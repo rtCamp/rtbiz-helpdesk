@@ -1,0 +1,11 @@
+CREATE TABLE %s (
+	id BIGINT(11) NOT NULL AUTO_INCREMENT,
+	lead_id BIGINT(11) NOT NULL,
+	type VARCHAR(20) DEFAULT NULL,
+	old_value TEXT,
+	new_value TEXT,
+	message TEXT,
+	update_time TIMESTAMP NOT NULL,
+	updated_by BIGINT(11) NOT NULL,
+	PRIMARY KEY  (id)
+);

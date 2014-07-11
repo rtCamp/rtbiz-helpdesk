@@ -1,0 +1,467 @@
+<?php
+
+/*
+ * lead front page Template
+ *
+ * @author udit
+ */
+global $rt_crm_module, $rt_crm_contacts, $rt_crm_accounts, $rt_crm_settings, $rt_crm_leads;
+
+get_header();
+
+do_action( 'rtcrm_lead_front_page_after_header' );
+
+global $rtcrm_lead;
+$post_type = get_post_type( $rtcrm_lead );
+$module_settings = get_site_option( 'rt_crm_settings', false );
+$labels = $rt_crm_module->labels;
+$post_id = $rtcrm_lead->ID;
+$user_edit = false;
+
+?>
+<div class="rtcrm-container">
+<?php
+global $wpdb;
+echo "<script> var arr_leadmeta_key=''; </script>";
+
+
+$post = get_post( $post_id );
+$lead_unique_id = get_post_meta( $post_id, 'rtcrm_unique_id', true );
+
+$create = new DateTime($post->post_date);
+
+$modify = new DateTime($post->post_modified);
+$createdate = $create->format("M d, Y h:i A");
+$modifydate = $modify->format("M d, Y h:i A");
+?>
+<div  id="add-new-post" class="row">
+	<input type="hidden" id='lead_unique_id' value="<?php echo $lead_unique_id; ?>" />
+	<div class="large-12 columns">
+		<?php if( $user_edit ) { ?>
+			<input name="post[post_title]" id="new_<?php echo $post_type ?>_title" type="text" placeholder="<?php _e(ucfirst($labels['name'])." Subject"); ?>" value="<?php echo ( isset($post->ID) ) ? $post->post_title : ""; ?>" />
+		<?php } else { ?>
+			<h4><?php echo ( isset($post->ID) ) ? $post->post_title : ""; ?></h4>
+		<?php } ?>
+	</div>
+	<div class="large-12 columns">
+		<div class="large-9 small-12 columns">
+			<div class="row expand">
+				<div class="large-12 columns">
+					<?php
+						if( $user_edit ) {
+							wp_editor(( isset($post->ID) ) ? $post->post_content : "", "post[post_content]");
+						} else {
+							echo '<span>'.(( isset($post->ID) ) ? $post->post_content : '').'</span>';
+						}
+					?>
+				</div>
+			</div>
+			<br /><br />
+<?php if (isset($post->ID)) { ?>
+			<div id="followup_wrapper">
+				<fieldset>
+					<legend>Followup</legend>
+					<form id="add_followup_form" method="post">
+						<input type='hidden' id='edit-comment-id' />
+						<textarea id="followup_content" name="followup_content" placeholder="Add new followup"></textarea>
+						<button class="mybutton add-savefollowup" id="savefollwoup" type="button" ><?php _e("Add"); ?></button>
+						<!--<button class="mybutton right" type="submit" ><?php _e("Add"); ?></button>-->
+						<!--<input type="file" class="right" name="lead_attach_file" id="lead_attach_file" multiple />-->
+					</form>
+					<div class="row">
+<?php
+$page = 0;
+$comment_count = count( get_comments(
+	array(
+		'meta_key' => '_rtcrm_privacy',
+		'meta_value' => 'no',
+		'order' => 'DESC',
+		'post_id' => $post->ID,
+		'post_type' => $post_type,
+	)
+) );
+$comments = get_comments(
+	array(
+		'meta_key' => '_rtcrm_privacy',
+		'meta_value' => 'no',
+		'order' => 'DESC',
+		'post_id' => $post->ID,
+		'post_type' => $post_type,
+		'number' => '10',
+		'offset' => $page*10
+	)
+);
+?>
+						<div class="large-12 columns <?php echo (empty($comments)) ? 'hide' : ''; ?>">
+							<a class="accordion-expand-all right" href="#" data-isallopen="false"><i class="general foundicon-down-arrow" title="Expand All"></i></a>
+						</div>
+						<div class="large-12 columns" id="commentlist">
+
+<?php
+foreach ($comments as $comment) {
+
+	$user = get_user_by("email", $comment->comment_author_email);
+?>
+							<div id="header-<?php echo $comment->comment_ID; ?>" class="comment-header row">
+								<div class="comment-user-gravatar left">
+									<a href="#" class="th radius">
+										<?php echo get_avatar($comment->comment_author_email, 30); ?>
+									</a>
+								</div>
+								<div class="large-11 columns">
+									<div class="row">
+										<div class="large-1 small-1 columns rtcrm_privacy"></div>
+										<div class="large-7 small-7 columns">
+											<div class="row">
+												<div class="comment-user-title large-12 columns">
+	<?php
+		if ($user)
+			echo $user->display_name;
+		else if(!empty ($comment->comment_author)){
+			echo $comment->comment_author;
+		} else {
+			echo 'Annonymous';
+		}
+	?>
+												</div>
+												<div class="comment-participant large-12 columns">
+									<?php
+										$participants = '';
+										$to = get_comment_meta( $comment->comment_ID, '_email_to', true );
+										if( !empty( $to ) )
+											$participants .= $to;
+										$cc = get_comment_meta( $comment->comment_ID, '_email_cc', true );
+										if( !empty( $cc ) )
+											$participants .= ','.$cc;
+										$bcc = get_comment_meta( $comment->comment_ID, '_email_bcc', true );
+										if( !empty( $bcc ) )
+											$participants .= ','.$bcc;
+
+										if( !empty( $participants ) ) {
+											$p_arr = explode(',', $participants);
+											$p_arr = array_unique($p_arr);
+											$participants = implode(' , ', $p_arr);
+											echo 'to  '.$participants;
+										}
+									?>
+												</div>
+											</div>
+										</div>
+										<div class="comment-info large-3 small-3 columns">
+											<span class="comment-type">[<?php echo ucfirst($comment->comment_type) ." - "; ?></span>
+											<?php $dt = new DateTime($comment->comment_date); ?>
+											<span class="comment-date moment-from-now" title="<?php echo $dt->format("M d,Y h:i A"); ?>">
+												<?php echo $dt->format("M d,Y h:i A"); ?>
+											</span>
+											<span>]</span>
+										</div>
+										<div class="large-1 small-1 columns">
+											<?php if($user_edit) { ?>
+												<a class="folowup-hover" href="#editFollowup" title="Edit" data-comment-id="<?php echo $comment->comment_ID; ?>"><?php _e('Edit'); ?></a>
+												<a class="folowup-hover delete" href="#deleteFollowup" title="Delete" data-comment-id="<?php echo $comment->comment_ID; ?>"><?php _e('Delete'); ?></a>
+											<?php } ?>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="comment-wrapper row" id="comment-<?php echo $comment->comment_ID; ?>">
+								<div class="large-9 columns comment-content">
+	<?php
+		if (isset($comment->comment_content) && $comment->comment_content != "") {
+			if (strpos("<body", $comment->comment_content) !== false) {
+				preg_match_all("/<body[^>]*>(.*?)<\/body>/s", $comment->comment_content, $output_array);
+				if (count($output_array) > 0) {
+					$comment->comment_content = $output_array[0];
+				}
+			}
+			echo Rt_CRM_Utils::forceUFT8($comment->comment_content);
+		}
+	?>
+								</div>
+								<div class="large-3 columns">
+	<?php
+	$comment_attechment = get_comment_meta($comment->comment_ID, "attachment");
+
+	if (!empty($comment_attechment)) {
+		?>
+									<ul class='comment_attechment block-grid large-2-up'> <?php
+								foreach ($comment_attechment as $commenytAttechment) {
+
+									$extn_array = explode('.', $commenytAttechment);
+									$extn = $extn_array[count($extn_array) - 1];
+
+									$file_array = explode('/', $commenytAttechment);
+									$fileName = $file_array[count($file_array) - 1];
+			?>
+										<li>
+											<a href="<?php echo $commenytAttechment; ?>" title="Attachment" >
+												<img src="<?php echo RT_CRM_URL . "assets/file-type/" . $extn . ".png"; ?>" />
+												<span><?php echo $fileName; ?></span>
+											</a>
+											<input type="hidden" name="attachemnt" value="<?php echo $commenytAttechment; ?>">
+											<?php if ( $user_edit ) { ?>
+												<a class="edit-remove" href="#editRemoveAttachemnt"><i class="foundicon-remove"></i></a>
+											<?php } ?>
+										</li>
+		<?php } ?>
+									</ul>
+		<?php } ?>
+								</div>
+							</div>
+									<?php } //End Loop for comments
+$all_crm_participants = array();
+$comments = get_comments(
+	array(
+		'meta_key' => '_rtcrm_privacy',
+		'meta_value' => 'no',
+		'order' => 'DESC',
+		'post_id' => $post->ID,
+		'post_type' => $post_type,
+	)
+);
+foreach ( $comments as $comment ) {
+	$participants = '';
+	$to = get_comment_meta( $comment->comment_ID, '_email_to', true );
+	if( !empty( $to ) )
+		$participants .= $to.',';
+	$cc = get_comment_meta( $comment->comment_ID, '_email_cc', true );
+	if( !empty( $cc ) )
+		$participants .= $cc.',';
+	$bcc = get_comment_meta( $comment->comment_ID, '_email_bcc', true );
+	if( !empty( $bcc ) )
+		$participants .= $bcc;
+
+	if( !empty( $participants ) ) {
+		$p_arr = explode(',', $participants);
+		$p_arr = array_unique($p_arr);
+		$all_crm_participants = array_merge($all_crm_participants, $p_arr);
+	}
+}
+$all_crm_participants = array_filter( array_unique( $all_crm_participants ) );
+									?>
+						</div>
+						<div class="large-12 columns <?php echo ( ($page+1) < ($comment_count/10) ) ? '' : 'hide'; ?>">
+							<button id="load_more_btn" class="button large expand"><?php _e( 'LOAD MORE' ); ?></button>
+						</div>
+					</div>
+				</fieldset>
+			</div>
+<?php } ?>
+		</div>
+		<div class="large-3 columns rtcrm_sticky_div">
+			<fieldset>
+				<legend><i class="foundicon-idea"></i> <?php _e(ucfirst($labels['name'])." Information"); ?></legend>
+				<div class="row collapse">
+					<div class="small-4 large-4  columns">
+						<span class="prefix" title="Status">Status</span>
+					</div>
+					<div class="small-8 large-8 columns">
+<?php
+if (isset($post->ID))
+    $pstatus = $post->post_status;
+else
+    $pstatus = "";
+$post_status = $rt_crm_module->get_custom_statuses();
+?>
+					<?php if( $user_edit ) { ?>
+						<select class="right" name="post[post_status]">
+<?php foreach ($post_status as $status) {
+    if ($status['slug'] == $pstatus)
+        $selected = 'selected="selected"';
+    else
+        $selected = '';
+
+    echo printf('<option value="%s" %s >%s</option>', $status['slug'], $selected, $status['name']);
+} ?>
+						</select>
+					<?php } else {
+						foreach ( $post_status as $status ) {
+							if($status['slug'] == $pstatus) {
+								echo '<div class="rtcrm_attr_border rtcrm_view_mode">'.$status['name'].'</div>';
+								break;
+							}
+						}
+					} ?>
+					</div>
+				</div>
+				<div class="row collapse">
+					<div class="large-4 small-4 columns">
+						<span class="prefix" title="Create Date"><label>Create Date</label></span>
+					</div>
+					<div class="large-8 mobile-large-2 columns">
+						<?php if( $user_edit ) { ?>
+							<input class="datetimepicker moment-from-now" type="text" placeholder="Select Create Date"
+									value="<?php echo ( isset($createdate) ) ? $createdate : ''; ?>"
+									title="<?php echo ( isset($createdate) ) ? $createdate : ''; ?>">
+							<input name="post[post_date]" type="hidden" value="<?php echo ( isset($createdate) ) ? $createdate : ''; ?>" />
+						<?php } else { ?>
+							<div class="rtcrm_attr_border rtcrm_view_mode moment-from-now" title="<?php echo $createdate ?>"><?php echo $createdate ?></div>
+						<?php } ?>
+					</div>
+				</div>
+<?php if (isset($post->ID)) { ?>
+
+				<div class="row collapse">
+					<div class="large-4 mobile-large-1 columns">
+						<span class="prefix" title="Modify Date"><label>Modify Date</label></span>
+					</div>
+					<div class="large-8 mobile-large-3 columns">
+						<?php if( $user_edit ) { ?>
+							<input class="moment-from-now"  type="text" placeholder="Modified on Date"  value="<?php echo $modifydate; ?>"
+								  title="<?php echo $modifydate; ?>" readonly="readonly">
+						<?php } else { ?>
+							<div class="rtcrm_attr_border rtcrm_view_mode moment-from-now" title="<?php echo $createdate ?>"><?php echo $createdate ?></div>
+						<?php } ?>
+					</div>
+				</div>
+<?php } ?>
+				<div class="row collapse">
+					<div class="large-4 mobile-large-1 columns">
+						<span class="prefix" title="<?php _e('Assigned To'); ?>"><label for="post[post_author]"><?php _e('Assigned To'); ?></label></span>
+					</div>
+					<div class="large-8 mobile-large-3 columns">
+<?php
+$get_assigned_to = array();
+if (isset($post->ID)) {
+    $post_author = $post->post_author;
+    $get_assigned_to = get_post_meta($post->ID, "subscribe_to", true);
+} else {
+    $post_author = get_current_user_id();
+}
+$results = Rt_CRM_Utils::get_crm_rtcamp_user();
+$arrCommentReply = array();
+$arrSubscriberUser[] = array();
+$subScribetHTML = "";
+if( !empty( $results ) ) {
+	foreach ( $results as $author ) {
+		if ($get_assigned_to && !empty($get_assigned_to) && in_array($author->ID, $get_assigned_to)) {
+			if( in_array( $author->user_email, $all_crm_participants ) ) {
+				$key = array_search($author->user_email, $all_crm_participants);
+				if ( $key !== FALSE ) {
+					unset( $all_crm_participants[$key] );
+				}
+			}
+            $subScribetHTML .= "<li id='subscribe-auth-" . $author->ID . "' class='contact-list' >"
+					. '<div class="row collapse"><div class="large-2 columns"> ' . get_avatar($author->user_email, 24) . '</div>'
+					. '<div class="large-9 columns"><a target="_blank" class="heading" href="mailto:' . $author->user_email . '" title="' . $author->display_name . '">' . $author->display_name . '</a>'
+						. '<input type="hidden" name="subscribe_to[]" value="' . $author->ID . '" />'
+					. '</div>'
+					. '</li>';
+        }
+        $arrSubscriberUser[] = array("id" => $author->ID, "label" => $author->display_name, "imghtml" => get_avatar($author->user_email, 24));
+        $arrCommentReply[] = array("userid" => $author->ID, "label" => $author->display_name, "email" => $author->user_email, "contact" => false, "imghtml" => get_avatar($author->user_email, 24));
+	}
+}
+?>
+					<?php if( $user_edit ) { ?>
+						<select name="post[post_author]" >
+<?php
+if (!empty($results)) {
+    foreach ($results as $author) {
+        if ($author->ID == $post_author) {
+            $selected = " selected";
+        } else {
+            $selected = " ";
+        }
+        echo '<option value="' . $author->ID . '"' . $selected . '>' . $author->display_name . '</option>';
+    }
+}
+?>
+						</select>
+					<?php } else {
+						if(!empty($results)) {
+							foreach ($results as $author) {
+								if($author->ID == $post_author) {
+									echo '<div class="rtcrm_attr_border rtcrm_view_mode">'.get_avatar( $author->user_email, 17 ).' '.$author->display_name.'</div>';
+									break;
+								}
+							}
+						} else {
+							echo '<div class="rtcrm_attr_border rtcrm_view_mode">'.__( 'Not Assigned yet ').'</div>';
+						}
+					} ?>
+					</div>
+				</div>
+			</fieldset>
+			<fieldset>
+				<legend><i class="foundicon-smiley"></i> <?php _e("Participants"); ?></legend>
+				<script>
+					var arr_subscriber_user =<?php echo json_encode($arrSubscriberUser); ?>;
+					var ac_auth_token = '<?php echo get_user_meta(get_current_user_id(), 'rtcrm_activecollab_token', true); ?>';
+					var ac_default_project = '<?php echo get_user_meta(get_current_user_id(), 'rtcrm_activecollab_default_project', true); ?>';
+				</script>
+				<ul class="rtcrm-participant-list large-block-grid-1 small-block-grid-1">
+<?php echo $subScribetHTML; ?>
+				</ul>
+<?php if ( isset( $module_settings['attach_contacts'] ) && $module_settings['attach_contacts'] == 'yes' ) { ?>
+				<ul class="rtcrm-participant-list large-block-grid-1 small-block-grid-1">
+					<?php if (isset($post->ID)) {
+                            $scriptstr = "";
+		$lead_term = rt_biz_get_post_for_person_connection( $post->ID, $post->post_type, $fetch_person = true );
+		foreach ($lead_term as $tterm) {
+                                $email = get_term_meta($tterm->term_id, $rt_crm_contacts->email_key, true);
+								if( in_array( $email, $all_crm_participants ) ) {
+									$key = array_search($email, $all_crm_participants);
+									if ( $key !== FALSE ) {
+										unset( $all_crm_participants[$key] );
+									}
+								}
+                                echo "<li id='crm-contact-" . $tterm->term_id . "' class='contact-list' >"
+										. "<div class='row collapse'>"
+											. "<div class='large-2 columns'> " . get_avatar($email, 24) . "</div>"
+											. "<div id='crm-contact-meta-" . $tterm->term_id . "'  class='large-9 columns'><a target='_blank' class='heading' href='mailto:" . $email . "' title='" . $tterm->name . "'>" . $tterm->name . "</a></div>"
+										. "</div>"
+								. "</li>";
+                            }
+                        } ?>
+				</ul>
+				<ul class="rtcrm-participant-list large-block-grid-1 small-block-grid-1">
+				<?php foreach ( $all_crm_participants as $email ) {
+					echo "<li class='contact-list'>"
+							. "<div class='row collapse'>"
+								. "<div class='large-2 columns'> " . get_avatar($email, 24) . "</div>"
+								. "<div class='large-9 columns'><a target='_blank' class='heading' href='mailto:" . $email . "' title='" . $email . "'>" . $email . "</a></div>"
+							. "</div>"
+					. "</li>";
+				} ?>
+				</ul>
+			</fieldset>
+<?php }
+$attachments = array();
+if ( isset( $post->ID ) ) {
+	$attachments = get_children( array(
+		'post_parent' => $post->ID,
+		'post_type' => 'attachment',
+	));
+} ?>
+			<fieldset>
+				<legend><i class="foundicon-paper-clip"></i> <?php _e("Attachments"); ?></legend>
+				<?php if( $user_edit ) { ?>
+					<a href="#" class="button" id="add_lead_attachment"><?php _e('Add'); ?></a>
+				<?php } ?>
+				<div class="scroll-height">
+					<?php foreach ($attachments as $attachment) { ?>
+						<?php $extn_array = explode('.', $attachment->guid); $extn = $extn_array[count($extn_array) - 1]; ?>
+						<div class="large-12 mobile-large-3 columns attachment-item" data-attachment-id="<?php echo $attachment->ID; ?>">
+							<a class="rtcrm_attachment" title="<?php echo $attachment->post_title; ?>" target="_blank" href="<?php echo wp_get_attachment_url($attachment->ID); ?>">
+								<img height="20px" width="20px" src="<?php echo RT_CRM_URL . "assets/file-type/" . $extn . ".png"; ?>" />
+								<?php echo $attachment->post_title; ?>
+							</a>
+							<?php if( $user_edit ) { ?>
+								<a href="#" class="rtcrm_delete_attachment right">x</a>
+							<?php } ?>
+							<input type="hidden" name="attachment[]" value="<?php echo $attachment->ID; ?>" />
+						</div>
+					<?php } ?>
+				</div>
+			</fieldset>
+		</div>
+	</div>
+</div>
+<script>
+    var arr_comment_reply_to = <?php echo json_encode($arrCommentReply); ?>;
+</script>
+</div>
+<?php
+do_action( 'rtcrm_lead_front_page_before_footer' );
+get_footer();

@@ -1,0 +1,49 @@
+#labelCommentTimeStamp{height: 30px;}
+#readonly-postdivrich{padding: 10px;}
+#publishing-action{display:none}
+.input-multiple{width:85% !important;}
+#fd-but-leate_closing_date span{background: url('../img/cal.gif');}
+.control-group label{width: 60px;float: left;text-align: right;padding-right: 5px;line-height: 25px;}
+.ac-subscribe-selected img{vertical-align: middle}
+
+#divSubscriberList div{height: 30px;line-height: 26px;max-width: 200px;padding: 5px;}
+#divSubscriberList div img{float: left;padding: 2px;}
+.control-group{padding-bottom: 5px;}
+.control-group select{width: 135px;}
+#save-post{float:none}
+.howto {display: none;}
+.tagchecklist span .remove-extra,.tagchecklist span .remove-extra:hover, .tagchecklist span .remove-extra:visited{margin: 0;cursor: pointer;width: 100%;height: 18px;display: inline;float: none;text-indent: 0px;overflow: auto;position: relative;background: none;}
+.tagchecklist span .remove-extra img{vertical-align: middle;padding-left: 20px;padding-right: 5px;padding-left: 3px;}
+#leadsource-all{max-height: 100px;}
+#startImporting{display:none}
+.myerror{background-color: #ffebe8;border-color: #c00;}
+.importloading{
+    background-image:url('../img/loading.gif');;
+    background-repeat:no-repeat;
+    background-position:center;
+    display: block;
+    height: 50px;
+}
+.sucessmessage{text-align: center;display:none}
+#rtCrmMappingForm tfoot{background-color: #f1f1f1;}
+ li.toplevel_page_crm-dashboard a:active{
+    font-weight: bold !important;
+    color: black !important;
+}
+#contacts .tagchecklist{overflow: hidden}
+#contacts .tagchecklist span {padding-top: 5px}
+#selected-user-contact img{vertical-align: middle}
+.crm-option input[type=text]{width:400px}
+.crm-google-profile-table td, .crm-google-profile-table th{margin: 0px; padding: 0px;width:100px; vertical-align: top;}
+.crm-google-profile-table th {font-weight: bold}
+.crm-google-profile-table{border:1px;}
+.crm-google-profile-table td.long,.crm-google-profile-table textArea{width: 400px;}
+.mail-acl_user img {vertical-align: middle; padding: 3px;}
+.mail-acl_user{ padding: 3px;float: left;margin-right: 10px;}
+.comment-reply-to label{float: left;line-height: 40px;padding-right: 12px;font-weight: bold;width: 40px;}
+.comment-reply-to{padding:5px}
+
+
+.rtcrm-remove-server{ color: red; }
+.rtcrm-hide-row { display: none; }
+.rtcrm-show-row { display: block; }

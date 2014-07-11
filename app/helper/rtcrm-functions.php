@@ -1,0 +1,295 @@
+<?php
+
+/**
+ * rtCRM Studio Functions
+ *
+ * Helper functions for rtCRM Studio
+ *
+ * @author udit
+ */
+
+function rtcrm_get_template( $template_name, $args = array(), $template_path = '', $default_path = '' ) {
+
+	if ( $args && is_array($args) )
+		extract( $args );
+
+	$located = rtcrm_locate_template( $template_name, $template_path, $default_path );
+
+	do_action( 'rtcrm_before_template_part', $template_name, $template_path, $located, $args );
+
+	include( $located );
+
+	do_action( 'rtcrm_after_template_part', $template_name, $template_path, $located, $args );
+}
+
+function rtcrm_locate_template( $template_name, $template_path = '', $default_path = '' ) {
+
+	global $rt_wp_crm;
+	if ( ! $template_path ) { $template_path = $rt_wp_crm->templateURL; }
+	if ( ! $default_path ) { $default_path = RT_CRM_PATH_TEMPLATES; }
+
+	// Look within passed path within the theme - this is priority
+	$template = locate_template(
+		array(
+			trailingslashit( $template_path ) . $template_name,
+			$template_name
+		)
+	);
+
+	// Get default template
+	if ( ! $template )
+		$template = $default_path . $template_name;
+
+	// Return what we found
+	return apply_filters('rtcrm_locate_template', $template, $template_name, $template_path);
+}
+
+function rtcrm_sanitize_taxonomy_name( $taxonomy ) {
+	$taxonomy = strtolower( stripslashes( strip_tags( $taxonomy ) ) );
+	$taxonomy = preg_replace( '/&.+?;/', '', $taxonomy ); // Kill entities
+	$taxonomy = str_replace( array( '.', '\'', '"' ), '', $taxonomy ); // Kill quotes and full stops.
+	$taxonomy = str_replace( array( ' ', '_' ), '-', $taxonomy ); // Replace spaces and underscores.
+
+	return $taxonomy;
+}
+
+function rtcrm_attribute_taxonomy_name( $name ) {
+	return 'rt_' . rtcrm_sanitize_taxonomy_name( $name );
+}
+
+function rtcrm_post_type_name( $name ) {
+	return 'rt_' . rtcrm_sanitize_taxonomy_name( $name );
+}
+
+function rtcrm_get_all_attributes( $attribute_store_as = '' ) {
+	global $rt_crm_attributes_model;
+	$attrs = $rt_crm_attributes_model->get_all_attributes();
+
+	if( empty( $attribute_store_as ) ) {
+		return $attrs;
+	}
+
+	$newAttr = array();
+	foreach ($attrs as $attr) {
+		if( $attr->attribute_store_as == $attribute_store_as )
+			$newAttr[] = $attr;
+	}
+
+	return $newAttr;
+}
+
+function rtcrm_get_attributes( $post_type, $attribute_store_as = '' ) {
+	global $rt_crm_attributes_relationship_model, $rt_crm_attributes_model;
+	$relations = $rt_crm_attributes_relationship_model->get_relations_by_post_type( $post_type );
+	$attrs = array();
+
+	foreach ($relations as $relation) {
+		$attrs[] = $rt_crm_attributes_model->get_attribute( $relation->attr_id );
+	}
+
+	if( empty( $attribute_store_as ) ) {
+		return $attrs;
+	}
+
+	$newAttr = array();
+	foreach ($attrs as $attr) {
+		if ( $attr->attribute_store_as == $attribute_store_as )
+			$newAttr[] = $attr;
+	}
+	return $newAttr;
+}
+
+
+/*     * ********* Post Term To String **** */
+function rtcrm_post_term_to_string( $postid, $taxonomy, $termsep = ',' ) {
+	$termsArr = get_the_terms( $postid, $taxonomy );
+	$tmpStr = '';
+	if ( $termsArr ) {
+		$sep = '';
+		foreach ( $termsArr as $tObj ) {
+			$tmpStr .= $sep . $tObj->name;
+			$sep = $termsep;
+		}
+	}
+	return $tmpStr;
+}
+/*     * ********* Post Term To String **** */
+
+function rtcrm_extract_key_from_attributes( $attr ) {
+	return $attr->attribute_name;
+}
+
+function rtcrm_is_system_email( $email ) {
+	$settings = get_site_option( 'rt_crm_settings', false );
+	if ( isset( $settings['system_email'] ) && $email == $settings['system_email'] ) {
+		return true;
+	}
+	return false;
+}
+
+function rtcrm_get_all_system_emails() {
+	$emails = array();
+	$settings = get_site_option( 'rt_crm_settings', false );
+	if ( isset( $settings['system_email'] ) && ! empty( $settings['system_email'] ) ) {
+		$emails[] = $settings['system_email'];
+	}
+	return $emails;
+}
+
+function rtcrm_get_all_participants( $lead_id ) {
+	$lead = get_post( $lead_id );
+	$participants = array();
+	if ( isset( $lead->post_author ) ) {
+		$participants[] = $lead->post_author;
+	}
+	$subscribers = get_post_meta( $lead_id, 'subscribe_to', true );
+	$participants = array_merge( $participants, $subscribers );
+
+//	TODO
+//	$contacts = wp_get_post_terms( $lead_id, rtcrm_attribute_taxonomy_name( 'contacts' ) );
+//	foreach ( $contacts as $contact ) {
+//		$user_id = get_term_meta( $contact->term_id, 'user_id', true );
+//		if(!empty($user_id)) {
+//			$participants[] = $user_id;
+//		}
+//	}
+
+	$comments = get_comments(array('order' => 'DESC', 'post_id' => $lead_id, 'post_type' => $lead->post_type ) );
+	foreach ( $comments as $comment ) {
+		$p = '';
+		$to = get_comment_meta( $comment->comment_ID, '_email_to', true );
+		if( !empty( $to ) )
+			$p .= $to.',';
+		$cc = get_comment_meta( $comment->comment_ID, '_email_cc', true );
+		if( !empty( $cc ) )
+			$p .= $cc.',';
+		$bcc = get_comment_meta( $comment->comment_ID, '_email_bcc', true );
+		if( !empty( $bcc ) )
+			$p .= $bcc;
+
+		if( !empty( $p ) ) {
+			$p_arr = explode( ',', $p );
+			$p_arr = array_unique( $p_arr );
+			$all_p = array_merge( $all_p, $p_arr );
+		}
+	}
+	$all_p = array_unique( $all_p );
+	foreach ($all_p as $p) {
+		$user = get_user_by( 'email', $p );
+		if($user) {
+			$participants[] = $user->ID;
+		}
+	}
+	return array_unique( $participants );
+}
+
+function rtcrm_get_lead_table_name() {
+
+	global $wpdb, $blog_id;
+	return $wpdb->prefix . ( ( is_multisite() ) ? $blog_id.'_' : '' ) . 'rt_wp_crm_crm_index';
+}
+
+function rtcrm_get_user_ids( $user ) {
+	return $user->ID;
+}
+
+function rt_update_post_term_count( $terms, $taxonomy ) {
+	global $wpdb;
+
+	$object_types = (array) $taxonomy->object_type;
+
+	foreach ( $object_types as &$object_type )
+		list( $object_type ) = explode( ':', $object_type );
+
+	$object_types = array_unique( $object_types );
+
+	if ( false !== ( $check_attachments = array_search( 'attachment', $object_types ) ) ) {
+		unset( $object_types[ $check_attachments ] );
+		$check_attachments = true;
+	}
+
+	if ( $object_types )
+		$object_types = esc_sql( array_filter( $object_types, 'post_type_exists' ) );
+
+	foreach ( (array) $terms as $term ) {
+		$count = 0;
+
+		// Attachments can be 'inherit' status, we need to base count off the parent's status if so
+		if ( $check_attachments )
+			$count += (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->term_relationships, $wpdb->posts p1 WHERE p1.ID = $wpdb->term_relationships.object_id  AND post_type = 'attachment' AND term_taxonomy_id = %d", $term ) );
+
+		if ( $object_types )
+			$count += (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->term_relationships, $wpdb->posts WHERE $wpdb->posts.ID = $wpdb->term_relationships.object_id  AND post_type IN ('" . implode("', '", $object_types ) . "') AND term_taxonomy_id = %d", $term ) );
+
+		do_action( 'edit_term_taxonomy', $term, $taxonomy );
+		$wpdb->update( $wpdb->term_taxonomy, compact( 'count' ), array( 'term_taxonomy_id' => $term ) );
+		do_action( 'edited_term_taxonomy', $term, $taxonomy );
+	}
+}
+
+/**
+ * Function to encrypt or decrypt the given value
+ * @param string
+ * @return string
+ */
+function rtcrm_encrypt_decrypt( $string ) {
+
+	$string_length = strlen( $string );
+	$encrypted_string = "";
+
+	/**
+	 * For each character of the given string generate the code
+	 */
+	for ( $position = 0; $position < $string_length; $position++ ) {
+		$key = ( ( $string_length + $position ) + 1 );
+		$key = ( 255 + $key ) % 255;
+		$get_char_to_be_encrypted = substr( $string, $position, 1 );
+		$ascii_char = ord( $get_char_to_be_encrypted );
+		$xored_char = $ascii_char ^ $key;  //xor operation
+		$encrypted_char = chr( $xored_char );
+		$encrypted_string .= $encrypted_char;
+	}
+
+	/**
+	 * Return the encrypted/decrypted string
+	 */
+	return $encrypted_string;
+}
+
+// wp1_text_diff
+function rtcrm_text_diff( $left_string, $right_string, $args = null ) {
+	$defaults = array('title' => '', 'title_left' => '', 'title_right' => '');
+	$args = wp_parse_args($args, $defaults);
+
+	$left_string = normalize_whitespace($left_string);
+	$right_string = normalize_whitespace($right_string);
+	$left_lines = explode("\n", $left_string);
+	$right_lines = explode("\n", $right_string);
+
+	$renderer = new Rt_CRM_Email_Diff();
+	$text_diff = new Text_Diff($left_lines, $right_lines);
+	$diff = $renderer->render($text_diff);
+
+	if (!$diff)
+		return '';
+
+	$r = "<table class='diff' style='width: 100%;background: white;margin-bottom: 1.25em;border: solid 1px #dddddd;border-radius: 3px;margin: 0 0 18px;'>\n";
+	$r .= "<col class='ltype' /><col class='content' /><col class='ltype' /><col class='content' />";
+
+	if ($args['title'] || $args['title_left'] || $args['title_right'])
+		$r .= "<thead>";
+	if ($args['title'])
+		$r .= "<tr class='diff-title'><th colspan='4'>$args[title]</th></tr>\n";
+	if ($args['title_left'] || $args['title_right']) {
+		$r .= "<tr class='diff-sub-title'>\n";
+		$r .= "\t<td></td><th>$args[title_left]</th>\n";
+		$r .= "\t<td></td><th>$args[title_right]</th>\n";
+		$r .= "</tr>\n";
+	}
+	if ($args['title'] || $args['title_left'] || $args['title_right'])
+		$r .= "</thead>\n";
+	$r .= "<tbody>\n$diff\n</tbody>\n";
+	$r .= "</table>";
+	return $r;
+}
+
