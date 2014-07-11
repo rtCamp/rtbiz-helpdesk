@@ -11,40 +11,40 @@
   Text Domain: rt_helpdesk
  */
 
-if ( !defined( 'RT_HD_VERSION' ) ) {
+if ( ! defined( 'RT_HD_VERSION' ) ) {
 	define( 'RT_HD_VERSION', '0.0.1' );
 }
-if ( !defined( 'RT_HD_TEXT_DOMAIN' ) ) {
+if ( ! defined( 'RT_HD_TEXT_DOMAIN' ) ) {
 	define( 'RT_HD_TEXT_DOMAIN', 'rt_helpdesk' );
 }
-if ( !defined( 'RT_HD_PATH' ) ) {
+if ( ! defined( 'RT_HD_PATH' ) ) {
 	define( 'RT_HD_PATH', plugin_dir_path( __FILE__ ) );
 }
-if ( !defined( 'RT_HD_URL' ) ) {
+if ( ! defined( 'RT_HD_URL' ) ) {
 	define( 'RT_HD_URL', plugin_dir_url( __FILE__ ) );
 }
-if ( !defined( 'RT_HD_PATH_APP' ) ) {
+if ( ! defined( 'RT_HD_PATH_APP' ) ) {
 	define( 'RT_HD_PATH_APP', plugin_dir_path( __FILE__ ) . 'app/' );
 }
-if ( !defined( 'RT_HD_PATH_ADMIN' ) ) {
+if ( ! defined( 'RT_HD_PATH_ADMIN' ) ) {
 	define( 'RT_HD_PATH_ADMIN', plugin_dir_path( __FILE__ ) . 'app/admin/' );
 }
-if ( !defined( 'RT_HD_PATH_MODELS' ) ) {
+if ( ! defined( 'RT_HD_PATH_MODELS' ) ) {
 	define( 'RT_HD_PATH_MODELS', plugin_dir_path( __FILE__ ) . 'app/models/' );
 }
-if ( !defined( 'RT_HD_PATH_SCHEMA' ) ) {
+if ( ! defined( 'RT_HD_PATH_SCHEMA' ) ) {
 	define( 'RT_HD_PATH_SCHEMA', plugin_dir_path( __FILE__ ) . 'app/schema/' );
 }
-if ( !defined( 'RT_HD_PATH_LIB' ) ) {
+if ( ! defined( 'RT_HD_PATH_LIB' ) ) {
 	define( 'RT_HD_PATH_LIB', plugin_dir_path( __FILE__ ) . 'app/lib/' );
 }
-if ( !defined( 'RT_HD_PATH_VENDOR' ) ) {
+if ( ! defined( 'RT_HD_PATH_VENDOR' ) ) {
 	define( 'RT_HD_PATH_VENDOR', plugin_dir_path( __FILE__ ) . 'app/vendor/' );
 }
-if ( !defined( 'RT_HD_PATH_HELPER' ) ) {
+if ( ! defined( 'RT_HD_PATH_HELPER' ) ) {
 	define( 'RT_HD_PATH_HELPER', plugin_dir_path( __FILE__ ) . 'app/helper/' );
 }
-if ( !defined( 'RT_HD_PATH_TEMPLATES' ) ) {
+if ( ! defined( 'RT_HD_PATH_TEMPLATES' ) ) {
 	define( 'RT_HD_PATH_TEMPLATES', plugin_dir_path( __FILE__ ) . 'templates/' );
 }
 
@@ -77,6 +77,6 @@ function rt_hd_init() {
 
 	global $rt_wp_hd;
 	$rt_wp_hd = new RT_WP_Helpdesk();
-
 }
+
 add_action( 'rt_biz_init', 'rt_hd_init', 1 );

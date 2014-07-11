@@ -7,10 +7,9 @@
  *
  * @author udit
  */
-
 function rthd_get_template( $template_name, $args = array(), $template_path = '', $default_path = '' ) {
 
-	if ( $args && is_array($args) )
+	if ( $args && is_array( $args ) )
 		extract( $args );
 
 	$located = rthd_locate_template( $template_name, $template_path, $default_path );
@@ -25,15 +24,19 @@ function rthd_get_template( $template_name, $args = array(), $template_path = ''
 function rthd_locate_template( $template_name, $template_path = '', $default_path = '' ) {
 
 	global $rt_wp_hd;
-	if ( ! $template_path ) { $template_path = $rt_wp_hd->templateURL; }
-	if ( ! $default_path ) { $default_path = RT_HD_PATH_TEMPLATES; }
+	if ( ! $template_path ) {
+		$template_path = $rt_wp_hd->templateURL;
+	}
+	if ( ! $default_path ) {
+		$default_path = RT_HD_PATH_TEMPLATES;
+	}
 
 	// Look within passed path within the theme - this is priority
 	$template = locate_template(
-		array(
-			trailingslashit( $template_path ) . $template_name,
-			$template_name
-		)
+			array(
+				trailingslashit( $template_path ) . $template_name,
+				$template_name
+			)
 	);
 
 	// Get default template
@@ -41,7 +44,7 @@ function rthd_locate_template( $template_name, $template_path = '', $default_pat
 		$template = $default_path . $template_name;
 
 	// Return what we found
-	return apply_filters('rthd_locate_template', $template, $template_name, $template_path);
+	return apply_filters( 'rthd_locate_template', $template, $template_name, $template_path );
 }
 
 function rthd_sanitize_taxonomy_name( $taxonomy ) {
@@ -65,13 +68,13 @@ function rthd_get_all_attributes( $attribute_store_as = '' ) {
 	global $rt_hd_attributes_model;
 	$attrs = $rt_hd_attributes_model->get_all_attributes();
 
-	if( empty( $attribute_store_as ) ) {
+	if ( empty( $attribute_store_as ) ) {
 		return $attrs;
 	}
 
 	$newAttr = array();
-	foreach ($attrs as $attr) {
-		if( $attr->attribute_store_as == $attribute_store_as )
+	foreach ( $attrs as $attr ) {
+		if ( $attr->attribute_store_as == $attribute_store_as )
 			$newAttr[] = $attr;
 	}
 
@@ -83,24 +86,24 @@ function rthd_get_attributes( $post_type, $attribute_store_as = '' ) {
 	$relations = $rt_hd_attributes_relationship_model->get_relations_by_post_type( $post_type );
 	$attrs = array();
 
-	foreach ($relations as $relation) {
+	foreach ( $relations as $relation ) {
 		$attrs[] = $rt_hd_attributes_model->get_attribute( $relation->attr_id );
 	}
 
-	if( empty( $attribute_store_as ) ) {
+	if ( empty( $attribute_store_as ) ) {
 		return $attrs;
 	}
 
 	$newAttr = array();
-	foreach ($attrs as $attr) {
+	foreach ( $attrs as $attr ) {
 		if ( $attr->attribute_store_as == $attribute_store_as )
 			$newAttr[] = $attr;
 	}
 	return $newAttr;
 }
 
+/* * ********* Post Term To String **** */
 
-/*     * ********* Post Term To String **** */
 function rthd_post_term_to_string( $postid, $taxonomy, $termsep = ',' ) {
 	$termsArr = get_the_terms( $postid, $taxonomy );
 	$tmpStr = '';
@@ -113,7 +116,8 @@ function rthd_post_term_to_string( $postid, $taxonomy, $termsep = ',' ) {
 	}
 	return $tmpStr;
 }
-/*     * ********* Post Term To String **** */
+
+/* * ********* Post Term To String **** */
 
 function rthd_extract_key_from_attributes( $attr ) {
 	return $attr->attribute_name;
@@ -121,7 +125,7 @@ function rthd_extract_key_from_attributes( $attr ) {
 
 function rthd_is_system_email( $email ) {
 	$settings = get_site_option( 'rt_helpdesk_settings', false );
-	if ( isset( $settings['system_email'] ) && $email == $settings['system_email'] ) {
+	if ( isset( $settings[ 'system_email' ] ) && $email == $settings[ 'system_email' ] ) {
 		return true;
 	}
 	return false;
@@ -130,8 +134,8 @@ function rthd_is_system_email( $email ) {
 function rthd_get_all_system_emails() {
 	$emails = array();
 	$settings = get_site_option( 'rt_helpdesk_settings', false );
-	if ( isset( $settings['system_email'] ) && ! empty( $settings['system_email'] ) ) {
-		$emails[] = $settings['system_email'];
+	if ( isset( $settings[ 'system_email' ] ) && ! empty( $settings[ 'system_email' ] ) ) {
+		$emails[] = $settings[ 'system_email' ];
 	}
 	return $emails;
 }
@@ -154,29 +158,29 @@ function rthd_get_all_participants( $lead_id ) {
 //		}
 //	}
 
-	$comments = get_comments(array('order' => 'DESC', 'post_id' => $lead_id, 'post_type' => $lead->post_type ) );
+	$comments = get_comments( array( 'order' => 'DESC', 'post_id' => $lead_id, 'post_type' => $lead->post_type ) );
 	foreach ( $comments as $comment ) {
 		$p = '';
 		$to = get_comment_meta( $comment->comment_ID, '_email_to', true );
-		if( !empty( $to ) )
-			$p .= $to.',';
+		if ( ! empty( $to ) )
+			$p .= $to . ',';
 		$cc = get_comment_meta( $comment->comment_ID, '_email_cc', true );
-		if( !empty( $cc ) )
-			$p .= $cc.',';
+		if ( ! empty( $cc ) )
+			$p .= $cc . ',';
 		$bcc = get_comment_meta( $comment->comment_ID, '_email_bcc', true );
-		if( !empty( $bcc ) )
+		if ( ! empty( $bcc ) )
 			$p .= $bcc;
 
-		if( !empty( $p ) ) {
+		if ( ! empty( $p ) ) {
 			$p_arr = explode( ',', $p );
 			$p_arr = array_unique( $p_arr );
 			$all_p = array_merge( $all_p, $p_arr );
 		}
 	}
 	$all_p = array_unique( $all_p );
-	foreach ($all_p as $p) {
+	foreach ( $all_p as $p ) {
 		$user = get_user_by( 'email', $p );
-		if($user) {
+		if ( $user ) {
 			$participants[] = $user->ID;
 		}
 	}
@@ -186,7 +190,7 @@ function rthd_get_all_participants( $lead_id ) {
 function rthd_get_lead_table_name() {
 
 	global $wpdb, $blog_id;
-	return $wpdb->prefix . ( ( is_multisite() ) ? $blog_id.'_' : '' ) . 'rt_wp_hd_hd_index';
+	return $wpdb->prefix . ( ( is_multisite() ) ? $blog_id . '_' : '' ) . 'rt_wp_hd_hd_index';
 }
 
 function rthd_get_user_ids( $user ) {
@@ -196,7 +200,7 @@ function rthd_get_user_ids( $user ) {
 function rt_update_post_term_count( $terms, $taxonomy ) {
 	global $wpdb;
 
-	$object_types = (array) $taxonomy->object_type;
+	$object_types = ( array ) $taxonomy->object_type;
 
 	foreach ( $object_types as &$object_type )
 		list( $object_type ) = explode( ':', $object_type );
@@ -211,15 +215,15 @@ function rt_update_post_term_count( $terms, $taxonomy ) {
 	if ( $object_types )
 		$object_types = esc_sql( array_filter( $object_types, 'post_type_exists' ) );
 
-	foreach ( (array) $terms as $term ) {
+	foreach ( ( array ) $terms as $term ) {
 		$count = 0;
 
 		// Attachments can be 'inherit' status, we need to base count off the parent's status if so
 		if ( $check_attachments )
-			$count += (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->term_relationships, $wpdb->posts p1 WHERE p1.ID = $wpdb->term_relationships.object_id  AND post_type = 'attachment' AND term_taxonomy_id = %d", $term ) );
+			$count += ( int ) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->term_relationships, $wpdb->posts p1 WHERE p1.ID = $wpdb->term_relationships.object_id  AND post_type = 'attachment' AND term_taxonomy_id = %d", $term ) );
 
 		if ( $object_types )
-			$count += (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->term_relationships, $wpdb->posts WHERE $wpdb->posts.ID = $wpdb->term_relationships.object_id  AND post_type IN ('" . implode("', '", $object_types ) . "') AND term_taxonomy_id = %d", $term ) );
+			$count += ( int ) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->term_relationships, $wpdb->posts WHERE $wpdb->posts.ID = $wpdb->term_relationships.object_id  AND post_type IN ('" . implode( "', '", $object_types ) . "') AND term_taxonomy_id = %d", $term ) );
 
 		do_action( 'edit_term_taxonomy', $term, $taxonomy );
 		$wpdb->update( $wpdb->term_taxonomy, compact( 'count' ), array( 'term_taxonomy_id' => $term ) );
@@ -240,7 +244,7 @@ function rthd_encrypt_decrypt( $string ) {
 	/**
 	 * For each character of the given string generate the code
 	 */
-	for ( $position = 0; $position < $string_length; $position++ ) {
+	for ( $position = 0; $position < $string_length; $position ++ ) {
 		$key = ( ( $string_length + $position ) + 1 );
 		$key = ( 255 + $key ) % 255;
 		$get_char_to_be_encrypted = substr( $string, $position, 1 );
@@ -258,38 +262,37 @@ function rthd_encrypt_decrypt( $string ) {
 
 // wp1_text_diff
 function rthd_text_diff( $left_string, $right_string, $args = null ) {
-	$defaults = array('title' => '', 'title_left' => '', 'title_right' => '');
-	$args = wp_parse_args($args, $defaults);
+	$defaults = array( 'title' => '', 'title_left' => '', 'title_right' => '' );
+	$args = wp_parse_args( $args, $defaults );
 
-	$left_string = normalize_whitespace($left_string);
-	$right_string = normalize_whitespace($right_string);
-	$left_lines = explode("\n", $left_string);
-	$right_lines = explode("\n", $right_string);
+	$left_string = normalize_whitespace( $left_string );
+	$right_string = normalize_whitespace( $right_string );
+	$left_lines = explode( "\n", $left_string );
+	$right_lines = explode( "\n", $right_string );
 
 	$renderer = new Rt_HD_Email_Diff();
-	$text_diff = new Text_Diff($left_lines, $right_lines);
-	$diff = $renderer->render($text_diff);
+	$text_diff = new Text_Diff( $left_lines, $right_lines );
+	$diff = $renderer->render( $text_diff );
 
-	if (!$diff)
+	if ( ! $diff )
 		return '';
 
 	$r = "<table class='diff' style='width: 100%;background: white;margin-bottom: 1.25em;border: solid 1px #dddddd;border-radius: 3px;margin: 0 0 18px;'>\n";
 	$r .= "<col class='ltype' /><col class='content' /><col class='ltype' /><col class='content' />";
 
-	if ($args['title'] || $args['title_left'] || $args['title_right'])
+	if ( $args[ 'title' ] || $args[ 'title_left' ] || $args[ 'title_right' ] )
 		$r .= "<thead>";
-	if ($args['title'])
-		$r .= "<tr class='diff-title'><th colspan='4'>$args[title]</th></tr>\n";
-	if ($args['title_left'] || $args['title_right']) {
+	if ( $args[ 'title' ] )
+		$r .= "<tr class='diff-title'><th colspan='4'>{$args[ 'title' ]}</th></tr>\n";
+	if ( $args[ 'title_left' ] || $args[ 'title_right' ] ) {
 		$r .= "<tr class='diff-sub-title'>\n";
-		$r .= "\t<td></td><th>$args[title_left]</th>\n";
-		$r .= "\t<td></td><th>$args[title_right]</th>\n";
+		$r .= "\t<td></td><th>{$args[ 'title_left' ]}</th>\n";
+		$r .= "\t<td></td><th>{$args[ 'title_right' ]}</th>\n";
 		$r .= "</tr>\n";
 	}
-	if ($args['title'] || $args['title_left'] || $args['title_right'])
+	if ( $args[ 'title' ] || $args[ 'title_left' ] || $args[ 'title_right' ] )
 		$r .= "</thead>\n";
 	$r .= "<tbody>\n$diff\n</tbody>\n";
 	$r .= "</table>";
 	return $r;
 }
-
