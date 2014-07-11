@@ -1,32 +1,32 @@
 <?php
 
 /**
- * rtCRM Studio Functions
+ * rt-helpdesk Functions
  *
- * Helper functions for rtCRM Studio
+ * Helper functions for rt-helpdesk
  *
  * @author udit
  */
 
-function rtcrm_get_template( $template_name, $args = array(), $template_path = '', $default_path = '' ) {
+function rthd_get_template( $template_name, $args = array(), $template_path = '', $default_path = '' ) {
 
 	if ( $args && is_array($args) )
 		extract( $args );
 
-	$located = rtcrm_locate_template( $template_name, $template_path, $default_path );
+	$located = rthd_locate_template( $template_name, $template_path, $default_path );
 
-	do_action( 'rtcrm_before_template_part', $template_name, $template_path, $located, $args );
+	do_action( 'rthd_before_template_part', $template_name, $template_path, $located, $args );
 
 	include( $located );
 
-	do_action( 'rtcrm_after_template_part', $template_name, $template_path, $located, $args );
+	do_action( 'rthd_after_template_part', $template_name, $template_path, $located, $args );
 }
 
-function rtcrm_locate_template( $template_name, $template_path = '', $default_path = '' ) {
+function rthd_locate_template( $template_name, $template_path = '', $default_path = '' ) {
 
-	global $rt_wp_crm;
-	if ( ! $template_path ) { $template_path = $rt_wp_crm->templateURL; }
-	if ( ! $default_path ) { $default_path = RT_CRM_PATH_TEMPLATES; }
+	global $rt_wp_hd;
+	if ( ! $template_path ) { $template_path = $rt_wp_hd->templateURL; }
+	if ( ! $default_path ) { $default_path = RT_HD_PATH_TEMPLATES; }
 
 	// Look within passed path within the theme - this is priority
 	$template = locate_template(
@@ -41,10 +41,10 @@ function rtcrm_locate_template( $template_name, $template_path = '', $default_pa
 		$template = $default_path . $template_name;
 
 	// Return what we found
-	return apply_filters('rtcrm_locate_template', $template, $template_name, $template_path);
+	return apply_filters('rthd_locate_template', $template, $template_name, $template_path);
 }
 
-function rtcrm_sanitize_taxonomy_name( $taxonomy ) {
+function rthd_sanitize_taxonomy_name( $taxonomy ) {
 	$taxonomy = strtolower( stripslashes( strip_tags( $taxonomy ) ) );
 	$taxonomy = preg_replace( '/&.+?;/', '', $taxonomy ); // Kill entities
 	$taxonomy = str_replace( array( '.', '\'', '"' ), '', $taxonomy ); // Kill quotes and full stops.
@@ -53,17 +53,17 @@ function rtcrm_sanitize_taxonomy_name( $taxonomy ) {
 	return $taxonomy;
 }
 
-function rtcrm_attribute_taxonomy_name( $name ) {
-	return 'rt_' . rtcrm_sanitize_taxonomy_name( $name );
+function rthd_attribute_taxonomy_name( $name ) {
+	return 'rt_' . rthd_sanitize_taxonomy_name( $name );
 }
 
-function rtcrm_post_type_name( $name ) {
-	return 'rt_' . rtcrm_sanitize_taxonomy_name( $name );
+function rthd_post_type_name( $name ) {
+	return 'rt_' . rthd_sanitize_taxonomy_name( $name );
 }
 
-function rtcrm_get_all_attributes( $attribute_store_as = '' ) {
-	global $rt_crm_attributes_model;
-	$attrs = $rt_crm_attributes_model->get_all_attributes();
+function rthd_get_all_attributes( $attribute_store_as = '' ) {
+	global $rt_hd_attributes_model;
+	$attrs = $rt_hd_attributes_model->get_all_attributes();
 
 	if( empty( $attribute_store_as ) ) {
 		return $attrs;
@@ -78,13 +78,13 @@ function rtcrm_get_all_attributes( $attribute_store_as = '' ) {
 	return $newAttr;
 }
 
-function rtcrm_get_attributes( $post_type, $attribute_store_as = '' ) {
-	global $rt_crm_attributes_relationship_model, $rt_crm_attributes_model;
-	$relations = $rt_crm_attributes_relationship_model->get_relations_by_post_type( $post_type );
+function rthd_get_attributes( $post_type, $attribute_store_as = '' ) {
+	global $rt_hd_attributes_relationship_model, $rt_hd_attributes_model;
+	$relations = $rt_hd_attributes_relationship_model->get_relations_by_post_type( $post_type );
 	$attrs = array();
 
 	foreach ($relations as $relation) {
-		$attrs[] = $rt_crm_attributes_model->get_attribute( $relation->attr_id );
+		$attrs[] = $rt_hd_attributes_model->get_attribute( $relation->attr_id );
 	}
 
 	if( empty( $attribute_store_as ) ) {
@@ -101,7 +101,7 @@ function rtcrm_get_attributes( $post_type, $attribute_store_as = '' ) {
 
 
 /*     * ********* Post Term To String **** */
-function rtcrm_post_term_to_string( $postid, $taxonomy, $termsep = ',' ) {
+function rthd_post_term_to_string( $postid, $taxonomy, $termsep = ',' ) {
 	$termsArr = get_the_terms( $postid, $taxonomy );
 	$tmpStr = '';
 	if ( $termsArr ) {
@@ -115,28 +115,28 @@ function rtcrm_post_term_to_string( $postid, $taxonomy, $termsep = ',' ) {
 }
 /*     * ********* Post Term To String **** */
 
-function rtcrm_extract_key_from_attributes( $attr ) {
+function rthd_extract_key_from_attributes( $attr ) {
 	return $attr->attribute_name;
 }
 
-function rtcrm_is_system_email( $email ) {
-	$settings = get_site_option( 'rt_crm_settings', false );
+function rthd_is_system_email( $email ) {
+	$settings = get_site_option( 'rt_helpdesk_settings', false );
 	if ( isset( $settings['system_email'] ) && $email == $settings['system_email'] ) {
 		return true;
 	}
 	return false;
 }
 
-function rtcrm_get_all_system_emails() {
+function rthd_get_all_system_emails() {
 	$emails = array();
-	$settings = get_site_option( 'rt_crm_settings', false );
+	$settings = get_site_option( 'rt_helpdesk_settings', false );
 	if ( isset( $settings['system_email'] ) && ! empty( $settings['system_email'] ) ) {
 		$emails[] = $settings['system_email'];
 	}
 	return $emails;
 }
 
-function rtcrm_get_all_participants( $lead_id ) {
+function rthd_get_all_participants( $lead_id ) {
 	$lead = get_post( $lead_id );
 	$participants = array();
 	if ( isset( $lead->post_author ) ) {
@@ -146,7 +146,7 @@ function rtcrm_get_all_participants( $lead_id ) {
 	$participants = array_merge( $participants, $subscribers );
 
 //	TODO
-//	$contacts = wp_get_post_terms( $lead_id, rtcrm_attribute_taxonomy_name( 'contacts' ) );
+//	$contacts = wp_get_post_terms( $lead_id, rthd_attribute_taxonomy_name( 'contacts' ) );
 //	foreach ( $contacts as $contact ) {
 //		$user_id = get_term_meta( $contact->term_id, 'user_id', true );
 //		if(!empty($user_id)) {
@@ -183,13 +183,13 @@ function rtcrm_get_all_participants( $lead_id ) {
 	return array_unique( $participants );
 }
 
-function rtcrm_get_lead_table_name() {
+function rthd_get_lead_table_name() {
 
 	global $wpdb, $blog_id;
-	return $wpdb->prefix . ( ( is_multisite() ) ? $blog_id.'_' : '' ) . 'rt_wp_crm_crm_index';
+	return $wpdb->prefix . ( ( is_multisite() ) ? $blog_id.'_' : '' ) . 'rt_wp_hd_hd_index';
 }
 
-function rtcrm_get_user_ids( $user ) {
+function rthd_get_user_ids( $user ) {
 	return $user->ID;
 }
 
@@ -232,7 +232,7 @@ function rt_update_post_term_count( $terms, $taxonomy ) {
  * @param string
  * @return string
  */
-function rtcrm_encrypt_decrypt( $string ) {
+function rthd_encrypt_decrypt( $string ) {
 
 	$string_length = strlen( $string );
 	$encrypted_string = "";
@@ -257,7 +257,7 @@ function rtcrm_encrypt_decrypt( $string ) {
 }
 
 // wp1_text_diff
-function rtcrm_text_diff( $left_string, $right_string, $args = null ) {
+function rthd_text_diff( $left_string, $right_string, $args = null ) {
 	$defaults = array('title' => '', 'title_left' => '', 'title_right' => '');
 	$args = wp_parse_args($args, $defaults);
 
@@ -266,7 +266,7 @@ function rtcrm_text_diff( $left_string, $right_string, $args = null ) {
 	$left_lines = explode("\n", $left_string);
 	$right_lines = explode("\n", $right_string);
 
-	$renderer = new Rt_CRM_Email_Diff();
+	$renderer = new Rt_HD_Email_Diff();
 	$text_diff = new Text_Diff($left_lines, $right_lines);
 	$diff = $renderer->render($text_diff);
 
