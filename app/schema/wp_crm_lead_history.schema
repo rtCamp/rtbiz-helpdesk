@@ -1,6 +1,6 @@
 CREATE TABLE %s (
 	id BIGINT(11) NOT NULL AUTO_INCREMENT,
-	lead_id BIGINT(11) NOT NULL,
+	ticket_id BIGINT(11) NOT NULL,
 	type VARCHAR(20) DEFAULT NULL,
 	old_value TEXT,
 	new_value TEXT,
