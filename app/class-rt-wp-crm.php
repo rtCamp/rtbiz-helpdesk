@@ -12,12 +12,13 @@ if ( ! defined( 'ABSPATH' ) )
  */
 
 /**
- * Description of RT_WP_CRM
+ * Description of RT_WP_Helpdesk
  *
  * @author udit
  */
-if ( ! class_exists( 'RT_WP_CRM' ) ) {
-	class RT_WP_CRM {
+if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
+
+	class RT_WP_Helpdesk {
 
 		public $templateURL;
 
@@ -27,7 +28,7 @@ if ( ! class_exists( 'RT_WP_CRM' ) ) {
 				return false;
 			}
 
-            $this->init_globals();
+			$this->init_globals();
 
 			add_action( 'init', array( $this, 'admin_init' ), 5 );
 			add_action( 'init', array( $this, 'init' ), 6 );
@@ -36,15 +37,15 @@ if ( ! class_exists( 'RT_WP_CRM' ) ) {
 		}
 
 		function admin_init() {
-			$this->templateURL = apply_filters('rtcrm_template_url', 'rtcrm/');
+			$this->templateURL = apply_filters( 'rthd_template_url', 'rthelpdesk/' );
 
 			$this->update_database();
 
-			global $rt_crm_admin;
-			$rt_crm_admin = new Rt_CRM_Admin();
+			global $rt_hd_admin;
+			$rt_hd_admin = new Rt_HD_Admin();
 
-			global $rt_crm_gravity_form_importer;
-			$rt_crm_gravity_form_importer->crm_importer_ajax_hooks();
+			global $rt_hd_gravity_form_importer;
+			$rt_hd_gravity_form_importer->hd_importer_ajax_hooks();
 		}
 
 		function check_rt_biz_dependecy() {
@@ -96,142 +97,144 @@ if ( ! class_exists( 'RT_WP_CRM' ) ) {
 			return $flag;
 		}
 
-		function rt_biz_admin_notice() { ?>
+		function rt_biz_admin_notice() {
+			?>
 			<div class="updated">
-				<p><?php _e( sprintf( 'rtCRM : It seems that rtBiz plugin is not installed or activated. Please %s / %s it.', '<a href="'.admin_url( 'plugin-install.php?tab=search&s=rt-contacts' ).'">'.__( 'install' ).'</a>', '<a href="'.admin_url( 'plugins.php' ).'">'.__( 'activate' ).'</a>' ) ); ?></p>
+				<p><?php _e( sprintf( 'rtHelpdesk : It seems that rtBiz plugin is not installed or activated. Please %s / %s it.', '<a href="' . admin_url( 'plugin-install.php?tab=search&s=rt-biz' ) . '">' . __( 'install' ) . '</a>', '<a href="' . admin_url( 'plugins.php' ) . '">' . __( 'activate' ) . '</a>' ) ); ?></p>
 			</div>
-		<?php }
+		<?php
+		}
 
 		function init_globals() {
-			global $rt_crm_attributes, $rt_crm_leads, $rt_crm_acl,
-					$rt_crm_gravity_form_importer, $rt_crm_settings, $rt_crm_logs,
-					$taxonomy_metadata, $rt_crm_module, $rtcrm_form,
-					$rt_crm_mail_accounts_model,
-					$rt_crm_mail_acl_model, $rt_crm_mail_thread_importer_model,
-					$rt_crm_mail_message_model, $rt_crm_mail_outbound_model,
-					$rt_crm_gravity_fields_mapping_model, $rt_crm_user_settings,
-					$rt_crm_dashboard, $rt_crm_lead_history_model, $rt_reports,
-					$rt_crm_accounts, $rt_crm_contacts, $rt_crm_closing_reason,
-					$rt_crm_imap_server_model, $rt_crm_gravity_form_mapper;
+			global $rt_hd_attributes, $rt_hd_tickets, $rt_hd_acl,
+			$rt_hd_gravity_form_importer, $rt_hd_settings, $rt_hd_logs,
+			$taxonomy_metadata, $rt_hd_module, $rthd_form,
+			$rt_hd_mail_accounts_model,
+			$rt_hd_mail_acl_model, $rt_hd_mail_thread_importer_model,
+			$rt_hd_mail_message_model, $rt_hd_mail_outbound_model,
+			$rt_hd_gravity_fields_mapping_model, $rt_hd_user_settings,
+			$rt_hd_dashboard, $rt_hd_ticket_history_model, $rt_reports,
+			$rt_hd_accounts, $rt_hd_contacts, $rt_hd_closing_reason,
+			$rt_hd_imap_server_model, $rt_hd_gravity_form_mapper;
 
-			$rtcrm_form = new Rt_Form();
+			$rthd_form = new Rt_Form();
 
-			$rt_crm_mail_accounts_model = new Rt_CRM_Mail_Accounts_Model();
-			$rt_crm_mail_acl_model = new Rt_CRM_Mail_ACL_Model();
-			$rt_crm_mail_thread_importer_model = new Rt_CRM_Mail_Thread_Importer_Model();
-			$rt_crm_mail_message_model = new Rt_CRM_Mail_Message_Model();
-			$rt_crm_mail_outbound_model = new Rt_CRM_Mail_Outbound_Model();
-			$rt_crm_gravity_fields_mapping_model = new Rt_CRM_Gravity_Fields_Mapping_Model();
-			$rt_crm_lead_history_model = new Rt_CRM_Lead_History_Model();
-			$rt_crm_imap_server_model = new Rt_CRM_IMAP_Server_Model();
+			$rt_hd_mail_accounts_model = new Rt_HD_Mail_Accounts_Model();
+			$rt_hd_mail_acl_model = new Rt_HD_Mail_ACL_Model();
+			$rt_hd_mail_thread_importer_model = new Rt_HD_Mail_Thread_Importer_Model();
+			$rt_hd_mail_message_model = new Rt_HD_Mail_Message_Model();
+			$rt_hd_mail_outbound_model = new Rt_HD_Mail_Outbound_Model();
+			$rt_hd_gravity_fields_mapping_model = new Rt_HD_Gravity_Fields_Mapping_Model();
+			$rt_hd_ticket_history_model = new Rt_HD_Ticket_History_Model();
+			$rt_hd_imap_server_model = new Rt_HD_IMAP_Server_Model();
 
 			$taxonomy_metadata = new Taxonomy_Metadata();
 			$taxonomy_metadata->activate();
 
-			$rt_crm_closing_reason = new Rt_CRM_Closing_Reason();
-			$rt_crm_attributes = new Rt_CRM_Attributes();
-			$rt_crm_module = new Rt_CRM_Module();
-			$rt_crm_acl = new Rt_CRM_ACL();
-//			$rt_crm_roles = new Rt_CRM_Roles();
-			$rt_crm_accounts = new Rt_CRM_Accounts();
-			$rt_crm_contacts = new Rt_CRM_Contacts();
-			$rt_crm_leads = new Rt_CRM_Leads();
+			$rt_hd_closing_reason = new Rt_HD_Closing_Reason();
+			$rt_hd_attributes = new Rt_HD_Attributes();
+			$rt_hd_module = new Rt_HD_Module();
+			$rt_hd_acl = new Rt_HD_ACL();
+//			$rt_hd_roles = new Rt_HD_Roles();
+			$rt_hd_accounts = new Rt_HD_Accounts();
+			$rt_hd_contacts = new Rt_HD_Contacts();
+			$rt_hd_tickets = new Rt_HD_Tickets();
 
-			$rt_crm_dashboard = new Rt_CRM_Dashboard();
+			$rt_hd_dashboard = new Rt_HD_Dashboard();
 
-			$rt_crm_gravity_form_importer = new Rt_CRM_Gravity_Form_Importer();
-			$rt_crm_gravity_form_mapper= new Rt_CRM_Gravity_Form_Mapper();
-			$rt_crm_settings = new Rt_CRM_Settings();
-			$rt_crm_user_settings = new Rt_CRM_User_Settings();
-			$rt_crm_logs = new Rt_CRM_Logs();
+			$rt_hd_gravity_form_importer = new Rt_HD_Gravity_Form_Importer();
+			$rt_hd_gravity_form_mapper = new Rt_HD_Gravity_Form_Mapper();
+			$rt_hd_settings = new Rt_HD_Settings();
+			$rt_hd_user_settings = new Rt_HD_User_Settings();
+			$rt_hd_logs = new Rt_HD_Logs();
 
 			$page_slugs = array(
-				'rtcrm-'.$rt_crm_module->post_type.'-dashboard',
+				'rthd-' . $rt_hd_module->post_type . '-dashboard',
 			);
 			$rt_reports = new Rt_Reports( $page_slugs );
 		}
 
 		function init() {
-			global $rt_crm_leads_front;
-			$rt_crm_leads_front = new Rt_CRM_Leads_Front();
+			global $rt_hd_tickets_front;
+			$rt_hd_tickets_front = new Rt_HD_Tickets_Front();
 		}
 
 		function update_database() {
-			$updateDB = new RT_DB_Update( trailingslashit( RT_CRM_PATH ) . 'index.php', trailingslashit( RT_CRM_PATH_SCHEMA ) );
+			$updateDB = new RT_DB_Update( trailingslashit( RT_HD_PATH ) . 'index.php', trailingslashit( RT_HD_PATH_SCHEMA ) );
 			$updateDB->do_upgrade();
 		}
 
 		function loadScripts() {
-			global $wp_query, $rt_crm_module;
+			global $wp_query, $rt_hd_module;
 
-			if ( !isset($wp_query->query_vars['name']) ) {
+			if ( ! isset( $wp_query->query_vars[ 'name' ] ) ) {
 				return;
 			}
 
-			$name = $wp_query->query_vars['name'];
+			$name = $wp_query->query_vars[ 'name' ];
 
-			$post_type = rtcrm_post_type_name( $name );
-			if( $post_type != $rt_crm_module->post_type ) {
+			$post_type = rthd_post_type_name( $name );
+			if ( $post_type != $rt_hd_module->post_type ) {
 				return;
 			}
 
-			if( !isset( $_REQUEST['rtcrm_unique_id'] ) || (isset($_REQUEST['rtcrm_unique_id']) && empty($_REQUEST['rtcrm_unique_id'])) ) {
+			if ( ! isset( $_REQUEST[ 'rthd_unique_id' ] ) || (isset( $_REQUEST[ 'rthd_unique_id' ] ) && empty( $_REQUEST[ 'rthd_unique_id' ] )) ) {
 				return;
 			}
 
 			$args = array(
-				'meta_key' => 'rtcrm_unique_id',
-				'meta_value' => $_REQUEST['rtcrm_unique_id'],
+				'meta_key' => 'rthd_unique_id',
+				'meta_value' => $_REQUEST[ 'rthd_unique_id' ],
 				'post_status' => 'any',
 				'post_type' => $post_type,
 			);
 
-			$leadpost = get_posts( $args );
-			if( empty( $leadpost ) ) {
+			$ticketpost = get_posts( $args );
+			if ( empty( $ticketpost ) ) {
 				return;
 			}
-			$lead = $leadpost[0];
-			if( $post_type != $lead->post_type ) {
+			$ticket = $ticketpost[ 0 ];
+			if ( $post_type != $ticket->post_type ) {
 				return;
 			}
 
 
-			wp_enqueue_script('rt-jquery-tagit-js', RT_CRM_URL . 'app/assets/javascripts/tag-it.js', array( 'jquery', 'jquery-ui-widget' ), RT_CRM_VERSION, true);
-			wp_enqueue_style('rt-jquery-tagit-css', RT_CRM_URL . 'app/assets/css/jquery.tagit.css', false, RT_CRM_VERSION, 'all');
-			wp_enqueue_script('jquery-ui-timepicker-addon', RT_CRM_URL . 'app/assets/javascripts/jquery-ui-timepicker-addon.js',array("jquery-ui-datepicker","jquery-ui-slider"), RT_CRM_VERSION, true);
+			wp_enqueue_script( 'rt-jquery-tagit-js', RT_HD_URL . 'app/assets/javascripts/tag-it.js', array( 'jquery', 'jquery-ui-widget' ), RT_HD_VERSION, true );
+			wp_enqueue_style( 'rt-jquery-tagit-css', RT_HD_URL . 'app/assets/css/jquery.tagit.css', false, RT_HD_VERSION, 'all' );
+			wp_enqueue_script( 'jquery-ui-timepicker-addon', RT_HD_URL . 'app/assets/javascripts/jquery-ui-timepicker-addon.js', array( "jquery-ui-datepicker", "jquery-ui-slider" ), RT_HD_VERSION, true );
 
-			wp_enqueue_script('foundation.zepto', RT_CRM_URL . 'app/assets/javascripts/vendor/zepto.js',array("jquery"), "", true);
-			wp_enqueue_script('jquery.foundation.reveal', RT_CRM_URL . 'app/assets/javascripts/jquery.foundation.reveal.js',array("foundation-js"), "", true);
-			wp_enqueue_script('jquery.foundation.form', RT_CRM_URL . 'app/assets/javascripts/foundation/foundation.forms.js',array("foundation-js"), "", true);
-			wp_enqueue_script('jquery.foundation.tabs', RT_CRM_URL . 'app/assets/javascripts/foundation/foundation.section.js',array("foundation-js"), "", true);
-			wp_enqueue_script('foundation-modernizr-js', RT_CRM_URL . 'app/assets/javascripts/vendor/custom.modernizr.js', array(), "", false);
-			wp_enqueue_script('ratting-jquery', RT_CRM_URL . 'app/assets/ratting-jquery/jquery.rating.pack.js', array(), RT_CRM_VERSION, true);
-			wp_enqueue_script('foundation-js', RT_CRM_URL . 'app/assets/javascripts/foundation/foundation.js',array("jquery","foundation.zepto"), RT_CRM_VERSION, true);
-			wp_enqueue_script('sticky-kit', RT_CRM_URL . 'app/assets/javascripts/stickyfloat.js', array('jquery'), RT_CRM_VERSION, true);
-			wp_enqueue_script('rtcrm-app-js', RT_CRM_URL . 'app/assets/javascripts/app.js', array( 'foundation-js', 'rt-jquery-tagit-js' ), RT_CRM_VERSION, true);
+			wp_enqueue_script( 'foundation.zepto', RT_HD_URL . 'app/assets/javascripts/vendor/zepto.js', array( "jquery" ), "", true );
+			wp_enqueue_script( 'jquery.foundation.reveal', RT_HD_URL . 'app/assets/javascripts/jquery.foundation.reveal.js', array( "foundation-js" ), "", true );
+			wp_enqueue_script( 'jquery.foundation.form', RT_HD_URL . 'app/assets/javascripts/foundation/foundation.forms.js', array( "foundation-js" ), "", true );
+			wp_enqueue_script( 'jquery.foundation.tabs', RT_HD_URL . 'app/assets/javascripts/foundation/foundation.section.js', array( "foundation-js" ), "", true );
+			wp_enqueue_script( 'foundation-modernizr-js', RT_HD_URL . 'app/assets/javascripts/vendor/custom.modernizr.js', array(), "", false );
+			wp_enqueue_script( 'ratting-jquery', RT_HD_URL . 'app/assets/ratting-jquery/jquery.rating.pack.js', array(), RT_HD_VERSION, true );
+			wp_enqueue_script( 'foundation-js', RT_HD_URL . 'app/assets/javascripts/foundation/foundation.js', array( "jquery", "foundation.zepto" ), RT_HD_VERSION, true );
+			wp_enqueue_script( 'sticky-kit', RT_HD_URL . 'app/assets/javascripts/stickyfloat.js', array( 'jquery' ), RT_HD_VERSION, true );
+			wp_enqueue_script( 'rthd-app-js', RT_HD_URL . 'app/assets/javascripts/app.js', array( 'foundation-js', 'rt-jquery-tagit-js' ), RT_HD_VERSION, true );
 
 
-			wp_enqueue_script('moment-js', RT_CRM_URL . 'app/assets/javascripts/moment.js',array("jquery"), RT_CRM_VERSION, true);
+			wp_enqueue_script( 'moment-js', RT_HD_URL . 'app/assets/javascripts/moment.js', array( "jquery" ), RT_HD_VERSION, true );
 
-			if( ! wp_script_is( 'jquery-ui-accordion' ) ) {
+			if ( ! wp_script_is( 'jquery-ui-accordion' ) ) {
 				wp_enqueue_script( 'jquery-ui-accordion' );
 			}
 
-			wp_enqueue_style('ratting-jquery', RT_CRM_URL . 'app/assets/ratting-jquery/jquery.rating.css', false, "", 'all');
-			wp_enqueue_style('foundation-icon-general-css', RT_CRM_URL . 'app/assets/css/general_foundicons.css', false, "", 'all');
-			wp_enqueue_style('foundation-icon-general-ie-css', RT_CRM_URL . 'app/assets/css/general_foundicons_ie7.css', false, "", 'all');
-			wp_enqueue_style('foundation-icon-social-css', RT_CRM_URL . 'app/assets/css/social_foundicons.css', false, "", 'all');
-			wp_enqueue_style('foundation-icon-social-ie-css', RT_CRM_URL . 'app/assets/css/social_foundicons_ie7.css', false, "", 'all');
-			wp_enqueue_style('foundation-normalize', RT_CRM_URL . 'app/assets/css/legacy_normalize.css', false, '', 'all');
-			wp_enqueue_style('foundation-legacy-css', RT_CRM_URL . 'app/assets/css/legacy_admin.css', false, '', 'all');
-			wp_enqueue_style('rtcrm-admin-css', RT_CRM_URL . 'app/assets/css/admin.css', false, RT_CRM_VERSION, 'all');
+			wp_enqueue_style( 'ratting-jquery', RT_HD_URL . 'app/assets/ratting-jquery/jquery.rating.css', false, "", 'all' );
+			wp_enqueue_style( 'foundation-icon-general-css', RT_HD_URL . 'app/assets/css/general_foundicons.css', false, "", 'all' );
+			wp_enqueue_style( 'foundation-icon-general-ie-css', RT_HD_URL . 'app/assets/css/general_foundicons_ie7.css', false, "", 'all' );
+			wp_enqueue_style( 'foundation-icon-social-css', RT_HD_URL . 'app/assets/css/social_foundicons.css', false, "", 'all' );
+			wp_enqueue_style( 'foundation-icon-social-ie-css', RT_HD_URL . 'app/assets/css/social_foundicons_ie7.css', false, "", 'all' );
+			wp_enqueue_style( 'foundation-normalize', RT_HD_URL . 'app/assets/css/legacy_normalize.css', false, '', 'all' );
+			wp_enqueue_style( 'foundation-legacy-css', RT_HD_URL . 'app/assets/css/legacy_admin.css', false, '', 'all' );
+			wp_enqueue_style( 'rthd-admin-css', RT_HD_URL . 'app/assets/css/admin.css', false, RT_HD_VERSION, 'all' );
 
-			if( !wp_script_is('jquery-ui-datepicker') ) {
+			if ( ! wp_script_is( 'jquery-ui-datepicker' ) ) {
 				wp_enqueue_script( 'jquery-ui-datepicker' );
 			}
 
-			if( !wp_script_is('jquery-ui-autocomplete') ) {
-				wp_enqueue_script('jquery-ui-autocomplete', '', array('jquery-ui-widget', 'jquery-ui-position'), '1.9.2',true);
+			if ( ! wp_script_is( 'jquery-ui-autocomplete' ) ) {
+				wp_enqueue_script( 'jquery-ui-autocomplete', '', array( 'jquery-ui-widget', 'jquery-ui-position' ), '1.9.2', true );
 			}
 
 			global $wp_scripts;
@@ -251,27 +254,29 @@ if ( ! class_exists( 'RT_WP_CRM' ) ) {
 
 		function localize_scripts() {
 
-			$unique_id = $_REQUEST['rtcrm_unique_id'];
-			global $rt_crm_module;
+			$unique_id = $_REQUEST[ 'rthd_unique_id' ];
+			global $rt_hd_module;
 			$args = array(
-				'meta_key' => 'rtcrm_unique_id',
+				'meta_key' => 'rthd_unique_id',
 				'meta_value' => $unique_id,
 				'post_status' => 'any',
-				'post_type' => $rt_crm_module->post_type,
+				'post_type' => $rt_hd_module->post_type,
 			);
-			$leadpost = get_posts( $args );
-			if( empty( $leadpost ) ) {
+			$ticketpost = get_posts( $args );
+			if ( empty( $ticketpost ) ) {
 				return;
 			}
-			$lead = $leadpost[0];
+			$ticket = $ticketpost[ 0 ];
 
 			$user_edit = false;
 
-			if( wp_script_is( 'rtcrm-app-js' ) ) {
-				wp_localize_script( 'rtcrm-app-js', 'ajaxurl', admin_url( 'admin-ajax.php' ) );
-				wp_localize_script( 'rtcrm-app-js', 'rtcrm_post_type', get_post_type( $lead->ID ) );
-				wp_localize_script( 'rtcrm-app-js', 'rtcrm_user_edit', array($user_edit) );
+			if ( wp_script_is( 'rthd-app-js' ) ) {
+				wp_localize_script( 'rthd-app-js', 'ajaxurl', admin_url( 'admin-ajax.php' ) );
+				wp_localize_script( 'rthd-app-js', 'rthd_post_type', get_post_type( $ticket->ID ) );
+				wp_localize_script( 'rthd-app-js', 'rthd_user_edit', array( $user_edit ) );
 			}
 		}
+
 	}
+
 }
