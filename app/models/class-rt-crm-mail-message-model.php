@@ -12,14 +12,14 @@ if (!defined('ABSPATH'))
  */
 
 /**
- * Description of RtCRMMailMessageModel
+ * Description of RtHDMailMessageModel
  *
  * @author udit
  */
-if ( !class_exists( 'Rt_CRM_Mail_Message_Model' ) ) {
-	class Rt_CRM_Mail_Message_Model extends RT_DB_Model {
+if ( !class_exists( 'Rt_HD_Mail_Message_Model' ) ) {
+	class Rt_HD_Mail_Message_Model extends RT_DB_Model {
 		public function __construct() {
-			parent::__construct( 'wp_crm_mail_messageids' );
+			parent::__construct( 'wp_hd_mail_messageids' );
 		}
 
 		function get_message( $where ) {

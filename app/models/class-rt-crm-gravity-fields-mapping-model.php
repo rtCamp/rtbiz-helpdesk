@@ -12,14 +12,14 @@ if ( ! defined( 'ABSPATH' ) )
  */
 
 /**
- * Description of RtCRMGravityFieldsMappingModel
+ * Description of RtHDGravityFieldsMappingModel
  *
  * @author udit
  */
-if ( !class_exists( 'Rt_CRM_Gravity_Fields_Mapping_Model' ) ) {
-	class Rt_CRM_Gravity_Fields_Mapping_Model extends RT_DB_Model {
+if ( !class_exists( 'Rt_HD_Gravity_Fields_Mapping_Model' ) ) {
+	class Rt_HD_Gravity_Fields_Mapping_Model extends RT_DB_Model {
 		public function __construct() {
-			parent::__construct( 'wp_crm_gravity_fields_mapping' );
+			parent::__construct( 'wp_hd_gravity_fields_mapping' );
 		}
 
 		function get_all_mappings(){

@@ -12,14 +12,14 @@ if (!defined('ABSPATH'))
  */
 
 /**
- * Description of RtCRMMailOutboundModel
+ * Description of RtHDMailOutboundModel
  *
  * @author udit
  */
-if ( !class_exists( 'Rt_CRM_Mail_Outbound_Model' ) ) {
-	class Rt_CRM_Mail_Outbound_Model extends RT_DB_Model {
+if ( !class_exists( 'Rt_HD_Mail_Outbound_Model' ) ) {
+	class Rt_HD_Mail_Outbound_Model extends RT_DB_Model {
 		public function __construct() {
-			parent::__construct( 'wp_crm_mail_outbound' );
+			parent::__construct( 'wp_hd_mail_outbound' );
 		}
 
 		function get_outbound_mail( $where ) {

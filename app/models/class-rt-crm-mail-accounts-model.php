@@ -12,14 +12,14 @@ if (!defined('ABSPATH'))
  */
 
 /**
- * Description of RtCRMMailAccountsModel
+ * Description of RtHDMailAccountsModel
  *
  * @author udit
  */
-if ( !class_exists( 'Rt_CRM_Mail_Accounts_Model' ) ) {
-	class Rt_CRM_Mail_Accounts_Model extends RT_DB_Model {
+if ( !class_exists( 'Rt_HD_Mail_Accounts_Model' ) ) {
+	class Rt_HD_Mail_Accounts_Model extends RT_DB_Model {
 		public function __construct() {
-			parent::__construct( 'wp_crm_mail_accounts' );
+			parent::__construct( 'wp_hd_mail_accounts' );
 		}
 
 		function add_mail_account( $data ) {

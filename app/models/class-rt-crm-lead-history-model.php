@@ -7,14 +7,14 @@
  */
 
 /**
- * Description of RtCRMLeadHistoryModel
+ * Description of RtHDLeadHistoryModel
  *
  * @author udit
  */
-if ( !class_exists( 'Rt_CRM_Lead_History_Model' ) ) {
-	class Rt_CRM_Lead_History_Model extends RT_DB_Model {
+if ( !class_exists( 'Rt_HD_Lead_History_Model' ) ) {
+	class Rt_HD_Lead_History_Model extends RT_DB_Model {
 		public function __construct() {
-			parent::__construct('wp_crm_lead_history');
+			parent::__construct('wp_hd_lead_history');
 		}
 	}
 }

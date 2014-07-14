@@ -12,14 +12,14 @@ if (!defined('ABSPATH'))
  */
 
 /**
- * Description of RtCRMIMAPServerModel
+ * Description of RtHDIMAPServerModel
  *
  * @author udit
  */
-if ( !class_exists( 'Rt_CRM_IMAP_Server_Model' ) ) {
-	class Rt_CRM_IMAP_Server_Model extends RT_DB_Model {
+if ( !class_exists( 'Rt_HD_IMAP_Server_Model' ) ) {
+	class Rt_HD_IMAP_Server_Model extends RT_DB_Model {
 		public function __construct() {
-			parent::__construct( 'wp_crm_imap_server' );
+			parent::__construct( 'wp_hd_imap_server' );
 		}
 
 		function get_all_servers() {

@@ -12,15 +12,15 @@ if ( ! defined( 'ABSPATH' ) )
  */
 
 /**
- * Description of RtCRMLeadModel
+ * Description of RtHDLeadModel
  *
  * @author udit
  */
-if ( !class_exists( 'Rt_CRM_Lead_Model' ) ) {
-	class Rt_CRM_Lead_Model extends RT_DB_Model {
+if ( !class_exists( 'Rt_HD_Lead_Model' ) ) {
+	class Rt_HD_Lead_Model extends RT_DB_Model {
 
 		public function __construct() {
-			$table_name = rtcrm_get_lead_table_name();
+			$table_name = rthd_get_ticket_table_name();
 			parent::__construct( $table_name, true );
 		}
 

@@ -12,14 +12,14 @@ if (!defined('ABSPATH'))
  */
 
 /**
- * Description of RtCRMMailThreadImporterModel
+ * Description of RtHDMailThreadImporterModel
  *
  * @author udit
  */
-if ( !class_exists( 'Rt_CRM_Mail_Thread_Importer_Model' ) ) {
-	class Rt_CRM_Mail_Thread_Importer_Model extends RT_DB_Model {
+if ( !class_exists( 'Rt_HD_Mail_Thread_Importer_Model' ) ) {
+	class Rt_HD_Mail_Thread_Importer_Model extends RT_DB_Model {
 		public function __construct() {
-			parent::__construct( 'wp_crm_mail_thread_importer' );
+			parent::__construct( 'wp_hd_mail_thread_importer' );
 		}
 
 		function add_thread( $data ) {

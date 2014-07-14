@@ -12,14 +12,14 @@ if (!defined('ABSPATH'))
  */
 
 /**
- * Description of RtCRMMailACLModel
+ * Description of RtHDMailACLModel
  *
  * @author udit
  */
-if ( !class_exists('Rt_CRM_Mail_ACL_Model' ) ) {
-	class Rt_CRM_Mail_ACL_Model extends RT_DB_Model {
+if ( !class_exists('Rt_HD_Mail_ACL_Model' ) ) {
+	class Rt_HD_Mail_ACL_Model extends RT_DB_Model {
 		public function __construct() {
-			parent::__construct( 'wp_crm_mail_acl' );
+			parent::__construct( 'wp_hd_mail_acl' );
 		}
 
 		function get_acl( $where ) {
