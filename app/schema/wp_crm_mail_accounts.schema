@@ -15,4 +15,4 @@ CREATE TABLE %s (
 	last_mail_uid TEXT,
 	PRIMARY KEY  (id),
 	UNIQUE KEY email (email)
-);
+) CHARACTER SET utf8 COLLATE utf8_general_ci;

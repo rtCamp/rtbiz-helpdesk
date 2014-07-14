@@ -8,4 +8,4 @@ CREATE TABLE %s (
 	update_time TIMESTAMP NOT NULL,
 	updated_by BIGINT(11) NOT NULL,
 	PRIMARY KEY  (id)
-);
+) CHARACTER SET utf8 COLLATE utf8_general_ci;

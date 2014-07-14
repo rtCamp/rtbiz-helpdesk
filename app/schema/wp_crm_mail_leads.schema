@@ -14,4 +14,4 @@ CREATE TABLE %s (
 	flag CHAR(1) DEFAULT 'p',
 	enttime TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY  (messageid)
-);
+) CHARACTER SET utf8 COLLATE utf8_general_ci;

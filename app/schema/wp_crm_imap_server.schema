@@ -8,4 +8,4 @@ CREATE TABLE %s (
 	outgoing_smtp_port VARCHAR(200) NOT NULL,
 	outgoing_smtp_enc VARCHAR(10) DEFAULT NULL,
 	PRIMARY KEY  (id)
-);
+) CHARACTER SET utf8 COLLATE utf8_general_ci;

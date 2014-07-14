@@ -4,4 +4,4 @@ CREATE TABLE %s (
 	enttime TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY  (id),
 	UNIQUE KEY messege_id_index (messageid)
-);
+) CHARACTER SET utf8 COLLATE utf8_general_ci;

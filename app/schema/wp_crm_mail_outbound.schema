@@ -13,4 +13,4 @@ CREATE TABLE %s (
 	refrence_type VARCHAR(45) DEFAULT NULL,
 	sent VARCHAR(45) DEFAULT 'no',
 	PRIMARY KEY  (id)
-);
+) CHARACTER SET utf8 COLLATE utf8_general_ci;
