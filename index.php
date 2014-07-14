@@ -50,7 +50,7 @@ if ( ! defined( 'RT_HD_PATH_TEMPLATES' ) ) {
 
 include_once RT_HD_PATH_LIB . 'wp-helpers.php';
 
-function rt_crm_include() {
+function rt_hd_include() {
 
 	include_once RT_HD_PATH_VENDOR . 'MailLib/zendAutoload.php';
 	include_once RT_HD_PATH_VENDOR . 'forceutf8/src/ForceUTF8/Encoding.php';
