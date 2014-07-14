@@ -13,7 +13,7 @@ jQuery(document).ready(function($) {
 
 	format_date_moment();
 
-	$('.rtcrm_sticky_div').stickyfloat( {duration: 400, delay: 3, offsetY:40} );
+	$('.rthd_sticky_div').stickyfloat( {duration: 400, delay: 3, offsetY:40} );
 
 	$("#savefollwoup").click(function(){
 		var followuptype =$("#followup-type").val();
@@ -25,7 +25,7 @@ jQuery(document).ready(function($) {
 		requestArray["action"] = "rtcrm_add_new_followup_front";
 		requestArray["followuptype"] = 'note';
 
-		requestArray["followup_lead_unique_id"] = $("#lead_unique_id").val();
+		requestArray["followup_ticket_unique_id"] = $("#ticket_unique_id").val();
 		requestArray["follwoup-time"]=$("#follwoup-time").val();
 
 		if(jQuery("#followup_content").val()=="" && typeof tinyMCE != 'undefined' ){
@@ -118,7 +118,7 @@ jQuery(document).ready(function($) {
 		$.post( ajaxurl, {
 			action: 'rtcrm_get_lead_comments_ajax',
 			page: page,
-			lead_unique_id: $("#lead_unique_id").val()
+			ticket_unique_id: $("#ticket_unique_id").val()
 		}, function(data) {
 			data = JSON.parse(data);
 			if(typeof data.status != undefined && data.status == 'success') {

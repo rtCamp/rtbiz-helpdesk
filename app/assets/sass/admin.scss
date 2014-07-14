@@ -54,7 +54,7 @@
 // @import "foundation/components/tooltips";
 // @import "foundation/components/dropdown";
 
-.rtcrm-container {
+.rthd-container {
 
 //	@import "settings";
 //	@import "compass/reset";
@@ -118,20 +118,20 @@
 		margin-top: 5px;
 	}
 
-	#add_lead_attachment {
+	#add_ticket_attachment {
 		margin-bottom: 5px;
 	}
 
-	.rtcrm_delete_attachment {
+	.rthd_delete_attachment {
 		color: red;
 		margin-right: 5px;
 	}
 
-	.rtcrm_view_mode {
+	.rthd_view_mode {
 		text-align: center;
 	}
 
-	.rtcrm_attachment {
+	.rthd_attachment {
 		height: 20px;
 		overflow: hidden;
 		display: inline-block;
@@ -260,7 +260,7 @@
 			display: none;
 		}
 
-		.rtcrm_privacy {
+		.rthd_privacy {
 			display: inline-block;
 			margin-left: 5px;
 		}
@@ -283,7 +283,7 @@
 		}
 	}
 
-	.rtcrm-participant-list li {
+	.rthd-participant-list li {
 		.row.collapse .large-9.columns{
 			overflow: hidden;
 		}
@@ -293,7 +293,7 @@
 		margin-top: auto;
 	}
 
-	.rtcrm_attr_border {
+	.rthd_attr_border {
 		border: 1px solid #d9d9d9;
 	}
 

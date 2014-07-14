@@ -140,9 +140,9 @@ $.ajaxSetup({
                 });
             }, minLength: 2,
             select: function(event, ui) {
-                if (jQuery("#crm-contact-" + ui.item.id).length < 1) {
+                if (jQuery("#hd-contact-" + ui.item.id).length < 1) {
                     //get_term_meta
-                    var contact_meta = "#crm-contact-meta-" + ui.item.id
+                    var contact_meta = "#hd-contact-meta-" + ui.item.id
                     $("#divContactsList").append(genrate_contact_li(ui.item));
                     add_contact_meta(contact_meta,ui.item.id)
 
@@ -204,7 +204,7 @@ $.ajaxSetup({
                     },
                     success: function(data) {
                         $.each(data,function(key,value){
-                            if (jQuery("#crm-contact-" + value.id).length < 1) {
+                            if (jQuery("#hd-contact-" + value.id).length < 1) {
                                 jQuery("#divContactsList").append(genrate_contact_li(value));
                             }
                         })
@@ -597,9 +597,9 @@ if(jQuery("#new-contact-account").length > 0){
                 success: function(data) {
                     if (data.status) {
                         $("#add-contact").trigger('reveal:close');
-                        if (jQuery("#crm-contact-" + data.data.id).length < 1) {
+                        if (jQuery("#hd-contact-" + data.data.id).length < 1) {
                             jQuery("#divContactsList").append(genrate_contact_li(data.data));
-                            add_contact_meta("#crm-contact-meta-" + data.data.id,data.data.id)
+                            add_contact_meta("#hd-contact-meta-" + data.data.id,data.data.id)
                         }
 
                     } else {
@@ -685,7 +685,7 @@ if(jQuery("#new-contact-account").length > 0){
 		jQuery(this).parent().remove();
 	});
 
-	jQuery('#add_lead_attachment').on('click', function(e) {
+	jQuery('#add_ticket_attachment').on('click', function(e) {
 		e.preventDefault();
 		if (file_frame_lead) {
 			file_frame_lead.open();
@@ -1417,8 +1417,8 @@ function genrate_account_li(data){
                             + "</div></li>";
 }
 function genrate_contact_li(data){
-    return "<li id='crm-contact-" + data.id + "' class='contact-list' ><div class='row collapse'><div class='large-2 columns'> " + data.imghtml
-            + "</div><div id='crm-contact-meta-" + data.id + "'  class='large-9 columns'> <a target='_blank' class='heading' href='" +  data.url  + "' title='" + data.label +"'>" + data.label +"</a>"
+    return "<li id='hd-contact-" + data.id + "' class='contact-list' ><div class='row collapse'><div class='large-2 columns'> " + data.imghtml
+            + "</div><div id='hd-contact-meta-" + data.id + "'  class='large-9 columns'> <a target='_blank' class='heading' href='" +  data.url  + "' title='" + data.label +"'>" + data.label +"</a>"
             + "</div><div class='large-1 columns'><a href='#removeContact'><i class='foundicon-remove'></i></a><input type='hidden' name='post[contacts][]' value='" + data.id + "' /></div>"
             + "</div></li>"
 
