@@ -6,7 +6,7 @@ if( ! isset( $_REQUEST['post_type'] ) || $_REQUEST['post_type'] != $rt_crm_modul
 }
 
 $labels = $rt_crm_module->labels;
-$module_settings = get_site_option( 'rt_crm_settings', false );
+$module_settings = rthd_get_settings();
 $post_type = $_REQUEST['post_type'];
 $leadModel = new Rt_CRM_Lead_Model();
 

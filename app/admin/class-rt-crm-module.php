@@ -35,8 +35,11 @@ if( !class_exists( 'Rt_CRM_Module' ) ) {
 		}
 
 		function db_lead_table_update() {
-			$updateDB = new RT_DB_Update( trailingslashit( RT_CRM_PATH ) . 'index.php', trailingslashit( RT_CRM_PATH_SCHEMA ) );
-			if ( $updateDB->check_upgrade() ) {
+			global $wpdb;
+			$table_name = rthd_get_ticket_table_name();
+			$db_table_name = $wpdb->get_var( "SHOW TABLES LIKE '$table_name'" );
+			$updateDB = new RT_DB_Update( trailingslashit( RT_HD_PATH ) . 'index.php', trailingslashit( RT_HD_PATH_SCHEMA ) );
+			if ( $updateDB->check_upgrade() || $db_table_name != $table_name ) {
 				$this->create_database_table();
 			}
 		}
@@ -47,7 +50,7 @@ if( !class_exists( 'Rt_CRM_Module' ) ) {
 
 			global $rt_crm_attributes_relationship_model, $rt_crm_attributes_model;
 			$relations = $rt_crm_attributes_relationship_model->get_relations_by_post_type( $this->post_type );
-			$table_name = rtcrm_get_lead_table_name();
+			$table_name = rthd_get_ticket_table_name();
 			$sql = "CREATE TABLE {$table_name} (\n"
 					. "id BIGINT(20) NOT NULL AUTO_INCREMENT,\n"
 					. "post_id BIGINT(20),\n"
@@ -74,7 +77,7 @@ if( !class_exists( 'Rt_CRM_Module' ) ) {
 				$sql .= "{$attr_name} TEXT,\n";
 			}
 
-			$settings = get_site_option( 'rt_crm_settings', false );
+			$settings = rthd_get_settings();
 			if ( isset( $settings['attach_contacts'] ) && $settings['attach_contacts'] == 'yes' ) {
 				$contact_name = rt_biz_get_person_post_type();
 				$sql .= "{$contact_name} TEXT,\n";
@@ -85,7 +88,7 @@ if( !class_exists( 'Rt_CRM_Module' ) ) {
 			}
 
 			$sql .= "PRIMARY KEY  (id)\n"
-				. ");";
+				. ") CHARACTER SET utf8 COLLATE utf8_general_ci;";
 
 			dbDelta($sql);
 		}
@@ -95,7 +98,7 @@ if( !class_exists( 'Rt_CRM_Module' ) ) {
 			$this->register_custom_post( $menu_position );
 			$this->register_custom_statuses();
 
-			$settings = get_site_option( 'rt_crm_settings', false );
+			$settings = rthd_get_settings();
 			if ( isset( $settings['attach_contacts'] ) && $settings['attach_contacts'] == 'yes' ) {
 				rt_biz_register_person_connection( $this->post_type, $this->labels['name'] );
 			}
@@ -120,6 +123,17 @@ if( !class_exists( 'Rt_CRM_Module' ) ) {
 			add_action( 'rt_attributes_relations_added', array( $this, 'create_database_table' ) );
 			add_action( 'rt_attributes_relations_updated', array( $this, 'create_database_table' ) );
 			add_action( 'rt_attributes_relations_deleted', array( $this, 'create_database_table' ) );
+
+			add_action( 'rt_attributes_relations_added', array( $this, 'update_ticket_table' ), 10, 2 );
+			add_action( 'rt_attributes_relations_updated', array( $this, 'update_ticket_table' ), 10, 2 );
+			add_action( 'rt_attributes_relations_deleted', array( $this, 'update_ticket_table' ), 10, 2 );
+		}
+
+		function update_ticket_table( $attr_id, $post_types ) {
+			if ( in_array( $this->post_type, $post_types ) ) {
+				$updateDB = new RT_DB_Update( trailingslashit( RT_HD_PATH ) . 'index.php', trailingslashit( RT_HD_PATH_SCHEMA ) );
+				delete_option( $updateDB->db_version_option_name );
+			}
 		}
 
 		function native_list_view_link() {

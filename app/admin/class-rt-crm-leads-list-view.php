@@ -36,7 +36,7 @@ if ( !class_exists( 'Rt_CRM_Leads_List_View' ) ) {
 			$this->table_name = rtcrm_get_lead_table_name();
 			$this->labels = $rt_crm_module->labels;
 			$this->post_type = $rt_crm_module->post_type;
-			$this->settings = get_site_option( 'rt_crm_settings', false );
+			$this->settings = rthd_get_settings();
 			$this->relations = $rt_crm_attributes_relationship_model->get_relations_by_post_type( $this->post_type );
 			$this->post_statuses = $rt_crm_module->get_custom_statuses();
 

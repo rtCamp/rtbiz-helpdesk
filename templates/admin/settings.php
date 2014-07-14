@@ -5,7 +5,7 @@
 */
 global $rt_crm_module_model, $rt_crm_module;
 
-$module_settings = get_site_option( 'rt_crm_settings', false );
+$module_settings = rthd_get_settings();
 $flag = false;
 $slug = str_replace( '-', '_', sanitize_title( strtolower( $rt_crm_module->name ) ) );
 if ( isset( $_POST[$slug."_system_email"] ) ) {

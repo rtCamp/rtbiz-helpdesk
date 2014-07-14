@@ -64,7 +64,7 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 			$post_date_gmt = gmdate('Y-m-d H:i:s', (intval($timeStamp)));
 			$post_type = $rt_crm_module->post_type;
 			$labels = $rt_crm_module->labels;
-			$settings = get_site_option( 'rt_crm_settings', false );
+			$settings = rthd_get_settings();
 
 			$leadModel = new Rt_CRM_Lead_Model();
 
@@ -491,7 +491,7 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 		public function insert_post_comment($comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, $uploaded, $allemails, $dndEmails, $messageid = "", $inreplyto = "", $references = "", $subscriber = array()) {
 
 			$post_type = get_post_type( $comment_post_ID );
-			$module_settings = get_site_option( 'rt_crm_settings', false );
+			$module_settings = rthd_get_settings();
 			$leadModel = new Rt_CRM_Lead_Model();
 			$d = new DateTime($commenttime);
 			$UTC = new DateTimeZone("UTC");
@@ -909,14 +909,14 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 			if (!isset($_POST["followuptype"])) {
 				wp_die("Invalid Request");
 			}
-			if (!isset($_POST["followup_lead_unique_id"])) {
+			if (!isset($_POST["followup_ticket_unique_id"])) {
 				wp_die("Invalid Lead");
 			}
-			$lead_unique_id = $_POST['followup_lead_unique_id'];
+			$ticket_unique_id = $_POST['followup_ticket_unique_id'];
 			global $rt_crm_module;
 			$args = array(
 				'meta_key' => 'rtcrm_unique_id',
-				'meta_value' => $lead_unique_id,
+				'meta_value' => $ticket_unique_id,
 				'post_status' => 'any',
 				'post_type' => $rt_crm_module->post_type,
 			);
@@ -1022,18 +1022,18 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 		}
 
 		function get_lead_comments_ajax() {
-			if ( !isset( $_POST["lead_unique_id"] ) ) {
+			if ( !isset( $_POST["ticket_unique_id"] ) ) {
 				wp_die("Invalid Request");
 			}
 			if ( !isset( $_POST["page"] ) ) {
 				wp_die("Invalid Request");
 			}
 
-			$lead_unique_id = $_POST['lead_unique_id'];
+			$ticket_unique_id = $_POST['ticket_unique_id'];
 			global $rt_crm_module;
 			$args = array(
 				'meta_key' => 'rtcrm_unique_id',
-				'meta_value' => $lead_unique_id,
+				'meta_value' => $ticket_unique_id,
 				'post_status' => 'any',
 				'post_type' => $rt_crm_module->post_type,
 			);
@@ -1371,7 +1371,7 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 			}
 			$flag = true;
 			$post_type = get_post_type($post_id);
-			$module_settings = get_site_option( 'rt_crm_settings', false );
+			$module_settings = rthd_get_settings();
 			$systemEmail = ( isset( $module_settings['system_email'] ) ) ? $module_settings['system_email'] : '';
 			if ($systemEmail) {
 				if (!is_email($systemEmail)) {

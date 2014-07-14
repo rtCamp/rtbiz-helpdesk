@@ -112,7 +112,7 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 				}
 			}
 
-			$module_settings = get_site_option( 'rt_crm_settings', false );
+			$module_settings = rthd_get_settings();
 			if( isset( $module_settings['attach_contacts'] ) && $module_settings['attach_contacts'] == 'yes') {
 				$temp_arr = array(
 					"contactname" => array(
@@ -200,7 +200,7 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 			}
 		}
 
-		public function crm_importer_ajax_hooks() {
+		public function hd_importer_ajax_hooks() {
 			add_action( 'wp_ajax_rtcrm_map_import', array( $this, 'rtcrm_map_import_callback' ) );
 			add_action( 'wp_ajax_rtcrm_map_import_feauture', array( $this, 'rtcrm_map_import_feauture' ) );
 			add_action( 'init', array( $this, 'install_gravity_form_hook' ) );
@@ -784,7 +784,7 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 
 			//** END of remove woocommerce hooks **//
 
-			$module_settings = get_site_option( 'rt_crm_settings', false );
+			$module_settings = rthd_get_settings();
 
 			$response = array();
 			$autoDieFlag = !$autoDieFlag;
@@ -1052,7 +1052,7 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 			extract($map_data, EXTR_OVERWRITE);
 
 			global $transaction_id, $rt_crm_module;
-			$module_settings = get_site_option( 'rt_crm_settings', false );
+			$module_settings = rthd_get_settings();
 			$post_type = $rt_crm_module->post_type;
 			$leadModel = new Rt_CRM_Lead_Model();
 			if (isset($creationdate)) {

@@ -16,7 +16,7 @@ $attach_contacts = true;
 $post_type = '';
 if(isset($example_data[0])) {
 	$post_type = get_post_type( $example_data[0]->ID );
-	$module_settings = get_site_option( 'rt_crm_settings', false );
+	$module_settings = rthd_get_settings();
 	if ( isset( $module_settings['attach_contacts'] ) && $module_settings['attach_contacts'] != 'yes' )
 		$attach_contacts = false;
 	if ( isset( $module_settings['attach_accounts'] ) && $module_settings['attach_accounts'] != 'yes' )
