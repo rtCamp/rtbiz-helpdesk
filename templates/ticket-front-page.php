@@ -13,7 +13,7 @@ do_action( 'rthd_ticket_front_page_after_header' );
 
 global $rthd_ticket;
 $post_type = get_post_type( $rthd_ticket );
-$module_settings = get_site_option( 'rt_helpdesk_settings', false );
+$module_settings = rthd_get_settings();
 $labels = $rt_hd_module->labels;
 $post_id = $rthd_ticket->ID;
 $user_edit = false;
