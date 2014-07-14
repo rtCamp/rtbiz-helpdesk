@@ -12,13 +12,13 @@ if ( ! defined( 'ABSPATH' ) )
  */
 
 /**
- * Description of Rt_CRM_Leads
+ * Description of Rt_HD_Tickets
  *
  * @author udit
  */
-if ( !class_exists( 'Rt_CRM_Leads' ) ) {
+if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 
-	class Rt_CRM_Leads {
+	class Rt_HD_Tickets {
 
 		public function __construct() {
 			$this->hooks();
@@ -29,32 +29,32 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 
 			add_action( 'comment_post', array( $this, 'mail_new_comment_data' ), 10, 2 );
 
-			add_action( 'wp_ajax_rtcrm_add_new_followup_ajax', array( $this, 'add_new_followup_ajax' ) );
-			add_action( 'wp_ajax_rtcrm_add_new_followup_front', array( $this, 'add_new_followup_front' ) );
-			add_action( 'wp_ajax_nopriv_rtcrm_add_new_followup_front', array( $this, 'add_new_followup_front' ) );
-			add_action( 'wp_ajax_rtcrm_get_lead_comments_ajax', array( $this, 'get_lead_comments_ajax' ) );
-			add_action( 'wp_ajax_nopriv_rtcrm_get_lead_comments_ajax', array( $this, 'get_lead_comments_ajax' ) );
-			add_action( 'wp_ajax_activecollab_task_comment_import_ajax', array( $this, 'activecollab_task_comment_import_ajax' ) );
-			add_action( 'wp_ajax_crm_delete_followup', array( $this, 'delete_followup_ajax' ) );
-			add_action( 'wp_ajax_rtcrm_gmail_import_thread_request', array( $this, 'gmail_thread_import_request' ) );
+			add_action( 'wp_ajax_rthd_add_new_followup_ajax', array( $this, 'add_new_followup_ajax' ) );
+			add_action( 'wp_ajax_rthd_add_new_followup_front', array( $this, 'add_new_followup_front' ) );
+			add_action( 'wp_ajax_nopriv_rthd_add_new_followup_front', array( $this, 'add_new_followup_front' ) );
+			add_action( 'wp_ajax_rthd_get_ticket_comments_ajax', array( $this, 'get_ticket_comments_ajax' ) );
+			add_action( 'wp_ajax_nopriv_rthd_get_ticket_comments_ajax', array( $this, 'get_ticket_comments_ajax' ) );
+			add_action( 'wp_ajax_rthd_activecollab_task_comment_import_ajax', array( $this, 'activecollab_task_comment_import_ajax' ) );
+			add_action( 'wp_ajax_helpdesk_delete_followup', array( $this, 'delete_followup_ajax' ) );
+			add_action( 'wp_ajax_rthd_gmail_import_thread_request', array( $this, 'gmail_thread_import_request' ) );
 		}
 
 		function filter_comment_from_admin($_comment1) {
-			global $hook_suffix, $rt_crm_module;
+			global $hook_suffix, $rt_hd_module;
 			if ( in_array( $hook_suffix, array( 'edit-comments.php', 'index.php' ) ) ) {
 				global $wpdb;
 				if ( strpos( $_comment1['join'], $wpdb->posts ) === false ) {
 					$_comment1['join'] .= " left join $wpdb->posts on {$wpdb->comments}.comment_post_id = {$wpdb->posts}.id ";
 				}
-				$_comment1["where"] .= " and $wpdb->posts.post_type NOT IN ( '".$rt_crm_module->post_type."' ) ";
+				$_comment1["where"] .= " and $wpdb->posts.post_type NOT IN ( '".$rt_hd_module->post_type."' ) ";
 			}
 
 			return $_comment1;
 		}
 
-		public function insert_new_lead($title, $body, $userid, $mailtime, $allemail, $uploaded, $senderEmail, $messageid = "", $inreplyto = "", $references = "", $subscriber = array()) {
+		public function insert_new_ticket($title, $body, $userid, $mailtime, $allemail, $uploaded, $senderEmail, $messageid = "", $inreplyto = "", $references = "", $subscriber = array()) {
 
-			global $rt_crm_lead_history_model, $rt_crm_module;
+			global $rt_hd_ticket_history_model, $rt_hd_module;
 
 			$d = new DateTime($mailtime);
 			$UTC = new DateTimeZone("UTC");
@@ -62,13 +62,13 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 			$timeStamp = $d->getTimestamp();
 			$post_date = gmdate('Y-m-d H:i:s', (intval($timeStamp) + ( get_option('gmt_offset') * 3600 )));
 			$post_date_gmt = gmdate('Y-m-d H:i:s', (intval($timeStamp)));
-			$post_type = $rt_crm_module->post_type;
-			$labels = $rt_crm_module->labels;
+			$post_type = $rt_hd_module->post_type;
+			$labels = $rt_hd_module->labels;
 			$settings = rthd_get_settings();
 
-			$leadModel = new Rt_CRM_Lead_Model();
+			$ticketModel = new Rt_HD_Ticket_Model();
 
-			$unique_id = md5( 'rtcrm_'.$post_type.'_'.$post_date_gmt );
+			$unique_id = md5( 'rthd_'.$post_type.'_'.$post_date_gmt );
 
 			$post = array(
 				'post_author' => $userid,
@@ -85,8 +85,8 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 			}
 
 			/* Insert History for status */
-			$id = $rt_crm_lead_history_model->insert(array(
-					'lead_id' => $post_id,
+			$id = $rt_hd_ticket_history_model->insert(array(
+					'ticket_id' => $post_id,
 					'type' => 'post_status',
 					'old_value' => '',
 					'new_value' => $post['post_status'],
@@ -109,12 +109,12 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 				'user_updated_by' => get_current_user_id(),
 				'user_created_by' => get_current_user_id(),
 			);
-			$leadModel->add_lead( $data );
-			/* System Notification - Lead Inserted */
+			$ticketModel->add_ticket( $data );
+			/* System Notification - Ticket Inserted */
 
 			/* Insert History for status */
-			$id = $rt_crm_lead_history_model->insert(array(
-					'lead_id' => $post_id,
+			$id = $rt_hd_ticket_history_model->insert(array(
+					'ticket_id' => $post_id,
 					'type' => 'post_status',
 					'old_value' => '',
 					'new_value' => $post['post_status'],
@@ -123,14 +123,14 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 				)
 			);
 
-			update_post_meta( $post_id, 'rtcrm_unique_id', $unique_id );
+			update_post_meta( $post_id, 'rthd_unique_id', $unique_id );
 
 			if( isset( $settings['attach_contacts'] ) && $settings['attach_contacts'] == 'yes' ) {
 				$this->add_contacts_to_post($allemail, $post_id);
 			}
 			$this->add_attachment_to_post($uploaded, $post_id, $post_type);
 
-			update_post_meta($post_id, "lead_email", $senderEmail);
+			update_post_meta($post_id, "ticket_email", $senderEmail);
 
 			global $transaction_id;
 			if (isset($transaction_id) && $transaction_id > 0) {
@@ -161,25 +161,25 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 				$bulkimport = false;
 			global $gravity_auto_import;
 			if ($flag && !$bulkimport && !isset($gravity_auto_import)) {
-				global $rt_crm_settings;
+				global $rt_hd_settings;
 				$title = "[New ".$labels['name']."]" . $this->create_title_for_mail($post_id);
-				$body = $body . "<br />To View ".$labels['name']." Click <a href='" . admin_url("edit.php?post_type={$post_type}&page=rtcrm-add-{$post_type}&{$post_type}_id=" . $post_id) . "'>here</a>. <br/>";
-				$body .= 'Lead created by : <a target="_blank" href="">'.get_the_author_meta( 'display_name', get_current_user_id() ).'</a>';
+				$body = $body . "<br />To View ".$labels['name']." Click <a href='" . admin_url("edit.php?post_type={$post_type}&page=rthd-add-{$post_type}&{$post_type}_id=" . $post_id) . "'>here</a>. <br/>";
+				$body .= 'Ticket created by : <a target="_blank" href="">'.get_the_author_meta( 'display_name', get_current_user_id() ).'</a>';
 
 				$outbound_emails = ( isset( $settings['outbound_emails'] ) && ! empty( $settings['outbound_emails'] ) ) ? explode( ',', $settings['outbound_emails'] ) : '' ;
 				$notify_emails = array();
 				foreach ( $outbound_emails as $email ) {
 					if ( is_email( $email ) ) {
-						$notify_emails[] = array( 'email' => $email, 'name' => $rt_crm_module->name.' Outbound Email' );
+						$notify_emails[] = array( 'email' => $email, 'name' => $rt_hd_module->name.' Outbound Email' );
 					}
 				}
 
-				$rt_crm_settings->insert_new_send_email($systemEmail, $title, $body, array(), array(), $notify_emails, $uploaded, $post_id, "comment");
+				$rt_hd_settings->insert_new_send_email($systemEmail, $title, $body, array(), array(), $notify_emails, $uploaded, $post_id, "comment");
 			} else {
 				if (isset($gravity_auto_import) && $gravity_auto_import) {
-					//add_filter  [CRM #$post_id]
-					global $crm_import_lead_id;
-					$crm_import_lead_id = $post_id;
+					//add_filter  [Helpdesk #$post_id]
+					global $helpdesk_import_ticket_id;
+					$helpdesk_import_ticket_id = $post_id;
 					add_filter('gform_pre_send_email', array(&$this, 'hijack_mail_subject'), 999, 2);
 				} else {
 					// if system email is not set
@@ -189,7 +189,7 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 					$user = get_user_by( 'id', $userid );
 					$to = $user->user_email;
 					$title = "[New ".$labels['name']."]" . $this->create_title_for_mail( $post_id );
-					$body = $body . "<br />To View ".$labels['name']." Click <a href='" . admin_url("edit.php?post_type={$post_type}&page=rtcrm-add-{$post_type}&{$post_type}_id=" . $post_id) . "'>here</a>. <br/>";
+					$body = $body . "<br />To View ".$labels['name']." Click <a href='" . admin_url("edit.php?post_type={$post_type}&page=rthd-add-{$post_type}&{$post_type}_id=" . $post_id) . "'>here</a>. <br/>";
 					$headers = 'Content-Type: text/html';
 					wp_mail( $to, $title, $body, $headers, $uploaded );
 				}
@@ -198,25 +198,25 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 		}
 
 		function hijack_mail_subject($data, $message_format) {
-			global $crm_import_lead_id, $rt_crm_module;
-			$post_type = get_post_type($crm_import_lead_id);
-			$data["subject"] = "[".strtoupper( $rt_crm_module->name )." #" . $crm_import_lead_id . "]" . $data["subject"];
-			$crm_url = admin_url("edit.php?post_type={$post_type}&page=rtcrm-add-{$post_type}&{$post_type}_id=" . $crm_import_lead_id);
-			$data["message"] = str_replace("--rtcamp_crm_link--", $crm_url, $data["message"]);
+			global $helpdesk_import_ticket_id, $rt_hd_module;
+			$post_type = get_post_type($helpdesk_import_ticket_id);
+			$data["subject"] = "[".strtoupper( $rt_hd_module->name )." #" . $helpdesk_import_ticket_id . "]" . $data["subject"];
+			$hd_url = admin_url("edit.php?post_type={$post_type}&page=rthd-add-{$post_type}&{$post_type}_id=" . $helpdesk_import_ticket_id);
+			$data["message"] = str_replace("--rtcamp_hd_link--", $hd_url, $data["message"]);
 			return $data;
 		}
 
 		function create_title_for_mail( $post_id ) {
-			global $rt_crm_module;
-			return '['. strtoupper( $rt_crm_module->name ) .' #' . $post_id . '] ' . get_the_title( $post_id );
+			global $rt_hd_module;
+			return '['. strtoupper( $rt_hd_module->name ) .' #' . $post_id . '] ' . get_the_title( $post_id );
 		}
 
-		function add_attachment_to_post($uploaded, $post_id, $post_type, $mainLead = true, $comment_id = 0) {
+		function add_attachment_to_post($uploaded, $post_id, $post_type, $mainTicket = true, $comment_id = 0) {
 			if ( isset( $uploaded ) && is_array( $uploaded ) ) {
 
 				foreach ($uploaded as $upload) {
 
-					$post_attachment_hashes = get_post_meta( $post_id, '_rt_wp_crm_attachment_hash' );
+					$post_attachment_hashes = get_post_meta( $post_id, '_rt_wp_hd_attachment_hash' );
 					if ( ! empty( $post_attachment_hashes ) && in_array( md5_file( $upload['file'] ), $post_attachment_hashes ) ) {
 						continue;
 					}
@@ -235,9 +235,9 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 					$attach_id = wp_insert_attachment($attachment);
 
 					add_post_meta( $attach_id, '_wp_attached_file', $upload["file"]);
-					add_post_meta( $post_id, '_rt_wp_crm_attachment_hash', md5_file( $upload['file'] ) );
+					add_post_meta( $post_id, '_rt_wp_hd_attachment_hash', md5_file( $upload['file'] ) );
 
-					if ($mainLead) {
+					if ($mainTicket) {
 						add_post_meta($attach_id, "show-in-main", "true");
 					}
 					if ($comment_id > 0) {
@@ -248,7 +248,7 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 		}
 
 		function add_contacts_to_post($allemail, $post_id) {
-			global $rt_crm_contacts;
+			global $rt_hd_contacts;
 			$postterms = array();
 			foreach ($allemail as $email) {
 				$term = rt_biz_get_person_by_email( $email['address'] );
@@ -257,7 +257,7 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 						$postterms[] = $tm->ID;
 					}
 				} else {
-					$term = $rt_crm_contacts->insert_new_contact( $email["address"], ( isset( $email["name"] ) ) ? $email["name"] : $email["address"] );
+					$term = $rt_hd_contacts->insert_new_contact( $email["address"], ( isset( $email["name"] ) ) ? $email["name"] : $email["address"] );
 					$postterms[] = $term->ID;
 				}
 
@@ -269,7 +269,7 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 					rt_biz_connect_post_to_person( $post_type, $post_id, $postterms );
 
 					// Update Index
-					$leadModel = new Rt_CRM_Lead_Model();
+					$ticketModel = new Rt_HD_Ticket_Model();
 					$where = array( 'post_id' => $post_id );
 					$attr_name = rt_biz_get_person_post_type();
 					$data = array(
@@ -278,7 +278,7 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 						'date_update_gmt' => gmdate( 'Y-m-d H:i:s' ),
 						'user_updated_by' => get_current_user_id(),
 					);
-					$leadModel->update_lead( $data, $where );
+					$ticketModel->update_ticket( $data, $where );
 					// System Notification -- Contact added
 				}
 			}
@@ -286,11 +286,11 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 
 		function get_post_id_from_subject( $subject ) {
 			//\[([a-z]+)\ \#([1-9]+)\]
-			global $rt_crm_module;
+			global $rt_hd_module;
 			$pattern = '/\[([a-z]+)\ \#([0-9]+)\]/im';
 			$intMatch = preg_match_all( $pattern, $subject, $matches );
-			$module_name = strtolower( $rt_crm_module->name );
-			$post_type = $rt_crm_module->post_type;
+			$module_name = strtolower( $rt_hd_module->name );
+			$post_type = $rt_hd_module->post_type;
 			if( count( $matches ) > 0 ) {
 				if( isset( $matches[2][0] ) && isset( $matches[1][0] ) ) {
 					if( strtolower( $matches[1][0] ) == $module_name && get_post_type( intval( $matches[2][0] ) ) == $post_type ) {
@@ -301,7 +301,7 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 			return 0;
 		}
 
-		public function process_email_to_lead(
+		public function process_email_to_ticket(
 				$title,
 				$body,
 				$fromemail,
@@ -317,13 +317,13 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 				$systemEmail = false,
 				$subscriber = array()
 		) {
-			global $rt_crm_contacts;
+			global $rt_hd_contacts;
 
 			if ($userid === false)
-				$userid = $rt_crm_contacts->get_user_from_email($fromemail["address"]);
+				$userid = $rt_hd_contacts->get_user_from_email($fromemail["address"]);
 //always true in mail cron  is use for importer
 			if (!$check_duplicate) {
-				return $this->insert_new_lead($title, $body, $userid, $mailtime, $allemail, $uploaded, $fromemail["address"]);
+				return $this->insert_new_ticket($title, $body, $userid, $mailtime, $allemail, $uploaded, $fromemail["address"]);
 			}
 //-----------------------------------------------------------------------------//
 			global $threadPostId;
@@ -375,7 +375,7 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 					return $this->insert_post_comment($existPostId, $userid, $body, $fromemail["name"], $fromemail["address"], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $subscriber);
 				} else {
 					if ( $systemEmail ) {
-						return $this->insert_new_lead($title, $body, $userid, $mailtime, $allemail, $uploaded, $fromemail["address"], $messageid, $inreplyto, $references, $subscriber);
+						return $this->insert_new_ticket($title, $body, $userid, $mailtime, $allemail, $uploaded, $fromemail["address"], $messageid, $inreplyto, $references, $subscriber);
 					}
 				}
 			} else {
@@ -384,7 +384,7 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 				echo $existPostId;
 				if (!$existPostId) {
 					if ( $systemEmail ) {
-						return $this->insert_new_lead($title, $body, $userid, $mailtime, $allemail, $uploaded, $fromemail["address"], $messageid, $inreplyto, $references, $subscriber);
+						return $this->insert_new_ticket($title, $body, $userid, $mailtime, $allemail, $uploaded, $fromemail["address"], $messageid, $inreplyto, $references, $subscriber);
 					}
 				} else {
 					return $this->insert_post_comment($existPostId, $userid, $body, $fromemail["name"], $fromemail["address"], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $subscriber);
@@ -455,13 +455,13 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 		}
 
 		function post_exists($title, $date = '') {
-			global $wpdb, $rt_crm_module;
+			global $wpdb, $rt_hd_module;
 			if (trim($title) == "")
 				return 0;
 			$post_title = stripslashes(sanitize_post_field('post_title', $title, 0, 'db'));
 			$post_date = stripslashes(sanitize_post_field('post_date', $date, 0, 'db'));
 
-			$query = "SELECT ID FROM $wpdb->posts WHERE 1=1 and post_type IN ('".$rt_crm_module->post_type."') ";
+			$query = "SELECT ID FROM $wpdb->posts WHERE 1=1 and post_type IN ('".$rt_hd_module->post_type."') ";
 			$args = array();
 
 			if (!empty($date) && $date != '') {
@@ -492,7 +492,7 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 
 			$post_type = get_post_type( $comment_post_ID );
 			$module_settings = rthd_get_settings();
-			$leadModel = new Rt_CRM_Lead_Model();
+			$ticketModel = new Rt_HD_Ticket_Model();
 			$d = new DateTime($commenttime);
 			$UTC = new DateTimeZone("UTC");
 			$d->setTimezone($UTC);
@@ -547,12 +547,12 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 			$where = array(
 				'post_id' => $comment_post_ID,
 			);
-			$leadModel->update_lead($data, $where);
-			/* System Notification -- Followup Added to the lead */
+			$ticketModel->update_ticket($data, $where);
+			/* System Notification -- Followup Added to the ticket */
 
-			global $rtcrm_all_emails;
-			if(isset($rtcrm_all_emails)) {
-				foreach ($rtcrm_all_emails as $email) {
+			global $rthd_all_emails;
+			if(isset($rthd_all_emails)) {
+				foreach ($rthd_all_emails as $email) {
 					if( isset( $email['key'] ) ) {
 						$meta = get_comment_meta($comment_id, '_email_'.$email['key'], true );
 						if(empty($meta))
@@ -611,7 +611,6 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 				return false;
 
 			$sql = $wpdb->prepare("select meta_value from $wpdb->commentmeta where $wpdb->commentmeta.meta_key = '_messageid' and $wpdb->commentmeta.meta_value = %s", $messageid);
-			// union  select '0' as meta_value from $crmsettings->mail_leads  where $crmsettings->mail_leads.messageid like %s
 			$result = $wpdb->get_results($sql);
 			if (empty($result)) {
 
@@ -650,8 +649,8 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 			$comment = get_comment($comment_id);
 			$comment_post_ID = $comment->comment_post_ID;
 
-			global $rt_crm_module;
-			if ( get_post_type($comment_post_ID) != $rt_crm_module->post_type ) {
+			global $rt_hd_module;
+			if ( get_post_type($comment_post_ID) != $rt_hd_module->post_type ) {
 				return true;
 			}
 
@@ -668,7 +667,7 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 //
 //        //$postterms = wp_get_post_terms($comment_post_ID, $contacts->slug);
 //
-//        $lead_email = array_merge(get_post_meta($comment_post_ID, "lead_email"), $this->get_comment_emails($comment_post_ID));
+//        $ticket_email = array_merge(get_post_meta($comment_post_ID, "ticket_email"), $this->get_comment_emails($comment_post_ID));
 //
 //        $bcc = "";
 //        $sep = "";
@@ -777,20 +776,20 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 
 
 			$toEmail = array();
-			if (isset($_POST["crm-email-to"])) {
-				foreach ($_POST["crm-email-to"] as $key => $email) {
+			if (isset($_POST["helpdesk-email-to"])) {
+				foreach ($_POST["helpdesk-email-to"] as $key => $email) {
 					$toEmail[] = array("email" => $email, 'name' => '');
 				}
 			}
 			$ccEmail = array();
-			if (isset($_POST["crm-email-cc"])) {
-				foreach ($_POST["crm-email-cc"] as $key => $email) {
+			if (isset($_POST["helpdesk-email-cc"])) {
+				foreach ($_POST["helpdesk-email-cc"] as $key => $email) {
 					$ccEmail[] = array("email" => $email, 'name' => '');
 				}
 			}
 			$bccEmail = array();
-			if (isset($_POST["crm-email-bcc"])) {
-				foreach ($_POST["crm-email-bcc"] as $key => $email) {
+			if (isset($_POST["helpdesk-email-bcc"])) {
+				foreach ($_POST["helpdesk-email-bcc"] as $key => $email) {
 					$bccEmail[] = array("email" => $email, 'name' => '');
 				}
 			}
@@ -809,8 +808,8 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 			$signature = '';
 			$email_type = '';
 			$imap_server = '';
-			global $rt_crm_settings;
-			$accessToken = $rt_crm_settings->get_accesstoken_from_email( $fromemail, $signature, $email_type, $imap_server );
+			global $rt_hd_settings;
+			$accessToken = $rt_hd_settings->get_accesstoken_from_email( $fromemail, $signature, $email_type, $imap_server );
 
 			if (strpos($signature, "</") == false) {
 				$signature = htmlentities($signature);
@@ -821,8 +820,8 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 
 
 			$mailbody .= "<br />" . $signature;
-			global $rt_crm_settings;
-			$tmpMailOutbountId = $rt_crm_settings->insert_new_send_email($_POST["comment-reply-from"], $title, $mailbody, $toEmail, $ccEmail, $bccEmail, $attachment, $comment_id, "comment");
+			global $rt_hd_settings;
+			$tmpMailOutbountId = $rt_hd_settings->insert_new_send_email($_POST["comment-reply-from"], $title, $mailbody, $toEmail, $ccEmail, $bccEmail, $attachment, $comment_id, "comment");
 			return true;
 		}
 
@@ -910,26 +909,26 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 				wp_die("Invalid Request");
 			}
 			if (!isset($_POST["followup_ticket_unique_id"])) {
-				wp_die("Invalid Lead");
+				wp_die("Invalid Ticket");
 			}
 			$ticket_unique_id = $_POST['followup_ticket_unique_id'];
-			global $rt_crm_module;
+			global $rt_hd_module;
 			$args = array(
-				'meta_key' => 'rtcrm_unique_id',
+				'meta_key' => 'rthd_unique_id',
 				'meta_value' => $ticket_unique_id,
 				'post_status' => 'any',
-				'post_type' => $rt_crm_module->post_type,
+				'post_type' => $rt_hd_module->post_type,
 			);
-			$leadpost = get_posts( $args );
-			if( empty( $leadpost ) ) {
-				wp_die("Invalid Lead");
+			$ticketpost = get_posts( $args );
+			if( empty( $ticketpost ) ) {
+				wp_die("Invalid Ticket");
 			}
-			$rtcrm_lead = $leadpost[0];
+			$rthd_ticket = $ticketpost[0];
 
 			$returnArray = array();
 			$followuptype = $_POST["followuptype"];
-			$comment_post_ID = $rtcrm_lead->ID;
-			$post_type = $rtcrm_lead->post_type;
+			$comment_post_ID = $rthd_ticket->ID;
+			$post_type = $rthd_ticket->post_type;
 
 			$comment_content = $_POST["followup_content"];
 			$comment_privacy = 'no';
@@ -976,7 +975,7 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 			$commentdata['comment_approved'] = 1;
 			$comment_ID = wp_insert_comment($commentdata);
 
-			update_comment_meta( $comment_ID, '_rtcrm_privacy', $comment_privacy );
+			update_comment_meta( $comment_ID, '_rthd_privacy', $comment_privacy );
 
 			$comment = get_comment($comment_ID);
 			$attachment = array();
@@ -1021,7 +1020,7 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 			die(0);
 		}
 
-		function get_lead_comments_ajax() {
+		function get_ticket_comments_ajax() {
 			if ( !isset( $_POST["ticket_unique_id"] ) ) {
 				wp_die("Invalid Request");
 			}
@@ -1030,35 +1029,35 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 			}
 
 			$ticket_unique_id = $_POST['ticket_unique_id'];
-			global $rt_crm_module;
+			global $rt_hd_module;
 			$args = array(
-				'meta_key' => 'rtcrm_unique_id',
+				'meta_key' => 'rthd_unique_id',
 				'meta_value' => $ticket_unique_id,
 				'post_status' => 'any',
-				'post_type' => $rt_crm_module->post_type,
+				'post_type' => $rt_hd_module->post_type,
 			);
-			$leadpost = get_posts( $args );
-			if( empty( $leadpost ) ) {
-				wp_die("Invalid Lead");
+			$ticketpost = get_posts( $args );
+			if( empty( $ticketpost ) ) {
+				wp_die("Invalid Ticket");
 			}
-			$rtcrm_lead = $leadpost[0];
+			$rthd_ticket = $ticketpost[0];
 			$page = $_POST['page'];
 			$comment_count = count( get_comments(
 				array(
-					'meta_key' => '_rtcrm_privacy',
+					'meta_key' => '_rthd_privacy',
 					'meta_value' => 'no',
 					'order' => 'DESC',
-					'post_id' => $rtcrm_lead->ID,
-					'post_type' => $rtcrm_lead->post_type,
+					'post_id' => $rthd_ticket->ID,
+					'post_type' => $rthd_ticket->post_type,
 				)
 			) );
 			$comments = get_comments(
 				array(
-					'meta_key' => '_rtcrm_privacy',
+					'meta_key' => '_rthd_privacy',
 					'meta_value' => 'no',
 					'order' => 'DESC',
-					'post_id' => $rtcrm_lead->ID,
-					'post_type' => $rtcrm_lead->post_type,
+					'post_id' => $rthd_ticket->ID,
+					'post_type' => $rthd_ticket->post_type,
 					'number' => '10',
 					'offset' => $page*10
 				)
@@ -1129,7 +1128,7 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 					$commentdata['comment_date_gmt'] = $d->format('Y-m-d H:i:s');
 				}
 				wp_update_comment($commentdata);
-				update_comment_meta( $_POST["comment_id"], '_rtcrm_privacy', $comment_privacy );
+				update_comment_meta( $_POST["comment_id"], '_rthd_privacy', $comment_privacy );
 				$comment = get_comment($_POST["comment_id"]);
 				if (isset($_REQUEST["attachemntlist"]) && !empty($_REQUEST["attachemntlist"])) {
 					delete_comment_meta($_POST["comment_id"], "attachment");
@@ -1165,13 +1164,13 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 
 				$flag = false;
 
-				$diff = rtcrm_text_diff($oldDate, $newDate);
+				$diff = rthd_text_diff($oldDate, $newDate);
 				if ($diff) {
 					$body.="<br/><b>Date : </b>" . $diff;
 					$flag = true;
 				}
 
-				$diff = rtcrm_text_diff(trim(html_entity_decode(strip_tags($oldCommentBody))), trim(html_entity_decode(strip_tags($commentdata["comment_content"]))));
+				$diff = rthd_text_diff(trim(html_entity_decode(strip_tags($oldCommentBody))), trim(html_entity_decode(strip_tags($commentdata["comment_content"]))));
 				if ($diff) {
 					$flag = true;
 					$body.="<br/><b>Body : </b>" . $diff;
@@ -1184,7 +1183,7 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 				$returnArray["status"] = true;
 				$returnArray["data"] = $this->genrate_comment_html_ajax($comment);
 				$returnArray['comment_count'] = get_comments( array( 'order' => 'DESC', 'post_id' => $comment_post_ID, 'post_type' => $post_type, 'count' => true ) );
-				$returnArray['private'] = get_comment_meta( $_POST["comment_id"], '_rtcrm_privacy', true );
+				$returnArray['private'] = get_comment_meta( $_POST["comment_id"], '_rthd_privacy', true );
 
 				echo json_encode($returnArray);
 				die(0);
@@ -1218,7 +1217,7 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 			$commentdata['comment_approved'] = 1;
 			$comment_ID = wp_insert_comment($commentdata);
 
-			update_comment_meta( $comment_ID, '_rtcrm_privacy', $comment_privacy );
+			update_comment_meta( $comment_ID, '_rthd_privacy', $comment_privacy );
 
 			$comment = get_comment($comment_ID);
 
@@ -1300,8 +1299,8 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 				$signature = '';
 				$email_type = '';
 				$imap_server = '';
-				global $rt_crm_settings;
-				$accessToken = $rt_crm_settings->get_accesstoken_from_email( $fromemail, $signature, $email_type, $imap_server );
+				global $rt_hd_settings;
+				$accessToken = $rt_hd_settings->get_accesstoken_from_email( $fromemail, $signature, $email_type, $imap_server );
 
 				if (strpos($signature, "</") == false) {
 					$signature = htmlentities($signature);
@@ -1309,7 +1308,7 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 					$signature = preg_replace('/  /i', "  ", $signature);
 				}
 				$mailbody .= "<br />" . $signature;
-				$rt_crm_settings->insert_new_send_email($_POST["comment-reply-from"], $title, $mailbody, $toEmail, $ccEmail, $bccEmail, $attachment, $comment_ID, "comment");
+				$rt_hd_settings->insert_new_send_email($_POST["comment-reply-from"], $title, $mailbody, $toEmail, $ccEmail, $bccEmail, $attachment, $comment_ID, "comment");
 			}
 
 			update_comment_meta( $comment_ID, '_email_from', $_POST["comment-reply-from"] );
@@ -1338,7 +1337,7 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 
 			$returnArray["data"] = $this->genrate_comment_html_ajax($comment);
 			$returnArray['comment_count'] = get_comments( array( 'order' => 'DESC', 'post_id' => $comment_post_ID, 'post_type' => $post_type, 'count' => true ) );
-			$returnArray['private'] = get_comment_meta( $comment_ID, '_rtcrm_privacy', true );
+			$returnArray['private'] = get_comment_meta( $comment_ID, '_rthd_privacy', true );
 
 			echo json_encode($returnArray);
 
@@ -1348,10 +1347,10 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 
 		public function is_allow_to_sendemail_fromemail($email) {
 			$user_id = get_current_user_id();
-			global $wpdb, $rt_crm_mail_accounts_model, $rt_crm_mail_acl_model;
-			$sql = $wpdb->prepare("(select * from {$rt_crm_mail_accounts_model->table_name} where user_id=%d and email = %s)
-                                union (select a.* from {$rt_crm_mail_acl_model->table_name} b inner join
-                                {$rt_crm_mail_accounts_model->table_name} a on a.email=b.email where b.allow_user=%d and a.email=%s)", $user_id, $email, $user_id, $email);
+			global $wpdb, $rt_hd_mail_accounts_model, $rt_hd_mail_acl_model;
+			$sql = $wpdb->prepare("(select * from {$rt_hd_mail_accounts_model->table_name} where user_id=%d and email = %s)
+                                union (select a.* from {$rt_hd_mail_acl_model->table_name} b inner join
+                                {$rt_hd_mail_accounts_model->table_name} a on a.email=b.email where b.allow_user=%d and a.email=%s)", $user_id, $email, $user_id, $email);
 			$result = $wpdb->get_results($sql);
 			if ($result && !empty($result)) {
 				return true;
@@ -1381,17 +1380,17 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 				$flag = false;
 			}
 			if ($flag && !empty($bccemails)) {
-				global $rt_crm_settings;
-				$accessToken = $rt_crm_settings->get_accesstoken_from_email( $systemEmail, $signature, $email_type, $imap_server );
+				global $rt_hd_settings;
+				$accessToken = $rt_hd_settings->get_accesstoken_from_email( $systemEmail, $signature, $email_type, $imap_server );
 
 				if (strpos($signature, "</") == false) {
 					$signature = htmlentities($signature);
 					$signature = preg_replace('/(\n|\r|\r\n)/i', "<br />", $signature);
 					$signature = preg_replace('/  /i', "  ", $signature);
 				}
-				$emailHTML = $body . "</br> To View Follwup Click <a href='" . admin_url("edit.php?post_type={$post_type}&page=rtcrm-add-{$post_type}&{$post_type}_id=" . $post_id) . "'>here</a>.<br/>";
+				$emailHTML = $body . "</br> To View Follwup Click <a href='" . admin_url("edit.php?post_type={$post_type}&page=rthd-add-{$post_type}&{$post_type}_id=" . $post_id) . "'>here</a>.<br/>";
 				$emailHTML .= "<br />" . $signature;
-				$rt_crm_settings->insert_new_send_email($systemEmail, $title, $emailHTML, array(), array(), $bccemails, array(), $comment_id, "comment");
+				$rt_hd_settings->insert_new_send_email($systemEmail, $title, $emailHTML, array(), array(), $bccemails, array(), $comment_id, "comment");
 			}
 		}
 
@@ -1408,7 +1407,7 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 						$comment->comment_content = $output_array[0];
 					}
 				}
-				$data = Rt_CRM_Utils::forceUFT8($comment->comment_content);
+				$data = Rt_HD_Utils::forceUFT8($comment->comment_content);
 			} else {
 				$data = '';
 			}
@@ -1425,7 +1424,7 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 					. '</div>'
 					. '<div class="large-10 columns">'
 						. '<div class="row">'
-							. '<div class="large-1 small-1 columns rtcrm_privacy"></div>'
+							. '<div class="large-1 small-1 columns rthd_privacy"></div>'
 							. '<div class="large-7 small-7 columns">'
 								. '<div class="row">'
 									. '<div class="comment-user-title large-12 columns">';
@@ -1489,7 +1488,7 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 					$file_array = explode('/', $commenytAttechment);
 					$fileName = $file_array[count($file_array) - 1];
 					$commentstr.="<li><a href='" . $commenytAttechment . "' title='Attachment' >";
-					$commentstr.= "<img src='" . RT_CRM_URL . "app/assets/file-type/" . $extn . ".png' />";
+					$commentstr.= "<img src='" . RT_HD_URL . "app/assets/file-type/" . $extn . ".png' />";
 					$commentstr.= "<span>" . $fileName . "</span></a></li>";
 				}
 				$commentstr .="  </ul>";
@@ -1512,12 +1511,12 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 						$comment->comment_content = $output_array[0];
 					}
 				}
-				$data = Rt_CRM_Utils::forceUFT8($comment->comment_content);
+				$data = Rt_HD_Utils::forceUFT8($comment->comment_content);
 			} else {
 				$data = '';
 			}
 
-			$rtcrm_privacy = get_comment_meta( $comment->comment_ID, '_rtcrm_privacy', true );
+			$rthd_privacy = get_comment_meta( $comment->comment_ID, '_rthd_privacy', true );
 
 			$dt = new DateTime($comment->comment_date);
 			$commentstr = '<div id="header-' . $comment->comment_ID . '" class="comment-header row">'
@@ -1530,7 +1529,7 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 						. '<div class="comment-user-gravatar">'
 							. '<a href="#" class="th radius">'.get_avatar($comment->comment_author_email, 40).'</a>'
 						. '</div>'
-						. '<div class="rtcrm_privacy" data-crm-privacy="'.( ( $rtcrm_privacy !== 'no' ) ? 'yes' : 'no' ).'">'. ( ( $rtcrm_privacy !== 'no' ) ? '<i class="general foundicon-lock"></i>' : '' ) .'</div>'
+						. '<div class="rthd_privacy" data-hd-privacy="'.( ( $rthd_privacy !== 'no' ) ? 'yes' : 'no' ).'">'. ( ( $rthd_privacy !== 'no' ) ? '<i class="general foundicon-lock"></i>' : '' ) .'</div>'
 						. '<div class="comment-users">'
 							. '<div class="comment-user-title large-12 columns">';
 
@@ -1591,7 +1590,7 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 					$file_array = explode('/', $commenytAttechment);
 					$fileName = $file_array[count($file_array) - 1];
 					$commentstr.="<li><a href='" . $commenytAttechment . "' title='Attachment' >";
-					$commentstr.= "<img src='" . RT_CRM_URL . "app/assets/file-type/" . $extn . ".png' />";
+					$commentstr.= "<img src='" . RT_HD_URL . "app/assets/file-type/" . $extn . ".png' />";
 					$commentstr.= "<span>" . $fileName . "</span></a></li>";
 				}
 				$commentstr .="  </ul>";
@@ -1686,7 +1685,7 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 
 
 							$comment_attachemnt_str.="<li><a href='" . $uploading["url"] . "' title='Attachment' >";
-							$comment_attachemnt_str.= "<img src='" . RT_CRM_URL . "app/assets/file-type/" . $extn . ".png' />";
+							$comment_attachemnt_str.= "<img src='" . RT_HD_URL . "app/assets/file-type/" . $extn . ".png' />";
 							$comment_attachemnt_str.= "<span>" . $fileName . "</span></a></li>";
 						}
 					}
@@ -1743,19 +1742,19 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 				echo json_encode($response);
 				die(0);
 			}
-			global $rt_crm_module;
-			if ( get_post_type($_POST["post_id"]) != $rt_crm_module->post_type ) {
+			global $rt_hd_module;
+			if ( get_post_type($_POST["post_id"]) != $rt_hd_module->post_type ) {
 				$response["false"] = true;
 				$response["message"] = "Invalid Post Type";
 				echo json_encode($response);
 				die(0);
 			}
 
-			global $rt_crm_settings;
+			global $rt_hd_settings;
 			$signature = '';
 			$email_type = '';
 			$imap_server = '';
-			$access_token = $rt_crm_settings->get_accesstoken_from_email( $_POST["email"], $signature, $email_type, $imap_server );
+			$access_token = $rt_hd_settings->get_accesstoken_from_email( $_POST["email"], $signature, $email_type, $imap_server );
 
 			if ( $email_type != 'goauth' ) {
 				$response["false"] = true;
@@ -1786,8 +1785,8 @@ if ( !class_exists( 'Rt_CRM_Leads' ) ) {
 				'user_id' => $userid,
 				'status' => 'r'
 			);
-			global $rt_crm_mail_thread_importer_model;
-			$rows_affected = $rt_crm_mail_thread_importer_model->add_thread( $args );
+			global $rt_hd_mail_thread_importer_model;
+			$rows_affected = $rt_hd_mail_thread_importer_model->add_thread( $args );
 			return $rows_affected;
 		}
 

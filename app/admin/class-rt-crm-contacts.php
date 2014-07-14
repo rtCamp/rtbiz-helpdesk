@@ -12,13 +12,13 @@ if (!defined('ABSPATH'))
  */
 
 /**
- * Description of Rt_CRM_Contacts
+ * Description of Rt_HD_Contacts
  *
  * @author udit
  */
-if ( !class_exists( 'Rt_CRM_Contacts' ) ) {
+if ( !class_exists( 'Rt_HD_Contacts' ) ) {
 
-	class Rt_CRM_Contacts {
+	class Rt_HD_Contacts {
 
 		public $email_key = 'contact_email';
 		public $user_id = 'contact_user_id';
@@ -33,15 +33,15 @@ if ( !class_exists( 'Rt_CRM_Contacts' ) ) {
 			add_filter( 'rt_entity_columns', array( $this, 'contacts_columns' ), 10, 2 );
 			add_action( 'rt_entity_manage_columns', array( $this, 'manage_contacts_columns' ), 10, 3 );
 
-			add_action( 'wp_ajax_rtcrm_search_contact', array( $this, 'contact_autocomplete_ajax' ) );
-			add_action( 'wp_ajax_rtcrm_get_term_meta', array( $this, 'get_taxonomy_meta_ajax' ) );
+			add_action( 'wp_ajax_rthd_search_contact', array( $this, 'contact_autocomplete_ajax' ) );
+			add_action( 'wp_ajax_rthd_get_term_meta', array( $this, 'get_taxonomy_meta_ajax' ) );
 
-			add_action( 'wp_ajax_rtcrm_get_account_contacts', array( $this, 'get_account_contacts_ajax' ) );
-			add_action( 'wp_ajax_rtcrm_add_contact', array( $this, 'add_new_contact_ajax' ) );
+			add_action( 'wp_ajax_rthd_get_account_contacts', array( $this, 'get_account_contacts_ajax' ) );
+			add_action( 'wp_ajax_rthd_add_contact', array( $this, 'add_new_contact_ajax' ) );
 		}
 
 		/**
-		 * Create custom column 'Leads' for Contacts taxonomy
+		 * Create custom column 'Tickets' for Contacts taxonomy
 		 * @param type $contacts_columns
 		 * @return array new_columns
 		 */
@@ -52,16 +52,16 @@ if ( !class_exists( 'Rt_CRM_Contacts' ) ) {
 				return $columns;
 			}
 
-			global $rt_crm_module;
-			if ( in_array( $rt_crm_module->post_type, array_keys( $rt_entity->enabled_post_types ) ) ) {
-				$columns[$rt_crm_module->post_type] = $rt_crm_module->labels['name'];
+			global $rt_hd_module;
+			if ( in_array( $rt_hd_module->post_type, array_keys( $rt_entity->enabled_post_types ) ) ) {
+				$columns[$rt_hd_module->post_type] = $rt_hd_module->labels['name'];
 			}
 
 			return $columns;
 		}
 
 		/**
-		 * Get count of contact terms used in individual lead. This function returns the exact count
+		 * Get count of contact terms used in individual ticket. This function returns the exact count
 		 * @param string $out
 		 * @param string $column_name
 		 * @param integer $term_id
@@ -74,13 +74,13 @@ if ( !class_exists( 'Rt_CRM_Contacts' ) ) {
 				return;
 			}
 
-			global $rt_crm_module;
+			global $rt_hd_module;
 			switch( $column ) {
 				default:
-					if ( in_array( $rt_crm_module->post_type, array_keys( $rt_entity->enabled_post_types ) ) && $column == $rt_crm_module->post_type ) {
+					if ( in_array( $rt_hd_module->post_type, array_keys( $rt_entity->enabled_post_types ) ) && $column == $rt_hd_module->post_type ) {
 						$post_details = get_post( $post_id );
-						$pages = rt_biz_get_post_for_person_connection( $post_id, $rt_crm_module->post_type );
-						echo '<a href = edit.php?' . $post_details->post_type . '=' . $post_details->ID . '&post_type='.$rt_crm_module->post_type.'>' . count( $pages ) . '</a>';
+						$pages = rt_biz_get_post_for_person_connection( $post_id, $rt_hd_module->post_type );
+						echo '<a href = edit.php?' . $post_details->post_type . '=' . $post_details->ID . '&post_type='.$rt_hd_module->post_type.'>' . count( $pages ) . '</a>';
 					}
 					break;
 			}
@@ -138,13 +138,13 @@ if ( !class_exists( 'Rt_CRM_Contacts' ) ) {
 			return $userid;
 		}
 
-		function contacts_diff_on_lead( $post_id, $newLead ) {
+		function contacts_diff_on_ticket( $post_id, $newTicket ) {
 
 			$diffHTML = '';
-			if ( ! isset( $newLead['contacts'] ) ) {
-				$newLead['contacts'] = array();
+			if ( ! isset( $newTicket['contacts'] ) ) {
+				$newTicket['contacts'] = array();
 			}
-			$contacts = $newLead['contacts'];
+			$contacts = $newTicket['contacts'];
 			$contacts = array_unique( $contacts );
 
 			$oldContactsString = rt_biz_person_connection_to_string( $post_id );
@@ -157,7 +157,7 @@ if ( !class_exists( 'Rt_CRM_Contacts' ) ) {
 				}
 				$newContactsSring = implode( ',', $contactsArr );
 			}
-			$diff = rtcrm_text_diff( $oldContactsString, $newContactsSring );
+			$diff = rthd_text_diff( $oldContactsString, $newContactsSring );
 			if ( $diff ) {
 				$diffHTML .= '<tr><th style="padding: .5em;border: 0;">Contacts</th><td>' . $diff . '</td><td></td></tr>';
 			}
@@ -165,11 +165,11 @@ if ( !class_exists( 'Rt_CRM_Contacts' ) ) {
 			return $diffHTML;
 		}
 
-		function contacts_save_on_lead( $post_id, $newLead ) {
-			if ( ! isset( $newLead['contacts'] ) ) {
-				$newLead['contacts'] = array();
+		function contacts_save_on_ticket( $post_id, $newTicket ) {
+			if ( ! isset( $newTicket['contacts'] ) ) {
+				$newTicket['contacts'] = array();
 			}
-			$contacts = array_map('intval', $newLead['contacts']);
+			$contacts = array_map('intval', $newTicket['contacts']);
 			$contacts = array_unique($contacts);
 
 			$post_type = get_post_type( $post_id );

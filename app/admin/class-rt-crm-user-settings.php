@@ -12,27 +12,27 @@ if (!defined('ABSPATH'))
  */
 
 /**
- * Description of Rt_CRM_User_Settings
+ * Description of Rt_HD_User_Settings
  *
  * @author udit
  */
-if ( !class_exists( 'Rt_CRM_User_Settings' ) ) {
-	class Rt_CRM_User_Settings {
+if ( !class_exists( 'Rt_HD_User_Settings' ) ) {
+	class Rt_HD_User_Settings {
 		var $page_url;
 
 		public function __construct() {
-			$this->page_url = admin_url( 'admin.php?page=rtcrm-user-settings' );
+			$this->page_url = admin_url( 'admin.php?page=rthd-user-settings' );
 		}
 
 		function ui() {
-			global $rt_crm_settings, $rt_crm_imap_server_model, $rt_crm_module;
+			global $rt_hd_settings, $rt_hd_imap_server_model, $rt_hd_module;
 
 			$args = array(
-				'rt_crm_settings' => $rt_crm_settings,
-				'rt_crm_imap_server_model' => $rt_crm_imap_server_model,
-				'rt_crm_module' => $rt_crm_module,
+				'rt_hd_settings' => $rt_hd_settings,
+				'rt_hd_imap_server_model' => $rt_hd_imap_server_model,
+				'rt_hd_module' => $rt_hd_module,
 			);
-			rtcrm_get_template( 'admin/user-settings.php', $args );
+			rthd_get_template( 'admin/user-settings.php', $args );
 		}
 	}
 }

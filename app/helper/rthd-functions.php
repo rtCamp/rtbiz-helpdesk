@@ -140,17 +140,17 @@ function rthd_get_all_system_emails() {
 	return $emails;
 }
 
-function rthd_get_all_participants( $lead_id ) {
-	$lead = get_post( $lead_id );
+function rthd_get_all_participants( $ticket_id ) {
+	$ticket = get_post( $ticket_id );
 	$participants = array();
-	if ( isset( $lead->post_author ) ) {
-		$participants[] = $lead->post_author;
+	if ( isset( $ticket->post_author ) ) {
+		$participants[] = $ticket->post_author;
 	}
-	$subscribers = get_post_meta( $lead_id, 'subscribe_to', true );
+	$subscribers = get_post_meta( $ticket_id, 'subscribe_to', true );
 	$participants = array_merge( $participants, $subscribers );
 
 //	TODO
-//	$contacts = wp_get_post_terms( $lead_id, rthd_attribute_taxonomy_name( 'contacts' ) );
+//	$contacts = wp_get_post_terms( $ticket_id, rthd_attribute_taxonomy_name( 'contacts' ) );
 //	foreach ( $contacts as $contact ) {
 //		$user_id = get_term_meta( $contact->term_id, 'user_id', true );
 //		if(!empty($user_id)) {
@@ -158,7 +158,7 @@ function rthd_get_all_participants( $lead_id ) {
 //		}
 //	}
 
-	$comments = get_comments( array( 'order' => 'DESC', 'post_id' => $lead_id, 'post_type' => $lead->post_type ) );
+	$comments = get_comments( array( 'order' => 'DESC', 'post_id' => $ticket_id, 'post_type' => $ticket->post_type ) );
 	foreach ( $comments as $comment ) {
 		$p = '';
 		$to = get_comment_meta( $comment->comment_ID, '_email_to', true );
@@ -190,7 +190,7 @@ function rthd_get_all_participants( $lead_id ) {
 function rthd_get_ticket_table_name() {
 
 	global $wpdb;
-	return $wpdb->prefix . 'rt_wp_hd_hd_index';
+	return $wpdb->prefix . 'rt_wp_hd_ticket_index';
 }
 
 function rthd_get_user_ids( $user ) {

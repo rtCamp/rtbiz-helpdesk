@@ -1,4 +1,4 @@
-rtcrm_user_edit = rtcrm_user_edit[0];
+rthd_user_edit = rthd_user_edit[0];
 jQuery(document).ready(function($) {
 
 	function format_date_moment() {
@@ -20,9 +20,9 @@ jQuery(document).ready(function($) {
 
 		var requestArray= new Object();
 
-		requestArray['post_type'] = rtcrm_post_type;
+		requestArray['post_type'] = rthd_post_type;
 		requestArray["comment_id"]=  $("#edit-comment-id").val();
-		requestArray["action"] = "rtcrm_add_new_followup_front";
+		requestArray["action"] = "rthd_add_new_followup_front";
 		requestArray["followuptype"] = 'note';
 
 		requestArray["followup_ticket_unique_id"] = $("#ticket_unique_id").val();
@@ -42,7 +42,7 @@ jQuery(document).ready(function($) {
 		})
 
 
-				requestArray['user_edit'] = rtcrm_user_edit;
+				requestArray['user_edit'] = rthd_user_edit;
 				$.ajax({
 					url: ajaxurl,
 					dataType: "json",
@@ -116,7 +116,7 @@ jQuery(document).ready(function($) {
 	$(document).on('click', '#load_more_btn', function(e) {
 		e.preventDefault();
 		$.post( ajaxurl, {
-			action: 'rtcrm_get_lead_comments_ajax',
+			action: 'rthd_get_ticket_comments_ajax',
 			page: page,
 			ticket_unique_id: $("#ticket_unique_id").val()
 		}, function(data) {

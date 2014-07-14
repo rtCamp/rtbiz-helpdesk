@@ -65,7 +65,7 @@
 //	@import "foundation/components/forms";
 //	@import "foundation/components/section";
 
-	.rtcrm-gravity-mapping {
+	.rthd-gravity-mapping {
 		[class*="column"] + [class*="column"]:last-child {
 			float: none;
 		}
@@ -105,7 +105,7 @@
 		}
 	}
 
-	.rtcrm-stars {
+	.rthd-stars {
 		height: 14px;
 		margin: 5px 5px 6px;
 
@@ -137,7 +137,7 @@
 		display: inline-block;
 	}
 
-	#lead_attach_file {
+	#ticket_attach_file {
 		width: auto;
 		padding: 0;
 	}
@@ -297,16 +297,16 @@
 		border: 1px solid #d9d9d9;
 	}
 
-	.rtcrm_public_link {
+	.rthd_public_link {
 		margin: 2% 5px 2%;
 		display: inline-block;
 	}
 
-	#rtcrm-status {
+	#rthd-status {
 		margin: 15px 0;
 	}
 
-/*	.rtcrm-sticky {
+/*	.rthd-sticky {
 		position: fixed;
 		right: 0;
 		z-index: 100;
@@ -335,11 +335,11 @@
 		}
 	}
 
-	#add-new-post .rtcrm-lead-content-wrapper {
+	#add-new-post .rthd-ticket-content-wrapper {
 		margin-bottom: 25px;
 	}
 
-	#add-new-post .rtcrm-post-author-wrapper {
+	#add-new-post .rthd-post-author-wrapper {
 		margin-bottom: 25px;
 	}
 

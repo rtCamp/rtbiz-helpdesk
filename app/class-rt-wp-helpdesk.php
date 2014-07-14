@@ -135,7 +135,6 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			$rt_hd_attributes = new Rt_HD_Attributes();
 			$rt_hd_module = new Rt_HD_Module();
 			$rt_hd_acl = new Rt_HD_ACL();
-//			$rt_hd_roles = new Rt_HD_Roles();
 			$rt_hd_accounts = new Rt_HD_Accounts();
 			$rt_hd_contacts = new Rt_HD_Contacts();
 			$rt_hd_tickets = new Rt_HD_Tickets();

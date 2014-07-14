@@ -12,12 +12,12 @@ if ( ! defined( 'ABSPATH' ) )
  */
 
 /**
- * Description of Rt_CRM_Dashboard
+ * Description of Rt_HD_Dashboard
  *
  * @author udit
  */
-if ( !class_exists( 'Rt_CRM_Dashboard' ) ) {
-	class Rt_CRM_Dashboard {
+if ( !class_exists( 'Rt_HD_Dashboard' ) ) {
+	class Rt_HD_Dashboard {
 
 		var $screen_id;
 		var $charts = array();
@@ -32,7 +32,7 @@ if ( !class_exists( 'Rt_CRM_Dashboard' ) ) {
 			add_action( 'admin_footer-'.$this->screen_id, array( $this, 'footer_scripts' ) );
 
 			/* Setup Google Charts */
-			add_action( 'rtcrm_after_dashboard', array( $this, 'render_google_charts' ) );
+			add_action( 'rthd_after_dashboard', array( $this, 'render_google_charts' ) );
 		}
 
 		/**
@@ -56,9 +56,9 @@ if ( !class_exists( 'Rt_CRM_Dashboard' ) ) {
 		* This calls the add_meta_boxes hooks, adds screen options and enqueues the postbox.js script.
 		*/
 		function page_actions() {
-			global $rt_crm_module;
+			global $rt_hd_module;
 
-			if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] === 'rtcrm-'.$rt_crm_module->post_type.'-dashboard' ) {
+			if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] === 'rthd-'.$rt_hd_module->post_type.'-dashboard' ) {
 				do_action('add_meta_boxes_' . $this->screen_id, null);
 				do_action('add_meta_boxes', $this->screen_id, null);
 
@@ -68,7 +68,7 @@ if ( !class_exists( 'Rt_CRM_Dashboard' ) ) {
 		}
 
 		function ui( $post_type ) {
-			rtcrm_get_template( 'admin/dashboard.php', array( 'post_type' => $post_type ) );
+			rthd_get_template( 'admin/dashboard.php', array( 'post_type' => $post_type ) );
 		}
 
 		function render_google_charts() {

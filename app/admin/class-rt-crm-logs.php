@@ -12,21 +12,21 @@ if ( ! defined( 'ABSPATH' ) )
  */
 
 /**
- * Description of Rt_CRM_Logs
+ * Description of Rt_HD_Logs
  *
  * @author udit
  */
-if( !class_exists( 'Rt_CRM_Logs' ) ) {
-	class Rt_CRM_Logs {
+if( !class_exists( 'Rt_HD_Logs' ) ) {
+	class Rt_HD_Logs {
 		function ui() {
 			global $wpdb;
-			$editor_cap = rt_biz_get_access_role_cap( RT_CRM_TEXT_DOMAIN, 'editor' );
+			$editor_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
 			if( !current_user_can( $editor_cap ) ) {
 				wp_die("Opsss!! You are in restricted area");
 			}
 			//Delete lead code
 			if(isset($_REQUEST["log-list"])){
-				rtcrm_get_template( 'admin/list-transaction-post.php' );
+				rthd_get_template( 'admin/list-transaction-post.php' );
 				return;
 			}
 			if (isset($_REQUEST["transa_id"])) {
@@ -62,7 +62,6 @@ if( !class_exists( 'Rt_CRM_Logs' ) ) {
 						$wpdb->get_results("delete from $table_name where lead_id in ({$strPost})");
 					}
 
-					//wp_redirect("admin.php?page=rtcrmlog",200);
 				}
 			}
 
@@ -164,8 +163,8 @@ if( !class_exists( 'Rt_CRM_Logs' ) ) {
 				?>
 							</td>
 							<td>
-								<a class="revertChanges" href="admin.php?page=rtcrm-logs&transa_id=<?php echo $rslt->trans_id; ?>" data-trans="<?php echo $rslt->trans_id; ?>" > Revert Changes </a> &nbsp; | &nbsp;
-								<a href="admin.php?page=rtcrm-logs&log-list=log-list&trans_id=<?php echo $rslt->trans_id; ?>" data-trans="<?php echo $rslt->trans_id; ?>" > View Post </a>
+								<a class="revertChanges" href="admin.php?page=rthd-logs&transa_id=<?php echo $rslt->trans_id; ?>" data-trans="<?php echo $rslt->trans_id; ?>" > Revert Changes </a> &nbsp; | &nbsp;
+								<a href="admin.php?page=rthd-logs&log-list=log-list&trans_id=<?php echo $rslt->trans_id; ?>" data-trans="<?php echo $rslt->trans_id; ?>" > View Post </a>
 							</td>
 						</tr>
 

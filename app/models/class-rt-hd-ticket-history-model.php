@@ -7,14 +7,14 @@
  */
 
 /**
- * Description of RtHDLeadHistoryModel
+ * Description of RtHDTicketHistoryModel
  *
  * @author udit
  */
-if ( !class_exists( 'Rt_HD_Lead_History_Model' ) ) {
-	class Rt_HD_Lead_History_Model extends RT_DB_Model {
+if ( !class_exists( 'Rt_HD_Ticket_History_Model' ) ) {
+	class Rt_HD_Ticket_History_Model extends RT_DB_Model {
 		public function __construct() {
-			parent::__construct('wp_hd_lead_history');
+			parent::__construct('wp_hd_ticket_history');
 		}
 	}
 }

@@ -4,11 +4,11 @@ var attachmentString = '';
 var arr_failed_lead = Array();
 
 function admin_side_menu_patch() {
-    jQuery("li.toplevel_page_crm-dashboard").removeClass("wp-not-current-submenu menu-top menu-icon-generic menu-top-first menu-top-last")
-    jQuery("li.toplevel_page_crm-dashboard").addClass("wp-has-current-submenu wp-menu-open open-if-no-js menu-top menu-icon-generic menu-top-first")
-    jQuery("a.toplevel_page_crm-dashboard").removeClass("wp-not-current-submenu menu-top menu-icon-generic menu-top-first menu-top-last opensub")
-    jQuery("a.toplevel_page_crm-dashboard").addClass("wp-has-current-submenu wp-menu-open open-if-no-js menu-top menu-icon-post menu-top-first")
-    jQuery("li.toplevel_page_crm-dashboard a").each(function(e) {
+    jQuery("li.toplevel_page_hd-dashboard").removeClass("wp-not-current-submenu menu-top menu-icon-generic menu-top-first menu-top-last")
+    jQuery("li.toplevel_page_hd-dashboard").addClass("wp-has-current-submenu wp-menu-open open-if-no-js menu-top menu-icon-generic menu-top-first")
+    jQuery("a.toplevel_page_hd-dashboard").removeClass("wp-not-current-submenu menu-top menu-icon-generic menu-top-first menu-top-last opensub")
+    jQuery("a.toplevel_page_hd-dashboard").addClass("wp-has-current-submenu wp-menu-open open-if-no-js menu-top menu-icon-post menu-top-first")
+    jQuery("li.toplevel_page_hd-dashboard a").each(function(e) {
         if ((window.location.href).indexOf(this.href) != -1) {
             jQuery(this).parent().addClass("current");
             jQuery(this).addClass('current')
@@ -21,11 +21,11 @@ jQuery(document).ready(function($) {
 	/**
 	 * WordPress Menu Hack for Dashboard
 	 */
-	if (typeof rt_crm_top_menu != 'undefined' && typeof rt_crm_dashboard_url != 'undefined') {
-		$('#' + rt_crm_top_menu + ' ul li').removeClass('current');
-		$('#' + rt_crm_top_menu + ' ul li a').removeClass('current');
-		$('#' + rt_crm_top_menu + ' ul li a').each(function(e) {
-			if (this.href == rt_crm_dashboard_url) {
+	if (typeof rt_hd_top_menu != 'undefined' && typeof rt_hd_dashboard_url != 'undefined') {
+		$('#' + rt_hd_top_menu + ' ul li').removeClass('current');
+		$('#' + rt_hd_top_menu + ' ul li a').removeClass('current');
+		$('#' + rt_hd_top_menu + ' ul li a').each(function(e) {
+			if (this.href == rt_hd_dashboard_url) {
 				$(this).parent().addClass("current");
 				$(this).addClass('current');
 			}
@@ -130,7 +130,7 @@ jQuery(document).ready(function($) {
         $("#newmeta").toggle();
     })
     $(".revertChanges").click(function(e) {
-        var r = confirm("This will delete all the crm data created in this trannsaction ! Are you sure you want to continue ?");
+        var r = confirm("This will delete all the helpdesk data created in this trannsaction ! Are you sure you want to continue ?");
         if (r == true) {
 
         }
@@ -155,7 +155,7 @@ jQuery(document).ready(function($) {
                 return false;
             }
             var ajaxdata = {
-                action: 'rtcrm_defined_map_feild_value',
+                action: 'rthd_defined_map_feild_value',
                 mapSourceType: $("#mapSourceType").val(),
                 map_form_id: jQuery('#mapSource').val(),
                 field_id: $(fieldMap).data("field")
@@ -256,7 +256,7 @@ jQuery(document).ready(function($) {
             var sucessCount = 0;
             var failCount = 0;
             var forceImport = false;
-            jQuery("#rtCrmMappingForm .wp-list-table tbody tr").each(function() {
+            jQuery("#rtHelpdeskMappingForm .wp-list-table tbody tr").each(function() {
                 var tempTD = $(this).children();
                 var tempSelectOption = $(tempTD[1]).find("select option");
                 var searchQ = jQuery(tempTD[0]).text().trim().toLowerCase();
@@ -281,7 +281,7 @@ jQuery(document).ready(function($) {
                 otherCount++;
             })
             var postdata;
-            jQuery('#rtCrmMappingForm').submit(function(e) {
+            jQuery('#rtHelpdeskMappingForm').submit(function(e) {
                 e.preventDefault();
                 postdata = new Object;
                 var data = jQuery(this).serializeArray();
@@ -511,7 +511,7 @@ jQuery(document).ready(function($) {
                 });
                 if (errorFlag)
                     return false;
-                jQuery('#rtCrmMappingForm').slideUp();
+                jQuery('#rtHelpdeskMappingForm').slideUp();
                 jQuery(".myerror").addClass("error");
                 jQuery(".myupdate").addClass("updated");
                 jQuery('#startImporting').slideDown();
@@ -527,7 +527,7 @@ jQuery(document).ready(function($) {
                 }
                 var rCount = 0;
                 var ajaxdata = {
-                    action: 'rtcrm_map_import',
+                    action: 'rthd_map_import',
                     mapSourceType: $("#mapSourceType").val(),
                     map_data: postdata,
                     map_form_id: jQuery('#mapSource').val(),
@@ -535,7 +535,7 @@ jQuery(document).ready(function($) {
                     gravity_lead_id: parseInt(arr_lead_id[rCount].id),
                     forceimport: forceImport,
                     trans_id: transaction_id,
-					rtcrm_module: jQuery('#rtcrm_module').val()
+					rthd_module: jQuery('#rthd_module').val()
                 }
                 try {
                     do_ajax_in_loop(ajaxdata, rCount);
@@ -567,14 +567,14 @@ jQuery(document).ready(function($) {
         function load_dummy_data(lead_id) {
 			try {
 				var ajaxdata = {
-					action: 'rtcrm_gravity_dummy_data',
+					action: 'rthd_gravity_dummy_data',
 					mapSourceType: $("#mapSourceType").val(),
 					map_form_id: jQuery('#mapSource').val(),
 					dummy_lead_id: arr_lead_id[lead_id].id
 
 				}
 				jQuery.post(ajaxurl, ajaxdata, function(response) {
-					$(".crm-dummy-data").each(function(e, el) {
+					$(".helpdesk-dummy-data").each(function(e, el) {
 						var key = $(el).data("field-name");
 						if (isNaN(key) && key.indexOf("-s-") > -1) {
 							key = key.replace("/-s-/g", " ")
@@ -641,13 +641,13 @@ jQuery(document).ready(function($) {
                var strHTML="";
                if(arr_failed_lead.toString() != "")
                 strHTML += "Fail Lead Index : " + arr_failed_lead.toString() + "<br />"
-               strHTML += "<a target='_blank' href='admin.php?page=rtcrmlogs&log-list=log-list&trans_id=" + transaction_id + "' >View All Inserted Leads </a>";
+               strHTML += "<a target='_blank' href='admin.php?page=rthdlogs&log-list=log-list&trans_id=" + transaction_id + "' >View All Inserted Leads </a>";
             $("#extra-data-importer").html(strHTML);
 
         });
         $("#futureYes").on("click", function(event, ui) {
             var ajaxdata = {
-                action: 'rtcrm_map_import_feauture',
+                action: 'rthd_map_import_feauture',
                 map_data: postdata,
                 map_form_id: jQuery('#mapSource').val(),
             }
@@ -690,46 +690,46 @@ jQuery(document).ready(function($) {
     });
 
 	// Imap Servers
-	jQuery(document).on('click', '.rtcrm-edit-server', function(e) {
+	jQuery(document).on('click', '.rthd-edit-server', function(e) {
 		e.preventDefault();
 		server_id = jQuery(this).data('server-id');
-		jQuery('#rtcrm_imap_server_'+server_id).toggleClass('rtcrm-hide-row').toggleClass('rtcrm-show-row');
+		jQuery('#rthd_imap_server_'+server_id).toggleClass('rthd-hide-row').toggleClass('rthd-show-row');
 	});
-	jQuery(document).on('click', '#rtcrm_add_imap_server', function(e) {
+	jQuery(document).on('click', '#rthd_add_imap_server', function(e) {
 		e.preventDefault();
-		jQuery('#rtcrm_new_imap_server').toggleClass('rtcrm-hide-row').toggleClass('rtcrm-show-row');
+		jQuery('#rthd_new_imap_server').toggleClass('rthd-hide-row').toggleClass('rthd-show-row');
 	});
-	jQuery(document).on('click', '.rtcrm-remove-server', function(e) {
+	jQuery(document).on('click', '.rthd-remove-server', function(e) {
 		e.preventDefault();
 		flag = confirm( 'Are you sure you want to remove this server ?' );
 		server_id = jQuery(this).data('server-id');
 		if(flag) {
-			jQuery('#rtcrm_imap_server_'+server_id).remove();
+			jQuery('#rthd_imap_server_'+server_id).remove();
 			jQuery(this).parent().parent().remove();
 		}
 	});
 
 
 	// User Settings Page - Add Email
-	jQuery(document).on('click', '#rtcrm_add_personal_email', function(e) {
+	jQuery(document).on('click', '#rthd_add_personal_email', function(e) {
 		e.preventDefault();
-		jQuery('#rtcrm_email_acc_type_container').toggleClass('rtcrm-hide-row').toggleClass('rtcrm-show-row');
-		if ( jQuery('#rtcrm_email_acc_type_container').hasClass('rtcrm-hide-row') ) {
-			jQuery('#rtcrm_goauth_container').removeClass('rtcrm-show-row').addClass('rtcrm-hide-row');
-			jQuery('#rtcrm_add_imap_acc_form').removeClass('rtcrm-show-row').addClass('rtcrm-hide-row');
-			jQuery('#rtcrm_select_email_acc_type').val('').change();
+		jQuery('#rthd_email_acc_type_container').toggleClass('rthd-hide-row').toggleClass('rthd-show-row');
+		if ( jQuery('#rthd_email_acc_type_container').hasClass('rthd-hide-row') ) {
+			jQuery('#rthd_goauth_container').removeClass('rthd-show-row').addClass('rthd-hide-row');
+			jQuery('#rthd_add_imap_acc_form').removeClass('rthd-show-row').addClass('rthd-hide-row');
+			jQuery('#rthd_select_email_acc_type').val('').change();
 		}
 	});
-	jQuery(document).on('change','#rtcrm_select_email_acc_type', function(e) {
+	jQuery(document).on('change','#rthd_select_email_acc_type', function(e) {
 		if ( jQuery(this).val() == 'goauth' ) {
-			jQuery('#rtcrm_goauth_container').removeClass('rtcrm-hide-row').addClass('rtcrm-show-row');
-			jQuery('#rtcrm_add_imap_acc_form').removeClass('rtcrm-show-row').addClass('rtcrm-hide-row');
+			jQuery('#rthd_goauth_container').removeClass('rthd-hide-row').addClass('rthd-show-row');
+			jQuery('#rthd_add_imap_acc_form').removeClass('rthd-show-row').addClass('rthd-hide-row');
 		} else if ( jQuery(this).val() == 'imap' ) {
-			jQuery('#rtcrm_add_imap_acc_form').removeClass('rtcrm-hide-row').addClass('rtcrm-show-row');
-			jQuery('#rtcrm_goauth_container').removeClass('rtcrm-show-row').addClass('rtcrm-hide-row');
+			jQuery('#rthd_add_imap_acc_form').removeClass('rthd-hide-row').addClass('rthd-show-row');
+			jQuery('#rthd_goauth_container').removeClass('rthd-show-row').addClass('rthd-hide-row');
 		} else {
-			jQuery('#rtcrm_goauth_container').removeClass('rtcrm-show-row').addClass('rtcrm-hide-row');
-			jQuery('#rtcrm_add_imap_acc_form').removeClass('rtcrm-show-row').addClass('rtcrm-hide-row');
+			jQuery('#rthd_goauth_container').removeClass('rthd-show-row').addClass('rthd-hide-row');
+			jQuery('#rthd_add_imap_acc_form').removeClass('rthd-show-row').addClass('rthd-hide-row');
 		}
 	});
 });

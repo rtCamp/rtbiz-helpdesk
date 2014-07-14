@@ -1,7 +1,7 @@
 <?php
 
 /*
- * rtCRM Studio Dashboard Template
+ * rtHelpdesk Studio Dashboard Template
  *
  * @author udit
  */
@@ -10,7 +10,7 @@
 
 	<?php screen_icon(); ?>
 
-	<h2><?php _e( 'CRM Dashboard' ); ?></h2>
+	<h2><?php _e( 'Helpdesk Dashboard' ); ?></h2>
 
 		<div id="poststuff">
 
@@ -36,7 +36,7 @@
 			</div> <!-- #post-body -->
 			<?php wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false ); ?>
 			<?php wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>
-			<?php do_action( 'rtcrm_after_dashboard' ); ?>
+			<?php do_action( 'rthd_after_dashboard' ); ?>
 
 		</div> <!-- #poststuff -->
 

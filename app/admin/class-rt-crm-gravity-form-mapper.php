@@ -1,6 +1,6 @@
 <?php
 /**
- * Don't load this file directly!
+ * Don't load this file directly
  */
 if ( ! defined( 'ABSPATH' ) )
 	exit;
@@ -12,52 +12,52 @@ if ( ! defined( 'ABSPATH' ) )
  */
 
 /**
- * Description of Rt_CRM_Gravity_Form_Mapper
+ * Description of Rt_HD_Gravity_Form_Mapper
  *
  * @author dipesh
  */
-if (!class_exists('Rt_CRM_Gravity_Form_Mapper')) {
+if (!class_exists('Rt_HD_Gravity_Form_Mapper')) {
 
-	class Rt_CRM_Gravity_Form_Mapper {
+	class Rt_HD_Gravity_Form_Mapper {
 
 		public function __construct() {
 			$this->hooks();
 		}
 
 		function hooks() {
-			add_action( 'wp_ajax_crm_delete_mapping', array( $this, 'delete_mapping_ajax' ) );
-			add_action( 'wp_ajax_crm_enable_mapping', array( $this, 'crm_enable_ajax' ) );
+			add_action( 'wp_ajax_helpdesk_delete_mapping', array( $this, 'delete_mapping_ajax' ) );
+			add_action( 'wp_ajax_helpdesk_enable_mapping', array( $this, 'enable_mapping_ajax' ) );
 
 		}
 
 		function delete_mapping_ajax(){
-			global $rt_crm_gravity_fields_mapping_model;
+			global $rt_hd_gravity_fields_mapping_model;
 			$response = array();
-			if ( ! isset( $_POST["action"] ) || $_POST["action"] != "crm_delete_mapping" || !isset( $_POST["mapping_id"] ) ) {
+			if ( ! isset( $_POST["action"] ) || $_POST["action"] != "helpdesk_delete_mapping" || !isset( $_POST["mapping_id"] ) ) {
 				die(0);
 			}
-			$response["status"] =  $rt_crm_gravity_fields_mapping_model->delete_mapping( array( 'id' => $_POST["mapping_id"] )) ;
+			$response["status"] =  $rt_hd_gravity_fields_mapping_model->delete_mapping( array( 'id' => $_POST["mapping_id"] )) ;
 			echo json_encode( $response );
 			die(0);
 		}
 
-		function crm_enable_ajax(){
-			global $rt_crm_gravity_fields_mapping_model;
+		function enable_mapping_ajax(){
+			global $rt_hd_gravity_fields_mapping_model;
 			$response = array();
-			if ( ! isset( $_POST["action"] ) || $_POST["action"] != "crm_enable_mapping" || !isset( $_POST["mapping_id"] ) ) {
+			if ( ! isset( $_POST["action"] ) || $_POST["action"] != "helpdesk_enable_mapping" || !isset( $_POST["mapping_id"] ) ) {
 				die(0);
 			}
 			$data=array( 'enable' => isset( $_POST["mapping_enable"] ) ? $_POST["mapping_enable"]=='true' ? 'yes' : 'no'  : 'no' );
 			$where=array( 'id' => $_POST["mapping_id"] );
-			$response["status"] =  $rt_crm_gravity_fields_mapping_model->update_mapping( $data, $where );
+			$response["status"] =  $rt_hd_gravity_fields_mapping_model->update_mapping( $data, $where );
 			echo json_encode( $response );
 			die(0);
 		}
 
 		public function ui() {
-			global $rt_crm_gravity_fields_mapping_model;
+			global $rt_hd_gravity_fields_mapping_model;
 			$args = array();
-			$gravity_fields=$rt_crm_gravity_fields_mapping_model->get_all_mappings();
+			$gravity_fields=$rt_hd_gravity_fields_mapping_model->get_all_mappings();
 			foreach($gravity_fields as  $key=>$gravity_field){
 				$forms = RGFormsModel::get_forms();
 				if (isset($forms) && !empty($forms)) {
@@ -70,7 +70,7 @@ if (!class_exists('Rt_CRM_Gravity_Form_Mapper')) {
 				}
 			}
 			$args['gravity_fields']=$gravity_fields;
-			rtcrm_get_template( 'admin/list-gravity-form-mapper.php', $args );
+			rthd_get_template( 'admin/list-gravity-form-mapper.php', $args );
 		}
 
 

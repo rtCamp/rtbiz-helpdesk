@@ -1,4 +1,4 @@
-rtcrm_user_edit = rtcrm_user_edit[0];
+rthd_user_edit = rthd_user_edit[0];
 
 jQuery(document).ready(function($) {
     $(document).foundation();
@@ -91,7 +91,7 @@ $.ajaxSetup({
 			dataType: "json",
 			type: 'post',
 			data: {
-				action: "rtcrm_get_term_meta",
+				action: "rthd_get_term_meta",
 				query: term_id
 			},
 			success: function (data) {
@@ -123,9 +123,9 @@ $.ajaxSetup({
                     dataType: "json",
                     type: 'post',
                     data: {
-                        action: "rtcrm_search_contact",
+                        action: "rthd_search_contact",
                         query: request.term,
-						post_type: rtcrm_post_type
+						post_type: rthd_post_type
                     },
                     success: function(data) {
                         response($.map(data, function(item) {
@@ -172,7 +172,7 @@ $.ajaxSetup({
                     data: {
                         action: "rthd_search_account",
                         query: request.term,
-						post_type: rtcrm_post_type
+						post_type: rthd_post_type
                     },
                     success: function(data) {
                         response($.map(data, function(item) {
@@ -187,20 +187,20 @@ $.ajaxSetup({
                 });
             }, minLength: 2,
             select: function(event, ui) {
-                if (jQuery("#crm-account-" + ui.item.id).length < 1) {
+                if (jQuery("#hd-account-" + ui.item.id).length < 1) {
                     jQuery("#divAccountsList").append(genrate_account_li(ui.item));
                 }
                 jQuery("#search_account").val("");
 
-                //rtcrm_get_account_contacts
+                //rthd_get_account_contacts
                 $.ajax({
                     url: ajaxurl,
                     dataType: "json",
                     type: 'post',
                     data: {
-                        action: "rtcrm_get_account_contacts",
+                        action: "rthd_get_account_contacts",
                         query: ui.item.id,
-						post_type: rtcrm_post_type
+						post_type: rthd_post_type
                     },
                     success: function(data) {
                         $.each(data,function(key,value){
@@ -257,7 +257,7 @@ $.ajaxSetup({
             },
             closed: function() {
                 if (lastAccountId > 0 && lastAccountDetail != null) {
-                    jQuery("#div_contact_account").html("<li id='crm-account-" + lastAccountDetail.id + "' class='contact-list' ><div class='row collapse'><div class='large-2 columns'> " + lastAccountDetail.imghtml
+                    jQuery("#div_contact_account").html("<li id='hd-account-" + lastAccountDetail.id + "' class='contact-list' ><div class='row collapse'><div class='large-2 columns'> " + lastAccountDetail.imghtml
                             + "</div><div class='large-9 columns'><a target='_blank' class='heading' href='" +  lastAccountDetail.url  + "' title='" + lastAccountDetail.label +"'>" + lastAccountDetail.label +"</a>"
                             + "</div><div class='large-1 columns'><a href='#removeAccount'><i class='foundicon-remove'></i></a><input type='hidden' name='new-contact-account' value='" + lastAccountDetail.id + "' /></div>"
                             + "</div></li>");
@@ -289,10 +289,10 @@ $.ajaxSetup({
             data: {
                 action: "rthd_get_term_by_key",
 	            account_id: account_id,
-                post_type: rtcrm_post_type
+                post_type: rthd_post_type
             },
             success: function(data) {
-                if (jQuery("#crm-account-" + data.id).length < 1) {
+                if (jQuery("#hd-account-" + data.id).length < 1) {
                     jQuery("#divAccountsList").append(genrate_account_li(data));
                 }
             }
@@ -332,7 +332,7 @@ if(jQuery("#new-contact-account").length > 0){
                 data: {
                     action: "rthd_search_account",
                     query: request.term,
-					post_type: rtcrm_post_type
+					post_type: rthd_post_type
                 },
                 success: function(data) {
                     response($.map(data, function(item) {
@@ -441,28 +441,28 @@ if(jQuery("#new-contact-account").length > 0){
     }
 
 	function check_closing_reason() {
-		removeError($('#rtcrm_closing_reason'));
-		if ( $('#rtcrm_post_status').val() !== 'closed' ) {
+		removeError($('#rthd_closing_reason'));
+		if ( $('#rthd_post_status').val() !== 'closed' ) {
 			return true;
 		}
 
-		if ( $('#rtcrm_closing_reason').val() !== '' ) {
+		if ( $('#rthd_closing_reason').val() !== '' ) {
 			return true;
 		}
 
-		addError($('#rtcrm_closing_reason'),'You need to give at least one reason to close the lead');
+		addError($('#rthd_closing_reason'),'You need to give at least one reason to close the ticket');
 		return false;
 	}
 
-	$('#rtcrm_closing_reason').on('change', function(e) {
+	$('#rthd_closing_reason').on('change', function(e) {
 		removeError($(this));
 	});
 
-	$('#rtcrm_post_status').on('change', function(e) {
+	$('#rthd_post_status').on('change', function(e) {
 		if($(this).val() == 'closed') {
-			$('#rtcrm_closing_reason_wrapper').show();
+			$('#rthd_closing_reason_wrapper').show();
 		} else {
-			$('#rtcrm_closing_reason_wrapper').hide();
+			$('#rthd_closing_reason_wrapper').hide();
 		}
 	});
 
@@ -489,7 +489,7 @@ if(jQuery("#new-contact-account").length > 0){
                 tmpObject[value.name] = value.value;
             })
             var rCount = 0;
-			tmpObject['post_type'] = rtcrm_post_type;
+			tmpObject['post_type'] = rthd_post_type;
             tmpObject["accountmeta"] = new Object()
             $("#account_meta_container input[type=text]").each(function() {
                 type = $(this).data("metakey");
@@ -522,7 +522,7 @@ if(jQuery("#new-contact-account").length > 0){
                 success: function(data) {
                     if (data.status) {
 
-                        if (jQuery("#crm-account-" + data.data.id).length < 1) {
+                        if (jQuery("#hd-account-" + data.data.id).length < 1) {
                             jQuery("#divAccountsList").append(genrate_account_li(data.data));
                         }
                         if (accountForContact) {
@@ -585,13 +585,13 @@ if(jQuery("#new-contact-account").length > 0){
             if (errorFlag) {
                 return false;
             }
-			tmpObject['post_type'] = rtcrm_post_type;
+			tmpObject['post_type'] = rthd_post_type;
             $.ajax({
                 url: ajaxurl,
                 dataType: "json",
                 type: 'post',
                 data: {
-                    action: "rtcrm_add_contact",
+                    action: "rthd_add_contact",
                     data: tmpObject
                 },
                 success: function(data) {
@@ -616,7 +616,7 @@ if(jQuery("#new-contact-account").length > 0){
     });
 	$("#form-add-post").submit(function(e) {
 		try {
-			var eleAccountName = $("#new_"+rtcrm_post_type+"_title");
+			var eleAccountName = $("#new_"+rthd_post_type+"_title");
 			if ($(eleAccountName).val().trim() == "") {
 				addError(eleAccountName, "Please Enter the Title");
 				return false;
@@ -668,7 +668,7 @@ if(jQuery("#new-contact-account").length > 0){
                     if (jQuery("#comment-reply-to").html().indexOf(person.email) == -1) {
                         tStr += '<li class="tagit-choice ui-widget-content ui-state-default ui-corner-all"><span class="tagit-label">'
                         tStr += person.imghtml + person.label + '<a class="tagit-close custome-tagit-close"><span class="text-icon">×</span><span class="ui-icon ui-icon-close"></span></a>'
-                        tStr += '</span><input type="hidden" style="display:none;" value="' + person.email + '" name="crm-email-to[' + new Date().getTime() + ']"></li>'
+                        tStr += '</span><input type="hidden" style="display:none;" value="' + person.email + '" name="helpdesk-email-to[' + new Date().getTime() + ']"></li>'
                     }
                 }
             })
@@ -680,18 +680,18 @@ if(jQuery("#new-contact-account").length > 0){
 
     });
 
-	jQuery(document).on('click', '.rtcrm_delete_attachment',function(e) {
+	jQuery(document).on('click', '.rthd_delete_attachment',function(e) {
 		e.preventDefault();
 		jQuery(this).parent().remove();
 	});
 
 	jQuery('#add_ticket_attachment').on('click', function(e) {
 		e.preventDefault();
-		if (file_frame_lead) {
-			file_frame_lead.open();
+		if (file_frame_ticket) {
+			file_frame_ticket.open();
 			return;
 		}
-		file_frame_lead = wp.media.frames.file_frame = wp.media({
+		file_frame_ticket = wp.media.frames.file_frame = wp.media({
 			title: jQuery(this).data('uploader_title'),
 			searchable: true,
 			button: {
@@ -699,14 +699,14 @@ if(jQuery("#new-contact-account").length > 0){
 			},
 			multiple: true // Set to true to allow multiple files to be selected
 		});
-		file_frame_lead.on('select', function() {
-			var selection = file_frame_lead.state().get('selection');
+		file_frame_ticket.on('select', function() {
+			var selection = file_frame_ticket.state().get('selection');
 			var strAttachment = '';
 			selection.map(function(attachment) {
 				attachment = attachment.toJSON();
 				strAttachment = '<div class="large-12 mobile-large-3 columns attachment-item" data-attachment-id="'+attachment.id+'">';
 				strAttachment += '<a target="_blank" href="'+attachment.url+'"><img height="20px" width="20px" src="' +attachment.icon + '" > '+attachment.filename+'</a>';
-				strAttachment += '<a href="#" class="rtcrm_delete_attachment right">x</a>';
+				strAttachment += '<a href="#" class="rthd_delete_attachment right">x</a>';
 				strAttachment += '<input type="hidden" name="attachment[]" value="' + attachment.id +'" /></div>';
 
 				jQuery("#attachment-container .scroll-height").append(strAttachment);
@@ -715,7 +715,7 @@ if(jQuery("#new-contact-account").length > 0){
 			});
 			// Do something with attachment.id and/or attachment.url here
 		});
-		file_frame_lead.open();
+		file_frame_ticket.open();
 	});
 
 jQuery('#btnCommentAttachment').click(function(event) {
@@ -909,9 +909,9 @@ $("#savefollwoup").click(function(){
 
         var requestArray= new Object();
         requestArray["thread_id"]= thread_id;
-        requestArray["action"] = "rtcrm_gmail_import_thread_request";
+        requestArray["action"] = "rthd_gmail_import_thread_request";
         requestArray["email"]=email;
-        requestArray["post_id"]=$("#lead_id").val();;
+        requestArray["post_id"]=$("#ticket_id").val();;
          $.ajax({
                 url: ajaxurl,
                 dataType: "json",
@@ -931,12 +931,12 @@ $("#savefollwoup").click(function(){
 
     var requestArray= new Object();
 
-	requestArray['post_type'] = rtcrm_post_type;
+	requestArray['post_type'] = rthd_post_type;
     requestArray["comment_id"]=  $("#edit-comment-id").val();
-    requestArray["action"] = "rtcrm_add_new_followup_ajax";
+    requestArray["action"] = "rthd_add_new_followup_ajax";
     requestArray["followuptype"]=followuptype;
 
-    requestArray["followup_post_id"] = $("#lead_id").val();
+    requestArray["followup_post_id"] = $("#ticket_id").val();
     requestArray["follwoup-time"]=$("#follwoup-time").val();
 
 	requestArray['followup_private'] = ($('#followup-private').is(':checked')) ? 'yes' : 'no';
@@ -983,7 +983,7 @@ $("#savefollwoup").click(function(){
                 return false;
             }
         }
-			requestArray['user_edit'] = rtcrm_user_edit;
+			requestArray['user_edit'] = rthd_user_edit;
             $.ajax({
                 url: ajaxurl,
                 dataType: "json",
@@ -1016,11 +1016,11 @@ $("#savefollwoup").click(function(){
 			source: function (request, response) {
 				var term = $.ui.autocomplete.escapeRegex(request.term)
 					, startsWithMatcher = new RegExp("^" + term, "i")
-					, startsWith = $.grep(arr_leadmeta_key, function(value) {
+					, startsWith = $.grep(arr_ticketmeta_key, function(value) {
 						return startsWithMatcher.test(value.meta_key || value.label || value.value || value);
 					})
 					, containsMatcher = new RegExp(term, "i")
-					, contains = $.grep(arr_leadmeta_key, function (value) {
+					, contains = $.grep(arr_ticketmeta_key, function (value) {
 						return $.inArray(value, startsWith) < 0 &&
 							containsMatcher.test(value.meta_key || value.label || value.value || value);
 					});
@@ -1082,9 +1082,9 @@ $("#savefollwoup").click(function(){
 
         var tmpstr=' <div class="large-12 columns" >';
         tmpstr +='<div class="large-3 columns">';
-        tmpstr +='<input type="text" name="lead_ex_files[' + exf_count +'][title]" value="' + title +'" />';
+        tmpstr +='<input type="text" name="ticket_ex_files[' + exf_count +'][title]" value="' + title +'" />';
         tmpstr +='</div><div class="large-8 columns">';
-        tmpstr +='<input type="text" name="lead_ex_files[' + exf_count +'][link]" value="' + link +'" />';
+        tmpstr +='<input type="text" name="ticket_ex_files[' + exf_count +'][link]" value="' + link +'" />';
         tmpstr +='</div><div class="large-1 columns">';
         tmpstr +='<button class="removeMeta"><i class="foundicon-minus"></i></button>';
         tmpstr +='</div></div>';
@@ -1097,7 +1097,7 @@ $("#savefollwoup").click(function(){
 
  function get_task_comments(project_id,task_id){
      if(ac_auth_token== ''){
-         alert("Please set active collab token from crm setting page");
+         alert("Please set active collab token from helpdesk setting page");
          return false;
      }
     if($.trim(task_id)==""){
@@ -1174,8 +1174,8 @@ $("#savefollwoup").click(function(){
           type: 'POST',
           dataType: 'json',
           data:{
-              action : 'activecollab_task_comment_import_ajax',
-              post_id:$("#lead_id").val(),
+              action : 'rthd_activecollab_task_comment_import_ajax',
+              post_id:$("#ticket_id").val(),
               project_id:project_id,
               task_id:task_id,
               auth_token:ac_auth_token,
@@ -1212,7 +1212,7 @@ $("#savefollwoup").click(function(){
           type: 'POST',
           dataType: 'json',
           data:{
-              action : 'crm_delete_followup',
+              action : 'helpdesk_delete_followup',
               comment_id:del_comment_id,
           },
           success: function(data) {
@@ -1259,8 +1259,8 @@ $("#savefollwoup").click(function(){
                 jQuery("#followup_content").val($(that).find(".comment-content").html());
                 $("#edit-comment-id").val(edit_comment_id);
                 $("#follwoup-time").val($(that).find(".comment-date").text())
-				var rtcrm_privacy = $('#header-'+edit_comment_id).find('.rtcrm_privacy').data('crm-privacy');
-				if(rtcrm_privacy == 'yes') {
+				var rthd_privacy = $('#header-'+edit_comment_id).find('.rthd_privacy').data('hd-privacy');
+				if(rthd_privacy == 'yes') {
 					$('#followup-private').attr('checked', 'checked').change();
 				} else {
 					$('#followup-private').removeAttr('checked').change();
@@ -1315,20 +1315,20 @@ function reset_followup(){
 		jQuery(this).siblings(".gmail_quote").toggle();
 	});
 	$("#button-trash").click(function(){
-		var r = confirm("Are you sure you want to move this lead to trash?");
+		var r = confirm("Are you sure you want to move this ticket to trash?");
 		if (r != true) {
 			return false;
 		}
-		window.location="edit.php?post_type="+rtcrm_post_type+"&page=rtcrm-add-"+rtcrm_post_type+"&action=trash&"+rtcrm_post_type+"_id=" + $("#lead_id").val();
+		window.location="edit.php?post_type="+rthd_post_type+"&page=rthd-add-"+rthd_post_type+"&action=trash&"+rthd_post_type+"_id=" + $("#ticket_id").val();
 	});
 
 	$('a.close').on('click', function(e) { e.preventDefault(); $(this).parent().remove(); });
 
-	$("#rtcrm-adv-module-toggle").click(function(e) {
-		$("#rtcrm-adv-module-div").toggle('slide');
+	$("#rthd-adv-module-toggle").click(function(e) {
+		$("#rthd-adv-module-div").toggle('slide');
 	});
 
-	$(".rtcrm_enable_mapping").on('change', function(e){
+	$(".rthd_enable_mapping").on('change', function(e){
 		e.preventDefault();
 		var update_mapping_id = $(this).data("mapping-id");
 		var that=this;
@@ -1337,7 +1337,7 @@ function reset_followup(){
 			type: 'POST',
 			dataType: 'json',
 			data:{
-				action : 'crm_enable_mapping',
+				action : 'helpdesk_enable_mapping',
 				mapping_id:update_mapping_id,
 				mapping_enable:that.checked
 
@@ -1356,7 +1356,7 @@ function reset_followup(){
 		});
 	});
 
-	$(".rtcrm_delete_mapping").on('click', function(e){
+	$(".rthd_delete_mapping").on('click', function(e){
 		e.preventDefault();
 		var r = confirm("Are you sure you want to remove this Mapping?");
 		if (r != true) {
@@ -1370,7 +1370,7 @@ function reset_followup(){
 			type: 'POST',
 			dataType: 'json',
 			data:{
-				action : 'crm_delete_mapping',
+				action : 'helpdesk_delete_mapping',
 				mapping_id:del_mapping_id
 			},
 			success: function(data) {
@@ -1389,7 +1389,7 @@ function reset_followup(){
 
 });
 
-var file_frame_lead, file_frame_followup;
+var file_frame_ticket, file_frame_followup;
 function enter_key_to_click(textbox_id,button_id){
     jQuery("#" + textbox_id ).keypress(function(e){
         if(e.keyCode==13){
@@ -1411,7 +1411,7 @@ function genrate_followup_html(comment){
 }
 
 function genrate_account_li(data){
-    return "<li id='crm-account-" + data.id + "' class='contact-list' ><div class='row collapse'><div class='large-2 columns'> " + data.imghtml
+    return "<li id='hd-account-" + data.id + "' class='contact-list' ><div class='row collapse'><div class='large-2 columns'> " + data.imghtml
                             + "</div><div class='large-9 columns'><a target='_blank' class='heading' href='" +  data.url  + "' title='" + data.label +"'>" + data.label +"</a>"
                             + "</div><div class='large-1 columns'><a href='#removeAccount'><i class='foundicon-remove'></i></a><input type='hidden' name='post[accounts][]' value='" + data.id + "' /></div>"
                             + "</div></li>";

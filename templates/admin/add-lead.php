@@ -1,14 +1,14 @@
 <?php
-global $rt_crm_module, $rt_crm_attributes, $rt_crm_closing_reason, $rt_crm_contacts, $rt_crm_accounts, $rt_crm_settings, $rt_crm_leads, $rt_crm_lead_history_model;
+global $rt_hd_module, $rt_hd_attributes, $rt_hd_closing_reason, $rt_hd_contacts, $rt_hd_accounts, $rt_hd_settings, $rt_hd_tickets, $rt_hd_ticket_history_model;
 
-if( ! isset( $_REQUEST['post_type'] ) || $_REQUEST['post_type'] != $rt_crm_module->post_type ) {
+if( ! isset( $_REQUEST['post_type'] ) || $_REQUEST['post_type'] != $rt_hd_module->post_type ) {
 	wp_die("Opsss!! You are in restricted area");
 }
 
-$labels = $rt_crm_module->labels;
+$labels = $rt_hd_module->labels;
 $module_settings = rthd_get_settings();
 $post_type = $_REQUEST['post_type'];
-$leadModel = new Rt_CRM_Lead_Model();
+$ticketModel = new Rt_HD_Ticket_Model();
 
 if ( !isset($_REQUEST[$post_type.'_id']) && !current_user_can( "publish_{$post_type}s" ) ) {
 	wp_die("Opsss!! You are in restricted area");
@@ -25,64 +25,64 @@ if ( current_user_can( "edit_{$post_type}" ) ) {
 
 if( isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'trash' && isset( $_REQUEST[$post_type.'_id'] ) ) {
 	wp_trash_post( $_REQUEST[$post_type.'_id'] );
-	$leadModel->update_lead( array( 'post_status' => 'trash' ), array( 'post_id' => $_REQUEST[$post_type.'_id'] ) );
-    $return = wp_redirect( admin_url( 'edit.php?post_type='.$post_type.'&page=rtcrm-all-'.$post_type ) );
+	$ticketModel->update_ticket( array( 'post_status' => 'trash' ), array( 'post_id' => $_REQUEST[$post_type.'_id'] ) );
+    $return = wp_redirect( admin_url( 'edit.php?post_type='.$post_type.'&page=rthd-all-'.$post_type ) );
     if( !$return ) {
-        echo '<script> window.location="' . admin_url( 'edit.php?post_type='.$post_type.'&page=rtcrm-all-'.$post_type ) . '"; </script> ';
+        echo '<script> window.location="' . admin_url( 'edit.php?post_type='.$post_type.'&page=rthd-all-'.$post_type ) . '"; </script> ';
     }
 }
 
 $closing_reason_history_id = '';
 if ( isset( $_POST['post'] ) ) {
 
-	// Lead Creation Date -- Can be new function
-    $newLead = $_POST['post'];
-    $creationdate = $newLead['post_date'];
+	// Ticket Creation Date -- Can be new function
+    $newTicket = $_POST['post'];
+    $creationdate = $newTicket['post_date'];
     if ( isset( $creationdate ) && $creationdate != '' ) {
         try {
             $dr = date_create_from_format( 'M d, Y H:i A', $creationdate );
 			$UTC = new DateTimeZone('UTC');
 			$dr->setTimezone($UTC);
 			$timeStamp = $dr->getTimestamp();
-            $newLead['post_date'] = gmdate('Y-m-d H:i:s', (intval($timeStamp) + ( get_option('gmt_offset') * 3600 )));
-			$newLead['post_date_gmt'] = gmdate('Y-m-d H:i:s', (intval($timeStamp)));
+            $newTicket['post_date'] = gmdate('Y-m-d H:i:s', (intval($timeStamp) + ( get_option('gmt_offset') * 3600 )));
+			$newTicket['post_date_gmt'] = gmdate('Y-m-d H:i:s', (intval($timeStamp)));
         } catch ( Exception $e ) {
-            $newLead['post_date'] = current_time( 'mysql' );
-			$newLead['post_date_gmt'] = gmdate('Y-m-d H:i:s');
+            $newTicket['post_date'] = current_time( 'mysql' );
+			$newTicket['post_date_gmt'] = gmdate('Y-m-d H:i:s');
         }
     } else {
-        $newLead['post_date'] = current_time( 'mysql' );
-		$newLead['post_date_gmt'] = gmdate('Y-m-d H:i:s');
+        $newTicket['post_date'] = current_time( 'mysql' );
+		$newTicket['post_date_gmt'] = gmdate('Y-m-d H:i:s');
     }
 
 	// Post Data to be saved.
     $post = array(
-        'post_author' => $newLead['post_author'],
-        'post_content' => $newLead['post_content'],
-        'post_status' => $newLead['post_status'],
-        'post_title' => $newLead['post_title'],
-        'post_date' => $newLead['post_date'],
-        'post_date_gmt' => $newLead['post_date_gmt'],
+        'post_author' => $newTicket['post_author'],
+        'post_content' => $newTicket['post_content'],
+        'post_status' => $newTicket['post_status'],
+        'post_title' => $newTicket['post_title'],
+        'post_date' => $newTicket['post_date'],
+        'post_date_gmt' => $newTicket['post_date_gmt'],
         'post_type' => $post_type
     );
 
-	// Diff Email between new lead data & old lead data -- can be new function
+	// Diff Email between new ticket data & old ticket data -- can be new function
 	$emailTable = "<table style='width: 100%; border-collapse: collapse; border: none;'>";
     $emailHTML = "";
     $updateFlag = false;
-    if ( isset($newLead['post_id'] ) ) {
+    if ( isset($newTicket['post_id'] ) ) {
         $updateFlag = true;
-        $oldpost = get_post ( $newLead['post_id'], ARRAY_A );
-        $diff = rtcrm_text_diff( $oldpost['post_title'], $post['post_title'] );
+        $oldpost = get_post ( $newTicket['post_id'], ARRAY_A );
+        $diff = rthd_text_diff( $oldpost['post_title'], $post['post_title'] );
         if ( $diff ) {
             $emailHTML .= '<tr><th style="padding: .5em;border: 0;"> Title</th><td>' . $diff . '</td><td></td></tr>';
         }
-        $diff = rtcrm_text_diff( $oldpost['post_status'], $post['post_status'] );
+        $diff = rthd_text_diff( $oldpost['post_status'], $post['post_status'] );
         if ( $diff ) {
             $emailHTML .= '<tr><th style="padding: .5em;border: 0;"> Status </th><td>' . $diff . '</td><td></td></tr>';
 			/* Insert History for status */
-	        $id = $rt_crm_lead_history_model->insert( array(
-					'lead_id' => $newLead['post_id'],
+	        $id = $rt_hd_ticket_history_model->insert( array(
+					'ticket_id' => $newTicket['post_id'],
 			        'type' => 'post_status',
 			        'old_value' => $oldpost['post_status'],
 			        'new_value' => $post['post_status'],
@@ -97,16 +97,16 @@ if ( isset( $_POST['post'] ) ) {
         $oldUser = get_user_by( 'id', $oldpost['post_author'] );
         $newUser = get_user_by( 'id', $post['post_author'] );
 
-        $diff = rtcrm_text_diff( $oldUser->display_name, $newUser->display_name );
+        $diff = rthd_text_diff( $oldUser->display_name, $newUser->display_name );
         if ( $diff ) {
             $emailHTML .= '<tr><th style="padding: .5em;border: 0;"> Assigned To</th><td>' . $diff . '</td><td></td></tr>';
         }
 
-        $diff = rtcrm_text_diff( strip_tags( $oldpost['post_content'] ), strip_tags( $post['post_content'] ) );
+        $diff = rthd_text_diff( strip_tags( $oldpost['post_content'] ), strip_tags( $post['post_content'] ) );
         if ( $diff ) {
-            $emailHTML .= '<tr><th style="padding: .5em;border: 0;"> Lead Content</th><td>' . $diff . '</td><td></td></tr>';
+            $emailHTML .= '<tr><th style="padding: .5em;border: 0;"> Ticket Content</th><td>' . $diff . '</td><td></td></tr>';
         }
-        $post = array_merge( $post, array( 'ID' => $newLead['post_id'] ) );
+        $post = array_merge( $post, array( 'ID' => $newTicket['post_id'] ) );
         $post_id = @wp_update_post( $post );
 
 		/* Update Index Table */
@@ -122,9 +122,9 @@ if ( isset( $_POST['post'] ) ) {
 			'user_updated_by' => get_current_user_id(),
 		);
 		$where = array( 'post_id' => $post_id );
-		$leadModel->update_lead( $data, $where );
+		$ticketModel->update_ticket( $data, $where );
 
-		/* System Notification - Lead Updated */
+		/* System Notification - Ticket Updated */
 
     } else {
         $emailHTML .= '<tr><td> Title </td><td>' . $post['post_title'] . '</td></tr>';
@@ -147,12 +147,12 @@ if ( isset( $_POST['post'] ) ) {
 			'user_updated_by' => get_current_user_id(),
 			'user_created_by' => get_current_user_id(),
 		);
-		$leadModel->add_lead( $data );
-		/* System Notification - Lead Inserted */
+		$ticketModel->add_ticket( $data );
+		/* System Notification - Ticket Inserted */
 
 	    /* Insert History for status */
-	    $id = $rt_crm_lead_history_model->insert(array(
-			    'lead_id' => $post_id,
+	    $id = $rt_hd_ticket_history_model->insert(array(
+			    'ticket_id' => $post_id,
 			    'type' => 'post_status',
 			    'old_value' => '',
 			    'new_value' => $post['post_status'],
@@ -164,20 +164,20 @@ if ( isset( $_POST['post'] ) ) {
 			$closing_reason_history_id = $id;
 	    }
 
-	    $unique_id = get_post_meta( $post_id, 'rtcrm_unique_id', true );
+	    $unique_id = get_post_meta( $post_id, 'rthd_unique_id', true );
 		if( empty( $unique_id ) ) {
-			$d = new DateTime($newLead['post_date']);
+			$d = new DateTime($newTicket['post_date']);
 			$UTC = new DateTimeZone("UTC");
 			$d->setTimezone($UTC);
 			$timeStamp = $d->getTimestamp();
 			$post_date_gmt = gmdate('Y-m-d H:i:s', (intval($timeStamp)));
-			$unique_id = md5( 'rtcrm_'.$post_type.'_'.$post_date_gmt );
-			update_post_meta( $post_id, 'rtcrm_unique_id', $unique_id );
+			$unique_id = md5( 'rthd_'.$post_type.'_'.$post_date_gmt );
+			update_post_meta( $post_id, 'rthd_unique_id', $unique_id );
 		}
     }
 
 	// Save post meta
-	$postmeta = apply_filters( 'rt_crm_lead_meta', $_POST['postmeta'] );
+	$postmeta = apply_filters( 'rt_hd_ticket_meta', $_POST['postmeta'] );
 	if ( ! empty( $postmeta ) ) {
         foreach ( $postmeta as $meta ) {
             update_post_meta( $post_id, $meta['key'], $meta['value'] );
@@ -189,16 +189,16 @@ if ( isset( $_POST['post'] ) ) {
     }
 
 	// Closing Date Diff & Save
-    if ( isset( $newLead['closing-date'] ) && !empty( $newLead['closing-date'] )) {
-		$oldclosingdate = get_post_meta( $post_id, "lead_closing_date", true );
-        $diff = rtcrm_text_diff( $oldclosingdate, $newLead["closing-date"] );
+    if ( isset( $newTicket['closing-date'] ) && !empty( $newTicket['closing-date'] )) {
+		$oldclosingdate = get_post_meta( $post_id, "ticket_closing_date", true );
+        $diff = rthd_text_diff( $oldclosingdate, $newTicket["closing-date"] );
         if ( $diff ) {
             $emailHTML .= '<tr><th style="padding: .5em;border: 0;">Closing Date</th><td>' . $diff . '</td><td></td></tr>';
         }
-        update_post_meta( $post_id, 'lead_closing_date', $newLead['closing-date'] );
+        update_post_meta( $post_id, 'ticket_closing_date', $newTicket['closing-date'] );
 
 		/* Update Index Table */
-		$cd = new DateTime( $newLead['closing-date'] );
+		$cd = new DateTime( $newTicket['closing-date'] );
 		$UTC = new DateTimeZone('UTC');
 		$cd->setTimezone($UTC);
 		$timeStamp = $cd->getTimestamp();
@@ -211,14 +211,14 @@ if ( isset( $_POST['post'] ) ) {
 			'user_updated_by' => get_current_user_id(),
 		);
 		$where = array( 'post_id' => $post_id );
-		$leadModel->update_lead( $data, $where );
+		$ticketModel->update_ticket( $data, $where );
 		/* System Notification -- Closing Date Changed */
     }
 
 	// Subscribers Save & Diff
 	if ( !isset( $_POST['subscribe_to'] ) ) {
         $_POST['subscribe_to'] = array();
-        if( intval( $newLead['post_author'] ) != get_current_user_id() && !$updateFlag ) {
+        if( intval( $newTicket['post_author'] ) != get_current_user_id() && !$updateFlag ) {
             $_POST['subscribe_to'][] = get_current_user_id();
         }
     }
@@ -264,7 +264,7 @@ if ( isset( $_POST['post'] ) ) {
 				$file = get_post($attachment);
 				$filepath = get_attached_file( $attachment );
 
-				$post_attachment_hashes = get_post_meta( $post_id, '_rt_wp_crm_attachment_hash' );
+				$post_attachment_hashes = get_post_meta( $post_id, '_rt_wp_hd_attachment_hash' );
 				if ( ! empty( $post_attachment_hashes ) && in_array( md5_file( $filepath ), $post_attachment_hashes ) ) {
 					continue;
 				}
@@ -280,12 +280,12 @@ if ( isset( $_POST['post'] ) ) {
 					);
 					wp_insert_attachment( $args, $file->guid, $post_id );
 
-					add_post_meta( $post_id, '_rt_wp_crm_attachment_hash', md5_file( $filepath ) );
+					add_post_meta( $post_id, '_rt_wp_hd_attachment_hash', md5_file( $filepath ) );
 
 				} else {
 					wp_update_post( array( 'ID' => $attachment, 'post_parent' => $post_id ) );
 					$file = get_attached_file( $attachment );
-					add_post_meta( $post_id, '_rt_wp_crm_attachment_hash', md5_file( $filepath ) );
+					add_post_meta( $post_id, '_rt_wp_hd_attachment_hash', md5_file( $filepath ) );
 				}
 			}
 		}
@@ -294,14 +294,14 @@ if ( isset( $_POST['post'] ) ) {
 			if( !in_array( $attachment, $new_attachments ) ) {
 				wp_update_post( array( 'ID' => $attachment, 'post_parent' => '0' ) );
 				$filepath = get_attached_file( $attachment );
-				delete_post_meta($post_id, '_rt_wp_crm_attachment_hash', md5_file( $filepath ) );
+				delete_post_meta($post_id, '_rt_wp_hd_attachment_hash', md5_file( $filepath ) );
 			}
 		}
 	} else {
 		foreach ( $old_attachments as $attachment ) {
 			wp_update_post( array( 'ID' => $attachment, 'post_parent' => '0' ) );
 			$filepath = get_attached_file( $attachment );
-			delete_post_meta($post_id, '_rt_wp_crm_attachment_hash', md5_file( $filepath ) );
+			delete_post_meta($post_id, '_rt_wp_hd_attachment_hash', md5_file( $filepath ) );
 		}
 	}
 	$old_attachments_title = array();
@@ -314,18 +314,18 @@ if ( isset( $_POST['post'] ) ) {
 		$new_attachments_title[] = get_the_title( $attachment );
 	}
 	$new_attachments_str = implode(' , ', $new_attachments_title);
-	$diff = rtcrm_text_diff( $old_attachments_str, $new_attachments_str );
+	$diff = rthd_text_diff( $old_attachments_str, $new_attachments_str );
 	if ( $diff ) {
 		$emailHTML .= '<tr><th style="padding: .5em;border: 0;">Attachments</th><td>' . $diff . '</td><td></td></tr>';
 	}
 
 	// External File Links
-	$old_ex_files = get_post_meta( $post_id, 'lead_external_file' );
+	$old_ex_files = get_post_meta( $post_id, 'ticket_external_file' );
 	$new_ex_files = array();
-	if ( isset( $_POST['lead_ex_files'] ) ) {
-		$new_ex_files = $_POST['lead_ex_files'];
+	if ( isset( $_POST['ticket_ex_files'] ) ) {
+		$new_ex_files = $_POST['ticket_ex_files'];
 
-		delete_post_meta( $post_id, 'lead_external_file' );
+		delete_post_meta( $post_id, 'ticket_external_file' );
 
 		foreach ( $new_ex_files as $ex_file ) {
 			if ( empty( $ex_file['link'] ) ) {
@@ -334,10 +334,10 @@ if ( isset( $_POST['post'] ) ) {
 			if( empty( $ex_file['title'] ) ) {
 				$ex_file['title'] = $ex_file['link'];
 			}
-			add_post_meta( $post_id, 'lead_external_file', json_encode( $ex_file ) );
+			add_post_meta( $post_id, 'ticket_external_file', json_encode( $ex_file ) );
 		}
 	} else {
-		delete_post_meta( $post_id, 'lead_external_file' );
+		delete_post_meta( $post_id, 'ticket_external_file' );
 	}
 
 	$old_ex_links = array();
@@ -352,19 +352,19 @@ if ( isset( $_POST['post'] ) ) {
 		}
 		$new_ex_links[] = '<a href="'.$ex_file['link'].'" target="_blank">'.$ex_file['title'].'</a>';
 	}
-	$diff = rtcrm_text_diff( implode( ' , ', $old_ex_links ), implode( ' , ', $new_ex_links ) );
+	$diff = rthd_text_diff( implode( ' , ', $old_ex_links ), implode( ' , ', $new_ex_links ) );
 	if ( $diff ) {
 		$emailHTML .= '<tr><th style="padding: .5em;border: 0;">External Files Links</th><td>' . $diff . '</td><td></td></tr>';
 	}
 
 	// Cloasing Reason
-	$closing_reason_diff = $rt_crm_closing_reason->closing_reason_diff( $post_id, $newLead );
+	$closing_reason_diff = $rt_hd_closing_reason->closing_reason_diff( $post_id, $newTicket );
 	$emailHTML .= $closing_reason_diff;
 	if ( !empty( $closing_reason_diff ) ) {
-		$rt_crm_closing_reason->save_closing_reason( $post_id, $newLead );
+		$rt_hd_closing_reason->save_closing_reason( $post_id, $newTicket );
 		/* Update Index Table */
-		$attr_name = str_replace('-', '_', rtcrm_attribute_taxonomy_name( 'closing_reason' ) );
-		$attr_val = (!isset($newLead['closing_reason'])) ? array() : $newLead['closing_reason'];
+		$attr_name = str_replace('-', '_', rthd_attribute_taxonomy_name( 'closing_reason' ) );
+		$attr_val = (!isset($newTicket['closing_reason'])) ? array() : $newTicket['closing_reason'];
 		$data = array(
 			$attr_name => ( is_array( $attr_val ) ) ? implode( ',', $attr_val ) : $attr_val,
 			'date_update' => current_time( 'mysql' ),
@@ -372,12 +372,12 @@ if ( isset( $_POST['post'] ) ) {
 			'user_updated_by' => get_current_user_id(),
 		);
 		$where = array( 'post_id' => $post_id );
-		$leadModel->update_lead( $data, $where );
+		$ticketModel->update_ticket( $data, $where );
 		/* System Notification -- Closing Reason Changed */
 
 		/* Insert History for status - closing reason */
 		if ( $closing_reason_history_id ) {
-			$terms = wp_get_post_terms( $post_id, rtcrm_attribute_taxonomy_name( 'closing_reason' ) );
+			$terms = wp_get_post_terms( $post_id, rthd_attribute_taxonomy_name( 'closing_reason' ) );
 			$message = '';
 			foreach ( $terms as $term ) {
 				if ( empty( $message ) ) {
@@ -386,9 +386,9 @@ if ( isset( $_POST['post'] ) ) {
 					$message .= ( ' , ' . $term->name );
 				}
 			}
-			$rt_crm_lead_history_model->update( array( 'message' => $message ), array( 'id' => $closing_reason_history_id ) );
+			$rt_hd_ticket_history_model->update( array( 'message' => $message ), array( 'id' => $closing_reason_history_id ) );
 		} else {
-			$terms = wp_get_post_terms( $post_id, rtcrm_attribute_taxonomy_name( 'closing_reason' ) );
+			$terms = wp_get_post_terms( $post_id, rthd_attribute_taxonomy_name( 'closing_reason' ) );
 			$message = '';
 			foreach ( $terms as $term ) {
 				if ( empty( $message ) ) {
@@ -397,8 +397,8 @@ if ( isset( $_POST['post'] ) ) {
 					$message .= ( ' , ' . $term->name );
 				}
 			}
-			$rt_crm_lead_history_model->insert(array(
-					'lead_id' => $post_id,
+			$rt_hd_ticket_history_model->insert(array(
+					'ticket_id' => $post_id,
 					'type' => 'post_status',
 					'old_value' => $oldpost['post_status'],
 					'new_value' => $post['post_status'],
@@ -411,15 +411,15 @@ if ( isset( $_POST['post'] ) ) {
 	}
 
 // Attributes Diff & Save
-	$attributes = rtcrm_get_attributes( $post_type );
+	$attributes = rthd_get_attributes( $post_type );
 	foreach ( $attributes as $attr ) {
-		$attr_diff = $rt_crm_attributes->attribute_diff( $attr, $post_id, $newLead );
+		$attr_diff = $rt_hd_attributes->attribute_diff( $attr, $post_id, $newTicket );
 		$emailHTML .= $attr_diff;
 		if ( !empty( $attr_diff ) ) {
-			$rt_crm_attributes->save_attributes( $attr, $post_id, $newLead );
+			$rt_hd_attributes->save_attributes( $attr, $post_id, $newTicket );
 			/* Update Index Table */
-			$attr_name = str_replace('-', '_', rtcrm_attribute_taxonomy_name($attr->attribute_name));
-			$attr_val = (!isset($newLead[$attr->attribute_name])) ? array() : $newLead[$attr->attribute_name];
+			$attr_name = str_replace('-', '_', rthd_attribute_taxonomy_name($attr->attribute_name));
+			$attr_val = (!isset($newTicket[$attr->attribute_name])) ? array() : $newTicket[$attr->attribute_name];
 			$data = array(
 				$attr_name => ( is_array( $attr_val ) ) ? implode( ',', $attr_val ) : $attr_val,
 				'date_update' => current_time( 'mysql' ),
@@ -427,20 +427,20 @@ if ( isset( $_POST['post'] ) ) {
 				'user_updated_by' => get_current_user_id(),
 			);
 			$where = array( 'post_id' => $post_id );
-			$leadModel->update_lead( $data, $where );
+			$ticketModel->update_ticket( $data, $where );
 			/* System Notification -- Attribute Changed */
 		}
 	}
 
 	// Contacts
 	if ( $module_settings['attach_contacts'] == 'yes' ) {
-		$contact_diff = $rt_crm_contacts->contacts_diff_on_lead( $post_id, $newLead );
+		$contact_diff = $rt_hd_contacts->contacts_diff_on_ticket( $post_id, $newTicket );
 		$emailHTML .= $contact_diff;
 		if ( !empty( $contact_diff ) ) {
-			$rt_crm_contacts->contacts_save_on_lead( $post_id, $newLead );
+			$rt_hd_contacts->contacts_save_on_ticket( $post_id, $newTicket );
 			/* Update Index Table */
 			$contact_name = rt_biz_get_person_post_type();
-			$contact_val = ( ! isset( $newLead['contacts'] ) ) ? array() : $newLead['contacts'];
+			$contact_val = ( ! isset( $newTicket['contacts'] ) ) ? array() : $newTicket['contacts'];
 			$contact_val = array_map( 'intval', $contact_val );
 			$contact_val = array_unique( $contact_val );
 			$data = array(
@@ -450,20 +450,20 @@ if ( isset( $_POST['post'] ) ) {
 				'user_updated_by' => get_current_user_id(),
 			);
 			$where = array( 'post_id' => $post_id );
-			$leadModel->update_lead( $data, $where );
+			$ticketModel->update_ticket( $data, $where );
 			/* System Notification -- Contacts updated */
 		}
 	}
 
 	// Accounts
 	if ( $module_settings['attach_accounts'] == 'yes' ) {
-		$account_diff = $rt_crm_accounts->accounts_diff_on_ticket( $post_id, $newLead );
+		$account_diff = $rt_hd_accounts->accounts_diff_on_ticket( $post_id, $newTicket );
 		$emailHTML .= $account_diff;
 		if ( !empty( $account_diff ) ) {
-			$rt_crm_accounts->accounts_save_on_ticket( $post_id, $newLead );
+			$rt_hd_accounts->accounts_save_on_ticket( $post_id, $newTicket );
 			/* Update Index Table */
 			$account_name = rt_biz_get_organization_post_type();
-			$account_val = (!isset($newLead['accounts'])) ? array() : $newLead['accounts'];
+			$account_val = (!isset($newTicket['accounts'])) ? array() : $newTicket['accounts'];
 			$account_val = array_map('intval', $account_val);
 			$account_val = array_unique($account_val);
 			$data = array(
@@ -473,7 +473,7 @@ if ( isset( $_POST['post'] ) ) {
 				'user_updated_by' => get_current_user_id(),
 			);
 			$where = array( 'post_id' => $post_id );
-			$leadModel->update_lead( $data, $where );
+			$ticketModel->update_ticket( $data, $where );
 			/* System Notification -- Accounts updated */
 		}
 	}
@@ -491,70 +491,70 @@ if ( isset( $_POST['post'] ) ) {
         $flag = false;
     }
     if ($flag) {
-        $accessToken = $rt_crm_settings->get_accesstoken_from_email( $systemEmail, $signature, $email_type, $imap_server );
-        $crmZendEmail = new Rt_CRM_Zend_Mail();
+        $accessToken = $rt_hd_settings->get_accesstoken_from_email( $systemEmail, $signature, $email_type, $imap_server );
+        $hdZendEmail = new Rt_HD_Zend_Mail();
         if (strpos($signature, "</") == false) {
             $signature = htmlentities($signature);
             $signature = preg_replace('/(\n|\r|\r\n)/i', "<br />", $signature);
             $signature = preg_replace('/  /i', "  ", $signature);
         }
-        $title_suffix = $rt_crm_leads->create_title_for_mail( $post_id );
+        $title_suffix = $rt_hd_tickets->create_title_for_mail( $post_id );
         $current_user = wp_get_current_user();
         if ($updateFlag) {
             if ($oldUser->ID != $newUser->ID) {
 
 
                 $title = "[Assigned You] " . $title_suffix;
-                $emailHTML1 = "<b>" . $current_user->display_name ."</b> assigned you new lead.<br /> To View Lead Click <a href='" . admin_url("edit.php?post_type={$post_type}&page=rtcrm-add-".$post_type."&".$post_type."_id=" . $post_id) . "'>here</a>.";
+                $emailHTML1 = "<b>" . $current_user->display_name ."</b> assigned you new ticket.<br /> To View Ticket Click <a href='" . admin_url("edit.php?post_type={$post_type}&page=rthd-add-".$post_type."&".$post_type."_id=" . $post_id) . "'>here</a>.";
 
-                $rt_crm_settings->insert_new_send_email($systemEmail, $title, $emailHTML1, array(), array(), array(array("email" => $newUser->user_email, "name" => $newUser->display_name)), array(), $post_id, "post");
+                $rt_hd_settings->insert_new_send_email($systemEmail, $title, $emailHTML1, array(), array(), array(array("email" => $newUser->user_email, "name" => $newUser->display_name)), array(), $post_id, "post");
                 $title = "[Reassigned] " . $title_suffix;
-                $emailHTML1 = "You are no longer responsible for this lead. It has been reassigned to " . $newUser->display_name . " .<br /> To View Lead Click <a href='" . admin_url("edit.php?post_type={$post_type}&page=rtcrm-add-".$post_type."&".$post_type."_id=" . $post_id) . "'>here</a>.";
-                $rt_crm_settings->insert_new_send_email($systemEmail, $title, $emailHTML1, array(), array(), array(array("email" => $oldUser->user_email, "name" => $oldUser->display_name)), array(), $post_id, "post");
+                $emailHTML1 = "You are no longer responsible for this ticket. It has been reassigned to " . $newUser->display_name . " .<br /> To View Ticket Click <a href='" . admin_url("edit.php?post_type={$post_type}&page=rthd-add-".$post_type."&".$post_type."_id=" . $post_id) . "'>here</a>.";
+                $rt_hd_settings->insert_new_send_email($systemEmail, $title, $emailHTML1, array(), array(), array(array("email" => $oldUser->user_email, "name" => $oldUser->display_name)), array(), $post_id, "post");
             }
 
             if (!empty($newSubscriberList)) {
                 $title = "[Subscribe] " . $title_suffix;
-                $emailHTML1 = "You have been <b>subscribed</b> to this lead.<br /> To View Lead Click <a href='" . admin_url("edit.php?post_type={$post_type}&page=rtcrm-add-".$post_type."&".$post_type."_id=" . $post_id) . "'>here</a>.";
-                $rt_crm_settings->insert_new_send_email($systemEmail, $title, $emailHTML1, array(), array(), $newSubscriberList, array(), $post_id, "post");
+                $emailHTML1 = "You have been <b>subscribed</b> to this ticket.<br /> To View Ticket Click <a href='" . admin_url("edit.php?post_type={$post_type}&page=rthd-add-".$post_type."&".$post_type."_id=" . $post_id) . "'>here</a>.";
+                $rt_hd_settings->insert_new_send_email($systemEmail, $title, $emailHTML1, array(), array(), $newSubscriberList, array(), $post_id, "post");
             }
             if (!empty($oldSubscriberList)) {
                 $title = "[Unsubscribe] " . $title_suffix;
-                $emailHTML1 = "You have been <b>unsubscribed</b> to this lead.<br /> To View Lead Click <a href='" . admin_url("edit.php?post_type={$post_type}&page=rtcrm-add-".$post_type."&".$post_type."_id=" . $post_id) . "'>here</a>.";
-                $rt_crm_settings->insert_new_send_email($systemEmail, $title, $emailHTML1, array(), array(), $oldSubscriberList, array(), $post_id, "post");
+                $emailHTML1 = "You have been <b>unsubscribed</b> to this ticket.<br /> To View Ticket Click <a href='" . admin_url("edit.php?post_type={$post_type}&page=rthd-add-".$post_type."&".$post_type."_id=" . $post_id) . "'>here</a>.";
+                $rt_hd_settings->insert_new_send_email($systemEmail, $title, $emailHTML1, array(), array(), $oldSubscriberList, array(), $post_id, "post");
             }
             if ($emailHTML != "" && !empty($bccemails)) {
-                $emailHTML = $emailTable . $emailHTML . "</table> </br> To View Lead Click <a href='" . admin_url("edit.php?post_type={$post_type}&page=rtcrm-add-".$post_type."&".$post_type."_id=" . $post_id) . "'>here</a>.";
-                $emailHTML .= "<br />" . 'Lead updated by : <a target="_blank" href="">'.get_the_author_meta( 'display_name', get_current_user_id() ).'</a>';
+                $emailHTML = $emailTable . $emailHTML . "</table> </br> To View Ticket Click <a href='" . admin_url("edit.php?post_type={$post_type}&page=rthd-add-".$post_type."&".$post_type."_id=" . $post_id) . "'>here</a>.";
+                $emailHTML .= "<br />" . 'Ticket updated by : <a target="_blank" href="">'.get_the_author_meta( 'display_name', get_current_user_id() ).'</a>';
                 $emailHTML .= "<br />" . $signature;
-                $title = "[Lead Updated] " . $title_suffix;
-                $rt_crm_settings->insert_new_send_email($systemEmail, $title, stripslashes($emailHTML), array(), array(), $bccemails, array(), $post_id, "post");
+                $title = "[Ticket Updated] " . $title_suffix;
+                $rt_hd_settings->insert_new_send_email($systemEmail, $title, stripslashes($emailHTML), array(), array(), $bccemails, array(), $post_id, "post");
             }
         } else {
             $newUser = get_user_by("id", $post["post_author"]);
             if ($newUser) {
                 $title = "[Assigned You] " . $title_suffix;
-                $emailHTML = "New lead assigned to you.<br /> To View Lead Click <a href='" . admin_url("edit.php?post_type={$post_type}&page=rtcrm-add-".$post_type."&".$post_type."_id=" . $post_id) . "'>here</a>.";
-                $rt_crm_settings->insert_new_send_email($systemEmail, $title, $emailHTML, array(), array(), array(array("email" => $newUser->user_email, "name" => $newUser->display_name)), array(), $post_id, "post");
+                $emailHTML = "New ticket assigned to you.<br /> To View Ticket Click <a href='" . admin_url("edit.php?post_type={$post_type}&page=rthd-add-".$post_type."&".$post_type."_id=" . $post_id) . "'>here</a>.";
+                $rt_hd_settings->insert_new_send_email($systemEmail, $title, $emailHTML, array(), array(), array(array("email" => $newUser->user_email, "name" => $newUser->display_name)), array(), $post_id, "post");
             }
             if (!empty($bccemails)) {
                 $title = "[Subscribe] " . $title_suffix;
-                $emailHTML = "You have been <b>subscribed</b> to this lead.<br /> To View Lead Click <a href='" . admin_url("edit.php?post_type={$post_type}&page=rtcrm-add-".$post_type."&".$post_type."_id=" . $post_id) . "'>here</a>.";
-                $rt_crm_settings->insert_new_send_email($systemEmail, $title, $emailHTML, array(), array(), $bccemails, array(), $post_id, "post");
+                $emailHTML = "You have been <b>subscribed</b> to this ticket.<br /> To View Ticket Click <a href='" . admin_url("edit.php?post_type={$post_type}&page=rthd-add-".$post_type."&".$post_type."_id=" . $post_id) . "'>here</a>.";
+                $rt_hd_settings->insert_new_send_email($systemEmail, $title, $emailHTML, array(), array(), $bccemails, array(), $post_id, "post");
             }
         }
     }
     $_REQUEST[$post_type."_id"] = $post_id;
 }
 ?>
-<div class="rtcrm-container">
+<div class="rthd-container">
 <?php
 global $wpdb;
 $meta_key_results = $wpdb->get_results(" select distinct meta_key from $wpdb->postmeta inner join $wpdb->posts on post_id=ID
                                              and post_type='{$post_type}' and  not meta_key like '\_%' order by meta_key");
-echo "<script> var arr_leadmeta_key=" . json_encode($meta_key_results) . "; </script>";
+echo "<script> var arr_ticketmeta_key=" . json_encode($meta_key_results) . "; </script>";
 
-$form_ulr = admin_url("edit.php?post_type={$post_type}&page=rtcrm-add-{$post_type}");
+$form_ulr = admin_url("edit.php?post_type={$post_type}&page=rthd-add-{$post_type}");
 if (isset($_REQUEST["{$post_type}_id"])) {
     $form_ulr .= "&{$post_type}_id=" . $_REQUEST["{$post_type}_id"];
     if (isset($_REQUEST["new"])) {
@@ -583,7 +583,7 @@ if (isset($_REQUEST["{$post_type}_id"])) {
         <?php
         $post = false;
     }
-    if ( $post->post_type != $rt_crm_module->post_type ) {
+    if ( $post->post_type != $rt_hd_module->post_type ) {
         ?>
         <div class="alert-box alert">
             Invalid Post Type
@@ -599,7 +599,7 @@ if (isset($_REQUEST["{$post_type}_id"])) {
     $createdate = $create->format("M d, Y h:i A");
     $modifydate = $modify->format("M d, Y h:i A");
 
-	$close_date_meta = get_post_meta($post->ID, 'lead_closing_date', true);
+	$close_date_meta = get_post_meta($post->ID, 'ticket_closing_date', true);
 	if(!empty($close_date_meta)) {
 		$closingdate = new DateTime($close_date_meta);
 		$closingdate = $closingdate->format('M d, Y h:i A');
@@ -613,7 +613,7 @@ if (isset($_REQUEST["{$post_type}_id"])) {
 	    <form method='post' id="form-add-post" action="<?php echo $form_ulr; ?>">
 	<?php } ?>
 <?php if (isset($post->ID) && $user_edit ) { ?>
-            <input type="hidden" name="post[post_id]" id='lead_id' value="<?php echo $post->ID; ?>" />
+            <input type="hidden" name="post[post_id]" id='ticket_id' value="<?php echo $post->ID; ?>" />
 <?php } ?>
 
         <div class="row">
@@ -631,7 +631,7 @@ if (isset($_REQUEST["{$post_type}_id"])) {
         ?>
                 <h4><i class="gen-enclosed <?php echo $post_icon; ?>"></i> <?php _e($page_title); ?></h4>
             </div>
-            <div class="large-5 columns rtcrm-sticky">
+            <div class="large-5 columns rthd-sticky">
                 <?php if(isset($post->ID) && current_user_can( "delete_{$post_type}s" ) ){ ?>
                 <button id="button-trash" type="button" class="right mybutton alert" ><?php _e("Trash"); ?></button>
                 <?php } ?>
@@ -654,7 +654,7 @@ if (isset($_REQUEST["{$post_type}_id"])) {
 						<?php } ?>
                     </div>
                 </div>
-                <div class="row collapse rtcrm-lead-content-wrapper">
+                <div class="row collapse rthd-ticket-content-wrapper">
                     <div class="large-12 columns">
 						<?php
 							if( $user_edit ) {
@@ -673,8 +673,8 @@ if (isset($_REQUEST["{$post_type}_id"])) {
 $arrayMeta = array();
 if (isset($post->ID)) {
     $post_metas = get_post_custom( $post->ID );
-    $post_users_meta = array( "subscribe_to", "lead_closing_date", 'lead_external_file', 'rtcrm_unique_id' );
-	$post_users_meta = array_merge( $post_users_meta, array_map( 'rtcrm_extract_key_from_attributes', rtcrm_get_attributes( $post_type, 'meta' ) ) );
+    $post_users_meta = array( "subscribe_to", "ticket_closing_date", 'ticket_external_file', 'rthd_unique_id' );
+	$post_users_meta = array_merge( $post_users_meta, array_map( 'rthd_extract_key_from_attributes', rthd_get_attributes( $post_type, 'meta' ) ) );
     $count = 1;
 
 	foreach ($post_metas as $key => $my_custom_field) {
@@ -746,18 +746,18 @@ if (isset($post->ID)) {
 					<div class="inside">
 						<div class="row collapse" id="attachment-container">
 							<?php if( $user_edit ) { ?>
-								<a href="#" class="button" id="add_lead_attachment"><?php _e('Add'); ?></a>
+								<a href="#" class="button" id="add_ticket_attachment"><?php _e('Add'); ?></a>
 							<?php } ?>
 							<div class="scroll-height">
 								<?php foreach ($attachments as $attachment) { ?>
 									<?php $extn_array = explode('.', $attachment->guid); $extn = $extn_array[count($extn_array) - 1]; ?>
 									<div class="large-12 mobile-large-3 columns attachment-item" data-attachment-id="<?php echo $attachment->ID; ?>">
 										<a target="_blank" href="<?php echo wp_get_attachment_url($attachment->ID); ?>">
-											<img height="20px" width="20px" src="<?php echo RT_CRM_URL . "assets/file-type/" . $extn . ".png"; ?>" />
+											<img height="20px" width="20px" src="<?php echo RT_HD_URL . "assets/file-type/" . $extn . ".png"; ?>" />
 											<?php echo $attachment->post_title; ?>
 										</a>
 										<?php if( $user_edit ) { ?>
-											<a href="#" class="rtcrm_delete_attachment right">x</a>
+											<a href="#" class="rthd_delete_attachment right">x</a>
 										<?php } ?>
 										<input type="hidden" name="attachment[]" value="<?php echo $attachment->ID; ?>" />
 									</div>
@@ -772,23 +772,23 @@ if (isset($post->ID)) {
 					<div class="inside">
 					<?php
 					if ( isset( $post->ID ) ) {
-						$lead_ex_files = get_post_meta( $post->ID, 'lead_external_file' );
+						$ticket_ex_files = get_post_meta( $post->ID, 'ticket_external_file' );
 						$count = 1;
-						foreach ( $lead_ex_files as $ex_file ) {
+						foreach ( $ticket_ex_files as $ex_file ) {
 							$ex_file = (array)json_decode( $ex_file );
 						?>
 						<div class="row collapse">
 							<div class="large-12 small-12 columns">
 								<div class="large-3 small-3 columns">
 								<?php if( $user_edit ) { ?>
-									<input type="text" name="lead_ex_files[<?php echo $count; ?>'][title]" value="<?php echo $ex_file['title']; ?>" />
+									<input type="text" name="ticket_ex_files[<?php echo $count; ?>'][title]" value="<?php echo $ex_file['title']; ?>" />
 								<?php } else { ?>
 									<span><?php echo $key.': '; ?></span>
 								<?php } ?>
 								</div>
 								<?php if( $user_edit ) { ?>
 								<div class="large-8 small-8 columns">
-									<input type="text" name="lead_ex_files[<?php echo $count; ?>'][link]" value="<?php echo $ex_file['link']; ?>" />
+									<input type="text" name="ticket_ex_files[<?php echo $count; ?>'][link]" value="<?php echo $ex_file['link']; ?>" />
 								</div>
 								<div class="large-1 small-1 columns">
 									<button class="removeMeta"><i class="foundicon-minus"></i></button>
@@ -832,17 +832,17 @@ if (isset($post->ID)) {
 							<div class="small-4 large-4 columns">
 								<span class="prefix" title="Status">Status</span>
 							</div>
-							<div class="small-8 large-8 columns <?php echo ( ! $user_edit ) ? 'rtcrm_attr_border' : ''; ?>">
+							<div class="small-8 large-8 columns <?php echo ( ! $user_edit ) ? 'rthd_attr_border' : ''; ?>">
 <?php
 if (isset($post->ID))
 $pstatus = $post->post_status;
 else
 $pstatus = "";
-$post_status = $rt_crm_module->get_custom_statuses();
+$post_status = $rt_hd_module->get_custom_statuses();
 $custom_status_flag = true;
 ?>
 						<?php if( $user_edit ) { ?>
-							<select id="rtcrm_post_status" class="right" name="post[post_status]">
+							<select id="rthd_post_status" class="right" name="post[post_status]">
 <?php foreach ($post_status as $status) {
 if ($status['slug'] == $pstatus) {
 	$selected = 'selected="selected"';
@@ -857,31 +857,31 @@ printf('<option value="%s" %s >%s</option>', $status['slug'], $selected, $status
 							<?php } else {
 								foreach ( $post_status as $status ) {
 									if($status['slug'] == $pstatus) {
-										echo '<span class="rtcrm_view_mode">'.$status['name'].'</span>';
+										echo '<span class="rthd_view_mode">'.$status['name'].'</span>';
 										break;
 									}
 								}
 							} ?>
 						</div>
 					</div>
-					<div id="rtcrm_closing_reason_wrapper" class="row collapse <?php echo ( $pstatus === 'closed' ) ? 'show' : 'hide'; ?> <?php echo ( ! $user_edit ) ? 'rtcrm_attr_border' : ''; ?>">
+					<div id="rthd_closing_reason_wrapper" class="row collapse <?php echo ( $pstatus === 'closed' ) ? 'show' : 'hide'; ?> <?php echo ( ! $user_edit ) ? 'rthd_attr_border' : ''; ?>">
 						<div class="large-4 small-4 columns">
 							<span class="prefix" title="<?php _e('Closing Reason'); ?>"><label><?php _e('Closing Reason'); ?></label></span>
 						</div>
-						<div class="large-8 small-8 columns"><?php $rt_crm_closing_reason->get_closing_reasons( ( isset( $post->ID ) ) ? $post->ID : '', $user_edit ); ?></div>
+						<div class="large-8 small-8 columns"><?php $rt_hd_closing_reason->get_closing_reasons( ( isset( $post->ID ) ) ? $post->ID : '', $user_edit ); ?></div>
 					</div>
                     <div class="row collapse">
                         <div class="large-4 small-4 columns">
                             <span class="prefix" title="Create Date"><label>Create Date</label></span>
                         </div>
-                        <div class="large-7 mobile-large-1 columns <?php echo ( ! $user_edit ) ? 'rtcrm_attr_border' : ''; ?>">
+                        <div class="large-7 mobile-large-1 columns <?php echo ( ! $user_edit ) ? 'rthd_attr_border' : ''; ?>">
 							<?php if( $user_edit ) { ?>
 								<input class="datetimepicker moment-from-now" type="text" placeholder="Select Create Date"
 									   value="<?php echo ( isset($createdate) ) ? $createdate : ''; ?>"
 									   title="<?php echo ( isset($createdate) ) ? $createdate : ''; ?>">
 								<input name="post[post_date]" type="hidden" value="<?php echo ( isset($createdate) ) ? $createdate : ''; ?>" />
 							<?php } else { ?>
-								<span class="rtcrm_view_mode moment-from-now"><?php echo $createdate ?></span>
+								<span class="rthd_view_mode moment-from-now"><?php echo $createdate ?></span>
 							<?php } ?>
                         </div>
 						<div class="large-1 mobile-large-1 columns">
@@ -893,12 +893,12 @@ printf('<option value="%s" %s >%s</option>', $status['slug'], $selected, $status
                             <div class="large-4 mobile-large-1 columns">
                                 <span class="prefix" title="Modify Date"><label>Modify Date</label></span>
                             </div>
-                            <div class="large-7 mobile-large-1 columns <?php echo ( ! $user_edit ) ? 'rtcrm_attr_border' : ''; ?>">
+                            <div class="large-7 mobile-large-1 columns <?php echo ( ! $user_edit ) ? 'rthd_attr_border' : ''; ?>">
 								<?php if( $user_edit ) { ?>
 	                                <input class="moment-from-now"  type="text" placeholder="Modified on Date"  value="<?php echo $modifydate; ?>"
 		                                   title="<?php echo $modifydate; ?>" readonly="readonly">
 								<?php } else { ?>
-									<span class="rtcrm_view_mode moment-from-now"><?php echo $modifydate; ?></span>
+									<span class="rthd_view_mode moment-from-now"><?php echo $modifydate; ?></span>
 								<?php } ?>
                             </div>
 							<div class="large-1 mobile-large-1 columns">
@@ -909,14 +909,14 @@ printf('<option value="%s" %s >%s</option>', $status['slug'], $selected, $status
 							<div class="large-4 mobile-large-1 columns">
 								<span class="prefix" title="<?php _e('Closing Date'); ?>"><label><?php _e('Closing Date'); ?></label></span>
 							</div>
-							<div class="large-7 mobile-large-2 columns <?php echo ( ! $user_edit ) ? 'rtcrm_attr_border' : ''; ?>">
+							<div class="large-7 mobile-large-2 columns <?php echo ( ! $user_edit ) ? 'rthd_attr_border' : ''; ?>">
 								<?php if( $user_edit ) { ?>
 									<input class="datepicker moment-from-now" type="text" placeholder="Select Closing Date"
 									   value="<?php echo ( isset($closingdate) ) ? $closingdate : ''; ?>"
 									   title="<?php echo ( isset($closingdate) ) ? $closingdate : ''; ?>">
 									<input name="post[closing-date]" type="hidden" value="<?php echo ( isset($closingdate) ) ? $closingdate : ''; ?>" />
 								<?php } else { ?>
-									<span class="rtcrm_view_mode moment-from-now"><?php echo $closingdate; ?></span>
+									<span class="rthd_view_mode moment-from-now"><?php echo $closingdate; ?></span>
 								<?php } ?>
 							</div>
 							<?php if( $user_edit ) { ?>
@@ -927,16 +927,16 @@ printf('<option value="%s" %s >%s</option>', $status['slug'], $selected, $status
 						</div>
 <?php } ?>
 					<?php
-						$meta_attributes = rtcrm_get_attributes( $post_type, 'meta' );
+						$meta_attributes = rthd_get_attributes( $post_type, 'meta' );
 						foreach ( $meta_attributes as $attr ) {
 							if ( strstr( $attr->attribute_name, 'date' ) ) { ?>
 								<div class="row collapse">
-									<?php $rt_crm_attributes->render_meta( $attr, isset($post->ID) ? $post->ID : '', $user_edit ); ?>
+									<?php $rt_hd_attributes->render_meta( $attr, isset($post->ID) ? $post->ID : '', $user_edit ); ?>
 								</div>
 							<?php } ?>
 					<?php } ?>
 <?php
-$all_crm_participants = array();
+$all_hd_participants = array();
 if(isset($post->ID)) {
 	$comments = get_comments(array('order' => 'DESC', 'post_id' => $post->ID, 'post_type' => $post_type ) );
 	foreach ( $comments as $comment ) {
@@ -954,10 +954,10 @@ if(isset($post->ID)) {
 		if( !empty( $participants ) ) {
 			$p_arr = explode(',', $participants);
 			$p_arr = array_unique($p_arr);
-			$all_crm_participants = array_merge($all_crm_participants, $p_arr);
+			$all_hd_participants = array_merge($all_hd_participants, $p_arr);
 		}
 	}
-	$all_crm_participants = array_filter( array_unique( $all_crm_participants ) );
+	$all_hd_participants = array_filter( array_unique( $all_hd_participants ) );
 }
 $get_assigned_to = array();
 if (isset($post->ID)) {
@@ -966,17 +966,17 @@ if (isset($post->ID)) {
 } else {
     $post_author = get_current_user_id();
 }
-$results = Rt_CRM_Utils::get_crm_rtcamp_user();
+$results = Rt_HD_Utils::get_hd_rtcamp_user();
 $arrCommentReply = array();
 $arrSubscriberUser[] = array();
 $subScribetHTML = "";
 if( !empty( $results ) ) {
 	foreach ( $results as $author ) {
 		if ($get_assigned_to && !empty($get_assigned_to) && in_array($author->ID, $get_assigned_to)) {
-			if( in_array( $author->user_email, $all_crm_participants ) ) {
-				$key = array_search($author->user_email, $all_crm_participants);
+			if( in_array( $author->user_email, $all_hd_participants ) ) {
+				$key = array_search($author->user_email, $all_hd_participants);
 				if ( $key !== FALSE ) {
-					unset( $all_crm_participants[$key] );
+					unset( $all_hd_participants[$key] );
 				}
 			}
             $subScribetHTML .= "<li id='subscribe-auth-" . $author->ID
@@ -991,43 +991,43 @@ if( !empty( $results ) ) {
 ?>
 					<?php
 						if ( isset( $post->ID ) ) {
-							$rtcrm_unique_id = get_post_meta($post->ID, 'rtcrm_unique_id', true);
-							if(!empty($rtcrm_unique_id)) { ?>
+							$rthd_unique_id = get_post_meta($post->ID, 'rthd_unique_id', true);
+							if(!empty($rthd_unique_id)) { ?>
 								<div class="row collapse">
 									<div class="large-4 mobile-large-1 columns">
 										<span class="prefix" title="<?php _e('Public URL'); ?>"><label><?php _e('Public URL'); ?></label></span>
 									</div>
 									<div class="large-8 mobile-large-3 columns">
-										<div class="rtcrm_attr_border"><a class="rtcrm_public_link" target="_blank" href="<?php echo trailingslashit(site_url()) . strtolower($labels['name']) . '/?rtcrm_unique_id=' . $rtcrm_unique_id; ?>"><?php _e('Link'); ?></a></div>
+										<div class="rthd_attr_border"><a class="rthd_public_link" target="_blank" href="<?php echo trailingslashit(site_url()) . strtolower($labels['name']) . '/?rthd_unique_id=' . $rthd_unique_id; ?>"><?php _e('Link'); ?></a></div>
 									</div>
 								</div>
 							<?php }
 						}
 					?>
 <?php
-	$meta_attributes = rtcrm_get_attributes( $post_type, 'meta' );
+	$meta_attributes = rthd_get_attributes( $post_type, 'meta' );
 	foreach ( $meta_attributes as $attr ) {
 		if ( strstr( $attr->attribute_name, 'date' ) ) {
 			continue;
 		}
 		?>
 		<div class="row collapse">
-			<?php $rt_crm_attributes->render_meta( $attr, isset($post->ID) ? $post->ID : '', $user_edit ); ?>
+			<?php $rt_hd_attributes->render_meta( $attr, isset($post->ID) ? $post->ID : '', $user_edit ); ?>
 		</div>
 	<?php }
-	$attributes = rtcrm_get_attributes( $post_type, 'taxonomy' );
+	$attributes = rthd_get_attributes( $post_type, 'taxonomy' );
 	foreach ($attributes as $attr) {
 		if( !in_array( $attr->attribute_render_type, array( 'rating-stars', 'radio', 'dropdown' ) ) )
 			continue;
 		?>
 		<div class="row collapse">
-			<?php $rt_crm_attributes->render_meta( $attr, isset($post->ID) ? $post->ID : '', $user_edit ); ?>
+			<?php $rt_hd_attributes->render_meta( $attr, isset($post->ID) ? $post->ID : '', $user_edit ); ?>
 		</div>
 	<?php } ?>
-	<?php do_action( 'rt_crm_after_lead_information', $post->ID, $user_edit ); ?>
+	<?php do_action( 'rt_hd_after_ticket_information', $post->ID, $user_edit ); ?>
 	</div>
 </div>
-			<?php do_action( 'rt_crm_other_details', $user_edit, $post ); ?>
+			<?php do_action( 'rt_hd_other_details', $user_edit, $post ); ?>
 			<?php foreach ( $attributes as $attr ) {
 				if( in_array( $attr->attribute_render_type, array( 'rating-stars', 'radio', 'dropdown' ) ) )
 					continue;
@@ -1036,13 +1036,13 @@ if( !empty( $results ) ) {
 					<div class="handlediv" title="<?php _e( 'Click to toggle' ); ?>"><br /></div>
 					<h6 class="hndle"><span><i class="gen-enclosed foundicon-star"></i> <?php echo $attr->attribute_label; ?></span></h6>
 					<div class="inside">
-						<?php $rt_crm_attributes->render_taxonomy( $attr, isset($post->ID) ? $post->ID : '', $user_edit ); ?>
+						<?php $rt_hd_attributes->render_taxonomy( $attr, isset($post->ID) ? $post->ID : '', $user_edit ); ?>
 					</div>
 				</div>
 			<?php } ?>
             </div>
             <div class="large-3 columns ui-sortable meta-box-sortables">
-				<div id="rtcrm-assignee" class="row collapse rtcrm-post-author-wrapper">
+				<div id="rthd-assignee" class="row collapse rthd-post-author-wrapper">
 					<div class="large-4 mobile-large-1 columns">
 						<span class="prefix" title="<?php _e('Assigned To'); ?>"><label for="post[post_author]"><strong><?php _e('Assigned To'); ?></strong></label></span>
 					</div>
@@ -1066,7 +1066,7 @@ foreach ($results as $author) {
 							if(!empty($results)) {
 								foreach ($results as $author) {
 									if($author->ID == $post_author) {
-										echo '<div class="rtcrm_view_mode">'.get_avatar( $author->user_email, 17 ).' '.$author->display_name.'</div>';
+										echo '<div class="rthd_view_mode">'.get_avatar( $author->user_email, 17 ).' '.$author->display_name.'</div>';
 										break;
 									}
 								}
@@ -1080,8 +1080,8 @@ foreach ($results as $author) {
 					<div class="inside">
 						<script>
 							var arr_subscriber_user =<?php echo json_encode($arrSubscriberUser); ?>;
-							var ac_auth_token = '<?php echo get_user_meta(get_current_user_id(), 'rtcrm_activecollab_token', true); ?>';
-							var ac_default_project = '<?php echo get_user_meta(get_current_user_id(), 'rtcrm_activecollab_default_project', true); ?>';
+							var ac_auth_token = '<?php echo get_user_meta(get_current_user_id(), 'rthd_activecollab_token', true); ?>';
+							var ac_default_project = '<?php echo get_user_meta(get_current_user_id(), 'rthd_activecollab_default_project', true); ?>';
 						</script>
 						<?php if ( $user_edit ) { ?>
 						<input type="text" placeholder="Type Subscribers Name to select" id="subscriber_user_ac" />
@@ -1107,16 +1107,16 @@ foreach ($results as $author) {
 	                    <ul id="divAccountsList" class="block-grid large-1-up">
 <?php
 if (isset($post->ID)) {
-	$lead_term = array();
+	$ticket_term = array();
 	$account_post_type = rt_biz_get_organization_post_type();
-	$lead_term = rt_biz_get_post_for_organization_connection( $post->ID, $post->post_type, $fetch_account = true );
+	$ticket_term = rt_biz_get_post_for_organization_connection( $post->ID, $post->post_type, $fetch_account = true );
 
-    foreach ($lead_term as $tterm) {
-		$email = rt_biz_get_entity_meta( $tterm->ID, $rt_crm_accounts->email_key, true );
-        echo "<li id='crm-account-" . $tterm->ID . "' class='contact-list' >"
+    foreach ($ticket_term as $tterm) {
+		$email = rt_biz_get_entity_meta( $tterm->ID, $rt_hd_accounts->email_key, true );
+        echo "<li id='hd-account-" . $tterm->ID . "' class='contact-list' >"
 				. "<div class='row collapse'>"
 					. "<div class='large-2 columns'> " . get_avatar($email, 24) . "</div>"
-					. "<div id='crm-account-meta-" . $tterm->ID . "'  class='large-9 columns'><a target='_blank' class='heading' href='" . admin_url("edit.php?". $account_post_type ."=" . $tterm->ID . "&post_type=".$post_type) . "' title='" . $tterm->post_title . "'>" . $tterm->post_title . "</a></div>"
+					. "<div id='hd-account-meta-" . $tterm->ID . "'  class='large-9 columns'><a target='_blank' class='heading' href='" . admin_url("edit.php?". $account_post_type ."=" . $tterm->ID . "&post_type=".$post_type) . "' title='" . $tterm->post_title . "'>" . $tterm->post_title . "</a></div>"
 					. "<div class='large-1 columns'><a href='#removeContact'><i class='foundicon-remove'></i></a><input type='hidden' name='post[accounts][]' value='" . $tterm->ID . "' /></div>"
 				. "</div>"
 			. "</li>";
@@ -1143,22 +1143,22 @@ if (isset($post->ID)) {
 	                    <ul id="divContactsList" class="large-block-grid-1"><?php
 							if (isset($post->ID)) {
 								$scriptstr = "";
-								$lead_term = array();
+								$ticket_term = array();
 								$contact_post_type = rt_biz_get_person_post_type();
-								$lead_term = rt_biz_get_post_for_person_connection( $post->ID, $post->post_type, $fetch_person = true );
-								foreach ($lead_term as $tterm) {
+								$ticket_term = rt_biz_get_post_for_person_connection( $post->ID, $post->post_type, $fetch_person = true );
+								foreach ($ticket_term as $tterm) {
 
-									$email = rt_biz_get_entity_meta( $tterm->ID, $rt_crm_contacts->email_key, true );
-									if ( in_array( $email, $all_crm_participants ) ) {
-										$key = array_search( $email, $all_crm_participants );
+									$email = rt_biz_get_entity_meta( $tterm->ID, $rt_hd_contacts->email_key, true );
+									if ( in_array( $email, $all_hd_participants ) ) {
+										$key = array_search( $email, $all_hd_participants );
 										if ( $key !== FALSE ) {
-											unset( $all_crm_participants[$key] );
+											unset( $all_hd_participants[$key] );
 										}
 									}
-									echo "<li id='crm-contact-" . $tterm->ID . "' class='contact-list' >"
+									echo "<li id='hd-contact-" . $tterm->ID . "' class='contact-list' >"
 											. "<div class='row collapse'>"
 												. "<div class='large-2 columns'> " . get_avatar($email, 24) . "</div>"
-												. "<div id='crm-contact-meta-" . $tterm->ID . "'  class='large-9 columns'><a target='_blank' class='heading' href='" . admin_url("edit.php?".  rtcrm_post_type_name('contact')."=" . $tterm->ID . "&post_type=".$post_type) . "' title='" . $tterm->post_title . "'>" . $tterm->post_title . "</a>";
+												. "<div id='hd-contact-meta-" . $tterm->ID . "'  class='large-9 columns'><a target='_blank' class='heading' href='" . admin_url("edit.php?".  rthd_post_type_name('contact')."=" . $tterm->ID . "&post_type=".$post_type) . "' title='" . $tterm->post_title . "'>" . $tterm->post_title . "</a>";
 									if ($email) {
 										echo "<i class=''><a href='mailto:" . $email . "'>" . $email . "</a><a class='inline' target='_blank' href='http://mail.google.com/mail/#search/" .$email."'> <i class='foundicon-search'></i></a></i>";
 										$arrCommentReply[] = array("userid" => $tterm->ID, "label" => $tterm->post_title, "email" => $email, "contact" => true, "imghtml" => get_avatar($email, 24));
@@ -1177,8 +1177,8 @@ if (isset($post->ID)) {
 					<div class="handlediv" title="<?php _e( 'Click to toggle' ); ?>"><br /></div>
 					<h6 class="hndle"><span><i class="foundicon-smiley"></i> <?php _e("Participants"); ?></span></h6>
 					<div class="inside">
-						<ul class="rtcrm-participant-list large-block-grid-1 small-block-grid-1">
-						<?php foreach ( $all_crm_participants as $email ) {
+						<ul class="rthd-participant-list large-block-grid-1 small-block-grid-1">
+						<?php foreach ( $all_hd_participants as $email ) {
 							echo "<li>"
 									. "<div class='row collapse'>"
 										. "<div class='large-2 columns'> " . get_avatar($email, 50) . "</div>"
@@ -1241,8 +1241,8 @@ if (isset($post->ID)) {
 										<a href="#" class="th radius">
 										<?php echo get_avatar($comment->comment_author_email, 40); ?>
 										</a>
-									</div><?php $rtcrm_privacy = get_comment_meta( $comment->comment_ID, '_rtcrm_privacy', true ); ?><div class="rtcrm_privacy" data-crm-privacy="<?php echo ( $rtcrm_privacy != 'no' ) ? 'yes' : 'no'; ?>">
-										<?php if($rtcrm_privacy != 'no') { ?><i class="general foundicon-lock"></i><?php } ?>
+									</div><?php $rthd_privacy = get_comment_meta( $comment->comment_ID, '_rthd_privacy', true ); ?><div class="rthd_privacy" data-hd-privacy="<?php echo ( $rthd_privacy != 'no' ) ? 'yes' : 'no'; ?>">
+										<?php if($rthd_privacy != 'no') { ?><i class="general foundicon-lock"></i><?php } ?>
 									</div><div class="comment-users"><div class="comment-user-title large-12 columns">
 								<?php
 									if ($user)
@@ -1296,7 +1296,7 @@ if (isset($post->ID)) {
 					$comment->comment_content = $output_array[0];
 				}
 			}
-			echo Rt_CRM_Utils::forceUFT8($comment->comment_content);
+			echo Rt_HD_Utils::forceUFT8($comment->comment_content);
 		}
 	?>
 								</div>
@@ -1314,7 +1314,7 @@ if (isset($post->ID)) {
 										?>
 											<li>
 												<a href="<?php echo $commenytAttechment; ?>" title="Attachment" >
-													<img src="<?php echo RT_CRM_URL . "assets/file-type/" . $extn . ".png"; ?>" />
+													<img src="<?php echo RT_HD_URL . "assets/file-type/" . $extn . ".png"; ?>" />
 													<span><?php echo $fileName; ?></span>
 												</a>
 												<input type="hidden" name="attachemnt" value="<?php echo $commenytAttechment; ?>">
@@ -1379,7 +1379,7 @@ if (isset($post->ID)) {
                                         <select id="email_from_ac" name="email_from_ac">
     <?php
 
-    $allowMailAc = $rt_crm_settings->get_allow_email_address();
+    $allowMailAc = $rt_hd_settings->get_allow_email_address();
     $strAllowMailAc= "";
     if ($allowMailAc) {
         foreach ($allowMailAc as $mailAc) {

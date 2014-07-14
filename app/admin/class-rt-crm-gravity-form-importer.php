@@ -12,23 +12,23 @@ if (!defined('ABSPATH'))
  */
 
 /**
- * Description of Rt_CRM_Gravity_Form_Importer
+ * Description of Rt_HD_Gravity_Form_Importer
  *
  * @author udit
  */
-if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
+if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 
-	class Rt_CRM_Gravity_Form_Importer {
+	class Rt_HD_Gravity_Form_Importer {
 
-		var $lead_field;
+		var $ticket_field;
 
 		public function __construct() {
 			add_action( 'init', array( $this, 'init_importer' ) );
 		}
 
 		function init_importer() {
-			global $rt_crm_attributes_relationship_model;
-			$this->lead_field = array(
+			global $rt_hd_attributes_relationship_model;
+			$this->ticket_field = array(
 				"title" => array(
 					'display_name' => 'Title',
 					'slug' => 'title',
@@ -41,13 +41,13 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 					'required' => true,
 					'multiple' => false,
 					'type' => 'any'
-				), "leadmeta" => array(
-					'display_name' => 'Lead Meta',
-					'slug' => 'leadmeta',
+				), "ticketmeta" => array(
+					'display_name' => 'Ticket Meta',
+					'slug' => 'ticketmeta',
 					'required' => false,
 					'multiple' => true,
 					'type' => 'key',
-					'key_list' => 'arr_leadmeta_key'
+					'key_list' => 'arr_ticketmeta_key'
 				), "creationdate" => array(
 					'display_name' => 'Create Date',
 					'slug' => 'creationdate',
@@ -67,47 +67,47 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 					'multiple' => false,
 					'type' => 'defined',
 					'definedsource' => 'arr_assignedto'
-				), "leadstatus" => array(
+				), "ticketstatus" => array(
 					'display_name' => 'Status',
-					'slug' => 'leadstatus',
+					'slug' => 'ticketstatus',
 					'required' => true,
 					'multiple' => false,
 					'type' => 'defined',
-					'definedsource' => 'arr_leadstatus'
+					'definedsource' => 'arr_ticketstatus'
 				),
 			);
 
-			global $rt_crm_module;
-			$attributes = rtcrm_get_attributes( $rt_crm_module->post_type );
+			global $rt_hd_module;
+			$attributes = rthd_get_attributes( $rt_hd_module->post_type );
 			foreach ( $attributes as $attr ) {
-				$relation = $rt_crm_attributes_relationship_model->get_relations_by_post_type( $rt_crm_module->post_type, $attr->id );
+				$relation = $rt_hd_attributes_relationship_model->get_relations_by_post_type( $rt_hd_module->post_type, $attr->id );
 				if( ! isset( $relation[0] ) ) {
 					continue;
 				}
 				$relation = $relation[0];
 				$attr_settings = maybe_unserialize( $relation->settings );
 				$slug = str_replace( array( '-' ), '_', $attr->attribute_name );
-				$this->lead_field[$slug] = array(
+				$this->ticket_field[$slug] = array(
 					'display_name' => $attr->attribute_label,
 					'slug' => $slug,
 					'required' => ( isset( $attr_settings['is_required'] ) && $attr_settings['is_required'] == 'yes' ) ? true : false,
 				);
 				switch ( $attr->attribute_store_as ) {
 					case 'meta':
-						$this->lead_field[$slug]['multiple'] = false;
-						$this->lead_field[$slug]['type'] = $attr->attribute_render_type;
+						$this->ticket_field[$slug]['multiple'] = false;
+						$this->ticket_field[$slug]['type'] = $attr->attribute_render_type;
 						break;
 					case 'taxonomy':
-						$this->lead_field[$slug]['type'] = 'defined';
-						$this->lead_field[$slug]['definedsource'] = 'arr_'.$slug;
+						$this->ticket_field[$slug]['type'] = 'defined';
+						$this->ticket_field[$slug]['definedsource'] = 'arr_'.$slug;
 						if( $attr->attribute_render_type == 'checklist' ) {
-							$this->lead_field[$slug]['multiple'] = true;
+							$this->ticket_field[$slug]['multiple'] = true;
 						} else {
-							$this->lead_field[$slug]['multiple'] = false;
+							$this->ticket_field[$slug]['multiple'] = false;
 						}
 						break;
 					default:
-						do_action( 'rtcrm_gravity_form_fields_map' &$this->lead_field[$slug], $attr );
+						do_action( 'rthd_gravity_form_fields_map' &$this->ticket_field[$slug], $attr );
 						break;
 				}
 			}
@@ -165,7 +165,7 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 						'type' => 'any'
 					),
 				);
-				$this->lead_field = array_merge($this->lead_field, $temp_arr);
+				$this->ticket_field = array_merge($this->ticket_field, $temp_arr);
 			}
 
 			if( isset( $module_settings['attach_accounts'] ) && $module_settings['attach_accounts'] == 'yes') {
@@ -196,33 +196,33 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 						'type' => 'any'
 					),
 				);
-				$this->lead_field = array_merge($this->lead_field, $temp_arr);
+				$this->ticket_field = array_merge($this->ticket_field, $temp_arr);
 			}
 		}
 
 		public function hd_importer_ajax_hooks() {
-			add_action( 'wp_ajax_rtcrm_map_import', array( $this, 'rtcrm_map_import_callback' ) );
-			add_action( 'wp_ajax_rtcrm_map_import_feauture', array( $this, 'rtcrm_map_import_feauture' ) );
+			add_action( 'wp_ajax_rthd_map_import', array( $this, 'rthd_map_import_callback' ) );
+			add_action( 'wp_ajax_rthd_map_import_feauture', array( $this, 'rthd_map_import_feauture' ) );
 			add_action( 'init', array( $this, 'install_gravity_form_hook' ) );
-			add_action( 'wp_ajax_rtcrm_gravity_dummy_data', array( $this, 'get_random_gravity_data' ) );
-			add_action( 'wp_ajax_rtcrm_defined_map_feild_value', array( $this, 'rtcrm_defined_map_feild_value' ) );
+			add_action( 'wp_ajax_rthd_gravity_dummy_data', array( $this, 'get_random_gravity_data' ) );
+			add_action( 'wp_ajax_rthd_defined_map_feild_value', array( $this, 'rthd_defined_map_feild_value' ) );
 		}
 
 		public function install_gravity_form_hook() {
 			add_action( 'gform_entry_info', array( $this, 'gravity_form_lead_meta' ), 1, 2 );
-			add_action( 'gform_entry_created', array( $this, 'rtcrm_auto_import' ), 1, 2 );
-			add_filter( 'gform_pre_submission_filter', array( $this, 'rtcrm_add_custome_field' ), 1, 1 );
+			add_action( 'gform_entry_created', array( $this, 'rthd_auto_import' ), 1, 2 );
+			add_filter( 'gform_pre_submission_filter', array( $this, 'rthd_add_custome_field' ), 1, 1 );
 		}
 
-		public function rtcrm_add_custome_field( $data ) {
+		public function rthd_add_custome_field( $data ) {
 
-			global $rt_crm_gravity_fields_mapping_model;
+			global $rt_hd_gravity_fields_mapping_model;
 			$form_id = $data["id"];
-			$form_mappings = $rt_crm_gravity_fields_mapping_model->get_mapping( $form_id );
+			$form_mappings = $rt_hd_gravity_fields_mapping_model->get_mapping( $form_id );
 			if ( ! empty( $form_mappings ) && $form_mappings->enable == 'yes' ) {
 				$found_history_field = false;
 				if ( ! $found_history_field && isset( $data['notification']['message'] ) ) {
-					$data['notification']['message'] .= '<br />rtCrm Lead :<a href="--rtcamp_crm_link--">rtCRM Link</a>';
+					$data['notification']['message'] .= '<br />rtHelpdesk Ticket :<a href="--rtcamp_hd_link--">rtHelpdesk Link</a>';
 
 					// Hides field output of fields set to a Visibility of Admin Only
 					// Ref: http://www.gravityhelp.com/documentation/page/Merge_Tags
@@ -234,7 +234,7 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 			return $data;
 		}
 
-		public function rtcrm_defined_map_feild_value() {
+		public function rthd_defined_map_feild_value() {
 			$form_id = $_REQUEST["map_form_id"];
 			if ( isset( $_REQUEST["mapSourceType"] ) && $_REQUEST["mapSourceType"] == "gravity" ) {
 				$field_id = intval( $_REQUEST["field_id"] );
@@ -266,17 +266,17 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 		}
 
 		function gravity_form_lead_meta( $form_id, $gr_lead ) {
-			global $rt_crm_gravity_fields_mapping_model;
+			global $rt_hd_gravity_fields_mapping_model;
 			$gr_lead_id = absint($gr_lead["id"]);
-			$mappings = $rt_crm_gravity_fields_mapping_model->get_mapping( $form_id );
+			$mappings = $rt_hd_gravity_fields_mapping_model->get_mapping( $form_id );
 			foreach ( $mappings as $mapping ) {
 				if ( $mapping->enable == 'yes' ) {
-					global $rt_crm_module;
-					$labels = $rt_crm_module->labels;
-					$post_type = $rt_crm_module->post_type;
-					$crm_lead_id = intval( $this->gform_get_meta( $gr_lead_id, "crm-".$post_type."-post-id" ) );
-					if ( $crm_lead_id ) {
-						echo "Linked ".$rt_crm_module->name." Post : <a href='" . get_edit_post_link( $crm_lead_id ) . "' >" . get_the_title( $crm_lead_id ) . "</a><br/>";
+					global $rt_hd_module;
+					$labels = $rt_hd_module->labels;
+					$post_type = $rt_hd_module->post_type;
+					$hd_ticket_id = intval( $this->gform_get_meta( $gr_lead_id, "helpdesk-".$post_type."-post-id" ) );
+					if ( $hd_ticket_id ) {
+						echo "Linked ".$rt_hd_module->name." Post : <a href='" . get_edit_post_link( $hd_ticket_id ) . "' >" . get_the_title( $hd_ticket_id ) . "</a><br/>";
 					}
 				}
 			}
@@ -315,18 +315,18 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 		}
 
 		public function ui() {
-			global $rt_crm_module;
+			global $rt_hd_module;
 			if (!isset($_REQUEST["type"])) {
 				$_REQUEST["type"] = "csv";
 			}
 			$this->load_handlebars_Templates();
 			?>
 			<div class="wrap"><div id="icon-tools" class="icon32"><br></div>
-				<h2><?php _e( 'Import to CRM' ); ?></h2>
+				<h2><?php _e( 'Import to Helpdesk' ); ?></h2>
 				<ul class="subsubsub">
-					<li><a href="<?php echo admin_url("admin.php?page=rtcrm-gravity-import&type=csv"); ?>" <?php if ($_REQUEST["type"] == "csv") echo " class='current'"; ?>>CSV</a> |</li>
-					<li><a href="<?php echo admin_url("admin.php?page=rtcrm-gravity-import&type=gravity"); ?>" <?php if ($_REQUEST["type"] == "gravity") echo " class='current'"; ?> >Gravity</a> | </li>
-					<li><a href="<?php echo admin_url("admin.php?page=rtcrm-logs"); ?>" >Logs</a></li>
+					<li><a href="<?php echo admin_url("admin.php?page=rthd-gravity-import&type=csv"); ?>" <?php if ($_REQUEST["type"] == "csv") echo " class='current'"; ?>>CSV</a> |</li>
+					<li><a href="<?php echo admin_url("admin.php?page=rthd-gravity-import&type=gravity"); ?>" <?php if ($_REQUEST["type"] == "gravity") echo " class='current'"; ?> >Gravity</a> | </li>
+					<li><a href="<?php echo admin_url("admin.php?page=rthd-logs"); ?>" >Logs</a></li>
 
 				</ul>
 				<?php
@@ -394,7 +394,7 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 				}
 
 				$flag = true;
-				$post_type = $rt_crm_module->post_type;
+				$post_type = $rt_hd_module->post_type;
 
 				if ($_REQUEST["type"] == "csv") {
 					if (isset($_FILES['map_upload']) && $_FILES['map_upload']['error'] == 0) {
@@ -425,7 +425,7 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 								Total Rows: <strong><?php echo count($csv->data); ?></strong></p>
 						</div>
 
-						<form method="post" action="" id="rtCrmMappingForm" name="rtCrmMappingForm">
+						<form method="post" action="" id="rtHelpdeskMappingForm" name="rtHelpdeskMappingForm">
 							<input type="hidden" name="mapSource" id="mapSource" value="<?php echo $upload['file']; ?>" />
 							<input type="hidden" name="mapSourceType" id="mapSourceType" value="<?php echo $_REQUEST['type']; ?>" />
 							<input type="hidden" name="mapEntryCount" id="mapEntryCount" value="<?php echo count($csv->data) ?>" />
@@ -448,18 +448,18 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 												$fieldname = str_replace(" ", "-s-", $value);
 												$form_fields = '<select data-og="' . $fieldname . '" name="field-' . $fieldname . '"  id="field-' . $fieldname . '" class="map_form_fields map_form_fixed_fields">';
 												$form_fields .= '<option value="">Choose a field or Skip it</option>';
-												foreach ($this->lead_field as $key => $lfield) {
+												foreach ($this->ticket_field as $key => $lfield) {
 //                                                if ($lfield["type"] == 'defined')
 //                                                    continue;
 													$form_fields .= '<option value="' . $lfield["slug"] . '">' . ucfirst($lfield["display_name"]) . '</option>';
 												}
-												//$form_fields .= '<option value="leadmeta">Other Field</option>';
+												//$form_fields .= '<option value="ticketmeta">Other Field</option>';
 												$form_fields .= '</select>';
 												echo $form_fields;
 												?>
 											</td>
 											<td></td>
-											<td class='crm-dummy-data' data-field-name="<?php echo $value; ?>"><?php echo $data[$value]; ?></td>
+											<td class='helpdesk-dummy-data' data-field-name="<?php echo $value; ?>"><?php echo $data[$value]; ?></td>
 
 										</tr>
 									<?php } ?>
@@ -489,7 +489,7 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 								Form Selected : <strong><?php echo $form_data["title"]; ?></strong><br/>
 								Total Entries: <strong><?php echo $form_count["total"]; ?></strong>
 							</div>
-							<form method="post" action="" id="rtCrmMappingForm" name="rtCrmMappingForm">
+							<form method="post" action="" id="rtHelpdeskMappingForm" name="rtHelpdeskMappingForm">
 								<input type="hidden" name="mapSource" id="mapSource" value="<?php echo $form_id; ?>" />
 								<input type="hidden" name="mapSourceType" id="mapSourceType" value="<?php echo $_REQUEST['type']; ?>" />
 								<input type="hidden" name="mapEntryCount" id="mapEntryCount" value="<?php echo $form_count["total"]; ?>" />
@@ -497,7 +497,7 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 									<thead>
 										<tr>
 											<th scope="row">Field Name</th>
-											<th scope="row">CRM Column Name</th>
+											<th scope="row">Helpdesk Column Name</th>
 											<th scope="row">Default Value</th>
 											<th scope="row"><a href="#dummyDataPrev"> << </a>Sample <a href="#dummyDataNext"> >> </a></th>
 										</tr>
@@ -513,18 +513,18 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 													<?php
 													$form_fields = '<select name="field-' . $field['id'] . '"  id="field-' . $field['id'] . '" class="map_form_fields map_form_fixed_fields">';
 													$form_fields .= '<option value="">Choose a field or Skip it</option>';
-													foreach ($this->lead_field as $key => $lfield) {
+													foreach ($this->ticket_field as $key => $lfield) {
 //                                                    if (isset($lfield["type"]) &&  $lfield["type"]== 'defined')
 //                                                        continue;
 														$form_fields .= '<option value="' . $lfield["slug"] . '">' . ucfirst($lfield["display_name"]) . '</option>';
 													}
-//                                                /$form_fields .= '<option value="leadmeta">Other Field</option>';
+//                                                /$form_fields .= '<option value="ticketmeta">Other Field</option>';
 													$form_fields .= '</select>';
 													echo $form_fields;
 													?>
 												</td>
 												<td></td>
-												<td class='crm-dummy-data' data-field-name="<?php echo $field['id']; ?>"><?php echo (isset($formdummydata[0][$field['id']])) ? $formdummydata[0][$field['id']] : ''; ?></td>
+												<td class='helpdesk-dummy-data' data-field-name="<?php echo $field['id']; ?>"><?php echo (isset($formdummydata[0][$field['id']])) ? $formdummydata[0][$field['id']] : ''; ?></td>
 											</tr>
 										<?php }
 										?>
@@ -537,16 +537,16 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 										</td>
 										<td>
 											<?php
-											$leadStatus = $rt_crm_module->statuses;
-											$arr_leadstatus = array();
-											$form_fields = '<select name="leadstatus" class="map_form_fields">';
-											foreach ($leadStatus as $key => $lfield) {
+											$ticketStatus = $rt_hd_module->statuses;
+											$arr_ticketstatus = array();
+											$form_fields = '<select name="ticketstatus" class="map_form_fields">';
+											foreach ($ticketStatus as $key => $lfield) {
 												$form_fields .= '<option value="' . $lfield["slug"] . '">' . $lfield["name"] . '</option>';
-												$arr_leadstatus[] = array("slug" => $lfield["slug"], "display" => $lfield["name"]);
+												$arr_ticketstatus[] = array("slug" => $lfield["slug"], "display" => $lfield["name"]);
 											}
 											$form_fields .= '</select>';
 											echo $form_fields;
-											echo "<script> var arr_leadstatus=" . json_encode($arr_leadstatus) . "; </script>"
+											echo "<script> var arr_ticketstatus=" . json_encode($arr_ticketstatus) . "; </script>"
 											?>
 										</td>
 										<td></td>
@@ -561,7 +561,7 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 										<td>
 											<?php
 											global $wpdb;
-											$results = Rt_CRM_Utils::get_crm_rtcamp_user();
+											$results = Rt_HD_Utils::get_hd_rtcamp_user();
 											$meta_key_results = $wpdb->get_results(" select distinct meta_key from $wpdb->postmeta inner join $wpdb->posts on post_id=ID
 								 and post_type='".$post_type."' and  not meta_key like '\_%' order by meta_key");
 
@@ -581,7 +581,7 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 												echo 'No authors found';
 											}
 											echo "<script> var arr_assignedto=" . json_encode($arr_assignedto) . "; </script>";
-											echo "<script> var arr_leadmeta_key=" . json_encode($meta_key_results) . "; </script>";
+											echo "<script> var arr_ticketmeta_key=" . json_encode($meta_key_results) . "; </script>";
 											?>
 										</td>
 										<td></td>
@@ -590,7 +590,7 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 									</tr>
 
 									<?php
-										$attributes = rtcrm_get_attributes($rt_crm_module->post_type);
+										$attributes = rthd_get_attributes($rt_hd_module->post_type);
 										foreach ($attributes as $attr) { ?>
 											<tr>
 												<td><?php echo $attr->attribute_label; ?></td>
@@ -598,7 +598,7 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 													<?php
 													switch ( $attr->attribute_store_as ) {
 														case 'taxonomy':
-															$attr_terms = get_terms( rtcrm_attribute_taxonomy_name( $attr->attribute_name ), array( "hide_empty" => false, "orderby" => $attr->attribute_orderby, "order" => "ASC" ) );
+															$attr_terms = get_terms( rthd_attribute_taxonomy_name( $attr->attribute_name ), array( "hide_empty" => false, "orderby" => $attr->attribute_orderby, "order" => "ASC" ) );
 															$term_array = array();
 															if ( is_array( $attr_terms ) && count( $attr_terms ) > 0 ) {
 																echo '<select name="'.str_replace( array( '-' ), '_', $attr->attribute_name ).'">';
@@ -617,7 +617,7 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 															echo '<input type="text" name="'.str_replace( array( '-' ), '_', $attr->attribute_name ).'" />';
 															break;
 														default:
-															do_action( 'rtcrm_gravity_form_fields_map_default_value' &$this->lead_field[$attr->attribute_name], $attr );
+															do_action( 'rthd_gravity_form_fields_map_default_value' &$this->ticket_field[$attr->attribute_name], $attr );
 															break;
 													}
 													?>
@@ -668,7 +668,7 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 											<?php
 											$form_fields = '<select name="otherfield0" class="other-field">';
 											$form_fields .= '<option value="">Select</option>';
-											foreach ($this->lead_field as $lfield) {
+											foreach ($this->ticket_field as $lfield) {
 												if (isset($lfield["type"]) && $lfield["type"] == 'defined')
 													continue;
 												$form_fields .= '<option value="' . $lfield["slug"] . '">' . ucfirst($lfield["display_name"]) . '</option>';
@@ -702,7 +702,7 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 							</table>
 							<script>
 								var transaction_id =<?php echo time(); ?>;
-								var arr_map_fields =<?php echo json_encode($this->lead_field); ?>;
+								var arr_map_fields =<?php echo json_encode($this->ticket_field); ?>;
 								<?php if ($_REQUEST["type"] == "gravity") { ?>
 									var arr_lead_id =<?php $this->get_all_gravity_lead($form_id); ?>
 									<?php
@@ -719,7 +719,7 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 							<input type="submit" name="map_mapping_import" id="map_mapping_import" value="Import" class="button button-primary"/>
 						</form>
 						<div id='startImporting'>
-							<h2>Importing <?php if (isset($formname)) echo $formname; ?> into CRM...</h2>
+							<h2>Importing <?php if (isset($formname)) echo $formname; ?> into Helpdesk...</h2>
 							<div id="progressbar"></div>
 							<div class="myupdate">
 								<p> Successfully imported : <span id='sucessfullyImported'>0</span></p>
@@ -743,8 +743,8 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 						</div>
 		<?php }
 
-		public function rtcrm_map_import_feauture() {
-			global $rt_crm_gravity_fields_mapping_model;
+		public function rthd_map_import_feauture() {
+			global $rt_hd_gravity_fields_mapping_model;
 
 			$response = array();
 			header('Content-Type: application/json');
@@ -754,7 +754,7 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 				$form_id = $_REQUEST["map_form_id"];
 				$map_data = maybe_serialize( $_REQUEST["map_data"] );
 
-				$mapping = $rt_crm_gravity_fields_mapping_model->get_mapping( $form_id );
+				$mapping = $rt_hd_gravity_fields_mapping_model->get_mapping( $form_id );
 				if( ! empty( $mapping ) ) {
 					$data = array(
 						'mapping' => $map_data,
@@ -762,13 +762,13 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 					$where = array(
 						'form_id' => $form_id,
 					);
-					$rt_crm_gravity_fields_mapping_model->update_mapping( $data, $where );
+					$rt_hd_gravity_fields_mapping_model->update_mapping( $data, $where );
 				} else {
 					$data = array(
 						'form_id' => $form_id,
 						'mapping' => $map_data,
 					);
-					$rt_crm_gravity_fields_mapping_model->add_mapping( $data );
+					$rt_hd_gravity_fields_mapping_model->add_mapping( $data );
 				}
 				$response["status"] = true;
 			}
@@ -797,7 +797,7 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 				}
 				$response[0]["lead_id"] = $gravity_lead_id;
 				if (!$forceImport) {
-					$alreadyImported = $this->gform_get_meta($gravity_lead_id, "import-to-crm");
+					$alreadyImported = $this->gform_get_meta($gravity_lead_id, "import-to-helpdesk");
 					if ($alreadyImported) {
 						if ($autoDieFlag) {
 							return true;
@@ -831,7 +831,7 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 									}
 								}
 
-								if (isset($this->lead_field[$key]["type"]) && $this->lead_field[$key]["type"] == "defined") {
+								if (isset($this->ticket_field[$key]["type"]) && $this->ticket_field[$key]["type"] == "defined") {
 									if (trim($meta["fieldName"]) == "") {
 										$tValue = $meta["defaultValue"];
 									} else if (isset($meta["mappingData"][$tValue])) {
@@ -847,13 +847,13 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 									}
 								}
 								$tKey = $f_field['label'];
-								if ( isset($this->lead_field[$key]["type"]) && $this->lead_field[$key]["type"] == "type" ) {
+								if ( isset($this->ticket_field[$key]["type"]) && $this->ticket_field[$key]["type"] == "type" ) {
 									if (isset($meta["keyname"]) && trim($meta["keyname"]) != "")
 										$tKey = $meta["keyname"];
 								}
 								$meta = array("key" => ucfirst($tKey), "value" => $tValue);
 							} else {
-								if (isset($this->lead_field[$key]["type"]) && $this->lead_field[$key]["type"] == "defined") {
+								if (isset($this->ticket_field[$key]["type"]) && $this->ticket_field[$key]["type"] == "defined") {
 									if (trim($meta["fieldName"]) == "") {
 										$tfield = $meta["defaultValue"];
 									} else if (isset($meta["mappingData"][$tValue])) {
@@ -864,7 +864,7 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 								} else
 									$tfield = $meta["fieldName"];
 								$tKey = $f_field['label'];
-								if (isset($this->lead_field[$key]["type"]) && $this->lead_field[$key]["type"] == "type") {
+								if (isset($this->ticket_field[$key]["type"]) && $this->ticket_field[$key]["type"] == "type") {
 									if (isset($meta["keyname"]) && trim($meta["keyname"]) != "")
 										$tKey = $meta["keyname"];
 								}
@@ -888,7 +888,7 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 								}
 							}
 
-							if (isset($this->lead_field[$key]["type"]) && $this->lead_field[$key]["type"] == "defined") {
+							if (isset($this->ticket_field[$key]["type"]) && $this->ticket_field[$key]["type"] == "defined") {
 								if (trim($tfield) == "") {
 									$tfield = $field["defaultValue"];
 								} else if (isset($field["mappingData"][$tfield])) {
@@ -928,11 +928,11 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 					if (isset($map_data["contacttitle"]))
 						$contactname = $map_data["contacttitle"] . " " . $contactname;
 					$siteurl = "";
-					if (isset($map_data["leadmeta"])) {
-						$leadmeta = $map_data["leadmeta"];
-						foreach ($leadmeta as $leadm) {
-							if (strtolower($leadm["key"]) == 'site url') {
-								$siteurl = " -" . $leadm["value"];
+					if (isset($map_data["ticketmeta"])) {
+						$ticketmeta = $map_data["ticketmeta"];
+						foreach ($ticketmeta as $ticketm) {
+							if (strtolower($ticketm["key"]) == 'site url') {
+								$siteurl = " -" . $ticketm["value"];
 								break;
 							}
 						}
@@ -940,7 +940,7 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 					$map_data["title"] = "Enquiry From " . $contactname;
 				}
 
-				$response[0] = $this->create_leads_from_map_data($map_data, $gravity_lead_id, $type);
+				$response[0] = $this->create_tickets_from_map_data($map_data, $gravity_lead_id, $type);
 				if ($autoDieFlag) {
 					return $response[0]["status"];
 				}
@@ -962,7 +962,7 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 								foreach ($field as &$meta) {
 									if (!( strpos($meta["fieldName"], "field-") === false )) {
 										$field_id = str_replace("-s-", " ", str_replace("field-", "", $meta["fieldName"]));
-										if (isset($this->lead_field[$key]["type"]) && $this->lead_field[$key]["type"] == "defined") {
+										if (isset($this->ticket_field[$key]["type"]) && $this->ticket_field[$key]["type"] == "defined") {
 											if (array_key_exists($field_id, $csv->data[$row_index])) {
 												$tfield = $csv->data[$row_index][$field_id];
 												if (trim($tfield) == "") {
@@ -976,7 +976,7 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 												$tfield = $meta["defaultValue"];
 											}
 											$tKey = $field_id;
-											if (isset($this->lead_field[$key]["type"]) && $this->lead_field[$key]["type"] == "key") {
+											if (isset($this->ticket_field[$key]["type"]) && $this->ticket_field[$key]["type"] == "key") {
 												if (isset($meta["keyname"]) && trim($meta["keyname"]) != "")
 													$tKey = $meta["keyname"];
 											}
@@ -984,7 +984,7 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 										} else {
 											if (array_key_exists($field_id, $csv->data[$row_index])) {
 												$tKey = $field_id;
-												if (isset($this->lead_field[$key]["type"]) && $this->lead_field[$key]["type"] == "key") {
+												if (isset($this->ticket_field[$key]["type"]) && $this->ticket_field[$key]["type"] == "key") {
 													if (isset($meta["keyname"]) && trim($meta["keyname"]) != "")
 														$tKey = $meta["keyname"];
 												}
@@ -999,7 +999,7 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 										}
 									} else {
 										$tKey = $field_id;
-										if (isset($this->lead_field[$key]["type"]) && $this->lead_field[$key]["type"] == "key") {
+										if (isset($this->ticket_field[$key]["type"]) && $this->ticket_field[$key]["type"] == "key") {
 											if (isset($meta["keyname"]) && trim($meta["keyname"]) != "")
 												$tKey = $meta["keyname"];
 										}
@@ -1011,7 +1011,7 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 									$field_id = str_replace("-s-", " ", str_replace("field-", "", $field["fieldName"]));
 									if (array_key_exists($field_id, $csv->data[$row_index])) {
 										$tfield = $csv->data[$row_index][$field_id];
-										if (isset($this->lead_field[$key]["type"]) && $this->lead_field[$key]["type"] == "defined") {
+										if (isset($this->ticket_field[$key]["type"]) && $this->ticket_field[$key]["type"] == "defined") {
 											if (trim($tfield) == "") {
 												$tfield = $field["defaultValue"];
 											} else if (isset($field["mappingData"][$tfield])) {
@@ -1034,7 +1034,7 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 							}
 						}
 
-						$response[] = $this->create_leads_from_map_data($map_data, $row_index, $type);
+						$response[] = $this->create_tickets_from_map_data($map_data, $row_index, $type);
 					}
 					unset($csv);
 					$response[0]["startmemory"] = $start_memory;
@@ -1048,13 +1048,13 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 			// IMP LINE
 		}
 
-		function create_leads_from_map_data($map_data, $gravity_lead_id, $type) {
+		function create_tickets_from_map_data($map_data, $gravity_lead_id, $type) {
 			extract($map_data, EXTR_OVERWRITE);
 
-			global $transaction_id, $rt_crm_module;
+			global $transaction_id, $rt_hd_module;
 			$module_settings = rthd_get_settings();
-			$post_type = $rt_crm_module->post_type;
-			$leadModel = new Rt_CRM_Lead_Model();
+			$post_type = $rt_hd_module->post_type;
+			$ticketModel = new Rt_HD_Ticket_Model();
 			if (isset($creationdate)) {
 				$creationdate = trim($creationdate);
 
@@ -1126,9 +1126,9 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 
 			$title = $titleprefix . " " . $title . " " . $titlesuffix;
 			$title = trim($title);
-			global $rt_crm_leads;
+			global $rt_hd_tickets;
 
-			$lead_id = $rt_crm_leads->process_email_to_lead(
+			$ticket_id = $rt_hd_tickets->process_email_to_ticket(
 					$title,
 					$description,
 					$fromemail,
@@ -1141,21 +1141,21 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 			);
 			$response = array();
 			$response["lead_id"] = $gravity_lead_id;
-			if (!$lead_id) {
+			if (!$ticket_id) {
 				$response["status"] = false;
 			} else {
 				if ($type == "gravity") {
-					$this->gform_update_meta($gravity_lead_id, "import-to-crm", 1);
-					$this->gform_update_meta($gravity_lead_id, "crm-".$post_type."-post-id", $lead_id);
+					$this->gform_update_meta($gravity_lead_id, "import-to-helpdesk", 1);
+					$this->gform_update_meta($gravity_lead_id, "helpdesk-".$post_type."-post-id", $ticket_id);
 					if (isset($transaction_id) && $transaction_id > 0) {
 						$this->gform_update_meta($gravity_lead_id, "_transaction_id", $transaction_id);
 					}
 				}
 				$response["status"] = true;
-				update_post_meta($lead_id, "_gravity_form_all_data", $_REQUEST);
-				if (isset($leadmeta)) {
-					foreach ($leadmeta as $leadm) {
-						update_post_meta($lead_id, $leadm["key"], $leadm["value"]);
+				update_post_meta($ticket_id, "_gravity_form_all_data", $_REQUEST);
+				if (isset($ticketmeta)) {
+					foreach ($ticketmeta as $ticketm) {
+						update_post_meta($ticket_id, $ticketm["key"], $ticketm["value"]);
 					}
 				}
 
@@ -1170,14 +1170,14 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 							$modify_date_gmt = gmdate('Y-m-d H:i:s', (intval($timeStamp)));
 
 							$my_post = array();
-							$my_post['ID'] = $lead_id;
+							$my_post['ID'] = $ticket_id;
 							$my_post['post_modified'] = $modify_date;
 							$my_post['post_modified_gmt'] = $modify_date_gmt;
 							wp_update_post($my_post);
 
-							$where = array( 'post_id' => $lead_id );
+							$where = array( 'post_id' => $ticket_id );
 							$data = array( 'date_update' => $modify_date, 'date_update_gmt' => $modify_date_gmt, 'user_updated_by' => get_current_user_id(), );
-							$leadModel->update_lead( $data, $where );
+							$ticketModel->update_ticket( $data, $where );
 						} else {
 							try {
 								$dt = new DateTime($modifydate);
@@ -1187,14 +1187,14 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 								$modify_date_gmt = gmdate('Y-m-d H:i:s', (intval($timeStamp)));
 
 								$my_post = array();
-								$my_post['ID'] = $lead_id;
+								$my_post['ID'] = $ticket_id;
 								$my_post['post_modified'] = $modifydate;
 								$my_post['post_modified_gmt'] = $modify_date_gmt;
 								wp_update_post($my_post);
 
-								$where = array( 'post_id' => $lead_id );
+								$where = array( 'post_id' => $ticket_id );
 								$data = array( 'date_update' => $modify_date, 'date_update_gmt' => $modify_date_gmt, 'user_updated_by' => get_current_user_id(), );
-								$leadModel->update_lead($data, $where);
+								$ticketModel->update_ticket($data, $where);
 
 							} catch (Exception $e) {
 								$modifydate = 'now';
@@ -1209,14 +1209,14 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 							$modify_date_gmt = gmdate('Y-m-d H:i:s', (intval($timeStamp)));
 
 							$my_post = array();
-							$my_post['ID'] = $lead_id;
+							$my_post['ID'] = $ticket_id;
 							$my_post['post_modified'] = $modifydate;
 							$my_post['post_modified_gmt'] = $modify_date_gmt;
 							wp_update_post($my_post);
 
-							$where = array( 'post_id' => $lead_id );
+							$where = array( 'post_id' => $ticket_id );
 							$data = array( 'date_update' => $modify_date, 'date_update_gmt' => $modify_date_gmt, 'user_updated_by' => get_current_user_id(), );
-							$leadModel->update_lead($data, $where);
+							$ticketModel->update_ticket($data, $where);
 
 						} catch (Exception $e) {
 							$modifydate = 'now';
@@ -1224,32 +1224,32 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 					}
 				}
 
-				if (isset($leadstatus) && $leadstatus != "new") {
+				if (isset($ticketstatus) && $ticketstatus != "new") {
 					$my_post = array();
-					$my_post['ID'] = $lead_id;
-					$my_post['post_status'] = $leadstatus;
+					$my_post['ID'] = $ticket_id;
+					$my_post['post_status'] = $ticketstatus;
 					wp_update_post($my_post);
 
 					// Update Index Table
-					$where = array( 'post_id' => $lead_id );
+					$where = array( 'post_id' => $ticket_id );
 					$data = array(
-						'post_status' => $leadstatus,
+						'post_status' => $ticketstatus,
 						'date_update' => current_time( 'mysql' ),
 						'date_update_gmt' => gmdate('Y-m-d H:i:s'),
 						'user_updated_by' => get_current_user_id(),
 					);
-					$leadModel->update_lead($data, $where);
+					$ticketModel->update_ticket($data, $where);
 
 					// System Notification -- Meta Attribute updated
 				}
 
 
-				$attributes = rtcrm_get_attributes($rt_crm_module->post_type);
+				$attributes = rthd_get_attributes($rt_hd_module->post_type);
 				foreach ($attributes as $attr) {
 					$slug = str_replace( array( '-' ), '_', $attr->attribute_name );
 					switch ( $attr->attribute_store_as ) {
 						case 'taxonomy':
-							$tax_name = rtcrm_attribute_taxonomy_name($attr->attribute_name);
+							$tax_name = rthd_attribute_taxonomy_name($attr->attribute_name);
 							switch ( $attr->attribute_render_type ) {
 								case 'dropdown':
 								case 'radio':
@@ -1270,18 +1270,18 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 										}
 										$term = get_term_by("id", $term_id, $tax_name);
 										$termslug = $term->slug;
-										@wp_set_object_terms($lead_id, $termslug, $tax_name, true);
+										@wp_set_object_terms($ticket_id, $termslug, $tax_name, true);
 
 										// Update Index Table
 										$attr_name = str_replace( '-', '_', $tax_name );
-										$where = array( 'post_id' => $lead_id );
+										$where = array( 'post_id' => $ticket_id );
 										$data = array(
 											$attr_name => $termslug,
 											'date_update' => current_time( 'mysql' ),
 											'date_update_gmt' => gmdate('Y-m-d H:i:s'),
 											'user_updated_by' => get_current_user_id(),
 										);
-										$leadModel->update_lead($data, $where);
+										$ticketModel->update_ticket($data, $where);
 
 										// System Notification -- Tax Attribute updated
 									}
@@ -1309,24 +1309,24 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 											$term = get_term_by("id", $term_id, $tax_name);
 											$termslug[] = $term->slug;
 										}
-										@wp_set_object_terms($lead_id, $termslug, $tax_name, true);
+										@wp_set_object_terms($ticket_id, $termslug, $tax_name, true);
 
 										// Update Index Table
 										$attr_name = str_replace( '-', '_', $tax_name );
-										$where = array( 'post_id' => $lead_id );
+										$where = array( 'post_id' => $ticket_id );
 										$data = array(
 											$attr_name => implode( ',', $termslug ),
 											'date_update' => current_time( 'mysql' ),
 											'date_update_gmt' => gmdate('Y-m-d H:i:s'),
 											'user_updated_by' => get_current_user_id(),
 										);
-										$leadModel->update_lead($data, $where);
+										$ticketModel->update_ticket($data, $where);
 
 										// System Notification -- Tax Attribute updated
 									}
 									break;
 								default:
-									do_action( 'rtcrm_save_gravity_import_attributes', $map_data, $gravity_lead_id, $type );
+									do_action( 'rthd_save_gravity_import_attributes', $map_data, $gravity_lead_id, $type );
 									break;
 							}
 							break;
@@ -1335,18 +1335,18 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 								case 'text':
 								case 'currency':
 									if (isset(${$slug})) {
-										add_post_meta($lead_id, $attr->attribute_name, ${$slug});
+										add_post_meta($ticket_id, $attr->attribute_name, ${$slug});
 
 										// Update Index Table
-										$attr_name = str_replace( '-', '_', rtcrm_attribute_taxonomy_name( $attr->attribute_name ) );
-										$where = array( 'post_id' => $lead_id );
+										$attr_name = str_replace( '-', '_', rthd_attribute_taxonomy_name( $attr->attribute_name ) );
+										$where = array( 'post_id' => $ticket_id );
 										$data = array(
 											$attr_name => ${$slug},
 											'date_update' => current_time( 'mysql' ),
 											'date_update_gmt' => gmdate('Y-m-d H:i:s'),
 											'user_updated_by' => get_current_user_id(),
 										);
-										$leadModel->update_lead($data, $where);
+										$ticketModel->update_ticket($data, $where);
 
 										// System Notification -- Meta Attribute updated
 									}
@@ -1372,30 +1372,30 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 
 											}
 										}
-										add_post_meta($lead_id, $attr->attribute_name, ${$slug});
+										add_post_meta($ticket_id, $attr->attribute_name, ${$slug});
 
 										// Update Index Table
-										$attr_name = str_replace( '-', '_', rtcrm_attribute_taxonomy_name( $attr->attribute_name ) );
-										$where = array( 'post_id' => $lead_id );
+										$attr_name = str_replace( '-', '_', rthd_attribute_taxonomy_name( $attr->attribute_name ) );
+										$where = array( 'post_id' => $ticket_id );
 										$data = array(
 											$attr_name => ${$slug},
 											'date_update' => current_time( 'mysql' ),
 											'date_update_gmt' => gmdate('Y-m-d H:i:s'),
 											'user_updated_by' => get_current_user_id(),
 										);
-										$leadModel->update_lead($data, $where);
+										$ticketModel->update_ticket($data, $where);
 
 										// System Notification -- Meta Attribute updated
 
 									}
 									break;
 								default:
-									do_action( 'rtcrm_save_gravity_import_attributes', $map_data, $gravity_lead_id, $type );
+									do_action( 'rthd_save_gravity_import_attributes', $map_data, $gravity_lead_id, $type );
 									break;
 							}
 							break;
 						default:
-							do_action( 'rtcrm_save_gravity_import_attributes', $map_data, $gravity_lead_id, $type );
+							do_action( 'rthd_save_gravity_import_attributes', $map_data, $gravity_lead_id, $type );
 							break;
 					}
 				}
@@ -1422,7 +1422,7 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 						}
 					}
 
-					// Contact will be linked with the lead later while creating the lead.
+					// Contact will be linked with the ticket later while creating the ticket.
 				}
 
 				if( isset( $module_settings['attach_accounts'] ) && $module_settings['attach_accounts'] == 'yes' ) {
@@ -1439,7 +1439,7 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 						if ( ! isset( $accountmeta ) ) {
 							$accountmeta = array();
 						}
-						$account_id = $rt_crm_leads->post_exists( $accountname );
+						$account_id = $rt_hd_tickets->post_exists( $accountname );
 
 						if( ! empty( $account_id ) && get_post_type( $account_id ) === rt_biz_get_organization_post_type() ) {
 							if ( isset( $transaction_id ) && $transaction_id > 0 ) {
@@ -1460,19 +1460,19 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 						}
 						$account = get_post( $account_id );
 
-						rt_biz_connect_post_to_organization( $post_type, $lead_id, $account );
+						rt_biz_connect_post_to_organization( $post_type, $ticket_id, $account );
 
 						// Update Index Table
 						$attr_name = rt_biz_get_organization_post_type();
 						if ( ! empty( $attr_name ) ) {
-							$where = array( 'post_id' => $lead_id );
+							$where = array( 'post_id' => $ticket_id );
 							$data = array(
 								$attr_name => $account->ID,
 								'date_update' => current_time( 'mysql' ),
 								'date_update_gmt' => gmdate('Y-m-d H:i:s'),
 								'user_updated_by' => get_current_user_id(),
 							);
-							$leadModel->update_lead($data, $where);
+							$ticketModel->update_ticket($data, $where);
 
 							//	System Notification -- Accounts Updated
 						}
@@ -1482,7 +1482,7 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 			return $response;
 		}
 
-		public function rtcrm_map_import_callback() {
+		public function rthd_map_import_callback() {
 			if ( ! isset( $_REQUEST["gravity_lead_id"] ) ) {
 				echo json_encode(array(array("status" => false)));
 				die(0);
@@ -1503,11 +1503,11 @@ if (!class_exists('Rt_CRM_Gravity_Form_Importer')) {
 			$this->process_import($map_data, $map_source_form_id, $map_index_lead_id, $type, $forceImport );
 		}
 
-		public function rtcrm_auto_import($lead, $form) {
+		public function rthd_auto_import($lead, $form) {
 			//gform_after_submission
-			global $rt_crm_gravity_fields_mapping_model;
+			global $rt_hd_gravity_fields_mapping_model;
 			$form_id = $form["id"];
-			$form_mappings = $rt_crm_gravity_fields_mapping_model->get_mapping( $form_id );
+			$form_mappings = $rt_hd_gravity_fields_mapping_model->get_mapping( $form_id );
 			foreach ($form_mappings as $fm) {
 				$map_data = maybe_unserialize( $fm->mapping );
 				if( ! empty( $map_data ) && $fm->enable == 'yes' ) {

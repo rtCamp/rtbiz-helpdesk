@@ -6,7 +6,7 @@ if (!class_exists('WP_List_Table')) {
     require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 }
 
-global  $wpdb, $rt_crm_contacts, $rt_crm_accounts;
+global  $wpdb, $rt_hd_contacts, $rt_hd_accounts;
 $post_id_sql = "select p.id as ID ,p.post_title as post_title ,p.post_status as post_status , p.post_type as post_type,
     date_format(p.post_date,'%d-%m-%Y %H:%i:%s ') as post_date,date_format(p.post_modified,'%d-%m-%y %h:%i') as post_modified,
     u.display_name as uname,u.Id as user_id from $wpdb->posts p inner join $wpdb->users u on p.post_author=u.ID where p.ID in ( select post_id from $wpdb->postmeta where meta_key like '_transaction_id' and meta_value = '{$_REQUEST["trans_id"]}') ";
@@ -24,7 +24,7 @@ if(isset($example_data[0])) {
 }
 ?>
         <div class="wrap"><div id="icon-tools" class="icon32"><br></div>
-            <h2>Lead Created in Transaction <?php $_REQUEST["trans_id"];?> </h2>
+            <h2>Ticket Created in Transaction <?php $_REQUEST["trans_id"];?> </h2>
             <br>
             <table class="wp-list-table widefat fixed">
                 <thead>
@@ -75,7 +75,7 @@ if(isset($example_data[0])) {
                         </td>
                         <td>
 							<?php
-								$url = add_query_arg( array( 'post_type' => $rslt->post_type, 'page' => 'rtcrm-all-'.$rslt->post_type ), admin_url('edit.php') );
+								$url = add_query_arg( array( 'post_type' => $rslt->post_type, 'page' => 'rthd-all-'.$rslt->post_type ), admin_url('edit.php') );
 								$url = add_query_arg( 'assignee', $rslt->user_id, $url );
 							?>
                             <a target="_blank" href="<?php echo $url; ?>"><?php echo $rslt->uname; ?></a>
@@ -90,12 +90,12 @@ if(isset($example_data[0])) {
 							$contact_name = rt_biz_get_person_post_type();
 
 							$sep ='';
-							$base_url = add_query_arg( array( 'post_type' => $rslt->post_type, 'page' => 'rtcrm-all-'.$rslt->post_type ), admin_url( 'edit.php' ) );
+							$base_url = add_query_arg( array( 'post_type' => $rslt->post_type, 'page' => 'rthd-all-'.$rslt->post_type ), admin_url( 'edit.php' ) );
 							if($post_terms){
 								foreach($post_terms as $pterm){
 									$contact = get_post( $pterm );
 									$url = add_query_arg( $contact_name, $contact->ID, $base_url );
-									$email = rt_biz_get_entity_meta( $contact->ID, $rt_crm_contacts->email_key, true );
+									$email = rt_biz_get_entity_meta( $contact->ID, $rt_hd_contacts->email_key, true );
 									echo $sep . "<a target='_blank' href='". $url . "'>" . get_avatar( $email, 24 ) . $contact->post_title . "</a>";
 									$sep =',';
 								}
@@ -114,7 +114,7 @@ if(isset($example_data[0])) {
 								foreach($post_terms as $pterm){
 									$account = get_post( $pterm );
 									$url = add_query_arg( $account_name, $account->ID, $base_url );
-									$email = rt_biz_get_entity_meta( $account->ID, $rt_crm_accounts->email_key, true );
+									$email = rt_biz_get_entity_meta( $account->ID, $rt_hd_accounts->email_key, true );
 									echo $sep . "<a target='_blank' href='". $url . "'>" . get_avatar( $email, 24 ) . $account->post_title . "</a>";
 									$sep =',';
 								}

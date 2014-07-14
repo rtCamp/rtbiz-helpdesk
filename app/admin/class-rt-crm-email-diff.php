@@ -12,17 +12,17 @@ if ( ! defined( 'ABSPATH' ) )
  */
 
 /**
- * Description of Rt_CRM_Email_Diff
+ * Description of Rt_HD_Email_Diff
  *
  * @author udit
  */
-if( !class_exists( 'Rt_CRM_Email_Diff') ) {
+if( !class_exists( 'Rt_HD_Email_Diff') ) {
 
 	if ( !class_exists( 'WP_Text_Diff_Renderer_Table' ) ) {
 		require( ABSPATH . WPINC . '/wp-diff.php' );
 	}
 
-	class Rt_CRM_Email_Diff extends WP_Text_Diff_Renderer_Table {
+	class Rt_HD_Email_Diff extends WP_Text_Diff_Renderer_Table {
 
 		var $_leading_context_lines = 2;
 		var $_trailing_context_lines = 2;

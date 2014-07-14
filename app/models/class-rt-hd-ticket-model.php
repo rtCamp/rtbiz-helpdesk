@@ -12,27 +12,27 @@ if ( ! defined( 'ABSPATH' ) )
  */
 
 /**
- * Description of RtHDLeadModel
+ * Description of RtHDTicketModel
  *
  * @author udit
  */
-if ( !class_exists( 'Rt_HD_Lead_Model' ) ) {
-	class Rt_HD_Lead_Model extends RT_DB_Model {
+if ( !class_exists( 'Rt_HD_Ticket_Model' ) ) {
+	class Rt_HD_Ticket_Model extends RT_DB_Model {
 
 		public function __construct() {
 			$table_name = rthd_get_ticket_table_name();
 			parent::__construct( $table_name, true );
 		}
 
-		function add_lead( $data ) {
+		function add_ticket( $data ) {
 			return parent::insert( $data );
 		}
 
-		function update_lead( $data, $where ) {
+		function update_ticket( $data, $where ) {
 			return parent::update( $data, $where );
 		}
 
-		function delete_lead( $where ) {
+		function delete_ticket( $where ) {
 			return parent::delete( $where );
 		}
 	}

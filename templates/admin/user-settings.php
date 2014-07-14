@@ -17,7 +17,7 @@ if ( $_REQUEST["type"] == "personal" && isset( $_POST["mail_ac"] ) && is_email( 
 		$allow_users=array();
 	}
 	if ( isset( $_POST['imap_password'] ) ) {
-		$token = rtcrm_encrypt_decrypt( $_POST['imap_password'] );
+		$token = rthd_encrypt_decrypt( $_POST['imap_password'] );
 	} else {
 		$token = NULL;
 	}
@@ -26,7 +26,7 @@ if ( $_REQUEST["type"] == "personal" && isset( $_POST["mail_ac"] ) && is_email( 
 	} else {
 		$imap_server = NULL;
 	}
-	$email_ac = $rt_crm_settings->get_email_acc( $_POST['mail_ac'] );
+	$email_ac = $rt_hd_settings->get_email_acc( $_POST['mail_ac'] );
 	$email_data = NULL;
 	if ( isset( $_POST['mail_folders'] ) && ! empty( $_POST['mail_folders'] ) && is_array( $_POST['mail_folders'] ) && ! empty( $email_ac ) ) {
 		$email_data = maybe_unserialize( $email_ac->email_data );
@@ -38,63 +38,63 @@ if ( $_REQUEST["type"] == "personal" && isset( $_POST["mail_ac"] ) && is_email( 
 		}
 		$email_data['inbox_folder'] = $_POST['inbox_folder'];
 	}
-	$rt_crm_settings->update_mail_acl( $_POST["mail_ac"], $token, maybe_serialize( $email_data ), $allow_users, $_POST["emailsignature"], $imap_server );
+	$rt_hd_settings->update_mail_acl( $_POST["mail_ac"], $token, maybe_serialize( $email_data ), $allow_users, $_POST["emailsignature"], $imap_server );
 }
 if ( $_REQUEST["type"] == "personal" && isset( $_REQUEST["email"] ) && is_email( $_REQUEST["email"] ) ) {
-	$rt_crm_settings->delete_user_google_ac( $_REQUEST["email"] );
-	echo '<script>window.location="'.add_query_arg( array( 'post_type' => $rt_crm_module->post_type, 'page' => 'rtcrm-user-settings', 'type' => 'personal' ), admin_url( 'edit.php' ) ).'";</script>';
+	$rt_hd_settings->delete_user_google_ac( $_REQUEST["email"] );
+	echo '<script>window.location="'.add_query_arg( array( 'post_type' => $rt_hd_module->post_type, 'page' => 'rthd-user-settings', 'type' => 'personal' ), admin_url( 'edit.php' ) ).'";</script>';
 	die();
 }
 
 $flag = false;
-if(isset($_POST["rtcrm_activecollab_token"])){
-	//update_site_option('rtcrm_activecollab_token',$_POST["rtcrm_activecollab_token"]);
-	update_user_meta(get_current_user_id(), "rtcrm_activecollab_token", $_POST["rtcrm_activecollab_token"]);
+if(isset($_POST["rthd_activecollab_token"])){
+	//update_site_option('rthd_activecollab_token',$_POST["rthd_activecollab_token"]);
+	update_user_meta(get_current_user_id(), "rthd_activecollab_token", $_POST["rthd_activecollab_token"]);
 	$flag = true;
 }
-if(isset($_POST["rtcrm_activecollab_default_project"])){
-	//update_site_option('rtcrm_activecollab_default_project',$_POST["rtcrm_activecollab_default_project"]);
-	update_user_meta(get_current_user_id(), "rtcrm_activecollab_default_project", $_POST["rtcrm_activecollab_default_project"]);
+if(isset($_POST["rthd_activecollab_default_project"])){
+	//update_site_option('rthd_activecollab_default_project',$_POST["rthd_activecollab_default_project"]);
+	update_user_meta(get_current_user_id(), "rthd_activecollab_default_project", $_POST["rthd_activecollab_default_project"]);
 	$flag = true;
 }
 if ( $flag ) {
-	echo '<script>window.location="'.add_query_arg( array( 'post_type' => $rt_crm_module->post_type, 'page' => 'rtcrm-user-settings', 'type' => 'activecollab' ), admin_url( 'edit.php' ) ).'";</script>';
+	echo '<script>window.location="'.add_query_arg( array( 'post_type' => $rt_hd_module->post_type, 'page' => 'rthd-user-settings', 'type' => 'activecollab' ), admin_url( 'edit.php' ) ).'";</script>';
 	die();
 }
 
-$rt_crm_settings->update_gmail_ac_count();
+$rt_hd_settings->update_gmail_ac_count();
 ?>
 <div class="wrap">
 	<div id="icon-options-general" class="icon32"><br></div><h2><?php _e('User Settings'); ?></h2>
 	<ul class="subsubsub">
-		<li><a href="<?php echo admin_url("edit.php?post_type=rt_lead&page=rtcrm-user-settings&type=personal"); ?>" <?php if ($_REQUEST["type"] == "personal") echo " class='current'"; ?> ><?php _e('Personal Emails'); ?></a> | </li>
-		<li><a href="<?php echo admin_url("edit.php?post_type=rt_lead&page=rtcrm-user-settings&type=activecollab"); ?>" <?php if ($_REQUEST["type"] == "activecollab") echo " class='current'"; ?> ><?php _e('Active Collab'); ?></a></li>
+		<li><a href="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-user-settings&type=personal"); ?>" <?php if ($_REQUEST["type"] == "personal") echo " class='current'"; ?> ><?php _e('Personal Emails'); ?></a> | </li>
+		<li><a href="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-user-settings&type=activecollab"); ?>" <?php if ($_REQUEST["type"] == "activecollab") echo " class='current'"; ?> ><?php _e('Active Collab'); ?></a></li>
 	</ul>
 
 	<?php if ( $_REQUEST['type'] != 'personal' ) { ?>
 	<form method="post">
 	<?php } ?>
-	<table class="form-table crm-option">
+	<table class="form-table hd-option">
 		<tbody>
 <?php
 if ($_REQUEST['type'] == 'personal') {
-	$redirect_url = get_site_option('rtcrm_googleapi_redirecturl');
+	$redirect_url = get_site_option('rthd_googleapi_redirecturl');
 	if (!$redirect_url) {
-		$redirect_url = admin_url("edit.php?post_type=rt_lead&page=rtcrm-user-settings&type=personal");
-		update_site_option("rtcrm_googleapi_redirecturl", $redirect_url);
+		$redirect_url = admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-user-settings&type=personal");
+		update_site_option("rthd_googleapi_redirecturl", $redirect_url);
 	}
-	$google_client_id = get_site_option('rtcrm_googleapi_clientid', "");
-	$google_client_secret = get_site_option('rtcrm_googleapi_clientsecret', "");
-	$google_client_redirect_url = get_site_option('rtcrm_googleapi_redirecturl', "");
+	$google_client_id = get_site_option('rthd_googleapi_clientid', "");
+	$google_client_secret = get_site_option('rthd_googleapi_clientsecret', "");
+	$google_client_redirect_url = get_site_option('rthd_googleapi_redirecturl', "");
 	if ($google_client_id == "" || $google_client_secret == "") {
-		echo '<tr valign="top"><td><div class="error"><p>Please set google api detail on Google API <a href="' . admin_url("edit.php?post_type=rt_lead&page=rtcrm-settings&type=googleApi") . '">setting</a> page </p></div></td></tr>';
+		echo '<tr valign="top"><td><div class="error"><p>Please set google api detail on Google API <a href="' . admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&type=googleApi") . '">setting</a> page </p></div></td></tr>';
 		return;
 	}
-	include_once RT_CRM_PATH_VENDOR . 'google-api-php-client/Google_Client.php';
-	include_once RT_CRM_PATH_VENDOR . 'google-api-php-client/contrib/Google_Oauth2Service.php';
+	include_once RT_HD_PATH_VENDOR . 'google-api-php-client/Google_Client.php';
+	include_once RT_HD_PATH_VENDOR . 'google-api-php-client/contrib/Google_Oauth2Service.php';
 
 	$client = new Google_Client();
-	$client->setApplicationName("CRM Studio");
+	$client->setApplicationName("Helpdesk Studio");
 	$client->setClientId($google_client_id);
 	$client->setClientSecret($google_client_secret);
 	$client->setRedirectUri($google_client_redirect_url);
@@ -107,28 +107,28 @@ if ($_REQUEST['type'] == 'personal') {
 		$client->authenticate();
 		$user = $oauth2->userinfo_v2_me->get();
 		$email = filter_var($user['email'], FILTER_SANITIZE_EMAIL);
-		$rt_crm_settings->add_user_google_ac($client->getAccessToken(), $email, serialize($user), $user_id);
+		$rt_hd_settings->add_user_google_ac($client->getAccessToken(), $email, serialize($user), $user_id);
 		wp_redirect($google_client_redirect_url);
 	}
 
-	if ( isset( $_REQUEST['rtcrm_add_imap_email'] ) ) {
-		if ( isset( $_POST['rtcrm_imap_user_email'] ) && ! empty( $_POST['rtcrm_imap_user_email'] )
-				&& isset( $_POST['rtcrm_imap_user_pwd'] ) && ! empty( $_POST['rtcrm_imap_user_pwd'] )
-				&& isset( $_POST['rtcrm_imap_server'] ) && ! empty( $_POST['rtcrm_imap_server'] ) ) {
-			$password = $_POST['rtcrm_imap_user_pwd'];
-			$email = $_POST['rtcrm_imap_user_email'];
+	if ( isset( $_REQUEST['rthd_add_imap_email'] ) ) {
+		if ( isset( $_POST['rthd_imap_user_email'] ) && ! empty( $_POST['rthd_imap_user_email'] )
+				&& isset( $_POST['rthd_imap_user_pwd'] ) && ! empty( $_POST['rthd_imap_user_pwd'] )
+				&& isset( $_POST['rthd_imap_server'] ) && ! empty( $_POST['rthd_imap_server'] ) ) {
+			$password = $_POST['rthd_imap_user_pwd'];
+			$email = $_POST['rthd_imap_user_email'];
 			$email_data = array(
 				'email' => $email,
 			);
-			$imap_server = $_POST['rtcrm_imap_server'];
-			$rt_crm_settings->add_user_google_ac( rtcrm_encrypt_decrypt( $password ), $email, maybe_serialize( $email_data ), $user_id, 'imap', $imap_server );
+			$imap_server = $_POST['rthd_imap_server'];
+			$rt_hd_settings->add_user_google_ac( rthd_encrypt_decrypt( $password ), $email, maybe_serialize( $email_data ), $user_id, 'imap', $imap_server );
 		}
 	}
 
-	$google_acs = $rt_crm_settings->get_user_google_ac($user_id);
+	$google_acs = $rt_hd_settings->get_user_google_ac($user_id);
 	$authUrl = $client->createAuthUrl();
 
-	$results = Rt_CRM_Utils::get_crm_rtcamp_user();
+	$results = Rt_HD_Utils::get_hd_rtcamp_user();
 	$arrSubscriberUser = array();
 	foreach ( $results as $author ) {
 		$arrSubscriberUser[] = array("id" => $author->ID, "label" => $author->display_name, "imghtml" => get_avatar($author->user_email, 25));
@@ -158,7 +158,7 @@ if ($_REQUEST['type'] == 'personal') {
 				if ( isset( $ac->email_data['mail_folders'] ) ) {
 					$user['mail_folders'] = $ac->email_data['mail_folders'];
 				}
-				$rt_crm_settings->update_user_google_ac($client->getAccessToken(), $email, serialize($user));
+				$rt_hd_settings->update_user_google_ac($client->getAccessToken(), $email, serialize($user));
 				$ac->email_data = $user;
 				$token = json_decode($client->getAccessToken());
 			}
@@ -176,15 +176,15 @@ if ($_REQUEST['type'] == 'personal') {
 		?>
 					<tr>
 						<td>
-							<form method="post" action="<?php echo admin_url("edit.php?post_type=rt_lead&page=rtcrm-user-settings&type=personal"); ?>">
+							<form method="post" action="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-user-settings&type=personal"); ?>">
 								<input type="hidden" name='mail_ac' value="<?php echo $email; ?>" />
-								<table class='crm-google-profile-table'>
+								<table class='hd-google-profile-table'>
 									<tr valign="top">
 										<th scope="row" ><label><?php echo $personMarkup; ?></label></th>
 										<th scope="row"><label>Allow user</label></th>
 										<td class="long"><input type='text' name='mail_acl_<?php echo $rCount; ?>' class='rtcamp-user-ac' />
 		<?php
-		$mail_users_acl = $rt_crm_settings->get_email_acl($email);
+		$mail_users_acl = $rt_hd_settings->get_email_acl($email);
 		foreach ($mail_users_acl as $acl) {
 			echo "<div class='mail-acl_user' acl-user='" . $acl->allow_user . "' id='mail_acl_" . $rCount . '_' . $acl->allow_user . "'>&nbsp;&nbsp;
 										<a href='#removeAccess'>X</a><input type='hidden' name='allow_users[]' value='" . $acl->allow_user . "' /></div>";
@@ -206,7 +206,7 @@ if ($_REQUEST['type'] == 'personal') {
 											<select required="required" name="imap_server">
 												<option value=""><?php _e( 'Select Mail Server' ); ?></option>
 												<?php
-												$imap_servers = $rt_crm_imap_server_model->get_all_servers();
+												$imap_servers = $rt_hd_imap_server_model->get_all_servers();
 												foreach ( $imap_servers as $server ) { ?>
 												<option <?php echo ( isset( $ac->imap_server ) && $ac->imap_server == $server->id ) ? 'selected="selected"' : ''; ?> value="<?php echo $server->id; ?>"><?php echo $server->server_name; ?></option>
 												<?php } ?>
@@ -216,14 +216,14 @@ if ($_REQUEST['type'] == 'personal') {
 									<tr valign="top">
 										<td></td>
 										<th scope="row"><label><?php _e( 'Password' ); ?></label></th>
-										<td class="long"><input required="required" type="password" name="imap_password" placeholder="Password" value="<?php echo rtcrm_encrypt_decrypt( $token ); ?>" /></td>
+										<td class="long"><input required="required" type="password" name="imap_password" placeholder="Password" value="<?php echo rthd_encrypt_decrypt( $token ); ?>" /></td>
 									</tr>
 									<?php }
 									$all_folders = NULL;
 									try {
-										$crmZendEmail = new Rt_CRM_Zend_Mail();
-										if ( $crmZendEmail->tryImapLogin( $email, $token, $email_type, $imap_server ) ) {
-											$storage = new ImapStorage($crmZendEmail->imap);
+										$hdZendEmail = new Rt_HD_Zend_Mail();
+										if ( $hdZendEmail->tryImapLogin( $email, $token, $email_type, $imap_server ) ) {
+											$storage = new ImapStorage($hdZendEmail->imap);
 											$all_folders = $storage->getFolders();
 										}
 									} catch( Exception $e ) {
@@ -239,16 +239,16 @@ if ($_REQUEST['type'] == 'personal') {
 												<select data-email-id="<?php echo $ac->id; ?>" name="inbox_folder" required="required" data-prev-value="<?php echo $inbox_folder; ?>">
 													<option value=""><?php _e( 'Choose Inbox Folder' ); ?></option>
 													<?php if ( ! is_null( $all_folders ) ) {
-														$crmZendEmail->render_folders_dropdown( $all_folders, $value = $inbox_folder );
+														$hdZendEmail->render_folders_dropdown( $all_folders, $value = $inbox_folder );
 													} ?>
 												</select>
 											</label>
-											<?php if ( in_array( $email, rtcrm_get_all_system_emails() ) ) { ?>
+											<?php if ( in_array( $email, rthd_get_all_system_emails() ) ) { ?>
 											<p class="description"><?php _e( 'This is linked as a system mail. Hence it will only read the Inbox Folder; no matter what folder you choose over here. These will be ignored.' ); ?></p>
 											<?php } ?>
 										<?php
 											if ( ! is_null( $all_folders ) ) {
-												$crmZendEmail->render_folders_checkbox( $all_folders, $element_name = 'mail_folders', $values = $mail_folders, $data_str = 'data-email-id='.$ac->id, $inbox_folder );
+												$hdZendEmail->render_folders_checkbox( $all_folders, $element_name = 'mail_folders', $values = $mail_folders, $data_str = 'data-email-id='.$ac->id, $inbox_folder );
 											} else {
 												echo '<p class="description">'.__( 'No Folders found.' ).'</p>';
 											}
@@ -263,7 +263,7 @@ if ($_REQUEST['type'] == 'personal') {
 											<?php if ( $ac->type == 'goauth' ) { ?>
 											<a class='button button-primary' href='<?php echo $authUrl; ?>'>Re Connect Google Now</a>
 											<?php } ?>
-											<a class='button remove-google-ac' href='<?php echo admin_url("edit.php?post_type=rt_lead&page=rtcrm-user-settings&type=personal&email=" . $email); ?>'>Remove A/C</a>
+											<a class='button remove-google-ac' href='<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-user-settings&type=personal&email=" . $email); ?>'>Remove A/C</a>
 										</td>
 									</tr>
 								</table>
@@ -286,12 +286,12 @@ if ($_REQUEST['type'] == 'personal') {
 		</script>
 			<?php } else if ( $_REQUEST['type'] == 'activecollab' ) { ?>
 			<tr valign="top">
-				<th scope="row"><label for="rtcrm_wellcome_text">Active Collab Token</label></th>
-				<td><input type="text" name="rtcrm_activecollab_token" value="<?php echo get_user_meta(get_current_user_id(), 'rtcrm_activecollab_token',true); ?>" /></td>
+				<th scope="row"><label for="rthd_wellcome_text">Active Collab Token</label></th>
+				<td><input type="text" name="rthd_activecollab_token" value="<?php echo get_user_meta(get_current_user_id(), 'rthd_activecollab_token',true); ?>" /></td>
 			</tr>
 			<tr valign="top">
-				<th scope="row"><label for="rtcrm_wellcome_text">Default Project ID</label></th>
-				<td><input type="text" name="rtcrm_activecollab_default_project" value="<?php echo get_user_meta(get_current_user_id(), 'rtcrm_activecollab_default_project',true); ?>" /></td>
+				<th scope="row"><label for="rthd_wellcome_text">Default Project ID</label></th>
+				<td><input type="text" name="rthd_activecollab_default_project" value="<?php echo get_user_meta(get_current_user_id(), 'rthd_activecollab_default_project',true); ?>" /></td>
 			</tr>
 			<?php } ?>
 		</tbody>
@@ -301,30 +301,30 @@ if ($_REQUEST['type'] == 'personal') {
 	</form>
 	<?php } else { ?>
 		<p class="submit">
-			<a class="button" id="rtcrm_add_personal_email" href="#"><?php _e( 'Add Email' ); ?></a>
+			<a class="button" id="rthd_add_personal_email" href="#"><?php _e( 'Add Email' ); ?></a>
 		</p>
-		<p class="submit rtcrm-hide-row" id="rtcrm_email_acc_type_container">
-			<select id="rtcrm_select_email_acc_type">
+		<p class="submit rthd-hide-row" id="rthd_email_acc_type_container">
+			<select id="rthd_select_email_acc_type">
 				<option value=""><?php _e( 'Select Type' ); ?></option>
 				<option value="goauth"><?php _e( 'Google OAuth App' ); ?></option>
 				<option value="imap"><?php _e( 'IMAP' ); ?></option>
 			</select>
 		</p>
-		<p class="submit rtcrm-hide-row" id="rtcrm_goauth_container">
+		<p class="submit rthd-hide-row" id="rthd_goauth_container">
 			<a class='button button-primary' href='<?php echo $authUrl;?>'><?php _e( 'Connect New Google A/C' ); ?></a>
 		</p>
-		<form id="rtcrm_add_imap_acc_form" class="rtcrm-hide-row" method="post" action="<?php echo admin_url("edit.php?post_type=rt_lead&page=rtcrm-user-settings&type=personal"); ?>">
-			<input type="hidden" name="rtcrm_add_imap_email" value="1" />
-			<select required="required" name="rtcrm_imap_server">
+		<form id="rthd_add_imap_acc_form" class="rthd-hide-row" method="post" action="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-user-settings&type=personal"); ?>">
+			<input type="hidden" name="rthd_add_imap_email" value="1" />
+			<select required="required" name="rthd_imap_server">
 				<option value=""><?php _e( 'Select Mail Server' ); ?></option>
 				<?php
-				$imap_servers = $rt_crm_imap_server_model->get_all_servers();
+				$imap_servers = $rt_hd_imap_server_model->get_all_servers();
 				foreach ( $imap_servers as $server ) { ?>
 				<option value="<?php echo $server->id; ?>"><?php echo $server->server_name; ?></option>
 				<?php } ?>
 			</select>
-			<input type="email" required="required" name="rtcrm_imap_user_email" placeholder="Email" />
-			<input type="password" required="required" name="rtcrm_imap_user_pwd" placeholder="Password" />
+			<input type="email" required="required" name="rthd_imap_user_email" placeholder="Email" />
+			<input type="password" required="required" name="rthd_imap_user_pwd" placeholder="Password" />
 			<button class="button button-primary" type="submit"><?php _e( 'Save' ); ?></button>
 		</form>
 	<?php } ?>
