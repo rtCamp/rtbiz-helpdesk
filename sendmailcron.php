@@ -8,11 +8,11 @@ if ( ! defined( 'WP_LOAD_PATH' ) ) {
 }
 
 require_once( WP_LOAD_PATH . 'wp-load.php');
-global $rt_crm_settings;
-$emailRow = $rt_crm_settings->get_new_sent_mail();
+global $rt_hd_settings;
+$emailRow = $rt_hd_settings->get_new_sent_mail();
 if( empty( $emailRow ) )
     return ;
-$crmZendEmail = new Rt_CRM_Zend_Mail();
+$hdZendEmail = new Rt_HD_Zend_Mail();
 $accessTokenArray= array();
 $signature = "";
 foreach($emailRow as $email){
@@ -20,16 +20,16 @@ foreach($emailRow as $email){
 	   $email_type = '';
 	   $imap_server = '';
        $accessTokenArray[$email->fromemail] = array(
-		   'token' => $rt_crm_settings->get_accesstoken_from_email( $email->fromemail,$signature, $email_type, $imap_server ),
+		   'token' => $rt_hd_settings->get_accesstoken_from_email( $email->fromemail,$signature, $email_type, $imap_server ),
 		   'email_type' => $email_type,
 		   'imap_server' => $imap_server,
 		);
    }
-   if ( $rt_crm_settings->update_sent_email( $email->id, 'p', 'no' ) > 0 ) {
+   if ( $rt_hd_settings->update_sent_email( $email->id, 'p', 'no' ) > 0 ) {
       echo $email->id;
        $updateFlag=false;
        try{
-            $crmZendEmail->sendemail(
+            $hdZendEmail->sendemail(
 				$email->fromemail,
 				$accessTokenArray[$email->fromemail]['token'],
 				$accessTokenArray[$email->fromemail]['email_type'],
@@ -47,9 +47,9 @@ foreach($emailRow as $email){
            $updateFlag=false;
        }
        if($updateFlag){
-           $rt_crm_settings->update_sent_email($email->id,'yes','p');
+           $rt_hd_settings->update_sent_email($email->id,'yes','p');
        }else{
-           $rt_crm_settings->update_sent_email($email->id,'error','p');
+           $rt_hd_settings->update_sent_email($email->id,'error','p');
 		   echo "Error: " .$email->id ."<br />";
        }
    } else {
