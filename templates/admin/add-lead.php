@@ -457,10 +457,10 @@ if ( isset( $_POST['post'] ) ) {
 
 	// Accounts
 	if ( $module_settings['attach_accounts'] == 'yes' ) {
-		$account_diff = $rt_crm_accounts->accounts_diff_on_lead( $post_id, $newLead );
+		$account_diff = $rt_crm_accounts->accounts_diff_on_ticket( $post_id, $newLead );
 		$emailHTML .= $account_diff;
 		if ( !empty( $account_diff ) ) {
-			$rt_crm_accounts->accounts_save_on_lead( $post_id, $newLead );
+			$rt_crm_accounts->accounts_save_on_ticket( $post_id, $newLead );
 			/* Update Index Table */
 			$account_name = rt_biz_get_organization_post_type();
 			$account_val = (!isset($newLead['accounts'])) ? array() : $newLead['accounts'];

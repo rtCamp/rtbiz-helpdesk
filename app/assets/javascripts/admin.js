@@ -170,7 +170,7 @@ $.ajaxSetup({
                     dataType: "json",
                     type: 'post',
                     data: {
-                        action: "rtcrm_search_account",
+                        action: "rthd_search_account",
                         query: request.term,
 						post_type: rtcrm_post_type
                     },
@@ -281,13 +281,13 @@ $.ajaxSetup({
     });
 
     function add_account_from_id(account_id) {
-        //rtcrm_get_term_by_key
+        //rthd_get_term_by_key
         $.ajax({
             url: ajaxurl,
             dataType: "json",
             type: 'post',
             data: {
-                action: "rtcrm_get_term_by_key",
+                action: "rthd_get_term_by_key",
 	            account_id: account_id,
                 post_type: rtcrm_post_type
             },
@@ -330,7 +330,7 @@ if(jQuery("#new-contact-account").length > 0){
                 dataType: "json",
                 type: 'post',
                 data: {
-                    action: "rtcrm_search_account",
+                    action: "rthd_search_account",
                     query: request.term,
 					post_type: rtcrm_post_type
                 },
@@ -516,7 +516,7 @@ if(jQuery("#new-contact-account").length > 0){
                 dataType: "json",
                 type: 'post',
                 data: {
-                    action: "rtcrm_add_account",
+                    action: "rthd_add_account",
                     data: tmpObject
                 },
                 success: function(data) {

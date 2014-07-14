@@ -13,13 +13,13 @@ if (!defined('ABSPATH'))
  */
 
 /**
- * Description of Rt_CRM_Accounts
+ * Description of Rt_HD_Accounts
  *
  * @author udit
  */
-if ( ! class_exists( 'Rt_CRM_Accounts' ) ) {
+if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 
-	class Rt_CRM_Accounts {
+	class Rt_HD_Accounts {
 
 		public $email_key = 'account_email';
 		function __construct() {
@@ -30,9 +30,9 @@ if ( ! class_exists( 'Rt_CRM_Accounts' ) ) {
 			add_filter( 'rt_entity_columns', array( $this, 'accounts_columns' ), 10, 2 );
 			add_action( 'rt_entity_manage_columns', array( $this, 'manage_accounts_columns' ), 10, 3 );
 
-			add_action( 'wp_ajax_rtcrm_add_account', array( $this, 'add_new_account_ajax' ) );
-			add_action( 'wp_ajax_rtcrm_search_account', array( $this, 'account_autocomplete_ajax' ) );
-			add_action( 'wp_ajax_rtcrm_get_term_by_key', array( $this, 'get_term_by_key_ajax' ) );
+			add_action( 'wp_ajax_rthd_add_account', array( $this, 'add_new_account_ajax' ) );
+			add_action( 'wp_ajax_rthd_search_account', array( $this, 'account_autocomplete_ajax' ) );
+			add_action( 'wp_ajax_rthd_get_term_by_key', array( $this, 'get_term_by_key_ajax' ) );
 		}
 
 		public function account_autocomplete_ajax() {
@@ -136,9 +136,9 @@ if ( ! class_exists( 'Rt_CRM_Accounts' ) ) {
 
 			$columns['country'] = __( 'Country' );
 
-			global $rt_crm_module;
-			if ( in_array( $rt_crm_module->post_type, array_keys( $rt_entity->enabled_post_types ) ) ) {
-				$columns[$rt_crm_module->post_type] = $rt_crm_module->labels['name'];
+			global $rt_hd_module;
+			if ( in_array( $rt_hd_module->post_type, array_keys( $rt_entity->enabled_post_types ) ) ) {
+				$columns[$rt_hd_module->post_type] = $rt_hd_module->labels['name'];
 			}
 
 			return $columns;
@@ -151,7 +151,7 @@ if ( ! class_exists( 'Rt_CRM_Accounts' ) ) {
 				return;
 			}
 
-			global $rt_crm_module;
+			global $rt_hd_module;
 			switch( $column ) {
 				case 'country':
 					if ( class_exists( 'Rt_Entity' ) ) {
@@ -159,22 +159,22 @@ if ( ! class_exists( 'Rt_CRM_Accounts' ) ) {
 					}
 					break;
 				default:
-					if ( in_array( $rt_crm_module->post_type, array_keys( $rt_entity->enabled_post_types ) ) && $column == $rt_crm_module->post_type ) {
+					if ( in_array( $rt_hd_module->post_type, array_keys( $rt_entity->enabled_post_types ) ) && $column == $rt_hd_module->post_type ) {
 						$post_details = get_post( $post_id );
-						$pages = rt_biz_get_post_for_organization_connection( $post_id, $rt_crm_module->post_type );
-						echo '<a href = edit.php?' . $post_details->post_type . '=' . $post_details->ID . '&post_type='.$rt_crm_module->post_type.'>' . count( $pages ) . '</a>';
+						$pages = rt_biz_get_post_for_organization_connection( $post_id, $rt_hd_module->post_type );
+						echo '<a href = edit.php?' . $post_details->post_type . '=' . $post_details->ID . '&post_type='.$rt_hd_module->post_type.'>' . count( $pages ) . '</a>';
 					}
 					break;
 			}
 		}
 
-		function accounts_diff_on_lead( $post_id, $newLead ) {
+		function accounts_diff_on_ticket( $post_id, $newTicket ) {
 
 			$diffHTML = '';
-			if ( !isset( $newLead['accounts'] ) ) {
-				$newLead['accounts'] = array();
+			if ( !isset( $newTicket['accounts'] ) ) {
+				$newTicket['accounts'] = array();
 			}
-			$accounts = $newLead['accounts'];
+			$accounts = $newTicket['accounts'];
 			$accounts = array_unique($accounts);
 
 			$oldAccountsString = rt_biz_organization_connection_to_string( $post_id );
@@ -187,7 +187,7 @@ if ( ! class_exists( 'Rt_CRM_Accounts' ) ) {
 				}
 				$newAccountsSring = implode( ',', $accountsArr );
 			}
-			$diff = rtcrm_text_diff( $oldAccountsString, $newAccountsSring );
+			$diff = rthd_text_diff( $oldAccountsString, $newAccountsSring );
 			if ( $diff ) {
 				$diffHTML .= '<tr><th style="padding: .5em;border: 0;">Accounts</th><td>' . $diff . '</td><td></td></tr>';
 			}
@@ -195,11 +195,11 @@ if ( ! class_exists( 'Rt_CRM_Accounts' ) ) {
 			return $diffHTML;
 		}
 
-		function accounts_save_on_lead( $post_id, $newLead ) {
-			if ( !isset( $newLead['accounts'] ) ) {
-				$newLead['accounts'] = array();
+		function accounts_save_on_ticket( $post_id, $newTicket ) {
+			if ( !isset( $newTicket['accounts'] ) ) {
+				$newTicket['accounts'] = array();
 			}
-			$accounts = array_map('intval', $newLead['accounts']);
+			$accounts = array_map('intval', $newTicket['accounts']);
 			$accounts = array_unique($accounts);
 
 			$post_type = get_post_type( $post_id );
