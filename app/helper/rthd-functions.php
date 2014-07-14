@@ -311,3 +311,21 @@ function rthd_get_settings() {
 function rthd_update_settings( $key, $value ) {
 
 }
+
+function rthd_get_menu_label() {
+	$menu_label = get_site_option( 'rthd_menu_label', __( 'rtHelpdesk' ) );
+	return $menu_label;
+}
+
+function rthd_update_menu_label( $menu_label ) {
+	update_site_option( 'rthd_menu_label', $menu_label );
+}
+
+function rthd_get_logo_url() {
+	$logo_url = get_site_option( 'rthd_logo_url', RT_HD_URL.'app/assets/img/hd-16X16.png' );
+	return $logo_url;
+}
+
+function rthd_update_logo_url( $logo_url ) {
+	update_site_option( 'rthd_logo_url', $logo_url );
+}

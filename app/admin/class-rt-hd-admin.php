@@ -118,7 +118,7 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 			add_action( 'admin_enqueue_scripts', array( $this, 'load_styles_scripts' ) );
 
 			add_action( 'admin_menu', array( $this, 'register_menu' ), 1 );
-			add_action( 'admin_bar_menu', array( $this, 'register_toolbar_menu' ), 100 );
+//			add_action( 'admin_bar_menu', array( $this, 'register_toolbar_menu' ), 100 );
 
 			add_filter( 'pre_insert_term', array( $this, 'remove_wocommerce_actions' ), 10, 2 );
 		}
@@ -126,11 +126,7 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 		function register_menu() {
 			global $rt_hd_module, $rt_hd_gravity_form_importer, $rt_hd_gravity_form_mapper, $rt_hd_logs;
 
-			$hd_logo_url = get_site_option( 'rthd_logo_url' );
-
-			if ( empty( $hd_logo_url ) ) {
-				$hd_logo_url = RT_HD_URL.'app/assets/img/hd-16X16.png';
-			}
+			$hd_logo_url = rthd_get_logo_url();
 
 			$admin_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' );
 			$editor_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
@@ -166,18 +162,17 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 			$editor_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
 			$author_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
 
-			$hd_logo_url = get_site_option( 'rthd_logo_url' );
-			if ( empty( $hd_logo_url ) ) {
-				$hd_logo_url = RT_HD_URL.'app/assets/img/hd-16X16.png';
-			}
+			$hd_logo_url = rthd_get_logo_url();
+
+			$menu_label = rthd_get_menu_label();
 
 			if ( current_user_can( $author_cap ) ) {
 				$admin_bar->add_menu( array(
 					'id'    => 'rt-wp-hd',
-					'title' => '<img src="'.$hd_logo_url.'" style="vertical-align:middle;margin-right:5px" alt="'.__( 'Helpdesk Studio' ).'" title="'.__( 'Helpdesk' ).'" />'.__( 'Helpdesk' ),
+					'title' => '<img src="'.$hd_logo_url.'" style="vertical-align:middle;margin-right:5px" alt="'.$menu_label.'" title="'.$menu_label.'" />'.$menu_label,
 					'href'  => admin_url( 'admin.php?page=rthd-'.$rt_hd_module->post_type.'-dashboard' ),
 					'meta'  => array(
-						'title' => __( 'Helpdesk' ),
+						'title' => $menu_label,
 					),
 				));
 			}

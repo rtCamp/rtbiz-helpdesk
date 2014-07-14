@@ -25,7 +25,7 @@ if ( ! class_exists( 'Rt_HD_ACL' ) ) {
 
 		function register_rt_hd_module( $modules ) {
 			global $rt_hd_module;
-			$menu_label = get_site_option( 'rthd_menu_label', __('rtHelpdesk') );
+			$menu_label = rthd_get_menu_label();
 			$module_key = rt_biz_sanitize_module_key( RT_HD_TEXT_DOMAIN );
 			$modules[ $module_key ] = array(
 				'label' => $menu_label,

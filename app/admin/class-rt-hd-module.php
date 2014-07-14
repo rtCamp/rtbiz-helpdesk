@@ -261,11 +261,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 		}
 
 		function register_custom_post( $menu_position ) {
-			$hd_logo_url = get_site_option( 'rthd_logo_url' );
-
-			if ( empty( $hd_logo_url ) ) {
-				$hd_logo_url = RT_HD_URL.'app/assets/img/hd-16X16.png';
-			}
+			$hd_logo_url = rthd_get_logo_url();
 
 			$args = array(
 				'labels' => $this->labels,
@@ -308,7 +304,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
         }
 
 		function get_custom_labels() {
-			$menu_label = get_site_option( 'rthd_menu_label', __('rtHelpdesk') );
+			$menu_label = rthd_get_menu_label();
 			$this->labels = array(
 				'name' => __( 'Ticket' ),
 				'singular_name' => __( 'Ticket' ),

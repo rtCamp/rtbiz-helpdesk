@@ -40,11 +40,11 @@ if(isset($_POST["rthd_wellcome_text"])){
 	$flag = true;
 }
 if ( isset( $_POST['rthd_logo_url'] ) ) {
-	update_site_option( 'rthd_logo_url', $_POST['rthd_logo_url'] );
+	rthd_update_logo_url( $_POST['rthd_logo_url'] );
 	$flag = true;
 }
 if ( isset( $_POST['rthd_menu_label'] ) ) {
-	update_site_option( 'rthd_menu_label', $_POST['rthd_menu_label'] );
+	rthd_update_menu_label( $_POST['rthd_menu_label'] );
 	$flag = true;
 }
 if ( $flag ) {
@@ -324,11 +324,11 @@ if(!isset($_REQUEST["type"])){
 					</tr>
 					<tr valign="top">
 						<th scope="row"><label for="rthd_menu_label"><?php _e( 'Helpdesk Plugin Menu Label' ); ?></label></th>
-						<td><input type="text" name="rthd_menu_label" value="<?php echo get_site_option( 'rthd_menu_label', __('rtHelpdesk') ); ?>" /></td>
+						<td><input type="text" name="rthd_menu_label" value="<?php echo rthd_get_menu_label(); ?>" /></td>
 					</tr>
 					<tr valign="top">
 						<th scope="row"><label for="rthd_logo_url"><?php _e( 'Helpdesk Plugin Icon (Logo) URL' ); ?></label></th>
-						<td><input type="text" name="rthd_logo_url" value="<?php echo get_site_option( 'rthd_logo_url', '' ); ?>" /></td>
+						<td><input type="text" name="rthd_logo_url" value="<?php echo rthd_get_logo_url(); ?>" /></td>
 					</tr>
 				<?php } ?>
 			</tbody>
