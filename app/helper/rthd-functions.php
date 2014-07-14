@@ -124,7 +124,7 @@ function rthd_extract_key_from_attributes( $attr ) {
 }
 
 function rthd_is_system_email( $email ) {
-	$settings = get_site_option( 'rt_helpdesk_settings', false );
+	$settings = rthd_get_settings();
 	if ( isset( $settings[ 'system_email' ] ) && $email == $settings[ 'system_email' ] ) {
 		return true;
 	}
@@ -133,7 +133,7 @@ function rthd_is_system_email( $email ) {
 
 function rthd_get_all_system_emails() {
 	$emails = array();
-	$settings = get_site_option( 'rt_helpdesk_settings', false );
+	$settings = rthd_get_settings();
 	if ( isset( $settings[ 'system_email' ] ) && ! empty( $settings[ 'system_email' ] ) ) {
 		$emails[] = $settings[ 'system_email' ];
 	}
@@ -187,10 +187,10 @@ function rthd_get_all_participants( $lead_id ) {
 	return array_unique( $participants );
 }
 
-function rthd_get_lead_table_name() {
+function rthd_get_ticket_table_name() {
 
-	global $wpdb, $blog_id;
-	return $wpdb->prefix . ( ( is_multisite() ) ? $blog_id . '_' : '' ) . 'rt_wp_hd_hd_index';
+	global $wpdb;
+	return $wpdb->prefix . 'rt_wp_hd_hd_index';
 }
 
 function rthd_get_user_ids( $user ) {
@@ -295,4 +295,19 @@ function rthd_text_diff( $left_string, $right_string, $args = null ) {
 	$r .= "<tbody>\n$diff\n</tbody>\n";
 	$r .= "</table>";
 	return $r;
+}
+
+function rthd_get_settings() {
+	$default = array(
+		'attach_contacts' => 'yes',
+		'attach_accounts' => 'yes',
+		'system_email' => '',
+		'outbound_emails' => '',
+	);
+	$settings = get_site_option( 'rt_helpdesk_settings', $default );
+	return $settings;
+}
+
+function rthd_update_settings( $key, $value ) {
+
 }
