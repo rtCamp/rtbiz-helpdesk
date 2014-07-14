@@ -8,14 +8,14 @@ if ( ! defined( 'WP_LOAD_PATH' ) ) {
 }
 
 require_once( WP_LOAD_PATH . 'wp-load.php');
-global $rt_crm_settings;
-$emailRow = $rt_crm_settings->get_email_for_sync();
+global $rt_hd_settings;
+$emailRow = $rt_hd_settings->get_email_for_sync();
 if ( !$emailRow )
     return ;
 $email = $emailRow->email;
 echo "\r\n" . $email . " Selected. \r\n";
 
-$rt_crm_settings->update_sync_status( $email, true );
+$rt_hd_settings->update_sync_status( $email, true );
 $last_sync_time = $emailRow->last_mail_time;
 
 if ( !$last_sync_time ) {
@@ -38,17 +38,17 @@ if($emailRow->last_mail_uid){
 $signature = '';
 $email_type = '';
 $imap_server = '';
-$access_token = $rt_crm_settings->get_accesstoken_from_email( $email, $signature, $email_type, $imap_server );
+$access_token = $rt_hd_settings->get_accesstoken_from_email( $email, $signature, $email_type, $imap_server );
 
-$crmZendEmail = new Rt_CRM_Zend_Mail();
+$hdZendEmail = new Rt_HD_Zend_Mail();
 //System Mail
 $isSystemMail =false;
-if( rtcrm_is_system_email( $email ) ) {
+if( rthd_is_system_email( $email ) ) {
 	$isSystemMail = true;
 }
-$crmZendEmail->reademail( $email, $access_token, $email_type, $imap_server, $last_sync_time, $emailRow->user_id, $isSystemMail, $signature );
+$hdZendEmail->reademail( $email, $access_token, $email_type, $imap_server, $last_sync_time, $emailRow->user_id, $isSystemMail, $signature );
 
-$rt_crm_settings->update_sync_status($email,true);
+$rt_hd_settings->update_sync_status($email,true);
 //thread Importer
-$crmZendEmail->reademail( $email, $access_token, $email_type, $imap_server, $last_sync_time, $emailRow->user_id, $isSystemMail, $signature, true );
-$rt_crm_settings->update_sync_status($email, false);
+$hdZendEmail->reademail( $email, $access_token, $email_type, $imap_server, $last_sync_time, $emailRow->user_id, $isSystemMail, $signature, true );
+$rt_hd_settings->update_sync_status($email, false);
