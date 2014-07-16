@@ -323,34 +323,19 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 		function get_custom_statuses() {
 			$this->statuses = array(
 				array(
-					'slug' => 'new',
-					'name' => __( 'New' ),
-					'description' => __( 'New ticket is created' ),
+					'slug' => 'unanswered',
+					'name' => __( 'Unanswered' ),
+					'description' => __( 'Ticket is unanswered. It needs to be replied. The default state.' ),
 				),
 				array(
-					'slug' => 'assigned',
-					'name' => __( 'Assigned' ),
-					'description' => __( 'Ticket is assigned' ),
+					'slug' => 'answered',
+					'name' => __( 'Answered' ),
+					'description' => __( 'Ticket is answered. Expecting further communication from client' ),
 				),
 				array(
-					'slug' => 'requirement-analysis',
-					'name' => __( 'Requirement Analysis' ),
-					'description' => __( 'Ticket is under requirement analysis' ),
-				),
-				array(
-					'slug' => 'quotation',
-					'name' => __( 'Quotation' ),
-					'description' => __( 'Ticket is in quotation phase' ),
-				),
-				array(
-					'slug' => 'negotiation',
-					'name' => __( 'Negotiation' ),
-					'description' => __( 'Ticket is in negotiation phase' ),
-				),
-				array(
-					'slug' => 'closed',
-					'name' => __( 'Closed' ),
-					'description' => __( 'Ticket is closed' ),
+					'slug' => 'trash',
+					'name' => __( 'Archived' ),
+					'description' => __( 'Ticket is archived/closed. Client can re-open if they wish to.' ),
 				),
 			);
 			return $this->statuses;
@@ -365,7 +350,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			global $rt_hd_dashboard;
 
 			/* Pie Chart - Progress Indicator (Post status based) */
-			add_meta_box( 'rthd-tickets-by-status', __( 'Status wise Tickets Budget' ), array( $this, 'tickets_by_status' ), $rt_hd_dashboard->screen_id, 'column1' );
+			add_meta_box( 'rthd-tickets-by-status', __( 'Status wise Tickets' ), array( $this, 'tickets_by_status' ), $rt_hd_dashboard->screen_id, 'column1' );
 			/* Line Chart for Closed::Won */
 			add_meta_box( 'rthd-daily-tickets', __( 'Daily Tickets' ), array( $this, 'daily_tickets' ), $rt_hd_dashboard->screen_id, 'column2' );
 			/* Load by Team (Matrix/Table) */
@@ -387,15 +372,15 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 				$post_statuses[$status['slug']] = $status['name'];
 			}
 
-			$query = "SELECT post_status, SUM(rt_budget) AS rthd_budget FROM {$table_name} WHERE 1=1 GROUP BY post_status";
+			$query = "SELECT post_status, COUNT(id) AS rthd_count FROM {$table_name} WHERE 1=1 GROUP BY post_status";
 			$results = $wpdb->get_results($query);
 			$data_source = array();
-			$cols = array( __('Ticket Status'), __( 'Budget' ) );
+			$cols = array( __('Ticket Status'), __( 'Count' ) );
 			$rows = array();
 			foreach ( $results as $item ) {
 				$post_status = ( isset( $post_statuses[$item->post_status] ) ) ? $post_statuses[$item->post_status] : '';
 				if ( !empty( $post_status ) ) {
-					$rows[] = array( $post_status, ( !empty( $item->rthd_budget ) ) ? floatval( $item->rthd_budget ) : 0 );
+					$rows[] = array( $post_status, ( !empty( $item->rthd_count ) ) ? floatval( $item->rthd_count ) : 0 );
 				}
 			}
 			$data_source['cols'] = $cols;
@@ -407,7 +392,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 				'data_source' => $data_source,
 				'dom_element' => 'rthd_hd_pie_tickets_by_status',
 				'options' => array(
-					'title' => __( 'Status wise Tickets Budget' ),
+					'title' => __( 'Status wise Tickets' ),
 				),
 			);
 		?>
@@ -499,7 +484,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			$account = rt_biz_get_organization_post_type();
 
 			$query = "SELECT acc.ID AS account_id, acc.post_title AS account_name "
-						. ( ( isset( $wpdb->p2p ) ) ? ", COUNT( ticket.ID ) AS account_tickets, SUM( ticket.rt_budget ) AS account_budget " : ' ' )
+						. ( ( isset( $wpdb->p2p ) ) ? ", COUNT( ticket.ID ) AS account_tickets " : ' ' )
 					. "FROM {$wpdb->posts} AS acc "
 					. ( ( isset( $wpdb->p2p ) ) ? "JOIN {$wpdb->p2p} AS p2p ON acc.ID = p2p.p2p_to " : ' ' )
 					. ( ( isset( $wpdb->p2p ) ) ? "JOIN {$table_name} AS ticket ON ticket.post_id = p2p.p2p_from " : ' ' )
@@ -507,7 +492,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 					. ( ( isset( $wpdb->p2p ) ) ? "AND p2p.p2p_type = '{$this->post_type}_to_{$account}' " : ' ' )
 					. "AND acc.post_type = '{$account}' "
 					. "GROUP BY acc.ID "
-					. ( ( isset( $wpdb->p2p ) ) ? "ORDER BY account_budget DESC " : ' ' )
+					. ( ( isset( $wpdb->p2p ) ) ? "ORDER BY account_tickets DESC " : ' ' )
 					. "LIMIT 0 , 10";
 
 			$results = $wpdb->get_results($query);
@@ -521,10 +506,6 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 				array(
 					'type' => 'number',
 					'label' => __( 'Number of Tickets' ),
-				),
-				array(
-					'type' => 'number',
-					'label' => __( 'Budget' ),
 				),
 			);
 
@@ -541,7 +522,6 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 				$rows[] = array(
 					'<a href="'.$url.'">'.$item->account_name.'</a>',
 					intval($item->account_tickets),
-					floatval($item->account_budget),
 				);
 			}
 
@@ -569,7 +549,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			$account = rt_biz_get_organization_post_type();
 
 			$query = "SELECT contact.ID AS contact_id, contact.post_title AS contact_name "
-						. ( ( isset( $wpdb->p2p ) ) ? ", COUNT( ticket.ID ) AS contact_tickets, SUM( ticket.rt_budget ) AS contact_budget " : ' ' )
+						. ( ( isset( $wpdb->p2p ) ) ? ", COUNT( ticket.ID ) AS contact_tickets " : ' ' )
 					. "FROM {$wpdb->posts} AS contact "
 					. ( ( isset( $wpdb->p2p ) ) ? "JOIN {$wpdb->p2p} AS p2p_lc ON contact.ID = p2p_lc.p2p_to " : ' ' )
 					. ( ( isset( $wpdb->p2p ) ) ? "JOIN {$table_name} AS ticket ON ticket.post_id = p2p_lc.p2p_from " : ' ' )
@@ -579,7 +559,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 					. "AND contact.post_type = '{$contact}' "
 					. ( ( isset( $wpdb->p2p ) ) ? "AND p2p_ac.p2p_type IS NULL " : ' ' )
 					. "GROUP BY contact.ID "
-					. ( ( isset( $wpdb->p2p ) ) ? "ORDER BY contact_budget DESC " : ' ' )
+					. ( ( isset( $wpdb->p2p ) ) ? "ORDER BY contact_tickets DESC " : ' ' )
 					. "LIMIT 0 , 10";
 
 			$results = $wpdb->get_results($query);
@@ -593,10 +573,6 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 				array(
 					'type' => 'number',
 					'label' => __( 'Number of Tickets' ),
-				),
-				array(
-					'type' => 'number',
-					'label' => __( 'Budget' ),
 				),
 			);
 
@@ -613,7 +589,6 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 				$rows[] = array(
 					'<a href="'.$url.'">'.$item->contact_name.'</a>',
 					intval($item->contact_tickets),
-					floatval($item->contact_budget),
 				);
 			}
 
