@@ -88,7 +88,7 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 				}
 
 				if ( !  wp_style_is( 'rt-jquery-ui-css' ) ) {
-					wp_enqueue_style('rt-jquery-ui-css', RT_HRM_URL . 'app/assets/css/jquery-ui-1.9.2.custom.css', false, RT_HD_VERSION, 'all');
+					wp_enqueue_style('rt-jquery-ui-css', RT_HD_URL . 'app/assets/css/jquery-ui-1.9.2.custom.css', false, RT_HD_VERSION, 'all');
 				}
 
 				wp_enqueue_script( 'postbox' );
