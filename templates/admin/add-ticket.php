@@ -177,12 +177,14 @@ if ( isset( $_POST['post'] ) ) {
     }
 
 	// Save post meta
-	$postmeta = apply_filters( 'rt_hd_ticket_meta', $_POST['postmeta'] );
-	if ( ! empty( $postmeta ) ) {
-        foreach ( $postmeta as $meta ) {
-            update_post_meta( $post_id, $meta['key'], $meta['value'] );
-        }
-    }
+	if ( isset( $_POST[ 'postmeta' ] ) ) {
+		$postmeta = apply_filters( 'rt_hd_ticket_meta', $_POST['postmeta'] );
+		if ( ! empty( $postmeta ) ) {
+	        foreach ( $postmeta as $meta ) {
+	            update_post_meta( $post_id, $meta['key'], $meta['value'] );
+	        }
+	    }
+	}
 
     if ( is_wp_error( $post_id ) ) {
         wp_die( 'Error while creating new '. ucfirst( $labels['name'] ) );
