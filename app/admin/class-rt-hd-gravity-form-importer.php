@@ -139,6 +139,12 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 						'required' => false,
 						'multiple' => false,
 						'type' => 'text'
+					), "contactaddress" => array(
+						'display_name' => 'Contact Address',
+						'slug' => 'contactaddress',
+						'required' => false,
+						'multiple' => false,
+						'type' => 'text'
 					), "contactemail" => array(
 						'display_name' => 'Contact Email',
 						'slug' => 'contactemail',
@@ -324,8 +330,8 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 			<div class="wrap"><div id="icon-tools" class="icon32"><br></div>
 				<h2><?php _e( 'Import to Helpdesk' ); ?></h2>
 				<ul class="subsubsub">
-					<li><a href="<?php echo admin_url("admin.php?page=rthd-gravity-import&type=csv"); ?>" <?php if ($_REQUEST["type"] == "csv") echo " class='current'"; ?>>CSV</a> |</li>
-					<li><a href="<?php echo admin_url("admin.php?page=rthd-gravity-import&type=gravity"); ?>" <?php if ($_REQUEST["type"] == "gravity") echo " class='current'"; ?> >Gravity</a> | </li>
+					<li><a href="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-gravity-import&type=csv"); ?>" <?php if ($_REQUEST["type"] == "csv") echo " class='current'"; ?>>CSV</a> |</li>
+					<li><a href="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-gravity-import&type=gravity"); ?>" <?php if ($_REQUEST["type"] == "gravity") echo " class='current'"; ?> >Gravity</a> | </li>
 					<li><a href="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-logs"); ?>" >Logs</a></li>
 
 				</ul>
@@ -1414,6 +1420,9 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 							foreach ($contactphoneno as $cphone) {
 								rt_biz_add_entity_meta( $contact->ID, 'contact_phone', $cphone['value'] );
 							}
+						}
+						if ( isset( $contactaddress ) && ! empty( $contactaddress ) ) {
+							rt_biz_add_entity_meta( $contact->ID, 'contact_address', $contactaddress );
 						}
 						if ( isset( $contactmeta ) && ! empty( $contactmeta ) ) {
 							foreach ( $contactmeta as $cmeta ) {
