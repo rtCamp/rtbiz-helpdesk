@@ -225,16 +225,18 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 			global $rt_hd_gravity_fields_mapping_model;
 			$form_id = $data["id"];
 			$form_mappings = $rt_hd_gravity_fields_mapping_model->get_mapping( $form_id );
-			if ( ! empty( $form_mappings ) && $form_mappings->enable == 'yes' ) {
-				$found_history_field = false;
-				if ( ! $found_history_field && isset( $data['notification']['message'] ) ) {
-					$data['notification']['message'] .= '<br />rtHelpdesk Ticket :<a href="--rtcamp_hd_link--">rtHelpdesk Link</a>';
+			foreach ( $form_mappings as $mapping ) {
+				if ( $mapping->enable == 'yes' ) {
+					$found_history_field = false;
+					if ( ! $found_history_field && isset( $data['notification']['message'] ) ) {
+						$data['notification']['message'] .= '<br />rtHelpdesk Ticket :<a href="--rtcamp_hd_link--">rtHelpdesk Link</a>';
 
-					// Hides field output of fields set to a Visibility of Admin Only
-					// Ref: http://www.gravityhelp.com/documentation/page/Merge_Tags
-					if(isset($data['autoResponder']['message']))
-						$data['autoResponder']['message'] = str_replace('{all_fields}', '{all_fields:noadmin}', $data['autoResponder']['message']);
-					/* "icing on the cake" by rtCamp - End */
+						// Hides field output of fields set to a Visibility of Admin Only
+						// Ref: http://www.gravityhelp.com/documentation/page/Merge_Tags
+						if(isset($data['autoResponder']['message']))
+							$data['autoResponder']['message'] = str_replace('{all_fields}', '{all_fields:noadmin}', $data['autoResponder']['message']);
+						/* "icing on the cake" by rtCamp - End */
+					}
 				}
 			}
 			return $data;
