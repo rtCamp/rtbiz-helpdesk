@@ -211,7 +211,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 			} else {
 				$to = array();
 				foreach ( $notify_emails as $email ) {
-					$to[] = $email['email'];
+					$to[] = $email['address'];
 				}
 				$headers = 'Content-Type: text/html';
 				wp_mail($to,$title,$body,$headers, $uploaded);
