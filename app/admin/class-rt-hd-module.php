@@ -375,7 +375,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			$attribute_id = $args[ 'args' ][ 'attribute_id' ];
 			$attr = $rt_hd_attributes_model->get_attribute( $attribute_id );
 			$taxonomy = $rt_hd_rt_attributes->get_taxonomy_name( $attr->attribute_name );
-			$post_type = rt_biz_get_person_post_type();
+			$post_type = $this->post_type;
 			$terms = get_terms( $taxonomy );
 
 			$data_source = array();
