@@ -334,7 +334,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 				),
 				array(
 					'slug' => 'trash',
-					'name' => __( 'Resolved' ),
+					'name' => __( 'Archived' ),
 					'description' => __( 'Ticket is archived/closed. Client can re-open if they wish to.' ),
 				),
 			);
