@@ -92,7 +92,7 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 			//All link
 			$class = ( $current == 'all' ) ? ' class="current"' :'';
 			$url = add_query_arg( array( 'post_type' => $this->post_type, 'page' => 'rthd-all-'.$this->post_type ), admin_url( 'edit.php' ) );
-			$count = array_sum( $num_count );
+			$count = array_sum( $num_count ) - $num_count['trash'];
 			$views['all'] = "<a href='{$url}' {$class} >".__('All <span class="count">('.$count.')</span>')."</a>";
 
 			foreach ( $this->post_statuses as $status ) {
@@ -234,6 +234,8 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 
 			if ( isset( $_GET['post_status'] ) ) {
 				$query .= " AND rt_ticket.post_status = '".$_GET['post_status']."'";
+			} else {
+				$query .= " AND rt_ticket.post_status != 'trash'";
 			}
 
 			if ( isset( $_GET['assignee'] ) ) {
