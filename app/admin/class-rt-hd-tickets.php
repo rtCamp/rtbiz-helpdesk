@@ -209,7 +209,10 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 			if($flag) {
 				$rt_hd_settings->insert_new_send_email($systemEmail, $title, $body, array(), array(), $notify_emails, $uploaded, $post_id, "comment");
 			} else {
-				$to = wp_list_pluck($notify_emails, 'address');
+				$to = array();
+				foreach ( $notify_emails as $email ) {
+					$to[] = $email['address'];
+				}
 				$headers = 'Content-Type: text/html';
 				wp_mail($to,$title,$body,$headers, $uploaded);
 			}
