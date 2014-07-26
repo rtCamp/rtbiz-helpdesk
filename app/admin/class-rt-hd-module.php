@@ -399,7 +399,11 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			$data_source['cols'] = $cols;
 			$data_source['rows'] = $rows;
 
+<<<<<<< HEAD
 			$rt_hd_dashboard->charts[] = array(
+=======
+			$this->charts[] = array(
+>>>>>>> ffe345965be5dea85971d52a572471469984cb01
 				'id' => $args['id'],
 				'chart_type' => 'pie',
 				'data_source' => $data_source,
