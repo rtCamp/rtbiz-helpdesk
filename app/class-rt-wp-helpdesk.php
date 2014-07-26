@@ -113,7 +113,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			$rt_hd_mail_acl_model, $rt_hd_mail_thread_importer_model,
 			$rt_hd_mail_message_model, $rt_hd_mail_outbound_model,
 			$rt_hd_gravity_fields_mapping_model, $rt_hd_user_settings,
-			$rt_hd_dashboard, $rt_hd_ticket_history_model, $rt_reports,
+			$rt_hd_dashboard, $rt_hd_ticket_history_model, $rt_hd_reports,
 			$rt_hd_accounts, $rt_hd_contacts, $rt_hd_closing_reason,
 			$rt_hd_imap_server_model, $rt_hd_gravity_form_mapper;
 
@@ -150,7 +150,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			$page_slugs = array(
 				'rthd-' . $rt_hd_module->post_type . '-dashboard',
 			);
-			$rt_reports = new Rt_Reports( $page_slugs );
+			$rt_hd_reports = new Rt_Reports( $page_slugs );
 		}
 
 		function init() {
