@@ -175,6 +175,19 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 				}
 
 				$rt_hd_settings->insert_new_send_email($systemEmail, $title, $body, array(), array(), $notify_emails, $uploaded, $post_id, "comment");
+
+				$title = "[New ".$labels['name']."]" . $this->create_title_for_mail($post_id);
+				$body = $body . "<br />To View ".$labels['name']." Click <a href='" . trailingslashit(site_url()) . strtolower($labels['name']) . '/?rthd_unique_id=' . $unique_id . "'>here</a>. <br/>";
+
+				$notify_emails = array();
+				foreach ( $allemail as $email ) {
+					if ( is_email( $email['address'] ) ) {
+						$notify_emails[] = array( 'email' => $email['address'], 'name' => $email['name'] );
+					}
+				}
+
+				$rt_hd_settings->insert_new_send_email($systemEmail, $title, $body, array(), array(), $notify_emails, $uploaded, $post_id, "comment");
+
 			} else {
 				if (isset($gravity_auto_import) && $gravity_auto_import) {
 					//add_filter  [Helpdesk #$post_id]
