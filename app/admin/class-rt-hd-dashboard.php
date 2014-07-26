@@ -72,8 +72,8 @@ if ( !class_exists( 'Rt_HD_Dashboard' ) ) {
 		}
 
 		function render_google_charts() {
-			global $rt_reports;
-			$rt_reports->render_chart( $this->charts );
+			global $rt_hd_reports;
+			$rt_hd_reports->render_chart( $this->charts );
 		}
 	}
 }
