@@ -347,7 +347,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 		}
 
 		function add_dashboard_widgets() {
-			global $rt_hd_dashboard;
+			global $rt_hd_dashboard, $rt_hd_attributes_model, $rt_hd_attributes_relationship_model;
 
 			/* Pie Chart - Progress Indicator (Post status based) */
 			add_meta_box( 'rthd-tickets-by-status', __( 'Status wise Tickets' ), array( $this, 'tickets_by_status' ), $rt_hd_dashboard->screen_id, 'column1' );
@@ -359,6 +359,58 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			add_meta_box( 'rthd-top-accounts', __( 'Top Accounts' ), array( $this, 'top_accounts' ), $rt_hd_dashboard->screen_id, 'column4' );
 			/* Top Clients */
 			add_meta_box( 'rthd-top-clients', __( 'Top Clients' ), array( $this, 'top_clients' ), $rt_hd_dashboard->screen_id, 'column4' );
+
+			$relations = $rt_hd_attributes_relationship_model->get_relations_by_post_type( $this->post_type );
+			foreach ( $relations as $r ) {
+				$attr = $rt_hd_attributes_model->get_attribute( $r->attr_id );
+				if ( $attr->attribute_store_as == 'taxonomy' ) {
+					add_meta_box( 'rthd-tickets-by-' . $attr->attribute_name, $attr->attribute_label . ' ' . __( 'Wise Tickets' ), array( $this, 'dashboard_attributes_widget_content' ), $rt_hd_dashboard->screen_id, 'column1', 'default', array( 'attribute_id' => $attr->id ) );
+				}
+			}
+		}
+
+		function dashboard_attributes_widget_content( $obj, $args ) {
+			global $rt_hd_rt_attributes, $rt_hd_dashboard;
+			$rt_hd_attributes_model = new RT_Attributes_Model();
+			$attribute_id = $args[ 'args' ][ 'attribute_id' ];
+			$attr = $rt_hd_attributes_model->get_attribute( $attribute_id );
+			$taxonomy = $rt_hd_rt_attributes->get_taxonomy_name( $attr->attribute_name );
+			$post_type = rt_biz_get_person_post_type();
+			$terms = get_terms( $taxonomy );
+
+			$data_source = array();
+			$cols = array( $attr->attribute_label, __( 'Tickets' ) );
+			$rows = array();
+
+			foreach ( $terms as $t ) {
+				$posts = new WP_Query( array(
+					'post_type' => $post_type,
+					'post_status' => 'any',
+					'nopaging' => true,
+					$taxonomy => $t->slug,
+				) );
+
+				$rows[] = array(
+					$t->name,
+					count( $posts->posts ),
+				);
+			}
+
+			$data_source['cols'] = $cols;
+			$data_source['rows'] = $rows;
+
+			$rt_hd_dashboard->charts[] = array(
+				'id' => $args['id'],
+				'chart_type' => 'pie',
+				'data_source' => $data_source,
+				'dom_element' => 'rthd_pie_'.$args['id'],
+				'options' => array(
+					'title' => $args['title'],
+				),
+			);
+		?>
+    		<div id="<?php echo 'rthd_pie_'.$args['id']; ?>"></div>
+		<?php
 		}
 
 		/**
