@@ -381,6 +381,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			$data_source = array();
 			$cols = array( $attr->attribute_label, __( 'Tickets' ) );
 			$rows = array();
+			$total = 0;
 
 			foreach ( $terms as $t ) {
 				$posts = new WP_Query( array(
@@ -394,7 +395,16 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 					$t->name,
 					count( $posts->posts ),
 				);
+				$total += count( $posts->posts );
 			}
+
+			$posts = new WP_Query( array(
+				'post_type' => $post_type,
+				'post_status' => 'any',
+				'nopaging' => true,
+			) );
+
+			$rows[] = array( __( 'Others' ), count( $posts->posts ) - $total );
 
 			$data_source['cols'] = $cols;
 			$data_source['rows'] = $rows;
