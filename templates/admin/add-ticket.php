@@ -23,6 +23,13 @@ if ( current_user_can( "edit_{$post_type}" ) ) {
 	wp_die("Opsss!! You are in restricted area");
 }
 
+if ( ! current_user_can( "edit_others_{$post_type}s" ) && isset( $_REQUEST[$post_type.'_id'] ) ) {
+	$assignee = get_post_field( 'post_author', $_REQUEST[$post_type.'_id'] );
+	if ( $assignee != get_current_user_id() ) {
+		wp_die("Opsss!! You are in restricted area");
+	}
+}
+
 if( isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'trash' && isset( $_REQUEST[$post_type.'_id'] ) ) {
 	wp_trash_post( $_REQUEST[$post_type.'_id'] );
 	$ticketModel->update_ticket( array( 'post_status' => 'trash' ), array( 'post_id' => $_REQUEST[$post_type.'_id'] ) );

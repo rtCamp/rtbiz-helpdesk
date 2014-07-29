@@ -238,7 +238,9 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 				$query .= " AND rt_ticket.post_status != 'trash'";
 			}
 
-			if ( isset( $_GET['assignee'] ) ) {
+			if ( ! current_user_can( "edit_others_{$this->post_type}s" ) ) {
+				$query .= " AND rt_ticket.assignee = '". get_current_user_id() ."'";
+			} else if ( isset( $_GET['assignee'] ) ) {
 				$query .= " AND rt_ticket.assignee = '".$_GET['assignee']."'";
 			}
 
