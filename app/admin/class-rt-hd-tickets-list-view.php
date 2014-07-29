@@ -263,8 +263,8 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 
 			/* -- Ordering parameters -- */
 			//Parameters that are going to be used to order the result
-			$orderby = ! empty( $_GET["orderby"] ) ? mysql_real_escape_string( $_GET["orderby"] ) : 'ASC';
-			$order = ! empty( $_GET["order"] ) ? mysql_real_escape_string( $_GET["order"] ) : '';
+			$orderby = ! empty( $_GET["orderby"] ) ? mysqli_real_escape_string( $_GET["orderby"] ) : 'ASC';
+			$order = ! empty( $_GET["order"] ) ? mysqli_real_escape_string( $_GET["order"] ) : '';
 			if ( ! empty( $orderby ) & ! empty( $order ) ) {
 				$query.=' ORDER BY '.$orderby.' '.$order;
 			} else {
