@@ -98,117 +98,15 @@ $comments = get_comments(
 						<div class="large-12 columns" id="commentlist">
 
 <?php
-foreach ($comments as $comment) {
 
-	$user = get_user_by("email", $comment->comment_author_email);
-?>
-							<div id="header-<?php echo $comment->comment_ID; ?>" class="comment-header row">
-								<div class="comment-user-gravatar left">
-									<a href="#" class="th radius">
-										<?php echo get_avatar($comment->comment_author_email, 30); ?>
-									</a>
-								</div>
-								<div class="large-11 columns">
-									<div class="row">
-										<div class="large-1 small-1 columns rthd_privacy"></div>
-										<div class="large-7 small-7 columns">
-											<div class="row">
-												<div class="comment-user-title large-12 columns">
-	<?php
-		if ($user)
-			echo $user->display_name;
-		else if(!empty ($comment->comment_author)){
-			echo $comment->comment_author;
-		} else {
-			echo 'Annonymous';
-		}
-	?>
-												</div>
-												<div class="comment-participant large-12 columns">
-									<?php
-										$participants = '';
-										$to = get_comment_meta( $comment->comment_ID, '_email_to', true );
-										if( !empty( $to ) )
-											$participants .= $to;
-										$cc = get_comment_meta( $comment->comment_ID, '_email_cc', true );
-										if( !empty( $cc ) )
-											$participants .= ','.$cc;
-										$bcc = get_comment_meta( $comment->comment_ID, '_email_bcc', true );
-										if( !empty( $bcc ) )
-											$participants .= ','.$bcc;
+global $prev_month, $prev_year, $prev_day;
+$prev_month = '';
+$prev_day = '';
+$prev_year = '';
+foreach ( $comments as $comment ) {
+	rthd_get_template( 'followup.php', array( 'comment' => $comment, 'user_edit' => $user_edit, ) );
+} //End Loop for comments
 
-										if( !empty( $participants ) ) {
-											$p_arr = explode(',', $participants);
-											$p_arr = array_unique($p_arr);
-											$participants = implode(' , ', $p_arr);
-											echo 'to  '.$participants;
-										}
-									?>
-												</div>
-											</div>
-										</div>
-										<div class="comment-info large-3 small-3 columns">
-											<span class="comment-type">[<?php echo ucfirst($comment->comment_type) ." - "; ?></span>
-											<?php $dt = new DateTime($comment->comment_date); ?>
-											<span class="comment-date moment-from-now" title="<?php echo $dt->format("M d,Y h:i A"); ?>">
-												<?php echo $dt->format("M d,Y h:i A"); ?>
-											</span>
-											<span>]</span>
-										</div>
-										<div class="large-1 small-1 columns">
-											<?php if($user_edit) { ?>
-												<a class="folowup-hover" href="#editFollowup" title="Edit" data-comment-id="<?php echo $comment->comment_ID; ?>"><?php _e('Edit'); ?></a>
-												<a class="folowup-hover delete" href="#deleteFollowup" title="Delete" data-comment-id="<?php echo $comment->comment_ID; ?>"><?php _e('Delete'); ?></a>
-											<?php } ?>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="comment-wrapper row" id="comment-<?php echo $comment->comment_ID; ?>">
-								<div class="large-9 columns comment-content">
-	<?php
-		if (isset($comment->comment_content) && $comment->comment_content != "") {
-			if (strpos("<body", $comment->comment_content) !== false) {
-				preg_match_all("/<body[^>]*>(.*?)<\/body>/s", $comment->comment_content, $output_array);
-				if (count($output_array) > 0) {
-					$comment->comment_content = $output_array[0];
-				}
-			}
-			echo Rt_HD_Utils::forceUFT8($comment->comment_content);
-		}
-	?>
-								</div>
-								<div class="large-3 columns">
-	<?php
-	$comment_attechment = get_comment_meta($comment->comment_ID, "attachment");
-
-	if (!empty($comment_attechment)) {
-		?>
-									<ul class='comment_attechment block-grid large-2-up'> <?php
-								foreach ($comment_attechment as $commenytAttechment) {
-
-									$extn_array = explode('.', $commenytAttechment);
-									$extn = $extn_array[count($extn_array) - 1];
-
-									$file_array = explode('/', $commenytAttechment);
-									$fileName = $file_array[count($file_array) - 1];
-			?>
-										<li>
-											<a href="<?php echo $commenytAttechment; ?>" title="Attachment" >
-												<img src="<?php echo RT_HD_URL . "assets/file-type/" . $extn . ".png"; ?>" />
-												<span><?php echo $fileName; ?></span>
-											</a>
-											<input type="hidden" name="attachemnt" value="<?php echo $commenytAttechment; ?>">
-											<?php if ( $user_edit ) { ?>
-												<a class="edit-remove" href="#editRemoveAttachemnt"><i class="foundicon-remove"></i></a>
-											<?php } ?>
-										</li>
-		<?php } ?>
-									</ul>
-		<?php } ?>
-								</div>
-							</div>
-									<?php } //End Loop for comments
 $all_hd_participants = array();
 $comments = get_comments(
 	array(

@@ -108,16 +108,21 @@
   width: 50%;
 }
 /* line 182, ../sass/admin.scss */
+.rthd-container #commentlist .comment-user-title {
+  margin-top: 10px;
+}
+/* line 186, ../sass/admin.scss */
 .rthd-container #commentlist .comment-info {
   display: inline-block;
   font-size: small;
   width: 25%;
+  margin-top: 10px;
 }
-/* line 188, ../sass/admin.scss */
+/* line 193, ../sass/admin.scss */
 .rthd-container #commentlist .comment-actions {
   display: inline-block;
 }
-/* line 192, ../sass/admin.scss */
+/* line 197, ../sass/admin.scss */
 .rthd-container #commentlist .comment-date {
   background: #e26143;
   text-align: center;
@@ -128,7 +133,7 @@
   display: inline-block;
   float: left;
 }
-/* line 203, ../sass/admin.scss */
+/* line 208, ../sass/admin.scss */
 .rthd-container #commentlist .comment-date .comment-month {
   color: #fff;
   text-transform: uppercase;
@@ -137,7 +142,7 @@
   margin: 0;
   padding: 2px 0;
 }
-/* line 212, ../sass/admin.scss */
+/* line 217, ../sass/admin.scss */
 .rthd-container #commentlist .comment-date .comment-day {
   font-size: 15px;
   line-height: 1;
@@ -149,23 +154,23 @@
   border-radius: 0 0 3px 3px;
   margin: 0;
 }
-/* line 224, ../sass/admin.scss */
+/* line 229, ../sass/admin.scss */
 .rthd-container #commentlist .comment-date .comment-year {
   font-size: 10px;
   margin: 0;
   padding: 0;
 }
-/* line 231, ../sass/admin.scss */
+/* line 236, ../sass/admin.scss */
 .rthd-container #commentlist .comment-meta {
   display: inline-block;
   width: 95%;
   float: right;
 }
-/* line 237, ../sass/admin.scss */
+/* line 242, ../sass/admin.scss */
 .rthd-container #commentlist .comment-skip-date {
   margin-left: 40px;
 }
-/* line 241, ../sass/admin.scss */
+/* line 246, ../sass/admin.scss */
 .rthd-container #commentlist .comment-header {
   cursor: pointer;
   background-color: #F5F5F5;
@@ -174,7 +179,7 @@
   padding-bottom: 3px;
   max-height: 57px;
 }
-/* line 250, ../sass/admin.scss */
+/* line 255, ../sass/admin.scss */
 .rthd-container #commentlist .comment-wrapper {
   display: block;
   background-color: #FFF;
@@ -187,12 +192,12 @@
   margin: 1px 0;
   display: none;
 }
-/* line 263, ../sass/admin.scss */
+/* line 268, ../sass/admin.scss */
 .rthd-container #commentlist .rthd_privacy {
   display: inline-block;
   margin-left: 5px;
 }
-/* line 269, ../sass/admin.scss */
+/* line 274, ../sass/admin.scss */
 .rthd-container #load_more_btn {
   margin-top: 10px;
   margin-bottom: 0;
@@ -204,40 +209,40 @@
   background: linear-gradient(#f5f5f5, #e9e9e9);
   border: none;
 }
-/* line 281, ../sass/admin.scss */
+/* line 286, ../sass/admin.scss */
 .rthd-container #load_more_btn:active {
   box-shadow: inset 0px 0px 2px #5A5A5A;
 }
-/* line 287, ../sass/admin.scss */
+/* line 292, ../sass/admin.scss */
 .rthd-container .rthd-participant-list li .row.collapse .large-9.columns {
   overflow: hidden;
 }
-/* line 292, ../sass/admin.scss */
+/* line 297, ../sass/admin.scss */
 .rthd-container small.error {
   margin-top: auto;
 }
-/* line 296, ../sass/admin.scss */
+/* line 301, ../sass/admin.scss */
 .rthd-container .rthd_attr_border {
   border: 1px solid #d9d9d9;
 }
-/* line 300, ../sass/admin.scss */
+/* line 305, ../sass/admin.scss */
 .rthd-container .rthd_public_link {
   margin: 2% 5px 2%;
   display: inline-block;
 }
-/* line 305, ../sass/admin.scss */
+/* line 310, ../sass/admin.scss */
 .rthd-container #rthd-status {
   margin: 15px 0;
 }
-/* line 315, ../sass/admin.scss */
+/* line 320, ../sass/admin.scss */
 .rthd-container #subscriber_user_ac {
   margin-bottom: 10px;
 }
-/* line 319, ../sass/admin.scss */
+/* line 324, ../sass/admin.scss */
 .rthd-container .meta-box-sortables div.postbox {
   margin-bottom: 25px;
 }
-/* line 323, ../sass/admin.scss */
+/* line 328, ../sass/admin.scss */
 .rthd-container .meta-box-sortables div.postbox h6 {
   border-bottom: 1px solid #eee;
   padding: 5px;
@@ -246,28 +251,28 @@
   color: #444;
   font-size: 12px;
 }
-/* line 332, ../sass/admin.scss */
+/* line 337, ../sass/admin.scss */
 .rthd-container .meta-box-sortables div.postbox button {
   height: 26px;
   line-height: 8px;
 }
-/* line 338, ../sass/admin.scss */
+/* line 343, ../sass/admin.scss */
 .rthd-container #add-new-post .rthd-ticket-content-wrapper {
   margin-bottom: 25px;
 }
-/* line 342, ../sass/admin.scss */
+/* line 347, ../sass/admin.scss */
 .rthd-container #add-new-post .rthd-post-author-wrapper {
   margin-bottom: 25px;
 }
-/* line 346, ../sass/admin.scss */
+/* line 351, ../sass/admin.scss */
 .rthd-container #add-new-post .postbox select {
   height: 26.5px;
 }
-/* line 350, ../sass/admin.scss */
+/* line 355, ../sass/admin.scss */
 .rthd-container .mceEditor td.mceIframeContainer iframe {
   min-height: 170px;
 }
-/* line 354, ../sass/admin.scss */
+/* line 359, ../sass/admin.scss */
 .rthd-container .wp-editor-container textarea.wp-editor-area {
   min-height: 178px;
 }

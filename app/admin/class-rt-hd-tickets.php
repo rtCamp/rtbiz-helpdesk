@@ -1419,104 +1419,17 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 
 		function genrate_comment_html_front( $comment ) {
 			$user_edit = false;
-			if(isset($_POST['user_edit'])) {
-				$user_edit = $_POST['user_edit'];
+			if ( isset( $_POST[ 'user_edit' ] ) ) {
+				$user_edit = $_POST[ 'user_edit' ];
 			}
 
-			if (isset($comment->comment_content) && $comment->comment_content != "") {
-				if (strpos("<body", $comment->comment_content) !== false) {
-					preg_match_all("/<body[^>]*>(.*?)<\/body>/s", $comment->comment_content, $output_array);
-					if (count($output_array) > 0) {
-						$comment->comment_content = $output_array[0];
-					}
-				}
-				$data = Rt_HD_Utils::forceUFT8($comment->comment_content);
-			} else {
-				$data = '';
-			}
-
-			$dt = new DateTime($comment->comment_date);
-			$commentstr = '<div id="header-' . $comment->comment_ID . '" class="comment-header row">'
-					. '<div class="comment-date left large-1 columns" title="'.$dt->format("M d,Y h:i A").'">'
-						. '<p class="comment-month">'.$dt->format("M").'</p>'
-						. '<p class="comment-day">'.$dt->format("d").'</p>'
-						. '<p class="comment-year">'.$dt->format("Y").'</p>'
-					. '</div>'
-					. '<div class="comment-user-gravatar left">'
-						. '<a href="#" class="th radius">'.get_avatar($comment->comment_author_email, 30).'</a>'
-					. '</div>'
-					. '<div class="large-10 columns">'
-						. '<div class="row">'
-							. '<div class="large-1 small-1 columns rthd_privacy"></div>'
-							. '<div class="large-7 small-7 columns">'
-								. '<div class="row">'
-									. '<div class="comment-user-title large-12 columns">';
-
-			$user = get_user_by("email", $comment->comment_author_email);
-			if ($user)
-				$commentstr .= $user->display_name;
-			else if( !empty( $comment->comment_author ) ) {
-				$commentstr .= $comment->comment_author;
-			} else {
-				$commentstr .= 'Annonymous';
-			}
-			$commentstr .= '</div>'
-						. '<div class="comment-participant large-12 columns">';
-			$participants = '';
-			$to = get_comment_meta( $comment->comment_ID, '_email_to', true );
-			if( !empty( $to ) )
-				$participants .= $to;
-			$cc = get_comment_meta( $comment->comment_ID, '_email_cc', true );
-			if( !empty( $cc ) )
-				$participants .= ','.$cc;
-			$bcc = get_comment_meta( $comment->comment_ID, '_email_bcc', true );
-			if( !empty( $bcc ) )
-				$participants .= ','.$bcc;
-
-			if( !empty( $participants ) ) {
-				$p_arr = explode(',', $participants);
-				$p_arr = array_unique($p_arr);
-				$participants = implode(' , ', $p_arr);
-				$commentstr .= 'to  '.$participants;
-			}
-			$commentstr .= '</div>'
-					. '</div>'
-				. '</div>';
-
-			$dt = new DateTime($comment->comment_date);
-			$commentstr .= '<div class="comment-info large-3 small-3 columns">'
-						. '<span class="comment-type">' . ucfirst($comment->comment_type) . '</span>'
-					. '</div>';
-
-			$commentstr .= '<div class="large-1 small-1 columns">';
-			if($user_edit) {
-					$commentstr .= '<a class="folowup-hover" href="#editFollowup" title="Edit" data-comment-id="'.$comment->comment_ID.'">'.__('Edit').'</a>'
-					. '<a class="folowup-hover delete" href="#deleteFollowup" title="Delete" data-comment-id="'.$comment->comment_ID.'">'.__('Delete').'</a>';
-			}
-			$commentstr .= '</div>';
-
-			$commentstr .= '</div>'
-					. '</div>'
-				. '</div>';
-
-			$commentstr .= '<div class="comment-wrapper row" id="comment-' . $comment->comment_ID . '">'
-							. '<div class="large-9 columns comment-content">'. $data . '</div>'
-							. '<div class="large-3 columns">';
-			$comment_attechment = get_comment_meta($comment->comment_ID, "attachment");
-			if (!empty($comment_attechment)) {
-				$commentstr.="<ul class='comment_attechment large-block-grid-2'>";
-				foreach ($comment_attechment as $commenytAttechment) {
-					$extn_array = explode('.', $commenytAttechment);
-					$extn = $extn_array[count($extn_array) - 1];
-					$file_array = explode('/', $commenytAttechment);
-					$fileName = $file_array[count($file_array) - 1];
-					$commentstr.="<li><a href='" . $commenytAttechment . "' title='Attachment' >";
-					$commentstr.= "<img src='" . RT_HD_URL . "app/assets/file-type/" . $extn . ".png' />";
-					$commentstr.= "<span>" . $fileName . "</span></a></li>";
-				}
-				$commentstr .="  </ul>";
-			}
-			$commentstr.='</div></div>';
+			global $prev_month, $prev_year, $prev_day;
+			$prev_month = '';
+			$prev_day = '';
+			$prev_year = '';
+			ob_start();
+			rthd_get_template( 'followup.php', array( 'comment' => $comment, 'user_edit' => $user_edit, ) );
+			$commentstr = ob_get_clean();
 			return $commentstr;
 		}
 
@@ -1527,98 +1440,13 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 				$user_edit = $_POST['user_edit'];
 			}
 
-			if (isset($comment->comment_content) && $comment->comment_content != "") {
-				if (strpos("<body", $comment->comment_content) !== false) {
-					preg_match_all("/<body[^>]*>(.*?)<\/body>/s", $comment->comment_content, $output_array);
-					if (count($output_array) > 0) {
-						$comment->comment_content = $output_array[0];
-					}
-				}
-				$data = Rt_HD_Utils::forceUFT8($comment->comment_content);
-			} else {
-				$data = '';
-			}
-
-			$rthd_privacy = get_comment_meta( $comment->comment_ID, '_rthd_privacy', true );
-
-			$dt = new DateTime($comment->comment_date);
-			$commentstr = '<div id="header-' . $comment->comment_ID . '" class="comment-header row">'
-					. '<div class="comment-date" title="'.$dt->format("M d,Y h:i A").'">'
-						. '<p class="comment-month">'.$dt->format("M").'</p>'
-						. '<p class="comment-day">'.$dt->format("d").'</p>'
-						. '<p class="comment-year">'.$dt->format("Y").'</p>'
-					. '</div>'
-					. '<div class="comment-meta">'
-						. '<div class="comment-user-gravatar">'
-							. '<a href="#" class="th radius">'.get_avatar($comment->comment_author_email, 40).'</a>'
-						. '</div>'
-						. '<div class="rthd_privacy" data-hd-privacy="'.( ( $rthd_privacy !== 'no' ) ? 'yes' : 'no' ).'">'. ( ( $rthd_privacy !== 'no' ) ? '<i class="general foundicon-lock"></i>' : '' ) .'</div>'
-						. '<div class="comment-users">'
-							. '<div class="comment-user-title large-12 columns">';
-
-			$user = get_user_by("email", $comment->comment_author_email);
-			if ($user)
-				$commentstr .= $user->display_name;
-			else if( !empty( $comment->comment_author ) ) {
-				$commentstr .= $comment->comment_author;
-			} else {
-				$commentstr .= 'Annonymous';
-			}
-			$commentstr .= '</div>'
-						. '<div class="comment-participant large-12 columns">';
-			$participants = '';
-			$to = get_comment_meta( $comment->comment_ID, '_email_to', true );
-			if( !empty( $to ) )
-				$participants .= $to;
-			$cc = get_comment_meta( $comment->comment_ID, '_email_cc', true );
-			if( !empty( $cc ) )
-				$participants .= ','.$cc;
-			$bcc = get_comment_meta( $comment->comment_ID, '_email_bcc', true );
-			if( !empty( $bcc ) )
-				$participants .= ','.$bcc;
-
-			if( !empty( $participants ) ) {
-				$p_arr = explode(',', $participants);
-				$p_arr = array_unique($p_arr);
-				$participants = implode(' , ', $p_arr);
-				$commentstr .= 'to  '.$participants;
-			}
-			$commentstr .= '</div>'
-				. '</div>';
-
-			$dt = new DateTime($comment->comment_date);
-			$commentstr .= '<div class="comment-info">'
-						. '<span class="comment-type">' . ucfirst($comment->comment_type) . '</span>'
-					. '</div>';
-
-			$commentstr .= '<div class="comment-actions">';
-			if($user_edit) {
-					$commentstr .= '<a class="folowup-hover" href="#editFollowup" title="Edit" data-comment-id="'.$comment->comment_ID.'">'.__('Edit').'</a>'
-					. '<a class="folowup-hover delete" href="#deleteFollowup" title="Delete" data-comment-id="'.$comment->comment_ID.'">'.__('Delete').'</a>';
-			}
-			$commentstr .= '</div>';
-
-			$commentstr .= '</div>'
-				. '</div>';
-
-			$commentstr .= '<div class="comment-wrapper row" id="comment-' . $comment->comment_ID . '">'
-							. '<div class="push-1 large-8 columns comment-content">'. $data . '</div>'
-							. '<div class="large-3 columns">';
-			$comment_attechment = get_comment_meta($comment->comment_ID, "attachment");
-			if (!empty($comment_attechment)) {
-				$commentstr.="<ul class='comment_attechment large-block-grid-2'>";
-				foreach ($comment_attechment as $commenytAttechment) {
-					$extn_array = explode('.', $commenytAttechment);
-					$extn = $extn_array[count($extn_array) - 1];
-					$file_array = explode('/', $commenytAttechment);
-					$fileName = $file_array[count($file_array) - 1];
-					$commentstr.="<li><a href='" . $commenytAttechment . "' title='Attachment' >";
-					$commentstr.= "<img src='" . RT_HD_URL . "app/assets/file-type/" . $extn . ".png' />";
-					$commentstr.= "<span>" . $fileName . "</span></a></li>";
-				}
-				$commentstr .="  </ul>";
-			}
-			$commentstr.='</div></div>';
+			global $prev_month, $prev_year, $prev_day;
+			$prev_month = '';
+			$prev_day = '';
+			$prev_year = '';
+			ob_start();
+			rthd_get_template( 'admin/followup.php', array( 'comment' => $comment, 'user_edit' => $user_edit, ) );
+			$commentstr = ob_get_clean();
 			return $commentstr;
 		}
 
