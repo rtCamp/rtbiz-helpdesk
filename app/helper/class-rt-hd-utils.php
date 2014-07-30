@@ -22,7 +22,8 @@ if ( ! class_exists( 'Rt_HD_Utils' ) ) {
 	class Rt_HD_Utils {
 
 		static public function forceUFT8( $tmpStr ) {
-			return preg_replace( '/[^(\x20-\x7F)]*/', '', $tmpStr );
+//			return preg_replace( '/[^(\x20-\x7F)]*/', '', $tmpStr );
+			return $tmpStr;
 		}
 
 		public static $mime_types = array(
