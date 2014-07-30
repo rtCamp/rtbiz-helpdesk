@@ -283,7 +283,7 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 			$perpage = $this->get_items_per_page( rthd_post_type_name( $this->labels['name'] ).'_per_page', 10 );
 
 			//Which page is this?
-			$paged = ! empty( $_GET['paged'] ) ? mysql_real_escape_string( $_GET['paged'] ) : '';
+			$paged = ! empty( $_GET['paged'] ) ? esc_sql( $_GET['paged'] ) : '';
 			//Page Number
 			if ( empty( $paged ) || ! is_numeric( $paged ) || $paged <= 0 ) { $paged=1; }
 			//How many pages do we have in total?
