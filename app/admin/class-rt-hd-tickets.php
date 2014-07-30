@@ -959,9 +959,9 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 			$user = wp_get_current_user();
 			if ($user->exists()) {
 				$user_id = $user->ID;
-				$comment_author = $wpdb->escape($user->display_name);
-				$comment_author_email = $wpdb->escape($user->user_email);
-				$comment_author_url = $wpdb->escape($user->user_url);
+				$comment_author = esc_sql($user->display_name);
+				$comment_author_email = esc_sql($user->user_email);
+				$comment_author_url = esc_sql($user->user_url);
 			}
 			if ('' == $comment_content) {
 				$returnArray["status"] = false;
@@ -1123,9 +1123,9 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 			$user = wp_get_current_user();
 			if ($user->exists()) {
 				$user_id = $user->ID;
-				$comment_author = $wpdb->escape($user->display_name);
-				$comment_author_email = $wpdb->escape($user->user_email);
-				$comment_author_url = $wpdb->escape($user->user_url);
+				$comment_author = esc_sql($user->display_name);
+				$comment_author_email = esc_sql($user->user_email);
+				$comment_author_url = esc_sql($user->user_url);
 			}
 			if ('' == $comment_content) {
 				$returnArray["status"] = false;
@@ -1647,13 +1647,13 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 				$user = get_user_by("email", $comment_data["created_by"]["email"]);
 				if ($user) {
 					$user_id = $user->ID;
-					$comment_author = $wpdb->escape($user->display_name);
-					$comment_author_email = $wpdb->escape($user->user_email);
-					$comment_author_url = $wpdb->escape($user->user_url);
+					$comment_author = esc_sql($user->display_name);
+					$comment_author_email = esc_sql($user->user_email);
+					$comment_author_url = esc_sql($user->user_url);
 				} else {
-					$comment_author = $wpdb->escape($comment_data["created_by"]["display_name"]);
-					$comment_author_email = $wpdb->escape($comment_data["created_by"]["email"]);
-					$comment_author_url = $wpdb->escape($comment_data["created_by"]["urls"]["view"]);
+					$comment_author = esc_sql($comment_data["created_by"]["display_name"]);
+					$comment_author_email = esc_sql($comment_data["created_by"]["email"]);
+					$comment_author_url = esc_sql($comment_data["created_by"]["urls"]["view"]);
 				}
 				if ('' == $comment_content) {
 					$returnArray["status"] = false;
