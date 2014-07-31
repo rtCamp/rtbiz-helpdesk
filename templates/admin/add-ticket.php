@@ -873,7 +873,7 @@ printf('<option value="%s" %s >%s</option>', $status['slug'], $selected, $status
 							} ?>
 						</div>
 					</div>
-					<div id="rthd_closing_reason_wrapper" class="row collapse <?php echo ( $pstatus === 'closed' ) ? 'show' : 'hide'; ?> <?php echo ( ! $user_edit ) ? 'rthd_attr_border' : ''; ?>">
+					<div id="rthd_closing_reason_wrapper" class="row collapse <?php echo ( $pstatus === 'trash' ) ? 'show' : 'hide'; ?> <?php echo ( ! $user_edit ) ? 'rthd_attr_border' : ''; ?>">
 						<div class="large-4 small-4 columns">
 							<span class="prefix" title="<?php _e('Closing Reason'); ?>"><label><?php _e('Closing Reason'); ?></label></span>
 						</div>

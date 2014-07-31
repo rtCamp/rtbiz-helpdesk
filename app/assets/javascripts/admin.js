@@ -442,7 +442,7 @@ if(jQuery("#new-contact-account").length > 0){
 
 	function check_closing_reason() {
 		removeError($('#rthd_closing_reason'));
-		if ( $('#rthd_post_status').val() !== 'closed' ) {
+		if ( $('#rthd_post_status').val() !== 'trash' ) {
 			return true;
 		}
 
@@ -459,7 +459,7 @@ if(jQuery("#new-contact-account").length > 0){
 	});
 
 	$('#rthd_post_status').on('change', function(e) {
-		if($(this).val() == 'closed') {
+		if($(this).val() == 'trash') {
 			$('#rthd_closing_reason_wrapper').show();
 		} else {
 			$('#rthd_closing_reason_wrapper').hide();
