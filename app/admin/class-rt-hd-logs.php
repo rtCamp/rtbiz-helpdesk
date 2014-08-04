@@ -95,9 +95,6 @@ if( !class_exists( 'Rt_HD_Logs' ) ) {
 					from (select distinct meta_value from $wpdb->postmeta where meta_key like '_transaction_id' order by convert(meta_value, UNSIGNED INTEGER) desc limit %d, %d) as p;", $left, $size);
 			$result = $wpdb->get_results($sql);
 			?>
-			<div class="wrap"><div id="icon-tools" class="icon32"><br></div>
-				<h2>Import Logs</h2>
-				<br>
 				<table class="wp-list-table widefat fixed">
 					<thead>
 						<tr>
@@ -172,7 +169,6 @@ if( !class_exists( 'Rt_HD_Logs' ) ) {
 			<?php }
 			?>
 				</table>
-			</div>
 			<?php
 		}
 	}

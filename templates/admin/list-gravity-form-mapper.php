@@ -1,7 +1,3 @@
-<div class="wrap rthd-container">
-	<h2>
-		<?php echo _e('Helpdesk Gravity Mappings'); ?>
-	</h2>
 	<table class="wp-list-table widefat rthd-gravity-mapping" cellspacing="0">
 		<thead>
 			<tr>
@@ -36,4 +32,3 @@
 		<?php } ?>
 		</tbody>
 	</table>
-</div>

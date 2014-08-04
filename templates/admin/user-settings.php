@@ -64,11 +64,9 @@ if ( $flag ) {
 
 $rt_hd_settings->update_gmail_ac_count();
 ?>
-<div class="wrap">
-	<div id="icon-options-general" class="icon32"><br></div><h2><?php _e('User Settings'); ?></h2>
 	<ul class="subsubsub">
-		<li><a href="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-user-settings&type=personal"); ?>" <?php if ($_REQUEST["type"] == "personal") echo " class='current'"; ?> ><?php _e('Personal Emails'); ?></a> | </li>
-		<li><a href="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-user-settings&type=activecollab"); ?>" <?php if ($_REQUEST["type"] == "activecollab") echo " class='current'"; ?> ><?php _e('Active Collab'); ?></a></li>
+		<li><a href="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&type=personal&tab=my-settings"); ?>" <?php if ($_REQUEST["type"] == "personal") echo " class='current'"; ?> ><?php _e('Personal Emails'); ?></a> | </li>
+		<li><a href="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&type=activecollab&tab=my-settings"); ?>" <?php if ($_REQUEST["type"] == "activecollab") echo " class='current'"; ?> ><?php _e('Active Collab'); ?></a></li>
 	</ul>
 
 	<?php if ( $_REQUEST['type'] != 'personal' ) { ?>
@@ -328,4 +326,3 @@ if ($_REQUEST['type'] == 'personal') {
 			<button class="button button-primary" type="submit"><?php _e( 'Save' ); ?></button>
 		</form>
 	<?php } ?>
-</div>
