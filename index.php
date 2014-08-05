@@ -58,7 +58,6 @@ function rt_hd_include() {
 	include_once RT_HD_PATH_VENDOR . 'parsecsv.lib.php';
 	include_once RT_HD_PATH_VENDOR . 'rfc822_addresses.php';
 	include_once RT_HD_PATH_VENDOR . 'simplexlsx.php';
-	include_once RT_HD_PATH_VENDOR . 'taxonomy-metadata.php';
 
 	include_once RT_HD_PATH_HELPER . 'rthd-functions.php';
 

@@ -37,7 +37,7 @@ POSSIBILITY OF SUCH DAMAGE.
  * @license  Revised BSD
   */
 
-namespace ForceUTF8;
+namespace Rt_Helpdesk_ForceUTF8;
 
 class Encoding {
     
