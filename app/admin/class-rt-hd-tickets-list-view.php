@@ -415,17 +415,16 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 								echo '</th>';
 								break;
 							case "rthd_post_id":
-								echo '<td '.$attributes.'>'.'<a href="'.admin_url('edit.php?post_type='.$this->post_type.'&page=rthd-add-'.$this->post_type.'&'.$this->post_type.'_id='.$rec->rthd_post_id).'">'.$rec->rthd_post_id.'</a>';
+								echo '<td '.$attributes.'>'.'<a href="'.admin_url('edit.php?post_type='.$this->post_type.'&page=rthd-add-'.$this->post_type.'&'.$this->post_type.'_id='.$rec->rthd_post_id).'">#'.$rec->rthd_post_id.'</a>';					
+								//.'< /td>';
+								break;
+							case "rthd_title":
+								echo '<td '.$attributes.'>'.'<a href="'.admin_url('edit.php?post_type='.$this->post_type.'&page=rthd-add-'.$this->post_type.'&'.$this->post_type.'_id='.$rec->rthd_post_id).'">'.$rec->rthd_title.'</a>';
 								$actions = array(
 									'edit'      => '<a href="'.admin_url('edit.php?post_type='.$this->post_type.'&page=rthd-add-'.$this->post_type.'&'.$this->post_type.'_id='.$rec->rthd_post_id).'">Edit</a>',
 									'delete'    => '<a href="'.admin_url('edit.php?post_type='.$this->post_type.'&page=rthd-add-'.$this->post_type.'&'.$this->post_type.'_id='.$rec->rthd_post_id.'&action=trash').'">Trash</a>',
 								);
 								echo $this->row_actions( $actions );
-								//.'< /td>';
-								break;
-							case "rthd_title":
-								echo '<td '.$attributes.'>'.'<a href="'.admin_url('edit.php?post_type='.$this->post_type.'&page=rthd-add-'.$this->post_type.'&'.$this->post_type.'_id='.$rec->rthd_post_id).'">'.$rec->rthd_title.'</a>';
-								
 								//.'< /td>';
 								break;
 							case "rthd_assignee":
