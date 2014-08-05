@@ -274,6 +274,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 			global $rt_hd_contacts;
 			$postterms = array();
 			foreach ($allemail as $email) {
+                            if ( !empty( $email[ 'address' ] ) ) {                                           
 				$term = rt_biz_get_person_by_email( $email['address'] );
 				if ( ! empty( $term ) ) {
 					foreach ($term as $tm) {
@@ -283,7 +284,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 					$term = $rt_hd_contacts->insert_new_contact( $email["address"], ( isset( $email["name"] ) ) ? $email["name"] : $email["address"] );
 					$postterms[] = $term->ID;
 				}
-
+                                
 				$postterms = array_unique($postterms);
 
 				if ( ! empty( $postterms ) ) {
@@ -304,6 +305,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 					$ticketModel->update_ticket( $data, $where );
 					// System Notification -- Contact added
 				}
+                            }
 			}
 		}
 
