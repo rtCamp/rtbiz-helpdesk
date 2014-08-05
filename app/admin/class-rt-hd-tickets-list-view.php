@@ -187,6 +187,21 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 			);
 			return $actions;
 		}
+                
+                function process_bulk_action() {
+                    
+                    //Detect when a bulk action is being triggered...
+                    if( 'delete'===$this->current_action() && isset( $_POST['rt_ticket'] ) ) { 
+                        $ticketModel = new Rt_HD_Ticket_Model();
+                        foreach($_POST['rt_ticket'] as $ticket_id) {
+                            
+                            wp_trash_post( $ticket_id );
+                            $ticketModel->update_ticket( array( 'post_status' => 'trash' ), array( 'post_id' =>$ticket_id ) );
+                        }
+                    }
+                    
+                }
+
 
 		/**
 		 * Prepare the table with different parameters, pagination, columns and table elements */
@@ -196,6 +211,8 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 
 			$s = @$_POST['s'];
 
+                        $this->process_bulk_action();
+                                                 
 			/* -- Preparing your query -- */
 			$query = "SELECT
 						rt_ticket.id AS rthd_id,
@@ -364,7 +381,7 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 			}
 			return false;
 		}
-
+                
 		/**
 		 * Display the rows of records in the table
 		 * @return string, echo the markup of the rows */
@@ -394,7 +411,7 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 						switch ( $column_name ) {
 							case "cb":
 								echo '<th scope="row" class="check-column">';
-									echo '<input type="checkbox" name="'.$this->post_type.'[]" id="cb-select-'.$rec->rthd_id.'" value="'.$rec->rthd_id.'" />';
+									echo '<input type="checkbox" name="'.$this->post_type.'[]" id="cb-select-'.$rec->rthd_post_id.'" value="'.$rec->rthd_post_id.'" />';
 								echo '</th>';
 								break;
 							case "rthd_post_id":
