@@ -92,9 +92,9 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 			//All link
 			$class = ( $current == 'all' ) ? ' class="current"' :'';
 			$url = add_query_arg( array( 'post_type' => $this->post_type, 'page' => 'rthd-all-'.$this->post_type ), admin_url( 'edit.php' ) );
-			$count=0;
+			$count = array_sum($num_count);
                         if ( isset( $num_count['trash'] ) ) {
-                            $count = array_sum( $num_count ) - $num_count['trash'];
+                            $count = $count - $num_count['trash'];
                         }
 			$views['all'] = "<a href='{$url}' {$class} >".__('All <span class="count">('.$count.')</span>')."</a>";
 
