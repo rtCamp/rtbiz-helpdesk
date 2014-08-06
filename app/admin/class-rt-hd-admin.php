@@ -286,7 +286,7 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
                                         case 'importers' : 
                                                 
                                             if ( current_user_can( $this->editor_cap ) ) {  
-                                                  $rt_hd_user_settings->ui();
+                                                 $rt_hd_gravity_form_importer->ui();
                                             }else{
                                                  wp_die('You are not allowed to view this page');
                                             }
@@ -296,7 +296,7 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
                                         case 'import-mapper' : 
                                             
                                             if ( current_user_can( $this->editor_cap ) ) {  
-                                                  $rt_hd_user_settings->ui();
+                                                 $rt_hd_gravity_form_mapper->ui();
                                             }else{
                                                  wp_die('You are not allowed to view this page');
                                             }
@@ -306,7 +306,7 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
                                         case 'import-logs' : 
                                             
                                             if ( current_user_can( $this->editor_cap ) ) {  
-                                                  $rt_hd_user_settings->ui();
+                                                  $rt_hd_logs->ui();
                                             }else{
                                                  wp_die('You are not allowed to view this page');
                                             }
