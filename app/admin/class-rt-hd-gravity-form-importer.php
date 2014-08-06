@@ -324,17 +324,18 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 
 		public function ui() {
 			global $rt_hd_module;
+                        
+                        $current_tab = $_GET[ 'tab' ];
+                        
 			if (!isset($_REQUEST["type"])) {
 				$_REQUEST["type"] = "csv";
 			}
 			$this->load_handlebars_Templates();
 			?>
 				<ul class="subsubsub">
-					<li><a href="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&type=csv&tab=gravity-forms"); ?>" <?php if ($_REQUEST["type"] == "csv") echo " class='current'"; ?>>CSV</a> |</li>
-					<li><a href="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&type=gravity&tab=gravity-forms"); ?>" <?php if ($_REQUEST["type"] == "gravity") echo " class='current'"; ?> >Gravity</a> | </li>
-					<li><a href="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&type=logs&tab=gravity-forms"); ?>" <?php if ($_REQUEST["type"] == "logs") echo " class='current'"; ?> >Import Logs</a> | </li>
-					<li><a href="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&type=mapper&tab=gravity-forms"); ?>" <?php if ($_REQUEST["type"] == "mapper") echo " class='current'"; ?>>Gravity Mapper</a></li>
-
+					<li><a href="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&type=csv&tab=$current_tab"); ?>" <?php if ($_REQUEST["type"] == "csv") echo " class='current'"; ?>>CSV</a> |</li>
+					<li><a href="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&type=gravity&tab=$current_tab"); ?>" <?php if ($_REQUEST["type"] == "gravity") echo " class='current'"; ?> >Gravity</a> </li>
+					
 				</ul>
 				<?php
 				if ($_REQUEST["type"] == "gravity") {
@@ -395,13 +396,7 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 						</table>
 					</form>
 					<?php
-				} else if($_REQUEST["type"] == "mapper"){
-                                    global $rt_hd_gravity_form_mapper;
-                                    $rt_hd_gravity_form_mapper->ui();
-                                }else if($_REQUEST["type"] == "logs"){
-                                    global $rt_hd_logs;
-                                    $rt_hd_logs->ui();
-                                }
+				}
 				if (!( isset($_REQUEST['map_submit']) && $_REQUEST['map_submit'] != '' )) {
 					return false;
 				}

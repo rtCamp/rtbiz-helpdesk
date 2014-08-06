@@ -18,26 +18,44 @@ if ( ! defined( 'ABSPATH' ) )
  */
 if( !class_exists( 'Rt_HD_Admin' ) ) {
 	class Rt_HD_Admin {
-            private $hd_settings_tabs;
+            private $hd_settings_tabs, $defualt_tab;
 		public function __construct() {
 			if ( is_admin() ) {
-				$this->hooks();
+                        $this->hooks();
                                 
+                        $admin_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' );
+			$editor_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
+			$author_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
+                        
                                 $this->hd_settings_tabs = array(
                                     'my-settings' => array(
                                         'menu_title' => __('My Settings'),
-                                        'menu_slug' => 'my-settings'
+                                        'menu_slug' => 'my-settings',
+                                        'capability' => $author_cap
                                     ),
                                     'admin-settings' => array(
                                         'menu_title' => __('Admin Settings'),
-                                        'menu_slug' => 'admin-settings'
+                                        'menu_slug' => 'admin-settings',
+                                        'capability' => $admin_cap
                                     ),
-                                    'gravity-forms' => array(
-                                        'menu_title' => __('Gravity Forms'),
-                                        'menu_slug' => 'gravity-forms'
+                                    'importers' => array(
+                                        'menu_title' => __('Importers'),
+                                        'menu_slug' => 'importers',
+                                        'capability' => $editor_cap
+                                    ),
+                                    'import-mapper' => array(
+                                        'menu_title' => __('Import Mapper'),
+                                        'menu_slug' => 'import-mapper',
+                                        'capability' => $editor_cap
+                                    ),
+                                    'import-logs' => array(
+                                        'menu_title' => __('Import Logs'),
+                                        'menu_slug' => 'import-logs',
+                                        'capability' => $admin_cap
                                     ),
                                 );
                                 
+                                $this->defualt_tab='my-settings';
 			}
 		}
 
@@ -148,9 +166,8 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 			$admin_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' );
 			$editor_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
 			$author_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
-
-			add_submenu_page( 'edit.php?post_type='.$rt_hd_module->post_type, __( 'Settings' ), __( 'Settings' ), $admin_cap, 'rthd-settings', array( $this, 'settings_ui' ) );
-}
+			add_submenu_page( 'edit.php?post_type='.$rt_hd_module->post_type, __( 'Settings' ), __( 'Settings' ), $author_cap, 'rthd-settings', array( $this, 'settings_ui' ) );
+                }
 
 		function remove_wocommerce_actions( $term, $taxonomy ) {
 			$attrs = rthd_get_all_attributes();
@@ -243,14 +260,28 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
                     <div id="icon-options-general" class="icon32"><br></div><h2><?php _e( 'Helpdesk Settings' ); ?></h2>
                                    <?php $this->settings_ui_tabs();
 
-                                    global $rt_hd_settings,$rt_hd_user_settings,$rt_hd_gravity_form_importer;
-                                    $tab=isset( $_GET[ 'tab' ] )? $_GET[ 'tab' ] : 'admin-settings' ;
+                                    global $rt_hd_settings, $rt_hd_user_settings, $rt_hd_gravity_form_importer, $rt_hd_gravity_form_mapper, $rt_hd_logs;
+                                    $tab=isset( $_GET[ 'tab' ] )? $_GET[ 'tab' ] : $this->defualt_tab ;
                                     if ( $tab == 'admin-settings' ) {
+                                        
                                         $rt_hd_settings->ui();
-                                    }elseif($tab=='my-settings'){
+                                        
+                                    }elseif( $tab == 'my-settings' ){
+                                        
                                         $rt_hd_user_settings->ui();
-                                    }elseif($tab=='gravity-forms'){
+                                        
+                                    }elseif( $tab == 'importers' ){
+                                        
                                         $rt_hd_gravity_form_importer->ui();
+                                        
+                                    }elseif( $tab == 'import-mapper' ){
+                                    
+                                        $rt_hd_gravity_form_mapper->ui();
+                                        
+                                    }elseif( $tab == 'import-logs' ){
+                                    
+                                        $rt_hd_logs->ui();
+                                        
                                     } ?>
                     </div>
         <?php
@@ -260,15 +291,19 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
                 
                 function settings_ui_tabs(){
                     
-                    $current=isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'admin-settings';
+                    $current=isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : $this->defualt_tab;
                     echo '<h2 class="nav-tab-wrapper">';
                     foreach ($this->hd_settings_tabs as $tab => $name) {
-                        $class = ( $tab == $current ) ? ' nav-tab-active' : '';
-                        echo '<a class="nav-tab' . $class . '" href="?post_type=rt_ticket&page=rthd-settings&tab=' . $name['menu_slug'] . '">' . $name['menu_title'] . '</a>';
-                    }
+                        if (current_user_can( $name['capability'] ) ) {
+                            
+                            $class = ( $tab == $current ) ? ' nav-tab-active' : '';
+                            echo '<a class="nav-tab' . $class . '" href="?post_type=rt_ticket&page=rthd-settings&tab=' . $name['menu_slug'] . '">' . $name['menu_title'] . '</a>';
+
+                         }
+                        
+                        }
                     echo '</h2>';
-                    
-                    
+                       
                 }
             }
 }
