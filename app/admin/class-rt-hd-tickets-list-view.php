@@ -92,7 +92,10 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 			//All link
 			$class = ( $current == 'all' ) ? ' class="current"' :'';
 			$url = add_query_arg( array( 'post_type' => $this->post_type, 'page' => 'rthd-all-'.$this->post_type ), admin_url( 'edit.php' ) );
-			$count = array_sum( $num_count ) - $num_count['trash'];
+			$count = array_sum($num_count);
+                        if ( isset( $num_count['trash'] ) ) {
+                            $count = $count - $num_count['trash'];
+                        }
 			$views['all'] = "<a href='{$url}' {$class} >".__('All <span class="count">('.$count.')</span>')."</a>";
 
 			foreach ( $this->post_statuses as $status ) {
@@ -124,6 +127,7 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 
 			$columns = array(
 				'cb' => '<input type="checkbox" />',
+				'rthd_post_id' => __( 'Ticket ID' ),
 				'rthd_title'=> __( 'Title' ),
 				'rthd_assignee'=> __( 'Assignee' ),
 				'rthd_create_date'=> __( 'Create Date' ),
@@ -183,6 +187,21 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 			);
 			return $actions;
 		}
+                
+                function process_bulk_action() {
+                    
+                    //Detect when a bulk action is being triggered...
+                    if( 'delete'===$this->current_action() && isset( $_POST['rt_ticket'] ) ) { 
+                        $ticketModel = new Rt_HD_Ticket_Model();
+                        foreach($_POST['rt_ticket'] as $ticket_id) {
+                            
+                            wp_trash_post( $ticket_id );
+                            $ticketModel->update_ticket( array( 'post_status' => 'trash' ), array( 'post_id' =>$ticket_id ) );
+                        }
+                    }
+                    
+                }
+
 
 		/**
 		 * Prepare the table with different parameters, pagination, columns and table elements */
@@ -192,6 +211,8 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 
 			$s = @$_POST['s'];
 
+                        $this->process_bulk_action();
+                                                 
 			/* -- Preparing your query -- */
 			$query = "SELECT
 						rt_ticket.id AS rthd_id,
@@ -360,7 +381,7 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 			}
 			return false;
 		}
-
+                
 		/**
 		 * Display the rows of records in the table
 		 * @return string, echo the markup of the rows */
@@ -390,8 +411,12 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 						switch ( $column_name ) {
 							case "cb":
 								echo '<th scope="row" class="check-column">';
-									echo '<input type="checkbox" name="'.$this->post_type.'[]" id="cb-select-'.$rec->rthd_id.'" value="'.$rec->rthd_id.'" />';
+									echo '<input type="checkbox" name="'.$this->post_type.'[]" id="cb-select-'.$rec->rthd_post_id.'" value="'.$rec->rthd_post_id.'" />';
 								echo '</th>';
+								break;
+							case "rthd_post_id":
+								echo '<td '.$attributes.'>'.'<a href="'.admin_url('edit.php?post_type='.$this->post_type.'&page=rthd-add-'.$this->post_type.'&'.$this->post_type.'_id='.$rec->rthd_post_id).'">#'.$rec->rthd_post_id.'</a>';					
+								//.'< /td>';
 								break;
 							case "rthd_title":
 								echo '<td '.$attributes.'>'.'<a href="'.admin_url('edit.php?post_type='.$this->post_type.'&page=rthd-add-'.$this->post_type.'&'.$this->post_type.'_id='.$rec->rthd_post_id).'">'.$rec->rthd_title.'</a>';

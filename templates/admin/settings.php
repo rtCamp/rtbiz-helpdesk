@@ -121,13 +121,11 @@ if(!isset($_REQUEST["type"])){
 
 ?>
 
-<div class="wrap">
-	<div id="icon-options-general" class="icon32"><br></div><h2><?php _e( 'Helpdesk Settings' ); ?></h2>
-	<ul class="subsubsub">
-		<li><a href="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&type=googleApi");?>" <?php if ($_REQUEST["type"] == "googleApi") echo " class='current'"; ?> ><?php _e( 'Google API' ); ?></a> | </li>
-		<li><a href="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&type=imapServers");?>" <?php if ($_REQUEST["type"] == "imapServers") echo " class='current'"; ?> ><?php _e( 'IMAP Servers' ); ?></a> | </li>
-		<li><a href="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&type=systememails");?>" <?php if ($_REQUEST["type"] == "systememails") echo " class='current'"; ?> ><?php _e( 'System Emails' ); ?></a> | </li>
-		<li><a href="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&type=other");?>" <?php if ($_REQUEST["type"] == "other") echo " class='current'"; ?> ><?php _e( 'Other' ); ?></a></li>
+       	<ul class="subsubsub">
+		<li><a href="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&type=googleApi&tab=admin-settings");?>" <?php if ($_REQUEST["type"] == "googleApi") echo " class='current'"; ?> ><?php _e( 'Google API' ); ?></a> | </li>
+		<li><a href="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&type=imapServers&tab=admin-settings");?>" <?php if ($_REQUEST["type"] == "imapServers") echo " class='current'"; ?> ><?php _e( 'IMAP Servers' ); ?></a> | </li>
+		<li><a href="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&type=systememails&tab=admin-settings");?>" <?php if ($_REQUEST["type"] == "systememails") echo " class='current'"; ?> ><?php _e( 'System Emails' ); ?></a> | </li>
+		<li><a href="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&type=other&tab=admin-settings");?>" <?php if ($_REQUEST["type"] == "other") echo " class='current'"; ?> ><?php _e( 'Other' ); ?></a></li>
 	</ul>
 
 	<form method="post" action="<?php  echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&type=" . $_REQUEST["type"]); ?>">
@@ -335,4 +333,3 @@ if(!isset($_REQUEST["type"])){
 		</table>
 		<p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="<?php esc_attr_e('Save Changes'); ?>" /></p>
 	</form>
-</div>

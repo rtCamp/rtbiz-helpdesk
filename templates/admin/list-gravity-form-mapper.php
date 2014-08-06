@@ -1,8 +1,17 @@
-<div class="wrap rthd-container">
-	<h2>
-		<?php echo _e('Helpdesk Gravity Mappings'); ?>
-	</h2>
-	<table class="wp-list-table widefat rthd-gravity-mapping" cellspacing="0">
+<?php 
+        global $rt_hd_module;
+        
+        $current_tab = $_GET[ 'tab' ];
+        
+	if (!isset( $_REQUEST['type'] )) {
+            $_REQUEST['type'] = 'gravity';
+	}
+?>
+<ul class="subsubsub">
+    <li><a href="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&type=gravity&tab=$current_tab"); ?>" <?php if ($_REQUEST["type"] == "gravity") echo " class='current'"; ?>>Gravity</a></li>
+    					
+</ul>
+<table class="wp-list-table widefat rthd-gravity-mapping" cellspacing="0">
 		<thead>
 			<tr>
 				<th scope='col' id='rthd_form_name' class='manage-column column-rthd_form_name'  style=""><span>Form</span><span class="sorting-indicator"></span></th>
@@ -36,4 +45,3 @@
 		<?php } ?>
 		</tbody>
 	</table>
-</div>
