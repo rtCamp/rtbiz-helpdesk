@@ -18,9 +18,44 @@ if ( ! defined( 'ABSPATH' ) )
  */
 if( !class_exists( 'Rt_HD_Admin' ) ) {
 	class Rt_HD_Admin {
+            private $hd_settings_tabs, $defualt_tab, $admin_cap, $editor_cap, $author_cap;
 		public function __construct() {
 			if ( is_admin() ) {
-				$this->hooks();
+                        $this->hooks();
+                                
+                        $this->admin_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' );
+			$this->editor_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
+			$this->author_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
+                        
+                                $this->hd_settings_tabs = array(
+                                    'my-settings' => array(
+                                        'menu_title' => __('My Settings'),
+                                        'menu_slug' => 'my-settings',
+                                        'capability' => $this->author_cap
+                                    ),
+                                    'admin-settings' => array(
+                                        'menu_title' => __('Admin Settings'),
+                                        'menu_slug' => 'admin-settings',
+                                        'capability' => $this->admin_cap
+                                    ),
+                                    'importers' => array(
+                                        'menu_title' => __('Importers'),
+                                        'menu_slug' => 'importers',
+                                        'capability' => $this->editor_cap
+                                    ),
+                                    'import-mapper' => array(
+                                        'menu_title' => __('Import Mapper'),
+                                        'menu_slug' => 'import-mapper',
+                                        'capability' => $this->editor_cap
+                                    ),
+                                    'import-logs' => array(
+                                        'menu_title' => __('Import Logs'),
+                                        'menu_slug' => 'import-logs',
+                                        'capability' => $this->editor_cap
+                                    ),
+                                );
+                                
+                                $this->defualt_tab='my-settings';
 			}
 		}
 
@@ -128,17 +163,9 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 
 			$hd_logo_url = rthd_get_logo_url();
 
-			$admin_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' );
-			$editor_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
-			$author_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
-
-			add_submenu_page( 'edit.php?post_type='.$rt_hd_module->post_type, __( 'Gravity Importer' ), __( 'Gravity Importer' ), $editor_cap, 'rthd-gravity-import', array( $rt_hd_gravity_form_importer, 'ui' ) );
-			add_submenu_page( 'edit.php?post_type='.$rt_hd_module->post_type, __( 'Gravity Mapper' ), __( 'Gravity Mapper' ), $editor_cap, 'rthd-gravity-mapper', array( $rt_hd_gravity_form_mapper, 'ui' ) );
-			add_submenu_page( 'edit.php?post_type='.$rt_hd_module->post_type, __( 'Logs' ), __( 'Logs' ), $editor_cap, 'rthd-logs', array( $rt_hd_logs, 'ui' ) );
-
-			add_submenu_page( 'edit.php?post_type='.$rt_hd_module->post_type, __( 'Settings' ), __( 'Settings' ), $admin_cap, 'rthd-settings', array( $this, 'settings_ui' ) );
-			add_submenu_page( 'edit.php?post_type='.$rt_hd_module->post_type, __( 'User Settings' ), __( 'User Settings' ), $author_cap, 'rthd-user-settings', array( $this, 'user_settings_ui' ) );
-		}
+			
+			add_submenu_page( 'edit.php?post_type='.$rt_hd_module->post_type, __( 'Settings' ), __( 'Settings' ), $this->author_cap, 'rthd-settings', array( $this, 'settings_ui' ) );
+                }
 
 		function remove_wocommerce_actions( $term, $taxonomy ) {
 			$attrs = rthd_get_all_attributes();
@@ -225,9 +252,88 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 			$rt_hd_user_settings->ui();
 		}
 
-		function settings_ui() {
-			global $rt_hd_settings;
-			$rt_hd_settings->ui();
+		function settings_ui() { ?>
+     
+                    <div class="wrap">
+                    <div id="icon-options-general" class="icon32"><br></div><h2><?php _e( 'Helpdesk Settings' ); ?></h2>
+                                   <?php $this->settings_ui_tabs();
+
+                                    global $rt_hd_settings, $rt_hd_user_settings, $rt_hd_gravity_form_importer, $rt_hd_gravity_form_mapper, $rt_hd_logs;
+                                    $tab=isset( $_GET[ 'tab' ] )? $_GET[ 'tab' ] : $this->defualt_tab ;
+                                    
+                                    switch ( $tab ) {
+                                        
+                                        case  'admin-settings' :
+                                            
+                                            if ( current_user_can( $this->admin_cap ) ) {  
+                                                 $rt_hd_settings->ui();
+                                            }else{
+                                                wp_die('You are not allowed to view this page');
+                                            }
+                                            
+                                            break;
+                                            
+                                        case 'my-settings' : 
+                                            
+                                            if ( current_user_can( $this->author_cap ) ) {  
+                                                  $rt_hd_user_settings->ui();
+                                            }else{
+                                                  wp_die('You are not allowed to view this page');
+                                            }
+                                            
+                                            break;
+                                            
+                                        case 'importers' : 
+                                                
+                                            if ( current_user_can( $this->editor_cap ) ) {  
+                                                  $rt_hd_user_settings->ui();
+                                            }else{
+                                                 wp_die('You are not allowed to view this page');
+                                            }
+                                            
+                                            break;
+                                            
+                                        case 'import-mapper' : 
+                                            
+                                            if ( current_user_can( $this->editor_cap ) ) {  
+                                                  $rt_hd_user_settings->ui();
+                                            }else{
+                                                 wp_die('You are not allowed to view this page');
+                                            }
+                                            
+                                            break;
+                                            
+                                        case 'import-logs' : 
+                                            
+                                            if ( current_user_can( $this->editor_cap ) ) {  
+                                                  $rt_hd_user_settings->ui();
+                                            }else{
+                                                 wp_die('You are not allowed to view this page');
+                                            }
+                                    
+                                    }
+                                    ?>
+                    </div>
+        <?php
+                        
+			
 		}
-	}
+                
+                function settings_ui_tabs(){
+                    
+                    $current=isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : $this->defualt_tab;
+                    echo '<h2 class="nav-tab-wrapper">';
+                    foreach ($this->hd_settings_tabs as $tab => $name) {
+                        if (current_user_can( $name['capability'] ) ) {
+                            
+                            $class = ( $tab == $current ) ? ' nav-tab-active' : '';
+                            echo '<a class="nav-tab' . $class . '" href="?post_type=rt_ticket&page=rthd-settings&tab=' . $name['menu_slug'] . '">' . $name['menu_title'] . '</a>';
+
+                         }
+                        
+                        }
+                    echo '</h2>';
+                    
+                }
+            }
 }
