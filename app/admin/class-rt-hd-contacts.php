@@ -174,7 +174,10 @@ if ( !class_exists( 'Rt_HD_Contacts' ) ) {
 
 			$post_type = get_post_type( $post_id );
 
-			rt_biz_connect_post_to_person( $post_type, $post_id, $contacts, $clear_old = true );
+			rt_biz_clear_post_connections_to_person( $post_type, $post_id );
+			foreach ( $contacts as $contact ) {
+				rt_biz_connect_post_to_person( $post_type, $post_id, $contact );
+			}
 		}
 
 		function get_account_contacts_ajax() {
