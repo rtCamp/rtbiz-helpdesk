@@ -289,7 +289,9 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 				if ( ! empty( $postterms ) ) {
 
 					$post_type = get_post_type( $post_id );
-					rt_biz_connect_post_to_person( $post_type, $post_id, $postterms );
+					foreach ( $postterms as $term ) {
+						rt_biz_connect_post_to_person( $post_type, $post_id, $postterm );
+					}
 
 					// Update Index
 					$ticketModel = new Rt_HD_Ticket_Model();
