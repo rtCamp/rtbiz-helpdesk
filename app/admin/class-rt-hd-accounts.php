@@ -204,10 +204,7 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 
 			$post_type = get_post_type( $post_id );
 
-			rt_biz_clear_post_connections_to_organization( $post_type, $post_id );
-			foreach ( $accounts as $account ) {
-				rt_biz_connect_post_to_organization( $post_type, $post_id, $account );
-			}
+			rt_biz_connect_post_to_organization( $post_type, $post_id, $accounts, $clear_old = true );
 		}
 	}
 
