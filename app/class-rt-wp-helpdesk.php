@@ -130,7 +130,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			$rt_hd_ticket_history_model = new Rt_HD_Ticket_History_Model();
 			$rt_hd_imap_server_model = new Rt_HD_IMAP_Server_Model();
 
-			$taxonomy_metadata = new Taxonomy_Metadata();
+			$taxonomy_metadata = new Rt_Helpdesk_Taxonomy_Metadata\Taxonomy_Metadata();
 			$taxonomy_metadata->activate();
 
 			$rt_hd_closing_reason = new Rt_HD_Closing_Reason();
