@@ -197,7 +197,7 @@ function rthd_get_user_ids( $user ) {
 	return $user->ID;
 }
 
-function rthd_update_post_term_count( $terms, $taxonomy ) {
+function rt_update_post_term_count( $terms, $taxonomy ) {
 	global $wpdb;
 
 	$object_types = ( array ) $taxonomy->object_type;

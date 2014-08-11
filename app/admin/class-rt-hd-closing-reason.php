@@ -44,7 +44,7 @@ if ( !class_exists( 'Rt_HD_Closing_Reason' ) ) {
 				'labels' => $labels,
 				'show_ui' => true,
 				'query_var' => true,
-				'update_count_callback' => 'rthd_update_post_term_count',
+				'update_count_callback' => 'rt_update_post_term_count',
 				'rewrite' => array('slug' => rthd_attribute_taxonomy_name('closing_reason')),
 				'capabilities' => array(
 					'manage_terms' => $editor_cap,
