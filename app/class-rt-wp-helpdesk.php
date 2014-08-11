@@ -110,7 +110,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 		function init_globals() {
 			global $rt_hd_attributes, $rt_hd_tickets, $rt_hd_acl,
 			$rt_hd_gravity_form_importer, $rt_hd_settings, $rt_hd_logs,
-			$rt_hd_module, $rthd_form,
+			$taxonomy_metadata, $rt_hd_module, $rthd_form,
 			$rt_hd_mail_accounts_model,
 			$rt_hd_mail_acl_model, $rt_hd_mail_thread_importer_model,
 			$rt_hd_mail_message_model, $rt_hd_mail_outbound_model,
@@ -129,6 +129,9 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			$rt_hd_gravity_fields_mapping_model = new Rt_HD_Gravity_Fields_Mapping_Model();
 			$rt_hd_ticket_history_model = new Rt_HD_Ticket_History_Model();
 			$rt_hd_imap_server_model = new Rt_HD_IMAP_Server_Model();
+
+			$taxonomy_metadata = new Rt_Helpdesk_Taxonomy_Metadata\Taxonomy_Metadata();
+			$taxonomy_metadata->activate();
 
 			$rt_hd_closing_reason = new Rt_HD_Closing_Reason();
 			$rt_hd_attributes = new Rt_HD_Attributes();

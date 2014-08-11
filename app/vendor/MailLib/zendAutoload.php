@@ -17,4 +17,3 @@ class MyAutoloader
 	}
 }
 spl_autoload_register(__NAMESPACE__ . "\\MyAutoloader::load");
-

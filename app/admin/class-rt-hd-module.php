@@ -94,7 +94,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 		}
 
 		function init_hd() {
-			$menu_position = 31;
+			$menu_position = 32;
 			$this->register_custom_post( $menu_position );
 			$this->register_custom_statuses();
 
