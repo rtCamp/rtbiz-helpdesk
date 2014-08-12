@@ -88,10 +88,6 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 				}
 			}
 
-			if ( ! class_exists( 'Rt_Biz' ) ) {
-				$flag = false;
-			}
-
 			if ( ! $flag ) {
 				add_action( 'admin_notices', array( $this, 'rt_biz_admin_notice' ) );
 			}
