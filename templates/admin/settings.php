@@ -18,7 +18,7 @@ if ( isset( $_POST[$slug.'_outbound_emails'] ) ) {
 }
 if ( $flag ) {
 	update_site_option( 'rt_hd_settings', $module_settings );
-	echo '<script>window.location="'.add_query_arg( array( 'post_type' => $rt_hd_module->post_type, 'page' => 'rthd-settings', 'type' => 'systememails' ), admin_url( 'edit.php' ) ).'";</script>';
+	echo '<script>window.location="'.add_query_arg( array( 'post_type' => $rt_hd_module->post_type, 'page' => 'rthd-settings', 'type' => 'systememails','tab'=>'admin-settings' ), admin_url( 'edit.php' ) ).'";</script>';
 	die();
 }
 
@@ -31,7 +31,7 @@ if(isset($_POST["rthd_googleapi_clientsecret"])){
 	$flag = true;
 }
 if ( $flag ) {
-	echo '<script>window.location="'.add_query_arg( array( 'post_type' => $rt_hd_module->post_type, 'page' => 'rthd-settings', 'type' => 'googleApi' ), admin_url( 'edit.php' ) ).'";</script>';
+	echo '<script>window.location="'.add_query_arg( array( 'post_type' => $rt_hd_module->post_type, 'page' => 'rthd-settings', 'type' => 'googleApi', 'tab'=>'admin-settings' ), admin_url( 'edit.php' ) ).'";</script>';
 	die();
 }
 
@@ -48,7 +48,7 @@ if ( isset( $_POST['rthd_menu_label'] ) ) {
 	$flag = true;
 }
 if ( $flag ) {
-	echo '<script>window.location="'.add_query_arg( array( 'post_type' => $rt_hd_module->post_type, 'page' => 'rthd-settings', 'type' => 'other' ), admin_url( 'edit.php' ) ).'";</script>';
+	echo '<script>window.location="'.add_query_arg( array( 'post_type' => $rt_hd_module->post_type, 'page' => 'rthd-settings', 'type' => 'other', 'tab'=>'admin-settings' ), admin_url( 'edit.php' ) ).'";</script>';
 	die();
 }
 
@@ -60,7 +60,7 @@ if ( isset( $_REQUEST['type'] ) && $_REQUEST['type'] == 'imapServers' ) {
 		$old_servers = $rt_hd_imap_server_model->get_all_servers();
 
 		if ( isset( $_POST['rthd_imap_servers'] ) ) {
-			$new_servers = $_POST['rthd_imap_servers'];
+			$new_servers = $_POST['rthd_imap_servers'];                     
 
 			// Handle / Update Existing Servers
 			foreach ( $old_servers as $id => $server ) {
@@ -110,7 +110,7 @@ if ( isset( $_REQUEST['type'] ) && $_REQUEST['type'] == 'imapServers' ) {
 				$rt_hd_imap_server_model->delete_server( $server->id );
 			}
 		}
-		echo '<script>window.location="'.add_query_arg( array( 'post_type' => $rt_hd_module->post_type, 'page' => 'rthd-settings', 'type' => 'imapServers' ), admin_url( 'edit.php' ) ).'";</script>';
+		echo '<script>window.location="'.add_query_arg( array( 'post_type' => $rt_hd_module->post_type, 'page' => 'rthd-settings', 'type' => 'imapServers', 'tab'=>'admin-settings' ), admin_url( 'edit.php' ) ).'";</script>';
 		die();
 	}
 }
@@ -128,7 +128,7 @@ if(!isset($_REQUEST["type"])){
 		<li><a href="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&type=other&tab=admin-settings");?>" <?php if ($_REQUEST["type"] == "other") echo " class='current'"; ?> ><?php _e( 'Other' ); ?></a></li>
 	</ul>
 
-	<form method="post" action="<?php  echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&type=" . $_REQUEST["type"]); ?>">
+	<form method="post" action="<?php  echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&tab=admin-settings&type=" . $_REQUEST["type"]); ?>">
 		<table class="form-table hd-option">
 			<tbody>
 				<?php if($_REQUEST["type"] == "googleApi"){

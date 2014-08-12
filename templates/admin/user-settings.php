@@ -42,7 +42,7 @@ if ( $_REQUEST["type"] == "personal" && isset( $_POST["mail_ac"] ) && is_email( 
 }
 if ( $_REQUEST["type"] == "personal" && isset( $_REQUEST["email"] ) && is_email( $_REQUEST["email"] ) ) {
 	$rt_hd_settings->delete_user_google_ac( $_REQUEST["email"] );
-	echo '<script>window.location="'.add_query_arg( array( 'post_type' => $rt_hd_module->post_type, 'page' => 'rthd-user-settings', 'type' => 'personal' ), admin_url( 'edit.php' ) ).'";</script>';
+	echo '<script>window.location="'.add_query_arg( array( 'post_type' => $rt_hd_module->post_type, 'page' => 'rthd-settings', 'type' => 'personal', 'tab' => 'my-settings' ), admin_url( 'edit.php' ) ).'";</script>';
 	die();
 }
 
@@ -58,7 +58,7 @@ if(isset($_POST["rthd_activecollab_default_project"])){
 	$flag = true;
 }
 if ( $flag ) {
-	echo '<script>window.location="'.add_query_arg( array( 'post_type' => $rt_hd_module->post_type, 'page' => 'rthd-user-settings', 'type' => 'activecollab' ), admin_url( 'edit.php' ) ).'";</script>';
+	echo '<script>window.location="'.add_query_arg( array( 'post_type' => $rt_hd_module->post_type, 'page' => 'rthd-settings', 'type' => 'activecollab','tab' => 'my-settings'  ), admin_url( 'edit.php' ) ).'";</script>';
 	die();
 }
 
@@ -174,7 +174,7 @@ if ($_REQUEST['type'] == 'personal') {
 		?>
 					<tr>
 						<td>
-							<form method="post" action="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-user-settings&type=personal"); ?>">
+							<form method="post" action="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&tab=my-settings&type=personal"); ?>">
 								<input type="hidden" name='mail_ac' value="<?php echo $email; ?>" />
 								<table class='hd-google-profile-table'>
 									<tr valign="top">
@@ -311,7 +311,7 @@ if ($_REQUEST['type'] == 'personal') {
 		<p class="submit rthd-hide-row" id="rthd_goauth_container">
 			<a class='button button-primary' href='<?php echo $authUrl;?>'><?php _e( 'Connect New Google A/C' ); ?></a>
 		</p>
-		<form id="rthd_add_imap_acc_form" class="rthd-hide-row" method="post" action="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-user-settings&type=personal"); ?>">
+		<form id="rthd_add_imap_acc_form" class="rthd-hide-row" method="post" action="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&type=personal&tab=my-settings"); ?>">
 			<input type="hidden" name="rthd_add_imap_email" value="1" />
 			<select required="required" name="rthd_imap_server">
 				<option value=""><?php _e( 'Select Mail Server' ); ?></option>
