@@ -199,7 +199,7 @@ $post_status = $rt_hd_module->get_custom_statuses();
 				</div>
 <?php if (isset($post->ID)) { ?>
 
-				<div class="row collapse hide">
+				<div class="row collapse">
 					<div class="large-4 mobile-large-1 columns">
 						<span class="prefix" title="Modify Date"><label>Modify Date</label></span>
 					</div>
@@ -213,7 +213,7 @@ $post_status = $rt_hd_module->get_custom_statuses();
 					</div>
 				</div>
 <?php } ?>
-				<div class="row collapse hide">
+				<div class="row collapse">
 					<div class="large-4 mobile-large-1 columns">
 						<span class="prefix" title="<?php _e('Assigned To'); ?>"><label for="post[post_author]"><?php _e('Assigned To'); ?></label></span>
 					</div>
@@ -281,7 +281,7 @@ if (!empty($results)) {
 					</div>
 				</div>
 			</fieldset>
-			<fieldset class="hide">
+			<fieldset>
 				<legend><i class="foundicon-smiley"></i> <?php _e("Participants"); ?></legend>
 				<script>
 					var arr_subscriber_user =<?php echo json_encode($arrSubscriberUser); ?>;
