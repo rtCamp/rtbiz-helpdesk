@@ -135,7 +135,7 @@ if(!isset($_REQUEST["type"])){
 					$redirect_url =get_site_option('rthd_googleapi_redirecturl');
 
 					if(!$redirect_url){
-						$redirect_url= admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-user-settings&type=personal");
+						$redirect_url= admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&tab=my-settings&type=personal");
 						update_site_option("rthd_googleapi_redirecturl", $redirect_url);
 					}
 

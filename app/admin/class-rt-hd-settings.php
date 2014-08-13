@@ -82,7 +82,7 @@ if (!class_exists('Rt_HD_Settings')) {
 				$signature = "";
 			$redirect_url = get_site_option('rthd_googleapi_redirecturl');
 			if (!$redirect_url) {
-				$redirect_url = admin_url("admin.php?page=rthd-user-settings&type=personal");
+				$redirect_url = admin_url("admin.php?page=rthd-settings&tab=my-settings&type=personal");
 				update_site_option("rthd_googleapi_redirecturl", $redirect_url);
 			}
 
