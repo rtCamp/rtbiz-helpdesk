@@ -118,7 +118,7 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 					}
 					$host = $server->incoming_imap_server;
 					$port = $server->incoming_imap_port;
-					$ssl = ( isset( $server->incoming_imap_enc ) && ! is_null( $server->incoming_imap_enc ) ) ? true : false;
+					$ssl = ( isset( $server->incoming_imap_enc ) && ! is_null( $server->incoming_imap_enc ) ) ? $server->incoming_imap_enc : false;
 					$this->imap->connect( $host, $port, $ssl );
 					return $this->imap->login( $email, rthd_encrypt_decrypt( $accessToken ) );
 				default:
