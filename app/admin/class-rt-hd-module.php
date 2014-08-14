@@ -156,9 +156,9 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 		}
 
 		function add_post_link() {
-			if ( strpos( $_SERVER["REQUEST_URI"], 'post-new.php?post_type='.$this->post_type ) > 0 ) {
+			/*if ( strpos( $_SERVER["REQUEST_URI"], 'post-new.php?post_type='.$this->post_type ) > 0 ) {
 				wp_redirect( admin_url( 'edit.php?post_type=' . $this->post_type.'&page=rthd-add-'.$this->post_type ), 200 );
-			}
+			}*/
 		}
 
 		function ticket_edit_link( $editlink, $postID, $context ) {

@@ -113,7 +113,8 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			$rt_hd_gravity_fields_mapping_model, $rt_hd_user_settings,
 			$rt_hd_dashboard, $rt_hd_ticket_history_model, $rt_hd_reports,
 			$rt_hd_accounts, $rt_hd_contacts, $rt_hd_closing_reason,
-			$rt_hd_imap_server_model, $rt_hd_gravity_form_mapper;
+			$rt_hd_imap_server_model, $rt_hd_gravity_form_mapper,
+            $rt_hd_admin_meta_boxes;
 
 			$rthd_form = new Rt_Form();
 
@@ -136,6 +137,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			$rt_hd_accounts = new Rt_HD_Accounts();
 			$rt_hd_contacts = new Rt_HD_Contacts();
 			$rt_hd_tickets = new Rt_HD_Tickets();
+            $rt_hd_admin_meta_boxes = new RT_HD_Admin_Meta_Boxes();
 
 			$rt_hd_dashboard = new Rt_HD_Dashboard();
 
