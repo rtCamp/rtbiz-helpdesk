@@ -86,7 +86,7 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 				wp_enqueue_style('rt-hd-css', RT_HD_URL . 'app/assets/css/rt-hd-css.css', false, RT_HD_VERSION, 'all');
 				wp_enqueue_style('rt-jquery-tagit', RT_HD_URL . 'app/assets/css/jquery.tagit.css', false, RT_HD_URL, 'all');
 			}
-			$pagearray = array( 'rthd-add-module', 'rthd-settings', 'rthd-add-'.$rt_hd_module->post_type );
+			$pagearray = array( 'rthd-add-module', 'rthd-gravity-mapper', 'rthd-add-'.$rt_hd_module->post_type );
 			if ( isset( $_REQUEST['page'] ) && in_array( $_REQUEST['page'], $pagearray ) ) {
 				wp_enqueue_script('jquery-ui-timepicker-addon', RT_HD_URL . 'app/assets/javascripts/jquery-ui-timepicker-addon.js',array("jquery-ui-datepicker","jquery-ui-slider"), RT_HD_VERSION, true);
 
@@ -135,7 +135,7 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 		function localize_scripts() {
 			global $rt_hd_module;
 
-			$pagearray = array( 'rthd-add-module', 'rthd-settings', 'rthd-add-'.$rt_hd_module->post_type );
+			$pagearray = array( 'rthd-add-module', 'rthd-gravity-mapper', 'rthd-add-'.$rt_hd_module->post_type );
 			if( wp_script_is( 'rthd-admin-js' ) && isset( $_REQUEST['post_type'] ) && isset( $_REQUEST['page'] ) && in_array( $_REQUEST['page'], $pagearray ) ) {
 				$user_edit = false;
 				if ( current_user_can( "edit_{$rt_hd_module->post_type}" ) ) {
