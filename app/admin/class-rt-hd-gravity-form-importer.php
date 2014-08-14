@@ -1267,13 +1267,13 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 											$term = wp_insert_term(${$slug}, $tax_name, array('description' => ${$slug}, 'slug' => strtolower(${$slug})));
 											$term_id = $term["term_id"];
 											if (isset($transaction_id) && $transaction_id > 0) {
-												add_term_meta($term_id, "_transaction_id", $transaction_id, true);
+												Rt_Helpdesk_Taxonomy_Metadata\add_term_meta($term_id, "_transaction_id", $transaction_id, true);
 											}
 										} else {
 											$term_id = $term_id["term_id"];
 											if (isset($transaction_id) && $transaction_id > 0) {
-												delete_term_meta($term_id, "_transaction_id");
-												add_term_meta($term_id, "_transaction_id", $transaction_id, true);
+												Rt_Helpdesk_Taxonomy_Metadata\delete_term_meta($term_id, "_transaction_id");
+												Rt_Helpdesk_Taxonomy_Metadata\add_term_meta($term_id, "_transaction_id", $transaction_id, true);
 											}
 										}
 										$term = get_term_by("id", $term_id, $tax_name);
@@ -1305,13 +1305,13 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 												$term = wp_insert_term($attr_term["value"], $tax_name, array('description' => $attr_term["value"], 'slug' => strtolower($attr_term["value"])));
 												$term_id = $term["term_id"];
 												if (isset($transaction_id) && $transaction_id > 0) {
-													add_term_meta($term_id, "_transaction_id", $transaction_id, true);
+													Rt_Helpdesk_Taxonomy_Metadata\add_term_meta($term_id, "_transaction_id", $transaction_id, true);
 												}
 											} else {
 												$term_id = $term_id["term_id"];
 												if (isset($transaction_id) && $transaction_id > 0) {
-													delete_term_meta($term_id, "_transaction_id");
-													add_term_meta($term_id, "_transaction_id", $transaction_id, true);
+													Rt_Helpdesk_Taxonomy_Metadata\delete_term_meta($term_id, "_transaction_id");
+													Rt_Helpdesk_Taxonomy_Metadata\add_term_meta($term_id, "_transaction_id", $transaction_id, true);
 												}
 											}
 											$term = get_term_by("id", $term_id, $tax_name);

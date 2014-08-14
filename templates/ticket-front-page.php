@@ -297,7 +297,7 @@ if (!empty($results)) {
                             $scriptstr = "";
 		$ticket_term = rt_biz_get_post_for_person_connection( $post->ID, $post->post_type, $fetch_person = true );
 		foreach ($ticket_term as $tterm) {
-                                $email = get_term_meta($tterm->term_id, $rt_hd_contacts->email_key, true);
+                                $email = rt_biz_get_entity_meta($tterm->ID, $rt_hd_contacts->email_key, true);
 								if( in_array( $email, $all_hd_participants ) ) {
 									$key = array_search($email, $all_hd_participants);
 									if ( $key !== FALSE ) {
