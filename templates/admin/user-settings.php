@@ -42,7 +42,7 @@ if ( $_REQUEST["type"] == "personal" && isset( $_POST["mail_ac"] ) && is_email( 
 }
 if ( $_REQUEST["type"] == "personal" && isset( $_REQUEST["email"] ) && is_email( $_REQUEST["email"] ) ) {
 	$rt_hd_settings->delete_user_google_ac( $_REQUEST["email"] );
-	echo '<script>window.location="'.add_query_arg( array( 'post_type' => $rt_hd_module->post_type, 'page' => 'rthd-settings', 'type' => 'personal', 'tab' => 'my-settings' ), admin_url( 'edit.php' ) ).'";</script>';
+	echo '<script>window.location="'.add_query_arg( array( 'post_type' => $rt_hd_module->post_type, 'page' => 'rthd-user-settings', 'type' => 'personal' ), admin_url( 'edit.php' ) ).'";</script>';
 	die();
 }
 
@@ -58,7 +58,7 @@ if(isset($_POST["rthd_activecollab_default_project"])){
 	$flag = true;
 }
 if ( $flag ) {
-	echo '<script>window.location="'.add_query_arg( array( 'post_type' => $rt_hd_module->post_type, 'page' => 'rthd-settings', 'type' => 'activecollab','tab' => 'my-settings'  ), admin_url( 'edit.php' ) ).'";</script>';
+	echo '<script>window.location="'.add_query_arg( array( 'post_type' => $rt_hd_module->post_type, 'page' => 'rthd-user-settings', 'type' => 'activecollab' ), admin_url( 'edit.php' ) ).'";</script>';
 	die();
 }
 
