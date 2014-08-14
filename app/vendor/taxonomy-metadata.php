@@ -7,6 +7,8 @@ Author: mitcho (Michael Yoshitaka Erlewine), sirzooro
 Author URI: http://mitcho.com/
 */
 
+namespace Rt_Helpdesk_Taxonomy_Metadata;
+
 class Taxonomy_Metadata {
 	function __construct() {
 		add_action( 'init', array($this, 'wpdbfix') );

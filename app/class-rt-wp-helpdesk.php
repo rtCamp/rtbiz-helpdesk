@@ -62,6 +62,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 				'rt_biz_add_organization',
 				'rt_biz_organization_connection_to_string',
 				'rt_biz_connect_post_to_organization',
+				'rt_biz_clear_post_connections_to_organization',
 				'rt_biz_sanitize_module_key',
 				'rt_biz_get_access_role_cap',
 				'rt_biz_get_person_by_email',
@@ -72,6 +73,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 				'rt_biz_get_organization_to_person_connection',
 				'rt_biz_search_person',
 				'rt_biz_connect_organization_to_person',
+				'rt_biz_clear_post_connections_to_person',
 				'rt_biz_register_person_connection',
 				'rt_biz_register_organization_connection',
 				'rt_biz_get_organization_capabilities',
@@ -84,10 +86,6 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 				if ( ! function_exists( $fn ) ) {
 					$flag = false;
 				}
-			}
-
-			if ( ! class_exists( 'Rt_Biz' ) ) {
-				$flag = false;
 			}
 
 			if ( ! $flag ) {
@@ -128,7 +126,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			$rt_hd_ticket_history_model = new Rt_HD_Ticket_History_Model();
 			$rt_hd_imap_server_model = new Rt_HD_IMAP_Server_Model();
 
-			$taxonomy_metadata = new Taxonomy_Metadata();
+			$taxonomy_metadata = new Rt_Helpdesk_Taxonomy_Metadata\Taxonomy_Metadata();
 			$taxonomy_metadata->activate();
 
 			$rt_hd_closing_reason = new Rt_HD_Closing_Reason();

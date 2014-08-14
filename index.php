@@ -80,3 +80,12 @@ function rt_hd_init() {
 }
 
 add_action( 'rt_biz_init', 'rt_hd_init', 1 );
+
+function rt_hd_check_dependency() {
+	global $rt_wp_hd;
+	if ( empty( $rt_wp_hd ) ) {
+		rt_hd_include();
+		$rt_wp_hd = new RT_WP_Helpdesk();
+	}
+}
+add_action( 'init', 'rt_hd_check_dependency' );
