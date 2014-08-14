@@ -419,13 +419,6 @@ if ( isset( $_POST['post'] ) ) {
 		}
 	}
 
-    //User-group save
-    if ( isset( $_POST['post'] ) && isset( $_POST['post']['user-group'] ) ){
-        wp_set_post_terms( $post_id, implode( ',', $_POST['post']['user-group'] ), 'user-group' );
-    }else{
-        wp_set_post_terms( $post_id, implode( ',', array() ), 'user-group' );
-    }
-
 // Attributes Diff & Save
 	$attributes = rthd_get_attributes( $post_type );
 	foreach ( $attributes as $attr ) {
@@ -1043,29 +1036,6 @@ if( !empty( $results ) ) {
 	<?php if ( isset( $post->ID ) ) { do_action( 'rt_hd_after_ticket_information', $post, $user_edit ); } ?>
 	</div>
 </div>
-
-    <?php
-    $terms = get_terms( 'user-group', array( 'hide_empty' => false ) );
-    if ( isset( $_REQUEST['rt_ticket_id'] ) ){
-        $selected_term_list = wp_get_post_terms($_REQUEST['rt_ticket_id'], 'user-group', array("fields" => "ids"));
-    } ?>
-
-    <div class="row collapse postbox">
-        <div class="handlediv" title="Click to toggle"><br></div>
-        <h6 class="hndle"><span><i class="gen-enclosed foundicon-star"></i>Department</span></h6>
-        <div class="inside">
-            <ul class="rt-form-checkbox scroll-height">
-                <?php foreach( $terms as $key=>$term ){
-                    $checked = '';
-                    if ( isset( $selected_term_list ) && in_array( $term->term_id, $selected_term_list ) ){
-                        $checked= 'checked';
-                    }?>
-                    <li><label for="user-group-<?php echo $key; ?>"><input title="" id="user-group-<?php echo $key; ?>" <?php echo $checked; ?> name="post[user-group][]" value="<?php echo $term->slug; ?>" type="checkbox"> <?php echo $term->name; ?> </label></li>
-                <?php } ?>
-            </ul>
-        </div>
-    </div>
-
 			<?php if ( isset( $post->ID ) ) { do_action( 'rt_hd_other_details', $user_edit, $post ); } ?>
 			<?php foreach ( $attributes as $attr ) {
 				if( in_array( $attr->attribute_render_type, array( 'rating-stars', 'radio', 'dropdown' ) ) )

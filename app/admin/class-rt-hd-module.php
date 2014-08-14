@@ -120,8 +120,6 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			add_filter( 'get_edit_post_link', array( $this, 'ticket_edit_link' ), 10, 3 );
 			add_filter( 'post_row_actions', array( $this, 'post_row_action' ), 10, 2 );
 
-            add_filter( 'rtbiz_dept_Supported_PT', array( $this, 'add_department_support' ) );
-
 			add_action( 'rt_attributes_relations_added', array( $this, 'create_database_table' ) );
 			add_action( 'rt_attributes_relations_updated', array( $this, 'create_database_table' ) );
 			add_action( 'rt_attributes_relations_deleted', array( $this, 'create_database_table' ) );
@@ -178,11 +176,6 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			$action['edit'] = "<a href='" . admin_url("edit.php?post_type={$this->post_type}&page=rthd-add-{$this->post_type}&{$this->post_type}_id=" . $post->ID) . "' title='" . $title . "'>" . $title . "</a>";
 			return $action;
 		}
-
-        function add_department_support( $post_types ){
-            $post_types[] = $this->post_type;
-            return $post_types;
-        }
 
 		function register_custom_pages() {
 			global $rt_hd_dashboard;
