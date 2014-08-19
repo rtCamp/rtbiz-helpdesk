@@ -30,6 +30,8 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 
 			$this->init_globals();
 
+			$this->init_redux();
+
 			add_action( 'init', array( $this, 'admin_init' ), 5 );
 			add_action( 'init', array( $this, 'init' ), 6 );
 
@@ -101,6 +103,15 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 				<p><?php _e( sprintf( 'rtHelpdesk : It seems that rtBiz plugin is not installed or activated. Please %s / %s it.', '<a href="' . admin_url( 'plugin-install.php?tab=search&s=rt-biz' ) . '">' . __( 'install' ) . '</a>', '<a href="' . admin_url( 'plugins.php' ) . '">' . __( 'activate' ) . '</a>' ) ); ?></p>
 			</div>
 		<?php
+		}
+
+		function init_redux() {
+			if ( ! class_exists( 'ReduxFramework' ) && file_exists( dirname( __FILE__ ) . '/vendor/redux/ReduxCore/framework.php' ) ) {
+				require_once( dirname( __FILE__ ) . '/vendor/redux/ReduxCore/framework.php' );
+			}
+			if ( ! isset( $redux_demo ) && file_exists( dirname( __FILE__ ) . '/settings/redux-config.php' ) ) {
+				require_once( dirname( __FILE__ ) . '/settings/redux-config.php' );
+			}
 		}
 
 		function init_globals() {
