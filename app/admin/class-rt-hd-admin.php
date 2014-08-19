@@ -60,7 +60,7 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 		}
 
 		function load_styles_scripts() {
-			global $post, $rt_hd_module;
+			global $post, $rt_hd_module, $pagenow;
 			$pagearray = array( 'rthd-gravity-import', 'rthd-settings', 'rthd-user-settings', 'rthd-logs', 'rthd-'.$rt_hd_module->post_type.'-dashboard' );
 			if( ( isset( $post->post_type ) && $post->post_type == $rt_hd_module->post_type )
 					|| ( isset( $_REQUEST['page'] ) && in_array( $_REQUEST['page'], $pagearray ) )
@@ -87,7 +87,8 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 				wp_enqueue_style('rt-jquery-tagit', RT_HD_URL . 'app/assets/css/jquery.tagit.css', false, RT_HD_URL, 'all');
 			}
 			$pagearray = array( 'rthd-add-module', 'rthd-gravity-mapper', 'rthd-add-'.$rt_hd_module->post_type );
-			if ( isset( $_REQUEST['page'] ) && in_array( $_REQUEST['page'], $pagearray ) ) {
+			if ( isset( $post->post_type ) && $post->post_type == $rt_hd_module->post_type && in_array( $pagenow, array( 'post.php', 'post-new.php' ) ) 
+                                || ( isset( $_REQUEST['page'] ) && in_array( $_REQUEST['page'], $pagearray ) ) ) {
 				wp_enqueue_script('jquery-ui-timepicker-addon', RT_HD_URL . 'app/assets/javascripts/jquery-ui-timepicker-addon.js',array("jquery-ui-datepicker","jquery-ui-slider"), RT_HD_VERSION, true);
 
 				wp_enqueue_script('foundation.zepto', RT_HD_URL . 'app/assets/javascripts/vendor/zepto.js',array("jquery"), "", true);
@@ -111,7 +112,7 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 				wp_enqueue_style('foundation-icon-social-css', RT_HD_URL . 'app/assets/css/social_foundicons.css', false, "", 'all');
 				wp_enqueue_style('foundation-icon-social-ie-css', RT_HD_URL . 'app/assets/css/social_foundicons_ie7.css', false, "", 'all');
 				wp_enqueue_style('foundation-normalize', RT_HD_URL . 'app/assets/css/legacy_normalize.css', false, '', 'all');
-	            wp_enqueue_style('foundation-legacy-css', RT_HD_URL . 'app/assets/css/legacy_admin.css', false, '', 'all');
+                                wp_enqueue_style('foundation-legacy-css', RT_HD_URL . 'app/assets/css/legacy_admin.css', false, '', 'all');
 				wp_enqueue_style('rthd-admin-css', RT_HD_URL . 'app/assets/css/admin.css', false, RT_HD_VERSION, 'all');
 
 				if( !wp_script_is('jquery-ui-datepicker') ) {

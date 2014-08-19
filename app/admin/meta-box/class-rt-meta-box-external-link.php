@@ -23,8 +23,7 @@ if( !class_exists( 'RT_Meta_Box_External_Link' ) ) {
          */
         public static function ui( $post ) {
 
-            global $rt_hd_module, $rt_hd_closing_reason, $rt_hd_attributes;
-            $post_type = $rt_hd_module->post_type;
+            $post_type = $post->post_type;
 
             $user_edit = false;
             if ( current_user_can( "edit_{$post_type}" ) ) {
@@ -89,6 +88,26 @@ if( !class_exists( 'RT_Meta_Box_External_Link' ) ) {
          */
         public static function save( $post_id, $post ) {
 
+            // External File Links
+            $old_ex_files = get_post_meta( $post_id, 'ticket_external_file' );
+            $new_ex_files = array();
+            if ( isset( $_POST['ticket_ex_files'] ) ) {
+                    $new_ex_files = $_POST['ticket_ex_files'];
+
+                    delete_post_meta( $post_id, 'ticket_external_file' );
+
+                    foreach ( $new_ex_files as $ex_file ) {
+                            if ( empty( $ex_file['link'] ) ) {
+                                    continue;
+                            }
+                            if( empty( $ex_file['title'] ) ) {
+                                    $ex_file['title'] = $ex_file['link'];
+                            }
+                            add_post_meta( $post_id, 'ticket_external_file', json_encode( $ex_file ) );
+                    }
+            } else {
+                    delete_post_meta( $post_id, 'ticket_external_file' );
+            }
         }
     }
 }

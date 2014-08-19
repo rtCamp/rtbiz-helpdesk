@@ -23,8 +23,7 @@ if( !class_exists( 'RT_Meta_Box_Custom_Fields' ) ) {
          */
         public static function ui( $post ) {
 
-            global $rt_hd_module;
-            $post_type = $rt_hd_module->post_type;
+            $post_type = $post->post_type;
 
             $user_edit = false;
             if ( current_user_can( "edit_{$post_type}" ) ) {
@@ -98,7 +97,15 @@ if( !class_exists( 'RT_Meta_Box_Custom_Fields' ) ) {
          * Save meta box data
          */
         public static function save( $post_id, $post ) {
-
+            if ( isset( $_POST[ 'postmeta' ] ) ) {
+                $postmeta = apply_filters( 'rt_hd_ticket_meta', $_POST['postmeta'] );
+                if ( ! empty( $postmeta ) ) {
+                    foreach ( $postmeta as $meta ) {
+                        $postmeta = apply_filters( 'rt_hd_ticket_meta', $_POST['postmeta'] );
+                        update_post_meta( $post_id, $meta['key'], $meta['value'] );
+                    }
+                }
+            }
         }
     }
 }

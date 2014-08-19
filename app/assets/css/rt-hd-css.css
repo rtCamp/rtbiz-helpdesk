@@ -1,6 +1,6 @@
 #labelCommentTimeStamp{height: 30px;}
 #readonly-postdivrich{padding: 10px;}
-#publishing-action{display:none}
+/* #publishing-action{display:none}*/
 .input-multiple{width:85% !important;}
 #fd-but-leate_closing_date span{background: url('../img/cal.gif');}
 .control-group label{width: 60px;float: left;text-align: right;padding-right: 5px;line-height: 25px;}

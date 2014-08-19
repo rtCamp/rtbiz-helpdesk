@@ -22,10 +22,7 @@ if( !class_exists( 'RT_Meta_Box_Department' ) ) {
          * Output the metabox
          */
         public static function ui( $post ) {
-
-            global $rt_hd_module, $rt_hd_closing_reason, $rt_hd_attributes;
-            $post_type = $rt_hd_module->post_type;
-
+            $post_type = $post->post_type;
             $user_edit = false;
             if ( current_user_can( "edit_{$post_type}" ) ) {
                 $user_edit = 'true';
@@ -36,8 +33,8 @@ if( !class_exists( 'RT_Meta_Box_Department' ) ) {
             }
 
             $terms = get_terms( 'user-group', array( 'hide_empty' => false ) );
-            if ( isset( $_REQUEST['rt_ticket_id'] ) ){
-                $selected_term_list = wp_get_post_terms($_REQUEST['rt_ticket_id'], 'user-group', array("fields" => "ids"));
+            if ( isset( $post ) ){
+                $selected_term_list = wp_get_post_terms($post->ID, 'user-group', array("fields" => "ids"));
             } ?>
 
             <div class="row collapse postbox">
@@ -57,7 +54,11 @@ if( !class_exists( 'RT_Meta_Box_Department' ) ) {
          * Save meta box data
          */
         public static function save( $post_id, $post ) {
-
+            if ( isset( $_POST['post'] ) && isset( $_POST['post']['user-group'] ) ){
+                wp_set_post_terms( $post_id, implode( ',', $_POST['post']['user-group'] ), 'user-group' );
+            }else{
+                wp_set_post_terms( $post_id, implode( ',', array() ), 'user-group' );
+            }
         }
     }
 }

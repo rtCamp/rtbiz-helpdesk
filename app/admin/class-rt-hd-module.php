@@ -115,9 +115,9 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 		function hooks() {
 			add_action( 'admin_menu', array( $this, 'register_custom_pages' ), 1 );
 			add_filter( 'custom_menu_order', array($this, 'custom_pages_order') );
-			add_action( 'admin_init', array( $this, 'add_post_link' ) );
-			add_action( 'admin_init', array( $this, 'native_list_view_link' ) );
-			add_filter( 'get_edit_post_link', array( $this, 'ticket_edit_link' ), 10, 3 );
+			//add_action( 'admin_init', array( $this, 'add_post_link' ) );
+			//add_action( 'admin_init', array( $this, 'native_list_view_link' ) );
+			//add_filter( 'get_edit_post_link', array( $this, 'ticket_edit_link' ), 10, 3 );
 			add_filter( 'post_row_actions', array( $this, 'post_row_action' ), 10, 2 );
 
             add_filter( 'rtbiz_dept_Supported_PT', array( $this, 'add_department_support' ) );
@@ -156,9 +156,9 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 		}
 
 		function add_post_link() {
-			/*if ( strpos( $_SERVER["REQUEST_URI"], 'post-new.php?post_type='.$this->post_type ) > 0 ) {
+			if ( strpos( $_SERVER["REQUEST_URI"], 'post-new.php?post_type='.$this->post_type ) > 0 ) {
 				wp_redirect( admin_url( 'edit.php?post_type=' . $this->post_type.'&page=rthd-add-'.$this->post_type ), 200 );
-			}*/
+			}
 		}
 
 		function ticket_edit_link( $editlink, $postID, $context ) {
@@ -196,11 +196,11 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			/* Metaboxes for dashboard widgets */
 			add_action( 'add_meta_boxes', array( $this, 'add_dashboard_widgets' ) );
 
-			$filter = add_submenu_page( 'edit.php?post_type='.$this->post_type, __( ucfirst( $this->labels['all_items'] ) ), __( ucfirst( $this->labels['all_items'] ) ), $author_cap, 'rthd-all-'.$this->post_type, array( $this, 'custom_page_list_view' ) );
-			add_action( "load-$filter", array( $this, 'add_screen_options' ) );
+			//$filter = add_submenu_page( 'edit.php?post_type='.$this->post_type, __( ucfirst( $this->labels['all_items'] ) ), __( ucfirst( $this->labels['all_items'] ) ), $author_cap, 'rthd-all-'.$this->post_type, array( $this, 'custom_page_list_view' ) );
+			//add_action( "load-$filter", array( $this, 'add_screen_options' ) );
 
-			$screen_id = add_submenu_page( 'edit.php?post_type='.$this->post_type, __('Add ' . ucfirst( $this->labels['name'] ) ), __('Add ' . ucfirst( $this->labels['name'] ) ), $author_cap, 'rthd-add-'.$this->post_type, array( $this, 'custom_page_ui' ) );
-			add_action( 'admin_footer-'.$screen_id, array( $this, 'footer_scripts' ) );
+			//$screen_id = add_submenu_page( 'edit.php?post_type='.$this->post_type, __('Add ' . ucfirst( $this->labels['name'] ) ), __('Add ' . ucfirst( $this->labels['name'] ) ), $author_cap, 'rthd-add-'.$this->post_type, array( $this, 'custom_page_ui' ) );
+			//add_action( 'admin_footer-'.$screen_id, array( $this, 'footer_scripts' ) );
 
 			add_filter( 'set-screen-option', array( $this,'tickets_table_set_option' ), 10, 3 );
 		}
@@ -231,8 +231,8 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			if ( isset( $submenu['edit.php?post_type='.$this->post_type] ) && !empty( $submenu['edit.php?post_type='.$this->post_type] ) ) {
 				$module_menu = $submenu['edit.php?post_type='.$this->post_type];
 				unset($submenu['edit.php?post_type='.$this->post_type]);
-				unset($module_menu[5]);
-				unset($module_menu[10]);
+				//unset($module_menu[5]);
+				//unset($module_menu[10]);
 				$new_index = 5;
 				foreach ( $this->custom_menu_order as $item ) {
 					foreach ( $module_menu as $p_key => $menu_item ) {

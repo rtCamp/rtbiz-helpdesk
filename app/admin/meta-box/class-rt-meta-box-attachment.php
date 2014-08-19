@@ -23,8 +23,7 @@ if( !class_exists( 'RT_Meta_Box_Attachment' ) ) {
          */
         public static function ui( $post ) {
 
-            global $rt_hd_module, $rt_hd_closing_reason, $rt_hd_attributes;
-            $post_type = $rt_hd_module->post_type;
+            $post_type = $post->post_type;
 
             $user_edit = false;
             if ( current_user_can( "edit_{$post_type}" ) ) {
@@ -71,6 +70,60 @@ if( !class_exists( 'RT_Meta_Box_Attachment' ) ) {
          */
         public static function save( $post_id, $post ) {
 
+            $old_attachments = get_posts( array(
+                    'post_parent' => $post_id,
+                    'post_type' => 'attachment',
+                    'fields' => 'ids',
+            'posts_per_page' => -1,
+            ));
+            $new_attachments = array();
+            if ( isset( $_POST['attachment'] ) ) {
+                    $new_attachments = $_POST['attachment'];
+                    foreach ( $new_attachments as $attachment ) {
+                            if( !in_array( $attachment, $old_attachments ) ) {
+                                    $file = get_post($attachment);
+                                    $filepath = get_attached_file( $attachment );
+
+                                    $post_attachment_hashes = get_post_meta( $post_id, '_rt_wp_hd_attachment_hash' );
+                                    if ( ! empty( $post_attachment_hashes ) && in_array( md5_file( $filepath ), $post_attachment_hashes ) ) {
+                                            continue;
+                                    }
+
+                                    if( !empty( $file->post_parent ) ) {
+                                            $args = array(
+                                                    'post_mime_type' => $file->post_mime_type,
+                                                    'guid' => $file->guid,
+                                                    'post_title' => $file->post_title,
+                                                    'post_content' => $file->post_content,
+                                                    'post_parent' => $post_id,
+                                                    'post_author' => get_current_user_id(),
+                                            );
+                                            wp_insert_attachment( $args, $file->guid, $post_id );
+
+                                            add_post_meta( $post_id, '_rt_wp_hd_attachment_hash', md5_file( $filepath ) );
+
+                                    } else {
+                                            wp_update_post( array( 'ID' => $attachment, 'post_parent' => $post_id ) );
+                                            $file = get_attached_file( $attachment );
+                                            add_post_meta( $post_id, '_rt_wp_hd_attachment_hash', md5_file( $filepath ) );
+                                    }
+                            }
+                    }
+
+                    foreach ( $old_attachments as $attachment ) {
+                            if( !in_array( $attachment, $new_attachments ) ) {
+                                    wp_update_post( array( 'ID' => $attachment, 'post_parent' => '0' ) );
+                                    $filepath = get_attached_file( $attachment );
+                                    delete_post_meta($post_id, '_rt_wp_hd_attachment_hash', md5_file( $filepath ) );
+                            }
+                    }
+            } else {
+                    foreach ( $old_attachments as $attachment ) {
+                            wp_update_post( array( 'ID' => $attachment, 'post_parent' => '0' ) );
+                            $filepath = get_attached_file( $attachment );
+                            delete_post_meta($post_id, '_rt_wp_hd_attachment_hash', md5_file( $filepath ) );
+                    }
+            }
         }
     }
 }
