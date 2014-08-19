@@ -180,7 +180,42 @@ if( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
          * Save meta box data
          */
         public static function save( $post_id, $post ) {
-                
+            global $rt_hd_admin_meta_boxes; 
+
+            $newTicket = $_POST['post'];
+            $creationdate = $newTicket['post_date'];
+            if ( isset( $creationdate ) && $creationdate != '' ) {
+                try {
+                    $dr = date_create_from_format( 'M d, Y H:i A', $creationdate );
+                                $UTC = new DateTimeZone('UTC');
+                                $dr->setTimezone($UTC);
+                                $timeStamp = $dr->getTimestamp();
+                    $newTicket['post_date'] = gmdate('Y-m-d H:i:s', (intval($timeStamp) + ( get_option('gmt_offset') * 3600 )));
+                                $newTicket['post_date_gmt'] = gmdate('Y-m-d H:i:s', (intval($timeStamp)));
+                } catch ( Exception $e ) {
+                    $newTicket['post_date'] = current_time( 'mysql' );
+                                $newTicket['post_date_gmt'] = gmdate('Y-m-d H:i:s');
+                }
+            } else {
+                $newTicket['post_date'] = current_time( 'mysql' );
+                        $newTicket['post_date_gmt'] = gmdate('Y-m-d H:i:s');
+            }
+
+                // Post Data to be saved.
+            $newpost = array(
+                'post_status' => $newTicket['post_status'], 
+                'post_date' => $newTicket['post_date'],
+                'post_date_gmt' => $newTicket['post_date_gmt'],
+            );
+            $newpost = array_merge( $newpost, array( 'ID' => $post_id ) );
+            // unhook this function so it doesn't loop infinitely
+            remove_action( 'save_post', array( $rt_hd_admin_meta_boxes, 'save_meta_boxes' ), 1, 2 );
+
+            // update the post, which calls save_post again
+            wp_update_post( $newpost );
+
+            // re-hook this function
+            add_action( 'save_post', array( $rt_hd_admin_meta_boxes, 'save_meta_boxes' ), 1, 2 );
         }
     }
 }
