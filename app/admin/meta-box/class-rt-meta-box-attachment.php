@@ -25,15 +25,6 @@ if( !class_exists( 'RT_Meta_Box_Attachment' ) ) {
 
             $post_type = $post->post_type;
 
-            $user_edit = false;
-            if ( current_user_can( "edit_{$post_type}" ) ) {
-                $user_edit = 'true';
-            } else if ( current_user_can( "read_{$post_type}" ) ) {
-                $user_edit = 'false';
-            } else {
-                wp_die("Opsss!! You are in restricted area");
-            }
-
             $attachments = array();
             if ( isset( $post->ID ) ) {
                 $attachments = get_posts( array(
@@ -43,10 +34,8 @@ if( !class_exists( 'RT_Meta_Box_Attachment' ) ) {
                 ));
             }?>
 
-            <div class="row collapse" id="attachment-container"><?php
-                if( $user_edit ) { ?>
-                    <a href="#" class="button" id="add_ticket_attachment"><?php _e('Add'); ?></a><?php
-                } ?>
+            <div class="row collapse" id="attachment-container">
+                <a href="#" class="button" id="add_ticket_attachment"><?php _e('Add'); ?></a>
                 <div class="scroll-height"><?php
                     foreach ($attachments as $attachment) {
                         $extn_array = explode('.', $attachment->guid); $extn = $extn_array[count($extn_array) - 1]; ?>
@@ -54,10 +43,8 @@ if( !class_exists( 'RT_Meta_Box_Attachment' ) ) {
                             <a target="_blank" href="<?php echo wp_get_attachment_url($attachment->ID); ?>">
                                 <img height="20px" width="20px" src="<?php echo RT_HD_URL . "assets/file-type/" . $extn . ".png"; ?>" /><?php
                                 echo $attachment->post_title; ?>
-                            </a><?php
-                            if( $user_edit ) { ?>
-                                <a href="#" class="rthd_delete_attachment right">x</a><?php
-                            } ?>
+                            </a>
+                            <a href="#" class="rthd_delete_attachment right">x</a>
                             <input type="hidden" name="attachment[]" value="<?php echo $attachment->ID; ?>" />
                         </div><?php
                     } ?>
