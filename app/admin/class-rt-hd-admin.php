@@ -92,13 +92,13 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 				wp_enqueue_script('jquery-ui-timepicker-addon', RT_HD_URL . 'app/assets/javascripts/jquery-ui-timepicker-addon.js',array("jquery-ui-datepicker","jquery-ui-slider"), RT_HD_VERSION, true);
 
 				wp_enqueue_script('foundation.zepto', RT_HD_URL . 'app/assets/javascripts/vendor/zepto.js',array("jquery"), "", true);
-				wp_enqueue_script('jquery.foundation.reveal', RT_HD_URL . 'app/assets/javascripts/jquery.foundation.reveal.js',array("foundation-js"), "", true);
-				wp_enqueue_script('jquery.foundation.form', RT_HD_URL . 'app/assets/javascripts/foundation/foundation.forms.js',array("foundation-js"), "", true);
-				wp_enqueue_script('jquery.foundation.tabs', RT_HD_URL . 'app/assets/javascripts/foundation/foundation.section.js',array("foundation-js"), "", true);
-				wp_enqueue_script('foundation-modernizr-js', RT_HD_URL . 'app/assets/javascripts/vendor/custom.modernizr.js', array(), "", false);
-				wp_enqueue_script('ratting-jquery', RT_HD_URL . 'app/assets/ratting-jquery/jquery.rating.pack.js', array(), RT_HD_VERSION, true);
+//				wp_enqueue_script('jquery.foundation.reveal', RT_HD_URL . 'app/assets/javascripts/jquery.foundation.reveal.js',array("foundation-js"), "", true);
+//				wp_enqueue_script('jquery.foundation.form', RT_HD_URL . 'app/assets/javascripts/foundation/foundation.forms.js',array("foundation-js"), "", true);
+//				wp_enqueue_script('jquery.foundation.tabs', RT_HD_URL . 'app/assets/javascripts/foundation/foundation.section.js',array("foundation-js"), "", true);
+//				wp_enqueue_script('foundation-modernizr-js', RT_HD_URL . 'app/assets/javascripts/vendor/custom.modernizr.js', array(), "", false);
+//				wp_enqueue_script('ratting-jquery', RT_HD_URL . 'app/assets/ratting-jquery/jquery.rating.pack.js', array(), RT_HD_VERSION, true);
 				wp_enqueue_script('foundation-js', RT_HD_URL . 'app/assets/javascripts/foundation/foundation.js',array("jquery","foundation.zepto"), RT_HD_VERSION, true);
-				wp_enqueue_script('sticky-kit', RT_HD_URL . 'app/assets/javascripts/stickyfloat.js', array('jquery'), RT_HD_VERSION, true);
+//				wp_enqueue_script('sticky-kit', RT_HD_URL . 'app/assets/javascripts/stickyfloat.js', array('jquery'), RT_HD_VERSION, true);
 				wp_enqueue_script('rthd-admin-js', RT_HD_URL . 'app/assets/javascripts/admin.js',array("foundation-js"), RT_HD_VERSION, true);
 				wp_enqueue_script('moment-js', RT_HD_URL . 'app/assets/javascripts/moment.js',array("jquery"), RT_HD_VERSION, true);
 
@@ -106,11 +106,11 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 					wp_enqueue_script( 'jquery-ui-accordion' );
 				}
 
-				wp_enqueue_style('ratting-jquery', RT_HD_URL . 'app/assets/ratting-jquery/jquery.rating.css', false, "", 'all');
+				//wp_enqueue_style('ratting-jquery', RT_HD_URL . 'app/assets/ratting-jquery/jquery.rating.css', false, "", 'all');
 				wp_enqueue_style('foundation-icon-general-css', RT_HD_URL . 'app/assets/css/general_foundicons.css', false, "", 'all');
-				wp_enqueue_style('foundation-icon-general-ie-css', RT_HD_URL . 'app/assets/css/general_foundicons_ie7.css', false, "", 'all');
-				wp_enqueue_style('foundation-icon-social-css', RT_HD_URL . 'app/assets/css/social_foundicons.css', false, "", 'all');
-				wp_enqueue_style('foundation-icon-social-ie-css', RT_HD_URL . 'app/assets/css/social_foundicons_ie7.css', false, "", 'all');
+				//wp_enqueue_style('foundation-icon-general-ie-css', RT_HD_URL . 'app/assets/css/general_foundicons_ie7.css', false, "", 'all');
+				//wp_enqueue_style('foundation-icon-social-css', RT_HD_URL . 'app/assets/css/social_foundicons.css', false, "", 'all');
+				//wp_enqueue_style('foundation-icon-social-ie-css', RT_HD_URL . 'app/assets/css/social_foundicons_ie7.css', false, "", 'all');
 				wp_enqueue_style('foundation-normalize', RT_HD_URL . 'app/assets/css/legacy_normalize.css', false, '', 'all');
                                 wp_enqueue_style('foundation-legacy-css', RT_HD_URL . 'app/assets/css/legacy_admin.css', false, '', 'all');
 				wp_enqueue_style('rthd-admin-css', RT_HD_URL . 'app/assets/css/admin.css', false, RT_HD_VERSION, 'all');

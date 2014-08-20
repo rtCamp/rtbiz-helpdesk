@@ -277,7 +277,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 				'show_ui' => true, // Show the UI in admin panel
 				'menu_icon' => $hd_logo_url,
 				'menu_position' => $menu_position,
-				'supports' => array('title', 'editor', 'comments', 'custom-fields'),
+				'supports' => array('title', 'editor', 'comments', 'custom-fields', 'revisions'),
 				'capability_type' => $this->post_type,
 			);
 			register_post_type( $this->post_type, $args );
