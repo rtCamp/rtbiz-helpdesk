@@ -35,7 +35,7 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 			global $rt_hd_attributes_relationship_model, $rt_hd_module;
 			$this->table_name = rthd_get_ticket_table_name();
 			$this->labels = $rt_hd_module->labels;
-			$this->post_type = $rt_hd_module->post_type;
+			$this->post_type = Rt_HD_Module::$post_type;
 			$this->settings = rthd_get_settings();
 			$this->relations = $rt_hd_attributes_relationship_model->get_relations_by_post_type( $this->post_type );
 			$this->post_statuses = $rt_hd_module->get_custom_statuses();

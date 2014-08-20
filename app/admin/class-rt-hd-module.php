@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) )
 if( !class_exists( 'Rt_HD_Module' ) ) {
 	class Rt_HD_Module {
 
-		var $post_type = 'rt_ticket';
+		static $post_type = 'rt_ticket';
 		// used in mail subject title - to detect whether it's a Helpdesk mail or not. So no translation
 		var $name = 'Helpdesk';
 		var $labels = array();
@@ -49,7 +49,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
 			global $rt_hd_attributes_relationship_model, $rt_hd_attributes_model;
-			$relations = $rt_hd_attributes_relationship_model->get_relations_by_post_type( $this->post_type );
+			$relations = $rt_hd_attributes_relationship_model->get_relations_by_post_type( self::$post_type );
 			$table_name = rthd_get_ticket_table_name();
 			$sql = "CREATE TABLE {$table_name} (\n"
 					. "id BIGINT(20) NOT NULL AUTO_INCREMENT,\n"
@@ -100,10 +100,10 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 
 			$settings = rthd_get_settings();
 			if ( isset( $settings['attach_contacts'] ) && $settings['attach_contacts'] == 'yes' ) {
-				rt_biz_register_person_connection( $this->post_type, $this->labels['name'] );
+				rt_biz_register_person_connection( self::$post_type, $this->labels['name'] );
 			}
 			if ( isset( $settings['attach_accounts'] ) && $settings['attach_accounts'] == 'yes' ) {
-				rt_biz_register_organization_connection( $this->post_type, $this->labels['name'] );
+				rt_biz_register_organization_connection( self::$post_type, $this->labels['name'] );
 			}
 
 			global $rt_hd_closing_reason;
@@ -132,7 +132,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 		}
 
 		function update_ticket_table( $attr_id, $post_types ) {
-			if ( in_array( $this->post_type, $post_types ) ) {
+			if ( in_array( self::$post_type, $post_types ) ) {
 				$updateDB = new RT_DB_Update( trailingslashit( RT_HD_PATH ) . 'index.php', trailingslashit( RT_HD_PATH_SCHEMA ) );
 				delete_option( $updateDB->db_version_option_name );
 			}
@@ -147,23 +147,23 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 				strpos( $_SERVER['REQUEST_URI'], 'page=rthd-settings' ) === false &&
 				strpos( $_SERVER['REQUEST_URI'], 'page=rthd-logs' ) === false &&
 				strpos( $_SERVER['REQUEST_URI'], 'page=rthd-user-settings' ) === false &&
-				strpos( $_SERVER['REQUEST_URI'], 'post_type='.$this->post_type ) &&
-				strpos( $_SERVER['REQUEST_URI'], 'page=rthd-add-'.$this->post_type ) === false &&
-				strpos( $_SERVER['REQUEST_URI'], 'page=rthd-'.$this->post_type.'-dashboard' ) === false &&
-				strpos( $_SERVER['REQUEST_URI'], 'page=rthd-all-'.$this->post_type ) === false ) {
-				wp_redirect( add_query_arg( 'page', 'rthd-all-'.$this->post_type ), 200 );
+				strpos( $_SERVER['REQUEST_URI'], 'post_type='.self::$post_type ) &&
+				strpos( $_SERVER['REQUEST_URI'], 'page=rthd-add-'.self::$post_type ) === false &&
+				strpos( $_SERVER['REQUEST_URI'], 'page=rthd-'.self::$post_type.'-dashboard' ) === false &&
+				strpos( $_SERVER['REQUEST_URI'], 'page=rthd-all-'.self::$post_type ) === false ) {
+				wp_redirect( add_query_arg( 'page', 'rthd-all-'.self::$post_type ), 200 );
 			}
 		}
 
 		function add_post_link() {
-			if ( strpos( $_SERVER["REQUEST_URI"], 'post-new.php?post_type='.$this->post_type ) > 0 ) {
-				wp_redirect( admin_url( 'edit.php?post_type=' . $this->post_type.'&page=rthd-add-'.$this->post_type ), 200 );
+			if ( strpos( $_SERVER["REQUEST_URI"], 'post-new.php?post_type='.self::$post_type ) > 0 ) {
+				wp_redirect( admin_url( 'edit.php?post_type=' . self::$post_type.'&page=rthd-add-'.self::$post_type ), 200 );
 			}
 		}
 
 		function ticket_edit_link( $editlink, $postID, $context ) {
 			$post_type = get_post_type( $postID );
-			if ( $post_type != $this->post_type ) {
+			if ( $post_type != self::$post_type ) {
 				return $editlink;
 			}
 			return admin_url( "edit.php?post_type={$post_type}&page=rthd-add-{$post_type}&{$post_type}_id=" . $postID );
@@ -171,16 +171,16 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 
 		function post_row_action( $action, $post ) {
 			$post_type = get_post_type( $post );
-			if ( $post_type != $this->post_type ) {
+			if ( $post_type != self::$post_type ) {
 				return $action;
 			}
 			$title = __( 'Edit' );
-			$action['edit'] = "<a href='" . admin_url("edit.php?post_type={$this->post_type}&page=rthd-add-{$this->post_type}&{$this->post_type}_id=" . $post->ID) . "' title='" . $title . "'>" . $title . "</a>";
+			$action['edit'] = "<a href='" . admin_url("edit.php?post_type=".self::$post_type."&page=rthd-add-".self::$post_type."&".self::$post_type."_id=" . $post->ID) . "' title='" . $title . "'>" . $title . "</a>";
 			return $action;
 		}
 
         function add_department_support( $post_types ){
-            $post_types[] = $this->post_type;
+            $post_types[] = self::$post_type;
             return $post_types;
         }
 
@@ -189,17 +189,17 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 
 			$author_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
 
-			$screen_id = add_submenu_page( 'edit.php?post_type='.$this->post_type, __( 'Dashboard' ), __( 'Dashboard' ), $author_cap, 'rthd-'.$this->post_type.'-dashboard', array( $this, 'dashboard' ) );
+			$screen_id = add_submenu_page( 'edit.php?post_type='.self::$post_type, __( 'Dashboard' ), __( 'Dashboard' ), $author_cap, 'rthd-'.self::$post_type.'-dashboard', array( $this, 'dashboard' ) );
 			$rt_hd_dashboard->add_screen_id( $screen_id );
 			$rt_hd_dashboard->setup_dashboard();
 
 			/* Metaboxes for dashboard widgets */
 			add_action( 'add_meta_boxes', array( $this, 'add_dashboard_widgets' ) );
 
-			$filter = add_submenu_page( 'edit.php?post_type='.$this->post_type, __( ucfirst( $this->labels['all_items'] ) ), __( ucfirst( $this->labels['all_items'] ) ), $author_cap, 'rthd-all-'.$this->post_type, array( $this, 'custom_page_list_view' ) );
+			$filter = add_submenu_page( 'edit.php?post_type='.self::$post_type, __( ucfirst( $this->labels['all_items'] ) ), __( ucfirst( $this->labels['all_items'] ) ), $author_cap, 'rthd-all-'.self::$post_type, array( $this, 'custom_page_list_view' ) );
 			add_action( "load-$filter", array( $this, 'add_screen_options' ) );
 
-			$screen_id = add_submenu_page( 'edit.php?post_type='.$this->post_type, __('Add ' . ucfirst( $this->labels['name'] ) ), __('Add ' . ucfirst( $this->labels['name'] ) ), $author_cap, 'rthd-add-'.$this->post_type, array( $this, 'custom_page_ui' ) );
+			$screen_id = add_submenu_page( 'edit.php?post_type='.self::$post_type, __('Add ' . ucfirst( $this->labels['name'] ) ), __('Add ' . ucfirst( $this->labels['name'] ) ), $author_cap, 'rthd-add-'.self::$post_type, array( $this, 'custom_page_ui' ) );
 			add_action( 'admin_footer-'.$screen_id, array( $this, 'footer_scripts' ) );
 
 			add_filter( 'set-screen-option', array( $this,'tickets_table_set_option' ), 10, 3 );
@@ -219,7 +219,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			$args = array(
 				'label' => $this->labels['all_items'],
 				'default' => 10,
-				'option' => $this->post_type.'_per_page',
+				'option' => self::$post_type.'_per_page',
 			);
 			add_screen_option($option, $args);
 			new Rt_HD_Tickets_List_View();
@@ -228,16 +228,16 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 		function custom_pages_order( $menu_order ) {
 			global $submenu;
 			global $menu;
-			if ( isset( $submenu['edit.php?post_type='.$this->post_type] ) && !empty( $submenu['edit.php?post_type='.$this->post_type] ) ) {
-				$module_menu = $submenu['edit.php?post_type='.$this->post_type];
-				unset($submenu['edit.php?post_type='.$this->post_type]);
+			if ( isset( $submenu['edit.php?post_type='.self::$post_type] ) && !empty( $submenu['edit.php?post_type='.self::$post_type] ) ) {
+				$module_menu = $submenu['edit.php?post_type='.self::$post_type];
+				unset($submenu['edit.php?post_type='.self::$post_type]);
 				unset($module_menu[5]);
 				unset($module_menu[10]);
 				$new_index = 5;
 				foreach ( $this->custom_menu_order as $item ) {
 					foreach ( $module_menu as $p_key => $menu_item ) {
 						if ( in_array( $item, $menu_item ) ) {
-							$submenu['edit.php?post_type='.$this->post_type][$new_index] = $menu_item;
+							$submenu['edit.php?post_type='.self::$post_type][$new_index] = $menu_item;
 							unset ( $module_menu[$p_key] );
 							$new_index += 5;
 							break;
@@ -245,8 +245,10 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 					}
 				}
 				foreach( $module_menu as $p_key => $menu_item ) {
-					$menu_item[0]= '--- '.$menu_item[0];
-					$submenu['edit.php?post_type='.$this->post_type][$new_index] = $menu_item;
+					if ( $menu_item[2] != Redux_Framework_Helpdesk_Config::$page_slug ) {
+						$menu_item[0]= '--- '.$menu_item[0];
+					}
+					$submenu['edit.php?post_type='.self::$post_type][$new_index] = $menu_item;
 					unset ( $module_menu[$p_key] );
 					$new_index += 5;
 				}
@@ -261,7 +263,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 
 		function custom_page_list_view() {
 			$args = array(
-				'post_type' => $this->post_type,
+				'post_type' => self::$post_type,
 				'labels' => $this->labels,
 			);
 			rthd_get_template( 'admin/list-view.php', $args );
@@ -278,9 +280,9 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 				'menu_icon' => $hd_logo_url,
 				'menu_position' => $menu_position,
 				'supports' => array('title', 'editor', 'comments', 'custom-fields'),
-				'capability_type' => $this->post_type,
+				'capability_type' => self::$post_type,
 			);
-			register_post_type( $this->post_type, $args );
+			register_post_type( self::$post_type, $args );
 		}
 
 		function register_custom_statuses() {
@@ -298,24 +300,19 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
         function get_custom_menu_order(){
 			global $rt_hd_attributes;
             $this->custom_menu_order = array(
-                'rthd-'.$this->post_type.'-dashboard',
-				'rthd-all-'.$this->post_type,
-				'rthd-add-'.$this->post_type,
-				'rthd-gravity-import',
-				'rthd-gravity-mapper',
-				'rthd-logs',
-				'rthd-settings',
-				'rthd-user-settings',
+                'rthd-'.self::$post_type.'-dashboard',
+				'rthd-all-'.self::$post_type,
+				'rthd-add-'.self::$post_type,
 				$rt_hd_attributes->attributes_page_slug,
             );
         }
 
 		function get_custom_labels() {
-			$menu_label = rthd_get_menu_label();
+			$settings = rthd_get_redux_settings();
 			$this->labels = array(
 				'name' => __( 'Ticket' ),
 				'singular_name' => __( 'Ticket' ),
-				'menu_name' => $menu_label,
+				'menu_name' => $settings[ 'rthd_menu_label' ],
 				'all_items' => __( 'Tickets' ),
 				'add_new' => __( 'Add Ticket' ),
 				'add_new_item' => __( 'Add Ticket' ),
@@ -350,7 +347,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 
 		function dashboard() {
 			global $rt_hd_dashboard;
-			$rt_hd_dashboard->ui( $this->post_type );
+			$rt_hd_dashboard->ui( self::$post_type );
 		}
 
 		function add_dashboard_widgets() {
@@ -367,7 +364,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			/* Top Clients */
 			add_meta_box( 'rthd-top-clients', __( 'Top Clients' ), array( $this, 'top_clients' ), $rt_hd_dashboard->screen_id, 'column4' );
 
-			$relations = $rt_hd_attributes_relationship_model->get_relations_by_post_type( $this->post_type );
+			$relations = $rt_hd_attributes_relationship_model->get_relations_by_post_type( self::$post_type );
 			foreach ( $relations as $r ) {
 				$attr = $rt_hd_attributes_model->get_attribute( $r->attr_id );
 				if ( $attr->attribute_store_as == 'taxonomy' ) {
@@ -382,7 +379,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			$attribute_id = $args[ 'args' ][ 'attribute_id' ];
 			$attr = $rt_hd_attributes_model->get_attribute( $attribute_id );
 			$taxonomy = $rt_hd_rt_attributes->get_taxonomy_name( $attr->attribute_name );
-			$post_type = $this->post_type;
+			$post_type = self::$post_type;
 			$terms = get_terms( $taxonomy );
 
 			$data_source = array();
@@ -518,8 +515,8 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 				$user = get_user_by('id', $user);
 				$url = add_query_arg(
 					array(
-						'post_type' => $this->post_type,
-						'page' => 'rthd-all-'.$this->post_type,
+						'post_type' => self::$post_type,
+						'page' => 'rthd-all-'.self::$post_type,
 						'assignee' => $user->ID,
 					),
 					admin_url( 'edit.php' )
@@ -558,7 +555,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 					. ( ( isset( $wpdb->p2p ) ) ? "JOIN {$wpdb->p2p} AS p2p ON acc.ID = p2p.p2p_to " : ' ' )
 					. ( ( isset( $wpdb->p2p ) ) ? "JOIN {$table_name} AS ticket ON ticket.post_id = p2p.p2p_from " : ' ' )
 					. "WHERE 2=2 "
-					. ( ( isset( $wpdb->p2p ) ) ? "AND p2p.p2p_type = '{$this->post_type}_to_{$account}' " : ' ' )
+					. ( ( isset( $wpdb->p2p ) ) ? "AND p2p.p2p_type = '".self::$post_type."_to_{$account}' " : ' ' )
 					. "AND acc.post_type = '{$account}' "
 					. "GROUP BY acc.ID "
 					. ( ( isset( $wpdb->p2p ) ) ? "ORDER BY account_tickets DESC " : ' ' )
@@ -582,8 +579,8 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			foreach ( $results as $item ) {
 				$url = add_query_arg(
 					array(
-						'post_type' => $this->post_type,
-						'page' => 'rthd-all-'.$this->post_type,
+						'post_type' => self::$post_type,
+						'page' => 'rthd-all-'.self::$post_type,
 						$account => $item->account_id,
 					),
 					admin_url( 'edit.php' )
@@ -624,7 +621,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 					. ( ( isset( $wpdb->p2p ) ) ? "JOIN {$table_name} AS ticket ON ticket.post_id = p2p_lc.p2p_from " : ' ' )
 					. ( ( isset( $wpdb->p2p ) ) ? "LEFT JOIN {$wpdb->p2p} AS p2p_ac ON contact.ID = p2p_ac.p2p_to AND p2p_ac.p2p_type = '{$account}_to_{$contact}'  " : ' ' )
 					. "WHERE 2=2 "
-					. ( ( isset( $wpdb->p2p ) ) ? "AND p2p_lc.p2p_type = '{$this->post_type}_to_{$contact}' " : ' ' )
+					. ( ( isset( $wpdb->p2p ) ) ? "AND p2p_lc.p2p_type = '".self::$post_type."_to_{$contact}' " : ' ' )
 					. "AND contact.post_type = '{$contact}' "
 					. ( ( isset( $wpdb->p2p ) ) ? "AND p2p_ac.p2p_type IS NULL " : ' ' )
 					. "GROUP BY contact.ID "
@@ -649,8 +646,8 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			foreach ( $results as $item ) {
 				$url = add_query_arg(
 					array(
-						'post_type' => $this->post_type,
-						'page' => 'rthd-all-'.$this->post_type,
+						'post_type' => self::$post_type,
+						'page' => 'rthd-all-'.self::$post_type,
 						$contact => $item->contact_id,
 					),
 					admin_url( 'edit.php' )

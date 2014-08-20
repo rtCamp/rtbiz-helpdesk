@@ -40,13 +40,13 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		}
 
 		function filter_comment_from_admin($_comment1) {
-			global $hook_suffix, $rt_hd_module;
+			global $hook_suffix;
 			if ( in_array( $hook_suffix, array( 'edit-comments.php', 'index.php' ) ) ) {
 				global $wpdb;
 				if ( strpos( $_comment1['join'], $wpdb->posts ) === false ) {
 					$_comment1['join'] .= " left join $wpdb->posts on {$wpdb->comments}.comment_post_id = {$wpdb->posts}.id ";
 				}
-				$_comment1["where"] .= " and $wpdb->posts.post_type NOT IN ( '".$rt_hd_module->post_type."' ) ";
+				$_comment1["where"] .= " and $wpdb->posts.post_type NOT IN ( '".Rt_HD_Module::$post_type."' ) ";
 			}
 
 			return $_comment1;
@@ -62,7 +62,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 			$timeStamp = $d->getTimestamp();
 			$post_date = gmdate('Y-m-d H:i:s', (intval($timeStamp) + ( get_option('gmt_offset') * 3600 )));
 			$post_date_gmt = gmdate('Y-m-d H:i:s', (intval($timeStamp)));
-			$post_type = $rt_hd_module->post_type;
+			$post_type = Rt_HD_Module::$post_type;
 			$labels = $rt_hd_module->labels;
 			$settings = rthd_get_settings();
 
@@ -315,7 +315,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 			$pattern = '/\[([a-z]+)\ \#([0-9]+)\]/im';
 			$intMatch = preg_match_all( $pattern, $subject, $matches );
 			$module_name = strtolower( $rt_hd_module->name );
-			$post_type = $rt_hd_module->post_type;
+			$post_type = Rt_HD_Module::$post_type;
 			if( count( $matches ) > 0 ) {
 				if( isset( $matches[2][0] ) && isset( $matches[1][0] ) ) {
 					if( strtolower( $matches[1][0] ) == $module_name && get_post_type( intval( $matches[2][0] ) ) == $post_type ) {
@@ -480,13 +480,13 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		}
 
 		function post_exists($title, $date = '') {
-			global $wpdb, $rt_hd_module;
+			global $wpdb;
 			if (trim($title) == "")
 				return 0;
 			$post_title = stripslashes(sanitize_post_field('post_title', $title, 0, 'db'));
 			$post_date = stripslashes(sanitize_post_field('post_date', $date, 0, 'db'));
 
-			$query = "SELECT ID FROM $wpdb->posts WHERE 1=1 and post_type IN ('".$rt_hd_module->post_type."') ";
+			$query = "SELECT ID FROM $wpdb->posts WHERE 1=1 and post_type IN ('".Rt_HD_Module::$post_type."') ";
 			$args = array();
 
 			if (!empty($date) && $date != '') {
@@ -674,8 +674,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 			$comment = get_comment($comment_id);
 			$comment_post_ID = $comment->comment_post_ID;
 
-			global $rt_hd_module;
-			if ( get_post_type($comment_post_ID) != $rt_hd_module->post_type ) {
+			if ( get_post_type($comment_post_ID) != Rt_HD_Module::$post_type ) {
 				return true;
 			}
 
@@ -937,12 +936,11 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 				wp_die("Invalid Ticket");
 			}
 			$ticket_unique_id = $_POST['followup_ticket_unique_id'];
-			global $rt_hd_module;
 			$args = array(
 				'meta_key' => 'rthd_unique_id',
 				'meta_value' => $ticket_unique_id,
 				'post_status' => 'any',
-				'post_type' => $rt_hd_module->post_type,
+				'post_type' => Rt_HD_Module::$post_type,
 			);
 			$ticketpost = get_posts( $args );
 			if( empty( $ticketpost ) ) {
@@ -1054,12 +1052,11 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 			}
 
 			$ticket_unique_id = $_POST['ticket_unique_id'];
-			global $rt_hd_module;
 			$args = array(
 				'meta_key' => 'rthd_unique_id',
 				'meta_value' => $ticket_unique_id,
 				'post_status' => 'any',
-				'post_type' => $rt_hd_module->post_type,
+				'post_type' => Rt_HD_Module::$post_type,
 			);
 			$ticketpost = get_posts( $args );
 			if( empty( $ticketpost ) ) {
@@ -1595,8 +1592,8 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 				echo json_encode($response);
 				die(0);
 			}
-			global $rt_hd_module;
-			if ( get_post_type($_POST["post_id"]) != $rt_hd_module->post_type ) {
+
+			if ( get_post_type($_POST["post_id"]) != Rt_HD_Module::$post_type ) {
 				$response["false"] = true;
 				$response["message"] = "Invalid Post Type";
 				echo json_encode($response);

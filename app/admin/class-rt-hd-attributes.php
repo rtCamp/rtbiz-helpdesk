@@ -26,7 +26,7 @@ if( !class_exists( 'Rt_HD_Attributes' ) ) {
 		}
 
 		function init_attributes() {
-			global $rt_hd_rt_attributes, $rt_hd_module, $rt_hd_attributes_model, $rt_hd_attributes_relationship_model;
+			global $rt_hd_rt_attributes, $rt_hd_attributes_model, $rt_hd_attributes_relationship_model;
 			$rt_hd_rt_attributes = new RT_Attributes( RT_HD_TEXT_DOMAIN );
 
 			$admin_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' );
@@ -39,7 +39,7 @@ if( !class_exists( 'Rt_HD_Attributes' ) ) {
 				'assign_terms' => $editor_cap,
 			);
 
-			$rt_hd_rt_attributes->add_attributes_page( $this->attributes_page_slug, 'edit.php?post_type='.$rt_hd_module->post_type, $rt_hd_module->post_type, $admin_cap, $terms_caps, $render_type = true, $storage_type = true, $orderby = true );
+			$rt_hd_rt_attributes->add_attributes_page( $this->attributes_page_slug, 'edit.php?post_type='.Rt_HD_Module::$post_type, Rt_HD_Module::$post_type, $admin_cap, $terms_caps, $render_type = true, $storage_type = true, $orderby = true );
 			$rt_hd_attributes_model = new RT_Attributes_Model();
 			$rt_hd_attributes_relationship_model = new RT_Attributes_Relationship_Model();
 		}

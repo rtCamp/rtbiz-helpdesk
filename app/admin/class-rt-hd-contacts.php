@@ -53,8 +53,8 @@ if ( !class_exists( 'Rt_HD_Contacts' ) ) {
 			}
 
 			global $rt_hd_module;
-			if ( in_array( $rt_hd_module->post_type, array_keys( $rt_entity->enabled_post_types ) ) ) {
-				$columns[$rt_hd_module->post_type] = $rt_hd_module->labels['name'];
+			if ( in_array( Rt_HD_Module::$post_type, array_keys( $rt_entity->enabled_post_types ) ) ) {
+				$columns[Rt_HD_Module::$post_type] = $rt_hd_module->labels['name'];
 			}
 
 			return $columns;
@@ -74,13 +74,12 @@ if ( !class_exists( 'Rt_HD_Contacts' ) ) {
 				return;
 			}
 
-			global $rt_hd_module;
 			switch( $column ) {
 				default:
-					if ( in_array( $rt_hd_module->post_type, array_keys( $rt_entity->enabled_post_types ) ) && $column == $rt_hd_module->post_type ) {
+					if ( in_array( Rt_HD_Module::$post_type, array_keys( $rt_entity->enabled_post_types ) ) && $column == Rt_HD_Module::$post_type ) {
 						$post_details = get_post( $post_id );
-						$pages = rt_biz_get_post_for_person_connection( $post_id, $rt_hd_module->post_type );
-						echo '<a href = edit.php?' . $post_details->post_type . '=' . $post_details->ID . '&post_type='.$rt_hd_module->post_type.'>' . count( $pages ) . '</a>';
+						$pages = rt_biz_get_post_for_person_connection( $post_id, Rt_HD_Module::$post_type );
+						echo '<a href = edit.php?' . $post_details->post_type . '=' . $post_details->ID . '&post_type='.Rt_HD_Module::$post_type.'>' . count( $pages ) . '</a>';
 					}
 					break;
 			}

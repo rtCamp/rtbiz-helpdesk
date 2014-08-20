@@ -24,12 +24,11 @@ if ( ! class_exists( 'Rt_HD_ACL' ) ) {
 		}
 
 		function register_rt_hd_module( $modules ) {
-			global $rt_hd_module;
-			$menu_label = rthd_get_menu_label();
+			$settings = rthd_get_redux_settings();
 			$module_key = rt_biz_sanitize_module_key( RT_HD_TEXT_DOMAIN );
 			$modules[ $module_key ] = array(
-				'label' => $menu_label,
-				'post_types' => array( $rt_hd_module->post_type ),
+				'label' => $settings['rthd_menu_label'],
+				'post_types' => array( Rt_HD_Module::$post_type ),
 			);
 			return $modules;
 		}

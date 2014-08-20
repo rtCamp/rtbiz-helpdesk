@@ -8,7 +8,7 @@
 	}
 ?>
 <ul class="subsubsub">
-    <li><a href="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&type=gravity&tab=$current_tab"); ?>" <?php if ($_REQUEST["type"] == "gravity") echo " class='current'"; ?>>Gravity</a></li>
+    <li><a href="<?php echo admin_url("edit.php?post_type=".Rt_HD_Module::$post_type."&page=rthd-settings&type=gravity&tab=$current_tab"); ?>" <?php if ($_REQUEST["type"] == "gravity") echo " class='current'"; ?>>Gravity</a></li>
     					
 </ul>
 <table class="wp-list-table widefat rthd-gravity-mapping" cellspacing="0">

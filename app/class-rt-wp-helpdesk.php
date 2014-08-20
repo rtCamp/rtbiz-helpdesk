@@ -28,9 +28,9 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 				return false;
 			}
 
-			$this->init_globals();
-
 			$this->init_redux();
+
+			$this->init_globals();
 
 			add_action( 'init', array( $this, 'admin_init' ), 5 );
 			add_action( 'init', array( $this, 'init' ), 6 );
@@ -157,7 +157,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			$rt_hd_logs = new Rt_HD_Logs();
 
 			$page_slugs = array(
-				'rthd-' . $rt_hd_module->post_type . '-dashboard',
+				'rthd-' . Rt_HD_Module::$post_type . '-dashboard',
 			);
 			$rt_hd_reports = new Rt_Reports( $page_slugs );
 		}
@@ -173,7 +173,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 		}
 
 		function loadScripts() {
-			global $wp_query, $rt_hd_module;
+			global $wp_query;
 
 			if ( ! isset( $wp_query->query_vars[ 'name' ] ) ) {
 				return;
@@ -182,7 +182,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			$name = $wp_query->query_vars[ 'name' ];
 
 			$post_type = rthd_post_type_name( $name );
-			if ( $post_type != $rt_hd_module->post_type ) {
+			if ( $post_type != Rt_HD_Module::$post_type ) {
 				return;
 			}
 
@@ -263,12 +263,11 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 		function localize_scripts() {
 
 			$unique_id = $_REQUEST[ 'rthd_unique_id' ];
-			global $rt_hd_module;
 			$args = array(
 				'meta_key' => 'rthd_unique_id',
 				'meta_value' => $unique_id,
 				'post_status' => 'any',
-				'post_type' => $rt_hd_module->post_type,
+				'post_type' => Rt_HD_Module::$post_type,
 			);
 			$ticketpost = get_posts( $args );
 			if ( empty( $ticketpost ) ) {

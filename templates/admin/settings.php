@@ -18,7 +18,7 @@ if ( isset( $_POST[$slug.'_outbound_emails'] ) ) {
 }
 if ( $flag ) {
 	update_site_option( 'rt_hd_settings', $module_settings );
-	echo '<script>window.location="'.add_query_arg( array( 'post_type' => $rt_hd_module->post_type, 'page' => 'rthd-settings', 'type' => 'systememails','tab'=>'admin-settings' ), admin_url( 'edit.php' ) ).'";</script>';
+	echo '<script>window.location="'.add_query_arg( array( 'post_type' => Rt_HD_Module::$post_type, 'page' => 'rthd-settings', 'type' => 'systememails','tab'=>'admin-settings' ), admin_url( 'edit.php' ) ).'";</script>';
 	die();
 }
 
@@ -31,7 +31,7 @@ if(isset($_POST["rthd_googleapi_clientsecret"])){
 	$flag = true;
 }
 if ( $flag ) {
-	echo '<script>window.location="'.add_query_arg( array( 'post_type' => $rt_hd_module->post_type, 'page' => 'rthd-settings', 'type' => 'googleApi', 'tab'=>'admin-settings' ), admin_url( 'edit.php' ) ).'";</script>';
+	echo '<script>window.location="'.add_query_arg( array( 'post_type' => Rt_HD_Module::$post_type, 'page' => 'rthd-settings', 'type' => 'googleApi', 'tab'=>'admin-settings' ), admin_url( 'edit.php' ) ).'";</script>';
 	die();
 }
 
@@ -48,7 +48,7 @@ if ( isset( $_POST['rthd_menu_label'] ) ) {
 	$flag = true;
 }
 if ( $flag ) {
-	echo '<script>window.location="'.add_query_arg( array( 'post_type' => $rt_hd_module->post_type, 'page' => 'rthd-settings', 'type' => 'other', 'tab'=>'admin-settings' ), admin_url( 'edit.php' ) ).'";</script>';
+	echo '<script>window.location="'.add_query_arg( array( 'post_type' => Rt_HD_Module::$post_type, 'page' => 'rthd-settings', 'type' => 'other', 'tab'=>'admin-settings' ), admin_url( 'edit.php' ) ).'";</script>';
 	die();
 }
 
@@ -110,7 +110,7 @@ if ( isset( $_REQUEST['type'] ) && $_REQUEST['type'] == 'imapServers' ) {
 				$rt_hd_imap_server_model->delete_server( $server->id );
 			}
 		}
-		echo '<script>window.location="'.add_query_arg( array( 'post_type' => $rt_hd_module->post_type, 'page' => 'rthd-settings', 'type' => 'imapServers', 'tab'=>'admin-settings' ), admin_url( 'edit.php' ) ).'";</script>';
+		echo '<script>window.location="'.add_query_arg( array( 'post_type' => Rt_HD_Module::$post_type, 'page' => 'rthd-settings', 'type' => 'imapServers', 'tab'=>'admin-settings' ), admin_url( 'edit.php' ) ).'";</script>';
 		die();
 	}
 }
@@ -122,20 +122,20 @@ if(!isset($_REQUEST["type"])){
 ?>
 
        	<ul class="subsubsub">
-		<li><a href="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&type=googleApi&tab=admin-settings");?>" <?php if ($_REQUEST["type"] == "googleApi") echo " class='current'"; ?> ><?php _e( 'Google API' ); ?></a> | </li>
-		<li><a href="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&type=imapServers&tab=admin-settings");?>" <?php if ($_REQUEST["type"] == "imapServers") echo " class='current'"; ?> ><?php _e( 'IMAP Servers' ); ?></a> | </li>
-		<li><a href="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&type=systememails&tab=admin-settings");?>" <?php if ($_REQUEST["type"] == "systememails") echo " class='current'"; ?> ><?php _e( 'System Emails' ); ?></a> | </li>
-		<li><a href="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&type=other&tab=admin-settings");?>" <?php if ($_REQUEST["type"] == "other") echo " class='current'"; ?> ><?php _e( 'Other' ); ?></a></li>
+		<li><a href="<?php echo admin_url("edit.php?post_type=".Rt_HD_Module::$post_type."&page=rthd-settings&type=googleApi&tab=admin-settings");?>" <?php if ($_REQUEST["type"] == "googleApi") echo " class='current'"; ?> ><?php _e( 'Google API' ); ?></a> | </li>
+		<li><a href="<?php echo admin_url("edit.php?post_type=".Rt_HD_Module::$post_type."&page=rthd-settings&type=imapServers&tab=admin-settings");?>" <?php if ($_REQUEST["type"] == "imapServers") echo " class='current'"; ?> ><?php _e( 'IMAP Servers' ); ?></a> | </li>
+		<li><a href="<?php echo admin_url("edit.php?post_type=".Rt_HD_Module::$post_type."&page=rthd-settings&type=systememails&tab=admin-settings");?>" <?php if ($_REQUEST["type"] == "systememails") echo " class='current'"; ?> ><?php _e( 'System Emails' ); ?></a> | </li>
+		<li><a href="<?php echo admin_url("edit.php?post_type=".Rt_HD_Module::$post_type."&page=rthd-settings&type=other&tab=admin-settings");?>" <?php if ($_REQUEST["type"] == "other") echo " class='current'"; ?> ><?php _e( 'Other' ); ?></a></li>
 	</ul>
 
-	<form method="post" action="<?php  echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&tab=admin-settings&type=" . $_REQUEST["type"]); ?>">
+	<form method="post" action="<?php  echo admin_url("edit.php?post_type=".Rt_HD_Module::$post_type."&page=rthd-settings&tab=admin-settings&type=" . $_REQUEST["type"]); ?>">
 		<table class="form-table hd-option">
 			<tbody>
 				<?php if($_REQUEST["type"] == "googleApi"){
 					$redirect_url =get_site_option('rthd_googleapi_redirecturl');
 
 					if(!$redirect_url){
-						$redirect_url= admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&tab=my-settings&type=personal");
+						$redirect_url= admin_url("edit.php?post_type=".Rt_HD_Module::$post_type."&page=rthd-settings&tab=my-settings&type=personal");
 						update_site_option("rthd_googleapi_redirecturl", $redirect_url);
 					}
 
