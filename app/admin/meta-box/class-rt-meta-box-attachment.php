@@ -34,21 +34,21 @@ if( !class_exists( 'RT_Meta_Box_Attachment' ) ) {
                 ));
             }?>
 
-            <div class="row collapse" id="attachment-container">
+            <div id="attachment-container" class="row_group">
                 <a href="#" class="button" id="add_ticket_attachment"><?php _e('Add'); ?></a>
-                <div class="scroll-height"><?php
+                <ul id="divAttachmentList" class="scroll-height"><?php
                     foreach ($attachments as $attachment) {
                         $extn_array = explode('.', $attachment->guid); $extn = $extn_array[count($extn_array) - 1]; ?>
-                        <div class="large-12 mobile-large-3 columns attachment-item" data-attachment-id="<?php echo $attachment->ID; ?>">
+                        <li data-attachment-id="<?php echo $attachment->ID; ?>" class="attachment-item row_group">
+                            <a href="#" class="delete_row rthd_delete_attachment">x</a>
                             <a target="_blank" href="<?php echo wp_get_attachment_url($attachment->ID); ?>">
                                 <img height="20px" width="20px" src="<?php echo RT_HD_URL . "assets/file-type/" . $extn . ".png"; ?>" /><?php
                                 echo $attachment->post_title; ?>
                             </a>
-                            <a href="#" class="rthd_delete_attachment right">x</a>
                             <input type="hidden" name="attachment[]" value="<?php echo $attachment->ID; ?>" />
-                        </div><?php
+                        </li><?php
                     } ?>
-                </div>
+                </ul>
             </div><?php
         }
 

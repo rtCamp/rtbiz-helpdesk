@@ -65,69 +65,57 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 			if( ( isset( $post->post_type ) && $post->post_type == $rt_hd_module->post_type )
 					|| ( isset( $_REQUEST['page'] ) && in_array( $_REQUEST['page'], $pagearray ) )
 					|| ( isset( $_REQUEST['post_type'] ) && $_REQUEST['post_type'] == $rt_hd_module->post_type ) ) {
-				wp_enqueue_script('rt-jquery-tagit', RT_HD_URL . 'app/assets/javascripts/tag-it.js', array('jquery', 'jquery-ui-widget'), RT_HD_VERSION, true);
-				wp_enqueue_script('rt-custom-status', RT_HD_URL . 'app/assets/javascripts/rt-custom-status.js', array('jquery'), RT_HD_VERSION, true);
-				wp_enqueue_script('rt-handlebars', RT_HD_URL . 'app/assets/javascripts/handlebars.js', array('jquery'), RT_HD_VERSION, true);
-
-				if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] == 'rthd-'.$rt_hd_module->post_type.'-dashboard' ) {
-					wp_localize_script('rt-custom-status', 'rt_hd_top_menu', 'menu-posts-'.$rt_hd_module->post_type);
-					wp_localize_script('rt-custom-status', 'rt_hd_dashboard_url', admin_url( 'edit.php?post_type='.$rt_hd_module->post_type.'&page='.'rthd-'.$rt_hd_module->post_type.'-dashboard' ) );
-				}
-
-				if( !wp_script_is('jquery-ui-datepicker') ) {
-					wp_enqueue_script( 'jquery-ui-datepicker' );
-				}
-				if( !wp_script_is('jquery-ui-autocomplete') ) {
-					wp_enqueue_script('jquery-ui-autocomplete', '', array('jquery-ui-widget', 'jquery-ui-position'), '1.9.2');
-				}
-				if( !wp_script_is('jquery-ui-progressbar') ) {
-					wp_enqueue_script('jquery-ui-progressbar','',array('jquery-ui-widget', 'jquery-ui-position'), '1.9.2');
-				}
-				wp_enqueue_style('rt-hd-css', RT_HD_URL . 'app/assets/css/rt-hd-css.css', false, RT_HD_VERSION, 'all');
-				wp_enqueue_style('rt-jquery-tagit', RT_HD_URL . 'app/assets/css/jquery.tagit.css', false, RT_HD_URL, 'all');
+//				wp_enqueue_script('rt-jquery-tagit', RT_HD_URL . 'app/assets/javascripts/tag-it.js', array('jquery', 'jquery-ui-widget'), RT_HD_VERSION, true);
+//				wp_enqueue_script('rt-custom-status', RT_HD_URL . 'app/assets/javascripts/rt-custom-status.js', array('jquery'), RT_HD_VERSION, true);
+//				wp_enqueue_script('rt-handlebars', RT_HD_URL . 'app/assets/javascripts/handlebars.js', array('jquery'), RT_HD_VERSION, true);
+//
+//				if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] == 'rthd-'.$rt_hd_module->post_type.'-dashboard' ) {
+//					wp_localize_script('rt-custom-status', 'rt_hd_top_menu', 'menu-posts-'.$rt_hd_module->post_type);
+//					wp_localize_script('rt-custom-status', 'rt_hd_dashboard_url', admin_url( 'edit.php?post_type='.$rt_hd_module->post_type.'&page='.'rthd-'.$rt_hd_module->post_type.'-dashboard' ) );
+//				}
+//
+//				if( !wp_script_is('jquery-ui-datepicker') ) {
+//					wp_enqueue_script( 'jquery-ui-datepicker' );
+//				}
+//				if( !wp_script_is('jquery-ui-autocomplete') ) {
+//					wp_enqueue_script('jquery-ui-autocomplete', '', array('jquery-ui-widget', 'jquery-ui-position'), '1.9.2');
+//				}
+//				if( !wp_script_is('jquery-ui-progressbar') ) {
+//					wp_enqueue_script('jquery-ui-progressbar','',array('jquery-ui-widget', 'jquery-ui-position'), '1.9.2');
+//				}
+//				wp_enqueue_style('rt-hd-css', RT_HD_URL . 'app/assets/css/rt-hd-css.css', false, RT_HD_VERSION, 'all');
+//				wp_enqueue_style('rt-jquery-tagit', RT_HD_URL . 'app/assets/css/jquery.tagit.css', false, RT_HD_URL, 'all');
 			}
 			$pagearray = array( 'rthd-add-module', 'rthd-gravity-mapper', 'rthd-add-'.$rt_hd_module->post_type );
 			if ( isset( $post->post_type ) && $post->post_type == $rt_hd_module->post_type && in_array( $pagenow, array( 'post.php', 'post-new.php' ) ) 
                                 || ( isset( $_REQUEST['page'] ) && in_array( $_REQUEST['page'], $pagearray ) ) ) {
+                            
+                                // Date & time picker
 				wp_enqueue_script('jquery-ui-timepicker-addon', RT_HD_URL . 'app/assets/javascripts/jquery-ui-timepicker-addon.js',array("jquery-ui-datepicker","jquery-ui-slider"), RT_HD_VERSION, true);
-
-				wp_enqueue_script('foundation.zepto', RT_HD_URL . 'app/assets/javascripts/vendor/zepto.js',array("jquery"), "", true);
-//				wp_enqueue_script('jquery.foundation.reveal', RT_HD_URL . 'app/assets/javascripts/jquery.foundation.reveal.js',array("foundation-js"), "", true);
-//				wp_enqueue_script('jquery.foundation.form', RT_HD_URL . 'app/assets/javascripts/foundation/foundation.forms.js',array("foundation-js"), "", true);
-//				wp_enqueue_script('jquery.foundation.tabs', RT_HD_URL . 'app/assets/javascripts/foundation/foundation.section.js',array("foundation-js"), "", true);
-//				wp_enqueue_script('foundation-modernizr-js', RT_HD_URL . 'app/assets/javascripts/vendor/custom.modernizr.js', array(), "", false);
-//				wp_enqueue_script('ratting-jquery', RT_HD_URL . 'app/assets/ratting-jquery/jquery.rating.pack.js', array(), RT_HD_VERSION, true);
-				wp_enqueue_script('foundation-js', RT_HD_URL . 'app/assets/javascripts/foundation/foundation.js',array("jquery","foundation.zepto"), RT_HD_VERSION, true);
-//				wp_enqueue_script('sticky-kit', RT_HD_URL . 'app/assets/javascripts/stickyfloat.js', array('jquery'), RT_HD_VERSION, true);
-				wp_enqueue_script('rthd-admin-js', RT_HD_URL . 'app/assets/javascripts/admin.js',array("foundation-js"), RT_HD_VERSION, true);
-				wp_enqueue_script('moment-js', RT_HD_URL . 'app/assets/javascripts/moment.js',array("jquery"), RT_HD_VERSION, true);
-
-				if( !wp_script_is('jquery-ui-accordion') ) {
-					wp_enqueue_script( 'jquery-ui-accordion' );
-				}
-
-				//wp_enqueue_style('ratting-jquery', RT_HD_URL . 'app/assets/ratting-jquery/jquery.rating.css', false, "", 'all');
-				wp_enqueue_style('foundation-icon-general-css', RT_HD_URL . 'app/assets/css/general_foundicons.css', false, "", 'all');
-				//wp_enqueue_style('foundation-icon-general-ie-css', RT_HD_URL . 'app/assets/css/general_foundicons_ie7.css', false, "", 'all');
-				//wp_enqueue_style('foundation-icon-social-css', RT_HD_URL . 'app/assets/css/social_foundicons.css', false, "", 'all');
-				//wp_enqueue_style('foundation-icon-social-ie-css', RT_HD_URL . 'app/assets/css/social_foundicons_ie7.css', false, "", 'all');
-				wp_enqueue_style('foundation-normalize', RT_HD_URL . 'app/assets/css/legacy_normalize.css', false, '', 'all');
-                                wp_enqueue_style('foundation-legacy-css', RT_HD_URL . 'app/assets/css/legacy_admin.css', false, '', 'all');
-				wp_enqueue_style('rthd-admin-css', RT_HD_URL . 'app/assets/css/admin.css', false, RT_HD_VERSION, 'all');
-
-				if( !wp_script_is('jquery-ui-datepicker') ) {
+                                if( !wp_script_is('jquery-ui-datepicker') ) {
 					wp_enqueue_script( 'jquery-ui-datepicker' );
-				}
-
-				if( !wp_script_is('jquery-ui-autocomplete') ) {
-					wp_enqueue_script('jquery-ui-autocomplete', '', array('jquery-ui-widget', 'jquery-ui-position'), '1.9.2',true);
-				}
-
-				if ( !  wp_style_is( 'rt-jquery-ui-css' ) ) {
+				}   
+                                if ( !  wp_style_is( 'rt-jquery-ui-css' ) ) {
 					wp_enqueue_style('rt-jquery-ui-css', RT_HD_URL . 'app/assets/css/jquery-ui-1.9.2.custom.css', false, RT_HD_VERSION, 'all');
 				}
-
-				wp_enqueue_script( 'postbox' );
+                                //Momnet 
+                                wp_enqueue_script('moment-js', RT_HD_URL . 'app/assets/javascripts/moment.js',array("jquery"), RT_HD_VERSION, true);
+				wp_enqueue_script('rthd-admin-js', RT_HD_URL . 'app/assets/javascripts/admin.js', RT_HD_VERSION, true);
+				
+                                //autocomplete
+                                if( !wp_script_is('jquery-ui-autocomplete') ) {
+					wp_enqueue_script('jquery-ui-autocomplete', '', array('jquery-ui-widget', 'jquery-ui-position'), '1.9.2',true);
+				}
+                                
+                                //Admin css
+                                wp_enqueue_style('rthd-admin-css', RT_HD_URL . 'app/assets/css/admin_new.css', false, RT_HD_VERSION, 'all');
+                                
+                                
+//				if( !wp_script_is('jquery-ui-accordion') ) {
+//					wp_enqueue_script( 'jquery-ui-accordion' );
+//				}
+				
+//				wp_enqueue_script( 'postbox' );
 			}
 
 			$this->localize_scripts();

@@ -1,18 +1,18 @@
 rthd_user_edit = rthd_user_edit[0];
 
 jQuery(document).ready(function($) {
-    $(document).foundation();
+    //$(document).foundation();
     var LOADER_OVERLAY = $("<div class='loading-overlay'><i class='loader-icon'></i></div>");
-$.ajaxSetup({
-	beforeSend : function(jqXHR, settings) {
-		if(settings.data.indexOf('heartbeat') === -1 && settings.data.indexOf('closed-postboxes') === -1 && settings.data.indexOf('meta-box-order') === -1) {
-			$("body").append(LOADER_OVERLAY);
-		}
-	},
-	complete : function(jqXHR, settings) {
-		$("body").find(".loading-overlay").remove();
-	}
-});
+//    $.ajaxSetup({
+//            beforeSend : function(jqXHR, settings) {
+//                    if(settings.data.indexOf('heartbeat') === -1 && settings.data.indexOf('closed-postboxes') === -1 && settings.data.indexOf('meta-box-order') === -1) {
+//                            $("body").append(LOADER_OVERLAY);
+//                    }
+//            },
+//            complete : function(jqXHR, settings) {
+//                    $("body").find(".loading-overlay").remove();
+//            }
+//    });
 
 	if($(".datepicker").length > 0) {
 		$(".datepicker").datepicker({
@@ -67,7 +67,7 @@ $.ajaxSetup({
                 },
                 select: function(event, ui) {
                     if (jQuery("#subscribe-auth-" + ui.item.id).length < 1) {
-                        jQuery("#divSubscriberList").append("<li id='subscribe-auth-" + ui.item.id + "' class='contact-list' >" + ui.item.imghtml + "<a class='heading' target='_blank' href='"+ui.item.user_edit_link+"'>" + ui.item.label + "</a><a href='#removeSubscriber' class='right'><i class='foundicon-remove'></i></a><input type='hidden' name='subscribe_to[]' value='" + ui.item.id + "' /></li>")
+                        jQuery("#divSubscriberList").append("<li id='subscribe-auth-" + ui.item.id + "' class='contact-list' >" + ui.item.imghtml + "<a href='#removeSubscriber' class='delete_row'>×</a><br/><a class='subscribe-title heading' target='_blank' href='"+ui.item.user_edit_link+"'>" + ui.item.label + "</a><input type='hidden' name='subscribe_to[]' value='" + ui.item.id + "' /></li>")
                     }
                     jQuery("#subscriber_user_ac").val("");
                     return false;
@@ -704,9 +704,9 @@ if(jQuery("#new-contact-account").length > 0){
 			var strAttachment = '';
 			selection.map(function(attachment) {
 				attachment = attachment.toJSON();
-				strAttachment = '<div class="large-12 mobile-large-3 columns attachment-item" data-attachment-id="'+attachment.id+'">';
-				strAttachment += '<a target="_blank" href="'+attachment.url+'"><img height="20px" width="20px" src="' +attachment.icon + '" > '+attachment.filename+'</a>';
-				strAttachment += '<a href="#" class="rthd_delete_attachment right">x</a>';
+                                strAttachment = '<li data-attachment-id="'+attachment.id+'" class="attachment-item row_group">';
+                                strAttachment += '<a href="#" class="delete_row rthd_delete_attachment">x</a>';
+                                strAttachment += '<a target="_blank" href="'+attachment.url+'"><img height="20px" width="20px" src="' +attachment.icon + '" > '+attachment.filename+'</a>';
 				strAttachment += '<input type="hidden" name="attachment[]" value="' + attachment.id +'" /></div>';
 
 				jQuery("#attachment-container .scroll-height").append(strAttachment);
@@ -1068,7 +1068,7 @@ $("#savefollwoup").click(function(){
         $(this).parent().parent().remove();
     });
     $(document).on('click',".removeMeta",function(){
-        $(this).parent().parent().remove();
+        $(this).parent().remove();
     })
 
 	exf_count = 12345;
@@ -1079,15 +1079,12 @@ $("#savefollwoup").click(function(){
             return false;
         $("#add_ex_file_title").val("");
         $("#add_ex_file_link").val("");
-
-        var tmpstr=' <div class="large-12 columns" >';
-        tmpstr +='<div class="large-3 columns">';
+        
+        var tmpstr = '<div class="row_group">';
+        tmpstr +='<button class="delete_row removeMeta"><i class="foundicon-minus"></i>X</button>';
         tmpstr +='<input type="text" name="ticket_ex_files[' + exf_count +'][title]" value="' + title +'" />';
-        tmpstr +='</div><div class="large-8 columns">';
         tmpstr +='<input type="text" name="ticket_ex_files[' + exf_count +'][link]" value="' + link +'" />';
-        tmpstr +='</div><div class="large-1 columns">';
-        tmpstr +='<button class="removeMeta"><i class="foundicon-minus"></i></button>';
-        tmpstr +='</div></div>';
+        tmpstr +='</div>';
         exf_count++;
         $("#external-files-container").append(tmpstr);
     });

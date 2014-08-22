@@ -114,13 +114,14 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 
 		function hooks() {
 			add_action( 'admin_menu', array( $this, 'register_custom_pages' ), 1 );
-			add_filter( 'custom_menu_order', array($this, 'custom_pages_order') );
+			//add_filter( 'custom_menu_order', array($this, 'custom_pages_order') );
+                        add_action( 'wp_before_admin_bar_render', array( $this, 'rtticket_post_action_updated' ), 11 );
 			//add_action( 'admin_init', array( $this, 'add_post_link' ) );
 			//add_action( 'admin_init', array( $this, 'native_list_view_link' ) );
 			//add_filter( 'get_edit_post_link', array( $this, 'ticket_edit_link' ), 10, 3 );
-			add_filter( 'post_row_actions', array( $this, 'post_row_action' ), 10, 2 );
+			//add_filter( 'post_row_actions', array( $this, 'post_row_action' ), 10, 2 );
 
-            add_filter( 'rtbiz_dept_Supported_PT', array( $this, 'add_department_support' ) );
+                        add_filter( 'rtbiz_dept_Supported_PT', array( $this, 'add_department_support' ) );
 
 			add_action( 'rt_attributes_relations_added', array( $this, 'create_database_table' ) );
 			add_action( 'rt_attributes_relations_updated', array( $this, 'create_database_table' ) );
@@ -179,10 +180,10 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			return $action;
 		}
 
-        function add_department_support( $post_types ){
-            $post_types[] = $this->post_type;
-            return $post_types;
-        }
+                function add_department_support( $post_types ){
+                    $post_types[] = $this->post_type;
+                    return $post_types;
+                }
 
 		function register_custom_pages() {
 			global $rt_hd_dashboard;
@@ -295,20 +296,20 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			}
 		}
 
-        function get_custom_menu_order(){
-			global $rt_hd_attributes;
-            $this->custom_menu_order = array(
-                'rthd-'.$this->post_type.'-dashboard',
-				'rthd-all-'.$this->post_type,
-				'rthd-add-'.$this->post_type,
-				'rthd-gravity-import',
-				'rthd-gravity-mapper',
-				'rthd-logs',
-				'rthd-settings',
-				'rthd-user-settings',
-				$rt_hd_attributes->attributes_page_slug,
-            );
-        }
+                function get_custom_menu_order(){
+                                global $rt_hd_attributes;
+                    $this->custom_menu_order = array(
+                        'rthd-'.$this->post_type.'-dashboard',
+                                        'rthd-all-'.$this->post_type,
+                                        'rthd-add-'.$this->post_type,
+                                        'rthd-gravity-import',
+                                        'rthd-gravity-mapper',
+                                        'rthd-logs',
+                                        'rthd-settings',
+                                        'rthd-user-settings',
+                                        $rt_hd_attributes->attributes_page_slug,
+                    );
+                }
 
 		function get_custom_labels() {
 			$menu_label = rthd_get_menu_label();
@@ -346,6 +347,38 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 				),
 			);
 			return $this->statuses;
+		}
+                
+                /**
+		 * Fill the post status select box and change the value accordingly
+		 * 
+		 * @global type $pagenow
+		 * @global type $post
+		 * @return type
+		 */
+		function rtticket_post_action_updated() {
+			global $pagenow;
+			if ( get_post_type() == $this->post_type && ( $pagenow == 'edit.php' || $pagenow == 'post-new.php' || ( isset( $_GET[ 'action' ] ) && $_GET[ 'action' ] ) == 'edit' ) ) {
+				global $post;
+				if ( ! isset( $post ) ) {
+					return;
+				}
+				echo '
+				<script>
+				jQuery(document).ready(function($){
+					$("#publishing-action").html("<span class=\"spinner\"><\/span><input name=\"original_publish\" type=\"hidden\" id=\"original_publish\" value=\"Update\"><input type=\"submit\" id=\"save-publish\" class=\"button button-primary button-large\" value=\"Update\" ><\/input>");
+					$(".save-post-status").click(function(){
+						$("#publish").hide();
+						$("#publishing-action").html("<span class=\"spinner\"><\/span><input name=\"original_publish\" type=\"hidden\" id=\"original_publish\" value=\"Update\"><input type=\"submit\" id=\"save-publish\" class=\"button button-primary button-large\" value=\"Update\" ><\/input>");
+					});
+					$("#save-publish").click(function(){
+						$("#publish").click();
+					});
+                                        $("#post-status-select").removeClass("hide-if-js");
+				});
+				</script>
+				';
+			}
 		}
 
 		function dashboard() {

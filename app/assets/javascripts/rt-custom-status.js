@@ -92,43 +92,42 @@ jQuery(document).ready(function($) {
 	//set normal priority
 //    jQuery("[name=priority]").val(3);
 
-    $("#postcustomstuff input[type=text],#postcustomstuff textarea").each(function(e) {
+//    $("#postcustomstuff input[type=text],#postcustomstuff textarea").each(function(e) {
 
-        var test_val= $(this).val();
-        if (IsEmail(test_val)){
-             test_val = "<a target='_blank' href='mailto:"+ test_val+"'> " + test_val  + "</a>";
-        } else if (isUrl(test_val)){
-            test_val = "<a target='_blank' href='"+ test_val+"'> " + test_val  + "</a>";
-        }
+//        var test_val= $(this).val();
+//        if (IsEmail(test_val)){
+//             test_val = "<a target='_blank' href='mailto:"+ test_val+"'> " + test_val  + "</a>";
+//        } else if (isUrl(test_val)){
+//            test_val = "<a target='_blank' href='"+ test_val+"'> " + test_val  + "</a>";
+//        }
 
-        $(this).parent().append("<label class='custome-readonly'>" + test_val + "</label>");
-        $(this).siblings(".submit").hide();
-        $(this).hide();
-        $(this).parent().dblclick(function() {
-            $(this).parent().find("input[type=text],textarea,.submit").each(function() {
-                $(this).show();
-            })
-            $(this).parent().find(".custome-readonly").each(function() {
-                $(this).hide();
-            })
-        })
-    });
-	$(document).on("dblclick", ".custome-readonly", function() {
+//        $(this).parent().append("<label class='custome-readonly'>" + test_val + "</label>");
+//        $(this).siblings(".submit").hide();
+//        $(this).hide();
+//        $(this).parent().dblclick(function() {
+//            $(this).parent().find("input[type=text],textarea,.submit").each(function() {
+//                $(this).show();
+//            })
+//            $(this).parent().find(".custome-readonly").each(function() {
+//                $(this).hide();
+//            })
+//        })
+//    });
+//	$(document).on("dblclick", ".custome-readonly", function() {
 
-        $(this).parent().parent().find("input[type=text],textarea,.submit").each(function() {
-            $(this).show();
-        })
-        $(this).parent().parent().find(".custome-readonly").each(function() {
-            $(this).hide();
-        })
+//        $(this).parent().parent().find("input[type=text],textarea,.submit").each(function() {
+//            $(this).show();
+//        })
+//        $(this).parent().parent().find(".custome-readonly").each(function() {
+//            $(this).hide();
+//        })
 
-    })
+//    })
 
-
-	$("#newmeta").hide();
-    $("#newmeta").prev().dblclick(function() {
-        $("#newmeta").toggle();
-    })
+//	$("#newmeta").hide();
+//    $("#newmeta").prev().dblclick(function() {
+//        $("#newmeta").toggle();
+//    })
     $(".revertChanges").click(function(e) {
         var r = confirm("This will delete all the helpdesk data created in this trannsaction ! Are you sure you want to continue ?");
         if (r == true) {

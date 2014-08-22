@@ -63,6 +63,7 @@ if( !class_exists( 'Rt_HD_Attributes' ) ) {
 
 		function taxonomy_diff( $attr, $post_id, $newTicket ) {
 			$diffHTML = '';
+                        $attr->attribute_render_type = 'checklist';
 			switch ( $attr->attribute_render_type ) {
 //				case 'autocomplete':
 //					break;
@@ -84,7 +85,7 @@ if( !class_exists( 'Rt_HD_Attributes' ) ) {
 					}
 					if ( !empty( $newVals ) ) {
 						$newTerms = get_term_by( 'id', $newVals[0], rthd_attribute_taxonomy_name( $attr->attribute_name ) );
-						$post_new_term_slug = $newVals[0];
+                                                $post_new_term_slug = $newVals[0];
 						$post_new_term_name = $newTerms->name;
 					} else {
 						$post_new_term_slug = '';
@@ -96,18 +97,20 @@ if( !class_exists( 'Rt_HD_Attributes' ) ) {
 					}
 					break;
 				case 'checklist':
-					if ( !isset( $newTicket[$attr->attribute_name] ) ) {
-						$newTicket[$attr->attribute_name] = array();
+					if ( !isset( $newTicket['rt_'.$attr->attribute_name] ) ) {
+						$newTicket['rt_'.$attr->attribute_name] = array();
 					}
-					$newVals = $newTicket[$attr->attribute_name];
+					$newVals = $newTicket['rt_'.$attr->attribute_name];
 					$newVals = array_unique( $newVals );
 					$oldTermString = rthd_post_term_to_string( $post_id, rthd_attribute_taxonomy_name( $attr->attribute_name ) );
 					$newTermString = '';
 					if(!empty($newVals)) {
 						$newTermArr = array();
 						foreach ( $newVals as $value ) {
-							$newTerm = get_term_by( 'id', $value, rthd_attribute_taxonomy_name( $attr->attribute_name ) );
-							$newTermArr[] = $newTerm->name;
+                                                    $newTerm = get_term_by( 'id', $value, rthd_attribute_taxonomy_name( $attr->attribute_name ) );
+                                                    if ( $newTerm ){
+                                                        $newTermArr[] = $newTerm->name;
+                                                    }
 						}
 						$newTermString = implode(',', $newTermArr);
 					}
@@ -126,11 +129,11 @@ if( !class_exists( 'Rt_HD_Attributes' ) ) {
 		function meta_diff( $attr, $post_id, $newTicket ) {
 			$diffHTML = '';
 
-			$oldattr = get_post_meta( $post_id, $attr->attribute_name, true );
-	        if ( $oldattr != $newTicket[$attr->attribute_name] ) {
+			$oldattr = get_post_meta( $post_id, '_'.$attr->attribute_name, true );
+                        if ( $oldattr != $newTicket[$attr->attribute_name] ) {
 				$diffHTML .= '<tr><th style="padding: .5em;border: 0;">'.$attr->attribute_label.'</th><td>' . rthd_text_diff( $oldattr, $newTicket[$attr->attribute_name] ) . '</td><td></td></tr>';
 			}
-	        update_post_meta($post_id, $attr->attribute_name, $newTicket[$attr->attribute_name]);
+                        //update_post_meta($post_id, '_'.$attr->attribute_name, $newTicket[$attr->attribute_name]);
 			return $diffHTML;
 		}
 
@@ -143,7 +146,7 @@ if( !class_exists( 'Rt_HD_Attributes' ) ) {
 					wp_set_post_terms( $post_id, implode( ',', $newTicket[$attr->attribute_name] ), rthd_attribute_taxonomy_name( $attr->attribute_name ) );
 					break;
 				case 'meta':
-					update_post_meta( $post_id, $attr->attribute_name, $newTicket[$attr->attribute_name] );
+					update_post_meta( $post_id, '_'.$attr->attribute_name, $newTicket[$attr->attribute_name] );
 					break;
 				default:
 					do_action( 'rthd_update_attribute', $attr, $post_id, $newTicket );
@@ -294,7 +297,7 @@ if( !class_exists( 'Rt_HD_Attributes' ) ) {
 					</div>
 					<?php break;
 				case 'date':
-					$value = get_post_meta( $post_id, $attr->attribute_name, true ); ?>
+					$value = get_post_meta( $post_id, '_'.$attr->attribute_name, true ); ?>
 					<div class="large-4 mobile-large-1 columns">
 						<span class="prefix" title="<?php echo $attr->attribute_label; ?>"><label for="post[<?php echo $attr->attribute_name; ?>]"><?php echo $attr->attribute_label; ?></label></span>
 					</div>
@@ -308,7 +311,7 @@ if( !class_exists( 'Rt_HD_Attributes' ) ) {
 					<?php }
 					break;
 				case 'datetime':
-					$value = get_post_meta( $post_id, $attr->attribute_name, true ); ?>
+					$value = get_post_meta( $post_id, '_'.$attr->attribute_name, true ); ?>
 					<div class="large-4 mobile-large-1 columns">
 						<span class="prefix" title="<?php echo $attr->attribute_label; ?>"><label for="post[<?php echo $attr->attribute_name; ?>]"><?php echo $attr->attribute_label; ?></label></span>
 					</div>
@@ -322,7 +325,7 @@ if( !class_exists( 'Rt_HD_Attributes' ) ) {
 					<?php }
 					break;
 				case 'currency':
-					$value = get_post_meta( $post_id, $attr->attribute_name, true ); ?>
+					$value = get_post_meta( $post_id, '_'.$attr->attribute_name, true ); ?>
 					<div class="large-4 mobile-large-1 columns">
 						<span class="prefix" title="<?php echo $attr->attribute_label; ?>"><label for="post[<?php echo $attr->attribute_name; ?>]"><?php echo $attr->attribute_label; ?></label></span>
 					</div>
@@ -336,7 +339,7 @@ if( !class_exists( 'Rt_HD_Attributes' ) ) {
 					<?php }
 					break;
 				case 'text':
-					$value = get_post_meta( $post_id, $attr->attribute_name, true ); ?>
+					$value = get_post_meta( $post_id, '_'.$attr->attribute_name, true ); ?>
 					<div class="large-4 small-4 columns">
 						<span class="prefix" title="<?php echo $attr->attribute_label; ?>"><label for="post[<?php echo $attr->attribute_name; ?>]"><?php echo $attr->attribute_label; ?></label></span>
 					</div>

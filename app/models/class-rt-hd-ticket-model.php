@@ -23,6 +23,21 @@ if ( !class_exists( 'Rt_HD_Ticket_Model' ) ) {
 			$table_name = rthd_get_ticket_table_name();
 			parent::__construct( $table_name, true );
 		}
+                
+                function is_exist( $post_id ){
+                    $args   = array();
+                    $list = null;
+                    if ( ! empty( $post_id ) ){
+                        $args = array( 'post_id' => $post_id );
+                        $list = parent::get( $args );
+                        foreach ( $list as $post ) {
+                            if ( $post_id == $post->post_id ){
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                }
 
 		function add_ticket( $data ) {
 			return parent::insert( $data );

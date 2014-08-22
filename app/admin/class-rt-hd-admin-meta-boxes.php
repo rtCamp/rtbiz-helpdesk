@@ -29,10 +29,12 @@ if( !class_exists( 'RT_HD_Admin_Meta_Boxes' ) ) {
             add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ), 30 );
             add_action( 'save_post', array( $this, 'save_meta_boxes' ), 1, 2 );
             
+            add_action( 'pre_post_update', 'RT_Ticket_Diff_Email::store_old_post_data', 1, 2 );
             add_action( 'rt_hd_process_rt_ticket_meta', 'RT_Meta_Box_Ticket_Info::save', 10, 2 );
+            add_action( 'rt_hd_process_rt_ticket_meta', 'RT_Meta_Box_Subscribers::save', 10, 2 );
             add_action( 'rt_hd_process_rt_ticket_meta', 'RT_Meta_Box_Attachment::save', 10, 2 );
             add_action( 'rt_hd_process_rt_ticket_meta', 'RT_Meta_Box_External_Link::save', 10, 2 );
-            add_action( 'rt_hd_process_rt_ticket_meta', 'RT_Ticket_Diff_Email::save', 1, 2 );
+            add_action( 'rt_hd_process_rt_ticket_meta', 'RT_Ticket_Diff_Email::save', 10, 2 );
             
         }
 
@@ -43,7 +45,7 @@ if( !class_exists( 'RT_HD_Admin_Meta_Boxes' ) ) {
             global $rt_hd_module;
 
             remove_meta_box('tagsdiv-rt_closing-reason', $rt_hd_module->post_type, 'side' );
-            remove_meta_box('revisionsdiv', $rt_hd_module->post_type, 'side' );
+            remove_meta_box('revisionsdiv', $rt_hd_module->post_type, 'normal' );
             remove_meta_box( 'commentsdiv', $rt_hd_module->post_type , 'normal' );
             remove_meta_box( 'commentstatusdiv', $rt_hd_module->post_type , 'normal' );
             remove_meta_box( 'slugdiv', $rt_hd_module->post_type , 'normal' );
@@ -55,16 +57,17 @@ if( !class_exists( 'RT_HD_Admin_Meta_Boxes' ) ) {
         public function rename_meta_boxes() {
            
         }
-
-        /**
+        
+                /**
          * Add rtbiz Meta boxes
          */
         public function add_meta_boxes() {
             global $rt_hd_module;
 
-            add_meta_box( 'rt-hd-ticket-data', __( 'Ticket Information', 'rtbiz' ), 'RT_Meta_Box_Ticket_Info::ui', $rt_hd_module->post_type, 'side', 'default' );
-            add_meta_box( 'rt-hd-attachment', __( 'Attachment', 'rtbiz' ), 'RT_Meta_Box_Attachment::ui', $rt_hd_module->post_type, 'normal', 'high' );
-            add_meta_box( 'rt-hd-external-link', __( 'External Link', 'rtbiz' ), 'RT_Meta_Box_External_Link::ui', $rt_hd_module->post_type, 'normal', 'high' );
+            add_meta_box( 'rt-hd-ticket-data', __( 'Ticket Information', 'rtbiz' ), 'RT_Meta_Box_Ticket_Info::ui', $rt_hd_module->post_type, 'normal', 'high' );
+            add_meta_box( 'rt-hd-subscriiber', __( 'Subscriiber', 'rtbiz' ), 'RT_Meta_Box_Subscribers::ui', $rt_hd_module->post_type, 'side', 'default' );
+            add_meta_box( 'rt-hd-attachment', __( 'Attachment', 'rtbiz' ), 'RT_Meta_Box_Attachment::ui', $rt_hd_module->post_type, 'side', 'default' );
+            add_meta_box( 'rt-hd-external-link', __( 'External Link', 'rtbiz' ), 'RT_Meta_Box_External_Link::ui', $rt_hd_module->post_type, 'side', 'default' );
         }
         
         public function save_meta_boxes( $post_id, $post ) {
