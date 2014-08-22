@@ -70,7 +70,7 @@ if (!class_exists('Rt_HD_Gravity_Form_Mapper')) {
 				}
 			}
 			$args['gravity_fields']=$gravity_fields;
-			rthd_get_template( 'admin/list-gravity-form-mapper.php', $args );
+			include dirname( __FILE__ ) . '/../../templates/admin/list-gravity-form-mapper.php';
 		}
 
 

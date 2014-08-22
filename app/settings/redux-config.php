@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Don't load this file directly!
  */
@@ -29,11 +28,59 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				return;
 			}
 
-			// This is needed. Bah WordPress bugs.  ;)
-			if ( true == Redux_Helpers::isTheme( __FILE__ ) ) {
-				$this->initSettings();
-			} else {
-				add_action( 'plugins_loaded', array( $this, 'initSettings' ), 12 );
+			add_action( 'plugins_loaded', array( $this, 'initSettings' ), 15 );
+			add_action( 'init', array( $this, 'save_imap_servers' ) );
+		}
+
+		function save_imap_servers() {
+			if ( isset( $_POST[ 'rthd_imap_servers_changed' ] ) ) {
+
+				global $rt_hd_imap_server_model;
+				$old_servers = $rt_hd_imap_server_model->get_all_servers();
+
+				if ( isset( $_POST[ 'rthd_imap_servers' ] ) ) {
+					$new_servers = $_POST[ 'rthd_imap_servers' ];
+
+					// Handle / Update Existing Servers
+					foreach ( $old_servers as $id => $server ) {
+						if ( isset( $new_servers[ $server->id ] ) ) {
+							if ( empty( $new_servers[ $server->id ][ 'server_name' ] ) || empty( $new_servers[ $server->id ][ 'incoming_imap_server' ] ) || empty( $new_servers[ $server->id ][ 'incoming_imap_port' ] ) || empty( $new_servers[ $server->id ][ 'outgoing_smtp_server' ] ) || empty( $new_servers[ $server->id ][ 'outgoing_smtp_port' ] ) ) {
+								continue;
+							}
+							$args = array(
+								'server_name' => $new_servers[ $server->id ][ 'server_name' ],
+								'incoming_imap_server' => $new_servers[ $server->id ][ 'incoming_imap_server' ],
+								'incoming_imap_port' => $new_servers[ $server->id ][ 'incoming_imap_port' ],
+								'incoming_imap_enc' => ( isset( $new_servers[ $server->id ][ 'incoming_imap_enc' ] ) && ! empty( $new_servers[ $server->id ][ 'incoming_imap_enc' ] ) ) ? $new_servers[ $server->id ][ 'incoming_imap_enc' ] : NULL,
+								'outgoing_smtp_server' => $new_servers[ $server->id ][ 'outgoing_smtp_server' ],
+								'outgoing_smtp_port' => $new_servers[ $server->id ][ 'outgoing_smtp_port' ],
+								'outgoing_smtp_enc' => ( isset( $new_servers[ $server->id ][ 'outgoing_smtp_enc' ] ) && ! empty( $new_servers[ $server->id ][ 'outgoing_smtp_enc' ] ) ) ? $new_servers[ $server->id ][ 'outgoing_smtp_enc' ] : NULL,
+							);
+							$rt_hd_imap_server_model->update_server( $args, $server->id );
+						} else {
+							$rt_hd_imap_server_model->delete_server( $server->id );
+						}
+					}
+
+					// New Server in the list
+					if ( ! empty( $new_servers[ 'new' ][ 'server_name' ] ) && ! empty( $new_servers[ 'new' ][ 'incoming_imap_server' ] ) && ! empty( $new_servers[ 'new' ][ 'incoming_imap_port' ] ) && ! empty( $new_servers[ 'new' ][ 'outgoing_smtp_server' ] ) && ! empty( $new_servers[ 'new' ][ 'outgoing_smtp_port' ] ) ) {
+
+						$args = array(
+							'server_name' => $new_servers[ 'new' ][ 'server_name' ],
+							'incoming_imap_server' => $new_servers[ 'new' ][ 'incoming_imap_server' ],
+							'incoming_imap_port' => $new_servers[ 'new' ][ 'incoming_imap_port' ],
+							'incoming_imap_enc' => ( isset( $new_servers[ $server->id ][ 'incoming_imap_enc' ] ) && ! empty( $new_servers[ $server->id ][ 'incoming_imap_enc' ] ) ) ? $new_servers[ $server->id ][ 'incoming_imap_enc' ] : NULL,
+							'outgoing_smtp_server' => $new_servers[ 'new' ][ 'outgoing_smtp_server' ],
+							'outgoing_smtp_port' => $new_servers[ 'new' ][ 'outgoing_smtp_port' ],
+							'outgoing_smtp_enc' => ( isset( $new_servers[ $server->id ][ 'outgoing_smtp_enc' ] ) && ! empty( $new_servers[ $server->id ][ 'outgoing_smtp_enc' ] ) ) ? $new_servers[ $server->id ][ 'outgoing_smtp_enc' ] : NULL,
+						);
+						$rt_hd_imap_server_model->add_server( $args );
+					}
+				} else {
+					foreach ( $old_servers as $server ) {
+						$rt_hd_imap_server_model->delete_server( $server->id );
+					}
+				}
 			}
 		}
 
@@ -175,6 +222,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'id' => 'rthd_menu_label',
 						'type' => 'text',
 						'title' => __( 'Menu Label' ),
+						'subtitle' => __( 'Menu Label Identity for the Plugin.' ),
 						'desc' => __( 'This label will be used for the Menu Item label for Helpdesk' ),
 						'default' => __( 'rtHelpdesk' ),
 						'placeholder' => __( 'rtHelpdesk, Helpdesk, etc.' ),
@@ -187,21 +235,158 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'desc' => __( 'This logo will be used for all the Menu, Submenu, Post Types Menu Icons in Helpdesk.' ),
 						'subtitle' => __( 'Upload any logo using the WordPress native uploader, preferrably with the size of 16x16.' ),
 						'default' => array(
-							'url' => RT_HD_URL.'app/assets/img/hd-16X16.png',
+							'url' => RT_HD_URL . 'app/assets/img/hd-16X16.png',
 						),
+					),
+				),
+			);
+
+			global $rt_hd_settings;
+			$all_emails = $rt_hd_settings->get_all_email_address();
+			foreach ( $all_emails as $e ) {
+				$email_options[ $e->email ] = $e->email;
+			}
+
+			$redirect_url = get_option( 'rthd_googleapi_redirecturl' );
+			if ( ! $redirect_url ) {
+				$redirect_url = admin_url( 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&page=rthd-settings' );
+				update_option( 'rthd_googleapi_redirecturl', $redirect_url );
+			}
+
+			$this->sections[] = array(
+				'icon' => 'el-icon-envelope',
+				'title' => __( 'Mail Setup' ),
+				'permissions' => $admin_cap,
+				'fields' => array(
+					array(
+						'id' => 'rthd_system_emails',
+						'title' => __( 'System Emails' ),
+						'subtitle' => __( 'Subtitle' ),
+						'desc' => __( 'Description' ),
+						'type' => 'select',
+						'multi' => true,
+						'options' => $email_options,
+					),
+					array(
+						'id' => 'rthd_outbound_emails',
+						'title' => __( 'Outbound Emails' ),
+						'subtitle' => __( 'Subtitle' ),
+						'desc' => __( 'Description' ),
+						'type' => 'multi_text',
+						'validate' => 'email',
+						'multi' => true,
+					),
+				),
+			);
+
+			$this->sections[] = array(
+				'icon' => 'el-icon-googleplus',
+				'title' => __( 'Google OAuth' ),
+				'permissions' => $admin_cap,
+				'subsection' => true,
+				'fields' => array(
+					array(
+						'id' => 'rthd_googleapi_clientid',
+						'type' => 'text',
+						'title' => __( 'Google API Client ID' ),
+						'subtitle' => __( 'Subtitle' ),
+						'desc' => sprintf( '<p class="description">%s <a href="https://console.developers.google.com">%s</a>, %s <b>%s</b></p>', __( 'Create an app on' ), __( 'Google API Console' ), __( 'set authorized redirect urls to' ), $redirect_url ),
+					),
+					array(
+						'id' => 'rthd_googleapi_clientsecret',
+						'type' => 'text',
+						'title' => __( 'Google API Client Secret' ),
+						'subtitle' => __( 'Subtitle' ),
+					),
+				),
+			);
+
+			$this->sections[] = array(
+				'icon' => 'el-icon-network',
+				'title' => __( 'IMAP Servers' ),
+				'permissions' => $admin_cap,
+				'subsection' => true,
+				'fields' => array(
+					array(
+						'id' => 'rthd_imap_servers',
+						'type' => 'callback',
+						'title' => __( 'IMAP Servers' ),
+						'subtitle' => __( 'This section lets you configure different IMAP & SMTP Mail Servers e.g., Outlook, Google, Yahoo etc.' ),
+						'callback' => 'rthd_imap_servers',
 					),
 				),
 			);
 
 			$this->sections[] = array(
 				'title' => __( 'Import / Export' ),
+				'icon' => 'el-icon-tasks',
+				'permissions' => $editor_cap,
+				'fields' => array(),
+			);
+
+			ob_start();
+			rthd_ticket_impoters();
+			$importers_content = ob_get_clean();
+			$this->sections[] = array(
+				'title' => __( 'Importers' ),
+				'desc' => __( 'This section lets you import tickets into Helpdesk System from either a CSV file or any other Form Manager Plugin e.g., Gravity Forms.' ),
+				'icon' => 'el-icon-upload',
+				'permissions' => $editor_cap,
+				'subsection' => true,
+				'fields' => array(
+					array(
+						'id' => 'rthd_ticket_importers',
+						'type' => 'raw',
+						'content' => $importers_content,
+					),
+				),
+			);
+
+			ob_start();
+			rthd_ticket_import_mapper();
+			$import_mapper_content = ob_get_clean();
+			$this->sections[] = array(
+				'title' => __( 'Mapper' ),
+				'desc' => __( 'This section lets you view all the Import Mappings existing for ticket importing into Helpdesk System.' ),
+				'icon' => 'el-icon-map-marker',
+				'permissions' => $editor_cap,
+				'subsection' => true,
+				'fields' => array(
+					array(
+						'id' => 'rthd_ticket_import_mapper',
+						'type' => 'raw',
+						'content' => $import_mapper_content,
+					),
+				),
+			);
+
+			ob_start();
+			rthd_ticket_import_logs();
+			$import_log_content = ob_get_clean();
+			$this->sections[] = array(
+				'title' => __( 'Import Logs' ),
+				'icon' => 'el-icon-list-alt',
+				'permissions' => $editor_cap,
+				'subsection' => true,
+				'fields' => array(
+					array(
+						'id' => 'rthd_ticket_import_logs',
+						'type' => 'raw',
+						'content' => $import_log_content,
+					),
+				),
+			);
+
+			$this->sections[] = array(
+				'title' => __( 'Miscellaneous' ),
+				'heading' => __( 'Import / Export Settings' ),
 				'desc' => __( 'Import and Export your settings from file, text or URL.' ),
 				'icon' => 'el-icon-refresh',
 				'fields' => array(
 					array(
-						'id' => 'rthd-import-export',
+						'id' => 'rthd_settings_import_export',
 						'type' => 'import_export',
-						'title' => 'Import Export',
+						'title' => __( 'Import Export' ),
 						'subtitle' => 'Save and restore your options',
 						'full_width' => false,
 					),
@@ -373,18 +558,136 @@ function rthd_get_redux_post_settings( $post ) {
 	return $GLOBALS[ 'redux_helpdesk_settings' ];
 }
 
-/**
-  Custom function for the callback referenced above
- */
-if ( ! function_exists( 'redux_my_custom_field' ) ):
+function rthd_ticket_impoters() {
+	global $rt_hd_gravity_form_importer;
+	$rt_hd_gravity_form_importer->ui();
+}
 
-	function redux_my_custom_field( $field, $value ) {
-		print_r( $field );
-		echo '<br/>';
-		print_r( $value );
-	}
+function rthd_ticket_import_mapper() {
+	global $rt_hd_gravity_form_mapper;
+	$rt_hd_gravity_form_mapper->ui();
+}
 
-endif;
+function rthd_ticket_import_logs() {
+	global $rt_hd_logs;
+	$rt_hd_logs->ui();
+}
+
+function rthd_imap_servers( $field, $value ) {
+	global $rt_hd_imap_server_model;
+	$servers = $rt_hd_imap_server_model->get_all_servers();
+	?>
+	<table>
+		<tbody>
+	<?php foreach ( $servers as $server ) { ?>
+				<tr valign="top">
+					<th scope="row"><?php echo $server->server_name; ?></th>
+					<td>
+						<a href="#" class="rthd-edit-server" data-server-id="<?php echo $server->id; ?>"><?php _e( 'Edit' ); ?></a>
+						<a href="#" class="rthd-remove-server" data-server-id="<?php echo $server->id; ?>"><?php _e( 'Remove' ); ?></a>
+					</td>
+				</tr>
+				<tr valign="top" id="rthd_imap_server_<?php echo $server->id; ?>" class="rthd-hide-row">
+					<td>
+						<table>
+							<tr valign="top">
+								<th scope="row"><?php _e( 'Server Name: ' ); ?></th>
+								<td><input type="text" required="required" name="rthd_imap_servers[<?php echo $server->id; ?>][server_name]" value="<?php echo $server->server_name; ?>" /></td>
+							</tr>
+							<tr valign="top">
+								<th scope="row"><?php _e( 'IMAP (Incoming) Server: ' ); ?></th>
+								<td><input type="text" required="required" name="rthd_imap_servers[<?php echo $server->id; ?>][incoming_imap_server]" value="<?php echo $server->incoming_imap_server; ?>" /></td>
+							</tr>
+							<tr valign="top">
+								<th scope="row"><?php _e( 'IMAP (Incoming) Port: ' ); ?></th>
+								<td><input type="text" required="required" name="rthd_imap_servers[<?php echo $server->id; ?>][incoming_imap_port]" value="<?php echo $server->incoming_imap_port; ?>" /></td>
+							</tr>
+							<tr valign="top">
+								<th scope="row"><?php _e( 'IMAP (Incoming) Encryption: ' ); ?></th>
+								<td>
+									<select name="rthd_imap_servers[<?php echo $server->id; ?>][incoming_imap_enc]">
+										<option value=""><?php _e( 'Select Encryption Method' ); ?></option>
+										<option value="ssl" <?php echo ( $server->incoming_imap_enc == 'ssl' ) ? 'selected="selected"' : ''; ?>><?php _e( 'SSL' ); ?></option>
+										<option value="tls" <?php echo ( $server->incoming_imap_enc == 'tls' ) ? 'selected="selected"' : ''; ?>><?php _e( 'TLS' ); ?></option>
+									</select>
+								</td>
+							</tr>
+							<tr valign="top">
+								<th scope="row"><?php _e( 'SMTP (Outgoing) Server: ' ); ?></th>
+								<td><input type="text" required="required" name="rthd_imap_servers[<?php echo $server->id; ?>][outgoing_smtp_server]" value="<?php echo $server->outgoing_smtp_server; ?>" /></td>
+							</tr>
+							<tr valign="top">
+								<th scope="row"><?php _e( 'SMTP (Outgoing) Port: ' ); ?></th>
+								<td><input type="text" required="required" name="rthd_imap_servers[<?php echo $server->id; ?>][outgoing_smtp_port]" value="<?php echo $server->outgoing_smtp_port; ?>" /></td>
+							</tr>
+							<tr valign="top">
+								<th scope="row"><?php _e( 'SMTP (Outgoing) Encryption: ' ); ?></th>
+								<td>
+									<select name="rthd_imap_servers[<?php echo $server->id; ?>][outgoing_smtp_enc]">
+										<option value=""><?php _e( 'Select Encryption Method' ); ?></option>
+										<option value="ssl" <?php echo ( $server->outgoing_smtp_enc == 'ssl' ) ? 'selected="selected"' : ''; ?>><?php _e( 'SSL' ); ?></option>
+										<option value="tls" <?php echo ( $server->outgoing_smtp_enc == 'tls' ) ? 'selected="selected"' : ''; ?>><?php _e( 'TLS' ); ?></option>
+									</select>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+	<?php } ?>
+		<input type="hidden" name="rthd_imap_servers_changed" value="1" />
+		<tr valign="top">
+			<th scope="row"><a href="#" class="button" id="rthd_add_imap_server"><?php _e( 'Add new server' ); ?></a></th>
+		</tr>
+		<tr valign="top" id="rthd_new_imap_server" class="rthd-hide-row">
+			<td>
+				<table>
+					<tr valign="top">
+						<th scope="row"><?php _e( 'Server Name: ' ); ?></th>
+						<td><input type="text" name="rthd_imap_servers[new][server_name]" /></td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><?php _e( 'IMAP (Incoming) Server: ' ); ?></th>
+						<td><input type="text" name="rthd_imap_servers[new][incoming_imap_server]" /></td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><?php _e( 'IMAP (Incoming) Port: ' ); ?></th>
+						<td><input type="text" name="rthd_imap_servers[new][incoming_imap_port]" /></td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><?php _e( 'IMAP (Incoming) Encryption: ' ); ?></th>
+						<td>
+							<select name="rthd_imap_servers[new][incoming_imap_enc]">
+								<option value=""><?php _e( 'Select Encryption Method' ); ?></option>
+								<option value="ssl"><?php _e( 'SSL' ); ?></option>
+								<option value="tls"><?php _e( 'TLS' ); ?></option>
+							</select>
+						</td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><?php _e( 'SMTP (Outgoing) Server: ' ); ?></th>
+						<td><input type="text" name="rthd_imap_servers[new][outgoing_smtp_server]" /></td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><?php _e( 'SMTP (Outgoing) Port: ' ); ?></th>
+						<td><input type="text" name="rthd_imap_servers[new][outgoing_smtp_port]" /></td>
+					</tr>
+					<tr valign="top">
+						<th scope="row"><?php _e( 'Is SSL required for SMTP (Outgoing Mails): ' ); ?></th>
+						<td>
+							<select name="rthd_imap_servers[new][outgoing_smtp_enc]">
+								<option value=""><?php _e( 'Select Encryption Method' ); ?></option>
+								<option value="ssl"><?php _e( 'SSL' ); ?></option>
+								<option value="tls"><?php _e( 'TLS' ); ?></option>
+							</select>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</tbody>
+	</table>
+<?php
+}
 
 /**
   Custom function for the callback validation referenced above
@@ -413,6 +716,8 @@ if ( ! function_exists( 'redux_validate_callback_function' ) ):
 		}
 		return $return;
 	}
+
+
 
 
 

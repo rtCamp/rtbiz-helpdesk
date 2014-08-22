@@ -324,16 +324,15 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 		public function ui() {
 			global $rt_hd_module;
             $post_type = Rt_HD_Module::$post_type;
-			$current_tab = $_GET[ 'tab' ];
-                        
+
 			if (!isset($_REQUEST["type"])) {
 				$_REQUEST["type"] = "csv";
 			}
 			$this->load_handlebars_Templates();
 			?>
 				<ul class="subsubsub">
-					<li><a href="<?php echo admin_url("edit.php?post_type=$post_type&page=rthd-settings&type=csv&tab=$current_tab"); ?>" <?php if ($_REQUEST["type"] == "csv") echo " class='current'"; ?>>CSV</a> |</li>
-					<li><a href="<?php echo admin_url("edit.php?post_type=$post_type&page=rthd-settings&type=gravity&tab=$current_tab"); ?>" <?php if ($_REQUEST["type"] == "gravity") echo " class='current'"; ?> >Gravity</a> </li>
+					<li><a href="<?php echo admin_url("edit.php?post_type=$post_type&page=rthd-settings&type=csv"); ?>" <?php if ($_REQUEST["type"] == "csv") echo " class='current'"; ?>>CSV</a> |</li>
+					<li><a href="<?php echo admin_url("edit.php?post_type=$post_type&page=rthd-settings&type=gravity"); ?>" <?php if ($_REQUEST["type"] == "gravity") echo " class='current'"; ?> >Gravity</a> </li>
 					
 				</ul>
 				<?php
