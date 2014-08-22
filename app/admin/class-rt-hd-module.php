@@ -118,7 +118,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			//add_action( 'admin_init', array( $this, 'add_post_link' ) );
 			//add_action( 'admin_init', array( $this, 'native_list_view_link' ) );
 			//add_filter( 'get_edit_post_link', array( $this, 'ticket_edit_link' ), 10, 3 );
-			add_filter( 'post_row_actions', array( $this, 'post_row_action' ), 10, 2 );
+			//add_filter( 'post_row_actions', array( $this, 'post_row_action' ), 10, 2 );
 
             add_filter( 'rtbiz_dept_Supported_PT', array( $this, 'add_department_support' ) );
 
@@ -127,11 +127,179 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			add_action( 'rt_attributes_relations_deleted', array( $this, 'create_database_table' ) );
 
 			add_action( 'rt_attributes_relations_added', array( $this, 'update_ticket_table' ), 10, 2 );
-			add_action( 'rt_attributes_relations_updated', array( $this, 'update_ticket_table' ), 10, 2 );
-			add_action( 'rt_attributes_relations_deleted', array( $this, 'update_ticket_table' ), 10, 2 );
+			add_action( 'rt_attributes_relations_updated', array( $this, 'update_ticket_table' ), 10, 1 );
+			add_action( 'rt_attributes_relations_deleted', array( $this, 'update_ticket_table' ), 10, 1 );
+                        
+                        add_filter( "manage_edit-{$this->post_type}_columns", array( $this,'edit_custom_columns' ) ) ;
+                        add_action( "manage_{$this->post_type}_posts_custom_column" , array( $this, 'manage_custom_columns' ), 10, 2 );
+                        add_action('pre_get_posts', array( $this, 'pre_filter' ) );
+                        add_filter( "manage_edit-{$this->post_type}_sortable_columns",  array( $this,  'sortable_column' ) );
 		}
+                
+                function edit_custom_columns( $columns ){
+                   
+                    unset( $columns['comments'] );
+                    unset( $columns['date'] );
+                    
+                    $rthd_ticket_id = array( 'rthd_ticket_id' =>   __( 'Ticket ID', RT_HD_TEXT_DOMAIN ) );
+                    $columns = array_slice( $columns, 0, 1, true ) + $rthd_ticket_id + array_slice( $columns, 1, NULL, true );
+                 
+                    $columns['author'] = __('Assignee');
+                    $columns['rthd_create_date'] =   __( 'Create Date', RT_HD_TEXT_DOMAIN );
+                    $columns['rthd_update_date'] =   __( 'Update Date', RT_HD_TEXT_DOMAIN );
+                    $columns['rthd_status'] =   __( 'Status', RT_HD_TEXT_DOMAIN );
+                    $columns['rthd_created_by'] =   __( 'Create By', RT_HD_TEXT_DOMAIN );
+                    $columns['rthd_last_updated_by'] =   __( 'Last Updated By', RT_HD_TEXT_DOMAIN );
+                    $columns['rthd_closed_by'] =   __( 'Closed By', RT_HD_TEXT_DOMAIN );
+                    $columns['rthd_closing_reason'] =   __( 'Closing Reason', RT_HD_TEXT_DOMAIN );
+                    $columns['rthd_contacts'] =   __( 'Contacts', RT_HD_TEXT_DOMAIN );
+                    $columns['rthd_accounts'] =   __( 'Accounts', RT_HD_TEXT_DOMAIN );
+                   
+                  
+                    return $columns;
+                 
+                }
+                
+                   function manage_custom_columns( $column ){
+                    
+                    global $post;
+                   
+                   
+                    switch ( $column ) {
+                        
+                       case 'rthd_ticket_id' :
+                           
+                            printf( '<a href="%s">#%s</a>',
+                                        esc_url( add_query_arg( array( 'post' => get_the_ID(), 'action' => 'edit' ), 'post.php' )),
+                                        get_the_ID()
+                           );
+                           
+                               break;
+                           
+                       case 'rthd_create_date' :
+                           
+                          $date =  new DateTime(get_the_date());
+                           
+                          echo  human_time_diff( $date->format('U') , time() ) . __(' ago') ;
+                           
+                               break;
+                           
+                       case 'rthd_update_date' :
+                        
+                           $date =  new DateTime( get_the_modified_date() );
+                           
+                          echo  human_time_diff( $date->format('U') , time() ) . __(' ago') ;
+                               break;
+                           
+                       case 'rthd_closing_date' :
+                    
+                           echo get_post_meta($post->ID, '_ticket_closing_date', true ) ;
+                           
+                               break; 
+                           
+                       case 'rthd_status' :
+                    
+                           printf( '<a href="%s">%s</a>',
+					esc_url( add_query_arg( array( 'post_type' => $this->post_type, 'post_status' => get_post_status() ), 'edit.php' )),
+					get_post_status()
+                           );
+                           
+                           
+                               break;
+                           
+                       case 'rthd_created_by' :
+                    
+                           echo get_post_meta($post->ID, '_ticket_created_by', true ) ;
+                          
+                               break;
+                           
+                       case 'rthd_last_updated_by' :
+                    
+                           echo get_post_meta($post->ID, '_ticket_last_updated_by', true ) ;
+                          
+                               break;
+                           
+                       case 'rthd_closed_by' :
+                    
+                           echo get_post_meta($post->ID, '_ticket_closed_by', true ) ;
+                          
+                               break;
+                           
+                       case 'rthd_closing_reason' :
+                    
+                           echo get_post_meta($post->ID, '_ticket_closing_reason', true ) ;
+                          
+                               break;
+                         
+                       case 'rthd_contacts' :
+                 
+                          $contact_name = rt_biz_get_person_post_type();
+                          $contact = get_post_meta($post->ID, '_ticket_contacts', true );
+                           
+                        if( !empty($contact) ){
+                            $termArr = array();
+                            $contacts = explode( ',', $contact );
+                            var_dump($contacts);
+                            $base_url = add_query_arg( array( 'post_type' => $this->post_type ), admin_url( 'edit.php' ) );
+                            foreach ( $contacts as $contact ) {
+                                    $term = get_post( $contact );
+                                    if ( ! empty( $term ) ) {
+                                            $url = add_query_arg( $contact_name, $term->ID, $base_url );
+                                            $termArr[] = '<a href="'.$url.'">'.$term->post_title.'</a>';
+                                    }
+                            }
+                            
+                            echo implode( ' , ', $termArr );
+                            // var_dump($termArr);
+                        }
+                            break;       
+                                    
+                         
+                       case 'rthd_accounts' :
+                    
+                         $accounts_name = rt_biz_get_organization_post_type();
+                         $accounts = get_post_meta($post->ID, '_ticket_accounts', true );
+                         
+                         if ( !empty( $accounts ) ) {
+                             
+                        
+                            $termArr = array();
+                            $accounts = explode( ',', $accounts );
+                            $base_url = add_query_arg( array( 'post_type' => $this->post_type ), admin_url( 'edit.php' ) );
+                            foreach ( $accounts as $account ) {
+                                    $term = get_post( $account );
+                                    if ( ! empty( $term ) ) {
+                                            $url = add_query_arg( $accounts_name, $term->ID, $base_url );
+                                            $termArr[] = '<a href="'.$url.'">'.$term->post_title.'</a>';
+                                    }
+                            }
+                           
+                            echo implode( ' , ', $termArr );
+                         }                                         
+                               break;
 
-		function update_ticket_table( $attr_id, $post_types ) {
+
+                   }
+                   
+                 
+               }
+               
+                 function pre_filter( $query ){
+                         
+                       if ( isset( $_GET['post_type'] ) && $_GET['post_type'] == $this->post_type ) {
+                           $query->set('post_status', array( 'answered', 'unanswered' ) );
+                       }
+                   } 
+                   
+                   function sortable_column( $columns ){
+                       
+                    $columns['rthd_ticket_id'] =   __( 'Ticket ID', RT_HD_TEXT_DOMAIN );
+                    $columns['rthd_create_date'] =   __( 'Create Date', RT_HD_TEXT_DOMAIN );
+                    $columns['rthd_update_date'] =   __( 'Update Date', RT_HD_TEXT_DOMAIN );
+                        return $columns;
+                       
+                   }
+                        		function update_ticket_table( $attr_id, $post_types ) {
 			if ( in_array( $this->post_type, $post_types ) ) {
 				$updateDB = new RT_DB_Update( trailingslashit( RT_HD_PATH ) . 'index.php', trailingslashit( RT_HD_PATH_SCHEMA ) );
 				delete_option( $updateDB->db_version_option_name );
