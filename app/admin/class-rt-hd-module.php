@@ -150,7 +150,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
                     $columns['rthd_update_date'] =   __( 'Update Date', RT_HD_TEXT_DOMAIN );
                     $columns['rthd_status'] =   __( 'Status', RT_HD_TEXT_DOMAIN );
                     $columns['rthd_created_by'] =   __( 'Create By', RT_HD_TEXT_DOMAIN );
-                    $columns['rthd_last_updated_by'] =   __( 'Last Updated By', RT_HD_TEXT_DOMAIN );
+                    $columns['rthd_updated_by'] =   __( 'Updated By', RT_HD_TEXT_DOMAIN );
                     $columns['rthd_closed_by'] =   __( 'Closed By', RT_HD_TEXT_DOMAIN );
                     $columns['rthd_closing_reason'] =   __( 'Closing Reason', RT_HD_TEXT_DOMAIN );
                     $columns['rthd_contacts'] =   __( 'Contacts', RT_HD_TEXT_DOMAIN );
@@ -209,76 +209,69 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
                                break;
                            
                        case 'rthd_created_by' :
-                    
-                           echo get_post_meta($post->ID, '_ticket_created_by', true ) ;
+                           
+                           $user_id = get_post_meta($post->ID, '_ticket_created_by', true );
+                           $user_info = get_userdata($user_id);
+                           echo ( $user_info ) ? $user_info->user_login : '-' ;
                           
                                break;
                            
-                       case 'rthd_last_updated_by' :
-                    
-                           echo get_post_meta($post->ID, '_ticket_last_updated_by', true ) ;
+                       case 'rthd_updated_by' :
+     
+                           $user_id = get_post_meta($post->ID, '_ticket_updated_by', true );
+                           $user_info = get_userdata($user_id);
+                           echo ( $user_info ) ? $user_info->user_login : '-' ;
                           
                                break;
                            
                        case 'rthd_closed_by' :
-                    
-                           echo get_post_meta($post->ID, '_ticket_closed_by', true ) ;
+              
+                           $user_id = get_post_meta($post->ID, '_ticket_closed_by', true );
+                           $user_info = get_userdata($user_id);
+                           echo ( $user_info ) ? $user_info->user_login : '' ;
                           
                                break;
                            
                        case 'rthd_closing_reason' :
-                    
-                           echo get_post_meta($post->ID, '_ticket_closing_reason', true ) ;
-                          
-                               break;
+                           
+                           $term = wp_get_post_terms( $post->ID, rthd_attribute_taxonomy_name( 'closing_reason' ) );
+                           echo  !empty( $term ) ? $term->name : '-' ;
+
+                           break;
                          
                        case 'rthd_contacts' :
                  
-                          $contact_name = rt_biz_get_person_post_type();
-                          $contact = get_post_meta($post->ID, '_ticket_contacts', true );
+                          $contacts = rt_biz_get_post_for_person_connection( $post->ID, $this->post_type );
                            
-                        if( !empty($contact) ){
-                            $termArr = array();
-                            $contacts = explode( ',', $contact );
-                            var_dump($contacts);
-                            $base_url = add_query_arg( array( 'post_type' => $this->post_type ), admin_url( 'edit.php' ) );
-                            foreach ( $contacts as $contact ) {
-                                    $term = get_post( $contact );
-                                    if ( ! empty( $term ) ) {
-                                            $url = add_query_arg( $contact_name, $term->ID, $base_url );
-                                            $termArr[] = '<a href="'.$url.'">'.$term->post_title.'</a>';
-                                    }
-                            }
-                            
-                            echo implode( ' , ', $termArr );
-                            // var_dump($termArr);
-                        }
-                            break;       
+                          $contact_name = array();
+                          $base_url = add_query_arg( array( 'post_type' => $this->post_type ), admin_url( 'edit.php' ) );
+                          
+                          foreach ($contacts as $contact) {
+                              
+                             $url = add_query_arg( array( 'contact_id' => $contact->ID ), $base_url );
+                             $contact_name[] = '<a href="'.$url.'">'.$contact->post_title.'</a>';
+                          }
+                     
+                          echo implode(',', $contact_name);
+                          
+                          break;       
                                     
                          
                        case 'rthd_accounts' :
                     
-                         $accounts_name = rt_biz_get_organization_post_type();
-                         $accounts = get_post_meta($post->ID, '_ticket_accounts', true );
-                         
-                         if ( !empty( $accounts ) ) {
-                             
-                        
-                            $termArr = array();
-                            $accounts = explode( ',', $accounts );
-                            $base_url = add_query_arg( array( 'post_type' => $this->post_type ), admin_url( 'edit.php' ) );
-                            foreach ( $accounts as $account ) {
-                                    $term = get_post( $account );
-                                    if ( ! empty( $term ) ) {
-                                            $url = add_query_arg( $accounts_name, $term->ID, $base_url );
-                                            $termArr[] = '<a href="'.$url.'">'.$term->post_title.'</a>';
-                                    }
-                            }
-                           
-                            echo implode( ' , ', $termArr );
-                         }                                         
-                               break;
+                            $accounts = rt_biz_get_post_for_organization_connection( $post->ID, $this->post_type );
 
+                            $account_name = array();
+                            $base_url = add_query_arg( array( 'post_type' => $this->post_type ), admin_url( 'edit.php' ) );
+       
+                            foreach ($accounts as $account) {
+
+                                 $url = add_query_arg( array( 'account_id' => $account->ID ), $base_url );
+                                 $account_name[] = '<a href="'.$url.'">'.$account->post_title.'</a>';;
+                            }
+
+                            echo implode(',', $account_name);
+                     
 
                    }
                    
@@ -287,9 +280,15 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
                
                  function pre_filter( $query ){
                          
-                       if ( isset( $_GET['post_type'] ) && $_GET['post_type'] == $this->post_type ) {
-                           $query->set('post_status', array( 'answered', 'unanswered' ) );
+                     if ( isset( $_GET['post_type'] ) && $_GET['post_type'] == $this->post_type ) {
+                         
+                       if ( !isset( $_GET['post_status'] )  ) {
+                             
+                          $query->set('post_status', array( 'answered', 'unanswered' ) );
                        }
+                       
+                     }
+                       
                    } 
                    
                    function sortable_column( $columns ){
