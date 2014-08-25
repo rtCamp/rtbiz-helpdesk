@@ -33,6 +33,8 @@ if( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
             $createdate = $create->format("M d, Y h:i A");
             $modifydate = $modify->format("M d, Y h:i A");
 
+            $post_author = $post->post_author;
+            
             $close_date_meta = get_post_meta($post->ID, '_ticket_closing_date', true);
             if(!empty($close_date_meta)) {
                 $closingdate = new DateTime($close_date_meta);
@@ -170,7 +172,7 @@ if( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
                 $newTicket['post_date'] = current_time( 'mysql' );
                         $newTicket['post_date_gmt'] = gmdate('Y-m-d H:i:s');
             }
-
+            
             // Post Data to be saved.
             $newpost = array(
                 'post_author' => $newTicket['post_author'],
@@ -181,12 +183,14 @@ if( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
             
             // unhook this function so it doesn't loop infinitely
             remove_action( 'save_post', array( $rt_hd_admin_meta_boxes, 'save_meta_boxes' ), 1, 2 );
-
+            remove_action( 'pre_post_update', 'RT_Ticket_Diff_Email::store_old_post_data', 1, 2 );
+            
             // update the post, which calls save_post again
             @wp_update_post( $newpost );
 
             // re-hook this function
             add_action( 'save_post', array( $rt_hd_admin_meta_boxes, 'save_meta_boxes' ), 1, 2 );
+            add_action( 'pre_post_update', 'RT_Ticket_Diff_Email::store_old_post_data', 1, 2 );
             
             /* Update Index Table */
             $data = array(
@@ -252,7 +256,7 @@ if( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
             }
             
             //created by
-            update_post_meta( $post_id, '_ticket_created_by', get_current_user_id() );
+            update_post_meta( $post_id, '_ticket_updated_by', get_current_user_id() );
             $data = array_merge( $data, array( 
                 'date_update' => current_time( 'mysql' ),
                 'date_update_gmt' => gmdate('Y-m-d H:i:s'),

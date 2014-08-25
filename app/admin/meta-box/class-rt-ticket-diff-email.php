@@ -225,10 +225,10 @@ if( !class_exists( 'RT_Ticket_Diff_Email' ) ) {
          * Save meta box data
          */
         public static function save( $post_id, $post ) {
-            global $rt_ticket_email_content, $rt_hd_settings, $rt_hd_tickets;
+            global $rt_ticket_email_content, $rt_hd_settings, $rt_hd_tickets, $rt_hd_module;
             
             $emailTable = "<table style='width: 100%; border-collapse: collapse; border: none;'>";
-            
+            $post_type = $rt_hd_module->post_type;
             $module_settings = rthd_get_settings();
             $updateFlag = true;
             $oldUser = $rt_ticket_email_content['oldUser'];
@@ -236,6 +236,7 @@ if( !class_exists( 'RT_Ticket_Diff_Email' ) ) {
             $newSubscriberList = $rt_ticket_email_content['newSubscriberList'];
             $oldSubscriberList = $rt_ticket_email_content['oldSubscriberList'];
             $emailHTML = $rt_ticket_email_content['emailHTML'];
+            $bccemails = $rt_ticket_email_content['bccemails'];
             
             $flag = true;
             $systemEmail = ( isset( $module_settings['system_email'] ) ) ? $module_settings['system_email'] : '';
@@ -278,8 +279,8 @@ if( !class_exists( 'RT_Ticket_Diff_Email' ) ) {
                         $emailHTML1 = "You have been <b>unsubscribed</b> to this ticket.<br /> To View Ticket Click <a href='" . admin_url("edit.php?post_type={$post_type}&page=rthd-add-".$post_type."&".$post_type."_id=" . $post_id) . "'>here</a>.";
                         $rt_hd_settings->insert_new_send_email($systemEmail, $title, $emailHTML1, array(), array(), $oldSubscriberList, array(), $post_id, "post");
                     }
-
                     if ($emailHTML != "" && !empty($bccemails)) {
+                        var_dump( 'send ');
                         $emailHTML = $emailTable . $emailHTML . "</table> </br> To View Ticket Click <a href='" . admin_url("edit.php?post_type={$post_type}&page=rthd-add-".$post_type."&".$post_type."_id=" . $post_id) . "'>here</a>.";
                         $emailHTML .= "<br />" . 'Ticket updated by : <a target="_blank" href="">'.get_the_author_meta( 'display_name', get_current_user_id() ).'</a>';
                         $emailHTML .= "<br />" . $signature;

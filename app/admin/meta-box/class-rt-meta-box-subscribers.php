@@ -51,13 +51,7 @@ if( !class_exists( 'RT_Meta_Box_Subscribers ' ) ) {
                 $all_hd_participants = array_filter( array_unique( $all_hd_participants ) );
             }
 
-            $get_assigned_to = array();
-            if (isset($post->ID)) {
-                $post_author = $post->post_author;
-                $get_assigned_to = get_post_meta($post->ID, "_subscribe_to", true);
-            } else {
-                $post_author = get_current_user_id();
-            }
+            $get_assigned_to = get_post_meta($post->ID, "_subscribe_to", true);
             
             $results = Rt_HD_Utils::get_hd_rtcamp_user();
             $arrCommentReply = array();
