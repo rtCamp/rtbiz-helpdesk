@@ -31,8 +31,8 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			add_action( 'plugins_loaded', array( $this, 'initSettings' ), 15 );
 			add_action( 'init', array( $this, 'save_imap_servers' ) );
 		}
-
-		function save_imap_servers() {
+                
+                function save_imap_servers() {
 			if ( isset( $_POST[ 'rthd_imap_servers_changed' ] ) ) {
 
 				global $rt_hd_imap_server_model;
@@ -115,6 +115,9 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			// add_filter('redux/options/' . $this->args['opt_name'] . '/sections', array($this, 'dynamic_section'));
 
 			$this->ReduxFramework = new ReduxFramework( $this->sections, $this->args );
+
+                        //add_action("redux/options/{$this->args[ 'opt_name' ]}/register", array( $this, 'test') );
+                        
 		}
 
 		/**

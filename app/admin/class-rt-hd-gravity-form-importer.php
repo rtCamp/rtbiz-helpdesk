@@ -208,6 +208,7 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 		public function hd_importer_ajax_hooks() {
 			add_action( 'wp_ajax_rthd_map_import', array( $this, 'rthd_map_import_callback' ) );
 			add_action( 'wp_ajax_rthd_map_import_feauture', array( $this, 'rthd_map_import_feauture' ) );
+			add_action( 'wp_ajax_rthd_import', array( $this, 'importer' ) );
 			add_action( 'init', array( $this, 'install_gravity_form_hook' ) );
 			add_action( 'wp_ajax_rthd_gravity_dummy_data', array( $this, 'get_random_gravity_data' ) );
 			add_action( 'wp_ajax_rthd_defined_map_feild_value', array( $this, 'rthd_defined_map_feild_value' ) );
@@ -323,7 +324,7 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 
 		public function ui() {
 			global $rt_hd_module;
-            $post_type = Rt_HD_Module::$post_type;
+                $post_type = Rt_HD_Module::$post_type;
 
 			if (!isset($_REQUEST["type"])) {
 				$_REQUEST["type"] = "csv";
@@ -373,10 +374,11 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 							<?php if (!$noFormflag) : ?>
 								<tr>
 									<th scope="row"></th>
-									<td><input type="submit" name="map_submit" value="Next" class="button button-primary"/></td>
+                                                                        <td><input type="button" id="map_submit" name="map_submit" value="Next" class="button button-primary"/></td>
 								</tr>
 							<?php endif; ?>
 						</table>
+                                            <div id="mapping-form"></div>
 					</form>
 				<?php } else if ($_REQUEST["type"] == "csv") {
 					?>
@@ -395,9 +397,14 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 					</form>
 					<?php
 				}
-				if (!( isset($_REQUEST['map_submit']) && $_REQUEST['map_submit'] != '' )) {
-					return false;
-				}
+						
+             
+                        }
+
+		public function importer() {
+			global $rt_hd_module;
+                        $post_type = Rt_HD_Module::$post_type;
+
 
 				$flag = true;
 				$post_type = Rt_HD_Module::$post_type;
@@ -477,9 +484,10 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 								return false;
 							}
 						} else {
-							$form_id = intval($_POST['mapSource']);
+                                                        global $rt_hd_gravity_fields_mapping_model;
+							$form_id = intval($_REQUEST['mapSource']);
 							$form_data = RGFormsModel::get_form_meta($form_id);
-							$form_count = RGFormsModel::get_form_counts($form_id);
+							$form_count = RGFormsModel::get_form_counts($form_id);                                          
 							if (!$form_data) {
 								?>
 								<div id="map_message" class="error">Invalid Form </div>
@@ -517,6 +525,7 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 												<td><?php echo ucfirst($field['label']); ?> <input type="hidden" value="<?php echo ucfirst($field['type']); ?>" /></td>
 												<td>
 													<?php
+                                                                                                                 
 													$form_fields = '<select name="field-' . $field['id'] . '"  id="field-' . $field['id'] . '" class="map_form_fields map_form_fixed_fields">';
 													$form_fields .= '<option value="">Choose a field or Skip it</option>';
 													foreach ($this->ticket_field as $key => $lfield) {
@@ -722,7 +731,7 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 									var arr_lead_id =<?php echo json_encode($jsonArray); ?>
 								<?php } ?>
 							</script>
-							<input type="submit" name="map_mapping_import" id="map_mapping_import" value="Import" class="button button-primary"/>
+							<input type="button" name="map_mapping_import" id="map_mapping_import" value="Import" class="button button-primary"/>
 						</form>
 						<div id='startImporting'>
 							<h2>Importing <?php if (isset($formname)) echo $formname; ?> into Helpdesk...</h2>
@@ -747,7 +756,9 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 			<?php } ?>
 
 						</div>
-		<?php }
+		<?php    die();
+                
+                        }
 
 		public function rthd_map_import_feauture() {
 			global $rt_hd_gravity_fields_mapping_model;

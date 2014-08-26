@@ -290,7 +290,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 
 					$post_type = get_post_type( $post_id );
 					foreach ( $postterms as $term ) {
-						rt_biz_connect_post_to_person( $post_type, $post_id, $postterm );
+						rt_biz_connect_post_to_person( $post_type, $post_id, $term );
 					}
 
 					// Update Index

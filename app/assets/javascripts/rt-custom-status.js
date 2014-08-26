@@ -163,7 +163,7 @@ jQuery(document).ready(function($) {
             }
 
             jQuery.post(ajaxurl, ajaxdata, function(response) {
-                if (response.length < 1) {
+              if (response.length < 1) {
                     alert("Too many distinct value, Can't Map");
                     $("[name=" + $(fieldMap).data("field-name") + "]").parent().parent().show();
                     $(fieldMap).prev().addClass("form-invalid");
@@ -248,14 +248,32 @@ jQuery(document).ready(function($) {
 
                 }
             }
-        })
+        });
 
-        if (arr_map_fields != undefined) {
+       
             var count = 1;
 
             var sucessCount = 0;
             var failCount = 0;
             var forceImport = false;
+            
+                jQuery('#map_submit').click(function(){
+                        var data = {
+                                                action: "rthd_import",
+                                                type: 'gravity',
+                                                mapSource : $('#mapSource').val()
+                                   }
+
+                        jQuery.post(ajaxurl,data, function( response ){
+                            sucessCount = 0;
+                            failCount = 0;
+                            forceImport = false;
+                            
+                            $('#mapping-form').html( response );
+
+                        });
+                 });
+        
             jQuery("#rtHelpdeskMappingForm .wp-list-table tbody tr").each(function() {
                 var tempTD = $(this).children();
                 var tempSelectOption = $(tempTD[1]).find("select option");
@@ -281,208 +299,139 @@ jQuery(document).ready(function($) {
                 otherCount++;
             })
             var postdata;
-            jQuery('#rtHelpdeskMappingForm').submit(function(e) {
-                e.preventDefault();
-                postdata = new Object;
-                var data = jQuery(this).serializeArray();
-                var count = jQuery('#mapEntryCount').val();
-                var errorFlag = false;
-                jQuery.each(data, function(i, mapping) {
-                    if (mapping.value == '')
-                        return true;
+            jQuery('#map_mapping_import').live('click', function() {
+                if (arr_map_fields != undefined) {
+                    postdata = new Object;
+                    var data = jQuery('#rtHelpdeskMappingForm').serializeArray();
+                    console.log(data);
+                    var count = jQuery('#mapEntryCount').val();
+                    var errorFlag = false;
+                    jQuery.each(data, function(i, mapping) {
+                        if (mapping.value == '')
+                            return true;
 
-                    var temp = mapping["name"];
-                    if (temp.indexOf('default-') > -1)
-                        return true;
-                    if (temp.indexOf('key-') > -1)
-                        return true;
-                    if (temp.indexOf('field-') > -1) {
-                        //checking Assigned  or not
-                        if (postdata[mapping.value] == undefined) {
+                        var temp = mapping["name"];
+                        if (temp.indexOf('default-') > -1)
+                            return true;
+                        if (temp.indexOf('key-') > -1)
+                            return true;
+                        if (temp.indexOf('field-') > -1) {
+                            //checking Assigned  or not
+                            if (postdata[mapping.value] == undefined) {
 
-                            if (arr_map_fields[mapping.value].multiple) {
-                                //multiple but assigne first time
-                                postdata[mapping.value] = Array();
-                                var tmpObj = Object();
-                                tmpObj.fieldName = mapping["name"];
-                                tmpObj.defaultValue = $($('#' + mapping["name"]).parent().next().children("input,select")).val();
-                                if (arr_map_fields[mapping.value].type != undefined && arr_map_fields[mapping.value].type == "defined") {
-                                    var arrMapSelects = $("#" + this.name).siblings("table").find("select");
-                                    if (arrMapSelects.length < 1) {
-                                        errorFlag = true;
-                                        alert("Maping not Defined for " + arr_map_fields[mapping.value].display_name)
-                                        $("#" + mapping["name"]).addClass("form-invalid");
-                                        $("#" + mapping["name"]).focus();
-                                        return false;
+                                if (arr_map_fields[mapping.value].multiple) {
+                                    //multiple but assigne first time
+                                    postdata[mapping.value] = Array();
+                                    var tmpObj = Object();
+                                    tmpObj.fieldName = mapping["name"];
+                                    tmpObj.defaultValue = $($('#' + mapping["name"]).parent().next().children("input,select")).val();
+                                    if (arr_map_fields[mapping.value].type != undefined && arr_map_fields[mapping.value].type == "defined") {
+                                        var arrMapSelects = $("#" + this.name).siblings("table").find("select");
+                                        if (arrMapSelects.length < 1) {
+                                            errorFlag = true;
+                                            alert("Maping not Defined for " + arr_map_fields[mapping.value].display_name)
+                                            $("#" + mapping["name"]).addClass("form-invalid");
+                                            $("#" + mapping["name"]).focus();
+                                            return false;
+                                        } else {
+                                            var tObj = Object();
+                                            $.each(arrMapSelects, function(indx, obj) {
+                                                tObj[$(obj).data("map-value")] = $(this).val();
+                                            });
+                                            tmpObj.mappingData = tObj;
+                                        }
+
+                                    } else if (arr_map_fields[mapping.value].type == "key") {
+                                        var arrMapSelects = $("#" + this.name).siblings("select");
+                                        if (arrMapSelects.length > 0) {
+                                            tmpObj.keyname = $(arrMapSelects).val();
+                                        } else {
+                                            tmpObj.keyname = "";
+                                        }
+
                                     } else {
-                                        var tObj = Object();
-                                        $.each(arrMapSelects, function(indx, obj) {
-                                            tObj[$(obj).data("map-value")] = $(this).val();
-                                        });
-                                        tmpObj.mappingData = tObj;
+
+                                        tmpObj.mappingData = null;
                                     }
 
-                                } else if (arr_map_fields[mapping.value].type == "key") {
-                                    var arrMapSelects = $("#" + this.name).siblings("select");
-                                    if (arrMapSelects.length > 0) {
-                                        tmpObj.keyname = $(arrMapSelects).val();
-                                    } else {
-                                        tmpObj.keyname = "";
-                                    }
-
+                                    postdata[mapping.value].push(tmpObj);
                                 } else {
+                                    //multiple not allowed
+                                    var tmpObj = Object();
+                                    tmpObj.fieldName = mapping["name"];
+                                    tmpObj.defaultValue = $($('#' + mapping["name"]).parent().next().children("input,select")).val();
+                                    if (arr_map_fields[mapping.value].type != undefined && arr_map_fields[mapping.value].type == "defined") {
+                                        var arrMapSelects = $("#" + this.name).siblings("table").find("select");
+                                        if (arrMapSelects.length < 1) {
+                                            errorFlag = true;
+                                            alert("Maping not Defined for " + arr_map_fields[mapping.value].display_name)
+                                            $("#" + mapping["name"]).addClass("form-invalid");
+                                            $("#" + mapping["name"]).focus();
+                                            return false;
+                                        } else {
+                                            var tObj = Object();
+                                            $.each(arrMapSelects, function(indx, obj) {
+                                                tObj[$(obj).data("map-value")] = $(this).val();
+                                            });
+                                            tmpObj.mappingData = tObj;
+                                        }
 
-                                    tmpObj.mappingData = null;
+                                    } else if (arr_map_fields[mapping.value].type == "key") {
+                                        var arrMapSelects = $("#" + this.name).siblings("select");
+                                        if (arrMapSelects.length > 0) {
+                                            tmpObj.keyname = $(arrMapSelects).val();
+                                        } else {
+                                            tmpObj.keyname = "";
+                                        }
+
+                                    } else {
+
+                                        tmpObj.mappingData = null;
+                                    }
+
+                                    postdata[mapping.value] = tmpObj; //mapping["name"];
                                 }
 
-                                postdata[mapping.value].push(tmpObj);
                             } else {
-                                //multiple not allowed
-                                var tmpObj = Object();
-                                tmpObj.fieldName = mapping["name"];
-                                tmpObj.defaultValue = $($('#' + mapping["name"]).parent().next().children("input,select")).val();
-                                if (arr_map_fields[mapping.value].type != undefined && arr_map_fields[mapping.value].type == "defined") {
-                                    var arrMapSelects = $("#" + this.name).siblings("table").find("select");
-                                    if (arrMapSelects.length < 1) {
-                                        errorFlag = true;
-                                        alert("Maping not Defined for " + arr_map_fields[mapping.value].display_name)
-                                        $("#" + mapping["name"]).addClass("form-invalid");
-                                        $("#" + mapping["name"]).focus();
-                                        return false;
+                                if (arr_map_fields[mapping.value].multiple) {
+                                    var tmpObj = Object();
+                                    tmpObj.fieldName = mapping["name"];
+                                    tmpObj.defaultValue = $($('#' + mapping["name"]).parent().next().children("input,select")).val();
+                                    if (arr_map_fields[mapping.value].type != undefined && arr_map_fields[mapping.value].type == "defined") {
+                                        var arrMapSelects = $("#" + this.name).siblings("table").find("select");
+                                        if (arrMapSelects.length < 1) {
+                                            errorFlag = true;
+                                            alert("Maping not Defined for " + arr_map_fields[mapping.value].display_name)
+                                            $("#" + mapping["name"]).addClass("form-invalid");
+                                            $("#" + mapping["name"]).focus();
+                                            return false;
+                                        } else {
+                                            var tObj = Object();
+                                            $.each(arrMapSelects, function(indx, obj) {
+                                                tObj[$(obj).data("map-value")] = $(this).val();
+                                            });
+                                            tmpObj.mappingData = tObj;
+                                        }
+
+                                    } else if (arr_map_fields[mapping.value].type == "key") {
+                                        var arrMapSelects = $("#" + this.name).siblings("select");
+                                        if (arrMapSelects.length > 0) {
+                                            tmpObj.keyname = $(arrMapSelects).val();
+                                        } else {
+                                            tmpObj.keyname = "";
+                                        }
+
                                     } else {
-                                        var tObj = Object();
-                                        $.each(arrMapSelects, function(indx, obj) {
-                                            tObj[$(obj).data("map-value")] = $(this).val();
-                                        });
-                                        tmpObj.mappingData = tObj;
+
+                                        tmpObj.mappingData = null;
                                     }
 
-                                } else if (arr_map_fields[mapping.value].type == "key") {
-                                    var arrMapSelects = $("#" + this.name).siblings("select");
-                                    if (arrMapSelects.length > 0) {
-                                        tmpObj.keyname = $(arrMapSelects).val();
-                                    } else {
-                                        tmpObj.keyname = "";
-                                    }
-
-                                } else {
-
-                                    tmpObj.mappingData = null;
-                                }
-
-                                postdata[mapping.value] = tmpObj; //mapping["name"];
-                            }
-
-                        } else {
-                            if (arr_map_fields[mapping.value].multiple) {
-                                var tmpObj = Object();
-                                tmpObj.fieldName = mapping["name"];
-                                tmpObj.defaultValue = $($('#' + mapping["name"]).parent().next().children("input,select")).val();
-                                if (arr_map_fields[mapping.value].type != undefined && arr_map_fields[mapping.value].type == "defined") {
-                                    var arrMapSelects = $("#" + this.name).siblings("table").find("select");
-                                    if (arrMapSelects.length < 1) {
-                                        errorFlag = true;
-                                        alert("Maping not Defined for " + arr_map_fields[mapping.value].display_name)
-                                        $("#" + mapping["name"]).addClass("form-invalid");
-                                        $("#" + mapping["name"]).focus();
-                                        return false;
-                                    } else {
-                                        var tObj = Object();
-                                        $.each(arrMapSelects, function(indx, obj) {
-                                            tObj[$(obj).data("map-value")] = $(this).val();
-                                        });
-                                        tmpObj.mappingData = tObj;
-                                    }
-
-                                } else if (arr_map_fields[mapping.value].type == "key") {
-                                    var arrMapSelects = $("#" + this.name).siblings("select");
-                                    if (arrMapSelects.length > 0) {
-                                        tmpObj.keyname = $(arrMapSelects).val();
-                                    } else {
-                                        tmpObj.keyname = "";
-                                    }
-
-                                } else {
-
-                                    tmpObj.mappingData = null;
-                                }
-
-                                postdata[mapping.value].push(tmpObj);
-                            } else {
-                                errorFlag = true;
-                                alert("Multiple " + arr_map_fields[mapping.value].display_name + " not allowed")
-                                $("select,input[type=textbox]").each(function(e) {
-                                    if ($(this).val() == mapping["value"]) {
-                                        $(this).addClass("form-invalid");
-                                    }
-                                })
-                                $("#" + mapping["name"]).addClass("form-invalid");
-                                $("#" + mapping["name"]).focus();
-                                return false;
-                            }
-                        }
-                    } else if (temp.indexOf('otherfield') > -1) {
-                        var mapElement = $("#" + mapping.name);
-                        mapping.name = $(mapElement).val();
-                        if ($.trim(mapping.name) == "") {
-
-                        } else if (postdata[mapping.value] == undefined) {
-                            if (arr_map_fields[mapping.value].multiple) {
-                                postdata[mapping.value] = Array();
-                                var tmpObj = Object();
-                                tmpObj.fieldName = mapping["name"];
-                                tmpObj.defaultValue = '';
-
-                                postdata[mapping.value].push(tmpObj);
-                            } else {
-                                var tmpObj = Object();
-                                tmpObj.fieldName = mapping["name"];
-                                tmpObj.defaultValue = '';
-                                postdata[mapping.value] = tmpObj;
-                            }
-
-                        } else {
-                            if (arr_map_fields[mapping.value].multiple) {
-                                var tmpObj = Object();
-                                tmpObj.fieldName = mapping["name"];
-                                tmpObj.defaultValue = '';
-                                postdata[mapping.value].push(tmpObj);
-                            } else {
-                                errorFlag = true;
-                                alert("Multiple " + arr_map_fields[mapping.value].display_name + " not allowed")
-                                $("select,input[type=textbox]").each(function(e) {
-                                    if ($(this).val() == mapping["value"]) {
-                                        $(this).addClass("form-invalid");
-                                    }
-                                })
-                                $(mapElement).addClass("form-invalid");
-                                $(mapElement).focus();
-                                return false;
-                            }
-                        }
-
-                    } else {
-                        if ($("[name=" + mapping.name + "]").parent().parent().css("display") != 'none') {
-                            var tmpObj = Object();
-                            tmpObj.fieldName = mapping.value;
-                            tmpObj.defaultValue = '';
-                            if (postdata[mapping.name] == undefined) {
-                                if (arr_map_fields[mapping.name] != undefined && arr_map_fields[mapping.name].multiple) {
-                                    tmpObj.mappingData = null;
-                                    postdata[mapping.name] = Array();
-                                    postdata[mapping.name].push(tmpObj);
-                                } else {
-                                    postdata[mapping.name] = tmpObj;
-                                }
-                            } else {
-                                if (arr_map_fields[mapping.name] != undefined && arr_map_fields[mapping.name].multiple) {
-                                    tmpObj.mappingData = null;
-                                    postdata[mapping.name].push(tmpObj);
+                                    postdata[mapping.value].push(tmpObj);
                                 } else {
                                     errorFlag = true;
-                                    alert("Multiple " + arr_map_fields[mapping.name].display_name + " not allowed")
+                                    alert("Multiple " + arr_map_fields[mapping.value].display_name + " not allowed")
                                     $("select,input[type=textbox]").each(function(e) {
-                                        if ($(this).val() == mapping.name) {
+                                        if ($(this).val() == mapping["value"]) {
                                             $(this).addClass("form-invalid");
                                         }
                                     })
@@ -491,61 +440,132 @@ jQuery(document).ready(function($) {
                                     return false;
                                 }
                             }
+                        } else if (temp.indexOf('otherfield') > -1) {
+                            var mapElement = $("#" + mapping.name);
+                            mapping.name = $(mapElement).val();
+                            if ($.trim(mapping.name) == "") {
+
+                            } else if (postdata[mapping.value] == undefined) {
+                                if (arr_map_fields[mapping.value].multiple) {
+                                    postdata[mapping.value] = Array();
+                                    var tmpObj = Object();
+                                    tmpObj.fieldName = mapping["name"];
+                                    tmpObj.defaultValue = '';
+
+                                    postdata[mapping.value].push(tmpObj);
+                                } else {
+                                    var tmpObj = Object();
+                                    tmpObj.fieldName = mapping["name"];
+                                    tmpObj.defaultValue = '';
+                                    postdata[mapping.value] = tmpObj;
+                                }
+
+                            } else {
+                                if (arr_map_fields[mapping.value].multiple) {
+                                    var tmpObj = Object();
+                                    tmpObj.fieldName = mapping["name"];
+                                    tmpObj.defaultValue = '';
+                                    postdata[mapping.value].push(tmpObj);
+                                } else {
+                                    errorFlag = true;
+                                    alert("Multiple " + arr_map_fields[mapping.value].display_name + " not allowed")
+                                    $("select,input[type=textbox]").each(function(e) {
+                                        if ($(this).val() == mapping["value"]) {
+                                            $(this).addClass("form-invalid");
+                                        }
+                                    })
+                                    $(mapElement).addClass("form-invalid");
+                                    $(mapElement).focus();
+                                    return false;
+                                }
+                            }
+
+                        } else {
+                            if ($("[name=" + mapping.name + "]").parent().parent().css("display") != 'none') {
+                                var tmpObj = Object();
+                                tmpObj.fieldName = mapping.value;
+                                tmpObj.defaultValue = '';
+                                if (postdata[mapping.name] == undefined) {
+                                    if (arr_map_fields[mapping.name] != undefined && arr_map_fields[mapping.name].multiple) {
+                                        tmpObj.mappingData = null;
+                                        postdata[mapping.name] = Array();
+                                        postdata[mapping.name].push(tmpObj);
+                                    } else {
+                                        postdata[mapping.name] = tmpObj;
+                                    }
+                                } else {
+                                    if (arr_map_fields[mapping.name] != undefined && arr_map_fields[mapping.name].multiple) {
+                                        tmpObj.mappingData = null;
+                                        postdata[mapping.name].push(tmpObj);
+                                    } else {
+                                        errorFlag = true;
+                                        alert("Multiple " + arr_map_fields[mapping.name].display_name + " not allowed")
+                                        $("select,input[type=textbox]").each(function(e) {
+                                            if ($(this).val() == mapping.name) {
+                                                $(this).addClass("form-invalid");
+                                            }
+                                        })
+                                        $("#" + mapping["name"]).addClass("form-invalid");
+                                        $("#" + mapping["name"]).focus();
+                                        return false;
+                                    }
+                                }
 
 
 
+                            }
                         }
-                    }
-                });
-                if (errorFlag)
-                    return false;
-                jQuery.each(arr_map_fields, function(i, map_field) {
-                    if (map_field.required) {
-                        if (postdata[map_field.slug] == undefined) {
-                            alert(map_field.display_name + " is required");
-                            errorFlag = true;
-                            return false;
+                    });
+                    if (errorFlag)
+                        return false;
+                    jQuery.each(arr_map_fields, function(i, map_field) {
+                        if (map_field.required) {
+                            if (postdata[map_field.slug] == undefined) {
+                                alert(map_field.display_name + " is required");
+                                errorFlag = true;
+                                return false;
+                            }
                         }
+
+                    });
+                    if (errorFlag)
+                        return false;
+                    jQuery('#rtHelpdeskMappingForm').slideUp();
+                    jQuery(".myerror").addClass("error");
+                    jQuery(".myupdate").addClass("updated");
+                    jQuery('#startImporting').slideDown();
+                    $("#progressbar").progressbar({
+                        value: 0,
+                        max: arr_lead_id.length
+                    });
+
+                    if (jQuery("#forceimport").attr('checked') == undefined) {
+                        forceImport = "false";
+                    } else {
+                        forceImport = "true";
                     }
+                    var rCount = 0;
+                    var ajaxdata = {
+                        action: 'rthd_map_import',
+                        mapSourceType: $("#mapSourceType").val(),
+                        map_data: postdata,
+                        map_form_id: jQuery('#mapSource').val(),
+                        map_row_index: rCount,
+                        gravity_lead_id: parseInt(arr_lead_id[rCount].id),
+                        forceimport: forceImport,
+                        trans_id: transaction_id,
+                                            rthd_module: jQuery('#rthd_module').val()
+                    }
+                    try {
+                        do_ajax_in_loop(ajaxdata, rCount);
+                    } catch (e) {
 
-                });
-                if (errorFlag)
+                    }
                     return false;
-                jQuery('#rtHelpdeskMappingForm').slideUp();
-                jQuery(".myerror").addClass("error");
-                jQuery(".myupdate").addClass("updated");
-                jQuery('#startImporting').slideDown();
-                $("#progressbar").progressbar({
-                    value: 0,
-                    max: arr_lead_id.length
-                });
-
-                if (jQuery("#forceimport").attr('checked') == undefined) {
-                    forceImport = "false";
-                } else {
-                    forceImport = "true";
                 }
-                var rCount = 0;
-                var ajaxdata = {
-                    action: 'rthd_map_import',
-                    mapSourceType: $("#mapSourceType").val(),
-                    map_data: postdata,
-                    map_form_id: jQuery('#mapSource').val(),
-                    map_row_index: rCount,
-                    gravity_lead_id: parseInt(arr_lead_id[rCount].id),
-                    forceimport: forceImport,
-                    trans_id: transaction_id,
-					rthd_module: jQuery('#rthd_module').val()
-                }
-                try {
-                    do_ajax_in_loop(ajaxdata, rCount);
-                } catch (e) {
-
-                }
-                return false;
             });
 
-        }
+        
         var lead_index = 0;
         $(document).on('click', 'a[href=#dummyDataNext]', function(e) {
             e.preventDefault();
@@ -633,7 +653,7 @@ jQuery(document).ready(function($) {
             });
 
         }
-        $("#progressbar").on("progressbarcomplete", function(event, ui) {
+        $("#progressbar").live("progressbarcomplete", function(event, ui) {
             $(".importloading").hide();
             $(".sucessmessage").show();
 //
@@ -645,7 +665,7 @@ jQuery(document).ready(function($) {
             $("#extra-data-importer").html(strHTML);
 
         });
-        $("#futureYes").on("click", function(event, ui) {
+        $("#futureYes").live("click", function(event, ui) {
             var ajaxdata = {
                 action: 'rthd_map_import_feauture',
                 map_data: postdata,
