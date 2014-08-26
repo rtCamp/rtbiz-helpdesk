@@ -212,7 +212,9 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
                            
                            $user_id = get_post_meta($post->ID, '_ticket_created_by', true );
                            $user_info = get_userdata($user_id);
-                           echo ( $user_info ) ? $user_info->user_login : '-' ;
+                           $url = esc_url( add_query_arg( array( 'post_type' => $this->post_type, 'created_by' =>$user_id ), 'edit.php' ));
+                           
+                           echo ( $user_info ) ?  sprintf( '<a href="%s">%s</a>', $url, $user_info->user_login )  : '-' ;
                           
                                break;
                            
@@ -220,7 +222,11 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
      
                            $user_id = get_post_meta($post->ID, '_ticket_updated_by', true );
                            $user_info = get_userdata($user_id);
-                           echo ( $user_info ) ? $user_info->user_login : '-' ;
+                           
+                            $url = esc_url( add_query_arg( array( 'post_type' => $this->post_type, 'updated_by' =>$user_id ), 'edit.php' ));
+                           
+                            
+                           echo ( $user_info ) ? sprintf( '<a href="%s">%s</a>', $url, $user_info->user_login ) : '-' ;
                           
                                break;
                            
@@ -249,7 +255,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
                           foreach ($contacts as $contact) {
                               
                              $url = add_query_arg( array( 'contact_id' => $contact->ID ), $base_url );
-                             $contact_name[] = '<a href="'.$url.'">'.$contact->post_title.'</a>';
+                             $contact_name[] =  sprintf( '<a href="%s">%s</a>', $url, $contact->post_title );
                           }
                      
                           echo implode(',', $contact_name);
@@ -267,7 +273,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
                             foreach ($accounts as $account) {
 
                                  $url = add_query_arg( array( 'account_id' => $account->ID ), $base_url );
-                                 $account_name[] = '<a href="'.$url.'">'.$account->post_title.'</a>';;
+                                 $account_name[] = sprintf( '<a href="%s">%s</a>', $url, $account->post_title );
                             }
 
                             echo implode(',', $account_name);
@@ -282,9 +288,30 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
                          
                      if ( isset( $_GET['post_type'] ) && $_GET['post_type'] == $this->post_type ) {
                          
-                       if ( !isset( $_GET['post_status'] )  ) {
+                       if ( isset( $_GET['created_by'] )  ) {
                              
-                          $query->set('post_status', array( 'answered', 'unanswered' ) );
+                         $query->set('meta_query',
+                                      array(
+                                               array(
+                                                       'key' => '_ticket_created_by',
+                                                       'value' => $_GET['created_by']
+                                               )
+                                       )
+                                 );
+                         
+                       }
+                       
+                       if ( isset( $_GET['updated_by'] )  ) {
+                             
+                         $query->set('meta_query',
+                                      array(
+                                               array(
+                                                       'key' => '_ticket_updated_by',
+                                                       'value' => $_GET['updated_by']
+                                               )
+                                       )
+                                 );
+                         
                        }
                        
                      }
