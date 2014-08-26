@@ -259,22 +259,62 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				'permissions' => $admin_cap,
 				'fields' => array(
 					array(
-						'id' => 'rthd_system_emails',
-						'title' => __( 'System Emails' ),
-						'subtitle' => __( 'Subtitle' ),
-						'desc' => __( 'Description' ),
-						'type' => 'select',
-						'multi' => true,
-						'options' => $email_options,
+						'id' => 'rthd_outgoing_email_from_address',
+						'title' => __( 'Outgoing Emails\' FROM Address' ),
+						'subtitle' => __( 'Outgoing System Email used for all Helpdesk Communication' ),
+						'desc' => sprintf( '%s <a href="%s">%s</a>. %s.', __( 'WordPress by default sends email using (mostly postfix) FROM/TO value set to Admin Email taken from' ), admin_url( 'options-general.php' ), __( 'here' ), __( 'System Email Address to be used for outbound emails. This Address will be used as FROM: email address for all outgoing emails' ) ),
+						'type' => 'text',
+						'default' => get_option( 'admin_email' ),
+						'validate' => 'email',
 					),
 					array(
-						'id' => 'rthd_outbound_emails',
-						'title' => __( 'Outbound Emails' ),
-						'subtitle' => __( 'Subtitle' ),
-						'desc' => __( 'Description' ),
+						'id' => 'rthd_outgoing_email_delivery',
+						'title' => __( 'Outgoing Emails\' Delivery' ),
+						'subtitle' => __( 'This is how the emails will be sent from the Helpdesk system.' ),
+						'desc' => __( '' ),
+						'type' => 'radio',
+						'options' => array(
+							'wp_mail' => __( 'WordPress wp_mail Function' ),
+							'user_mail_login' => __( 'User\'s own Mail Login - (Google OAuth / SMTP Login etc. as per configuration)' ),
+							'amazon_ses' => __( 'Amazon SES - (Articles) - Not working as of now' ),
+							'google_smtp' => __( 'Google SMTP - NOT Recommended (Articles) - Not working as of now' )
+						),
+						'default' => 'wp_mail',
+					),
+					array(
+						'id' => 'rthd_notification_emails',
+						'title' => __( 'Notification Emails' ),
+						'subtitle' => __( 'Email addresses to be notified on events' ),
+						'desc' => __( 'These email addresses will be notified of the events that occurs in HelpDesk Systems. This is a global list. All the subscribers also will be notified along with this list.' ),
 						'type' => 'multi_text',
 						'validate' => 'email',
 						'multi' => true,
+					),
+					array(
+						'id' => 'rthd_notification_events',
+						'title' => __( 'Notification Events' ),
+						'subtitle' => __( 'Events to be notified to users' ),
+						'desc' => __( 'These events will be notified to the Notification Emails whenever they occur.' ),
+						'type' => 'checkbox',
+						'options' => array(
+							'new_ticket_created' => __( 'Whenever a New Ticket is created.' ),
+							'new_comment_added' => __( 'Whenever a New Comment is added to a Ticket.' ),
+							'status_metadata_changed' => __( 'Whenever any status or metadata changed for a Ticket.' ),
+						),
+					),
+					array(
+						'id' => 'rthd_enable_reply_by_email',
+						'type' => 'switch',
+						'title' => __( 'Enable Reply by Email' ),
+						'subtitle' => __( 'This feature' ),
+						'default' => false,
+						'on' => __( 'Enable' ),
+						'off' => __( 'Disable' ),
+					),
+					array(
+						'id' => 'rthd_reply_by_email_view',
+						'type' => 'callback',
+						'callback' => 'rthd_reply_by_email_view',
 					),
 				),
 			);
@@ -571,6 +611,10 @@ function rthd_ticket_import_mapper() {
 function rthd_ticket_import_logs() {
 	global $rt_hd_logs;
 	$rt_hd_logs->ui();
+}
+
+function rthd_reply_by_email_view( $field, $value ) {
+	var_dump('yoyo');
 }
 
 function rthd_imap_servers( $field, $value ) {
