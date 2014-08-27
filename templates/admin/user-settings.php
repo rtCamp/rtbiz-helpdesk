@@ -42,7 +42,7 @@ if ( $_REQUEST["type"] == "personal" && isset( $_POST["mail_ac"] ) && is_email( 
 }
 if ( $_REQUEST["type"] == "personal" && isset( $_REQUEST["email"] ) && is_email( $_REQUEST["email"] ) ) {
 	$rt_hd_settings->delete_user_google_ac( $_REQUEST["email"] );
-	echo '<script>window.location="'.add_query_arg( array( 'post_type' => $rt_hd_module->post_type, 'page' => 'rthd-settings', 'type' => 'personal', 'tab' => 'my-settings' ), admin_url( 'edit.php' ) ).'";</script>';
+	echo '<script>window.location="'.add_query_arg( array( 'post_type' => Rt_HD_Module::$post_type, 'page' => 'rthd-settings', 'type' => 'personal', 'tab' => 'my-settings' ), admin_url( 'edit.php' ) ).'";</script>';
 	die();
 }
 
@@ -58,15 +58,15 @@ if(isset($_POST["rthd_activecollab_default_project"])){
 	$flag = true;
 }
 if ( $flag ) {
-	echo '<script>window.location="'.add_query_arg( array( 'post_type' => $rt_hd_module->post_type, 'page' => 'rthd-settings', 'type' => 'activecollab','tab' => 'my-settings'  ), admin_url( 'edit.php' ) ).'";</script>';
+	echo '<script>window.location="'.add_query_arg( array( 'post_type' => Rt_HD_Module::$post_type, 'page' => 'rthd-settings', 'type' => 'activecollab','tab' => 'my-settings'  ), admin_url( 'edit.php' ) ).'";</script>';
 	die();
 }
 
 $rt_hd_settings->update_gmail_ac_count();
 ?>
 	<ul class="subsubsub">
-		<li><a href="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&type=personal&tab=my-settings"); ?>" <?php if ($_REQUEST["type"] == "personal") echo " class='current'"; ?> ><?php _e('Personal Emails'); ?></a> | </li>
-		<li><a href="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&type=activecollab&tab=my-settings"); ?>" <?php if ($_REQUEST["type"] == "activecollab") echo " class='current'"; ?> ><?php _e('Active Collab'); ?></a></li>
+		<li><a href="<?php echo admin_url("edit.php?post_type=".Rt_HD_Module::$post_type."&page=rthd-settings&type=personal&tab=my-settings"); ?>" <?php if ($_REQUEST["type"] == "personal") echo " class='current'"; ?> ><?php _e('Personal Emails'); ?></a> | </li>
+		<li><a href="<?php echo admin_url("edit.php?post_type=".Rt_HD_Module::$post_type."&page=rthd-settings&type=activecollab&tab=my-settings"); ?>" <?php if ($_REQUEST["type"] == "activecollab") echo " class='current'"; ?> ><?php _e('Active Collab'); ?></a></li>
 	</ul>
 
 	<?php if ( $_REQUEST['type'] != 'personal' ) { ?>
@@ -78,14 +78,14 @@ $rt_hd_settings->update_gmail_ac_count();
 if ($_REQUEST['type'] == 'personal') {
 	$redirect_url = get_site_option('rthd_googleapi_redirecturl');
 	if (!$redirect_url) {
-		$redirect_url = admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&tab=my-settings&type=personal");
+		$redirect_url = admin_url("edit.php?post_type=".Rt_HD_Module::$post_type."&page=rthd-settings&tab=my-settings&type=personal");
 		update_site_option("rthd_googleapi_redirecturl", $redirect_url);
 	}
 	$google_client_id = get_site_option('rthd_googleapi_clientid', "");
 	$google_client_secret = get_site_option('rthd_googleapi_clientsecret', "");
 	$google_client_redirect_url = get_site_option('rthd_googleapi_redirecturl', "");
 	if ($google_client_id == "" || $google_client_secret == "") {
-		echo '<tr valign="top"><td><div class="error"><p>Please set google api detail on Google API <a href="' . admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&type=googleApi&tab=admin-settings") . '">setting</a> page </p></div></td></tr>';
+		echo '<tr valign="top"><td><div class="error"><p>Please set google api detail on Google API <a href="' . admin_url("edit.php?post_type=".Rt_HD_Module::$post_type."&page=rthd-settings&type=googleApi&tab=admin-settings") . '">setting</a> page </p></div></td></tr>';
 		return;
 	}
 	include_once RT_HD_PATH_VENDOR . 'google-api-php-client/Google_Client.php';
@@ -174,7 +174,7 @@ if ($_REQUEST['type'] == 'personal') {
 		?>
 					<tr>
 						<td>
-							<form method="post" autocomplete="off" action="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&tab=my-settings&type=personal"); ?>">
+							<form method="post" autocomplete="off" action="<?php echo admin_url("edit.php?post_type=".Rt_HD_Module::$post_type."&page=rthd-settings&tab=my-settings&type=personal"); ?>">
 								<input type="hidden" name='mail_ac' value="<?php echo $email; ?>" />
 								<table class='hd-google-profile-table'>
 									<tr valign="top">
@@ -261,7 +261,7 @@ if ($_REQUEST['type'] == 'personal') {
 											<?php if ( $ac->type == 'goauth' ) { ?>
 											<a class='button button-primary' href='<?php echo $authUrl; ?>'>Re Connect Google Now</a>
 											<?php } ?>
-											<a class='button remove-google-ac' href='<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&tab=my-settings&type=personal&email=" . $email); ?>'>Remove A/C</a>
+											<a class='button remove-google-ac' href='<?php echo admin_url("edit.php?post_type=".Rt_HD_Module::$post_type."&page=rthd-settings&tab=my-settings&type=personal&email=" . $email); ?>'>Remove A/C</a>
 										</td>
 									</tr>
 								</table>
@@ -311,7 +311,7 @@ if ($_REQUEST['type'] == 'personal') {
 		<p class="submit rthd-hide-row" id="rthd_goauth_container">
 			<a class='button button-primary' href='<?php echo $authUrl;?>'><?php _e( 'Connect New Google A/C' ); ?></a>
 		</p>
-		<form id="rthd_add_imap_acc_form" autocomplete="off" class="rthd-hide-row" method="post" action="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&type=personal&tab=my-settings"); ?>">
+		<form id="rthd_add_imap_acc_form" autocomplete="off" class="rthd-hide-row" method="post" action="<?php echo admin_url("edit.php?post_type=".Rt_HD_Module::$post_type."&page=rthd-settings&type=personal&tab=my-settings"); ?>">
 			<input type="hidden" name="rthd_add_imap_email" value="1" />
 			<select required="required" name="rthd_imap_server">
 				<option value=""><?php _e( 'Select Mail Server' ); ?></option>

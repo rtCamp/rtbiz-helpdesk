@@ -1,7 +1,7 @@
 <?php
 global $rt_hd_module, $rt_hd_attributes, $rt_hd_closing_reason, $rt_hd_contacts, $rt_hd_accounts, $rt_hd_settings, $rt_hd_tickets, $rt_hd_ticket_history_model;
 
-if( ! isset( $_REQUEST['post_type'] ) || $_REQUEST['post_type'] != $rt_hd_module->post_type ) {
+if( ! isset( $_REQUEST['post_type'] ) || $_REQUEST['post_type'] != Rt_HD_Module::$post_type ) {
 	wp_die("Opsss!! You are in restricted area");
 }
 
@@ -599,7 +599,7 @@ if (isset($_REQUEST["{$post_type}_id"])) {
         <?php
         $post = false;
     }
-    if ( $post->post_type != $rt_hd_module->post_type ) {
+    if ( $post->post_type != Rt_HD_Module::$post_type ) {
         ?>
         <div class="alert-box alert">
             Invalid Post Type

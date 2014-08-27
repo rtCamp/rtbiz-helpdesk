@@ -1325,64 +1325,7 @@ function reset_followup(){
 		$("#rthd-adv-module-div").toggle('slide');
 	});
 
-	$(".rthd_enable_mapping").on('change', function(e){
-		e.preventDefault();
-		var update_mapping_id = $(this).data("mapping-id");
-		var that=this;
-		$.ajax({
-			url: ajaxurl,
-			type: 'POST',
-			dataType: 'json',
-			data:{
-				action : 'helpdesk_enable_mapping',
-				mapping_id:update_mapping_id,
-				mapping_enable:that.checked
-
-			},
-			success: function(data) {
-				if(data.status){
-
-				}else{
-					alert("error in updating mapping from server");
-				}
-			},
-			error: function(xhr, textStatus, errorThrown) {
-				alert("error in update ");
-			}
-
-		});
-	});
-
-	$(".rthd_delete_mapping").on('click', function(e){
-		e.preventDefault();
-		var r = confirm("Are you sure you want to remove this Mapping?");
-		if (r != true) {
-			e.preventDefault();
-			return false;
-		}
-		var del_mapping_id = $(this).data("mapping-id");
-		var that=this;
-		$.ajax({
-			url: ajaxurl,
-			type: 'POST',
-			dataType: 'json',
-			data:{
-				action : 'helpdesk_delete_mapping',
-				mapping_id:del_mapping_id
-			},
-			success: function(data) {
-				if(data.status){
-					$("#mapping_" + del_mapping_id ).fadeOut(500, function() { $(this).remove(); });
-				}else{
-					alert("error in delete mapping from server");
-				}
-			},
-			error: function(xhr, textStatus, errorThrown) {
-				alert("error in remove ");
-			}
-
-		});
-	});
+	
 
 });
 

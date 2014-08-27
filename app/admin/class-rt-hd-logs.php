@@ -161,9 +161,10 @@ if( !class_exists( 'Rt_HD_Logs' ) ) {
 				?>
 							</td>
 							<td>
-								<a class="revertChanges" href="admin.php?page=rthd-logs&transa_id=<?php echo $rslt->trans_id; ?>" data-trans="<?php echo $rslt->trans_id; ?>" > Revert Changes </a> &nbsp; | &nbsp;
-								<a href="admin.php?page=rthd-logs&log-list=log-list&trans_id=<?php echo $rslt->trans_id; ?>" data-trans="<?php echo $rslt->trans_id; ?>" > View Post </a>
-							</td>
+								<a class="revertChanges" href="edit.php?post_type=rt_ticket&page=rthd-settings&transa_id=<?php echo $rslt->trans_id; ?>" data-trans="<?php echo $rslt->trans_id; ?>" > Revert Changes </a> &nbsp; | &nbsp;
+								<a href="edit.php?post_type=rt_ticket&page=rthd-settings&log-list=log-list&trans_id=<?php echo $rslt->trans_id; ?>" data-trans="<?php echo $rslt->trans_id; ?>" > View Post </a>
+
+                                                        </td>
 						</tr>
 
 

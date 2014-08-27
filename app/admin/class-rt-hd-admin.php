@@ -60,6 +60,7 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 		}
 
 		function load_styles_scripts() {
+<<<<<<< HEAD
 			global $post, $rt_hd_module, $pagenow;
 			$pagearray = array( 'rthd-gravity-import', 'rthd-settings', 'rthd-user-settings', 'rthd-logs', 'rthd-'.$rt_hd_module->post_type.'-dashboard' );
 			if( ( isset( $post->post_type ) && $post->post_type == $rt_hd_module->post_type )
@@ -91,6 +92,36 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
                                 || ( isset( $_REQUEST['page'] ) && in_array( $_REQUEST['page'], $pagearray ) ) ) {
                             
                                 // Date & time picker
+=======
+			global $post;
+			$pagearray = array( 'rthd-gravity-import', 'rthd-settings', 'rthd-user-settings', 'rthd-logs', 'rthd-'.Rt_HD_Module::$post_type.'-dashboard' );
+			if( ( isset( $post->post_type ) && $post->post_type == Rt_HD_Module::$post_type )
+					|| ( isset( $_REQUEST['page'] ) && in_array( $_REQUEST['page'], $pagearray ) )
+					|| ( isset( $_REQUEST['post_type'] ) && $_REQUEST['post_type'] == Rt_HD_Module::$post_type ) ) {
+				wp_enqueue_script('rt-jquery-tagit', RT_HD_URL . 'app/assets/javascripts/tag-it.js', array('jquery', 'jquery-ui-widget'), RT_HD_VERSION, true);
+				wp_enqueue_script('rt-custom-status', RT_HD_URL . 'app/assets/javascripts/rt-custom-status.js', array('jquery'), RT_HD_VERSION, true);
+				wp_enqueue_script('rt-handlebars', RT_HD_URL . 'app/assets/javascripts/handlebars.js', array('jquery'), RT_HD_VERSION, true);
+
+				if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] == 'rthd-'.Rt_HD_Module::$post_type.'-dashboard' ) {
+					wp_localize_script('rt-custom-status', 'rt_hd_top_menu', 'menu-posts-'.Rt_HD_Module::$post_type);
+					wp_localize_script('rt-custom-status', 'rt_hd_dashboard_url', admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&page='.'rthd-'.Rt_HD_Module::$post_type.'-dashboard' ) );
+				}
+
+				if( !wp_script_is('jquery-ui-datepicker') ) {
+					wp_enqueue_script( 'jquery-ui-datepicker' );
+				}
+				if( !wp_script_is('jquery-ui-autocomplete') ) {
+					wp_enqueue_script('jquery-ui-autocomplete', '', array('jquery-ui-widget', 'jquery-ui-position'), '1.9.2');
+				}
+				if( !wp_script_is('jquery-ui-progressbar') ) {
+					wp_enqueue_script('jquery-ui-progressbar','',array('jquery-ui-widget', 'jquery-ui-position'), '1.9.2');
+				}
+				wp_enqueue_style('rt-hd-css', RT_HD_URL . 'app/assets/css/rt-hd-css.css', false, RT_HD_VERSION, 'all');
+				wp_enqueue_style('rt-jquery-tagit', RT_HD_URL . 'app/assets/css/jquery.tagit.css', false, RT_HD_URL, 'all');
+			}
+			$pagearray = array( 'rthd-add-module', 'rthd-gravity-mapper', 'rthd-add-'.Rt_HD_Module::$post_type );
+			if ( isset( $_REQUEST['page'] ) && in_array( $_REQUEST['page'], $pagearray ) ) {
+>>>>>>> origin/redux
 				wp_enqueue_script('jquery-ui-timepicker-addon', RT_HD_URL . 'app/assets/javascripts/jquery-ui-timepicker-addon.js',array("jquery-ui-datepicker","jquery-ui-slider"), RT_HD_VERSION, true);
                                 if( !wp_script_is('jquery-ui-datepicker') ) {
 					wp_enqueue_script( 'jquery-ui-datepicker' );
@@ -122,12 +153,10 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 		}
 
 		function localize_scripts() {
-			global $rt_hd_module;
-
-			$pagearray = array( 'rthd-add-module', 'rthd-gravity-mapper', 'rthd-add-'.$rt_hd_module->post_type );
+			$pagearray = array( 'rthd-add-module', 'rthd-gravity-mapper', 'rthd-add-'.Rt_HD_Module::$post_type );
 			if( wp_script_is( 'rthd-admin-js' ) && isset( $_REQUEST['post_type'] ) && isset( $_REQUEST['page'] ) && in_array( $_REQUEST['page'], $pagearray ) ) {
 				$user_edit = false;
-				if ( current_user_can( "edit_{$rt_hd_module->post_type}" ) ) {
+				if ( current_user_can( 'edit_'.Rt_HD_Module::$post_type ) ) {
 					$user_edit = true;
 				}
 				wp_localize_script( 'rthd-admin-js', 'ajaxurl', admin_url( 'admin-ajax.php' ) );
@@ -142,19 +171,13 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 			add_action( 'admin_enqueue_scripts', array( $this, 'load_styles_scripts' ) );
 
 			add_action( 'admin_menu', array( $this, 'register_menu' ), 1 );
-//			add_action( 'admin_bar_menu', array( $this, 'register_toolbar_menu' ), 100 );
 
 			add_filter( 'pre_insert_term', array( $this, 'remove_wocommerce_actions' ), 10, 2 );
 		}
 
 		function register_menu() {
-			global $rt_hd_module, $rt_hd_gravity_form_importer, $rt_hd_gravity_form_mapper, $rt_hd_logs;
-
-			$hd_logo_url = rthd_get_logo_url();
-
-			
-			add_submenu_page( 'edit.php?post_type='.$rt_hd_module->post_type, __( 'Settings' ), __( 'Settings' ), $this->author_cap, 'rthd-settings', array( $this, 'settings_ui' ) );
-                }
+			add_submenu_page( 'edit.php?post_type='.Rt_HD_Module::$post_type, __( 'Settings' ), __( 'Settings' ), $this->author_cap, 'rthd-settings', array( $this, 'settings_ui' ) );
+		}
 
 		function remove_wocommerce_actions( $term, $taxonomy ) {
 			$attrs = rthd_get_all_attributes();
@@ -169,71 +192,6 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 				remove_action( "delete_term", 'woocommerce_delete_term', 5, 3 );
 			}
 			return $term;
-		}
-
-		function register_toolbar_menu( $admin_bar ) {
-			global $rt_hd_module;
-
-			$admin_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' );
-			$editor_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
-			$author_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
-
-			$hd_logo_url = rthd_get_logo_url();
-
-			$menu_label = rthd_get_menu_label();
-
-			if ( current_user_can( $author_cap ) ) {
-				$admin_bar->add_menu( array(
-					'id'    => 'rt-wp-hd',
-					'title' => '<img src="'.$hd_logo_url.'" style="vertical-align:middle;margin-right:5px" alt="'.$menu_label.'" title="'.$menu_label.'" />'.$menu_label,
-					'href'  => admin_url( 'admin.php?page=rthd-'.$rt_hd_module->post_type.'-dashboard' ),
-					'meta'  => array(
-						'title' => $menu_label,
-					),
-				));
-			}
-			if ( current_user_can( $editor_cap ) ) {
-				$admin_bar->add_menu( array(
-					'id'    => 'rthd-gravity-import',
-					'parent' => 'rt-wp-hd',
-					'title' => __( 'Gravity Import' ),
-					'href'  => admin_url( 'admin.php?page=rthd-gravity-import' ),
-					'meta'  => array(
-						'title' => __( 'Gravity Import' ),
-					),
-				));
-				$admin_bar->add_menu( array(
-					'id'    => 'rthd-gravity-mapper',
-					'parent' => 'rt-wp-hd',
-					'title' => __( 'Gravity Mapper' ),
-					'href'  => admin_url( 'admin.php?page=rthd-gravity-Mapper' ),
-					'meta'  => array(
-						'title' => __( 'Gravity Mapper' ),
-					),
-				));
-			}
-			if ( current_user_can( $admin_cap ) ) {
-				$admin_bar->add_menu( array(
-					'id'    => 'rthd-settings',
-					'parent' => 'rt-wp-hd',
-					'title' => __( 'Helpdesk Settings' ),
-					'href'  => admin_url( 'admin.php?page=rthd-settings' ),
-					'meta'  => array(
-						'title' => __( 'Helpdesk Settings' ),
-					),
-				));
-			}
-			if ( current_user_can( $editor_cap ) ) {
-				$admin_bar->add_menu( array(
-					'id'    => 'rthd-logs',
-					'parent' => 'rt-wp-hd',
-					'title' => __( 'Logs' ),
-					'href'  => admin_url( 'admin.php?page=rthd-logs' ),
-					'meta'  => array(
-						'title' => __( 'Logs' ),
-					),
-				));
-			}
 		}
 
 		function user_settings_ui() {

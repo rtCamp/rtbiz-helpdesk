@@ -35,7 +35,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 		}
 
 		function template_include( $template ) {
-			global $wp_query, $rt_hd_module;
+			global $wp_query;
 
 			if ( ! isset( $wp_query->query_vars[ 'name' ] ) ) {
 				return $template;
@@ -44,7 +44,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 			$name = $wp_query->query_vars[ 'name' ];
 
 			$post_type = rthd_post_type_name( $name );
-			if ( $post_type != $rt_hd_module->post_type ) {
+			if ( $post_type != Rt_HD_Module::$post_type ) {
 				return $template;
 			}
 

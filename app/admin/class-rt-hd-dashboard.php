@@ -56,9 +56,7 @@ if ( !class_exists( 'Rt_HD_Dashboard' ) ) {
 		* This calls the add_meta_boxes hooks, adds screen options and enqueues the postbox.js script.
 		*/
 		function page_actions() {
-			global $rt_hd_module;
-
-			if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] === 'rthd-'.$rt_hd_module->post_type.'-dashboard' ) {
+			if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] === 'rthd-'.Rt_HD_Module::$post_type.'-dashboard' ) {
 				do_action('add_meta_boxes_' . $this->screen_id, null);
 				do_action('add_meta_boxes', $this->screen_id, null);
 

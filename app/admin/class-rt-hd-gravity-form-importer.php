@@ -77,10 +77,9 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 				),
 			);
 
-			global $rt_hd_module;
-			$attributes = rthd_get_attributes( $rt_hd_module->post_type );
+			$attributes = rthd_get_attributes( Rt_HD_Module::$post_type );
 			foreach ( $attributes as $attr ) {
-				$relation = $rt_hd_attributes_relationship_model->get_relations_by_post_type( $rt_hd_module->post_type, $attr->id );
+				$relation = $rt_hd_attributes_relationship_model->get_relations_by_post_type( Rt_HD_Module::$post_type, $attr->id );
 				if( ! isset( $relation[0] ) ) {
 					continue;
 				}
@@ -209,6 +208,7 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 		public function hd_importer_ajax_hooks() {
 			add_action( 'wp_ajax_rthd_map_import', array( $this, 'rthd_map_import_callback' ) );
 			add_action( 'wp_ajax_rthd_map_import_feauture', array( $this, 'rthd_map_import_feauture' ) );
+			add_action( 'wp_ajax_rthd_import', array( $this, 'importer' ) );
 			add_action( 'init', array( $this, 'install_gravity_form_hook' ) );
 			add_action( 'wp_ajax_rthd_gravity_dummy_data', array( $this, 'get_random_gravity_data' ) );
 			add_action( 'wp_ajax_rthd_defined_map_feild_value', array( $this, 'rthd_defined_map_feild_value' ) );
@@ -281,7 +281,7 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 				if ( $mapping->enable == 'yes' ) {
 					global $rt_hd_module;
 					$labels = $rt_hd_module->labels;
-					$post_type = $rt_hd_module->post_type;
+					$post_type = Rt_HD_Module::$post_type;
 					$hd_ticket_id = intval( $this->gform_get_meta( $gr_lead_id, "helpdesk-".$post_type."-post-id" ) );
 					if ( $hd_ticket_id ) {
 						echo "Linked ".$rt_hd_module->name." Post : <a href='" . get_edit_post_link( $hd_ticket_id ) . "' >" . get_the_title( $hd_ticket_id ) . "</a><br/>";
@@ -324,17 +324,16 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 
 		public function ui() {
 			global $rt_hd_module;
-                        
-                        $current_tab = $_GET[ 'tab' ];
-                        
+                $post_type = Rt_HD_Module::$post_type;
+
 			if (!isset($_REQUEST["type"])) {
 				$_REQUEST["type"] = "csv";
 			}
 			$this->load_handlebars_Templates();
 			?>
 				<ul class="subsubsub">
-					<li><a href="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&type=csv&tab=$current_tab"); ?>" <?php if ($_REQUEST["type"] == "csv") echo " class='current'"; ?>>CSV</a> |</li>
-					<li><a href="<?php echo admin_url("edit.php?post_type=$rt_hd_module->post_type&page=rthd-settings&type=gravity&tab=$current_tab"); ?>" <?php if ($_REQUEST["type"] == "gravity") echo " class='current'"; ?> >Gravity</a> </li>
+					<li><a href="<?php echo admin_url("edit.php?post_type=$post_type&page=rthd-settings&type=csv"); ?>" <?php if ($_REQUEST["type"] == "csv") echo " class='current'"; ?>>CSV</a> |</li>
+					<li><a href="<?php echo admin_url("edit.php?post_type=$post_type&page=rthd-settings&type=gravity"); ?>" <?php if ($_REQUEST["type"] == "gravity") echo " class='current'"; ?> >Gravity</a> </li>
 					
 				</ul>
 				<?php
@@ -375,10 +374,11 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 							<?php if (!$noFormflag) : ?>
 								<tr>
 									<th scope="row"></th>
-									<td><input type="submit" name="map_submit" value="Next" class="button button-primary"/></td>
+                                                                        <td><input type="button" id="map_submit" name="map_submit" value="Next" class="button button-primary"/></td>
 								</tr>
 							<?php endif; ?>
 						</table>
+                                            <div id="mapping-form"></div>
 					</form>
 				<?php } else if ($_REQUEST["type"] == "csv") {
 					?>
@@ -397,12 +397,17 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 					</form>
 					<?php
 				}
-				if (!( isset($_REQUEST['map_submit']) && $_REQUEST['map_submit'] != '' )) {
-					return false;
-				}
+						
+             
+                        }
+
+		public function importer() {
+			global $rt_hd_module;
+                        $post_type = Rt_HD_Module::$post_type;
+
 
 				$flag = true;
-				$post_type = $rt_hd_module->post_type;
+				$post_type = Rt_HD_Module::$post_type;
 
 				if ($_REQUEST["type"] == "csv") {
 					if (isset($_FILES['map_upload']) && $_FILES['map_upload']['error'] == 0) {
@@ -479,9 +484,10 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 								return false;
 							}
 						} else {
-							$form_id = intval($_POST['mapSource']);
+                                                        global $rt_hd_gravity_fields_mapping_model;
+							$form_id = intval($_REQUEST['mapSource']);
 							$form_data = RGFormsModel::get_form_meta($form_id);
-							$form_count = RGFormsModel::get_form_counts($form_id);
+							$form_count = RGFormsModel::get_form_counts($form_id);                                          
 							if (!$form_data) {
 								?>
 								<div id="map_message" class="error">Invalid Form </div>
@@ -519,6 +525,7 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 												<td><?php echo ucfirst($field['label']); ?> <input type="hidden" value="<?php echo ucfirst($field['type']); ?>" /></td>
 												<td>
 													<?php
+                                                                                                                 
 													$form_fields = '<select name="field-' . $field['id'] . '"  id="field-' . $field['id'] . '" class="map_form_fields map_form_fixed_fields">';
 													$form_fields .= '<option value="">Choose a field or Skip it</option>';
 													foreach ($this->ticket_field as $key => $lfield) {
@@ -598,7 +605,7 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 									</tr>
 
 									<?php
-										$attributes = rthd_get_attributes($rt_hd_module->post_type);
+										$attributes = rthd_get_attributes(Rt_HD_Module::$post_type);
 										foreach ($attributes as $attr) { ?>
 											<tr>
 												<td><?php echo $attr->attribute_label; ?></td>
@@ -724,7 +731,7 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 									var arr_lead_id =<?php echo json_encode($jsonArray); ?>
 								<?php } ?>
 							</script>
-							<input type="submit" name="map_mapping_import" id="map_mapping_import" value="Import" class="button button-primary"/>
+							<input type="button" name="map_mapping_import" id="map_mapping_import" value="Import" class="button button-primary"/>
 						</form>
 						<div id='startImporting'>
 							<h2>Importing <?php if (isset($formname)) echo $formname; ?> into Helpdesk...</h2>
@@ -749,7 +756,9 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 			<?php } ?>
 
 						</div>
-		<?php }
+		<?php    die();
+                
+                        }
 
 		public function rthd_map_import_feauture() {
 			global $rt_hd_gravity_fields_mapping_model;
@@ -1059,9 +1068,9 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 		function create_tickets_from_map_data($map_data, $gravity_lead_id, $type) {
 			extract($map_data, EXTR_OVERWRITE);
 
-			global $transaction_id, $rt_hd_module;
+			global $transaction_id;
 			$module_settings = rthd_get_settings();
-			$post_type = $rt_hd_module->post_type;
+			$post_type = Rt_HD_Module::$post_type;
 			$ticketModel = new Rt_HD_Ticket_Model();
 			if (isset($creationdate)) {
 				$creationdate = trim($creationdate);
@@ -1252,7 +1261,7 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 				}
 
 
-				$attributes = rthd_get_attributes($rt_hd_module->post_type);
+				$attributes = rthd_get_attributes(Rt_HD_Module::$post_type);
 				foreach ($attributes as $attr) {
 					$slug = str_replace( array( '-' ), '_', $attr->attribute_name );
 					switch ( $attr->attribute_store_as ) {
