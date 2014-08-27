@@ -25,7 +25,7 @@ if( !class_exists( 'RT_Meta_Box_Subscribers ' ) ) {
 
             global $rt_hd_module;
 
-            $post_type = $rt_hd_module->post_type;
+            $post_type = Rt_HD_Module::$post_type;
             
             $all_hd_participants = array();
             if(isset($post->ID)) {

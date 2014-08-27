@@ -61,17 +61,17 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 
 		function load_styles_scripts() {
 			global $post, $rt_hd_module, $pagenow;
-			$pagearray = array( 'rthd-gravity-import', 'rthd-settings', 'rthd-user-settings', 'rthd-logs', 'rthd-'.$rt_hd_module->post_type.'-dashboard' );
-			if( ( isset( $post->post_type ) && $post->post_type == $rt_hd_module->post_type )
+			$pagearray = array( 'rthd-gravity-import', 'rthd-settings', 'rthd-user-settings', 'rthd-logs', 'rthd-'.Rt_HD_Module::$post_type.'-dashboard' );
+			if( ( isset( $post->post_type ) && $post->post_type == Rt_HD_Module::$post_type )
 					|| ( isset( $_REQUEST['page'] ) && in_array( $_REQUEST['page'], $pagearray ) )
-					|| ( isset( $_REQUEST['post_type'] ) && $_REQUEST['post_type'] == $rt_hd_module->post_type ) ) {
+					|| ( isset( $_REQUEST['post_type'] ) && $_REQUEST['post_type'] == Rt_HD_Module::$post_type ) ) {
 //				wp_enqueue_script('rt-jquery-tagit', RT_HD_URL . 'app/assets/javascripts/tag-it.js', array('jquery', 'jquery-ui-widget'), RT_HD_VERSION, true);
 //				wp_enqueue_script('rt-custom-status', RT_HD_URL . 'app/assets/javascripts/rt-custom-status.js', array('jquery'), RT_HD_VERSION, true);
 //				wp_enqueue_script('rt-handlebars', RT_HD_URL . 'app/assets/javascripts/handlebars.js', array('jquery'), RT_HD_VERSION, true);
 //
-//				if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] == 'rthd-'.$rt_hd_module->post_type.'-dashboard' ) {
-//					wp_localize_script('rt-custom-status', 'rt_hd_top_menu', 'menu-posts-'.$rt_hd_module->post_type);
-//					wp_localize_script('rt-custom-status', 'rt_hd_dashboard_url', admin_url( 'edit.php?post_type='.$rt_hd_module->post_type.'&page='.'rthd-'.$rt_hd_module->post_type.'-dashboard' ) );
+//				if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] == 'rthd-'.Rt_HD_Module::$post_type.'-dashboard' ) {
+//					wp_localize_script('rt-custom-status', 'rt_hd_top_menu', 'menu-posts-'.Rt_HD_Module::$post_type);
+//					wp_localize_script('rt-custom-status', 'rt_hd_dashboard_url', admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&page='.'rthd-'.Rt_HD_Module::$post_type.'-dashboard' ) );
 //				}
 //
 //				if( !wp_script_is('jquery-ui-datepicker') ) {
@@ -86,8 +86,8 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 //				wp_enqueue_style('rt-hd-css', RT_HD_URL . 'app/assets/css/rt-hd-css.css', false, RT_HD_VERSION, 'all');
 //				wp_enqueue_style('rt-jquery-tagit', RT_HD_URL . 'app/assets/css/jquery.tagit.css', false, RT_HD_URL, 'all');
 			}
-			$pagearray = array( 'rthd-add-module', 'rthd-gravity-mapper', 'rthd-add-'.$rt_hd_module->post_type );
-			if ( isset( $post->post_type ) && $post->post_type == $rt_hd_module->post_type && in_array( $pagenow, array( 'post.php', 'post-new.php' ) ) 
+			$pagearray = array( 'rthd-add-module', 'rthd-gravity-mapper', 'rthd-add-'.Rt_HD_Module::$post_type );
+			if ( isset( $post->post_type ) && $post->post_type == Rt_HD_Module::$post_type && in_array( $pagenow, array( 'post.php', 'post-new.php' ) ) 
                                 || ( isset( $_REQUEST['page'] ) && in_array( $_REQUEST['page'], $pagearray ) ) ) {
                             
                                 // Date & time picker

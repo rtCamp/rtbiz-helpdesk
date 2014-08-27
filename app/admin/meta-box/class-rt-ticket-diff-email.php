@@ -41,7 +41,7 @@ if( !class_exists( 'RT_Ticket_Diff_Email' ) ) {
                     return;
             }
 
-            if ( ! in_array( $post['post_type'], array( $rt_hd_module->post_type ) ) ) {
+            if ( ! in_array( $post['post_type'], array( Rt_HD_Module::$post_type ) ) ) {
                     return;
             }
             
@@ -158,14 +158,14 @@ if( !class_exists( 'RT_Ticket_Diff_Email' ) ) {
             $emailHTML .= $closing_reason_diff;
             
             // Attributes-meta Diff
-            $attributes = rthd_get_attributes( $rt_hd_module->post_type, 'meta' );
+            $attributes = rthd_get_attributes( Rt_HD_Module::$post_type, 'meta' );
             foreach ( $attributes as $attr ) {
 		$attr_diff = $rt_hd_attributes->attribute_diff( $attr, $post_id, $newTicket );
                 $emailHTML .= $attr_diff;
             }
             
             // Attributes-texonomies Diff
-            $attributes = rthd_get_attributes( $rt_hd_module->post_type, 'taxonomy' );
+            $attributes = rthd_get_attributes( Rt_HD_Module::$post_type, 'taxonomy' );
             foreach ( $attributes as $attr ) {
 		$attr_diff = $rt_hd_attributes->attribute_diff( $attr, $post_id, $_POST['tax_input'] );
                 $emailHTML .= $attr_diff;
@@ -228,7 +228,7 @@ if( !class_exists( 'RT_Ticket_Diff_Email' ) ) {
             global $rt_ticket_email_content, $rt_hd_settings, $rt_hd_tickets, $rt_hd_module;
             
             $emailTable = "<table style='width: 100%; border-collapse: collapse; border: none;'>";
-            $post_type = $rt_hd_module->post_type;
+            $post_type = Rt_HD_Module::$post_type;
             $module_settings = rthd_get_settings();
             $updateFlag = true;
             $oldUser = $rt_ticket_email_content['oldUser'];

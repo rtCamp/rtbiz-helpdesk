@@ -131,10 +131,10 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			add_action( 'rt_attributes_relations_updated', array( $this, 'update_ticket_table' ), 10, 1 );
 			add_action( 'rt_attributes_relations_deleted', array( $this, 'update_ticket_table' ), 10, 1 );
                         
-                        add_filter( "manage_edit-{$this->post_type}_columns", array( $this,'edit_custom_columns' ) ) ;
-                        add_action( "manage_{$this->post_type}_posts_custom_column" , array( $this, 'manage_custom_columns' ), 10, 2 );
+                        add_filter( "manage_edit-" . self::$post_type . "_columns", array( $this,'edit_custom_columns' ) ) ;
+                        add_action( "manage_" . self::$post_type . "_posts_custom_column" , array( $this, 'manage_custom_columns' ), 10, 2 );
                         add_action('pre_get_posts', array( $this, 'pre_filter' ) );
-                        add_filter( "manage_edit-{$this->post_type}_sortable_columns",  array( $this,  'sortable_column' ) );
+                        add_filter( "manage_edit-" . self::$post_type . "_sortable_columns",  array( $this,  'sortable_column' ) );
 		}
                 
                 function edit_custom_columns( $columns ){
@@ -201,7 +201,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
                        case 'rthd_status' :
                     
                            printf( '<a href="%s">%s</a>',
-					esc_url( add_query_arg( array( 'post_type' => $this->post_type, 'post_status' => get_post_status() ), 'edit.php' )),
+					esc_url( add_query_arg( array( 'post_type' => self::$post_type, 'post_status' => get_post_status() ), 'edit.php' )),
 					get_post_status()
                            );
                            
@@ -212,7 +212,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
                            
                            $user_id = get_post_meta($post->ID, '_ticket_created_by', true );
                            $user_info = get_userdata($user_id);
-                           $url = esc_url( add_query_arg( array( 'post_type' => $this->post_type, 'created_by' =>$user_id ), 'edit.php' ));
+                           $url = esc_url( add_query_arg( array( 'post_type' => self::$post_type, 'created_by' =>$user_id ), 'edit.php' ));
                            
                            echo ( $user_info ) ?  sprintf( '<a href="%s">%s</a>', $url, $user_info->user_login )  : '-' ;
                           
@@ -223,7 +223,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
                            $user_id = get_post_meta($post->ID, '_ticket_updated_by', true );
                            $user_info = get_userdata($user_id);
                            
-                            $url = esc_url( add_query_arg( array( 'post_type' => $this->post_type, 'updated_by' =>$user_id ), 'edit.php' ));
+                            $url = esc_url( add_query_arg( array( 'post_type' => self::$post_type, 'updated_by' =>$user_id ), 'edit.php' ));
                            
                             
                            echo ( $user_info ) ? sprintf( '<a href="%s">%s</a>', $url, $user_info->user_login ) : '-' ;
@@ -247,10 +247,10 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
                          
                        case 'rthd_contacts' :
                  
-                          $contacts = rt_biz_get_post_for_person_connection( $post->ID, $this->post_type );
+                          $contacts = rt_biz_get_post_for_person_connection( $post->ID, self::$post_type );
                            
                           $contact_name = array();
-                          $base_url = add_query_arg( array( 'post_type' => $this->post_type ), admin_url( 'edit.php' ) );
+                          $base_url = add_query_arg( array( 'post_type' => self::$post_type ), admin_url( 'edit.php' ) );
                           
                           foreach ($contacts as $contact) {
                               
@@ -265,10 +265,10 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
                          
                        case 'rthd_accounts' :
                     
-                            $accounts = rt_biz_get_post_for_organization_connection( $post->ID, $this->post_type );
+                            $accounts = rt_biz_get_post_for_organization_connection( $post->ID, self::$post_type );
 
                             $account_name = array();
-                            $base_url = add_query_arg( array( 'post_type' => $this->post_type ), admin_url( 'edit.php' ) );
+                            $base_url = add_query_arg( array( 'post_type' => self::$post_type ), admin_url( 'edit.php' ) );
        
                             foreach ($accounts as $account) {
 
@@ -286,7 +286,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
                
                  function pre_filter( $query ){
                          
-                     if ( isset( $_GET['post_type'] ) && $_GET['post_type'] == $this->post_type ) {
+                     if ( isset( $_GET['post_type'] ) && $_GET['post_type'] == self::$post_type ) {
                          
                        if ( isset( $_GET['created_by'] )  ) {
                              
@@ -327,7 +327,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
                        
                    }
                         		function update_ticket_table( $attr_id, $post_types ) {
-			if ( in_array( $this->post_type, $post_types ) ) {
+			if ( in_array( self::$post_type, $post_types ) ) {
 				$updateDB = new RT_DB_Update( trailingslashit( RT_HD_PATH ) . 'index.php', trailingslashit( RT_HD_PATH_SCHEMA ) );
 				delete_option( $updateDB->db_version_option_name );
 			}
@@ -391,10 +391,10 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			/* Metaboxes for dashboard widgets */
 			add_action( 'add_meta_boxes', array( $this, 'add_dashboard_widgets' ) );
 
-			//$filter = add_submenu_page( 'edit.php?post_type='.$this->post_type, __( ucfirst( $this->labels['all_items'] ) ), __( ucfirst( $this->labels['all_items'] ) ), $author_cap, 'rthd-all-'.$this->post_type, array( $this, 'custom_page_list_view' ) );
+			//$filter = add_submenu_page( 'edit.php?post_type='.self::$post_type, __( ucfirst( $this->labels['all_items'] ) ), __( ucfirst( $this->labels['all_items'] ) ), $author_cap, 'rthd-all-'.self::$post_type, array( $this, 'custom_page_list_view' ) );
 			//add_action( "load-$filter", array( $this, 'add_screen_options' ) );
 
-			//$screen_id = add_submenu_page( 'edit.php?post_type='.$this->post_type, __('Add ' . ucfirst( $this->labels['name'] ) ), __('Add ' . ucfirst( $this->labels['name'] ) ), $author_cap, 'rthd-add-'.$this->post_type, array( $this, 'custom_page_ui' ) );
+			//$screen_id = add_submenu_page( 'edit.php?post_type='.self::$post_type, __('Add ' . ucfirst( $this->labels['name'] ) ), __('Add ' . ucfirst( $this->labels['name'] ) ), $author_cap, 'rthd-add-'.self::$post_type, array( $this, 'custom_page_ui' ) );
 			//add_action( 'admin_footer-'.$screen_id, array( $this, 'footer_scripts' ) );
 
 			add_filter( 'set-screen-option', array( $this,'tickets_table_set_option' ), 10, 3 );
@@ -423,9 +423,9 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 		function custom_pages_order( $menu_order ) {
 			global $submenu;
 			global $menu;
-			if ( isset( $submenu['edit.php?post_type='.$this->post_type] ) && !empty( $submenu['edit.php?post_type='.$this->post_type] ) ) {
-				$module_menu = $submenu['edit.php?post_type='.$this->post_type];
-				unset($submenu['edit.php?post_type='.$this->post_type]);
+			if ( isset( $submenu['edit.php?post_type='.self::$post_type] ) && !empty( $submenu['edit.php?post_type='.self::$post_type] ) ) {
+				$module_menu = $submenu['edit.php?post_type='.self::$post_type];
+				unset($submenu['edit.php?post_type='.self::$post_type]);
 				//unset($module_menu[5]);
 				//unset($module_menu[10]);
 				$new_index = 5;
@@ -475,7 +475,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 				'menu_icon' => $hd_logo_url,
 				'menu_position' => $menu_position,
 				'supports' => array('title', 'editor', 'comments', 'custom-fields', 'revisions'),
-				'capability_type' => $this->post_type,
+				'capability_type' => self::$post_type,
 			);
 			register_post_type( self::$post_type, $args );
 		}
@@ -549,7 +549,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 		 */
 		function rtticket_post_action_updated() {
 			global $pagenow;
-			if ( get_post_type() == $this->post_type && ( $pagenow == 'edit.php' || $pagenow == 'post-new.php' || ( isset( $_GET[ 'action' ] ) && $_GET[ 'action' ] ) == 'edit' ) ) {
+			if ( get_post_type() == self::$post_type && ( $pagenow == 'edit.php' || $pagenow == 'post-new.php' || ( isset( $_GET[ 'action' ] ) && $_GET[ 'action' ] ) == 'edit' ) ) {
 				global $post;
 				if ( ! isset( $post ) ) {
 					return;

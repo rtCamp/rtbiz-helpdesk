@@ -25,7 +25,7 @@ if( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 
             global $rt_hd_module, $rt_hd_closing_reason, $rt_hd_attributes;
             $labels = $rt_hd_module->labels;
-            $post_type = $rt_hd_module->post_type;
+            $post_type = Rt_HD_Module::$post_type;
 
             $create = new DateTime($post->post_date);
 

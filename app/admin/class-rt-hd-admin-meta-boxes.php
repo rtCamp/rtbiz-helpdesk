@@ -44,11 +44,11 @@ if( !class_exists( 'RT_HD_Admin_Meta_Boxes' ) ) {
         public function remove_meta_boxes() {
             global $rt_hd_module;
 
-            remove_meta_box('tagsdiv-rt_closing-reason', $rt_hd_module->post_type, 'side' );
-            remove_meta_box('revisionsdiv', $rt_hd_module->post_type, 'normal' );
-            remove_meta_box( 'commentsdiv', $rt_hd_module->post_type , 'normal' );
-            remove_meta_box( 'commentstatusdiv', $rt_hd_module->post_type , 'normal' );
-            remove_meta_box( 'slugdiv', $rt_hd_module->post_type , 'normal' );
+            remove_meta_box('tagsdiv-rt_closing-reason', Rt_HD_Module::$post_type, 'side' );
+            remove_meta_box('revisionsdiv', Rt_HD_Module::$post_type, 'normal' );
+            remove_meta_box( 'commentsdiv', Rt_HD_Module::$post_type , 'normal' );
+            remove_meta_box( 'commentstatusdiv', Rt_HD_Module::$post_type , 'normal' );
+            remove_meta_box( 'slugdiv', Rt_HD_Module::$post_type , 'normal' );
         }
 
         /**
@@ -64,10 +64,10 @@ if( !class_exists( 'RT_HD_Admin_Meta_Boxes' ) ) {
         public function add_meta_boxes() {
             global $rt_hd_module;
 
-            add_meta_box( 'rt-hd-ticket-data', __( 'Ticket Information', 'rtbiz' ), 'RT_Meta_Box_Ticket_Info::ui', $rt_hd_module->post_type, 'normal', 'high' );
-            add_meta_box( 'rt-hd-subscriiber', __( 'Subscriiber', 'rtbiz' ), 'RT_Meta_Box_Subscribers::ui', $rt_hd_module->post_type, 'side', 'default' );
-            add_meta_box( 'rt-hd-attachment', __( 'Attachment', 'rtbiz' ), 'RT_Meta_Box_Attachment::ui', $rt_hd_module->post_type, 'side', 'default' );
-            add_meta_box( 'rt-hd-external-link', __( 'External Link', 'rtbiz' ), 'RT_Meta_Box_External_Link::ui', $rt_hd_module->post_type, 'side', 'default' );
+            add_meta_box( 'rt-hd-ticket-data', __( 'Ticket Information', 'rtbiz' ), 'RT_Meta_Box_Ticket_Info::ui', Rt_HD_Module::$post_type, 'normal', 'high' );
+            add_meta_box( 'rt-hd-subscriiber', __( 'Subscriiber', 'rtbiz' ), 'RT_Meta_Box_Subscribers::ui', Rt_HD_Module::$post_type, 'side', 'default' );
+            add_meta_box( 'rt-hd-attachment', __( 'Attachment', 'rtbiz' ), 'RT_Meta_Box_Attachment::ui', Rt_HD_Module::$post_type, 'side', 'default' );
+            add_meta_box( 'rt-hd-external-link', __( 'External Link', 'rtbiz' ), 'RT_Meta_Box_External_Link::ui', Rt_HD_Module::$post_type, 'side', 'default' );
         }
         
         public function save_meta_boxes( $post_id, $post ) {
@@ -93,7 +93,7 @@ if( !class_exists( 'RT_HD_Admin_Meta_Boxes' ) ) {
             }
 
             // Check the post type
-            if ( ! in_array( $post->post_type, array( $rt_hd_module->post_type ) ) ) {
+            if ( ! in_array( $post->post_type, array( Rt_HD_Module::$post_type ) ) ) {
                     return;
             }
             
