@@ -43,7 +43,7 @@ if( !class_exists( 'Rt_HD_Logs' ) ) {
 				}
 				if($strPost !=""){
 					$wpdb->get_results("delete from $wpdb->posts where ID in ({$strPost})");
-					$wpdb->get_results("delete from $wpdb->term_relationships where object_id in ({$strPost})");
+					$wpdb->get_results("d389elete from $wpdb->term_relationships where object_id in ({$strPost})");
 					$wpdb->get_results("delete from $wpdb->postmeta where post_id in ({$strPost})");
 				}
 				if (class_exists("RGForms")) {
@@ -161,9 +161,10 @@ if( !class_exists( 'Rt_HD_Logs' ) ) {
 				?>
 							</td>
 							<td>
-								<a class="revertChanges" href="admin.php?page=rthd-logs&transa_id=<?php echo $rslt->trans_id; ?>" data-trans="<?php echo $rslt->trans_id; ?>" > Revert Changes </a> &nbsp; | &nbsp;
-								<a href="admin.php?page=rthd-logs&log-list=log-list&trans_id=<?php echo $rslt->trans_id; ?>" data-trans="<?php echo $rslt->trans_id; ?>" > View Post </a>
-							</td>
+								<a class="revertChanges" href="edit.php?post_type=rt_ticket&page=rthd-settings&transa_id=<?php echo $rslt->trans_id; ?>" data-trans="<?php echo $rslt->trans_id; ?>" > Revert Changes </a> &nbsp; | &nbsp;
+								<a href="edit.php?post_type=rt_ticket&page=rthd-settings&log-list=log-list&trans_id=<?php echo $rslt->trans_id; ?>" data-trans="<?php echo $rslt->trans_id; ?>" > View Post </a>
+
+                                                        </td>
 						</tr>
 
 
