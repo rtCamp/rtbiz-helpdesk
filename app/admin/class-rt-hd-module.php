@@ -57,12 +57,12 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 					. "post_title TEXT,\n"
 					. "post_content TEXT,\n"
 					. "assignee BIGINT(20),\n"
-					. "date_create TIMESTAMP NOT NULL,\n"
-					. "date_create_gmt TIMESTAMP NOT NULL,\n"
-					. "date_update TIMESTAMP NOT NULL,\n"
-					. "date_update_gmt TIMESTAMP NOT NULL,\n"
-					. "date_closing TIMESTAMP NOT NULL,\n"
-					. "date_closing_gmt TIMESTAMP NOT NULL,\n"
+					. "date_create TIMESTAMP NOT NULL DEFAULT 0,\n"
+					. "date_create_gmt TIMESTAMP NOT NULL DEFAULT 0,\n"
+					. "date_update TIMESTAMP NOT NULL DEFAULT 0,\n"
+					. "date_update_gmt TIMESTAMP NOT NULL DEFAULT 0,\n"
+					. "date_closing TIMESTAMP NOT NULL DEFAULT 0,\n"
+					. "date_closing_gmt TIMESTAMP NOT NULL DEFAULT 0,\n"
 					. "post_status VARCHAR(20),\n"
 					. "user_created_by BIGINT(20),\n"
 					. "user_updated_by BIGINT(20),\n"
@@ -276,20 +276,11 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
                    }
                    
                  
-               }
+                }
                
-                 function pre_filter( $query ){
-                         
-                     if ( isset( $_GET['post_type'] ) && $_GET['post_type'] == $this->post_type ) {
-                         
-                       if ( !isset( $_GET['post_status'] )  ) {
-                             
-                          $query->set('post_status', array( 'answered', 'unanswered' ) );
-                       }
-                       
-                     }
-                       
-                   } 
+                function pre_filter( $query ){
+
+                } 
                    
                    function sortable_column( $columns ){
                        
