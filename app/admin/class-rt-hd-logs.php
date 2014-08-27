@@ -43,7 +43,7 @@ if( !class_exists( 'Rt_HD_Logs' ) ) {
 				}
 				if($strPost !=""){
 					$wpdb->get_results("delete from $wpdb->posts where ID in ({$strPost})");
-					$wpdb->get_results("d389elete from $wpdb->term_relationships where object_id in ({$strPost})");
+					$wpdb->get_results("delete from $wpdb->term_relationships where object_id in ({$strPost})");
 					$wpdb->get_results("delete from $wpdb->postmeta where post_id in ({$strPost})");
 				}
 				if (class_exists("RGForms")) {
