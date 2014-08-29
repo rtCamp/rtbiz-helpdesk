@@ -122,7 +122,7 @@ if( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
                 <?php $rt_hd_closing_reason->get_closing_reasons( ( isset( $post->ID ) ) ? $post->ID : '', TRUE ); ?>
             </div><?php
             
-            $rthd_unique_id = get_post_meta($post->ID, 'rthd_unique_id', true);
+            $rthd_unique_id = get_post_meta($post->ID, '_rthd_unique_id', true);
             if(!empty($rthd_unique_id)) { ?>
                 <div class="row_group">
                     <span class="prefix" title="<?php _e('Public URL'); ?>"><label><strong><?php _e('Public URL'); ?></strong></label></span>
@@ -262,6 +262,18 @@ if( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
                 'date_update_gmt' => gmdate('Y-m-d H:i:s'),
                 'user_updated_by' => get_current_user_id(),
             ) );
+            
+            //Unique link
+            $unique_id = get_post_meta( $post_id, '_rthd_unique_id', true );
+            if( empty( $unique_id ) ) {
+                    $d = new DateTime($newTicket['post_date']);
+                    $UTC = new DateTimeZone("UTC");
+                    $d->setTimezone($UTC);
+                    $timeStamp = $d->getTimestamp();
+                    $post_date_gmt = gmdate('Y-m-d H:i:s', (intval($timeStamp)));
+                    $unique_id = md5( 'rthd_'.$post_type.'_'.$post_date_gmt );
+                    update_post_meta( $post_id, '_rthd_unique_id', $unique_id );
+            }
             
             if ( $ticketModel->is_exist( $post_id ) ){
                 $where = array( 'post_id' => $post_id );
