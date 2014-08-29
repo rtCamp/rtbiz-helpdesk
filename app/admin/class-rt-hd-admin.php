@@ -66,8 +66,16 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 					|| ( isset( $_REQUEST['page'] ) && in_array( $_REQUEST['page'], $pagearray ) )
 					|| ( isset( $_REQUEST['post_type'] ) && $_REQUEST['post_type'] == Rt_HD_Module::$post_type ) ) {
 //				wp_enqueue_script('rt-jquery-tagit', RT_HD_URL . 'app/assets/javascripts/tag-it.js', array('jquery', 'jquery-ui-widget'), RT_HD_VERSION, true);
-
 				wp_enqueue_script('rt-custom-status', RT_HD_URL . 'app/assets/javascripts/rt-custom-status.js', array('jquery'), RT_HD_VERSION, true);
+
+				if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] == 'rthd-'.Rt_HD_Module::$post_type.'-dashboard' ) {
+					wp_localize_script('rt-custom-status', 'rt_hd_top_menu', 'menu-posts-'.Rt_HD_Module::$post_type);
+					wp_localize_script('rt-custom-status', 'rt_hd_dashboard_url', admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&page='.'rthd-'.Rt_HD_Module::$post_type.'-dashboard' ) );
+				}
+
+				if( !wp_script_is('jquery-ui-datepicker') ) {
+					wp_enqueue_script( 'jquery-ui-datepicker' );
+				}
 
 				if( !wp_script_is('jquery-ui-autocomplete') ) {
 					wp_enqueue_script('jquery-ui-autocomplete', '', array('jquery-ui-widget', 'jquery-ui-position'), '1.9.2');

@@ -121,7 +121,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			//add_filter( 'get_edit_post_link', array( $this, 'ticket_edit_link' ), 10, 3 );
 			//add_filter( 'post_row_actions', array( $this, 'post_row_action' ), 10, 2 );
 
-                        add_filter( 'rtbiz_dept_Supported_PT', array( $this, 'add_department_support' ) );
+            add_filter( 'rtbiz_dept_Supported_PT', array( $this, 'add_department_support' ) );
 
 			add_action( 'rt_attributes_relations_added', array( $this, 'create_database_table' ) );
 			add_action( 'rt_attributes_relations_updated', array( $this, 'create_database_table' ) );

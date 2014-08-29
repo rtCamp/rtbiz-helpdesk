@@ -1033,11 +1033,11 @@ if( !empty( $results ) ) {
 	<?php }
 	$attributes = rthd_get_attributes( $post_type, 'taxonomy' );
 	foreach ($attributes as $attr) {
-            if( !in_array( $attr->attribute_render_type, array( 'rating-stars', 'radio', 'dropdown' ) ) )
-                    continue;
-            ?>
-            <div class="row collapse">
-                    <?php $rt_hd_attributes->render_meta( $attr, isset($post->ID) ? $post->ID : '', $user_edit ); ?>
+		if( !in_array( $attr->attribute_render_type, array( 'rating-stars', 'radio', 'dropdown' ) ) )
+			continue;
+		?>
+		<div class="row collapse">
+			<?php $rt_hd_attributes->render_meta( $attr, isset($post->ID) ? $post->ID : '', $user_edit ); ?>
 		</div>
 	<?php } ?>
 	<?php if ( isset( $post->ID ) ) { do_action( 'rt_hd_after_ticket_information', $post, $user_edit ); } ?>

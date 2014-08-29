@@ -53,7 +53,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 			}
 
 			$args = array(
-				'meta_key' => 'rthd_unique_id',
+				'meta_key' => '_rthd_unique_id',
 				'meta_value' => $_REQUEST[ 'rthd_unique_id' ],
 				'post_status' => 'any',
 				'post_type' => $post_type,

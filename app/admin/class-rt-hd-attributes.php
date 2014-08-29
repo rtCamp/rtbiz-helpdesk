@@ -85,7 +85,7 @@ if( !class_exists( 'Rt_HD_Attributes' ) ) {
 					}
 					if ( !empty( $newVals ) ) {
 						$newTerms = get_term_by( 'id', $newVals[0], rthd_attribute_taxonomy_name( $attr->attribute_name ) );
-                                                $post_new_term_slug = $newVals[0];
+						$post_new_term_slug = $newVals[0];
 						$post_new_term_name = $newTerms->name;
 					} else {
 						$post_new_term_slug = '';

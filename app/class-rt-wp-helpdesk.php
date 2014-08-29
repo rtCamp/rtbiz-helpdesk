@@ -125,8 +125,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			$rt_hd_dashboard, $rt_hd_ticket_history_model, $rt_hd_reports,
 			$rt_hd_accounts, $rt_hd_contacts, $rt_hd_closing_reason,
 			$rt_hd_imap_server_model, $rt_hd_gravity_form_mapper,
-		   	$rt_hd_admin_meta_boxes;
-                        $rt_hd_woocommerce;
+		   	$rt_hd_admin_meta_boxes, $rt_hd_woocommerce;
 
 			$rthd_form = new Rt_Form();
 
@@ -157,7 +156,6 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			$rt_hd_settings = new Rt_HD_Settings();
 			$rt_hd_user_settings = new Rt_HD_User_Settings();
 			$rt_hd_logs = new Rt_HD_Logs();
-			
                         
                         $rt_hd_woocommerce = new Rt_HD_Woocommerce();
                         
@@ -212,7 +210,6 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			if ( $post_type != $ticket->post_type ) {
 				return;
 			}
-
 
 			wp_enqueue_script( 'rt-jquery-tagit-js', RT_HD_URL . 'app/assets/javascripts/tag-it.js', array( 'jquery', 'jquery-ui-widget' ), RT_HD_VERSION, true );
 			wp_enqueue_style( 'rt-jquery-tagit-css', RT_HD_URL . 'app/assets/css/jquery.tagit.css', false, RT_HD_VERSION, 'all' );
@@ -281,7 +278,6 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 				return;
 			}
 			$ticket = $ticketpost[ 0 ];
-
 			$user_edit = false;
 
 			if ( wp_script_is( 'rthd-app-js' ) ) {
