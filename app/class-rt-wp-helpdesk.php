@@ -161,12 +161,11 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
                         
                         $rt_hd_woocommerce = new Rt_HD_Woocommerce();
                         
-                        $rt_hd_admin_meta_boxes = new RT_HD_Admin_Meta_Boxes( );
-
 			$page_slugs = array(
 				'rthd-' . Rt_HD_Module::$post_type . '-dashboard',
 			);
 			$rt_hd_reports = new Rt_Reports( $page_slugs );
+                        
 			$rt_hd_admin_meta_boxes = new RT_HD_Admin_Meta_Boxes( );
 		}
 
