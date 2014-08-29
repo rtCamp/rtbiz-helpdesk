@@ -62,9 +62,10 @@ function rt_hd_include() {
 
 	include_once RT_HD_PATH_HELPER . 'rthd-functions.php';
 
-	global $rthd_app_autoload, $rthd_admin_autoload, $rthd_models_autoload, $rthd_helper_autoload, $rthd_form_autoload, $rthd_reports_autoload;
+	global $rthd_app_autoload, $rthd_admin_autoload, $rthd_models_autoload, $rthd_helper_autoload, $rthd_form_autoload, $rthd_reports_autoload, $rthd_admin_metabox_autoload;
 	$rthd_app_autoload = new RT_WP_Autoload( RT_HD_PATH_APP );
 	$rthd_admin_autoload = new RT_WP_Autoload( RT_HD_PATH_ADMIN );
+	$rthd_admin_metabox_autoload = new RT_WP_Autoload( RT_HD_PATH_ADMIN . 'meta-box/' );
 	$rthd_models_autoload = new RT_WP_Autoload( RT_HD_PATH_MODELS );
 	$rthd_helper_autoload = new RT_WP_Autoload( RT_HD_PATH_HELPER );
 	$rthd_form_autoload = new RT_WP_Autoload( RT_HD_PATH_LIB . 'rtformhelpers/' );

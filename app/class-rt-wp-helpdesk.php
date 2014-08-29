@@ -124,7 +124,8 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			$rt_hd_gravity_fields_mapping_model, $rt_hd_user_settings,
 			$rt_hd_dashboard, $rt_hd_ticket_history_model, $rt_hd_reports,
 			$rt_hd_accounts, $rt_hd_contacts, $rt_hd_closing_reason,
-			$rt_hd_imap_server_model, $rt_hd_gravity_form_mapper;
+			$rt_hd_imap_server_model, $rt_hd_gravity_form_mapper,
+		   	$rt_hd_admin_meta_boxes;
 
 			$rthd_form = new Rt_Form();
 
@@ -160,6 +161,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 				'rthd-' . Rt_HD_Module::$post_type . '-dashboard',
 			);
 			$rt_hd_reports = new Rt_Reports( $page_slugs );
+			$rt_hd_admin_meta_boxes = new RT_HD_Admin_Meta_Boxes( );
 		}
 
 		function init() {

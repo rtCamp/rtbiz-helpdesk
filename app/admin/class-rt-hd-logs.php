@@ -21,9 +21,9 @@ if( !class_exists( 'Rt_HD_Logs' ) ) {
 		function ui() {
 			global $wpdb;
 			$editor_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
-			if( !current_user_can( $editor_cap ) ) {
-				wp_die("Opsss!! You are in restricted area");
-			}
+//			if( !current_user_can( $editor_cap ) ) {
+//				wp_die("Opsss!! You are in restricted area");
+//			}
 			//Delete lead code
 			if(isset($_REQUEST["log-list"])){
 				rthd_get_template( 'admin/list-transaction-post.php' );
