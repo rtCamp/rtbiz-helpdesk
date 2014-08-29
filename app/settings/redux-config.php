@@ -254,7 +254,16 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			$author_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
 			$editor_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
 			$admin_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' );
-
+                        
+                        $users = get_users();
+                        $users_options = array();
+                        
+                        foreach ($users as $user) {
+                            
+                            $users_options[ $user->ID ] = $user->user_login;
+                           
+                        }
+                        
 			// ACTUAL DECLARATION OF SECTIONS
 			$this->sections[] = array(
 				'icon' => 'el-icon-cogs',
@@ -289,6 +298,14 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
                                          'desc' => __( 'This logo will be used for all the Menu, Submenu, Post Types Menu Icons in Helpdesk.' ),
                                          'subtitle' => __( 'Upload any logo using the WordPress native uploader, preferrably with the size of 16x16.' ),
 
+                                        ),
+                                        array(
+                                         'id' => 'rthd_default_user',
+                                         'type' => 'select',
+                                         'options' => $users_options,
+                                         'title' => __( 'Default Assignee' ),
+                                         'desc' => __( 'This logo will be used for all the Menu, Submenu, Post Types Menu Icons in Helpdesk.' ),
+                                         'subtitle' => __( 'Upload any logo using the WordPress native uploader, preferrably with the size of 16x16.' ),
                                         ),
 				),
 			);
