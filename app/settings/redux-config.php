@@ -240,7 +240,16 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'default' => array(
 							'url' => RT_HD_URL . 'app/assets/img/hd-16X16.png',
 						),
-					),
+                                            ),
+                                        array(
+                                         'id' => 'rthd_support_page',
+                                         'type' => 'select',
+                                         'data' => 'pages',
+                                         'title' => __( 'Support Page' ),
+                                         'desc' => __( 'This logo will be used for all the Menu, Submenu, Post Types Menu Icons in Helpdesk.' ),
+                                         'subtitle' => __( 'Upload any logo using the WordPress native uploader, preferrably with the size of 16x16.' ),
+
+                                        ),
 				),
 			);
 

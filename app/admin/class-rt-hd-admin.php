@@ -66,7 +66,7 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 					|| ( isset( $_REQUEST['page'] ) && in_array( $_REQUEST['page'], $pagearray ) )
 					|| ( isset( $_REQUEST['post_type'] ) && $_REQUEST['post_type'] == Rt_HD_Module::$post_type ) ) {
 //				wp_enqueue_script('rt-jquery-tagit', RT_HD_URL . 'app/assets/javascripts/tag-it.js', array('jquery', 'jquery-ui-widget'), RT_HD_VERSION, true);
-//				wp_enqueue_script('rt-custom-status', RT_HD_URL . 'app/assets/javascripts/rt-custom-status.js', array('jquery'), RT_HD_VERSION, true);
+				wp_enqueue_script('rt-custom-status', RT_HD_URL . 'app/assets/javascripts/rt-custom-status.js', array('jquery'), RT_HD_VERSION, true);
 //				wp_enqueue_script('rt-handlebars', RT_HD_URL . 'app/assets/javascripts/handlebars.js', array('jquery'), RT_HD_VERSION, true);
 //
 //				if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] == 'rthd-'.Rt_HD_Module::$post_type.'-dashboard' ) {

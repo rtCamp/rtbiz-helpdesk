@@ -79,15 +79,15 @@ jQuery(document).ready(function($) {
 	/**
 	 * Gravity Importer Handlebars
 	 */
-	Handlebars.registerHelper('mapfieldnew', function(obj1, obj2) {
-        if (obj1.toLowerCase().indexOf(obj2.toLowerCase()) > -1) {
-            return new Handlebars.SafeString(
-                    " selected "
-                    );
-        } else {
-            return new Handlebars.SafeString(" ");
-        }
-    });
+//	Handlebars.registerHelper('mapfieldnew', function(obj1, obj2) {
+//        if (obj1.toLowerCase().indexOf(obj2.toLowerCase()) > -1) {
+//            return new Handlebars.SafeString(
+//                    " selected "
+//                    );
+//        } else {
+//            return new Handlebars.SafeString(" ");
+//        }
+//    });
 
 	//set normal priority
 //    jQuery("[name=priority]").val(3);
