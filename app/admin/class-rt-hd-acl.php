@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) )
 
 /**
  * Description of Rt_HD_ACL
- *
+ * Add ACL(access control list) support to help desk plugin
  * @author udit
  */
 if ( ! class_exists( 'Rt_HD_ACL' ) ) {

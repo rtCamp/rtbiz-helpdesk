@@ -19,13 +19,25 @@ if ( ! defined( 'ABSPATH' ) )
  */
 if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 
+	/**
+	 * Class Rt_HD_Tickets_Front
+	 * Initialize the frontend
+	 */
 	class Rt_HD_Tickets_Front {
 
+		/**
+		 * change the title of frontend and template to front end.
+		 */
 		public function __construct() {
 			add_filter( 'template_include', array( $this, 'template_include' ), 1, 1 );
 			add_filter( 'wp_title', array( $this, 'change_title' ), 9999, 1 );
 		}
 
+		/**
+		 * @param $title
+		 * @return string
+		 * as name suggest this function is used to change the name of frontend.
+		 */
 		function change_title( $title ) {
 			global $rthd_front_page_title;
 			if ( isset( $rthd_front_page_title ) && ! empty( $rthd_front_page_title ) ) {
@@ -34,6 +46,11 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 			return $title;
 		}
 
+		/**
+		 * @param $template
+		 * @return mixed
+		 * include template for ticket on frontend
+		 */
 		function template_include( $template ) {
 			global $wp_query;
 

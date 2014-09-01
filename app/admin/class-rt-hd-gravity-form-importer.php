@@ -13,19 +13,29 @@ if (!defined('ABSPATH'))
 
 /**
  * Description of Rt_HD_Gravity_Form_Importer
- *
+ * Use for Access gravity form data
  * @author udit
  */
 if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 
+	/**
+	 * Class Rt_HD_Gravity_Form_Importer
+	 * Use for Access gravity form data
+	 */
 	class Rt_HD_Gravity_Form_Importer {
 
+		/**
+		 * @var
+		 */
 		var $ticket_field;
 
+		/**
+		 *  add hooks for importing Graviy form
+		 */
 		public function __construct() {
 			add_action( 'init', array( $this, 'init_importer' ) );
 		}
-
+	
 		function init_importer() {
 			global $rt_hd_attributes_relationship_model;
 			$this->ticket_field = array(
@@ -206,13 +216,13 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 		}
 
 		public function hd_importer_ajax_hooks() {
-			add_action( 'wp_ajax_rthd_map_import', array( $this, 'rthd_map_import_callback' ) );
-			add_action( 'wp_ajax_rthd_map_import_feauture', array( $this, 'rthd_map_import_feauture' ) );
-			add_action( 'wp_ajax_rthd_import', array( $this, 'importer' ) );
-			add_action( 'init', array( $this, 'install_gravity_form_hook' ) );
-			add_action( 'wp_ajax_rthd_gravity_dummy_data', array( $this, 'get_random_gravity_data' ) );
-			add_action( 'wp_ajax_rthd_defined_map_feild_value', array( $this, 'rthd_defined_map_feild_value' ) );
-		}
+				add_action( 'wp_ajax_rthd_map_import', array( $this, 'rthd_map_import_callback' ) );
+				add_action( 'wp_ajax_rthd_map_import_feauture', array( $this, 'rthd_map_import_feauture' ) );
+				add_action( 'wp_ajax_rthd_import', array( $this, 'importer' ) );
+				add_action( 'init', array( $this, 'install_gravity_form_hook' ) );
+				add_action( 'wp_ajax_rthd_gravity_dummy_data', array( $this, 'get_random_gravity_data' ) );
+				add_action( 'wp_ajax_rthd_defined_map_feild_value', array( $this, 'rthd_defined_map_feild_value' ) );
+			}
 
 		public function install_gravity_form_hook() {
 			add_action( 'gform_entry_info', array( $this, 'gravity_form_lead_meta' ), 1, 2 );
@@ -1563,7 +1573,9 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 			echo json_encode($wpdb->get_results($sql, ARRAY_A));
 		}
 
-		//functions to handle lead meta
+		/**
+		 * functions to handle lead meta
+		 */
 		function gform_get_meta($entry_id, $meta_key) {
 			global $wpdb, $_gform_lead_meta;
 

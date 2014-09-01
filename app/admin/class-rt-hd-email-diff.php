@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) )
 
 /**
  * Description of Rt_HD_Email_Diff
- *
+ * email difference
  * @author udit
  */
 if( !class_exists( 'Rt_HD_Email_Diff') ) {

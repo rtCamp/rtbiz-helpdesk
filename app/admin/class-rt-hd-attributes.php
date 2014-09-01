@@ -13,18 +13,30 @@ if ( ! defined( 'ABSPATH' ) )
 
 /**
  * Description of Rt_HD_Attributes
- *
+ * Handel Custom page "Attribute"
  * @author udit
  */
 if( !class_exists( 'Rt_HD_Attributes' ) ) {
+	/**
+	 * Class Rt_HD_Attributes
+	 */
 	class Rt_HD_Attributes {
 
+		/**
+		 * @var string Page slug
+		 */
 		var $attributes_page_slug = 'rthd-attributes';
 
+		/**
+		 * Construct
+		 */
 		public function __construct() {
 			add_action( 'init', array( $this, 'init_attributes' ) );
 		}
 
+		/**
+		 * Initialise attributes
+		 */
 		function init_attributes() {
 			global $rt_hd_rt_attributes, $rt_hd_attributes_model, $rt_hd_attributes_relationship_model;
 			$rt_hd_rt_attributes = new RT_Attributes( RT_HD_TEXT_DOMAIN );
@@ -44,6 +56,13 @@ if( !class_exists( 'Rt_HD_Attributes' ) ) {
 			$rt_hd_attributes_relationship_model = new RT_Attributes_Relationship_Model();
 		}
 
+		/**
+		 * @param $attr
+		 * @param $post_id
+		 * @param $newTicket
+		 * @return string
+		 * return different between to attributs
+		 */
 		function attribute_diff( $attr, $post_id, $newTicket ) {
 
 			$diffHTML = '';
@@ -61,6 +80,13 @@ if( !class_exists( 'Rt_HD_Attributes' ) ) {
 			return $diffHTML;
 		}
 
+		/**
+		 * @param $attr
+		 * @param $post_id
+		 * @param $newTicket
+		 * @return string
+		 * returns different between taxonomy
+		 */
 		function taxonomy_diff( $attr, $post_id, $newTicket ) {
 			$diffHTML = '';
                         $attr->attribute_render_type = 'checklist';
@@ -126,6 +152,13 @@ if( !class_exists( 'Rt_HD_Attributes' ) ) {
 			return $diffHTML;
 		}
 
+		/**
+		 * @param $attr
+		 * @param $post_id
+		 * @param $newTicket
+		 * @return string
+		 * returns difference between two meta
+		 */
 		function meta_diff( $attr, $post_id, $newTicket ) {
 			$diffHTML = '';
 
@@ -137,6 +170,12 @@ if( !class_exists( 'Rt_HD_Attributes' ) ) {
 			return $diffHTML;
 		}
 
+		/**
+		 * @param $attr
+		 * @param $post_id
+		 * @param $newTicket
+		 * Saves attributes
+		 */
 		function save_attributes( $attr, $post_id, $newTicket ) {
 			switch ( $attr->attribute_store_as ) {
 				case 'taxonomy':
@@ -154,6 +193,12 @@ if( !class_exists( 'Rt_HD_Attributes' ) ) {
 			}
 		}
 
+		/**
+		 * @param $attr
+		 * @param $post_id
+		 * @param bool $edit
+		 * Render UI for attribute
+		 */
 		function render_attribute( $attr, $post_id, $edit = true ) {
 			switch ( $attr->attribute_store_as ) {
 				case 'taxonomy':
@@ -168,6 +213,12 @@ if( !class_exists( 'Rt_HD_Attributes' ) ) {
 			}
 		}
 
+		/**
+		 * @param $attr
+		 * @param $post_id
+		 * @param bool $edit
+		 * render ui for taxonomy
+		 */
 		function render_taxonomy( $attr, $post_id, $edit = true ) {
 			switch ( $attr->attribute_render_type ) {
 //				case 'autocomplete':
@@ -248,6 +299,12 @@ if( !class_exists( 'Rt_HD_Attributes' ) ) {
 			}
 		}
 
+		/**
+		 * @param $attr
+		 * @param $post_id
+		 * @param bool $edit
+		 * render ui for meta box
+		 */
 		function render_meta( $attr, $post_id, $edit = true ) {
 			switch ( $attr->attribute_render_type ) {
 				case 'dropdown':
@@ -353,6 +410,11 @@ if( !class_exists( 'Rt_HD_Attributes' ) ) {
 			}
 		}
 
+		/**
+		 * @param $attr
+		 * @param $options
+		 * render ui for dropbox
+		 */
 		function render_dropdown( $attr, $options ) {
 			global $rthd_form;
 			$args = array(
@@ -364,6 +426,11 @@ if( !class_exists( 'Rt_HD_Attributes' ) ) {
 			echo $rthd_form->get_select( $args );
 		}
 
+		/**
+		 * @param $attr
+		 * @param $options
+		 * render ui for rating stars
+		 */
 		function render_rating_stars( $attr, $options ) {
 			global $rthd_form;
 			$args = array(
@@ -378,6 +445,11 @@ if( !class_exists( 'Rt_HD_Attributes' ) ) {
 			echo $rthd_form->get_radio( $args );
 		}
 
+		/**
+		 * @param $attr
+		 * @param $options
+		 * render ui for checklist
+		 */
 		function render_checklist( $attr, $options ) {
 			global $rthd_form;
 			$args = array(
@@ -389,6 +461,11 @@ if( !class_exists( 'Rt_HD_Attributes' ) ) {
 			echo $rthd_form->get_checkbox( $args );
 		}
 
+		/**
+		 * @param $attr
+		 * @param $value
+		 * render ui for date
+		 */
 		function render_date( $attr, $value ) {
 			global $rthd_form;
 			$args = array(
@@ -412,6 +489,11 @@ if( !class_exists( 'Rt_HD_Attributes' ) ) {
 			echo $rthd_form->get_hidden( $args );
 		}
 
+		/**
+		 * @param $attr
+		 * @param $value
+		 * render ui for date and time
+		 */
 		function render_datetime( $attr, $value ) {
 			global $rthd_form;
 			$args = array(
@@ -435,6 +517,11 @@ if( !class_exists( 'Rt_HD_Attributes' ) ) {
 			echo $rthd_form->get_hidden( $args );
 		}
 
+		/**
+		 * @param $attr
+		 * @param $value
+		 * render ui for currency
+		 */
 		function render_currency( $attr, $value ) {
 			global $rthd_form;
 			$args = array(
@@ -444,6 +531,11 @@ if( !class_exists( 'Rt_HD_Attributes' ) ) {
 			echo $rthd_form->get_textbox( $args );
 		}
 
+		/**
+		 * @param $attr
+		 * @param $value
+		 * render ui for text
+		 */
 		function render_text( $attr, $value ) {
 			global $rthd_form;
 			$args = array(

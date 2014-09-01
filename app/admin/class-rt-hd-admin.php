@@ -13,12 +13,34 @@ if ( ! defined( 'ABSPATH' ) )
 
 /**
  * Description of Rt_HD_Admin
- *
+ * Rt_HD_Admin is main class for admin backend and UI.
  * @author udit
  */
 if( !class_exists( 'Rt_HD_Admin' ) ) {
+	/**
+	 * Class Rt_HD_Admin
+	 */
 	class Rt_HD_Admin {
-            private $hd_settings_tabs, $defualt_tab, $admin_cap, $editor_cap, $author_cap;
+		/**
+		 * @var array
+		 */
+		/**
+		 * @var array|string
+		 */
+		/**
+		 * @var array|string
+		 */
+		/**
+		 * @var array|string
+		 */
+		/**
+		 * @var array|string
+		 */
+		private $hd_settings_tabs, $defualt_tab, $admin_cap, $editor_cap, $author_cap;
+
+		/**
+		 * Constructor
+		 */
 		public function __construct() {
 			if ( is_admin() ) {
                         $this->hooks();
@@ -59,6 +81,9 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 			}
 		}
 
+		/**
+		 * Register CSS and JS
+		 */
 		function load_styles_scripts() {
 			global $post, $rt_hd_module, $pagenow;
 			$pagearray = array( 'rthd-gravity-import', 'rthd-settings', 'rthd-user-settings', 'rthd-logs', 'rthd-'.Rt_HD_Module::$post_type.'-dashboard' );
@@ -120,6 +145,9 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 			$this->localize_scripts();
 		}
 
+		/**
+		 * Passes data to JS
+		 */
 		function localize_scripts() {
 			$pagearray = array( 'rthd-add-module', 'rthd-gravity-mapper', 'rthd-add-'.Rt_HD_Module::$post_type );
 			if( wp_script_is( 'rthd-admin-js' ) && isset( $_REQUEST['post_type'] ) && isset( $_REQUEST['page'] ) && in_array( $_REQUEST['page'], $pagearray ) ) {
@@ -135,6 +163,9 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 			}
 		}
 
+		/**
+		 * Hooks
+		 */
 		function hooks() {
 			add_action( 'admin_enqueue_scripts', array( $this, 'load_styles_scripts' ) );
 
@@ -143,10 +174,18 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 			add_filter( 'pre_insert_term', array( $this, 'remove_wocommerce_actions' ), 10, 2 );
 		}
 
+		/**
+		 *  Register menu entry to WP
+		 */
 		function register_menu() {
 			add_submenu_page( 'edit.php?post_type='.Rt_HD_Module::$post_type, __( 'Settings' ), __( 'Settings' ), $this->author_cap, 'rthd-settings', array( $this, 'settings_ui' ) );
 		}
 
+		/**
+		 * @param $term
+		 * @param $taxonomy
+		 * @return mixed
+		 */
 		function remove_wocommerce_actions( $term, $taxonomy ) {
 			$attrs = rthd_get_all_attributes();
 			$attr_list = array( 'contacts', 'accounts' );
@@ -162,11 +201,17 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 			return $term;
 		}
 
+		/**
+		 * UI for user settings
+		 */
 		function user_settings_ui() {
 			global $rt_hd_user_settings;
 			$rt_hd_user_settings->ui();
 		}
 
+		/**
+		 * Setting UI
+		 */
 		function settings_ui() { ?>
      
                     <div class="wrap">
@@ -233,8 +278,11 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
                         
 			
 		}
-                
-                function settings_ui_tabs(){
+
+		/**
+		 * Tabs for Setting UI
+		 */
+		function settings_ui_tabs(){
                     
                     $current=isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : $this->defualt_tab;
                     echo '<h2 class="nav-tab-wrapper">';
