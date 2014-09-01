@@ -37,6 +37,8 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 			add_action( 'wp_ajax_rthd_activecollab_task_comment_import_ajax', array( $this, 'activecollab_task_comment_import_ajax' ) );
 			add_action( 'wp_ajax_helpdesk_delete_followup', array( $this, 'delete_followup_ajax' ) );
 			add_action( 'wp_ajax_rthd_gmail_import_thread_request', array( $this, 'gmail_thread_import_request' ) );
+                        
+                        add_shortcode( 'rt_hd_tickets', array( $this, 'rt_hd_tickets_callback' ) );
 		}
 
 		function filter_comment_from_admin($_comment1) {
@@ -1639,6 +1641,55 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 			$rows_affected = $rt_hd_mail_thread_importer_model->add_thread( $args );
 			return $rows_affected;
 		}
+                
+                function rt_hd_tickets_callback( $atts ){  
+                    
+                     $a = shortcode_atts( array(
+                        'email' => '',
+                        'user' => '',
+                    ), $atts );
+                    
+           
+                  $args = array(
+                               'post_type' => Rt_HD_Module::$post_type,
+                               'post_status' => 'any',
+                               'nopaging' => TRUE,
+                              
+                            );
+                  
+                    if ( !empty($a['email']) ) {
+                        
+                        $person = rt_biz_get_person_by_email( $a['email'] );  
+                      
+                        $args['connected_items'] = $person[0]->ID;
+                        $args['connected_type'] = 'rt_ticket_to_rt_contact';
+                     
+                    }
+                    
+                    if ( !empty($a['user']) ) {
+                        
+                      $args['author'] = $a['user'];
+                     
+                    }
+                    
+                  $tickets = get_posts( $args ); ?>
+                      
+                  <h2><?php _e( 'Tikets', 'RT_HD_TEXT_DOMAIN' ); ?></h2>
+                  
+                 <?php
+                 printf( _n( 'One Ticket Found.', '%d Tickets Found.', count($tickets), 'my-RT_HD_TEXT_DOMAIN-domain' ), count($tickets) );
+                 foreach ( $tickets as  $ticket ) { ?>
+                  
+                    <p>
+                    <h5><?php echo $ticket->post_title ?></h5> <?php echo $ticket->post_content ?>
+                    </p>
+
+                  <?php }
+                  
+                  ?>
+                
+
+               <?php }
 
 	}
 
