@@ -34,6 +34,8 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
                 
                 // shortcode for get support form
                 add_shortcode( 'rt_hd_support_form', array( $this, 'rt_hd_support_form_callback' ) );
+                
+                add_action( 'woocommerce_after_my_account', array( $this, 'woo_my_tickets_my_account' ) );
                
             }
             
@@ -131,7 +133,8 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
                     <p>
                              <label>Product </label>
                              <select name="post[product_id]">
-                            <?php echo $option; ?>
+                                 <option value="">Choose Product</option>
+                                 <?php echo $option; ?>
                              </select>
                          </p>
                          
@@ -216,6 +219,14 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
                                      
         }
         
+        function woo_my_tickets_my_account(){
+            
+           global $current_user;
+           
+           echo do_shortcode('[rt_hd_tickets email='.$current_user->user_email.']');
+        }
+
+
         static function insert_attachment($file_handler, $post_id)
         {
             // check to make sure its a successful upload

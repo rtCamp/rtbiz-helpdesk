@@ -179,17 +179,17 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
                            
                        case 'rthd_create_date' :
                            
-                          $date =  new DateTime(get_the_date());
+                          $date =  new DateTime(get_the_date( 'Y-m-d H:i:s' ));
                            
-                          echo  human_time_diff( $date->format('U') , time() ) . __(' ago') ;
+                          echo  human_time_diff( $date->format('U') , current_time('timestamp') ) . __(' ago') ;
                            
                                break;
                            
                        case 'rthd_update_date' :
                         
-                           $date =  new DateTime( get_the_modified_date() );
+                         $date =  new DateTime( get_the_modified_date( 'Y-m-d H:i:s' ) );
                            
-                          echo  human_time_diff( $date->format('U') , time() ) . __(' ago') ;
+                         echo  human_time_diff( $date->format('U') , current_time('timestamp') ) . __(' ago') ;
                                break;
                            
                        case 'rthd_closing_date' :
@@ -288,6 +288,10 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
                          
                      if ( isset( $_GET['post_type'] ) && $_GET['post_type'] == self::$post_type ) {
                          
+                       
+                       $query->set( 'orderby', 'modified' );
+                       $query->set( 'order', 'asc' );
+                        
                        if ( isset( $_GET['created_by'] )  ) {
                              
                          $query->set('meta_query',

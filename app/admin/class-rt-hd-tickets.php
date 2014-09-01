@@ -1643,7 +1643,8 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		}
                 
                 function rt_hd_tickets_callback( $atts ){  
-                    
+                     global $rt_hd_module;
+                      $labels = $rt_hd_module->labels;
                      $a = shortcode_atts( array(
                         'email' => '',
                         'user' => '',
@@ -1678,16 +1679,34 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
                   
                  <?php
                  printf( _n( 'One Ticket Found.', '%d Tickets Found.', count($tickets), 'my-RT_HD_TEXT_DOMAIN-domain' ), count($tickets) );
-                 foreach ( $tickets as  $ticket ) { ?>
+                 ?>
+                  <table class="shop_table my_account_orders">
+                      <tr>
+                          <th>Ticket ID</th>
+                          <th>Last Updated</th>
+                          <th>Status</th>
+                          <th></th>
+                      </tr>
+                 
+                <?php
                   
-                    <p>
-                    <h5><?php echo $ticket->post_title ?></h5> <?php echo $ticket->post_content ?>
-                    </p>
+                 
+                 foreach ( $tickets as  $ticket ) {
+                     
+                     $rthd_unique_id = get_post_meta($ticket->ID, '_rthd_unique_id', true);
+                     $date =  new DateTime( $ticket->post_modified );
 
-                  <?php }
+                     ?>
                   
-                  ?>
-                
+                    <tr>
+                      <td> #<?php echo $ticket->ID ?> </td>
+                      <td> <?php echo human_time_diff( $date->format('U') , time() ) . __(' ago') ?> </td>
+                      <td> <?php echo $ticket->post_status  ?> </td>
+                      <td>  <a class="button support" target="_blank" href="<?php echo trailingslashit(site_url()) . strtolower($labels['name']) . '/?rthd_unique_id=' . $rthd_unique_id; ?>"><?php _e('Link'); ?></a> </td>
+                    </tr>
+
+                  <?php } ?>
+            </table>
 
                <?php }
 

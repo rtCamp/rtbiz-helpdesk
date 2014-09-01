@@ -303,6 +303,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
                                          'id' => 'rthd_default_user',
                                          'type' => 'select',
                                          'options' => $users_options,
+                                         'default' => '1',
                                          'title' => __( 'Default Assignee' ),
                                          'desc' => __( 'This logo will be used for all the Menu, Submenu, Post Types Menu Icons in Helpdesk.' ),
                                          'subtitle' => __( 'Upload any logo using the WordPress native uploader, preferrably with the size of 16x16.' ),
