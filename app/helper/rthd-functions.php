@@ -298,13 +298,16 @@ function rthd_text_diff( $left_string, $right_string, $args = null ) {
 }
 
 function rthd_get_settings() {
-	$default = array(
+	global $redux_helpdesk_settings;
+	$settings = array(
 		'attach_contacts' => 'yes',
 		'attach_accounts' => 'yes',
-		'system_email' => '',
+		'system_email' => isset( $redux_helpdesk_settings['rthd_outgoing_email_from_address'] ) && !empty( $redux_helpdesk_settings['rthd_outgoing_email_from_address'] ) ? $redux_helpdesk_settings['rthd_outgoing_email_from_address'] : '',
 		'outbound_emails' => '',
+		'outgoing_email_delivery' =>isset( $redux_helpdesk_settings['rthd_outgoing_email_delivery'] ) && !empty( $redux_helpdesk_settings['rthd_outgoing_email_delivery'] ) ? $redux_helpdesk_settings['rthd_outgoing_email_delivery'] : '',
 	);
-	$settings = get_site_option( 'rt_helpdesk_settings', $default );
+
+	//$settings = get_site_option( 'rt_helpdesk_settings', $default );
 	return $settings;
 }
 
@@ -328,4 +331,8 @@ function rthd_get_logo_url() {
 
 function rthd_update_logo_url( $logo_url ) {
 	update_site_option( 'rthd_logo_url', $logo_url );
+}
+
+function rthd_set_html_content_type() {
+	return 'text/html';
 }

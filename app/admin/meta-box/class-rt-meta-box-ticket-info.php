@@ -271,7 +271,7 @@ if( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
                     $d->setTimezone($UTC);
                     $timeStamp = $d->getTimestamp();
                     $post_date_gmt = gmdate('Y-m-d H:i:s', (intval($timeStamp)));
-                    $unique_id = md5( 'rthd_'.$post_type.'_'.$post_date_gmt );
+                    $unique_id = md5( 'rthd_'.$post->post_type.'_'.$post_date_gmt );
                     update_post_meta( $post_id, '_rthd_unique_id', $unique_id );
             }
             
