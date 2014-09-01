@@ -17,15 +17,35 @@ if ( ! defined( 'ABSPATH' ) )
  * @author udit
  */
 if( !class_exists( 'Rt_HD_Module' ) ) {
+	/**
+	 * Class Rt_HD_Module
+	 */
 	class Rt_HD_Module {
 
+		/**
+		 * @var string Stores Post Type
+		 */
 		static $post_type = 'rt_ticket';
-		// used in mail subject title - to detect whether it's a Helpdesk mail or not. So no translation
+		/**
+		 * @var string used in mail subject title - to detect whether it's a Helpdesk mail or not. So no translation
+		 */
 		var $name = 'Helpdesk';
+		/**
+		 * @var array
+		 */
 		var $labels = array();
+		/**
+		 * @var array
+		 */
 		var $statuses = array();
+		/**
+		 * @var array
+		 */
 		var $custom_menu_order = array();
 
+		/**
+		 *  constructor set hooks
+		 */
 		public function __construct() {
 			$this->get_custom_labels();
 			$this->get_custom_statuses();
@@ -34,6 +54,9 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			$this->hooks();
 		}
 
+		/**
+		 *  update table
+		 */
 		function db_ticket_table_update() {
 			global $wpdb;
 			$table_name = rthd_get_ticket_table_name();
@@ -44,6 +67,9 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			}
 		}
 
+		/**
+		 * create database table
+		 */
 		function create_database_table() {
 
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
@@ -93,6 +119,10 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			dbDelta($sql);
 		}
 
+		/**
+		 *  Hook for init
+		 *  Register Post
+		 */
 		function init_hd() {
 			$menu_position = 32;
 			$this->register_custom_post( $menu_position );
@@ -112,6 +142,9 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			$this->db_ticket_table_update();
 		}
 
+		/**
+		 *  set hooks
+		 */
 		function hooks() {
 			add_action( 'admin_menu', array( $this, 'register_custom_pages' ), 1 );
 			//add_filter( 'custom_menu_order', array($this, 'custom_pages_order') );
@@ -136,8 +169,13 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
                         add_action('pre_get_posts', array( $this, 'pre_filter' ) );
                         add_filter( "manage_edit-" . self::$post_type . "_sortable_columns",  array( $this,  'sortable_column' ) );
 		}
-                
-                function edit_custom_columns( $columns ){
+
+		/**
+		 * @param $columns
+		 * @return array
+		 *  update columns given in parameter and return updated columns
+		 */
+		function edit_custom_columns( $columns ){
                    
                     unset( $columns['comments'] );
                     unset( $columns['date'] );
@@ -160,8 +198,12 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
                     return $columns;
                  
                 }
-                
-                   function manage_custom_columns( $column ){
+
+		/**
+		 * @param $column
+		 *  todo: what this function does ?
+		 */
+		function manage_custom_columns( $column ){
                     
                     global $post;
                    
@@ -283,8 +325,12 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
                    
                  
                 }
-               
-                 function pre_filter( $query ){
+
+		/**
+		 * @param $query
+		 * todo: what this function does ?
+		 */
+		function pre_filter( $query ){
                          
                      if ( isset( $_GET['post_type'] ) && $_GET['post_type'] == self::$post_type ) {
                          
@@ -316,9 +362,15 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
                        
                      }
                        
-                   } 
-                   
-                   function sortable_column( $columns ){
+                   }
+
+		/**
+		 * @param $columns
+		 * @return mixed
+		 *
+		 * todo:what this function does ?
+		 */
+		function sortable_column( $columns ){
                        
                     $columns['rthd_ticket_id'] =   __( 'Ticket ID', RT_HD_TEXT_DOMAIN );
                     $columns['rthd_create_date'] =   __( 'Create Date', RT_HD_TEXT_DOMAIN );
@@ -326,13 +378,22 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
                         return $columns;
                        
                    }
-                        		function update_ticket_table( $attr_id, $post_types ) {
+
+		/**
+		 * @param $attr_id
+		 * @param $post_types
+		 *  Update ticket table
+		 */
+		function update_ticket_table( $attr_id, $post_types ) {
 			if ( in_array( self::$post_type, $post_types ) ) {
 				$updateDB = new RT_DB_Update( trailingslashit( RT_HD_PATH ) . 'index.php', trailingslashit( RT_HD_PATH_SCHEMA ) );
 				delete_option( $updateDB->db_version_option_name );
 			}
 		}
 
+		/**
+		 * todo: what this function does ?
+		 */
 		function native_list_view_link() {
 			global $rt_hd_attributes;
 			if ( strpos( $_SERVER["REQUEST_URI"], 'edit.php' ) > 0 &&
@@ -350,12 +411,22 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			}
 		}
 
+		/**
+		 *  add link to post
+		 */
 		function add_post_link() {
 			if ( strpos( $_SERVER["REQUEST_URI"], 'post-new.php?post_type='.self::$post_type ) > 0 ) {
 				wp_redirect( admin_url( 'edit.php?post_type=' . self::$post_type.'&page=rthd-add-'.self::$post_type ), 200 );
 			}
 		}
 
+		/**
+		 * @param $editlink String
+		 * @param $postID
+		 * @param $context
+		 * @return $URL
+		 * todo: what this function does ?
+		 */
 		function ticket_edit_link( $editlink, $postID, $context ) {
 			$post_type = get_post_type( $postID );
 			if ( $post_type != self::$post_type ) {
@@ -364,6 +435,12 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			return admin_url( "edit.php?post_type={$post_type}&page=rthd-add-{$post_type}&{$post_type}_id=" . $postID );
 		}
 
+		/**
+		 * @param $action
+		 * @param $post
+		 * @return mixed
+		 * returns new URL based on post
+		 */
 		function post_row_action( $action, $post ) {
 			$post_type = get_post_type( $post );
 			if ( $post_type != self::$post_type ) {
@@ -374,11 +451,19 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			return $action;
 		}
 
-        function add_department_support( $post_types ){
+		/**
+		 * @param $post_types
+		 * @return array
+		 * todo: what this function does ?
+		 */
+		function add_department_support( $post_types ){
             $post_types[] = self::$post_type;
             return $post_types;
         }
 
+		/**
+		 * Register (Hooks) for custom page
+		 */
 		function register_custom_pages() {
 			global $rt_hd_dashboard;
 
@@ -400,14 +485,26 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			add_filter( 'set-screen-option', array( $this,'tickets_table_set_option' ), 10, 3 );
 		}
 
+		/**
+		 * footer scripts
+		 */
 		function footer_scripts() { ?>
 			<script>postboxes.add_postbox_toggles(pagenow);</script>
 		<?php }
 
+		/**
+		 * @param $status
+		 * @param $option
+		 * @param $value
+		 * @return mixed
+		 */
 		function tickets_table_set_option($status, $option, $value) {
 			return $value;
 		}
 
+		/**
+		 * todo:what this function does ?
+		 */
 		function add_screen_options() {
 
 			$option = 'per_page';
@@ -420,6 +517,11 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			new Rt_HD_Tickets_List_View();
 		}
 
+		/**
+		 * @param $menu_order
+		 * @return mixed
+		 * todo:what this function does ?
+		 */
 		function custom_pages_order( $menu_order ) {
 			global $submenu;
 			global $menu;
@@ -451,11 +553,17 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			return $menu_order;
 		}
 
+		/**
+		 *  custom page ui
+		 */
 		function custom_page_ui() {
 			$args = array();
 			rthd_get_template('admin/add-ticket.php', $args);
 		}
 
+		/**
+		 * custom page ui
+		 */
 		function custom_page_list_view() {
 			$args = array(
 				'post_type' => self::$post_type,
@@ -464,6 +572,10 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			rthd_get_template( 'admin/list-view.php', $args );
 		}
 
+		/**
+		 * @param $menu_position
+		 *  Register custom post ui
+		 */
 		function register_custom_post( $menu_position ) {
 			$hd_logo_url = rthd_get_logo_url();
 
@@ -480,6 +592,9 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			register_post_type( self::$post_type, $args );
 		}
 
+		/**
+		 * Register Custom statuses
+		 */
 		function register_custom_statuses() {
 			foreach ($this->statuses as $status) {
 
@@ -492,7 +607,10 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			}
 		}
 
-        function get_custom_menu_order(){
+		/**
+		 * get custom menu order
+		 */
+		function get_custom_menu_order(){
 			global $rt_hd_attributes;
             $this->custom_menu_order = array(
                 'rthd-'.self::$post_type.'-dashboard',
@@ -502,6 +620,10 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
             );
         }
 
+		/**
+		 * @return array
+		 * custom label getter
+		 */
 		function get_custom_labels() {
 			$settings = rthd_get_redux_settings();
 			$this->labels = array(
@@ -519,6 +641,10 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			return $this->labels;
 		}
 
+		/**
+		 * @return array
+		 * custom status getter
+		 */
 		function get_custom_statuses() {
 			$this->statuses = array(
 				array(
@@ -540,7 +666,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			return $this->statuses;
 		}
                 
-                /**
+         /**
 		 * Fill the post status select box and change the value accordingly
 		 * 
 		 * @global type $pagenow
@@ -572,11 +698,17 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			}
 		}
 
+		/**
+		 * todo:what this function does ?
+		 */
 		function dashboard() {
 			global $rt_hd_dashboard;
 			$rt_hd_dashboard->ui( self::$post_type );
 		}
 
+		/**
+		 * add dashboard widget
+		 */
 		function add_dashboard_widgets() {
 			global $rt_hd_dashboard, $rt_hd_attributes_model, $rt_hd_attributes_relationship_model;
 
@@ -600,6 +732,12 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 			}
 		}
 
+		/**
+		 * @param $obj
+		 * @param $args
+		 * dashboard widget UI
+		 * todo:what this function does ?
+		 */
 		function dashboard_attributes_widget_content( $obj, $args ) {
 			global $rt_hd_rt_attributes, $rt_hd_dashboard;
 			$rt_hd_attributes_model = new RT_Attributes_Model();
@@ -693,6 +831,9 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
 		<?php
 		}
 
+		/**
+		 * todo:what this function does ?
+		 */
 		function team_load() {
 			global $rt_hd_dashboard, $wpdb;
             $table_name = rthd_get_ticket_table_name();
@@ -771,6 +912,10 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
         <?php
 		}
 
+		/**
+		 *  get top accounts
+		 *  todo:what this function does ?
+		 */
 		function top_accounts() {
 			global $rt_hd_dashboard, $wpdb;
 			$table_name = rthd_get_ticket_table_name();
@@ -835,6 +980,10 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
         <?php
 		}
 
+		/**
+		 *  top clients UI
+		 * todo:what this function does ?
+		 */
 		function top_clients() {
 			global $rt_hd_dashboard, $wpdb;
 			$table_name = rthd_get_ticket_table_name();
@@ -902,6 +1051,10 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
         <?php
 		}
 
+		/**
+		 * 	Daily tickets UI
+		 * todo:what this function does ?
+		 */
 		function daily_tickets() {
 			global $rt_hd_dashboard, $rt_hd_ticket_history_model;
 			$post_statuses = array();

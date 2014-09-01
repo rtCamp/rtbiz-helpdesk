@@ -35,7 +35,7 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 		public function __construct() {
 			add_action( 'init', array( $this, 'init_importer' ) );
 		}
-	
+
 		function init_importer() {
 			global $rt_hd_attributes_relationship_model;
 			$this->ticket_field = array(

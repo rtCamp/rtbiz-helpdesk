@@ -18,18 +18,30 @@ if ( ! defined( 'ABSPATH' ) )
  */
 if (!class_exists('Rt_HD_Gravity_Form_Mapper')) {
 
+	/**
+	 * Class Rt_HD_Gravity_Form_Mapper
+	 */
 	class Rt_HD_Gravity_Form_Mapper {
 
+		/**
+		 * Calling to Set Hooks
+		 */
 		public function __construct() {
 			$this->hooks();
 		}
 
+		/**
+		 * Hook function
+		 */
 		function hooks() {
 			add_action( 'wp_ajax_helpdesk_delete_mapping', array( $this, 'delete_mapping_ajax' ) );
 			add_action( 'wp_ajax_helpdesk_enable_mapping', array( $this, 'enable_mapping_ajax' ) );
 
 		}
 
+		/**
+		 * delete mapping for gravity form using AJAX
+		 */
 		function delete_mapping_ajax(){
 			global $rt_hd_gravity_fields_mapping_model;
 			$response = array();
@@ -41,6 +53,9 @@ if (!class_exists('Rt_HD_Gravity_Form_Mapper')) {
 			die(0);
 		}
 
+		/**
+		 * enable gravity form mapping via ajax call
+		 */
 		function enable_mapping_ajax(){
 			global $rt_hd_gravity_fields_mapping_model;
 			$response = array();
@@ -54,6 +69,9 @@ if (!class_exists('Rt_HD_Gravity_Form_Mapper')) {
 			die(0);
 		}
 
+		/**
+		 * Setting up UI
+		 */
 		public function ui() {
 			global $rt_hd_gravity_fields_mapping_model;
 			$args = array();
