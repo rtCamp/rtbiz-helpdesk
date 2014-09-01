@@ -14,18 +14,30 @@ if ( ! defined( 'ABSPATH' ) )
 
 /**
  * Description of Rt_HD_Utils
- *
+ * Help desk utility functions
  * @author udit
  */
 if ( ! class_exists( 'Rt_HD_Utils' ) ) {
 
+	/**
+	 * Class Rt_HD_Utils
+	 */
 	class Rt_HD_Utils {
 
+		/**
+		 * @param $tmpStr
+		 * @return mixed
+		 *
+		 */
 		static public function forceUFT8( $tmpStr ) {
 //			return preg_replace( '/[^(\x20-\x7F)]*/', '', $tmpStr );
 			return $tmpStr;
 		}
 
+		/**
+		 * @var array
+		 * mime type key being extension
+		 */
 		public static $mime_types = array(
 			"pdf" => "application/pdf"
 			, "exe" => "application/octet-stream"
@@ -54,6 +66,11 @@ if ( ! class_exists( 'Rt_HD_Utils' ) ) {
 			, "html" => "text/html"
 		);
 
+		/**
+		 * @param $msg
+		 * @param string $filename
+		 * Logging errors
+		 */
 		static public function log( $msg, $filename = "error_log.txt" ) {
 			$log_file = "/tmp/rt_helpdesk" . $filename;
 			if ( $fp = fopen( $log_file, "a+" ) ) {
@@ -62,6 +79,10 @@ if ( ! class_exists( 'Rt_HD_Utils' ) ) {
 			}
 		}
 
+		/**
+		 * @param $rCount
+		 * todo:what this function does ?
+		 */
 		static public function setAccounts( $rCount ) {
 			$log_file = RT_HD_PATH . "mailaccount.txt";
 			if ( $fp = fopen( $log_file, "w+" ) ) {
@@ -110,11 +131,20 @@ if ( ! class_exists( 'Rt_HD_Utils' ) ) {
 			return 0;
 		}
 
+		/**
+		 * @return mixed
+		 * get user
+		 */
 		public static function get_hd_rtcamp_user() {
 			$users = rt_biz_get_module_users( RT_HD_TEXT_DOMAIN );
 			return $users;
 		}
 
+		/**
+		 * @param $file
+		 * @return string
+		 * get mime type of file
+		 */
 		public static function get_mime_type( $file ) {
 
 			// our list of mime types
@@ -127,6 +157,11 @@ if ( ! class_exists( 'Rt_HD_Utils' ) ) {
 			}
 		}
 
+		/**
+		 * @param $file
+		 * @return int|string
+		 * get extension of file
+		 */
 		public static function get_extention( $file ) {
 
 			foreach ( self::$mime_types as $key => $mime ) {

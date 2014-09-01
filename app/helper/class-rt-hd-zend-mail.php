@@ -14,7 +14,8 @@ if ( ! defined( 'ABSPATH' ) )
 
 /**
  * Description of Rt_HD_Zend_Mail
- *
+ * This class deals with imap email related functions
+ * todo: what this class does ?
  * @author udit
  */
 use Zend\Mail\Transport\Smtp as SmtpTransport;
@@ -27,9 +28,18 @@ use Zend\Mime\Mime;
 
 if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 
+	/**
+	 * Class Rt_HD_Zend_Mail
+	 */
 	class Rt_HD_Zend_Mail {
 
+		/**
+		 * @var
+		 */
 		public $imap;
+		/**
+		 * @var authentication string.
+		 */
 		public $authString;
 
 		//put your code here
@@ -37,6 +47,11 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 			// set_include_path(get_include_path() . PATH_SEPARATOR . RT_HD_PATH_LIB);
 		}
 
+		/**
+		 * @param $folders
+		 * @param $value
+		 * UI for folders dropdown
+		 */
 		function render_folders_dropdown( $folders, $value ) {
 			while ( $folders->getChildren() ) {
 				$folder = $folders->current();
@@ -52,6 +67,14 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 			$folders->rewind();
 		}
 
+		/**
+		 * @param $folders
+		 * @param $element_name
+		 * @param $values
+		 * @param $data_str
+		 * @param $inbox_folder
+		 * Render UI for folder checkbox
+		 */
 		function render_folders_checkbox( $folders, $element_name, $values, $data_str, $inbox_folder ) {
 			while ( $folders->getChildren() ) {
 				echo '<ul>';
@@ -71,10 +94,23 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 			$folders->rewind();
 		}
 
+		/**
+		 * @param $email
+		 * @param $accessToken
+		 * @return string
+		 * concate string for auth
+		 */
 		function constructAuthString( $email, $accessToken ) {
 			return base64_encode( "user=$email\1auth=Bearer $accessToken\1\1" );
 		}
 
+		/**
+		 * @param $imap
+		 * @param $email
+		 * @param $accessToken
+		 * @return bool
+		 * authentication imap email
+		 */
 		function oauth2Authenticate( $imap, $email, $accessToken ) {
 			$this->authString = $this->constructAuthString( $email, $accessToken );
 			$authenticateParams = array( 'XOAUTH2', $this->authString );
@@ -102,6 +138,14 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 			}
 		}
 
+		/**
+		 * @param $email
+		 * @param $accessToken
+		 * @param $email_type
+		 * @param $imap_server
+		 * @return bool
+		 * try imap login if return true else false
+		 */
 		function tryImapLogin( $email, $accessToken, $email_type, $imap_server ) {
 			$this->imap = new Zend\Mail\Protocol\Imap();
 
@@ -126,6 +170,21 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 			}
 		}
 
+		/**
+		 * @param $fromemail
+		 * @param $accessToken
+		 * @param $email_type
+		 * @param $imap_server
+		 * @param $subject
+		 * @param $body
+		 * @param $toEmail
+		 * @param $ccEmail
+		 * @param $bccEmail
+		 * @param $attachemnts
+		 * @param string $mailtype
+		 * @return bool|void
+		 * send email
+		 */
 		public function sendemail( $fromemail, $accessToken, $email_type, $imap_server, $subject, $body, $toEmail, $ccEmail, $bccEmail, $attachemnts, $mailtype = 'notification' ) {
 			set_time_limit( 0 );
 			if ( ! $this->tryImapLogin( $fromemail, $accessToken, $email_type, $imap_server ) ) {
@@ -226,6 +285,11 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 			return $transport->send( $message );
 		}
 
+		/**
+		 * @param $part
+		 * @return string
+		 * decode message
+		 */
 		function get_decoded_message( $part ) {
 			$txtBody = $part->getContent();
 			if ( isset( $part->contentTransferEncoding ) ) {
@@ -246,6 +310,12 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 			return $txtBody;
 		}
 
+		/**
+		 * @param $email
+		 * @return mixed
+		 *  get import thread request
+		 * todo:what this function does ?
+		 */
 		public function get_import_thread_request( $email ) {
 			global $rt_hd_mail_thread_importer_model;
 			$where = array(
@@ -255,12 +325,30 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 			return $rt_hd_mail_thread_importer_model->get_thread( $where );
 		}
 
+		/**
+		 * @param $id
+		 * @return bool
+		 * todo:what this function does ?
+		 */
 		public function update_thread_import_status( $id ) {
 			global $rt_hd_mail_thread_importer_model;
 			$rows_affected = $rt_hd_mail_thread_importer_model->update_thread( array( 'status' => 'c' ), array( 'id' => $id ) );
 			return ( ! empty( $rows_affected ) );
 		}
 
+		/**
+		 * @param $email
+		 * @param $accessToken
+		 * @param $email_type
+		 * @param $imap_server
+		 * @param $lastDate
+		 * @param $user_id
+		 * @param bool $isSystemEmail
+		 * @param string $signature
+		 * @param bool $isThreadImporter
+		 * @return bool
+		 * read email
+		 */
 		public function reademail( $email, $accessToken, $email_type, $imap_server, $lastDate, $user_id, $isSystemEmail = false, $signature = "", $isThreadImporter = false ) {
 			set_time_limit( 0 );
 			global $signature, $rt_hd_settings;
@@ -369,6 +457,11 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 			}
 		}
 
+		/**
+		 * @param $hex
+		 * @return string
+		 * todo:what this function does ?
+		 */
 		function bchexdec( $hex ) {
 			$len = strlen( $hex );
 			$dec = "";
@@ -378,6 +471,13 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 			return $dec;
 		}
 
+		/**
+		 * @param $UmailId
+		 * @param $storage
+		 * @return int
+		 * @throws Exception
+		 * todo:what this function does ?
+		 */
 		function getNumberByUniqueId( $UmailId, &$storage ) {
 			$cMail = $storage->protocol->requestAndResponse( "UID FETCH {$UmailId}:* (UID)", array() );
 			if ( is_array( $cMail ) ) {
@@ -392,6 +492,11 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 			throw new Exception( "No Unique id found" );
 		}
 
+		/**
+		 * @param $messageid
+		 * @return bool
+		 * todo:what this function does ?
+		 */
 		public function insert_mail_message_id( $messageid ) {
 			global $rt_hd_mail_message_model;
 
@@ -402,12 +507,24 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 			return false;
 		}
 
+		/**
+		 * @param $email
+		 * @param $replytime
+		 * @return bool
+		 * todo: description?
+		 */
 		public function update_sync_meta( $email, $replytime ) {
 			global $rt_hd_mail_accounts_model;
 			$rows_affected = $rt_hd_mail_accounts_model->update_mail_account( array( 'last_mail_time' => $replytime ), array( 'email' => $email ) );
 			return ( ! empty( $rows_affected ) );
 		}
 
+		/**
+		 * @param $email
+		 * @param $uid
+		 * @return bool
+		 * todo : description?
+		 */
 		public function update_last_mail_uid( $email, $uid ) {
 			global $threadPostId;
 			if ( $threadPostId ) {
@@ -422,6 +539,15 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 			return ( ! empty( $rows_affected ) );
 		}
 
+		/**
+		 * @param $email
+		 * @param $storage
+		 * @param $arrayMailIds
+		 * @param $hdUser
+		 * @param $user_id
+		 * @param $isSystemEmail
+		 * parse email message
+		 */
 		public function rt_parse_email( $email, &$storage, &$arrayMailIds, &$hdUser, $user_id, $isSystemEmail ) {
 			$lastMessageId = "-1";
 			global $rt_hd_tickets;
