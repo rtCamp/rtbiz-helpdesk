@@ -62,7 +62,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
              * Shortcode callback for [rt_hd_support_form]
              */
             function rt_hd_support_form_callback(){
-                 global  $redux_helpdesk_settings;
+                 
                  $option = ''; $order_email = '';
                
                  // Save ticket if data has been posted
@@ -169,7 +169,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
          */
         function save(){
             
-          global $rt_hd_contacts,  $rt_hd_tickets;
+          global $rt_hd_contacts,  $rt_hd_tickets,  $redux_helpdesk_settings;;
           
             $data = $_POST['post'];
 
@@ -179,7 +179,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
             $rt_hd_tickets_id = $rt_hd_tickets->insert_new_ticket(
                                      "Support for {$product->post->post_title}",
                                      $data['description'],
-                                     1, // it will changed to dynamic once redux option for default assignee shell be introduced
+                                     $redux_helpdesk_settings['rthd_default_user'], // it will changed to dynamic once redux option for default assignee shell be introduced
                                      'now',
                                      array( array( 'address'=> $data['email'], 'name' => '' ) ),
                                      array(),
