@@ -16,6 +16,7 @@ if ( !defined( 'ABSPATH' ) ) {
  * Description of RtHDTicketModel
  * Model for 'rt_wp_hd_ticket_index' table in DB
  * @author udit
+ * @since rt-Helpdesk 0.1
  */
 if ( !class_exists( 'Rt_HD_Ticket_Model' ) ) {
 	class Rt_HD_Ticket_Model extends RT_DB_Model {
@@ -31,6 +32,8 @@ if ( !class_exists( 'Rt_HD_Ticket_Model' ) ) {
 		 * @param $post_id
 		 *
 		 * @return bool
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function is_exist( $post_id ) {
 			$args = array();
@@ -54,6 +57,8 @@ if ( !class_exists( 'Rt_HD_Ticket_Model' ) ) {
 		 * @param $data
 		 *
 		 * @return int
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function add_ticket( $data ) {
 			return parent::insert( $data );
@@ -66,6 +71,8 @@ if ( !class_exists( 'Rt_HD_Ticket_Model' ) ) {
 		 * @param $where
 		 *
 		 * @return mixed
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function update_ticket( $data, $where ) {
 			return parent::update( $data, $where );
@@ -77,6 +84,8 @@ if ( !class_exists( 'Rt_HD_Ticket_Model' ) ) {
 		 * @param $where
 		 *
 		 * @return int
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function delete_ticket( $where ) {
 			return parent::delete( $where );

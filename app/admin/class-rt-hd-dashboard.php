@@ -94,8 +94,9 @@ if ( !class_exists( 'Rt_HD_Dashboard' ) ) {
 		}
 
 		/**
-		 * @param $post_type
 		 * set custom template for Dashboard
+		 *
+		 * @param $post_type
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */

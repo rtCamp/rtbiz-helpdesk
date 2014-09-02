@@ -16,6 +16,8 @@ if ( !defined( 'ABSPATH' ) ) {
  * Description of Rt_HD_Admin
  * Rt_HD_Admin is main class for admin backend and UI.
  * @author udit
+ *
+ * @since rt-Helpdesk 0.1
  */
 if ( !class_exists( 'Rt_HD_Admin' ) ) {
 	class Rt_HD_Admin {
@@ -195,7 +197,7 @@ if ( !class_exists( 'Rt_HD_Admin' ) ) {
 		}
 
 		/**
-		 *  Register menu entry to WP
+		 * Register menu entry to WP
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */

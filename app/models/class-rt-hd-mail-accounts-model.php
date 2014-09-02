@@ -15,7 +15,10 @@ if ( !defined( 'ABSPATH' ) ) {
 /**
  * Description of RtHDMailAccountsModel
  * email account model for wp_hd_mail_accounts table
+ *
  * @author udit
+ *
+ * @since rt-Helpdesk 0.1
  */
 if ( !class_exists( 'Rt_HD_Mail_Accounts_Model' ) ) {
 	/**
@@ -32,6 +35,8 @@ if ( !class_exists( 'Rt_HD_Mail_Accounts_Model' ) ) {
 		 * @param $data
 		 *
 		 * @return int
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function add_mail_account( $data ) {
 			return parent::insert( $data );
@@ -43,6 +48,8 @@ if ( !class_exists( 'Rt_HD_Mail_Accounts_Model' ) ) {
 		 * @param $where
 		 *
 		 * @return array
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function get_mail_account( $where ) {
 			return parent::get( $where );
@@ -55,6 +62,9 @@ if ( !class_exists( 'Rt_HD_Mail_Accounts_Model' ) ) {
 		 * @param $where
 		 *
 		 * @return mixed
+		 *
+		 * @since rt-Helpdesk 0.1
+		 *
 		 */
 		function update_mail_account( $data, $where ) {
 			return parent::update( $data, $where );
@@ -66,6 +76,8 @@ if ( !class_exists( 'Rt_HD_Mail_Accounts_Model' ) ) {
 		 * @param $where
 		 *
 		 * @return int
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function remove_mail_account( $where ) {
 			return parent::delete( $where );
@@ -75,6 +87,8 @@ if ( !class_exists( 'Rt_HD_Mail_Accounts_Model' ) ) {
 		 * get all mail account
 		 *
 		 * @return array
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function get_all_mail_accounts() {
 			return parent::get( array() );

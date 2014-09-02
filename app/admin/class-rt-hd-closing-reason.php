@@ -60,6 +60,12 @@ if ( !class_exists( 'Rt_HD_Closing_Reason' ) ) {
 			) );
 		}
 
+		/**
+		 * Save closing reason
+		 *
+		 * @param $post_id
+		 * @param $newTicket
+		 */
 		function save_closing_reason( $post_id, $newTicket ) {
 			if ( !isset( $newTicket['closing_reason'] ) ) {
 				$newTicket['closing_reason'] = array();

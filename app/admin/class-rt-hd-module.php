@@ -16,11 +16,13 @@ if ( !defined( 'ABSPATH' ) ) {
  * Description of Rt_HD_Module
  *
  * @author udit
+ *
  * @since rt-Helpdesk 0.1
  */
 if ( !class_exists( 'Rt_HD_Module' ) ) {
 	/**
 	 * Class Rt_HD_Module
+	 *
 	 * @since rt-Helpdesk 0.1
 	 */
 	class Rt_HD_Module {
@@ -65,6 +67,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 
 		/**
 		 *  update table
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		function db_ticket_table_update() {
@@ -79,6 +82,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 
 		/**
 		 * create database table
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		function create_database_table() {
@@ -133,6 +137,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 		/**
 		 *  Hook for init
 		 *  Register Post
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		function init_hd() {
@@ -156,6 +161,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 
 		/**
 		 *  set hooks
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		function hooks() {
@@ -187,10 +193,12 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 		}
 
 		/**
+		 * update columns given in parameter and return updated columns
+		 *
 		 * @param $columns
 		 *
 		 * @return array
-		 *  update columns given in parameter and return updated columns
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		function edit_custom_columns( $columns ) {
@@ -218,8 +226,9 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 		}
 
 		/**
+		 * Manage Custom Columns
+		 *
 		 * @param $column
-		 *  todo: what this function does ?
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
@@ -369,8 +378,9 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 		}
 
 		/**
-		 * @param $query
 		 * todo: what this function does ?
+		 *
+		 * @param $query
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
@@ -413,11 +423,12 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 		}
 
 		/**
+		 * Define new sortable columns for ticket list view
+		 *
 		 * @param $columns
 		 *
 		 * @return mixed
 		 *
-		 * todo:what this function does ?
 		 * @since rt-Helpdesk 0.1
 		 */
 		function sortable_column( $columns ) {
@@ -432,9 +443,10 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 
 
 		/**
+		 * Update ticket table
+		 *
 		 * @param $attr_id
 		 * @param $post_types
-		 *  Update ticket table
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
@@ -447,7 +459,9 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 		}
 
 		/**
+		 * Native list view link
 		 * todo: what this function does ?
+		 *
 		 * @since rt-Helpdesk 0.1
 		 *
 		 */
@@ -471,6 +485,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 
 		/**
 		 *  add link to post
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		function add_post_link() {
@@ -480,6 +495,8 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 		}
 
 		/**
+		 * ticket edit link
+		 *
 		 * @param $editlink String
 		 * @param $postID
 		 * @param $context
@@ -497,11 +514,13 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 		}
 
 		/**
+		 * returns new URL based on post
+		 *
 		 * @param $action
 		 * @param $post
 		 *
 		 * @return mixed
-		 * returns new URL based on post
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		function post_row_action( $action, $post ) {
@@ -516,10 +535,12 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 		}
 
 		/**
+		 *  Add department support for HD
+		 *
 		 * @param $post_types
 		 *
 		 * @return array
-		 * todo: what this function does ?
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		function add_department_support( $post_types ) {
@@ -530,6 +551,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 
 		/**
 		 * Register (Hooks) for custom page
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		function register_custom_pages() {
@@ -552,6 +574,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 
 		/**
 		 * footer scripts
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		function footer_scripts() {
@@ -566,6 +589,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 		 * @param $value
 		 *
 		 * @return mixed
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		function tickets_table_set_option( $status, $option, $value ) {
@@ -574,6 +598,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 
 		/**
 		 * todo:what this function does ?
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		function add_screen_options() {
@@ -589,10 +614,12 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 		}
 
 		/**
+		 * Customize menu item order
+		 *
 		 * @param $menu_order
 		 *
 		 * @return mixed
-		 * todo:what this function does ?
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		function custom_pages_order( $menu_order ) {
@@ -629,6 +656,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 
 		/**
 		 *  custom page ui
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		function custom_page_ui() {
@@ -638,6 +666,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 
 		/**
 		 * custom page ui
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		function custom_page_list_view() {
@@ -649,8 +678,9 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 		}
 
 		/**
-		 * @param $menu_position
 		 *  Register custom post ui
+		 *
+		 * @param $menu_position
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
@@ -672,6 +702,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 
 		/**
 		 * Register Custom statuses
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		function register_custom_statuses() {
@@ -691,6 +722,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 
 		/**
 		 * get custom menu order
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		function get_custom_menu_order() {
@@ -704,8 +736,10 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 		}
 
 		/**
-		 * @return array
 		 * custom label getter
+		 *
+		 * @return array
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		function get_custom_labels() {
@@ -727,8 +761,10 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 		}
 
 		/**
-		 * @return array
 		 * custom status getter
+		 *
+		 * @return array
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		function get_custom_statuses() {
@@ -758,7 +794,9 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 		 *
 		 * @global type $pagenow
 		 * @global type $post
+		 *
 		 * @return type
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		function rtticket_post_action_updated() {
@@ -788,6 +826,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 
 		/**
 		 * todo:what this function does ?
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		function dashboard() {
@@ -797,6 +836,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 
 		/**
 		 * add dashboard widget
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		function add_dashboard_widgets() {
@@ -904,6 +944,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 
 		/**
 		 * Status wise A single pie will show ticket and amount both: 11 Tickets worth $5555
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		function tickets_by_status() {
@@ -947,6 +988,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 
 		/**
 		 * todo:what this function does ?
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		function team_load() {
@@ -1030,6 +1072,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 		/**
 		 *  get top accounts
 		 *  todo:what this function does ?
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		function top_accounts() {
@@ -1097,8 +1140,9 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 		}
 
 		/**
-		 *  top clients UI
+		 * top clients UI
 		 * todo:what this function does ?
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		function top_clients() {
@@ -1169,8 +1213,9 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 		}
 
 		/**
-		 *    Daily tickets UI
+		 *  Daily tickets UI
 		 * todo:what this function does ?
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		function daily_tickets() {

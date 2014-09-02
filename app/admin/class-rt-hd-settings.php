@@ -35,6 +35,7 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 
 		/**
 		 * constructor
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		public function __construct() {
@@ -42,6 +43,7 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 
 		/**
 		 * setup ui template
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		function ui() {
@@ -53,12 +55,12 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 		}
 
 		/**
+		 * update sync meta time
+		 *
 		 * @param $email
 		 * @param $replytime
 		 *
 		 * @return bool
-		 *
-		 * update sync meta time
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
@@ -70,12 +72,12 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 		}
 
 		/**
+		 * change status of sync
+		 *
 		 * @param $email
 		 * @param $isSyncing
 		 *
 		 * @return bool
-		 *
-		 * change status of sync
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
@@ -91,11 +93,11 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 		}
 
 		/**
+		 * get email account
+		 *
 		 * @param $email
 		 *
 		 * @return bool
-		 *
-		 * get email account
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
@@ -111,11 +113,11 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 		}
 
 		/**
+		 * get user google account
+		 *
 		 * @param int $user_id
 		 *
 		 * @return mixed
-		 *
-		 * get user google account
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
@@ -129,14 +131,14 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 		}
 
 		/**
+		 * get access token from email Gmail
+		 *
 		 * @param $email
 		 * @param $signature
 		 * @param $email_type
 		 * @param $imap_server
 		 *
 		 * @return bool
-		 *
-		 *  get access token from email Gmail
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
@@ -216,7 +218,7 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 		}
 
 		/**
-		 *  count gmail account
+		 * count gmail account
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
@@ -227,6 +229,8 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 		}
 
 		/**
+		 * add Gmail user account
+		 *
 		 * @param $outh_token
 		 * @param $email
 		 * @param $email_data
@@ -235,8 +239,6 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 		 * @param null $imap_server
 		 *
 		 * @return bool
-		 *
-		 * add Gmail user account
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
@@ -266,13 +268,13 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 		}
 
 		/**
+		 * update user google account
+		 *
 		 * @param $outh_token
 		 * @param $email
 		 * @param $email_data
 		 *
 		 * @return bool
-		 *
-		 * update user google account
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
@@ -291,12 +293,12 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 		}
 
 		/**
+		 * remove user google account
+		 *
 		 * @param $email
 		 * @param $user_id
 		 *
 		 * @return mixed
-		 *
-		 * remove user google account
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
@@ -314,15 +316,14 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 			return $result;
 		}
 
+
 		/**
+		 * update mail access
+		 *
 		 * @param $email
 		 * @param null $token
 		 * @param null $email_data
-		 * @param array $user_ids
-		 * @param string $signature
 		 * @param null $imap_server
-		 *
-		 * update mail access
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
@@ -343,11 +344,11 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 		}
 
 		/**
+		 * get email access
+		 *
 		 * @param $email
 		 *
 		 * @return mixed
-		 *
-		 *  get email access
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
@@ -358,9 +359,9 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 		}
 
 		/**
-		 * @return mixed
-		 *
 		 * get allow email address
+		 *
+		 * @return mixed
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
@@ -375,9 +376,9 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 		}
 
 		/**
-		 * @return mixed
-		 *
 		 * get all email address
+		 *
+		 * @return mixed
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
@@ -388,11 +389,11 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 		}
 
 		/**
+		 * get email for sync debug
+		 *
 		 * @param $email
 		 *
 		 * @return mixed
-		 *
-		 * get email for sync debug
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
@@ -405,9 +406,9 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 		}
 
 		/**
-		 * @return mixed
-		 *
 		 * get email for sync
+		 *
+		 * @return mixed
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
@@ -427,6 +428,8 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 		}
 
 		/**
+		 * send email
+		 *
 		 * @param $fromemail
 		 * @param $subject
 		 * @param $body
@@ -438,8 +441,6 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 		 * @param string $refrence_type
 		 *
 		 * @return mixed
-		 *
-		 * send email
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
@@ -464,8 +465,9 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 		}
 
 		/**
-		 * @return mixed
 		 * get send mails
+		 *
+		 * @return mixed
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
@@ -476,13 +478,13 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 		}
 
 		/**
+		 * update send box
+		 *
 		 * @param $sentEmailID
 		 * @param string $status
 		 * @param string $oldStatus
 		 *
 		 * @return mixed
-		 *
-		 * update send box
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */

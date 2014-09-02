@@ -233,6 +233,8 @@ function rthd_get_all_system_emails() {
  * @param $ticket_id
  *
  * @return array
+ *
+ * @since rt-Helpdesk 0.1
  */
 function rthd_get_all_participants( $ticket_id ) {
 	$ticket       = get_post( $ticket_id );
@@ -289,6 +291,8 @@ function rthd_get_all_participants( $ticket_id ) {
  * get ticket table name
  *
  * @return string
+ *
+ *  @since rt-Helpdesk 0.1
  */
 function rthd_get_ticket_table_name() {
 
@@ -303,6 +307,8 @@ function rthd_get_ticket_table_name() {
  * @param $user
  *
  * @return mixed
+ *
+ * @since rt-Helpdesk 0.1
  */
 function rthd_get_user_ids( $user ) {
 	return $user->ID;
@@ -313,6 +319,8 @@ function rthd_get_user_ids( $user ) {
  *
  * @param $terms
  * @param $taxonomy
+ *
+ * @since rt-Helpdesk 0.1
  */
 function rthd_update_post_term_count( $terms, $taxonomy ) {
 	global $wpdb;
@@ -355,9 +363,11 @@ function rthd_update_post_term_count( $terms, $taxonomy ) {
 /**
  * Function to encrypt or decrypt the given value
  *
- * @param string
+ * @param encrypted/decrypted $string
  *
- * @return string
+ * @return string Return the encrypted/decrypted string
+ *
+ * @since rt-Helpdesk 0.1
  */
 function rthd_encrypt_decrypt( $string ) {
 
@@ -392,6 +402,8 @@ function rthd_encrypt_decrypt( $string ) {
  * @param null $args
  *
  * @return string
+ *
+ * @since rt-Helpdesk 0.1
  */
 function rthd_text_diff( $left_string, $right_string, $args = null ) {
 	$defaults = array( 'title' => '', 'title_left' => '', 'title_right' => '' );
@@ -438,6 +450,8 @@ function rthd_text_diff( $left_string, $right_string, $args = null ) {
  * get settings
  *
  * @return mixed
+ *
+ * @since rt-Helpdesk 0.1
  */
 function rthd_get_settings() {
 	global $redux_helpdesk_settings;
@@ -458,6 +472,8 @@ function rthd_get_settings() {
  *
  * @param $key
  * @param $value
+ *
+ * @since rt-Helpdesk 0.1
  */
 function rthd_update_settings( $key, $value ) {
 
@@ -467,6 +483,8 @@ function rthd_update_settings( $key, $value ) {
  * get menu label
  *
  * @return mixed
+ *
+ * @since rt-Helpdesk 0.1
  */
 function rthd_get_menu_label() {
 	$menu_label = get_site_option( 'rthd_menu_label', __( 'rtHelpdesk' ) );
@@ -478,6 +496,8 @@ function rthd_get_menu_label() {
  * update menu label
  *
  * @param $menu_label
+ *
+ * @since rt-Helpdesk 0.1
  */
 function rthd_update_menu_label( $menu_label ) {
 	update_site_option( 'rthd_menu_label', $menu_label );
@@ -487,6 +507,8 @@ function rthd_update_menu_label( $menu_label ) {
  * get url logo
  *
  * @return mixed
+ *
+ * @since rt-Helpdesk 0.1
  */
 function rthd_get_logo_url() {
 	$logo_url = get_site_option( 'rthd_logo_url', RT_HD_URL . 'app/assets/img/hd-16X16.png' );
@@ -498,11 +520,20 @@ function rthd_get_logo_url() {
  * update url logo
  *
  * @param $logo_url
+ *
+ * @since rt-Helpdesk 0.1
  */
 function rthd_update_logo_url( $logo_url ) {
 	update_site_option( 'rthd_logo_url', $logo_url );
 }
 
+/**
+ * return content type
+ *
+ * @return string
+ *
+ * @since rt-Helpdesk 0.1
+ */
 function rthd_set_html_content_type() {
 	return 'text/html';
 }

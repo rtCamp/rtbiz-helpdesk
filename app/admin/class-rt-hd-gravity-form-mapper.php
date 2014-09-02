@@ -22,12 +22,14 @@ if ( !class_exists( 'Rt_HD_Gravity_Form_Mapper' ) ) {
 
 	/**
 	 * Class Rt_HD_Gravity_Form_Mapper
+	 *
 	 * @since rt-Helpdesk 0.1
 	 */
 	class Rt_HD_Gravity_Form_Mapper {
 
 		/**
 		 * Calling to Set Hooks
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		public function __construct() {
@@ -36,6 +38,7 @@ if ( !class_exists( 'Rt_HD_Gravity_Form_Mapper' ) ) {
 
 		/**
 		 * Hook function
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		function hooks() {
@@ -46,6 +49,7 @@ if ( !class_exists( 'Rt_HD_Gravity_Form_Mapper' ) ) {
 
 		/**
 		 * delete mapping for gravity form using AJAX
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		function delete_mapping_ajax() {
@@ -61,6 +65,7 @@ if ( !class_exists( 'Rt_HD_Gravity_Form_Mapper' ) ) {
 
 		/**
 		 * enable gravity form mapping via ajax call
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		function enable_mapping_ajax() {
@@ -78,6 +83,7 @@ if ( !class_exists( 'Rt_HD_Gravity_Form_Mapper' ) ) {
 
 		/**
 		 * Setting up UI
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		public function ui() {

@@ -20,6 +20,7 @@ if ( !defined( 'ABSPATH' ) ) {
  *
  * @author udit
  *
+ * @since rt-Helpdesk 0.1
  */
 if ( !class_exists( 'Rt_HD_Mail_ACL_Model' ) ) {
 	/**
@@ -36,6 +37,8 @@ if ( !class_exists( 'Rt_HD_Mail_ACL_Model' ) ) {
 		 * @param $where
 		 *
 		 * @return array
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function get_acl( $where ) {
 			return parent::get( $where );
@@ -47,6 +50,8 @@ if ( !class_exists( 'Rt_HD_Mail_ACL_Model' ) ) {
 		 * @param $data
 		 *
 		 * @return int
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function add_acl( $data ) {
 			return parent::insert( $data );
@@ -58,6 +63,8 @@ if ( !class_exists( 'Rt_HD_Mail_ACL_Model' ) ) {
 		 * @param $where
 		 *
 		 * @return int
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function remove_acl( $where ) {
 			return parent::delete( $where );

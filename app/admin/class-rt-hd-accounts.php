@@ -18,7 +18,7 @@ if ( !defined( 'ABSPATH' ) ) {
  * Handel backend accounts
  * @author udit
  *
- * @since rt-Helpdesk 0.1
+ *
  */
 if ( !class_exists( 'Rt_HD_Accounts' ) ) {
 
