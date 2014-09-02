@@ -29,7 +29,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 		 * @var string Stores Post Type
 		 * @since rt-Helpdesk 0.1
 		 */
-		static $post_type = 'rt_ticket';
+		static $post_type = 'rtbiz_hd_ticket';
 		/**
 		 * @var string used in mail subject title - to detect whether it's a Helpdesk mail or not. So no translation
 		 * @since rt-Helpdesk 0.1
