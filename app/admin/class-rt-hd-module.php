@@ -293,18 +293,30 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
                            
                        case 'rthd_closed_by' :
               
-                           $user_id = get_post_meta($post->ID, '_rtbiz_helpdesk_closed_by', true );
-                           $user_info = get_userdata($user_id);
-                           echo ( $user_info ) ? $user_info->user_login : '' ;
-                          
+                          if ($post->post_status != 'unanswered') {
+                              
+                            $user_id = get_post_meta($post->ID, '_rtbiz_helpdesk_closed_by', true );
+                            $user_info = get_userdata($user_id);
+                            echo ( $user_info ) ? $user_info->user_login : '' ;
+                           
+                          }else{
+                              
+                               echo '-';
+                          }
                                break;
                            
                        case 'rthd_closing_reason' :
                            
-                           $term_name = wp_get_post_terms(  $post->ID , rthd_attribute_taxonomy_name( 'closing-reason' ), array("fields" => "names") );
-                        
-                           echo  !empty( $term_name ) ? $term_name[0] : '-' ;
-
+                           if ($post->post_status != 'unanswered') {
+                               
+                                $term_name = wp_get_post_terms(  $post->ID , rthd_attribute_taxonomy_name( 'closing-reason' ), array("fields" => "names") );
+                                echo  !empty( $term_name ) ? $term_name[0] : '-' ;
+                                
+                           }else{
+                               
+                               echo '-';
+                           }
+                           
                            break;
                          
                        case 'rthd_contacts' :
