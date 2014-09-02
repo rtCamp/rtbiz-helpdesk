@@ -141,6 +141,11 @@ if (!class_exists('Rt_HD_Module')) {
                         add_action( "manage_" . self::$post_type . "_posts_custom_column" , array( $this, 'manage_custom_columns' ), 10, 2 );
                         add_action('pre_get_posts', array( $this, 'pre_filter' ) );
                         add_filter( "manage_edit-" . self::$post_type . "_sortable_columns",  array( $this,  'sortable_column' ) );
+                        add_action( 'save_post_'.self::$post_type, array( $this,  'after_ticket_updated' ) );
+                        add_action( 'untrashed_post', array( $this,  'after_restore_trashed_ticket' ) );
+                        add_action( 'before_delete_post', array( $this,  'before_ticket_deleted' ) );
+                        
+                        
 		}
                 
                 function edit_custom_columns( $columns ){
@@ -170,7 +175,7 @@ if (!class_exists('Rt_HD_Module')) {
                    function manage_custom_columns( $column ){
                     
                     global $post;
-                   
+                    
                    
                     switch ( $column ) {
                         
@@ -341,6 +346,48 @@ if (!class_exists('Rt_HD_Module')) {
                 
                    } 
                    
+                function after_ticket_updated( $post_id ){
+
+                    if ( get_post_status( $post_id ) == 'trash' ) {
+
+                         $url = add_query_arg( array('post_type' => self::$post_type ) ,admin_url('edit.php') );
+                         wp_safe_redirect( $url );
+                         die();
+
+                    }
+                }
+                
+                function after_restore_trashed_ticket( $post_id ){
+                    
+                    $ticket = get_post( $post_id );
+                    
+                    if ( $ticket->post_type == self::$post_type ) {
+                        
+                        $ticket->post_status = 'unanswered';
+                        wp_update_post($ticket);
+                        
+                    }
+                }
+                
+                function before_ticket_deleted( $post_id ){
+                    
+                    if ( get_post_type( $post_id ) == self::$post_type ) {
+                        
+                        global $rt_hd_ticket_history_model;
+                        $ticketModel = new Rt_HD_Ticket_Model();
+
+                        $ticket_index = array( 'post_id' => $post_id );
+                        $ticket_history = array( 'ticket_id' => $post_id );
+                        
+                        $rt_hd_ticket_history_model->delete( $ticket_history );
+                        
+                        $ticketModel->delete_ticket( $ticket_index );
+                        
+                    }
+                  
+                    
+                }
+                        
                  
 		function sortable_column($columns)
 		{
