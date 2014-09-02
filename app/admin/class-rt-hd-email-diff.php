@@ -2,8 +2,9 @@
 /**
  * Don't load this file directly!
  */
-if ( ! defined( 'ABSPATH' ) )
+if ( !defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -19,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) )
  *
  * @since rt-Helpdesk 0.1
  */
-if( !class_exists( 'Rt_HD_Email_Diff') ) {
+if ( !class_exists( 'Rt_HD_Email_Diff' ) ) {
 
 	if ( !class_exists( 'WP_Text_Diff_Renderer_Table' ) ) {
 		require( ABSPATH . WPINC . '/wp-diff.php' );
@@ -30,7 +31,7 @@ if( !class_exists( 'Rt_HD_Email_Diff') ) {
 		var $_leading_context_lines = 2;
 		var $_trailing_context_lines = 2;
 
-		function addedLine($line) {
+		function addedLine( $line ) {
 			return "<td style='padding: .5em;border: 0;width:25px;'>+</td><td style='padding: .5em;border: 0;background-color: #dfd;'>{$line}</td>";
 		}
 
@@ -38,11 +39,12 @@ if( !class_exists( 'Rt_HD_Email_Diff') ) {
 		 * @ignore
 		 *
 		 * @param string $line HTML-escape the value.
+		 *
 		 * @return string
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		function deletedLine($line) {
+		function deletedLine( $line ) {
 			return "<td style='padding: .5em;border: 0;width:25px;' >-</td><td style='padding: .5em;border: 0;background-color: #fdd;' >{$line}</td>";
 		}
 
@@ -50,11 +52,12 @@ if( !class_exists( 'Rt_HD_Email_Diff') ) {
 		 * @ignore
 		 *
 		 * @param string $line HTML-escape the value.
+		 *
 		 * @return string
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		function contextLine($line) {
+		function contextLine( $line ) {
 			return "<td style='padding: .5em;border: 0;' > </td><td style='padding: .5em;border: 0;'>{$line}</td>";
 		}
 	}

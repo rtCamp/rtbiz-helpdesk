@@ -2,8 +2,9 @@
 /**
  * Don't load this file directly!
  */
-if (!defined('ABSPATH'))
+if ( !defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -20,7 +21,7 @@ if (!defined('ABSPATH'))
  * @author udit
  *
  */
-if ( !class_exists('Rt_HD_Mail_ACL_Model' ) ) {
+if ( !class_exists( 'Rt_HD_Mail_ACL_Model' ) ) {
 	/**
 	 * Class Rt_HD_Mail_ACL_Model
 	 */

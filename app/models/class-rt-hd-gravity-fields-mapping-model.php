@@ -2,8 +2,9 @@
 /**
  * Don't load this file directly!
  */
-if ( ! defined( 'ABSPATH' ) )
+if ( !defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -33,21 +34,24 @@ if ( !class_exists( 'Rt_HD_Gravity_Fields_Mapping_Model' ) ) {
 		 * @return array
 		 * returns all gravity field mapping
 		 */
-		function get_all_mappings(){
+		function get_all_mappings() {
 			$gravity_mappings = parent::get( array() );
+
 			return $gravity_mappings;
 		}
 
 		/**
 		 * @param string $form_id
 		 * returns mapping of specific form
+		 *
 		 * @return array
 		 */
 		function get_mapping( $form_id = '' ) {
 			$args = array();
-			if(!empty($form_id)) {
+			if ( !empty( $form_id ) ) {
 				$args['form_id'] = $form_id;
 			}
+
 			return parent::get( $args );
 		}
 
@@ -55,6 +59,7 @@ if ( !class_exists( 'Rt_HD_Gravity_Fields_Mapping_Model' ) ) {
 		 * @param $data
 		 * @param $where
 		 * update mapping of gravity field
+		 *
 		 * @return mixed
 		 */
 		function update_mapping( $data, $where ) {
@@ -64,17 +69,20 @@ if ( !class_exists( 'Rt_HD_Gravity_Fields_Mapping_Model' ) ) {
 		/**
 		 * @param $data
 		 * add mapping of gravity field
+		 *
 		 * @return int
 		 */
 		function add_mapping( $data ) {
 			$data['create_date'] = current_time( 'mysql' );
-			$data['enable'] = 'yes';
+			$data['enable']      = 'yes';
+
 			return parent::insert( $data );
 		}
 
 		/**
 		 * @param $where
 		 *  delete mapping of gravity field
+		 *
 		 * @return int
 		 */
 		function delete_mapping( $where ) {

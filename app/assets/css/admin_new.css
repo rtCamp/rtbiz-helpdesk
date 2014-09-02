@@ -1,7 +1,8 @@
-#rt-hd-ticket-data .inside{
+#rt-hd-ticket-data .inside {
     padding: 0;
 }
-.row_group{
+
+.row_group {
     padding: 10px 10px;
 }
 
@@ -13,22 +14,22 @@
     line-height: 1.5em;
 }
 
-#rt-hd-ticket-data .row_group{
+#rt-hd-ticket-data .row_group {
     width: 45%;
     display: inline-block;
 }
 
-#divSubscriberList .contact-list{
+#divSubscriberList .contact-list {
     display: inline-block;
     text-align: center;
     margin-right: 10px;
- }
- 
- #divAttachmentList .attachment-item{
-     background: #F8F8F8;
- }
- 
- .delete_row{
+}
+
+#divAttachmentList .attachment-item {
+    background: #F8F8F8;
+}
+
+.delete_row {
     position: relative;
     display: block;
     float: right;
@@ -39,18 +40,18 @@
     padding: 0 5px;
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
     text-decoration: none;
- }
+}
 
-#divSubscriberList .delete_row{
+#divSubscriberList .delete_row {
     margin-left: -15px;
     margin-top: -10px;
 }
 
-#divAttachmentList .delete_row, #external-files-container .delete_row{
+#divAttachmentList .delete_row, #external-files-container .delete_row {
     margin: -15px;
 }
 
-#add_new_ex_file{
+#add_new_ex_file {
     margin-top: 10px;
 }
 

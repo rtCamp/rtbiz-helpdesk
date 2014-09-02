@@ -2,8 +2,9 @@
 /**
  * Don't load this file directly!
  */
-if (!defined('ABSPATH'))
+if ( !defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -50,6 +51,7 @@ if ( !class_exists( 'Rt_HD_Mail_Outbound_Model' ) ) {
 
 		/**
 		 * add outbound mail in DB
+		 *
 		 * @param $data
 		 *
 		 * @return int

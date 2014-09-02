@@ -2,8 +2,9 @@
 /**
  * Don't load this file directly!
  */
-if ( ! defined( 'ABSPATH' ) )
+if ( !defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -31,20 +32,21 @@ if ( !class_exists( 'Rt_HD_Ticket_Model' ) ) {
 		 *
 		 * @return bool
 		 */
-		function is_exist( $post_id ){
-                    $args   = array();
-                    $list = null;
-                    if ( ! empty( $post_id ) ){
-                        $args = array( 'post_id' => $post_id );
-                        $list = parent::get( $args );
-                        foreach ( $list as $post ) {
-                            if ( $post_id == $post->post_id ){
-                                return true;
-                            }
-                        }
-                    }
-                    return false;
-                }
+		function is_exist( $post_id ) {
+			$args = array();
+			$list = null;
+			if ( !empty( $post_id ) ) {
+				$args = array( 'post_id' => $post_id );
+				$list = parent::get( $args );
+				foreach ( $list as $post ) {
+					if ( $post_id == $post->post_id ) {
+						return true;
+					}
+				}
+			}
+
+			return false;
+		}
 
 		/**
 		 * add ticket

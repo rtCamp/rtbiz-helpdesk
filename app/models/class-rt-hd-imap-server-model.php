@@ -2,8 +2,9 @@
 /**
  * Don't load this file directly!
  */
-if (!defined('ABSPATH'))
+if ( !defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -77,10 +78,11 @@ if ( !class_exists( 'Rt_HD_IMAP_Server_Model' ) ) {
 		 */
 		function get_server( $id ) {
 			$servers = parent::get( array( 'id' => $id ) );
-			$server = false;
-			if ( ! empty( $servers ) ) {
+			$server  = false;
+			if ( !empty( $servers ) ) {
 				$server = $servers[0];
 			}
+
 			return $server;
 		}
 	}

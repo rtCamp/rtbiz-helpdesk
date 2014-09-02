@@ -8,7 +8,7 @@ function admin_side_menu_patch() {
     jQuery("li.toplevel_page_hd-dashboard").addClass("wp-has-current-submenu wp-menu-open open-if-no-js menu-top menu-icon-generic menu-top-first")
     jQuery("a.toplevel_page_hd-dashboard").removeClass("wp-not-current-submenu menu-top menu-icon-generic menu-top-first menu-top-last opensub")
     jQuery("a.toplevel_page_hd-dashboard").addClass("wp-has-current-submenu wp-menu-open open-if-no-js menu-top menu-icon-post menu-top-first")
-    jQuery("li.toplevel_page_hd-dashboard a").each(function(e) {
+    jQuery("li.toplevel_page_hd-dashboard a").each(function (e) {
         if ((window.location.href).indexOf(this.href) != -1) {
             jQuery(this).parent().addClass("current");
             jQuery(this).addClass('current')
@@ -16,69 +16,67 @@ function admin_side_menu_patch() {
     });
 }
 
-jQuery(document).ready(function($) {
+jQuery(document).ready(function ($) {
 
-	/**
-	 * WordPress Menu Hack for Dashboard
-	 */
-	if (typeof rt_hd_top_menu != 'undefined' && typeof rt_hd_dashboard_url != 'undefined') {
-		$('#' + rt_hd_top_menu + ' ul li').removeClass('current');
-		$('#' + rt_hd_top_menu + ' ul li a').removeClass('current');
-		$('#' + rt_hd_top_menu + ' ul li a').each(function(e) {
-			if (this.href == rt_hd_dashboard_url) {
-				$(this).parent().addClass("current");
-				$(this).addClass('current');
-			}
-		});
-	}
+    /**
+     * WordPress Menu Hack for Dashboard
+     */
+    if (typeof rt_hd_top_menu != 'undefined' && typeof rt_hd_dashboard_url != 'undefined') {
+        $('#' + rt_hd_top_menu + ' ul li').removeClass('current');
+        $('#' + rt_hd_top_menu + ' ul li a').removeClass('current');
+        $('#' + rt_hd_top_menu + ' ul li a').each(function (e) {
+            if (this.href == rt_hd_dashboard_url) {
+                $(this).parent().addClass("current");
+                $(this).addClass('current');
+            }
+        });
+    }
 
-	/**
-	 *	Studio Settings Page
-	 */
-	if ($(".rtcamp-user-ac").length > 0) {
-		jQuery.each(arr_rtcamper, function(ind, val) {
-			$("div[acl-user=" + val.id + "]").each(function() {
-				$(this).prepend(val.imghtml + val.label);
-			})
-			//acl-user
-		});
+    /**
+     *    Studio Settings Page
+     */
+    if ($(".rtcamp-user-ac").length > 0) {
+        jQuery.each(arr_rtcamper, function (ind, val) {
+            $("div[acl-user=" + val.id + "]").each(function () {
+                $(this).prepend(val.imghtml + val.label);
+            })
+            //acl-user
+        });
 
-		jQuery(".rtcamp-user-ac").autocomplete({
-			source: arr_rtcamper,
-			select: function(event, ui) {
-				var tmpName = this.name + "_" + ui.item.id;
-				if (jQuery("#" + tmpName).length == 0) {
-					jQuery(this).after("<div class='mail-acl_user' id='" + tmpName + "'>" + ui.item.imghtml + ui.item.label + "&nbsp;&nbsp;<a href='#removeAccess'>X</a><input type='hidden' name='allow_users[]' value='" + ui.item.id + "' /></div>")
-				}
-				jQuery(this).val("");
-				return false;
-			}
-		}).data("ui-autocomplete")._renderItem = function(ul, item) {
-			return $("<li></li>").data("ui-autocomplete-item", item).append("<a class='ac-subscribe-selected'>" + item.imghtml + "&nbsp;" + item.label + "</a>").appendTo(ul);
-		};
-		jQuery(document).on('click', "a[href=#removeAccess]", function(e) {
-			e.preventDefault();
-			$(this).parent().remove();
-		});
+        jQuery(".rtcamp-user-ac").autocomplete({
+            source: arr_rtcamper,
+            select: function (event, ui) {
+                var tmpName = this.name + "_" + ui.item.id;
+                if (jQuery("#" + tmpName).length == 0) {
+                    jQuery(this).after("<div class='mail-acl_user' id='" + tmpName + "'>" + ui.item.imghtml + ui.item.label + "&nbsp;&nbsp;<a href='#removeAccess'>X</a><input type='hidden' name='allow_users[]' value='" + ui.item.id + "' /></div>")
+                }
+                jQuery(this).val("");
+                return false;
+            }
+        }).data("ui-autocomplete")._renderItem = function (ul, item) {
+            return $("<li></li>").data("ui-autocomplete-item", item).append("<a class='ac-subscribe-selected'>" + item.imghtml + "&nbsp;" + item.label + "</a>").appendTo(ul);
+        };
+        jQuery(document).on('click', "a[href=#removeAccess]", function (e) {
+            e.preventDefault();
+            $(this).parent().remove();
+        });
 
-	}
-	$(".remove-google-ac").click(function(e) {
-		var r = confirm("Are you sure you want to remove this email A/C ?");
-		if (r == true) {
+    }
+    $(".remove-google-ac").click(function (e) {
+        var r = confirm("Are you sure you want to remove this email A/C ?");
+        if (r == true) {
 
-		}
-		else
-		{
-			e.preventDefault();
-			return false;
-		}
-	});
-
+        }
+        else {
+            e.preventDefault();
+            return false;
+        }
+    });
 
 
-	/**
-	 * Gravity Importer Handlebars
-	 */
+    /**
+     * Gravity Importer Handlebars
+     */
 //	Handlebars.registerHelper('mapfieldnew', function(obj1, obj2) {
 //        if (obj1.toLowerCase().indexOf(obj2.toLowerCase()) > -1) {
 //            return new Handlebars.SafeString(
@@ -89,7 +87,7 @@ jQuery(document).ready(function($) {
 //        }
 //    });
 
-	//set normal priority
+        //set normal priority
 //    jQuery("[name=priority]").val(3);
 
 //    $("#postcustomstuff input[type=text],#postcustomstuff textarea").each(function(e) {
@@ -128,29 +126,28 @@ jQuery(document).ready(function($) {
 //    $("#newmeta").prev().dblclick(function() {
 //        $("#newmeta").toggle();
 //    })
-    $(".revertChanges").click(function(e) {
+    $(".revertChanges").click(function (e) {
         var r = confirm("This will delete all the helpdesk data created in this trannsaction ! Are you sure you want to continue ?");
         if (r == true) {
 
         }
-        else
-        {
+        else {
             e.preventDefault();
             return false;
         }
     })
 
 
-	/**
-	 * Gravity Importer Page
-	 */
-	try {
+    /**
+     * Gravity Importer Page
+     */
+    try {
 
-        $(document).on("click", "a[href=#mapField]", function(e) {
+        $(document).on("click", "a[href=#mapField]", function (e) {
             e.preventDefault();
             var fieldMap = this;
             if ($(this).next().length > 0) {
-                $(this).next().toggle( );
+                $(this).next().toggle();
                 return false;
             }
             var ajaxdata = {
@@ -161,8 +158,8 @@ jQuery(document).ready(function($) {
 
             }
 
-            jQuery.post(ajaxurl, ajaxdata, function(response) {
-              if (response.length < 1) {
+            jQuery.post(ajaxurl, ajaxdata, function (response) {
+                if (response.length < 1) {
                     alert("Too many distinct value, Can't Map");
                     $("[name=" + $(fieldMap).data("field-name") + "]").parent().parent().show();
                     $(fieldMap).prev().addClass("form-invalid");
@@ -180,11 +177,11 @@ jQuery(document).ready(function($) {
                 arrTmp.mapData = window[$(fieldMap).data("map-data")];
                 $(fieldMap).after(template(arrTmp));
 
-                $(fieldMap).parent().find("tr").each(function() {
+                $(fieldMap).parent().find("tr").each(function () {
                     var tempTD = $(this).children();
                     var tempSelectOption = $(tempTD[1]).find("select option");
                     var searchQ = jQuery(tempTD[0]).text().trim().toLowerCase();
-                    $(tempSelectOption).each(function() {
+                    $(tempSelectOption).each(function () {
                         if (jQuery(this).text().trim().toLowerCase().indexOf(searchQ) != -1) {
                             $(tempTD[1]).find("select").val(jQuery(this).attr("value"));
                             $(tempTD[1]).find("select").change();
@@ -195,11 +192,10 @@ jQuery(document).ready(function($) {
                 });
 
 
-
             })
 
         });
-        $(document).on("change", ".map_form_fixed_fields", function(e) {
+        $(document).on("change", ".map_form_fixed_fields", function (e) {
             e.preventDefault();
             var field_name = jQuery(this).val();
             if (field_name == "")
@@ -233,7 +229,7 @@ jQuery(document).ready(function($) {
                 $(this).parent().next().html(tmpStr);
                 if ($(this).next().length < 1) {
                     $(this).after("<a data-field-name='" + field_name + "' href='#mapField' data-map-data='" + arr_map_fields[field_name].definedsource + "' data-field='" + this.name.replace("field-", "") + "' > Map </a>");
-                    if(field_name !="product")
+                    if (field_name != "product")
                         $("[name=" + field_name + "]").parent().parent().hide();
                     $(this).next().click();
                 } else {
@@ -241,7 +237,7 @@ jQuery(document).ready(function($) {
                     $(this).next().remove();
                     $(this).next().remove();
                     $(this).after("<a data-field-name='" + field_name + "' href='#mapField' data-map-data='" + arr_map_fields[field_name].definedsource + "' data-field='" + this.name.replace("field-", "") + "' > Map </a>");
-                    if(field_name !="product")
+                    if (field_name != "product")
                         $("[name=" + field_name + "]").parent().parent().hide();
                     $(this).next().click();
 
@@ -249,188 +245,258 @@ jQuery(document).ready(function($) {
             }
         });
 
-       
-            var count = 1;
 
-            var sucessCount = 0;
-            var failCount = 0;
-            var forceImport = false;
-            
-                jQuery('#map_submit').click(function(){
-                        var data = {
-                                                action: "rthd_import",
-                                                type: 'gravity',
-                                                mapSource : $('#mapSource').val()
-                                   }
+        var count = 1;
 
-                        jQuery.post(ajaxurl,data, function( response ){
-                            sucessCount = 0;
-                            failCount = 0;
-                            forceImport = false;
-                            
-                            $('#mapping-form').html( response );
+        var sucessCount = 0;
+        var failCount = 0;
+        var forceImport = false;
 
-                        });
-                 });
-        
-            jQuery("#rtHelpdeskMappingForm .wp-list-table tbody tr").each(function() {
-                var tempTD = $(this).children();
-                var tempSelectOption = $(tempTD[1]).find("select option");
-                var searchQ = jQuery(tempTD[0]).text().trim().toLowerCase();
-                $(tempSelectOption).each(function() {
-                    if (jQuery(this).text().trim().toLowerCase().indexOf(searchQ) != -1) {
-                        $(tempTD[1]).find("select").val(jQuery(this).attr("value"));
-                        $(tempTD[1]).find("select").change();
-                        return false;
-                    }
-                });
+        jQuery('#map_submit').click(function () {
+            var data = {
+                action: "rthd_import",
+                type: 'gravity',
+                mapSource: $('#mapSource').val()
+            }
+
+            jQuery.post(ajaxurl, data, function (response) {
+                sucessCount = 0;
+                failCount = 0;
+                forceImport = false;
+
+                $('#mapping-form').html(response);
 
             });
-            var otherCount = 1;
-            jQuery(document).on("change", ".other-field", function() {
-                if ($(this).val() == '') {
+        });
+
+        jQuery("#rtHelpdeskMappingForm .wp-list-table tbody tr").each(function () {
+            var tempTD = $(this).children();
+            var tempSelectOption = $(tempTD[1]).find("select option");
+            var searchQ = jQuery(tempTD[0]).text().trim().toLowerCase();
+            $(tempSelectOption).each(function () {
+                if (jQuery(this).text().trim().toLowerCase().indexOf(searchQ) != -1) {
+                    $(tempTD[1]).find("select").val(jQuery(this).attr("value"));
+                    $(tempTD[1]).find("select").change();
                     return false;
                 }
-                if ($("#otherfeild" + otherCount).length > 0)
-                    return false;
-                var tempParent = $(this).parent().parent();
-                $(tempParent).after("<tr>" + $(tempParent).html().replace(this.name, "otherfield" + otherCount).replace(this.name, "otherfield" + otherCount) + "</tr>");
-                otherCount++;
-            })
-            var postdata;
-            jQuery('#map_mapping_import').live('click', function() {
-                if (arr_map_fields != undefined) {
-                    postdata = new Object;
-                    var data = jQuery('#rtHelpdeskMappingForm').serializeArray();
-                    console.log(data);
-                    var count = jQuery('#mapEntryCount').val();
-                    var errorFlag = false;
-                    jQuery.each(data, function(i, mapping) {
-                        if (mapping.value == '')
-                            return true;
+            });
 
-                        var temp = mapping["name"];
-                        if (temp.indexOf('default-') > -1)
-                            return true;
-                        if (temp.indexOf('key-') > -1)
-                            return true;
-                        if (temp.indexOf('field-') > -1) {
-                            //checking Assigned  or not
-                            if (postdata[mapping.value] == undefined) {
+        });
+        var otherCount = 1;
+        jQuery(document).on("change", ".other-field", function () {
+            if ($(this).val() == '') {
+                return false;
+            }
+            if ($("#otherfeild" + otherCount).length > 0)
+                return false;
+            var tempParent = $(this).parent().parent();
+            $(tempParent).after("<tr>" + $(tempParent).html().replace(this.name, "otherfield" + otherCount).replace(this.name, "otherfield" + otherCount) + "</tr>");
+            otherCount++;
+        })
+        var postdata;
+        jQuery('#map_mapping_import').live('click', function () {
+            if (arr_map_fields != undefined) {
+                postdata = new Object;
+                var data = jQuery('#rtHelpdeskMappingForm').serializeArray();
+                console.log(data);
+                var count = jQuery('#mapEntryCount').val();
+                var errorFlag = false;
+                jQuery.each(data, function (i, mapping) {
+                    if (mapping.value == '')
+                        return true;
 
-                                if (arr_map_fields[mapping.value].multiple) {
-                                    //multiple but assigne first time
-                                    postdata[mapping.value] = Array();
-                                    var tmpObj = Object();
-                                    tmpObj.fieldName = mapping["name"];
-                                    tmpObj.defaultValue = $($('#' + mapping["name"]).parent().next().children("input,select")).val();
-                                    if (arr_map_fields[mapping.value].type != undefined && arr_map_fields[mapping.value].type == "defined") {
-                                        var arrMapSelects = $("#" + this.name).siblings("table").find("select");
-                                        if (arrMapSelects.length < 1) {
-                                            errorFlag = true;
-                                            alert("Maping not Defined for " + arr_map_fields[mapping.value].display_name)
-                                            $("#" + mapping["name"]).addClass("form-invalid");
-                                            $("#" + mapping["name"]).focus();
-                                            return false;
-                                        } else {
-                                            var tObj = Object();
-                                            $.each(arrMapSelects, function(indx, obj) {
-                                                tObj[$(obj).data("map-value")] = $(this).val();
-                                            });
-                                            tmpObj.mappingData = tObj;
-                                        }
+                    var temp = mapping["name"];
+                    if (temp.indexOf('default-') > -1)
+                        return true;
+                    if (temp.indexOf('key-') > -1)
+                        return true;
+                    if (temp.indexOf('field-') > -1) {
+                        //checking Assigned  or not
+                        if (postdata[mapping.value] == undefined) {
 
-                                    } else if (arr_map_fields[mapping.value].type == "key") {
-                                        var arrMapSelects = $("#" + this.name).siblings("select");
-                                        if (arrMapSelects.length > 0) {
-                                            tmpObj.keyname = $(arrMapSelects).val();
-                                        } else {
-                                            tmpObj.keyname = "";
-                                        }
-
+                            if (arr_map_fields[mapping.value].multiple) {
+                                //multiple but assigne first time
+                                postdata[mapping.value] = Array();
+                                var tmpObj = Object();
+                                tmpObj.fieldName = mapping["name"];
+                                tmpObj.defaultValue = $($('#' + mapping["name"]).parent().next().children("input,select")).val();
+                                if (arr_map_fields[mapping.value].type != undefined && arr_map_fields[mapping.value].type == "defined") {
+                                    var arrMapSelects = $("#" + this.name).siblings("table").find("select");
+                                    if (arrMapSelects.length < 1) {
+                                        errorFlag = true;
+                                        alert("Maping not Defined for " + arr_map_fields[mapping.value].display_name)
+                                        $("#" + mapping["name"]).addClass("form-invalid");
+                                        $("#" + mapping["name"]).focus();
+                                        return false;
                                     } else {
-
-                                        tmpObj.mappingData = null;
+                                        var tObj = Object();
+                                        $.each(arrMapSelects, function (indx, obj) {
+                                            tObj[$(obj).data("map-value")] = $(this).val();
+                                        });
+                                        tmpObj.mappingData = tObj;
                                     }
 
-                                    postdata[mapping.value].push(tmpObj);
+                                } else if (arr_map_fields[mapping.value].type == "key") {
+                                    var arrMapSelects = $("#" + this.name).siblings("select");
+                                    if (arrMapSelects.length > 0) {
+                                        tmpObj.keyname = $(arrMapSelects).val();
+                                    } else {
+                                        tmpObj.keyname = "";
+                                    }
+
                                 } else {
-                                    //multiple not allowed
-                                    var tmpObj = Object();
-                                    tmpObj.fieldName = mapping["name"];
-                                    tmpObj.defaultValue = $($('#' + mapping["name"]).parent().next().children("input,select")).val();
-                                    if (arr_map_fields[mapping.value].type != undefined && arr_map_fields[mapping.value].type == "defined") {
-                                        var arrMapSelects = $("#" + this.name).siblings("table").find("select");
-                                        if (arrMapSelects.length < 1) {
-                                            errorFlag = true;
-                                            alert("Maping not Defined for " + arr_map_fields[mapping.value].display_name)
-                                            $("#" + mapping["name"]).addClass("form-invalid");
-                                            $("#" + mapping["name"]).focus();
-                                            return false;
-                                        } else {
-                                            var tObj = Object();
-                                            $.each(arrMapSelects, function(indx, obj) {
-                                                tObj[$(obj).data("map-value")] = $(this).val();
-                                            });
-                                            tmpObj.mappingData = tObj;
-                                        }
 
-                                    } else if (arr_map_fields[mapping.value].type == "key") {
-                                        var arrMapSelects = $("#" + this.name).siblings("select");
-                                        if (arrMapSelects.length > 0) {
-                                            tmpObj.keyname = $(arrMapSelects).val();
-                                        } else {
-                                            tmpObj.keyname = "";
-                                        }
-
-                                    } else {
-
-                                        tmpObj.mappingData = null;
-                                    }
-
-                                    postdata[mapping.value] = tmpObj; //mapping["name"];
+                                    tmpObj.mappingData = null;
                                 }
 
+                                postdata[mapping.value].push(tmpObj);
                             } else {
-                                if (arr_map_fields[mapping.value].multiple) {
-                                    var tmpObj = Object();
-                                    tmpObj.fieldName = mapping["name"];
-                                    tmpObj.defaultValue = $($('#' + mapping["name"]).parent().next().children("input,select")).val();
-                                    if (arr_map_fields[mapping.value].type != undefined && arr_map_fields[mapping.value].type == "defined") {
-                                        var arrMapSelects = $("#" + this.name).siblings("table").find("select");
-                                        if (arrMapSelects.length < 1) {
-                                            errorFlag = true;
-                                            alert("Maping not Defined for " + arr_map_fields[mapping.value].display_name)
-                                            $("#" + mapping["name"]).addClass("form-invalid");
-                                            $("#" + mapping["name"]).focus();
-                                            return false;
-                                        } else {
-                                            var tObj = Object();
-                                            $.each(arrMapSelects, function(indx, obj) {
-                                                tObj[$(obj).data("map-value")] = $(this).val();
-                                            });
-                                            tmpObj.mappingData = tObj;
-                                        }
-
-                                    } else if (arr_map_fields[mapping.value].type == "key") {
-                                        var arrMapSelects = $("#" + this.name).siblings("select");
-                                        if (arrMapSelects.length > 0) {
-                                            tmpObj.keyname = $(arrMapSelects).val();
-                                        } else {
-                                            tmpObj.keyname = "";
-                                        }
-
+                                //multiple not allowed
+                                var tmpObj = Object();
+                                tmpObj.fieldName = mapping["name"];
+                                tmpObj.defaultValue = $($('#' + mapping["name"]).parent().next().children("input,select")).val();
+                                if (arr_map_fields[mapping.value].type != undefined && arr_map_fields[mapping.value].type == "defined") {
+                                    var arrMapSelects = $("#" + this.name).siblings("table").find("select");
+                                    if (arrMapSelects.length < 1) {
+                                        errorFlag = true;
+                                        alert("Maping not Defined for " + arr_map_fields[mapping.value].display_name)
+                                        $("#" + mapping["name"]).addClass("form-invalid");
+                                        $("#" + mapping["name"]).focus();
+                                        return false;
                                     } else {
-
-                                        tmpObj.mappingData = null;
+                                        var tObj = Object();
+                                        $.each(arrMapSelects, function (indx, obj) {
+                                            tObj[$(obj).data("map-value")] = $(this).val();
+                                        });
+                                        tmpObj.mappingData = tObj;
                                     }
 
-                                    postdata[mapping.value].push(tmpObj);
+                                } else if (arr_map_fields[mapping.value].type == "key") {
+                                    var arrMapSelects = $("#" + this.name).siblings("select");
+                                    if (arrMapSelects.length > 0) {
+                                        tmpObj.keyname = $(arrMapSelects).val();
+                                    } else {
+                                        tmpObj.keyname = "";
+                                    }
+
+                                } else {
+
+                                    tmpObj.mappingData = null;
+                                }
+
+                                postdata[mapping.value] = tmpObj; //mapping["name"];
+                            }
+
+                        } else {
+                            if (arr_map_fields[mapping.value].multiple) {
+                                var tmpObj = Object();
+                                tmpObj.fieldName = mapping["name"];
+                                tmpObj.defaultValue = $($('#' + mapping["name"]).parent().next().children("input,select")).val();
+                                if (arr_map_fields[mapping.value].type != undefined && arr_map_fields[mapping.value].type == "defined") {
+                                    var arrMapSelects = $("#" + this.name).siblings("table").find("select");
+                                    if (arrMapSelects.length < 1) {
+                                        errorFlag = true;
+                                        alert("Maping not Defined for " + arr_map_fields[mapping.value].display_name)
+                                        $("#" + mapping["name"]).addClass("form-invalid");
+                                        $("#" + mapping["name"]).focus();
+                                        return false;
+                                    } else {
+                                        var tObj = Object();
+                                        $.each(arrMapSelects, function (indx, obj) {
+                                            tObj[$(obj).data("map-value")] = $(this).val();
+                                        });
+                                        tmpObj.mappingData = tObj;
+                                    }
+
+                                } else if (arr_map_fields[mapping.value].type == "key") {
+                                    var arrMapSelects = $("#" + this.name).siblings("select");
+                                    if (arrMapSelects.length > 0) {
+                                        tmpObj.keyname = $(arrMapSelects).val();
+                                    } else {
+                                        tmpObj.keyname = "";
+                                    }
+
+                                } else {
+
+                                    tmpObj.mappingData = null;
+                                }
+
+                                postdata[mapping.value].push(tmpObj);
+                            } else {
+                                errorFlag = true;
+                                alert("Multiple " + arr_map_fields[mapping.value].display_name + " not allowed")
+                                $("select,input[type=textbox]").each(function (e) {
+                                    if ($(this).val() == mapping["value"]) {
+                                        $(this).addClass("form-invalid");
+                                    }
+                                })
+                                $("#" + mapping["name"]).addClass("form-invalid");
+                                $("#" + mapping["name"]).focus();
+                                return false;
+                            }
+                        }
+                    } else if (temp.indexOf('otherfield') > -1) {
+                        var mapElement = $("#" + mapping.name);
+                        mapping.name = $(mapElement).val();
+                        if ($.trim(mapping.name) == "") {
+
+                        } else if (postdata[mapping.value] == undefined) {
+                            if (arr_map_fields[mapping.value].multiple) {
+                                postdata[mapping.value] = Array();
+                                var tmpObj = Object();
+                                tmpObj.fieldName = mapping["name"];
+                                tmpObj.defaultValue = '';
+
+                                postdata[mapping.value].push(tmpObj);
+                            } else {
+                                var tmpObj = Object();
+                                tmpObj.fieldName = mapping["name"];
+                                tmpObj.defaultValue = '';
+                                postdata[mapping.value] = tmpObj;
+                            }
+
+                        } else {
+                            if (arr_map_fields[mapping.value].multiple) {
+                                var tmpObj = Object();
+                                tmpObj.fieldName = mapping["name"];
+                                tmpObj.defaultValue = '';
+                                postdata[mapping.value].push(tmpObj);
+                            } else {
+                                errorFlag = true;
+                                alert("Multiple " + arr_map_fields[mapping.value].display_name + " not allowed")
+                                $("select,input[type=textbox]").each(function (e) {
+                                    if ($(this).val() == mapping["value"]) {
+                                        $(this).addClass("form-invalid");
+                                    }
+                                })
+                                $(mapElement).addClass("form-invalid");
+                                $(mapElement).focus();
+                                return false;
+                            }
+                        }
+
+                    } else {
+                        if ($("[name=" + mapping.name + "]").parent().parent().css("display") != 'none') {
+                            var tmpObj = Object();
+                            tmpObj.fieldName = mapping.value;
+                            tmpObj.defaultValue = '';
+                            if (postdata[mapping.name] == undefined) {
+                                if (arr_map_fields[mapping.name] != undefined && arr_map_fields[mapping.name].multiple) {
+                                    tmpObj.mappingData = null;
+                                    postdata[mapping.name] = Array();
+                                    postdata[mapping.name].push(tmpObj);
+                                } else {
+                                    postdata[mapping.name] = tmpObj;
+                                }
+                            } else {
+                                if (arr_map_fields[mapping.name] != undefined && arr_map_fields[mapping.name].multiple) {
+                                    tmpObj.mappingData = null;
+                                    postdata[mapping.name].push(tmpObj);
                                 } else {
                                     errorFlag = true;
-                                    alert("Multiple " + arr_map_fields[mapping.value].display_name + " not allowed")
-                                    $("select,input[type=textbox]").each(function(e) {
-                                        if ($(this).val() == mapping["value"]) {
+                                    alert("Multiple " + arr_map_fields[mapping.name].display_name + " not allowed")
+                                    $("select,input[type=textbox]").each(function (e) {
+                                        if ($(this).val() == mapping.name) {
                                             $(this).addClass("form-invalid");
                                         }
                                     })
@@ -439,134 +505,63 @@ jQuery(document).ready(function($) {
                                     return false;
                                 }
                             }
-                        } else if (temp.indexOf('otherfield') > -1) {
-                            var mapElement = $("#" + mapping.name);
-                            mapping.name = $(mapElement).val();
-                            if ($.trim(mapping.name) == "") {
-
-                            } else if (postdata[mapping.value] == undefined) {
-                                if (arr_map_fields[mapping.value].multiple) {
-                                    postdata[mapping.value] = Array();
-                                    var tmpObj = Object();
-                                    tmpObj.fieldName = mapping["name"];
-                                    tmpObj.defaultValue = '';
-
-                                    postdata[mapping.value].push(tmpObj);
-                                } else {
-                                    var tmpObj = Object();
-                                    tmpObj.fieldName = mapping["name"];
-                                    tmpObj.defaultValue = '';
-                                    postdata[mapping.value] = tmpObj;
-                                }
-
-                            } else {
-                                if (arr_map_fields[mapping.value].multiple) {
-                                    var tmpObj = Object();
-                                    tmpObj.fieldName = mapping["name"];
-                                    tmpObj.defaultValue = '';
-                                    postdata[mapping.value].push(tmpObj);
-                                } else {
-                                    errorFlag = true;
-                                    alert("Multiple " + arr_map_fields[mapping.value].display_name + " not allowed")
-                                    $("select,input[type=textbox]").each(function(e) {
-                                        if ($(this).val() == mapping["value"]) {
-                                            $(this).addClass("form-invalid");
-                                        }
-                                    })
-                                    $(mapElement).addClass("form-invalid");
-                                    $(mapElement).focus();
-                                    return false;
-                                }
-                            }
-
-                        } else {
-                            if ($("[name=" + mapping.name + "]").parent().parent().css("display") != 'none') {
-                                var tmpObj = Object();
-                                tmpObj.fieldName = mapping.value;
-                                tmpObj.defaultValue = '';
-                                if (postdata[mapping.name] == undefined) {
-                                    if (arr_map_fields[mapping.name] != undefined && arr_map_fields[mapping.name].multiple) {
-                                        tmpObj.mappingData = null;
-                                        postdata[mapping.name] = Array();
-                                        postdata[mapping.name].push(tmpObj);
-                                    } else {
-                                        postdata[mapping.name] = tmpObj;
-                                    }
-                                } else {
-                                    if (arr_map_fields[mapping.name] != undefined && arr_map_fields[mapping.name].multiple) {
-                                        tmpObj.mappingData = null;
-                                        postdata[mapping.name].push(tmpObj);
-                                    } else {
-                                        errorFlag = true;
-                                        alert("Multiple " + arr_map_fields[mapping.name].display_name + " not allowed")
-                                        $("select,input[type=textbox]").each(function(e) {
-                                            if ($(this).val() == mapping.name) {
-                                                $(this).addClass("form-invalid");
-                                            }
-                                        })
-                                        $("#" + mapping["name"]).addClass("form-invalid");
-                                        $("#" + mapping["name"]).focus();
-                                        return false;
-                                    }
-                                }
 
 
-
-                            }
                         }
-                    });
-                    if (errorFlag)
-                        return false;
-                    jQuery.each(arr_map_fields, function(i, map_field) {
-                        if (map_field.required) {
-                            if (postdata[map_field.slug] == undefined) {
-                                alert(map_field.display_name + " is required");
-                                errorFlag = true;
-                                return false;
-                            }
-                        }
-
-                    });
-                    if (errorFlag)
-                        return false;
-                    jQuery('#rtHelpdeskMappingForm').slideUp();
-                    jQuery(".myerror").addClass("error");
-                    jQuery(".myupdate").addClass("updated");
-                    jQuery('#startImporting').slideDown();
-                    $("#progressbar").progressbar({
-                        value: 0,
-                        max: arr_lead_id.length
-                    });
-
-                    if (jQuery("#forceimport").attr('checked') == undefined) {
-                        forceImport = "false";
-                    } else {
-                        forceImport = "true";
                     }
-                    var rCount = 0;
-                    var ajaxdata = {
-                        action: 'rthd_map_import',
-                        mapSourceType: $("#mapSourceType").val(),
-                        map_data: postdata,
-                        map_form_id: jQuery('#mapSource').val(),
-                        map_row_index: rCount,
-                        gravity_lead_id: parseInt(arr_lead_id[rCount].id),
-                        forceimport: forceImport,
-                        trans_id: transaction_id,
-                                            rthd_module: jQuery('#rthd_module').val()
-                    }
-                    try {
-                        do_ajax_in_loop(ajaxdata, rCount);
-                    } catch (e) {
-
-                    }
+                });
+                if (errorFlag)
                     return false;
-                }
-            });
+                jQuery.each(arr_map_fields, function (i, map_field) {
+                    if (map_field.required) {
+                        if (postdata[map_field.slug] == undefined) {
+                            alert(map_field.display_name + " is required");
+                            errorFlag = true;
+                            return false;
+                        }
+                    }
 
-        
+                });
+                if (errorFlag)
+                    return false;
+                jQuery('#rtHelpdeskMappingForm').slideUp();
+                jQuery(".myerror").addClass("error");
+                jQuery(".myupdate").addClass("updated");
+                jQuery('#startImporting').slideDown();
+                $("#progressbar").progressbar({
+                    value: 0,
+                    max: arr_lead_id.length
+                });
+
+                if (jQuery("#forceimport").attr('checked') == undefined) {
+                    forceImport = "false";
+                } else {
+                    forceImport = "true";
+                }
+                var rCount = 0;
+                var ajaxdata = {
+                    action: 'rthd_map_import',
+                    mapSourceType: $("#mapSourceType").val(),
+                    map_data: postdata,
+                    map_form_id: jQuery('#mapSource').val(),
+                    map_row_index: rCount,
+                    gravity_lead_id: parseInt(arr_lead_id[rCount].id),
+                    forceimport: forceImport,
+                    trans_id: transaction_id,
+                    rthd_module: jQuery('#rthd_module').val()
+                }
+                try {
+                    do_ajax_in_loop(ajaxdata, rCount);
+                } catch (e) {
+
+                }
+                return false;
+            }
+        });
+
+
         var lead_index = 0;
-        $(document).on('click', 'a[href=#dummyDataNext]', function(e) {
+        $(document).on('click', 'a[href=#dummyDataNext]', function (e) {
             e.preventDefault();
             lead_index++;
             if (arr_lead_id.length - 1 < lead_index) {
@@ -574,7 +569,7 @@ jQuery(document).ready(function($) {
             }
             load_dummy_data(lead_index);
         });
-        $(document).on('click', 'a[href=#dummyDataPrev]', function(e) {
+        $(document).on('click', 'a[href=#dummyDataPrev]', function (e) {
             e.preventDefault();
             lead_index--;
             if (lead_index < 0) {
@@ -584,28 +579,30 @@ jQuery(document).ready(function($) {
         });
 
         function load_dummy_data(lead_id) {
-			try {
-				var ajaxdata = {
-					action: 'rthd_gravity_dummy_data',
-					mapSourceType: $("#mapSourceType").val(),
-					map_form_id: jQuery('#mapSource').val(),
-					dummy_lead_id: arr_lead_id[lead_id].id
+            try {
+                var ajaxdata = {
+                    action: 'rthd_gravity_dummy_data',
+                    mapSourceType: $("#mapSourceType").val(),
+                    map_form_id: jQuery('#mapSource').val(),
+                    dummy_lead_id: arr_lead_id[lead_id].id
 
-				}
-				jQuery.post(ajaxurl, ajaxdata, function(response) {
-					$(".helpdesk-dummy-data").each(function(e, el) {
-						var key = $(el).data("field-name");
-						if (isNaN(key) && key.indexOf("-s-") > -1) {
-							key = key.replace("/-s-/g", " ")
-						}
-						$(el).html(response[key]);
-					})
-				})
-			} catch(e) {
+                }
+                jQuery.post(ajaxurl, ajaxdata, function (response) {
+                    $(".helpdesk-dummy-data").each(function (e, el) {
+                        var key = $(el).data("field-name");
+                        if (isNaN(key) && key.indexOf("-s-") > -1) {
+                            key = key.replace("/-s-/g", " ")
+                        }
+                        $(el).html(response[key]);
+                    })
+                })
+            } catch (e) {
 
-			}
+            }
         }
+
         var lastCount = 0;
+
         function do_ajax_in_loop(ajaxdata, rCount) {
             ajaxdata.map_row_index = rCount;
             var tmpArray = Array();
@@ -621,8 +618,8 @@ jQuery(document).ready(function($) {
             }
             lastCount = i;
             ajaxdata.gravity_lead_id = tmpArray;
-            jQuery.post(ajaxurl, ajaxdata, function(response) {
-                $.each(response, function(ind, obj) {
+            jQuery.post(ajaxurl, ajaxdata, function (response) {
+                $.each(response, function (ind, obj) {
                     $("#progressbar").progressbar("option", "value", sucessCount + failCount + 1);
                     if (obj.status) {
                         sucessCount++;
@@ -638,11 +635,11 @@ jQuery(document).ready(function($) {
                 if (arr_lead_id.length > rCount) {
                     do_ajax_in_loop(ajaxdata, rCount);
                 }
-            }).fail(function() {
+            }).fail(function () {
                 $("#progressbar").progressbar("option", "value", sucessCount + failCount + lastCount);
                 failCount += lastCount;
                 $("#failImported").html(failCount)
-                $.each(ajaxdata.gravity_lead_id, function(ind, obj) {
+                $.each(ajaxdata.gravity_lead_id, function (ind, obj) {
                     arr_failed_lead.push(obj.lead_id);
                 });
 
@@ -652,25 +649,26 @@ jQuery(document).ready(function($) {
             });
 
         }
-        $("#progressbar").live("progressbarcomplete", function(event, ui) {
+
+        $("#progressbar").live("progressbarcomplete", function (event, ui) {
             $(".importloading").hide();
             $(".sucessmessage").show();
 //
 //            arr_failed_lead.toString()
-               var strHTML="";
-               if(arr_failed_lead.toString() != "")
+            var strHTML = "";
+            if (arr_failed_lead.toString() != "")
                 strHTML += "Fail Lead Index : " + arr_failed_lead.toString() + "<br />"
-               strHTML += "<a target='_blank' href='admin.php?page=rthdlogs&log-list=log-list&trans_id=" + transaction_id + "' >View All Inserted Leads </a>";
+            strHTML += "<a target='_blank' href='admin.php?page=rthdlogs&log-list=log-list&trans_id=" + transaction_id + "' >View All Inserted Leads </a>";
             $("#extra-data-importer").html(strHTML);
 
         });
-        $("#futureYes").live("click", function(event, ui) {
+        $("#futureYes").live("click", function (event, ui) {
             var ajaxdata = {
                 action: 'rthd_map_import_feauture',
                 map_data: postdata,
                 map_form_id: jQuery('#mapSource').val(),
             }
-            jQuery.post(ajaxurl, ajaxdata, function(response) {
+            jQuery.post(ajaxurl, ajaxdata, function (response) {
                 if (response.status) {
                     $("#futureYes").parent().html("<h3>Done</h3>");
                 } else {
@@ -679,18 +677,18 @@ jQuery(document).ready(function($) {
             });
 
         });
-        $("#futureNo").on("click", function(event, ui) {
+        $("#futureNo").on("click", function (event, ui) {
             $(this).parent().html("<h3>Done</h3>");
         });
     } catch (e) {
 
     }
 
-    jQuery(document).on('click', ".delete-multiple", function(e) {
+    jQuery(document).on('click', ".delete-multiple", function (e) {
         $(this).prev().remove();
         $(this).remove();
     })
-    jQuery(document).on('click', ".add-multiple", function(e) {
+    jQuery(document).on('click', ".add-multiple", function (e) {
         var tempVal = $(this).prev().val();
         var name = $(this).prev().attr("name")
         if (tempVal == '')
@@ -708,112 +706,114 @@ jQuery(document).ready(function($) {
         $(this).after("<input type='text' name='" + name + "' value='" + tempVal + "' class='input-multiple' />");
     });
 
-	// Imap Servers
-	jQuery(document).on('click', '.rthd-edit-server', function(e) {
-		e.preventDefault();
-		server_id = jQuery(this).data('server-id');
-		jQuery('#rthd_imap_server_'+server_id).toggleClass('rthd-hide-row').toggleClass('rthd-show-row');
-	});
-	jQuery(document).on('click', '#rthd_add_imap_server', function(e) {
-		e.preventDefault();
-		jQuery('#rthd_new_imap_server').toggleClass('rthd-hide-row').toggleClass('rthd-show-row');
-	});
-	jQuery(document).on('click', '.rthd-remove-server', function(e) {
-		e.preventDefault();
-		flag = confirm( 'Are you sure you want to remove this server ?' );
-		server_id = jQuery(this).data('server-id');
-		if(flag) {
-			jQuery('#rthd_imap_server_'+server_id).remove();
-			jQuery(this).parent().parent().remove();
-		}
-	});
+    // Imap Servers
+    jQuery(document).on('click', '.rthd-edit-server', function (e) {
+        e.preventDefault();
+        server_id = jQuery(this).data('server-id');
+        jQuery('#rthd_imap_server_' + server_id).toggleClass('rthd-hide-row').toggleClass('rthd-show-row');
+    });
+    jQuery(document).on('click', '#rthd_add_imap_server', function (e) {
+        e.preventDefault();
+        jQuery('#rthd_new_imap_server').toggleClass('rthd-hide-row').toggleClass('rthd-show-row');
+    });
+    jQuery(document).on('click', '.rthd-remove-server', function (e) {
+        e.preventDefault();
+        flag = confirm('Are you sure you want to remove this server ?');
+        server_id = jQuery(this).data('server-id');
+        if (flag) {
+            jQuery('#rthd_imap_server_' + server_id).remove();
+            jQuery(this).parent().parent().remove();
+        }
+    });
 
 
-	// User Settings Page - Add Email
-	jQuery(document).on('click', '#rthd_add_personal_email', function(e) {
-		e.preventDefault();
-		jQuery('#rthd_email_acc_type_container').toggleClass('rthd-hide-row').toggleClass('rthd-show-row');
-		if ( jQuery('#rthd_email_acc_type_container').hasClass('rthd-hide-row') ) {
-			jQuery('#rthd_goauth_container').removeClass('rthd-show-row').addClass('rthd-hide-row');
-			jQuery('#rthd_add_imap_acc_form').removeClass('rthd-show-row').addClass('rthd-hide-row');
-			jQuery('#rthd_select_email_acc_type').val('').change();
-		}
-	});
-	jQuery(document).on('change','#rthd_select_email_acc_type', function(e) {
-		if ( jQuery(this).val() == 'goauth' ) {
-			jQuery('#rthd_goauth_container').removeClass('rthd-hide-row').addClass('rthd-show-row');
-			jQuery('#rthd_add_imap_acc_form').removeClass('rthd-show-row').addClass('rthd-hide-row');
-		} else if ( jQuery(this).val() == 'imap' ) {
-			jQuery('#rthd_add_imap_acc_form').removeClass('rthd-hide-row').addClass('rthd-show-row');
-			jQuery('#rthd_goauth_container').removeClass('rthd-show-row').addClass('rthd-hide-row');
-		} else {
-			jQuery('#rthd_goauth_container').removeClass('rthd-show-row').addClass('rthd-hide-row');
-			jQuery('#rthd_add_imap_acc_form').removeClass('rthd-show-row').addClass('rthd-hide-row');
-		}
-	});
+    // User Settings Page - Add Email
+    jQuery(document).on('click', '#rthd_add_personal_email', function (e) {
+        e.preventDefault();
+        jQuery('#rthd_email_acc_type_container').toggleClass('rthd-hide-row').toggleClass('rthd-show-row');
+        if (jQuery('#rthd_email_acc_type_container').hasClass('rthd-hide-row')) {
+            jQuery('#rthd_goauth_container').removeClass('rthd-show-row').addClass('rthd-hide-row');
+            jQuery('#rthd_add_imap_acc_form').removeClass('rthd-show-row').addClass('rthd-hide-row');
+            jQuery('#rthd_select_email_acc_type').val('').change();
+        }
+    });
+    jQuery(document).on('change', '#rthd_select_email_acc_type', function (e) {
+        if (jQuery(this).val() == 'goauth') {
+            jQuery('#rthd_goauth_container').removeClass('rthd-hide-row').addClass('rthd-show-row');
+            jQuery('#rthd_add_imap_acc_form').removeClass('rthd-show-row').addClass('rthd-hide-row');
+        } else if (jQuery(this).val() == 'imap') {
+            jQuery('#rthd_add_imap_acc_form').removeClass('rthd-hide-row').addClass('rthd-show-row');
+            jQuery('#rthd_goauth_container').removeClass('rthd-show-row').addClass('rthd-hide-row');
+        } else {
+            jQuery('#rthd_goauth_container').removeClass('rthd-show-row').addClass('rthd-hide-row');
+            jQuery('#rthd_add_imap_acc_form').removeClass('rthd-show-row').addClass('rthd-hide-row');
+        }
+    });
 
-        
-        /**
-         *  Import Mappings existing for ticket importing into Helpdesk System.
-         */
-        $(".rthd_enable_mapping").on('change', function(e){
-		e.preventDefault();
-		var update_mapping_id = $(this).data("mapping-id");
-		var that=this;
-		$.ajax({
-			url: ajaxurl,
-			type: 'POST',
-			dataType: 'json',
-			data:{
-				action : 'helpdesk_enable_mapping',
-				mapping_id:update_mapping_id,
-				mapping_enable:that.checked
 
-			},
-			success: function(data) {
-				if(data.status){
+    /**
+     *  Import Mappings existing for ticket importing into Helpdesk System.
+     */
+    $(".rthd_enable_mapping").on('change', function (e) {
+        e.preventDefault();
+        var update_mapping_id = $(this).data("mapping-id");
+        var that = this;
+        $.ajax({
+            url: ajaxurl,
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                action: 'helpdesk_enable_mapping',
+                mapping_id: update_mapping_id,
+                mapping_enable: that.checked
 
-				}else{
-					alert("error in updating mapping from server");
-				}
-			},
-			error: function(xhr, textStatus, errorThrown) {
-				alert("error in update ");
-			}
+            },
+            success: function (data) {
+                if (data.status) {
 
-		});
-	});
+                } else {
+                    alert("error in updating mapping from server");
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                alert("error in update ");
+            }
 
-	$(".rthd_delete_mapping").on('click', function(e){
-		e.preventDefault();
-		var r = confirm("Are you sure you want to remove this Mapping?");
-		if (r != true) {
-			e.preventDefault();
-			return false;
-		}
-		var del_mapping_id = $(this).data("mapping-id");
-		var that=this;
-		$.ajax({
-			url: ajaxurl,
-			type: 'POST',
-			dataType: 'json',
-			data:{
-				action : 'helpdesk_delete_mapping',
-				mapping_id:del_mapping_id
-			},
-			success: function(data) {
-				if(data.status){
-					$("#mapping_" + del_mapping_id ).fadeOut(500, function() { $(this).remove(); });
-				}else{
-					alert("error in delete mapping from server");
-				}
-			},
-			error: function(xhr, textStatus, errorThrown) {
-				alert("error in remove ");
-			}
+        });
+    });
 
-		});
-	});
+    $(".rthd_delete_mapping").on('click', function (e) {
+        e.preventDefault();
+        var r = confirm("Are you sure you want to remove this Mapping?");
+        if (r != true) {
+            e.preventDefault();
+            return false;
+        }
+        var del_mapping_id = $(this).data("mapping-id");
+        var that = this;
+        $.ajax({
+            url: ajaxurl,
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                action: 'helpdesk_delete_mapping',
+                mapping_id: del_mapping_id
+            },
+            success: function (data) {
+                if (data.status) {
+                    $("#mapping_" + del_mapping_id).fadeOut(500, function () {
+                        $(this).remove();
+                    });
+                } else {
+                    alert("error in delete mapping from server");
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                alert("error in remove ");
+            }
+
+        });
+    });
 });
 
 function IsEmail(email) {
