@@ -194,7 +194,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
                            
                        case 'rthd_closing_date' :
                     
-                           echo get_post_meta($post->ID, '_rtbiz_helpdesk_ticket_closing_date', true ) ;
+                           echo get_post_meta($post->ID, '_rtbiz_helpdesk_rtbiz_helpdesk_ticket_closing_date', true ) ;
                            
                                break; 
                            

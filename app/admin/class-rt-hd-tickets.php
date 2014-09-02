@@ -241,7 +241,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 
 				foreach ($uploaded as $upload) {
 
-					$post_attachment_hashes = get_post_meta( $post_id, '_rt_wp_hd_attachment_hash' );
+					$post_attachment_hashes = get_post_meta( $post_id, '_rtbiz_helpdesk_attachment_hash' );
 					if ( ! empty( $post_attachment_hashes ) && in_array( md5_file( $upload['file'] ), $post_attachment_hashes ) ) {
 						continue;
 					}
@@ -260,7 +260,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 					$attach_id = wp_insert_attachment($attachment);
 
 					add_post_meta( $attach_id, '_wp_attached_file', $upload["file"]);
-					add_post_meta( $post_id, '_rt_wp_hd_attachment_hash', md5_file( $upload['file'] ) );
+					add_post_meta( $post_id, '_rtbiz_helpdesk_attachment_hash', md5_file( $upload['file'] ) );
 
 					if ($mainTicket) {
 						add_post_meta($attach_id, "show-in-main", "true");
@@ -1693,7 +1693,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
                  
                  foreach ( $tickets as  $ticket ) {
                      
-                     $rthd_unique_id = get_post_meta($ticket->ID, '_rthd_unique_id', true);
+                     $rthd_unique_id = get_post_meta($ticket->ID, '_rtbiz_helpdesk_ticket_unique_id', true);
                      $date =  new DateTime( $ticket->post_modified );
 
                      ?>

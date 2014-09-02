@@ -26,7 +26,7 @@ echo "<script> var arr_ticketmeta_key=''; </script>";
 
 
 $post = get_post( $post_id );
-$ticket_unique_id = get_post_meta( $post_id, '_rthd_unique_id', true );
+$ticket_unique_id = get_post_meta( $post_id, '_rtbiz_helpdesk_ticket_unique_id', true );
 
 $create = new DateTime($post->post_date);
 

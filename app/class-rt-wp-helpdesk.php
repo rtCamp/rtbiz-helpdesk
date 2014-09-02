@@ -196,7 +196,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			}
 
 			$args = array(
-				'meta_key' => '_rthd_unique_id',
+				'meta_key' => '_rtbiz_helpdesk_ticket_unique_id',
 				'meta_value' => $_REQUEST[ 'rthd_unique_id' ],
 				'post_status' => 'any',
 				'post_type' => $post_type,
@@ -268,7 +268,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 
 			$unique_id = $_REQUEST[ 'rthd_unique_id' ];
 			$args = array(
-				'meta_key' => '_rthd_unique_id',
+				'meta_key' => '_rtbiz_helpdesk_ticket_unique_id',
 				'meta_value' => $unique_id,
 				'post_status' => 'any',
 				'post_type' => Rt_HD_Module::$post_type,
