@@ -51,7 +51,7 @@ if ( !class_exists( 'RT_HD_Admin_Meta_Boxes' ) ) {
 		public function remove_meta_boxes() {
 			global $rt_hd_module;
 
-			remove_meta_box( 'tagsdiv-rt_closing-reason', Rt_HD_Module::$post_type, 'side' );
+			remove_meta_box( 'tagsdiv-'.rthd_attribute_taxonomy_name( 'closing-reason' ) , Rt_HD_Module::$post_type, 'side' );
 			remove_meta_box( 'revisionsdiv', Rt_HD_Module::$post_type, 'normal' );
 			remove_meta_box( 'commentsdiv', Rt_HD_Module::$post_type, 'normal' );
 			remove_meta_box( 'commentstatusdiv', Rt_HD_Module::$post_type, 'normal' );

@@ -82,7 +82,7 @@ function rthd_sanitize_taxonomy_name( $taxonomy ) {
  * @return string
  */
 function rthd_attribute_taxonomy_name( $name ) {
-	return 'rt_' . rthd_sanitize_taxonomy_name( $name );
+	return 'rtbiz_hd_' . rthd_sanitize_taxonomy_name( $name );
 }
 
 /**
