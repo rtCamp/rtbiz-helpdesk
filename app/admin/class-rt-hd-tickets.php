@@ -132,7 +132,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 			}
 			$this->add_attachment_to_post($uploaded, $post_id, $post_type);
 
-			update_post_meta($post_id, "_rtbiz_helpdesk_ticket_email", $senderEmail);
+			update_post_meta($post_id, "_rtbiz_helpdesk_email", $senderEmail);
 
 			global $transaction_id;
 			if (isset($transaction_id) && $transaction_id > 0) {
@@ -1697,7 +1697,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
                  
                  foreach ( $tickets as  $ticket ) {
                      
-                     $rthd_unique_id = get_post_meta($ticket->ID, '_rtbiz_helpdesk_ticket_unique_id', true);
+                     $rthd_unique_id = get_post_meta($ticket->ID, '_rtbiz_helpdesk_unique_id', true);
                      $date =  new DateTime( $ticket->post_modified );
 
                      ?>

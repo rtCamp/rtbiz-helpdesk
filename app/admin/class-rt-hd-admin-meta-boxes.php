@@ -30,11 +30,11 @@ if( !class_exists( 'RT_HD_Admin_Meta_Boxes' ) ) {
             add_action( 'save_post', array( $this, 'save_meta_boxes' ), 1, 2 );
             
             add_action( 'pre_post_update', 'RT_Ticket_Diff_Email::store_old_post_data', 1, 2 );
-            add_action( 'rt_hd_process_rt_ticket_meta', 'RT_Meta_Box_Ticket_Info::save', 10, 2 );
-            add_action( 'rt_hd_process_rt_ticket_meta', 'RT_Meta_Box_Subscribers::save', 10, 2 );
-            add_action( 'rt_hd_process_rt_ticket_meta', 'RT_Meta_Box_Attachment::save', 10, 2 );
-            add_action( 'rt_hd_process_rt_ticket_meta', 'RT_Meta_Box_External_Link::save', 10, 2 );
-            add_action( 'rt_hd_process_rt_ticket_meta', 'RT_Ticket_Diff_Email::save', 10, 2 );
+            add_action( 'rt_hd_process_' . Rt_HD_Module::$post_type . '_meta', 'RT_Meta_Box_Ticket_Info::save', 10, 2 );
+            add_action( 'rt_hd_process_' . Rt_HD_Module::$post_type . '_meta', 'RT_Meta_Box_Subscribers::save', 10, 2 );
+            add_action( 'rt_hd_process_' . Rt_HD_Module::$post_type . '_meta', 'RT_Meta_Box_Attachment::save', 10, 2 );
+            add_action( 'rt_hd_process_' . Rt_HD_Module::$post_type . '_meta', 'RT_Meta_Box_External_Link::save', 10, 2 );
+            add_action( 'rt_hd_process_' . Rt_HD_Module::$post_type . '_meta', 'RT_Ticket_Diff_Email::save', 10, 2 );
             
         }
 

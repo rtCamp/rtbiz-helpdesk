@@ -35,7 +35,7 @@ if( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 
             $post_author = $post->post_author;
             
-            $close_date_meta = get_post_meta($post->ID, '_rtbiz_helpdesk_ticket_closing_date', true);
+            $close_date_meta = get_post_meta($post->ID, '_rtbiz_helpdesk_closing_date', true);
             if(!empty($close_date_meta)) {
                 $closingdate = new DateTime($close_date_meta);
                 $closingdate = $closingdate->format('M d, Y h:i A');
@@ -122,7 +122,7 @@ if( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
                 <?php $rt_hd_closing_reason->get_closing_reasons( ( isset( $post->ID ) ) ? $post->ID : '', TRUE ); ?>
             </div><?php
             
-            $rthd_unique_id = get_post_meta($post->ID, '_rtbiz_helpdesk_ticket_unique_id', true);
+            $rthd_unique_id = get_post_meta($post->ID, '_rtbiz_helpdesk_unique_id', true);
             if(!empty($rthd_unique_id)) { ?>
                 <div class="row_group">
                     <span class="prefix" title="<?php _e('Public URL', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e('Public URL', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
@@ -202,8 +202,8 @@ if( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
             
             //closing date
             if ( isset( $newTicket['closing-date'] ) && !empty( $newTicket['closing-date'] ) ){
-                update_post_meta( $post_id, '_rtbiz_helpdesk_ticket_closing_date', $newTicket['closing-date'] );
-                update_post_meta( $post_id, '_rtbiz_helpdesk_ticket_closed_by', get_current_user_id() );
+                update_post_meta( $post_id, '_rtbiz_helpdesk_closing_date', $newTicket['closing-date'] );
+                update_post_meta( $post_id, '_rtbiz_helpdesk_closed_by', get_current_user_id() );
                 $cd = new DateTime( $newTicket['closing-date'] );
                 $UTC = new DateTimeZone('UTC');
                 $cd->setTimezone($UTC);
@@ -256,7 +256,7 @@ if( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
             }
             
             //created by
-            update_post_meta( $post_id, '_rtbiz_helpdesk_ticket_updated_by', get_current_user_id() );
+            update_post_meta( $post_id, '_rtbiz_helpdesk_updated_by', get_current_user_id() );
             $data = array_merge( $data, array( 
                 'date_update' => current_time( 'mysql' ),
                 'date_update_gmt' => gmdate('Y-m-d H:i:s'),
@@ -264,7 +264,7 @@ if( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
             ) );
             
             //Unique link
-            $unique_id = get_post_meta( $post_id, '_rtbiz_helpdesk_ticket_unique_id', true );
+            $unique_id = get_post_meta( $post_id, '_rtbiz_helpdesk_unique_id', true );
             if( empty( $unique_id ) ) {
                     $d = new DateTime($newTicket['post_date']);
                     $UTC = new DateTimeZone("UTC");
@@ -279,7 +279,7 @@ if( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
                 $where = array( 'post_id' => $post_id );
                 $ticketModel->update_ticket( $data, $where );
             }else{
-                update_post_meta( $post_id, '_rtbiz_helpdesk_ticket_created_by', get_current_user_id() );
+                update_post_meta( $post_id, '_rtbiz_helpdesk_created_by', get_current_user_id() );
                 $data = array_merge( $data, array( 
                     'user_created_by' => get_current_user_id(),
                     'date_create' => $newpost['post_date'],

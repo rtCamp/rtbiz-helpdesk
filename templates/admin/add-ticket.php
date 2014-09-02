@@ -204,7 +204,7 @@ if ( isset( $_POST['post'] ) ) {
         if ( $diff ) {
             $emailHTML .= '<tr><th style="padding: .5em;border: 0;">Closing Date</th><td>' . $diff . '</td><td></td></tr>';
         }
-        update_post_meta( $post_id, '_rtbiz_helpdesk_rtbiz_helpdesk_ticket_closing_date', $newTicket['closing-date'] );
+        update_post_meta( $post_id, '_rtbiz_helpdesk_rtbiz_helpdesk_closing_date', $newTicket['closing-date'] );
 
 		/* Update Index Table */
 		$cd = new DateTime( $newTicket['closing-date'] );
