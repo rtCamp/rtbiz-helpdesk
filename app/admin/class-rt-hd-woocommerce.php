@@ -34,6 +34,8 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
                 
                 // shortcode for get support form
                 add_shortcode( 'rt_hd_support_form', array( $this, 'rt_hd_support_form_callback' ) );
+                
+                add_action( 'woocommerce_after_my_account', array( $this, 'woo_my_tickets_my_account' ) );
                
             }
             
@@ -131,7 +133,8 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
                     <p>
                              <label><?php _e( 'Product', RT_HD_TEXT_DOMAIN ); ?></label>
                              <select name="post[product_id]">
-                            <?php echo $option; ?>
+                                 <option value="">Choose Product</option>
+                                 <?php echo $option; ?>
                              </select>
                          </p>
                          
@@ -186,7 +189,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
                                      $data['email']
             );
                                      
-            update_post_meta( $rt_hd_tickets_id, '_rthd_product_id', $data['product_id'] );
+            update_post_meta( $rt_hd_tickets_id, '_rtbiz_helpdesk_product_id', $data['product_id'] );
             
             if ( $_FILES ) {
               
@@ -211,11 +214,19 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
             }
             
             if( isset( $_GET['order_id'] ) ) {
-              update_post_meta( $rt_hd_tickets_id, '_rthd_order_id', $_GET['order_id'] );
+              update_post_meta( $rt_hd_tickets_id, '_rtbiz_helpdesk_order_id', $_GET['order_id'] );
             }
                                      
         }
         
+        function woo_my_tickets_my_account(){
+            
+           global $current_user;
+           
+           echo do_shortcode('[rt_hd_tickets email='.$current_user->user_email.']');
+        }
+
+
         static function insert_attachment($file_handler, $post_id)
         {
             // check to make sure its a successful upload

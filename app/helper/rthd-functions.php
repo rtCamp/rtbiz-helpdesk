@@ -150,7 +150,7 @@ function rthd_get_all_participants( $ticket_id ) {
 	if ( isset( $ticket->post_author ) ) {
 		$participants[] = $ticket->post_author;
 	}
-	$subscribers = get_post_meta( $ticket_id, 'subscribe_to', true );
+	$subscribers = get_post_meta( $ticket_id, '_rtbiz_helpdesk_subscribe_to', true );
 	$participants = array_merge( $participants, $subscribers );
 
 //	TODO

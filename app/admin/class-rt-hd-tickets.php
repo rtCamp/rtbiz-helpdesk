@@ -125,27 +125,27 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 				)
 			);
 
-			update_post_meta( $post_id, 'rthd_unique_id', $unique_id );
+			update_post_meta( $post_id, '_rtbiz_helpdesk_unique_id', $unique_id );
 
 			if( isset( $settings['attach_contacts'] ) && $settings['attach_contacts'] == 'yes' ) {
 				$this->add_contacts_to_post($allemail, $post_id);
 			}
 			$this->add_attachment_to_post($uploaded, $post_id, $post_type);
 
-			update_post_meta($post_id, "ticket_email", $senderEmail);
+			update_post_meta($post_id, "_rtbiz_helpdesk_ticket_email", $senderEmail);
 
 			global $transaction_id;
 			if (isset($transaction_id) && $transaction_id > 0) {
-				update_post_meta($post_id, "_transaction_id", $transaction_id);
+				update_post_meta($post_id, "_rtbiz_helpdesk_transaction_id", $transaction_id);
 			}
 
-			update_post_meta($post_id, 'subscribe_to', $subscriber);
+			update_post_meta($post_id, '_rtbiz_helpdesk_subscribe_to', $subscriber);
 			if ($messageid != "")
-				update_post_meta($post_id, "_messageid", $messageid);
+				update_post_meta($post_id, "_rtbiz_helpdesk_messageid", $messageid);
 			if ($inreplyto != "")
-				update_post_meta($post_id, "_inreplyto", $inreplyto);
+				update_post_meta($post_id, "_rtbiz_helpdesk_inreplyto", $inreplyto);
 			if ($references != "")
-				update_post_meta($post_id, "_references", $references);
+				update_post_meta($post_id, "_rtbiz_helpdesk_references", $references);
 
 
 
@@ -241,7 +241,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 
 				foreach ($uploaded as $upload) {
 
-					$post_attachment_hashes = get_post_meta( $post_id, '_rt_wp_hd_attachment_hash' );
+					$post_attachment_hashes = get_post_meta( $post_id, '_rtbiz_helpdesk_attachment_hash' );
 					if ( ! empty( $post_attachment_hashes ) && in_array( md5_file( $upload['file'] ), $post_attachment_hashes ) ) {
 						continue;
 					}
@@ -260,7 +260,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 					$attach_id = wp_insert_attachment($attachment);
 
 					add_post_meta( $attach_id, '_wp_attached_file', $upload["file"]);
-					add_post_meta( $post_id, '_rt_wp_hd_attachment_hash', md5_file( $upload['file'] ) );
+					add_post_meta( $post_id, '_rtbiz_helpdesk_attachment_hash', md5_file( $upload['file'] ) );
 
 					if ($mainTicket) {
 						add_post_meta($attach_id, "show-in-main", "true");
@@ -590,11 +590,11 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 				}
 			}
 
-			$subscribe_to = get_post_meta($comment_post_ID, 'subscribe_to', true);
+			$subscribe_to = get_post_meta($comment_post_ID, '_rtbiz_helpdesk_subscribe_to', true);
 			if ($subscribe_to && is_array($subscribe_to) && sizeof($subscribe_to) > 0) {
 				$subscriber = array_merge($subscribe_to, $subscriber);
 			}
-			update_post_meta($comment_post_ID, 'subscribe_to', $subscriber);
+			update_post_meta($comment_post_ID, '_rtbiz_helpdesk_subscribe_to', $subscriber);
 
 			$this->add_attachment_to_post($uploaded, $comment_post_ID, $post_type, false, $comment_id);
 			if( isset( $module_settings['attach_contacts'] ) && $module_settings['attach_contacts'] == 'yes' ) {
@@ -1384,7 +1384,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		}
 
 		function notify_subscriber_via_email($post_id, $title, $body, $comment_id) {
-			$oldSubscriberArr = get_post_meta($post_id, "subscribe_to", true);
+			$oldSubscriberArr = get_post_meta($post_id, "_rtbiz_helpdesk_subscribe_to", true);
 			$bccemails = array();
 			if ($oldSubscriberArr && is_array($oldSubscriberArr) && !empty($oldSubscriberArr)) {
 				foreach ($oldSubscriberArr as $emailsubscriber) {
@@ -1643,7 +1643,8 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		}
                 
                 function rt_hd_tickets_callback( $atts ){  
-                    
+                     global $rt_hd_module;
+                      $labels = $rt_hd_module->labels;
                      $a = shortcode_atts( array(
                         'email' => '',
                         'user' => '',
@@ -1678,16 +1679,34 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
                   
                  <?php
                  printf( _n( 'One Ticket Found.', '%d Tickets Found.', count($tickets), 'my-RT_HD_TEXT_DOMAIN-domain' ), count($tickets) );
-                 foreach ( $tickets as  $ticket ) { ?>
+                 ?>
+                  <table class="shop_table my_account_orders">
+                      <tr>
+                          <th>Ticket ID</th>
+                          <th>Last Updated</th>
+                          <th>Status</th>
+                          <th></th>
+                      </tr>
+                 
+                <?php
                   
-                    <p>
-                    <h5><?php echo $ticket->post_title ?></h5> <?php echo $ticket->post_content ?>
-                    </p>
+                 
+                 foreach ( $tickets as  $ticket ) {
+                     
+                     $rthd_unique_id = get_post_meta($ticket->ID, '_rtbiz_helpdesk_ticket_unique_id', true);
+                     $date =  new DateTime( $ticket->post_modified );
 
-                  <?php }
+                     ?>
                   
-                  ?>
-                
+                    <tr>
+                      <td> #<?php echo $ticket->ID ?> </td>
+                      <td> <?php echo human_time_diff( $date->format('U') , time() ) . __(' ago') ?> </td>
+                      <td> <?php echo $ticket->post_status  ?> </td>
+                      <td>  <a class="button support" target="_blank" href="<?php echo trailingslashit(site_url()) . strtolower($labels['name']) . '/?rthd_unique_id=' . $rthd_unique_id; ?>"><?php _e('Link'); ?></a> </td>
+                    </tr>
+
+                  <?php } ?>
+            </table>
 
                <?php }
 

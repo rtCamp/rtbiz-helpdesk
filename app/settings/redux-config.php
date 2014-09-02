@@ -302,6 +302,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
                                          'id' => 'rthd_default_user',
                                          'type' => 'select',
                                          'options' => $users_options,
+                                         'default' => '1',
                                          'title' => __( 'Default Assignee' ),
                                          'desc' => __( 'Default User for HelpDesh ticket Assignee' ),
                                          'subtitle' => __( 'Select User for Support ticket Assign' ),

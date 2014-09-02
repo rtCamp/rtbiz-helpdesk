@@ -99,7 +99,7 @@ if( !class_exists( 'RT_Ticket_Diff_Email' ) ) {
             
             // Closing Date Diff
             if ( isset( $newTicket['closing-date'] ) && !empty( $newTicket['closing-date'] )) {
-                $oldclosingdate = get_post_meta( $post_id, "_ticket_closing_date", true );
+                $oldclosingdate = get_post_meta( $post_id, "_rtbiz_helpdesk_ticket_closing_date", true );
                 $diff = rthd_text_diff( $oldclosingdate, $newTicket["closing-date"] );
                 if ( $diff ) {
                     $emailHTML .= '<tr><th style="padding: .5em;border: 0;">Closing Date</th><td>' . $diff . '</td><td></td></tr>';
@@ -133,7 +133,7 @@ if( !class_exists( 'RT_Ticket_Diff_Email' ) ) {
             
             // External File Links Diff
             if ( isset( $_POST['ticket_ex_files'] ) ) {
-                $old_ex_files = get_post_meta( $post_id, '_ticket_external_file' );
+                $old_ex_files = get_post_meta( $post_id, '_rtbiz_helpdesk_ticket_external_file' );
                 $new_ex_files = $_POST['ticket_ex_files'];
                 $old_ex_links = array();
                 $new_ex_links = array();
@@ -180,7 +180,7 @@ if( !class_exists( 'RT_Ticket_Diff_Email' ) ) {
             }
             
             //Unscuscribe logic
-            $oldSubscriberArr = get_post_meta( $post_id, '_subscribe_to', true );
+            $oldSubscriberArr = get_post_meta( $post_id, '_rtbiz_helpdesk_subscribe_to', true );
             if ( !$oldSubscriberArr ) {
                 $oldSubscriberArr = array();
             }
