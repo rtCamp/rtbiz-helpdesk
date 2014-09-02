@@ -16,23 +16,34 @@ if ( !defined( 'ABSPATH' ) ) {
  * Description of RtHDGravityFieldsMappingModel
  *
  * @author udit
+ *
+ * @since rt-Helpdesk 0.1
  */
 if ( !class_exists( 'Rt_HD_Gravity_Fields_Mapping_Model' ) ) {
 	/**
 	 * Class Rt_HD_Gravity_Fields_Mapping_Model
 	 * This Uses to access database for Gravity Fields
+	 *
+	 * @since rt-Helpdesk 0.1
+	 *
 	 */
 	class Rt_HD_Gravity_Fields_Mapping_Model extends RT_DB_Model {
 		/**
 		 * constructor
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		public function __construct() {
 			parent::__construct( 'wp_hd_gravity_fields_mapping' );
 		}
 
 		/**
-		 * @return array
 		 * returns all gravity field mapping
+		 *
+		 * @return array
+		 *
+		 * @since rt-Helpdesk 0.1
+		 *
 		 */
 		function get_all_mappings() {
 			$gravity_mappings = parent::get( array() );
@@ -41,10 +52,14 @@ if ( !class_exists( 'Rt_HD_Gravity_Fields_Mapping_Model' ) ) {
 		}
 
 		/**
-		 * @param string $form_id
 		 * returns mapping of specific form
 		 *
+		 * @param string $form_id
+		 *
 		 * @return array
+		 *
+		 *  @since rt-Helpdesk 0.1
+		 *
 		 */
 		function get_mapping( $form_id = '' ) {
 			$args = array();
@@ -56,21 +71,27 @@ if ( !class_exists( 'Rt_HD_Gravity_Fields_Mapping_Model' ) ) {
 		}
 
 		/**
-		 * @param $data
-		 * @param $where
 		 * update mapping of gravity field
 		 *
+		 * @param $data
+		 * @param $where
+		 *
 		 * @return mixed
+		 *
+		 *
 		 */
 		function update_mapping( $data, $where ) {
 			return parent::update( $data, $where );
 		}
 
 		/**
-		 * @param $data
 		 * add mapping of gravity field
 		 *
+		 * @param $data
+		 *
 		 * @return int
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function add_mapping( $data ) {
 			$data['create_date'] = current_time( 'mysql' );
@@ -80,10 +101,14 @@ if ( !class_exists( 'Rt_HD_Gravity_Fields_Mapping_Model' ) ) {
 		}
 
 		/**
-		 * @param $where
 		 *  delete mapping of gravity field
 		 *
+		 * @param $where
+		 *
 		 * @return int
+		 *
+		 * @since rt-Helpdesk 0.1
+		 *
 		 */
 		function delete_mapping( $where ) {
 			return parent::delete( $where );

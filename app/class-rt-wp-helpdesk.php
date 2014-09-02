@@ -27,12 +27,15 @@ if ( !class_exists( 'RT_WP_Helpdesk' ) ) {
 
 		/**
 		 * @var $templateURL is used to set template's root path
-		 * todo: Ask udit
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		public $templateURL;
 
 		/**
 		 * Constructor of RT_WP_Helpdesk checks dependency and initialize UI and set all hooks for this class
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		public function __construct() {
 
@@ -56,6 +59,7 @@ if ( !class_exists( 'RT_WP_Helpdesk' ) ) {
 		 * set all hooks for admins,
 		 * set hook for gravity forms
 		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function admin_init() {
 			$this->templateURL = apply_filters( 'rthd_template_url', 'rthelpdesk/' );
@@ -71,7 +75,11 @@ if ( !class_exists( 'RT_WP_Helpdesk' ) ) {
 
 		/**
 		 * check for rt biz dependency and if it does not find any single dependency then it returns false
+		 *
 		 * @return bool
+		 *
+		 * @since rt-Helpdesk 0.1
+		 *
 		 */
 		function check_rt_biz_dependecy() {
 
@@ -122,6 +130,8 @@ if ( !class_exists( 'RT_WP_Helpdesk' ) ) {
 
 		/**
 		 * if rtbiz plugin is not installed or activated it gives notification to user to do so.
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function rt_biz_admin_notice() {
 			?>
@@ -133,6 +143,8 @@ if ( !class_exists( 'RT_WP_Helpdesk' ) ) {
 
 		/**
 		 * Initialize the redux for setting UI and functionality.
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function init_redux() {
 			if ( !class_exists( 'ReduxFramework' ) && file_exists( dirname( __FILE__ ) . '/vendor/redux/ReduxCore/framework.php' ) ) {
@@ -147,6 +159,8 @@ if ( !class_exists( 'RT_WP_Helpdesk' ) ) {
 		 * Initialize the global variables,
 		 * Register taxonomies
 		 * Register Hooks
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function init_globals() {
 			global $rt_hd_attributes, $rt_hd_tickets, $rt_hd_acl,
@@ -203,6 +217,8 @@ if ( !class_exists( 'RT_WP_Helpdesk' ) ) {
 
 		/**
 		 *  Initialize the frontend
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function init() {
 			global $rt_hd_tickets_front;
@@ -211,6 +227,8 @@ if ( !class_exists( 'RT_WP_Helpdesk' ) ) {
 
 		/**
 		 * update_database() Setup database from schema
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function update_database() {
 			$updateDB = new RT_DB_Update( trailingslashit( RT_HD_PATH ) . 'index.php', trailingslashit( RT_HD_PATH_SCHEMA ) );
@@ -219,6 +237,8 @@ if ( !class_exists( 'RT_WP_Helpdesk' ) ) {
 
 		/**
 		 * Register all js
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function loadScripts() {
 			global $wp_query;
@@ -323,6 +343,8 @@ if ( !class_exists( 'RT_WP_Helpdesk' ) ) {
 
 		/**
 		 *  This is functions passes the value to java script
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function localize_scripts() {
 

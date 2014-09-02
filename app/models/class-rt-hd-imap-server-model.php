@@ -15,7 +15,10 @@ if ( !defined( 'ABSPATH' ) ) {
 /**
  * Description of RtHDIMAPServerModel
  * IMAP server model for database table
+ *
  * @author udit
+ *
+ * @since rt-Helpdesk 0.1
  */
 if ( !class_exists( 'Rt_HD_IMAP_Server_Model' ) ) {
 	/**
@@ -30,6 +33,8 @@ if ( !class_exists( 'Rt_HD_IMAP_Server_Model' ) ) {
 		 * get all servers
 		 *
 		 * @return array
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function get_all_servers() {
 			return parent::get( array() );
@@ -41,6 +46,8 @@ if ( !class_exists( 'Rt_HD_IMAP_Server_Model' ) ) {
 		 * @param $id
 		 *
 		 * @return int
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function delete_server( $id ) {
 			return parent::delete( array( 'id' => $id ) );
@@ -52,6 +59,8 @@ if ( !class_exists( 'Rt_HD_IMAP_Server_Model' ) ) {
 		 * @param $data
 		 *
 		 * @return int
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function add_server( $data ) {
 			return parent::insert( $data );
@@ -64,6 +73,8 @@ if ( !class_exists( 'Rt_HD_IMAP_Server_Model' ) ) {
 		 * @param $id
 		 *
 		 * @return mixed
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function update_server( $data, $id ) {
 			return parent::update( $data, array( 'id' => $id ) );
@@ -75,6 +86,9 @@ if ( !class_exists( 'Rt_HD_IMAP_Server_Model' ) ) {
 		 * @param $id
 		 *
 		 * @return bool
+		 *
+		 * @since rt-Helpdesk 0.1
+		 *
 		 */
 		function get_server( $id ) {
 			$servers = parent::get( array( 'id' => $id ) );

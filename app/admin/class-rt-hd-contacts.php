@@ -45,6 +45,7 @@ if ( !class_exists( 'Rt_HD_Contacts' ) ) {
 
 		/**
 		 * Hooks
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		function hooks() {
@@ -277,6 +278,7 @@ if ( !class_exists( 'Rt_HD_Contacts' ) ) {
 
 		/**
 		 * AJAX call to get taxonomy meta
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		public function get_taxonomy_meta_ajax() {

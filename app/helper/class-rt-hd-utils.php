@@ -30,6 +30,7 @@ if ( !class_exists( 'Rt_HD_Utils' ) ) {
 		 *
 		 * @return mixed
 		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		static public function forceUFT8( $tmpStr ) {
 //			return preg_replace( '/[^(\x20-\x7F)]*/', '', $tmpStr );
@@ -37,8 +38,11 @@ if ( !class_exists( 'Rt_HD_Utils' ) ) {
 		}
 
 		/**
-		 * @var array
 		 * mime type key being extension
+		 *
+		 * @var array
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		public static $mime_types = array(
 			"pdf"  => "application/pdf"
@@ -93,9 +97,12 @@ if ( !class_exists( 'Rt_HD_Utils' ) ) {
 		);
 
 		/**
+		 * Logging errors
+		 *
 		 * @param $msg
 		 * @param string $filename
-		 * Logging errors
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		static public function log( $msg, $filename = "error_log.txt" ) {
 			$log_file = "/tmp/rt_helpdesk" . $filename;
@@ -106,8 +113,11 @@ if ( !class_exists( 'Rt_HD_Utils' ) ) {
 		}
 
 		/**
+		 * Set accounts
+		 *
 		 * @param $rCount
-		 * todo:what this function does ?
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		static public function setAccounts( $rCount ) {
 			$log_file = RT_HD_PATH . "mailaccount.txt";
@@ -120,13 +130,13 @@ if ( !class_exists( 'Rt_HD_Utils' ) ) {
 		/**
 		 * Determine if a post exists based on title, content, and date
 		 *
-		 * @since 2.0.0
-		 *
 		 * @param string $title Post title
 		 * @param string $content Optional post content
 		 * @param string $date Optional post date
 		 *
 		 * @return int Post ID if post exists, 0 otherwise.
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		static public function post_exists( $title, $content = '', $date = '' ) {
 			global $wpdb;
@@ -161,8 +171,11 @@ if ( !class_exists( 'Rt_HD_Utils' ) ) {
 		}
 
 		/**
+		 * Get user
+		 *
 		 * @return mixed
-		 * get user
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		public static function get_hd_rtcamp_user() {
 			$users = rt_biz_get_module_users( RT_HD_TEXT_DOMAIN );
@@ -171,10 +184,13 @@ if ( !class_exists( 'Rt_HD_Utils' ) ) {
 		}
 
 		/**
+		 * Get mime type of file
+		 *
 		 * @param $file
 		 *
 		 * @return string
-		 * get mime type of file
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		public static function get_mime_type( $file ) {
 
@@ -189,10 +205,13 @@ if ( !class_exists( 'Rt_HD_Utils' ) ) {
 		}
 
 		/**
+		 * Get extension of file
+		 *
 		 * @param $file
 		 *
 		 * @return int|string
-		 * get extension of file
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		public static function get_extention( $file ) {
 

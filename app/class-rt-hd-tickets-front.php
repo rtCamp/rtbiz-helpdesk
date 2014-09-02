@@ -17,12 +17,16 @@ if ( !defined( 'ABSPATH' ) ) {
  * Description of Rt_HD_Tickets_Front
  *
  * @author udit
+ *
+ * @since rt-Helpdesk 0.1
  */
 if ( !class_exists( 'Rt_HD_Tickets_Front' ) ) {
 
 	/**
 	 * Class Rt_HD_Tickets_Front
 	 * Initialize the frontend
+	 *
+	 * @since rt-Helpdesk 0.1
 	 */
 	class Rt_HD_Tickets_Front {
 
@@ -35,10 +39,14 @@ if ( !class_exists( 'Rt_HD_Tickets_Front' ) ) {
 		}
 
 		/**
+		 *
+		 * Change the Title of frontend.
+		 *
 		 * @param $title
 		 *
 		 * @return string
-		 * as name suggest this function is used to change the name of frontend.
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function change_title( $title ) {
 			global $rthd_front_page_title;
@@ -50,10 +58,13 @@ if ( !class_exists( 'Rt_HD_Tickets_Front' ) ) {
 		}
 
 		/**
+		 * include template for ticket on frontend
+		 *
 		 * @param $template
 		 *
 		 * @return mixed
-		 * include template for ticket on frontend
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function template_include( $template ) {
 			global $wp_query;

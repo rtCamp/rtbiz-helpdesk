@@ -28,6 +28,9 @@ if ( !class_exists( 'Rt_HD_Woocommerce' ) ) {
 		}
 
 
+		/**
+		 *
+		 */
 		function hooks() {
 
 			// filter for add new action link on My Account page
@@ -43,6 +46,7 @@ if ( !class_exists( 'Rt_HD_Woocommerce' ) ) {
 
 		/**
 		 * Add new action link for Get Support in woocommerce order list
+		 *
 		 * @global type $redux_helpdesk_settings
 		 *
 		 * @param type $actions
@@ -63,7 +67,7 @@ if ( !class_exists( 'Rt_HD_Woocommerce' ) ) {
 		}
 
 
-		/*
+		/**
 		 * Shortcode callback for [rt_hd_support_form]
 		 */
 		function rt_hd_support_form_callback() {
@@ -174,6 +178,7 @@ if ( !class_exists( 'Rt_HD_Woocommerce' ) ) {
 
 		/**
 		 * Save new support ticket for specified product
+		 *
 		 * @global type $rt_hd_contacts
 		 */
 		function save() {
@@ -233,6 +238,14 @@ if ( !class_exists( 'Rt_HD_Woocommerce' ) ) {
 		}
 
 
+		/**
+		 * add attachment
+		 *
+		 * @param $file_handler
+		 * @param $post_id
+		 *
+		 * @return int|WP_Error
+		 */
 		static function insert_attachment( $file_handler, $post_id ) {
 			// check to make sure its a successful upload
 			if ( $_FILES[$file_handler]['error'] !== UPLOAD_ERR_OK ) {

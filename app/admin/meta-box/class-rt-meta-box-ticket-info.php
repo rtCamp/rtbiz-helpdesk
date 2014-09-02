@@ -14,6 +14,8 @@ if ( !defined( 'ABSPATH' ) ) {
 
 /**
  * Description of RT_HD_Admin_Meta_Boxes
+ *
+ * @since rt-Helpdesk 0.1
  */
 
 if ( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
@@ -21,6 +23,8 @@ if ( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 
 		/**
 		 * Output the metabox
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		public static function ui( $post ) {
 
@@ -167,6 +171,8 @@ if ( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 
 		/**
 		 * Save meta box data
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		public static function save( $post_id, $post ) {
 			global $rt_hd_admin_meta_boxes, $ticketModel, $rt_hd_closing_reason, $rt_hd_attributes, $rt_ticket_email_content;

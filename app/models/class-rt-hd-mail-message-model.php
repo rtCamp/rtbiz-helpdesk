@@ -17,6 +17,8 @@ if ( !defined( 'ABSPATH' ) ) {
  * model for wp_hd_mail_messageids table in database
  *
  * @author udit
+ *
+ * @since rt-Helpdesk 0.1
  */
 if ( !class_exists( 'Rt_HD_Mail_Message_Model' ) ) {
 	/**
@@ -33,6 +35,8 @@ if ( !class_exists( 'Rt_HD_Mail_Message_Model' ) ) {
 		 * @param $where
 		 *
 		 * @return array
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function get_message( $where ) {
 			return parent::get( $where );
@@ -44,6 +48,8 @@ if ( !class_exists( 'Rt_HD_Mail_Message_Model' ) ) {
 		 * @param $data
 		 *
 		 * @return int
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function add_message( $data ) {
 			return parent::insert( $data );

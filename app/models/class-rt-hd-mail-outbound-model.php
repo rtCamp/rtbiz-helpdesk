@@ -15,7 +15,10 @@ if ( !defined( 'ABSPATH' ) ) {
 /**
  * Description of RtHDMailOutboundModel
  * Model for table wp_hd_mail_outbound in database
+
  * @author udit
+ *
+ * @since rt-Helpdesk 0.1
  */
 if ( !class_exists( 'Rt_HD_Mail_Outbound_Model' ) ) {
 	/**
@@ -32,6 +35,8 @@ if ( !class_exists( 'Rt_HD_Mail_Outbound_Model' ) ) {
 		 * @param $where
 		 *
 		 * @return array
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function get_outbound_mail( $where ) {
 			return parent::get( $where );
@@ -44,6 +49,8 @@ if ( !class_exists( 'Rt_HD_Mail_Outbound_Model' ) ) {
 		 * @param $where
 		 *
 		 * @return mixed
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function update_outbound_mail( $data, $where ) {
 			return parent::update( $data, $where );
@@ -55,6 +62,8 @@ if ( !class_exists( 'Rt_HD_Mail_Outbound_Model' ) ) {
 		 * @param $data
 		 *
 		 * @return int
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function add_outbound_mail( $data ) {
 			return parent::insert( $data );

@@ -36,6 +36,7 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 
 		/**
 		 * Construct
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		public function __construct() {
@@ -44,6 +45,7 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 
 		/**
 		 * Initialise attributes
+		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		function init_attributes() {
@@ -66,13 +68,13 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 		}
 
 		/**
+		 * return different between to attributs
+		 *
 		 * @param $attr
 		 * @param $post_id
 		 * @param $newTicket
 		 *
 		 * @return string
-		 *
-		 * return different between to attributs
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
@@ -95,12 +97,13 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 		}
 
 		/**
+		 * returns different between taxonomy
+		 *
 		 * @param $attr
 		 * @param $post_id
 		 * @param $newTicket
 		 *
 		 * @return string
-		 * returns different between taxonomy
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
@@ -171,13 +174,13 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 		}
 
 		/**
+		 * returns difference between two meta
+		 *
 		 * @param $attr
 		 * @param $post_id
 		 * @param $newTicket
 		 *
 		 * @return string
-		 *
-		 * returns difference between two meta
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
@@ -194,11 +197,11 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 		}
 
 		/**
+		 * Saves attributes
+		 *
 		 * @param $attr
 		 * @param $post_id
 		 * @param $newTicket
-		 *
-		 * Saves attributes
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
@@ -220,11 +223,11 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 		}
 
 		/**
+		 * Render UI for attribute
+		 *
 		 * @param $attr
 		 * @param $post_id
 		 * @param bool $edit
-		 *
-		 * Render UI for attribute
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
@@ -243,11 +246,11 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 		}
 
 		/**
+		 * render ui for taxonomy
+		 *
 		 * @param $attr
 		 * @param $post_id
 		 * @param bool $edit
-		 *
-		 * render ui for taxonomy
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
@@ -344,11 +347,11 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 		}
 
 		/**
+		 * render ui for meta box
+		 *
 		 * @param $attr
 		 * @param $post_id
 		 * @param bool $edit
-		 *
-		 * render ui for meta box
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
@@ -505,10 +508,10 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 		}
 
 		/**
+		 * render ui for dropdown
+		 *
 		 * @param $attr
 		 * @param $options
-		 *
-		 * render ui for dropdown
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
@@ -524,10 +527,10 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 		}
 
 		/**
+		 * render ui for rating stars
+		 *
 		 * @param $attr
 		 * @param $options
-		 *
-		 * render ui for rating stars
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
@@ -546,10 +549,10 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 		}
 
 		/**
+		 *  render ui for checklist
+		 *
 		 * @param $attr
 		 * @param $options
-		 *
-		 * render ui for checklist
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
@@ -565,10 +568,10 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 		}
 
 		/**
+		 * render ui for date
+		 *
 		 * @param $attr
 		 * @param $value
-		 *
-		 * render ui for date
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
@@ -596,10 +599,10 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 		}
 
 		/**
+		 * render ui for date and time
+		 *
 		 * @param $attr
 		 * @param $value
-		 *
-		 * render ui for date and time
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
@@ -627,9 +630,10 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 		}
 
 		/**
+		 * render ui for currency
+		 *
 		 * @param $attr
 		 * @param $value
-		 * render ui for currency
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
@@ -643,10 +647,10 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 		}
 
 		/**
+		 * render ui for text
+		 *
 		 * @param $attr
 		 * @param $value
-		 *
-		 * render ui for text
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */

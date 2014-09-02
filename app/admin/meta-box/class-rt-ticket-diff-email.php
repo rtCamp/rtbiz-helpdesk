@@ -14,15 +14,20 @@ if ( !defined( 'ABSPATH' ) ) {
 
 /**
  * Description of RT_HD_Admin_Meta_Boxes
+ *
+ * @since rt-Helpdesk 0.1
  */
 
 if ( !class_exists( 'RT_Ticket_Diff_Email' ) ) {
 	class RT_Ticket_Diff_Email {
 
 		/**
+		 * it stores different of new data and old data on ticket update.
+		 *
 		 * @param $post_id
 		 * @param $post
-		 * it stores different of new data and old data on ticket update.
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		public static function store_old_post_data( $post_id, $post ) {
 			global $rt_hd_ticket_history_model, $rt_hd_closing_reason, $rt_hd_module, $rt_hd_attributes, $rt_ticket_email_content;
@@ -229,6 +234,8 @@ if ( !class_exists( 'RT_Ticket_Diff_Email' ) ) {
 		/**
 		 * Diff Email between new ticket data & old ticket data -- can be new function
 		 * Save meta box data
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		public static function save( $post_id, $post ) {
 			global $rt_ticket_email_content, $rt_hd_settings, $rt_hd_tickets, $rt_hd_module;

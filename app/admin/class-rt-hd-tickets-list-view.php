@@ -134,6 +134,7 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 
 		/**
 		 * Define the columns that are going to be used in the table
+		 *
 		 * @return array $columns, the array of columns to use with the table
 		 *
 		 * @since rt-Helpdesk 0.1
@@ -177,6 +178,7 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 
 		/**
 		 * Decide which columns to activate the sorting functionality on
+		 *
 		 * @return array $sortable, the array of columns that can be sorted by the user
 		 *
 		 * @since rt-Helpdesk 0.1
@@ -417,6 +419,7 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 
 		/**
 		 * Display the rows of records in the table
+		 *
 		 * @return string, echo the markup of the rows
 		 *
 		 * @since rt-Helpdesk 0.1

@@ -14,6 +14,8 @@ if ( !defined( 'ABSPATH' ) ) {
 
 /**
  * Description of RT_HD_Admin_Meta_Boxes
+ *
+ * @since rt-Helpdesk 0.1
  */
 
 if ( !class_exists( 'RT_Meta_Box_Subscribers ' ) ) {
@@ -21,6 +23,8 @@ if ( !class_exists( 'RT_Meta_Box_Subscribers ' ) ) {
 
 		/**
 		 * Output the metabox
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		public static function ui( $post ) {
 
@@ -114,6 +118,8 @@ if ( !class_exists( 'RT_Meta_Box_Subscribers ' ) ) {
 
 		/**
 		 * Save meta box data
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		public static function save( $post_id, $post ) {
 

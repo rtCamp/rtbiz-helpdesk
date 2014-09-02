@@ -16,8 +16,10 @@ if ( !defined( 'ABSPATH' ) ) {
 /**
  * Description of Rt_HD_Zend_Mail
  * This class deals with imap email related functions
- * todo: what this class does ?
+ *
  * @author udit
+ *
+ * @since rt-Helpdesk 0.1
  */
 use Zend\Mail\Message;
 use Zend\Mail\Storage\Imap as ImapStorage;
@@ -49,9 +51,13 @@ if ( !class_exists( 'Rt_HD_Zend_Mail' ) ) {
 		}
 
 		/**
+		 * UI for folders dropdown
+		 *
 		 * @param $folders
 		 * @param $value
-		 * UI for folders dropdown
+		 *
+		 * @since rt-Helpdesk 0.1
+		 *
 		 */
 		function render_folders_dropdown( $folders, $value ) {
 			while ( $folders->getChildren() ) {
@@ -69,12 +75,16 @@ if ( !class_exists( 'Rt_HD_Zend_Mail' ) ) {
 		}
 
 		/**
+		 * Render UI for folder checkbox
+		 *
 		 * @param $folders
 		 * @param $element_name
 		 * @param $values
 		 * @param $data_str
 		 * @param $inbox_folder
-		 * Render UI for folder checkbox
+		 *
+		 * @since rt-Helpdesk 0.1
+		 *
 		 */
 		function render_folders_checkbox( $folders, $element_name, $values, $data_str, $inbox_folder ) {
 			while ( $folders->getChildren() ) {
@@ -96,23 +106,29 @@ if ( !class_exists( 'Rt_HD_Zend_Mail' ) ) {
 		}
 
 		/**
+		 * concate string for auth
+		 *
 		 * @param $email
 		 * @param $accessToken
 		 *
 		 * @return string
-		 * concate string for auth
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function constructAuthString( $email, $accessToken ) {
 			return base64_encode( "user=$email\1auth=Bearer $accessToken\1\1" );
 		}
 
 		/**
+		 *  authentication imap email
+		 *
 		 * @param $imap
 		 * @param $email
 		 * @param $accessToken
 		 *
 		 * @return bool
-		 * authentication imap email
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function oauth2Authenticate( $imap, $email, $accessToken ) {
 			$this->authString   = $this->constructAuthString( $email, $accessToken );
@@ -151,6 +167,9 @@ if ( !class_exists( 'Rt_HD_Zend_Mail' ) ) {
 		 *
 		 * @return bool
 		 * try imap login if return true else false
+		 *
+		 * @since rt-Helpdesk 0.1
+		 *
 		 */
 		function tryImapLogin( $email, $accessToken, $email_type, $imap_server ) {
 			$this->imap = new Zend\Mail\Protocol\Imap();
@@ -180,6 +199,8 @@ if ( !class_exists( 'Rt_HD_Zend_Mail' ) ) {
 		}
 
 		/**
+		 * send email
+		 *
 		 * @param $fromemail
 		 * @param $accessToken
 		 * @param $email_type
@@ -193,7 +214,8 @@ if ( !class_exists( 'Rt_HD_Zend_Mail' ) ) {
 		 * @param string $mailtype
 		 *
 		 * @return bool|void
-		 * send email
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		public function sendemail( $fromemail, $accessToken, $email_type, $imap_server, $subject, $body, $toEmail, $ccEmail, $bccEmail, $attachemnts, $mailtype = 'notification' ) {
 			set_time_limit( 0 );
@@ -299,10 +321,14 @@ if ( !class_exists( 'Rt_HD_Zend_Mail' ) ) {
 		}
 
 		/**
+		 * decode message
+		 *
 		 * @param $part
 		 *
 		 * @return string
-		 * decode message
+		 *
+		 * @since rt-Helpdesk 0.1
+		 *
 		 */
 		function get_decoded_message( $part ) {
 			$txtBody = $part->getContent();
@@ -326,11 +352,13 @@ if ( !class_exists( 'Rt_HD_Zend_Mail' ) ) {
 		}
 
 		/**
+		 * get import thread request
+		 *
 		 * @param $email
 		 *
 		 * @return mixed
-		 *  get import thread request
-		 * todo:what this function does ?
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		public function get_import_thread_request( $email ) {
 			global $rt_hd_mail_thread_importer_model;
@@ -343,10 +371,13 @@ if ( !class_exists( 'Rt_HD_Zend_Mail' ) ) {
 		}
 
 		/**
+		 * update thread import status
+		 *
 		 * @param $id
 		 *
 		 * @return bool
-		 * todo:what this function does ?
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		public function update_thread_import_status( $id ) {
 			global $rt_hd_mail_thread_importer_model;
@@ -356,6 +387,8 @@ if ( !class_exists( 'Rt_HD_Zend_Mail' ) ) {
 		}
 
 		/**
+		 * Read Email
+		 *
 		 * @param $email
 		 * @param $accessToken
 		 * @param $email_type
@@ -367,7 +400,8 @@ if ( !class_exists( 'Rt_HD_Zend_Mail' ) ) {
 		 * @param bool $isThreadImporter
 		 *
 		 * @return bool
-		 * read email
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		public function reademail( $email, $accessToken, $email_type, $imap_server, $lastDate, $user_id, $isSystemEmail = false, $signature = "", $isThreadImporter = false ) {
 			set_time_limit( 0 );
@@ -499,12 +533,16 @@ if ( !class_exists( 'Rt_HD_Zend_Mail' ) ) {
 		}
 
 		/**
+		 * Get number by unique ID
+		 *
 		 * @param $UmailId
 		 * @param $storage
 		 *
 		 * @return int
+		 *
 		 * @throws Exception
-		 * todo:what this function does ?
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function getNumberByUniqueId( $UmailId, &$storage ) {
 			$cMail = $storage->protocol->requestAndResponse( "UID FETCH {$UmailId}:* (UID)", array() );
@@ -522,10 +560,12 @@ if ( !class_exists( 'Rt_HD_Zend_Mail' ) ) {
 		}
 
 		/**
+		 * Insert email message ID
 		 * @param $messageid
 		 *
 		 * @return bool
-		 * todo:what this function does ?
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		public function insert_mail_message_id( $messageid ) {
 			global $rt_hd_mail_message_model;
@@ -539,11 +579,15 @@ if ( !class_exists( 'Rt_HD_Zend_Mail' ) ) {
 		}
 
 		/**
+		 * Update sync
+		 *
 		 * @param $email
 		 * @param $replytime
 		 *
 		 * @return bool
-		 * todo: description?
+		 *
+		 * @since rt-Helpdesk 0.1
+		 *
 		 */
 		public function update_sync_meta( $email, $replytime ) {
 			global $rt_hd_mail_accounts_model;
@@ -553,11 +597,14 @@ if ( !class_exists( 'Rt_HD_Zend_Mail' ) ) {
 		}
 
 		/**
+		 * Update email UID
+		 *
 		 * @param $email
 		 * @param $uid
 		 *
 		 * @return bool
-		 * todo : description?
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		public function update_last_mail_uid( $email, $uid ) {
 			global $threadPostId;
@@ -574,13 +621,16 @@ if ( !class_exists( 'Rt_HD_Zend_Mail' ) ) {
 		}
 
 		/**
+		 * parse email message
+		 *
 		 * @param $email
 		 * @param $storage
 		 * @param $arrayMailIds
 		 * @param $hdUser
 		 * @param $user_id
 		 * @param $isSystemEmail
-		 * parse email message
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		public function rt_parse_email( $email, &$storage, &$arrayMailIds, &$hdUser, $user_id, $isSystemEmail ) {
 			$lastMessageId = "-1";
