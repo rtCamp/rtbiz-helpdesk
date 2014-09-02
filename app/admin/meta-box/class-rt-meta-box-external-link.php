@@ -43,7 +43,7 @@ if( !class_exists( 'RT_Meta_Box_External_Link' ) ) {
             <div class="row_group ">
                 <input type="text" id='add_ex_file_title' placeholder="Title"/>
                 <input type="text" id='add_ex_file_link' placeholder="Link"/>
-                <button id="add_new_ex_file" class="button" type="button" ><?php _e( 'Add' ); ?></button>
+                <button id="add_new_ex_file" class="button" type="button" ><?php _e( 'Add', RT_HD_TEXT_DOMAIN ); ?></button>
             </div><?php
         }
 

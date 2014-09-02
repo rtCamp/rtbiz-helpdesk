@@ -186,18 +186,8 @@ if (!class_exists('Rt_HD_Settings')) {
 			return $result;
 		}
 
-		public function update_mail_acl( $email, $token = NULL, $email_data = NULL,$user_ids = array(), $signature = '', $imap_server = NULL ) {
-			global $rt_hd_mail_acl_model, $rt_hd_mail_accounts_model;
-			$rt_hd_mail_acl_model->remove_acl( array( 'email' => $email ) );
-			foreach ( $user_ids as $uid ) {
-				$args = array(
-					'allow_user' => $uid,
-					'email' => $email,
-				);
-				$rt_hd_mail_acl_model->add_acl( $args );
-			}
-
-			$args = array( 'signature' => $signature );
+		public function update_mail_acl( $email, $token = NULL, $email_data = NULL, $imap_server = NULL ) {
+			global $rt_hd_mail_accounts_model;
 
 			if ( $email_data != NULL ) {
 				$args['email_data'] = $email_data;

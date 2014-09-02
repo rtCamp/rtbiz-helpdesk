@@ -134,7 +134,7 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 				return $columns;
 			}
 
-			$columns['country'] = __( 'Country' );
+			$columns['country'] = __( 'Country', RT_HD_TEXT_DOMAIN );
 
 			global $rt_hd_module;
 			if ( in_array( Rt_HD_Module::$post_type, array_keys( $rt_entity->enabled_post_types ) ) ) {

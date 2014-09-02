@@ -1674,7 +1674,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
                     
                   $tickets = get_posts( $args ); ?>
                       
-                  <h2><?php _e( 'Tikets', 'RT_HD_TEXT_DOMAIN' ); ?></h2>
+                  <h2><?php _e( 'Tikets', RT_HD_TEXT_DOMAIN ); ?></h2>
                   
                  <?php
                  printf( _n( 'One Ticket Found.', '%d Tickets Found.', count($tickets), 'my-RT_HD_TEXT_DOMAIN-domain' ), count($tickets) );

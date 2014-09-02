@@ -301,7 +301,7 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 
 			//How many to display per page?
 			//$perpage = 25;
-			$perpage = $this->get_items_per_page( rthd_post_type_name( $this->labels['name'] ).'_per_page', 10 );
+			$perpage = $this->get_items_per_page( Rt_HD_Module::$post_type . '_per_page', 10 );
 
 			//Which page is this?
 			$paged = ! empty( $_GET['paged'] ) ? esc_sql( $_GET['paged'] ) : '';

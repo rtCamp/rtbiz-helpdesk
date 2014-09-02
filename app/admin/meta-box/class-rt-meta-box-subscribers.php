@@ -79,7 +79,7 @@ if( !class_exists( 'RT_Meta_Box_Subscribers ' ) ) {
             }?>
             
             <div class="">
-                <span class="prefix" title="<?php _e( 'Subscribers' ); ?>"><label><strong><?php _e('Subscribers'); ?></strong></label></span>
+                <span class="prefix" title="<?php _e( 'Subscribers', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e('Subscribers', RT_HD_TEXT_DOMAIN); ?></strong></label></span>
                 <script>
                     var arr_subscriber_user =<?php echo json_encode($arrSubscriberUser); ?>;
                     var ac_auth_token = '<?php echo get_user_meta(get_current_user_id(), 'rthd_activecollab_token', true); ?>';
