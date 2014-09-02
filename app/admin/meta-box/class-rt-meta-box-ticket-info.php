@@ -202,7 +202,7 @@ if( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
             
             //closing date
             if ( isset( $newTicket['closing-date'] ) && !empty( $newTicket['closing-date'] ) ){
-                update_post_meta( $post_id, '_rtbiz_helpdesk_rtbiz_helpdesk_ticket_closing_date', $newTicket['closing-date'] );
+                update_post_meta( $post_id, '_rtbiz_helpdesk_ticket_closing_date', $newTicket['closing-date'] );
                 update_post_meta( $post_id, '_rtbiz_helpdesk_ticket_closed_by', get_current_user_id() );
                 $cd = new DateTime( $newTicket['closing-date'] );
                 $UTC = new DateTimeZone('UTC');

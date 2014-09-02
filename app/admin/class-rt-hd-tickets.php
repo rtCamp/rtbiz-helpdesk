@@ -76,7 +76,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 				'post_author' => $userid,
 				'post_content' => $body,
 				'post_date' => $post_date,
-				'post_status' => 'new',
+				'post_status' => 'unanswered',
 				'post_title' => $title,
 				'post_type' => $post_type,
 				'post_date_gmt' => $post_date_gmt,
@@ -170,11 +170,15 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 
 				$outbound_emails = ( isset( $settings['outbound_emails'] ) && ! empty( $settings['outbound_emails'] ) ) ? explode( ',', $settings['outbound_emails'] ) : '' ;
 				$notify_emails = array();
-				foreach ( $outbound_emails as $email ) {
-					if ( is_email( $email ) ) {
-						$notify_emails[] = array( 'email' => $email, 'name' => $rt_hd_module->name.' Outbound Email' );
-					}
-				}
+                                
+                                if ( isset($outbound_emails) && !empty($outbound_emails) ) {
+                                    foreach ( $outbound_emails as $email ) {
+                                         if ( is_email( $email ) ) {
+                                                 $notify_emails[] = array( 'email' => $email, 'name' => $rt_hd_module->name.' Outbound Email' );
+                                         }
+                                    } 
+                                }
+				
 
 				$rt_hd_settings->insert_new_send_email($systemEmail, $title, $body, array(), array(), $notify_emails, $uploaded, $post_id, "comment");
 
