@@ -14,19 +14,39 @@ if (!defined('ABSPATH'))
 
 /**
  * Description of Rt_HD_Accounts
- *
+ * Handel backend accounts
  * @author udit
+ *
+ * @since rt-Helpdesk 0.1
  */
 if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 
-	class Rt_HD_Accounts {
+    /**
+     * Class Rt_HD_Accounts
+     *
+     * @since rt-Helpdesk 0.1
+     */
+    class Rt_HD_Accounts {
 
-		public $email_key = 'account_email';
-		function __construct() {
+        /**
+         * @var string
+         */
+        public $email_key = 'account_email';
+
+        /**
+         *  call to set hooks
+         * @since rt-Helpdesk 0.1
+         */
+        function __construct() {
 			$this->hooks();
 		}
 
-		function hooks() {
+        /**
+         * set hooks
+         *
+         * @since rt-Helpdesk 0.1
+         */
+        function hooks() {
 			add_filter( 'rt_entity_columns', array( $this, 'accounts_columns' ), 10, 2 );
 			add_action( 'rt_entity_manage_columns', array( $this, 'manage_accounts_columns' ), 10, 3 );
 
@@ -35,7 +55,12 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 			add_action( 'wp_ajax_rthd_get_term_by_key', array( $this, 'get_term_by_key_ajax' ) );
 		}
 
-		public function account_autocomplete_ajax() {
+        /**
+         * provides autocomplete for ajax call
+         *
+         * @since rt-Helpdesk 0.1
+         */
+        public function account_autocomplete_ajax() {
 			if (!isset($_POST["query"])) {
 				wp_die("Opss!! Invalid request");
 			}
@@ -56,7 +81,12 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 			die(0);
 		}
 
-		public function get_term_by_key_ajax() {
+        /**
+         *  get terms by key and returns user and profile image of matching key.
+         *
+         * @since rt-Helpdesk 0.1
+         */
+        public function get_term_by_key_ajax() {
 			if ( ! isset( $_POST['account_id'] ) ) {
 				wp_die( 'Opss!! Invalid request' );
 			}
@@ -77,8 +107,13 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 			die(0);
 		}
 
-		public function add_new_account_ajax() {
-
+        /**
+         * create new account by ajax call
+         *
+         * @since rt-Helpdesk 0.1
+         */
+        public function add_new_account_ajax() {
+			var_dump("hello");
 			$returnArray = array();
 			$returnArray['status'] = false;
 			$accountData = $_POST['data'];
@@ -127,7 +162,17 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 			die( 0 );
 		}
 
-		function accounts_columns( $columns, $rt_entity ) {
+        /**
+         * to add columns to accounts
+         *
+         * @param $columns
+         * @param $rt_entity
+         *
+         * @return mixed
+         * 
+         * @since rt-Helpdesk 0.1  
+         */
+        function accounts_columns( $columns, $rt_entity ) {
 
 			global $rt_organization;
 			if ( $rt_entity->post_type != $rt_organization->post_type ) {
@@ -144,7 +189,16 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 			return $columns;
 		}
 
-		function manage_accounts_columns( $column, $post_id, $rt_entity ) {
+        /**
+         * manage account columns 
+         *
+         * @param $column
+         * @param $post_id
+         * @param $rt_entity
+         * 
+         * @since rt-Helpdesk 0.1  
+         */
+        function manage_accounts_columns( $column, $post_id, $rt_entity ) {
 
 			global $rt_organization;
 			if ( $rt_entity->post_type != $rt_organization->post_type ) {
@@ -167,7 +221,16 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 			}
 		}
 
-		function accounts_diff_on_ticket( $post_id, $newTicket ) {
+        /**
+         * get diff of account 
+         * 
+         * @param $post_id
+         * @param $newTicket
+         * @return string
+         * 
+         * @since rt-Helpdesk 0.1 
+         */
+        function accounts_diff_on_ticket( $post_id, $newTicket ) {
 
 			$diffHTML = '';
 			if ( !isset( $newTicket['accounts'] ) ) {
@@ -194,7 +257,15 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 			return $diffHTML;
 		}
 
-		function accounts_save_on_ticket( $post_id, $newTicket ) {
+        /**
+         * save account 
+         * 
+         * @param $post_id
+         * @param $newTicket
+         * 
+         * @since rt-Helpdesk 0.1  
+         */
+        function accounts_save_on_ticket( $post_id, $newTicket ) {
 			if ( !isset( $newTicket['accounts'] ) ) {
 				$newTicket['accounts'] = array();
 			}

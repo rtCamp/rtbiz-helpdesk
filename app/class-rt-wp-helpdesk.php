@@ -13,15 +13,26 @@ if ( ! defined( 'ABSPATH' ) )
 
 /**
  * Description of RT_WP_Helpdesk
- *
+ * Main class that initialize the rt-helpdesk plugin.
  * @author udit
  */
 if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 
+	/**
+	 * Class RT_WP_Helpdesk
+	 * Main class that initialize the rt-helpdesk plugin.
+	 */
 	class RT_WP_Helpdesk {
 
+		/**
+		 * @var $templateURL is used to set template's root path
+		 * todo: Ask udit
+		 */
 		public $templateURL;
 
+		/**
+		 * Constructor of RT_WP_Helpdesk checks dependency and initialize UI and set all hooks for this class
+		 */
 		public function __construct() {
 
 			if ( ! $this->check_rt_biz_dependecy() ) {
@@ -38,6 +49,13 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			add_action( 'wp_enqueue_scripts', array( $this, 'loadScripts' ) );
 		}
 
+		/**
+		 * Admin_init sets admin UI and functionality,
+		 * initialize the database,
+		 * set all hooks for admins,
+		 * set hook for gravity forms
+		 *
+		 */
 		function admin_init() {
 			$this->templateURL = apply_filters( 'rthd_template_url', 'rthelpdesk/' );
 
@@ -50,6 +68,10 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			$rt_hd_gravity_form_importer->hd_importer_ajax_hooks();
 		}
 
+		/**
+		 * check for rt biz dependency and if it does not find any single dependency then it returns false
+		 * @return bool
+		 */
 		function check_rt_biz_dependecy() {
 
 			$flag = true;
@@ -97,6 +119,9 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			return $flag;
 		}
 
+		/**
+		 * if rtbiz plugin is not installed or activated it gives notification to user to do so.
+		 */
 		function rt_biz_admin_notice() {
 			?>
 			<div class="updated">
@@ -105,6 +130,9 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 		<?php
 		}
 
+		/**
+		 * Initialize the redux for setting UI and functionality.
+		 */
 		function init_redux() {
 			if ( ! class_exists( 'ReduxFramework' ) && file_exists( dirname( __FILE__ ) . '/vendor/redux/ReduxCore/framework.php' ) ) {
 				require_once( dirname( __FILE__ ) . '/vendor/redux/ReduxCore/framework.php' );
@@ -114,6 +142,11 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			}
 		}
 
+		/**
+		 * Initialize the global variables,
+		 * Register taxonomies
+		 * Register Hooks
+		 */
 		function init_globals() {
 			global $rt_hd_attributes, $rt_hd_tickets, $rt_hd_acl,
 			$rt_hd_gravity_form_importer, $rt_hd_settings, $rt_hd_logs,
@@ -167,23 +200,31 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			$rt_hd_admin_meta_boxes = new RT_HD_Admin_Meta_Boxes( );
 		}
 
+		/**
+		 *  Initialize the frontend
+		 */
 		function init() {
 			global $rt_hd_tickets_front;
 			$rt_hd_tickets_front = new Rt_HD_Tickets_Front();
 		}
 
+		/**
+		 * update_database() Setup database from schema
+		 */
 		function update_database() {
 			$updateDB = new RT_DB_Update( trailingslashit( RT_HD_PATH ) . 'index.php', trailingslashit( RT_HD_PATH_SCHEMA ) );
 			$updateDB->do_upgrade();
 		}
 
+		/**
+		 * Register all js
+		 */
 		function loadScripts() {
 			global $wp_query;
 
 			if ( ! isset( $wp_query->query_vars[ 'name' ] ) ) {
 				return;
 			}
-
 			$name = $wp_query->query_vars[ 'name' ];
 
 			$post_type = rthd_post_type_name( $name );
@@ -264,6 +305,9 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			$this->localize_scripts();
 		}
 
+		/**
+		 *  This is functions passes the value to java script
+		 */
 		function localize_scripts() {
 
 			$unique_id = $_REQUEST[ 'rthd_unique_id' ];

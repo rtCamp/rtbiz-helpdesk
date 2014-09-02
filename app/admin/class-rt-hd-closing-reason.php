@@ -16,6 +16,8 @@ if (!defined('ABSPATH'))
  * Description of Rt_HD_Closing_Reason
  *
  * @author udit
+ *
+ * @since rt-Helpdesk 0.1
  */
 if ( !class_exists( 'Rt_HD_Closing_Reason' ) ) {
 	class Rt_HD_Closing_Reason {
@@ -25,6 +27,8 @@ if ( !class_exists( 'Rt_HD_Closing_Reason' ) ) {
 
 		/**
 		 * Create taxonomy for accounts
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function closing_reason( $post_type ) {
 			$labels = array(
@@ -66,6 +70,8 @@ if ( !class_exists( 'Rt_HD_Closing_Reason' ) ) {
 
 		/**
 		 * Closing Reason Email Diff
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function closing_reason_diff( $post_id, $newTicket ) {
 
@@ -98,6 +104,8 @@ if ( !class_exists( 'Rt_HD_Closing_Reason' ) ) {
 
 		/**
 		 * Render Closing Reasons - DOM Element
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function get_closing_reasons( $post_id, $user_edit = true ) {
 			global $rthd_form;

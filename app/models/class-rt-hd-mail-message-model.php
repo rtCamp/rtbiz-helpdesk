@@ -13,19 +13,37 @@ if (!defined('ABSPATH'))
 
 /**
  * Description of RtHDMailMessageModel
+ * model for wp_hd_mail_messageids table in database
  *
  * @author udit
  */
 if ( !class_exists( 'Rt_HD_Mail_Message_Model' ) ) {
+	/**
+	 * Class Rt_HD_Mail_Message_Model
+	 */
 	class Rt_HD_Mail_Message_Model extends RT_DB_Model {
 		public function __construct() {
 			parent::__construct( 'wp_hd_mail_messageids' );
 		}
 
+		/**
+		 * get mail message
+		 *
+		 * @param $where
+		 *
+		 * @return array
+		 */
 		function get_message( $where ) {
 			return parent::get( $where );
 		}
 
+		/**
+		 * add mail message
+		 *
+		 * @param $data
+		 *
+		 * @return int
+		 */
 		function add_message( $data ) {
 			return parent::insert( $data );
 		}

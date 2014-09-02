@@ -17,8 +17,13 @@ exit;
 
 if( !class_exists( 'RT_Ticket_Diff_Email' ) ) {
     class RT_Ticket_Diff_Email {
-        
-        public static function store_old_post_data( $post_id, $post ){
+
+		/**
+		 * @param $post_id
+		 * @param $post
+		 * it stores different of new data and old data on ticket update.
+		 */
+		public static function store_old_post_data( $post_id, $post ){
             global $rt_hd_ticket_history_model, $rt_hd_closing_reason, $rt_hd_module, $rt_hd_attributes, $rt_ticket_email_content;
             
             // $post_id and $post are required

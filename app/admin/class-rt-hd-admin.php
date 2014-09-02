@@ -2,7 +2,7 @@
 /**
  * Don't load this file directly!
  */
-if (!defined('ABSPATH'))
+if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 /*
@@ -13,7 +13,7 @@ if (!defined('ABSPATH'))
 
 /**
  * Description of Rt_HD_Admin
- *
+ * Rt_HD_Admin is main class for admin backend and UI.
  * @author udit
  */
 if (!class_exists('Rt_HD_Admin')) {
@@ -62,6 +62,11 @@ if (!class_exists('Rt_HD_Admin')) {
 			}
 		}
 
+		/**
+		 * Register CSS and JS
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
 		function load_styles_scripts()
 		{
 			global $post, $rt_hd_module, $pagenow;
@@ -141,6 +146,11 @@ if (!class_exists('Rt_HD_Admin')) {
 			$this->localize_scripts();
 		}
 
+		/**
+		 * Passes data to JS
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
 		function localize_scripts()
 		{
 			$pagearray = array('rthd-add-module', 'rthd-gravity-mapper', 'rthd-add-' . Rt_HD_Module::$post_type);
@@ -157,6 +167,10 @@ if (!class_exists('Rt_HD_Admin')) {
 			}
 		}
 
+		/**
+		 * Hooks
+		 * @since rt-Helpdesk 0.1
+		 */
 		function hooks()
 		{
 			add_action('admin_enqueue_scripts', array($this, 'load_styles_scripts'));
@@ -166,11 +180,24 @@ if (!class_exists('Rt_HD_Admin')) {
 			add_filter('pre_insert_term', array($this, 'remove_wocommerce_actions'), 10, 2);
 		}
 
+		/**
+		 *  Register menu entry to WP
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
 		function register_menu()
 		{
 			add_submenu_page('edit.php?post_type=' . Rt_HD_Module::$post_type, __('Settings'), __('Settings'), $this->author_cap, 'rthd-settings', array($this, 'settings_ui'));
 		}
 
+		/**
+		 * @param $term
+		 * @param $taxonomy
+		 *
+		 * @return mixed
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
 		function remove_wocommerce_actions($term, $taxonomy)
 		{
 			$attrs = rthd_get_all_attributes();
@@ -180,19 +207,29 @@ if (!class_exists('Rt_HD_Admin')) {
 					$attr_list[] = $attr->attribute_name;
 				}
 			}
-			if (in_array($taxonomy, $attr_list)) {
-				remove_action("create_term", 'woocommerce_create_term', 5, 3);
-				remove_action("delete_term", 'woocommerce_delete_term', 5, 3);
+			if ( in_array( $taxonomy, $attr_list ) ) {
+				remove_action( "create_term", 'woocommerce_create_term', 5, 3 );
+				remove_action( "delete_term", 'woocommerce_delete_term', 5, 3 );
 			}
 			return $term;
 		}
 
+		/**
+		 * UI for user settings
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
 		function user_settings_ui()
 		{
 			global $rt_hd_user_settings;
 			$rt_hd_user_settings->ui();
 		}
 
+		/**
+		 * Setting UI
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
 		function settings_ui()
 		{
 			?>
@@ -263,22 +300,26 @@ if (!class_exists('Rt_HD_Admin')) {
 
 		}
 
-		function settings_ui_tabs()
-		{
+		/**
+		 * Tabs for Setting UI
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
+		function settings_ui_tabs(){
+                    
+                    $current=isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : $this->defualt_tab;
+                    echo '<h2 class="nav-tab-wrapper">';
+                    foreach ($this->hd_settings_tabs as $tab => $name) {
+                        if (current_user_can( $name['capability'] ) ) {
+                            
+                            $class = ( $tab == $current ) ? ' nav-tab-active' : '';
+                            echo '<a class="nav-tab' . $class . '" href="?post_type=rt_ticket&page=rthd-settings&tab=' . $name['menu_slug'] . '">' . $name['menu_title'] . '</a>';
 
-			$current = isset($_GET['tab']) ? $_GET['tab'] : $this->defualt_tab;
-			echo '<h2 class="nav-tab-wrapper">';
-			foreach ($this->hd_settings_tabs as $tab => $name) {
-				if (current_user_can($name['capability'])) {
-
-					$class = ($tab == $current) ? ' nav-tab-active' : '';
-					echo '<a class="nav-tab' . $class . '" href="?post_type=rt_ticket&page=rthd-settings&tab=' . $name['menu_slug'] . '">' . $name['menu_title'] . '</a>';
-
-				}
-
-			}
-			echo '</h2>';
-
-		}
-	}
+                         }
+                        
+                        }
+                    echo '</h2>';
+                    
+                }
+            }
 }

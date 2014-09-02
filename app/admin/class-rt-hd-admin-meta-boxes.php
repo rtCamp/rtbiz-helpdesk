@@ -13,6 +13,8 @@ if ( ! defined( 'ABSPATH' ) )
 
 /**
  * Description of RT_HD_Admin_Meta_Boxes
+ *
+ * @since rt-Helpdesk 0.1
  */
 
 if( !class_exists( 'RT_HD_Admin_Meta_Boxes' ) ) {
@@ -22,6 +24,8 @@ if( !class_exists( 'RT_HD_Admin_Meta_Boxes' ) ) {
 
         /**
          * Constructor
+         *
+         * @since rt-Helpdesk 0.1
          */
         public function __construct() {
             add_action( 'add_meta_boxes', array( $this, 'remove_meta_boxes' ), 10 );
@@ -40,6 +44,8 @@ if( !class_exists( 'RT_HD_Admin_Meta_Boxes' ) ) {
 
         /**
          * Remove bloat
+         *
+         * @since rt-Helpdesk 0.1
          */
         public function remove_meta_boxes() {
             global $rt_hd_module;
@@ -53,13 +59,17 @@ if( !class_exists( 'RT_HD_Admin_Meta_Boxes' ) ) {
 
         /**
          * Rename core meta boxes
+         *
+         * @since rt-Helpdesk 0.1
          */
         public function rename_meta_boxes() {
            
         }
-        
-                /**
+
+	    /**
          * Add rtbiz Meta boxes
+	     *
+	     * @since rt-Helpdesk 0.1
          */
         public function add_meta_boxes() {
             global $rt_hd_module;
@@ -69,8 +79,16 @@ if( !class_exists( 'RT_HD_Admin_Meta_Boxes' ) ) {
             add_meta_box( 'rt-hd-attachment', __( 'Attachment', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Attachment::ui', Rt_HD_Module::$post_type, 'side', 'default' );
             add_meta_box( 'rt-hd-external-link', __( 'External Link', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_External_Link::ui', Rt_HD_Module::$post_type, 'side', 'default' );
         }
-        
-        public function save_meta_boxes( $post_id, $post ) {
+
+	    /**
+	     * save meta boxes
+	     *
+	     * @param $post_id
+	     * @param $post
+	     *
+	     * @since rt-Helpdesk 0.1
+	     */
+	    public function save_meta_boxes( $post_id, $post ) {
             global $rt_hd_module;
             // $post_id and $post are required
             if ( empty( $post_id ) || empty( $post ) ) {
