@@ -247,12 +247,12 @@ if ( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 			//closing_reason
 			if ( isset( $newTicket['closing_reason'] ) && !empty( $newTicket['closing_reason'] ) ) {
 				$rt_hd_closing_reason->save_closing_reason( $post_id, $newTicket );
-				$attr_name = str_replace( '-', '_', rthd_attribute_taxonomy_name( 'closing_reason' ) );
+				$attr_name = str_replace( '-', '_', rthd_attribute_taxonomy_name( 'closing-reason' ) );
 				$attr_val  = ( !isset( $newTicket['closing_reason'] ) ) ? array() : $newTicket['closing_reason'];
 				$data      = array_merge( $data, array(
 					$attr_name => ( is_array( $attr_val ) ) ? implode( ',', $attr_val ) : $attr_val,
 				) );
-				$terms     = wp_get_post_terms( $post_id, rthd_attribute_taxonomy_name( 'closing_reason' ) );
+				$terms     = wp_get_post_terms( $post_id, rthd_attribute_taxonomy_name( 'closing-reason' ) );
 				$message   = '';
 				foreach ( $terms as $term ) {
 					if ( empty( $message ) ) {

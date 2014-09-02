@@ -190,6 +190,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
             add_action( 'save_post_'.self::$post_type, array( $this,  'after_ticket_updated' ) );
             add_action( 'untrashed_post', array( $this,  'after_restore_trashed_ticket' ) );
             add_action( 'before_delete_post', array( $this,  'before_ticket_deleted' ) );
+            add_action( 'wp_trash_post', array( $this,  'before_ticket_trashed' ) );
 
         }
 
@@ -440,6 +441,19 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 
             if ( $ticket->post_type == self::$post_type ) {
 
+                global $rt_hd_ticket_history_model;
+
+                $rt_hd_ticket_history_model->insert( array(
+                        'ticket_id'   => $post_id,
+                        'type'        => 'post_status',
+                        'old_value'   => 'trash',
+                        'new_value'   => 'unanswered',
+                        'message'     => NULL,
+                        'update_time' => current_time( 'mysql' ),
+                        'updated_by'  => get_current_user_id(),
+                    )
+                );
+
                 $ticket->post_status = 'unanswered';
                 wp_update_post($ticket);
 
@@ -462,7 +476,26 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 
             }
 
+        }
 
+        function before_ticket_trashed( $post_id ){
+
+            if ( get_post_type( $post_id ) == self::$post_type ) {
+
+                global $rt_hd_ticket_history_model;
+
+                $rt_hd_ticket_history_model->insert( array(
+                        'ticket_id'   => $post_id,
+                        'type'        => 'post_status',
+                        'old_value'   => get_post_status( $post_id ),
+                        'new_value'   => 'trash',
+                        'message'     => NULL,
+                        'update_time' => current_time( 'mysql' ),
+                        'updated_by'  => get_current_user_id(),
+                    )
+                );
+
+            }
         }
 
 

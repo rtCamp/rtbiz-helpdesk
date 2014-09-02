@@ -392,7 +392,7 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 			if ( isset( $this->settings['attach_accounts'] ) && $this->settings['attach_accounts'] == 'yes' && isset( $_GET[$account_name] ) ) {
 				$taxonomies[$account_name] = $_GET[$account_name];
 			}
-			$closing_reason_name = rthd_attribute_taxonomy_name( 'closing_reason' );
+			$closing_reason_name = rthd_attribute_taxonomy_name( 'closing-reason' );
 			$key                 = str_replace( '-', '_', $closing_reason_name );
 			if ( isset( $_GET[$closing_reason_name] ) ) {
 				$term             = get_term_by( 'slug', $_GET[$closing_reason_name], $closing_reason_name );
@@ -540,9 +540,9 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 											'page'      => 'rthd-all-' . $this->post_type
 										), admin_url( 'edit.php' ) );
 									foreach ( $reasons as $reason ) {
-										$term = get_term_by( 'id', $reason, rthd_attribute_taxonomy_name( 'closing_reason' ) );
+										$term = get_term_by( 'id', $reason, rthd_attribute_taxonomy_name( 'closing-reason' ) );
 										if ( !empty( $term ) ) {
-											$url       = add_query_arg( rthd_attribute_taxonomy_name( 'closing_reason' ), $term->slug, $base_url );
+											$url       = add_query_arg( rthd_attribute_taxonomy_name( 'closing-reason' ), $term->slug, $base_url );
 											$termArr[] = '<a href="' . $url . '">' . $term->name . '</a>';
 										}
 									}
