@@ -26,7 +26,7 @@ $user_edit       = false;
 
 
 	$post             = get_post( $post_id );
-	$ticket_unique_id = get_post_meta( $post_id, '_rtbiz_helpdesk_unique_id', true );
+	$ticket_unique_id = get_post_meta( $post_id, '_rtbiz_hd_unique_id', true );
 
 	$create = new DateTime( $post->post_date );
 

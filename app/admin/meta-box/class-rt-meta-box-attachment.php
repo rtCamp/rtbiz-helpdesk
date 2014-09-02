@@ -80,7 +80,7 @@ if ( !class_exists( 'RT_Meta_Box_Attachment' ) ) {
 						$file     = get_post( $attachment );
 						$filepath = get_attached_file( $attachment );
 
-						$post_attachment_hashes = get_post_meta( $post_id, '_rtbiz_helpdesk_attachment_hash' );
+						$post_attachment_hashes = get_post_meta( $post_id, '_rtbiz_hd_attachment_hash' );
 						if ( !empty( $post_attachment_hashes ) && in_array( md5_file( $filepath ), $post_attachment_hashes ) ) {
 							continue;
 						}
@@ -96,12 +96,12 @@ if ( !class_exists( 'RT_Meta_Box_Attachment' ) ) {
 							);
 							wp_insert_attachment( $args, $file->guid, $post_id );
 
-							add_post_meta( $post_id, '_rtbiz_helpdesk_attachment_hash', md5_file( $filepath ) );
+							add_post_meta( $post_id, '_rtbiz_hd_attachment_hash', md5_file( $filepath ) );
 
 						} else {
 							wp_update_post( array( 'ID' => $attachment, 'post_parent' => $post_id ) );
 							$file = get_attached_file( $attachment );
-							add_post_meta( $post_id, '_rtbiz_helpdesk_attachment_hash', md5_file( $filepath ) );
+							add_post_meta( $post_id, '_rtbiz_hd_attachment_hash', md5_file( $filepath ) );
 						}
 					}
 				}
@@ -110,14 +110,14 @@ if ( !class_exists( 'RT_Meta_Box_Attachment' ) ) {
 					if ( !in_array( $attachment, $new_attachments ) ) {
 						wp_update_post( array( 'ID' => $attachment, 'post_parent' => '0' ) );
 						$filepath = get_attached_file( $attachment );
-						delete_post_meta( $post_id, '_rtbiz_helpdesk_attachment_hash', md5_file( $filepath ) );
+						delete_post_meta( $post_id, '_rtbiz_hd_attachment_hash', md5_file( $filepath ) );
 					}
 				}
 			} else {
 				foreach ( $old_attachments as $attachment ) {
 					wp_update_post( array( 'ID' => $attachment, 'post_parent' => '0' ) );
 					$filepath = get_attached_file( $attachment );
-					delete_post_meta( $post_id, '_rtbiz_helpdesk_attachment_hash', md5_file( $filepath ) );
+					delete_post_meta( $post_id, '_rtbiz_hd_attachment_hash', md5_file( $filepath ) );
 				}
 			}
 		}

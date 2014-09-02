@@ -31,7 +31,7 @@ if ( !class_exists( 'RT_Meta_Box_External_Link' ) ) {
 			$post_type = $post->post_type;?>
 			<div id="external-files-container"><?php
 				if ( isset( $post->ID ) ) {
-					$ticket_ex_files = get_post_meta( $post->ID, '_rtbiz_helpdesk_external_file' );
+					$ticket_ex_files = get_post_meta( $post->ID, '_rtbiz_hd_external_file' );
 					$count           = 1;
 					foreach ( $ticket_ex_files as $ex_file ) {
 						$ex_file = (array) json_decode( $ex_file );?>
@@ -62,12 +62,12 @@ if ( !class_exists( 'RT_Meta_Box_External_Link' ) ) {
 		public static function save( $post_id, $post ) {
 
 			// External File Links
-			$old_ex_files = get_post_meta( $post_id, '_rtbiz_helpdesk_external_file' );
+			$old_ex_files = get_post_meta( $post_id, '_rtbiz_hd_external_file' );
 			$new_ex_files = array();
 			if ( isset( $_POST['ticket_ex_files'] ) ) {
 				$new_ex_files = $_POST['ticket_ex_files'];
 
-				delete_post_meta( $post_id, '_rtbiz_helpdesk_external_file' );
+				delete_post_meta( $post_id, '_rtbiz_hd_external_file' );
 
 				foreach ( $new_ex_files as $ex_file ) {
 					if ( empty( $ex_file['link'] ) ) {
@@ -76,10 +76,10 @@ if ( !class_exists( 'RT_Meta_Box_External_Link' ) ) {
 					if ( empty( $ex_file['title'] ) ) {
 						$ex_file['title'] = $ex_file['link'];
 					}
-					add_post_meta( $post_id, '_rtbiz_helpdesk_external_file', json_encode( $ex_file ) );
+					add_post_meta( $post_id, '_rtbiz_hd_external_file', json_encode( $ex_file ) );
 				}
 			} else {
-				delete_post_meta( $post_id, '_rtbiz_helpdesk_external_file' );
+				delete_post_meta( $post_id, '_rtbiz_hd_external_file' );
 			}
 		}
 	}

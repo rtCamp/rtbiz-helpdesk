@@ -62,7 +62,7 @@ if ( !class_exists( 'RT_Meta_Box_Subscribers ' ) ) {
 				$all_hd_participants = array_filter( array_unique( $all_hd_participants ) );
 			}
 
-			$get_assigned_to = get_post_meta( $post->ID, "_rtbiz_helpdesk_subscribe_to", true );
+			$get_assigned_to = get_post_meta( $post->ID, "_rtbiz_hd_subscribe_to", true );
 
 			$results             = Rt_HD_Utils::get_hd_rtcamp_user();
 			$arrCommentReply     = array();
@@ -132,7 +132,7 @@ if ( !class_exists( 'RT_Meta_Box_Subscribers ' ) ) {
 					$_POST['subscribe_to'][] = get_current_user_id();
 				}
 			}
-			update_post_meta( $post_id, '_rtbiz_helpdesk_subscribe_to', $_POST['subscribe_to'] );
+			update_post_meta( $post_id, '_rtbiz_hd_subscribe_to', $_POST['subscribe_to'] );
 		}
 	}
 }

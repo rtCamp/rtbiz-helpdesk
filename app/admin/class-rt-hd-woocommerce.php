@@ -200,7 +200,7 @@ if ( !class_exists( 'Rt_HD_Woocommerce' ) ) {
 				$data['email']
 			);
 
-			update_post_meta( $rt_hd_tickets_id, '_rtbiz_helpdesk_woocommerce_product_id', $data['product_id'] );
+			update_post_meta( $rt_hd_tickets_id, '_rtbiz_hd_woocommerce_product_id', $data['product_id'] );
 
 			if ( $_FILES ) {
 
@@ -225,7 +225,7 @@ if ( !class_exists( 'Rt_HD_Woocommerce' ) ) {
 			}
 
 			if ( isset( $_GET['order_id'] ) ) {
-				update_post_meta( $rt_hd_tickets_id, '_rtbiz_helpdesk__woocommerce_order_id', $_GET['order_id'] );
+				update_post_meta( $rt_hd_tickets_id, '_rtbiz_hd__woocommerce_order_id', $_GET['order_id'] );
 			}
 
 		}

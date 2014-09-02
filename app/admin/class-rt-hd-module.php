@@ -266,7 +266,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 
 				case 'rthd_closing_date' :
 
-					echo get_post_meta( $post->ID, '_rtbiz_helpdesk_closing_date', true );
+					echo get_post_meta( $post->ID, '_rtbiz_hd_closing_date', true );
 
 					break;
 
@@ -285,7 +285,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 
 				case 'rthd_created_by' :
 
-					$user_id   = get_post_meta( $post->ID, '_rtbiz_helpdesk_created_by', true );
+					$user_id   = get_post_meta( $post->ID, '_rtbiz_hd_created_by', true );
 					$user_info = get_userdata( $user_id );
 					$url       = esc_url( add_query_arg( array(
 								'post_type'  => self::$post_type,
@@ -298,7 +298,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 
 				case 'rthd_updated_by' :
 
-					$user_id   = get_post_meta( $post->ID, '_rtbiz_helpdesk_updated_by', true );
+					$user_id   = get_post_meta( $post->ID, '_rtbiz_hd_updated_by', true );
 					$user_info = get_userdata( $user_id );
 
 					$url = esc_url( add_query_arg( array(
@@ -315,7 +315,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 
 					if ( $post->post_status != 'unanswered' ) {
 
-						$user_id   = get_post_meta( $post->ID, '_rtbiz_helpdesk_closed_by', true );
+						$user_id   = get_post_meta( $post->ID, '_rtbiz_hd_closed_by', true );
 						$user_info = get_userdata( $user_id );
 						echo ( $user_info ) ? $user_info->user_login : '';
 
@@ -398,7 +398,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 					$query->set( 'meta_query',
 						array(
 							array(
-								'key'   => '_rtbiz_helpdesk_created_by',
+								'key'   => '_rtbiz_hd_created_by',
 								'value' => $_GET['created_by']
 							)
 						)
@@ -411,7 +411,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 					$query->set( 'meta_query',
 						array(
 							array(
-								'key'   => '_rtbiz_helpdesk_updated_by',
+								'key'   => '_rtbiz_hd_updated_by',
 								'value' => $_GET['updated_by']
 							)
 						)
