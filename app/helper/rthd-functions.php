@@ -1,11 +1,14 @@
 <?php
+/**
+ *
+ *   Helper functions for rt-helpdesk
+ *   @author udit
+ */
 
 /**
  * rt-helpdesk Functions
+ * used to render template
  *
- * Helper functions for rt-helpdesk
- *
- * @author udit
  */
 function rthd_get_template( $template_name, $args = array(), $template_path = '', $default_path = '' ) {
 
@@ -21,6 +24,13 @@ function rthd_get_template( $template_name, $args = array(), $template_path = ''
 	do_action( 'rthd_after_template_part', $template_name, $template_path, $located, $args );
 }
 
+/**
+ * @param $template_name
+ * @param string $template_path
+ * @param string $default_path
+ * used to locate / get template path
+ * @return mixed|void
+ */
 function rthd_locate_template( $template_name, $template_path = '', $default_path = '' ) {
 
 	global $rt_wp_hd;
@@ -47,6 +57,11 @@ function rthd_locate_template( $template_name, $template_path = '', $default_pat
 	return apply_filters( 'rthd_locate_template', $template, $template_name, $template_path );
 }
 
+/**
+ * @param $taxonomy
+ * sanitize taxonomy name
+ * @return mixed|string
+ */
 function rthd_sanitize_taxonomy_name( $taxonomy ) {
 	$taxonomy = strtolower( stripslashes( strip_tags( $taxonomy ) ) );
 	$taxonomy = preg_replace( '/&.+?;/', '', $taxonomy ); // Kill entities
@@ -56,14 +71,29 @@ function rthd_sanitize_taxonomy_name( $taxonomy ) {
 	return $taxonomy;
 }
 
+/**
+ * @param $name
+ * adding prefix for taxonomy
+ * @return string
+ */
 function rthd_attribute_taxonomy_name( $name ) {
 	return 'rt_' . rthd_sanitize_taxonomy_name( $name );
 }
 
+/**
+ * @param $name
+ *  adding prefix for post type
+ * @return string
+ */
 function rthd_post_type_name( $name ) {
 	return 'rt_' . rthd_sanitize_taxonomy_name( $name );
 }
 
+/**
+ * @param string $attribute_store_as
+ *  get all attributes
+ * @return array
+ */
 function rthd_get_all_attributes( $attribute_store_as = '' ) {
 	global $rt_hd_attributes_model;
 	$attrs = $rt_hd_attributes_model->get_all_attributes();
@@ -81,6 +111,12 @@ function rthd_get_all_attributes( $attribute_store_as = '' ) {
 	return $newAttr;
 }
 
+/**
+ * @param $post_type
+ * @param string $attribute_store_as
+ * get single attribute
+ * @return array
+ */
 function rthd_get_attributes( $post_type, $attribute_store_as = '' ) {
 	global $rt_hd_attributes_relationship_model, $rt_hd_attributes_model;
 	$relations = $rt_hd_attributes_relationship_model->get_relations_by_post_type( $post_type );
@@ -104,6 +140,15 @@ function rthd_get_attributes( $post_type, $attribute_store_as = '' ) {
 
 /* * ********* Post Term To String **** */
 
+/**
+ * Post Term To String
+ *
+ * @param $postid
+ * @param $taxonomy
+ * @param string $termsep
+ *
+ * @return string
+ */
 function rthd_post_term_to_string( $postid, $taxonomy, $termsep = ',' ) {
 	$termsArr = get_the_terms( $postid, $taxonomy );
 	$tmpStr = '';
@@ -117,12 +162,24 @@ function rthd_post_term_to_string( $postid, $taxonomy, $termsep = ',' ) {
 	return $tmpStr;
 }
 
-/* * ********* Post Term To String **** */
-
+/**
+ * extract key from attributes
+ *
+ * @param $attr
+ *
+ * @return mixed
+ */
 function rthd_extract_key_from_attributes( $attr ) {
 	return $attr->attribute_name;
 }
 
+/**
+ * check if given email is system email or not
+ *
+ * @param $email
+ *
+ * @return bool
+ */
 function rthd_is_system_email( $email ) {
 	$settings = rthd_get_settings();
 	if ( isset( $settings[ 'system_email' ] ) && $email == $settings[ 'system_email' ] ) {
@@ -131,6 +188,11 @@ function rthd_is_system_email( $email ) {
 	return false;
 }
 
+/**
+ * returns all system emails
+ *
+ * @return array
+ */
 function rthd_get_all_system_emails() {
 	$emails = array();
 	$settings = rthd_get_settings();
@@ -140,6 +202,13 @@ function rthd_get_all_system_emails() {
 	return $emails;
 }
 
+/**
+ * get all participants list array
+ *
+ * @param $ticket_id
+ *
+ * @return array
+ */
 function rthd_get_all_participants( $ticket_id ) {
 	$ticket = get_post( $ticket_id );
 	$participants = array();
@@ -187,16 +256,34 @@ function rthd_get_all_participants( $ticket_id ) {
 	return array_unique( $participants );
 }
 
+/**
+ * get ticket table name
+ *
+ * @return string
+ */
 function rthd_get_ticket_table_name() {
 
 	global $wpdb;
 	return $wpdb->prefix . 'rt_wp_hd_ticket_index';
 }
 
+/**
+ * get user ids
+ *
+ * @param $user
+ *
+ * @return mixed
+ */
 function rthd_get_user_ids( $user ) {
 	return $user->ID;
 }
 
+/**
+ * update post term count
+ *
+ * @param $terms
+ * @param $taxonomy
+ */
 function rthd_update_post_term_count( $terms, $taxonomy ) {
 	global $wpdb;
 
@@ -260,7 +347,15 @@ function rthd_encrypt_decrypt( $string ) {
 	return $encrypted_string;
 }
 
-// wp1_text_diff
+/**
+ * wp1_text_diff
+ *
+ * @param $left_string
+ * @param $right_string
+ * @param null $args
+ *
+ * @return string
+ */
 function rthd_text_diff( $left_string, $right_string, $args = null ) {
 	$defaults = array( 'title' => '', 'title_left' => '', 'title_right' => '' );
 	$args = wp_parse_args( $args, $defaults );
@@ -297,6 +392,11 @@ function rthd_text_diff( $left_string, $right_string, $args = null ) {
 	return $r;
 }
 
+/**
+ * get settings
+ *
+ * @return mixed
+ */
 function rthd_get_settings() {
 	$default = array(
 		'attach_contacts' => 'yes',
@@ -308,24 +408,50 @@ function rthd_get_settings() {
 	return $settings;
 }
 
+/**
+ * update given settings
+ *
+ * @param $key
+ * @param $value
+ */
 function rthd_update_settings( $key, $value ) {
 
 }
 
+/**
+ * get menu label
+ *
+ * @return mixed
+ */
 function rthd_get_menu_label() {
 	$menu_label = get_site_option( 'rthd_menu_label', __( 'rtHelpdesk' ) );
 	return $menu_label;
 }
 
+/**
+ * update menu label
+ *
+ * @param $menu_label
+ */
 function rthd_update_menu_label( $menu_label ) {
 	update_site_option( 'rthd_menu_label', $menu_label );
 }
 
+/**
+ * get url logo
+ *
+ * @return mixed
+ */
 function rthd_get_logo_url() {
 	$logo_url = get_site_option( 'rthd_logo_url', RT_HD_URL.'app/assets/img/hd-16X16.png' );
 	return $logo_url;
 }
 
+/**
+ * update url logo
+ *
+ * @param $logo_url
+ */
 function rthd_update_logo_url( $logo_url ) {
 	update_site_option( 'rthd_logo_url', $logo_url );
 }

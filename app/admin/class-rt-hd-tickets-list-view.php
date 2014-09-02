@@ -15,6 +15,8 @@ if ( ! defined( 'ABSPATH' ) )
  * Description of Rt_HD_Tickets_List_View
  *
  * @author udit
+ *
+ * @since rt-Helpdesk 0.1
  */
 
 if( ! class_exists( 'WP_List_Table' ) )
@@ -50,8 +52,13 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 		}
 
 		/**
-		* Add extra markup in the toolbars before or after the list
-		* @param string $which, helps you decide if you add the markupafter (bottom) or before (top) the list */
+		 * Add extra markup in the toolbars before or after the list
+		 *
+		 * @param string $which , helps you decide if you add the markupafter (bottom) or before (top) the list
+		 *
+		 * @since rt-Helpdesk 0.1
+		 *
+		 */
 		function extra_tablenav( $which ) {
 			$search = @$_POST['s'] ? esc_attr( $_POST['s'] ) : '';
 			if ( $which == 'top' ) {
@@ -73,6 +80,8 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 		 * @access protected
 		 *
 		 * @return array
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function get_views() {
 
@@ -119,8 +128,11 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 		}
 
 		/**
-		* Define the columns that are going to be used in the table
-		* @return array $columns, the array of columns to use with the table */
+		 * Define the columns that are going to be used in the table
+		 * @return array $columns, the array of columns to use with the table
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
 		public function get_columns() {
 
 			global $rt_hd_attributes_model;
@@ -159,8 +171,11 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 		}
 
 		/**
-		* Decide which columns to activate the sorting functionality on
-		* @return array $sortable, the array of columns that can be sorted by the user */
+		 * Decide which columns to activate the sorting functionality on
+		 * @return array $sortable, the array of columns that can be sorted by the user
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
 		public function get_sortable_columns() {
 			$sortable = array(
 				'rthd_title'=> array('rthd_title', false),
@@ -176,10 +191,11 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 		 * Get an associative array ( option_name => option_title ) with the list
 		 * of bulk actions available on this table.
 		 *
-		 * @since 3.1.0
 		 * @access protected
 		 *
 		 * @return array
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function get_bulk_actions() {
 			$actions = array(
@@ -204,7 +220,10 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 
 
 		/**
-		 * Prepare the table with different parameters, pagination, columns and table elements */
+		 * Prepare the table with different parameters, pagination, columns and table elements
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
 		function prepare_items() {
 			global $wpdb;
 			global $rt_hd_attributes_model;
@@ -338,6 +357,8 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 
 		/**
 		 * Check For Taxonomy Query, if any
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function check_tax_query() {
 			global $rt_hd_attributes_model;
@@ -371,7 +392,9 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 		}
 
 		/**
+		 * get status label
 		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function get_status_label( $slug ) {
 			foreach ($this->post_statuses as $status) {
@@ -384,7 +407,9 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
                 
 		/**
 		 * Display the rows of records in the table
-		 * @return string, echo the markup of the rows */
+		 * @return string, echo the markup of the rows
+		 *
+		@since rt-Helpdesk 0.1*/
 		function display_rows() {
 
 			global $rt_hd_attributes_model;

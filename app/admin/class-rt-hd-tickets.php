@@ -15,6 +15,8 @@ if ( ! defined( 'ABSPATH' ) )
  * Description of Rt_HD_Tickets
  *
  * @author udit
+ *
+ * @since rt-Helpdesk 0.1
  */
 if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 
@@ -28,6 +30,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 
 		/**
 		 * set hooks
+		 * @since rt-Helpdesk 0.1
 		 */
 		public function __construct() {
 			$this->hooks();
@@ -35,6 +38,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 
 		/**
 		 * hook function
+		 * @since rt-Helpdesk 0.1
 		 */
 		function hooks() {
 			add_filter( 'comments_clauses', array( $this, 'filter_comment_from_admin' ),100, 1 );
@@ -55,6 +59,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		 * @param $_comment1
 		 * @return mixed
 		 * filer comment from admin
+		 * @since rt-Helpdesk 0.1
 		 */
 		function filter_comment_from_admin($_comment1) {
 			global $hook_suffix;
@@ -83,6 +88,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		 * @param array $subscriber
 		 * @return bool
 		 * add new ticket
+		 * @since rt-Helpdesk 0.1
 		 */
 		public function insert_new_ticket($title, $body, $userid, $mailtime, $allemail, $uploaded, $senderEmail, $messageid = "", $inreplyto = "", $references = "", $subscriber = array()) {
 
@@ -257,6 +263,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		 * @param $message_format
 		 * @return mixed
 		 * check email subject for existence of ticket related conversation
+		 * @since rt-Helpdesk 0.1
 		 */
 		function hijack_mail_subject($data, $message_format) {
 			global $helpdesk_import_ticket_id, $rt_hd_module;
@@ -271,6 +278,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		 * @param $post_id
 		 * @return string
 		 * create email title
+		 * @since rt-Helpdesk 0.1
 		 */
 		function create_title_for_mail( $post_id ) {
 			global $rt_hd_module;
@@ -284,6 +292,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		 * @param bool $mainTicket
 		 * @param int $comment_id
 		 * add attachment to post
+		 * @since rt-Helpdesk 0.1
 		 */
 		function add_attachment_to_post($uploaded, $post_id, $post_type, $mainTicket = true, $comment_id = 0) {
 			if ( isset( $uploaded ) && is_array( $uploaded ) ) {
@@ -325,6 +334,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		 * @param $allemail
 		 * @param $post_id
 		 * add contacts to post 
+		 * @since rt-Helpdesk 0.1
 		 */
 		function add_contacts_to_post($allemail, $post_id) {
 			global $rt_hd_contacts;
@@ -369,6 +379,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		 * @param $subject
 		 * @return int
 		 * get post id from subject
+		 * @since rt-Helpdesk 0.1
 		 */
 		function get_post_id_from_subject( $subject ) {
 			//\[([a-z]+)\ \#([1-9]+)\]
@@ -404,6 +415,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		 * @param array $subscriber
 		 * @return bool
 		 * process email as ticket if it is related to ticket conversation
+		 * @since rt-Helpdesk 0.1
 		 */
 		public function process_email_to_ticket(
 				$title,
@@ -502,6 +514,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		 * @param $refrences
 		 * @return bool
 		 * get post id from email meta
+		 * @since rt-Helpdesk 0.1
 		 */
 		function get_post_id_from_mail_meta($inreplyto, $refrences) {
 			if ($inreplyto == "" && $refrences == "")
@@ -540,6 +553,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		 * @param $mailBodyText
 		 * @param $dndEmails
 		 * process forward email data
+		 * @since rt-Helpdesk 0.1
 		 */
 		function process_forward_email_data(&$title, &$body, &$mailtime, &$allemail, &$mailBodyText, &$dndEmails) {
 			$forwardArray = explode("\r", $mailBodyText);
@@ -569,6 +583,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		 * @param $string
 		 * @return mixed
 		 * get all email from string
+		 * @since rt-Helpdesk 0.1
 		 */
 		function extract_all_email_from_string($string) {
 			$pattern = '/[a-z0-9_\-\+\.]+@[a-z0-9\-]+\.([a-z]{2,3})(?:\.[a-z]{2})?/i';
@@ -583,6 +598,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		 * @param string $date
 		 * @return int
 		 * check for post existence
+		 * @since rt-Helpdesk 0.1
 		 */
 		function post_exists($title, $date = '') {
 			global $wpdb;
@@ -634,6 +650,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		 * @param array $subscriber
 		 * @return bool
 		 * add comment to post
+		 * @since rt-Helpdesk 0.1
 		 */
 		public function insert_post_comment($comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, $uploaded, $allemails, $dndEmails, $messageid = "", $inreplyto = "", $references = "", $subscriber = array()) {
 
@@ -740,6 +757,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		 * @param $comment_content_old
 		 * @return bool
 		 * check for duplicate comment
+		 * @since rt-Helpdesk 0.1
 		 */
 		public function check_duplicate_comment($comment_post_ID, $comment_date, $comment_content, $comment_content_old) {
 			global $wpdb;
@@ -764,6 +782,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		 * @param $messageid
 		 * @return bool
 		 * check duplicate from message ID
+		 * @since rt-Helpdesk 0.1
 		 */
 		public function check_duplicate_from_message_Id($messageid) {
 			global $wpdb;
@@ -786,6 +805,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		 * @param $post_id
 		 * @return array emails
 		 * get comment emails
+		 * @since rt-Helpdesk 0.1
 		 */
 		public function get_comment_emails($post_id) {
 			global $wpdb;
@@ -801,6 +821,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		/**
 		 * @param $comment_id
 		 * send new mail as someone post new comment
+		 * @since rt-Helpdesk 0.1
 		 */
 		public function mail_new_comment_data($comment_id) {
 
@@ -821,6 +842,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		 * @param array $dndEmails
 		 * @return bool
 		 * mail comment data
+		 * @since rt-Helpdesk 0.1
 		 */
 		public function mail_comment_data($comment_id, $uploaded, $senderemail, $allemails, $dndEmails = array()) {
 
@@ -1006,6 +1028,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		 * @param $strFileType
 		 * @return string
 		 * get mine type from extension of file
+		 * @since rt-Helpdesk 0.1
 		 */
 		function get_mime_type_from_extn($strFileType) {
 			$ContentType = "application/octet-stream";
@@ -1054,6 +1077,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		 * @param $status
 		 * @return string
 		 * default,sucess,warning,important,info,inverse
+		 * @since rt-Helpdesk 0.1
 		 */
 		function get_status_class($status) {
 			//default,sucess,warning,important,info,inverse
@@ -1093,6 +1117,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 
 		/**
 		 * todo:what this function does ?
+		 * @since rt-Helpdesk 0.1
 		 */
 		function add_new_followup_front() {
 			if (!isset($_POST["followuptype"])) {
@@ -1211,6 +1236,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 
 		/**
 		 *  get tickets from ajax
+		 * @since rt-Helpdesk 0.1
 		 */
 		function get_ticket_comments_ajax() {
 			if ( !isset( $_POST["ticket_unique_id"] ) ) {
@@ -1271,6 +1297,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		/**
 		 * @return bool
 		 * add new followup on AJAX
+		 * @since rt-Helpdesk 0.1
 		 */
 		function add_new_followup_ajax() {
 			if (!isset($_POST["followuptype"])) {
@@ -1544,6 +1571,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		 * @param $email
 		 * @return bool
 		 * check for if sending of email is Allowed from sendmail
+		 * @since rt-Helpdesk 0.1
 		 */
 		public function is_allow_to_sendemail_fromemail($email) {
 			$user_id = get_current_user_id();
@@ -1565,6 +1593,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		 * @param $body
 		 * @param $comment_id
 		 * notify subscriber via email
+		 * @since rt-Helpdesk 0.1
 		 */
 		function notify_subscriber_via_email($post_id, $title, $body, $comment_id) {
 			$oldSubscriberArr = get_post_meta($post_id, "subscribe_to", true);
@@ -1606,6 +1635,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		 * @return string
 		 * generate comment from HTML front
 		 * todo : what this function does ?
+		 * @since rt-Helpdesk 0.1
 		 */
 		function genrate_comment_html_front( $comment ) {
 			$user_edit = false;
@@ -1627,6 +1657,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		 * @param $comment
 		 * @return string
 		 * generate comment html ajax
+		 * @since rt-Helpdesk 0.1
 		 */
 		function genrate_comment_html_ajax($comment) {
 
@@ -1647,6 +1678,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 
 		/**
 		 * todo:what this function does ?
+		 * @since rt-Helpdesk 0.1
 		 */
 		function activecollab_task_comment_import_ajax() {
 
@@ -1775,6 +1807,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 
 		/**
 		 * remove follow up AJAX
+		 * @since rt-Helpdesk 0.1
 		 */
 		function delete_followup_ajax() {
 			$response = array();
@@ -1788,6 +1821,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 
 		/**
 		 * request import for gmail thread
+		 * @since rt-Helpdesk 0.1
 		 */
 		function gmail_thread_import_request() {
 			$response = array();
@@ -1835,9 +1869,13 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		 * @param $post_id
 		 * @param int $userid
 		 * @return mixed
+		 * 
 		 * insert import mail thread request
+		 * 
 		 * todo:what this function does ?
-		 */
+		 * @since rt-Helpdesk 0.1
+		 * @since rt-Helpdesk 0.1
+		 */	 
 		public function insert_import_mail_thread_request($email, $threaid, $post_id, $userid = 0) {
 			if ($userid == 0) {
 				$userid = get_current_user_id();

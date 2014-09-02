@@ -14,7 +14,10 @@ if ( ! defined( 'ABSPATH' ) )
 /**
  * Description of Rt_HD_Email_Diff
  * email difference
+ *
  * @author udit
+ *
+ * @since rt-Helpdesk 0.1
  */
 if( !class_exists( 'Rt_HD_Email_Diff') ) {
 
@@ -36,6 +39,8 @@ if( !class_exists( 'Rt_HD_Email_Diff') ) {
 		 *
 		 * @param string $line HTML-escape the value.
 		 * @return string
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function deletedLine($line) {
 			return "<td style='padding: .5em;border: 0;width:25px;' >-</td><td style='padding: .5em;border: 0;background-color: #fdd;' >{$line}</td>";
@@ -46,6 +51,8 @@ if( !class_exists( 'Rt_HD_Email_Diff') ) {
 		 *
 		 * @param string $line HTML-escape the value.
 		 * @return string
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function contextLine($line) {
 			return "<td style='padding: .5em;border: 0;' > </td><td style='padding: .5em;border: 0;'>{$line}</td>";

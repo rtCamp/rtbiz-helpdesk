@@ -15,19 +15,37 @@ if (!defined('ABSPATH'))
  * Description of Rt_HD_Contacts
  *
  * @author udit
+ *
+ * @since rt-Helpdesk 0.1
  */
 if ( !class_exists( 'Rt_HD_Contacts' ) ) {
 
+	/**
+	 * Class Rt_HD_Contacts
+	 */
 	class Rt_HD_Contacts {
 
+		/**
+		 * @var string
+		 */
 		public $email_key = 'contact_email';
+		/**
+		 * @var string
+		 */
 		public $user_id = 'contact_user_id';
+		/**
+		 * @var string
+		 */
 		public $user_role = 'contacts';
 
 		public function __construct() {
 			$this->hooks();
 		}
 
+		/**
+		 * Hooks
+		 * @since rt-Helpdesk 0.1
+		 */
 		function hooks() {
 
 			add_filter( 'rt_entity_columns', array( $this, 'contacts_columns' ), 10, 2 );
@@ -42,8 +60,13 @@ if ( !class_exists( 'Rt_HD_Contacts' ) ) {
 
 		/**
 		 * Create custom column 'Tickets' for Contacts taxonomy
-		 * @param type $contacts_columns
-		 * @return array new_columns
+		 *
+		 * @param $columns
+		 * @param $rt_entity
+		 *
+		 * @return mixed
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function contacts_columns( $columns, $rt_entity ) {
 
@@ -62,10 +85,17 @@ if ( !class_exists( 'Rt_HD_Contacts' ) ) {
 
 		/**
 		 * Get count of contact terms used in individual ticket. This function returns the exact count
-		 * @param string $out
-		 * @param string $column_name
-		 * @param integer $term_id
+		 *
+		 * @param $column
+		 * @param $post_id
+		 * @param $rt_entity
+		 *
+		 * @internal param string $out
+		 * @internal param string $column_name
+		 * @internal param int $term_id
 		 * @return string $out
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function manage_contacts_columns( $column, $post_id, $rt_entity ) {
 
@@ -85,6 +115,16 @@ if ( !class_exists( 'Rt_HD_Contacts' ) ) {
 			}
 		}
 
+		/**
+		 * add new contact
+		 *
+		 * @param $email
+		 * @param $title
+		 *
+		 * @return mixed|null|WP_Post
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
 		public function insert_new_contact( $email, $title ) {
 
 			$contact = rt_biz_get_person_by_email( $email );
@@ -111,6 +151,15 @@ if ( !class_exists( 'Rt_HD_Contacts' ) ) {
 			return $contact;
 		}
 
+		/**
+		 * get user from email id
+		 *
+		 * @param $email
+		 *
+		 * @return bool|int|null
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
 		function get_user_from_email( $email ) {
 			$userid = username_exists( $email );
 			//
@@ -137,6 +186,16 @@ if ( !class_exists( 'Rt_HD_Contacts' ) ) {
 			return $userid;
 		}
 
+		/**
+		 * contacts different on ticket
+		 *
+		 * @param $post_id
+		 * @param $newTicket
+		 *
+		 * @return string
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
 		function contacts_diff_on_ticket( $post_id, $newTicket ) {
 
 			$diffHTML = '';
@@ -164,6 +223,13 @@ if ( !class_exists( 'Rt_HD_Contacts' ) ) {
 			return $diffHTML;
 		}
 
+		/**
+		 * contact save on tickets
+		 *
+		 * @param $post_id
+		 * @param $newTicket
+		 * @since rt-Helpdesk 0.1
+		 */
 		function contacts_save_on_ticket( $post_id, $newTicket ) {
 			if ( ! isset( $newTicket['contacts'] ) ) {
 				$newTicket['contacts'] = array();
@@ -179,6 +245,11 @@ if ( !class_exists( 'Rt_HD_Contacts' ) ) {
 			}
 		}
 
+		/**
+		 * AJAX call to get accounts
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
 		function get_account_contacts_ajax() {
 
 			$contacts = rt_biz_get_organization_to_person_connection( $_POST['query'] );
@@ -199,6 +270,10 @@ if ( !class_exists( 'Rt_HD_Contacts' ) ) {
 			die(0);
 		}
 
+		/**
+		 * AJAX call to get taxonomy meta
+		 * @since rt-Helpdesk 0.1
+		 */
 		public function get_taxonomy_meta_ajax() {
 			if ( ! isset( $_POST['query'] ) ) {
 				wp_die( 'Opss!! Invalid request' );
@@ -216,6 +291,11 @@ if ( !class_exists( 'Rt_HD_Contacts' ) ) {
 			die( 0 );
 		}
 
+		/**
+		 * AJAX call for autocomplete contact
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
 		public function contact_autocomplete_ajax() {
 			if ( ! isset( $_POST["query"] ) ) {
 				wp_die( 'Opss!! Invalid request' );
@@ -237,6 +317,11 @@ if ( !class_exists( 'Rt_HD_Contacts' ) ) {
 			die(0);
 		}
 
+		/**
+		 * add new contact AJAX call
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
 		public function add_new_contact_ajax() {
 			$returnArray = array();
 			$returnArray['status'] = false;

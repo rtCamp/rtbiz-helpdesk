@@ -16,11 +16,15 @@ if (!defined('ABSPATH'))
  * Description of Rt_HD_Accounts
  * Handel backend accounts
  * @author udit
+ *
+ * @since rt-Helpdesk 0.1
  */
 if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 
     /**
      * Class Rt_HD_Accounts
+     *
+     * @since rt-Helpdesk 0.1
      */
     class Rt_HD_Accounts {
 
@@ -31,6 +35,7 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 
         /**
          *  call to set hooks
+         * @since rt-Helpdesk 0.1
          */
         function __construct() {
 			$this->hooks();
@@ -38,6 +43,8 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 
         /**
          * set hooks
+         *
+         * @since rt-Helpdesk 0.1
          */
         function hooks() {
 			add_filter( 'rt_entity_columns', array( $this, 'accounts_columns' ), 10, 2 );
@@ -50,6 +57,8 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 
         /**
          * provides autocomplete for ajax call
+         *
+         * @since rt-Helpdesk 0.1
          */
         public function account_autocomplete_ajax() {
 			if (!isset($_POST["query"])) {
@@ -74,6 +83,8 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 
         /**
          *  get terms by key and returns user and profile image of matching key.
+         *
+         * @since rt-Helpdesk 0.1
          */
         public function get_term_by_key_ajax() {
 			if ( ! isset( $_POST['account_id'] ) ) {
@@ -98,6 +109,8 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 
         /**
          * create new account by ajax call
+         *
+         * @since rt-Helpdesk 0.1
          */
         public function add_new_account_ajax() {
 			var_dump("hello");
@@ -150,9 +163,14 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 		}
 
         /**
+         * to add columns to accounts
+         *
          * @param $columns
          * @param $rt_entity
+         *
          * @return mixed
+         * 
+         * @since rt-Helpdesk 0.1  
          */
         function accounts_columns( $columns, $rt_entity ) {
 
@@ -172,9 +190,13 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 		}
 
         /**
+         * manage account columns 
+         *
          * @param $column
          * @param $post_id
          * @param $rt_entity
+         * 
+         * @since rt-Helpdesk 0.1  
          */
         function manage_accounts_columns( $column, $post_id, $rt_entity ) {
 
@@ -200,9 +222,13 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 		}
 
         /**
+         * get diff of account 
+         * 
          * @param $post_id
          * @param $newTicket
          * @return string
+         * 
+         * @since rt-Helpdesk 0.1 
          */
         function accounts_diff_on_ticket( $post_id, $newTicket ) {
 
@@ -232,8 +258,12 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 		}
 
         /**
+         * save account 
+         * 
          * @param $post_id
          * @param $newTicket
+         * 
+         * @since rt-Helpdesk 0.1  
          */
         function accounts_save_on_ticket( $post_id, $newTicket ) {
 			if ( !isset( $newTicket['accounts'] ) ) {

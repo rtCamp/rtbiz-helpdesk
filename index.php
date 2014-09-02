@@ -14,84 +14,84 @@
 if ( ! defined( 'RT_HD_VERSION' ) ) {
     /**
      * Defines RT_HD_VERSION if it does not exits.
-	 *   @since rt-Helpdesk 0.0.1
+	 *   @since rt-Helpdesk 0.1
      */
     define( 'RT_HD_VERSION', '0.0.1' );
 }
 if ( ! defined( 'RT_HD_TEXT_DOMAIN' ) ) {
     /**
      * Defines RT_HD_TEXT_DOMAIN if it does not exits.
-	 *   @since rt-Helpdesk 0.0.1
+	 *   @since rt-Helpdesk 0.1
      */
     define( 'RT_HD_TEXT_DOMAIN', 'rt_helpdesk' );
 }
 if ( ! defined( 'RT_HD_PATH' ) ) {
     /**
      * Defines RT_HD_PATH if it does not exits.
-	 *   @since rt-Helpdesk 0.0.1
+	 *   @since rt-Helpdesk 0.1
      */
     define( 'RT_HD_PATH', plugin_dir_path( __FILE__ ) );
 }
 if ( ! defined( 'RT_HD_URL' ) ) {
     /**
      * Defines RT_HD_URL if it does not exits.
-	 *   @since rt-Helpdesk 0.0.1
+	 *   @since rt-Helpdesk 0.1
      */
     define( 'RT_HD_URL', plugin_dir_url( __FILE__ ) );
 }
 if ( ! defined( 'RT_HD_PATH_APP' ) ) {
     /**
      * Defines app folder path if it does not exits.
-	 *   @since rt-Helpdesk 0.0.1
+	 *   @since rt-Helpdesk 0.1
      */
     define( 'RT_HD_PATH_APP', plugin_dir_path( __FILE__ ) . 'app/' );
 }
 if ( ! defined( 'RT_HD_PATH_ADMIN' ) ) {
     /**
      *  Defines app/admin path if it does not exits.
-	 *   @since rt-Helpdesk 0.0.1
+	 *   @since rt-Helpdesk 0.1
      */
     define( 'RT_HD_PATH_ADMIN', plugin_dir_path( __FILE__ ) . 'app/admin/' );
 }
 if ( ! defined( 'RT_HD_PATH_MODELS' ) ) {
     /**
      * Defines app/models path if it does not exits.
-	 *   @since rt-Helpdesk 0.0.1
+	 *   @since rt-Helpdesk 0.1
      */
     define( 'RT_HD_PATH_MODELS', plugin_dir_path( __FILE__ ) . 'app/models/' );
 }
 if ( ! defined( 'RT_HD_PATH_SCHEMA' ) ) {
     /**
      *  Defines app/schema path if it does not exits.
-	 *   @since rt-Helpdesk 0.0.1
+	 *   @since rt-Helpdesk 0.1
      */
     define( 'RT_HD_PATH_SCHEMA', plugin_dir_path( __FILE__ ) . 'app/schema/' );
 }
 if ( ! defined( 'RT_HD_PATH_LIB' ) ) {
     /**
      * Defines app/lib path if it does not exits.
-	 *   @since rt-Helpdesk 0.0.1
+	 *   @since rt-Helpdesk 0.1
      */
     define( 'RT_HD_PATH_LIB', plugin_dir_path( __FILE__ ) . 'app/lib/' );
 }
 if ( ! defined( 'RT_HD_PATH_VENDOR' ) ) {
     /**
      *  Defines app/vendor path if it does not exits.
-	 *   @since rt-Helpdesk 0.0.1
+	 *   @since rt-Helpdesk 0.1
      */
     define( 'RT_HD_PATH_VENDOR', plugin_dir_path( __FILE__ ) . 'app/vendor/' );
 }
 if ( ! defined( 'RT_HD_PATH_HELPER' ) ) {
     /**
      * Defines app/helper path if it does not exits.
-	 *   @since rt-Helpdesk 0.0.1
+	 *   @since rt-Helpdesk 0.1
      */
     define( 'RT_HD_PATH_HELPER', plugin_dir_path( __FILE__ ) . 'app/helper/' );
 }
 if ( ! defined( 'RT_HD_PATH_TEMPLATES' ) ) {
     /**
      * Defines templates/ path if it does not exits.
-	 *  @since rt-Helpdesk 0.0.1
+	 *  @since rt-Helpdesk 0.1
 	 */
     define( 'RT_HD_PATH_TEMPLATES', plugin_dir_path( __FILE__ ) . 'templates/' );
 }
@@ -101,7 +101,7 @@ include_once RT_HD_PATH_LIB . 'wp-helpers.php';
 /**
  *  Includes all external Require Libraries and
  *  using autoload rt helper class that load all classes with in given directory.
- *  @since rt-Helpdesk 0.0.1
+ *  @since rt-Helpdesk 0.1
  */
 function rt_hd_include() {
 
@@ -128,7 +128,7 @@ function rt_hd_include() {
 
 /**
  *  Main function that initiate RT_WP_Helpdesk class and call it's constructor which does initialize plugin
- *  @since rt-Helpdesk 0.0.1
+ *  @since rt-Helpdesk 0.1
  */
 function rt_hd_init() {
 
@@ -144,7 +144,7 @@ add_action( 'rt_biz_init', 'rt_hd_init', 1 );
  * rt_hd_check_dependency check for rt-helpdesk dependency
  * dependencies are require to run file else this plugin can't function
  *
- * @since rt-Helpdesk 0.0.1
+ * @since rt-Helpdesk 0.1
  */
 function rt_hd_check_dependency() {
 	global $rt_wp_hd;

@@ -8,7 +8,7 @@
 
 /**
  * Description of RtHDTicketHistoryModel
- *
+ * Model for 'wp_hd_ticket_history' table in DB
  * @author udit
  */
 if ( !class_exists( 'Rt_HD_Ticket_History_Model' ) ) {

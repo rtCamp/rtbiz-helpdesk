@@ -15,32 +15,45 @@ if ( ! defined( 'ABSPATH' ) )
  * Description of Rt_HD_Admin
  * Rt_HD_Admin is main class for admin backend and UI.
  * @author udit
- */
+ * @since rt-Helpdesk 0.1
+*/
 if( !class_exists( 'Rt_HD_Admin' ) ) {
 	/**
 	 * Class Rt_HD_Admin
+	 *
+	 * @since rt-Helpdesk 0.1
 	 */
 	class Rt_HD_Admin {
 		/**
 		 * @var array
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		/**
 		 * @var array|string
+		 *
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		/**
 		 * @var array|string
+		 * @since rt-Helpdesk 0.1
 		 */
 		/**
 		 * @var array|string
+		 * @since rt-Helpdesk 0.1
 		 */
 		/**
 		 * @var array|string
+		 * @since rt-Helpdesk 0.1
 		 */
 		private $hd_settings_tabs, $defualt_tab, $admin_cap, $editor_cap, $author_cap;
 
 		/**
 		 * Constructor
-		 */
+		 *
+	  	 * @since rt-Helpdesk 0.1
+		*/
 		public function __construct() {
 			if ( is_admin() ) {
                         $this->hooks();
@@ -83,6 +96,8 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 
 		/**
 		 * Register CSS and JS
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function load_styles_scripts() {
 			global $post, $rt_hd_module, $pagenow;
@@ -147,6 +162,8 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 
 		/**
 		 * Passes data to JS
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function localize_scripts() {
 			$pagearray = array( 'rthd-add-module', 'rthd-gravity-mapper', 'rthd-add-'.Rt_HD_Module::$post_type );
@@ -165,6 +182,7 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 
 		/**
 		 * Hooks
+		 * @since rt-Helpdesk 0.1
 		 */
 		function hooks() {
 			add_action( 'admin_enqueue_scripts', array( $this, 'load_styles_scripts' ) );
@@ -176,6 +194,8 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 
 		/**
 		 *  Register menu entry to WP
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function register_menu() {
 			add_submenu_page( 'edit.php?post_type='.Rt_HD_Module::$post_type, __( 'Settings' ), __( 'Settings' ), $this->author_cap, 'rthd-settings', array( $this, 'settings_ui' ) );
@@ -184,7 +204,10 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 		/**
 		 * @param $term
 		 * @param $taxonomy
+		 *
 		 * @return mixed
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function remove_wocommerce_actions( $term, $taxonomy ) {
 			$attrs = rthd_get_all_attributes();
@@ -203,6 +226,8 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 
 		/**
 		 * UI for user settings
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function user_settings_ui() {
 			global $rt_hd_user_settings;
@@ -211,6 +236,8 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 
 		/**
 		 * Setting UI
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function settings_ui() { ?>
      
@@ -281,6 +308,8 @@ if( !class_exists( 'Rt_HD_Admin' ) ) {
 
 		/**
 		 * Tabs for Setting UI
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function settings_ui_tabs(){
                     

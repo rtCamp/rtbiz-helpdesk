@@ -15,12 +15,16 @@ if (!defined('ABSPATH'))
  * Description of Rt_HD_Gravity_Form_Importer
  * Use for Access gravity form data
  * @author udit
+ *
+ * @since rt-Helpdesk 0.1
  */
 if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 
 	/**
 	 * Class Rt_HD_Gravity_Form_Importer
 	 * Use for Access gravity form data
+	 *
+	 * @since rt-Helpdesk 0.1
 	 */
 	class Rt_HD_Gravity_Form_Importer {
 
@@ -36,6 +40,11 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 			add_action( 'init', array( $this, 'init_importer' ) );
 		}
 
+		/**
+		 *  for init hook
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
 		function init_importer() {
 			global $rt_hd_attributes_relationship_model;
 			$this->ticket_field = array(
@@ -215,21 +224,38 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 			}
 		}
 
+		/**
+		 * import call from ajax
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
 		public function hd_importer_ajax_hooks() {
 				add_action( 'wp_ajax_rthd_map_import', array( $this, 'rthd_map_import_callback' ) );
 				add_action( 'wp_ajax_rthd_map_import_feauture', array( $this, 'rthd_map_import_feauture' ) );
 				add_action( 'wp_ajax_rthd_import', array( $this, 'importer' ) );
 				add_action( 'init', array( $this, 'install_gravity_form_hook' ) );
 				add_action( 'wp_ajax_rthd_gravity_dummy_data', array( $this, 'get_random_gravity_data' ) );
-				add_action( 'wp_ajax_rthd_defined_map_feild_value', array( $this, 'rthd_defined_map_feild_value' ) );
+				add_action( 'wp_ajax_rthd_defined_map_feild_value', array( $this, 'rthd_defined_map_field_value' ) );
 			}
 
+		/**
+		 * install gravity form Hooks
+		 */
 		public function install_gravity_form_hook() {
 			add_action( 'gform_entry_info', array( $this, 'gravity_form_lead_meta' ), 1, 2 );
 			add_action( 'gform_entry_created', array( $this, 'rthd_auto_import' ), 1, 2 );
 			add_filter( 'gform_pre_submission_filter', array( $this, 'rthd_add_custome_field' ), 1, 1 );
 		}
 
+		/**
+		 * Add custom field
+		 *
+		 * @param $data
+		 *
+		 * @return mixed
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
 		public function rthd_add_custome_field( $data ) {
 
 			global $rt_hd_gravity_fields_mapping_model;
@@ -252,7 +278,12 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 			return $data;
 		}
 
-		public function rthd_defined_map_feild_value() {
+		/**
+		 * define map field value
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
+		public function rthd_defined_map_field_value() {
 			$form_id = $_REQUEST["map_form_id"];
 			if ( isset( $_REQUEST["mapSourceType"] ) && $_REQUEST["mapSourceType"] == "gravity" ) {
 				$field_id = intval( $_REQUEST["field_id"] );
@@ -283,6 +314,15 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 			die(0);
 		}
 
+
+		/**
+		 * gracity form lead meta
+		 *
+		 * @param $form_id
+		 * @param $gr_lead
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
 		function gravity_form_lead_meta( $form_id, $gr_lead ) {
 			global $rt_hd_gravity_fields_mapping_model;
 			$gr_lead_id = absint($gr_lead["id"]);
@@ -300,6 +340,11 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 			}
 		}
 
+		/**
+		 * Load handlebars template
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
 		function load_handlebars_Templates() {
 			?>
 			<script id="map_table_content" type="text/x-handlebars-template">
@@ -332,6 +377,11 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 			<?php
 		}
 
+
+		/**
+		 * UI render
+		 * @since rt-Helpdesk 0.1
+		 */
 		public function ui() {
 			global $rt_hd_module;
                 $post_type = Rt_HD_Module::$post_type;
@@ -411,6 +461,12 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
              
                         }
 
+
+		/**
+		 * Importer
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
 		public function importer() {
 			global $rt_hd_module;
                         $post_type = Rt_HD_Module::$post_type;
@@ -770,6 +826,12 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
                 
                         }
 
+
+		/**
+		 * map import feature
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
 		public function rthd_map_import_feauture() {
 			global $rt_hd_gravity_fields_mapping_model;
 
@@ -803,6 +865,19 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 			die(0);
 		}
 
+
+		/**
+		 * process import
+		 *
+		 * @param $map_data
+		 * @param $form_id
+		 * @param $gravity_lead_id
+		 * @param $type
+		 * @param bool $forceImport
+		 * @param bool $autoDieFlag
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
 		function process_import($map_data, $form_id, $gravity_lead_id, $type, $forceImport = false, $autoDieFlag = true) {
 			//** remove woocommerce hooks **//
 
@@ -1075,6 +1150,18 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 			// IMP LINE
 		}
 
+
+		/**
+		 * create tickets from map data
+		 *
+		 * @param $map_data
+		 * @param $gravity_lead_id
+		 * @param $type
+		 *
+		 * @return array
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
 		function create_tickets_from_map_data($map_data, $gravity_lead_id, $type) {
 			extract($map_data, EXTR_OVERWRITE);
 
@@ -1512,6 +1599,12 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 			return $response;
 		}
 
+
+		/**
+		 * map import call back
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
 		public function rthd_map_import_callback() {
 			if ( ! isset( $_REQUEST["gravity_lead_id"] ) ) {
 				echo json_encode(array(array("status" => false)));
@@ -1533,6 +1626,14 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 			$this->process_import($map_data, $map_source_form_id, $map_index_lead_id, $type, $forceImport );
 		}
 
+		/**
+		 * auto import
+		 *
+		 * @param $lead
+		 * @param $form
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
 		public function rthd_auto_import($lead, $form) {
 			//gform_after_submission
 			global $rt_hd_gravity_fields_mapping_model;
@@ -1551,6 +1652,13 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 			}
 		}
 
+		/**
+		 * get forms
+		 *
+		 * @return bool
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
 		function get_forms() {
 			if (!class_exists("RGForms")) {
 				return false;
@@ -1566,6 +1674,14 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 				return false;
 		}
 
+		/**
+		 *
+		 * get all gravity lead
+		 *
+		 * @param $form_id
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
 		function get_all_gravity_lead($form_id) {
 			$gravityLeadTableName = RGFormsModel::get_lead_table_name();
 			global $wpdb;
@@ -1574,7 +1690,14 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 		}
 
 		/**
-		 * functions to handle lead meta
+		 * function to handle lead meta
+		 *
+		 * @param $entry_id
+		 * @param $meta_key
+		 *
+		 * @return bool|mixed
+		 *
+		 * @since rt-Helpdesk 0.1
 		 */
 		function gform_get_meta($entry_id, $meta_key) {
 			global $wpdb, $_gform_lead_meta;
@@ -1591,6 +1714,15 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 			return $meta_value;
 		}
 
+		/**
+		 * gform update meta
+		 *
+		 * @param $entry_id
+		 * @param $meta_key
+		 * @param $meta_value
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
 		function gform_update_meta($entry_id, $meta_key, $meta_value) {
 			global $wpdb, $_gform_lead_meta;
 			$table_name = RGFormsModel::get_lead_meta_table_name();
@@ -1609,6 +1741,14 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 				$_gform_lead_meta[$cache_key] = maybe_unserialize($meta_value);
 		}
 
+		/**
+		 * gform delete meta
+		 * @param $entry_id
+		 * @param string $meta_key
+		 *
+		 * @since rt-Helpdesk 0.1
+		 *
+		 */
 		function gform_delete_meta($entry_id, $meta_key = "") {
 			global $wpdb, $_gform_lead_meta;
 			$table_name = RGFormsModel::get_lead_meta_table_name();
@@ -1620,6 +1760,11 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 			$_gform_lead_meta = array();
 		}
 
+		/**
+		 * get random gravity data
+		 * 
+		 * @since rt-Helpdesk 0.1
+		 */
 		function get_random_gravity_data() {
 			//mapSourceType
 

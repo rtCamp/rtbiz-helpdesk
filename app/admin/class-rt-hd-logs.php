@@ -13,9 +13,10 @@ if ( ! defined( 'ABSPATH' ) )
 
 /**
  * Description of Rt_HD_Logs
- *
+ * render UI of logs
  * @author udit
- */
+ * @since rt-Helpdesk 0.1
+*/
 if( !class_exists( 'Rt_HD_Logs' ) ) {
 	class Rt_HD_Logs {
 		function ui() {
