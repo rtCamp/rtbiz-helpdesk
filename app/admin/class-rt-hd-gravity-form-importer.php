@@ -348,7 +348,7 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 							$class = '';
 						}
 						$form_select = '<select name="mapSource" id="mapSource" ' . $class . '>';
-						$form_select .= '<option value="">Please select a form</option>';
+						$form_select .= '<option value="">' . __('Please select a form', RT_HD_TEXT_DOMAIN ) . '</option>';
 						foreach ($forms as $id => $form) {
 							if (isset($_POST["mapSource"]) && intval($_POST["mapSource"]) == $id) {
 								$selected = "selected='selected'";
@@ -366,7 +366,7 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 					<form action="" method="post">
 						<table class="form-table">
 							<tr>
-								<th scope="row"><label for="mapSource">Select a Form:</label></th>
+								<th scope="row"><label for="mapSource"><?php _e( 'Select a Form:', RT_HD_TEXT_DOMAIN ); ?></label></th>
 								<td>
 									<?php echo $form_select; ?>
 								</td>
@@ -385,7 +385,7 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 					<form action="" method="post" enctype="multipart/form-data">
 						<table class="form-table">
 							<tr>
-								<th scope="row"><label for="map_upload">Upload a data file:</label></th>
+								<th scope="row"><label for="map_upload"><?php _e( 'Upload a data file:', RT_HD_TEXT_DOMAIN ); ?></label></th>
 								<td>
 									<input type="file" name="map_upload" id="map_upload" />
 								</td>
@@ -412,7 +412,7 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 				if ($_REQUEST["type"] == "csv") {
 					if (isset($_FILES['map_upload']) && $_FILES['map_upload']['error'] == 0) {
 						if ($_FILES['map_upload']['type'] != 'text/csv') {
-							echo "<div class='error'>Please upload a CSV file only!</div>";
+							echo "<div class='error'>" . __( 'Please upload a CSV file only!', RT_HD_TEXT_DOMAIN ) . "</div>";
 							return;
 						}
 						//Upload the file to 'Uploads' folder
@@ -434,8 +434,8 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 						$data = $csv->data[rand(1, count($csv->data) - 1)];
 						?>
 						<div id="map_message" class="updated map_message"><p>
-								File uploaded: <strong><?php echo $_FILES['map_upload']['name']; ?></strong>
-								Total Rows: <strong><?php echo count($csv->data); ?></strong></p>
+								<?php _e( 'File uploaded:', RT_HD_TEXT_DOMAIN ); ?> <strong><?php echo $_FILES['map_upload']['name']; ?></strong>
+								<?php _e( 'Total Rows:', RT_HD_TEXT_DOMAIN ); ?> <strong><?php echo count($csv->data); ?></strong></p>
 						</div>
 
 						<form method="post" action="" id="rtHelpdeskMappingForm" name="rtHelpdeskMappingForm">
@@ -445,10 +445,10 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 							<table class="wp-list-table widefat fixed" id="map_mapping_table">
 								<thead>
 									<tr>
-										<th scope="row">Column Name</th>
-										<th scope="row">Field Name</th>
-										<th scope="row">Default Value</th>
-										<th scope="row"><a href="#dummyDataPrev"> << </a>Sample <a href="#dummyDataNext"> >> </a></th>
+										<th scope="row"><?php _e( 'Column Name', RT_HD_TEXT_DOMAIN ); ?></th>
+										<th scope="row"><?php _e( 'Field Name', RT_HD_TEXT_DOMAIN ); ?></th>
+										<th scope="row"><?php _e( 'Default Value', RT_HD_TEXT_DOMAIN ); ?></th>
+										<th scope="row"><a href="#dummyDataPrev"> << </a><?php _e( 'Sample', RT_HD_TEXT_DOMAIN ); ?> <a href="#dummyDataNext"> >> </a></th>
 									</tr>
 								</thead>
 								<tbody style="background: white;">
@@ -480,7 +480,7 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 
 							<?php
 							} else {
-								echo "<div class='error'><p>Please Select File </p></div>";
+								echo "<div class='error'><p>" . __( 'Please Select File', RT_HD_TEXT_DOMAIN ) . "</p></div>";
 								return false;
 							}
 						} else {
@@ -510,10 +510,10 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 								<table class="wp-list-table widefat fixed posts" >
 									<thead>
 										<tr>
-											<th scope="row">Field Name</th>
-											<th scope="row">Helpdesk Column Name</th>
-											<th scope="row">Default Value</th>
-											<th scope="row"><a href="#dummyDataPrev"> << </a>Sample <a href="#dummyDataNext"> >> </a></th>
+											<th scope="row"><?php _e( 'Field Name', RT_HD_TEXT_DOMAIN ); ?></th>
+											<th scope="row"><?php _e( 'Helpdesk Column Name', RT_HD_TEXT_DOMAIN ); ?></th>
+											<th scope="row"><?php _e( 'Default Value', RT_HD_TEXT_DOMAIN ); ?></th>
+											<th scope="row"><a href="#dummyDataPrev"> << </a><?php _e( 'Sample', RT_HD_TEXT_DOMAIN ); ?><a href="#dummyDataNext"> >> </a></th>
 										</tr>
 									</thead>
 									<tbody style=" background: white; ">
@@ -734,23 +734,23 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 							<input type="button" name="map_mapping_import" id="map_mapping_import" value="Import" class="button button-primary"/>
 						</form>
 						<div id='startImporting'>
-							<h2>Importing <?php if (isset($formname)) echo $formname; ?> into Helpdesk...</h2>
+							<h2> <?php _e( sprintf('Importing %s into Helpdesk...', isset($formname) ? $formname : '' ), RT_HD_TEXT_DOMAIN ); ?></h2>
 							<div id="progressbar"></div>
 							<div class="myupdate">
-								<p> Successfully imported : <span id='sucessfullyImported'>0</span></p>
+								<p> <?php _e( 'Successfully imported :', RT_HD_TEXT_DOMAIN ); ?> <span id='sucessfullyImported'>0</span></p>
 							</div>
 							<div class="myerror">
-								<p> Failed to import : <span id='failImported'>0</span></p>
+								<p> <?php _e( 'Failed to import :', RT_HD_TEXT_DOMAIN ); ?> <span id='failImported'>0</span></p>
 							</div>
 							<div class="importloading">
 
 							</div>
 							<div class="sucessmessage">
-			<?php if ($_REQUEST["type"] == "gravity") { ?>
-									Would u like to import future entries automatically? &nbsp;
+			<?php if ($_REQUEST["type"] == "gravity") {
+									_e ( 'Would u like to import future entries automatically?', RT_HD_TEXT_DOMAIN );?> &nbsp;
 									<input type='button' id='futureYes' value='Yes' class="button button-primary"/>&nbsp;<input type='button' id='futureNo' value='No' class="button " />                    </div>
 			<?php } else { ?>
-								<h3>Done ! </h3>
+								<h3><?php _e( 'Done !', RT_HD_TEXT_DOMAIN ); ?></h3>
 								<span id="extra-data-importer"></span>
 
 			<?php } ?>

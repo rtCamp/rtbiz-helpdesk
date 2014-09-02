@@ -1197,7 +1197,7 @@ if (isset($post->ID)) {
 									echo "<li id='hd-contact-" . $tterm->ID . "' class='contact-list' >"
 											. "<div class='row collapse'>"
 												. "<div class='large-2 columns'> " . get_avatar($email, 24) . "</div>"
-												. "<div id='hd-contact-meta-" . $tterm->ID . "'  class='large-9 columns'><a target='_blank' class='heading' href='" . admin_url("edit.php?".  rthd_post_type_name('contact')."=" . $tterm->ID . "&post_type=".$post_type) . "' title='" . $tterm->post_title . "'>" . $tterm->post_title . "</a>";
+												. "<div id='hd-contact-meta-" . $tterm->ID . "'  class='large-9 columns'><a target='_blank' class='heading' href='" . admin_url("edit.php?".  rtbiz_post_type_name('contact')."=" . $tterm->ID . "&post_type=".$post_type) . "' title='" . $tterm->post_title . "'>" . $tterm->post_title . "</a>";
 									if ($email) {
 										echo "<i class=''><a href='mailto:" . $email . "'>" . $email . "</a><a class='inline' target='_blank' href='http://mail.google.com/mail/#search/" .$email."'> <i class='foundicon-search'></i></a></i>";
 										$arrCommentReply[] = array("userid" => $tterm->ID, "label" => $tterm->post_title, "email" => $email, "contact" => true, "imghtml" => get_avatar($email, 24));

@@ -35,7 +35,7 @@ if( !class_exists( 'RT_Meta_Box_Attachment' ) ) {
             }?>
 
             <div id="attachment-container" class="row_group">
-                <a href="#" class="button" id="add_ticket_attachment"><?php _e('Add'); ?></a>
+                <a href="#" class="button" id="add_ticket_attachment"><?php _e('Add', RT_HD_TEXT_DOMAIN ); ?></a>
                 <ul id="divAttachmentList" class="scroll-height"><?php
                     foreach ($attachments as $attachment) {
                         $extn_array = explode('.', $attachment->guid); $extn = $extn_array[count($extn_array) - 1]; ?>

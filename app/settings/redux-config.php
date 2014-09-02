@@ -88,42 +88,41 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 
 		public function save_replay_by_email() {
 
-			global $rt_hd_settings;
+			global $rt_hd_settings, $redux_helpdesk_settings;
 
-			if ( isset( $_POST["mail_ac"] ) && is_email( $_POST["mail_ac"] ) ) {
-				if ( isset( $_POST["allow_users"] ) ) {
-					$allow_users=$_POST["allow_users"];
-				} else {
-					$allow_users=array();
-				}
-				if ( isset( $_POST['imap_password'] ) ) {
-					$token = rthd_encrypt_decrypt( $_POST['imap_password'] );
-				} else {
-					$token = NULL;
-				}
-				if ( isset( $_POST['imap_server'] ) ) {
-					$imap_server = $_POST['imap_server'];
-				} else {
-					$imap_server = NULL;
-				}
-				$email_ac = $rt_hd_settings->get_email_acc( $_POST['mail_ac'] );
-				$email_data = NULL;
-				if ( isset( $_POST['mail_folders'] ) && ! empty( $_POST['mail_folders'] ) && is_array( $_POST['mail_folders'] ) && ! empty( $email_ac ) ) {
-					$email_data = maybe_unserialize( $email_ac->email_data );
-					$email_data['mail_folders'] = implode( ',', $_POST['mail_folders'] );
-				}
-				if ( isset( $_POST['inbox_folder'] ) && ! empty( $_POST['inbox_folder'] ) && ! empty( $email_ac ) ) {
-					if ( is_null( $email_data ) ) {
-						$email_data = maybe_unserialize( $email_ac->email_data );
+			if ( isset( $redux_helpdesk_settings ) && isset( $redux_helpdesk_settings['rthd_enable_reply_by_email'] )
+				&& $redux_helpdesk_settings['rthd_enable_reply_by_email']==1
+				&& isset( $_POST['rthd_submit_enable_reply_by_email'] ) && $_POST['rthd_submit_enable_reply_by_email']=='save' ){
+				if ( isset( $_POST["mail_ac"] ) && is_email( $_POST["mail_ac"] ) ) {
+					if ( isset( $_POST['imap_password'] ) ) {
+						$token = rthd_encrypt_decrypt( $_POST['imap_password'] );
+					} else {
+						$token = NULL;
 					}
-					$email_data['inbox_folder'] = $_POST['inbox_folder'];
+					if ( isset( $_POST['imap_server'] ) ) {
+						$imap_server = $_POST['imap_server'];
+					} else {
+						$imap_server = NULL;
+					}
+					$email_ac = $rt_hd_settings->get_email_acc( $_POST['mail_ac'] );
+					$email_data = NULL;
+					if ( isset( $_POST['mail_folders'] ) && ! empty( $_POST['mail_folders'] ) && is_array( $_POST['mail_folders'] ) && ! empty( $email_ac ) ) {
+						$email_data = maybe_unserialize( $email_ac->email_data );
+						$email_data['mail_folders'] = implode( ',', $_POST['mail_folders'] );
+					}
+					if ( isset( $_POST['inbox_folder'] ) && ! empty( $_POST['inbox_folder'] ) && ! empty( $email_ac ) ) {
+						if ( is_null( $email_data ) ) {
+							$email_data = maybe_unserialize( $email_ac->email_data );
+						}
+						$email_data['inbox_folder'] = $_POST['inbox_folder'];
+					}
+					$rt_hd_settings->update_mail_acl( $_POST["mail_ac"], $token, maybe_serialize( $email_data ), $imap_server );
 				}
-				$rt_hd_settings->update_mail_acl( $_POST["mail_ac"], $token, maybe_serialize( $email_data ), $allow_users, $_POST["emailsignature"], $imap_server );
-			}
-			if ( isset( $_REQUEST["email"] ) && is_email( $_REQUEST["email"] ) ) {
-				$rt_hd_settings->delete_user_google_ac( $_REQUEST["email"] );
-				echo '<script>window.location="'.add_query_arg( array( 'post_type' => Rt_HD_Module::$post_type, 'page' => 'rthd-settings'), admin_url( 'edit.php' ) ).'";</script>';
-				die();
+				if ( isset( $_REQUEST["email"] ) && is_email( $_REQUEST["email"] ) ) {
+					$rt_hd_settings->delete_user_google_ac( $_REQUEST["email"] );
+					echo '<script>window.location="'.add_query_arg( array( 'post_type' => Rt_HD_Module::$post_type, 'page' => 'rthd-settings'), admin_url( 'edit.php' ) ).'";</script>';
+					die();
+				}
 			}
 		}
 
@@ -295,8 +294,8 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
                                          'type' => 'select',
                                          'data' => 'pages',
                                          'title' => __( 'Support Page' ),
-                                         'desc' => __( 'This logo will be used for all the Menu, Submenu, Post Types Menu Icons in Helpdesk.' ),
-                                         'subtitle' => __( 'Upload any logo using the WordPress native uploader, preferrably with the size of 16x16.' ),
+                                         'desc' => __( 'This Page will used for redirect support request in WooCommerce.' ),
+                                         'subtitle' => __( 'Select Page for Product Support' ),
 
                                         ),
                                         array(
@@ -305,8 +304,8 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
                                          'options' => $users_options,
                                          'default' => '1',
                                          'title' => __( 'Default Assignee' ),
-                                         'desc' => __( 'This logo will be used for all the Menu, Submenu, Post Types Menu Icons in Helpdesk.' ),
-                                         'subtitle' => __( 'Upload any logo using the WordPress native uploader, preferrably with the size of 16x16.' ),
+                                         'desc' => __( 'Default User for HelpDesh ticket Assignee' ),
+                                         'subtitle' => __( 'Select User for Support ticket Assign' ),
                                         ),
 				),
 			);
@@ -787,23 +786,6 @@ function rthd_reply_by_email_view( $field, $value ) {
 						<td>
 							<input type="hidden" name='mail_ac' value="<?php echo $email; ?>" />
 							<table class='hd-google-profile-table'>
-								<tr valign="top">
-									<th scope="row" ><label><?php echo $personMarkup; ?></label></th>
-									<th scope="row"><label>Allow user</label></th>
-									<td class="long"><input type='text' name='mail_acl_<?php echo $rCount; ?>' class='rtcamp-user-ac' autocomplete="off" />
-										<?php $mail_users_acl = $rt_hd_settings->get_email_acl($email);
-											foreach ($mail_users_acl as $acl) {
-												echo "<div class='mail-acl_user' acl-user='" . $acl->allow_user . "' id='mail_acl_" . $rCount . '_' . $acl->allow_user . "'>&nbsp;&nbsp;
-														<a href='#removeAccess'>X</a><input type='hidden' name='allow_users[]' value='" . $acl->allow_user . "' /></div>";
-											} ?>
-									</td>
-								</tr>
-								<tr valign="top">
-									<td><?php if ( isset( $ac->email_data['name'] ) ) { echo $ac->email_data['name']; } ?> <br/><a href='mailto:<?php echo $email ?>'><?php echo $email ?></a></td>
-									<th scope="row">Signature</th><td class="long">
-										<textarea name='emailsignature' id='emailsignature'><?php echo isset($ac->signature) ? $ac->signature : ''; ?></textarea>
-									</td>
-								</tr>
 							<?php if( $ac->type == 'imap' ) { ?>
 								<tr valign="top">
 									<td></td>
@@ -835,7 +817,7 @@ function rthd_reply_by_email_view( $field, $value ) {
 									echo '<tr valign="top"><td></td><td></td><td><p class="description">'.$e->getMessage().'</p></td></tr>';
 								} ?>
 								<tr valign="top">
-									<td></td>
+									<td><label><?php echo $personMarkup; ?></label></td>
 									<th scope="row"><label><?php _e( 'Mail Folders to read' ); ?></label></th>
 									<td>
 										<label> <?php _e( 'Inbox Folder' ); ?>
@@ -860,10 +842,11 @@ function rthd_reply_by_email_view( $field, $value ) {
 									<td></td>
 									<th scope="row"><label></label></th>
 									<td>
+										<input type="hidden" name="rthd_submit_enable_reply_by_email" value="save" />
+										<a class='button remove-google-ac' href='<?php echo admin_url("edit.php?post_type=".Rt_HD_Module::$post_type."&page=rthd-settings&tab=my-settings&type=personal&email=" . $email); ?>'>Remove A/C</a>
 										<?php if ( $ac->type == 'goauth' ) { ?>
 											<a class='button button-primary' href='<?php echo $authUrl; ?>'>Re Connect Google Now</a>
 										<?php } ?>
-										<a class='button remove-google-ac' href='<?php echo admin_url("edit.php?post_type=".Rt_HD_Module::$post_type."&page=rthd-settings&tab=my-settings&type=personal&email=" . $email); ?>'>Remove A/C</a>
 									</td>
 								</tr>
 							</table>

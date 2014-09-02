@@ -1,14 +1,15 @@
 <?php
 
-/*
-  Plugin Name: WordPress Helpdesk
-  Plugin URI: http://rtcamp.com/
-  Description: Helpdesk System for Wordpress
-  Version: 0.0.1
-  Author: rtCamp
-  Author URI: http://rtcamp.com
-  License: GPL
-  Text Domain: rt_helpdesk
+/**
+ * Plugin Name: rtBiz HelpDesk
+ * Plugin URI: http://rtcamp.com/
+ * Description: HelpDesk System for handle & track User request for Help
+ * Version: 0.1
+ * Author: rtCamp
+ * Author URI: http://rtcamp.com
+ * Contributors: Udit, Dipesh, Paresh
+ * License: GPL
+ * Text Domain: rt_helpdesk
  */
 
 if ( ! defined( 'RT_HD_VERSION' ) ) {

@@ -52,7 +52,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
                 $page = get_page( $redux_helpdesk_settings['rthd_support_page'] );
                 $actions['support'] = array(
                     'url'  => "/{$page->post_name}/?order_id={$order->id}",
-                    'name' => __( 'Get Support', 'woocommerce' )
+                    'name' => __( 'Get Support', RT_HD_TEXT_DOMAIN )
                 );
                 
                 return $actions;
@@ -131,7 +131,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
                 <form method="post" action="" class="comment-form" enctype="multipart/form-data">
                     
                     <p>
-                             <label>Product </label>
+                             <label><?php _e( 'Product', RT_HD_TEXT_DOMAIN ); ?></label>
                              <select name="post[product_id]">
                                  <option value="">Choose Product</option>
                                  <?php echo $option; ?>
@@ -139,12 +139,12 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
                          </p>
                          
                          <p>
-                             <label>Email</label>
+                             <label><?php _e( 'Email', RT_HD_TEXT_DOMAIN ); ?></label>
                              <input type="text" name="post[email]" value="<?php echo $order_email ?>" />
                          </p>
                          
                          <p>
-                             <label>Description</label>
+                             <label><?php _e( 'Description', RT_HD_TEXT_DOMAIN ); ?></label>
                              <textarea name="post[description]"></textarea>
                          </p>
                          

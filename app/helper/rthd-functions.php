@@ -60,8 +60,12 @@ function rthd_attribute_taxonomy_name( $name ) {
 	return 'rt_' . rthd_sanitize_taxonomy_name( $name );
 }
 
-function rthd_post_type_name( $name ) {
+function rtbiz_post_type_name( $name ) {
 	return 'rt_' . rthd_sanitize_taxonomy_name( $name );
+}
+
+function rthd_post_type_name( $name ) {
+	return 'rtbiz_hd_' . rthd_sanitize_taxonomy_name( $name );
 }
 
 function rthd_get_all_attributes( $attribute_store_as = '' ) {

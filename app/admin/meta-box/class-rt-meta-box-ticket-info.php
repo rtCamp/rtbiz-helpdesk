@@ -50,7 +50,7 @@ if( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
             </style>
             
             <div class="row_group">
-                <span class="prefix" title="<?php _e( 'Assigned To' ); ?>"><label for="post[post_author]"><strong><?php _e('Assigned To'); ?></strong></label></span>
+                <span class="prefix" title="<?php _e( 'Assigned To', RT_HD_TEXT_DOMAIN ); ?>"><label for="post[post_author]"><strong><?php _e('Assigned To'); ?></strong></label></span>
                 <select name="post[post_author]" ><?php
                     if ( !empty( $rtcamp_users ) ) {
                         foreach ( $rtcamp_users as $author ) {
@@ -66,7 +66,7 @@ if( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
             </div>
             
             <div class="row_group">
-                <span class="prefix" title="<?php _e( 'Status' ); ?>"><label><strong><?php _e('Status'); ?></strong></label></span><?php
+                <span class="prefix" title="<?php _e( 'Status' ); ?>"><label><strong><?php _e('Status', RT_HD_TEXT_DOMAIN ); ?></strong></label></span><?php
                 $pstatus = "";
                 if (isset($post->ID)){
                     $pstatus = $post->post_status;
@@ -93,7 +93,7 @@ if( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
             </div>
                                 
             <div class="row_group">
-                <span class="prefix" title="<?php _e('Create Date'); ?>"><label><strong><?php _e('Create Date'); ?></strong></label></span>
+                <span class="prefix" title="<?php _e('Create Date', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e('Create Date', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
                 <input class="datetimepicker moment-from-now" type="text" placeholder="Select Create Date"
                                value="<?php echo ( isset( $createdate ) ) ? $createdate : ''; ?>"
                                title="<?php echo ( isset( $createdate ) ) ? $createdate : ''; ?>">
@@ -102,14 +102,14 @@ if( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
             </div>
             
             <div class="row_group">
-                <span class="prefix" title="<?php _e('Modify Date'); ?>"><label><strong><?php _e('Modify Date'); ?></strong></label></span>
+                <span class="prefix" title="<?php _e('Modify Date', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e('Modify Date', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
                 <input class="moment-from-now"  type="text" placeholder="Modified on Date"  value="<?php echo $modifydate; ?>"
                                        title="<?php echo $modifydate; ?>" readonly="readonly">
                 <!--<span class="postfix datepicker-toggle" data-datepicker="closing-date"><label class="foundicon-calendar">[]</label></span>-->
             </div>
             
             <div class="row_group">
-                <span class="prefix" title="<?php _e('Closing Date'); ?>"><label><strong><?php _e('Closing Date'); ?></strong></label></span>
+                <span class="prefix" title="<?php _e('Closing Date', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e('Closing Date', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
                 <input class="datepicker moment-from-now" type="text" placeholder="Select Closing Date"
                     value="<?php echo ( isset( $closingdate ) ) ? $closingdate : ''; ?>"
                     title="<?php echo ( isset( $closingdate ) ) ? $closingdate : ''; ?>">
@@ -118,14 +118,14 @@ if( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
             </div>
                 
             <div class="row_group">
-                <span class="prefix" title="<?php _e('Closing Reason'); ?>"><label><strong><?php _e('Closing Reason'); ?></strong></label></span>
+                <span class="prefix" title="<?php _e('Closing Reason', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e('Closing Reason', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
                 <?php $rt_hd_closing_reason->get_closing_reasons( ( isset( $post->ID ) ) ? $post->ID : '', TRUE ); ?>
             </div><?php
             
             $rthd_unique_id = get_post_meta($post->ID, '_rtbiz_helpdesk_ticket_unique_id', true);
             if(!empty($rthd_unique_id)) { ?>
                 <div class="row_group">
-                    <span class="prefix" title="<?php _e('Public URL'); ?>"><label><strong><?php _e('Public URL'); ?></strong></label></span>
+                    <span class="prefix" title="<?php _e('Public URL', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e('Public URL', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
                     <div class="rthd_attr_border">
                         <a class="rthd_public_link" target="_blank" href="<?php echo trailingslashit(site_url()) . strtolower($labels['name']) . '/?rthd_unique_id=' . $rthd_unique_id; ?>"><?php _e('Link'); ?></a>
                     </div>

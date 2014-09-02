@@ -100,28 +100,28 @@ if( !class_exists( 'Rt_HD_Logs' ) ) {
 					<thead>
 						<tr>
 							<th>
-								Transaction Id
+								<?php _e( 'Transaction Id', RT_HD_TEXT_DOMAIN ); ?>
 							</th>
 							<th>
-								Title
+								<?php _e( 'Title', RT_HD_TEXT_DOMAIN ); ?>
 							</th>
 							<th>
-								First Date
+								<?php _e( 'First Date', RT_HD_TEXT_DOMAIN ); ?>
 							</th>
 							<th>
-								Last Date
+								<?php _e( 'Last Date', RT_HD_TEXT_DOMAIN ); ?>
 							</th>
 							<th>
-								Post Count
+								<?php _e( 'Post Count', RT_HD_TEXT_DOMAIN ); ?>
 							</th>
 							<th>
-								Taxonomy Count
+								<?php _e( 'Taxonomy Count', RT_HD_TEXT_DOMAIN ); ?>
 							</th>
 	<!--                        <th>
 								Gravity Meta Count
 							</th>-->
 							<th>
-								Transaction Start Time
+								<?php _e( 'Transaction Start Time', RT_HD_TEXT_DOMAIN ); ?>
 							</th>
 							<th>
 

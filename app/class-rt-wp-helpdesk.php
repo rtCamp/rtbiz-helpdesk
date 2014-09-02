@@ -100,7 +100,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 		function rt_biz_admin_notice() {
 			?>
 			<div class="updated">
-				<p><?php _e( sprintf( 'rtHelpdesk : It seems that rtBiz plugin is not installed or activated. Please %s / %s it.', '<a href="' . admin_url( 'plugin-install.php?tab=search&s=rt-biz' ) . '">' . __( 'install' ) . '</a>', '<a href="' . admin_url( 'plugins.php' ) . '">' . __( 'activate' ) . '</a>' ) ); ?></p>
+				<p><?php _e( sprintf( 'rtHelpdesk : It seems that rtBiz plugin is not installed or activated. Please %s / %s it.', '<a href="' . admin_url( 'plugin-install.php?tab=search&s=rt-biz' ) . '">' . __( 'install' ) . '</a>', '<a href="' . admin_url( 'plugins.php' ) . '">' . __( 'activate' ) . '</a>' ) , RT_HD_TEXT_DOMAIN ); ?></p>
 			</div>
 		<?php
 		}
@@ -157,13 +157,13 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			$rt_hd_user_settings = new Rt_HD_User_Settings();
 			$rt_hd_logs = new Rt_HD_Logs();
                         
-                        $rt_hd_woocommerce = new Rt_HD_Woocommerce();
-                        
+			$rt_hd_woocommerce = new Rt_HD_Woocommerce();
+
 			$page_slugs = array(
 				'rthd-' . Rt_HD_Module::$post_type . '-dashboard',
 			);
 			$rt_hd_reports = new Rt_Reports( $page_slugs );
-                        
+
 			$rt_hd_admin_meta_boxes = new RT_HD_Admin_Meta_Boxes( );
 		}
 

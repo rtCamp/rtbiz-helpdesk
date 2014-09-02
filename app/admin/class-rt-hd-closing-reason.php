@@ -28,15 +28,15 @@ if ( !class_exists( 'Rt_HD_Closing_Reason' ) ) {
 		 */
 		function closing_reason( $post_type ) {
 			$labels = array(
-				'name' => __( 'Closing Reason' ),
-				'search_items' => __( 'Search Closing Reason' ),
-				'all_items' => __('All Closing Reasons'),
-				'edit_item' => __('Edit Closing Reason'),
-				'update_item' => __('Update Closing Reason'),
-				'add_new_item' => __('Add New Closing Reason'),
-				'new_item_name' => __('New Closing Reason'),
-				'menu_name' => __('Closing Reasons'),
-				'choose_from_most_used' => __('Choose from the most used Closing Reasons'),
+				'name' => __( 'Closing Reason', RT_HD_TEXT_DOMAIN ),
+				'search_items' => __( 'Search Closing Reason', RT_HD_TEXT_DOMAIN ),
+				'all_items' => __('All Closing Reasons', RT_HD_TEXT_DOMAIN ),
+				'edit_item' => __('Edit Closing Reason', RT_HD_TEXT_DOMAIN ),
+				'update_item' => __('Update Closing Reason', RT_HD_TEXT_DOMAIN ),
+				'add_new_item' => __('Add New Closing Reason', RT_HD_TEXT_DOMAIN ),
+				'new_item_name' => __('New Closing Reason', RT_HD_TEXT_DOMAIN ),
+				'menu_name' => __('Closing Reasons', RT_HD_TEXT_DOMAIN ),
+				'choose_from_most_used' => __('Choose from the most used Closing Reasons', RT_HD_TEXT_DOMAIN ),
 			);
 			$editor_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
 			register_taxonomy(rthd_attribute_taxonomy_name('closing_reason'), array( $post_type ), array(
@@ -109,12 +109,12 @@ if ( !class_exists( 'Rt_HD_Closing_Reason' ) ) {
 			if( !empty( $post_term ) ) {
 				$selected_term = $post_term[0];
 				$options[] = array(
-					__('Select a Reason') => '',
+					__('Select a Reason', RT_HD_TEXT_DOMAIN ) => '',
 					'selected' => false,
 				);
 			} else {
 				$options[] = array(
-					__('Select a Reason') => '',
+					__('Select a Reason', RT_HD_TEXT_DOMAIN ) => '',
 					'selected' => true,
 				);
 			}
