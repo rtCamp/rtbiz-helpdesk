@@ -123,6 +123,8 @@ if ( !class_exists( 'RT_Meta_Box_Subscribers ' ) ) {
 		 */
 		public static function save( $post_id, $post ) {
 
+			$newTicket   = $_POST['post']; //post data
+
 			// Subscribers
 			if ( !isset( $_POST['subscribe_to'] ) ) {
 				$_POST['subscribe_to'] = array();

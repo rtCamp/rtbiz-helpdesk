@@ -175,7 +175,7 @@ if ( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		public static function save( $post_id, $post ) {
-			global $rt_hd_admin_meta_boxes, $ticketModel, $rt_hd_closing_reason, $rt_hd_attributes, $rt_ticket_email_content;
+			global $rt_hd_admin_meta_boxes, $ticketModel, $rt_hd_closing_reason, $rt_hd_attributes, $rt_ticket_email_content, $rt_hd_ticket_history_model;
 
 			$closing_reason_history_id = $rt_ticket_email_content['closing_reason_history_id'];
 
