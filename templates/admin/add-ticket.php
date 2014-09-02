@@ -179,7 +179,7 @@ if ( isset( $_POST['post'] ) ) {
 			$timeStamp = $d->getTimestamp();
 			$post_date_gmt = gmdate('Y-m-d H:i:s', (intval($timeStamp)));
 			$unique_id = md5( 'rthd_'.$post_type.'_'.$post_date_gmt );
-			update_post_meta( $post_id, 'rthd_unique_id', $unique_id );
+			update_post_meta( $post_id, '_rtbiz_helpdesk_unique_id', $unique_id );
 		}
     }
 
@@ -204,7 +204,7 @@ if ( isset( $_POST['post'] ) ) {
         if ( $diff ) {
             $emailHTML .= '<tr><th style="padding: .5em;border: 0;">Closing Date</th><td>' . $diff . '</td><td></td></tr>';
         }
-        update_post_meta( $post_id, 'ticket_closing_date', $newTicket['closing-date'] );
+        update_post_meta( $post_id, '_rtbiz_helpdesk_ticket_closing_date', $newTicket['closing-date'] );
 
 		/* Update Index Table */
 		$cd = new DateTime( $newTicket['closing-date'] );
@@ -256,7 +256,7 @@ if ( isset( $_POST['post'] ) ) {
             $oldSubscriberList[] = array( 'email' => $userSub->user_email, 'name' => $userSub->display_name );
         }
     }
-    update_post_meta( $post_id, 'subscribe_to', $_POST['subscribe_to'] );
+    update_post_meta( $post_id, '_rtbiz_helpdesk_subscribe_to', $_POST['subscribe_to'] );
 
 	// Attachments
 	$old_attachments = get_posts( array(

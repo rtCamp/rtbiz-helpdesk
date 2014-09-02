@@ -180,7 +180,7 @@ if( !class_exists( 'RT_Ticket_Diff_Email' ) ) {
             }
             
             //Unscuscribe logic
-            $oldSubscriberArr = get_post_meta( $post_id, '_subscribe_to', true );
+            $oldSubscriberArr = get_post_meta( $post_id, '_rtbiz_helpdesk_subscribe_to', true );
             if ( !$oldSubscriberArr ) {
                 $oldSubscriberArr = array();
             }

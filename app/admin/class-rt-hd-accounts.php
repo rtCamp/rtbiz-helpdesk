@@ -153,7 +153,7 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 
 			switch( $column ) {
 				case 'country':
-					if ( class_exists( 'Rt_Entity' ) ) {
+					if ( class_exists( 'Rt_Entity' ) ) { // TODO Update it while updating meta of rtbiz
 						echo implode( ' , ', get_post_meta( $post_id, Rt_Entity::$meta_key_prefix.'account_country' ) );
 					}
 					break;

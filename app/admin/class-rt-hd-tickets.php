@@ -125,27 +125,27 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 				)
 			);
 
-			update_post_meta( $post_id, 'rthd_unique_id', $unique_id );
+			update_post_meta( $post_id, '_rtbiz_helpdesk_unique_id', $unique_id );
 
 			if( isset( $settings['attach_contacts'] ) && $settings['attach_contacts'] == 'yes' ) {
 				$this->add_contacts_to_post($allemail, $post_id);
 			}
 			$this->add_attachment_to_post($uploaded, $post_id, $post_type);
 
-			update_post_meta($post_id, "ticket_email", $senderEmail);
+			update_post_meta($post_id, "_rtbiz_helpdesk_ticket_email", $senderEmail);
 
 			global $transaction_id;
 			if (isset($transaction_id) && $transaction_id > 0) {
-				update_post_meta($post_id, "_transaction_id", $transaction_id);
+				update_post_meta($post_id, "_rtbiz_helpdesk_transaction_id", $transaction_id);
 			}
 
-			update_post_meta($post_id, 'subscribe_to', $subscriber);
+			update_post_meta($post_id, '_rtbiz_helpdesk_subscribe_to', $subscriber);
 			if ($messageid != "")
-				update_post_meta($post_id, "_messageid", $messageid);
+				update_post_meta($post_id, "_rtbiz_helpdesk_messageid", $messageid);
 			if ($inreplyto != "")
-				update_post_meta($post_id, "_inreplyto", $inreplyto);
+				update_post_meta($post_id, "_rtbiz_helpdesk_inreplyto", $inreplyto);
 			if ($references != "")
-				update_post_meta($post_id, "_references", $references);
+				update_post_meta($post_id, "_rtbiz_helpdesk_references", $references);
 
 
 
@@ -590,11 +590,11 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 				}
 			}
 
-			$subscribe_to = get_post_meta($comment_post_ID, 'subscribe_to', true);
+			$subscribe_to = get_post_meta($comment_post_ID, '_rtbiz_helpdesk_subscribe_to', true);
 			if ($subscribe_to && is_array($subscribe_to) && sizeof($subscribe_to) > 0) {
 				$subscriber = array_merge($subscribe_to, $subscriber);
 			}
-			update_post_meta($comment_post_ID, 'subscribe_to', $subscriber);
+			update_post_meta($comment_post_ID, '_rtbiz_helpdesk_subscribe_to', $subscriber);
 
 			$this->add_attachment_to_post($uploaded, $comment_post_ID, $post_type, false, $comment_id);
 			if( isset( $module_settings['attach_contacts'] ) && $module_settings['attach_contacts'] == 'yes' ) {
@@ -1384,7 +1384,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		}
 
 		function notify_subscriber_via_email($post_id, $title, $body, $comment_id) {
-			$oldSubscriberArr = get_post_meta($post_id, "subscribe_to", true);
+			$oldSubscriberArr = get_post_meta($post_id, "_rtbiz_helpdesk_subscribe_to", true);
 			$bccemails = array();
 			if ($oldSubscriberArr && is_array($oldSubscriberArr) && !empty($oldSubscriberArr)) {
 				foreach ($oldSubscriberArr as $emailsubscriber) {

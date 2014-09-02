@@ -194,7 +194,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
                            
                        case 'rthd_closing_date' :
                     
-                           echo get_post_meta($post->ID, '_ticket_closing_date', true ) ;
+                           echo get_post_meta($post->ID, '_rtbiz_helpdesk_ticket_closing_date', true ) ;
                            
                                break; 
                            
@@ -210,7 +210,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
                            
                        case 'rthd_created_by' :
                            
-                           $user_id = get_post_meta($post->ID, '_ticket_created_by', true );
+                           $user_id = get_post_meta($post->ID, '_rtbiz_helpdesk_ticket_created_by', true );
                            $user_info = get_userdata($user_id);
                            $url = esc_url( add_query_arg( array( 'post_type' => self::$post_type, 'created_by' =>$user_id ), 'edit.php' ));
                            
@@ -220,7 +220,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
                            
                        case 'rthd_updated_by' :
      
-                           $user_id = get_post_meta($post->ID, '_ticket_updated_by', true );
+                           $user_id = get_post_meta($post->ID, '_rtbiz_helpdesk_ticket_updated_by', true );
                            $user_info = get_userdata($user_id);
                            
                             $url = esc_url( add_query_arg( array( 'post_type' => self::$post_type, 'updated_by' =>$user_id ), 'edit.php' ));
@@ -232,7 +232,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
                            
                        case 'rthd_closed_by' :
               
-                           $user_id = get_post_meta($post->ID, '_ticket_closed_by', true );
+                           $user_id = get_post_meta($post->ID, '_rtbiz_helpdesk_ticket_closed_by', true );
                            $user_info = get_userdata($user_id);
                            echo ( $user_info ) ? $user_info->user_login : '' ;
                           
@@ -297,7 +297,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
                          $query->set('meta_query',
                                       array(
                                                array(
-                                                       'key' => '_ticket_created_by',
+                                                       'key' => '_rtbiz_helpdesk_ticket_created_by',
                                                        'value' => $_GET['created_by']
                                                )
                                        )
@@ -310,7 +310,7 @@ if( !class_exists( 'Rt_HD_Module' ) ) {
                          $query->set('meta_query',
                                       array(
                                                array(
-                                                       'key' => '_ticket_updated_by',
+                                                       'key' => '_rtbiz_helpdesk_ticket_updated_by',
                                                        'value' => $_GET['updated_by']
                                                )
                                        )

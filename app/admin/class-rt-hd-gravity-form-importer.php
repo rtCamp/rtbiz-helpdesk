@@ -1169,7 +1169,7 @@ if (!class_exists('Rt_HD_Gravity_Form_Importer')) {
 					}
 				}
 				$response["status"] = true;
-				update_post_meta($ticket_id, "_gravity_form_all_data", $_REQUEST);
+				update_post_meta($ticket_id, "_rtbiz_helpdesk_gravity_form_all_data", $_REQUEST);
 				if (isset($ticketmeta)) {
 					foreach ($ticketmeta as $ticketm) {
 						update_post_meta($ticket_id, $ticketm["key"], $ticketm["value"]);
