@@ -2,8 +2,9 @@
 /**
  * Don't load this file directly!
  */
-if (!defined('ABSPATH'))
+if ( !defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -13,31 +14,68 @@ if (!defined('ABSPATH'))
 
 /**
  * Description of RtHDMailAccountsModel
- *
+ * email account model for wp_hd_mail_accounts table
  * @author udit
  */
 if ( !class_exists( 'Rt_HD_Mail_Accounts_Model' ) ) {
+	/**
+	 * Class Rt_HD_Mail_Accounts_Model
+	 */
 	class Rt_HD_Mail_Accounts_Model extends RT_DB_Model {
 		public function __construct() {
 			parent::__construct( 'wp_hd_mail_accounts' );
 		}
 
+		/**
+		 * add mail account
+		 *
+		 * @param $data
+		 *
+		 * @return int
+		 */
 		function add_mail_account( $data ) {
 			return parent::insert( $data );
 		}
 
+		/**
+		 * get mail account
+		 *
+		 * @param $where
+		 *
+		 * @return array
+		 */
 		function get_mail_account( $where ) {
 			return parent::get( $where );
 		}
 
+		/**
+		 * update mail account
+		 *
+		 * @param $data
+		 * @param $where
+		 *
+		 * @return mixed
+		 */
 		function update_mail_account( $data, $where ) {
 			return parent::update( $data, $where );
 		}
 
+		/**
+		 * remove mail account
+		 *
+		 * @param $where
+		 *
+		 * @return int
+		 */
 		function remove_mail_account( $where ) {
 			return parent::delete( $where );
 		}
 
+		/**
+		 * get all mail account
+		 *
+		 * @return array
+		 */
 		function get_all_mail_accounts() {
 			return parent::get( array() );
 		}

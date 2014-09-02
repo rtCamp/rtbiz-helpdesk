@@ -3,8 +3,9 @@
 /**
  * Don't load this file directly!
  */
-if ( ! defined( 'ABSPATH' ) )
+if ( !defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -17,53 +18,73 @@ if ( ! defined( 'ABSPATH' ) )
  *
  * @author udit
  */
-if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
+if ( !class_exists( 'Rt_HD_Tickets_Front' ) ) {
 
+	/**
+	 * Class Rt_HD_Tickets_Front
+	 * Initialize the frontend
+	 */
 	class Rt_HD_Tickets_Front {
 
+		/**
+		 * change the title of frontend and template to front end.
+		 */
 		public function __construct() {
 			add_filter( 'template_include', array( $this, 'template_include' ), 1, 1 );
 			add_filter( 'wp_title', array( $this, 'change_title' ), 9999, 1 );
 		}
 
+		/**
+		 * @param $title
+		 *
+		 * @return string
+		 * as name suggest this function is used to change the name of frontend.
+		 */
 		function change_title( $title ) {
 			global $rthd_front_page_title;
-			if ( isset( $rthd_front_page_title ) && ! empty( $rthd_front_page_title ) ) {
+			if ( isset( $rthd_front_page_title ) && !empty( $rthd_front_page_title ) ) {
 				return $rthd_front_page_title;
 			}
+
 			return $title;
 		}
 
+		/**
+		 * @param $template
+		 *
+		 * @return mixed
+		 * include template for ticket on frontend
+		 */
 		function template_include( $template ) {
 			global $wp_query;
 
-			if ( ! isset( $wp_query->query_vars[ 'name' ] ) ) {
+			if ( !isset( $wp_query->query_vars['name'] ) ) {
 				return $template;
 			}
 
-			$name = $wp_query->query_vars[ 'name' ];
+			$name = $wp_query->query_vars['name'];
 
 			$post_type = rthd_post_type_name( $name );
 			if ( $post_type != Rt_HD_Module::$post_type ) {
 				return $template;
 			}
 
-			if ( ! isset( $_REQUEST[ 'rthd_unique_id' ] ) || ( isset( $_REQUEST[ 'rthd_unique_id' ] ) && empty( $_REQUEST[ 'rthd_unique_id' ] ) ) ) {
+			if ( !isset( $_REQUEST['rthd_unique_id'] ) || ( isset( $_REQUEST['rthd_unique_id'] ) && empty( $_REQUEST['rthd_unique_id'] ) ) ) {
 				return $template;
 			}
 
 			$args = array(
-				'meta_key' => '_rtbiz_helpdesk_unique_id',
-				'meta_value' => $_REQUEST[ 'rthd_unique_id' ],
+				'meta_key'    => '_rtbiz_helpdesk_unique_id',
+				'meta_value'  => $_REQUEST['rthd_unique_id'],
 				'post_status' => 'any',
-				'post_type' => $post_type,
+				'post_type'   => $post_type,
 			);
 
 			$ticketpost = get_posts( $args );
 			if ( empty( $ticketpost ) ) {
 				return $template;
 			}
-			$ticket = $ticketpost[ 0 ];
+			$ticket = $ticketpost[0];
 			if ( $post_type != $ticket->post_type ) {
 				return $template;
 			}
@@ -72,6 +93,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 			$rthd_ticket = $ticket;
 			global $rthd_front_page_title;
 			$rthd_front_page_title = ucfirst( $name ) . ' | ' . $rthd_ticket->post_title;
+
 			return rthd_locate_template( 'ticket-front-page.php' );
 		}
 
