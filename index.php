@@ -97,7 +97,7 @@ if ( !defined( 'RT_HD_PATH_TEMPLATES' ) ) {
 	define( 'RT_HD_PATH_TEMPLATES', plugin_dir_path( __FILE__ ) . 'templates/' );
 }
 
-include_once RT_HD_PATH_LIB . 'wp-helpers.php';
+include_once RT_HD_PATH_LIB . 'rt-lib.php';
 
 /**
  *  Includes all external Require Libraries and
