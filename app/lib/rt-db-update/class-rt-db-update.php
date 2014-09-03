@@ -30,7 +30,7 @@ if ( ! class_exists( 'RT_DB_Update' ) ){
 		/**
 		 * @var string
 		 */
-		public $plugin_path = '/../wp-helpers.php';
+		public $plugin_path = '/../rt-lib.php';
 		/**
 		 * @var string
 		 */
@@ -89,7 +89,11 @@ if ( ! class_exists( 'RT_DB_Update' ) ){
 
 			$this->mu_single_table = $mu_single_table;
 
-			$this->rt_plugin_info = new RT_Plugin_Info( $this->plugin_path );
+			if ( false !== strpos( $this->plugin_path, '/themes' ) ) {
+				$this->rt_plugin_info = new RT_Theme_Info( $this->plugin_path );
+			} else {
+				$this->rt_plugin_info = new RT_Plugin_Info( $this->plugin_path );
+			}
 			if ( $current_version == false ){
 				$current_version = $this->rt_plugin_info->version;
 			}
