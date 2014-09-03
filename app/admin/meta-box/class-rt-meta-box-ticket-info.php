@@ -33,7 +33,7 @@ if ( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 			$post_type = Rt_HD_Module::$post_type;
 
 			$create = new DateTime( $post->post_date );
-
+                            
 			$modify     = new DateTime( $post->post_modified );
 			$createdate = $create->format( "M d, Y h:i A" );
 			$modifydate = $modify->format( "M d, Y h:i A" );
@@ -187,11 +187,9 @@ if ( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 			if ( isset( $creationdate ) && $creationdate != '' ) {
 				try {
 					$dr  = date_create_from_format( 'M d, Y H:i A', $creationdate );
-					$UTC = new DateTimeZone( 'UTC' );
-					$dr->setTimezone( $UTC );
-					$timeStamp                  = $dr->getTimestamp();
-					$newTicket['post_date']     = gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) + ( get_option( 'gmt_offset' ) * 3600 ) ) );
-					$newTicket['post_date_gmt'] = gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) ) );
+					$timeStamp = $dr->getTimestamp();
+					$newTicket['post_date']     = gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) ) );
+					$newTicket['post_date_gmt'] = get_gmt_from_date($dr->format('Y-m-d H:i:s'));
 				} catch ( Exception $e ) {
 					$newTicket['post_date']     = current_time( 'mysql' );
 					$newTicket['post_date_gmt'] = gmdate( 'Y-m-d H:i:s' );
@@ -233,12 +231,10 @@ if ( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 				update_post_meta( $post_id, '_rtbiz_hd_closing_date', $newTicket['closing-date'] );
 				update_post_meta( $post_id, '_rtbiz_hd_closed_by', get_current_user_id() );
 				$cd  = new DateTime( $newTicket['closing-date'] );
-				$UTC = new DateTimeZone( 'UTC' );
-				$cd->setTimezone( $UTC );
 				$timeStamp = $cd->getTimestamp();
 				$data      = array_merge( $data, array(
-					'date_closing'     => gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) + ( get_option( 'gmt_offset' ) * 3600 ) ) ),
-					'date_closing_gmt' => gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) ) ),
+					'date_closing'     => gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) ) ),
+					'date_closing_gmt' => get_gmt_from_date( $cd->format('Y-m-d H:i:s') ) ,
 					'user_closed_by'   => get_current_user_id(),
 				) );
 
