@@ -117,6 +117,14 @@ if ( !class_exists( 'RT_HD_Admin_Meta_Boxes' ) ) {
 			}
 
 			do_action( 'rt_hd_process_' . $post->post_type . '_meta', $post_id, $post );
+
+;            if( $post->post_status == 'trash' ) {
+
+                $url = add_query_arg( array('post_type' => Rt_HD_Module::$post_type ) ,admin_url('edit.php') );
+                wp_safe_redirect( $url );
+                die();
+            }
+
 		}
 
 	}

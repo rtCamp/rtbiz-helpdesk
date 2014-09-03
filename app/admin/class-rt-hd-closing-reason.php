@@ -117,7 +117,7 @@ if ( !class_exists( 'Rt_HD_Closing_Reason' ) ) {
 		function get_closing_reasons( $post_id, $user_edit = true ) {
 			global $rthd_form;
 			$options   = array();
-			$terms     = get_terms( rthd_attribute_taxonomy_name( 'closing_reason' ), array( 'hide_empty' => false ) );
+			$terms     = get_terms( rthd_attribute_taxonomy_name( 'closing-reason' ), array( 'hide_empty' => false ) );
 			$post_term = wp_get_post_terms( $post_id, rthd_attribute_taxonomy_name( 'closing-reason' ), array( 'fields' => 'ids' ) );
 			// Default Selected Term for the attribute. can beset via settings -- later on
 			$selected_term = '-11111';

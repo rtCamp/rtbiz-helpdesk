@@ -177,8 +177,12 @@ function rthd_post_term_to_string( $postid, $taxonomy, $termsep = ',' ) {
 	if ( $termsArr ) {
 		$sep = '';
 		foreach ( $termsArr as $tObj ) {
-			$tmpStr .= $sep . $tObj->name;
-			$sep = $termsep;
+
+           if( isset( $tObj->name) ) {
+               $tmpStr .= $sep . $tObj->name;
+               $sep = $termsep;
+           }
+
 		}
 	}
 
