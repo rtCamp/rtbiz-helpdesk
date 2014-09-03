@@ -6,17 +6,17 @@
  * @author Faishal Saiyed<saiyedfaishal@gmail.com>
  */
 
-if ( ! class_exists( 'RT_Plugin_Info' ) ){
+if ( ! class_exists( 'RT_Theme_Info' ) ){
 	/**
 	 * Class RT_Plugin_Info
 	 */
-	class RT_Plugin_Info
+	class RT_Theme_Info
 	{
 
 		/**
 		 * @var string plugin loader file path
 		 */
-		public $plugin_path;
+		public $theme_path;
 		/**
 		 * @var string Name of the plugin, must be unique.
 		 */
@@ -28,11 +28,11 @@ if ( ! class_exists( 'RT_Plugin_Info' ) ){
 		/**
 		 * @var string Description of what the plugin does and/or notes from the author.
 		 */
-		public $desctipriton;
+		public $description;
 		/**
 		 * @var string The author's name
 		 */
-		public $authro;
+		public $author;
 		/**
 		 * @var string The authors web site address.
 		 */
@@ -44,7 +44,7 @@ if ( ! class_exists( 'RT_Plugin_Info' ) ){
 		/**
 		 * @var string Plugin web site address.
 		 */
-		public $pluginuri;
+		public $themeuri;
 		/**
 		 * @var string  Plugin's text domain for localization.
 		 */
@@ -60,56 +60,56 @@ if ( ! class_exists( 'RT_Plugin_Info' ) ){
 		/**
 		 * @var array plugin info metadata in raw format
 		 */
-		public $plugin_data;
+		public $theme_data;
 
 		/**
 		 * @param null $path
 		 */
 		public function __construct( $path = null )
 		{
-			$this->set_current_plugin_path( $path );
-			$this->set_plugin_data();
+			$this->set_current_theme_path( $path );
+			$this->set_theme_data();
 		}
 
 		/**
 		 * @return array plugin info in array
 		 */
-		function get_plugin_data()
+		function get_theme_data()
 		{
-			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+			require_once( ABSPATH . 'wp-admin/includes/theme.php' );
 
-			return get_plugin_data( $this->plugin_path );
+			return wp_get_theme( basename( $this->theme_path ) );
 		}
 
 		/**
 		 * Set plugin data
 		 * @return null
 		 */
-		function set_plugin_data()
+		function set_theme_data()
 		{
-			$this->plugin_data  = $this->get_plugin_data();
-			$this->name         = $this->plugin_data['Name'];
-			$this->title        = $this->plugin_data['Title'];
-			$this->desctipriton = $this->plugin_data['Description'];
-			$this->author       = $this->plugin_data['Author'];
-			$this->authoruri    = $this->plugin_data['AuthorURI'];
-			$this->version      = $this->plugin_data['Version'];
-			$this->pluginuri    = $this->plugin_data['PluginURI'];
-			$this->textdomain   = $this->plugin_data['TextDomain'];
-			$this->domain_path  = $this->plugin_data['DomainPath'];
-			$this->network      = $this->plugin_data['Network'];
+			$this->theme_data  = $this->get_theme_data();
+			$this->name        = $this->theme_data->get( 'Name' );
+			$this->title       = $this->theme_data->get( 'Name' );
+			$this->description = $this->theme_data->get( 'Description' );
+			$this->author      = $this->theme_data->get( 'Author' );
+			$this->authoruri   = $this->theme_data->get( 'AuthorURI' );
+			$this->version     = $this->theme_data->get( 'Version' );
+			$this->themeuri    = $this->theme_data->get( 'ThemeURI' );
+			$this->textdomain  = $this->theme_data->get( 'TextDomain' );
+			$this->domain_path = $this->theme_data->get( 'DomainPath' );
+			$this->network     = $this->theme_data->get( 'Status' );
 		}
 
 		/**
 		 * Set current plugin loader path
 		 * @param $path string plugin loader file path
 		 */
-		function set_current_plugin_path( $path )
+		function set_current_theme_path( $path )
 		{
 			if ( $path != null ){
-				$this->plugin_path = $path;
+				$this->theme_path = $path;
 			} else {
-				$this->plugin_path = realpath( plugin_dir_path( __FILE__ ) . '../../index.php' );
+				$this->theme_path = realpath( plugin_dir_path( __FILE__ ) . '../../index.php' );
 			}
 		}
 
