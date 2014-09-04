@@ -2,7 +2,7 @@
 /**
  * Don't load this file directly!
  */
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -18,7 +18,7 @@ if ( !defined( 'ABSPATH' ) ) {
  * @since rt-Helpdesk 0.1
  */
 
-if ( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
+if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 	class RT_Meta_Box_Ticket_Info {
 
 		/**
@@ -33,7 +33,7 @@ if ( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 			$post_type = Rt_HD_Module::$post_type;
 
 			$create = new DateTime( $post->post_date );
-                            
+
 			$modify     = new DateTime( $post->post_modified );
 			$createdate = $create->format( "M d, Y h:i A" );
 			$modifydate = $modify->format( "M d, Y h:i A" );
@@ -41,7 +41,7 @@ if ( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 			$post_author = $post->post_author;
 
 			$close_date_meta = get_post_meta( $post->ID, '_rtbiz_hd_closing_date', true );
-			if ( !empty( $close_date_meta ) ) {
+			if ( ! empty( $close_date_meta ) ) {
 				$closingdate = new DateTime( $close_date_meta );
 				$closingdate = $closingdate->format( 'M d, Y h:i A' );
 			} else {
@@ -61,9 +61,9 @@ if ( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 
 			<div class="row_group">
 				<span class="prefix" title="<?php _e( 'Assigned To', RT_HD_TEXT_DOMAIN ); ?>"><label
-						for="post[post_author]"><strong><?php _e( 'Assigned To' ); ?></strong></label></span>
-				<select name="post[post_author]"><?php
-					if ( !empty( $rtcamp_users ) ) {
+						for="post[post_author]"><strong><?php _e( 'Assigned To' ); ?></strong></label></span> <select
+					name="post[post_author]"><?php
+					if ( ! empty( $rtcamp_users ) ) {
 						foreach ( $rtcamp_users as $author ) {
 							if ( $author->ID == $post_author ) {
 								$selected = " selected";
@@ -87,18 +87,18 @@ if ( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 
 				$default_wp_status = array( 'auto-draft', 'draft' );
 				if ( in_array( $pstatus, $default_wp_status ) ) {
-					$pstatus = $post_status[0]['slug'];
+					$pstatus = $post_status[ 0 ][ 'slug' ];
 				}
 				$custom_status_flag = true;?>
 				<select id="rthd_post_status" class="right" name="post_status"><?php
 					foreach ( $post_status as $status ) {
-						if ( $status['slug'] == $pstatus ) {
+						if ( $status[ 'slug' ] == $pstatus ) {
 							$selected           = 'selected="selected"';
 							$custom_status_flag = false;
 						} else {
 							$selected = '';
 						}
-						printf( '<option value="%s" %s >%s</option>', $status['slug'], $selected, $status['name'] );
+						printf( '<option value="%s" %s >%s</option>', $status[ 'slug' ], $selected, $status[ 'name' ] );
 					}
 					if ( $custom_status_flag && isset( $post->ID ) ) {
 						echo '<option selected="selected" value="' . $pstatus . '">' . $pstatus . '</option>';
@@ -111,9 +111,9 @@ if ( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 				      title="<?php _e( 'Create Date', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Create Date', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
 				<input class="datetimepicker moment-from-now" type="text" placeholder="Select Create Date"
 				       value="<?php echo ( isset( $createdate ) ) ? $createdate : ''; ?>"
-				       title="<?php echo ( isset( $createdate ) ) ? $createdate : ''; ?>">
-				<input name="post[post_date]" type="hidden"
-				       value="<?php echo ( isset( $createdate ) ) ? $createdate : ''; ?>"/>
+				       title="<?php echo ( isset( $createdate ) ) ? $createdate : ''; ?>"> <input name="post[post_date]"
+				                                                                                  type="hidden"
+				                                                                                  value="<?php echo ( isset( $createdate ) ) ? $createdate : ''; ?>"/>
 				<!--<span class="postfix datepicker-toggle" data-datepicker="closing-date"><label class="foundicon-calendar">[]</label></span>-->
 			</div>
 
@@ -121,8 +121,7 @@ if ( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 				<span class="prefix"
 				      title="<?php _e( 'Modify Date', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Modify Date', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
 				<input class="moment-from-now" type="text" placeholder="Modified on Date"
-				       value="<?php echo $modifydate; ?>"
-				       title="<?php echo $modifydate; ?>" readonly="readonly">
+				       value="<?php echo $modifydate; ?>" title="<?php echo $modifydate; ?>" readonly="readonly">
 				<!--<span class="postfix datepicker-toggle" data-datepicker="closing-date"><label class="foundicon-calendar">[]</label></span>-->
 			</div>
 
@@ -131,9 +130,9 @@ if ( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 				      title="<?php _e( 'Closing Date', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Closing Date', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
 				<input class="datepicker moment-from-now" type="text" placeholder="Select Closing Date"
 				       value="<?php echo ( isset( $closingdate ) ) ? $closingdate : ''; ?>"
-				       title="<?php echo ( isset( $closingdate ) ) ? $closingdate : ''; ?>">
-				<input name="post[closing-date]" type="hidden"
-				       value="<?php echo ( isset( $closingdate ) ) ? $closingdate : ''; ?>"/>
+				       title="<?php echo ( isset( $closingdate ) ) ? $closingdate : ''; ?>"> <input
+					name="post[closing-date]" type="hidden"
+					value="<?php echo ( isset( $closingdate ) ) ? $closingdate : ''; ?>"/>
 				<!--<span class="postfix datepicker-toggle" data-datepicker="closing-date"><label class="foundicon-calendar">[]</label></span>-->
 			</div>
 
@@ -144,7 +143,7 @@ if ( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 			</div><?php
 
 			$rthd_unique_id = get_post_meta( $post->ID, '_rtbiz_hd_unique_id', true );
-			if ( !empty( $rthd_unique_id ) ) {
+			if ( ! empty( $rthd_unique_id ) ) {
 				?>
 				<div class="row_group">
 				<span class="prefix"
@@ -152,7 +151,7 @@ if ( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 
 				<div class="rthd_attr_border">
 					<a class="rthd_public_link" target="_blank"
-					   href="<?php echo trailingslashit( site_url() ) . strtolower( $labels['name'] ) . '/?rthd_unique_id=' . $rthd_unique_id; ?>"><?php _e( 'Link' ); ?></a>
+					   href="<?php echo trailingslashit( site_url() ) . strtolower( $labels[ 'name' ] ) . '/?rthd_unique_id=' . $rthd_unique_id; ?>"><?php _e( 'Link' ); ?></a>
 				</div>
 				</div><?php
 			}
@@ -177,34 +176,30 @@ if ( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 		public static function save( $post_id, $post ) {
 			global $rt_hd_admin_meta_boxes, $ticketModel, $rt_hd_closing_reason, $rt_hd_attributes, $rt_ticket_email_content, $rt_hd_ticket_history_model;
 
-			$closing_reason_history_id = $rt_ticket_email_content['closing_reason_history_id'];
+			$closing_reason_history_id = $rt_ticket_email_content[ 'closing_reason_history_id' ];
 
-			$newTicket   = $_POST['post']; //post data
+			$newTicket   = $_POST[ 'post' ]; //post data
 			$ticketModel = new Rt_HD_Ticket_Model();
 
 			//Create Date
-			$creationdate = $newTicket['post_date'];
+			$creationdate = $newTicket[ 'post_date' ];
 			if ( isset( $creationdate ) && $creationdate != '' ) {
 				try {
-					$dr  = date_create_from_format( 'M d, Y H:i A', $creationdate );
-					$timeStamp = $dr->getTimestamp();
-					$newTicket['post_date']     = gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) ) );
-					$newTicket['post_date_gmt'] = get_gmt_from_date($dr->format('Y-m-d H:i:s'));
+					$dr                           = date_create_from_format( 'M d, Y H:i A', $creationdate );
+					$timeStamp                    = $dr->getTimestamp();
+					$newTicket[ 'post_date' ]     = gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) ) );
+					$newTicket[ 'post_date_gmt' ] = get_gmt_from_date( $dr->format( 'Y-m-d H:i:s' ) );
 				} catch ( Exception $e ) {
-					$newTicket['post_date']     = current_time( 'mysql' );
-					$newTicket['post_date_gmt'] = gmdate( 'Y-m-d H:i:s' );
+					$newTicket[ 'post_date' ]     = current_time( 'mysql' );
+					$newTicket[ 'post_date_gmt' ] = gmdate( 'Y-m-d H:i:s' );
 				}
 			} else {
-				$newTicket['post_date']     = current_time( 'mysql' );
-				$newTicket['post_date_gmt'] = gmdate( 'Y-m-d H:i:s' );
+				$newTicket[ 'post_date' ]     = current_time( 'mysql' );
+				$newTicket[ 'post_date_gmt' ] = gmdate( 'Y-m-d H:i:s' );
 			}
 
 			// Post Data to be saved.
-			$newpost = array(
-				'post_author'   => $newTicket['post_author'],
-				'post_date'     => $newTicket['post_date'],
-				'post_date_gmt' => $newTicket['post_date_gmt'],
-			);
+			$newpost = array( 'post_author' => $newTicket[ 'post_author' ], 'post_date' => $newTicket[ 'post_date' ], 'post_date_gmt' => $newTicket[ 'post_date_gmt' ], );
 			$newpost = array_merge( $newpost, array( 'ID' => $post_id ) );
 
 			// unhook this function so it doesn't loop infinitely
@@ -219,38 +214,27 @@ if ( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 			add_action( 'pre_post_update', 'RT_Ticket_Diff_Email::store_old_post_data', 1, 2 );
 
 			/* Update Index Table */
-			$data = array(
-				'assignee'     => $newpost['post_author'],
-				'post_content' => $post->post_content,
-				'post_status'  => $post->post_status,
-				'post_title'   => $post->post_title,
-			);
+			$data = array( 'assignee' => $newpost[ 'post_author' ], 'post_content' => $post->post_content, 'post_status' => $post->post_status, 'post_title' => $post->post_title, );
 
 			//closing date
-			if ( isset( $newTicket['closing-date'] ) && !empty( $newTicket['closing-date'] ) ) {
-				update_post_meta( $post_id, '_rtbiz_hd_closing_date', $newTicket['closing-date'] );
+			if ( isset( $newTicket[ 'closing-date' ] ) && ! empty( $newTicket[ 'closing-date' ] ) ) {
+				update_post_meta( $post_id, '_rtbiz_hd_closing_date', $newTicket[ 'closing-date' ] );
 				update_post_meta( $post_id, '_rtbiz_hd_closed_by', get_current_user_id() );
-				$cd  = new DateTime( $newTicket['closing-date'] );
+				$cd        = new DateTime( $newTicket[ 'closing-date' ] );
 				$timeStamp = $cd->getTimestamp();
-				$data      = array_merge( $data, array(
-					'date_closing'     => gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) ) ),
-					'date_closing_gmt' => get_gmt_from_date( $cd->format('Y-m-d H:i:s') ) ,
-					'user_closed_by'   => get_current_user_id(),
-				) );
+				$data      = array_merge( $data, array( 'date_closing' => gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) ) ), 'date_closing_gmt' => get_gmt_from_date( $cd->format( 'Y-m-d H:i:s' ) ), 'user_closed_by' => get_current_user_id(), ) );
 
 			}
 
 			//closing_reason
-			if ( isset( $newTicket['closing_reason'] ) && !empty( $newTicket['closing_reason'] ) ) {
+			if ( isset( $newTicket[ 'closing_reason' ] ) && ! empty( $newTicket[ 'closing_reason' ] ) ) {
 				$rt_hd_closing_reason->save_closing_reason( $post_id, $newTicket );
 				$attr_name = str_replace( '-', '_', rthd_attribute_taxonomy_name( 'closing-reason' ) );
 
-				$attr_val  = ( !isset( $newTicket['closing_reason'] ) ) ? array() : $newTicket['closing_reason'];
-				$data      = array_merge( $data, array(
-					$attr_name => ( is_array( $attr_val ) ) ? implode( ',', $attr_val ) : $attr_val,
-				) );
-				$terms     = wp_get_post_terms( $post_id, rthd_attribute_taxonomy_name( 'closing-reason' ) );
-				$message   = '';
+				$attr_val = ( ! isset( $newTicket[ 'closing_reason' ] ) ) ? array() : $newTicket[ 'closing_reason' ];
+				$data     = array_merge( $data, array( $attr_name => ( is_array( $attr_val ) ) ? implode( ',', $attr_val ) : $attr_val, ) );
+				$terms    = wp_get_post_terms( $post_id, rthd_attribute_taxonomy_name( 'closing-reason' ) );
+				$message  = '';
 				foreach ( $terms as $term ) {
 					if ( empty( $message ) ) {
 						$message .= $term->name;
@@ -268,14 +252,12 @@ if ( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 			$meta_attributes = rthd_get_attributes( $post->post_type, 'meta' );
 			foreach ( $meta_attributes as $attr ) {
 				$attr_diff = $rt_hd_attributes->attribute_diff( $attr, $post_id, $newTicket );
-				if ( !empty( $attr_diff ) ) {
+				if ( ! empty( $attr_diff ) ) {
 					$rt_hd_attributes->save_attributes( $attr, $post_id, $newTicket );
 					/* Update Index Table */
 					$attr_name = str_replace( '-', '_', rthd_attribute_taxonomy_name( $attr->attribute_name ) );
-					$attr_val  = ( !isset( $newTicket[$attr->attribute_name] ) ) ? array() : $newTicket[$attr->attribute_name];
-					$data      = array_merge( $data, array(
-						$attr_name => ( is_array( $attr_val ) ) ? implode( ',', $attr_val ) : $attr_val,
-					) );
+					$attr_val  = ( ! isset( $newTicket[ $attr->attribute_name ] ) ) ? array() : $newTicket[ $attr->attribute_name ];
+					$data      = array_merge( $data, array( $attr_name => ( is_array( $attr_val ) ) ? implode( ',', $attr_val ) : $attr_val, ) );
 					$where     = array( 'post_id' => $post_id );
 					$ticketModel->update_ticket( $data, $where );
 				}
@@ -283,16 +265,12 @@ if ( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 
 			//created by
 			update_post_meta( $post_id, '_rtbiz_hd_updated_by', get_current_user_id() );
-			$data = array_merge( $data, array(
-				'date_update'     => current_time( 'mysql' ),
-				'date_update_gmt' => gmdate( 'Y-m-d H:i:s' ),
-				'user_updated_by' => get_current_user_id(),
-			) );
+			$data = array_merge( $data, array( 'date_update' => current_time( 'mysql' ), 'date_update_gmt' => gmdate( 'Y-m-d H:i:s' ), 'user_updated_by' => get_current_user_id(), ) );
 
 			//Unique link
 			$unique_id = get_post_meta( $post_id, '_rtbiz_hd_unique_id', true );
 			if ( empty( $unique_id ) ) {
-				$d   = new DateTime( $newTicket['post_date'] );
+				$d   = new DateTime( $newTicket[ 'post_date' ] );
 				$UTC = new DateTimeZone( "UTC" );
 				$d->setTimezone( $UTC );
 				$timeStamp     = $d->getTimestamp();
@@ -306,12 +284,7 @@ if ( !class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 				$ticketModel->update_ticket( $data, $where );
 			} else {
 				update_post_meta( $post_id, '_rtbiz_hd_created_by', get_current_user_id() );
-				$data = array_merge( $data, array(
-					'user_created_by' => get_current_user_id(),
-					'date_create'     => $newpost['post_date'],
-					'date_create_gmt' => $newpost['post_date_gmt'],
-					'post_id'         => $post_id,
-				) );
+				$data = array_merge( $data, array( 'user_created_by' => get_current_user_id(), 'date_create' => $newpost[ 'post_date' ], 'date_create_gmt' => $newpost[ 'post_date_gmt' ], 'post_id' => $post_id, ) );
 
 				$data = array_merge( $data, array( 'post_id' => $post_id ) );
 				$ticketModel->add_ticket( $data );

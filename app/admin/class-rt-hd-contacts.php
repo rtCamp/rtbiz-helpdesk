@@ -2,7 +2,7 @@
 /**
  * Don't load this file directly!
  */
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -19,7 +19,7 @@ if ( !defined( 'ABSPATH' ) ) {
  *
  * @since rt-Helpdesk 0.1
  */
-if ( !class_exists( 'Rt_HD_Contacts' ) ) {
+if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 
 	/**
 	 * Class Rt_HD_Contacts
@@ -79,7 +79,7 @@ if ( !class_exists( 'Rt_HD_Contacts' ) ) {
 
 			global $rt_hd_module;
 			if ( in_array( Rt_HD_Module::$post_type, array_keys( $rt_entity->enabled_post_types ) ) ) {
-				$columns[Rt_HD_Module::$post_type] = $rt_hd_module->labels['name'];
+				$columns[ Rt_HD_Module::$post_type ] = $rt_hd_module->labels[ 'name' ];
 			}
 
 			return $columns;
@@ -130,7 +130,7 @@ if ( !class_exists( 'Rt_HD_Contacts' ) ) {
 		public function insert_new_contact( $email, $title ) {
 
 			$contact = rt_biz_get_person_by_email( $email );
-			if ( !$contact ) {
+			if ( ! $contact ) {
 				if ( trim( $title ) == "" ) {
 					$title = $email;
 				}
@@ -139,7 +139,7 @@ if ( !class_exists( 'Rt_HD_Contacts' ) ) {
 				$contact    = get_post( $contact_id );
 			}
 			$contactmeta = rt_biz_get_entity_meta( $contact->ID, $this->email_key, true );
-			if ( !$contactmeta ) {
+			if ( ! $contactmeta ) {
 				rt_biz_add_entity_meta( $contact->ID, $this->email_key, $email, true );
 				global $transaction_id;
 				if ( isset( $transaction_id ) && $transaction_id > 0 ) {
@@ -166,15 +166,15 @@ if ( !class_exists( 'Rt_HD_Contacts' ) ) {
 		function get_user_from_email( $email ) {
 			$userid = username_exists( $email );
 			//
-			if ( !$userid ) {
+			if ( ! $userid ) {
 				$userid = 1;
 			}
 
 			return $userid;
 			//** followin code if to create use if not exits
-			if ( !$userid ) {
+			if ( ! $userid ) {
 				$userid = @email_exists( $email );
-				if ( !$userid ) {
+				if ( ! $userid ) {
 					add_filter( 'wpmu_welcome_user_notification', '__return_false' );
 					$random_password = wp_generate_password( $length = 12, $include_standard_special_chars = false );
 					$userid          = wp_create_user( $email, $random_password, $email );
@@ -204,19 +204,19 @@ if ( !class_exists( 'Rt_HD_Contacts' ) ) {
 		function contacts_diff_on_ticket( $post_id, $newTicket ) {
 
 			$diffHTML = '';
-			if ( !isset( $newTicket['contacts'] ) ) {
-				$newTicket['contacts'] = array();
+			if ( ! isset( $newTicket[ 'contacts' ] ) ) {
+				$newTicket[ 'contacts' ] = array();
 			}
-			$contacts = $newTicket['contacts'];
+			$contacts = $newTicket[ 'contacts' ];
 			$contacts = array_unique( $contacts );
 
 			$oldContactsString = rt_biz_person_connection_to_string( $post_id );
 			$newContactsSring  = '';
-			if ( !empty( $contacts ) ) {
+			if ( ! empty( $contacts ) ) {
 				$contactsArr = array();
 				foreach ( $contacts as $contact ) {
-					$newC          = get_post( $contact );
-					$contactsArr[] = $newC->post_title;
+					$newC           = get_post( $contact );
+					$contactsArr[ ] = $newC->post_title;
 				}
 				$newContactsSring = implode( ',', $contactsArr );
 			}
@@ -237,10 +237,10 @@ if ( !class_exists( 'Rt_HD_Contacts' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		function contacts_save_on_ticket( $post_id, $newTicket ) {
-			if ( !isset( $newTicket['contacts'] ) ) {
-				$newTicket['contacts'] = array();
+			if ( ! isset( $newTicket[ 'contacts' ] ) ) {
+				$newTicket[ 'contacts' ] = array();
 			}
-			$contacts = array_map( 'intval', $newTicket['contacts'] );
+			$contacts = array_map( 'intval', $newTicket[ 'contacts' ] );
 			$contacts = array_unique( $contacts );
 
 			$post_type = get_post_type( $post_id );
@@ -258,18 +258,11 @@ if ( !class_exists( 'Rt_HD_Contacts' ) ) {
 		 */
 		function get_account_contacts_ajax() {
 
-			$contacts = rt_biz_get_organization_to_person_connection( $_POST['query'] );
+			$contacts = rt_biz_get_organization_to_person_connection( $_POST[ 'query' ] );
 			$result   = array();
 			foreach ( $contacts as $contact ) {
-				$email    = rt_biz_get_entity_meta( $contact->ID, $this->email_key, true );
-				$result[] = array(
-					'label'   => $contact->post_title,
-					'id'      => $contact->ID,
-					'slug'    => $contact->post_name,
-					'email'   => $email,
-					'imghtml' => get_avatar( $email, 24 ),
-					'url'     => admin_url( "edit.php?" . $contact->post_type . "=" . $contact->ID . "&post_type=" . $_POST['post_type'] ),
-				);
+				$email     = rt_biz_get_entity_meta( $contact->ID, $this->email_key, true );
+				$result[ ] = array( 'label' => $contact->post_title, 'id' => $contact->ID, 'slug' => $contact->post_name, 'email' => $email, 'imghtml' => get_avatar( $email, 24 ), 'url' => admin_url( "edit.php?" . $contact->post_type . "=" . $contact->ID . "&post_type=" . $_POST[ 'post_type' ] ), );
 			}
 
 			echo json_encode( $result );
@@ -282,17 +275,17 @@ if ( !class_exists( 'Rt_HD_Contacts' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		public function get_taxonomy_meta_ajax() {
-			if ( !isset( $_POST['query'] ) ) {
+			if ( ! isset( $_POST[ 'query' ] ) ) {
 				wp_die( 'Opss!! Invalid request' );
 			}
 
-			$post_id   = $_POST['query'];
+			$post_id   = $_POST[ 'query' ];
 			$post_type = get_post_type( $post_id );
 			$result    = get_post_meta( $post_id );
 
 			$accounts = rt_biz_get_post_for_organization_connection( $post_id, $post_type, $fetch_account = true );
 			foreach ( $accounts as $account ) {
-				$result['account_id'] = $account->ID;
+				$result[ 'account_id' ] = $account->ID;
 			}
 			echo json_encode( $result );
 			die( 0 );
@@ -304,20 +297,14 @@ if ( !class_exists( 'Rt_HD_Contacts' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		public function contact_autocomplete_ajax() {
-			if ( !isset( $_POST["query"] ) ) {
+			if ( ! isset( $_POST[ "query" ] ) ) {
 				wp_die( 'Opss!! Invalid request' );
 			}
 
-			$contacts = rt_biz_search_person( $_POST['query'] );
+			$contacts = rt_biz_search_person( $_POST[ 'query' ] );
 			$result   = array();
 			foreach ( $contacts as $contact ) {
-				$result[] = array(
-					'label'   => $contact->post_title,
-					'id'      => $contact->ID,
-					'slug'    => $contact->post_name,
-					'imghtml' => get_avatar( '', 24 ),
-					'url'     => admin_url( "edit.php?" . $contact->post_type . "=" . $contact->ID . "&post_type=" . $_POST['post_type'] ),
-				);
+				$result[ ] = array( 'label' => $contact->post_title, 'id' => $contact->ID, 'slug' => $contact->post_name, 'imghtml' => get_avatar( '', 24 ), 'url' => admin_url( "edit.php?" . $contact->post_type . "=" . $contact->ID . "&post_type=" . $_POST[ 'post_type' ] ), );
 			}
 
 			echo json_encode( $result );
@@ -330,26 +317,26 @@ if ( !class_exists( 'Rt_HD_Contacts' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		public function add_new_contact_ajax() {
-			$returnArray           = array();
-			$returnArray['status'] = false;
-			$accountData           = $_POST['data'];
-			if ( !isset( $accountData['new-contact-name'] ) ) {
-				$returnArray['status']  = false;
-				$returnArray['message'] = 'Invalid Data Please Check';
+			$returnArray             = array();
+			$returnArray[ 'status' ] = false;
+			$accountData             = $_POST[ 'data' ];
+			if ( ! isset( $accountData[ 'new-contact-name' ] ) ) {
+				$returnArray[ 'status' ]  = false;
+				$returnArray[ 'message' ] = 'Invalid Data Please Check';
 			} else {
-				$post_id = post_exists( $accountData['new-contact-name'] );
-				if ( !empty( $post_id ) && get_post_type( $post_id ) === rt_biz_get_person_post_type() ) {
-					$returnArray['status']  = false;
-					$returnArray['message'] = 'Term Already Exits';
+				$post_id = post_exists( $accountData[ 'new-contact-name' ] );
+				if ( ! empty( $post_id ) && get_post_type( $post_id ) === rt_biz_get_person_post_type() ) {
+					$returnArray[ 'status' ]  = false;
+					$returnArray[ 'message' ] = 'Term Already Exits';
 				} else {
-					if ( isset( $accountData['contactmeta'] ) && !empty( $accountData['contactmeta'] ) ) {
-						foreach ( $accountData['contactmeta'] as $cmeta => $metavalue ) {
+					if ( isset( $accountData[ 'contactmeta' ] ) && ! empty( $accountData[ 'contactmeta' ] ) ) {
+						foreach ( $accountData[ 'contactmeta' ] as $cmeta => $metavalue ) {
 							foreach ( $metavalue as $metadata ) {
 								if ( strstr( $cmeta, 'email' ) != false ) {
 									$result = rt_biz_get_person_by_email( $metadata );
-									if ( $result && !empty( $result ) ) {
-										$returnArray['status']  = false;
-										$returnArray['message'] = $metadata . ' is already exits';
+									if ( $result && ! empty( $result ) ) {
+										$returnArray[ 'status' ]  = false;
+										$returnArray[ 'message' ] = $metadata . ' is already exits';
 										echo json_encode( $returnArray );
 										die( 0 );
 									}
@@ -358,20 +345,19 @@ if ( !class_exists( 'Rt_HD_Contacts' ) ) {
 						}
 					}
 
-					$post_id = rt_biz_add_person( $accountData['new-contact-name'], $accountData['new-contact-description'] );
+					$post_id = rt_biz_add_person( $accountData[ 'new-contact-name' ], $accountData[ 'new-contact-description' ] );
 
-					if ( isset( $accountData['new-contact-account'] )
-					     && trim( $accountData['new-contact-account'] ) != ''
+					if ( isset( $accountData[ 'new-contact-account' ] ) && trim( $accountData[ 'new-contact-account' ] ) != ''
 					) {
 
-						rt_biz_connect_organization_to_person( $accountData['new-contact-account'], $post_id );
+						rt_biz_connect_organization_to_person( $accountData[ 'new-contact-account' ], $post_id );
 					}
 
-					$email = $accountData['new-contact-name'];
+					$email = $accountData[ 'new-contact-name' ];
 
-					if ( isset( $accountData['contactmeta'] ) && !empty( $accountData['contactmeta'] ) ) {
+					if ( isset( $accountData[ 'contactmeta' ] ) && ! empty( $accountData[ 'contactmeta' ] ) ) {
 
-						foreach ( $accountData['contactmeta'] as $cmeta => $metavalue ) {
+						foreach ( $accountData[ 'contactmeta' ] as $cmeta => $metavalue ) {
 							foreach ( $metavalue as $metadata ) {
 								if ( strstr( $cmeta, 'email' ) != false ) {
 									$email = $metadata;
@@ -381,16 +367,10 @@ if ( !class_exists( 'Rt_HD_Contacts' ) ) {
 							}
 						}
 					}
-					$returnArray['status'] = true;
+					$returnArray[ 'status' ] = true;
 
-					$post                = get_post( $post_id );
-					$returnArray['data'] = array(
-						'id'      => $post_id,
-						'value'   => $post->ID,
-						'label'   => $accountData['new-contact-name'],
-						'url'     => admin_url( 'edit.php?' . $post->post_type . '=' . $post->ID . '&post_type=' . $accountData['post_type'] ),
-						"imghtml" => get_avatar( $email, 50 )
-					);
+					$post                  = get_post( $post_id );
+					$returnArray[ 'data' ] = array( 'id' => $post_id, 'value' => $post->ID, 'label' => $accountData[ 'new-contact-name' ], 'url' => admin_url( 'edit.php?' . $post->post_type . '=' . $post->ID . '&post_type=' . $accountData[ 'post_type' ] ), "imghtml" => get_avatar( $email, 50 ) );
 				}
 			}
 			echo json_encode( $returnArray );

@@ -1,13 +1,13 @@
 <?php
 global $rt_hd_module;
 
-if ( !isset( $_REQUEST['type'] ) ) {
-	$_REQUEST['type'] = 'gravity';
+if ( ! isset( $_REQUEST[ 'type' ] ) ) {
+	$_REQUEST[ 'type' ] = 'gravity';
 }
 ?>
 <ul class="subsubsub">
 	<li>
-		<a href="<?php echo admin_url( "edit.php?post_type=" . Rt_HD_Module::$post_type . "&page=rthd-settings&type=gravity" ); ?>" <?php if ( $_REQUEST["type"] == "gravity" ) {
+		<a href="<?php echo admin_url( "edit.php?post_type=" . Rt_HD_Module::$post_type . "&page=rthd-settings&type=gravity" ); ?>" <?php if ( $_REQUEST[ "type" ] == "gravity" ) {
 			echo " class='current'";
 		} ?>>Gravity</a></li>
 

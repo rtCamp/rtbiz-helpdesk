@@ -2,7 +2,7 @@
 /**
  * Don't load this file directly!
  */
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -19,7 +19,7 @@ if ( !defined( 'ABSPATH' ) ) {
  *
  * @since rt-Helpdesk 0.1
  */
-if ( !class_exists( 'Rt_HD_Dashboard' ) ) {
+if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 	/**
 	 * Class Rt_HD_Dashboard
 	 */
@@ -72,7 +72,7 @@ if ( !class_exists( 'Rt_HD_Dashboard' ) ) {
 		 */
 		function footer_scripts() {
 			?>
-			<script> postboxes.add_postbox_toggles(pagenow);</script>
+			<script> postboxes.add_postbox_toggles( pagenow );</script>
 		<?php
 		}
 
@@ -84,7 +84,7 @@ if ( !class_exists( 'Rt_HD_Dashboard' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		function page_actions() {
-			if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] === 'rthd-' . Rt_HD_Module::$post_type . '-dashboard' ) {
+			if ( isset( $_REQUEST[ 'page' ] ) && $_REQUEST[ 'page' ] === 'rthd-' . Rt_HD_Module::$post_type . '-dashboard' ) {
 				do_action( 'add_meta_boxes_' . $this->screen_id, null );
 				do_action( 'add_meta_boxes', $this->screen_id, null );
 

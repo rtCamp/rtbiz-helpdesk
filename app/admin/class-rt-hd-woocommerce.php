@@ -2,7 +2,7 @@
 /**
  * Don't load this file directly!
  */
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -18,7 +18,7 @@ if ( !defined( 'ABSPATH' ) ) {
  * @author paresh
  */
 
-if ( !class_exists( 'Rt_HD_Woocommerce' ) ) {
+if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 
 	class Rt_HD_Woocommerce {
 
@@ -49,18 +49,15 @@ if ( !class_exists( 'Rt_HD_Woocommerce' ) ) {
 		 *
 		 * @global type $redux_helpdesk_settings
 		 *
-		 * @param type $actions
-		 * @param type $order
+		 * @param type  $actions
+		 * @param type  $order
 		 *
 		 * @return type
 		 */
 		function wocommerce_actions_link( $actions, $order ) {
 			global $redux_helpdesk_settings;
-			$page               = get_page( $redux_helpdesk_settings['rthd_support_page'] );
-			$actions['support'] = array(
-				'url'  => "/{$page->post_name}/?order_id={$order->id}",
-				'name' => __( 'Get Support', RT_HD_TEXT_DOMAIN )
-			);
+			$page                 = get_page( $redux_helpdesk_settings[ 'rthd_support_page' ] );
+			$actions[ 'support' ] = array( 'url' => "/{$page->post_name}/?order_id={$order->id}", 'name' => __( 'Get Support', RT_HD_TEXT_DOMAIN ) );
 
 			return $actions;
 
@@ -76,33 +73,30 @@ if ( !class_exists( 'Rt_HD_Woocommerce' ) ) {
 			$order_email = '';
 
 			// Save ticket if data has been posted
-			if ( !empty( $_POST ) ) {
+			if ( ! empty( $_POST ) ) {
 				self::save();
 			}
 
-			if ( isset( $_GET['order_id'] ) ) {
+			if ( isset( $_GET[ 'order_id' ] ) ) {
 
 
-				$order = new WC_Order( $_GET['order_id'] );
+				$order = new WC_Order( $_GET[ 'order_id' ] );
 				$items = $order->get_items();
 
 				$order_email = $order->billing_email;
 
 
 				foreach ( $items as $item ) {
-					$product_name         = $item['name'];
-					$product_id           = $item['product_id'];
-					$product_variation_id = $item['variation_id'];
+					$product_name         = $item[ 'name' ];
+					$product_id           = $item[ 'product_id' ];
+					$product_variation_id = $item[ 'variation_id' ];
 
 					$option .= "<option value=$product_id>$product_name</option>";
 				}
 
 
 			} else {
-				$arg = array(
-					'post_type' => 'product',
-					'nopagging' => true,
-				);
+				$arg = array( 'post_type' => 'product', 'nopagging' => true, );
 
 				$products = get_posts( $arg );
 
@@ -113,48 +107,47 @@ if ( !class_exists( 'Rt_HD_Woocommerce' ) ) {
 			}
 			?>
 			<script type="text/javascript">
-				jQuery(document).ready(function ($) {
+				jQuery( document ).ready( function ( $ ) {
 					//print list of selected file
 
-					$("#filesToUpload").change(function () {
+					$( "#filesToUpload" ).change( function () {
 
-						var input = document.getElementById('filesToUpload');
+						var input = document.getElementById( 'filesToUpload' );
 
 						var list = '';
 
 						//for every file...
-						for (var x = 0; x < input.files.length; x++) {
+						for ( var x = 0; x < input.files.length; x ++ ) {
 							//add to list
 
 							list += '<li>' + input.files[x].name + '</li>';
 						}
 
-						$("#fileList").html(list);
+						$( "#fileList" ).html( list );
 
-					});
+					} );
 
-				});
+				} );
 			</script>
 
 			<h2><?php _e( 'Get Support', 'RT_HD_TEXT_DOMAIN' ); ?></h2>
 			<form method="post" action="" class="comment-form" enctype="multipart/form-data">
 
 				<p>
-					<label><?php _e( 'Product', RT_HD_TEXT_DOMAIN ); ?></label>
-					<select name="post[product_id]">
+					<label><?php _e( 'Product', RT_HD_TEXT_DOMAIN ); ?></label> <select name="post[product_id]">
 						<option value="">Choose Product</option>
 						<?php echo $option; ?>
 					</select>
 				</p>
 
 				<p>
-					<label><?php _e( 'Email', RT_HD_TEXT_DOMAIN ); ?></label>
-					<input type="text" name="post[email]" value="<?php echo $order_email ?>"/>
+					<label><?php _e( 'Email', RT_HD_TEXT_DOMAIN ); ?></label> <input type="text" name="post[email]"
+					                                                                 value="<?php echo $order_email ?>"/>
 				</p>
 
 				<p>
-					<label><?php _e( 'Description', RT_HD_TEXT_DOMAIN ); ?></label>
-					<textarea name="post[description]"></textarea>
+					<label><?php _e( 'Description', RT_HD_TEXT_DOMAIN ); ?></label> <textarea
+						name="post[description]"></textarea>
 				</p>
 
 				<p>
@@ -185,35 +178,22 @@ if ( !class_exists( 'Rt_HD_Woocommerce' ) ) {
 
 			global $rt_hd_contacts, $rt_hd_tickets, $redux_helpdesk_settings;;
 
-			$data = $_POST['post'];
+			$data = $_POST[ 'post' ];
 
 
-			$product = get_product( $data['product_id'] );
+			$product = get_product( $data[ 'product_id' ] );
 
-			$rt_hd_tickets_id = $rt_hd_tickets->insert_new_ticket(
-				"Support for {$product->post->post_title}",
-				$data['description'],
-				$redux_helpdesk_settings['rthd_default_user'], // it will changed to dynamic once redux option for default assignee shell be introduced
-				'now',
-				array( array( 'address' => $data['email'], 'name' => '' ) ),
-				array(),
-				$data['email']
-			);
+			$rt_hd_tickets_id = $rt_hd_tickets->insert_new_ticket( "Support for {$product->post->post_title}", $data[ 'description' ], $redux_helpdesk_settings[ 'rthd_default_user' ], // it will changed to dynamic once redux option for default assignee shell be introduced
+			                                                       'now', array( array( 'address' => $data[ 'email' ], 'name' => '' ) ), array(), $data[ 'email' ] );
 
-			update_post_meta( $rt_hd_tickets_id, '_rtbiz_hd_woocommerce_product_id', $data['product_id'] );
+			update_post_meta( $rt_hd_tickets_id, '_rtbiz_hd_woocommerce_product_id', $data[ 'product_id' ] );
 
 			if ( $_FILES ) {
 
-				$files = $_FILES['attachment'];
-				foreach ( $files['name'] as $key => $value ) {
-					if ( $files['name'][$key] ) {
-						$file = array(
-							'name'     => $files['name'][$key],
-							'type'     => $files['type'][$key],
-							'tmp_name' => $files['tmp_name'][$key],
-							'error'    => $files['error'][$key],
-							'size'     => $files['size'][$key]
-						);
+				$files = $_FILES[ 'attachment' ];
+				foreach ( $files[ 'name' ] as $key => $value ) {
+					if ( $files[ 'name' ][ $key ] ) {
+						$file = array( 'name' => $files[ 'name' ][ $key ], 'type' => $files[ 'type' ][ $key ], 'tmp_name' => $files[ 'tmp_name' ][ $key ], 'error' => $files[ 'error' ][ $key ], 'size' => $files[ 'size' ][ $key ] );
 
 						$_FILES = array( "upload_attachment" => $file );
 
@@ -224,8 +204,8 @@ if ( !class_exists( 'Rt_HD_Woocommerce' ) ) {
 				}
 			}
 
-			if ( isset( $_GET['order_id'] ) ) {
-				update_post_meta( $rt_hd_tickets_id, '_rtbiz_hd__woocommerce_order_id', $_GET['order_id'] );
+			if ( isset( $_GET[ 'order_id' ] ) ) {
+				update_post_meta( $rt_hd_tickets_id, '_rtbiz_hd__woocommerce_order_id', $_GET[ 'order_id' ] );
 			}
 
 		}
@@ -248,7 +228,7 @@ if ( !class_exists( 'Rt_HD_Woocommerce' ) ) {
 		 */
 		static function insert_attachment( $file_handler, $post_id ) {
 			// check to make sure its a successful upload
-			if ( $_FILES[$file_handler]['error'] !== UPLOAD_ERR_OK ) {
+			if ( $_FILES[ $file_handler ][ 'error' ] !== UPLOAD_ERR_OK ) {
 				__return_false();
 			}
 

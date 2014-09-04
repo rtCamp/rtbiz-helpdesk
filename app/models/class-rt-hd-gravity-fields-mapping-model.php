@@ -2,7 +2,7 @@
 /**
  * Don't load this file directly!
  */
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -19,7 +19,7 @@ if ( !defined( 'ABSPATH' ) ) {
  *
  * @since rt-Helpdesk 0.1
  */
-if ( !class_exists( 'Rt_HD_Gravity_Fields_Mapping_Model' ) ) {
+if ( ! class_exists( 'Rt_HD_Gravity_Fields_Mapping_Model' ) ) {
 	/**
 	 * Class Rt_HD_Gravity_Fields_Mapping_Model
 	 * This Uses to access database for Gravity Fields
@@ -58,13 +58,13 @@ if ( !class_exists( 'Rt_HD_Gravity_Fields_Mapping_Model' ) ) {
 		 *
 		 * @return array
 		 *
-		 *  @since rt-Helpdesk 0.1
+		 * @since rt-Helpdesk 0.1
 		 *
 		 */
 		function get_mapping( $form_id = '' ) {
 			$args = array();
-			if ( !empty( $form_id ) ) {
-				$args['form_id'] = $form_id;
+			if ( ! empty( $form_id ) ) {
+				$args[ 'form_id' ] = $form_id;
 			}
 
 			return parent::get( $args );
@@ -94,8 +94,8 @@ if ( !class_exists( 'Rt_HD_Gravity_Fields_Mapping_Model' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		function add_mapping( $data ) {
-			$data['create_date'] = current_time( 'mysql' );
-			$data['enable']      = 'yes';
+			$data[ 'create_date' ] = current_time( 'mysql' );
+			$data[ 'enable' ]      = 'yes';
 
 			return parent::insert( $data );
 		}

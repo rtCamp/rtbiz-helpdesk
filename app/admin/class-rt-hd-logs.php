@@ -2,7 +2,7 @@
 /**
  * Don't load this file directly!
  */
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -20,23 +20,23 @@ if ( !defined( 'ABSPATH' ) ) {
  *
  * @since rt-Helpdesk 0.1
  */
-if ( !class_exists( 'Rt_HD_Logs' ) ) {
+if ( ! class_exists( 'Rt_HD_Logs' ) ) {
 	class Rt_HD_Logs {
 		function ui() {
 			global $wpdb;
 			$editor_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
-//			if( !current_user_can( $editor_cap ) ) {
-//				wp_die("Opsss!! You are in restricted area");
-//			}
+			//			if( !current_user_can( $editor_cap ) ) {
+			//				wp_die("Opsss!! You are in restricted area");
+			//			}
 			//Delete lead code
-			if ( isset( $_REQUEST["log-list"] ) ) {
+			if ( isset( $_REQUEST[ "log-list" ] ) ) {
 				rthd_get_template( 'admin/list-transaction-post.php' );
 
 				return;
 			}
-			if ( isset( $_REQUEST["transa_id"] ) ) {
+			if ( isset( $_REQUEST[ "transa_id" ] ) ) {
 				global $wpdb;
-				$tran_id     = $_REQUEST["transa_id"];
+				$tran_id     = $_REQUEST[ "transa_id" ];
 				$post_id_sql = $wpdb->prepare( "select post_id from $wpdb->postmeta where meta_key like '_transaction_id' and meta_value = %s ", $tran_id );
 
 				$post_ids = $wpdb->get_results( $post_id_sql );
@@ -72,16 +72,16 @@ if ( !class_exists( 'Rt_HD_Logs' ) ) {
 
 			// -- End --
 
-			if ( isset( $_REQUEST["size"] ) ) {
-				$size = intval( $_REQUEST["size"] );
+			if ( isset( $_REQUEST[ "size" ] ) ) {
+				$size = intval( $_REQUEST[ "size" ] );
 				if ( $size > 100 ) {
 					$size = 100;
 				}
 			} else {
 				$size = 20;
 			}
-			if ( isset( $_REQUEST["page"] ) && intval( $_REQUEST["page"] ) > 1 ) {
-				$left = ( ( intval( $_REQUEST["page"] ) - 1 ) * $size );
+			if ( isset( $_REQUEST[ "page" ] ) && intval( $_REQUEST[ "page" ] ) > 1 ) {
+				$left = ( ( intval( $_REQUEST[ "page" ] ) - 1 ) * $size );
 			} else {
 				$left = 0;
 			}
@@ -170,9 +170,9 @@ if ( !class_exists( 'Rt_HD_Logs' ) ) {
 						<td>
 							<a class="revertChanges"
 							   href="edit.php?post_type=rt_ticket&page=rthd-settings&transa_id=<?php echo $rslt->trans_id; ?>"
-							   data-trans="<?php echo $rslt->trans_id; ?>"> Revert Changes </a> &nbsp; | &nbsp;
-							<a href="edit.php?post_type=rt_ticket&page=rthd-settings&log-list=log-list&trans_id=<?php echo $rslt->trans_id; ?>"
-							   data-trans="<?php echo $rslt->trans_id; ?>"> View Post </a>
+							   data-trans="<?php echo $rslt->trans_id; ?>"> Revert Changes </a> &nbsp; | &nbsp; <a
+								href="edit.php?post_type=rt_ticket&page=rthd-settings&log-list=log-list&trans_id=<?php echo $rslt->trans_id; ?>"
+								data-trans="<?php echo $rslt->trans_id; ?>"> View Post </a>
 
 						</td>
 					</tr>

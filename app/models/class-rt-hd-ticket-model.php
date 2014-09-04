@@ -2,7 +2,7 @@
 /**
  * Don't load this file directly!
  */
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -18,7 +18,7 @@ if ( !defined( 'ABSPATH' ) ) {
  * @author udit
  * @since rt-Helpdesk 0.1
  */
-if ( !class_exists( 'Rt_HD_Ticket_Model' ) ) {
+if ( ! class_exists( 'Rt_HD_Ticket_Model' ) ) {
 	class Rt_HD_Ticket_Model extends RT_DB_Model {
 
 		public function __construct() {
@@ -38,7 +38,7 @@ if ( !class_exists( 'Rt_HD_Ticket_Model' ) ) {
 		function is_exist( $post_id ) {
 			$args = array();
 			$list = null;
-			if ( !empty( $post_id ) ) {
+			if ( ! empty( $post_id ) ) {
 				$args = array( 'post_id' => $post_id );
 				$list = parent::get( $args );
 				foreach ( $list as $post ) {

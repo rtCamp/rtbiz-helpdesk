@@ -2,7 +2,7 @@
 /**
  * Don't load this file directly!
  */
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -20,11 +20,11 @@ if ( !defined( 'ABSPATH' ) ) {
  * @since rt-Helpdesk 0.1
  */
 
-if ( !class_exists( 'WP_List_Table' ) ) {
+if ( ! class_exists( 'WP_List_Table' ) ) {
 	require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 }
 
-if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
+if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 	class Rt_HD_Tickets_List_View extends WP_List_Table {
 
 		var $table_name;
@@ -44,12 +44,10 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 			$this->relations     = $rt_hd_attributes_relationship_model->get_relations_by_post_type( $this->post_type );
 			$this->post_statuses = $rt_hd_module->get_custom_statuses();
 
-			$args = array(
-				'singular' => $this->labels['singular_name'], //Singular label
-				'plural'   => $this->labels['all_items'], //plural label, also this well be one of the table css class
-				'ajax'     => true, //We won't support Ajax for this table
-				'screen'   => get_current_screen(),
-			);
+			$args = array( 'singular' => $this->labels[ 'singular_name' ], //Singular label
+			               'plural'   => $this->labels[ 'all_items' ], //plural label, also this well be one of the table css class
+			               'ajax'     => true, //We won't support Ajax for this table
+			               'screen'   => get_current_screen(), );
 			parent::__construct( $args );
 		}
 
@@ -62,15 +60,15 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 		 *
 		 */
 		function extra_tablenav( $which ) {
-			$search = @$_POST['s'] ? esc_attr( $_POST['s'] ) : '';
+			$search = @$_POST[ 's' ] ? esc_attr( $_POST[ 's' ] ) : '';
 			if ( $which == 'top' ) {
 				//The code that goes before the table is here
-//				echo"Before the table";
+				//				echo"Before the table";
 				$this->search_box( 'Search', 'search_id' );
 			}
 			if ( $which == 'bottom' ) {
 				//The code that goes after the table is there
-//				echo"After the table";
+				//				echo"After the table";
 			}
 		}
 
@@ -90,43 +88,40 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 			global $wpdb;
 			$views = array();
 
-			$current = ( isset( $_REQUEST['post_status'] ) && !empty( $_REQUEST['post_status'] ) ? $_REQUEST['post_status'] : 'all' );
+			$current = ( isset( $_REQUEST[ 'post_status' ] ) && ! empty( $_REQUEST[ 'post_status' ] ) ? $_REQUEST[ 'post_status' ] : 'all' );
 			$temp    = $wpdb->get_results( "SELECT post_status, count(id) AS ticket_count FROM {$this->table_name} GROUP BY post_status HAVING ticket_count > 0", ARRAY_A );
 			if ( empty( $temp ) ) {
 				return $views;
 			}
 			$num_count = array();
 			foreach ( $temp as $status ) {
-				$num_count[$status['post_status']] = intval( $status['ticket_count'] );
+				$num_count[ $status[ 'post_status' ] ] = intval( $status[ 'ticket_count' ] );
 			}
 
 			//All link
 			$class = ( $current == 'all' ) ? ' class="current"' : '';
-			$url   = add_query_arg( array(
-					'post_type' => $this->post_type,
-					'page'      => 'rthd-all-' . $this->post_type
-				), admin_url( 'edit.php' ) );
+			$url   = add_query_arg( array( 'post_type' => $this->post_type, 'page' => 'rthd-all-' . $this->post_type ), admin_url( 'edit.php' ) );
 			$count = array_sum( $num_count );
-			if ( isset( $num_count['trash'] ) ) {
-				$count = $count - $num_count['trash'];
+			if ( isset( $num_count[ 'trash' ] ) ) {
+				$count = $count - $num_count[ 'trash' ];
 			}
-			$views['all'] = "<a href='{$url}' {$class} >" . __( 'All <span class="count">(' . $count . ')</span>' ) . "</a>";
+			$views[ 'all' ] = "<a href='{$url}' {$class} >" . __( 'All <span class="count">(' . $count . ')</span>' ) . "</a>";
 
 			foreach ( $this->post_statuses as $status ) {
-				if ( isset( $num_count[$status['slug']] ) && !empty( $num_count[$status['slug']] ) ) {
-					$url                    = add_query_arg( 'post_status', $status['slug'] );
-					$class                  = ( $current == $status['slug'] ) ? ' class="current"' : '';
-					$count                  = $num_count[$status['slug']];
-					$views[$status['slug']] = "<a href='{$url}' {$class}>" . $status['name'] . " <span class='count'>(" . $count . ")</span></a>";
-					unset( $num_count[$status['slug']] );
+				if ( isset( $num_count[ $status[ 'slug' ] ] ) && ! empty( $num_count[ $status[ 'slug' ] ] ) ) {
+					$url                        = add_query_arg( 'post_status', $status[ 'slug' ] );
+					$class                      = ( $current == $status[ 'slug' ] ) ? ' class="current"' : '';
+					$count                      = $num_count[ $status[ 'slug' ] ];
+					$views[ $status[ 'slug' ] ] = "<a href='{$url}' {$class}>" . $status[ 'name' ] . " <span class='count'>(" . $count . ")</span></a>";
+					unset( $num_count[ $status[ 'slug' ] ] );
 				}
 			}
 
 			foreach ( $num_count as $key => $value ) {
-				$url         = add_query_arg( 'post_status', $key );
-				$class       = ( $current == $key ) ? ' class="current"' : '';
-				$count       = $value;
-				$views[$key] = "<a href='{$url}' {$class}>" . $key . " <span class='count'>(" . $count . ")</span></a>";
+				$url           = add_query_arg( 'post_status', $key );
+				$class         = ( $current == $key ) ? ' class="current"' : '';
+				$count         = $value;
+				$views[ $key ] = "<a href='{$url}' {$class}>" . $key . " <span class='count'>(" . $count . ")</span></a>";
 			}
 
 			return $views;
@@ -143,34 +138,21 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 
 			global $rt_hd_attributes_model;
 
-			$columns = array(
-				'cb'                  => '<input type="checkbox" />',
-				'rthd_post_id'        => __( 'Ticket ID' ),
-				'rthd_title'          => __( 'Title' ),
-				'rthd_assignee'       => __( 'Assignee' ),
-				'rthd_create_date'    => __( 'Create Date' ),
-				'rthd_update_date'    => __( 'Last Updated Date' ),
-				'rthd_closing_date'   => __( 'Closing Date' ),
-				'rthd_status'         => __( 'Status' ),
-				'rthd_created_by'     => __( 'Created By' ),
-				'rthd_updated_by'     => __( 'Last Updated By' ),
-				'rthd_closed_by'      => __( 'Closed By' ),
-				'rthd_closing_reason' => __( 'Closing Reason' ),
-			);
+			$columns = array( 'cb' => '<input type="checkbox" />', 'rthd_post_id' => __( 'Ticket ID' ), 'rthd_title' => __( 'Title' ), 'rthd_assignee' => __( 'Assignee' ), 'rthd_create_date' => __( 'Create Date' ), 'rthd_update_date' => __( 'Last Updated Date' ), 'rthd_closing_date' => __( 'Closing Date' ), 'rthd_status' => __( 'Status' ), 'rthd_created_by' => __( 'Created By' ), 'rthd_updated_by' => __( 'Last Updated By' ), 'rthd_closed_by' => __( 'Closed By' ), 'rthd_closing_reason' => __( 'Closing Reason' ), );
 
 			foreach ( $this->relations as $relation ) {
-				$attr                          = $rt_hd_attributes_model->get_attribute( $relation->attr_id );
-				$attr_name                     = str_replace( '-', '_', rthd_attribute_taxonomy_name( $attr->attribute_name ) );
-				$columns['rthd_' . $attr_name] = __( $attr->attribute_label );
+				$attr                            = $rt_hd_attributes_model->get_attribute( $relation->attr_id );
+				$attr_name                       = str_replace( '-', '_', rthd_attribute_taxonomy_name( $attr->attribute_name ) );
+				$columns[ 'rthd_' . $attr_name ] = __( $attr->attribute_label );
 			}
 
-			if ( isset( $this->settings['attach_contacts'] ) && $this->settings['attach_contacts'] == 'yes' ) {
-				$contact_name                     = rt_biz_get_person_post_type();
-				$columns['rthd_' . $contact_name] = __( 'Contacts' );
+			if ( isset( $this->settings[ 'attach_contacts' ] ) && $this->settings[ 'attach_contacts' ] == 'yes' ) {
+				$contact_name                       = rt_biz_get_person_post_type();
+				$columns[ 'rthd_' . $contact_name ] = __( 'Contacts' );
 			}
-			if ( isset( $this->settings['attach_accounts'] ) && $this->settings['attach_accounts'] == 'yes' ) {
-				$accounts_name                     = rt_biz_get_organization_post_type();
-				$columns['rthd_' . $accounts_name] = __( 'Accounts' );
+			if ( isset( $this->settings[ 'attach_accounts' ] ) && $this->settings[ 'attach_accounts' ] == 'yes' ) {
+				$accounts_name                       = rt_biz_get_organization_post_type();
+				$columns[ 'rthd_' . $accounts_name ] = __( 'Accounts' );
 			}
 
 			return $columns;
@@ -184,13 +166,7 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		public function get_sortable_columns() {
-			$sortable = array(
-				'rthd_title'        => array( 'rthd_title', false ),
-				'rthd_assignee'     => array( 'rthd_assignee', false ),
-				'rthd_create_date'  => array( 'rthd_create_date', false ),
-				'rthd_update_date'  => array( 'rthd_update_date', false ),
-				'rthd_closing_date' => array( 'rthd_closing_date', false ),
-			);
+			$sortable = array( 'rthd_title' => array( 'rthd_title', false ), 'rthd_assignee' => array( 'rthd_assignee', false ), 'rthd_create_date' => array( 'rthd_create_date', false ), 'rthd_update_date' => array( 'rthd_update_date', false ), 'rthd_closing_date' => array( 'rthd_closing_date', false ), );
 
 			return $sortable;
 		}
@@ -206,9 +182,7 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		function get_bulk_actions() {
-			$actions = array(
-				'delete' => __( 'Trash' ),
-			);
+			$actions = array( 'delete' => __( 'Trash' ), );
 
 			return $actions;
 		}
@@ -216,9 +190,9 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 		function process_bulk_action() {
 
 			//Detect when a bulk action is being triggered...
-			if ( 'delete' === $this->current_action() && isset( $_POST['rt_ticket'] ) ) {
+			if ( 'delete' === $this->current_action() && isset( $_POST[ 'rt_ticket' ] ) ) {
 				$ticketModel = new Rt_HD_Ticket_Model();
-				foreach ( $_POST['rt_ticket'] as $ticket_id ) {
+				foreach ( $_POST[ 'rt_ticket' ] as $ticket_id ) {
 
 					wp_trash_post( $ticket_id );
 					$ticketModel->update_ticket( array( 'post_status' => 'trash' ), array( 'post_id' => $ticket_id ) );
@@ -237,7 +211,7 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 			global $wpdb;
 			global $rt_hd_attributes_model;
 
-			$s = @$_POST['s'];
+			$s = @$_POST[ 's' ];
 
 			$this->process_bulk_action();
 
@@ -262,11 +236,11 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 				$query .= " , rt_ticket.{$attr_name} AS rthd_{$attr_name} ";
 			}
 
-			if ( isset( $this->settings['attach_contacts'] ) && $this->settings['attach_contacts'] == 'yes' ) {
+			if ( isset( $this->settings[ 'attach_contacts' ] ) && $this->settings[ 'attach_contacts' ] == 'yes' ) {
 				$contact_name = rt_biz_get_person_post_type();
 				$query .= " ,rt_ticket.{$contact_name} AS rthd_{$contact_name} ";
 			}
-			if ( isset( $this->settings['attach_accounts'] ) && $this->settings['attach_accounts'] == 'yes' ) {
+			if ( isset( $this->settings[ 'attach_accounts' ] ) && $this->settings[ 'attach_accounts' ] == 'yes' ) {
 				$account_name = rt_biz_get_organization_post_type();
 				$query .= " ,rt_ticket.{$account_name} AS rthd_{$account_name} ";
 			}
@@ -281,32 +255,34 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 				$query .= ') ';
 			}
 
-			if ( isset( $_GET['post_status'] ) ) {
-				$query .= " AND rt_ticket.post_status = '" . $_GET['post_status'] . "'";
+			if ( isset( $_GET[ 'post_status' ] ) ) {
+				$query .= " AND rt_ticket.post_status = '" . $_GET[ 'post_status' ] . "'";
 			} else {
 				$query .= " AND rt_ticket.post_status != 'trash'";
 			}
 
-			if ( !current_user_can( "edit_others_{$this->post_type}s" ) ) {
+			if ( ! current_user_can( "edit_others_{$this->post_type}s" ) ) {
 				$query .= " AND rt_ticket.assignee = '" . get_current_user_id() . "'";
-			} else if ( isset( $_GET['assignee'] ) ) {
-				$query .= " AND rt_ticket.assignee = '" . $_GET['assignee'] . "'";
+			} else {
+				if ( isset( $_GET[ 'assignee' ] ) ) {
+					$query .= " AND rt_ticket.assignee = '" . $_GET[ 'assignee' ] . "'";
+				}
 			}
 
-			if ( isset( $_GET['user_updated_by'] ) ) {
-				$query .= " AND rt_ticket.user_updated_by = '" . $_GET['user_updated_by'] . "'";
+			if ( isset( $_GET[ 'user_updated_by' ] ) ) {
+				$query .= " AND rt_ticket.user_updated_by = '" . $_GET[ 'user_updated_by' ] . "'";
 			}
 
-			if ( isset( $_GET['user_created_by'] ) ) {
-				$query .= " AND rt_ticket.user_created_by = '" . $_GET['user_created_by'] . "'";
+			if ( isset( $_GET[ 'user_created_by' ] ) ) {
+				$query .= " AND rt_ticket.user_created_by = '" . $_GET[ 'user_created_by' ] . "'";
 			}
 
-			if ( isset( $_GET['user_closed_by'] ) ) {
-				$query .= " AND rt_ticket.user_closed_by = '" . $_GET['user_closed_by'] . "'";
+			if ( isset( $_GET[ 'user_closed_by' ] ) ) {
+				$query .= " AND rt_ticket.user_closed_by = '" . $_GET[ 'user_closed_by' ] . "'";
 			}
 
 			$tax_query = $this->check_tax_query();
-			if ( !empty( $tax_query ) ) {
+			if ( ! empty( $tax_query ) ) {
 				foreach ( $tax_query as $key => $value ) {
 					$query .= " AND CONCAT( ',' , rt_ticket.{$key} , ',' ) LIKE '%," . $value . ",%'";
 				}
@@ -314,9 +290,9 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 
 			/* -- Ordering parameters -- */
 			//Parameters that are going to be used to order the result
-			$orderby = !empty( $_GET["orderby"] ) ? esc_sql( $_GET["orderby"] ) : 'ASC';
-			$order   = !empty( $_GET["order"] ) ? esc_sql( $_GET["order"] ) : '';
-			if ( !empty( $orderby ) & !empty( $order ) ) {
+			$orderby = ! empty( $_GET[ "orderby" ] ) ? esc_sql( $_GET[ "orderby" ] ) : 'ASC';
+			$order   = ! empty( $_GET[ "order" ] ) ? esc_sql( $_GET[ "order" ] ) : '';
+			if ( ! empty( $orderby ) & ! empty( $order ) ) {
 				$query .= ' ORDER BY ' . $orderby . ' ' . $order;
 			} else {
 				$query .= ' ORDER BY rthd_post_id DESC';
@@ -332,34 +308,28 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 			$perpage = $this->get_items_per_page( Rt_HD_Module::$post_type . '_per_page', 10 );
 
 			//Which page is this?
-			$paged = !empty( $_GET['paged'] ) ? esc_sql( $_GET['paged'] ) : '';
+			$paged = ! empty( $_GET[ 'paged' ] ) ? esc_sql( $_GET[ 'paged' ] ) : '';
 			//Page Number
-			if ( empty( $paged ) || !is_numeric( $paged ) || $paged <= 0 ) {
+			if ( empty( $paged ) || ! is_numeric( $paged ) || $paged <= 0 ) {
 				$paged = 1;
 			}
 			//How many pages do we have in total?
 			$totalpages = ceil( $totalitems / $perpage );
 			//adjust the query to take pagination into account
-			if ( !empty( $paged ) && !empty( $perpage ) ) {
+			if ( ! empty( $paged ) && ! empty( $perpage ) ) {
 				$offset = ( $paged - 1 ) * $perpage;
 				$query .= ' LIMIT ' . (int) $offset . ' , ' . (int) $perpage;
 			}
 
 			/* -- Register the pagination -- */
-			$this->set_pagination_args(
-				array(
-					'total_items' => $totalitems,
-					'total_pages' => $totalpages,
-					'per_page'    => $perpage,
-				)
-			);
+			$this->set_pagination_args( array( 'total_items' => $totalitems, 'total_pages' => $totalpages, 'per_page' => $perpage, ) );
 			//The pagination links are automatically built according to those parameters
 
 			/* -- Register the Columns -- */
-//			$columns = $this->get_columns();
-//			$hidden = array();
-//			$sortable = $this->get_sortable_columns();
-//			$this->_column_headers = array($columns, $hidden, $sortable);
+			//			$columns = $this->get_columns();
+			//			$hidden = array();
+			//			$sortable = $this->get_sortable_columns();
+			//			$this->_column_headers = array($columns, $hidden, $sortable);
 			$this->_column_headers = $this->get_column_info();
 
 			/* -- Fetch the items -- */
@@ -378,25 +348,25 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 				$attr      = $rt_hd_attributes_model->get_attribute( $relation->attr_id );
 				$attr_name = rthd_attribute_taxonomy_name( $attr->attribute_name );
 				$key       = str_replace( '-', '_', $attr_name );
-				if ( isset( $_GET[$attr_name] ) ) {
-					$term             = get_term_by( 'slug', $_GET[$attr_name], $attr_name );
-					$taxonomies[$key] = ( isset( $term->term_id ) && !empty( $term->term_id ) ) ? $term->term_id : 'NULL';
+				if ( isset( $_GET[ $attr_name ] ) ) {
+					$term               = get_term_by( 'slug', $_GET[ $attr_name ], $attr_name );
+					$taxonomies[ $key ] = ( isset( $term->term_id ) && ! empty( $term->term_id ) ) ? $term->term_id : 'NULL';
 				}
 			}
 
 			$contact_name = rt_biz_get_person_post_type();
-			if ( isset( $this->settings['attach_contacts'] ) && $this->settings['attach_contacts'] == 'yes' && isset( $_GET[$contact_name] ) ) {
-				$taxonomies[$contact_name] = $_GET[$contact_name];
+			if ( isset( $this->settings[ 'attach_contacts' ] ) && $this->settings[ 'attach_contacts' ] == 'yes' && isset( $_GET[ $contact_name ] ) ) {
+				$taxonomies[ $contact_name ] = $_GET[ $contact_name ];
 			}
 			$account_name = rt_biz_get_organization_post_type();
-			if ( isset( $this->settings['attach_accounts'] ) && $this->settings['attach_accounts'] == 'yes' && isset( $_GET[$account_name] ) ) {
-				$taxonomies[$account_name] = $_GET[$account_name];
+			if ( isset( $this->settings[ 'attach_accounts' ] ) && $this->settings[ 'attach_accounts' ] == 'yes' && isset( $_GET[ $account_name ] ) ) {
+				$taxonomies[ $account_name ] = $_GET[ $account_name ];
 			}
 			$closing_reason_name = rthd_attribute_taxonomy_name( 'closing-reason' );
 			$key                 = str_replace( '-', '_', $closing_reason_name );
-			if ( isset( $_GET[$closing_reason_name] ) ) {
-				$term             = get_term_by( 'slug', $_GET[$closing_reason_name], $closing_reason_name );
-				$taxonomies[$key] = ( isset( $term->term_id ) && !empty( $term->term_id ) ) ? $term->term_id : 'NULL';
+			if ( isset( $_GET[ $closing_reason_name ] ) ) {
+				$term               = get_term_by( 'slug', $_GET[ $closing_reason_name ], $closing_reason_name );
+				$taxonomies[ $key ] = ( isset( $term->term_id ) && ! empty( $term->term_id ) ) ? $term->term_id : 'NULL';
 			}
 
 			return $taxonomies;
@@ -409,7 +379,7 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 		 */
 		function get_status_label( $slug ) {
 			foreach ( $this->post_statuses as $status ) {
-				if ( $slug === $status['slug'] ) {
+				if ( $slug === $status[ 'slug' ] ) {
 					return $status;
 				}
 			}
@@ -435,7 +405,7 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 
 			//Loop for each record
 			$i = 0;
-			if ( !empty( $records ) ) {
+			if ( ! empty( $records ) ) {
 				foreach ( $records as $rec ) {
 					//Open the line
 					echo '<tr id="record_' . $rec->rthd_id . '" class="' . ( ( $i % 2 ) ? 'alternate' : '' ) . '">';
@@ -461,20 +431,14 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 								break;
 							case "rthd_title":
 								echo '<td ' . $attributes . '>' . '<a href="' . admin_url( 'edit.php?post_type=' . $this->post_type . '&page=rthd-add-' . $this->post_type . '&' . $this->post_type . '_id=' . $rec->rthd_post_id ) . '">' . $rec->rthd_title . '</a>';
-								$actions = array(
-									'edit'   => '<a href="' . admin_url( 'edit.php?post_type=' . $this->post_type . '&page=rthd-add-' . $this->post_type . '&' . $this->post_type . '_id=' . $rec->rthd_post_id ) . '">Edit</a>',
-									'delete' => '<a href="' . admin_url( 'edit.php?post_type=' . $this->post_type . '&page=rthd-add-' . $this->post_type . '&' . $this->post_type . '_id=' . $rec->rthd_post_id . '&action=trash' ) . '">Trash</a>',
-								);
+								$actions = array( 'edit' => '<a href="' . admin_url( 'edit.php?post_type=' . $this->post_type . '&page=rthd-add-' . $this->post_type . '&' . $this->post_type . '_id=' . $rec->rthd_post_id ) . '">Edit</a>', 'delete' => '<a href="' . admin_url( 'edit.php?post_type=' . $this->post_type . '&page=rthd-add-' . $this->post_type . '&' . $this->post_type . '_id=' . $rec->rthd_post_id . '&action=trash' ) . '">Trash</a>', );
 								echo $this->row_actions( $actions );
 								//.'< /td>';
 								break;
 							case "rthd_assignee":
-								if ( !empty( $rec->rthd_assignee ) ) {
+								if ( ! empty( $rec->rthd_assignee ) ) {
 									$user = get_user_by( 'id', $rec->rthd_assignee );
-									$url  = add_query_arg( array(
-											'post_type' => $this->post_type,
-											'page'      => 'rthd-all-' . $this->post_type
-										), admin_url( 'edit.php' ) );
+									$url  = add_query_arg( array( 'post_type' => $this->post_type, 'page' => 'rthd-all-' . $this->post_type ), admin_url( 'edit.php' ) );
 									$url  = add_query_arg( 'assignee', $rec->rthd_assignee, $url );
 									echo '<td ' . $attributes . '><a href="' . $url . '">' . $user->display_name . '</a>';
 								} else {
@@ -484,7 +448,7 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 								break;
 							case "rthd_create_date":
 								$date = date_parse( $rec->rthd_create_date );
-								if ( checkdate( $date['month'], $date['day'], $date['year'] ) ) {
+								if ( checkdate( $date[ 'month' ], $date[ 'day' ], $date[ 'year' ] ) ) {
 									$dtObj = new DateTime( $rec->rthd_create_date );
 									echo '<td ' . $attributes . '><span title="' . $rec->rthd_create_date . '">' . human_time_diff( $dtObj->format( 'U' ), time() ) . __( ' ago' ) . '</span>';
 								} else {
@@ -494,7 +458,7 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 								break;
 							case "rthd_update_date":
 								$date = date_parse( $rec->rthd_update_date );
-								if ( checkdate( $date['month'], $date['day'], $date['year'] ) ) {
+								if ( checkdate( $date[ 'month' ], $date[ 'day' ], $date[ 'year' ] ) ) {
 									$dtObj = new DateTime( $rec->rthd_update_date );
 									echo '<td ' . $attributes . '><span title="' . $rec->rthd_update_date . '">' . human_time_diff( $dtObj->format( 'U' ), time() ) . __( ' ago' ) . '</span>';
 								} else {
@@ -504,7 +468,7 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 								break;
 							case "rthd_closing_date":
 								$date = date_parse( $rec->rthd_closing_date );
-								if ( checkdate( $date['month'], $date['day'], $date['year'] ) ) {
+								if ( checkdate( $date[ 'month' ], $date[ 'day' ], $date[ 'year' ] ) ) {
 									$dtObj = new DateTime( $rec->rthd_closing_date );
 									echo '<td ' . $attributes . '><span title="' . $rec->rthd_closing_date . '">' . human_time_diff( $dtObj->format( 'U' ), time() ) . __( ' ago' ) . '</span>';
 								} else {
@@ -513,15 +477,12 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 								//.'< /td>';
 								break;
 							case "rthd_status":
-								if ( !empty( $rec->rthd_status ) ) {
+								if ( ! empty( $rec->rthd_status ) ) {
 									$status = $this->get_status_label( $rec->rthd_status );
-									if ( !empty( $status ) ) {
-										$url = add_query_arg( array(
-												'post_type' => $this->post_type,
-												'page'      => 'rthd-all-' . $this->post_type
-											), admin_url( 'edit.php' ) );
+									if ( ! empty( $status ) ) {
+										$url = add_query_arg( array( 'post_type' => $this->post_type, 'page' => 'rthd-all-' . $this->post_type ), admin_url( 'edit.php' ) );
 										$url = add_query_arg( 'post_status', $rec->rthd_status, $url );
-										echo '<td ' . $attributes . '><a href="' . $url . '">' . $status['name'] . '</a>';
+										echo '<td ' . $attributes . '><a href="' . $url . '">' . $status[ 'name' ] . '</a>';
 									} else {
 										echo '<td ' . $attributes . '><a href="' . $url . '">' . $rec->rthd_status . '</a>';
 									}
@@ -531,19 +492,16 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 								//.'< /td>';
 								break;
 							case "rthd_closing_reason":
-								if ( !empty( $rec->rthd_closing_reason ) ) {
+								if ( ! empty( $rec->rthd_closing_reason ) ) {
 									echo '<td ' . $attributes . '>';
 									$termArr  = array();
 									$reasons  = explode( ',', $rec->rthd_closing_reason );
-									$base_url = add_query_arg( array(
-											'post_type' => $this->post_type,
-											'page'      => 'rthd-all-' . $this->post_type
-										), admin_url( 'edit.php' ) );
+									$base_url = add_query_arg( array( 'post_type' => $this->post_type, 'page' => 'rthd-all-' . $this->post_type ), admin_url( 'edit.php' ) );
 									foreach ( $reasons as $reason ) {
 										$term = get_term_by( 'id', $reason, rthd_attribute_taxonomy_name( 'closing-reason' ) );
-										if ( !empty( $term ) ) {
-											$url       = add_query_arg( rthd_attribute_taxonomy_name( 'closing-reason' ), $term->slug, $base_url );
-											$termArr[] = '<a href="' . $url . '">' . $term->name . '</a>';
+										if ( ! empty( $term ) ) {
+											$url        = add_query_arg( rthd_attribute_taxonomy_name( 'closing-reason' ), $term->slug, $base_url );
+											$termArr[ ] = '<a href="' . $url . '">' . $term->name . '</a>';
 										}
 									}
 									echo implode( ',', $termArr );
@@ -553,12 +511,9 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 								//.'< /td>';
 								break;
 							case "rthd_created_by":
-								if ( !empty( $rec->rthd_created_by ) ) {
+								if ( ! empty( $rec->rthd_created_by ) ) {
 									$user = get_user_by( 'id', $rec->rthd_created_by );
-									$url  = add_query_arg( array(
-											'post_type' => $this->post_type,
-											'page'      => 'rthd-all-' . $this->post_type
-										), admin_url( 'edit.php' ) );
+									$url  = add_query_arg( array( 'post_type' => $this->post_type, 'page' => 'rthd-all-' . $this->post_type ), admin_url( 'edit.php' ) );
 									$url  = add_query_arg( 'user_created_by', $rec->rthd_created_by, $url );
 									echo '<td ' . $attributes . '><a href="' . $url . '">' . $user->display_name . '</a>';
 								} else {
@@ -567,12 +522,9 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 								//.'< /td>';
 								break;
 							case "rthd_updated_by":
-								if ( !empty( $rec->rthd_updated_by ) ) {
+								if ( ! empty( $rec->rthd_updated_by ) ) {
 									$user = get_user_by( 'id', $rec->rthd_updated_by );
-									$url  = add_query_arg( array(
-											'post_type' => $this->post_type,
-											'page'      => 'rthd-all-' . $this->post_type
-										), admin_url( 'edit.php' ) );
+									$url  = add_query_arg( array( 'post_type' => $this->post_type, 'page' => 'rthd-all-' . $this->post_type ), admin_url( 'edit.php' ) );
 									$url  = add_query_arg( 'user_updated_by', $rec->rthd_updated_by, $url );
 									echo '<td ' . $attributes . '><a href="' . $url . '">' . $user->display_name . '</a>';
 								} else {
@@ -581,12 +533,9 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 								//.'< /td>';
 								break;
 							case "rthd_closed_by":
-								if ( !empty( $rec->rthd_closed_by ) ) {
+								if ( ! empty( $rec->rthd_closed_by ) ) {
 									$user = get_user_by( 'id', $rec->rthd_closed_by );
-									$url  = add_query_arg( array(
-											'post_type' => $this->post_type,
-											'page'      => 'rthd-all-' . $this->post_type
-										), admin_url( 'edit.php' ) );
+									$url  = add_query_arg( array( 'post_type' => $this->post_type, 'page' => 'rthd-all-' . $this->post_type ), admin_url( 'edit.php' ) );
 									$url  = add_query_arg( 'user_closed_by', $rec->rthd_closed_by, $url );
 									echo '<td ' . $attributes . '><a href="' . $url . '">' . $user->display_name . '</a>';
 								} else {
@@ -600,22 +549,21 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 									$attr_name = str_replace( '-', '_', rthd_attribute_taxonomy_name( $attr->attribute_name ) );
 
 									if ( $column_name == 'rthd_' . $attr_name ) {
-										if ( !empty( $rec->{'rthd_' . $attr_name} ) ) {
+										if ( ! empty( $rec->{'rthd_' . $attr_name} ) ) {
 											if ( $attr->attribute_store_as == 'meta' ) {
 												echo '<td ' . $attributes . '>' . $rec->{'rthd_' . $attr_name};
-											} else if ( $attr->attribute_store_as == 'taxonomy' ) {
-												echo '<td ' . $attributes . '>';
-												$terms        = wp_get_post_terms( $rec->rthd_post_id, rthd_attribute_taxonomy_name( $attr->attribute_name ) );
-												$term_display = array();
-												$base_url     = add_query_arg( array(
-														'post_type' => $this->post_type,
-														'page'      => 'rthd-all-' . $this->post_type
-													), admin_url( 'edit.php' ) );
-												foreach ( $terms as $term ) {
-													$url            = add_query_arg( rthd_attribute_taxonomy_name( $attr->attribute_name ), $term->slug, $base_url );
-													$term_display[] = '<a href="' . $url . '">' . $term->name . '</a>';
+											} else {
+												if ( $attr->attribute_store_as == 'taxonomy' ) {
+													echo '<td ' . $attributes . '>';
+													$terms        = wp_get_post_terms( $rec->rthd_post_id, rthd_attribute_taxonomy_name( $attr->attribute_name ) );
+													$term_display = array();
+													$base_url     = add_query_arg( array( 'post_type' => $this->post_type, 'page' => 'rthd-all-' . $this->post_type ), admin_url( 'edit.php' ) );
+													foreach ( $terms as $term ) {
+														$url             = add_query_arg( rthd_attribute_taxonomy_name( $attr->attribute_name ), $term->slug, $base_url );
+														$term_display[ ] = '<a href="' . $url . '">' . $term->name . '</a>';
+													}
+													echo implode( ' , ', $term_display );
 												}
-												echo implode( ' , ', $term_display );
 											}
 										} else {
 											echo '<td ' . $attributes . '>-';
@@ -623,22 +571,19 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 									}
 								}
 
-								if ( isset( $this->settings['attach_contacts'] ) && $this->settings['attach_contacts'] == 'yes' ) {
+								if ( isset( $this->settings[ 'attach_contacts' ] ) && $this->settings[ 'attach_contacts' ] == 'yes' ) {
 									$contact_name = rt_biz_get_person_post_type();
 									if ( $column_name == 'rthd_' . $contact_name ) {
-										if ( !empty( $rec->{'rthd_' . $contact_name} ) ) {
+										if ( ! empty( $rec->{'rthd_' . $contact_name} ) ) {
 											echo '<td ' . $attributes . '>';
 											$termArr  = array();
 											$contacts = explode( ',', $rec->{'rthd_' . $contact_name} );
-											$base_url = add_query_arg( array(
-													'post_type' => $this->post_type,
-													'page'      => 'rthd-all-' . $this->post_type
-												), admin_url( 'edit.php' ) );
+											$base_url = add_query_arg( array( 'post_type' => $this->post_type, 'page' => 'rthd-all-' . $this->post_type ), admin_url( 'edit.php' ) );
 											foreach ( $contacts as $contact ) {
 												$term = get_post( $contact );
-												if ( !empty( $term ) ) {
-													$url       = add_query_arg( $contact_name, $term->ID, $base_url );
-													$termArr[] = '<a href="' . $url . '">' . $term->post_title . '</a>';
+												if ( ! empty( $term ) ) {
+													$url        = add_query_arg( $contact_name, $term->ID, $base_url );
+													$termArr[ ] = '<a href="' . $url . '">' . $term->post_title . '</a>';
 												}
 											}
 											echo implode( ' , ', $termArr );
@@ -647,22 +592,19 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 										}
 									}
 								}
-								if ( isset( $this->settings['attach_accounts'] ) && $this->settings['attach_accounts'] == 'yes' ) {
+								if ( isset( $this->settings[ 'attach_accounts' ] ) && $this->settings[ 'attach_accounts' ] == 'yes' ) {
 									$accounts_name = rt_biz_get_organization_post_type();
 									if ( $column_name == 'rthd_' . $accounts_name ) {
-										if ( !empty( $rec->{'rthd_' . $accounts_name} ) ) {
+										if ( ! empty( $rec->{'rthd_' . $accounts_name} ) ) {
 											echo '<td ' . $attributes . '>';
 											$termArr  = array();
 											$accounts = explode( ',', $rec->{'rthd_' . $accounts_name} );
-											$base_url = add_query_arg( array(
-													'post_type' => $this->post_type,
-													'page'      => 'rthd-all-' . $this->post_type
-												), admin_url( 'edit.php' ) );
+											$base_url = add_query_arg( array( 'post_type' => $this->post_type, 'page' => 'rthd-all-' . $this->post_type ), admin_url( 'edit.php' ) );
 											foreach ( $accounts as $account ) {
 												$term = get_post( $account );
-												if ( !empty( $term ) ) {
-													$url       = add_query_arg( $accounts_name, $term->ID, $base_url );
-													$termArr[] = '<a href="' . $url . '">' . $term->post_title . '</a>';
+												if ( ! empty( $term ) ) {
+													$url        = add_query_arg( $accounts_name, $term->ID, $base_url );
+													$termArr[ ] = '<a href="' . $url . '">' . $term->post_title . '</a>';
 												}
 											}
 											echo implode( ' , ', $termArr );
@@ -675,7 +617,7 @@ if ( !class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 						}
 					}
 					//Close the line
-//					echo'< /tr>';
+					//					echo'< /tr>';
 				}
 			}
 		}

@@ -3,7 +3,7 @@
 /**
  * Don't load this file directly!
  */
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -18,7 +18,7 @@ if ( !defined( 'ABSPATH' ) ) {
  * Help desk utility functions
  * @author udit
  */
-if ( !class_exists( 'Rt_HD_Utils' ) ) {
+if ( ! class_exists( 'Rt_HD_Utils' ) ) {
 
 	/**
 	 * Class Rt_HD_Utils
@@ -33,7 +33,7 @@ if ( !class_exists( 'Rt_HD_Utils' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		static public function forceUFT8( $tmpStr ) {
-//			return preg_replace( '/[^(\x20-\x7F)]*/', '', $tmpStr );
+			//			return preg_replace( '/[^(\x20-\x7F)]*/', '', $tmpStr );
 			return $tmpStr;
 		}
 
@@ -44,62 +44,12 @@ if ( !class_exists( 'Rt_HD_Utils' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		public static $mime_types = array(
-			"pdf"  => "application/pdf"
-		,
-			"exe"  => "application/octet-stream"
-		,
-			"zip"  => "application/zip"
-		,
-			"docx" => "application/msword"
-		,
-			"doc"  => "application/msword"
-		,
-			"xls"  => "application/vnd.ms-excel"
-		,
-			"ppt"  => "application/vnd.ms-powerpoint"
-		,
-			"gif"  => "image/gif"
-		,
-			"png"  => "image/png"
-		,
-			"jpeg" => "image/jpg"
-		,
-			"jpg"  => "image/jpg"
-		,
-			"mp3"  => "audio/mpeg"
-		,
-			"wav"  => "audio/x-wav"
-		,
-			"mpeg" => "video/mpeg"
-		,
-			"mpg"  => "video/mpeg"
-		,
-			"mpe"  => "video/mpeg"
-		,
-			"mov"  => "video/quicktime"
-		,
-			"avi"  => "video/x-msvideo"
-		,
-			"3gp"  => "video/3gpp"
-		,
-			"css"  => "text/css"
-		,
-			"jsc"  => "application/javascript"
-		,
-			"js"   => "application/javascript"
-		,
-			"php"  => "text/html"
-		,
-			"htm"  => "text/html"
-		,
-			"html" => "text/html"
-		);
+		public static $mime_types = array( "pdf" => "application/pdf", "exe" => "application/octet-stream", "zip" => "application/zip", "docx" => "application/msword", "doc" => "application/msword", "xls" => "application/vnd.ms-excel", "ppt" => "application/vnd.ms-powerpoint", "gif" => "image/gif", "png" => "image/png", "jpeg" => "image/jpg", "jpg" => "image/jpg", "mp3" => "audio/mpeg", "wav" => "audio/x-wav", "mpeg" => "video/mpeg", "mpg" => "video/mpeg", "mpe" => "video/mpeg", "mov" => "video/quicktime", "avi" => "video/x-msvideo", "3gp" => "video/3gpp", "css" => "text/css", "jsc" => "application/javascript", "js" => "application/javascript", "php" => "text/html", "htm" => "text/html", "html" => "text/html" );
 
 		/**
 		 * Logging errors
 		 *
-		 * @param $msg
+		 * @param        $msg
 		 * @param string $filename
 		 *
 		 * @since rt-Helpdesk 0.1
@@ -148,22 +98,22 @@ if ( !class_exists( 'Rt_HD_Utils' ) ) {
 			$query = "SELECT ID FROM $wpdb->posts WHERE 1=1";
 			$args  = array();
 
-			if ( !empty( $date ) ) {
+			if ( ! empty( $date ) ) {
 				$query .= ' AND post_date = %s';
-				$args[] = $post_date;
+				$args[ ] = $post_date;
 			}
 
-			if ( !empty( $title ) ) {
+			if ( ! empty( $title ) ) {
 				$query .= ' AND post_title = %s';
-				$args[] = $post_title;
+				$args[ ] = $post_title;
 			}
 
-			if ( !empty( $content ) ) {
+			if ( ! empty( $content ) ) {
 				$query .= 'AND post_content = %s';
-				$args[] = $post_content;
+				$args[ ] = $post_content;
 			}
 
-			if ( !empty( $args ) ) {
+			if ( ! empty( $args ) ) {
 				return $wpdb->get_var( $wpdb->prepare( $query, $args ) );
 			}
 
@@ -197,8 +147,8 @@ if ( !class_exists( 'Rt_HD_Utils' ) ) {
 			// our list of mime types
 
 			$extension = strtolower( end( explode( '.', $file ) ) );
-			if ( isset( self::$mime_types[$extension] ) ) {
-				return self::$mime_types[$extension];
+			if ( isset( self::$mime_types[ $extension ] ) ) {
+				return self::$mime_types[ $extension ];
 			} else {
 				return "application/octet-stream";
 			}

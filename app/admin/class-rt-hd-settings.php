@@ -3,7 +3,7 @@
 /**
  * Don't load this file directly!
  */
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -18,7 +18,7 @@ if ( !defined( 'ABSPATH' ) ) {
  *
  * @author udit
  */
-if ( !class_exists( 'Rt_HD_Settings' ) ) {
+if ( ! class_exists( 'Rt_HD_Settings' ) ) {
 
 	/**
 	 * Class Rt_HD_Settings
@@ -48,9 +48,7 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 		 */
 		function ui() {
 			global $rt_hd_settings;
-			$args = array(
-				'rt_hd_settings' => $rt_hd_settings,
-			);
+			$args = array( 'rt_hd_settings' => $rt_hd_settings, );
 			rthd_get_template( 'admin/settings.php', $args );
 		}
 
@@ -68,7 +66,7 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 			global $rt_hd_mail_accounts_model;
 			$rows_affected = $rt_hd_mail_accounts_model->update_mail_account( array( 'last_sync_time' => $replytime ), array( 'email' => $email ) );
 
-			return ( !empty( $rows_affected ) );
+			return ( ! empty( $rows_affected ) );
 		}
 
 		/**
@@ -89,7 +87,7 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 			global $rt_hd_mail_accounts_model;
 			$rows_affected = $rt_hd_mail_accounts_model->update_mail_account( array( 'sync_status' => $status ), array( 'email' => $email ) );
 
-			return ( !empty( $rows_affected ) );
+			return ( ! empty( $rows_affected ) );
 		}
 
 		/**
@@ -105,8 +103,8 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 			global $rt_hd_mail_accounts_model;
 			$emails = $rt_hd_mail_accounts_model->get_mail_account( array( 'email' => $email ) );
 			$email  = false;
-			if ( !empty( $emails ) ) {
-				$email = $emails[0];
+			if ( ! empty( $emails ) ) {
+				$email = $emails[ 0 ];
 			}
 
 			return $email;
@@ -145,8 +143,8 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 		public function get_accesstoken_from_email( $email, &$signature, &$email_type, &$imap_server ) {
 			global $rt_hd_mail_accounts_model;
 			$ac = $rt_hd_mail_accounts_model->get_mail_account( array( 'email' => $email ) );
-			if ( isset( $ac[0] ) ) {
-				$ac = $ac[0];
+			if ( isset( $ac[ 0 ] ) ) {
+				$ac = $ac[ 0 ];
 			} else {
 				$signature = '';
 
@@ -156,18 +154,18 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 			$signature   = $ac->signature;
 			$email_type  = $ac->type;
 			$imap_server = $ac->imap_server;
-			if ( !$signature ) {
+			if ( ! $signature ) {
 				$signature = "";
 			}
 			$redirect_url = get_site_option( 'rthd_googleapi_redirecturl' );
-			if ( !$redirect_url ) {
+			if ( ! $redirect_url ) {
 				$redirect_url = admin_url( "admin.php?page=rthd-settings&tab=my-settings&type=personal" );
 				update_site_option( "rthd_googleapi_redirecturl", $redirect_url );
 			}
 
 			$ac->email_data = unserialize( $ac->email_data );
 
-			$email = filter_var( $ac->email_data['email'], FILTER_SANITIZE_EMAIL );
+			$email = filter_var( $ac->email_data[ 'email' ], FILTER_SANITIZE_EMAIL );
 
 			$access_token = $ac->outh_token;
 
@@ -185,11 +183,7 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 				$client->setClientId( $google_client_id );
 				$client->setClientSecret( $google_client_secret );
 				$client->setRedirectUri( $google_client_redirect_url );
-				$client->setScopes( array(
-						'https://mail.google.com/',
-						'https://www.googleapis.com/auth/userinfo.email',
-						'https://www.googleapis.com/auth/userinfo.profile'
-					) );
+				$client->setScopes( array( 'https://mail.google.com/', 'https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile' ) );
 				$client->setAccessType( "offline" );
 
 				$token = json_decode( $ac->outh_token );
@@ -199,12 +193,12 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 					$client->refreshToken( $token->refresh_token );
 					$oauth2 = new Google_Oauth2Service( $client );
 					$user   = $oauth2->userinfo_v2_me->get();
-					$email  = filter_var( $user['email'], FILTER_SANITIZE_EMAIL );
-					if ( isset( $ac->email_data['inbox_folder'] ) ) {
-						$user['inbox_folder'] = $ac->email_data['inbox_folder'];
+					$email  = filter_var( $user[ 'email' ], FILTER_SANITIZE_EMAIL );
+					if ( isset( $ac->email_data[ 'inbox_folder' ] ) ) {
+						$user[ 'inbox_folder' ] = $ac->email_data[ 'inbox_folder' ];
 					}
-					if ( isset( $ac->email_data['mail_folders'] ) ) {
-						$user['mail_folders'] = $ac->email_data['mail_folders'];
+					if ( isset( $ac->email_data[ 'mail_folders' ] ) ) {
+						$user[ 'mail_folders' ] = $ac->email_data[ 'mail_folders' ];
 					}
 					$this->update_user_google_ac( $client->getAccessToken(), $email, serialize( $user ) );
 					$ac->email_data = $user;
@@ -231,12 +225,12 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 		/**
 		 * add Gmail user account
 		 *
-		 * @param $outh_token
-		 * @param $email
-		 * @param $email_data
-		 * @param $user_id
+		 * @param        $outh_token
+		 * @param        $email
+		 * @param        $email_data
+		 * @param        $user_id
 		 * @param string $type
-		 * @param null $imap_server
+		 * @param null   $imap_server
 		 *
 		 * @return bool
 		 *
@@ -248,23 +242,16 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 				$user_id = get_current_user_id();
 			}
 
-			$args = array(
-				'user_id'    => $user_id,
-				'email'      => $email,
-				'outh_token' => $outh_token,
-				'email_data' => $email_data,
-				'type'       => $type,
-				'flag'       => 'Y'
-			);
+			$args = array( 'user_id' => $user_id, 'email' => $email, 'outh_token' => $outh_token, 'email_data' => $email_data, 'type' => $type, 'flag' => 'Y' );
 
 			if ( $imap_server != null ) {
-				$args['imap_server'] = $imap_server;
+				$args[ 'imap_server' ] = $imap_server;
 			}
 
 			$rows_affected = $rt_hd_mail_accounts_model->add_mail_account( $args );
 			$this->update_gmail_ac_count();
 
-			return ( !empty( $rows_affected ) );
+			return ( ! empty( $rows_affected ) );
 		}
 
 		/**
@@ -280,16 +267,11 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 		 */
 		public function update_user_google_ac( $outh_token, $email, $email_data ) {
 			global $rt_hd_mail_accounts_model;
-			$data          = array(
-				'outh_token' => $outh_token,
-				'email_data' => $email_data,
-			);
-			$where         = array(
-				'email' => $email,
-			);
+			$data          = array( 'outh_token' => $outh_token, 'email_data' => $email_data, );
+			$where         = array( 'email' => $email, );
 			$rows_affected = $rt_hd_mail_accounts_model->update_mail_account( $data, $where );
 
-			return ( !empty( $rows_affected ) );
+			return ( ! empty( $rows_affected ) );
 		}
 
 		/**
@@ -307,10 +289,7 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 				$user_id = get_current_user_id();
 			}
 			global $rt_hd_mail_accounts_model;
-			$result = $rt_hd_mail_accounts_model->remove_mail_account( array(
-					'email'   => $email,
-					'user_id' => $user_id
-				) );
+			$result = $rt_hd_mail_accounts_model->remove_mail_account( array( 'email' => $email, 'user_id' => $user_id ) );
 			$this->update_gmail_ac_count();
 
 			return $result;
@@ -320,7 +299,7 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 		/**
 		 * update mail access
 		 *
-		 * @param $email
+		 * @param      $email
 		 * @param null $token
 		 * @param null $email_data
 		 * @param null $imap_server
@@ -331,13 +310,13 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 			global $rt_hd_mail_accounts_model;
 
 			if ( $email_data != null ) {
-				$args['email_data'] = $email_data;
+				$args[ 'email_data' ] = $email_data;
 			}
 			if ( $token != null ) {
-				$args['outh_token'] = $token;
+				$args[ 'outh_token' ] = $token;
 			}
 			if ( $imap_server != null ) {
-				$args['imap_server'] = $imap_server;
+				$args[ 'imap_server' ] = $imap_server;
 			}
 
 			$rows_affected = $rt_hd_mail_accounts_model->update_mail_account( $args, array( 'email' => $email ) );
@@ -417,7 +396,7 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 			global $wpdb, $rt_hd_mail_accounts_model;
 			$sql = $wpdb->prepare( "select * from $rt_hd_mail_accounts_model->table_name where sync_status in ( 'syncing' ) and ( last_sync_time is NULL or addtime( last_sync_time, %s ) < NOW() ) order by last_sync_time limit 1", $this->sync_period );
 			$row = $wpdb->get_row( $sql );
-			if ( !$row ) {
+			if ( ! $row ) {
 				$sql = "select * from $rt_hd_mail_accounts_model->table_name where not sync_status in ( 'syncing' ) order by last_sync_time limit 1";
 				$row = $wpdb->get_row( $sql );
 			} else {
@@ -430,14 +409,14 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 		/**
 		 * send email
 		 *
-		 * @param $fromemail
-		 * @param $subject
-		 * @param $body
-		 * @param array $toemail
-		 * @param array $ccemail
-		 * @param array $bccemail
-		 * @param array $attachement
-		 * @param int $refrence_id
+		 * @param        $fromemail
+		 * @param        $subject
+		 * @param        $body
+		 * @param array  $toemail
+		 * @param array  $ccemail
+		 * @param array  $bccemail
+		 * @param array  $attachement
+		 * @param int    $refrence_id
 		 * @param string $refrence_type
 		 *
 		 * @return mixed
@@ -448,18 +427,7 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 
 			$user_id = get_current_user_id();
 			global $rt_hd_mail_outbound_model;
-			$args = array(
-				'user_id'       => $user_id,
-				'fromemail'     => $fromemail,
-				'toemail'       => serialize( $toemail ),
-				'ccemail'       => serialize( $ccemail ),
-				'bccemail'      => serialize( $bccemail ),
-				'subject'       => $subject,
-				'body'          => $body,
-				'attachement'   => serialize( $attachement ),
-				'refrence_id'   => $refrence_id,
-				'refrence_type' => $refrence_type,
-			);
+			$args = array( 'user_id' => $user_id, 'fromemail' => $fromemail, 'toemail' => serialize( $toemail ), 'ccemail' => serialize( $ccemail ), 'bccemail' => serialize( $bccemail ), 'subject' => $subject, 'body' => $body, 'attachement' => serialize( $attachement ), 'refrence_id' => $refrence_id, 'refrence_type' => $refrence_type, );
 
 			return $rt_hd_mail_outbound_model->add_outbound_mail( $args );
 		}
@@ -480,7 +448,7 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 		/**
 		 * update send box
 		 *
-		 * @param $sentEmailID
+		 * @param        $sentEmailID
 		 * @param string $status
 		 * @param string $oldStatus
 		 *
@@ -490,10 +458,7 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 		 */
 		public function update_sent_email( $sentEmailID, $status = 'yes', $oldStatus = 'no' ) {
 			global $rt_hd_mail_outbound_model;
-			$rows_affected = $rt_hd_mail_outbound_model->update_outbound_mail( array( 'sent' => $status ), array(
-					'id'   => $sentEmailID,
-					'sent' => $oldStatus
-				) );
+			$rows_affected = $rt_hd_mail_outbound_model->update_outbound_mail( array( 'sent' => $status ), array( 'id' => $sentEmailID, 'sent' => $oldStatus ) );
 			echo $rows_affected;
 
 			return $rows_affected;
