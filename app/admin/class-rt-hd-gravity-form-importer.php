@@ -2,7 +2,7 @@
 /**
  * Don't load this file directly!
  */
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -19,7 +19,7 @@ if ( !defined( 'ABSPATH' ) ) {
  *
  * @since rt-Helpdesk 0.1
  */
-if ( !class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
+if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 
 	/**
 	 * Class Rt_HD_Gravity_Form_Importer
@@ -54,14 +54,14 @@ if ( !class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 					'slug'         => 'title',
 					'required'     => false,
 					'multiple'     => false,
-					'type'         => 'any'
+					'type'         => 'any',
 				),
 				"description"  => array(
 					'display_name' => 'Description',
 					'slug'         => 'description',
 					'required'     => true,
 					'multiple'     => false,
-					'type'         => 'any'
+					'type'         => 'any',
 				),
 				"ticketmeta"   => array(
 					'display_name' => 'Ticket Meta',
@@ -69,21 +69,21 @@ if ( !class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 					'required'     => false,
 					'multiple'     => true,
 					'type'         => 'key',
-					'key_list'     => 'arr_ticketmeta_key'
+					'key_list'     => 'arr_ticketmeta_key',
 				),
 				"creationdate" => array(
 					'display_name' => 'Create Date',
 					'slug'         => 'creationdate',
 					'required'     => false,
 					'multiple'     => false,
-					'type'         => 'date'
+					'type'         => 'date',
 				),
 				"modifydate"   => array(
 					'display_name' => 'Last Modify Date',
 					'slug'         => 'modifydate',
 					'required'     => false,
 					'multiple'     => false,
-					'type'         => 'date'
+					'type'         => 'date',
 				),
 				"assignedto"   => array(
 					'display_name'  => 'Assigne To',
@@ -91,7 +91,7 @@ if ( !class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 					'required'      => false,
 					'multiple'      => false,
 					'type'          => 'defined',
-					'definedsource' => 'arr_assignedto'
+					'definedsource' => 'arr_assignedto',
 				),
 				"ticketstatus" => array(
 					'display_name'  => 'Status',
@@ -99,14 +99,14 @@ if ( !class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 					'required'      => true,
 					'multiple'      => false,
 					'type'          => 'defined',
-					'definedsource' => 'arr_ticketstatus'
+					'definedsource' => 'arr_ticketstatus',
 				),
 			);
 
 			$attributes = rthd_get_attributes( Rt_HD_Module::$post_type );
 			foreach ( $attributes as $attr ) {
 				$relation = $rt_hd_attributes_relationship_model->get_relations_by_post_type( Rt_HD_Module::$post_type, $attr->id );
-				if ( !isset( $relation[0] ) ) {
+				if ( ! isset( $relation[0] ) ) {
 					continue;
 				}
 				$relation                  = $relation[0];
@@ -140,68 +140,68 @@ if ( !class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 			$module_settings = rthd_get_settings();
 			if ( isset( $module_settings['attach_contacts'] ) && $module_settings['attach_contacts'] == 'yes' ) {
 				$temp_arr           = array(
-					"contactname"      => array(
+					'contactname'      => array(
 						'display_name' => 'Contact Name',
 						'slug'         => 'contactname',
 						'required'     => false,
 						'multiple'     => false,
-						'type'         => 'text'
+						'type'         => 'text',
 					),
 					"contactfirstname" => array(
 						'display_name' => 'Contact First Name',
 						'slug'         => 'contactfirstname',
 						'required'     => false,
 						'multiple'     => false,
-						'type'         => 'text'
+						'type'         => 'text',
 					),
 					"contacttitle"     => array(
 						'display_name' => 'Contact Title',
 						'slug'         => 'contacttitle',
 						'required'     => false,
 						'multiple'     => false,
-						'type'         => 'text'
+						'type'         => 'text',
 					),
 					"contactlastname"  => array(
 						'display_name' => 'Contact Last Name',
 						'slug'         => 'contactlastname',
 						'required'     => false,
 						'multiple'     => false,
-						'type'         => 'text'
+						'type'         => 'text',
 					),
 					"contactaddress"   => array(
 						'display_name' => 'Contact Address',
 						'slug'         => 'contactaddress',
 						'required'     => false,
 						'multiple'     => false,
-						'type'         => 'text'
+						'type'         => 'text',
 					),
 					"contactemail"     => array(
 						'display_name' => 'Contact Email',
 						'slug'         => 'contactemail',
 						'required'     => true,
 						'multiple'     => true,
-						'type'         => 'email'
+						'type'         => 'email',
 					),
 					"contactskypeid"   => array(
 						'display_name' => 'Contact Skype Id',
 						'slug'         => 'contactskypeid',
 						'required'     => false,
 						'multiple'     => true,
-						'type'         => 'text'
+						'type'         => 'text',
 					),
 					"contactphoneno"   => array(
 						'display_name' => 'Contact Phone No',
 						'slug'         => 'contactphoneno',
 						'required'     => false,
 						'multiple'     => true,
-						'type'         => 'text'
+						'type'         => 'text',
 					),
 					"contactmeta"      => array(
 						'display_name' => 'Contact Meta',
 						'slug'         => 'contactmeta',
 						'required'     => false,
 						'multiple'     => true,
-						'type'         => 'any'
+						'type'         => 'any',
 					),
 				);
 				$this->ticket_field = array_merge( $this->ticket_field, $temp_arr );
@@ -209,33 +209,33 @@ if ( !class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 
 			if ( isset( $module_settings['attach_accounts'] ) && $module_settings['attach_accounts'] == 'yes' ) {
 				$temp_arr           = array(
-					"accountname"    => array(
+					'accountname'    => array(
 						'display_name' => 'Account Name',
 						'slug'         => 'accountname',
 						'required'     => false,
 						'multiple'     => false,
-						'type'         => 'any'
+						'type'         => 'any',
 					),
 					"accountaddress" => array(
 						'display_name' => 'Account Address',
 						'slug'         => 'accountaddress',
 						'required'     => false,
 						'multiple'     => false,
-						'type'         => 'any'
+						'type'         => 'any',
 					),
 					"accountcountry" => array(
 						'display_name' => 'Account Country',
 						'slug'         => 'accountcountry',
 						'required'     => false,
 						'multiple'     => false,
-						'type'         => 'any'
+						'type'         => 'any',
 					),
 					"accountmeta"    => array(
 						'display_name' => 'Account Meta',
 						'slug'         => 'accountmeta',
 						'required'     => false,
 						'multiple'     => true,
-						'type'         => 'any'
+						'type'         => 'any',
 					),
 				);
 				$this->ticket_field = array_merge( $this->ticket_field, $temp_arr );
@@ -277,7 +277,7 @@ if ( !class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 		public function rthd_add_custome_field( $data ) {
 
 			global $rt_hd_gravity_fields_mapping_model;
-			$form_id       = $data["id"];
+			$form_id       = $data['id'];
 			$form_mappings = $rt_hd_gravity_fields_mapping_model->get_mapping( $form_id );
 			foreach ( $form_mappings as $mapping ) {
 				if ( $mapping->enable == 'yes' ) {
@@ -304,21 +304,21 @@ if ( !class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		public function rthd_defined_map_field_value() {
-			$form_id = $_REQUEST["map_form_id"];
-			if ( isset( $_REQUEST["mapSourceType"] ) && $_REQUEST["mapSourceType"] == "gravity" ) {
-				$field_id  = intval( $_REQUEST["field_id"] );
+			$form_id = $_REQUEST['map_form_id'];
+			if ( isset( $_REQUEST['mapSourceType'] ) && $_REQUEST['mapSourceType'] == 'gravity' ) {
+				$field_id  = intval( $_REQUEST['field_id'] );
 				$tableName = RGFormsModel::get_lead_details_table_name();
 				global $wpdb;
 				$result = $wpdb->get_results( $wpdb->prepare( "select distinct value from $tableName where form_id= %d and field_number = %d ", $form_id, $field_id ) );
 			} else {
-				$field_id = $_REQUEST["field_id"];
+				$field_id = $_REQUEST['field_id'];
 				$csv      = new parseCSV();
 				$csv->auto( $form_id );
 				$result   = array();
-				$field_id = str_replace( "-s-", " ", $field_id );
+				$field_id = str_replace( '-s-', ' ', $field_id );
 				foreach ( $csv->data as $cdt ) {
-					$tmpArr = array( "value" => $cdt[$field_id] );
-					if ( !in_array( $tmpArr, $result ) ) {
+					$tmpArr = array( 'value' => $cdt[$field_id] );
+					if ( ! in_array( $tmpArr, $result ) ) {
 						$result[] = $tmpArr;
 					}
 					if ( count( $result ) > 15 ) {
@@ -346,16 +346,16 @@ if ( !class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 		 */
 		function gravity_form_lead_meta( $form_id, $gr_lead ) {
 			global $rt_hd_gravity_fields_mapping_model;
-			$gr_lead_id = absint( $gr_lead["id"] );
+			$gr_lead_id = absint( $gr_lead['id'] );
 			$mappings   = $rt_hd_gravity_fields_mapping_model->get_mapping( $form_id );
 			foreach ( $mappings as $mapping ) {
 				if ( $mapping->enable == 'yes' ) {
 					global $rt_hd_module;
 					$labels       = $rt_hd_module->labels;
 					$post_type    = Rt_HD_Module::$post_type;
-					$hd_ticket_id = intval( $this->gform_get_meta( $gr_lead_id, "helpdesk-" . $post_type . "-post-id" ) );
+					$hd_ticket_id = intval( $this->gform_get_meta( $gr_lead_id, 'helpdesk-' . $post_type . '-post-id' ) );
 					if ( $hd_ticket_id ) {
-						echo "Linked " . $rt_hd_module->name . " Post : <a href='" . get_edit_post_link( $hd_ticket_id ) . "' >" . get_the_title( $hd_ticket_id ) . "</a><br/>";
+						echo 'Linked ' . $rt_hd_module->name . " Post : <a href='" . get_edit_post_link( $hd_ticket_id ) . "' >" . get_the_title( $hd_ticket_id ) . "</a><br/>";
 					}
 				}
 			}
@@ -408,26 +408,26 @@ if ( !class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 			global $rt_hd_module;
 			$post_type = Rt_HD_Module::$post_type;
 
-			if ( !isset( $_REQUEST["type"] ) ) {
-				$_REQUEST["type"] = "csv";
+			if ( ! isset( $_REQUEST['type'] ) ) {
+				$_REQUEST['type'] = 'csv';
 			}
 			$this->load_handlebars_Templates();
 			?>
 			<ul class="subsubsub">
 				<li>
-					<a href="<?php echo admin_url( "edit.php?post_type=$post_type&page=rthd-settings&type=csv" ); ?>" <?php if ( $_REQUEST["type"] == "csv" ) {
+					<a href="<?php echo admin_url( "edit.php?post_type=$post_type&page=rthd-settings&type=csv" ); ?>" <?php if ( $_REQUEST['type'] == 'csv' ) {
 						echo " class='current'";
 					} ?>>CSV</a> |
 				</li>
 				<li>
-					<a href="<?php echo admin_url( "edit.php?post_type=$post_type&page=rthd-settings&type=gravity" ); ?>" <?php if ( $_REQUEST["type"] == "gravity" ) {
+					<a href="<?php echo admin_url( "edit.php?post_type=$post_type&page=rthd-settings&type=gravity" ); ?>" <?php if ( $_REQUEST['type'] == 'gravity' ) {
 						echo " class='current'";
 					} ?> >Gravity</a></li>
 
 			</ul>
 			<?php
-			if ( $_REQUEST["type"] == "gravity" ) {
-				$formname = "";
+			if ( $_REQUEST['type'] == 'gravity' ) {
+				$formname = '';
 				$forms    = $this->get_forms();
 				if ( isset( $forms ) && !empty( $forms ) ) {
 					$noFormflag = false;

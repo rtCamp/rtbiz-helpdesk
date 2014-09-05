@@ -2,7 +2,7 @@
 /**
  * Don't load this file directly!
  */
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -18,7 +18,7 @@ if ( !defined( 'ABSPATH' ) ) {
  *  @since rt-Helpdesk 0.1
  */
 
-if ( !class_exists( 'RT_Meta_Box_External_Link' ) ) {
+if ( ! class_exists( 'RT_Meta_Box_External_Link' ) ) {
 	class RT_Meta_Box_External_Link {
 
 		/**
@@ -30,17 +30,17 @@ if ( !class_exists( 'RT_Meta_Box_External_Link' ) ) {
 
 			$post_type = $post->post_type;?>
 			<div id="external-files-container"><?php
-				if ( isset( $post->ID ) ) {
+			if ( isset( $post->ID ) ) {
 					$ticket_ex_files = get_post_meta( $post->ID, '_rtbiz_hd_external_file' );
 					$count           = 1;
-					foreach ( $ticket_ex_files as $ex_file ) {
+				foreach ( $ticket_ex_files as $ex_file ) {
 						$ex_file = (array) json_decode( $ex_file );?>
 						<div class="row_group">
 						<button class="delete_row removeMeta"><i class="foundicon-minus"></i>X</button>
-						<input type="text" name="ticket_ex_files[<?php echo $count; ?>'][title]"
-						       value="<?php echo $ex_file['title']; ?>"/>
-						<input type="text" name="ticket_ex_files[<?php echo $count; ?>'][link]"
-						       value="<?php echo $ex_file['link']; ?>"/>
+						<input type="text" name="ticket_ex_files[<?php echo esc_attr( $count ); ?>'][title]"
+						       value="<?php echo esc_attr( $ex_file['title'] ); ?>"/>
+						<input type="text" name="ticket_ex_files[<?php echo esc_attr( $count ) ?>'][link]"
+						       value="<?php echo esc_url( $ex_file['link'] ); ?>"/>
 						</div><?php
 						$count ++;
 					}
@@ -57,7 +57,10 @@ if ( !class_exists( 'RT_Meta_Box_External_Link' ) ) {
 		/**
 		 * Save meta box data
 		 *
-		 *  @since rt-Helpdesk 0.1
+		 * @since rt-Helpdesk 0.1
+		 *
+		 * @param $post_id
+		 * @param $post
 		 */
 		public static function save( $post_id, $post ) {
 

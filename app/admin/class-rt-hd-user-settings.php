@@ -2,7 +2,7 @@
 /**
  * Don't load this file directly!
  */
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -19,7 +19,7 @@ if ( !defined( 'ABSPATH' ) ) {
  *
  * @since rt-Helpdesk 0.1
  */
-if ( !class_exists( 'Rt_HD_User_Settings' ) ) {
+if ( ! class_exists( 'Rt_HD_User_Settings' ) ) {
 	class Rt_HD_User_Settings {
 		var $page_url;
 

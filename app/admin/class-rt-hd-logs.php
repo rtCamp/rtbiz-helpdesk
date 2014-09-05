@@ -2,7 +2,7 @@
 /**
  * Don't load this file directly!
  */
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -20,50 +20,50 @@ if ( !defined( 'ABSPATH' ) ) {
  *
  * @since rt-Helpdesk 0.1
  */
-if ( !class_exists( 'Rt_HD_Logs' ) ) {
+if ( ! class_exists( 'Rt_HD_Logs' ) ) {
 	class Rt_HD_Logs {
 		function ui() {
 			global $wpdb;
 			$editor_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
-//			if( !current_user_can( $editor_cap ) ) {
-//				wp_die("Opsss!! You are in restricted area");
-//			}
+			//			if( !current_user_can( $editor_cap ) ) {
+			//				wp_die("Opsss!! You are in restricted area");
+			//			}
 			//Delete lead code
-			if ( isset( $_REQUEST["log-list"] ) ) {
+			if ( isset( $_REQUEST['log-list'] ) ) {
 				rthd_get_template( 'admin/list-transaction-post.php' );
 
 				return;
 			}
-			if ( isset( $_REQUEST["transa_id"] ) ) {
+			if ( isset( $_REQUEST['transa_id'] ) ) {
 				global $wpdb;
-				$tran_id     = $_REQUEST["transa_id"];
+				$tran_id     = $_REQUEST['transa_id'];
 				$post_id_sql = $wpdb->prepare( "select post_id from $wpdb->postmeta where meta_key like '_transaction_id' and meta_value = %s ", $tran_id );
 
 				$post_ids = $wpdb->get_results( $post_id_sql );
-				$strPost  = "";
-				$sep      = "";
+				$strPost  = '';
+				$sep      = '';
 				foreach ( $post_ids as $pid ) {
 					$strPost .= $sep . $pid->post_id;
-					$sep = ",";
+					$sep = '.';
 				}
-				if ( $strPost != "" ) {
+				if ( $strPost != '' ) {
 					$wpdb->get_results( "delete from $wpdb->posts where ID in ({$strPost})" );
 					$wpdb->get_results( "delete from $wpdb->term_relationships where object_id in ({$strPost})" );
 					$wpdb->get_results( "delete from $wpdb->postmeta where post_id in ({$strPost})" );
 				}
-				if ( class_exists( "RGForms" ) ) {
+				if ( class_exists( 'RGForms' ) ) {
 					$table_name = RGFormsModel::get_lead_meta_table_name();
-					$strPost    = "";
-					$sep        = "";
+					$strPost    = '';
+					$sep        = '';
 
 
 					$lead_id_sql = $wpdb->prepare( "select lead_id from $table_name where meta_key like '_transaction_id' and meta_value like %s ", $tran_id );
 					$lead_ids    = $wpdb->get_results( $lead_id_sql );
 					foreach ( $lead_ids as $pid ) {
 						$strPost .= $sep . $pid->lead_id;
-						$sep = ",";
+						$sep = '.';
 					}
-					if ( $strPost != "" ) {
+					if ( $strPost != '' ) {
 						$wpdb->get_results( "delete from $table_name where lead_id in ({$strPost})" );
 					}
 
@@ -72,26 +72,26 @@ if ( !class_exists( 'Rt_HD_Logs' ) ) {
 
 			// -- End --
 
-			if ( isset( $_REQUEST["size"] ) ) {
-				$size = intval( $_REQUEST["size"] );
+			if ( isset( $_REQUEST['size'] ) ) {
+				$size = intval( $_REQUEST['size'] );
 				if ( $size > 100 ) {
 					$size = 100;
 				}
 			} else {
 				$size = 20;
 			}
-			if ( isset( $_REQUEST["page"] ) && intval( $_REQUEST["page"] ) > 1 ) {
-				$left = ( ( intval( $_REQUEST["page"] ) - 1 ) * $size );
+			if ( isset( $_REQUEST['page'] ) && intval( $_REQUEST['page'] ) > 1 ) {
+				$left = ( ( intval( $_REQUEST['page'] ) - 1 ) * $size );
 			} else {
 				$left = 0;
 			}
-			$taxmeta = $wpdb->prefix . "taxonomymeta";
-			if ( class_exists( "RGFormsModel" ) ) {
-				$gravity_query = ",(select count(*) from " . RGFormsModel::get_lead_meta_table_name() . " where meta_value like p.meta_value) as gravity_meta ";
+			$taxmeta = $wpdb->prefix . 'taxonomymeta';
+			if ( class_exists( 'RGFormsModel' ) ) {
+				$gravity_query = ',(select count(*) from ' . RGFormsModel::get_lead_meta_table_name() . ' where meta_value like p.meta_value) as gravity_meta ';
 			} else {
-				$gravity_query = "";
+				$gravity_query = '';
 			}
-			$gravitymeta = "";
+			$gravitymeta = '';
 			$sql         = $wpdb->prepare( "select p.meta_value as trans_id, (select count(*) from $wpdb->postmeta where meta_value
 			  like p.meta_value) as post, (select count(*) from $taxmeta where meta_value like p.meta_value) as texonomy {$gravity_query} ,
 					(select a.post_title from $wpdb->posts a left join $wpdb->postmeta b on b.post_id=a.id where b.meta_value=p.meta_value limit 1) as title,
@@ -135,52 +135,52 @@ if ( !class_exists( 'Rt_HD_Logs' ) ) {
 				</thead>
 
 				<?php
-				foreach ( $result as $rslt ) {
-					?>
-					<tr>
-						<td>
-							<?php echo $rslt->trans_id; ?>
-						</td>
-						<td>
-							<?php echo $rslt->title; ?>
-						</td>
-						<td>
-							<?php echo $rslt->firstdate; ?>
-						</td>
-						<td>
-							<?php echo $rslt->lastdate; ?>
-						</td>
-						<td>
-							<?php echo $rslt->post; ?>
-						</td>
-
-						<td>
-							<?php echo $rslt->texonomy; ?>
-						</td>
-						<!--                        <td>
-				<?php if ( isset( $rslt->gravity_meta ) ) {
-							echo $rslt->gravity_meta;
-						} ?>
-							</td>-->
-
-						<td>
-							<?php echo date( 'Y-m-d H:i:s', intval( $rslt->trans_id ) );
-							?>
-						</td>
-						<td>
-							<a class="revertChanges"
-							   href="edit.php?post_type=rt_ticket&page=rthd-settings&transa_id=<?php echo $rslt->trans_id; ?>"
-							   data-trans="<?php echo $rslt->trans_id; ?>"> Revert Changes </a> &nbsp; | &nbsp;
-							<a href="edit.php?post_type=rt_ticket&page=rthd-settings&log-list=log-list&trans_id=<?php echo $rslt->trans_id; ?>"
-							   data-trans="<?php echo $rslt->trans_id; ?>"> View Post </a>
-
-						</td>
-					</tr>
-
-
-				<?php
-				}
+			foreach ( $result as $rslt ) {
 				?>
+				<tr>
+					<td>
+						<?php echo esc_attr( $rslt->trans_id ); ?>
+					</td>
+					<td>
+						<?php echo esc_attr( $rslt->title ); ?>
+					</td>
+					<td>
+						<?php echo esc_attr( $rslt->firstdate ); ?>
+					</td>
+					<td>
+						<?php echo esc_attr( $rslt->lastdate ); ?>
+					</td>
+					<td>
+						<?php echo esc_attr( $rslt->post ); ?>
+					</td>
+
+					<td>
+						<?php echo esc_attr( $rslt->texonomy ); ?>
+					</td>
+					<!--                        <td>
+			<?php if ( isset( $rslt->gravity_meta ) ) {
+						echo esc_attr( $rslt->gravity_meta );
+					} ?>
+						</td>-->
+
+					<td>
+						<?php echo esc_attr( date( 'Y-m-d H:i:s', intval( $rslt->trans_id ) ) );
+						?>
+					</td>
+					<td>
+						<a class="revertChanges"
+						   href="edit.php?post_type=rt_ticket&page=rthd-settings&transa_id=<?php echo esc_attr( $rslt->trans_id ); ?>"
+						   data-trans="<?php echo esc_attr( $rslt->trans_id ); ?>"> Revert Changes </a> &nbsp; | &nbsp;
+						<a href="edit.php?post_type=rt_ticket&page=rthd-settings&log-list=log-list&trans_id=<?php echo esc_attr( $rslt->trans_id ); ?>"
+						   data-trans="<?php echo esc_attr( $rslt->trans_id ); ?>"> View Post </a>
+
+					</td>
+				</tr>
+
+
+			<?php
+			}
+			?>
 			</table>
 		<?php
 		}

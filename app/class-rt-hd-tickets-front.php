@@ -3,7 +3,7 @@
 /**
  * Don't load this file directly!
  */
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -20,7 +20,7 @@ if ( !defined( 'ABSPATH' ) ) {
  *
  * @since rt-Helpdesk 0.1
  */
-if ( !class_exists( 'Rt_HD_Tickets_Front' ) ) {
+if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 
 	/**
 	 * Class Rt_HD_Tickets_Front
@@ -50,7 +50,7 @@ if ( !class_exists( 'Rt_HD_Tickets_Front' ) ) {
 		 */
 		function change_title( $title ) {
 			global $rthd_front_page_title;
-			if ( isset( $rthd_front_page_title ) && !empty( $rthd_front_page_title ) ) {
+			if ( isset( $rthd_front_page_title ) && ! empty( $rthd_front_page_title ) ) {
 				return $rthd_front_page_title;
 			}
 
@@ -69,7 +69,7 @@ if ( !class_exists( 'Rt_HD_Tickets_Front' ) ) {
 		function template_include( $template ) {
 			global $wp_query;
 
-			if ( !isset( $wp_query->query_vars['name'] ) ) {
+			if ( ! isset( $wp_query->query_vars['name'] ) ) {
 				return $template;
 			}
 
@@ -80,7 +80,7 @@ if ( !class_exists( 'Rt_HD_Tickets_Front' ) ) {
 				return $template;
 			}
 
-			if ( !isset( $_REQUEST['rthd_unique_id'] ) || ( isset( $_REQUEST['rthd_unique_id'] ) && empty( $_REQUEST['rthd_unique_id'] ) ) ) {
+			if ( ! isset( $_REQUEST['rthd_unique_id'] ) || ( isset( $_REQUEST['rthd_unique_id'] ) && empty( $_REQUEST['rthd_unique_id'] ) ) ) {
 				return $template;
 			}
 

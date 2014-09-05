@@ -35,7 +35,19 @@ if ( !class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			add_action( 'init', array( $this, 'save_replay_by_email' ) );
 		}
 
-		function save_imap_servers() {
+		function save_imap_servers($rthd_imap_servers_changed =null , $rthd_imap_servers =null ) {
+			if ( ! ( isset ( $_POST[ 'rthd_imap_servers_changed' ] ) && isset( $_POST[ 'rthd_imap_servers' ] ) )){
+				if(isset ($rthd_imap_servers_changed) && !empty($rthd_imap_servers_changed)){
+					$_POST[ 'rthd_imap_servers_changed' ] =$rthd_imap_servers_changed;
+				//	echo "1st";
+				}
+				if(isset ($rthd_imap_servers) && !empty($rthd_imap_servers)){
+					$_POST[ 'rthd_imap_servers' ] =$rthd_imap_servers;
+					//echo "2nd";
+				}
+			}
+
+
 			if ( isset( $_POST['rthd_imap_servers_changed'] ) ) {
 
 				global $rt_hd_imap_server_model;
@@ -60,6 +72,7 @@ if ( !class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 								'outgoing_smtp_enc'    => ( isset( $new_servers[$server->id]['outgoing_smtp_enc'] ) && !empty( $new_servers[$server->id]['outgoing_smtp_enc'] ) ) ? $new_servers[$server->id]['outgoing_smtp_enc'] : null,
 							);
 							$rt_hd_imap_server_model->update_server( $args, $server->id );
+
 						} else {
 							$rt_hd_imap_server_model->delete_server( $server->id );
 						}
@@ -78,6 +91,7 @@ if ( !class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 							'outgoing_smtp_enc'    => ( isset( $new_servers[$server->id]['outgoing_smtp_enc'] ) && !empty( $new_servers[$server->id]['outgoing_smtp_enc'] ) ) ? $new_servers[$server->id]['outgoing_smtp_enc'] : null,
 						);
 						$rt_hd_imap_server_model->add_server( $args );
+						return true;
 					}
 				} else {
 					foreach ( $old_servers as $server ) {
@@ -132,7 +146,6 @@ if ( !class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 		}
 
 		public function initSettings() {
-
 			// Set the default arguments
 			$this->setArguments();
 
@@ -141,7 +154,7 @@ if ( !class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 
 			// Create the sections and fields
 			$this->setSections();
-
+			//check if global options are set or not
 			if ( !isset( $this->args['opt_name'] ) ) { // No errors please
 				return;
 			}
@@ -159,42 +172,11 @@ if ( !class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			// add_filter('redux/options/' . $this->args['opt_name'] . '/sections', array($this, 'dynamic_section'));
 
 			$this->ReduxFramework = new ReduxFramework( $this->sections, $this->args );
-
+			return true;
 			//add_action("redux/options/{$this->args[ 'opt_name' ]}/register", array( $this, 'test') );
 
 		}
 
-		/**
-		 *
-		 * This is a test function that will let you see when the compiler hook occurs.
-		 * It only runs if a field    set with compiler=>true is changed.
-		 * */
-		function compiler_action( $options, $css, $changed_values ) {
-			echo '<h1>The compiler hook has run!</h1>';
-			echo "<pre>";
-			print_r( $changed_values ); // Values that have changed since the last save
-			echo "</pre>";
-			print_r( $options ); //Option values
-			print_r( $css ); // Compiler selector CSS values  compiler => array( CSS SELECTORS )
-
-			/*
-			  // Demo of how to use the dynamic CSS and write your own static CSS file
-			  $filename = dirname(__FILE__) . '/style' . '.css';
-			  global $wp_filesystem;
-			  if( empty( $wp_filesystem ) ) {
-			  require_once( ABSPATH .'/wp-admin/includes/file.php' );
-			  WP_Filesystem();
-			  }
-
-			  if( $wp_filesystem ) {
-			  $wp_filesystem->put_contents(
-			  $filename,
-			  $css,
-			  FS_CHMOD_FILE // predefined mode settings for WP files
-			  );
-			  }
-			 */
-		}
 
 		/**
 		 *
@@ -250,6 +232,7 @@ if ( !class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				// Used to hide the activation notice informing users of the demo panel. Only used when Redux is a plugin.
 				remove_action( 'admin_notices', array( ReduxFrameworkPlugin::instance(), 'admin_notices' ) );
 			}
+
 		}
 
 		public function setSections() {
@@ -498,6 +481,7 @@ if ( !class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					),
 				),
 			);
+			return true;
 		}
 
 		public function setHelpTabs() {
@@ -517,6 +501,7 @@ if ( !class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 
 			// Set the help sidebar
 			$this->args['help_sidebar'] = __( '<p>This is the sidebar content, HTML is allowed.</p>', 'redux-framework-demo' );
+			return true;
 		}
 
 		/**
@@ -526,7 +511,7 @@ if ( !class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 		 * */
 		public function setArguments() {
 
-//					$theme = wp_get_theme(); // For use with some settings. Not necessary.
+//			$theme = wp_get_theme(); // For use with some settings. Not necessary.
 			$author_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
 
 
@@ -662,6 +647,7 @@ if ( !class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 
 			// Add content after the form.
 			$this->args['footer_text'] = __( '<p>This text is displayed below the options panel. It isn\'t required, but more info is always better! The footer_text field accepts all HTML.</p>', 'redux-framework-demo' );
+			return true;
 		}
 
 	}

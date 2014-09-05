@@ -2,7 +2,7 @@
 /**
  * Don't load this file directly!
  */
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -18,7 +18,7 @@ if ( !defined( 'ABSPATH' ) ) {
  * @since rt-Helpdesk 0.1
  */
 
-if ( !class_exists( 'RT_HD_Admin_Meta_Boxes' ) ) {
+if ( ! class_exists( 'RT_HD_Admin_Meta_Boxes' ) ) {
 	class RT_HD_Admin_Meta_Boxes {
 
 		private static $meta_box_errors = array();
@@ -107,23 +107,22 @@ if ( !class_exists( 'RT_HD_Admin_Meta_Boxes' ) ) {
 			}
 
 			// Check user has permission to edit
-			if ( !current_user_can( 'edit_post', $post_id ) ) {
+			if ( ! current_user_can( 'edit_post', $post_id ) ) {
 				return;
 			}
 
 			// Check the post type
-			if ( !in_array( $post->post_type, array( Rt_HD_Module::$post_type ) ) ) {
+			if ( ! in_array( $post->post_type, array( Rt_HD_Module::$post_type ) ) ) {
 				return;
 			}
 
 			do_action( 'rt_hd_process_' . $post->post_type . '_meta', $post_id, $post );
 
-;            if( $post->post_status == 'trash' ) {
-
-                $url = add_query_arg( array('post_type' => Rt_HD_Module::$post_type ) ,admin_url('edit.php') );
-                wp_safe_redirect( $url );
-                die();
-            }
+			if ( $post->post_status == 'trash' ) {
+				$url = add_query_arg( array( 'post_type' => Rt_HD_Module::$post_type ) ,admin_url( 'edit.php' ) );
+				wp_safe_redirect( $url );
+				die();
+			}
 
 		}
 

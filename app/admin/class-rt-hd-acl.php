@@ -19,7 +19,7 @@ if ( !defined( 'ABSPATH' ) ) {
  * @author udit
  * @since rt-Helpdesk 0.1
  */
-if ( !class_exists( 'Rt_HD_ACL' ) ) {
+if ( ! class_exists( 'Rt_HD_ACL' ) ) {
 	class Rt_HD_ACL {
 		public function __construct() {
 			add_filter( 'rt_biz_modules', array( $this, 'register_rt_hd_module' ) );

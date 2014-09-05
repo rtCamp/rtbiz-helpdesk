@@ -2,7 +2,7 @@
 /**
  * Don't load this file directly!
  */
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -18,7 +18,7 @@ if ( !defined( 'ABSPATH' ) ) {
  * @author paresh
  */
 
-if ( !class_exists( 'Rt_HD_Woocommerce' ) ) {
+if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 
 	class Rt_HD_Woocommerce {
 
@@ -76,7 +76,7 @@ if ( !class_exists( 'Rt_HD_Woocommerce' ) ) {
 			$order_email = '';
 
 			// Save ticket if data has been posted
-			if ( !empty( $_POST ) ) {
+			if ( ! empty( $_POST ) ) {
 				self::save();
 			}
 
@@ -96,8 +96,6 @@ if ( !class_exists( 'Rt_HD_Woocommerce' ) ) {
 
 					$option .= "<option value=$product_id>$product_name</option>";
 				}
-
-
 			} else {
 				$arg = array(
 					'post_type' => 'product',
@@ -109,7 +107,6 @@ if ( !class_exists( 'Rt_HD_Woocommerce' ) ) {
 				foreach ( $products as $product ) {
 					$option .= "<option value=$product->ID>$product->post_title</option>";
 				}
-
 			}
 			?>
 			<script type="text/javascript">
@@ -143,13 +140,13 @@ if ( !class_exists( 'Rt_HD_Woocommerce' ) ) {
 					<label><?php _e( 'Product', RT_HD_TEXT_DOMAIN ); ?></label>
 					<select name="post[product_id]">
 						<option value="">Choose Product</option>
-						<?php echo $option; ?>
+						<?php echo esc_html( $option ); ?>
 					</select>
 				</p>
 
 				<p>
 					<label><?php _e( 'Email', RT_HD_TEXT_DOMAIN ); ?></label>
-					<input type="text" name="post[email]" value="<?php echo $order_email ?>"/>
+					<input type="text" name="post[email]" value="<?php echo sanitize_email( $order_email ) ?>"/>
 				</p>
 
 				<p>
@@ -206,16 +203,16 @@ if ( !class_exists( 'Rt_HD_Woocommerce' ) ) {
 
 				$files = $_FILES['attachment'];
 				foreach ( $files['name'] as $key => $value ) {
-					if ( $files['name'][$key] ) {
+					if ( $files['name'][ $key ] ) {
 						$file = array(
-							'name'     => $files['name'][$key],
-							'type'     => $files['type'][$key],
-							'tmp_name' => $files['tmp_name'][$key],
-							'error'    => $files['error'][$key],
-							'size'     => $files['size'][$key]
+							'name'     => $files['name'][ $key ],
+							'type'     => $files['type'][ $key ],
+							'tmp_name' => $files['tmp_name'][ $key ],
+							'error'    => $files['error'][ $key ],
+							'size'     => $files['size'][ $key ],
 						);
 
-						$_FILES = array( "upload_attachment" => $file );
+						$_FILES = array( 'upload_attachment' => $file );
 
 						foreach ( $_FILES as $file => $array ) {
 							$newupload = self::insert_attachment( $file, $rt_hd_tickets_id );
@@ -252,9 +249,9 @@ if ( !class_exists( 'Rt_HD_Woocommerce' ) ) {
 				__return_false();
 			}
 
-			require_once( ABSPATH . "wp-admin" . '/includes/image.php' );
-			require_once( ABSPATH . "wp-admin" . '/includes/file.php' );
-			require_once( ABSPATH . "wp-admin" . '/includes/media.php' );
+			require_once( ABSPATH . 'wp-admin' . '/includes/image.php' );
+			require_once( ABSPATH . 'wp-admin' . '/includes/file.php' );
+			require_once( ABSPATH . 'wp-admin' . '/includes/media.php' );
 
 			$attach_id = media_handle_upload( $file_handler, $post_id );
 

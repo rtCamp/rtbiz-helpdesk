@@ -2,7 +2,7 @@
 /**
  * Don't load this file directly!
  */
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -19,7 +19,7 @@ if ( !defined( 'ABSPATH' ) ) {
  *
  * @since rt-Helpdesk 0.1
  */
-if ( !class_exists( 'Rt_HD_Tickets' ) ) {
+if ( ! class_exists( 'Rt_HD_Tickets' ) ) {
 
 	/**
 	 * Class Rt_HD_Tickets
@@ -57,7 +57,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 			add_action( 'wp_ajax_nopriv_rthd_get_ticket_comments_ajax', array( $this, 'get_ticket_comments_ajax' ) );
 			add_action( 'wp_ajax_rthd_activecollab_task_comment_import_ajax', array(
 					$this,
-					'activecollab_task_comment_import_ajax'
+					'activecollab_task_comment_import_ajax',
 				) );
 			add_action( 'wp_ajax_helpdesk_delete_followup', array( $this, 'delete_followup_ajax' ) );
 			add_action( 'wp_ajax_rthd_gmail_import_thread_request', array( $this, 'gmail_thread_import_request' ) );
@@ -106,12 +106,12 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		public function insert_new_ticket( $title, $body, $userid, $mailtime, $allemail, $uploaded, $senderEmail, $messageid = "", $inreplyto = "", $references = "", $subscriber = array() ) {
+		public function insert_new_ticket( $title, $body, $userid, $mailtime, $allemail, $uploaded, $senderEmail, $messageid = '', $inreplyto = '', $references = '', $subscriber = array() ) {
 
 			global $rt_hd_ticket_history_model, $rt_hd_module;
 
 			$d   = new DateTime( $mailtime );
-			$UTC = new DateTimeZone( "UTC" );
+			$UTC = new DateTimeZone( 'UTC' );
 			$d->setTimezone( $UTC );
 			$timeStamp     = $d->getTimestamp();
 			$post_date     = gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) + ( get_option( 'gmt_offset' ) * 3600 ) ) );
@@ -184,61 +184,61 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 			}
 			$this->add_attachment_to_post( $uploaded, $post_id, $post_type );
 
-			update_post_meta( $post_id, "_rtbiz_hd_email", $senderEmail );
+			update_post_meta( $post_id, '_rtbiz_hd_email', $senderEmail );
 
 			global $transaction_id;
 			if ( isset( $transaction_id ) && $transaction_id > 0 ) {
-				update_post_meta( $post_id, "_rtbiz_hd_transaction_id", $transaction_id );
+				update_post_meta( $post_id, '_rtbiz_hd_transaction_id', $transaction_id );
 			}
 
 			update_post_meta( $post_id, '_rtbiz_hd_subscribe_to', $subscriber );
-			if ( $messageid != "" ) {
-				update_post_meta( $post_id, "_rtbiz_hd_messageid", $messageid );
+			if ( $messageid != '' ) {
+				update_post_meta( $post_id, '_rtbiz_hd_messageid', $messageid );
 			}
-			if ( $inreplyto != "" ) {
-				update_post_meta( $post_id, "_rtbiz_hd_inreplyto", $inreplyto );
+			if ( $inreplyto != '' ) {
+				update_post_meta( $post_id, '_rtbiz_hd_inreplyto', $inreplyto );
 			}
-			if ( $references != "" ) {
-				update_post_meta( $post_id, "_rtbiz_hd_references", $references );
+			if ( $references != '' ) {
+				update_post_meta( $post_id, '_rtbiz_hd_references', $references );
 			}
 
 
 			$flag        = true;
 			$systemEmail = ( isset( $settings['system_email'] ) ) ? $settings['system_email'] : '';
 			if ( $systemEmail ) {
-				if ( !is_email( $systemEmail ) ) {
+				if ( ! is_email( $systemEmail ) ) {
 					$flag = false;
 				}
 			} else {
 				$flag = false;
 			}
 			global $bulkimport;
-			if ( !isset( $bulkimport ) ) {
+			if ( ! isset( $bulkimport ) ) {
 				$bulkimport = false;
 			}
 			global $gravity_auto_import;
-			if ( $flag && !$bulkimport && !isset( $gravity_auto_import ) ) {
+			if ( $flag && ! $bulkimport && ! isset( $gravity_auto_import ) ) {
 				global $rt_hd_settings;
-				$title = "[New " . $labels['name'] . "]" . $this->create_title_for_mail( $post_id );
-				$body  = $body . "<br />To View " . $labels['name'] . " Click <a href='" . admin_url( "edit.php?post_type={$post_type}&page=rthd-add-{$post_type}&{$post_type}_id=" . $post_id ) . "'>here</a>. <br/>";
+				$title = '[New ' . $labels['name'] . ']' . $this->create_title_for_mail( $post_id );
+				$body  = $body . '<br />To View ' . $labels['name'] . " Click <a href='" . admin_url( "edit.php?post_type={$post_type}&page=rthd-add-{$post_type}&{$post_type}_id=" . $post_id ) . "'>here</a>. <br/>";
 				$body .= 'Ticket created by : <a target="_blank" href="">' . get_the_author_meta( 'display_name', get_current_user_id() ) . '</a>';
 
-				$outbound_emails = ( isset( $settings['outbound_emails'] ) && !empty( $settings['outbound_emails'] ) ) ? explode( ',', $settings['outbound_emails'] ) : '';
+				$outbound_emails = ( isset( $settings['outbound_emails'] ) && ! empty( $settings['outbound_emails'] ) ) ? explode( ',', $settings['outbound_emails'] ) : '';
 				$notify_emails   = array();
 
-				if ( isset( $outbound_emails ) && !empty( $outbound_emails ) ) {
+				if ( isset( $outbound_emails ) && ! empty( $outbound_emails ) ) {
 					foreach ( $outbound_emails as $email ) {
 						if ( is_email( $email ) ) {
 							$notify_emails[] = array(
 								'email' => $email,
-								'name'  => $rt_hd_module->name . ' Outbound Email'
+								'name'  => $rt_hd_module->name . ' Outbound Email',
 							);
 						}
 					}
 				}
 
 
-				$rt_hd_settings->insert_new_send_email( $systemEmail, $title, $body, array(), array(), $notify_emails, $uploaded, $post_id, "comment" );
+				$rt_hd_settings->insert_new_send_email( $systemEmail, $title, $body, array(), array(), $notify_emails, $uploaded, $post_id, 'comment' );
 
 			} else {
 				if ( isset( $gravity_auto_import ) && $gravity_auto_import ) {
@@ -253,15 +253,15 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 
 					$user    = get_user_by( 'id', $userid );
 					$to      = $user->user_email;
-					$title   = "[New " . $labels['name'] . "]" . $this->create_title_for_mail( $post_id );
-					$body    = $body . "<br />To View " . $labels['name'] . " Click <a href='" . admin_url( "edit.php?post_type={$post_type}&page=rthd-add-{$post_type}&{$post_type}_id=" . $post_id ) . "'>here</a>. <br/>";
+					$title   = '[New ' . $labels['name'] . ']' . $this->create_title_for_mail( $post_id );
+					$body    = $body . '<br />To View ' . $labels['name'] . " Click <a href='" . admin_url( "edit.php?post_type={$post_type}&page=rthd-add-{$post_type}&{$post_type}_id=" . $post_id ) . "'>here</a>. <br/>";
 					$headers = 'Content-Type: text/html';
 					wp_mail( $to, $title, $body, $headers, $uploaded );
 				}
 			}
 
-			$title = "[New " . $labels['name'] . "]" . $this->create_title_for_mail( $post_id );
-			$body  = $body . "<br />To View " . $labels['name'] . " Click <a href='" . trailingslashit( site_url() ) . strtolower( $labels['name'] ) . '/?rthd_unique_id=' . $unique_id . "'>here</a>. <br/>";
+			$title = '[New ' . $labels['name'] . ']' . $this->create_title_for_mail( $post_id );
+			$body  = $body . '<br />To View ' . $labels['name'] . " Click <a href='" . trailingslashit( site_url() ) . strtolower( $labels['name'] ) . '/?rthd_unique_id=' . $unique_id . "'>here</a>. <br/>";
 
 			$notify_emails = array();
 			foreach ( $allemail as $email ) {
@@ -271,7 +271,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 			}
 
 			if ( $flag ) {
-				$rt_hd_settings->insert_new_send_email( $systemEmail, $title, $body, array(), array(), $notify_emails, $uploaded, $post_id, "comment" );
+				$rt_hd_settings->insert_new_send_email( $systemEmail, $title, $body, array(), array(), $notify_emails, $uploaded, $post_id, 'comment' );
 			} else {
 				$to = array();
 				foreach ( $notify_emails as $email ) {
@@ -297,9 +297,9 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		function hijack_mail_subject( $data, $message_format ) {
 			global $helpdesk_import_ticket_id, $rt_hd_module;
 			$post_type       = get_post_type( $helpdesk_import_ticket_id );
-			$data["subject"] = "[" . strtoupper( $rt_hd_module->name ) . " #" . $helpdesk_import_ticket_id . "]" . $data["subject"];
+			$data['subject'] = "[" . strtoupper( $rt_hd_module->name ) . " #" . $helpdesk_import_ticket_id . "]" . $data["subject"];
 			$hd_url          = admin_url( "edit.php?post_type={$post_type}&page=rthd-add-{$post_type}&{$post_type}_id=" . $helpdesk_import_ticket_id );
-			$data["message"] = str_replace( "--rtcamp_hd_link--", $hd_url, $data["message"] );
+			$data['message'] = str_replace( "--rtcamp_hd_link--", $hd_url, $data["message"] );
 
 			return $data;
 		}
@@ -342,25 +342,25 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 
 					//$uploaded["filename"]
 					$attachment = array(
-						'post_title'     => $upload["filename"],
-						'image_alt'      => $upload["filename"],
+						'post_title'     => $upload['filename'],
+						'image_alt'      => $upload['filename'],
 						'post_type'      => $post_type,
-						'post_content'   => "",
-						'post_excerpt'   => "",
+						'post_content'   => '',
+						'post_excerpt'   => '',
 						'post_parent'    => $post_id,
-						'post_mime_type' => $this->get_mime_type_from_extn( $upload["extn"] ),
-						'guid'           => $upload["url"],
+						'post_mime_type' => $this->get_mime_type_from_extn( $upload['extn'] ),
+						'guid'           => $upload['url'],
 					);
 					$attach_id  = wp_insert_attachment( $attachment );
 
-					add_post_meta( $attach_id, '_wp_attached_file', $upload["file"] );
+					add_post_meta( $attach_id, '_wp_attached_file', $upload['file'] );
 					add_post_meta( $post_id, '_rtbiz_hd_attachment_hash', md5_file( $upload['file'] ) );
 
 					if ( $mainTicket ) {
-						add_post_meta( $attach_id, "show-in-main", "true" );
+						add_post_meta( $attach_id, 'show-in-main', 'true' );
 					}
 					if ( $comment_id > 0 ) {
-						add_comment_meta( $comment_id, "attachment", $upload["url"] );
+						add_comment_meta( $comment_id, 'attachment', $upload['url'] );
 					}
 				}
 			}
@@ -379,12 +379,12 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 			$postterms = array();
 			foreach ( $allemail as $email ) {
 				$term = rt_biz_get_person_by_email( $email['address'] );
-				if ( !empty( $term ) ) {
+				if ( ! empty( $term ) ) {
 					foreach ( $term as $tm ) {
 						$postterms[] = $tm->ID;
 					}
 				} else {
-					$term        = $rt_hd_contacts->insert_new_contact( $email["address"], ( isset( $email["name"] ) ) ? $email["name"] : $email["address"] );
+					$term        = $rt_hd_contacts->insert_new_contact( $email['address'], ( isset( $email['name'] ) ) ? $email['name'] : $email['address'] );
 					$postterms[] = $term->ID;
 				}
 
@@ -472,26 +472,26 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 			$mailBodyText,
 			$check_duplicate = true,
 			$userid = false,
-			$messageid = "",
-			$inreplyto = "",
-			$references = "",
+			$messageid = '',
+			$inreplyto = '',
+			$references = '',
 			$systemEmail = false,
 			$subscriber = array()
 		) {
 			global $rt_hd_contacts;
 
 			if ( $userid === false ) {
-				$userid = $rt_hd_contacts->get_user_from_email( $fromemail["address"] );
+				$userid = $rt_hd_contacts->get_user_from_email( $fromemail['address'] );
 			}
-//always true in mail cron  is use for importer
-			if ( !$check_duplicate ) {
-				return $this->insert_new_ticket( $title, $body, $userid, $mailtime, $allemail, $uploaded, $fromemail["address"] );
+			//always true in mail cron  is use for importer
+			if ( ! $check_duplicate ) {
+				return $this->insert_new_ticket( $title, $body, $userid, $mailtime, $allemail, $uploaded, $fromemail['address'] );
 			}
-//-----------------------------------------------------------------------------//
+			//-----------------------------------------------------------------------------//
 			global $threadPostId;
 			$forwardFlag = false;
-			if ( !isset( $threadPostId ) ) {
-				$forwardFlag = strpos( strtolower( $title ), "fwd:" );
+			if ( ! isset( $threadPostId ) ) {
+				$forwardFlag = strpos( strtolower( $title ), 'fwd:' );
 				if ( $forwardFlag === false ) {
 					$forwardFlag = false;
 				} else {
@@ -499,7 +499,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 				}
 
 
-				if ( strpos( strtolower( $title ), "re:" ) === false ) {
+				if ( strpos( strtolower( $title ), 're:' ) === false ) {
 					$replyFlag = false;
 				} else {
 					$replyFlag = true;
@@ -507,7 +507,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 
 				$postid = $this->get_post_id_from_subject( $title );
 
-				if ( !$postid ) {
+				if ( ! $postid ) {
 					//get postID from inreply to and refrence meta
 					$postid = $this->get_post_id_from_mail_meta( $inreplyto, $references );
 				}
@@ -523,36 +523,36 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 					$this->process_forward_email_data( $title, $body, $mailtime, $allemail, $mailBodyText, $dndEmails );
 				}
 
-				return $this->insert_post_comment( $postid, $userid, $body, $fromemail["name"], $fromemail["address"], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $subscriber );
+				return $this->insert_post_comment( $postid, $userid, $body, $fromemail['name'], $fromemail['address'], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $subscriber );
 			}
 			//if subject is re to post title
 
 			if ( $replyFlag ) {
-				$title       = str_replace( "Re:", "", $title );
+				$title       = str_replace( 'Re:', '', $title );
 				$title       = str_replace( "re:", "", $title );
 				$title       = trim( $title );
 				$existPostId = $this->post_exists( $title );
-				if ( !isset( $fromemail["name"] ) ) {
-					$fromemail["name"] = $fromemail["address"];
+				if ( !isset( $fromemail['name'] ) ) {
+					$fromemail['name'] = $fromemail['address'];
 				}
 				//if given post title exits then it will be add as comment other wise as post
 				if ( $existPostId ) {
-					return $this->insert_post_comment( $existPostId, $userid, $body, $fromemail["name"], $fromemail["address"], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $subscriber );
+					return $this->insert_post_comment( $existPostId, $userid, $body, $fromemail['name'], $fromemail['address'], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $subscriber );
 				} else {
 					if ( $systemEmail ) {
-						return $this->insert_new_ticket( $title, $body, $userid, $mailtime, $allemail, $uploaded, $fromemail["address"], $messageid, $inreplyto, $references, $subscriber );
+						return $this->insert_new_ticket( $title, $body, $userid, $mailtime, $allemail, $uploaded, $fromemail['address'], $messageid, $inreplyto, $references, $subscriber );
 					}
 				}
 			} else {
 				$existPostId = $this->post_exists( $title, $mailtime );
 				//if given post title exits then it will be add as comment other wise as post
-				echo $existPostId;
-				if ( !$existPostId ) {
+				echo esc_attr( $existPostId );
+				if ( ! $existPostId ) {
 					if ( $systemEmail ) {
-						return $this->insert_new_ticket( $title, $body, $userid, $mailtime, $allemail, $uploaded, $fromemail["address"], $messageid, $inreplyto, $references, $subscriber );
+						return $this->insert_new_ticket( $title, $body, $userid, $mailtime, $allemail, $uploaded, $fromemail['address'], $messageid, $inreplyto, $references, $subscriber );
 					}
 				} else {
-					return $this->insert_post_comment( $existPostId, $userid, $body, $fromemail["name"], $fromemail["address"], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $subscriber );
+					return $this->insert_post_comment( $existPostId, $userid, $body, $fromemail['name'], $fromemail['address'], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $subscriber );
 				}
 			}
 
@@ -570,23 +570,23 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		function get_post_id_from_mail_meta( $inreplyto, $refrences ) {
-			if ( $inreplyto == "" && $refrences == "" ) {
+			if ( $inreplyto == '' && $refrences == '' ) {
 				return false;
 			}
 			global $wpdb;
 			$sql1       = "select post_id as id ,'post' as type from {$wpdb->postmeta} where ";
 			$sql2       = "select comment_id as id, 'comment' as type from {$wpdb->commentmeta} where ";
-			$operatorOr = "";
-			if ( $inreplyto != "" ) {
+			$operatorOr = '';
+			if ( $inreplyto != '' ) {
 				$sql1 .= " ({$wpdb->postmeta}.meta_key in('_messageid','_references','_inreplyto') and {$wpdb->postmeta}.meta_value like '%{$inreplyto}%' ) ";
 				$sql2 .= " ({$wpdb->commentmeta}.meta_key in('_messageid','_references','_inreplyto') and {$wpdb->commentmeta}.meta_value like '%{$inreplyto}%' ) ";
-				$operatorOr = " or ";
+				$operatorOr = ' or ';
 			}
 
-			$sql = $sql1 . " union " . $sql2;
+			$sql = $sql1 . ' union ' . $sql2;
 			echo "\r\n" . $sql . "\r\n";
 			$result = $wpdb->get_results( $sql );
-			if ( !empty( $result ) ) {
+			if ( ! empty( $result ) ) {
 				$row = $result[0];
 				if ( $row->type == 'post' ) {
 					return $row->id;
@@ -617,22 +617,22 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 			$dndEmails    = array();
 			foreach ( $forwardArray as $forwardline ) {
 				$forwardline = strtolower( $forwardline );
-				if ( !( strpos( $forwardline, "to:" ) === false ) ) {
+				if ( ! ( strpos( $forwardline, 'to:' ) === false ) ) {
 					$dndEmails = array_merge( $dndEmails, $this->extract_all_email_from_string( $forwardline ) );
 				}
-				if ( !( strpos( $forwardline, "cc:" ) === false ) ) {
+				if ( ! ( strpos( $forwardline, 'cc:' ) === false ) ) {
 					$dndEmails = array_merge( $dndEmails, $this->extract_all_email_from_string( $forwardline ) );
 				}
-				if ( !( strpos( $forwardline, "data:" ) === false ) ) {
-					$mailtime = trim( str_replace( "date:", "", $forwardline ) );
+				if ( ! ( strpos( $forwardline, 'data:' ) === false ) ) {
+					$mailtime = trim( str_replace( 'date:', '', $forwardline ) );
 				}
-				if ( !( strpos( $forwardline, "title:" ) === false ) ) {
-					$title = trim( str_replace( "title:", "", $forwardline ) );
+				if ( ! ( strpos( $forwardline, 'title:' ) === false ) ) {
+					$title = trim( str_replace( 'title:', '', $forwardline ) );
 				}
 			}
 
 			foreach ( $dndEmails as $dndEmail ) {
-				$allemail[] = array( "address" => $dndEmail, "name" => $dndEmail );
+				$allemail[] = array( 'address' => $dndEmail, 'name' => $dndEmail );
 			}
 		}
 
@@ -648,7 +648,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		function extract_all_email_from_string( $string ) {
 			$pattern  = '/[a-z0-9_\-\+\.]+@[a-z0-9\-]+\.([a-z]{2,3})(?:\.[a-z]{2})?/i';
 			$intmatch = preg_match_all( $pattern, $string, $matches );
-			if ( !empty( $matches[0] ) ) {
+			if ( ! empty( $matches[0] ) ) {
 				return $matches[0];
 			}
 		}
@@ -665,7 +665,7 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		 */
 		function post_exists( $title, $date = '' ) {
 			global $wpdb;
-			if ( trim( $title ) == "" ) {
+			if ( trim( $title ) == '' ) {
 				return 0;
 			}
 			$post_title = stripslashes( sanitize_post_field( 'post_title', $title, 0, 'db' ) );
@@ -674,9 +674,9 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 			$query = "SELECT ID FROM $wpdb->posts WHERE 1=1 and post_type IN ('" . Rt_HD_Module::$post_type . "') ";
 			$args  = array();
 
-			if ( !empty( $date ) && $date != '' ) {
+			if ( ! empty( $date ) && $date != '' ) {
 				$d   = new DateTime( $date );
-				$UTC = new DateTimeZone( "UTC" );
+				$UTC = new DateTimeZone( 'UTC' );
 				$d->setTimezone( $UTC );
 				$timeStamp = $d->getTimestamp();
 				$postDate  = gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) + ( get_option( 'gmt_offset' ) * 3600 ) ) );
@@ -686,13 +686,13 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 				$args[] = $postDate;
 			}
 
-			if ( !empty( $title ) && trim( $title ) != "" ) {
+			if ( ! empty( $title ) && trim( $title ) != '' ) {
 				$query .= ' AND post_title = %s';
 				$args[] = $post_title;
 			}
 
 
-			if ( !empty( $args ) ) {
+			if ( ! empty( $args ) ) {
 				return $wpdb->get_var( $wpdb->prepare( $query, $args ) );
 			}
 
@@ -720,20 +720,20 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		public function insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, $uploaded, $allemails, $dndEmails, $messageid = "", $inreplyto = "", $references = "", $subscriber = array() ) {
+		public function insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, $uploaded, $allemails, $dndEmails, $messageid = '', $inreplyto = '', $references = '', $subscriber = array() ) {
 
 			$post_type       = get_post_type( $comment_post_ID );
 			$module_settings = rthd_get_settings();
 			$ticketModel     = new Rt_HD_Ticket_Model();
 			$d               = new DateTime( $commenttime );
-			$UTC             = new DateTimeZone( "UTC" );
+			$UTC             = new DateTimeZone( 'UTC' );
 			$d->setTimezone( $UTC );
 			$timeStamp      = $d->getTimestamp();
 			$commentDate    = gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) + ( get_option( 'gmt_offset' ) * 3600 ) ) );
 			$commentDateGmt = gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) ) );
 			global $signature;
 			$comment_content_old = $comment_content;
-			$comment_content     = str_replace( $signature, "", $comment_content );
+			$comment_content     = str_replace( $signature, '', $comment_content );
 			$data                = array(
 				'comment_post_ID'      => $comment_post_ID,
 				'comment_author'       => $comment_author,
@@ -754,28 +754,28 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 			}
 			$checkDupli = $this->check_duplicate_comment( $comment_post_ID, $commentDate, $comment_content, $comment_content_old );
 			if ( $checkDupli !== false ) {
-				if ( $messageid != "" ) {
-					add_comment_meta( $checkDupli, "_messageid", $messageid );
+				if ( $messageid != '' ) {
+					add_comment_meta( $checkDupli, '_messageid', $messageid );
 				}
-				if ( $inreplyto != "" ) {
-					add_comment_meta( $checkDupli, "_inreplyto", $inreplyto );
+				if ( $inreplyto != '' ) {
+					add_comment_meta( $checkDupli, '_inreplyto', $inreplyto );
 				}
-				if ( $references != "" ) {
-					add_comment_meta( $checkDupli, "_references", $references );
+				if ( $references != '' ) {
+					add_comment_meta( $checkDupli, '_references', $references );
 				}
 
 				return false;
 			}
 
 			$comment_id = wp_insert_comment( $data );
-			if ( $messageid != "" ) {
-				add_comment_meta( $comment_id, "_messageid", $messageid );
+			if ( $messageid != '' ) {
+				add_comment_meta( $comment_id, '_messageid', $messageid );
 			}
-			if ( $inreplyto != "" ) {
-				add_comment_meta( $comment_id, "_inreplyto", $inreplyto );
+			if ( $inreplyto != '' ) {
+				add_comment_meta( $comment_id, '_inreplyto', $inreplyto );
 			}
-			if ( $references != "" ) {
-				add_comment_meta( $comment_id, "_references", $references );
+			if ( $references != '' ) {
+				add_comment_meta( $comment_id, '_references', $references );
 			}
 
 			$data  = array(
@@ -815,13 +815,13 @@ if ( !class_exists( 'Rt_HD_Tickets' ) ) {
 				$this->add_contacts_to_post( $allemails, $comment_post_ID );
 			}
 			global $threadPostId;
-			if ( !isset( $threadPostId ) ) {
-				$title = "[New Follwup Added]" . $this->create_title_for_mail( $comment_post_ID );
-				$body  = " New Follwup Added by " . $comment_author . " - " . $comment_author_email;
-				$body .= "<br/><b>Type : </b>" . "Mail";
-				$body .= "<br/><b>From : </b>" . $comment_author_email;
-				$body .= "<br/><b>Body : </b>" . $comment_content;
-				$body .= "<br/> ";
+			if ( ! isset( $threadPostId ) ) {
+				$title = '[New Follwup Added]' . $this->create_title_for_mail( $comment_post_ID );
+				$body  = ' New Follwup Added by ' . $comment_author . ' - ' . $comment_author_email;
+				$body .= '<br/><b>Type : </b>' . 'Mail';
+				$body .= '<br/><b>From : </b>' . $comment_author_email;
+				$body .= '<br/><b>Body : </b>' . $comment_content;
+				$body .= '<br/> ';
 				$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, $comment_id );
 			}
 

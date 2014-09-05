@@ -3,7 +3,7 @@
 /**
  * Don't load this file directly!
  */
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -18,7 +18,7 @@ if ( !defined( 'ABSPATH' ) ) {
  *
  * @author udit
  */
-if ( !class_exists( 'Rt_HD_Settings' ) ) {
+if ( ! class_exists( 'Rt_HD_Settings' ) ) {
 
 	/**
 	 * Class Rt_HD_Settings
@@ -31,7 +31,7 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 		 * sync time
 		 * @since rt-Helpdesk 0.1
 		 */
-		public $sync_period = "00:20:00"; //"h:m:s"
+		public $sync_period = '00:20:00'; //"h:m:s"
 
 		/**
 		 * constructor
@@ -68,7 +68,7 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 			global $rt_hd_mail_accounts_model;
 			$rows_affected = $rt_hd_mail_accounts_model->update_mail_account( array( 'last_sync_time' => $replytime ), array( 'email' => $email ) );
 
-			return ( !empty( $rows_affected ) );
+			return ( ! empty( $rows_affected ) );
 		}
 
 		/**
@@ -82,14 +82,14 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		public function update_sync_status( $email, $isSyncing ) {
-			$status = "synced";
+			$status = 'synced';
 			if ( $isSyncing ) {
-				$status = "syncing";
+				$status = 'syncing';
 			}
 			global $rt_hd_mail_accounts_model;
 			$rows_affected = $rt_hd_mail_accounts_model->update_mail_account( array( 'sync_status' => $status ), array( 'email' => $email ) );
 
-			return ( !empty( $rows_affected ) );
+			return ( ! empty( $rows_affected ) );
 		}
 
 		/**
@@ -105,7 +105,7 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 			global $rt_hd_mail_accounts_model;
 			$emails = $rt_hd_mail_accounts_model->get_mail_account( array( 'email' => $email ) );
 			$email  = false;
-			if ( !empty( $emails ) ) {
+			if ( ! empty( $emails ) ) {
 				$email = $emails[0];
 			}
 
@@ -156,13 +156,13 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 			$signature   = $ac->signature;
 			$email_type  = $ac->type;
 			$imap_server = $ac->imap_server;
-			if ( !$signature ) {
-				$signature = "";
+			if ( ! $signature ) {
+				$signature = '';
 			}
 			$redirect_url = get_site_option( 'rthd_googleapi_redirecturl' );
-			if ( !$redirect_url ) {
-				$redirect_url = admin_url( "admin.php?page=rthd-settings&tab=my-settings&type=personal" );
-				update_site_option( "rthd_googleapi_redirecturl", $redirect_url );
+			if ( ! $redirect_url ) {
+				$redirect_url = admin_url( 'admin.php?page=rthd-settings&tab=my-settings&type=personal' );
+				update_site_option( 'rthd_googleapi_redirecturl', $redirect_url );
 			}
 
 			$ac->email_data = unserialize( $ac->email_data );
@@ -173,24 +173,24 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 
 			if ( $ac->type == 'goauth' ) {
 
-				$google_client_id           = get_site_option( 'rthd_googleapi_clientid', "" );
-				$google_client_secret       = get_site_option( 'rthd_googleapi_clientsecret', "" );
-				$google_client_redirect_url = get_site_option( 'rthd_googleapi_redirecturl', "" );
+				$google_client_id           = get_site_option( 'rthd_googleapi_clientid', '' );
+				$google_client_secret       = get_site_option( 'rthd_googleapi_clientsecret', '' );
+				$google_client_redirect_url = get_site_option( 'rthd_googleapi_redirecturl', '' );
 
 				include_once RT_HD_PATH_VENDOR . 'google-api-php-client/Google_Client.php';
 				include_once RT_HD_PATH_VENDOR . 'google-api-php-client/contrib/Google_Oauth2Service.php';
 
 				$client = new Google_Client();
-				$client->setApplicationName( "Helpdesk Studio" );
+				$client->setApplicationName( 'Helpdesk Studio' );
 				$client->setClientId( $google_client_id );
 				$client->setClientSecret( $google_client_secret );
 				$client->setRedirectUri( $google_client_redirect_url );
 				$client->setScopes( array(
 						'https://mail.google.com/',
 						'https://www.googleapis.com/auth/userinfo.email',
-						'https://www.googleapis.com/auth/userinfo.profile'
+						'https://www.googleapis.com/auth/userinfo.profile',
 					) );
-				$client->setAccessType( "offline" );
+				$client->setAccessType( 'offline' );
 
 				$token = json_decode( $ac->outh_token );
 				$client->setAccessToken( $ac->outh_token );
@@ -242,7 +242,7 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		public function add_user_google_ac( $outh_token, $email, $email_data, $user_id = - 1, $type = "goauth", $imap_server = null ) {
+		public function add_user_google_ac( $outh_token, $email, $email_data, $user_id = - 1, $type = 'goauth', $imap_server = null ) {
 			global $rt_hd_mail_accounts_model;
 			if ( $user_id == - 1 ) {
 				$user_id = get_current_user_id();
@@ -254,7 +254,7 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 				'outh_token' => $outh_token,
 				'email_data' => $email_data,
 				'type'       => $type,
-				'flag'       => 'Y'
+				'flag'       => 'Y',
 			);
 
 			if ( $imap_server != null ) {
@@ -264,7 +264,7 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 			$rows_affected = $rt_hd_mail_accounts_model->add_mail_account( $args );
 			$this->update_gmail_ac_count();
 
-			return ( !empty( $rows_affected ) );
+			return ( ! empty( $rows_affected ) );
 		}
 
 		/**
@@ -289,7 +289,7 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 			);
 			$rows_affected = $rt_hd_mail_accounts_model->update_mail_account( $data, $where );
 
-			return ( !empty( $rows_affected ) );
+			return ( ! empty( $rows_affected ) );
 		}
 
 		/**
@@ -309,7 +309,7 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 			global $rt_hd_mail_accounts_model;
 			$result = $rt_hd_mail_accounts_model->remove_mail_account( array(
 					'email'   => $email,
-					'user_id' => $user_id
+					'user_id' => $user_id,
 				) );
 			$this->update_gmail_ac_count();
 
@@ -417,7 +417,7 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 			global $wpdb, $rt_hd_mail_accounts_model;
 			$sql = $wpdb->prepare( "select * from $rt_hd_mail_accounts_model->table_name where sync_status in ( 'syncing' ) and ( last_sync_time is NULL or addtime( last_sync_time, %s ) < NOW() ) order by last_sync_time limit 1", $this->sync_period );
 			$row = $wpdb->get_row( $sql );
-			if ( !$row ) {
+			if ( ! $row ) {
 				$sql = "select * from $rt_hd_mail_accounts_model->table_name where not sync_status in ( 'syncing' ) order by last_sync_time limit 1";
 				$row = $wpdb->get_row( $sql );
 			} else {
@@ -444,7 +444,7 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		public function insert_new_send_email( $fromemail, $subject, $body, $toemail = array(), $ccemail = array(), $bccemail = array(), $attachement = array(), $refrence_id = 0, $refrence_type = "notification" ) {
+		public function insert_new_send_email( $fromemail, $subject, $body, $toemail = array(), $ccemail = array(), $bccemail = array(), $attachement = array(), $refrence_id = 0, $refrence_type = 'notification' ) {
 
 			$user_id = get_current_user_id();
 			global $rt_hd_mail_outbound_model;
@@ -492,9 +492,9 @@ if ( !class_exists( 'Rt_HD_Settings' ) ) {
 			global $rt_hd_mail_outbound_model;
 			$rows_affected = $rt_hd_mail_outbound_model->update_outbound_mail( array( 'sent' => $status ), array(
 					'id'   => $sentEmailID,
-					'sent' => $oldStatus
+					'sent' => $oldStatus,
 				) );
-			echo $rows_affected;
+			echo  esc_attr( $rows_affected );
 
 			return $rows_affected;
 		}

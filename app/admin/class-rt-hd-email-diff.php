@@ -20,9 +20,9 @@ if ( !defined( 'ABSPATH' ) ) {
  *
  * @since rt-Helpdesk 0.1
  */
-if ( !class_exists( 'Rt_HD_Email_Diff' ) ) {
+if ( ! class_exists( 'Rt_HD_Email_Diff' ) ) {
 
-	if ( !class_exists( 'WP_Text_Diff_Renderer_Table' ) ) {
+	if ( ! class_exists( 'WP_Text_Diff_Renderer_Table' ) ) {
 		require( ABSPATH . WPINC . '/wp-diff.php' );
 	}
 

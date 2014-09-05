@@ -3,7 +3,7 @@
 /**
  * Don't load this file directly!
  */
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -20,7 +20,7 @@ if ( !defined( 'ABSPATH' ) ) {
  *
  *
  */
-if ( !class_exists( 'Rt_HD_Accounts' ) ) {
+if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 
 	/**
 	 * Class Rt_HD_Accounts
@@ -62,8 +62,8 @@ if ( !class_exists( 'Rt_HD_Accounts' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		public function account_autocomplete_ajax() {
-			if ( !isset( $_POST["query"] ) ) {
-				wp_die( "Opss!! Invalid request" );
+			if ( ! isset( $_POST['query'] ) ) {
+				wp_die( 'Opss!! Invalid request' );
 			}
 
 			$accounts = rt_biz_search_organization( $_POST['query'] );
@@ -74,7 +74,7 @@ if ( !class_exists( 'Rt_HD_Accounts' ) ) {
 					'id'      => $account->ID,
 					'slug'    => $account->post_name,
 					'imghtml' => get_avatar( '', 24 ),
-					'url'     => admin_url( "edit.php?" . $account->post_type . "=" . $account->ID . "&post_type=" . $_POST['post_type'] ),
+					'url'     => admin_url( 'edit.php?' . $account->post_type . '=' . $account->ID . '&post_type='. $_POST['post_type'] ),
 				);
 			}
 
@@ -88,10 +88,10 @@ if ( !class_exists( 'Rt_HD_Accounts' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		public function get_term_by_key_ajax() {
-			if ( !isset( $_POST['account_id'] ) ) {
+			if ( ! isset( $_POST['account_id'] ) ) {
 				wp_die( 'Opss!! Invalid request' );
 			}
-			if ( !isset( $_POST['post_type'] ) ) {
+			if ( ! isset( $_POST['post_type'] ) ) {
 				wp_die( 'Opss!! Invalid request' );
 			}
 
@@ -102,7 +102,7 @@ if ( !class_exists( 'Rt_HD_Accounts' ) ) {
 				$returnArray['label'] = $result->post_title;
 
 				$returnArray['id']      = $result->ID;
-				$returnArray["imghtml"] = get_avatar( $result->post_title, 24 );
+				$returnArray['imghtml'] = get_avatar( $result->post_title, 24 );
 			}
 			echo json_encode( $returnArray );
 			die( 0 );
@@ -114,29 +114,29 @@ if ( !class_exists( 'Rt_HD_Accounts' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		public function add_new_account_ajax() {
-			var_dump( "hello" );
+			var_dump( 'hello' );
 			$returnArray           = array();
 			$returnArray['status'] = false;
 			$accountData           = $_POST['data'];
-			if ( !isset( $accountData['new-account-name'] ) ) {
+			if ( ! isset( $accountData['new-account-name'] ) ) {
 				$returnArray['status']  = false;
 				$returnArray['message'] = 'Invalid Data Please Check';
 			} else {
 				$post_id = post_exists( $accountData['new-account-name'] );
-				if ( !empty( $post_id ) && get_post_type( $post_id ) === rt_biz_get_organization_post_type() ) {
+				if ( ! empty( $post_id ) && get_post_type( $post_id ) === rt_biz_get_organization_post_type() ) {
 					$returnArray['status']  = false;
 					$returnArray['message'] = 'Account Already Exits';
 				} else {
-					if ( !isset( $accountData['new-account-note'] ) ) {
+					if ( ! isset( $accountData['new-account-note'] ) ) {
 						$accountData['new-account-note'] = '';
 					}
-					if ( !isset( $accountData['new-account-country'] ) ) {
+					if ( ! isset( $accountData['new-account-country'] ) ) {
 						$accountData['new-account-country'] = '';
 					}
-					if ( !isset( $accountData['new-account-address'] ) ) {
+					if ( ! isset( $accountData['new-account-address'] ) ) {
 						$accountData['new-account-address'] = '';
 					}
-					if ( !isset( $accountData['accountmeta'] ) && !is_array( $accountData['accountmeta'] ) ) {
+					if ( ! isset( $accountData['accountmeta'] ) && ! is_array( $accountData['accountmeta'] ) ) {
 						$accountData['accountmeta'] = array();
 					}
 
@@ -184,7 +184,7 @@ if ( !class_exists( 'Rt_HD_Accounts' ) ) {
 
 			global $rt_hd_module;
 			if ( in_array( Rt_HD_Module::$post_type, array_keys( $rt_entity->enabled_post_types ) ) ) {
-				$columns[Rt_HD_Module::$post_type] = $rt_hd_module->labels['name'];
+				$columns[ Rt_HD_Module::$post_type ] = $rt_hd_module->labels['name'];
 			}
 
 			return $columns;
@@ -209,14 +209,14 @@ if ( !class_exists( 'Rt_HD_Accounts' ) ) {
 			switch ( $column ) {
 				case 'country':
 					if ( class_exists( 'Rt_Entity' ) ) { // TODO Update it while updating meta of rtbiz
-						echo implode( ' , ', get_post_meta( $post_id, Rt_Entity::$meta_key_prefix . 'account_country' ) );
+						echo esc_attr( implode( ' , ', get_post_meta( $post_id, Rt_Entity::$meta_key_prefix . 'account_country' ) ) );
 					}
 					break;
 				default:
 					if ( in_array( Rt_HD_Module::$post_type, array_keys( $rt_entity->enabled_post_types ) ) && $column == Rt_HD_Module::$post_type ) {
 						$post_details = get_post( $post_id );
 						$pages        = rt_biz_get_post_for_organization_connection( $post_id, Rt_HD_Module::$post_type );
-						echo '<a href = edit.php?' . $post_details->post_type . '=' . $post_details->ID . '&post_type=' . Rt_HD_Module::$post_type . '>' . count( $pages ) . '</a>';
+						echo esc_html( '<a href = edit.php?' . $post_details->post_type . '=' . $post_details->ID . '&post_type=' . Rt_HD_Module::$post_type . '>' . count( $pages ) . '</a>' );
 					}
 					break;
 			}
@@ -235,7 +235,7 @@ if ( !class_exists( 'Rt_HD_Accounts' ) ) {
 		function accounts_diff_on_ticket( $post_id, $newTicket ) {
 
 			$diffHTML = '';
-			if ( !isset( $newTicket['accounts'] ) ) {
+			if ( ! isset( $newTicket['accounts'] ) ) {
 				$newTicket['accounts'] = array();
 			}
 			$accounts = $newTicket['accounts'];
@@ -243,7 +243,7 @@ if ( !class_exists( 'Rt_HD_Accounts' ) ) {
 
 			$oldAccountsString = rt_biz_organization_connection_to_string( $post_id );
 			$newAccountsSring  = '';
-			if ( !empty( $accounts ) ) {
+			if ( ! empty( $accounts ) ) {
 				$accountsArr = array();
 				foreach ( $accounts as $account ) {
 					$newA          = get_post( $account );
@@ -268,7 +268,7 @@ if ( !class_exists( 'Rt_HD_Accounts' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		function accounts_save_on_ticket( $post_id, $newTicket ) {
-			if ( !isset( $newTicket['accounts'] ) ) {
+			if ( ! isset( $newTicket['accounts'] ) ) {
 				$newTicket['accounts'] = array();
 			}
 			$accounts = array_map( 'intval', $newTicket['accounts'] );

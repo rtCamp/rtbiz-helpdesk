@@ -2,7 +2,7 @@
 /**
  * Don't load this file directly!
  */
-if (!defined('ABSPATH')){
+if (! defined('ABSPATH')){
 	exit;
 }
 
@@ -19,7 +19,7 @@ if (!defined('ABSPATH')){
  *
  * @since rt-Helpdesk 0.1
  */
-if ( !class_exists( 'Rt_HD_Module' ) ) {
+if ( ! class_exists( 'Rt_HD_Module' ) ) {
 	/**
 	 * Class Rt_HD_Module
 	 *
@@ -93,24 +93,24 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 			$relations  = $rt_hd_attributes_relationship_model->get_relations_by_post_type( self::$post_type );
 			$table_name = rthd_get_ticket_table_name();
 			$sql        = "CREATE TABLE {$table_name} (\n"
-			              . "id BIGINT(20) NOT NULL AUTO_INCREMENT,\n"
-			              . "post_id BIGINT(20),\n"
-			              . "post_title TEXT,\n"
-			              . "post_content TEXT,\n"
-			              . "assignee BIGINT(20),\n"
-			              . "date_create TIMESTAMP NOT NULL DEFAULT 0,\n"
-			              . "date_create_gmt TIMESTAMP NOT NULL DEFAULT 0,\n"
-			              . "date_update TIMESTAMP NOT NULL DEFAULT 0,\n"
-			              . "date_update_gmt TIMESTAMP NOT NULL DEFAULT 0,\n"
-			              . "date_closing TIMESTAMP NOT NULL DEFAULT 0,\n"
-			              . "date_closing_gmt TIMESTAMP NOT NULL DEFAULT 0,\n"
-			              . "post_status VARCHAR(20),\n"
-			              . "user_created_by BIGINT(20),\n"
-			              . "user_updated_by BIGINT(20),\n"
-			              . "user_closed_by BIGINT(20),\n"
-			              . "last_comment_id BIGINT(20),\n"
-			              . "flag VARCHAR(3),\n"
-			              . str_replace( '-', '_', rthd_attribute_taxonomy_name( 'closing_reason' ) ) . " TEXT,\n";
+							. "id BIGINT(20) NOT NULL AUTO_INCREMENT,\n"
+							. "post_id BIGINT(20),\n"
+							. "post_title TEXT,\n"
+							. "post_content TEXT,\n"
+							. "assignee BIGINT(20),\n"
+							. "date_create TIMESTAMP NOT NULL DEFAULT 0,\n"
+							. "date_create_gmt TIMESTAMP NOT NULL DEFAULT 0,\n"
+							. "date_update TIMESTAMP NOT NULL DEFAULT 0,\n"
+							. "date_update_gmt TIMESTAMP NOT NULL DEFAULT 0,\n"
+							. "date_closing TIMESTAMP NOT NULL DEFAULT 0,\n"
+							. "date_closing_gmt TIMESTAMP NOT NULL DEFAULT 0,\n"
+							. "post_status VARCHAR(20),\n"
+							. "user_created_by BIGINT(20),\n"
+							. "user_updated_by BIGINT(20),\n"
+							. "user_closed_by BIGINT(20),\n"
+							. "last_comment_id BIGINT(20),\n"
+							. "flag VARCHAR(3),\n"
+							. str_replace( '-', '_', rthd_attribute_taxonomy_name( 'closing_reason' ) ) . " TEXT,\n";
 
 			foreach ( $relations as $relation ) {
 				$attr      = $rt_hd_attributes_model->get_attribute( $relation->attr_id );
@@ -128,8 +128,8 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 				$sql .= "{$contact_name} TEXT,\n";
 			}
 
-			$sql .= "PRIMARY KEY  (id)\n"
-			        . ") CHARACTER SET utf8 COLLATE utf8_general_ci;";
+			$sql .= 'PRIMARY KEY  (id)\n'
+					. ') CHARACTER SET utf8 COLLATE utf8_general_ci;';
 
 			dbDelta( $sql );
 		}
@@ -183,14 +183,14 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 			add_action( 'rt_attributes_relations_updated', array( $this, 'update_ticket_table' ), 10, 1 );
 			add_action( 'rt_attributes_relations_deleted', array( $this, 'update_ticket_table' ), 10, 1 );
 
-			add_filter( "manage_edit-" . self::$post_type . "_columns", array( $this, 'edit_custom_columns' ) );
-			add_action( "manage_" . self::$post_type . "_posts_custom_column", array( $this, 'manage_custom_columns' ), 10, 2 );
+			add_filter( 'manage_edit-' . self::$post_type . '_columns', array( $this, 'edit_custom_columns' ) );
+			add_action( 'manage_' . self::$post_type . '_posts_custom_column', array( $this, 'manage_custom_columns' ), 10, 2 );
 			add_action( 'pre_get_posts', array( $this, 'pre_filter' ) );
-			add_filter( "manage_edit-" . self::$post_type . "_sortable_columns", array( $this, 'sortable_column' ) );
+			add_filter( 'manage_edit-' . self::$post_type . '_sortable_columns', array( $this, 'sortable_column' ) );
 
-            add_action( 'untrashed_post', array( $this,  'after_restore_trashed_ticket' ) );
-            add_action( 'before_delete_post', array( $this,  'before_ticket_deleted' ) );
-            add_action( 'wp_trash_post', array( $this,  'before_ticket_trashed' ) );
+			add_action( 'untrashed_post', array( $this,  'after_restore_trashed_ticket' ) );
+			add_action( 'before_delete_post', array( $this,  'before_ticket_deleted' ) );
+			add_action( 'wp_trash_post', array( $this,  'before_ticket_trashed' ) );
 
         }
 
@@ -254,7 +254,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 
 					$date = new DateTime( get_the_date( 'Y-m-d H:i:s' ) );
 
-					echo human_time_diff( $date->format( 'U' ), current_time( 'timestamp' ) ) . __( ' ago' );
+					echo esc_attr( human_time_diff( $date->format( 'U' ), current_time( 'timestamp' ) ) . __( ' ago' ) );
 
 					break;
 
@@ -262,12 +262,12 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 
 					$date = new DateTime( get_the_modified_date( 'Y-m-d H:i:s' ) );
 
-					echo human_time_diff( $date->format( 'U' ), current_time( 'timestamp' ) ) . __( ' ago' );
+					echo esc_attr( human_time_diff( $date->format( 'U' ), current_time( 'timestamp' ) ) . __( ' ago' ) );
 					break;
 
 				case 'rthd_closing_date' :
 
-					echo get_post_meta( $post->ID, '_rtbiz_hd_closing_date', true );
+					echo esc_attr( get_post_meta( $post->ID, '_rtbiz_hd_closing_date', true ) );
 
 					break;
 
@@ -290,7 +290,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 					$user_info = get_userdata( $user_id );
 					$url       = esc_url( add_query_arg( array(
 								'post_type'  => self::$post_type,
-								'created_by' => $user_id
+								'created_by' => $user_id,
 							), 'edit.php' ) );
 
 					echo ( $user_info ) ? sprintf( '<a href="%s">%s</a>', $url, $user_info->user_login ) : '-';
@@ -304,7 +304,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 
 					$url = esc_url( add_query_arg( array(
 								'post_type'  => self::$post_type,
-								'updated_by' => $user_id
+								'updated_by' => $user_id,
 							), 'edit.php' ) );
 
 
@@ -330,8 +330,8 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 
 					if ( $post->post_status != 'unanswered' ) {
 
-						$term_name = wp_get_post_terms( $post->ID, rthd_attribute_taxonomy_name( 'closing-reason' ), array( "fields" => "names" ) );
-						echo !empty( $term_name ) ? $term_name[0] : '-';
+						$term_name = wp_get_post_terms( $post->ID, rthd_attribute_taxonomy_name( 'closing-reason' ), array( 'fields' => 'names' ) );
+						echo esc_attr( ! empty( $term_name ) ? $term_name[0] : '-' );
 
 					} else {
 
@@ -353,7 +353,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 						$contact_name[] = sprintf( '<a href="%s">%s</a>', $url, $contact->post_title );
 					}
 
-					echo implode( ',', $contact_name );
+					echo esc_attr( implode( ',', $contact_name ) );
 
 					break;
 
@@ -371,7 +371,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 						$account_name[] = sprintf( '<a href="%s">%s</a>', $url, $account->post_title );
 					}
 
-					echo implode( ',', $account_name );
+					echo esc_attr( implode( ',', $account_name ) );
 
 
 			}
@@ -400,7 +400,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 						array(
 							array(
 								'key'   => '_rtbiz_hd_created_by',
-								'value' => $_GET['created_by']
+								'value' => $_GET['created_by'],
 							)
 						)
 					);
@@ -413,7 +413,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 						array(
 							array(
 								'key'   => '_rtbiz_hd_updated_by',
-								'value' => $_GET['updated_by']
+								'value' => $_GET['updated_by'],
 							)
 						)
 					);
@@ -424,68 +424,67 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 
 		}
 
-        function after_restore_trashed_ticket( $post_id ){
+		function after_restore_trashed_ticket( $post_id ){
 
-                $ticket = get_post( $post_id );
+			$ticket = get_post( $post_id );
 
-                if ( $ticket->post_type == self::$post_type ) {
+			if ( $ticket->post_type == self::$post_type ) {
 
-                    global $rt_hd_ticket_history_model;
+				global $rt_hd_ticket_history_model;
 
-                    $rt_hd_ticket_history_model->insert( array(
-                            'ticket_id'   => $post_id,
-                            'type'        => 'post_status',
-                            'old_value'   => 'trash',
-                            'new_value'   => 'unanswered',
-                            'message'     => NULL,
-                            'update_time' => current_time( 'mysql' ),
-                            'updated_by'  => get_current_user_id(),
-                        )
-                    );
+				$rt_hd_ticket_history_model->insert( array(
+					'ticket_id'   => $post_id,
+					'type'        => 'post_status',
+					'old_value'   => 'trash',
+					'new_value'   => 'unanswered',
+					'message'     => NULL,
+					'update_time' => current_time( 'mysql' ),
+					'updated_by'  => get_current_user_id(),
+				    )
+				);
 
-                    $ticket->post_status = 'unanswered';
-                    wp_update_post($ticket);
+				$ticket->post_status = 'unanswered';
+				wp_update_post( $ticket );
 
-                }
-        }
+			}
+		}
 
-        function before_ticket_deleted( $post_id ){
+		function before_ticket_deleted( $post_id ) {
 
-            if ( get_post_type( $post_id ) == self::$post_type ) {
+			if ( get_post_type( $post_id ) == self::$post_type ) {
 
-                global $rt_hd_ticket_history_model;
-                $ticketModel = new Rt_HD_Ticket_Model();
+				global $rt_hd_ticket_history_model;
+				$ticketModel = new Rt_HD_Ticket_Model();
 
-                $ticket_index = array( 'post_id' => $post_id );
-                $ticket_history = array( 'ticket_id' => $post_id );
+				$ticket_index   = array( 'post_id' => $post_id );
+				$ticket_history = array( 'ticket_id' => $post_id );
 
-                $rt_hd_ticket_history_model->delete( $ticket_history );
+				$rt_hd_ticket_history_model->delete( $ticket_history );
 
-                $ticketModel->delete_ticket( $ticket_index );
+				$ticketModel->delete_ticket( $ticket_index );
 
-            }
+			}
 
-        }
+		}
 
-        function before_ticket_trashed( $post_id ){
+		function before_ticket_trashed( $post_id ) {
 
-            if ( get_post_type( $post_id ) == self::$post_type ) {
+			if ( get_post_type( $post_id ) == self::$post_type ) {
 
-                global $rt_hd_ticket_history_model;
+				global $rt_hd_ticket_history_model;
 
-                $rt_hd_ticket_history_model->insert( array(
-                        'ticket_id'   => $post_id,
-                        'type'        => 'post_status',
-                        'old_value'   => get_post_status( $post_id ),
-                        'new_value'   => 'trash',
-                        'message'     => NULL,
-                        'update_time' => current_time( 'mysql' ),
-                        'updated_by'  => get_current_user_id(),
-                    )
-                );
+				$rt_hd_ticket_history_model->insert( array(
+									'ticket_id'   => $post_id,
+									'type'        => 'post_status',
+									'old_value'   => get_post_status( $post_id ),
+									'new_value'   => 'trash',
+									'message'     => null,
+									'update_time' => current_time( 'mysql' ),
+									'updated_by'  => get_current_user_id(),
+									) );
 
-            }
-        }
+			}
+		}
 
 
 		/**
@@ -534,16 +533,16 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 		function native_list_view_link() {
 			global $rt_hd_attributes;
 			if ( strpos( $_SERVER["REQUEST_URI"], 'edit.php' ) > 0 &&
-			     strpos( $_SERVER['REQUEST_URI'], 'page=' . $rt_hd_attributes->attributes_page_slug ) === false &&
-			     strpos( $_SERVER['REQUEST_URI'], 'page=rthd-gravity-import' ) === false &&
-			     strpos( $_SERVER['REQUEST_URI'], 'page=rthd-gravity-mapper' ) === false &&
-			     strpos( $_SERVER['REQUEST_URI'], 'page=rthd-settings' ) === false &&
-			     strpos( $_SERVER['REQUEST_URI'], 'page=rthd-logs' ) === false &&
-			     strpos( $_SERVER['REQUEST_URI'], 'page=rthd-user-settings' ) === false &&
-			     strpos( $_SERVER['REQUEST_URI'], 'post_type=' . self::$post_type ) &&
-			     strpos( $_SERVER['REQUEST_URI'], 'page=rthd-add-' . self::$post_type ) === false &&
-			     strpos( $_SERVER['REQUEST_URI'], 'page=rthd-' . self::$post_type . '-dashboard' ) === false &&
-			     strpos( $_SERVER['REQUEST_URI'], 'page=rthd-all-' . self::$post_type ) === false
+				strpos( $_SERVER['REQUEST_URI'], 'page=' . $rt_hd_attributes->attributes_page_slug ) === false &&
+				strpos( $_SERVER['REQUEST_URI'], 'page=rthd-gravity-import' ) === false &&
+				strpos( $_SERVER['REQUEST_URI'], 'page=rthd-gravity-mapper' ) === false &&
+				strpos( $_SERVER['REQUEST_URI'], 'page=rthd-settings' ) === false &&
+				strpos( $_SERVER['REQUEST_URI'], 'page=rthd-logs' ) === false &&
+				strpos( $_SERVER['REQUEST_URI'], 'page=rthd-user-settings' ) === false &&
+				strpos( $_SERVER['REQUEST_URI'], 'post_type=' . self::$post_type ) &&
+				strpos( $_SERVER['REQUEST_URI'], 'page=rthd-add-' . self::$post_type ) === false &&
+				strpos( $_SERVER['REQUEST_URI'], 'page=rthd-' . self::$post_type . '-dashboard' ) === false &&
+				strpos( $_SERVER['REQUEST_URI'], 'page=rthd-all-' . self::$post_type ) === false
 			) {
 				wp_redirect( add_query_arg( 'page', 'rthd-all-' . self::$post_type ), 200 );
 			}
@@ -595,7 +594,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 				return $action;
 			}
 			$title          = __( 'Edit', RT_HD_TEXT_DOMAIN );
-			$action['edit'] = "<a href='" . admin_url( "edit.php?post_type=" . self::$post_type . "&page=rthd-add-" . self::$post_type . "&" . self::$post_type . "_id=" . $post->ID ) . "' title='" . $title . "'>" . $title . "</a>";
+			$action['edit'] = "<a href='" . admin_url( 'edit.php?post_type=' . self::$post_type . '&page=rthd-add-' . self::$post_type . '&' . self::$post_type . '_id=' . $post->ID ) . "' title='" . $title . "'>" . $title . '</a>';
 
 			return $action;
 		}
@@ -625,9 +624,9 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 
 			$author_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
 
-			$screen_id = add_submenu_page( 'edit.php?post_type=' . self::$post_type, __( 'Dashboard', RT_HD_TEXT_DOMAIN ), __( 'Dashboard', RT_HD_TEXT_DOMAIN ), $author_cap, 'rthd-' . self::$post_type . '-dashboard', array(
+			$screen_id = add_submenu_page( 'edit.php?post_type=' . esc_attr( self::$post_type ), __( 'Dashboard', RT_HD_TEXT_DOMAIN ), __( 'Dashboard', RT_HD_TEXT_DOMAIN ), $author_cap, 'rthd-' . esc_attr( self::$post_type  ). '-dashboard', array(
 					$this,
-					'dashboard'
+					'dashboard',
 				) );
 			$rt_hd_dashboard->add_screen_id( $screen_id );
 			$rt_hd_dashboard->setup_dashboard();
@@ -691,17 +690,17 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 		function custom_pages_order( $menu_order ) {
 			global $submenu;
 			global $menu;
-			if ( isset( $submenu['edit.php?post_type=' . self::$post_type] ) && !empty( $submenu['edit.php?post_type=' . self::$post_type] ) ) {
-				$module_menu = $submenu['edit.php?post_type=' . self::$post_type];
-				unset( $submenu['edit.php?post_type=' . self::$post_type] );
+			if ( isset( $submenu[ 'edit.php?post_type=' . self::$post_type ] ) && !empty( $submenu[ 'edit.php?post_type=' . self::$post_type ] ) ) {
+				$module_menu = $submenu[ 'edit.php?post_type=' . self::$post_type ];
+				unset( $submenu[ 'edit.php?post_type=' . self::$post_type ] );
 				//unset($module_menu[5]);
 				//unset($module_menu[10]);
 				$new_index = 5;
 				foreach ( $this->custom_menu_order as $item ) {
 					foreach ( $module_menu as $p_key => $menu_item ) {
 						if ( in_array( $item, $menu_item ) ) {
-							$submenu['edit.php?post_type=' . self::$post_type][$new_index] = $menu_item;
-							unset ( $module_menu[$p_key] );
+							$submenu[ 'edit.php?post_type=' . self::$post_type ][ $new_index ] = $menu_item;
+							unset ( $module_menu[ $p_key ] );
 							$new_index += 5;
 							break;
 						}
@@ -711,8 +710,8 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 					if ( $menu_item[2] != Redux_Framework_Helpdesk_Config::$page_slug ) {
 						$menu_item[0] = '--- ' . $menu_item[0];
 					}
-					$submenu['edit.php?post_type=' . self::$post_type][$new_index] = $menu_item;
-					unset ( $module_menu[$p_key] );
+					$submenu[ 'edit.php?post_type=' . self::$post_type ][ $new_index ] = $menu_item;
+					unset ( $module_menu[ $p_key ] );
 					$new_index += 5;
 				}
 			}
@@ -775,12 +774,9 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 			foreach ( $this->statuses as $status ) {
 
 				register_post_status( $status['slug'], array(
-					'label'       => $status['slug']
-				,
-					'protected'   => true
-				,
-					'_builtin'    => false
-				,
+					'label'       => $status['slug'],
+					'protected'   => true,
+					'_builtin'    => false,
 					'label_count' => _n_noop( "{$status['name']} <span class='count'>(%s)</span>", "{$status['name']} <span class='count'>(%s)</span>" ),
 				) );
 			}
@@ -813,7 +809,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 			$this->labels = array(
 				'name'          => __( 'Ticket', RT_HD_TEXT_DOMAIN ),
 				'singular_name' => __( 'Ticket', RT_HD_TEXT_DOMAIN ),
-				'menu_name'     => $settings['rthd_menu_label'],
+				'menu_name'     => isset ( $settings['rthd_menu_label'] ) ? $settings['rthd_menu_label'] : 'rtHelpdesk',
 				'all_items'     => __( 'Tickets', RT_HD_TEXT_DOMAIN ),
 				'add_new'       => __( 'Add Ticket', RT_HD_TEXT_DOMAIN ),
 				'add_new_item'  => __( 'Add Ticket', RT_HD_TEXT_DOMAIN ),
@@ -869,7 +865,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 			global $pagenow;
 			if ( get_post_type() == self::$post_type && ( $pagenow == 'edit.php' || $pagenow == 'post-new.php' || ( isset( $_GET['action'] ) && $_GET['action'] ) == 'edit' ) ) {
 				global $post;
-				if ( !isset( $post ) ) {
+				if ( ! isset( $post ) ) {
 					return;
 				}
 				echo '
@@ -911,27 +907,27 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 			/* Pie Chart - Progress Indicator (Post status based) */
 			add_meta_box( 'rthd-tickets-by-status', __( 'Status wise Tickets', RT_HD_TEXT_DOMAIN ), array(
 					$this,
-					'tickets_by_status'
+					'tickets_by_status',
 				), $rt_hd_dashboard->screen_id, 'column1' );
 			/* Line Chart for Closed::Won */
 			add_meta_box( 'rthd-daily-tickets', __( 'Daily Tickets', RT_HD_TEXT_DOMAIN ), array(
 					$this,
-					'daily_tickets'
+					'daily_tickets',
 				), $rt_hd_dashboard->screen_id, 'column2' );
 			/* Load by Team (Matrix/Table) */
 			add_meta_box( 'rthd-team-load', __( 'Team Load', RT_HD_TEXT_DOMAIN ), array(
 					$this,
-					'team_load'
+					'team_load',
 				), $rt_hd_dashboard->screen_id, 'column3' );
 			/* Top Accounts */
 			add_meta_box( 'rthd-top-accounts', __( 'Top Accounts', RT_HD_TEXT_DOMAIN ), array(
 					$this,
-					'top_accounts'
+					'top_accounts',
 				), $rt_hd_dashboard->screen_id, 'column4' );
 			/* Top Clients */
 			add_meta_box( 'rthd-top-clients', __( 'Top Clients', RT_HD_TEXT_DOMAIN ), array(
 					$this,
-					'top_clients'
+					'top_clients',
 				), $rt_hd_dashboard->screen_id, 'column4' );
 
 			$relations = $rt_hd_attributes_relationship_model->get_relations_by_post_type( self::$post_type );
@@ -940,7 +936,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 				if ( $attr->attribute_store_as == 'taxonomy' ) {
 					add_meta_box( 'rthd-tickets-by-' . $attr->attribute_name, $attr->attribute_label . ' ' . __( 'Wise Tickets', RT_HD_TEXT_DOMAIN ), array(
 							$this,
-							'dashboard_attributes_widget_content'
+							'dashboard_attributes_widget_content',
 						), $rt_hd_dashboard->screen_id, 'column1', 'default', array( 'attribute_id' => $attr->id ) );
 				}
 			}
@@ -1004,7 +1000,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 				),
 			);
 			?>
-			<div id="<?php echo 'rthd_pie_' . $args['id']; ?>"></div>
+			<div id="<?php echo esc_attr( 'rthd_pie_' . $args['id'] ); ?>"></div>
 		<?php
 		}
 
@@ -1018,7 +1014,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 			$table_name    = rthd_get_ticket_table_name();
 			$post_statuses = array();
 			foreach ( $this->statuses as $status ) {
-				$post_statuses[$status['slug']] = $status['name'];
+				$post_statuses[ $status['slug'] ] = $status['name'];
 			}
 
 			$query       = "SELECT post_status, COUNT(id) AS rthd_count FROM {$table_name} WHERE 1=1 GROUP BY post_status";
@@ -1027,11 +1023,11 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 			$cols        = array( __( 'Ticket Status', RT_HD_TEXT_DOMAIN ), __( 'Count', RT_HD_TEXT_DOMAIN ) );
 			$rows        = array();
 			foreach ( $results as $item ) {
-				$post_status = ( isset( $post_statuses[$item->post_status] ) ) ? $post_statuses[$item->post_status] : '';
-				if ( !empty( $post_status ) ) {
+				$post_status = ( isset( $post_statuses[ $item->post_status ] ) ) ? $post_statuses[ $item->post_status ] : '';
+				if ( ! empty( $post_status ) ) {
 					$rows[] = array(
 						$post_status,
-						( !empty( $item->rthd_count ) ) ? floatval( $item->rthd_count ) : 0
+						( ! empty( $item->rthd_count ) ) ? floatval( $item->rthd_count ) : 0,
 					);
 				}
 			}
@@ -1062,7 +1058,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 			$table_name    = rthd_get_ticket_table_name();
 			$post_statuses = array();
 			foreach ( $this->statuses as $status ) {
-				$post_statuses[$status['slug']] = $status['name'];
+				$post_statuses[ $status['slug'] ] = $status['name'];
 			}
 
 			$query   = "SELECT assignee, post_status, COUNT(ID) AS rthd_ticket_count FROM {$table_name} WHERE 1=1 GROUP BY assignee, post_status";
@@ -1070,16 +1066,16 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 
 			$table_matrix = array();
 			foreach ( $results as $item ) {
-				if ( isset( $table_matrix[$item->assignee] ) ) {
-					if ( isset( $post_statuses[$item->post_status] ) ) {
-						$table_matrix[$item->assignee][$item->post_status] = $item->rthd_ticket_count;
+				if ( isset( $table_matrix[ $item->assignee ] ) ) {
+					if ( isset( $post_statuses[ $item->post_status ] ) ) {
+						$table_matrix[ $item->assignee ][ $item->post_status ] = $item->rthd_ticket_count;
 					}
 				} else {
 					foreach ( $post_statuses as $key => $status ) {
-						$table_matrix[$item->assignee][$key] = 0;
+						$table_matrix[ $item->assignee ][ $key ] = 0;
 					}
-					if ( isset( $post_statuses[$item->post_status] ) ) {
-						$table_matrix[$item->assignee][$item->post_status] = $item->rthd_ticket_count;
+					if ( isset( $post_statuses[ $item->post_status ] ) ) {
+						$table_matrix[ $item->assignee ][ $item->post_status ] = $item->rthd_ticket_count;
 					}
 				}
 			}
@@ -1112,7 +1108,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 					),
 					admin_url( 'edit.php' )
 				);
-				if ( !empty( $user ) ) {
+				if ( ! empty( $user ) ) {
 					array_unshift( $temp, '<a href="' . $url . '">' . $user->display_name . '</a>' );
 				}
 				$rows[] = $temp;
@@ -1146,17 +1142,17 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 			$table_name = rthd_get_ticket_table_name();
 			$account    = rt_biz_get_organization_post_type();
 
-			$query = "SELECT acc.ID AS account_id, acc.post_title AS account_name "
-			         . ( ( isset( $wpdb->p2p ) ) ? ", COUNT( ticket.ID ) AS account_tickets " : ' ' )
-			         . "FROM {$wpdb->posts} AS acc "
-			         . ( ( isset( $wpdb->p2p ) ) ? "JOIN {$wpdb->p2p} AS p2p ON acc.ID = p2p.p2p_to " : ' ' )
-			         . ( ( isset( $wpdb->p2p ) ) ? "JOIN {$table_name} AS ticket ON ticket.post_id = p2p.p2p_from " : ' ' )
-			         . "WHERE 2=2 "
-			         . ( ( isset( $wpdb->p2p ) ) ? "AND p2p.p2p_type = '" . self::$post_type . "_to_{$account}' " : ' ' )
-			         . "AND acc.post_type = '{$account}' "
-			         . "GROUP BY acc.ID "
-			         . ( ( isset( $wpdb->p2p ) ) ? "ORDER BY account_tickets DESC " : ' ' )
-			         . "LIMIT 0 , 10";
+			$query = 'SELECT acc.ID AS account_id, acc.post_title AS account_name '
+				. ( ( isset( $wpdb->p2p ) ) ? ', COUNT( ticket.ID ) AS account_tickets ' : ' ' )
+				. "FROM {$wpdb->posts} AS acc "
+				. ( ( isset( $wpdb->p2p ) ) ? "JOIN {$wpdb->p2p} AS p2p ON acc.ID = p2p.p2p_to " : ' ' )
+				. ( ( isset( $wpdb->p2p ) ) ? "JOIN {$table_name} AS ticket ON ticket.post_id = p2p.p2p_from " : ' ' )
+				. 'WHERE 2=2 '
+				. ( ( isset( $wpdb->p2p ) ) ? "AND p2p.p2p_type = '" . self::$post_type . "_to_{$account}' " : ' ' )
+				. "AND acc.post_type = '{$account}' "
+				. 'GROUP BY acc.ID '
+				. ( ( isset( $wpdb->p2p ) ) ? 'ORDER BY account_tickets DESC ' : ' ' )
+				. 'LIMIT 0 , 10';
 
 			$results = $wpdb->get_results( $query );
 
@@ -1218,18 +1214,18 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 			$account    = rt_biz_get_organization_post_type();
 
 			$query = "SELECT contact.ID AS contact_id, contact.post_title AS contact_name "
-			         . ( ( isset( $wpdb->p2p ) ) ? ", COUNT( ticket.ID ) AS contact_tickets " : ' ' )
-			         . "FROM {$wpdb->posts} AS contact "
-			         . ( ( isset( $wpdb->p2p ) ) ? "JOIN {$wpdb->p2p} AS p2p_lc ON contact.ID = p2p_lc.p2p_to " : ' ' )
-			         . ( ( isset( $wpdb->p2p ) ) ? "JOIN {$table_name} AS ticket ON ticket.post_id = p2p_lc.p2p_from " : ' ' )
-			         . ( ( isset( $wpdb->p2p ) ) ? "LEFT JOIN {$wpdb->p2p} AS p2p_ac ON contact.ID = p2p_ac.p2p_to AND p2p_ac.p2p_type = '{$account}_to_{$contact}'  " : ' ' )
-			         . "WHERE 2=2 "
-			         . ( ( isset( $wpdb->p2p ) ) ? "AND p2p_lc.p2p_type = '" . self::$post_type . "_to_{$contact}' " : ' ' )
-			         . "AND contact.post_type = '{$contact}' "
-			         . ( ( isset( $wpdb->p2p ) ) ? "AND p2p_ac.p2p_type IS NULL " : ' ' )
-			         . "GROUP BY contact.ID "
-			         . ( ( isset( $wpdb->p2p ) ) ? "ORDER BY contact_tickets DESC " : ' ' )
-			         . "LIMIT 0 , 10";
+				. ( ( isset( $wpdb->p2p ) ) ? ", COUNT( ticket.ID ) AS contact_tickets " : ' ' )
+				. "FROM {$wpdb->posts} AS contact "
+				. ( ( isset( $wpdb->p2p ) ) ? "JOIN {$wpdb->p2p} AS p2p_lc ON contact.ID = p2p_lc.p2p_to " : ' ' )
+				. ( ( isset( $wpdb->p2p ) ) ? "JOIN {$table_name} AS ticket ON ticket.post_id = p2p_lc.p2p_from " : ' ' )
+				. ( ( isset( $wpdb->p2p ) ) ? "LEFT JOIN {$wpdb->p2p} AS p2p_ac ON contact.ID = p2p_ac.p2p_to AND p2p_ac.p2p_type = '{$account}_to_{$contact}'  " : ' ' )
+				. 'WHERE 2=2 '
+				. ( ( isset( $wpdb->p2p ) ) ? "AND p2p_lc.p2p_type = '" . self::$post_type . "_to_{$contact}' " : ' ' )
+				. "AND contact.post_type = '{$contact}' "
+				. ( ( isset( $wpdb->p2p ) ) ? 'AND p2p_ac.p2p_type IS NULL ' : ' ' )
+				. 'GROUP BY contact.ID '
+				. ( ( isset( $wpdb->p2p ) ) ? 'ORDER BY contact_tickets DESC ' : ' ' )
+				. 'LIMIT 0 , 10';
 
 			$results = $wpdb->get_results( $query );
 
@@ -1253,11 +1249,11 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 						'page'      => 'rthd-all-' . self::$post_type,
 						$contact    => $item->contact_id,
 					),
-					admin_url('edit.php')
+					admin_url( 'edit.php' )
 				);
 				$rows[] = array(
 					'<a href="' . $url . '">' . $item->contact_name . '</a>',
-					intval($item->contact_tickets),
+					intval( $item->contact_tickets ),
 				);
 			}
 
@@ -1288,7 +1284,7 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 			global $rt_hd_dashboard, $rt_hd_ticket_history_model;
 			$post_statuses = array();
 			foreach ( $this->statuses as $status ) {
-				$post_statuses[$status['slug']] = $status['name'];
+				$post_statuses[ $status['slug'] ] = $status['name'];
 			}
 			$current_date = new DateTime();
 			$first_date   = date( 'Y-m-d', strtotime( 'first day of this month', $current_date->format( 'U' ) ) );
@@ -1315,15 +1311,15 @@ if ( !class_exists( 'Rt_HD_Module' ) ) {
 				$current_date = strtotime( '+' . $i ++ . ' days', $first_date );
 
 				foreach ( $post_statuses as $slug => $status ) {
-					$month_map[$current_date][$slug] = 0;
+					$month_map[ $current_date ][ $slug ] = 0;
 				}
 
 				$dt_obj = DateTime::createFromFormat( 'U', $current_date );
 				foreach ( $history as $item ) {
 					$update_time = new DateTime( $item->update_time );
 					if ( $dt_obj->format( 'Y-m-d' ) === $update_time->format( 'Y-m-d' ) ) {
-						if ( isset( $month_map[$current_date][$item->new_value] ) ) {
-							$month_map[$current_date][$item->new_value] ++;
+						if ( isset( $month_map[ $current_date ][ $item->new_value ] ) ) {
+							$month_map[ $current_date ][ $item->new_value ] ++;
 						}
 					}
 				}

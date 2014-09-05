@@ -2,7 +2,7 @@
 /**
  * Don't load this file directly!
  */
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -18,7 +18,7 @@ if ( !defined( 'ABSPATH' ) ) {
  * @since rt-Helpdesk 0.1
  */
 
-if ( !class_exists( 'RT_Ticket_Diff_Email' ) ) {
+if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 	class RT_Ticket_Diff_Email {
 
 		/**
@@ -48,11 +48,11 @@ if ( !class_exists( 'RT_Ticket_Diff_Email' ) ) {
 			}
 
 			// Check user has permission to edit
-			if ( !current_user_can( 'edit_post', $post_id ) ) {
+			if ( ! current_user_can( 'edit_post', $post_id ) ) {
 				return;
 			}
 
-			if ( !in_array( $post['post_type'], array( Rt_HD_Module::$post_type ) ) ) {
+			if ( ! in_array( $post['post_type'], array( Rt_HD_Module::$post_type ) ) ) {
 				return;
 			}
 
@@ -109,9 +109,9 @@ if ( !class_exists( 'RT_Ticket_Diff_Email' ) ) {
 			}
 
 			// Closing Date Diff
-			if ( isset( $newTicket['closing-date'] ) && !empty( $newTicket['closing-date'] ) ) {
-				$oldclosingdate = get_post_meta( $post_id, "_rtbiz_hd_closing_date", true );
-				$diff           = rthd_text_diff( $oldclosingdate, $newTicket["closing-date"] );
+			if ( isset( $newTicket['closing-date'] ) && ! empty( $newTicket['closing-date'] ) ) {
+				$oldclosingdate = get_post_meta( $post_id, '_rtbiz_hd_closing_date', true );
+				$diff           = rthd_text_diff( $oldclosingdate, $newTicket['closing-date'] );
 				if ( $diff ) {
 					$emailHTML .= '<tr><th style="padding: .5em;border: 0;">Closing Date</th><td>' . $diff . '</td><td></td></tr>';
 				}
@@ -183,7 +183,7 @@ if ( !class_exists( 'RT_Ticket_Diff_Email' ) ) {
 			}
 
 			// Subscribers List
-			if ( !isset( $_POST['subscribe_to'] ) ) {
+			if ( ! isset( $_POST['subscribe_to'] ) ) {
 				$_POST['subscribe_to'] = array();
 				if ( intval( $newTicket['post_author'] ) != get_current_user_id() ) {
 					$_POST['subscribe_to'][] = get_current_user_id();
@@ -192,7 +192,7 @@ if ( !class_exists( 'RT_Ticket_Diff_Email' ) ) {
 
 			//Unscuscribe logic
 			$oldSubscriberArr = get_post_meta( $post_id, '_rtbiz_hd_subscribe_to', true );
-			if ( !$oldSubscriberArr ) {
+			if ( ! $oldSubscriberArr ) {
 				$oldSubscriberArr = array();
 			}
 
@@ -211,7 +211,7 @@ if ( !class_exists( 'RT_Ticket_Diff_Email' ) ) {
 			}
 			$rt_ticket_email_content['bccemails'] = $bccemails;
 
-			if ( !empty( $removedSUbscriber ) ) {
+			if ( ! empty( $removedSUbscriber ) ) {
 				foreach ( $removedSUbscriber as $emailsubscriber ) {
 					$userSub             = get_user_by( 'id', intval( $emailsubscriber ) );
 					$oldSubscriberList[] = array( 'email' => $userSub->user_email, 'name' => $userSub->display_name );
@@ -254,7 +254,7 @@ if ( !class_exists( 'RT_Ticket_Diff_Email' ) ) {
 			$flag        = true;
 			$systemEmail = ( isset( $module_settings['system_email'] ) ) ? $module_settings['system_email'] : '';
 			if ( $systemEmail ) {
-				if ( !is_email( $systemEmail ) ) {
+				if ( ! is_email( $systemEmail ) ) {
 					$flag = false;
 				}
 			} else {
@@ -263,70 +263,67 @@ if ( !class_exists( 'RT_Ticket_Diff_Email' ) ) {
 			if ( $flag ) {
 				$accessToken = $rt_hd_settings->get_accesstoken_from_email( $systemEmail, $signature, $email_type, $imap_server );
 				$hdZendEmail = new Rt_HD_Zend_Mail();
-				if ( strpos( $signature, "</" ) == false ) {
+				if ( strpos( $signature, '</' ) == false ) {
 					$signature = htmlentities( $signature );
-					$signature = preg_replace( '/(\n|\r|\r\n)/i', "<br />", $signature );
-					$signature = preg_replace( '/  /i', "  ", $signature );
+					$signature = preg_replace( '/(\n|\r|\r\n)/i', '<br />', $signature );
+					$signature = preg_replace( '/  /i', '  ', $signature );
 				}
 				$title_suffix = $rt_hd_tickets->create_title_for_mail( $post_id );
 				$current_user = wp_get_current_user();
 				if ( $updateFlag ) {
 					if ( $oldUser->ID != $newUser->ID ) {
-						$title      = "[Assigned You] " . $title_suffix;
-						$emailHTML1 = "<b>" . $current_user->display_name . "</b> assigned you new ticket.<br /> To View Ticket Click <a href='" . admin_url( "edit.php?post_type={$post_type}&page=rthd-add-" . $post_type . "&" . $post_type . "_id=" . $post_id ) . "'>here</a>.";
+						$title      = '[Assigned You] ' . $title_suffix;
+						$emailHTML1 = '<b>' . $current_user->display_name . "</b> assigned you new ticket.<br /> To View Ticket Click <a href='" . admin_url( "edit.php?post_type={$post_type}&page=rthd-add-" . $post_type . '&' . $post_type . '_id=' . $post_id ) . "'>here</a>.";
 
 						$rt_hd_settings->insert_new_send_email( $systemEmail, $title, $emailHTML1, array(), array(), array(
 								array(
-									"email" => $newUser->user_email,
-									"name"  => $newUser->display_name
-								)
-							), array(), $post_id, "post" );
-						$title      = "[Reassigned] " . $title_suffix;
-						$emailHTML1 = "You are no longer responsible for this ticket. It has been reassigned to " . $newUser->display_name . " .<br /> To View Ticket Click <a href='" . admin_url( "edit.php?post_type={$post_type}&page=rthd-add-" . $post_type . "&" . $post_type . "_id=" . $post_id ) . "'>here</a>.";
+									'email' => $newUser->user_email,
+									'name' => $newUser->display_name,
+								),), array(), $post_id, 'post' );
+						$title      = '[Reassigned] ' . $title_suffix;
+						$emailHTML1 = 'You are no longer responsible for this ticket. It has been reassigned to ' . $newUser->display_name . " .<br /> To View Ticket Click <a href='" . admin_url( "edit.php?post_type={$post_type}&page=rthd-add-" . $post_type . '&'. $post_type . '_id=' . $post_id ) . "'>here</a>.";
 						$rt_hd_settings->insert_new_send_email( $systemEmail, $title, $emailHTML1, array(), array(), array(
 								array(
-									"email" => $oldUser->user_email,
-									"name"  => $oldUser->display_name
-								)
-							), array(), $post_id, "post" );
+									'email' => $oldUser->user_email,
+									'name'  => $oldUser->display_name,
+								),
+							), array(), $post_id, 'post' );
 					}
 
-					if ( !empty( $newSubscriberList ) ) {
-						$title      = "[Subscribe] " . $title_suffix;
-						$emailHTML1 = "You have been <b>subscribed</b> to this ticket.<br /> To View Ticket Click <a href='" . admin_url( "edit.php?post_type={$post_type}&page=rthd-add-" . $post_type . "&" . $post_type . "_id=" . $post_id ) . "'>here</a>.";
-						$rt_hd_settings->insert_new_send_email( $systemEmail, $title, $emailHTML1, array(), array(), $newSubscriberList, array(), $post_id, "post" );
+					if ( ! empty( $newSubscriberList ) ) {
+						$title      = '[Subscribe] ' . $title_suffix;
+						$emailHTML1 = "You have been <b>subscribed</b> to this ticket.<br /> To View Ticket Click <a href='" . admin_url( "edit.php?post_type={$post_type}&page=rthd-add-" . $post_type . '&' . $post_type . '_id=' . $post_id ) . "'>here</a>.";
+						$rt_hd_settings->insert_new_send_email( $systemEmail, $title, $emailHTML1, array(), array(), $newSubscriberList, array(), $post_id, 'post' );
 					}
 
-					if ( !empty( $oldSubscriberList ) ) {
-						$title      = "[Unsubscribe] " . $title_suffix;
-						$emailHTML1 = "You have been <b>unsubscribed</b> to this ticket.<br /> To View Ticket Click <a href='" . admin_url( "edit.php?post_type={$post_type}&page=rthd-add-" . $post_type . "&" . $post_type . "_id=" . $post_id ) . "'>here</a>.";
-						$rt_hd_settings->insert_new_send_email( $systemEmail, $title, $emailHTML1, array(), array(), $oldSubscriberList, array(), $post_id, "post" );
+					if ( ! empty( $oldSubscriberList ) ) {
+						$title      = '[Unsubscribe] ' . $title_suffix;
+						$emailHTML1 = "You have been <b>unsubscribed</b> to this ticket.<br /> To View Ticket Click <a href='" . admin_url( "edit.php?post_type={$post_type}&page=rthd-add-" . $post_type . '&' . $post_type . '_id=' . $post_id ) . "'>here</a>.";
+						$rt_hd_settings->insert_new_send_email( $systemEmail, $title, $emailHTML1, array(), array(), $oldSubscriberList, array(), $post_id, 'post' );
 					}
-					if ( $emailHTML != "" && !empty( $bccemails ) ) {
+					if ( $emailHTML != '' && ! empty( $bccemails ) ) {
 						var_dump( 'send ' );
-						$emailHTML = $emailTable . $emailHTML . "</table> </br> To View Ticket Click <a href='" . admin_url( "edit.php?post_type={$post_type}&page=rthd-add-" . $post_type . "&" . $post_type . "_id=" . $post_id ) . "'>here</a>.";
-						$emailHTML .= "<br />" . 'Ticket updated by : <a target="_blank" href="">' . get_the_author_meta( 'display_name', get_current_user_id() ) . '</a>';
-						$emailHTML .= "<br />" . $signature;
-						$title = "[Ticket Updated] " . $title_suffix;
-						$rt_hd_settings->insert_new_send_email( $systemEmail, $title, stripslashes( $emailHTML ), array(), array(), $bccemails, array(), $post_id, "post" );
+						$emailHTML = $emailTable . $emailHTML . "</table> </br> To View Ticket Click <a href='" . admin_url( "edit.php?post_type={$post_type}&page=rthd-add-" . $post_type . '&' . $post_type . '_id=' . $post_id ) . "'>here</a>.";
+						$emailHTML .= '<br />'. 'Ticket updated by : <a target="_blank" href="">' . get_the_author_meta( 'display_name', get_current_user_id() ) . '</a>';
+						$emailHTML .= '<br />' . $signature;
+						$title = '[Ticket Updated] ' . $title_suffix;
+						$rt_hd_settings->insert_new_send_email( $systemEmail, $title, stripslashes( $emailHTML ), array(), array(), $bccemails, array(), $post_id, 'post' );
 					}
-
 				} else {
-					$newUser = get_user_by( "id", $post["post_author"] );
+					$newUser = get_user_by( 'id', $post['post_author'] );
 					if ( $newUser ) {
-						$title     = "[Assigned You] " . $title_suffix;
-						$emailHTML = "New ticket assigned to you.<br /> To View Ticket Click <a href='" . admin_url( "edit.php?post_type={$post_type}&page=rthd-add-" . $post_type . "&" . $post_type . "_id=" . $post_id ) . "'>here</a>.";
+						$title     = '[Assigned You] ' . $title_suffix;
+						$emailHTML = "New ticket assigned to you.<br /> To View Ticket Click <a href='" . admin_url( "edit.php?post_type={$post_type}&page=rthd-add-" . $post_type . '&' . $post_type . '_id=' . $post_id ) . "'>here</a>.";
 						$rt_hd_settings->insert_new_send_email( $systemEmail, $title, $emailHTML, array(), array(), array(
 								array(
-									"email" => $newUser->user_email,
-									"name"  => $newUser->display_name
-								)
-							), array(), $post_id, "post" );
+									'email' => $newUser->user_email,
+									'name'  => $newUser->display_name,
+								),), array(), $post_id, 'post' );
 					}
-					if ( !empty( $bccemails ) ) {
-						$title     = "[Subscribe] " . $title_suffix;
-						$emailHTML = "You have been <b>subscribed</b> to this ticket.<br /> To View Ticket Click <a href='" . admin_url( "edit.php?post_type={$post_type}&page=rthd-add-" . $post_type . "&" . $post_type . "_id=" . $post_id ) . "'>here</a>.";
-						$rt_hd_settings->insert_new_send_email( $systemEmail, $title, $emailHTML, array(), array(), $bccemails, array(), $post_id, "post" );
+					if ( ! empty( $bccemails ) ) {
+						$title     = '[Subscribe] ' . $title_suffix;
+						$emailHTML = "You have been <b>subscribed</b> to this ticket.<br /> To View Ticket Click <a href='" . admin_url( "edit.php?post_type={$post_type}&page=rthd-add-" . $post_type . '&'. $post_type . '_id=' . $post_id ) . "'>here</a>.";
+						$rt_hd_settings->insert_new_send_email( $systemEmail, $title, $emailHTML, array(), array(), $bccemails, array(), $post_id, 'post' );
 					}
 				}
 			}

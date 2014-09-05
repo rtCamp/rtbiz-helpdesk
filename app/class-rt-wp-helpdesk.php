@@ -232,6 +232,7 @@ if ( !class_exists( 'RT_WP_Helpdesk' ) ) {
 		 */
 		function update_database() {
 			$updateDB = new RT_DB_Update( trailingslashit( RT_HD_PATH ) . 'index.php', trailingslashit( RT_HD_PATH_SCHEMA ) );
+			$updateDB -> install_db_version = 0;
 			$updateDB->do_upgrade();
 		}
 

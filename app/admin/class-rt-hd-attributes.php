@@ -289,7 +289,7 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 					$terms      = get_terms( rthd_attribute_taxonomy_name( $attr->attribute_name ), array(
 							'hide_empty' => false,
 							'orderby'    => $attr->attribute_orderby,
-							'order'      => 'asc'
+							'order'      => 'asc',
 						) );
 					$post_terms = wp_get_post_terms( $post_id, rthd_attribute_taxonomy_name( $attr->attribute_name ), array( 'fields' => 'ids' ) );
 					if ( empty( $post_terms ) ) {
@@ -310,7 +310,7 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 								$selected_terms[] = $term->name;
 							}
 						}
-						echo '<span class="rthd_view_mode">' . implode( ',', $selected_terms ) . '</span>';
+						echo '<span class="rthd_view_mode">' . esc_attr( implode( ',', $selected_terms ) ) . '</span>';
 					}
 					break;
 				case 'rating-stars':
@@ -318,17 +318,17 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 					$terms     = get_terms( rthd_attribute_taxonomy_name( $attr->attribute_name ), array(
 							'hide_empty' => false,
 							'orderby'    => $attr->attribute_orderby,
-							'order'      => 'asc'
+							'order'      => 'asc',
 						) );
 					$post_term = wp_get_post_terms( $post_id, rthd_attribute_taxonomy_name( $attr->attribute_name ), array( 'fields' => 'ids' ) );
 					// Default Selected Term for the attribute. can beset via settings -- later on
 					$selected_term = '-11111';
-					if ( !empty( $post_term ) ) {
+					if ( ! empty( $post_term ) ) {
 						$selected_term = $post_term[0];
 					}
 					foreach ( $terms as $term ) {
 						$options[] = array(
-//							'' => $term->term_id,
+							// '' => $term->term_id,
 							'title'   => $term->name,
 							'checked' => ( $term->term_id == $selected_term ) ? true : false,
 						);
@@ -337,7 +337,7 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 						$this->render_rating_stars( $attr, $options );
 					} else {
 						$term = get_term( $selected_term, rthd_attribute_taxonomy_name( $attr->attribute_name ) );
-						echo '<span class="rthd_view_mode">' . $term->name . '</span>';
+						echo '<span class="rthd_view_mode">' . esc_html( $term->name  ). '</span>';
 					}
 					break;
 				default:
@@ -362,12 +362,12 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 					$terms     = get_terms( rthd_attribute_taxonomy_name( $attr->attribute_name ), array(
 							'hide_empty' => false,
 							'orderby'    => $attr->attribute_orderby,
-							'order'      => 'asc'
+							'order'      => 'asc',
 						) );
 					$post_term = wp_get_post_terms( $post_id, rthd_attribute_taxonomy_name( $attr->attribute_name ), array( 'fields' => 'ids' ) );
 					// Default Selected Term for the attribute. can beset via settings -- later on
 					$selected_term = '-11111';
-					if ( !empty( $post_term ) ) {
+					if ( ! empty( $post_term ) ) {
 						$selected_term = $post_term[0];
 					}
 					foreach ( $terms as $term ) {
@@ -376,17 +376,17 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 							'selected'  => ( $term->term_id == $selected_term ) ? true : false,
 						);
 					} ?>
-					<div class="large-4 small-4 columns <?php echo ( !$edit ) ? 'rthd_attr_border' : ''; ?>">
-						<span class="prefix" title="<?php echo $attr->attribute_label; ?>"><label
-								for="post[<?php echo $attr->attribute_name; ?>]"><?php echo $attr->attribute_label; ?></label></span>
+					<div class="large-4 small-4 columns <?php echo esc_attr( ! $edit ) ? 'rthd_attr_border' : ''; ?>">
+						<span class="prefix" title="<?php echo esc_attr( $attr->attribute_label ); ?>"><label
+								for="post[<?php echo esc_attr( $attr->attribute_name ); ?>]"><?php echo esc_html( $attr->attribute_label ); ?></label></span>
 					</div>
 					<div class="large-8 mobile-large-2 columns">
-						<?php if ( $edit ) {
+				<?php if ( $edit ) {
 							$this->render_dropdown( $attr, $options );
-						} else {
-							$term = get_term( $selected_term, rthd_attribute_taxonomy_name( $attr->attribute_name ) );
-							echo '<span class="rthd_view_mode">' . $term->name . '</span>';
-						} ?>
+					} else {
+						$term = get_term( $selected_term, rthd_attribute_taxonomy_name( $attr->attribute_name ) );
+						echo '<span class="rthd_view_mode">' . esc_html( $term->name ) . '</span>';
+					} ?>
 					</div>
 					<?php break;
 				case 'rating-stars':
@@ -394,17 +394,17 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 					$terms     = get_terms( rthd_attribute_taxonomy_name( $attr->attribute_name ), array(
 							'hide_empty' => false,
 							'orderby'    => $attr->attribute_orderby,
-							'order'      => 'asc'
+							'order'      => 'asc',
 						) );
 					$post_term = wp_get_post_terms( $post_id, rthd_attribute_taxonomy_name( $attr->attribute_name ), array( 'fields' => 'ids' ) );
 					// Default Selected Term for the attribute. can beset via settings -- later on
 					$selected_term = '-11111';
-					if ( !empty( $post_term ) ) {
+					if ( ! empty( $post_term ) ) {
 						$selected_term = $post_term[0];
 					}
 					foreach ( $terms as $term ) {
 						$options[] = array(
-//							$term->name => $term->term_id,
+							//							$term->name => $term->term_id,
 							''        => $term->term_id,
 							'title'   => $term->name,
 							'checked' => ( $term->term_id == $selected_term ) ? true : false,
@@ -426,20 +426,20 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 				case 'date':
 					$value = get_post_meta( $post_id, '_rtbiz_hd_' . $attr->attribute_name, true ); ?>
 					<div class="large-4 mobile-large-1 columns">
-						<span class="prefix" title="<?php echo $attr->attribute_label; ?>"><label
-								for="post[<?php echo $attr->attribute_name; ?>]"><?php echo $attr->attribute_label; ?></label></span>
+						<span class="prefix" title="<?php echo esc_attr( $attr->attribute_label ); ?>"><label
+								for="post[<?php echo esc_attr( $attr->attribute_name ); ?>]"><?php echo esc_attr( $attr->attribute_label ); ?></label></span>
 					</div>
-					<div class="large-7 mobile-large-2 columns <?php echo ( !$edit ) ? 'rthd_attr_border' : ''; ?>">
-						<?php if ( $edit ) {
-							$this->render_date( $attr, $value );
-						} else {
-							echo '<span class="rthd_view_mode moment-from-now">' . $value . '</span>';
-						} ?>
+					<div class="large-7 mobile-large-2 columns <?php echo esc_attr( ( ! $edit ) ? 'rthd_attr_border' : '' ); ?>">
+					<?php if ( $edit ) {
+						$this->render_date( $attr, $value );
+					} else {
+						echo esc_html( '<span class="rthd_view_mode moment-from-now">' . $value . '</span>' );
+					} ?>
 					</div>
 					<?php if ( $edit ) { ?>
 					<div class="large-1 mobile-large-1 columns">
 						<span class="postfix datepicker-toggle"
-						      data-datepicker="<?php echo $attr->attribute_name; ?>"><label
+						      data-datepicker="<?php echo esc_attr( $attr->attribute_name ); ?>"><label
 								class="foundicon-calendar"></label></span>
 					</div>
 				<?php
@@ -448,20 +448,20 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 				case 'datetime':
 					$value = get_post_meta( $post_id, '_rtbiz_hd_' . $attr->attribute_name, true ); ?>
 					<div class="large-4 mobile-large-1 columns">
-						<span class="prefix" title="<?php echo $attr->attribute_label; ?>"><label
-								for="post[<?php echo $attr->attribute_name; ?>]"><?php echo $attr->attribute_label; ?></label></span>
+						<span class="prefix" title="<?php echo esc_attr( $attr->attribute_label ); ?>"><label
+								for="post[<?php echo esc_attr( $attr->attribute_name ); ?>]"><?php echo esc_attr( $attr->attribute_label ); ?></label></span>
 					</div>
-					<div class="large-7 mobile-large-2 columns <?php echo ( !$edit ) ? 'rthd_attr_border' : ''; ?>">
-						<?php if ( $edit ) {
-							$this->render_datetime( $attr, $value );
-						} else {
-							echo '<span class="rthd_view_mode moment-from-now">' . $value . '</span>';
-						} ?>
+					<div class="large-7 mobile-large-2 columns <?php echo esc_attr( ( ! $edit ) ? 'rthd_attr_border' : '' ); ?>">
+					<?php if ( $edit ) {
+						$this->render_datetime( $attr, $value );
+					} else {
+						echo esc_html( '<span class="rthd_view_mode moment-from-now">' . $value . '</span>' );
+					} ?>
 					</div>
 					<?php if ( $edit ) { ?>
 					<div class="large-1 mobile-large-1 columns">
 						<span class="postfix datetimepicker-toggle"
-						      data-datetimepicker="<?php echo $attribute_name; ?>"><label
+						      data-datetimepicker="<?php echo esc_attr( $attr->attribute_name ); ?>"><label
 								class="foundicon-calendar"></label></span>
 					</div>
 				<?php
@@ -470,15 +470,15 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 				case 'currency':
 					$value = get_post_meta( $post_id, '_rtbiz_hd_' . $attr->attribute_name, true ); ?>
 					<div class="large-4 mobile-large-1 columns">
-						<span class="prefix" title="<?php echo $attr->attribute_label; ?>"><label
-								for="post[<?php echo $attr->attribute_name; ?>]"><?php echo $attr->attribute_label; ?></label></span>
+						<span class="prefix" title="<?php echo esc_attr( $attr->attribute_label ); ?>"><label
+								for="post[<?php echo esc_attr( $attr->attribute_name ); ?>]"><?php echo esc_attr( $attr->attribute_label ); ?></label></span>
 					</div>
-					<div class="large-7 mobile-large-2 columns <?php echo ( !$edit ) ? 'rthd_attr_border' : ''; ?>">
-						<?php if ( $edit ) {
-							$this->render_currency( $attr, $value );
-						} else {
-							echo '<span class="rthd_view_mode">' . $value . '</span>';
-						} ?>
+					<div class="large-7 mobile-large-2 columns <?php echo esc_attr( ( ! $edit ) ? 'rthd_attr_border' : '' ); ?>">
+					<?php if ( $edit ) {
+						$this->render_currency( $attr, $value );
+					} else {
+						echo esc_html( '<span class="rthd_view_mode">' . $value . '</span>' );
+					} ?>
 					</div>
 					<?php if ( $edit ) { ?>
 					<div class="large-1 mobile-large-1 columns">
@@ -490,15 +490,15 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 				case 'text':
 					$value = get_post_meta( $post_id, '_rtbiz_hd_' . $attr->attribute_name, true ); ?>
 					<div class="large-4 small-4 columns">
-						<span class="prefix" title="<?php echo $attr->attribute_label; ?>"><label
-								for="post[<?php echo $attr->attribute_name; ?>]"><?php echo $attr->attribute_label; ?></label></span>
+						<span class="prefix" title="<?php echo esc_attr( $attr->attribute_label ); ?>"><label
+								for="post[<?php echo esc_attr( $attr->attribute_name ); ?>]"><?php echo esc_attr( $attr->attribute_label ); ?></label></span>
 					</div>
-					<div class="large-8 mobile-large-2 columns <?php echo ( !$edit ) ? 'rthd_attr_border' : ''; ?>">
-						<?php if ( $edit ) {
-							$this->render_text( $attr, $value );
-						} else {
-							echo '<span class="rthd_view_mode">' . $value . '</span>';
-						} ?>
+					<div class="large-8 mobile-large-2 columns <?php echo esc_attr( ( ! $edit ) ? 'rthd_attr_border' : '' ); ?>">
+					<?php if ( $edit ) {
+						$this->render_text( $attr, $value );
+					} else {
+						echo esc_html( '<span class="rthd_view_mode">' . $value . '</span>' );
+					} ?>
 					</div>
 					<?php break;
 				default:
@@ -520,10 +520,10 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 			$args = array(
 				'id'             => $attr->attribute_name,
 				'name'           => 'post[' . $attr->attribute_name . '][]',
-//				'class' => array('scroll-height'),
+				// 'class' => array('scroll-height'),
 				'rtForm_options' => $options,
 			);
-			echo $rthd_form->get_select( $args );
+			echo esc_attr( $rthd_form->get_select( $args ) );
 		}
 
 		/**
@@ -545,7 +545,7 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 				),
 				'rtForm_options' => $options,
 			);
-			echo $rthd_form->get_radio( $args );
+			echo esc_attr( $rthd_form->get_radio( $args ) );
 		}
 
 		/**
@@ -564,7 +564,7 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 				'class'          => array( 'scroll-height' ),
 				'rtForm_options' => $options,
 			);
-			echo $rthd_form->get_checkbox( $args );
+			echo esc_attr( $rthd_form->get_checkbox( $args ) );
 		}
 
 		/**
@@ -595,7 +595,7 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 				'name'  => 'post[' . $attr->attribute_name . ']',
 				'value' => $value,
 			);
-			echo $rthd_form->get_hidden( $args );
+			echo  $rthd_form->get_hidden( $args );
 		}
 
 		/**
@@ -660,7 +660,7 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 				'name'  => 'post[' . $attr->attribute_name . ']',
 				'value' => $value,
 			);
-			echo $rthd_form->get_textbox( $args );
+			echo  balanceTags( $rthd_form->get_textbox( $args ) );
 		}
 	}
 }

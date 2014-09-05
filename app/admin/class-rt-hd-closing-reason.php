@@ -83,7 +83,7 @@ if ( !class_exists( 'Rt_HD_Closing_Reason' ) ) {
 		function closing_reason_diff( $post_id, $newTicket ) {
 
 			$diffHTML = '';
-			if ( !isset( $newTicket['closing_reason'] ) ) {
+			if ( ! isset( $newTicket['closing_reason'] ) ) {
 				$newTicket['closing_reason'] = array();
 			}
 			$contacts = $newTicket['closing_reason'];
@@ -91,11 +91,11 @@ if ( !class_exists( 'Rt_HD_Closing_Reason' ) ) {
 
 			$oldContactsString = rthd_post_term_to_string( $post_id, rthd_attribute_taxonomy_name( 'closing-reason' ) );
 			$newContactsSring  = '';
-			if ( !empty( $contacts ) ) {
+			if ( ! empty( $contacts ) ) {
 				$contactsArr = array();
 				foreach ( $contacts as $contact ) {
 					$newC = get_term_by( 'id', $contact, rthd_attribute_taxonomy_name( 'closing-reason' ) );
-					if ( isset( $newC->name ) && !empty( $newC->name ) ) {
+					if ( isset( $newC->name ) && ! empty( $newC->name ) ) {
 						$contactsArr[] = $newC->name;
 					}
 				}
@@ -121,7 +121,7 @@ if ( !class_exists( 'Rt_HD_Closing_Reason' ) ) {
 			$post_term = wp_get_post_terms( $post_id, rthd_attribute_taxonomy_name( 'closing-reason' ), array( 'fields' => 'ids' ) );
 			// Default Selected Term for the attribute. can beset via settings -- later on
 			$selected_term = '-11111';
-			if ( !empty( $post_term ) ) {
+			if ( ! empty( $post_term ) ) {
 				$selected_term = $post_term[0];
 				$options[]     = array(
 					__( 'Select a Reason', RT_HD_TEXT_DOMAIN ) => '',
@@ -149,7 +149,7 @@ if ( !class_exists( 'Rt_HD_Closing_Reason' ) ) {
 				echo $rthd_form->get_select( $args );
 			} else {
 				$term = get_term( $selected_term, rthd_attribute_taxonomy_name( $attr->attribute_name ) );
-				echo '<span class="rthd_view_mode">' . $term->name . '</span>';
+				echo '<span class="rthd_view_mode">' . esc_html( $term->name ). '</span>';
 			}
 		}
 	}
