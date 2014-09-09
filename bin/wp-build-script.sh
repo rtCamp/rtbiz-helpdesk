@@ -10,8 +10,6 @@ function run_test ()
 {
     # PHP Setup Code
 
-    if [ -e phpunit.xml ] || [ -e phpunit.xml.dist ]; then bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION; fi
-
     #script
     find . -path ./bin -prune -o \( -name '*.php' -o -name '*.inc' \) -exec php -lf {} \;
     if [ -e phpunit.xml ] || [ -e phpunit.xml.dist ]; then phpunit || return 1; fi
@@ -26,8 +24,12 @@ function display_op()
 }
 
 # main_script
-for PHP_VERSION in 5.2 5.3 5.4 5.5 5.6; do
-    for WP_VERSION in 4.0 3.9; do
+for WP_VERSION in 4.0 3.9; do
+
+    if [ -e phpunit.xml ] || [ -e phpunit.xml.dist ]; then bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION; fi
+
+    for PHP_VERSION in 5.2 5.3 5.4 5.5 5.6; do
+
         for WP_MULTISITE in 0 1; do
             LOG_FILE="${CI_BUILD_REF_NAME}_php-${PHP_VERSION}_wp-${WP_VERSION}_m-${WP_MULTISITE}.log"
             run_test > $LOG_FILE
