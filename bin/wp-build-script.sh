@@ -4,13 +4,6 @@
 export PLUGIN_DIR=$(pwd)
 export PLUGIN_SLUG=$(basename $(pwd) | sed 's/^wp-//')
 pear config-set auto_discover 1
-pear install PHP_CodeSniffer
-cd $(pear config-get php_dir)/PHP/CodeSniffer/Standards/
-git clone git://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards.git
-cd $(pear config-get php_dir)/PHP/CodeSniffer/Standards/
-ln -s WordPress-Coding-Standards/WordPress WordPress
-rm -rf WordPress/Sniffs/VIP
-phpenv rehash
 
 # Test to be conducted
 function run_test ()
