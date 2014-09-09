@@ -4,7 +4,7 @@
 export PLUGIN_DIR=$(pwd)
 export PLUGIN_SLUG=$(basename $(pwd) | sed 's/^wp-//')
 pear config-set auto_discover 1
-final_op = ""
+final_op=""
 
 cd ../
 git clone git@git.rtcamp.com:rtbiz/rtbiz.git
@@ -44,7 +44,7 @@ for WP_VERSION in 4.0 3.9; do
                 STATUS="FAIL"
             fi
             display_op $STATUS $PHP_VERSION $WP_VERSION $WP_MULTISITE $LOG_FILE
-            final_op = $final_op."\n$STATUS $PHP_VERSION $WP_VERSION $WP_MULTISITE $LOG_FILE"
+            final_op=$final_op."\n$STATUS $PHP_VERSION $WP_VERSION $WP_MULTISITE $LOG_FILE"
         done
     done
 done
