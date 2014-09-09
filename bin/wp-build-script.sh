@@ -26,7 +26,7 @@ function run_test ()
 #
 function display_op()
 {
-    echo -e "\t$1\t$2\t$3\t$4\t$5"
+    echo -e "\t$1\t$2\t$3\t$4\t$5\n"
 }
 
 # main_script
@@ -39,10 +39,12 @@ for WP_VERSION in 4.0 3.9; do
         for WP_MULTISITE in 0 1; do
             LOG_FILE="${CI_BUILD_REF}_php-${PHP_VERSION}_wp-${WP_VERSION}_m-${WP_MULTISITE}.log"
             run_test > $LOG_FILE
+            run_test
             if [ $? -eq 0 ]; then
                 STATUS="PASS"
             else
                 STATUS="FAIL"
+                cat $LOG_FILE
             fi
             display_op $STATUS $PHP_VERSION $WP_VERSION $WP_MULTISITE $LOG_FILE
             final_op=$final_op."\n$STATUS $PHP_VERSION $WP_VERSION $WP_MULTISITE $LOG_FILE"
