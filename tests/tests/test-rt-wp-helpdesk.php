@@ -86,9 +86,9 @@ class test_RTWPHelpdesk extends RT_WP_TestCase {
 	/**
 	 * Ensure that rtbiz dependecy & it's function
 	 */
-	function test_check_rt_biz_dependecy() {
-		$this->assertTrue( $this->rtwpHelpDesk->check_rt_biz_dependecy(), 'rtbiz depend function not exist' );
-	}
+	// function test_check_rt_biz_dependecy() {
+	// 	$this->assertTrue( $this->rtwpHelpDesk->check_rt_biz_dependecy(), 'rtbiz depend function not exist' );
+	// }
 
 	/**
 	 * Ensure that rtbiz dependecy & it's function
@@ -101,4 +101,3 @@ class test_RTWPHelpdesk extends RT_WP_TestCase {
 
 
 }
- 
