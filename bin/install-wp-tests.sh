@@ -71,9 +71,9 @@ install_db() {
 	#
 	# # create database
 	# mysqladmin create $DB_NAME --user="$DB_USER" --password="$DB_PASS"$EXTRA
-	
-	mysql -u  $DB_USER -p$DB_PASS -e "DROP DATABASE $DB_NAME"
-	mysql -u  $DB_USER -p$DB_PASS -e "CREATE DATABASE $DB_NAME"
+
+	mysql --user="$DB_USER" --password="$DB_PASS" -e "DROP DATABASE $DB_NAME"
+	mysql --user="$DB_USER" --password="$DB_PASS" -e "CREATE DATABASE $DB_NAME"
 }
 
 install_wp
