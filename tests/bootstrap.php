@@ -2,7 +2,7 @@
 
 // Activates this plugin in WordPress so it can be tested.
 $GLOBALS['wp_tests_options'] = array(
-	'active_plugins' => array( /*'rt-biz/index.php',*/ 'rt-helpdesk/index.php' ),
+	'active_plugins' => array( 'rt-biz/index.php', 'rt-helpdesk/index.php' ),
 );
 
 $_tests_dir = getenv( 'WP_TESTS_DIR' );
@@ -13,7 +13,7 @@ if ( ! $_tests_dir ) {
 require_once $_tests_dir . '/includes/functions.php';
 
 function _manually_load_plugin() {
-	// require_once dirname( __FILE__ ) . '/../../rt-biz/index.php';
+	require_once dirname( __FILE__ ) . '/../../rt-biz/index.php';
 	require_once dirname( __FILE__ ) . '/../index.php';
 }
 tests_add_filter( 'muplugins_loaded', '_manually_load_plugin' );
