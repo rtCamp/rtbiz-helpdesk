@@ -2,7 +2,7 @@
 
 // Activates this plugin in WordPress so it can be tested.
 $GLOBALS['wp_tests_options'] = array(
-	'active_plugins' => array( 'rtbiz/index.php', 'rt-helpdesk/index.php' ),
+	'active_plugins' => array( 'rtbiz/index.php', 'rtbiz-helpdesk/index.php' ),
 );
 
 $_tests_dir = getenv( 'WP_TESTS_DIR' );
