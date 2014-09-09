@@ -215,8 +215,8 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 			if ( ! empty( $contacts ) ) {
 				$contactsArr = array();
 				foreach ( $contacts as $contact ) {
-					$newC          = get_post( $contact );
-					$contactsArr[] = $newC->post_title;
+					$newC           = get_post( $contact );
+					$contactsArr[ ] = $newC->post_title;
 				}
 				$newContactsSring = implode( ',', $contactsArr );
 			}
@@ -240,7 +240,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 			if ( ! isset( $newTicket['contacts'] ) ) {
 				$newTicket['contacts'] = array();
 			}
-			$contacts = array_map( 'intval', $newTicket['contacts'] );
+			$contacts = array_map( 'intval', $newTicket[ 'contacts' ] );
 			$contacts = array_unique( $contacts );
 
 			$post_type = get_post_type( $post_id );
@@ -258,7 +258,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		 */
 		function get_account_contacts_ajax() {
 
-			$contacts = rt_biz_get_organization_to_person_connection( $_POST['query'] );
+			$contacts = rt_biz_get_organization_to_person_connection( $_POST[ 'query' ] );
 			$result   = array();
 			foreach ( $contacts as $contact ) {
 				$email    = rt_biz_get_entity_meta( $contact->ID, $this->email_key, true );
@@ -286,13 +286,13 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 				wp_die( 'Opss!! Invalid request' );
 			}
 
-			$post_id   = $_POST['query'];
+			$post_id   = $_POST[ 'query' ];
 			$post_type = get_post_type( $post_id );
 			$result    = get_post_meta( $post_id );
 
 			$accounts = rt_biz_get_post_for_organization_connection( $post_id, $post_type, $fetch_account = true );
 			foreach ( $accounts as $account ) {
-				$result['account_id'] = $account->ID;
+				$result[ 'account_id' ] = $account->ID;
 			}
 			echo json_encode( $result );
 			die( 0 );
@@ -304,7 +304,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		public function contact_autocomplete_ajax() {
-			if ( ! isset( $_POST["query"] ) ) {
+			if ( ! isset( $_POST['query'] ) ) {
 				wp_die( 'Opss!! Invalid request' );
 			}
 
@@ -360,8 +360,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 
 					$post_id = rt_biz_add_person( $accountData['new-contact-name'], $accountData['new-contact-description'] );
 
-					if ( isset( $accountData['new-contact-account'] )
-					     && trim( $accountData['new-contact-account'] ) != ''
+					if ( isset( $accountData['new-contact-account'] ) && trim( $accountData['new-contact-account'] ) != ''
 					) {
 
 						rt_biz_connect_organization_to_person( $accountData['new-contact-account'], $post_id );

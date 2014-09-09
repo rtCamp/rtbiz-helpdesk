@@ -2,7 +2,7 @@
 /**
  * Don't load this file directly
  */
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -18,7 +18,7 @@ if ( !defined( 'ABSPATH' ) ) {
  * @author dipesh
  * @since rt-Helpdesk 0.1
  */
-if ( !class_exists( 'Rt_HD_Gravity_Form_Mapper' ) ) {
+if ( ! class_exists( 'Rt_HD_Gravity_Form_Mapper' ) ) {
 
 	/**
 	 * Class Rt_HD_Gravity_Form_Mapper

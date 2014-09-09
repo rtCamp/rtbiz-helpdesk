@@ -2,7 +2,7 @@
 /**
  * Don't load this file directly!
  */
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -19,7 +19,7 @@ if ( !defined( 'ABSPATH' ) ) {
  *
  * @since rt-Helpdesk 0.1
  */
-if ( !class_exists( 'Rt_HD_Admin' ) ) {
+if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 	class Rt_HD_Admin {
 		private $hd_settings_tabs, $defualt_tab, $admin_cap, $editor_cap, $author_cap;
 
@@ -81,10 +81,10 @@ if ( !class_exists( 'Rt_HD_Admin' ) ) {
 					|| ( isset( $_REQUEST['page'] ) && in_array( $_REQUEST['page'], $pagearray ) )
 					|| ( isset( $_REQUEST['post_type'] ) && $_REQUEST['post_type'] == Rt_HD_Module::$post_type )
 			) {
-				//	wp_enqueue_script('rt-jquery-tagit', RT_HD_URL . 'app/assets/javascripts/tag-it.js', array('jquery', 'jquery-ui-widget'), RT_HD_VERSION, true);
+				//				wp_enqueue_script('rt-jquery-tagit', RT_HD_URL . 'app/assets/javascripts/tag-it.js', array('jquery', 'jquery-ui-widget'), RT_HD_VERSION, true);
 				wp_enqueue_script( 'rt-custom-status', RT_HD_URL . 'app/assets/javascripts/rt-custom-status.js', array( 'jquery' ), RT_HD_VERSION, true );
 
-				if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] == 'rthd-' . Rt_HD_Module::$post_type . '-dashboard' ) {
+				if ( isset( $_REQUEST[ 'page' ] ) && $_REQUEST[ 'page' ] == 'rthd-' . Rt_HD_Module::$post_type . '-dashboard' ) {
 					wp_localize_script( 'rt-custom-status', 'rt_hd_top_menu', 'menu-posts-' . Rt_HD_Module::$post_type );
 					wp_localize_script( 'rt-custom-status', 'rt_hd_dashboard_url', admin_url( 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&page=' . 'rthd-' . Rt_HD_Module::$post_type . '-dashboard' ) );
 				}
@@ -145,10 +145,7 @@ if ( !class_exists( 'Rt_HD_Admin' ) ) {
 
 				//autocomplete
 				if ( ! wp_script_is( 'jquery-ui-autocomplete' ) ) {
-					wp_enqueue_script( 'jquery-ui-autocomplete', '', array(
-							'jquery-ui-widget',
-							'jquery-ui-position',
-						), '1.9.2', true );
+					wp_enqueue_script( 'jquery-ui-autocomplete', '', array( 'jquery-ui-widget', 'jquery-ui-position' ), '1.9.2', true );
 				}
 
 				//Admin css
@@ -159,7 +156,7 @@ if ( !class_exists( 'Rt_HD_Admin' ) ) {
 				//				}
 				//				wp_enqueue_script( 'postbox' );
 							}
-
+				
 			$this->localize_scripts();
 		}
 
@@ -170,13 +167,13 @@ if ( !class_exists( 'Rt_HD_Admin' ) ) {
 		 */
 		function localize_scripts() {
 			$pagearray = array( 'rthd-add-module', 'rthd-gravity-mapper', 'rthd-add-' . Rt_HD_Module::$post_type );
-			if ( wp_script_is( 'rthd-admin-js' ) && isset( $_REQUEST['post_type'] ) && isset( $_REQUEST['page'] ) && in_array( $_REQUEST['page'], $pagearray ) ) {
+			if ( wp_script_is( 'rthd-admin-js' ) && isset( $_REQUEST[ 'post_type' ] ) && isset( $_REQUEST[ 'page' ] ) && in_array( $_REQUEST[ 'page' ], $pagearray ) ) {
 				$user_edit = false;
 				if ( current_user_can( 'edit_' . Rt_HD_Module::$post_type ) ) {
 					$user_edit = true;
 				}
 				wp_localize_script( 'rthd-admin-js', 'ajaxurl', admin_url( 'admin-ajax.php' ) );
-				wp_localize_script( 'rthd-admin-js', 'rthd_post_type', $_REQUEST['post_type'] );
+				wp_localize_script( 'rthd-admin-js', 'rthd_post_type', $_REQUEST[ 'post_type' ] );
 				wp_localize_script( 'rthd-admin-js', 'rthd_user_edit', array( $user_edit ) );
 			} else {
 				wp_localize_script( 'rthd-admin-js', 'rthd_user_edit', array( '' ) );
@@ -220,7 +217,7 @@ if ( !class_exists( 'Rt_HD_Admin' ) ) {
 			$attr_list = array( 'contacts', 'accounts' );
 			foreach ( $attrs as $attr ) {
 				if ( $attr->attribute_store_as == 'taxonomy' ) {
-					$attr_list[] = $attr->attribute_name;
+					$attr_list[ ] = $attr->attribute_name;
 				}
 			}
 			if ( in_array( $taxonomy, $attr_list ) ) {
@@ -255,7 +252,7 @@ if ( !class_exists( 'Rt_HD_Admin' ) ) {
 				<?php $this->settings_ui_tabs();
 
 				global $rt_hd_settings, $rt_hd_user_settings, $rt_hd_gravity_form_importer, $rt_hd_gravity_form_mapper, $rt_hd_logs;
-				$tab = isset( $_GET['tab'] ) ? $_GET['tab'] : $this->defualt_tab;
+				$tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : $this->defualt_tab;
 
 			switch ( $tab ) {
 
@@ -321,15 +318,16 @@ if ( !class_exists( 'Rt_HD_Admin' ) ) {
 		 */
 		function settings_ui_tabs() {
 
-			$current = isset( $_GET['tab'] ) ? $_GET['tab'] : $this->defualt_tab;
+			$current = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : $this->defualt_tab;
 			echo '<h2 class="nav-tab-wrapper">';
 			foreach ( $this->hd_settings_tabs as $tab => $name ) {
-				if ( current_user_can( $name['capability'] ) ) {
+				if ( current_user_can( $name[ 'capability' ] ) ) {
 
 					$class = ( $tab == $current ) ? ' nav-tab-active' : '';
 					echo esc_html( '<a class="nav-tab' . $class . '" href="?post_type=rt_ticket&page=rthd-settings&tab=' . $name['menu_slug'] . '">' . $name['menu_title'] . '</a>' );
 
 				}
+
 			}
 			echo '</h2>';
 

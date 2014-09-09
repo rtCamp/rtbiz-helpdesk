@@ -1,148 +1,148 @@
 /* font-face */
 @font-face {
-    font-family: "SocialFoundicons";
-    src: url("../fonts/social_foundicons.eot");
-    src: url("../fonts/social_foundicons.eot?#iefix") format("embedded-opentype"), url("../fonts/social_foundicons.woff") format("woff"), url("../fonts/social_foundicons.ttf") format("truetype"), url("../fonts/social_foundicons.svg#SocialFoundicons") format("svg");
-    font-weight: normal;
-    font-style: normal;
+	font-family: "SocialFoundicons";
+	src: url("../fonts/social_foundicons.eot");
+	src: url("../fonts/social_foundicons.eot?#iefix") format("embedded-opentype"), url("../fonts/social_foundicons.woff") format("woff"), url("../fonts/social_foundicons.ttf") format("truetype"), url("../fonts/social_foundicons.svg#SocialFoundicons") format("svg");
+	font-weight: normal;
+	font-style: normal;
 }
 
 /* global foundicon styles */
 [class*="foundicon-social"] {
-    display: inline;
-    width: auto;
-    height: auto;
-    line-height: inherit;
-    vertical-align: baseline;
-    background-image: none;
-    background-position: 0 0;
-    background-repeat: repeat;
+	display: inline;
+	width: auto;
+	height: auto;
+	line-height: inherit;
+	vertical-align: baseline;
+	background-image: none;
+	background-position: 0 0;
+	background-repeat: repeat;
 }
 
 [class*="foundicon-social"]:before {
-    font-family: "SocialFoundicons";
-    font-weight: normal;
-    font-style: normal;
-    text-decoration: inherit;
+	font-family: "SocialFoundicons";
+	font-weight: normal;
+	font-style: normal;
+	text-decoration: inherit;
 }
 
 /* icons */
 .foundicon-social-thumb-up:before {
-    content: "\f000";
+	content: "\f000";
 }
 
 .foundicon-social-thumb-down:before {
-    content: "\f001";
+	content: "\f001";
 }
 
 .foundicon-social-rss:before {
-    content: "\f002";
+	content: "\f002";
 }
 
 .foundicon-social-facebook:before {
-    content: "\f003";
+	content: "\f003";
 }
 
 .foundicon-social-twitter:before {
-    content: "\f004";
+	content: "\f004";
 }
 
 .foundicon-social-pinterest:before {
-    content: "\f005";
+	content: "\f005";
 }
 
 .foundicon-social-github:before {
-    content: "\f006";
+	content: "\f006";
 }
 
 .foundicon-social-path:before {
-    content: "\f007";
+	content: "\f007";
 }
 
 .foundicon-social-linkedin:before {
-    content: "\f008";
+	content: "\f008";
 }
 
 .foundicon-social-dribbble:before {
-    content: "\f009";
+	content: "\f009";
 }
 
 .foundicon-social-stumble-upon:before {
-    content: "\f00a";
+	content: "\f00a";
 }
 
 .foundicon-social-behance:before {
-    content: "\f00b";
+	content: "\f00b";
 }
 
 .foundicon-social-reddit:before {
-    content: "\f00c";
+	content: "\f00c";
 }
 
 .foundicon-social-google-plus:before {
-    content: "\f00d";
+	content: "\f00d";
 }
 
 .foundicon-social-youtube:before {
-    content: "\f00e";
+	content: "\f00e";
 }
 
 .foundicon-social-vimeo:before {
-    content: "\f00f";
+	content: "\f00f";
 }
 
 .foundicon-social-flickr:before {
-    content: "\f010";
+	content: "\f010";
 }
 
 .foundicon-social-slideshare:before {
-    content: "\f011";
+	content: "\f011";
 }
 
 .foundicon-social-picassa:before {
-    content: "\f012";
+	content: "\f012";
 }
 
 .foundicon-social-skype:before {
-    content: "\f013";
+	content: "\f013";
 }
 
 .foundicon-social-steam:before {
-    content: "\f014";
+	content: "\f014";
 }
 
 .foundicon-social-instagram:before {
-    content: "\f015";
+	content: "\f015";
 }
 
 .foundicon-social-foursquare:before {
-    content: "\f016";
+	content: "\f016";
 }
 
 .foundicon-social-delicious:before {
-    content: "\f017";
+	content: "\f017";
 }
 
 .foundicon-social-chat:before {
-    content: "\f018";
+	content: "\f018";
 }
 
 .foundicon-social-torso:before {
-    content: "\f019";
+	content: "\f019";
 }
 
 .foundicon-social-tumblr:before {
-    content: "\f01a";
+	content: "\f01a";
 }
 
 .foundicon-social-video-chat:before {
-    content: "\f01b";
+	content: "\f01b";
 }
 
 .foundicon-social-digg:before {
-    content: "\f01c";
+	content: "\f01c";
 }
 
 .foundicon-social-wordpress:before {
-    content: "\f01d";
+	content: "\f01d";
 }

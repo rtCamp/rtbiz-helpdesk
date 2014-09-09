@@ -2,7 +2,7 @@
 /**
  * Don't load this file directly!
  */
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -20,7 +20,7 @@ if ( !defined( 'ABSPATH' ) ) {
  *
  * @since rt-Helpdesk 0.1
  */
-if ( !class_exists( 'Rt_HD_Mail_Message_Model' ) ) {
+if ( ! class_exists( 'Rt_HD_Mail_Message_Model' ) ) {
 	/**
 	 * Class Rt_HD_Mail_Message_Model
 	 */

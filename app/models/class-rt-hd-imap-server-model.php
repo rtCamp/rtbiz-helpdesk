@@ -2,7 +2,7 @@
 /**
  * Don't load this file directly!
  */
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -20,7 +20,7 @@ if ( !defined( 'ABSPATH' ) ) {
  *
  * @since rt-Helpdesk 0.1
  */
-if ( !class_exists( 'Rt_HD_IMAP_Server_Model' ) ) {
+if ( ! class_exists( 'Rt_HD_IMAP_Server_Model' ) ) {
 	/**
 	 * Class Rt_HD_IMAP_Server_Model
 	 */
@@ -93,8 +93,8 @@ if ( !class_exists( 'Rt_HD_IMAP_Server_Model' ) ) {
 		function get_server( $id ) {
 			$servers = parent::get( array( 'id' => $id ) );
 			$server  = false;
-			if ( !empty( $servers ) ) {
-				$server = $servers[0];
+			if ( ! empty( $servers ) ) {
+				$server = $servers[ 0 ];
 			}
 
 			return $server;

@@ -30,11 +30,7 @@ if ( ! class_exists( 'Rt_HD_User_Settings' ) ) {
 		function ui() {
 			global $rt_hd_settings, $rt_hd_imap_server_model, $rt_hd_module;
 
-			$args = array(
-				'rt_hd_settings'          => $rt_hd_settings,
-				'rt_hd_imap_server_model' => $rt_hd_imap_server_model,
-				'rt_hd_module'            => $rt_hd_module,
-			);
+			$args = array( 'rt_hd_settings' => $rt_hd_settings, 'rt_hd_imap_server_model' => $rt_hd_imap_server_model, 'rt_hd_module' => $rt_hd_module, );
 			rthd_get_template( 'admin/user-settings.php', $args );
 		}
 	}

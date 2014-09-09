@@ -2,7 +2,8 @@
 /**
  * Don't load this file directly!
  */
-if (! defined('ABSPATH')){
+
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -290,7 +291,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 					$user_info = get_userdata( $user_id );
 					$url       = esc_url( add_query_arg( array(
 								'post_type'  => self::$post_type,
-								'created_by' => $user_id,
+								'created_by' => $user_id
 							), 'edit.php' ) );
 
 					echo ( $user_info ) ? sprintf( '<a href="%s">%s</a>', $url, $user_info->user_login ) : '-';
@@ -865,7 +866,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 			global $pagenow;
 			if ( get_post_type() == self::$post_type && ( $pagenow == 'edit.php' || $pagenow == 'post-new.php' || ( isset( $_GET['action'] ) && $_GET['action'] ) == 'edit' ) ) {
 				global $post;
-				if ( ! isset( $post ) ) {
+				if ( !isset( $post ) ) {
 					return;
 				}
 				echo '
@@ -936,7 +937,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				if ( $attr->attribute_store_as == 'taxonomy' ) {
 					add_meta_box( 'rthd-tickets-by-' . $attr->attribute_name, $attr->attribute_label . ' ' . __( 'Wise Tickets', RT_HD_TEXT_DOMAIN ), array(
 							$this,
-							'dashboard_attributes_widget_content',
+							'dashboard_attributes_widget_content'
 						), $rt_hd_dashboard->screen_id, 'column1', 'default', array( 'attribute_id' => $attr->id ) );
 				}
 			}
@@ -1058,7 +1059,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 			$table_name    = rthd_get_ticket_table_name();
 			$post_statuses = array();
 			foreach ( $this->statuses as $status ) {
-				$post_statuses[ $status['slug'] ] = $status['name'];
+				$post_statuses[$status['slug']] = $status['name'];
 			}
 
 			$query   = "SELECT assignee, post_status, COUNT(ID) AS rthd_ticket_count FROM {$table_name} WHERE 1=1 GROUP BY assignee, post_status";

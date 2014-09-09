@@ -245,7 +245,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 		 */
 		static function insert_attachment( $file_handler, $post_id ) {
 			// check to make sure its a successful upload
-			if ( $_FILES[$file_handler]['error'] !== UPLOAD_ERR_OK ) {
+			if ( $_FILES[ $file_handler ][ 'error' ] !== UPLOAD_ERR_OK ) {
 				__return_false();
 			}
 

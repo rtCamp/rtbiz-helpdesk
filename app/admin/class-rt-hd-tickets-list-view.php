@@ -242,7 +242,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 			$this->process_bulk_action();
 
 			/* -- Preparing your query -- */
-			$query = 'SELECT
+			$query = "SELECT
 						rt_ticket.id AS rthd_id,
 						rt_ticket.post_id AS rthd_post_id,
 						rt_ticket.post_title AS rthd_title,
@@ -254,7 +254,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 						rt_ticket.user_created_by AS rthd_created_by,
 						rt_ticket.user_updated_by AS rthd_updated_by,
 						rt_ticket.user_closed_by AS rthd_closed_by,
-						rt_ticket.rt_closing_reason AS rthd_closing_reason';
+						rt_ticket.rt_closing_reason AS rthd_closing_reason";
 
 			foreach ( $this->relations as $relation ) {
 				$attr      = $rt_hd_attributes_model->get_attribute( $relation->attr_id );
@@ -287,7 +287,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 				$query .= " AND rt_ticket.post_status != 'trash'";
 			}
 
-			if ( ! current_user_can( "edit_others_{$this->post_type}s" ) ) {
+			if ( !current_user_can( "edit_others_{$this->post_type}s" ) ) {
 				$query .= " AND rt_ticket.assignee = '" . get_current_user_id() . "'";
 			} else if ( isset( $_GET['assignee'] ) ) {
 				$query .= " AND rt_ticket.assignee = '" . $_GET['assignee'] . "'";
@@ -306,7 +306,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 			}
 
 			$tax_query = $this->check_tax_query();
-			if ( ! empty( $tax_query ) ) {
+			if ( !empty( $tax_query ) ) {
 				foreach ( $tax_query as $key => $value ) {
 					$query .= " AND CONCAT( ',' , rt_ticket.{$key} , ',' ) LIKE '%," . $value . ",%'";
 				}
@@ -502,7 +502,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 								}
 								//.'< /td>';
 								break;
-							case 'rthd_closing_date':
+							case "rthd_closing_date":
 								$date = date_parse( $rec->rthd_closing_date );
 								if ( checkdate( $date['month'], $date['day'], $date['year'] ) ) {
 									$dtObj = new DateTime( $rec->rthd_closing_date );

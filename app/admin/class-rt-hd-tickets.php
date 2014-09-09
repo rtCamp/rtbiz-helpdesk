@@ -360,7 +360,7 @@ if ( ! class_exists( 'Rt_HD_Tickets' ) ) {
 						add_post_meta( $attach_id, 'show-in-main', 'true' );
 					}
 					if ( $comment_id > 0 ) {
-						add_comment_meta( $comment_id, 'attachment', $upload['url'] );
+						add_comment_meta( $comment_id, "attachment", $upload["url"] );
 					}
 				}
 			}
@@ -1240,7 +1240,7 @@ if ( ! class_exists( 'Rt_HD_Tickets' ) ) {
 			if ( !isset( $_POST["followuptype"] ) ) {
 				wp_die( "Invalid Request" );
 			}
-			if ( !isset( $_POST["followup_ticket_unique_id"] ) ) {
+			if ( ! isset( $_POST[ "followup_ticket_unique_id" ] ) ) {
 				wp_die( "Invalid Ticket" );
 			}
 			$ticket_unique_id = $_POST['followup_ticket_unique_id'];
@@ -1335,7 +1335,7 @@ if ( ! class_exists( 'Rt_HD_Tickets' ) ) {
 
 			$currentUser = get_user_by( "id", get_current_user_id() );
 
-			if ( !empty( $currentUser->user_email ) ) {
+			if ( ! empty( $currentUser->user_email ) ) {
 				update_comment_meta( $comment_ID, '_email_from', $currentUser->user_email );
 			}
 
@@ -1368,46 +1368,23 @@ if ( ! class_exists( 'Rt_HD_Tickets' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		function get_ticket_comments_ajax() {
-			if ( !isset( $_POST["ticket_unique_id"] ) ) {
+			if ( ! isset( $_POST[ "ticket_unique_id" ] ) ) {
 				wp_die( "Invalid Request" );
 			}
-			if ( !isset( $_POST["page"] ) ) {
+			if ( ! isset( $_POST[ "page" ] ) ) {
 				wp_die( "Invalid Request" );
 			}
 
-			$ticket_unique_id = $_POST['ticket_unique_id'];
-			$args             = array(
-				'meta_key'    => 'rthd_unique_id',
-				'meta_value'  => $ticket_unique_id,
-				'post_status' => 'any',
-				'post_type'   => Rt_HD_Module::$post_type,
-			);
+			$ticket_unique_id = $_POST[ 'ticket_unique_id' ];
+			$args             = array( 'meta_key' => 'rthd_unique_id', 'meta_value' => $ticket_unique_id, 'post_status' => 'any', 'post_type' => Rt_HD_Module::$post_type, );
 			$ticketpost       = get_posts( $args );
 			if ( empty( $ticketpost ) ) {
 				wp_die( "Invalid Ticket" );
 			}
-			$rthd_ticket   = $ticketpost[0];
-			$page          = $_POST['page'];
-			$comment_count = count( get_comments(
-				array(
-					'meta_key'   => '_rthd_privacy',
-					'meta_value' => 'no',
-					'order'      => 'DESC',
-					'post_id'    => $rthd_ticket->ID,
-					'post_type'  => $rthd_ticket->post_type,
-				)
-			) );
-			$comments      = get_comments(
-				array(
-					'meta_key'   => '_rthd_privacy',
-					'meta_value' => 'no',
-					'order'      => 'DESC',
-					'post_id'    => $rthd_ticket->ID,
-					'post_type'  => $rthd_ticket->post_type,
-					'number'     => '10',
-					'offset'     => $page * 10
-				)
-			);
+			$rthd_ticket   = $ticketpost[ 0 ];
+			$page          = $_POST[ 'page' ];
+			$comment_count = count( get_comments( array( 'meta_key' => '_rthd_privacy', 'meta_value' => 'no', 'order' => 'DESC', 'post_id' => $rthd_ticket->ID, 'post_type' => $rthd_ticket->post_type, ) ) );
+			$comments      = get_comments( array( 'meta_key' => '_rthd_privacy', 'meta_value' => 'no', 'order' => 'DESC', 'post_id' => $rthd_ticket->ID, 'post_type' => $rthd_ticket->post_type, 'number' => '10', 'offset' => $page * 10 ) );
 			ob_start();
 			foreach ( $comments as $comment ) {
 				echo $this->generate_comment_html_front( $comment );
@@ -1418,12 +1395,7 @@ if ( ! class_exists( 'Rt_HD_Tickets' ) ) {
 			if ( ( $page + 1 ) < ( $comment_count / 10 ) ) {
 				$more = true;
 			}
-			$returnArray = array(
-				'status'       => 'success',
-				'data'         => $returnStr,
-				'more'         => $more,
-				'result_count' => sizeof( $comments )
-			);
+			$returnArray = array( 'status' => 'success', 'data' => $returnStr, 'more' => $more, 'result_count' => sizeof( $comments ) );
 			echo json_encode( $returnArray );
 			die( 0 );
 		}
@@ -1436,24 +1408,24 @@ if ( ! class_exists( 'Rt_HD_Tickets' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		function add_new_followup_ajax() {
-			if ( !isset( $_POST["followuptype"] ) ) {
+			if ( ! isset( $_POST[ "followuptype" ] ) ) {
 				wp_die( "Invalid Request" );
 			}
-			if ( !( isset( $_POST["followup_post_id"] ) && get_post_type( intval( $_POST["followup_post_id"] ) ) == $_POST['post_type'] ) ) {
+			if ( ! ( isset( $_POST[ "followup_post_id" ] ) && get_post_type( intval( $_POST[ "followup_post_id" ] ) ) == $_POST[ 'post_type' ] ) ) {
 				wp_die( "Invalid Post ID" );
 			}
 			$returnArray     = array();
-			$followuptype    = $_POST["followuptype"];
-			$comment_post_ID = $_POST["followup_post_id"];
+			$followuptype    = $_POST[ "followuptype" ];
+			$comment_post_ID = $_POST[ "followup_post_id" ];
 			$post_type       = get_post_type( $comment_post_ID );
-			if ( !current_user_can( 'edit_post', $comment_post_ID ) ) {
-				$returnArray["status"]  = false;
-				$returnArray["message"] = "Unauthorized Access";
+			if ( ! current_user_can( 'edit_post', $comment_post_ID ) ) {
+				$returnArray[ "status" ]  = false;
+				$returnArray[ "message" ] = "Unauthorized Access";
 				echo json_encode( $returnArray );
 				die( 0 );
 			}
-			$comment_content = $_POST["followup_content"];
-			$comment_privacy = $_POST['followup_private'];
+			$comment_content = $_POST[ "followup_content" ];
+			$comment_privacy = $_POST[ 'followup_private' ];
 			global $wpdb;
 			$user = wp_get_current_user();
 			if ( $user->exists() ) {
@@ -1463,54 +1435,49 @@ if ( ! class_exists( 'Rt_HD_Tickets' ) ) {
 				$comment_author_url   = esc_sql( $user->user_url );
 			}
 			if ( '' == $comment_content ) {
-				$returnArray["status"]  = false;
-				$returnArray["message"] = "ERROR: please type a comment.";
+				$returnArray[ "status" ]  = false;
+				$returnArray[ "message" ] = "ERROR: please type a comment.";
 				echo json_encode( $returnArray );
 				die( 0 );
 			}
 
-			if ( isset( $_POST["comment_id"] ) && intval( $_POST["comment_id"] ) > 0 ) {
-				$commentdata = get_comment( $_POST["comment_id"], ARRAY_A );
+			if ( isset( $_POST[ "comment_id" ] ) && intval( $_POST[ "comment_id" ] ) > 0 ) {
+				$commentdata = get_comment( $_POST[ "comment_id" ], ARRAY_A );
 
-				$oldCommentBody = $commentdata["comment_content"];
+				$oldCommentBody = $commentdata[ "comment_content" ];
 
-				$commentdata["comment_content"] = $comment_content;
-				$oldDate                        = $commentdata['comment_date'];
-				$newDate                        = "";
-				if ( isset( $_REQUEST["follwoup-time"] ) && $_REQUEST["follwoup-time"] != "" ) {
-					$d                           = new DateTime( $_REQUEST["follwoup-time"] );
-					$UTC                         = new DateTimeZone( "UTC" );
-					$commentdata['comment_date'] = $d->format( 'Y-m-d H:i:s' );
-					$newDate                     = $commentdata['comment_date'];
+				$commentdata[ "comment_content" ] = $comment_content;
+				$oldDate                          = $commentdata[ 'comment_date' ];
+				$newDate                          = "";
+				if ( isset( $_REQUEST[ "follwoup-time" ] ) && $_REQUEST[ "follwoup-time" ] != "" ) {
+					$d                             = new DateTime( $_REQUEST[ "follwoup-time" ] );
+					$UTC                           = new DateTimeZone( "UTC" );
+					$commentdata[ 'comment_date' ] = $d->format( 'Y-m-d H:i:s' );
+					$newDate                       = $commentdata[ 'comment_date' ];
 					$d->setTimezone( $UTC );
-					$commentdata['comment_date_gmt'] = $d->format( 'Y-m-d H:i:s' );
+					$commentdata[ 'comment_date_gmt' ] = $d->format( 'Y-m-d H:i:s' );
 				}
 				wp_update_comment( $commentdata );
-				update_comment_meta( $_POST["comment_id"], '_rthd_privacy', $comment_privacy );
-				$comment = get_comment( $_POST["comment_id"] );
-				if ( isset( $_REQUEST["attachemntlist"] ) && !empty( $_REQUEST["attachemntlist"] ) ) {
-					delete_comment_meta( $_POST["comment_id"], "attachment" );
+				update_comment_meta( $_POST[ "comment_id" ], '_rthd_privacy', $comment_privacy );
+				$comment = get_comment( $_POST[ "comment_id" ] );
+				if ( isset( $_REQUEST[ "attachemntlist" ] ) && ! empty( $_REQUEST[ "attachemntlist" ] ) ) {
+					delete_comment_meta( $_POST[ "comment_id" ], "attachment" );
 					$uploaded = array();
-					foreach ( $_REQUEST["attachemntlist"] as $strAttach ) {
+					foreach ( $_REQUEST[ "attachemntlist" ] as $strAttach ) {
 						if ( intval( $strAttach ) > 0 ) {
 							$attachfile = get_attached_file( intval( $strAttach ) );
-							add_comment_meta( $_POST["comment_id"], "attachment", wp_get_attachment_url( intval( $strAttach ) ) );
+							add_comment_meta( $_POST[ "comment_id" ], "attachment", wp_get_attachment_url( intval( $strAttach ) ) );
 						} else {
 							$attachfile = $strAttach;
 							add_comment_meta( $_POST["comment_id"], "attachment", $strAttach );
 						}
 						if ( $attachfile ) {
-							$attachment[] = $attachfile;
-							$extn_array   = explode( '.', $attachfile );
-							$extn         = $extn_array[count( $extn_array ) - 1];
-							$file_array   = explode( '/', $attachfile );
-							$fileName     = $file_array[count( $file_array ) - 1];
-							$uploaded[]   = array(
-								"filename" => $fileName,
-								"extn"     => $extn,
-								"url"      => $attachfile,
-								"file"     => get_post_meta( intval( $strAttach ), "_wp_attached_file", true )
-							);
+							$attachment[ ] = $attachfile;
+							$extn_array    = explode( '.', $attachfile );
+							$extn          = $extn_array[ count( $extn_array ) - 1 ];
+							$file_array    = explode( '/', $attachfile );
+							$fileName      = $file_array[ count( $file_array ) - 1 ];
+							$uploaded[ ]   = array( "filename" => $fileName, "extn" => $extn, "url" => $attachfile, "file" => get_post_meta( intval( $strAttach ), "_wp_attached_file", true ) );
 						}
 					}
 					$this->add_attachment_to_post( $uploaded, $comment_post_ID, false );
@@ -1532,7 +1499,7 @@ if ( ! class_exists( 'Rt_HD_Tickets' ) ) {
 					$flag = true;
 				}
 
-				$diff = rthd_text_diff( trim( html_entity_decode( strip_tags( $oldCommentBody ) ) ), trim( html_entity_decode( strip_tags( $commentdata["comment_content"] ) ) ) );
+				$diff = rthd_text_diff( trim( html_entity_decode( strip_tags( $oldCommentBody ) ) ), trim( html_entity_decode( strip_tags( $commentdata[ "comment_content" ] ) ) ) );
 				if ( $diff ) {
 					$flag = true;
 					$body .= "<br/><b>Body : </b>" . $diff;
@@ -1540,48 +1507,43 @@ if ( ! class_exists( 'Rt_HD_Tickets' ) ) {
 
 				$body .= "<br/> ";
 				if ( $flag ) {
-					$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, $_POST["comment_id"] );
+					$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, $_POST[ "comment_id" ] );
 				}
 
-				$returnArray["status"]        = true;
-				$returnArray["data"]          = $this->genrate_comment_html_ajax( $comment );
-				$returnArray['comment_count'] = get_comments( array(
-						'order'     => 'DESC',
-						'post_id'   => $comment_post_ID,
-						'post_type' => $post_type,
-						'count'     => true
-					) );
-				$returnArray['private']       = get_comment_meta( $_POST["comment_id"], '_rthd_privacy', true );
+				$returnArray[ "status" ]        = true;
+				$returnArray[ "data" ]          = $this->genrate_comment_html_ajax( $comment );
+				$returnArray[ 'comment_count' ] = get_comments( array( 'order' => 'DESC', 'post_id' => $comment_post_ID, 'post_type' => $post_type, 'count' => true ) );
+				$returnArray[ 'private' ]       = get_comment_meta( $_POST[ "comment_id" ], '_rthd_privacy', true );
 
 				echo json_encode( $returnArray );
 				die( 0 );
 			}
 
-			$comment_type                   = $followuptype;
-			$comment_parent                 = 0; //absint($_POST['comment_ID']);
-			$comment_auto_approved          = true;
-			$commentdata                    = compact( 'comment_post_ID', 'comment_author', 'comment_author_email', 'comment_author_url', 'comment_content', 'comment_type', 'comment_parent', 'user_id' );
-			$commentdata                    = apply_filters( 'preprocess_comment', $commentdata );
-			$commentdata['comment_post_ID'] = (int) $commentdata['comment_post_ID'];
-			if ( isset( $commentdata['user_ID'] ) ) {
-				$commentdata['user_id'] = $commentdata['user_ID'] = (int) $commentdata['user_ID'];
-			} elseif ( isset( $commentdata['user_id'] ) ) {
-				$commentdata['user_id'] = (int) $commentdata['user_id'];
+			$comment_type                     = $followuptype;
+			$comment_parent                   = 0; //absint($_POST['comment_ID']);
+			$comment_auto_approved            = true;
+			$commentdata                      = compact( 'comment_post_ID', 'comment_author', 'comment_author_email', 'comment_author_url', 'comment_content', 'comment_type', 'comment_parent', 'user_id' );
+			$commentdata                      = apply_filters( 'preprocess_comment', $commentdata );
+			$commentdata[ 'comment_post_ID' ] = (int) $commentdata[ 'comment_post_ID' ];
+			if ( isset( $commentdata[ 'user_ID' ] ) ) {
+				$commentdata[ 'user_id' ] = $commentdata[ 'user_ID' ] = (int) $commentdata[ 'user_ID' ];
+			} elseif ( isset( $commentdata[ 'user_id' ] ) ) {
+				$commentdata[ 'user_id' ] = (int) $commentdata[ 'user_id' ];
 			}
-			$commentdata['comment_parent']    = isset( $commentdata['comment_parent'] ) ? absint( $commentdata['comment_parent'] ) : 0;
-			$parent_status                    = ( 0 < $commentdata['comment_parent'] ) ? wp_get_comment_status( $commentdata['comment_parent'] ) : '';
-			$commentdata['comment_parent']    = ( 'approved' == $parent_status || 'unapproved' == $parent_status ) ? $commentdata['comment_parent'] : 0;
-			$commentdata['comment_author_IP'] = preg_replace( '/[^0-9a-fA-F:., ]/', '', $_SERVER['REMOTE_ADDR'] );
-			$commentdata['comment_agent']     = substr( $_SERVER['HTTP_USER_AGENT'], 0, 254 );
-			if ( isset( $_REQUEST["follwoup-time"] ) && $_REQUEST["follwoup-time"] != "" ) {
-				$d                           = new DateTime( $_REQUEST["follwoup-time"] );
-				$UTC                         = new DateTimeZone( "UTC" );
-				$commentdata['comment_date'] = $d->format( 'Y-m-d H:i:s' );
+			$commentdata[ 'comment_parent' ]    = isset( $commentdata[ 'comment_parent' ] ) ? absint( $commentdata[ 'comment_parent' ] ) : 0;
+			$parent_status                      = ( 0 < $commentdata[ 'comment_parent' ] ) ? wp_get_comment_status( $commentdata[ 'comment_parent' ] ) : '';
+			$commentdata[ 'comment_parent' ]    = ( 'approved' == $parent_status || 'unapproved' == $parent_status ) ? $commentdata[ 'comment_parent' ] : 0;
+			$commentdata[ 'comment_author_IP' ] = preg_replace( '/[^0-9a-fA-F:., ]/', '', $_SERVER[ 'REMOTE_ADDR' ] );
+			$commentdata[ 'comment_agent' ]     = substr( $_SERVER[ 'HTTP_USER_AGENT' ], 0, 254 );
+			if ( isset( $_REQUEST[ "follwoup-time" ] ) && $_REQUEST[ "follwoup-time" ] != "" ) {
+				$d                             = new DateTime( $_REQUEST[ "follwoup-time" ] );
+				$UTC                           = new DateTimeZone( "UTC" );
+				$commentdata[ 'comment_date' ] = $d->format( 'Y-m-d H:i:s' );
 				$d->setTimezone( $UTC );
-				$commentdata['comment_date_gmt'] = $d->format( 'Y-m-d H:i:s' );
+				$commentdata[ 'comment_date_gmt' ] = $d->format( 'Y-m-d H:i:s' );
 			} else {
-				$commentdata['comment_date']     = current_time( 'mysql' );
-				$commentdata['comment_date_gmt'] = current_time( 'mysql', 1 );
+				$commentdata[ 'comment_date' ]     = current_time( 'mysql' );
+				$commentdata[ 'comment_date_gmt' ] = current_time( 'mysql', 1 );
 			}
 			$commentdata['comment_approved'] = 1;
 			$comment_ID                      = wp_insert_comment( $commentdata );
@@ -1592,22 +1554,17 @@ if ( ! class_exists( 'Rt_HD_Tickets' ) ) {
 
 			$attachment = array();
 			$uploaded   = array();
-			if ( isset( $_REQUEST["attachemntlist"] ) && !empty( $_REQUEST["attachemntlist"] ) ) {
-				foreach ( $_REQUEST["attachemntlist"] as $strAttach ) {
+			if ( isset( $_REQUEST[ "attachemntlist" ] ) && ! empty( $_REQUEST[ "attachemntlist" ] ) ) {
+				foreach ( $_REQUEST[ "attachemntlist" ] as $strAttach ) {
 					$attachfile = get_attached_file( intval( $strAttach ) );
 					if ( $attachfile ) {
-						$attachment[] = $attachfile;
+						$attachment[ ] = $attachfile;
 						add_comment_meta( $comment_ID, "attachment", wp_get_attachment_url( intval( $strAttach ) ) );
-						$extn_array = explode( '.', $attachfile );
-						$extn       = $extn_array[count( $extn_array ) - 1];
-						$file_array = explode( '/', $attachfile );
-						$fileName   = $file_array[count( $file_array ) - 1];
-						$uploaded[] = array(
-							"filename" => $fileName,
-							"extn"     => $extn,
-							"url"      => $attachfile,
-							"file"     => get_post_meta( intval( $strAttach ), "_wp_attached_file", true )
-						);
+						$extn_array  = explode( '.', $attachfile );
+						$extn        = $extn_array[ count( $extn_array ) - 1 ];
+						$file_array  = explode( '/', $attachfile );
+						$fileName    = $file_array[ count( $file_array ) - 1 ];
+						$uploaded[ ] = array( "filename" => $fileName, "extn" => $extn, "url" => $attachfile, "file" => get_post_meta( intval( $strAttach ), "_wp_attached_file", true ) );
 					}
 				}
 				$this->add_attachment_to_post( $uploaded, $comment_post_ID, false );

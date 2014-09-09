@@ -2,7 +2,7 @@
 /**
  * Don't load this file directly!
  */
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -15,12 +15,11 @@ if ( !defined( 'ABSPATH' ) ) {
 /**
  * Description of RtHDMailOutboundModel
  * Model for table wp_hd_mail_outbound in database
-
  * @author udit
  *
  * @since rt-Helpdesk 0.1
  */
-if ( !class_exists( 'Rt_HD_Mail_Outbound_Model' ) ) {
+if ( ! class_exists( 'Rt_HD_Mail_Outbound_Model' ) ) {
 	/**
 	 * Class Rt_HD_Mail_Outbound_Model
 	 */

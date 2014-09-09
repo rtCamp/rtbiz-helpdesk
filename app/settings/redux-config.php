@@ -2,7 +2,7 @@
 /**
  * Don't load this file directly!
  */
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -15,7 +15,7 @@ use Zend\Mail\Storage\Imap as ImapStorage;
  * @author udit
  *
  * */
-if ( !class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
+if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 
 	class Redux_Framework_Helpdesk_Config {
 
@@ -26,7 +26,7 @@ if ( !class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 
 		public function __construct() {
 
-			if ( !class_exists( 'ReduxFramework' ) ) {
+			if ( ! class_exists( 'ReduxFramework' ) ) {
 				return;
 			}
 
@@ -36,13 +36,13 @@ if ( !class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 		}
 
 		function save_imap_servers($rthd_imap_servers_changed =null , $rthd_imap_servers =null ) {
-			if ( ! ( isset ( $_POST[ 'rthd_imap_servers_changed' ] ) && isset( $_POST[ 'rthd_imap_servers' ] ) )){
+			if ( ! ( isset ( $_POST['rthd_imap_servers_changed'] ) && isset( $_POST[ 'rthd_imap_servers' ] ) )){
 				if(isset ($rthd_imap_servers_changed) && !empty($rthd_imap_servers_changed)){
-					$_POST[ 'rthd_imap_servers_changed' ] =$rthd_imap_servers_changed;
+					$_POST['rthd_imap_servers_changed'] =$rthd_imap_servers_changed;
 				//	echo "1st";
 				}
 				if(isset ($rthd_imap_servers) && !empty($rthd_imap_servers)){
-					$_POST[ 'rthd_imap_servers' ] =$rthd_imap_servers;
+					$_POST['rthd_imap_servers'] =$rthd_imap_servers;
 					//echo "2nd";
 				}
 			}
@@ -154,8 +154,8 @@ if ( !class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 
 			// Create the sections and fields
 			$this->setSections();
-			//check if global options are set or not
-			if ( !isset( $this->args['opt_name'] ) ) { // No errors please
+
+			if ( ! isset( $this->args[ 'opt_name' ] ) ) { // No errors please
 				return;
 			}
 
@@ -853,15 +853,14 @@ function rthd_reply_by_email_view( $field, $value ) {
 										<select data-email-id="<?php echo $ac->id; ?>" name="inbox_folder"
 										        data-prev-value="<?php echo $inbox_folder; ?>">
 											<option value=""><?php _e( 'Choose Inbox Folder' ); ?></option>
-											<?php if ( !is_null( $all_folders ) ) {
+											<?php if ( ! is_null( $all_folders ) ) {
 												$hdZendEmail->render_folders_dropdown( $all_folders, $value = $inbox_folder );
 											} ?>
-										</select>
-									</label>
+										</select> </label>
 									<?php if ( in_array( $email, rthd_get_all_system_emails() ) ) { ?>
 										<p class="description"><?php _e( 'This is linked as a system mail. Hence it will only read the Inbox Folder; no matter what folder you choose over here. These will be ignored.' ); ?></p>
 									<?php } ?>
-									<?php if ( !is_null( $all_folders ) ) {
+									<?php if ( ! is_null( $all_folders ) ) {
 										$hdZendEmail->render_folders_checkbox( $all_folders, $element_name = 'mail_folders', $values = $mail_folders, $data_str = 'data-email-id=' . $ac->id, $inbox_folder );
 									} else {
 										echo '<p class="description">' . __( 'No Folders found.' ) . '</p>';
@@ -1071,7 +1070,7 @@ function rthd_imap_servers( $field, $value ) {
 /**
  * Custom function for the callback validation referenced above
  * */
-if ( !function_exists( 'redux_validate_callback_function' ) ):
+if ( ! function_exists('redux_validate_callback_function') ):
 
 	function redux_validate_callback_function( $field, $value, $existing_value ) {
 		$error = false;

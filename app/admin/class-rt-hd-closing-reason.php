@@ -3,7 +3,7 @@
 /**
  * Don't load this file directly!
  */
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -20,7 +20,7 @@ if ( !defined( 'ABSPATH' ) ) {
  *
  * @since rt-Helpdesk 0.1
  */
-if ( !class_exists( 'Rt_HD_Closing_Reason' ) ) {
+if ( ! class_exists( 'Rt_HD_Closing_Reason' ) ) {
 	class Rt_HD_Closing_Reason {
 		public function __construct() {
 
@@ -67,10 +67,10 @@ if ( !class_exists( 'Rt_HD_Closing_Reason' ) ) {
 		 * @param $newTicket
 		 */
 		function save_closing_reason( $post_id, $newTicket ) {
-			if ( !isset( $newTicket['closing_reason'] ) ) {
-				$newTicket['closing_reason'] = array();
+			if ( ! isset( $newTicket[ 'closing_reason' ] ) ) {
+				$newTicket[ 'closing_reason' ] = array();
 			}
-			$contacts = array_map( 'intval', $newTicket['closing_reason'] );
+			$contacts = array_map( 'intval', $newTicket[ 'closing_reason' ] );
 			$contacts = array_unique( $contacts );
 			wp_set_post_terms( $post_id, $contacts, rthd_attribute_taxonomy_name( 'closing-reason' ) );
 		}
@@ -83,10 +83,10 @@ if ( !class_exists( 'Rt_HD_Closing_Reason' ) ) {
 		function closing_reason_diff( $post_id, $newTicket ) {
 
 			$diffHTML = '';
-			if ( ! isset( $newTicket['closing_reason'] ) ) {
-				$newTicket['closing_reason'] = array();
+			if ( ! isset( $newTicket[ 'closing_reason' ] ) ) {
+				$newTicket[ 'closing_reason' ] = array();
 			}
-			$contacts = $newTicket['closing_reason'];
+			$contacts = $newTicket[ 'closing_reason' ];
 			$contacts = array_unique( $contacts );
 
 			$oldContactsString = rthd_post_term_to_string( $post_id, rthd_attribute_taxonomy_name( 'closing-reason' ) );
@@ -96,7 +96,7 @@ if ( !class_exists( 'Rt_HD_Closing_Reason' ) ) {
 				foreach ( $contacts as $contact ) {
 					$newC = get_term_by( 'id', $contact, rthd_attribute_taxonomy_name( 'closing-reason' ) );
 					if ( isset( $newC->name ) && ! empty( $newC->name ) ) {
-						$contactsArr[] = $newC->name;
+						$contactsArr[ ] = $newC->name;
 					}
 				}
 				$newContactsSring = implode( ',', $contactsArr );
@@ -122,28 +122,15 @@ if ( !class_exists( 'Rt_HD_Closing_Reason' ) ) {
 			// Default Selected Term for the attribute. can beset via settings -- later on
 			$selected_term = '-11111';
 			if ( ! empty( $post_term ) ) {
-				$selected_term = $post_term[0];
-				$options[]     = array(
-					__( 'Select a Reason', RT_HD_TEXT_DOMAIN ) => '',
-					'selected'                                 => false,
-				);
+				$selected_term = $post_term[ 0 ];
+				$options[ ]    = array( __( 'Select a Reason', RT_HD_TEXT_DOMAIN ) => '', 'selected' => false, );
 			} else {
-				$options[] = array(
-					__( 'Select a Reason', RT_HD_TEXT_DOMAIN ) => '',
-					'selected'                                 => true,
-				);
+				$options[ ] = array( __( 'Select a Reason', RT_HD_TEXT_DOMAIN ) => '', 'selected' => true, );
 			}
 			foreach ( $terms as $term ) {
-				$options[] = array(
-					$term->name => $term->term_id,
-					'selected'  => ( $term->term_id == $selected_term ) ? true : false,
-				);
+				$options[ ] = array( $term->name => $term->term_id, 'selected' => ( $term->term_id == $selected_term ) ? true : false, );
 			}
-			$args = array(
-				'id'             => 'rthd_closing_reason',
-				'name'           => 'post[closing_reason][]',
-				'rtForm_options' => $options,
-			);
+			$args = array( 'id' => 'rthd_closing_reason', 'name' => 'post[closing_reason][]', 'rtForm_options' => $options, );
 
 			if ( $user_edit ) {
 				echo $rthd_form->get_select( $args );

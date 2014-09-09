@@ -1,5 +1,5 @@
 <?php
-if ( !defined( 'WP_LOAD_PATH' ) ) {
+if ( ! defined( 'WP_LOAD_PATH' ) ) {
 	$path = "../../../";
 	if ( file_exists( $path . 'wp-load.php' ) ) {
 		define( 'WP_LOAD_PATH', $path );
@@ -11,12 +11,11 @@ if ( !defined( 'WP_LOAD_PATH' ) ) {
 require_once( WP_LOAD_PATH . 'wp-load.php' );
 global $rt_hd_settings, $redux_helpdesk_settings;
 
-if ( isset( $redux_helpdesk_settings ) && isset( $redux_helpdesk_settings['rthd_enable_reply_by_email'] )
-     && !empty( $redux_helpdesk_settings['rthd_enable_reply_by_email'] ) && $redux_helpdesk_settings['rthd_enable_reply_by_email'] == 1
+if ( isset( $redux_helpdesk_settings ) && isset( $redux_helpdesk_settings[ 'rthd_enable_reply_by_email' ] ) && ! empty( $redux_helpdesk_settings[ 'rthd_enable_reply_by_email' ] ) && $redux_helpdesk_settings[ 'rthd_enable_reply_by_email' ] == 1
 ) {
 
 	$emailRow = $rt_hd_settings->get_email_for_sync();
-	if ( !$emailRow ) {
+	if ( ! $emailRow ) {
 		return;
 	}
 	$email = $emailRow->email;
@@ -25,7 +24,7 @@ if ( isset( $redux_helpdesk_settings ) && isset( $redux_helpdesk_settings['rthd_
 	$rt_hd_settings->update_sync_status( $email, true );
 	$last_sync_time = $emailRow->last_mail_time;
 
-	if ( !$last_sync_time ) {
+	if ( ! $last_sync_time ) {
 		$dt = new DateTime( "now" );
 		$dt->sub( new DateInterval( 'P1D' ) );
 		$last_sync_time = $dt->format( "d-M-Y" );

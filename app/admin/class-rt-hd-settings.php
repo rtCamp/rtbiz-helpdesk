@@ -231,12 +231,12 @@ if ( ! class_exists( 'Rt_HD_Settings' ) ) {
 		/**
 		 * add Gmail user account
 		 *
-		 * @param $outh_token
-		 * @param $email
-		 * @param $email_data
-		 * @param $user_id
+		 * @param        $outh_token
+		 * @param        $email
+		 * @param        $email_data
+		 * @param        $user_id
 		 * @param string $type
-		 * @param null $imap_server
+		 * @param null   $imap_server
 		 *
 		 * @return bool
 		 *

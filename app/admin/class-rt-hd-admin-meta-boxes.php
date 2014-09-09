@@ -51,7 +51,7 @@ if ( ! class_exists( 'RT_HD_Admin_Meta_Boxes' ) ) {
 		public function remove_meta_boxes() {
 			global $rt_hd_module;
 
-			remove_meta_box( 'tagsdiv-'.rthd_attribute_taxonomy_name( 'closing-reason' ) , Rt_HD_Module::$post_type, 'side' );
+			remove_meta_box( 'tagsdiv-' . rthd_attribute_taxonomy_name( 'closing-reason' ), Rt_HD_Module::$post_type, 'side' );
 			remove_meta_box( 'revisionsdiv', Rt_HD_Module::$post_type, 'normal' );
 			remove_meta_box( 'commentsdiv', Rt_HD_Module::$post_type, 'normal' );
 			remove_meta_box( 'commentstatusdiv', Rt_HD_Module::$post_type, 'normal' );
@@ -102,7 +102,7 @@ if ( ! class_exists( 'RT_HD_Admin_Meta_Boxes' ) ) {
 			}
 
 			// Check the post being saved == the $post_id to prevent triggering this call for other save_post events
-			if ( empty( $_POST['post_ID'] ) || $_POST['post_ID'] != $post_id ) {
+			if ( empty( $_POST[ 'post_ID' ] ) || $_POST[ 'post_ID' ] != $post_id ) {
 				return;
 			}
 
@@ -116,10 +116,10 @@ if ( ! class_exists( 'RT_HD_Admin_Meta_Boxes' ) ) {
 				return;
 			}
 
-			do_action( 'rt_hd_process_' . $post->post_type . '_meta', $post_id, $post );
-
+			do_action( 'rt_hd_process_' . $post->post_type . '_meta', $post_id, $post );;
 			if ( $post->post_status == 'trash' ) {
-				$url = add_query_arg( array( 'post_type' => Rt_HD_Module::$post_type ) ,admin_url( 'edit.php' ) );
+
+				$url = add_query_arg( array( 'post_type' => Rt_HD_Module::$post_type ), admin_url( 'edit.php' ) );
 				wp_safe_redirect( $url );
 				die();
 			}

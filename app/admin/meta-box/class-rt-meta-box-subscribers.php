@@ -35,8 +35,8 @@ if ( ! class_exists( 'RT_Meta_Box_Subscribers ' ) ) {
 			$all_hd_participants = array();
 			if ( isset( $post->ID ) ) {
 				$comments = get_comments( array(
-                                            'order'     => 'DESC',
-                                            'post_id'   => $post->ID,
+											'order'     => 'DESC',
+											'post_id'   => $post->ID,
 											'post_type' => $post_type,
 					) );
 				foreach ( $comments as $comment ) {

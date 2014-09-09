@@ -66,7 +66,6 @@ if ( ! class_exists( 'Rt_HD_Logs' ) ) {
 					if ( $strPost != '' ) {
 						$wpdb->get_results( "delete from $table_name where lead_id in ({$strPost})" );
 					}
-
 				}
 			}
 

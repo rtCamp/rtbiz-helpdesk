@@ -8,16 +8,16 @@
  * and open the template in the editor.
  */
 
-$dt         = new DateTime( $comment->comment_date );
+$dt = new DateTime( $comment->comment_date );
 $curr_month = $dt->format( 'M' );
-$curr_day   = $dt->format( 'd' );
-$curr_year  = $dt->format( 'Y' );
+$curr_day = $dt->format( 'd' );
+$curr_year = $dt->format( 'Y' );
 global $prev_month, $prev_year, $prev_day;
 
 ?>
 
 <div id="header-<?php echo $comment->comment_ID; ?>" class="comment-header row">
-	<?php if ( !( $curr_month == $prev_month && $curr_day == $prev_day && $curr_year == $prev_year ) ) { ?>
+	<?php if ( ! ( $curr_month == $prev_month && $curr_day == $prev_day && $curr_year == $prev_year ) ) { ?>
 		<div class="comment-date" title="<?php echo $dt->format( 'M d,Y h:i A' ); ?>">
 			<p class="comment-month"><?php echo $curr_month; ?></p>
 
@@ -33,8 +33,8 @@ global $prev_month, $prev_year, $prev_day;
 		$class = 'comment-skip-date';
 	}
 	$prev_month = $curr_month;
-	$prev_day   = $curr_day;
-	$prev_year  = $curr_year;
+	$prev_day = $curr_day;
+	$prev_year = $curr_year;
 	?>
 	<div class="comment-meta <?php echo $class; ?>">
 		<div class="comment-user-gravatar">
@@ -52,30 +52,32 @@ global $prev_month, $prev_year, $prev_day;
 				$user = get_user_by( 'email', $comment->comment_author_email );
 				if ( $user ) {
 					echo $user->display_name;
-				} else if ( !empty( $comment->comment_author ) ) {
-					echo $comment->comment_author;
 				} else {
-					echo 'Annonymous';
+					if ( ! empty( $comment->comment_author ) ) {
+						echo $comment->comment_author;
+					} else {
+						echo 'Annonymous';
+					}
 				}
 				?>
 			</div>
 			<div class="comment-participant large-12 columns">
 				<?php
 				$participants = '';
-				$to           = get_comment_meta( $comment->comment_ID, '_email_to', true );
-				if ( !empty( $to ) ) {
+				$to = get_comment_meta( $comment->comment_ID, '_email_to', true );
+				if ( ! empty( $to ) ) {
 					$participants .= $to;
 				}
 				$cc = get_comment_meta( $comment->comment_ID, '_email_cc', true );
-				if ( !empty( $cc ) ) {
+				if ( ! empty( $cc ) ) {
 					$participants .= ',' . $cc;
 				}
 				$bcc = get_comment_meta( $comment->comment_ID, '_email_bcc', true );
-				if ( !empty( $bcc ) ) {
+				if ( ! empty( $bcc ) ) {
 					$participants .= ',' . $bcc;
 				}
 
-				if ( !empty( $participants ) ) {
+				if ( ! empty( $participants ) ) {
 					$p_arr        = explode( ',', $participants );
 					$p_arr        = array_unique( $p_arr );
 					$participants = implode( ' , ', $p_arr );
@@ -105,7 +107,7 @@ global $prev_month, $prev_year, $prev_day;
 			if ( strpos( '<body', $comment->comment_content ) !== false ) {
 				preg_match_all( '/<body[^>]*>(.*?)<\/body>/s', $comment->comment_content, $output_array );
 				if ( count( $output_array ) > 0 ) {
-					$comment->comment_content = $output_array[0];
+					$comment->comment_content = $output_array[ 0 ];
 				}
 			}
 			echo Rt_HD_Utils::forceUFT8( $comment->comment_content );
@@ -115,23 +117,22 @@ global $prev_month, $prev_year, $prev_day;
 	<div class="large-3 columns">
 		<?php
 		$comment_attechment = get_comment_meta( $comment->comment_ID, 'attachment' );
-		if ( !empty( $comment_attechment ) ) {
+		if ( ! empty( $comment_attechment ) ) {
 			?>
 			<ul class="comment_attechment block-grid large-2-up">
 				<?php
 				foreach ( $comment_attechment as $commenytAttechment ) {
 					$extn_array = explode( '.', $commenytAttechment );
-					$extn       = $extn_array[count( $extn_array ) - 1];
+					$extn       = $extn_array[ count( $extn_array ) - 1 ];
 
 					$file_array = explode( '/', $commenytAttechment );
-					$fileName   = $file_array[count( $file_array ) - 1];
+					$fileName   = $file_array[ count( $file_array ) - 1 ];
 					?>
 					<li>
-						<a href="<?php echo $commenytAttechment; ?>" title="Attachment">
-							<img src="<?php echo RT_HD_URL . "assets/file-type/" . $extn . ".png"; ?>"/>
-							<span><?php echo $fileName; ?></span>
-						</a>
-						<input type="hidden" name="attachemnt" value="<?php echo $commenytAttechment; ?>">
+						<a href="<?php echo $commenytAttechment; ?>" title="Attachment"> <img
+								src="<?php echo RT_HD_URL . "assets/file-type/" . $extn . ".png"; ?>"/>
+							<span><?php echo $fileName; ?></span> </a> <input type="hidden" name="attachemnt"
+						                                                      value="<?php echo $commenytAttechment; ?>">
 						<?php if ( $user_edit ) { ?>
 							<a class="edit-remove" href="#editRemoveAttachemnt"><i class="foundicon-remove"></i></a>
 						<?php } ?>

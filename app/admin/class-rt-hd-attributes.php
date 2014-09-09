@@ -2,7 +2,7 @@
 /**
  * Don't load this file directly!
  */
-if ( !defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -19,7 +19,7 @@ if ( !defined( 'ABSPATH' ) ) {
  *
  * @since rt-Helpdesk 0.1
  */
-if ( !class_exists( 'Rt_HD_Attributes' ) ) {
+if ( ! class_exists( 'Rt_HD_Attributes' ) ) {
 	/**
 	 * Class Rt_HD_Attributes
 	 *
@@ -111,27 +111,27 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 			$diffHTML                    = '';
 			$attr->attribute_render_type = 'checklist';
 			switch ( $attr->attribute_render_type ) {
-//				case 'autocomplete':
-//					break;
+				//				case 'autocomplete':
+				//					break;
 				case 'dropdown':
 				case 'rating-stars':
-					if ( !isset( $newTicket[$attr->attribute_name] ) ) {
-						$newTicket[$attr->attribute_name] = array();
+					if ( ! isset( $newTicket[ $attr->attribute_name ] ) ) {
+						$newTicket[ $attr->attribute_name ] = array();
 					}
-					$newVals = $newTicket[$attr->attribute_name];
+					$newVals = $newTicket[ $attr->attribute_name ];
 					$newVals = array_unique( $newVals );
 
 					$get_post_terms = wp_get_post_terms( $post_id, rthd_attribute_taxonomy_name( $attr->attribute_name ) );
 					if ( $get_post_terms ) {
-						$post_term_slug = $get_post_terms[0]->term_id;
-						$post_term_name = $get_post_terms[0]->name;
+						$post_term_slug = $get_post_terms[ 0 ]->term_id;
+						$post_term_name = $get_post_terms[ 0 ]->name;
 					} else {
 						$post_term_slug = '';
 						$post_term_name = '';
 					}
-					if ( !empty( $newVals ) ) {
-						$newTerms           = get_term_by( 'id', $newVals[0], rthd_attribute_taxonomy_name( $attr->attribute_name ) );
-						$post_new_term_slug = $newVals[0];
+					if ( ! empty( $newVals ) ) {
+						$newTerms           = get_term_by( 'id', $newVals[ 0 ], rthd_attribute_taxonomy_name( $attr->attribute_name ) );
+						$post_new_term_slug = $newVals[ 0 ];
 						$post_new_term_name = $newTerms->name;
 					} else {
 						$post_new_term_slug = '';
@@ -143,19 +143,19 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 					}
 					break;
 				case 'checklist':
-					if ( !isset( $newTicket['rt_' . $attr->attribute_name] ) ) {
-						$newTicket['rt_' . $attr->attribute_name] = array();
+					if ( ! isset( $newTicket[ 'rt_' . $attr->attribute_name ] ) ) {
+						$newTicket[ 'rt_' . $attr->attribute_name ] = array();
 					}
-					$newVals       = $newTicket['rt_' . $attr->attribute_name];
+					$newVals       = $newTicket[ 'rt_' . $attr->attribute_name ];
 					$newVals       = array_unique( $newVals );
 					$oldTermString = rthd_post_term_to_string( $post_id, rthd_attribute_taxonomy_name( $attr->attribute_name ) );
 					$newTermString = '';
-					if ( !empty( $newVals ) ) {
+					if ( ! empty( $newVals ) ) {
 						$newTermArr = array();
 						foreach ( $newVals as $value ) {
 							$newTerm = get_term_by( 'id', $value, rthd_attribute_taxonomy_name( $attr->attribute_name ) );
 							if ( $newTerm ) {
-								$newTermArr[] = $newTerm->name;
+								$newTermArr[ ] = $newTerm->name;
 							}
 						}
 						$newTermString = implode( ',', $newTermArr );
@@ -188,8 +188,8 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 			$diffHTML = '';
 
 			$oldattr = get_post_meta( $post_id, '_rtbiz_hd_' . $attr->attribute_name, true );
-			if ( $oldattr != $newTicket[$attr->attribute_name] ) {
-				$diffHTML .= '<tr><th style="padding: .5em;border: 0;">' . $attr->attribute_label . '</th><td>' . rthd_text_diff( $oldattr, $newTicket[$attr->attribute_name] ) . '</td><td></td></tr>';
+			if ( $oldattr != $newTicket[ $attr->attribute_name ] ) {
+				$diffHTML .= '<tr><th style="padding: .5em;border: 0;">' . $attr->attribute_label . '</th><td>' . rthd_text_diff( $oldattr, $newTicket[ $attr->attribute_name ] ) . '</td><td></td></tr>';
 			}
 
 			//update_post_meta($post_id, '_'.$attr->attribute_name, $newTicket[$attr->attribute_name]);
@@ -208,13 +208,13 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 		function save_attributes( $attr, $post_id, $newTicket ) {
 			switch ( $attr->attribute_store_as ) {
 				case 'taxonomy':
-					if ( !isset( $newTicket[$attr->attribute_name] ) ) {
-						$newTicket[$attr->attribute_name] = array();
+					if ( ! isset( $newTicket[ $attr->attribute_name ] ) ) {
+						$newTicket[ $attr->attribute_name ] = array();
 					}
-					wp_set_post_terms( $post_id, implode( ',', $newTicket[$attr->attribute_name] ), rthd_attribute_taxonomy_name( $attr->attribute_name ) );
+					wp_set_post_terms( $post_id, implode( ',', $newTicket[ $attr->attribute_name ] ), rthd_attribute_taxonomy_name( $attr->attribute_name ) );
 					break;
 				case 'meta':
-					update_post_meta( $post_id, '_rtbiz_hd_' . $attr->attribute_name, $newTicket[$attr->attribute_name] );
+					update_post_meta( $post_id, '_rtbiz_hd_' . $attr->attribute_name, $newTicket[ $attr->attribute_name ] );
 					break;
 				default:
 					do_action( 'rthd_update_attribute', $attr, $post_id, $newTicket );
@@ -225,8 +225,8 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 		/**
 		 * Render UI for attribute
 		 *
-		 * @param $attr
-		 * @param $post_id
+		 * @param      $attr
+		 * @param      $post_id
 		 * @param bool $edit
 		 *
 		 * @since rt-Helpdesk 0.1
@@ -248,34 +248,27 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 		/**
 		 * render ui for taxonomy
 		 *
-		 * @param $attr
-		 * @param $post_id
+		 * @param      $attr
+		 * @param      $post_id
 		 * @param bool $edit
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		function render_taxonomy( $attr, $post_id, $edit = true ) {
 			switch ( $attr->attribute_render_type ) {
-//				case 'autocomplete':
-//					break;
+				//				case 'autocomplete':
+				//					break;
 				case 'dropdown':
 					$options   = array();
-					$terms     = get_terms( rthd_attribute_taxonomy_name( $attr->attribute_name ), array(
-							'hide_empty' => false,
-							'orderby'    => $attr->attribute_orderby,
-							'order'      => 'asc'
-						) );
+					$terms     = get_terms( rthd_attribute_taxonomy_name( $attr->attribute_name ), array( 'hide_empty' => false, 'orderby' => $attr->attribute_orderby, 'order' => 'asc' ) );
 					$post_term = wp_get_post_terms( $post_id, rthd_attribute_taxonomy_name( $attr->attribute_name ), array( 'fields' => 'ids' ) );
 					// Default Selected Term for the attribute. can beset via settings -- later on
 					$selected_term = '-11111';
-					if ( !empty( $post_term ) ) {
-						$selected_term = $post_term[0];
+					if ( ! empty( $post_term ) ) {
+						$selected_term = $post_term[ 0 ];
 					}
 					foreach ( $terms as $term ) {
-						$options[] = array(
-							$term->name => $term->term_id,
-							'selected'  => ( $term->term_id == $selected_term ) ? true : false,
-						);
+						$options[ ] = array( $term->name => $term->term_id, 'selected' => ( $term->term_id == $selected_term ) ? true : false, );
 					}
 					if ( $edit ) {
 						$this->render_dropdown( $attr, $options );
@@ -296,10 +289,7 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 						$post_terms = array();
 					}
 					foreach ( $terms as $term ) {
-						$options[] = array(
-							$term->name => $term->term_id,
-							'checked'   => ( in_array( $term->term_id, $post_terms ) ) ? true : false,
-						);
+						$options[ ] = array( $term->name => $term->term_id, 'checked' => ( in_array( $term->term_id, $post_terms ) ) ? true : false, );
 					}
 					if ( $edit ) {
 						$this->render_checklist( $attr, $options );
@@ -307,7 +297,7 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 						$selected_terms = array();
 						foreach ( $terms as $term ) {
 							if ( in_array( $term->term_id, $post_terms ) ) {
-								$selected_terms[] = $term->name;
+								$selected_terms[ ] = $term->name;
 							}
 						}
 						echo '<span class="rthd_view_mode">' . esc_attr( implode( ',', $selected_terms ) ) . '</span>';
@@ -324,7 +314,7 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 					// Default Selected Term for the attribute. can beset via settings -- later on
 					$selected_term = '-11111';
 					if ( ! empty( $post_term ) ) {
-						$selected_term = $post_term[0];
+						$selected_term = $post_term[ 0 ];
 					}
 					foreach ( $terms as $term ) {
 						$options[] = array(
@@ -349,8 +339,8 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 		/**
 		 * render ui for meta box
 		 *
-		 * @param $attr
-		 * @param $post_id
+		 * @param      $attr
+		 * @param      $post_id
 		 * @param bool $edit
 		 *
 		 * @since rt-Helpdesk 0.1
@@ -371,10 +361,7 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 						$selected_term = $post_term[0];
 					}
 					foreach ( $terms as $term ) {
-						$options[] = array(
-							$term->name => $term->term_id,
-							'selected'  => ( $term->term_id == $selected_term ) ? true : false,
-						);
+						$options[ ] = array( $term->name => $term->term_id, 'selected' => ( $term->term_id == $selected_term ) ? true : false, );
 					} ?>
 					<div class="large-4 small-4 columns <?php echo esc_attr( ! $edit ) ? 'rthd_attr_border' : ''; ?>">
 						<span class="prefix" title="<?php echo esc_attr( $attr->attribute_label ); ?>"><label
@@ -451,12 +438,12 @@ if ( !class_exists( 'Rt_HD_Attributes' ) ) {
 						<span class="prefix" title="<?php echo esc_attr( $attr->attribute_label ); ?>"><label
 								for="post[<?php echo esc_attr( $attr->attribute_name ); ?>]"><?php echo esc_attr( $attr->attribute_label ); ?></label></span>
 					</div>
-					<div class="large-7 mobile-large-2 columns <?php echo esc_attr( ( ! $edit ) ? 'rthd_attr_border' : '' ); ?>">
-					<?php if ( $edit ) {
-						$this->render_datetime( $attr, $value );
-					} else {
-						echo esc_html( '<span class="rthd_view_mode moment-from-now">' . $value . '</span>' );
-					} ?>
+					<div class="large-7 mobile-large-2 columns <?php echo ( ! $edit ) ? 'rthd_attr_border' : ''; ?>">
+						<?php if ( $edit ) {
+							$this->render_datetime( $attr, $value );
+						} else {
+							echo '<span class="rthd_view_mode moment-from-now">' . $value . '</span>';
+						} ?>
 					</div>
 					<?php if ( $edit ) { ?>
 					<div class="large-1 mobile-large-1 columns">
