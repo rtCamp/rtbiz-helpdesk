@@ -139,15 +139,15 @@ if ( ! class_exists( 'Rt_HD_Tickets' ) ) {
 			}
 
 			/* Insert History for status */
-			$id = $rt_hd_ticket_history_model->insert( array(
-					'ticket_id'   => $post_id,
-					'type'        => 'post_status',
-					'old_value'   => '',
-					'new_value'   => $post['post_status'],
-					'update_time' => current_time( 'mysql' ),
-					'updated_by'  => get_current_user_id(),
-				)
-			);
+			//			$id = $rt_hd_ticket_history_model->insert( array(
+			//					'ticket_id'   => $post_id,
+			//					'type'        => 'post_status',
+			//					'old_value'   => '',
+			//					'new_value'   => $post['post_status'],
+			//					'update_time' => current_time( 'mysql' ),
+			//					'updated_by'  => get_current_user_id(),
+			//				)
+			//			);
 
 			/* Insert into Index Table */
 			$data = array(
@@ -336,7 +336,7 @@ if ( ! class_exists( 'Rt_HD_Tickets' ) ) {
 				foreach ( $uploaded as $upload ) {
 
 					$post_attachment_hashes = get_post_meta( $post_id, '_rtbiz_hd_attachment_hash' );
-					if ( !empty( $post_attachment_hashes ) && in_array( md5_file( $upload['file'] ), $post_attachment_hashes ) ) {
+					if ( ! empty( $post_attachment_hashes ) && in_array( md5_file( $upload['file'] ), $post_attachment_hashes ) ) {
 						continue;
 					}
 
@@ -532,7 +532,7 @@ if ( ! class_exists( 'Rt_HD_Tickets' ) ) {
 				$title       = str_replace( "re:", "", $title );
 				$title       = trim( $title );
 				$existPostId = $this->post_exists( $title );
-				if ( !isset( $fromemail['name'] ) ) {
+				if ( ! isset( $fromemail['name'] ) ) {
 					$fromemail['name'] = $fromemail['address'];
 				}
 				//if given post title exits then it will be add as comment other wise as post
@@ -871,7 +871,7 @@ if ( ! class_exists( 'Rt_HD_Tickets' ) ) {
 		 */
 		public function check_duplicate_from_message_Id( $messageid ) {
 			global $wpdb;
-			if ( $messageid && trim( $messageid ) == "" ) {
+			if ( $messageid && trim( $messageid ) == '' ) {
 				return false;
 			}
 
@@ -882,9 +882,9 @@ if ( ! class_exists( 'Rt_HD_Tickets' ) ) {
 				$sql    = $wpdb->prepare( "select meta_value from $wpdb->postmeta where $wpdb->postmeta.meta_key = '_messageid' and $wpdb->postmeta.meta_value = %s", $messageid );
 				$result = $wpdb->get_results( $sql );
 
-				return !empty( $result );
+				return ! empty( $result );
 			} else {
-				return !empty( $result );
+				return ! empty( $result );
 			}
 		}
 
@@ -918,10 +918,10 @@ if ( ! class_exists( 'Rt_HD_Tickets' ) ) {
 		 */
 		public function mail_new_comment_data( $comment_id ) {
 
-			if ( isset( $_REQUEST["commentSendAttachment"] ) && $_REQUEST["commentSendAttachment"] != "" ) {
-				$arrAttache = explode( ",", $_REQUEST["commentSendAttachment"] );
+			if ( isset( $_REQUEST['commentSendAttachment'] ) && $_REQUEST['commentSendAttachment'] != '') {
+				$arrAttache = explode( ",", $_REQUEST['commentSendAttachment'] );
 				foreach ( $arrAttache as $strAttach ) {
-					add_comment_meta( $comment_id, "attachment", wp_get_attachment_url( intval( $strAttach ) ) );
+					add_comment_meta( $comment_id, 'attachment', wp_get_attachment_url( intval( $strAttach ) ) );
 				}
 			}
 			$this->mail_comment_data( $comment_id, array(), "", array() );

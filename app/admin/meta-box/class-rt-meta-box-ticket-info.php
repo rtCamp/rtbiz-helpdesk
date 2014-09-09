@@ -227,14 +227,14 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 			);
 
 			//closing date
-			if ( isset( $newTicket['closing-date'] ) && !empty( $newTicket['closing-date'] ) ) {
+			if ( isset( $newTicket['closing-date'] ) && ! empty( $newTicket['closing-date'] ) ) {
 				update_post_meta( $post_id, '_rtbiz_hd_closing_date', $newTicket['closing-date'] );
 				update_post_meta( $post_id, '_rtbiz_hd_closed_by', get_current_user_id() );
 				$cd  = new DateTime( $newTicket['closing-date'] );
 				$timeStamp = $cd->getTimestamp();
 				$data      = array_merge( $data, array(
 					'date_closing'     => gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) ) ),
-					'date_closing_gmt' => get_gmt_from_date( $cd->format( 'Y-m-d H:i:s') ) ,
+					'date_closing_gmt' => get_gmt_from_date( $cd->format( 'Y-m-d H:i:s' ) ) ,
 					'user_closed_by'   => get_current_user_id(),
 				) );
 
@@ -272,7 +272,7 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 					$rt_hd_attributes->save_attributes( $attr, $post_id, $newTicket );
 					/* Update Index Table */
 					$attr_name = str_replace( '-', '_', rthd_attribute_taxonomy_name( $attr->attribute_name ) );
-					$attr_val  = ( ! isset( $newTicket[$attr->attribute_name] ) ) ? array() : $newTicket[$attr->attribute_name];
+					$attr_val  = ( ! isset( $newTicket[ $attr->attribute_name ] ) ) ? array() : $newTicket[ $attr->attribute_name ];
 					$data      = array_merge( $data, array(
 						$attr_name => ( is_array( $attr_val ) ) ? implode( ',', $attr_val ) : $attr_val,
 					) );
