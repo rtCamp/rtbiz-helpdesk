@@ -26,7 +26,7 @@ function display_op()
 # main_script
 for WP_VERSION in 4.0 3.9; do
 
-    if [ -e phpunit.xml ] || [ -e phpunit.xml.dist ]; then bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION; fi
+    if [ -e phpunit.xml ] || [ -e phpunit.xml.dist ]; then bash bin/install-wp-tests.sh wordpress_test_db wptestuser wptestpass localhost $WP_VERSION; fi
 
     for PHP_VERSION in 5.2 5.3 5.4 5.5 5.6; do
 
