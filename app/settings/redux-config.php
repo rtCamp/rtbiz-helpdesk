@@ -35,9 +35,9 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			add_action( 'init', array( $this, 'save_replay_by_email' ) );
 		}
 
-		function save_imap_servers( $rthd_imap_servers_changed =null , $rthd_imap_servers =null ) {
-			if ( ! ( isset ( $_POST['rthd_imap_servers_changed'] ) && isset( $_POST[ 'rthd_imap_servers'] ) ) ){
-				if ( isset ( $rthd_imap_servers_changed ) && ! empty( $rthd_imap_servers_changed )){
+		function save_imap_servers( $rthd_imap_servers_changed =null, $rthd_imap_servers =null ) {
+			if( ! ( isset ( $_POST['rthd_imap_servers_changed'] ) && isset( $_POST['rthd_imap_servers'] ) ) ){
+				if( isset ( $rthd_imap_servers_changed ) && ! empty( $rthd_imap_servers_changed )){
 					$_POST['rthd_imap_servers_changed'] = $rthd_imap_servers_changed;
 				//	echo "1st";
 				}

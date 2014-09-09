@@ -39,21 +39,21 @@ class test_ReduxConfig extends RT_WP_TestCase {
 	}
 
 	function test_save_imap_servers() {
-		$this->assertTrue( method_exists( $this->redux, 'save_imap_servers' ), 'Class does not have method myFunction save_imap_servers' );
+		//$this->assertTrue( method_exists( $this->redux, 'save_imap_servers' ), 'Class does not have method myFunction save_imap_servers' );
 		//$this->markTestIncomplete( 'This test has not been implemented yet.' );
 
-
-		$rthd_imap_servers = array(
-			'new' => array(
-				'server_name'          => 'gmail',
-				'incoming_imap_server' => 'dasf.com',
-				'incoming_imap_port'   => '22',
-				'incoming_imap_enc'    => 'ssl',
-				'outgoing_smtp_server' => '120',
-				'outgoing_smtp_port'   => '25',
-				'outgoing_smtp_enc'    => 'ssl',
-			)
-		);
+		//
+		//		$rthd_imap_servers = array(
+		//			'new' => array(
+		//				'server_name'          => 'gmail',
+		//				'incoming_imap_server' => 'dasf.com',
+		//				'incoming_imap_port'   => '22',
+		//				'incoming_imap_enc'    => 'ssl',
+		//				'outgoing_smtp_server' => '120',
+		//				'outgoing_smtp_port'   => '25',
+		//				'outgoing_smtp_enc'    => 'ssl',
+		//			)
+		//		);
 
 		//	$rthd_imap_servers_changed = 1;
 
