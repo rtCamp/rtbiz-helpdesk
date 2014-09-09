@@ -7,6 +7,7 @@ pear config-set auto_discover 1
 final_op=""
 
 cd ../
+rm -rf rtbiz
 git clone git@git.rtcamp.com:rtbiz/rtbiz.git
 cd $PLUGIN_DIR
 
@@ -51,5 +52,3 @@ done
 
 echo ==========================================================================
 echo -e "$final_op"
-
-rm -rf ../rtbiz
