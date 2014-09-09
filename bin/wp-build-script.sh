@@ -31,7 +31,7 @@ for WP_VERSION in 4.0 3.9; do
     for PHP_VERSION in 5.2 5.3 5.4 5.5 5.6; do
 
         for WP_MULTISITE in 0 1; do
-            LOG_FILE="${CI_BUILD_REF_NAME}_php-${PHP_VERSION}_wp-${WP_VERSION}_m-${WP_MULTISITE}.log"
+            LOG_FILE="${CI_BUILD_REF}_php-${PHP_VERSION}_wp-${WP_VERSION}_m-${WP_MULTISITE}.log"
             run_test > $LOG_FILE
             if [ $? -eq 0 ]; then
                 STATUS="PASS"
