@@ -5,6 +5,10 @@ export PLUGIN_DIR=$(pwd)
 export PLUGIN_SLUG=$(basename $(pwd) | sed 's/^wp-//')
 pear config-set auto_discover 1
 
+cd ../
+git clone git@git.rtcamp.com:rtbiz/rtbiz.git
+cd $PLUGIN_DIR
+
 # Test to be conducted
 function run_test ()
 {
