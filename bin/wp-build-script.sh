@@ -1,6 +1,7 @@
 ## http://git.rtcamp.com/rtbiz/process/blob/master/content/testing/phpunit.md
 
 # before-script
+source ~/.phpbrew/bashrc
 export PLUGIN_DIR=$(pwd)
 export PLUGIN_SLUG=$(basename $(pwd) | sed 's/^wp-//')
 pear config-set auto_discover 1
@@ -61,7 +62,7 @@ for WP_VERSION in 4.0 3.9; do
     if [ -e phpunit.xml ] || [ -e phpunit.xml.dist ]; then bash bin/install-wp-tests.sh wordpress_test_db wptestuser wptestpass localhost $WP_VERSION; fi
 
     for PHP_VERSION in 5.2 5.3 5.4 5.5 5.6; do
-
+        phpbrew use $PHP_VERSION
         for WP_MULTISITE in 0 1; do
             LOG_FILE="${CI_BUILD_ID}_php-${PHP_VERSION}_wp-${WP_VERSION}_m-${WP_MULTISITE}.log"
             run_test > $LOG_FILE
