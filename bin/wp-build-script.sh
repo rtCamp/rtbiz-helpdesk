@@ -7,8 +7,14 @@ pear config-set auto_discover 1
 final_op=""
 
 cd ../
+
 rm -rf rtbiz
 git clone git@git.rtcamp.com:rtbiz/rtbiz.git
+
+rm -rf posts-to-posts
+wget -nv -O posts-to-posts.zip http://downloads.wordpress.org/plugin/posts-to-posts.1.6.3.zip
+tar --strip-components=1 -zxmf posts-to-posts.zip -C posts-to-posts/
+
 cd $PLUGIN_DIR
 
 # Test to be conducted
