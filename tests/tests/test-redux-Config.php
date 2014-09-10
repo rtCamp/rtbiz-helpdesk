@@ -65,7 +65,6 @@ class test_ReduxConfig extends RT_WP_TestCase {
 		//	 $this->assertTrue( method_exists( $this->redux, 'initSettings' ), 'Class does not have method myFunction initSettings' );
 		//$this -> assertTrue( $this->redux->initSettings());
 		//var_dump($this->redux->initSettings());
-		$this->markTestIncomplete( 'This test has not been implemented yet.' );
 	}
 
 	function test_set_sections() {

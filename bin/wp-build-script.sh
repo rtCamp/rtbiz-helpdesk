@@ -10,6 +10,9 @@ cd ../
 
 rm -rf rtbiz
 git clone git@git.rtcamp.com:rtbiz/rtbiz.git
+cd rtbiz
+git checkout develop
+cd ../
 
 rm -rf posts-to-posts
 wget -nv -O posts-to-posts.zip http://downloads.wordpress.org/plugin/posts-to-posts.1.6.3.zip

@@ -14,6 +14,11 @@ require_once $_tests_dir . '/includes/functions.php';
 
 function _manually_load_plugin() {
 	define( 'WP_ADMIN', true );
+	$_SERVER[ 'REMOTE_ADDR' ] = 'localhost';
+	$_SERVER[ 'PHP_SELF' ] = 'http://localhost/wp-admin/';
+	define( 'AUTH_KEY', '1234567890' );
+	define( 'SECURE_AUTH_KEY', '1234567890' );
+
 	require_once dirname( __FILE__ ) . '/../../posts-to-posts/posts-to-posts.php';
 	require_once dirname( __FILE__ ) . '/../../rtbiz/index.php';
 	require_once dirname( __FILE__ ) . '/../index.php';
