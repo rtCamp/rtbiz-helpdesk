@@ -8,6 +8,18 @@ final_op=""
 
 cd ../
 
+mkdir phpcs
+cd phpcs
+export PHPCS_DIR=$(pwd)
+export PHPCS_GITHUB_SRC=squizlabs/PHP_CodeSniffer
+export PHPCS_GIT_TREE=master
+export WPCS_GITHUB_SRC=WordPress-Coding-Standards/WordPress-Coding-Standards
+export WPCS_GIT_TREE=master
+export WPCS_STANDARD=WordPress
+
+curl -L https://github.com/$PHPCS_GITHUB_SRC/archive/$PHPCS_GIT_TREE.tar.gz | tar xvz --strip-components=1 -C $PHPCS_DIR
+mkdir -p $PHPCS_DIR/CodeSniffer/Standards/WordPress && curl -L https://github.com/$WPCS_GITHUB_SRC/archive/$WPCS_GIT_TREE.tar.gz | tar xvz --strip-components=1 -C $PHPCS_DIR/CodeSniffer/Standards/WordPress
+
 rm -rf rtbiz
 git clone git@git.rtcamp.com:rtbiz/rtbiz.git
 cd rtbiz
@@ -28,7 +40,7 @@ function run_test ()
     #script
     find . -path ./bin -prune -o \( -name '*.php' -o -name '*.inc' \) -exec php -lf {} \;
     if [ -e phpunit.xml ] || [ -e phpunit.xml.dist ]; then phpunit || return 1; fi
-    phpcs --ignore='tests/*' --standard=WordPress $(find . -name '*.php') || return 1
+    $PHPCS_DIR/scripts/phpcs --standard=$WPCS_STANDARD $(if [ -n "$PHPCS_IGNORE" ]; then echo --ignore=$PHPCS_IGNORE; fi) $(find . -name '*.php') || return 1
     jshint . || return 1
 }
 
