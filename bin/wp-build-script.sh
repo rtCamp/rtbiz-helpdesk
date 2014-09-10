@@ -20,7 +20,9 @@ export WPCS_STANDARD=WordPress
 export PHPCS_IGNORE=tests/*
 
 curl -L https://github.com/$PHPCS_GITHUB_SRC/archive/$PHPCS_GIT_TREE.tar.gz | tar xvz --strip-components=1 -C $PHPCS_DIR
-mkdir -p $PHPCS_DIR/CodeSniffer/Standards/WordPress && curl -L https://github.com/$WPCS_GITHUB_SRC/archive/$WPCS_GIT_TREE.tar.gz | tar xvz --strip-components=1 -C $PHPCS_DIR/CodeSniffer/Standards/WordPress
+mkdir -p $PHPCS_DIR/CodeSniffer/Standards/WordPress-Coding-Standards && curl -L https://github.com/$WPCS_GITHUB_SRC/archive/$WPCS_GIT_TREE.tar.gz | tar xvz --strip-components=1 -C $PHPCS_DIR/CodeSniffer/Standards/WordPress-Coding-Standards
+ln -s $PHPCS_DIR/CodeSniffer/Standards/WordPress-Coding-Standards/WordPress $PHPCS_DIR/CodeSniffer/Standards/WordPress
+rm -rf $PHPCS_DIR/CodeSniffer/Standards/WordPress-Coding-Standards/WordPress/Sniffs/VIP
 cd ../
 
 rm -rf rtbiz
