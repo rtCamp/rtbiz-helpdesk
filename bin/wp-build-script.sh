@@ -13,7 +13,7 @@ git clone git@git.rtcamp.com:rtbiz/rtbiz.git
 
 rm -rf posts-to-posts
 wget -nv -O posts-to-posts.zip http://downloads.wordpress.org/plugin/posts-to-posts.1.6.3.zip
-tar --strip-components=1 -zxmf posts-to-posts.zip -C posts-to-posts/
+unzip posts-to-posts.zip
 
 cd $PLUGIN_DIR
 
