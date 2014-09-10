@@ -8,6 +8,7 @@ final_op=""
 
 cd ../
 
+rm -rf phpcs
 mkdir phpcs
 cd phpcs
 export PHPCS_DIR=$(pwd)
@@ -16,9 +17,11 @@ export PHPCS_GIT_TREE=master
 export WPCS_GITHUB_SRC=WordPress-Coding-Standards/WordPress-Coding-Standards
 export WPCS_GIT_TREE=master
 export WPCS_STANDARD=WordPress
+export PHPCS_IGNORE=tests/*
 
 curl -L https://github.com/$PHPCS_GITHUB_SRC/archive/$PHPCS_GIT_TREE.tar.gz | tar xvz --strip-components=1 -C $PHPCS_DIR
 mkdir -p $PHPCS_DIR/CodeSniffer/Standards/WordPress && curl -L https://github.com/$WPCS_GITHUB_SRC/archive/$WPCS_GIT_TREE.tar.gz | tar xvz --strip-components=1 -C $PHPCS_DIR/CodeSniffer/Standards/WordPress
+cd ../
 
 rm -rf rtbiz
 git clone git@git.rtcamp.com:rtbiz/rtbiz.git
@@ -58,7 +61,7 @@ for WP_VERSION in 4.0 3.9; do
     for PHP_VERSION in 5.2 5.3 5.4 5.5 5.6; do
 
         for WP_MULTISITE in 0 1; do
-            LOG_FILE="${CI_BUILD_REF}_php-${PHP_VERSION}_wp-${WP_VERSION}_m-${WP_MULTISITE}.log"
+            LOG_FILE="${CI_BUILD_ID}_php-${PHP_VERSION}_wp-${WP_VERSION}_m-${WP_MULTISITE}.log"
             run_test > $LOG_FILE
             run_test
             if [ $? -eq 0 ]; then
