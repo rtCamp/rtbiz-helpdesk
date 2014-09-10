@@ -39,9 +39,11 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 		 */
 		public function __construct() {
 
-			if ( ! $this->check_rt_biz_dependecy() ) {
+			if ( ! $this->check_rt_biz_dependency() ) {
 				return false;
 			}
+
+			$this->update_database();
 
 			$this->init_redux();
 
@@ -61,7 +63,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 *
 		 */
-		function check_rt_biz_dependecy() {
+		function check_rt_biz_dependency() {
 
 			$flag          = true;
 			$used_function = array( 'rt_biz_get_module_users', 'rt_biz_get_entity_meta', 'rt_biz_get_post_for_organization_connection', 'rt_biz_get_post_for_person_connection', 'rt_biz_get_organization_post_type', 'rt_biz_get_person_post_type', 'rt_biz_search_organization', 'rt_biz_add_organization', 'rt_biz_organization_connection_to_string', 'rt_biz_connect_post_to_organization', 'rt_biz_clear_post_connections_to_organization', 'rt_biz_sanitize_module_key', 'rt_biz_get_access_role_cap', 'rt_biz_get_person_by_email', 'rt_biz_add_person', 'rt_biz_add_entity_meta', 'rt_biz_person_connection_to_string', 'rt_biz_connect_post_to_person', 'rt_biz_get_organization_to_person_connection', 'rt_biz_search_person', 'rt_biz_connect_organization_to_person', 'rt_biz_clear_post_connections_to_person', 'rt_biz_register_person_connection', 'rt_biz_register_organization_connection', 'rt_biz_get_organization_capabilities', 'rt_biz_get_person_capabilities', 'rt_biz_get_person_meta_fields', 'rt_biz_get_organization_meta_fields' );
@@ -164,8 +166,6 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 		function admin_init() {
 			$this->templateURL = apply_filters( 'rthd_template_url', 'rthelpdesk/' );
 
-			$this->update_database();
-
 			global $rt_hd_admin, $rt_hd_admin_meta_boxes;
 			$rt_hd_admin            = new Rt_HD_Admin();
 			$rt_hd_admin_meta_boxes = new RT_HD_Admin_Meta_Boxes();
@@ -178,7 +178,6 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 		 */
 		function update_database() {
 			$updateDB = new RT_DB_Update( trailingslashit( RT_HD_PATH ) . 'index.php', trailingslashit( RT_HD_PATH_SCHEMA ) );
-			$updateDB -> install_db_version = 0;
 			$updateDB->do_upgrade();
 		}
 

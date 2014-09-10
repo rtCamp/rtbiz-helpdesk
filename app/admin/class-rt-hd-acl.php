@@ -37,7 +37,7 @@ if ( ! class_exists( 'Rt_HD_ACL' ) ) {
 		function register_rt_hd_module( $modules ) {
 			$settings               = rthd_get_redux_settings();
 			$module_key             = rt_biz_sanitize_module_key( RT_HD_TEXT_DOMAIN );
-			$modules[ $module_key ] = array( 'label' => $settings[ 'rthd_menu_label' ], 'post_types' => array( Rt_HD_Module::$post_type ), );
+			$modules[ $module_key ] = array( 'label' => ( ! empty( $settings[ 'rthd_menu_label' ] ) ) ? $settings[ 'rthd_menu_label' ] : __( 'Helpdesk' ), 'post_types' => array( Rt_HD_Module::$post_type ), );
 
 			return $modules;
 		}

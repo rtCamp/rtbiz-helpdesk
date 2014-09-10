@@ -20,8 +20,6 @@ class test_RTWPHelpdesk extends RT_WP_TestCase {
 	function setUp() {
 		parent::setUp();
 		$this->rtwpHelpDesk = new RT_WP_Helpdesk();
-		$this->rtdbupdate = new RT_DB_Update( false, realpath( dirname( __FILE__ ) . '/../../app/schema/' ) );
-		$this->rtdbupdate->do_upgrade();
 	}
 
 	/**
@@ -71,7 +69,7 @@ class test_RTWPHelpdesk extends RT_WP_TestCase {
 	 * Ensure that required function exist
 	 */
 	function  test_check_function() {
-		$this->assertTrue( method_exists( $this->rtwpHelpDesk, 'check_rt_biz_dependecy' ), 'Class RT_WP_Helpdesk does not have method check_rt_biz_dependecy' );
+		$this->assertTrue( method_exists( $this->rtwpHelpDesk, 'check_rt_biz_dependency' ), 'Class RT_WP_Helpdesk does not have method check_rt_biz_dependency' );
 		$this->assertTrue( method_exists( $this->rtwpHelpDesk, 'rt_biz_admin_notice' ), 'Class RT_WP_Helpdesk does not have method rt_biz_admin_notice' );
 		$this->assertTrue( method_exists( $this->rtwpHelpDesk, 'init_redux' ), 'Class RT_WP_Helpdesk does not have method init_redux' );
 		$this->assertTrue( method_exists( $this->rtwpHelpDesk, 'init_globals' ), 'Class RT_WP_Helpdesk does not have method init_globals' );
@@ -84,15 +82,12 @@ class test_RTWPHelpdesk extends RT_WP_TestCase {
 
 
 	/**
-	 * Ensure that rtbiz dependecy & it's function
+	 * Ensure that rtbiz dependency & it's function
 	 */
-	// function test_check_rt_biz_dependecy() {
-	// 	$this->assertTrue( $this->rtwpHelpDesk->check_rt_biz_dependecy(), 'rtbiz depend function not exist' );
-	// }
+	function test_check_rt_biz_dependency() {
+		$this->assertTrue( $this->rtwpHelpDesk->check_rt_biz_dependency(), 'rtbiz depend function not exist' );
+	}
 
-	/**
-	 * Ensure that rtbiz dependecy & it's function
-	 */
 	function test_check_loadScripts() {
 //		global $wp_query;
 //		$wp_query->query_vars[ 'name' ] = 'ticket';

@@ -129,8 +129,8 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				$sql .= "{$contact_name} TEXT,\n";
 			}
 
-			$sql .= 'PRIMARY KEY  (id)\n'
-					. ') CHARACTER SET utf8 COLLATE utf8_general_ci;';
+			$sql .= "PRIMARY KEY  (id)\n"
+					. ") CHARACTER SET utf8 COLLATE utf8_general_ci;";
 
 			dbDelta( $sql );
 		}

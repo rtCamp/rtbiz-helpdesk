@@ -91,7 +91,9 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Mapper' ) ) {
 			$args           = array();
 			$gravity_fields = $rt_hd_gravity_fields_mapping_model->get_all_mappings();
 			foreach ( $gravity_fields as $key => $gravity_field ) {
-				$forms = RGFormsModel::get_forms();
+				if ( class_exists( 'RGFormsModel' ) ) {
+					$forms = RGFormsModel::get_forms();
+				}
 				if ( isset( $forms ) && ! empty( $forms ) ) {
 					foreach ( $forms as $form ) {
 						if ( $form->id == $gravity_field->form_id ) {
