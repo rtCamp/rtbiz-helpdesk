@@ -6,6 +6,7 @@ export PLUGIN_DIR=$(pwd)
 export PLUGIN_SLUG=$(basename $(pwd) | sed 's/^wp-//')
 pear config-set auto_discover 1
 final_op=""
+OLD_PATH=$PATH
 
 cd ../
 
@@ -61,10 +62,10 @@ for WP_VERSION in 4.0 3.9; do
 
     if [ -e phpunit.xml ] || [ -e phpunit.xml.dist ]; then bash bin/install-wp-tests.sh wordpress_test_db wptestuser wptestpass localhost $WP_VERSION; fi
 
-    for PHP_VERSION in 5.2 5.3 5.4 5.5 5.6; do
+    for PHP_VERSION in 5.2.17 5.3.29 5.4.32 5.5.16 5.6.0; do
 
-        phpbrew use $PHP_VERSION
-
+        export $PATH=/opt/phpbrew/php/php-${PHP_VERSION}/bin:$OLD_PATH
+        
         php --version
 
         for WP_MULTISITE in 0 1; do
