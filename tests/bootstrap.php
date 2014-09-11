@@ -1,7 +1,9 @@
 <?php
 
 // Activates this plugin in WordPress so it can be tested.
-$GLOBALS[ 'wp_tests_options' ] = array( 'active_plugins' => array( 'rtbiz/index.php', 'rtbiz-helpdesk/rtbiz-helpdesk.php' ), );
+$GLOBALS['wp_tests_options'] = array(
+	'active_plugins' => array( 'posts-to-posts/posts-to-posts.php', 'rtbiz/index.php', 'rtbiz-helpdesk/rtbiz-helpdesk.php' ),
+);
 
 $_tests_dir = getenv( 'WP_TESTS_DIR' );
 if ( ! $_tests_dir ) {
@@ -12,8 +14,8 @@ require_once $_tests_dir . '/includes/functions.php';
 
 function _manually_load_plugin() {
 	define( 'WP_ADMIN', true );
-	$_SERVER[ 'REMOTE_ADDR' ] = 'localhost';
-	$_SERVER[ 'PHP_SELF' ] = 'http://localhost/wp-admin/';
+	$_SERVER['REMOTE_ADDR'] = 'localhost';
+	$_SERVER['PHP_SELF']    = 'http://localhost/wp-admin/';
 	define( 'AUTH_KEY', '1234567890' );
 	define( 'SECURE_AUTH_KEY', '1234567890' );
 
