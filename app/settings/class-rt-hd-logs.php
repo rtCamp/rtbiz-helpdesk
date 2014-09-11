@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @author udit
  *
- * @since rt-Helpdesk 0.1
+ * @since  rt-Helpdesk 0.1
  */
 if ( ! class_exists( 'Rt_HD_Logs' ) ) {
 	class Rt_HD_Logs {
@@ -134,52 +134,53 @@ if ( ! class_exists( 'Rt_HD_Logs' ) ) {
 				</thead>
 
 				<?php
-			foreach ( $result as $rslt ) {
-				?>
-				<tr>
-					<td>
-						<?php echo esc_attr( $rslt->trans_id ); ?>
-					</td>
-					<td>
-						<?php echo esc_attr( $rslt->title ); ?>
-					</td>
-					<td>
-						<?php echo esc_attr( $rslt->firstdate ); ?>
-					</td>
-					<td>
-						<?php echo esc_attr( $rslt->lastdate ); ?>
-					</td>
-					<td>
-						<?php echo esc_attr( $rslt->post ); ?>
-					</td>
+				foreach ( $result as $rslt ) {
+					?>
+					<tr>
+						<td>
+							<?php echo esc_attr( $rslt->trans_id ); ?>
+						</td>
+						<td>
+							<?php echo esc_attr( $rslt->title ); ?>
+						</td>
+						<td>
+							<?php echo esc_attr( $rslt->firstdate ); ?>
+						</td>
+						<td>
+							<?php echo esc_attr( $rslt->lastdate ); ?>
+						</td>
+						<td>
+							<?php echo esc_attr( $rslt->post ); ?>
+						</td>
 
-					<td>
-						<?php echo esc_attr( $rslt->texonomy ); ?>
-					</td>
-					<!--                        <td>
+						<td>
+							<?php echo esc_attr( $rslt->texonomy ); ?>
+						</td>
+						<!--                        <td>
 			<?php if ( isset( $rslt->gravity_meta ) ) {
-						echo esc_attr( $rslt->gravity_meta );
-					} ?>
+							echo esc_attr( $rslt->gravity_meta );
+						} ?>
 						</td>-->
 
-					<td>
-						<?php echo esc_attr( date( 'Y-m-d H:i:s', intval( $rslt->trans_id ) ) );
-						?>
-					</td>
-					<td>
-						<a class="revertChanges"
-						   href="edit.php?post_type=rt_ticket&page=rthd-settings&transa_id=<?php echo esc_attr( $rslt->trans_id ); ?>"
-						   data-trans="<?php echo esc_attr( $rslt->trans_id ); ?>"> Revert Changes </a> &nbsp; | &nbsp;
-						<a href="edit.php?post_type=rt_ticket&page=rthd-settings&log-list=log-list&trans_id=<?php echo esc_attr( $rslt->trans_id ); ?>"
-						   data-trans="<?php echo esc_attr( $rslt->trans_id ); ?>"> View Post </a>
+						<td>
+							<?php echo esc_attr( date( 'Y-m-d H:i:s', intval( $rslt->trans_id ) ) );
+							?>
+						</td>
+						<td>
+							<a class="revertChanges"
+							   href="edit.php?post_type=rt_ticket&page=rthd-settings&transa_id=<?php echo esc_attr( $rslt->trans_id ); ?>"
+							   data-trans="<?php echo esc_attr( $rslt->trans_id ); ?>"> Revert Changes </a> &nbsp; |
+							&nbsp;
+							<a href="edit.php?post_type=rt_ticket&page=rthd-settings&log-list=log-list&trans_id=<?php echo esc_attr( $rslt->trans_id ); ?>"
+							   data-trans="<?php echo esc_attr( $rslt->trans_id ); ?>"> View Post </a>
 
-					</td>
-				</tr>
+						</td>
+					</tr>
 
 
-			<?php
-			}
-			?>
+				<?php
+				}
+				?>
 			</table>
 		<?php
 		}

@@ -31,7 +31,7 @@ if ( ! class_exists( 'Rt_HD_Settings' ) ) {
 		 * sync time
 		 * @since rt-Helpdesk 0.1
 		 */
-		public $sync_period = '00:20:00'; //"h:m:s"
+		public $sync_period = '00:00:00'; //"h:m:s"
 
 		/**
 		 * constructor
@@ -186,10 +186,10 @@ if ( ! class_exists( 'Rt_HD_Settings' ) ) {
 				$client->setClientSecret( $google_client_secret );
 				$client->setRedirectUri( $google_client_redirect_url );
 				$client->setScopes( array(
-						'https://mail.google.com/',
-						'https://www.googleapis.com/auth/userinfo.email',
-						'https://www.googleapis.com/auth/userinfo.profile',
-					) );
+					'https://mail.google.com/',
+					'https://www.googleapis.com/auth/userinfo.email',
+					'https://www.googleapis.com/auth/userinfo.profile',
+				) );
 				$client->setAccessType( 'offline' );
 
 				$token = json_decode( $ac->outh_token );
@@ -308,9 +308,9 @@ if ( ! class_exists( 'Rt_HD_Settings' ) ) {
 			}
 			global $rt_hd_mail_accounts_model;
 			$result = $rt_hd_mail_accounts_model->remove_mail_account( array(
-					'email'   => $email,
-					'user_id' => $user_id,
-				) );
+				'email'   => $email,
+				'user_id' => $user_id,
+			) );
 			$this->update_gmail_ac_count();
 
 			return $result;
@@ -320,7 +320,7 @@ if ( ! class_exists( 'Rt_HD_Settings' ) ) {
 		/**
 		 * update mail access
 		 *
-		 * @param $email
+		 * @param      $email
 		 * @param null $token
 		 * @param null $email_data
 		 * @param null $imap_server
@@ -430,14 +430,14 @@ if ( ! class_exists( 'Rt_HD_Settings' ) ) {
 		/**
 		 * send email
 		 *
-		 * @param $fromemail
-		 * @param $subject
-		 * @param $body
-		 * @param array $toemail
-		 * @param array $ccemail
-		 * @param array $bccemail
-		 * @param array $attachement
-		 * @param int $refrence_id
+		 * @param        $fromemail
+		 * @param        $subject
+		 * @param        $body
+		 * @param array  $toemail
+		 * @param array  $ccemail
+		 * @param array  $bccemail
+		 * @param array  $attachement
+		 * @param int    $refrence_id
 		 * @param string $refrence_type
 		 *
 		 * @return mixed
@@ -480,7 +480,7 @@ if ( ! class_exists( 'Rt_HD_Settings' ) ) {
 		/**
 		 * update send box
 		 *
-		 * @param $sentEmailID
+		 * @param        $sentEmailID
 		 * @param string $status
 		 * @param string $oldStatus
 		 *
@@ -491,10 +491,10 @@ if ( ! class_exists( 'Rt_HD_Settings' ) ) {
 		public function update_sent_email( $sentEmailID, $status = 'yes', $oldStatus = 'no' ) {
 			global $rt_hd_mail_outbound_model;
 			$rows_affected = $rt_hd_mail_outbound_model->update_outbound_mail( array( 'sent' => $status ), array(
-					'id'   => $sentEmailID,
-					'sent' => $oldStatus,
-				) );
-			echo  esc_attr( $rows_affected );
+				'id'   => $sentEmailID,
+				'sent' => $oldStatus,
+			) );
+			echo esc_attr( $rows_affected );
 
 			return $rows_affected;
 		}

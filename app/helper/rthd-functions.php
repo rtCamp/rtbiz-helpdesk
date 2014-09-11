@@ -1,6 +1,5 @@
 <?php
 /**
- *
  *   Helper functions for rt-helpdesk
  * @author udit
  */
@@ -8,7 +7,7 @@
 /**
  * rt-helpdesk Functions
  * used to render template
- *
+
  */
 function rthd_get_template( $template_name, $args = array(), $template_path = '', $default_path = '' ) {
 
@@ -18,7 +17,7 @@ function rthd_get_template( $template_name, $args = array(), $template_path = ''
 
 	$located = rthd_locate_template( $template_name, $template_path, $default_path );
 
-	do_action( 'rthd_before_template_part', $template_name, $template_path, $located, $args );
+	do_action( "rthd_before_template_part", $template_name, $template_path, $located, $args );
 
 	include( $located );
 
@@ -118,7 +117,7 @@ function rthd_get_all_attributes( $attribute_store_as = '' ) {
 	$newAttr = array();
 	foreach ( $attrs as $attr ) {
 		if ( $attr->attribute_store_as == $attribute_store_as ) {
-			$newAttr[ ] = $attr;
+			$newAttr[] = $attr;
 		}
 	}
 
@@ -138,7 +137,7 @@ function rthd_get_attributes( $post_type, $attribute_store_as = '' ) {
 	$attrs     = array();
 
 	foreach ( $relations as $relation ) {
-		$attrs[ ] = $rt_hd_attributes_model->get_attribute( $relation->attr_id );
+		$attrs[] = $rt_hd_attributes_model->get_attribute( $relation->attr_id );
 	}
 
 	if ( empty( $attribute_store_as ) ) {
@@ -148,7 +147,7 @@ function rthd_get_attributes( $post_type, $attribute_store_as = '' ) {
 	$newAttr = array();
 	foreach ( $attrs as $attr ) {
 		if ( $attr->attribute_store_as == $attribute_store_as ) {
-			$newAttr[ ] = $attr;
+			$newAttr[] = $attr;
 		}
 	}
 
@@ -177,7 +176,6 @@ function rthd_post_term_to_string( $postid, $taxonomy, $termsep = ',' ) {
 				$tmpStr .= $sep . $tObj->name;
 				$sep = $termsep;
 			}
-
 		}
 	}
 
@@ -204,7 +202,7 @@ function rthd_extract_key_from_attributes( $attr ) {
  */
 function rthd_is_system_email( $email ) {
 	$settings = rthd_get_settings();
-	if ( isset( $settings[ 'system_email' ] ) && $email == $settings[ 'system_email' ] ) {
+	if ( isset( $settings['system_email'] ) && $email == $settings['system_email'] ) {
 		return true;
 	}
 
@@ -213,14 +211,13 @@ function rthd_is_system_email( $email ) {
 
 /**
  * returns all system emails
- *
  * @return array
  */
 function rthd_get_all_system_emails() {
 	$emails   = array();
 	$settings = rthd_get_settings();
-	if ( isset( $settings[ 'system_email' ] ) && ! empty( $settings[ 'system_email' ] ) ) {
-		$emails[ ] = $settings[ 'system_email' ];
+	if ( isset( $settings['system_email'] ) && ! empty( $settings['system_email'] ) ) {
+		$emails[] = $settings['system_email'];
 	}
 
 	return $emails;
@@ -232,14 +229,13 @@ function rthd_get_all_system_emails() {
  * @param $ticket_id
  *
  * @return array
- *
  * @since rt-Helpdesk 0.1
  */
 function rthd_get_all_participants( $ticket_id ) {
 	$ticket       = get_post( $ticket_id );
 	$participants = array();
 	if ( isset( $ticket->post_author ) ) {
-		$participants[ ] = $ticket->post_author;
+		$participants[] = $ticket->post_author;
 	}
 	$subscribers  = get_post_meta( $ticket_id, '_rtbiz_hd_subscribe_to', true );
 	$participants = array_merge( $participants, $subscribers );
@@ -279,7 +275,7 @@ function rthd_get_all_participants( $ticket_id ) {
 	foreach ( $all_p as $p ) {
 		$user = get_user_by( 'email', $p );
 		if ( $user ) {
-			$participants[ ] = $user->ID;
+			$participants[] = $user->ID;
 		}
 	}
 
@@ -288,9 +284,7 @@ function rthd_get_all_participants( $ticket_id ) {
 
 /**
  * get ticket table name
- *
  * @return string
- *
  * @since rt-Helpdesk 0.1
  */
 function rthd_get_ticket_table_name() {
@@ -306,7 +300,6 @@ function rthd_get_ticket_table_name() {
  * @param $user
  *
  * @return mixed
- *
  * @since rt-Helpdesk 0.1
  */
 function rthd_get_user_ids( $user ) {
@@ -365,13 +358,12 @@ function rthd_update_post_term_count( $terms, $taxonomy ) {
  * @param encrypted /decrypted $string
  *
  * @return string Return the encrypted/decrypted string
- *
  * @since rt-Helpdesk 0.1
  */
 function rthd_encrypt_decrypt( $string ) {
 
 	$string_length    = strlen( $string );
-	$encrypted_string = "";
+	$encrypted_string = '';
 
 	/**
 	 * For each character of the given string generate the code
@@ -401,7 +393,6 @@ function rthd_encrypt_decrypt( $string ) {
  * @param null $args
  *
  * @return string
- *
  * @since rt-Helpdesk 0.1
  */
 function rthd_text_diff( $left_string, $right_string, $args = null ) {
@@ -424,37 +415,41 @@ function rthd_text_diff( $left_string, $right_string, $args = null ) {
 	$r = "<table class='diff' style='width: 100%;background: white;margin-bottom: 1.25em;border: solid 1px #dddddd;border-radius: 3px;margin: 0 0 18px;'>\n";
 	$r .= "<col class='ltype' /><col class='content' /><col class='ltype' /><col class='content' />";
 
-	if ( $args[ 'title' ] || $args[ 'title_left' ] || $args[ 'title_right' ] ) {
-		$r .= "<thead>";
+	if ( $args['title'] || $args['title_left'] || $args['title_right'] ) {
+		$r .= '<thead>';
 	}
-	if ( $args[ 'title' ] ) {
-		$r .= "<tr class='diff-title'><th colspan='4'>{$args['title']}</th></tr>\n";
+	if ( $args['title'] ) {
+		$r .= "<tr class='diff-title'><th colspan='4'>" . $args['title'] . '</th></tr>\n';
 	}
-	if ( $args[ 'title_left' ] || $args[ 'title_right' ] ) {
+	if ( $args['title_left'] || $args['title_right'] ) {
 		$r .= "<tr class='diff-sub-title'>\n";
 		$r .= "\t<td></td><th>{$args['title_left']}</th>\n";
 		$r .= "\t<td></td><th>{$args['title_right']}</th>\n";
 		$r .= "</tr>\n";
 	}
-	if ( $args[ 'title' ] || $args[ 'title_left' ] || $args[ 'title_right' ] ) {
+	if ( $args['title'] || $args['title_left'] || $args['title_right'] ) {
 		$r .= "</thead>\n";
 	}
 	$r .= "<tbody>\n$diff\n</tbody>\n";
-	$r .= "</table>";
+	$r .= '</table>';
 
 	return $r;
 }
 
 /**
  * get settings
- *
  * @return mixed
- *
  * @since rt-Helpdesk 0.1
  */
 function rthd_get_settings() {
 	global $redux_helpdesk_settings;
-	$settings = array( 'attach_contacts' => 'yes', 'attach_accounts' => 'yes', 'system_email' => isset( $redux_helpdesk_settings[ 'rthd_outgoing_email_from_address' ] ) && ! empty( $redux_helpdesk_settings[ 'rthd_outgoing_email_from_address' ] ) ? $redux_helpdesk_settings[ 'rthd_outgoing_email_from_address' ] : '', 'outbound_emails' => '', 'outgoing_email_delivery' => isset( $redux_helpdesk_settings[ 'rthd_outgoing_email_delivery' ] ) && ! empty( $redux_helpdesk_settings[ 'rthd_outgoing_email_delivery' ] ) ? $redux_helpdesk_settings[ 'rthd_outgoing_email_delivery' ] : '', );
+	$settings = array(
+		'attach_contacts'         => 'yes',
+		'attach_accounts'         => 'yes',
+		'system_email'            => isset( $redux_helpdesk_settings['rthd_outgoing_email_from_address'] ) && ! empty( $redux_helpdesk_settings['rthd_outgoing_email_from_address'] ) ? $redux_helpdesk_settings['rthd_outgoing_email_from_address'] : '',
+		'outbound_emails'         => '',
+		'outgoing_email_delivery' => isset( $redux_helpdesk_settings['rthd_outgoing_email_delivery'] ) && ! empty( $redux_helpdesk_settings['rthd_outgoing_email_delivery'] ) ? $redux_helpdesk_settings['rthd_outgoing_email_delivery'] : '',
+	);
 
 	//$settings = get_site_option( 'rt_helpdesk_settings', $default );
 	return $settings;
@@ -474,9 +469,7 @@ function rthd_update_settings( $key, $value ) {
 
 /**
  * get menu label
- *
  * @return mixed
- *
  * @since rt-Helpdesk 0.1
  */
 function rthd_get_menu_label() {
@@ -498,9 +491,7 @@ function rthd_update_menu_label( $menu_label ) {
 
 /**
  * get url logo
- *
  * @return mixed
- *
  * @since rt-Helpdesk 0.1
  */
 function rthd_get_logo_url() {
@@ -522,11 +513,19 @@ function rthd_update_logo_url( $logo_url ) {
 
 /**
  * return content type
- *
  * @return string
- *
  * @since rt-Helpdesk 0.1
  */
 function rthd_set_html_content_type() {
 	return 'text/html';
+}
+
+
+// Setting ApI
+function rthd_get_redux_settings() {
+	if ( ! isset( $GLOBALS[ 'redux_helpdesk_settings' ] ) ) {
+		$GLOBALS[ 'redux_helpdesk_settings' ] = get_option( 'redux_helpdesk_settings', array() );
+	}
+
+	return $GLOBALS[ 'redux_helpdesk_settings' ];
 }

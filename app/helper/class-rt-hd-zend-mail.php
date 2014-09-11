@@ -63,11 +63,14 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 			while ( $folders->getChildren() ) {
 				$folder = $folders->current();
 				if ( $folder->getChildren() ) {
-					echo '<optgroup label="' . $folder->getGlobalName() . '">';
-					$this->render_folders_dropdown( $folder, $value );
-					echo '</optgroup>';
+					?>
+						<optgroup label="<?php echo esc_attr( $folder->getGlobalName() ); ?>">
+							<?php $this->render_folders_dropdown( $folder, $value ); ?>
+						</optgroup><?php
 				} else {
-					echo '<option value="' . $folder->getGlobalName() . '" ' . ( ( $folder->getGlobalName() == $value ) ? 'selected="selected"' : '' ) . '>' . $folder->getGlobalName() . '</option>';
+					?>
+					<option
+					value="<?php echo esc_attr( $folder->getGlobalName() ); ?>" <?php ( $folder->getGlobalName() == $value ) ? 'selected="selected"' : '' ?>><?php echo esc_html( $folder->getGlobalName() ); ?></option><?php
 				}
 				$folders->next();
 			}
@@ -229,11 +232,11 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 			$smtp_args = array();
 			switch ( $email_type ) {
 				case 'goauth':
-					$smtp_args[ 'name' ]              = 'gmail-smtp';
-					$smtp_args[ 'host' ]              = 'smtp.gmail.com';
-					$smtp_args[ 'port' ]              = 465;
-					$smtp_args[ 'connection_class' ]  = 'oauth2';
-					$smtp_args[ 'connection_config' ] = array( 'xoauth2_request' => $this->authString, 'ssl' => 'ssl', );
+					$smtp_args['name']              = 'gmail-smtp';
+					$smtp_args['host']              = 'smtp.gmail.com';
+					$smtp_args['port']              = 465;
+					$smtp_args['connection_class']  = 'oauth2';
+					$smtp_args['connection_config'] = array( 'xoauth2_request' => $this->authString, 'ssl' => 'ssl', );
 					break;
 				case 'imap':
 					global $rt_hd_imap_server_model;
@@ -243,11 +246,15 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 
 						return false;
 					}
-					$smtp_args[ 'name' ]              = $server->outgoing_smtp_server;
-					$smtp_args[ 'host' ]              = $server->outgoing_smtp_server;
-					$smtp_args[ 'port' ]              = $server->outgoing_smtp_port;
-					$smtp_args[ 'connection_class' ]  = 'login';
-					$smtp_args[ 'connection_config' ] = array( 'username' => $fromemail, 'password' => rthd_encrypt_decrypt( $accessToken ), 'ssl' => $server->outgoing_smtp_enc, );
+					$smtp_args['name']              = $server->outgoing_smtp_server;
+					$smtp_args['host']              = $server->outgoing_smtp_server;
+					$smtp_args['port']              = $server->outgoing_smtp_port;
+					$smtp_args['connection_class']  = 'login';
+					$smtp_args['connection_config'] = array(
+						'username' => $fromemail,
+						'password' => rthd_encrypt_decrypt( $accessToken ),
+						'ssl'      => $server->outgoing_smtp_enc,
+					);
 					break;
 				default:
 					break;
@@ -268,19 +275,19 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 			if ( ! empty( $toEmail ) ) {
 				foreach ( $toEmail as $temail ) {
 					//$mail->addTo($temail["email"], isset($temail["name"]) ? $temail["name"] : '');
-					$message->addTo( $temail[ "email" ], isset( $temail[ "name" ] ) ? $temail[ "name" ] : '' );
+					$message->addTo( $temail["email"], isset( $temail["name"] ) ? $temail["name"] : '' );
 				}
 			}
 			if ( ! empty( $ccEmail ) ) {
 				foreach ( $ccEmail as $temail ) {
 					//$mail->addCc($temail["email"], isset($temail["name"]) ? $temail["name"] : '');
-					$message->addCc( $temail[ "email" ], isset( $temail[ "name" ] ) ? $temail[ "name" ] : '' );
+					$message->addCc( $temail["email"], isset( $temail["name"] ) ? $temail["name"] : '' );
 				}
 			}
 			if ( ! empty( $bccEmail ) ) {
 				foreach ( $bccEmail as $temail ) {
-					if ( isset( $temail[ "email" ] ) ) {
-						$message->addBcc( $temail[ "email" ], isset( $temail[ "name" ] ) ? $temail[ "name" ] : '' );
+					if ( isset( $temail["email"] ) ) {
+						$message->addBcc( $temail["email"], isset( $temail["name"] ) ? $temail["name"] : '' );
 					}
 				}
 			}
@@ -337,7 +344,7 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 				}
 			}
 			preg_match( '/charset="(.+)"$/', $part->contentType, $matches );
-			$charset = isset( $matches[ 1 ] ) ? $matches[ 1 ] : '';
+			$charset = isset( $matches[1] ) ? $matches[1] : '';
 			if ( $charset == 'iso-8859-1' ) {
 				$txtBody = utf8_decode( $txtBody ); //convert to utf8
 			}
@@ -386,9 +393,9 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 		 * @param        $imap_server
 		 * @param        $lastDate
 		 * @param        $user_id
-		 * @param bool   $isSystemEmail
+		 * @param bool $isSystemEmail
 		 * @param string $signature
-		 * @param bool   $isThreadImporter
+		 * @param bool $isThreadImporter
 		 *
 		 * @return bool
 		 *
@@ -422,7 +429,7 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 
 			$email_data = maybe_unserialize( $email_acc->email_data );
 
-			if ( empty( $email_data[ 'inbox_folder' ] ) ) {
+			if ( empty( $email_data['inbox_folder'] ) ) {
 				$rt_hd_settings->update_sync_meta_time( $email, current_time( 'mysql' ) );
 				$rt_hd_settings->update_sync_status( $email, false );
 				echo 'inbox folder fail';
@@ -430,8 +437,8 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 				return false;
 			}
 
-			$mail_folders = explode( ',', ( isset( $email_data[ 'mail_folders' ] ) ) ? $email_data[ 'mail_folders' ] : '' );
-			$inbox_folder = $email_data[ 'inbox_folder' ];
+			$mail_folders = explode( ',', ( isset( $email_data['mail_folders'] ) ) ? $email_data['mail_folders'] : '' );
+			$inbox_folder = $email_data['inbox_folder'];
 			array_unshift( $mail_folders, $inbox_folder );
 			if ( $isThreadImporter ) {
 
@@ -454,7 +461,7 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 
 						$allMailArray = array();
 						foreach ( $allMail as $ids ) {
-							if ( $ids[ 0 ] == 'SEARCH' ) {
+							if ( $ids[0] == 'SEARCH' ) {
 								array_shift( $ids );
 								$allMailArray = $ids;
 							}
@@ -494,7 +501,7 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 					if ( $rt_mail_uid[ $sync_inbox_type ] > 0 ) {
 						$allMail = $storage->protocol->requestAndResponse( "UID FETCH {$rt_mail_uid[$sync_inbox_type]}:* (UID)", array() );
 						foreach ( $allMail as $tempEmail ) {
-							$arrayMailIds[ ] = array( "uid" => $tempEmail[ 2 ][ 1 ], 'msgid' => $tempEmail[ 0 ] );
+							$arrayMailIds[] = array( "uid" => $tempEmail[2][1], 'msgid' => $tempEmail[0] );
 						}
 					} else {
 						$arrayMailIds = $storage->protocol->search( array( 'SINCE ' . $lastDate ) );
@@ -539,7 +546,7 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 			$cMail = $storage->protocol->requestAndResponse( "UID FETCH {$UmailId}:* (UID)", array() );
 			if ( is_array( $cMail ) ) {
 				foreach ( $cMail as $tempEmail ) {
-					return intval( $tempEmail[ 0 ] );
+					return intval( $tempEmail[0] );
 				}
 			} else {
 				echo "here --> $UmailId ";
@@ -638,7 +645,7 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 				try {
 					if ( is_array( $UmailId ) ) {
 						$tempUIDArray = $UmailId;
-						$UmailId      = $tempUIDArray[ "uid" ];
+						$UmailId      = $tempUIDArray["uid"];
 					}
 					$mailId    = $this->getNumberByUniqueId( $UmailId, $storage );
 					$message   = $storage->getMessage( $mailId ); //1474);
@@ -654,7 +661,7 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 						$this->update_last_mail_uid( $email, $UmailId );
 						continue;
 					}
-					if ( $lastMessageId && $rt_hd_tickets->check_duplicate_from_message_Id( $lastMessageId ) ) {
+					if ( $lastMessageId && $rt_hd_tickets->check_duplicate_from_message_id( $lastMessageId ) ) {
 						$dt = new DateTime( $message->date );
 						$this->update_last_mail_uid( $email, $UmailId );
 						continue;
@@ -678,15 +685,22 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 					if ( isset( $message->from ) ) { // or $message->headerExists('cc');
 						$arrFrom = $message->getHeader( "from" )->getAddressList();
 						foreach ( $arrFrom as $tFrom ) {
-							$from[ "address" ]  = $tFrom->getEmail();
-							$from[ "name" ]     = $tFrom->getName();
-							$rthd_all_emails[ ] = array( "address" => $tFrom->getEmail(), "name" => $tFrom->getName(), 'key' => 'from' );
+							$from["address"]   = $tFrom->getEmail();
+							$from["name"]      = $tFrom->getName();
+							$rthd_all_emails[] = array(
+								"address" => $tFrom->getEmail(),
+								"name"    => $tFrom->getName(),
+								'key'     => 'from'
+							);
 							if ( ! array_key_exists( $tFrom->getEmail(), $hdUser ) ) {
 								if ( ! in_array( $tFrom->getEmail(), $systemEmails ) ) {
-									$allEmails[ ] = array( "address" => $tFrom->getEmail(), "name" => $tFrom->getName() );
+									$allEmails[] = array(
+										"address" => $tFrom->getEmail(),
+										"name"    => $tFrom->getName()
+									);
 								}
 							} else {
-								$subscriber[ ] = $hdUser[ $tFrom->getEmail() ];
+								$subscriber[] = $hdUser[ $tFrom->getEmail() ];
 							}
 						}
 					}
@@ -696,13 +710,17 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 							if ( ! is_email( $tTo->getEmail() ) ) {
 								continue;
 							}
-							$rthd_all_emails[ ] = array( "address" => $tTo->getEmail(), "name" => $tTo->getName(), 'key' => 'to' );
+							$rthd_all_emails[] = array(
+								"address" => $tTo->getEmail(),
+								"name"    => $tTo->getName(),
+								'key'     => 'to'
+							);
 							if ( ! array_key_exists( $tTo->getEmail(), $hdUser ) ) {
 								if ( ! in_array( $tTo->getEmail(), $systemEmails ) ) {
-									$allEmails[ ] = array( "address" => $tTo->getEmail(), "name" => $tTo->getName() );
+									$allEmails[] = array( "address" => $tTo->getEmail(), "name" => $tTo->getName() );
 								}
 							} else {
-								$subscriber[ ] = $hdUser[ $tTo->getEmail() ];
+								$subscriber[] = $hdUser[ $tTo->getEmail() ];
 							}
 						}
 					}
@@ -712,13 +730,17 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 							if ( ! is_email( $tCc->getEmail() ) ) {
 								continue;
 							}
-							$rthd_all_emails[ ] = array( "address" => $tCc->getEmail(), "name" => $tCc->getName(), 'key' => 'cc' );
+							$rthd_all_emails[] = array(
+								"address" => $tCc->getEmail(),
+								"name"    => $tCc->getName(),
+								'key'     => 'cc'
+							);
 							if ( ! array_key_exists( $tCc->getEmail(), $hdUser ) ) {
 								if ( ! in_array( $tCc->getEmail(), $systemEmails ) ) {
-									$allEmails[ ] = array( "address" => $tCc->getEmail(), "name" => $tCc->getName() );
+									$allEmails[] = array( "address" => $tCc->getEmail(), "name" => $tCc->getName() );
 								}
 							} else {
-								$subscriber[ ] = $hdUser[ $tCc->getEmail() ];
+								$subscriber[] = $hdUser[ $tCc->getEmail() ];
 							}
 						}
 					}
@@ -728,13 +750,17 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 							if ( ! is_email( $tBCc->getEmail() ) ) {
 								continue;
 							}
-							$rthd_all_emails[ ] = array( "address" => $tBCc->getEmail(), "name" => $tBCc->getName(), 'key' => 'bcc' );
+							$rthd_all_emails[] = array(
+								"address" => $tBCc->getEmail(),
+								"name"    => $tBCc->getName(),
+								'key'     => 'bcc'
+							);
 							if ( ! array_key_exists( $tBCc->getEmail(), $hdUser ) ) {
 								if ( ! in_array( $tBCc->getEmail(), $systemEmails ) ) {
-									$allEmails[ ] = array( "address" => $tBCc->getEmail(), "name" => $tBCc->getName() );
+									$allEmails[] = array( "address" => $tBCc->getEmail(), "name" => $tBCc->getName() );
 								}
 							} else {
-								$subscriber[ ] = $hdUser[ $tBCc->getEmail() ];
+								$subscriber[] = $hdUser[ $tBCc->getEmail() ];
 							}
 						}
 					}
@@ -766,8 +792,8 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 									try {
 										$filename = $part->getHeader( 'content-disposition' )->getFieldValue( "filename" );
 										if ( preg_match( '*filename=\"([^;]+)\"*', $filename, $matches ) ) {
-											if ( isset( $matches[ 1 ] ) ) {
-												$filename = trim( $matches[ 1 ] );
+											if ( isset( $matches[1] ) ) {
+												$filename = trim( $matches[1] );
 											} else {
 												$filename = time() . "." . Rt_HD_Utils::get_extention( $ContentType );
 											}
@@ -786,24 +812,24 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 									$filedata   = $this->get_decoded_message( $part );
 									$upload_dir = wp_upload_dir( null );
 									$filename   = sanitize_file_name( $filename );
-									if ( ! file_exists( $upload_dir [ 'path' ] . "/$filename" ) ) {
+									if ( ! file_exists( $upload_dir ['path'] . "/$filename" ) ) {
 										$uploaded = wp_upload_bits( $filename, null, $filedata );
 									} else {
-										$uploaded[ 'error' ] = false;
-										$uploaded[ 'file' ]  = $upload_dir [ 'path' ] . "/$filename";
-										$uploaded[ 'url' ]   = $upload_dir [ 'url' ] . "/$filename";
+										$uploaded['error'] = false;
+										$uploaded['file']  = $upload_dir ['path'] . "/$filename";
+										$uploaded['url']   = $upload_dir ['url'] . "/$filename";
 									}
-									if ( $uploaded[ 'error' ] == false ) {
+									if ( $uploaded['error'] == false ) {
 										Rt_HD_Utils::log( "[Attachement Created] File:{$uploaded['file']} ; URL: {$uploaded['url']}", "mail-attachement.txt" );
-										$file               = array();
-										$extn_array         = explode( '.', $filename );
-										$extn               = $extn_array[ count( $extn_array ) - 1 ];
-										$file[ 'file' ]     = $uploaded[ 'file' ];
-										$file[ 'url' ]      = $uploaded[ 'url' ];
-										$file[ "filename" ] = $filename;
-										$file[ "extn" ]     = $extn;
-										$file[ "type" ]     = $ContentType;
-										$attachements[ ]    = $file;
+										$file             = array();
+										$extn_array       = explode( '.', $filename );
+										$extn             = $extn_array[ count( $extn_array ) - 1 ];
+										$file['file']     = $uploaded['file'];
+										$file['url']      = $uploaded['url'];
+										$file["filename"] = $filename;
+										$file["extn"]     = $extn;
+										$file["type"]     = $ContentType;
+										$attachements[]   = $file;
 									} else {
 										echo $filename . "\r\n";
 										ob_start();
@@ -865,7 +891,7 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 
 					if ( ! $success_flag ) {
 						foreach ( $attachements as $attachement ) {
-							unlink( $attachement[ 'file' ] );
+							unlink( $attachement['file'] );
 						}
 					}
 

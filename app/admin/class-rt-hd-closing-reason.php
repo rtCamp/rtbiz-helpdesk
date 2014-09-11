@@ -7,29 +7,34 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of Rt_HD_Closing_Reason
- *
- * @author udit
- *
- * @since rt-Helpdesk 0.1
- */
 if ( ! class_exists( 'Rt_HD_Closing_Reason' ) ) {
-	class Rt_HD_Closing_Reason {
-		public function __construct() {
 
+	/**
+	 * Class Rt_HD_Closing_Reason
+	 * Register Closing-reason taxonomy for rtbiz-HelpDesk
+	 *
+	 * @since 0.1
+	 *
+	 * @author udit
+	 */
+	class Rt_HD_Closing_Reason {
+
+		protected $post_type;
+
+		/**
+		 * construct
+		 *
+		 * @since 0.1
+		 */
+		public function __construct() {
+			$this->post_type = Rt_HD_Module::$post_type ;
+			add_action( 'init', array( $this, 'closing_reason' ) );
 		}
 
 		/**
-		 * Create taxonomy for accounts
+		 * Register closing reason taxonomy for given CPT
 		 *
-		 * @since rt-Helpdesk 0.1
+		 * @since 0.1
 		 */
 		function closing_reason( $post_type ) {
 			$labels     = array(
@@ -44,7 +49,7 @@ if ( ! class_exists( 'Rt_HD_Closing_Reason' ) ) {
 				'choose_from_most_used' => __( 'Choose from the most used Closing Reasons', RT_HD_TEXT_DOMAIN ),
 			);
 			$editor_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
-			register_taxonomy( rthd_attribute_taxonomy_name( 'closing-reason' ), array( $post_type ), array(
+			register_taxonomy( rthd_attribute_taxonomy_name( 'closing-reason' ), array( $this->post_type ), array(
 				'hierarchical'          => false,
 				'labels'                => $labels,
 				'show_ui'               => true,
@@ -61,32 +66,39 @@ if ( ! class_exists( 'Rt_HD_Closing_Reason' ) ) {
 		}
 
 		/**
-		 * Save closing reason
+		 * Save closing reason for given post_id
+		 *
+		 * @since 0.1
 		 *
 		 * @param $post_id
 		 * @param $newTicket
 		 */
 		function save_closing_reason( $post_id, $newTicket ) {
-			if ( ! isset( $newTicket[ 'closing_reason' ] ) ) {
-				$newTicket[ 'closing_reason' ] = array();
+			if ( ! isset( $newTicket['closing_reason'] ) ) {
+				$newTicket['closing_reason'] = array();
 			}
-			$contacts = array_map( 'intval', $newTicket[ 'closing_reason' ] );
+			$contacts = array_map( 'intval', $newTicket['closing_reason'] );
 			$contacts = array_unique( $contacts );
 			wp_set_post_terms( $post_id, $contacts, rthd_attribute_taxonomy_name( 'closing-reason' ) );
 		}
 
 		/**
-		 * Closing Reason Email Diff
+		 * get Diff of Closing Reason for given post
 		 *
-		 * @since rt-Helpdesk 0.1
+		 * @since 0.1
+		 *
+		 * @param $post_id
+		 * @param $newTicket
+		 *
+		 * @return string
 		 */
 		function closing_reason_diff( $post_id, $newTicket ) {
 
 			$diffHTML = '';
-			if ( ! isset( $newTicket[ 'closing_reason' ] ) ) {
-				$newTicket[ 'closing_reason' ] = array();
+			if ( ! isset( $newTicket['closing_reason'] ) ) {
+				$newTicket['closing_reason'] = array();
 			}
-			$contacts = $newTicket[ 'closing_reason' ];
+			$contacts = $newTicket['closing_reason'];
 			$contacts = array_unique( $contacts );
 
 			$oldContactsString = rthd_post_term_to_string( $post_id, rthd_attribute_taxonomy_name( 'closing-reason' ) );
@@ -96,7 +108,7 @@ if ( ! class_exists( 'Rt_HD_Closing_Reason' ) ) {
 				foreach ( $contacts as $contact ) {
 					$newC = get_term_by( 'id', $contact, rthd_attribute_taxonomy_name( 'closing-reason' ) );
 					if ( isset( $newC->name ) && ! empty( $newC->name ) ) {
-						$contactsArr[ ] = $newC->name;
+						$contactsArr[] = $newC->name;
 					}
 				}
 				$newContactsSring = implode( ',', $contactsArr );
@@ -112,7 +124,10 @@ if ( ! class_exists( 'Rt_HD_Closing_Reason' ) ) {
 		/**
 		 * Render Closing Reasons - DOM Element
 		 *
-		 * @since rt-Helpdesk 0.1
+		 * @since 0.1
+		 *
+		 * @param $post_id
+		 * @param bool $user_edit
 		 */
 		function get_closing_reasons( $post_id, $user_edit = true ) {
 			global $rthd_form;
@@ -122,21 +137,28 @@ if ( ! class_exists( 'Rt_HD_Closing_Reason' ) ) {
 			// Default Selected Term for the attribute. can beset via settings -- later on
 			$selected_term = '-11111';
 			if ( ! empty( $post_term ) ) {
-				$selected_term = $post_term[ 0 ];
-				$options[ ]    = array( __( 'Select a Reason', RT_HD_TEXT_DOMAIN ) => '', 'selected' => false, );
+				$selected_term = $post_term[0];
+				$options[]     = array( __( 'Select a Reason', RT_HD_TEXT_DOMAIN ) => '', 'selected' => false, );
 			} else {
-				$options[ ] = array( __( 'Select a Reason', RT_HD_TEXT_DOMAIN ) => '', 'selected' => true, );
+				$options[] = array( __( 'Select a Reason', RT_HD_TEXT_DOMAIN ) => '', 'selected' => true, );
 			}
 			foreach ( $terms as $term ) {
-				$options[ ] = array( $term->name => $term->term_id, 'selected' => ( $term->term_id == $selected_term ) ? true : false, );
+				$options[] = array(
+					$term->name => $term->term_id,
+					'selected'  => ( $term->term_id == $selected_term ) ? true : false,
+				);
 			}
-			$args = array( 'id' => 'rthd_closing_reason', 'name' => 'post[closing_reason][]', 'rtForm_options' => $options, );
+			$args = array(
+				'id'             => 'rthd_closing_reason',
+				'name'           => 'post[closing_reason][]',
+				'rtForm_options' => $options,
+			);
 
 			if ( $user_edit ) {
-				echo $rthd_form->get_select( $args );
+				echo balanceTags( $rthd_form->get_select( $args ) );
 			} else {
-				$term = get_term( $selected_term, rthd_attribute_taxonomy_name( $attr->attribute_name ) );
-				echo '<span class="rthd_view_mode">' . esc_html( $term->name ). '</span>';
+				$term = get_term( $selected_term, rthd_attribute_taxonomy_name( 'closing-reason' ) );
+				?><span class="rthd_view_mode"><?php echo esc_html( $term->name ); ?></span><?php
 			}
 		}
 	}

@@ -6,23 +6,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of Rt_HD_Contacts
- *
- * @author udit
- *
- * @since rt-Helpdesk 0.1
- */
 if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 
 	/**
 	 * Class Rt_HD_Contacts
+	 *
+	 * @since  0.1
+	 *
+	 * @author udit
 	 */
 	class Rt_HD_Contacts {
 
@@ -46,7 +37,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		/**
 		 * Hooks
 		 *
-		 * @since rt-Helpdesk 0.1
+		 * @since 0.1
 		 */
 		function hooks() {
 
@@ -63,12 +54,12 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		/**
 		 * Create custom column 'Tickets' for Contacts taxonomy
 		 *
+		 * @since 0.1
+		 *
 		 * @param $columns
 		 * @param $rt_entity
 		 *
 		 * @return mixed
-		 *
-		 * @since rt-Helpdesk 0.1
 		 */
 		function contacts_columns( $columns, $rt_entity ) {
 
@@ -88,6 +79,8 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		/**
 		 * Get count of contact terms used in individual ticket. This function returns the exact count
 		 *
+		 * @since    0.1
+		 *
 		 * @param $column
 		 * @param $post_id
 		 * @param $rt_entity
@@ -96,8 +89,6 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		 * @internal param string $column_name
 		 * @internal param int $term_id
 		 * @return string $out
-		 *
-		 * @since rt-Helpdesk 0.1
 		 */
 		function manage_contacts_columns( $column, $post_id, $rt_entity ) {
 
@@ -111,7 +102,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 					if ( in_array( Rt_HD_Module::$post_type, array_keys( $rt_entity->enabled_post_types ) ) && $column == Rt_HD_Module::$post_type ) {
 						$post_details = get_post( $post_id );
 						$pages        = rt_biz_get_post_for_person_connection( $post_id, Rt_HD_Module::$post_type );
-						echo '<a href = edit.php?' . $post_details->post_type . '=' . $post_details->ID . '&post_type=' . Rt_HD_Module::$post_type . '>' . count( $pages ) . '</a>';
+						echo '<a href = edit.php?' . esc_url( $post_details->post_type ) . '=' . esc_url( $post_details->ID ) . '&post_type=' . esc_url( Rt_HD_Module::$post_type ) . '>' . esc_html( count( $pages ) ) . '</a>';
 					}
 					break;
 			}
@@ -120,12 +111,12 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		/**
 		 * add new contact
 		 *
+		 * @since 0.1
+		 *
 		 * @param $email
 		 * @param $title
 		 *
 		 * @return mixed|null|WP_Post
-		 *
-		 * @since rt-Helpdesk 0.1
 		 */
 		public function insert_new_contact( $email, $title ) {
 
@@ -157,11 +148,11 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		/**
 		 * get user from email id
 		 *
+		 * @since 0.1
+		 *
 		 * @param $email
 		 *
 		 * @return bool|int|null
-		 *
-		 * @since rt-Helpdesk 0.1
 		 */
 		function get_user_from_email( $email ) {
 			$userid = username_exists( $email );
@@ -171,8 +162,8 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 			}
 
 			return $userid;
-			// followin code if to create use if not exits
-			/*if ( ! $userid ) {
+			//** followin code if to create use if not exits
+			if ( ! $userid ) {
 				$userid = @email_exists( $email );
 				if ( ! $userid ) {
 					add_filter( 'wpmu_welcome_user_notification', '__return_false' );
@@ -188,18 +179,18 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 				}
 			}
 
-			return $userid;*/
+			return $userid;
 		}
 
 		/**
 		 * contacts different on ticket
 		 *
+		 * @since 0.1
+		 *
 		 * @param $post_id
 		 * @param $newTicket
 		 *
 		 * @return string
-		 *
-		 * @since rt-Helpdesk 0.1
 		 */
 		function contacts_diff_on_ticket( $post_id, $newTicket ) {
 
@@ -215,8 +206,8 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 			if ( ! empty( $contacts ) ) {
 				$contactsArr = array();
 				foreach ( $contacts as $contact ) {
-					$newC           = get_post( $contact );
-					$contactsArr[ ] = $newC->post_title;
+					$newC          = get_post( $contact );
+					$contactsArr[] = $newC->post_title;
 				}
 				$newContactsSring = implode( ',', $contactsArr );
 			}
@@ -231,16 +222,16 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		/**
 		 * contact save on tickets
 		 *
+		 * @since 0.1
+		 *
 		 * @param $post_id
 		 * @param $newTicket
-		 *
-		 * @since rt-Helpdesk 0.1
 		 */
 		function contacts_save_on_ticket( $post_id, $newTicket ) {
 			if ( ! isset( $newTicket['contacts'] ) ) {
 				$newTicket['contacts'] = array();
 			}
-			$contacts = array_map( 'intval', $newTicket[ 'contacts' ] );
+			$contacts = array_map( 'intval', $newTicket['contacts'] );
 			$contacts = array_unique( $contacts );
 
 			$post_type = get_post_type( $post_id );
@@ -254,11 +245,11 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		/**
 		 * AJAX call to get accounts
 		 *
-		 * @since rt-Helpdesk 0.1
+		 * @since 0.1
 		 */
 		function get_account_contacts_ajax() {
 
-			$contacts = rt_biz_get_organization_to_person_connection( $_POST[ 'query' ] );
+			$contacts = rt_biz_get_organization_to_person_connection( $_POST['query'] );
 			$result   = array();
 			foreach ( $contacts as $contact ) {
 				$email    = rt_biz_get_entity_meta( $contact->ID, $this->email_key, true );
@@ -279,20 +270,20 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		/**
 		 * AJAX call to get taxonomy meta
 		 *
-		 * @since rt-Helpdesk 0.1
+		 * @since 0.1
 		 */
 		public function get_taxonomy_meta_ajax() {
 			if ( ! isset( $_POST['query'] ) ) {
 				wp_die( 'Opss!! Invalid request' );
 			}
 
-			$post_id   = $_POST[ 'query' ];
+			$post_id   = $_POST['query'];
 			$post_type = get_post_type( $post_id );
 			$result    = get_post_meta( $post_id );
 
 			$accounts = rt_biz_get_post_for_organization_connection( $post_id, $post_type, $fetch_account = true );
 			foreach ( $accounts as $account ) {
-				$result[ 'account_id' ] = $account->ID;
+				$result['account_id'] = $account->ID;
 			}
 			echo json_encode( $result );
 			die( 0 );
@@ -301,7 +292,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		/**
 		 * AJAX call for autocomplete contact
 		 *
-		 * @since rt-Helpdesk 0.1
+		 * @since 0.1
 		 */
 		public function contact_autocomplete_ajax() {
 			if ( ! isset( $_POST['query'] ) ) {
@@ -327,7 +318,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		/**
 		 * add new contact AJAX call
 		 *
-		 * @since rt-Helpdesk 0.1
+		 * @since 0.1
 		 */
 		public function add_new_contact_ajax() {
 			$returnArray           = array();
@@ -388,7 +379,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 						'value'   => $post->ID,
 						'label'   => $accountData['new-contact-name'],
 						'url'     => admin_url( 'edit.php?' . $post->post_type . '=' . $post->ID . '&post_type=' . $accountData['post_type'] ),
-						'imghtml' => get_avatar( $email, 50 )
+						'imghtml' => get_avatar( $email, 50 ),
 					);
 				}
 			}

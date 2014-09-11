@@ -64,26 +64,10 @@ if ( ! class_exists( 'RT_Meta_Box_External_Link' ) ) {
 		 */
 		public static function save( $post_id, $post ) {
 
-			// External File Links
-			$old_ex_files = get_post_meta( $post_id, '_rtbiz_hd_external_file' );
-			$new_ex_files = array();
-			if ( isset( $_POST['ticket_ex_files'] ) ) {
-				$new_ex_files = $_POST['ticket_ex_files'];
+			global $rt_hd_tickets_operation;
 
-				delete_post_meta( $post_id, '_rtbiz_hd_external_file' );
+			$rt_hd_tickets_operation->ticket_external_link_update( $_POST['ticket_ex_files'], $post_id );
 
-				foreach ( $new_ex_files as $ex_file ) {
-					if ( empty( $ex_file['link'] ) ) {
-						continue;
-					}
-					if ( empty( $ex_file['title'] ) ) {
-						$ex_file['title'] = $ex_file['link'];
-					}
-					add_post_meta( $post_id, '_rtbiz_hd_external_file', json_encode( $ex_file ) );
-				}
-			} else {
-				delete_post_meta( $post_id, '_rtbiz_hd_external_file' );
-			}
 		}
 	}
 }

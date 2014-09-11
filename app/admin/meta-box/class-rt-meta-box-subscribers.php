@@ -111,7 +111,7 @@ if ( ! class_exists( 'RT_Meta_Box_Subscribers ' ) ) {
 			</script>
 			<input type="text" placeholder="Type Subscribers Name to select" id="subscriber_user_ac"/>
 			<ul id="divSubscriberList" class="">
-				<?php echo esc_html( $subScribetHTML ); ?>
+				<?php echo balanceTags( $subScribetHTML ); ?>
 			</ul>
 			</div><?php
 
@@ -129,16 +129,11 @@ if ( ! class_exists( 'RT_Meta_Box_Subscribers ' ) ) {
 		 */
 		public static function save( $post_id, $post ) {
 
+			global $rt_hd_tickets_operation;
+
 			$newTicket   = $_POST['post']; //post data
 
-			// Subscribers
-			if ( ! isset( $_POST['subscribe_to'] ) ) {
-				$_POST['subscribe_to'] = array();
-				if ( intval( $newTicket['post_author'] ) != get_current_user_id() ) {
-					$_POST['subscribe_to'][] = get_current_user_id();
-				}
-			}
-			update_post_meta( $post_id, '_rtbiz_hd_subscribe_to', $_POST['subscribe_to'] );
+			$rt_hd_tickets_operation->ticket_subscribe_update( $_POST['subscribe_to'], $newTicket['post_author'], $post_id );
 		}
 	}
 }

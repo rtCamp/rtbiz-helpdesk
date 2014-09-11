@@ -687,7 +687,7 @@ jQuery( document ).ready( function ( $ ) {
 			} );
 
 		} );
-		$( "#futureNo" ).on( "click", function ( event, ui ) {
+		$( "#futureNo" ).live( "click", function ( event, ui ) {
 			$( this ).parent().html( "<h3>Done</h3>" );
 		} );
 	} catch ( e ) {
