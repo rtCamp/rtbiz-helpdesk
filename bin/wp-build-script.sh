@@ -62,7 +62,11 @@ for WP_VERSION in 4.0 3.9; do
     if [ -e phpunit.xml ] || [ -e phpunit.xml.dist ]; then bash bin/install-wp-tests.sh wordpress_test_db wptestuser wptestpass localhost $WP_VERSION; fi
 
     for PHP_VERSION in 5.2 5.3 5.4 5.5 5.6; do
+
         phpbrew use $PHP_VERSION
+
+        php --version
+
         for WP_MULTISITE in 0 1; do
             LOG_FILE="${CI_BUILD_ID}_php-${PHP_VERSION}_wp-${WP_VERSION}_m-${WP_MULTISITE}.log"
             run_test > $LOG_FILE
