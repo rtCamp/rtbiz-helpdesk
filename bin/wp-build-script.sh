@@ -20,8 +20,8 @@ export WPCS_GIT_TREE=master
 export WPCS_STANDARD=WordPress
 export PHPCS_IGNORE=tests/*
 
-curl -L https://github.com/$PHPCS_GITHUB_SRC/archive/$PHPCS_GIT_TREE.tar.gz | tar xvz --strip-components=1 -C $PHPCS_DIR
-mkdir -p $PHPCS_DIR/CodeSniffer/Standards/WordPress-Coding-Standards && curl -L https://github.com/$WPCS_GITHUB_SRC/archive/$WPCS_GIT_TREE.tar.gz | tar xvz --strip-components=1 -C $PHPCS_DIR/CodeSniffer/Standards/WordPress-Coding-Standards
+curl -L https://github.com/$PHPCS_GITHUB_SRC/archive/$PHPCS_GIT_TREE.tar.gz | tar xz --strip-components=1 -C $PHPCS_DIR
+mkdir -p $PHPCS_DIR/CodeSniffer/Standards/WordPress-Coding-Standards && curl -L https://github.com/$WPCS_GITHUB_SRC/archive/$WPCS_GIT_TREE.tar.gz | tar xz --strip-components=1 -C $PHPCS_DIR/CodeSniffer/Standards/WordPress-Coding-Standards
 ln -s $PHPCS_DIR/CodeSniffer/Standards/WordPress-Coding-Standards/WordPress $PHPCS_DIR/CodeSniffer/Standards/WordPress
 rm -rf $PHPCS_DIR/CodeSniffer/Standards/WordPress-Coding-Standards/WordPress/Sniffs/VIP
 cd ../
@@ -34,7 +34,7 @@ cd ../
 
 rm -rf posts-to-posts
 wget -nv -O posts-to-posts.zip http://downloads.wordpress.org/plugin/posts-to-posts.1.6.3.zip
-unzip posts-to-posts.zip
+unzip -q posts-to-posts.zip
 
 cd $PLUGIN_DIR
 
