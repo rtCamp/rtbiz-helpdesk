@@ -11,7 +11,7 @@ if ( ! class_exists( 'Rt_HD_Attributes' ) ) {
 	 * Class Rt_HD_Attributes
 	 * Handel Custom page "Attribute"
 	 *
-	 * @since 0.1
+	 * @since  0.1
 	 *
 	 * @author udit
 	 */
@@ -31,7 +31,7 @@ if ( ! class_exists( 'Rt_HD_Attributes' ) ) {
 		 */
 		public function __construct() {
 			global $rt_hd_rt_attributes, $rt_hd_attributes_model, $rt_hd_attributes_relationship_model;
-			$rt_hd_rt_attributes = new RT_Attributes( RT_HD_TEXT_DOMAIN );
+			$rt_hd_rt_attributes                 = new RT_Attributes( RT_HD_TEXT_DOMAIN );
 			$rt_hd_attributes_model              = new RT_Attributes_Model();
 			$rt_hd_attributes_relationship_model = new RT_Attributes_Relationship_Model();
 
@@ -322,10 +322,11 @@ if ( ! class_exists( 'Rt_HD_Attributes' ) ) {
 						$selected_term = $post_term[0];
 					}
 					foreach ( $terms as $term ) {
-						$options[] = array( //							'' => $term->term_id,
-							'title'   => $term->name,
-							'checked' => ( $term->term_id == $selected_term ) ? true : false,
-						);
+						$options[] =
+							array( //							'' => $term->term_id,
+								'title'   => $term->name,
+								'checked' => ( $term->term_id == $selected_term ) ? true : false,
+							);
 					}
 					if ( $edit ) {
 						$this->render_rating_stars( $attr, $options );
@@ -376,12 +377,12 @@ if ( ! class_exists( 'Rt_HD_Attributes' ) ) {
 								for="post[<?php echo esc_attr( $attr->attribute_label ); ?>]"><?php echo esc_html( $attr->attribute_label ); ?></label></span>
 					</div>
 					<div class="large-8 mobile-large-2 columns">
-						<?php if ( $edit ) {
-							$this->render_dropdown( $attr, $options );
+					<?php if ( $edit ) {
+						$this->render_dropdown( $attr, $options );
 					} else {
-							$term = get_term( $selected_term, rthd_attribute_taxonomy_name( $attr->attribute_name ) );
-							?><span class="rthd_view_mode"><?php echo esc_html( $term->name ); ?></span><?php
-						} ?>
+						$term = get_term( $selected_term, rthd_attribute_taxonomy_name( $attr->attribute_name ) );
+						?><span class="rthd_view_mode"><?php echo esc_html( $term->name ); ?></span><?php
+					} ?>
 					</div>
 					<?php break;
 				case 'rating-stars':
@@ -398,25 +399,26 @@ if ( ! class_exists( 'Rt_HD_Attributes' ) ) {
 						$selected_term = $post_term[0];
 					}
 					foreach ( $terms as $term ) {
-						$options[] = array( //							$term->name => $term->term_id,
-							''        => $term->term_id,
-							'title'   => $term->name,
-							'checked' => ( $term->term_id == $selected_term ) ? true : false,
-						);
+						$options[] =
+							array( //							$term->name => $term->term_id,
+									''        => $term->term_id,
+									'title'   => $term->name,
+									'checked' => ( $term->term_id == $selected_term ) ? true : false,
+							);
 					} ?>
 					<div class="large-4 small-4 columns">
 						<span class="prefix" title="<?php echo esc_attr( $attr->attribute_label ); ?>"><label
 								for="post[<?php echo esc_attr( $attr->attribute_name ); ?>]"><?php echo esc_html( $attr->attribute_label ); ?></label></span>
 					</div>
-					<div class="large-8 mobile-large-2 columns rthd_attr_border">
-						<?php if ( $edit ) {
-							$this->render_rating_stars( $attr, $options );
+					<div class="large-8 mobile-large-2 columns rthd_attr_border"><?php
+					if ( $edit ) {
+						$this->render_rating_stars( $attr, $options );
 					} else {
-							$term = get_term( $selected_term, rthd_attribute_taxonomy_name( $attr->attribute_name ) );
-							?>
-							<div
-								class="rthd_attr_border rthd_view_mode"><?php echo esc_html( $term->name ); ?></div><?php
-						} ?>
+						$term = get_term( $selected_term, rthd_attribute_taxonomy_name( $attr->attribute_name ) );
+						?>
+						<div
+							class="rthd_attr_border rthd_view_mode"><?php echo esc_html( $term->name ); ?></div><?php
+					} ?>
 					</div>
 					<?php break;
 				case 'date':
@@ -427,11 +429,11 @@ if ( ! class_exists( 'Rt_HD_Attributes' ) ) {
 					</div>
 					<div
 						class="large-7 mobile-large-2 columns <?php echo sanitize_html_class( ( ! $edit ) ? 'rthd_attr_border' : '' ); ?>">
-						<?php if ( $edit ) {
-							$this->render_date( $attr, $value );
+					<?php if ( $edit ) {
+						$this->render_date( $attr, $value );
 					} else {
-							?><span class="rthd_view_mode moment-from-now"><?php echo esc_html( $value ) ?></span><?php
-						} ?>
+						?><span class="rthd_view_mode moment-from-now"><?php echo esc_html( $value ) ?></span><?php
+					} ?>
 					</div>
 					<?php if ( $edit ) { ?>
 					<div class="large-1 mobile-large-1 columns">
@@ -450,11 +452,11 @@ if ( ! class_exists( 'Rt_HD_Attributes' ) ) {
 					</div>
 					<div
 						class="large-7 mobile-large-2 columns <?php echo sanitize_html_class( ( ! $edit ) ? 'rthd_attr_border' : '' ); ?>">
-						<?php if ( $edit ) {
-							$this->render_datetime( $attr, $value );
+					<?php if ( $edit ) {
+						$this->render_datetime( $attr, $value );
 					} else {
-							?><span class="rthd_view_mode moment-from-now"><?php echo esc_html( $value ); ?></span><?php
-						} ?>
+						?><span class="rthd_view_mode moment-from-now"><?php echo esc_html( $value ); ?></span><?php
+					} ?>
 					</div>
 					<?php if ( $edit ) { ?>
 					<div class="large-1 mobile-large-1 columns">
@@ -473,11 +475,11 @@ if ( ! class_exists( 'Rt_HD_Attributes' ) ) {
 					</div>
 					<div
 						class="large-7 mobile-large-2 columns <?php echo sanitize_html_class( ( ! $edit ) ? 'rthd_attr_border' : '' ); ?>">
-						<?php if ( $edit ) {
-							$this->render_currency( $attr, $value );
+					<?php if ( $edit ) {
+						$this->render_currency( $attr, $value );
 					} else {
-							?><span class="rthd_view_mode"><?php echo esc_html( $value ); ?></span><?php
-						} ?>
+						?><span class="rthd_view_mode"><?php echo esc_html( $value ); ?></span><?php
+					} ?>
 					</div>
 					<?php if ( $edit ) { ?>
 					<div class="large-1 mobile-large-1 columns">
@@ -494,11 +496,11 @@ if ( ! class_exists( 'Rt_HD_Attributes' ) ) {
 					</div>
 					<div
 						class="large-8 mobile-large-2 columns <?php echo sanitize_html_class( ( ! $edit ) ? 'rthd_attr_border' : '' ); ?>">
-						<?php if ( $edit ) {
-							$this->render_text( $attr, $value );
+					<?php if ( $edit ) {
+						$this->render_text( $attr, $value );
 					} else {
-							?><span class="rthd_view_mode"><?php esc_htm( $value ); ?></span><?php
-						} ?>
+						?><span class="rthd_view_mode"><?php esc_htm( $value ); ?></span><?php
+					} ?>
 					</div>
 					<?php break;
 				default:

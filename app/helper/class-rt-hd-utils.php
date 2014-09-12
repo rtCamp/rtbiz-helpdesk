@@ -32,7 +32,7 @@ if ( ! class_exists( 'Rt_HD_Utils' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		static public function forceUFT8( $tmpStr ) {
+		static public function force_utf_8( $tmpStr ) {
 			//			return preg_replace( '/[^(\x20-\x7F)]*/', '', $tmpStr );
 			return $tmpStr;
 		}
@@ -44,7 +44,33 @@ if ( ! class_exists( 'Rt_HD_Utils' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		public static $mime_types = array( "pdf" => "application/pdf", "exe" => "application/octet-stream", "zip" => "application/zip", "docx" => "application/msword", "doc" => "application/msword", "xls" => "application/vnd.ms-excel", "ppt" => "application/vnd.ms-powerpoint", "gif" => "image/gif", "png" => "image/png", "jpeg" => "image/jpg", "jpg" => "image/jpg", "mp3" => "audio/mpeg", "wav" => "audio/x-wav", "mpeg" => "video/mpeg", "mpg" => "video/mpeg", "mpe" => "video/mpeg", "mov" => "video/quicktime", "avi" => "video/x-msvideo", "3gp" => "video/3gpp", "css" => "text/css", "jsc" => "application/javascript", "js" => "application/javascript", "php" => "text/html", "htm" => "text/html", "html" => "text/html" );
+		public static $mime_types = array(
+			'pdf'  => 'application/pdf',
+			'exe'  => 'application/octet-stream',
+			'zip'  => 'application/zip',
+			'docx' => 'application/msword',
+			'doc'  => 'application/msword',
+			'xls'  => 'application/vnd.ms-excel',
+			'ppt'  => 'application/vnd.ms-powerpoint',
+			'gif'  => 'image/gif',
+			'png'  => 'image/png',
+			'jpeg' => 'image/jpg',
+			'jpg'  => 'image/jpg',
+			'mp3'  => 'audio/mpeg',
+			'wav'  => 'audio/x-wav',
+			'mpeg' => 'video/mpeg',
+			'mpg'  => 'video/mpeg',
+			'mpe'  => 'video/mpeg',
+			'mov'  => 'video/quicktime',
+			'avi'  => 'video/x-msvideo',
+			'3gp'  => 'video/3gpp',
+			'css'  => 'text/css',
+			'jsc'  => 'application/javascript',
+			'js'   => 'application/javascript',
+			'php'  => 'text/html',
+			'htm'  => 'text/html',
+			'html' => 'text/html',
+		);
 
 		/**
 		 * Logging errors
@@ -54,9 +80,9 @@ if ( ! class_exists( 'Rt_HD_Utils' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		static public function log( $msg, $filename = "error_log.txt" ) {
-			$log_file = "/tmp/rt_helpdesk" . $filename;
-			if ( $fp = fopen( $log_file, "a+" ) ) {
+		static public function log( $msg, $filename = 'error_log.txt' ) {
+			$log_file = '/tmp/rt_helpdesk' . $filename;
+			if ( $fp = fopen( $log_file, 'a+' ) ) {
 				fwrite( $fp, "\n" . '[' . date( DATE_RSS ) . '] ' . $msg . "\n" );
 				fclose( $fp );
 			}
@@ -69,9 +95,9 @@ if ( ! class_exists( 'Rt_HD_Utils' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		static public function setAccounts( $rCount ) {
-			$log_file = RT_HD_PATH . "mailaccount.txt";
-			if ( $fp = fopen( $log_file, "w+" ) ) {
+		static public function set_accounts( $rCount ) {
+			$log_file = RT_HD_PATH . 'mailaccount.txt';
+			if ( $fp = fopen( $log_file, 'w+' ) ) {
 				fwrite( $fp, $rCount );
 				fclose( $fp );
 			}
@@ -80,9 +106,9 @@ if ( ! class_exists( 'Rt_HD_Utils' ) ) {
 		/**
 		 * Determine if a post exists based on title, content, and date
 		 *
-		 * @param string $title Post title
+		 * @param string $title   Post title
 		 * @param string $content Optional post content
-		 * @param string $date Optional post date
+		 * @param string $date    Optional post date
 		 *
 		 * @return int Post ID if post exists, 0 otherwise.
 		 *
@@ -100,17 +126,17 @@ if ( ! class_exists( 'Rt_HD_Utils' ) ) {
 
 			if ( ! empty( $date ) ) {
 				$query .= ' AND post_date = %s';
-				$args[ ] = $post_date;
+				$args[] = $post_date;
 			}
 
 			if ( ! empty( $title ) ) {
 				$query .= ' AND post_title = %s';
-				$args[ ] = $post_title;
+				$args[] = $post_title;
 			}
 
 			if ( ! empty( $content ) ) {
 				$query .= 'AND post_content = %s';
-				$args[ ] = $post_content;
+				$args[] = $post_content;
 			}
 
 			if ( ! empty( $args ) ) {
@@ -150,7 +176,7 @@ if ( ! class_exists( 'Rt_HD_Utils' ) ) {
 			if ( isset( self::$mime_types[ $extension ] ) ) {
 				return self::$mime_types[ $extension ];
 			} else {
-				return "application/octet-stream";
+				return 'application/octet-stream';
 			}
 		}
 
@@ -171,7 +197,7 @@ if ( ! class_exists( 'Rt_HD_Utils' ) ) {
 				}
 			}
 
-			return "tmp";
+			return 'tmp';
 		}
 
 	}

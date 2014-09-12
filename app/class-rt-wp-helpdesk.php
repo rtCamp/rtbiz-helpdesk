@@ -14,7 +14,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 	 * Main class that initialize the rt-helpdesk Classes.
 	 * Load Css/Js for front end
 	 *
-	 * @since 0.1
+	 * @since  0.1
 	 *
 	 * @author udit
 	 */
@@ -148,14 +148,13 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			$page_slugs    = array( 'rthd-' . Rt_HD_Module::$post_type . '-dashboard', );
 			$rt_hd_reports = new Rt_Reports( $page_slugs );
 
-			$rt_hd_dashboard      = new Rt_HD_Dashboard();
-			$rt_hd_acl            = new Rt_HD_ACL();
-			$rt_hd_accounts       = new Rt_HD_Accounts();
-			$rt_hd_contacts       = new Rt_HD_Contacts();
-			$rt_hd_tickets = new Rt_HD_Tickets();
-			$rt_hd_tickets_operation        = new Rt_HD_Tickets_Operation();
+			$rt_hd_dashboard          = new Rt_HD_Dashboard();
+			$rt_hd_acl                = new Rt_HD_ACL();
+			$rt_hd_accounts           = new Rt_HD_Accounts();
+			$rt_hd_contacts           = new Rt_HD_Contacts();
+			$rt_hd_tickets            = new Rt_HD_Tickets();
+			$rt_hd_tickets_operation  = new Rt_HD_Tickets_Operation();
 			$rt_hd_email_notification = new RT_HD_Email_Notification();
-
 
 
 			$reduxHelpdeskConfig = new Redux_Framework_Helpdesk_Config();
@@ -192,8 +191,8 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 		 * @since 0.1
 		 */
 		function update_database() {
-			$updateDB = new RT_DB_Update( trailingslashit( RT_HD_PATH ) . 'index.php', trailingslashit( RT_HD_PATH_SCHEMA ) );
-			$updateDB -> install_db_version = 0;
+			$updateDB                     = new RT_DB_Update( trailingslashit( RT_HD_PATH ) . 'index.php', trailingslashit( RT_HD_PATH_SCHEMA ) );
+			$updateDB->install_db_version = 0;
 			$updateDB->do_upgrade();
 		}
 
@@ -250,14 +249,14 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			}
 
 			wp_enqueue_script( 'rt-jquery-tagit-js', RT_HD_URL . 'app/assets/javascripts/tag-it.js', array(
-					'jquery',
-					'jquery-ui-widget',
-				), RT_HD_VERSION, true );
+				'jquery',
+				'jquery-ui-widget',
+			), RT_HD_VERSION, true );
 			wp_enqueue_style( 'rt-jquery-tagit-css', RT_HD_URL . 'app/assets/css/jquery.tagit.css', false, RT_HD_VERSION, 'all' );
 			wp_enqueue_script( 'jquery-ui-timepicker-addon', RT_HD_URL . 'app/assets/javascripts/jquery-ui-timepicker-addon.js', array(
-					'jquery-ui-datepicker',
-					'jquery-ui-slider',
-				), RT_HD_VERSION, true );
+				'jquery-ui-datepicker',
+				'jquery-ui-slider',
+			), RT_HD_VERSION, true );
 
 			wp_enqueue_script( 'foundation.zepto', RT_HD_URL . 'app/assets/javascripts/vendor/zepto.js', array( 'jquery' ), '', true );
 			wp_enqueue_script( 'jquery.foundation.reveal', RT_HD_URL . 'app/assets/javascripts/jquery.foundation.reveal.js', array( 'foundation-js' ), '', true );
@@ -266,14 +265,14 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			wp_enqueue_script( 'foundation-modernizr-js', RT_HD_URL . 'app/assets/javascripts/vendor/custom.modernizr.js', array(), '', false );
 			wp_enqueue_script( 'ratting-jquery', RT_HD_URL . 'app/assets/ratting-jquery/jquery.rating.pack.js', array(), RT_HD_VERSION, true );
 			wp_enqueue_script( 'foundation-js', RT_HD_URL . 'app/assets/javascripts/foundation/foundation.js', array(
-					'jquery',
-					'foundation.zepto',
-				), RT_HD_VERSION, true );
+				'jquery',
+				'foundation.zepto',
+			), RT_HD_VERSION, true );
 			wp_enqueue_script( 'sticky-kit', RT_HD_URL . 'app/assets/javascripts/stickyfloat.js', array( 'jquery' ), RT_HD_VERSION, true );
 			wp_enqueue_script( 'rthd-app-js', RT_HD_URL . 'app/assets/javascripts/app.js', array(
-					'foundation-js',
-					'rt-jquery-tagit-js',
-				), RT_HD_VERSION, true );
+				'foundation-js',
+				'rt-jquery-tagit-js',
+			), RT_HD_VERSION, true );
 
 
 			wp_enqueue_script( 'moment-js', RT_HD_URL . 'app/assets/javascripts/moment.js', array( 'jquery' ), RT_HD_VERSION, true );
@@ -297,9 +296,9 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 
 			if ( ! wp_script_is( 'jquery-ui-autocomplete' ) ) {
 				wp_enqueue_script( 'jquery-ui-autocomplete', '', array(
-						'jquery-ui-widget',
-						'jquery-ui-position',
-					), '1.9.2', true );
+					'jquery-ui-widget',
+					'jquery-ui-position',
+				), '1.9.2', true );
 			}
 
 			global $wp_scripts;

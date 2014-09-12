@@ -35,28 +35,28 @@ if ( ! class_exists( 'RT_Meta_Box_Attachment' ) ) {
 			$attachments = array();
 			if ( isset( $post->ID ) ) {
 				$attachments = get_posts( array(
-					'posts_per_page' => - 1,
-					'post_parent'    => $post->ID,
-					'post_type'      => 'attachment',
-				) );
+											'posts_per_page' => - 1,
+											'post_parent'    => $post->ID,
+											'post_type'      => 'attachment',
+											) );
 			}?>
 
 			<div id="attachment-container" class="row_group">
 			<a href="#" class="button" id="add_ticket_attachment"><?php _e( 'Add', RT_HD_TEXT_DOMAIN ); ?></a>
 			<ul id="divAttachmentList" class="scroll-height">
-			<?php
+				<?php
 			foreach ( $attachments as $attachment ) {
-					$extn_array = explode( '.', $attachment->guid );
-					$extn       = $extn_array[ count( $extn_array ) - 1 ]; ?>
+				$extn_array = explode( '.', $attachment->guid );
+				$extn       = $extn_array[ count( $extn_array ) - 1 ]; ?>
 				<li data-attachment-id="<?php echo esc_attr( $attachment->ID ); ?>" class="attachment-item row_group">
 					<a href="#" class="delete_row rthd_delete_attachment">x</a> <a target="_blank"
 					                                                               href="<?php echo esc_url( wp_get_attachment_url( $attachment->ID ) ); ?>">
 						<img height="20px" width="20px"
-						     src="<?php echo  esc_url( RT_HD_URL . 'assets/file-type/' . $extn . '.png' ); ?>"/><?php
+						     src="<?php echo esc_url( RT_HD_URL . 'assets/file-type/' . $extn . '.png' ); ?>"/><?php
 						echo esc_attr( $attachment->post_title ); ?>
 					</a> <input type="hidden" name="attachment[]" value="<?php echo esc_attr( $attachment->ID ); ?>"/>
 					</li><?php
-				} ?>
+			} ?>
 			</ul>
 			</div><?php
 		}

@@ -61,8 +61,8 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 
 			<div class="row_group">
 				<span class="prefix" title="<?php _e( 'Assigned To', RT_HD_TEXT_DOMAIN ); ?>"><label
-						for="post[post_author]"><strong><?php _e( 'Assigned To' ); ?></strong></label></span>
-				<select name="post[post_author]"><?php
+						for="post[post_author]"><strong><?php _e( 'Assigned To' ); ?></strong></label></span> <select
+					name="post[post_author]"><?php
 			if ( ! empty( $rtcamp_users ) ) {
 				foreach ( $rtcamp_users as $author ) {
 					if ( $author->ID == $post_author ) {
@@ -111,9 +111,9 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 				      title="<?php _e( 'Create Date', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Create Date', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
 				<input class="datetimepicker moment-from-now" type="text" placeholder="Select Create Date"
 				       value="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>"
-				       title="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>">
-				<input name="post[post_date]" type="hidden"
-				       value="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>"/>
+				       title="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>"> <input
+					name="post[post_date]" type="hidden"
+					value="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>"/>
 				<!--<span class="postfix datepicker-toggle" data-datepicker="closing-date"><label class="foundicon-calendar">[]</label></span>-->
 			</div>
 
@@ -121,8 +121,8 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 				<span class="prefix"
 				      title="<?php _e( 'Modify Date', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Modify Date', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
 				<input class="moment-from-now" type="text" placeholder="Modified on Date"
-				       value="<?php echo esc_attr( $modifydate ); ?>"
-				       title="<?php echo esc_attr( $modifydate ); ?>" readonly="readonly">
+				       value="<?php echo esc_attr( $modifydate ); ?>" title="<?php echo esc_attr( $modifydate ); ?>"
+				       readonly="readonly">
 				<!--<span class="postfix datepicker-toggle" data-datepicker="closing-date"><label class="foundicon-calendar">[]</label></span>-->
 			</div>
 
@@ -131,9 +131,9 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 				      title="<?php _e( 'Closing Date', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Closing Date', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
 				<input class="datepicker moment-from-now" type="text" placeholder="Select Closing Date"
 				       value="<?php echo esc_attr( ( isset( $closingdate ) ) ? $closingdate : '' ); ?>"
-				       title="<?php echo esc_attr( ( isset( $closingdate ) ) ? $closingdate : '' ); ?>">
-				<input name="post[closing-date]" type="hidden"
-				       value="<?php echo esc_attr( ( isset( $closingdate ) ) ? $closingdate : '' ); ?>"/>
+				       title="<?php echo esc_attr( ( isset( $closingdate ) ) ? $closingdate : '' ); ?>"> <input
+					name="post[closing-date]" type="hidden"
+					value="<?php echo esc_attr( ( isset( $closingdate ) ) ? $closingdate : '' ); ?>"/>
 				<!--<span class="postfix datepicker-toggle" data-datepicker="closing-date"><label class="foundicon-calendar">[]</label></span>-->
 			</div>
 
@@ -178,7 +178,7 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 
 			global $rt_hd_tickets_operation;
 
-			$newTicket   = $_POST['post']; //post data
+			$newTicket = $_POST['post']; //post data
 
 			//Create Date
 			$creationdate = $newTicket['post_date'];

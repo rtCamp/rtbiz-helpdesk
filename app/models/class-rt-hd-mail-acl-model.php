@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @author udit
  *
- * @since rt-Helpdesk 0.1
+ * @since  rt-Helpdesk 0.1
  */
 if ( ! class_exists( 'Rt_HD_Mail_ACL_Model' ) ) {
 	/**

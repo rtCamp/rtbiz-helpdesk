@@ -69,15 +69,13 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 		}
 
 		/**
-		 * Eidt Column list view on Tickets List view page
+		 * Edit Column list view on Tickets List view page
 		 *
 		 * @since  0.1
 		 *
-		 * @param $existing_columns
-		 *
 		 * @return array
 		 */
-		public function edit_custom_columns( $existing_columns ) {
+		public function edit_custom_columns( ) {
 			$columns = array();
 
 			$columns['cb']                         = '<input type="checkbox" />';
@@ -125,9 +123,9 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 					$user_id   = get_post_meta( $post->ID, '_rtbiz_hd_created_by', true );
 					$user_info = get_userdata( $user_id );
 					$url       = esc_url( add_query_arg( array(
-						'post_type'  => Rt_HD_Module::$post_type,
-						'created_by' => $user_id,
-					), 'edit.php' ) );
+															'post_type'  => Rt_HD_Module::$post_type,
+															'created_by' => $user_id,
+															), 'edit.php' ) );
 
 					printf( __( '<span class="created-by tips" data-tip="%s">%s', RT_HD_PATH_ADMIN ), get_the_date( 'd-m-Y H:i' ), $datediff );
 					if ( $user_info ) {
@@ -144,9 +142,9 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 					$user_id   = get_post_meta( $post->ID, '_rtbiz_hd_updated_by', true );
 					$user_info = get_userdata( $user_id );
 					$url       = esc_url( add_query_arg( array(
-						'post_type'  => Rt_HD_Module::$post_type,
-						'updated_by' => $user_id,
-					), 'edit.php' ) );
+															'post_type'  => Rt_HD_Module::$post_type,
+															'updated_by' => $user_id,
+															), 'edit.php' ) );
 
 					printf( __( '<span class="created-by tips" data-tip="%s">%s', RT_HD_PATH_ADMIN ), get_the_modified_date( 'd-m-Y H:i' ), $datediff );
 					if ( $user_info ) {
@@ -165,9 +163,9 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 						$user_id   = get_post_meta( $post->ID, '_rtbiz_hd_closed_by', true );
 						$user_info = get_userdata( $user_id );
 						$url       = esc_url( add_query_arg( array(
-							'post_type'  => Rt_HD_Module::$post_type,
-							'updated_by' => $user_id,
-						), 'edit.php' ) );
+															'post_type'  => Rt_HD_Module::$post_type,
+															'updated_by' => $user_id,
+															), 'edit.php' ) );
 
 						if ( $user_info ) {
 							printf( ' by <a href="%s">%s</a></span>', $url, $user_info->user_login );
@@ -267,7 +265,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 		 * @param $post
 		 */
 		public function save_meta_boxes( $post_id, $post ) {
-			global $rt_hd_module;
+			//global $rt_hd_module;
 			// $post_id and $post are required
 			if ( empty( $post_id ) || empty( $post ) ) {
 				return;

@@ -1309,12 +1309,13 @@ if ( ! class_exists( 'Rt_HD_Tickets' ) ) {
 
 			$returnArray['status']        = true;
 			$returnArray['data']          = $this->generate_comment_html_front( $comment );
-			$returnArray['comment_count'] = get_comments( array(
-				'order'     => 'DESC',
-				'post_id'   => $comment_post_ID,
-				'post_type' => $post_type,
-				'count'     => true,
-			) );
+			$returnArray['comment_count'] = get_comments(
+				array(
+					'order'     => 'DESC',
+					'post_id'   => $comment_post_ID,
+					'post_type' => $post_type,
+					'count'     => true,
+				) );
 
 			echo json_encode( $returnArray );
 
@@ -1348,22 +1349,24 @@ if ( ! class_exists( 'Rt_HD_Tickets' ) ) {
 			}
 			$rthd_ticket   = $ticketpost[0];
 			$page          = $_POST['page'];
-			$comment_count = count( get_comments( array(
-				'meta_key'   => '_rthd_privacy',
-				'meta_value' => 'no',
-				'order'      => 'DESC',
-				'post_id'    => $rthd_ticket->ID,
-				'post_type'  => $rthd_ticket->post_type,
-			) ) );
-			$comments      = get_comments( array(
-				'meta_key'   => '_rthd_privacy',
-				'meta_value' => 'no',
-				'order'      => 'DESC',
-				'post_id'    => $rthd_ticket->ID,
-				'post_type'  => $rthd_ticket->post_type,
-				'number'     => '10',
-				'offset'     => $page * 10,
-			) );
+			$comment_count = count( get_comments(
+										array(
+											'meta_key'   => '_rthd_privacy',
+											'meta_value' => 'no',
+											'order'      => 'DESC',
+											'post_id'    => $rthd_ticket->ID,
+											'post_type'  => $rthd_ticket->post_type,
+											) ) );
+			$comments = get_comments(
+				array(
+					'meta_key'   => '_rthd_privacy',
+					'meta_value' => 'no',
+					'order'      => 'DESC',
+					'post_id'    => $rthd_ticket->ID,
+					'post_type'  => $rthd_ticket->post_type,
+					'number'     => '10',
+					'offset'     => $page * 10,
+				) );
 			ob_start();
 			foreach ( $comments as $comment ) {
 				echo balanceTags( $this->generate_comment_html_front( $comment ) );
@@ -1501,12 +1504,13 @@ if ( ! class_exists( 'Rt_HD_Tickets' ) ) {
 
 				$returnArray['status']        = true;
 				$returnArray['data']          = $this->genrate_comment_html_ajax( $comment );
-				$returnArray['comment_count'] = get_comments( array(
-					'order'     => 'DESC',
-					'post_id'   => $comment_post_ID,
-					'post_type' => $post_type,
-					'count'     => true,
-				) );
+				$returnArray['comment_count'] = get_comments(
+					array(
+						'order'     => 'DESC',
+						'post_id'   => $comment_post_ID,
+						'post_type' => $post_type,
+						'count'     => true,
+					) );
 				$returnArray['private']       = get_comment_meta( $_POST['comment_id'], '_rthd_privacy', true );
 
 				echo json_encode( $returnArray );
@@ -1667,11 +1671,11 @@ if ( ! class_exists( 'Rt_HD_Tickets' ) ) {
 
 			$returnArray['data']          = $this->genrate_comment_html_ajax( $comment );
 			$returnArray['comment_count'] = get_comments( array(
-				'order'     => 'DESC',
-				'post_id'   => $comment_post_ID,
-				'post_type' => $post_type,
-				'count'     => true,
-			) );
+															'order'     => 'DESC',
+															'post_id'   => $comment_post_ID,
+															'post_type' => $post_type,
+															'count'     => true,
+															) );
 			$returnArray['private']       = get_comment_meta( $comment_ID, '_rthd_privacy', true );
 
 			echo json_encode( $returnArray );
@@ -2028,10 +2032,11 @@ if ( ! class_exists( 'Rt_HD_Tickets' ) ) {
 		function rt_hd_tickets_callback( $atts ) {
 			global $rt_hd_module;
 			$labels = $rt_hd_module->labels;
-			$a      = shortcode_atts( array(
-				'email' => '',
-				'user'  => '',
-			), $atts );
+			$a      = shortcode_atts(
+				array(
+					'email' => '',
+					'user'  => '',
+					), $atts );
 
 
 			$args = array(
@@ -2074,7 +2079,7 @@ if ( ! class_exists( 'Rt_HD_Tickets' ) ) {
 				<?php
 
 
-				foreach ( $tickets as $ticket ) {
+			foreach ( $tickets as $ticket ) {
 
 					$rthd_unique_id = get_post_meta( $ticket->ID, '_rtbiz_hd_unique_id', true );
 					$date           = new DateTime( $ticket->post_modified );
@@ -2082,11 +2087,11 @@ if ( ! class_exists( 'Rt_HD_Tickets' ) ) {
 					?>
 
 					<tr>
-						<td> #<?php echo $ticket->ID ?> </td>
-						<td> <?php echo human_time_diff( $date->format( 'U' ), time() ) . __( ' ago' ) ?> </td>
-						<td> <?php echo $ticket->post_status ?> </td>
+						<td> #<?php echo esc_attr( $ticket->ID ) ?> </td>
+						<td> <?php echo esc_attr( human_time_diff( $date->format( 'U' ), time() ) ) .esc_attr( __( ' ago' ) ) ?> </td>
+						<td> <?php echo esc_attr( $ticket->post_status )?> </td>
 						<td><a class="button support" target="_blank"
-						       href="<?php echo trailingslashit( site_url() ) . strtolower( $labels['name'] ) . '/?rthd_unique_id=' . $rthd_unique_id; ?>"><?php _e( 'Link' ); ?></a>
+						       href="<?php echo esc_url( trailingslashit( site_url() ) ) . esc_attr( strtolower( $labels['name'] ) ) . '/?rthd_unique_id=' . esc_attr( $rthd_unique_id ); ?>"><?php _e( 'Link' ); ?></a>
 						</td>
 					</tr>
 

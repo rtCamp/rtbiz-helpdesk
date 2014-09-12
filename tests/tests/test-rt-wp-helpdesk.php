@@ -20,7 +20,7 @@ class test_RT_WP_Help_desk extends RT_WP_TestCase {
 	function setUp() {
 		parent::setUp();
 		$this->rtwpHelpDesk = new RT_WP_Helpdesk();
-		$this->rtdbupdate = new RT_DB_Update( false, realpath( dirname( __FILE__ ) . '/../../app/schema/' ) );
+		$this->rtdbupdate   = new RT_DB_Update( false, realpath( dirname( __FILE__ ) . '/../../app/schema/' ) );
 		$this->rtdbupdate->do_upgrade();
 	}
 

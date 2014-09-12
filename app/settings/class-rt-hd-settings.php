@@ -185,11 +185,12 @@ if ( ! class_exists( 'Rt_HD_Settings' ) ) {
 				$client->setClientId( $google_client_id );
 				$client->setClientSecret( $google_client_secret );
 				$client->setRedirectUri( $google_client_redirect_url );
-				$client->setScopes( array(
-					'https://mail.google.com/',
-					'https://www.googleapis.com/auth/userinfo.email',
-					'https://www.googleapis.com/auth/userinfo.profile',
-				) );
+				$client->setScopes(
+					array(
+						'https://mail.google.com/',
+						'https://www.googleapis.com/auth/userinfo.email',
+						'https://www.googleapis.com/auth/userinfo.profile',
+					) );
 				$client->setAccessType( 'offline' );
 
 				$token = json_decode( $ac->outh_token );
@@ -225,7 +226,7 @@ if ( ! class_exists( 'Rt_HD_Settings' ) ) {
 		public function update_gmail_ac_count() {
 			global $rt_hd_mail_accounts_model;
 			$accounts = $rt_hd_mail_accounts_model->get_all_mail_accounts();
-			Rt_HD_Utils::setAccounts( sizeof( $accounts ) );
+			Rt_HD_Utils::set_accounts( sizeof( $accounts ) );
 		}
 
 		/**
@@ -307,10 +308,11 @@ if ( ! class_exists( 'Rt_HD_Settings' ) ) {
 				$user_id = get_current_user_id();
 			}
 			global $rt_hd_mail_accounts_model;
-			$result = $rt_hd_mail_accounts_model->remove_mail_account( array(
-				'email'   => $email,
-				'user_id' => $user_id,
-			) );
+			$result = $rt_hd_mail_accounts_model->remove_mail_account(
+				array(
+					'email'   => $email,
+					'user_id' => $user_id,
+				) );
 			$this->update_gmail_ac_count();
 
 			return $result;

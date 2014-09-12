@@ -375,26 +375,21 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 					<tr>
 						<td>{{this.value}}</td>
 						<td>
-							<select data-map-value='{{this.value}}'>
-								{{#each ../mapData}}
+							<select data-map-value='{{this.value}}'> {{#each ../mapData}}
 								<option value="{{this.slug}}"
 								{{{mapfieldnew this.display ../value}}}>{{this.display}}</option>
-								{{/each}}
-							</select>
+								{{/each}} </select>
 						</td>
 						{{/each}}
 				</table>
 			</script>
 			<script id="defined_filed-option" type="text/x-handlebars-template">
 				{{#each this}}
-				<option value="{{this.slug}}">{{this.display}}</option>
-				{{/each}}
+				<option value="{{this.slug}}">{{this.display}}</option>				{{/each}}
 			</script>
 			<script id="key-type-option" type="text/x-handlebars-template">
-				<option value="">--Select Key--</option>
-				{{#each this}}
-				<option value="{{this.meta_key}}">{{this.meta_key}}</option>
-				{{/each}}
+				<option value="">--Select Key--</option>				{{#each this}}
+				<option value="{{this.meta_key}}">{{this.meta_key}}</option>				{{/each}}
 			</script>
 
 		<?php
@@ -558,19 +553,19 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 						<tr>
 							<td><?php echo esc_html( ucfirst( $value ) ); ?></td>
 							<td>
-								<?php
-								$fieldname   = str_replace( ' ', '-s-', $value );
-								$form_fields = '<select data-og="' . $fieldname . '" name="field-' . $fieldname . '"  id="field-' . $fieldname . '" class="map_form_fields map_form_fixed_fields">';
-								$form_fields .= '<option value="">Choose a field or Skip it</option>';
-								foreach ( $this->ticket_field as $key => $lfield ) {
-									/*if ($lfield["type"] == 'defined')
-										continue;*/
-									$form_fields .= '<option value="' . $lfield['slug'] . '">' . ucfirst( $lfield['display_name'] ) . '</option>';
-								}
-								//$form_fields .= '<option value="ticketmeta">Other Field</option>';
-								$form_fields .= '</select>';
-								echo balanceTags( $form_fields );
-								?>
+						<?php
+						$fieldname   = str_replace( ' ', '-s-', $value );
+						$form_fields = '<select data-og="' . $fieldname . '" name="field-' . $fieldname . '"  id="field-' . $fieldname . '" class="map_form_fields map_form_fixed_fields">';
+						$form_fields .= '<option value="">Choose a field or Skip it</option>';
+						foreach ( $this->ticket_field as $key => $lfield ) {
+							/*if ($lfield["type"] == 'defined')
+								continue;*/
+							$form_fields .= '<option value="' . $lfield['slug'] . '">' . ucfirst( $lfield['display_name'] ) . '</option>';
+						}
+						//$form_fields .= '<option value="ticketmeta">Other Field</option>';
+						$form_fields .= '</select>';
+						echo balanceTags( $form_fields );
+						?>
 							</td>
 							<td></td>
 							<td class='helpdesk-dummy-data'
@@ -602,8 +597,8 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 				}
 				?>
 				<div id="map_message" class="updated map_message">
-					Form Selected : <strong><?php echo esc_html( $form_data['title'] ); ?></strong><br/>
-					Total Entries: <strong><?php echo esc_html( $form_count['total'] ); ?></strong>
+					Form Selected : <strong><?php echo esc_html( $form_data['title'] ); ?></strong><br/> Total Entries:
+					<strong><?php echo esc_html( $form_count['total'] ); ?></strong>
 				</div>
 				<form method="post" action="" id="rtHelpdeskMappingForm" name="rtHelpdeskMappingForm">
 				<input type="hidden" name="mapSource" id="mapSource" value="<?php echo esc_attr( $form_id ); ?>"/>
@@ -631,18 +626,18 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 						                                                                 value="<?php echo esc_attr( ucfirst( $field['type'] ) ); ?>"/>
 						</td>
 						<td>
-							<?php
-							$form_fields = '<select name="field-' . $field['id'] . '"  id="field-' . $field['id'] . '" class="map_form_fields map_form_fixed_fields">';
-							$form_fields .= '<option value="">Choose a field or Skip it</option>';
-							foreach ( $this->ticket_field as $key => $lfield ) {
-								/*if (isset($lfield["type"]) &&  $lfield["type"]== 'defined')
-									continue;*/
-								$form_fields .= '<option value="' . esc_attr( $lfield['slug'] ) . '">' . esc_html( ucfirst( $lfield['display_name'] ) ) . '</option>';
-							}
-							//                                                /$form_fields .= '<option value="ticketmeta">Other Field</option>';
-							$form_fields .= '</select>';
-							echo balanceTags( $form_fields );
-							?>
+					<?php
+					$form_fields = '<select name="field-' . $field['id'] . '"  id="field-' . $field['id'] . '" class="map_form_fields map_form_fixed_fields">';
+					$form_fields .= '<option value="">Choose a field or Skip it</option>';
+					foreach ( $this->ticket_field as $key => $lfield ) {
+						/*if (isset($lfield["type"]) &&  $lfield["type"]== 'defined')
+							continue;*/
+						$form_fields .= '<option value="' . esc_attr( $lfield['slug'] ) . '">' . esc_html( ucfirst( $lfield['display_name'] ) ) . '</option>';
+					}
+					//                                                /$form_fields .= '<option value="ticketmeta">Other Field</option>';
+					$form_fields .= '</select>';
+					echo balanceTags( $form_fields );
+					?>
 						</td>
 						<td></td>
 						<td class='helpdesk-dummy-data'
@@ -660,18 +655,18 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 					Status
 				</td>
 				<td>
-					<?php
-					$ticketStatus     = $rt_hd_module->statuses;
-					$arr_ticketstatus = array();
-					$form_fields      = '<select name="ticketstatus" class="map_form_fields">';
-					foreach ( $ticketStatus as $key => $lfield ) {
-						$form_fields .= '<option value="' . esc_attr( $lfield['slug'] ) . '">' . esc_html( $lfield['name'] ) . '</option>';
-						$arr_ticketstatus[] = array( 'slug' => $lfield['slug'], 'display' => $lfield['name'] );
-					}
-					$form_fields .= '</select>';
-					echo balanceTags( $form_fields );
-					echo '<script> var arr_ticketstatus=' . json_encode( $arr_ticketstatus ) . '; </script>';
-					?>
+			<?php
+			$ticketStatus     = $rt_hd_module->statuses;
+			$arr_ticketstatus = array();
+			$form_fields      = '<select name="ticketstatus" class="map_form_fields">';
+			foreach ( $ticketStatus as $key => $lfield ) {
+				$form_fields .= '<option value="' . esc_attr( $lfield['slug'] ) . '">' . esc_html( $lfield['name'] ) . '</option>';
+				$arr_ticketstatus[] = array( 'slug' => $lfield['slug'], 'display' => $lfield['name'] );
+			}
+			$form_fields .= '</select>';
+			echo balanceTags( $form_fields );
+			echo '<script> var arr_ticketstatus=' . json_encode( $arr_ticketstatus ) . '; </script>';
+			?>
 				</td>
 				<td></td>
 				<td></td>
@@ -682,32 +677,32 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 					Assigned To
 				</td>
 				<td>
-					<?php
-					global $wpdb;
-					$results          = Rt_HD_Utils::get_hd_rtcamp_user();
-					$meta_key_results = $wpdb->get_results( " select distinct meta_key from $wpdb->postmeta inner join $wpdb->posts on post_id=ID
-						 and post_type='" . $post_type . "' and  not meta_key like '\_%' order by meta_key" );
+			<?php
+			global $wpdb;
+			$results          = Rt_HD_Utils::get_hd_rtcamp_user();
+			$meta_key_results = $wpdb->get_results( " select distinct meta_key from $wpdb->postmeta inner join $wpdb->posts on post_id=ID
+				 and post_type='" . $post_type . "' and  not meta_key like '\_%' order by meta_key" );
 
-					$arr_assignedto = array();
-					if ( ! empty( $results ) ) {
-						// Name is your custom field key
-						echo "<select name='assignedto'>";
-						// loop trough each author
-						foreach ( $results as $author ) {
-							echo '<option value=' . esc_attr( $author->ID ) . ' >' . esc_html( $author->display_name ) . '</option>';
-							$arr_assignedto[] = array(
-								'slug'    => $author->ID,
-								'display' => $author->display_name . ' ' . $author->user_email,
-							);
-						}
+			$arr_assignedto = array();
+			if ( ! empty( $results ) ) {
+				// Name is your custom field key
+				echo "<select name='assignedto'>";
+				// loop trough each author
+				foreach ( $results as $author ) {
+					echo '<option value=' . esc_attr( $author->ID ) . ' >' . esc_html( $author->display_name ) . '</option>';
+					$arr_assignedto[] = array(
+						'slug'    => $author->ID,
+						'display' => $author->display_name . ' ' . $author->user_email,
+					);
+				}
 
-						echo '</select>';
-					} else {
-						_e( 'No authors found', RT_HD_TEXT_DOMAIN );
-					}
-					echo '<script> var arr_assignedto=' . json_encode( $arr_assignedto ) . '; </script>';
-					echo '<script> var arr_ticketmeta_key=' . json_encode( $meta_key_results ) . '; </script>';
-					?>
+				echo '</select>';
+			} else {
+				_e( 'No authors found', RT_HD_TEXT_DOMAIN );
+			}
+			echo '<script> var arr_assignedto=' . json_encode( $arr_assignedto ) . '; </script>';
+			echo '<script> var arr_ticketmeta_key=' . json_encode( $meta_key_results ) . '; </script>';
+			?>
 				</td>
 				<td></td>
 				<td></td>
@@ -720,36 +715,36 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 				<tr>
 					<td><?php echo esc_html( $attr->attribute_label ); ?></td>
 					<td>
-						<?php
-						switch ( $attr->attribute_store_as ) {
-							case 'taxonomy':
-								$attr_terms = get_terms( rthd_attribute_taxonomy_name( $attr->attribute_name ), array(
-									'hide_empty' => false,
-									'orderby'    => $attr->attribute_orderby,
-									'order'      => 'ASC',
-								) );
-								$term_array = array();
-								if ( is_array( $attr_terms ) && count( $attr_terms ) > 0 ) {
-									echo '<select name="' . esc_attr( str_replace( array( '-' ), '_', $attr->attribute_name ) ) . '">';
-									echo '<option value="" >Select ' . esc_html( $attr->attribute_label ) . '</option>';
-									foreach ( $attr_terms as $term ) {
-										echo '<option value="' . esc_attr( $term->slug ) . '" >' . esc_html( $term->name ) . '</option>';
-										$term_array[] = array( 'slug' => $term->slug, 'display' => $term->name );
-									}
-									echo '</select>';
-								} else {
-									echo 'No ' . esc_html( $attr->attribute_label ) . ' found';
-								}
-								echo '<script> var arr_' . esc_attr( str_replace( array( '-' ), '_', $attr->attribute_name ) ) . '=' . json_encode( $term_array ) . '; </script>';
-								break;
-							case 'meta':
-								echo '<input type="text" name="' . esc_attr( str_replace( array( '-' ), '_', $attr->attribute_name ) ) . '" />';
-								break;
-							default:
-								do_action( 'rthd_gravity_form_fields_map_default_value' & $this->ticket_field[ $attr->attribute_name ], $attr );
-								break;
+				<?php
+				switch ( $attr->attribute_store_as ) {
+					case 'taxonomy':
+						$attr_terms = get_terms( rthd_attribute_taxonomy_name( $attr->attribute_name ), array(
+							'hide_empty' => false,
+							'orderby'    => $attr->attribute_orderby,
+							'order'      => 'ASC',
+						) );
+						$term_array = array();
+						if ( is_array( $attr_terms ) && count( $attr_terms ) > 0 ) {
+							echo '<select name="' . esc_attr( str_replace( array( '-' ), '_', $attr->attribute_name ) ) . '">';
+							echo '<option value="" >Select ' . esc_html( $attr->attribute_label ) . '</option>';
+							foreach ( $attr_terms as $term ) {
+								echo '<option value="' . esc_attr( $term->slug ) . '" >' . esc_html( $term->name ) . '</option>';
+								$term_array[] = array( 'slug' => $term->slug, 'display' => $term->name );
+							}
+							echo '</select>';
+						} else {
+							echo 'No ' . esc_html( $attr->attribute_label ) . ' found';
 						}
-						?>
+						echo '<script> var arr_' . esc_attr( str_replace( array( '-' ), '_', $attr->attribute_name ) ) . '=' . json_encode( $term_array ) . '; </script>';
+						break;
+					case 'meta':
+						echo '<input type="text" name="' . esc_attr( str_replace( array( '-' ), '_', $attr->attribute_name ) ) . '" />';
+						break;
+					default:
+						do_action( 'rthd_gravity_form_fields_map_default_value' & $this->ticket_field[ $attr->attribute_name ], $attr );
+						break;
+				}
+					?>
 					</td>
 					<td></td>
 					<td></td>
@@ -763,8 +758,8 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 					Date Format
 				</td>
 				<td>
-					<input type="text" value="" name="dateformat"/>
-					<a href='http://www.php.net/manual/en/datetime.createfromformat.php' target='_blank'>Refrence</a>
+					<input type="text" value="" name="dateformat"/> <a
+						href='http://www.php.net/manual/en/datetime.createfromformat.php' target='_blank'>Refrence</a>
 				</td>
 				<td></td>
 				<td></td>
@@ -792,18 +787,18 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 
 			<tr>
 				<td>
-					<?php
-					$form_fields = '<select name="otherfield0" class="other-field">';
-					$form_fields .= '<option value="">Select</option>';
-					foreach ( $this->ticket_field as $lfield ) {
-						if ( isset( $lfield['type'] ) && $lfield['type'] == 'defined' ) {
-							continue;
-						}
-						$form_fields .= '<option value="' . esc_attr( $lfield['slug'] ) . '">' . esc_html( ucfirst( $lfield['display_name'] ) ) . '</option>';
-					}
-					$form_fields .= '</select>';
-					echo balanceTags( $form_fields );
-					?>
+			<?php
+			$form_fields = '<select name="otherfield0" class="other-field">';
+			$form_fields .= '<option value="">Select</option>';
+			foreach ( $this->ticket_field as $lfield ) {
+				if ( isset( $lfield['type'] ) && $lfield['type'] == 'defined' ) {
+					continue;
+				}
+				$form_fields .= '<option value="' . esc_attr( $lfield['slug'] ) . '">' . esc_html( ucfirst( $lfield['display_name'] ) ) . '</option>';
+			}
+			$form_fields .= '</select>';
+			echo balanceTags( $form_fields );
+			?>
 				</td>
 				<td>
 					<input type="text" value="" id="otherfield0"/>
@@ -825,51 +820,51 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 				<td></td>
 			</tr>
 			</tfoot>
-		</table>
+			</table>
 			<script>
 				var transaction_id =<?php echo esc_attr( time() ); ?>;
 				var arr_map_fields =<?php echo json_encode( $this->ticket_field ); ?>;
 				<?php if ( $_REQUEST['type'] == 'gravity' ) { ?>
 				var arr_lead_id = <?php $this->get_all_gravity_lead( $form_id ); ?>;
-				<?php } else {
-					$jsonArray = array();
-					$rCount = 0;
-					foreach ($csv->data as $cdata) {
-						$jsonArray[] = array( 'id' => $rCount++ );
-					}
-					?>
-				var arr_lead_id = <?php echo json_encode($jsonArray); ?>;
-				<?php } ?>
+			<?php } else {
+			$jsonArray = array();
+			$rCount = 0;
+				foreach ( $csv->data as $cdata ) {
+					$jsonArray[] = array( 'id' => $rCount++ );
+				}
+			?>
+		var arr_lead_id = <?php echo json_encode( $jsonArray ); ?>;
+			<?php } ?>
 			</script>
 			<input type="button" name="map_mapping_import" id="map_mapping_import" value="Import"
 			       class="button button-primary"/>
-		</form>
-		<div id='startImporting'>
-			<h2> <?php _e( sprintf( 'Importing %s into Helpdesk...', isset( $formname ) ? $formname : '' ), RT_HD_TEXT_DOMAIN ); ?></h2>
+			</form>
+			<div id='startImporting'>
+				<h2> <?php _e( esc_attr( sprintf( 'Importing %s into Helpdesk...', isset( $formname ) ? $formname : '' ) ), RT_HD_TEXT_DOMAIN ); ?></h2>
 
-			<div id="progressbar"></div>
-			<div class="myupdate">
-				<p> <?php _e( 'Successfully imported :', RT_HD_TEXT_DOMAIN ); ?> <span
-						id='sucessfullyImported'>0</span></p>
+				<div id="progressbar"></div>
+				<div class="myupdate">
+					<p> <?php _e( 'Successfully imported :', RT_HD_TEXT_DOMAIN ); ?> <span
+							id='sucessfullyImported'>0</span></p>
+				</div>
+				<div class="myerror">
+					<p> <?php _e( 'Failed to import :', RT_HD_TEXT_DOMAIN ); ?> <span id='failImported'>0</span></p>
+				</div>
+				<div class="importloading">
+
+				</div>
+				<div class="sucessmessage">
+					<?php if ( $_REQUEST['type'] == 'gravity' ) {
+					_e( 'Would u like to import future entries automatically?', RT_HD_TEXT_DOMAIN );?> &nbsp; <input
+						type='button' id='futureYes' value='Yes' class="button button-primary"/>&nbsp;<input
+						type='button' id='futureNo' value='No' class="button "/></div>
+				<?php } else { ?>
+					<h3><?php _e( 'Done !', RT_HD_TEXT_DOMAIN ); ?></h3>
+					<span id="extra-data-importer"></span>
+
+				<?php } ?>
+
 			</div>
-			<div class="myerror">
-				<p> <?php _e( 'Failed to import :', RT_HD_TEXT_DOMAIN ); ?> <span id='failImported'>0</span></p>
-			</div>
-			<div class="importloading">
-
-			</div>
-			<div class="sucessmessage">
-				<?php if ( $_REQUEST['type'] == 'gravity' ) {
-				_e( 'Would u like to import future entries automatically?', RT_HD_TEXT_DOMAIN );?> &nbsp;
-				<input type='button' id='futureYes' value='Yes' class="button button-primary"/>&nbsp;<input
-					type='button' id='futureNo' value='No' class="button "/></div>
-			<?php } else { ?>
-				<h3><?php _e( 'Done !', RT_HD_TEXT_DOMAIN ); ?></h3>
-				<span id="extra-data-importer"></span>
-
-			<?php } ?>
-
-		</div>
 			<?php    die();
 
 		}

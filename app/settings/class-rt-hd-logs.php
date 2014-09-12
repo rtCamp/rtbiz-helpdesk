@@ -134,7 +134,7 @@ if ( ! class_exists( 'Rt_HD_Logs' ) ) {
 				</thead>
 
 				<?php
-				foreach ( $result as $rslt ) {
+			foreach ( $result as $rslt ) {
 					?>
 					<tr>
 						<td>
@@ -170,9 +170,9 @@ if ( ! class_exists( 'Rt_HD_Logs' ) ) {
 							<a class="revertChanges"
 							   href="edit.php?post_type=rt_ticket&page=rthd-settings&transa_id=<?php echo esc_attr( $rslt->trans_id ); ?>"
 							   data-trans="<?php echo esc_attr( $rslt->trans_id ); ?>"> Revert Changes </a> &nbsp; |
-							&nbsp;
-							<a href="edit.php?post_type=rt_ticket&page=rthd-settings&log-list=log-list&trans_id=<?php echo esc_attr( $rslt->trans_id ); ?>"
-							   data-trans="<?php echo esc_attr( $rslt->trans_id ); ?>"> View Post </a>
+							&nbsp; <a
+								href="edit.php?post_type=rt_ticket&page=rthd-settings&log-list=log-list&trans_id=<?php echo esc_attr( $rslt->trans_id ); ?>"
+								data-trans="<?php echo esc_attr( $rslt->trans_id ); ?>"> View Post </a>
 
 						</td>
 					</tr>

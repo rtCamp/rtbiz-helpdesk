@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @author udit
  *
- * @since rt-Helpdesk 0.1
+ * @since  rt-Helpdesk 0.1
  */
 if ( ! class_exists( 'Rt_HD_IMAP_Server_Model' ) ) {
 	/**
@@ -94,7 +94,7 @@ if ( ! class_exists( 'Rt_HD_IMAP_Server_Model' ) ) {
 			$servers = parent::get( array( 'id' => $id ) );
 			$server  = false;
 			if ( ! empty( $servers ) ) {
-				$server = $servers[ 0 ];
+				$server = $servers[0];
 			}
 
 			return $server;

@@ -34,10 +34,11 @@ if ( ! class_exists( 'RT_Meta_Box_Subscribers ' ) ) {
 
 			$all_hd_participants = array();
 			if ( isset( $post->ID ) ) {
-				$comments = get_comments( array(
-											'order'     => 'DESC',
-											'post_id'   => $post->ID,
-											'post_type' => $post_type,
+				$comments = get_comments(
+					array(
+						'order'     => 'DESC',
+						'post_id'   => $post->ID,
+						'post_type' => $post_type,
 					) );
 				foreach ( $comments as $comment ) {
 					$participants = '';
@@ -86,17 +87,17 @@ if ( ! class_exists( 'RT_Meta_Box_Subscribers ' ) ) {
 											"<input type='hidden' name='subscribe_to[]' value='" . $author->ID . "' /></li>";
 					}
 					$arrSubscriberUser[] = array(
-													'id'             => $author->ID,
-													'label'          => $author->display_name,
-													'imghtml'        => get_avatar( $author->user_email, 24 ),
-													'user_edit_link' => get_edit_user_link( $author->ID )
+						'id'             => $author->ID,
+						'label'          => $author->display_name,
+						'imghtml'        => get_avatar( $author->user_email, 24 ),
+						'user_edit_link' => get_edit_user_link( $author->ID )
 					);
 					$arrCommentReply[]   = array(
-													'userid'  => $author->ID,
-													'label'  => $author->display_name,
-													'email'   => $author->user_email,
-													'contact' => false,
-													'imghtml' => get_avatar( $author->user_email, 24 )
+						'userid'  => $author->ID,
+						'label'   => $author->display_name,
+						'email'   => $author->user_email,
+						'contact' => false,
+						'imghtml' => get_avatar( $author->user_email, 24 )
 					);
 				}
 			}?>
@@ -131,7 +132,7 @@ if ( ! class_exists( 'RT_Meta_Box_Subscribers ' ) ) {
 
 			global $rt_hd_tickets_operation;
 
-			$newTicket   = $_POST['post']; //post data
+			$newTicket = $_POST['post']; //post data
 
 			$rt_hd_tickets_operation->ticket_subscribe_update( $_POST['subscribe_to'], $newTicket['post_author'], $post_id );
 		}

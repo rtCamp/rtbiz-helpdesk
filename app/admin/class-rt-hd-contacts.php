@@ -162,24 +162,24 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 			}
 
 			return $userid;
-			//** followin code if to create use if not exits
-			if ( ! $userid ) {
-				$userid = @email_exists( $email );
-				if ( ! $userid ) {
-					add_filter( 'wpmu_welcome_user_notification', '__return_false' );
-					$random_password = wp_generate_password( $length = 12, $include_standard_special_chars = false );
-					$userid          = wp_create_user( $email, $random_password, $email );
-
-					$role = get_role( $this->user_role );
-					if ( $role == null ) {
-						add_role( $this->user_role, 'Contacts' );
-					}
-					$user = new WP_User( $userid );
-					$user->set_role( $this->user_role );
-				}
-			}
-
-			return $userid;
+			//			//** followin code if to create use if not exits
+			//			if ( ! $userid ) {
+			//				$userid = @email_exists( $email );
+			//				if ( ! $userid ) {
+			//					add_filter( 'wpmu_welcome_user_notification', '__return_false' );
+			//					$random_password = wp_generate_password( $length = 12, $include_standard_special_chars = false );
+			//					$userid          = wp_create_user( $email, $random_password, $email );
+			//
+			//					$role = get_role( $this->user_role );
+			//					if ( $role == null ) {
+			//						add_role( $this->user_role, 'Contacts' );
+			//					}
+			//					$user = new WP_User( $userid );
+			//					$user->set_role( $this->user_role );
+			//				}
+			//			}
+			//
+			//			return $userid;
 		}
 
 		/**

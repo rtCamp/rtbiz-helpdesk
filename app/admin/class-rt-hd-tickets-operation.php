@@ -248,11 +248,11 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 
 			if ( isset( $post_id ) && ! empty( $post_id ) ) {
 				$old_attachments = get_posts( array(
-					'post_parent'    => $post_id,
-					'post_type'      => 'attachment',
-					'fields'         => 'ids',
-					'posts_per_page' => - 1,
-				) );
+												'post_parent'    => $post_id,
+												'post_type'      => 'attachment',
+												'fields'         => 'ids',
+												'posts_per_page' => - 1,
+											) );
 
 				if ( ! isset( $old_attachments ) ) {
 					$old_attachments = array();

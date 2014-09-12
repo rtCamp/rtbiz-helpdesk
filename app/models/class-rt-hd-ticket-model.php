@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Description of RtHDTicketModel
  * Model for 'rt_wp_hd_ticket_index' table in DB
  * @author udit
- * @since rt-Helpdesk 0.1
+ * @since  rt-Helpdesk 0.1
  */
 if ( ! class_exists( 'Rt_HD_Ticket_Model' ) ) {
 	class Rt_HD_Ticket_Model extends RT_DB_Model {

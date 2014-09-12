@@ -6,12 +6,12 @@
  * Time: 7:37 PM
  */
 
-if ( ! class_exists( 'RT_HD_Email_Notification' ) ){
+if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 
 	/**
 	 * Class RT_HD_Email_Notification
 	 *
-	 * @since 0.1
+	 * @since  0.1
 	 *
 	 * @author dipesh
 	 */
@@ -22,14 +22,14 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ){
 		 *
 		 * @since 0.1
 		 *
-		 * @param $fromemail
-		 * @param $subject
-		 * @param $body
-		 * @param array $toemail
-		 * @param array $ccemail
-		 * @param array $bccemail
-		 * @param array $attachement
-		 * @param int $refrence_id
+		 * @param        $fromemail
+		 * @param        $subject
+		 * @param        $body
+		 * @param array  $toemail
+		 * @param array  $ccemail
+		 * @param array  $bccemail
+		 * @param array  $attachement
+		 * @param int    $refrence_id
 		 * @param string $refrence_type
 		 *
 		 * @return mixed

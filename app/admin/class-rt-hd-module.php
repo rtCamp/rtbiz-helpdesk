@@ -12,7 +12,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 	 * Register rtbiz-HelpDesk CPT [ Ticket ] & statuses
 	 * Define connection with other post type [ person, organization ]
 	 *
-	 * @since 0.1
+	 * @since  0.1
 	 *
 	 * @author udit
 	 */
@@ -129,6 +129,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				'rthd-add-' . self::$post_type,
 				$rt_hd_attributes->attributes_page_slug,
 			);
+
 			return $this->statuses;
 		}
 
@@ -179,6 +180,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				'supports'           => array( 'title', 'editor', 'comments', 'custom-fields', 'revisions' ),
 				'capability_type'    => self::$post_type,
 			);
+
 			return register_post_type( self::$post_type, $args );
 		}
 
@@ -194,11 +196,11 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 		function register_custom_statuses( $status ) {
 
 			return register_post_status( $status['slug'], array(
-					'label'       => $status['slug'],
-					'protected'   => true,
-					'_builtin'    => false,
-					'label_count' => _n_noop( "{$status['name']} <span class='count'>(%s)</span>", "{$status['name']} <span class='count'>(%s)</span>" ),
-				) );
+				'label'       => $status['slug'],
+				'protected'   => true,
+				'_builtin'    => false,
+				'label_count' => _n_noop( "{$status['name']} <span class='count'>(%s)</span>", "{$status['name']} <span class='count'>(%s)</span>" ),
+			) );
 
 		}
 
@@ -311,7 +313,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				echo '
 				<script>
 				jQuery(document).ready(function($){
-					$("#publishing-action").html("<span class=\"spinner\"><\/span><input name=\"original_publish\" type=\"hidden\" id=\"original_publish\" value=\"Update\"><input type=\"submit\" id=\"save-publish\" class=\"button button-primary button-large\" value=\"Update\" ><\/input>");
+					$("#publishing-action").html("<span class=\"spinner\"> <\/span><input name=\"original_publish\" type=\"hidden\" id=\"original_publish\" value=\"Update\"><input type=\"submit\" id=\"save-publish\" class=\"button button-primary button-large\" value=\"Update\" ><\/input>");
 					$(".save-post-status").click(function(){
 						$("#publish").hide();
 						$("#publishing-action").html("<span class=\"spinner\"><\/span><input name=\"original_publish\" type=\"hidden\" id=\"original_publish\" value=\"Update\"><input type=\"submit\" id=\"save-publish\" class=\"button button-primary button-large\" value=\"Update\" ><\/input>");
@@ -358,22 +360,22 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				if ( isset( $_GET['created_by'] ) ) {
 
 					$query->set( 'meta_query', array(
-							array(
-								'key'   => '_rtbiz_hd_created_by',
-								'value' => $_GET['created_by'],
-							),
-						) );
+						array(
+							'key'   => '_rtbiz_hd_created_by',
+							'value' => $_GET['created_by'],
+						),
+					) );
 
 				}
 
 				if ( isset( $_GET['updated_by'] ) ) {
 
 					$query->set( 'meta_query', array(
-							array(
-								'key'   => '_rtbiz_hd_updated_by',
-								'value' => $_GET['updated_by'],
-							),
-						) );
+						array(
+							'key'   => '_rtbiz_hd_updated_by',
+							'value' => $_GET['updated_by'],
+						),
+					) );
 
 				}
 			}
@@ -394,15 +396,16 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 
 				global $rt_hd_ticket_history_model;
 
-				$rt_hd_ticket_history_model->insert( array(
-						'ticket_id'   => $post_id,
-						'type'        => 'post_status',
-						'old_value'   => 'trash',
-						'new_value'   => 'unanswered',
-						'message'     => null,
-						'update_time' => current_time( 'mysql' ),
-						'updated_by'  => get_current_user_id(),
-					) );
+				$rt_hd_ticket_history_model->insert(
+					array(
+							'ticket_id'   => $post_id,
+							'type'        => 'post_status',
+							'old_value'   => 'trash',
+							'new_value'   => 'unanswered',
+							'message'     => null,
+							'update_time' => current_time( 'mysql' ),
+							'updated_by'  => get_current_user_id(),
+							) );
 
 				$ticket->post_status = 'unanswered';
 				wp_update_post( $ticket );
@@ -448,7 +451,8 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 
 				global $rt_hd_ticket_history_model;
 
-				$rt_hd_ticket_history_model->insert( array(
+				$rt_hd_ticket_history_model->insert(
+					array(
 						'ticket_id'   => $post_id,
 						'type'        => 'post_status',
 						'old_value'   => get_post_status( $post_id ),

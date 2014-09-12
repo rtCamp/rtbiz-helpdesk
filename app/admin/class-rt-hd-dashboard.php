@@ -110,7 +110,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		 */
 		function footer_scripts() {
 			?>
-			<script> postboxes.add_postbox_toggles(pagenow);</script>
+			<script> postboxes.add_postbox_toggles( pagenow );</script>
 		<?php
 		}
 
@@ -294,7 +294,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		 * @since 0.1
 		 */
 		function team_load() {
-			global $rt_hd_module,$wpdb;
+			global $rt_hd_module, $wpdb;
 			$table_name    = rthd_get_ticket_table_name();
 			$post_statuses = array();
 			foreach ( $rt_hd_module->statuses as $status ) {
@@ -334,11 +334,12 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 					$temp[] = intval( $count );
 				}
 				$user = get_user_by( 'id', $user );
-				$url  = add_query_arg( array(
-					'post_type' => Rt_HD_Module::$post_type,
-					'page'      => 'rthd-all-' . Rt_HD_Module::$post_type,
-					'assignee'  => $user->ID,
-				), admin_url( 'edit.php' ) );
+				$url  = add_query_arg(
+					array(
+						'post_type' => Rt_HD_Module::$post_type,
+						'page'      => 'rthd-all-' . Rt_HD_Module::$post_type,
+						'assignee'  => $user->ID,
+					), admin_url( 'edit.php' ) );
 				if ( ! empty( $user ) ) {
 					array_unshift( $temp, '<a href="' . $url . '">' . $user->display_name . '</a>' );
 				}
@@ -382,11 +383,12 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 
 			$rows = array();
 			foreach ( $results as $item ) {
-				$url    = add_query_arg( array(
-					'post_type' => Rt_HD_Module::$post_type,
-					'page'      => 'rthd-all-' . Rt_HD_Module::$post_type,
-					$account    => $item->account_id,
-				), admin_url( 'edit.php' ) );
+				$url    = add_query_arg(
+					array(
+						'post_type' => Rt_HD_Module::$post_type,
+						'page'      => 'rthd-all-' . Rt_HD_Module::$post_type,
+						$account    => $item->account_id,
+					), admin_url( 'edit.php' ) );
 				$rows[] = array(
 					'<a href="' . $url . '">' . $item->account_name . '</a>',
 					intval( $item->account_tickets ),
@@ -431,11 +433,12 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 
 			$rows = array();
 			foreach ( $results as $item ) {
-				$url    = add_query_arg( array(
-					'post_type' => Rt_HD_Module::$post_type,
-					'page'      => 'rthd-all-' . Rt_HD_Module::$post_type,
-					$contact    => $item->contact_id,
-				), admin_url( 'edit.php' ) );
+				$url    = add_query_arg(
+					array(
+						'post_type' => Rt_HD_Module::$post_type,
+						'page'      => 'rthd-all-' . Rt_HD_Module::$post_type,
+						$contact    => $item->contact_id,
+					), admin_url( 'edit.php' ) );
 				$rows[] = array(
 					'<a href="' . $url . '">' . $item->contact_name . '</a>',
 					intval( $item->contact_tickets ),
@@ -480,12 +483,13 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			$total       = 0;
 
 			foreach ( $terms as $t ) {
-				$posts = new WP_Query( array(
-					'post_type'   => $post_type,
-					'post_status' => 'any',
-					'nopaging'    => true,
-					$taxonomy     => $t->slug,
-				) );
+				$posts = new WP_Query(
+					array(
+						'post_type'   => $post_type,
+						'post_status' => 'any',
+						'nopaging'    => true,
+						$taxonomy     => $t->slug,
+					) );
 
 				$rows[] = array( $t->name, count( $posts->posts ), );
 				$total += count( $posts->posts );

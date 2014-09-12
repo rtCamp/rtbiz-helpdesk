@@ -74,14 +74,15 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 			if ( $diff ) {
 				$emailHTML .= '<tr><th style="padding: .5em;border: 0;"> Status </th><td>' . $diff . '</td><td></td></tr>';
 				/* Insert History for status */
-				$id = $rt_hd_ticket_history_model->insert( array(
-					'ticket_id'   => $post_id,
-					'type'        => 'post_status',
-					'old_value'   => $oldpost->post_status,
-					'new_value'   => $_POST['post_status'],
-					'update_time' => current_time( 'mysql' ),
-					'updated_by'  => get_current_user_id(),
-				) );
+				$id = $rt_hd_ticket_history_model->insert(
+					array(
+						'ticket_id'   => $post_id,
+						'type'        => 'post_status',
+						'old_value'   => $oldpost->post_status,
+						'new_value'   => $_POST['post_status'],
+						'update_time' => current_time( 'mysql' ),
+						'updated_by'  => get_current_user_id(),
+					) );
 				if ( $_POST['post_status'] === 'trash' ) {
 					$closing_reason_history_id = $id;
 				}
@@ -113,12 +114,13 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 
 			// Attachments Diff
 			if ( isset( $_POST['attachment'] ) ) {
-				$old_attachments       = get_posts( array(
-					'post_parent'    => $post_id,
-					'post_type'      => 'attachment',
-					'fields'         => 'ids',
-					'posts_per_page' => - 1,
-				) );
+				$old_attachments = get_posts(
+					array(
+						'post_parent'    => $post_id,
+						'post_type'      => 'attachment',
+						'fields'         => 'ids',
+						'posts_per_page' => - 1,
+					) );
 				$new_attachments       = $_POST['attachment'];
 				$old_attachments_title = array();
 				foreach ( $old_attachments as $attachment ) {
@@ -292,7 +294,6 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 						$rt_hd_settings->insert_new_send_email( $systemEmail, $title, $emailHTML1, array(), array(), $oldSubscriberList, array(), $post_id, 'post' );
 					}
 					if ( $emailHTML != '' && ! empty( $bccemails ) ) {
-						var_dump( 'send ' );
 						$emailHTML = $emailTable . $emailHTML . "</table> </br> To View Ticket Click <a href='" . admin_url( "edit.php?post_type={$post_type}&page=rthd-add-" . $post_type . '&' . $post_type . '_id=' . $post_id ) . "'>here</a>.";
 						$emailHTML .= '<br />' . 'Ticket updated by : <a target="_blank" href="">' . get_the_author_meta( 'display_name', get_current_user_id() ) . '</a>';
 						$emailHTML .= '<br />' . $signature;

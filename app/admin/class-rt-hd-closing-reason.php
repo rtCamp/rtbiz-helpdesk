@@ -13,7 +13,7 @@ if ( ! class_exists( 'Rt_HD_Closing_Reason' ) ) {
 	 * Class Rt_HD_Closing_Reason
 	 * Register Closing-reason taxonomy for rtbiz-HelpDesk
 	 *
-	 * @since 0.1
+	 * @since  0.1
 	 *
 	 * @author udit
 	 */
@@ -27,7 +27,7 @@ if ( ! class_exists( 'Rt_HD_Closing_Reason' ) ) {
 		 * @since 0.1
 		 */
 		public function __construct() {
-			$this->post_type = Rt_HD_Module::$post_type ;
+			$this->post_type = Rt_HD_Module::$post_type;
 			add_action( 'init', array( $this, 'closing_reason' ) );
 		}
 
@@ -36,7 +36,7 @@ if ( ! class_exists( 'Rt_HD_Closing_Reason' ) ) {
 		 *
 		 * @since 0.1
 		 */
-		function closing_reason( $post_type ) {
+		function closing_reason() {
 			$labels     = array(
 				'name'                  => __( 'Closing Reason', RT_HD_TEXT_DOMAIN ),
 				'search_items'          => __( 'Search Closing Reason', RT_HD_TEXT_DOMAIN ),
@@ -126,7 +126,7 @@ if ( ! class_exists( 'Rt_HD_Closing_Reason' ) ) {
 		 *
 		 * @since 0.1
 		 *
-		 * @param $post_id
+		 * @param      $post_id
 		 * @param bool $user_edit
 		 */
 		function get_closing_reasons( $post_id, $user_edit = true ) {

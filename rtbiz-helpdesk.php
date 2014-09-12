@@ -136,7 +136,7 @@ function rt_hd_include() {
 	$rthd_admin_metabox_autoload = new RT_WP_Autoload( RT_HD_PATH_ADMIN . 'meta-box/' );
 	$rthd_models_autoload        = new RT_WP_Autoload( RT_HD_PATH_MODELS );
 	$rthd_helper_autoload        = new RT_WP_Autoload( RT_HD_PATH_HELPER );
-	$rthd_settings_autoload       = new RT_WP_Autoload( RT_HD_PATH_APP . 'settings' );
+	$rthd_settings_autoload      = new RT_WP_Autoload( RT_HD_PATH_APP . 'settings' );
 	$rthd_form_autoload          = new RT_WP_Autoload( RT_HD_PATH_LIB . 'rtformhelpers/' );
 	$rthd_reports_autoload       = new RT_WP_Autoload( RT_HD_PATH_LIB . 'rtreports/' );
 

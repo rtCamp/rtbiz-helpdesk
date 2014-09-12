@@ -134,10 +134,11 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				}
 				if ( isset( $_REQUEST['email'] ) && is_email( $_REQUEST['email'] ) ) {
 					$rt_hd_settings->delete_user_google_ac( $_REQUEST['email'] );
-					echo '<script>window.location="' . esc_url( add_query_arg( array(
-							'post_type' => Rt_HD_Module::$post_type,
-							'page'      => 'rthd-settings',
-						), admin_url( 'edit.php' ) ) ) . '";</script>';
+					echo '<script>window.location="' . esc_url( add_query_arg(
+																	array(
+																		'post_type' => Rt_HD_Module::$post_type,
+																		'page'      => 'rthd-settings',
+																	), admin_url( 'edit.php' ) ) ) . '";</script>';
 					die();
 				}
 			}
@@ -714,11 +715,12 @@ function rthd_reply_by_email_view( $field, $value ) {
 	$client->setClientId( $google_client_id );
 	$client->setClientSecret( $google_client_secret );
 	$client->setRedirectUri( $google_client_redirect_url );
-	$client->setScopes( array(
-		'https://mail.google.com/',
-		'https://www.googleapis.com/auth/userinfo.email',
-		'https://www.googleapis.com/auth/userinfo.profile',
-	) );
+	$client->setScopes(
+		array(
+			'https://mail.google.com/',
+			'https://www.googleapis.com/auth/userinfo.email',
+			'https://www.googleapis.com/auth/userinfo.profile',
+		) );
 	$client->setAccessType( 'offline' );
 	$oauth2  = new Google_Oauth2Service( $client );
 	$user_id = get_current_user_id();
@@ -809,12 +811,12 @@ function rthd_reply_by_email_view( $field, $value ) {
 									<td class="long">
 										<select required="required" name="imap_server">
 											<option value=""><?php _e( 'Select Mail Server' ); ?></option>
-											<?php $imap_servers = $rt_hd_imap_server_model->get_all_servers();
-											foreach ( $imap_servers as $server ) {
-												?>
-												<option <?php echo esc_html( ( isset( $ac->imap_server ) && $ac->imap_server == $server->id ) ? 'selected="selected"' : '' ); ?>
-													value="<?php echo esc_attr( $server->id ); ?>"><?php echo esc_html( $server->server_name ); ?></option>
-											<?php } ?>
+				<?php $imap_servers = $rt_hd_imap_server_model->get_all_servers();
+				foreach ( $imap_servers as $server ) {
+					?>
+					<option <?php echo esc_html( ( isset( $ac->imap_server ) && $ac->imap_server == $server->id ) ? 'selected="selected"' : '' ); ?>
+						value="<?php echo esc_attr( $server->id ); ?>"><?php echo esc_html( $server->server_name ); ?></option>
+				<?php } ?>
 										</select>
 									</td>
 								</tr>
@@ -829,15 +831,15 @@ function rthd_reply_by_email_view( $field, $value ) {
 							<?php
 							}
 							$all_folders = null;
-							try {
-								$hdZendEmail = new Rt_HD_Zend_Mail();
-								if ( $hdZendEmail->tryImapLogin( $email, $token, $email_type, $imap_server ) ) {
-									$storage     = new ImapStorage( $hdZendEmail->imap );
-									$all_folders = $storage->getFolders();
-								}
-							} catch ( Exception $e ) {
-								echo '<tr valign="top"><td></td><td></td><td><p class="description">' . esc_html( $e->getMessage() ) . '</p></td></tr>';
-							} ?>
+			try {
+				$hdZendEmail = new Rt_HD_Zend_Mail();
+				if ( $hdZendEmail->try_lmap_login( $email, $token, $email_type, $imap_server ) ) {
+					$storage     = new ImapStorage( $hdZendEmail->imap );
+					$all_folders = $storage->getFolders();
+				}
+			} catch ( Exception $e ) {
+				echo '<tr valign="top"><td></td><td></td><td><p class="description">' . esc_html( $e->getMessage() ) . '</p></td></tr>';
+			} ?>
 							<tr valign="top">
 								<td><label><?php echo balanceTags( $personMarkup ); ?></label></td>
 								<th scope="row"><label><?php _e( 'Mail Folders to read' ); ?></label></th>
@@ -850,30 +852,29 @@ function rthd_reply_by_email_view( $field, $value ) {
 											<?php if ( ! is_null( $all_folders ) ) {
 												$hdZendEmail->render_folders_dropdown( $all_folders, $value = $inbox_folder );
 											} ?>
-										</select>
-									</label>
+										</select> </label>
 									<?php if ( in_array( $email, rthd_get_all_system_emails() ) ) { ?>
 										<p class="description"><?php _e( 'This is linked as a system mail. Hence it will only read the Inbox Folder; no matter what folder you choose over here. These will be ignored.' ); ?></p>
 									<?php } ?>
-									<?php if ( ! is_null( $all_folders ) ) {
-										$hdZendEmail->render_folders_checkbox( $all_folders, $element_name = 'mail_folders', $values = $mail_folders, $data_str = 'data-email-id=' . $ac->id, $inbox_folder );
-									} else {
-										?>
-										<p class="description"><?php _e( 'No Folders found.' ); ?></p>
-									<?php } ?>
+			<?php if ( ! is_null( $all_folders ) ) {
+				$hdZendEmail->render_folders_checkbox( $all_folders, $element_name = 'mail_folders', $values = $mail_folders, $data_str = 'data-email-id=' . $ac->id, $inbox_folder );
+			} else {
+				?>
+				<p class="description"><?php _e( 'No Folders found.' ); ?></p>
+			<?php } ?>
 								</td>
 							</tr>
 							<tr valign="top">
 								<td></td>
 								<th scope="row"><label></label></th>
 								<td>
-									<input type="hidden" name="rthd_submit_enable_reply_by_email" value="save"/>
-									<a class='button remove-google-ac'
-									   href='<?php echo esc_url( admin_url( 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&page=rthd-settings&tab=my-settings&type=personal&email=' . $email ) ); ?>'>Remove
+									<input type="hidden" name="rthd_submit_enable_reply_by_email" value="save"/> <a
+										class='button remove-google-ac'
+										href='<?php echo esc_url( admin_url( 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&page=rthd-settings&tab=my-settings&type=personal&email=' . $email ) ); ?>'>Remove
 										A/C</a>
 									<?php if ( $ac->type == 'goauth' ) { ?>
-										<a class='button button-primary' href='<?php echo esc_url( $authUrl ); ?>'>Re Connect
-											Google Now</a>
+										<a class='button button-primary' href='<?php echo esc_url( $authUrl ); ?>'>Re
+											Connect Google Now</a>
 									<?php } ?>
 								</td>
 							</tr>
@@ -883,17 +884,17 @@ function rthd_reply_by_email_view( $field, $value ) {
 				</tbody>
 			</table>
 			<script>
-				jQuery(document).ready(function ($) {
-					$(document).on('change', 'select[name=inbox_folder]', function (e) {
+				jQuery( document ).ready( function ( $ ) {
+					$( document ).on( 'change', 'select[name=inbox_folder]', function ( e ) {
 						e.preventDefault();
-						inbox = $(this).val();
-						prev_value = $(this).data('prev-value');
-						$(this).data('prev-value', inbox);
-						email_id = $(this).data('email-id');
-						$('input[data-email-id="' + email_id + '"][value="' + inbox + '"]').parent().css('display', 'none');
-						$('input[data-email-id="' + email_id + '"][value="' + prev_value + '"]').parent().css('display', 'inline');
-					});
-				});
+						inbox = $( this ).val();
+						prev_value = $( this ).data( 'prev-value' );
+						$( this ).data( 'prev-value', inbox );
+						email_id = $( this ).data( 'email-id' );
+						$( 'input[data-email-id="' + email_id + '"][value="' + inbox + '"]' ).parent().css( 'display', 'none' );
+						$( 'input[data-email-id="' + email_id + '"][value="' + prev_value + '"]' ).parent().css( 'display', 'inline' );
+					} );
+				} );
 			</script>
 		<?php
 		}
@@ -908,22 +909,23 @@ function rthd_reply_by_email_view( $field, $value ) {
 			</select>
 		</p>
 		<p class="submit rthd-hide-row" id="rthd_goauth_container">
-			<a class='button button-primary' href='<?php echo esc_url( $authUrl ); ?>'><?php _e( 'Connect New Google A/C' ); ?></a>
+			<a class='button button-primary'
+			   href='<?php echo esc_url( $authUrl ); ?>'><?php _e( 'Connect New Google A/C' ); ?></a>
 		</p>
 		<p id="rthd_add_imap_acc_form" autocomplete="off" class="rthd-hide-row">
-			<input type="hidden" name="rthd_add_imap_email" value="1"/>
-			<select required="required" name="rthd_imap_server">
+			<input type="hidden" name="rthd_add_imap_email" value="1"/> <select required="required"
+			                                                                    name="rthd_imap_server">
 				<option value=""><?php _e( 'Select Mail Server' ); ?></option>
 				<?php
 				$imap_servers = $rt_hd_imap_server_model->get_all_servers();
-				foreach ( $imap_servers as $server ) {
-					?>
-					<option value="<?php echo esc_attr( $server->id ); ?>"><?php echo esc_html( $server->server_name ); ?></option>
-				<?php } ?>
-			</select>
-			<input type="email" required="required" autocomplete="off" name="rthd_imap_user_email" placeholder="Email"/>
-			<input type="password" required="required" autocomplete="off" name="rthd_imap_user_pwd"
-			       placeholder="Password"/>
+		foreach ( $imap_servers as $server ) {
+			?>
+			<option
+				value="<?php echo esc_attr( $server->id ); ?>"><?php echo esc_html( $server->server_name ); ?></option>
+		<?php } ?>
+			</select> <input type="email" required="required" autocomplete="off" name="rthd_imap_user_email"
+			                 placeholder="Email"/> <input type="password" required="required" autocomplete="off"
+			                                              name="rthd_imap_user_pwd" placeholder="Password"/>
 			<button class="button button-primary" type="submit"><?php _e( 'Save' ); ?></button>
 		</p>
 	<?PHP
@@ -941,9 +943,9 @@ function rthd_imap_servers( $field, $value ) {
 				<th scope="row"><?php echo esc_html( $server->server_name ); ?></th>
 				<td>
 					<a href="#" class="rthd-edit-server"
-					   data-server-id="<?php echo esc_attr( $server->id ); ?>"><?php _e( 'Edit' ); ?></a>
-					<a href="#" class="rthd-remove-server"
-					   data-server-id="<?php echo esc_attr( $server->id ); ?>"><?php _e( 'Remove' ); ?></a>
+					   data-server-id="<?php echo esc_attr( $server->id ); ?>"><?php _e( 'Edit' ); ?></a> <a href="#"
+					                                                                                         class="rthd-remove-server"
+					                                                                                         data-server-id="<?php echo esc_attr( $server->id ); ?>"><?php _e( 'Remove' ); ?></a>
 				</td>
 			</tr>
 			<tr valign="top" id="rthd_imap_server_<?php echo esc_attr( $server->id ); ?>" class="rthd-hide-row">
@@ -970,7 +972,8 @@ function rthd_imap_servers( $field, $value ) {
 						<tr valign="top">
 							<th scope="row"><?php _e( 'IMAP (Incoming) Encryption: ' ); ?></th>
 							<td>
-								<select name="rthd_imap_servers[<?php echo esc_attr( $server->id ); ?>][incoming_imap_enc]">
+								<select
+									name="rthd_imap_servers[<?php echo esc_attr( $server->id ); ?>][incoming_imap_enc]">
 									<option value=""><?php _e( 'Select Encryption Method' ); ?></option>
 									<option
 										value="ssl" <?php echo esc_html( ( $server->incoming_imap_enc == 'ssl' ) ? 'selected="selected"' : '' ); ?>><?php _e( 'SSL' ); ?></option>
@@ -994,7 +997,8 @@ function rthd_imap_servers( $field, $value ) {
 						<tr valign="top">
 							<th scope="row"><?php _e( 'SMTP (Outgoing) Encryption: ' ); ?></th>
 							<td>
-								<select name="rthd_imap_servers[<?php echo esc_attr( $server->id ); ?>][outgoing_smtp_enc]">
+								<select
+									name="rthd_imap_servers[<?php echo esc_attr( $server->id ); ?>][outgoing_smtp_enc]">
 									<option value=""><?php _e( 'Select Encryption Method' ); ?></option>
 									<option
 										value="ssl" <?php echo esc_html( ( $server->outgoing_smtp_enc == 'ssl' ) ? 'selected="selected"' : '' ); ?>><?php _e( 'SSL' ); ?></option>
@@ -1060,7 +1064,7 @@ function rthd_imap_servers( $field, $value ) {
 		</tr>
 		</tbody>
 	</table>
-<?php
+	<?php
 }
 
 /**

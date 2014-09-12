@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 	class Rt_HD_Admin {
-		private  $admin_cap, $editor_cap, $author_cap;
+		private $admin_cap, $editor_cap, $author_cap;
 
 		public function __construct() {
 
@@ -48,13 +48,19 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 			if ( in_array( $pagenow, array( 'edit.php', 'post.php', 'post-new.php' ) ) ) {
 				if ( isset( $post->post_type ) && $post->post_type == Rt_HD_Module::$post_type ) {
 
-					wp_enqueue_script( 'jquery-ui-timepicker-addon', RT_HD_URL . 'app/assets/javascripts/jquery-ui-timepicker-addon.js', array( 'jquery-ui-datepicker', 'jquery-ui-slider' ), RT_HD_VERSION, true );
+					wp_enqueue_script( 'jquery-ui-timepicker-addon', RT_HD_URL . 'app/assets/javascripts/jquery-ui-timepicker-addon.js', array(
+							'jquery-ui-datepicker',
+							'jquery-ui-slider',
+						), RT_HD_VERSION, true );
 
 					if ( ! wp_script_is( 'jquery-ui-datepicker' ) ) {
 						wp_enqueue_script( 'jquery-ui-datepicker' );
 					}
 					if ( ! wp_script_is( 'jquery-ui-autocomplete' ) ) {
-						wp_enqueue_script( 'jquery-ui-autocomplete', '', array( 'jquery-ui-widget', 'jquery-ui-position' ), '1.9.2' );
+						wp_enqueue_script( 'jquery-ui-autocomplete', '', array(
+								'jquery-ui-widget',
+								'jquery-ui-position',
+							), '1.9.2' );
 					}
 
 					wp_enqueue_script( 'moment-js', RT_HD_URL . 'app/assets/javascripts/moment.js', array( 'jquery' ), RT_HD_VERSION, true );
@@ -68,9 +74,9 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 
 			if ( ! wp_script_is( 'jquery-ui-progressbar' ) ) {
 				wp_enqueue_script( 'jquery-ui-progressbar', '', array(
-						'jquery-ui-widget',
-						'jquery-ui-position',
-					), '1.9.2' );
+					'jquery-ui-widget',
+					'jquery-ui-position',
+				), '1.9.2' );
 			}
 
 			wp_enqueue_script( 'rthd_setting_js', RT_HD_URL . 'app/assets/javascripts/rt-custom-status.js', RT_HD_VERSION, true );
@@ -108,7 +114,7 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 			) );
 		}
 
-		function settings_ui(){
+		function settings_ui() {
 
 		}
 

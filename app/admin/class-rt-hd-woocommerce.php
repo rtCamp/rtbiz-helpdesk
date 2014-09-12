@@ -49,8 +49,8 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 		 *
 		 * @global type $redux_helpdesk_settings
 		 *
-		 * @param type $actions
-		 * @param type $order
+		 * @param type  $actions
+		 * @param type  $order
 		 *
 		 * @return type
 		 */
@@ -110,48 +110,47 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 			}
 			?>
 			<script type="text/javascript">
-				jQuery(document).ready(function ($) {
+				jQuery( document ).ready( function ( $ ) {
 					//print list of selected file
 
-					$("#filesToUpload").change(function () {
+					$( "#filesToUpload" ).change( function () {
 
-						var input = document.getElementById('filesToUpload');
+						var input = document.getElementById( 'filesToUpload' );
 
 						var list = '';
 
 						//for every file...
-						for (var x = 0; x < input.files.length; x++) {
+						for ( var x = 0; x < input.files.length; x ++ ) {
 							//add to list
 
 							list += '<li>' + input.files[x].name + '</li>';
 						}
 
-						$("#fileList").html(list);
+						$( "#fileList" ).html( list );
 
-					});
+					} );
 
-				});
+				} );
 			</script>
 
 			<h2><?php _e( 'Get Support', 'RT_HD_TEXT_DOMAIN' ); ?></h2>
 			<form method="post" action="" class="comment-form" enctype="multipart/form-data">
 
 				<p>
-					<label><?php _e( 'Product', RT_HD_TEXT_DOMAIN ); ?></label>
-					<select name="post[product_id]">
+					<label><?php _e( 'Product', RT_HD_TEXT_DOMAIN ); ?></label> <select name="post[product_id]">
 						<option value="">Choose Product</option>
 						<?php echo esc_html( $option ); ?>
 					</select>
 				</p>
 
 				<p>
-					<label><?php _e( 'Email', RT_HD_TEXT_DOMAIN ); ?></label>
-					<input type="text" name="post[email]" value="<?php echo sanitize_email( $order_email ) ?>"/>
+					<label><?php _e( 'Email', RT_HD_TEXT_DOMAIN ); ?></label> <input type="text" name="post[email]"
+					                                                                 value="<?php echo sanitize_email( $order_email ) ?>"/>
 				</p>
 
 				<p>
-					<label><?php _e( 'Description', RT_HD_TEXT_DOMAIN ); ?></label>
-					<textarea name="post[description]"></textarea>
+					<label><?php _e( 'Description', RT_HD_TEXT_DOMAIN ); ?></label> <textarea
+						name="post[description]"></textarea>
 				</p>
 
 				<p>
@@ -231,7 +230,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 
 			global $current_user;
 
-			echo do_shortcode( '[rt_hd_tickets email=' . $current_user->user_email . ']' );
+			echo balanceTags( do_shortcode( '[rt_hd_tickets email=' . $current_user->user_email . ']' ) );
 		}
 
 
@@ -245,7 +244,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 		 */
 		static function insert_attachment( $file_handler, $post_id ) {
 			// check to make sure its a successful upload
-			if ( $_FILES[ $file_handler ][ 'error' ] !== UPLOAD_ERR_OK ) {
+			if ( $_FILES[ $file_handler ]['error'] !== UPLOAD_ERR_OK ) {
 				__return_false();
 			}
 

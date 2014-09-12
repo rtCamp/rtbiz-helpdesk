@@ -20,7 +20,7 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 	 * Manage people table column
 	 * Ajax for create & autocomplete ajax & get people by key
 	 *
-	 * @since 0.1
+	 * @since  0.1
 	 *
 	 * @author udit
 	 */
@@ -56,7 +56,7 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 		 * @param $columns
 		 * @param $rt_entity
 		 *
-		 * @return mixedsss
+		 * @return mixed
 		 */
 		function accounts_columns( $columns, $rt_entity ) {
 
@@ -141,7 +141,7 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 
 					$post                  = get_post( $post_id );
 					$returnArray['status'] = true;
-					$returnArray['data'] = array(
+					$returnArray['data']   = array(
 						'id'      => $post_id,
 						'label'   => $accountData['new-account-name'],
 						'url'     => admin_url( 'edit.php?' . $post->post_type . '=' . $post->ID . '&post_type=' . $accountData['post_type'] ),
@@ -247,7 +247,7 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 		 * save account for given post
 		 *
 		 * @since 0.1
- 		 *
+		 *
 		 * @param $post_id
 		 * @param $newTicket
 		 */
