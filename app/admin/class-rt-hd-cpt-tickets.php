@@ -31,6 +31,10 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 				$this,
 				'manage_custom_columns',
 			), 2 );
+			add_filter( 'manage_edit-' . Rt_HD_Module::$post_type . '_sortable_columns', array(
+				$this,
+				'sortable_column',
+			) );
 
 			// CPT Edit/Add View
 			add_action( 'add_meta_boxes', array( $this, 'remove_meta_boxes' ), 10 );
@@ -44,6 +48,11 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 			add_action( 'rt_hd_process_' . Rt_HD_Module::$post_type . '_meta', 'RT_Meta_Box_Attachment::save', 10, 2 );
 			add_action( 'rt_hd_process_' . Rt_HD_Module::$post_type . '_meta', 'RT_Meta_Box_External_Link::save', 10, 2 );
 			add_action( 'rt_hd_process_' . Rt_HD_Module::$post_type . '_meta', 'RT_Ticket_Diff_Email::save', 10, 2 );
+
+			add_action( 'pre_get_posts', array( $this, 'pre_filter' ) );
+			add_action( 'untrashed_post', array( $this, 'after_restore_trashed_ticket' ) );
+			add_action( 'before_delete_post', array( $this, 'before_ticket_deleted' ) );
+			add_action( 'wp_trash_post', array( $this, 'before_ticket_trashed' ) );
 		}
 
 		/**
@@ -93,6 +102,23 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 		}
 
 		/**
+		 * Define new sortable columns for ticket list view
+		 *
+		 * @since 0.1
+		 *
+		 * @param $columns
+		 *
+		 * @return mixed
+		 */
+		function sortable_column( $columns ) {
+			$columns['rthd_ticket_id']   = __( 'Ticket ID', RT_HD_TEXT_DOMAIN );
+			$columns['rthd_create_date'] = __( 'Create Date', RT_HD_TEXT_DOMAIN );
+			$columns['rthd_update_date'] = __( 'Update Date', RT_HD_TEXT_DOMAIN );
+
+			return $columns;
+		}
+
+		/**
 		 * Edit Content of List view Columns
 		 *
 		 * @since  0.1
@@ -122,14 +148,16 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 
 					$user_id   = get_post_meta( $post->ID, '_rtbiz_hd_created_by', true );
 					$user_info = get_userdata( $user_id );
-					$url       = esc_url( add_query_arg( array(
-															'post_type'  => Rt_HD_Module::$post_type,
-															'created_by' => $user_id,
-															), 'edit.php' ) );
+					$url       = esc_url(
+						add_query_arg(
+							array(
+								'post_type'  => Rt_HD_Module::$post_type,
+								'created_by' => $user_id,
+							), 'edit.php' ) );
 
 					printf( __( '<span class="created-by tips" data-tip="%s">%s', RT_HD_PATH_ADMIN ), get_the_date( 'd-m-Y H:i' ), $datediff );
 					if ( $user_info ) {
-						printf( ' by <a href="%s">%s</a>', $url, $user_info->user_login );
+						printf( " by <a href='%s'>%s</a>", $url, $user_info->user_login );
 					}
 					printf( '</span>' );
 					break;
@@ -141,10 +169,12 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 
 					$user_id   = get_post_meta( $post->ID, '_rtbiz_hd_updated_by', true );
 					$user_info = get_userdata( $user_id );
-					$url       = esc_url( add_query_arg( array(
-															'post_type'  => Rt_HD_Module::$post_type,
-															'updated_by' => $user_id,
-															), 'edit.php' ) );
+					$url       = esc_url(
+						add_query_arg(
+							array(
+								'post_type'  => Rt_HD_Module::$post_type,
+								'updated_by' => $user_id,
+							), 'edit.php' ) );
 
 					printf( __( '<span class="created-by tips" data-tip="%s">%s', RT_HD_PATH_ADMIN ), get_the_modified_date( 'd-m-Y H:i' ), $datediff );
 					if ( $user_info ) {
@@ -162,10 +192,12 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 
 						$user_id   = get_post_meta( $post->ID, '_rtbiz_hd_closed_by', true );
 						$user_info = get_userdata( $user_id );
-						$url       = esc_url( add_query_arg( array(
-															'post_type'  => Rt_HD_Module::$post_type,
-															'updated_by' => $user_id,
-															), 'edit.php' ) );
+						$url       = esc_url(
+							add_query_arg(
+								array(
+									'post_type'  => Rt_HD_Module::$post_type,
+									'updated_by' => $user_id,
+								), 'edit.php' ) );
 
 						if ( $user_info ) {
 							printf( ' by <a href="%s">%s</a></span>', $url, $user_info->user_login );
@@ -299,6 +331,122 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 				die();
 			}
 
+		}
+
+		/**
+		 * Filter ticket list view according to user query
+		 *
+		 * @since 0.1
+		 *
+		 * @param $query
+		 */
+		function pre_filter( $query ) {
+			if ( isset( $_GET['post_type'] ) && $_GET['post_type'] == Rt_HD_Module::$post_type ) {
+
+				$query->set( 'orderby', 'modified' );
+				$query->set( 'order', 'asc' );
+
+				if ( isset( $_GET['created_by'] ) ) {
+
+					$query->set( 'meta_query', array(
+						array(
+							'key'   => '_rtbiz_hd_created_by',
+							'value' => $_GET['created_by'],
+						),
+					) );
+
+				}
+
+				if ( isset( $_GET['updated_by'] ) ) {
+
+					$query->set( 'meta_query', array(
+						array(
+							'key'   => '_rtbiz_hd_updated_by',
+							'value' => $_GET['updated_by'],
+						),
+					) );
+
+				}
+			}
+		}
+
+		/**
+		 * update ticket status[ unanswered ] after restore from trash
+		 *
+		 * @since 0.1
+		 *
+		 * @param $post_id
+		 */
+		function after_restore_trashed_ticket( $post_id ) {
+
+			$ticket = get_post( $post_id );
+
+			if ( $ticket->post_type == Rt_HD_Module::$post_type ) {
+
+				global $rt_hd_ticket_history_model;
+
+				$rt_hd_ticket_history_model->insert(
+					array(
+						'ticket_id'   => $post_id,
+						'type'        => 'post_status',
+						'old_value'   => 'trash',
+						'new_value'   => 'unanswered',
+						'message'     => null,
+						'update_time' => current_time( 'mysql' ),
+						'updated_by'  => get_current_user_id(),
+					) );
+
+				$ticket->post_status = 'unanswered';
+				wp_update_post( $ticket );
+
+			}
+		}
+
+		/**
+		 * Delete index table entry before post delete
+		 *
+		 * @since 0.1
+		 *
+		 * @param $post_id
+		 */
+		function before_ticket_deleted( $post_id ) {
+
+			if ( get_post_type( $post_id ) == Rt_HD_Module::$post_type ) {
+
+				global $rt_hd_ticket_history_model;
+				$ticketModel = new Rt_HD_Ticket_Model();
+
+				$ticket_index   = array( 'post_id' => $post_id );
+				$ticket_history = array( 'ticket_id' => $post_id );
+
+				$rt_hd_ticket_history_model->delete( $ticket_history );
+
+				$ticketModel->delete_ticket( $ticket_index );
+			}
+		}
+
+		/**
+		 * update status history before ticket trashed
+		 *
+		 * @since 0.1
+		 *
+		 * @param $post_id
+		 */
+		function before_ticket_trashed( $post_id ) {
+			if ( get_post_type( $post_id ) == Rt_HD_Module::$post_type ) {
+				global $rt_hd_ticket_history_model;
+				$rt_hd_ticket_history_model->insert(
+					array(
+						'ticket_id'   => $post_id,
+						'type'        => 'post_status',
+						'old_value'   => get_post_status( $post_id ),
+						'new_value'   => 'trash',
+						'message'     => null,
+						'update_time' => current_time( 'mysql' ),
+						'updated_by'  => get_current_user_id(),
+					) );
+
+			}
 		}
 	}
 }

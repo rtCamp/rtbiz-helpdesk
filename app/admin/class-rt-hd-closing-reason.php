@@ -19,7 +19,7 @@ if ( ! class_exists( 'Rt_HD_Closing_Reason' ) ) {
 	 */
 	class Rt_HD_Closing_Reason {
 
-		protected $post_type;
+		var  $post_type = '';
 
 		/**
 		 * construct
@@ -49,7 +49,7 @@ if ( ! class_exists( 'Rt_HD_Closing_Reason' ) ) {
 				'choose_from_most_used' => __( 'Choose from the most used Closing Reasons', RT_HD_TEXT_DOMAIN ),
 			);
 			$editor_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
-			register_taxonomy( rthd_attribute_taxonomy_name( 'closing-reason' ), array( $this->post_type ), array(
+			return register_taxonomy( rthd_attribute_taxonomy_name( 'closing-reason' ), array( $this->post_type ), array(
 				'hierarchical'          => false,
 				'labels'                => $labels,
 				'show_ui'               => true,
