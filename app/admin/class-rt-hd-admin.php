@@ -108,7 +108,7 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 		 * @since 0.1
 		 */
 		function register_menu() {
-			add_submenu_page( 'edit.php?post_type=' . Rt_HD_Module::$post_type, __( 'Settings' ), __( 'Settings' ), $this->author_cap, 'rthd-settings', array(
+			return add_submenu_page( 'edit.php?post_type=' . Rt_HD_Module::$post_type, __( 'Settings' ), __( 'Settings' ), $this->author_cap, 'rthd-settings', array(
 				$this,
 				'settings_ui',
 			) );

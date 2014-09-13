@@ -61,7 +61,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		 *
 		 * @return mixed
 		 */
-		function contacts_columns( $columns, $rt_entity ) {
+		public function contacts_columns( $columns, $rt_entity ) {
 
 			global $rt_person;
 			if ( $rt_entity->post_type != $rt_person->post_type ) {
@@ -156,7 +156,6 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		 */
 		function get_user_from_email( $email ) {
 			$userid = username_exists( $email );
-			//
 			if ( ! $userid ) {
 				$userid = 1;
 			}

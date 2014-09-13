@@ -115,7 +115,7 @@ if ( ! class_exists( 'Rt_HD_Attributes' ) ) {
 					$newVals = $newTicket[ $attr->attribute_name ];
 					$newVals = array_unique( $newVals );
 
-					$get_post_terms = wp_get_post_terms( $post_id, rthd_attribute_taxonomy_name( $attr->attribute_name ) );
+					$get_post_terms = wp_get_post_terms( $post_id, rtbiz_post_type_name( $attr->attribute_name ) );
 					if ( $get_post_terms ) {
 						$post_term_slug = $get_post_terms[0]->term_id;
 						$post_term_name = $get_post_terms[0]->name;
@@ -124,7 +124,7 @@ if ( ! class_exists( 'Rt_HD_Attributes' ) ) {
 						$post_term_name = '';
 					}
 					if ( ! empty( $newVals ) ) {
-						$newTerms           = get_term_by( 'id', $newVals[0], rthd_attribute_taxonomy_name( $attr->attribute_name ) );
+						$newTerms           = get_term_by( 'id', $newVals[0], rtbiz_post_type_name( $attr->attribute_name ) );
 						$post_new_term_slug = $newVals[0];
 						$post_new_term_name = $newTerms->name;
 					} else {
@@ -142,12 +142,12 @@ if ( ! class_exists( 'Rt_HD_Attributes' ) ) {
 					}
 					$newVals       = $newTicket[ 'rt_' . $attr->attribute_name ];
 					$newVals       = array_unique( $newVals );
-					$oldTermString = rthd_post_term_to_string( $post_id, rthd_attribute_taxonomy_name( $attr->attribute_name ) );
+					$oldTermString = rthd_post_term_to_string( $post_id, rtbiz_post_type_name( $attr->attribute_name ) );
 					$newTermString = '';
 					if ( ! empty( $newVals ) ) {
 						$newTermArr = array();
 						foreach ( $newVals as $value ) {
-							$newTerm = get_term_by( 'id', $value, rthd_attribute_taxonomy_name( $attr->attribute_name ) );
+							$newTerm = get_term_by( 'id', $value, rtbiz_post_type_name( $attr->attribute_name ) );
 							if ( $newTerm ) {
 								$newTermArr[] = $newTerm->name;
 							}
@@ -202,10 +202,10 @@ if ( ! class_exists( 'Rt_HD_Attributes' ) ) {
 		function save_attributes( $attr, $post_id, $newTicket ) {
 			switch ( $attr->attribute_store_as ) {
 				case 'taxonomy':
-					if ( ! isset( $newTicket[ $attr->attribute_name ] ) ) {
-						$newTicket[ $attr->attribute_name ] = array();
+					if ( ! isset( $newTicket[ 'rt_' . $attr->attribute_name ] ) ) {
+						$newTicket[ 'rt_' . $attr->attribute_name ] = array();
 					}
-					wp_set_post_terms( $post_id, implode( ',', $newTicket[ $attr->attribute_name ] ), rthd_attribute_taxonomy_name( $attr->attribute_name ) );
+					wp_set_post_terms( $post_id, implode( ',', $newTicket[ 'rt_' . $attr->attribute_name ] ), rtbiz_post_type_name( $attr->attribute_name ) );
 					break;
 				case 'meta':
 					update_post_meta( $post_id, '_rtbiz_hd_' . $attr->attribute_name, $newTicket[ $attr->attribute_name ] );
@@ -254,12 +254,12 @@ if ( ! class_exists( 'Rt_HD_Attributes' ) ) {
 				//					break;
 				case 'dropdown':
 					$options   = array();
-					$terms     = get_terms( rthd_attribute_taxonomy_name( $attr->attribute_name ), array(
+					$terms     = get_terms( rtbiz_post_type_name( $attr->attribute_name ), array(
 						'hide_empty' => false,
 						'orderby'    => $attr->attribute_orderby,
 						'order'      => 'asc',
 					) );
-					$post_term = wp_get_post_terms( $post_id, rthd_attribute_taxonomy_name( $attr->attribute_name ), array( 'fields' => 'ids' ) );
+					$post_term = wp_get_post_terms( $post_id, rtbiz_post_type_name( $attr->attribute_name ), array( 'fields' => 'ids' ) );
 					// Default Selected Term for the attribute. can beset via settings -- later on
 					$selected_term = '-11111';
 					if ( ! empty( $post_term ) ) {
@@ -274,18 +274,18 @@ if ( ! class_exists( 'Rt_HD_Attributes' ) ) {
 					if ( $edit ) {
 						$this->render_dropdown( $attr, $options );
 					} else {
-						$term = get_term( $selected_term, rthd_attribute_taxonomy_name( $attr->attribute_name ) );
+						$term = get_term( $selected_term, rtbiz_post_type_name( $attr->attribute_name ) );
 						?><span class="rthd_view_mode"><?php echo esc_html( $term->name ); ?></span><?php
 					}
 					break;
 				case 'checklist':
 					$options    = array();
-					$terms      = get_terms( rthd_attribute_taxonomy_name( $attr->attribute_name ), array(
+					$terms      = get_terms( rtbiz_post_type_name( $attr->attribute_name ), array(
 						'hide_empty' => false,
 						'orderby'    => $attr->attribute_orderby,
 						'order'      => 'asc',
 					) );
-					$post_terms = wp_get_post_terms( $post_id, rthd_attribute_taxonomy_name( $attr->attribute_name ), array( 'fields' => 'ids' ) );
+					$post_terms = wp_get_post_terms( $post_id, rtbiz_post_type_name( $attr->attribute_name ), array( 'fields' => 'ids' ) );
 					if ( empty( $post_terms ) ) {
 						$post_terms = array();
 					}
@@ -310,12 +310,12 @@ if ( ! class_exists( 'Rt_HD_Attributes' ) ) {
 					break;
 				case 'rating-stars':
 					$options   = array();
-					$terms     = get_terms( rthd_attribute_taxonomy_name( $attr->attribute_name ), array(
+					$terms     = get_terms( rtbiz_post_type_name( $attr->attribute_name ), array(
 						'hide_empty' => false,
 						'orderby'    => $attr->attribute_orderby,
 						'order'      => 'asc',
 					) );
-					$post_term = wp_get_post_terms( $post_id, rthd_attribute_taxonomy_name( $attr->attribute_name ), array( 'fields' => 'ids' ) );
+					$post_term = wp_get_post_terms( $post_id, rtbiz_post_type_name( $attr->attribute_name ), array( 'fields' => 'ids' ) );
 					// Default Selected Term for the attribute. can beset via settings -- later on
 					$selected_term = '-11111';
 					if ( ! empty( $post_term ) ) {
@@ -331,7 +331,7 @@ if ( ! class_exists( 'Rt_HD_Attributes' ) ) {
 					if ( $edit ) {
 						$this->render_rating_stars( $attr, $options );
 					} else {
-						$term = get_term( $selected_term, rthd_attribute_taxonomy_name( $attr->attribute_name ) );
+						$term = get_term( $selected_term, rtbiz_post_type_name( $attr->attribute_name ) );
 						?><span class="rthd_view_mode"><?php echo esc_html( $term->name ); ?></span><?php
 					}
 					break;
@@ -354,12 +354,12 @@ if ( ! class_exists( 'Rt_HD_Attributes' ) ) {
 			switch ( $attr->attribute_render_type ) {
 				case 'dropdown':
 					$options   = array();
-					$terms     = get_terms( rthd_attribute_taxonomy_name( $attr->attribute_name ), array(
+					$terms     = get_terms( rtbiz_post_type_name( $attr->attribute_name ), array(
 						'hide_empty' => false,
 						'orderby'    => $attr->attribute_orderby,
 						'order'      => 'asc',
 					) );
-					$post_term = wp_get_post_terms( $post_id, rthd_attribute_taxonomy_name( $attr->attribute_name ), array( 'fields' => 'ids' ) );
+					$post_term = wp_get_post_terms( $post_id, rtbiz_post_type_name( $attr->attribute_name ), array( 'fields' => 'ids' ) );
 					// Default Selected Term for the attribute. can beset via settings -- later on
 					$selected_term = '-11111';
 					if ( ! empty( $post_term ) ) {
@@ -380,19 +380,19 @@ if ( ! class_exists( 'Rt_HD_Attributes' ) ) {
 					<?php if ( $edit ) {
 						$this->render_dropdown( $attr, $options );
 					} else {
-						$term = get_term( $selected_term, rthd_attribute_taxonomy_name( $attr->attribute_name ) );
-						?><span class="rthd_view_mode"><?php echo esc_html( $term->name ); ?></span><?php
-					} ?>
+                        $term = get_term( $selected_term, rtbiz_post_type_name( $attr->attribute_name ) );
+                        ?><span class="rthd_view_mode"><?php echo esc_html( $term->name ); ?></span><?php
+                    } ?>
 					</div>
 					<?php break;
 				case 'rating-stars':
 					$options   = array();
-					$terms     = get_terms( rthd_attribute_taxonomy_name( $attr->attribute_name ), array(
+					$terms     = get_terms( rtbiz_post_type_name( $attr->attribute_name ), array(
 						'hide_empty' => false,
 						'orderby'    => $attr->attribute_orderby,
 						'order'      => 'asc',
 					) );
-					$post_term = wp_get_post_terms( $post_id, rthd_attribute_taxonomy_name( $attr->attribute_name ), array( 'fields' => 'ids' ) );
+					$post_term = wp_get_post_terms( $post_id, rtbiz_post_type_name( $attr->attribute_name ), array( 'fields' => 'ids' ) );
 					// Default Selected Term for the attribute. can beset via settings -- later on
 					$selected_term = '-11111';
 					if ( ! empty( $post_term ) ) {
@@ -414,11 +414,11 @@ if ( ! class_exists( 'Rt_HD_Attributes' ) ) {
 					if ( $edit ) {
 						$this->render_rating_stars( $attr, $options );
 					} else {
-						$term = get_term( $selected_term, rthd_attribute_taxonomy_name( $attr->attribute_name ) );
-						?>
-						<div
-							class="rthd_attr_border rthd_view_mode"><?php echo esc_html( $term->name ); ?></div><?php
-					} ?>
+							$term = get_term( $selected_term, rtbiz_post_type_name( $attr->attribute_name ) );
+							?>
+							<div
+								class="rthd_attr_border rthd_view_mode"><?php echo esc_html( $term->name ); ?></div><?php
+						} ?>
 					</div>
 					<?php break;
 				case 'date':

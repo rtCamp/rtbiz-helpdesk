@@ -193,23 +193,29 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 		 * @param $newTicket
 		 * @param $post_type
 		 * @param $post_id
+		 * @param $attribute_store_as
 		 *
 		 * @return bool
 		 */
-		function ticket_attribute_update( $newTicket, $post_type, $post_id ) {
+		function ticket_attribute_update( $newTicket, $post_type, $post_id, $attribute_store_as = 'taxonomy' ) {
 
 			global $rt_hd_attributes;
 			if ( isset( $newTicket ) && ! empty( $newTicket ) && isset( $post_id ) && ! empty( $post_id ) ) {
 				$dataArray       = array();
 				$ticketModel     = new Rt_HD_Ticket_Model();
-				$meta_attributes = rthd_get_attributes( $post_type, 'meta' );
-
+				$meta_attributes = rthd_get_attributes( $post_type, $attribute_store_as );
 				foreach ( $meta_attributes as $attr ) {
 					$attr_diff = $rt_hd_attributes->attribute_diff( $attr, $post_id, $newTicket );
 					if ( ! empty( $attr_diff ) ) {
 						$rt_hd_attributes->save_attributes( $attr, $post_id, $newTicket );
+
 						/* Update Index Table */
-						$attr_name = str_replace( '-', '_', rthd_attribute_taxonomy_name( $attr->attribute_name ) );
+						if ( $attribute_store_as == 'taxonomy' ){
+							$attr_name = str_replace( '-', '_', rtbiz_post_type_name( $attr->attribute_name ) );
+						} else {
+							$attr_name = str_replace( '-', '_', rthd_attribute_taxonomy_name( $attr->attribute_name ) );
+						}
+
 						$attr_val  = ( ! isset( $newTicket[ $attr->attribute_name ] ) ) ? array() : $newTicket[ $attr->attribute_name ];
 						$dataArray = array_merge( $dataArray, array(
 							$attr_name => ( is_array( $attr_val ) ) ? implode( ',', $attr_val ) : $attr_val,
@@ -359,7 +365,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 			if ( isset( $post_id ) && ! empty( $post_id ) ) {
 
 				if ( ! isset( $subscribe_to ) || empty( $subscribe_to ) ) {
-					$newTicket['subscribe_to'] = array();
+					$subscribe_to = array();
 				}
 
 				if ( intval( $post_author ) != get_current_user_id() && ! in_array( get_current_user_id(), $subscribe_to ) ) {

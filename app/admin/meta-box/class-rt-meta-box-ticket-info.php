@@ -215,7 +215,7 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 
 			$rt_hd_tickets_operation->ticket_closing_field_update( $newTicket, $post_id );
 
-			$rt_hd_tickets_operation->ticket_attribute_update( $newTicket, $post->post_type, $post_id );
+			$rt_hd_tickets_operation->ticket_attribute_update( $newTicket, $post->post_type, $post_id, 'meta' );
 
 		}
 	}

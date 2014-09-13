@@ -58,7 +58,7 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 		 *
 		 * @return mixed
 		 */
-		function accounts_columns( $columns, $rt_entity ) {
+		public function accounts_columns( $columns, $rt_entity ) {
 
 			global $rt_organization;
 			if ( $rt_entity->post_type != $rt_organization->post_type ) {

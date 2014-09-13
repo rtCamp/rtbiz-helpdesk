@@ -2,7 +2,7 @@
 
 class test_Rt_HD_Module extends RT_WP_TestCase {
 	/**
-	 * @var $rthdModule object of RT_WP_Helpdesk
+	 * @var $rthdModule object of Rt_HD_Module
 	 */
 	var $rthdModule;
 
@@ -13,7 +13,6 @@ class test_Rt_HD_Module extends RT_WP_TestCase {
 	function setUp() {
 		parent::setUp();
 		$this->rthdModule = new Rt_HD_Module();
-		//$this->rthdModule->db_ticket_table_update();
 	}
 
 	/**
@@ -26,6 +25,7 @@ class test_Rt_HD_Module extends RT_WP_TestCase {
 		$this->assertTrue( method_exists( $this->rthdModule, 'init_hd' ), 'Class Rt_HD_Module does not have method init_hd' );
 		$this->assertTrue( method_exists( $this->rthdModule, 'register_custom_post' ), 'Class Rt_HD_Module does not have method register_custom_post' );
 		$this->assertTrue( method_exists( $this->rthdModule, 'register_custom_statuses' ), 'Class Rt_HD_Module does not have method register_custom_statuses' );
+		$this->assertTrue( method_exists( $this->rthdModule, 'add_department_support' ), 'Class Rt_HD_Module does not have method add_department_support' );
 	}
 
 	/**
@@ -61,7 +61,6 @@ class test_Rt_HD_Module extends RT_WP_TestCase {
 	 * Test register_custom_post
 	 */
 	function  test_register_custom_post() {
-		$this->rthdModule->register_custom_post( 32 );
 		$this->assertTrue( post_type_exists( Rt_HD_Module::$post_type ) );
 	}
 
@@ -69,9 +68,19 @@ class test_Rt_HD_Module extends RT_WP_TestCase {
 	 * Test register_custom_statuses
 	 */
 	function  test_register_custom_statuses() {
-		foreach ( $this->rthdModule->statuses as $status ) {
-			$this->assertTrue( is_object( $this->rthdModule->register_custom_statuses( $status ) ) );
-		}
+		$status = array(
+			'slug'        => 'Demo',
+			'name'        => __( 'Demo', RT_HD_TEXT_DOMAIN ),
+			'description' => __( 'Ticket is unanswered. It needs to be replied. The default state.', RT_HD_TEXT_DOMAIN ),
+		);
+		$this->assertTrue( is_object( $this->rthdModule->register_custom_statuses( $status ) ) );
+	}
+
+	/**
+	 * Test add_department_support
+	 */
+	function  test_add_department_support() {
+		$this->assertEquals( array( 'rtbiz_hd_ticket' ) , $this->rthdModule->add_department_support( array() ) );
 	}
 }
  
