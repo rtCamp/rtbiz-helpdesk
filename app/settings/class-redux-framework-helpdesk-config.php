@@ -689,8 +689,8 @@ function rthd_ticket_import_logs() {
  * @param $value
  */
 function rthd_reply_by_email_view( $field, $value ) {
-	$obj = new RT_HD_Setting_Inbound_Email();
-	$obj->rthd_reply_by_email_view( $field, $value );
+	global $rt_hd_settings_inbound_email;
+	$rt_hd_settings_inbound_email->rthd_reply_by_email_view( $field, $value );
 }
 
 function rthd_imap_servers( $field, $value ) {

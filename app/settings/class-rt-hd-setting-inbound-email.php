@@ -13,12 +13,33 @@ use Zend\Mail\Storage\Imap as ImapStorage;
 
 if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 
+	/**
+	 * Class RT_HD_Setting_Inbound_Email
+	 */
 	class RT_HD_Setting_Inbound_Email {
 
-		public function rthd_reply_by_email_view( $field, $value ) {
-			global $rt_hd_settings, $redux_helpdesk_settings, $rt_hd_imap_server_model;
+		/**
+		 * @var string
+		 */
+		var $user_id = '';
+		/**
+		 * @var null
+		 */
+		var $oauth2 = null;
+		/**
+		 * @var null
+		 */
+		var $client = null;
+
+
+		/**
+		 *
+		 */
+		public function goole_oauth() {
+			global $rt_hd_settings, $redux_helpdesk_settings;
 
 			$rt_hd_settings->update_gmail_ac_count();
+
 			//Google Client
 			$redirect_url = get_site_option( 'rthd_googleapi_redirecturl' );
 			if ( ! $redirect_url ) {
@@ -39,27 +60,27 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 			include_once RT_HD_PATH_VENDOR . 'google-api-php-client/Google_Client.php';
 			include_once RT_HD_PATH_VENDOR . 'google-api-php-client/contrib/Google_Oauth2Service.php';
 
-			$client = new Google_Client();
-			$client->setApplicationName( 'Helpdesk Studio' );
-			$client->setClientId( $google_client_id );
-			$client->setClientSecret( $google_client_secret );
-			$client->setRedirectUri( $google_client_redirect_url );
-			$client->setScopes(
+			$this->client = new Google_Client();
+			$this->client->setApplicationName( 'Helpdesk Studio' );
+			$this->client->setClientId( $google_client_id );
+			$this->client->setClientSecret( $google_client_secret );
+			$this->client->setRedirectUri( $google_client_redirect_url );
+			$this->client->setScopes(
 				array(
 					'https://mail.google.com/',
 					'https://www.googleapis.com/auth/userinfo.email',
 					'https://www.googleapis.com/auth/userinfo.profile',
 				) );
-			$client->setAccessType( 'offline' );
-			$oauth2  = new Google_Oauth2Service( $client );
-			$user_id = get_current_user_id();
+			$this->client->setAccessType( 'offline' );
+			$this->oauth2  = new Google_Oauth2Service( $this->client );
+			$this->user_id = get_current_user_id();
 
 			//Google Oauth redirection
 			if ( isset( $_GET['code'] ) ) {
-				$client->authenticate();
-				$user  = $oauth2->userinfo_v2_me->get();
+				$this->client->authenticate();
+				$user  = $this->oauth2->userinfo_v2_me->get();
 				$email = filter_var( $user['email'], FILTER_SANITIZE_EMAIL );
-				$rt_hd_settings->add_user_google_ac( $client->getAccessToken(), $email, serialize( $user ), $user_id );
+				$rt_hd_settings->add_user_google_ac( $this->client->getAccessToken(), $email, serialize( $user ), $this->user_id );
 				wp_redirect( $google_client_redirect_url );
 			}
 
@@ -71,12 +92,22 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 						'email' => $email,
 					);
 					$imap_server = $_POST['rthd_imap_server'];
-					$rt_hd_settings->add_user_google_ac( rthd_encrypt_decrypt( $password ), $email, maybe_serialize( $email_data ), $user_id, 'imap', $imap_server );
+					$rt_hd_settings->add_user_google_ac( rthd_encrypt_decrypt( $password ), $email, maybe_serialize( $email_data ), $this->user_id, 'imap', $imap_server );
 				}
 			}
+		}
 
-			$google_acs = $rt_hd_settings->get_user_google_ac( $user_id );
-			$authUrl    = $client->createAuthUrl();
+		/**
+		 * @param $field
+		 * @param $value
+		 */
+		public function rthd_reply_by_email_view( $field, $value ) {
+			global $rt_hd_settings;
+
+			$this->goole_oauth();
+
+			$google_acs = $rt_hd_settings->get_user_google_ac( $this->user_id );
+			$authUrl    = $this->client->createAuthUrl();
 
 			$results           = Rt_HD_Utils::get_hd_rtcamp_user();
 			$arrSubscriberUser = array();
@@ -102,10 +133,10 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 
 					if ( $ac->type == 'goauth' ) {
 						$token = json_decode( $ac->outh_token );
-						$client->setAccessToken( $ac->outh_token );
-						if ( $client->isAccessTokenExpired() ) {
-							$client->refreshToken( $token->refresh_token );
-							$user  = $oauth2->userinfo_v2_me->get();
+						$this->client->setAccessToken( $ac->outh_token );
+						if ( $this->client->isAccessTokenExpired() ) {
+							$this->client->refreshToken( $token->refresh_token );
+							$user  = $this->oauth2->userinfo_v2_me->get();
 							$email = filter_var( $user['email'], FILTER_SANITIZE_EMAIL );
 							if ( isset( $ac->email_data['inbox_folder'] ) ) {
 								$user['inbox_folder'] = $ac->email_data['inbox_folder'];
@@ -113,9 +144,9 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 							if ( isset( $ac->email_data['mail_folders'] ) ) {
 								$user['mail_folders'] = $ac->email_data['mail_folders'];
 							}
-							$rt_hd_settings->update_user_google_ac( $client->getAccessToken(), $email, serialize( $user ) );
+							$rt_hd_settings->update_user_google_ac( $this->client->getAccessToken(), $email, serialize( $user ) );
 							$ac->email_data = $user;
-							$token          = json_decode( $client->getAccessToken() );
+							$token          = json_decode( $this->client->getAccessToken() );
 						}
 						$token = $token->access_token;
 					} else {
@@ -133,7 +164,7 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 							<td>
 								<input type="hidden" name='mail_ac' value="<?php echo esc_attr( $email ); ?>"/>
 								<table class='hd-google-profile-table'>
-									<?php if ( $ac->type == 'imap' ) { ?>
+					<?php if ( $ac->type == 'imap' ) { ?>
 										<tr valign="top">
 											<td></td>
 											<th scope="row"><label><?php _e( 'IMAP Server' ); ?></label></th>
@@ -152,7 +183,8 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 										<tr valign="top">
 											<td></td>
 											<th scope="row"><label><?php _e( 'Password' ); ?></label></th>
-											<td class="long"><input required="required" autocomplete="off" type="password"
+											<td class="long"><input required="required" autocomplete="off"
+											                        type="password"
 											                        name="imap_password" placeholder="Password"
 											                        value="<?php echo esc_attr( rthd_encrypt_decrypt( $token ) ); ?>"/>
 											</td>
@@ -175,7 +207,8 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 										<td>
 											<label>
 												<?php _e( 'Inbox Folder' ); ?>
-												<select data-email-id="<?php echo esc_attr( $ac->id ); ?>" name="inbox_folder"
+												<select data-email-id="<?php echo esc_attr( $ac->id ); ?>"
+												        name="inbox_folder"
 												        data-prev-value="<?php echo esc_attr( $inbox_folder ); ?>">
 													<option value=""><?php _e( 'Choose Inbox Folder' ); ?></option>
 													<?php if ( ! is_null( $all_folders ) ) {
@@ -187,8 +220,7 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 											<?php } ?>
 					<?php if ( ! is_null( $all_folders ) ) {
 						$hdZendEmail->render_folders_checkbox( $all_folders, $element_name = 'mail_folders', $values = $mail_folders, $data_str = 'data-email-id=' . $ac->id, $inbox_folder );
-					} else {
-						?>
+					} else { ?>
 						<p class="description"><?php _e( 'No Folders found.' ); ?></p>
 					<?php } ?>
 										</td>
@@ -197,12 +229,14 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 										<td></td>
 										<th scope="row"><label></label></th>
 										<td>
-											<input type="hidden" name="rthd_submit_enable_reply_by_email" value="save"/> <a
+											<input type="hidden" name="rthd_submit_enable_reply_by_email" value="save"/>
+											<a
 												class='button remove-google-ac'
 												href='<?php echo esc_url( admin_url( 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&page=rthd-settings&tab=my-settings&type=personal&email=' . $email ) ); ?>'>Remove
 												A/C</a>
 											<?php if ( $ac->type == 'goauth' ) { ?>
-												<a class='button button-primary' href='<?php echo esc_url( $authUrl ); ?>'>Re
+												<a class='button button-primary'
+												   href='<?php echo esc_url( $authUrl ); ?>'>Re
 													Connect Google Now</a>
 											<?php } ?>
 										</td>
@@ -213,23 +247,24 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 						</tbody>
 					</table>
 					<script>
-						jQuery( document ).ready( function ( $ ) {
-							$( document ).on( 'change', 'select[name=inbox_folder]', function ( e ) {
+						jQuery(document).ready(function ($) {
+							$(document).on('change', 'select[name=inbox_folder]', function (e) {
 								e.preventDefault();
-								inbox = $( this ).val();
-								prev_value = $( this ).data( 'prev-value' );
-								$( this ).data( 'prev-value', inbox );
-								email_id = $( this ).data( 'email-id' );
-								$( 'input[data-email-id="' + email_id + '"][value="' + inbox + '"]' ).parent().css( 'display', 'none' );
-								$( 'input[data-email-id="' + email_id + '"][value="' + prev_value + '"]' ).parent().css( 'display', 'inline' );
-							} );
-						} );
+								inbox = $(this).val();
+								prev_value = $(this).data('prev-value');
+								$(this).data('prev-value', inbox);
+								var email_id = $(this).data('email-id');
+								$('input[data-email-id="' + email_id + '"][value="' + inbox + '"]').parent().css('display', 'none');
+								$('input[data-email-id="' + email_id + '"][value="' + prev_value + '"]').parent().css('display', 'inline');
+							});
+						});
 					</script>
 				<?php
 				}
 			} else {
 				?>
-				<p class="submit"><a class="button" id="rthd_add_personal_email" href="#"><?php _e( 'Add Email' ); ?></a></p>
+				<p class="submit"><a class="button" id="rthd_add_personal_email"
+				                     href="#"><?php _e( 'Add Email' ); ?></a></p>
 				<p class="submit rthd-hide-row" id="rthd_email_acc_type_container">
 					<select id="rthd_select_email_acc_type">
 						<option value=""><?php _e( 'Select Type' ); ?></option>
@@ -242,19 +277,20 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 					   href='<?php echo esc_url( $authUrl ); ?>'><?php _e( 'Connect New Google A/C' ); ?></a>
 				</p>
 				<p id="rthd_add_imap_acc_form" autocomplete="off" class="rthd-hide-row">
-					<input type="hidden" name="rthd_add_imap_email" value="1"/> <select required="required"
-					                                                                    name="rthd_imap_server">
+					<input type="hidden" name="rthd_add_imap_email" value="1"/>
+					<select required="required" name="rthd_imap_server">
 						<option value=""><?php _e( 'Select Mail Server' ); ?></option>
-						<?php
+				<?php
 				$imap_servers = $rt_hd_imap_server_model->get_all_servers();
 				foreach ( $imap_servers as $server ) {
 					?>
 					<option
 						value="<?php echo esc_attr( $server->id ); ?>"><?php echo esc_html( $server->server_name ); ?></option>
 				<?php } ?>
-					</select> <input type="email" required="required" autocomplete="off" name="rthd_imap_user_email"
-					                 placeholder="Email"/> <input type="password" required="required" autocomplete="off"
-					                                              name="rthd_imap_user_pwd" placeholder="Password"/>
+					</select>
+					<input type="email" required="required" autocomplete="off" name="rthd_imap_user_email"
+					       placeholder="Email"/> <input type="password" required="required" autocomplete="off"
+					                                    name="rthd_imap_user_pwd" placeholder="Password"/>
 					<button class="button button-primary" type="submit"><?php _e( 'Save' ); ?></button>
 				</p>
 			<?PHP

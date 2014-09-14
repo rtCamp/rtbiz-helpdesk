@@ -156,8 +156,13 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			$rt_hd_tickets_operation  = new Rt_HD_Tickets_Operation();
 			$rt_hd_email_notification = new RT_HD_Email_Notification();
 
+			//Setting
 
-			$reduxHelpdeskConfig = new Redux_Framework_Helpdesk_Config();
+			global $rt_hd_redux_framework_Helpdesk_Config, $rt_hd_settings_inbound_email ;
+
+			$rt_hd_redux_framework_Helpdesk_Config = new Redux_Framework_Helpdesk_Config();
+			$rt_hd_settings_inbound_email = new RT_HD_Setting_Inbound_Email();
+
 
 			$rt_hd_gravity_form_importer = new Rt_HD_Gravity_Form_Importer();
 			$rt_hd_gravity_form_mapper   = new Rt_HD_Gravity_Form_Mapper();
