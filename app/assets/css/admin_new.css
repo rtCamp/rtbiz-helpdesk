@@ -145,3 +145,9 @@ img.tips {
 	background: #F8F8F8;
 	margin-bottom: 10px;
 }
+
+
+/*Redux Setting Heder Css*/
+.redux-container #redux-header .display_header {
+    margin: 0;
+}

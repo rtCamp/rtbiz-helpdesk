@@ -241,7 +241,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			$editor_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
 			$admin_cap  = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' );
 
-			$users         = get_users();
+			$users         = rt_biz_get_module_users( rt_biz_sanitize_module_key( RT_HD_TEXT_DOMAIN ) );
 			$users_options = array();
 
 			foreach ( $users as $user ) {

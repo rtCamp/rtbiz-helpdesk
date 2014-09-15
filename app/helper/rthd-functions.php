@@ -17,7 +17,7 @@ function rthd_get_template( $template_name, $args = array(), $template_path = ''
 
 	$located = rthd_locate_template( $template_name, $template_path, $default_path );
 
-	do_action( "rthd_before_template_part", $template_name, $template_path, $located, $args );
+	do_action( 'rthd_before_template_part', $template_name, $template_path, $located, $args );
 
 	include( $located );
 
@@ -447,7 +447,7 @@ function rthd_get_settings() {
 		'attach_contacts'         => 'yes',
 		'attach_accounts'         => 'yes',
 		'system_email'            => isset( $redux_helpdesk_settings['rthd_outgoing_email_from_address'] ) && ! empty( $redux_helpdesk_settings['rthd_outgoing_email_from_address'] ) ? $redux_helpdesk_settings['rthd_outgoing_email_from_address'] : '',
-		'outbound_emails'         => '',
+		'outbound_emails'         => isset( $redux_helpdesk_settings['rthd_outgoing_email_from_address'] ) && ! empty( $redux_helpdesk_settings['rthd_outgoing_email_from_address'] ) ? $redux_helpdesk_settings['rthd_outgoing_email_from_address'] : '',
 		'outgoing_email_delivery' => isset( $redux_helpdesk_settings['rthd_outgoing_email_delivery'] ) && ! empty( $redux_helpdesk_settings['rthd_outgoing_email_delivery'] ) ? $redux_helpdesk_settings['rthd_outgoing_email_delivery'] : '',
 	);
 
@@ -523,9 +523,9 @@ function rthd_set_html_content_type() {
 
 // Setting ApI
 function rthd_get_redux_settings() {
-	if ( ! isset( $GLOBALS[ 'redux_helpdesk_settings' ] ) ) {
-		$GLOBALS[ 'redux_helpdesk_settings' ] = get_option( 'redux_helpdesk_settings', array() );
+	if ( ! isset( $GLOBALS['redux_helpdesk_settings'] ) ) {
+		$GLOBALS['redux_helpdesk_settings'] = get_option( 'redux_helpdesk_settings', array() );
 	}
 
-	return $GLOBALS[ 'redux_helpdesk_settings' ];
+	return $GLOBALS['redux_helpdesk_settings'];
 }
