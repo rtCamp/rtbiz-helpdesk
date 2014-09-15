@@ -158,11 +158,11 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 
 			//Setting
 
-			global $rt_hd_redux_framework_Helpdesk_Config, $rt_hd_settings_inbound_email ;
+			global $rt_hd_redux_framework_Helpdesk_Config, $rt_hd_settings_inbound_email, $rt_hd_settings_imap_server ;
 
 			$rt_hd_redux_framework_Helpdesk_Config = new Redux_Framework_Helpdesk_Config();
 			$rt_hd_settings_inbound_email = new RT_HD_Setting_Inbound_Email();
-
+			$rt_hd_settings_imap_server = new RT_HD_Setting_Imap_Server();
 
 			$rt_hd_gravity_form_importer = new Rt_HD_Gravity_Form_Importer();
 			$rt_hd_gravity_form_mapper   = new Rt_HD_Gravity_Form_Mapper();
