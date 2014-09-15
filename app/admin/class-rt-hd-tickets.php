@@ -62,7 +62,7 @@ if ( ! class_exists( 'Rt_HD_Tickets' ) ) {
 			add_action( 'wp_ajax_helpdesk_delete_followup', array( $this, 'delete_followup_ajax' ) );
 			add_action( 'wp_ajax_rthd_gmail_import_thread_request', array( $this, 'gmail_thread_import_request' ) );
 
-			add_shortcode( 'rt_hd_tickets', array( $this, 'rt_hd_tickets_callback' ) );
+
 		}
 
 		/**
@@ -2027,78 +2027,6 @@ if ( ! class_exists( 'Rt_HD_Tickets' ) ) {
 			$rows_affected = $rt_hd_mail_thread_importer_model->add_thread( $args );
 
 			return $rows_affected;
-		}
-
-		function rt_hd_tickets_callback( $atts ) {
-			global $rt_hd_module;
-			$labels = $rt_hd_module->labels;
-			$a      = shortcode_atts(
-				array(
-					'email' => '',
-					'user'  => '',
-					), $atts );
-
-
-			$args = array(
-				'post_type'   => Rt_HD_Module::$post_type,
-				'post_status' => 'any',
-				'nopaging'    => true,
-
-			);
-
-			if ( ! empty( $a['email'] ) ) {
-
-				$person = rt_biz_get_person_by_email( $a['email'] );
-
-				$args['connected_items'] = $person[0]->ID;
-				$args['connected_type']  = 'rt_ticket_to_rt_contact';
-
-			}
-
-			if ( ! empty( $a['user'] ) ) {
-
-				$args['author'] = $a['user'];
-
-			}
-
-			$tickets = get_posts( $args ); ?>
-
-			<h2><?php _e( 'Tikets', RT_HD_TEXT_DOMAIN ); ?></h2>
-
-			<?php
-			printf( _n( 'One Ticket Found.', '%d Tickets Found.', count( $tickets ), 'my-RT_HD_TEXT_DOMAIN-domain' ), count( $tickets ) );
-			?>
-			<table class="shop_table my_account_orders">
-				<tr>
-					<th>Ticket ID</th>
-					<th>Last Updated</th>
-					<th>Status</th>
-					<th></th>
-				</tr>
-
-				<?php
-
-
-			foreach ( $tickets as $ticket ) {
-
-					$rthd_unique_id = get_post_meta( $ticket->ID, '_rtbiz_hd_unique_id', true );
-					$date           = new DateTime( $ticket->post_modified );
-
-					?>
-
-					<tr>
-						<td> #<?php echo esc_attr( $ticket->ID ) ?> </td>
-						<td> <?php echo esc_attr( human_time_diff( $date->format( 'U' ), time() ) ) .esc_attr( __( ' ago' ) ) ?> </td>
-						<td> <?php echo esc_attr( $ticket->post_status )?> </td>
-						<td><a class="button support" target="_blank"
-						       href="<?php echo esc_url( trailingslashit( site_url() ) ) . esc_attr( strtolower( $labels['name'] ) ) . '/?rthd_unique_id=' . esc_attr( $rthd_unique_id ); ?>"><?php _e( 'Link' ); ?></a>
-						</td>
-					</tr>
-
-				<?php } ?>
-			</table>
-
-		<?php
 		}
 
 	}

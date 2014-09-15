@@ -12,24 +12,30 @@ if ( ! defined( 'ABSPATH' ) ) {
  * and open the template in the editor.
  */
 
-/**
- * Provide woocommerce integration with helpdesk for product suppourt
- *
- * @author paresh
- */
 
 if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 
+	/**
+	 * Class Rt_HD_Woocommerce
+	 * Provide wooCommerce integration with HelpDesk for product support
+	 *
+	 */
 	class Rt_HD_Woocommerce {
 
+		/**
+		 * construct
+		 *
+		 * @since 0.1
+		 */
 		function __construct() {
-
 			$this->hooks();
 		}
 
 
 		/**
+		 * Hook
 		 *
+		 * @since 0.1
 		 */
 		function hooks() {
 
@@ -38,6 +44,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 
 			// shortcode for get support form
 			add_shortcode( 'rt_hd_support_form', array( $this, 'rt_hd_support_form_callback' ) );
+			add_shortcode( 'rt_hd_tickets', array( $this, 'rt_hd_tickets_callback' ) );
 
 			add_action( 'woocommerce_after_my_account', array( $this, 'woo_my_tickets_my_account' ) );
 
@@ -46,6 +53,8 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 
 		/**
 		 * Add new action link for Get Support in woocommerce order list
+		 *
+		 * @since 0.1
 		 *
 		 * @global type $redux_helpdesk_settings
 		 *
@@ -68,7 +77,9 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 
 
 		/**
-		 * Shortcode callback for [rt_hd_support_form]
+		 * Short code callback for Display Support Form
+		 *
+		 * @since 0.1
 		 */
 		function rt_hd_support_form_callback() {
 
@@ -173,7 +184,9 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 		}
 
 		/**
-		 * Save new support ticket for specified product
+		 * Save new support ticket for wooCommerce
+		 *
+		 * @since 0.1
 		 *
 		 * @global type $rt_hd_contacts
 		 */
@@ -226,6 +239,11 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 
 		}
 
+		/**
+		 * View ticket on wooCommerce My account page
+		 *
+		 * @since 0.1
+		 */
 		function woo_my_tickets_my_account() {
 
 			global $current_user;
@@ -237,10 +255,12 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 		/**
 		 * add attachment
 		 *
+		 * @since 0.1
+		 *
 		 * @param $file_handler
 		 * @param $post_id
 		 *
-		 * @return int|WP_Error
+		 * @return int| WP_Error
 		 */
 		static function insert_attachment( $file_handler, $post_id ) {
 			// check to make sure its a successful upload
@@ -255,6 +275,77 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 			$attach_id = media_handle_upload( $file_handler, $post_id );
 
 			return $attach_id;
+		}
+
+
+		/**
+		 * wooCommerce View list all ticket
+		 * Default All ticket | Ticket by UserID | Ticket by User Email
+		 *
+		 * @since 0.1
+		 *
+		 * @param $atts
+		 */
+		function rt_hd_tickets_callback( $atts ) {
+			global $rt_hd_module;
+			$labels = $rt_hd_module->labels;
+			$a      = shortcode_atts(
+				array(
+					'email' => '',
+					'user'  => '',
+				), $atts );
+
+			$args = array(
+				'post_type'   => Rt_HD_Module::$post_type,
+				'post_status' => 'any',
+				'nopaging'    => true,
+
+			);
+
+			if ( ! empty( $a['email'] ) ) {
+
+				$person = rt_biz_get_person_by_email( $a['email'] );
+
+				$args['connected_items'] = $person[0]->ID;
+				$args['connected_type']  = 'rt_ticket_to_rt_contact';
+
+			}
+
+			if ( ! empty( $a['user'] ) ) {
+
+				$args['author'] = $a['user'];
+
+			}
+
+			$tickets = get_posts( $args ); ?>
+
+			<h2><?php _e( 'Tikets', RT_HD_TEXT_DOMAIN ); ?></h2>
+
+			<?php
+			printf( _n( 'One Ticket Found.', '%d Tickets Found.', count( $tickets ), 'my-RT_HD_TEXT_DOMAIN-domain' ), count( $tickets ) );
+			?>
+			<table class="shop_table my_account_orders">
+				<tr>
+					<th>Ticket ID</th>
+					<th>Last Updated</th>
+					<th>Status</th>
+					<th></th>
+				</tr>
+				<?php foreach ( $tickets as $ticket ) {
+					$rthd_unique_id = get_post_meta( $ticket->ID, '_rtbiz_hd_unique_id', true );
+					$date           = new DateTime( $ticket->post_modified );
+					?>
+					<tr>
+						<td> #<?php echo esc_attr( $ticket->ID ) ?> </td>
+						<td> <?php echo esc_attr( human_time_diff( $date->format( 'U' ), time() ) ) .esc_attr( __( ' ago' ) ) ?> </td>
+						<td> <?php echo esc_attr( $ticket->post_status )?> </td>
+						<td><a class="button support" target="_blank"
+						       href="<?php echo esc_url( trailingslashit( site_url() ) ) . esc_attr( strtolower( $labels['name'] ) ) . '/?rthd_unique_id=' . esc_attr( $rthd_unique_id ); ?>"><?php _e( 'Link' ); ?></a>
+						</td>
+					</tr>
+				<?php } ?>
+			</table>
+		<?php
 		}
 	}
 }
