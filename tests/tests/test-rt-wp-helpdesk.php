@@ -53,11 +53,13 @@ class test_RT_WP_Help_desk extends RT_WP_TestCase {
 		$this->assertTrue( class_exists( 'Rt_HD_ACL' ), 'Class Rt_HD_ACL does not exist' );
 		$this->assertTrue( class_exists( 'Rt_HD_Accounts' ), 'Class Rt_HD_Accounts does not exist' );
 		$this->assertTrue( class_exists( 'Rt_HD_Contacts' ), 'Class Rt_HD_Contacts does not exist' );
-		$this->assertTrue( class_exists( 'Rt_HD_Tickets' ), 'Class Rt_HD_Tickets does not exist' );
 		$this->assertTrue( class_exists( 'Rt_HD_Tickets_Operation' ), 'Class Rt_HD_Tickets_Operation does not exist' );
 		$this->assertTrue( class_exists( 'RT_HD_Email_Notification' ), 'Class RT_HD_Email_Notification does not exist' );
 
 		$this->assertTrue( class_exists( 'Redux_Framework_Helpdesk_Config' ), 'Class Redux_Framework_Helpdesk_Config does not exist' );
+		$this->assertTrue( class_exists( 'RT_HD_Setting_Inbound_Email' ), 'Class RT_HD_Setting_Inbound_Email does not exist' );
+		$this->assertTrue( class_exists( 'Rt_HD_Import_Operation' ), 'Class Rt_HD_Import_Operation does not exist' );
+		$this->assertTrue( class_exists( 'RT_HD_Setting_Imap_Server' ), 'Class RT_HD_Setting_Imap_Server does not exist' );
 
 		$this->assertTrue( class_exists( 'Rt_HD_Gravity_Form_Importer' ), 'Class Rt_HD_Gravity_Form_Importer does not exist' );
 		$this->assertTrue( class_exists( 'Rt_HD_Gravity_Form_Mapper' ), 'Class Rt_HD_Gravity_Form_Mapper does not exist' );

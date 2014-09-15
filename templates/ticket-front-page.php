@@ -5,7 +5,7 @@
  *
  * @author udit
  */
-global $rt_hd_module, $rt_hd_contacts, $rt_hd_accounts, $rt_hd_settings, $rt_hd_tickets;
+global $rt_hd_module, $rt_hd_contacts, $rt_hd_accounts, $rt_hd_settings, $rt_hd_import_operation;
 
 get_header();
 

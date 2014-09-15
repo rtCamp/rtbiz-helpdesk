@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since  rt-Helpdesk 0.1
  */
-if ( ! class_exists( 'Rt_HD_Tickets' ) ) {
+if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 	/**
 	 * Class Rt_HD_Tickets
@@ -29,7 +29,7 @@ if ( ! class_exists( 'Rt_HD_Tickets' ) ) {
 	 *
 	 * @since rt-Helpdesk 0.1
 	 */
-	class Rt_HD_Tickets {
+	class Rt_HD_Import_Operation {
 
 		/**
 		 * set hooks

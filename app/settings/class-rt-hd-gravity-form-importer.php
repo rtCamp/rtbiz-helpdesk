@@ -1317,9 +1317,9 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 
 			$title = $titleprefix . ' ' . $title . ' ' . $titlesuffix;
 			$title = trim( $title );
-			global $rt_hd_tickets;
+			global $rt_hd_import_operation;
 
-			$ticket_id           = $rt_hd_tickets->process_email_to_ticket( $title, $description, $fromemail, $creationdate, $allemail, array(), $description, false, $assignedto );
+			$ticket_id           = $rt_hd_import_operation->process_email_to_ticket( $title, $description, $fromemail, $creationdate, $allemail, array(), $description, false, $assignedto );
 			$response            = array();
 			$response['lead_id'] = $gravity_lead_id;
 			if ( ! $ticket_id ) {
@@ -1643,7 +1643,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 						if ( ! isset( $accountmeta ) ) {
 							$accountmeta = array();
 						}
-						$account_id = $rt_hd_tickets->post_exists( $accountname );
+						$account_id = $rt_hd_import_operation->post_exists( $accountname );
 
 						if ( ! empty( $account_id ) && get_post_type( $account_id ) === rt_biz_get_organization_post_type() ) {
 							if ( isset( $transaction_id ) && $transaction_id > 0 ) {

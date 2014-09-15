@@ -470,14 +470,14 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 							global $threadPostId;
 							$threadPostId = $rs->post_id;
 							$this->rt_parse_email( $email, $storage, $allMailArray, $hdUser, $user_id, $isSystemEmail );
-							global $rt_hd_tickets;
+							global $rt_hd_import_operation;
 
-							$title = '[New Follwup Imported]' . $rt_hd_tickets->create_title_for_mail( $threadPostId );
+							$title = '[New Follwup Imported]' . $rt_hd_import_operation->create_title_for_mail( $threadPostId );
 							$body  = 'New ' . count( $allMailArray ) . ' Follwup Imported From Gmail threads';
 							$body .= '<br/><b>Email Ac : </b>' . $email;
 							$body .= '<br/><b>Thread ID: </b>' . $threadId;
 							$body .= '<br/> ';
-							$rt_hd_tickets->notify_subscriber_via_email( $threadPostId, $title, $body, 0 );
+							$rt_hd_import_operation->notify_subscriber_via_email( $threadPostId, $title, $body, 0 );
 
 							$this->update_thread_import_status( $rs->id );
 						}
@@ -633,7 +633,7 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 		 */
 		public function rt_parse_email( $email, &$storage, &$arrayMailIds, &$hdUser, $user_id, $isSystemEmail ) {
 			$lastMessageId = '-1';
-			global $rt_hd_tickets;
+			global $rt_hd_import_operation;
 			$lastFlags = false;
 			$lastFlag  = array();
 			$message   = null;
@@ -661,7 +661,7 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 						$this->update_last_mail_uid( $email, $UmailId );
 						continue;
 					}
-					if ( $lastMessageId && $rt_hd_tickets->check_duplicate_from_message_id( $lastMessageId ) ) {
+					if ( $lastMessageId && $rt_hd_import_operation->check_duplicate_from_message_id( $lastMessageId ) ) {
 						$dt = new DateTime( $message->date );
 						$this->update_last_mail_uid( $email, $UmailId );
 						continue;
@@ -887,7 +887,7 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 					$htmlBody     = Rt_HD_Utils::force_utf_8( $htmlBody );
 					$subject      = Rt_HD_Utils::force_utf_8( $subject );
 					$txtBody      = Rt_HD_Utils::force_utf_8( $txtBody );
-					$success_flag = $rt_hd_tickets->process_email_to_ticket( $subject, $htmlBody, $from, $message->date, $allEmails, $attachements, $txtBody, true, $user_id, $messageid, $inreplyto, $references, $isSystemEmail, $subscriber );
+					$success_flag = $rt_hd_import_operation->process_email_to_ticket( $subject, $htmlBody, $from, $message->date, $allEmails, $attachements, $txtBody, true, $user_id, $messageid, $inreplyto, $references, $isSystemEmail, $subscriber );
 
 					if ( ! $success_flag ) {
 						foreach ( $attachements as $attachement ) {

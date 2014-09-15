@@ -1,5 +1,5 @@
 <?php
-global $rt_hd_module, $rt_hd_attributes, $rt_hd_closing_reason, $rt_hd_contacts, $rt_hd_accounts, $rt_hd_settings, $rt_hd_tickets, $rt_hd_ticket_history_model;
+global $rt_hd_module, $rt_hd_attributes, $rt_hd_closing_reason, $rt_hd_contacts, $rt_hd_accounts, $rt_hd_settings, $rt_hd_import_operation, $rt_hd_ticket_history_model;
 
 if ( ! isset( $_REQUEST['post_type'] ) || $_REQUEST['post_type'] != Rt_HD_Module::$post_type ) {
 	wp_die( 'Opsss!! You are in restricted area' );
@@ -516,7 +516,7 @@ if ( isset( $_POST['post'] ) ) {
 			$signature = preg_replace( '/(\n|\r|\r\n)/i', '<br />', $signature );
 			$signature = preg_replace( '/  /i', '  ', $signature );
 		}
-		$title_suffix = $rt_hd_tickets->create_title_for_mail( $post_id );
+		$title_suffix = $rt_hd_import_operation->create_title_for_mail( $post_id );
 		$current_user = wp_get_current_user();
 		if ( $updateFlag ) {
 			if ( $oldUser->ID != $newUser->ID ) {

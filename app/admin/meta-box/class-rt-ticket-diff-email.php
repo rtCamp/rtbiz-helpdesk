@@ -229,7 +229,7 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		public static function save( $post_id, $post ) {
-			global $rt_ticket_email_content, $rt_hd_settings, $rt_hd_tickets, $rt_hd_module;
+			global $rt_ticket_email_content, $rt_hd_settings, $rt_hd_import_operation, $rt_hd_module;
 
 			$emailTable        = "<table style='width: 100%; border-collapse: collapse; border: none;'>";
 			$post_type         = Rt_HD_Module::$post_type;
@@ -259,7 +259,7 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 					$signature = preg_replace( '/(\n|\r|\r\n)/i', '<br />', $signature );
 					$signature = preg_replace( '/  /i', '  ', $signature );
 				}
-				$title_suffix = $rt_hd_tickets->create_title_for_mail( $post_id );
+				$title_suffix = $rt_hd_import_operation->create_title_for_mail( $post_id );
 				$current_user = wp_get_current_user();
 				if ( $updateFlag ) {
 					if ( $oldUser->ID != $newUser->ID ) {

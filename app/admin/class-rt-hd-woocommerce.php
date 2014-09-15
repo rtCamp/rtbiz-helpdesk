@@ -192,14 +192,14 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 		 */
 		function save() {
 
-			global $rt_hd_contacts, $rt_hd_tickets, $redux_helpdesk_settings;;
+			global $rt_hd_contacts, $rt_hd_import_operation, $redux_helpdesk_settings;;
 
 			$data = $_POST['post'];
 
 
 			$product = get_product( $data['product_id'] );
 
-			$rt_hd_tickets_id = $rt_hd_tickets->insert_new_ticket(
+			$rt_hd_tickets_id = $rt_hd_import_operation->insert_new_ticket(
 				"Support for {$product->post->post_title}",
 				$data['description'],
 				$redux_helpdesk_settings['rthd_default_user'], // it will changed to dynamic once redux option for default assignee shell be introduced

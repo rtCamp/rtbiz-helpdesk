@@ -123,7 +123,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 		 */
 		function init_globals() {
 
-			global $rt_hd_mail_accounts_model, $rt_hd_mail_acl_model, $rt_hd_mail_thread_importer_model, $rt_hd_mail_message_model, $rt_hd_mail_outbound_model, $rt_hd_gravity_fields_mapping_model, $rt_hd_ticket_history_model, $rt_hd_imap_server_model, $rthd_form, $taxonomy_metadata, $rt_hd_reports, $rt_hd_closing_reason, $rt_hd_attributes, $rt_hd_dashboard, $rt_hd_module, $rt_hd_cpt_tickets, $rt_hd_acl, $rt_hd_accounts, $rt_hd_contacts, $rt_hd_tickets_operation, $rt_hd_email_notification, $rt_hd_tickets, $rt_hd_gravity_form_importer, $rt_hd_gravity_form_mapper, $rt_hd_settings, $rt_hd_user_settings, $rt_hd_logs, $rt_hd_woocommerce;
+			global $rt_hd_mail_accounts_model, $rt_hd_mail_acl_model, $rt_hd_mail_thread_importer_model, $rt_hd_mail_message_model, $rt_hd_mail_outbound_model, $rt_hd_gravity_fields_mapping_model, $rt_hd_ticket_history_model, $rt_hd_imap_server_model, $rthd_form, $taxonomy_metadata, $rt_hd_reports, $rt_hd_closing_reason, $rt_hd_attributes, $rt_hd_dashboard, $rt_hd_module, $rt_hd_cpt_tickets, $rt_hd_acl, $rt_hd_accounts, $rt_hd_contacts, $rt_hd_tickets_operation, $rt_hd_email_notification, $rt_hd_import_operation, $rt_hd_gravity_form_importer, $rt_hd_gravity_form_mapper, $rt_hd_settings, $rt_hd_user_settings, $rt_hd_logs, $rt_hd_woocommerce;
 
 			//Model class init
 			$rt_hd_mail_accounts_model          = new Rt_HD_Mail_Accounts_Model();
@@ -152,16 +152,16 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			$rt_hd_acl                = new Rt_HD_ACL();
 			$rt_hd_accounts           = new Rt_HD_Accounts();
 			$rt_hd_contacts           = new Rt_HD_Contacts();
-			$rt_hd_tickets            = new Rt_HD_Tickets();
 			$rt_hd_tickets_operation  = new Rt_HD_Tickets_Operation();
 			$rt_hd_email_notification = new RT_HD_Email_Notification();
 
 			//Setting
 
-			global $rt_hd_redux_framework_Helpdesk_Config, $rt_hd_settings_inbound_email, $rt_hd_settings_imap_server ;
+			global $rt_hd_redux_framework_Helpdesk_Config, $rt_hd_settings_inbound_email, $rt_hd_import_operation, $rt_hd_settings_imap_server;
 
 			$rt_hd_redux_framework_Helpdesk_Config = new Redux_Framework_Helpdesk_Config();
-			$rt_hd_settings_inbound_email = new RT_HD_Setting_Inbound_Email();
+			$rt_hd_settings_inbound_email          = new RT_HD_Setting_Inbound_Email();
+			$rt_hd_import_operation                = new Rt_HD_Import_Operation();
 			$rt_hd_settings_imap_server = new RT_HD_Setting_Imap_Server();
 
 			$rt_hd_gravity_form_importer = new Rt_HD_Gravity_Form_Importer();
@@ -196,8 +196,8 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 		 * @since 0.1
 		 */
 		function update_database() {
-			$updateDB = new RT_DB_Update( trailingslashit( RT_HD_PATH ) . 'rtbiz-helpdesk.php', trailingslashit( RT_HD_PATH_SCHEMA ) );
-			$updateDB -> install_db_version = 0;
+			$updateDB                     = new RT_DB_Update( trailingslashit( RT_HD_PATH ) . 'rtbiz-helpdesk.php', trailingslashit( RT_HD_PATH_SCHEMA ) );
+			$updateDB->install_db_version = 0;
 			$updateDB->do_upgrade();
 		}
 
