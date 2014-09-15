@@ -196,8 +196,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 		 * @since 0.1
 		 */
 		function update_database() {
-			$updateDB                     = new RT_DB_Update( trailingslashit( RT_HD_PATH ) . 'rtbiz-helpdesk.php', trailingslashit( RT_HD_PATH_SCHEMA ) );
-			$updateDB->install_db_version = 0;
+			$updateDB = new RT_DB_Update( trailingslashit( RT_HD_PATH ) . 'rtbiz-helpdesk.php', trailingslashit( RT_HD_PATH_SCHEMA ) );
 			$updateDB->do_upgrade();
 		}
 
