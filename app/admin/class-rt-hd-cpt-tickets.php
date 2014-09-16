@@ -49,7 +49,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 			add_action( 'rt_hd_process_' . Rt_HD_Module::$post_type . '_meta', 'RT_Meta_Box_External_Link::save', 10, 2 );
 			add_action( 'rt_hd_process_' . Rt_HD_Module::$post_type . '_meta', 'RT_Ticket_Diff_Email::save', 10, 2 );
 
-			add_action( 'pre_get_posts', array( $this, 'pre_filter' ) );
+			add_action( 'pre_get_posts', array( $this, 'pre_filter' ), 1 );
 			add_action( 'untrashed_post', array( $this, 'after_restore_trashed_ticket' ) );
 			add_action( 'before_delete_post', array( $this, 'before_ticket_deleted' ) );
 			add_action( 'wp_trash_post', array( $this, 'before_ticket_trashed' ) );
@@ -90,9 +90,9 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 			$columns['cb']                         = '<input type="checkbox" />';
 			$columns['rthd_ticket_title']          = __( 'Ticket', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_status']         = '<span class="status_head tips" data-tip="' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '">' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '</span>';
-			$columns['rthd_ticket_created_by']     = __( 'Create By', RT_HD_TEXT_DOMAIN );
-			$columns['rthd_ticket_updated_by']     = __( 'Updated By', RT_HD_TEXT_DOMAIN );
-			$columns['rthd_ticket_closed_by']      = __( 'Closed By', RT_HD_TEXT_DOMAIN );
+			$columns['rthd_ticket_created_by']     = __( 'Create_By', RT_HD_TEXT_DOMAIN );
+			$columns['rthd_ticket_updated_by']     = __( 'Updated_By', RT_HD_TEXT_DOMAIN );
+			$columns['rthd_ticket_closed_by']      = __( 'ClosedBy', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_closing_reason'] = __( 'Closing Reason', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_contacts']       = __( 'Contacts', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_accounts']       = __( 'Accounts', RT_HD_TEXT_DOMAIN );
@@ -111,10 +111,9 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 		 * @return mixed
 		 */
 		function sortable_column( $columns ) {
-			$columns['rthd_ticket_id']   = __( 'Ticket ID', RT_HD_TEXT_DOMAIN );
-			$columns['rthd_create_date'] = __( 'Create Date', RT_HD_TEXT_DOMAIN );
-			$columns['rthd_update_date'] = __( 'Update Date', RT_HD_TEXT_DOMAIN );
-
+			$columns['rthd_ticket_title']          = __( 'Ticket', RT_HD_TEXT_DOMAIN );
+			$columns['rthd_ticket_created_by']     = __( 'Create_By', RT_HD_TEXT_DOMAIN );
+			$columns['rthd_ticket_updated_by']     = __( 'Updated_By', RT_HD_TEXT_DOMAIN );
 			return $columns;
 		}
 
@@ -342,9 +341,23 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 		 */
 		function pre_filter( $query ) {
 			if ( isset( $_GET['post_type'] ) && $_GET['post_type'] == Rt_HD_Module::$post_type ) {
-
-				$query->set( 'orderby', 'modified' );
-				$query->set( 'order', 'asc' );
+				$orderby = $query->get( 'orderby' );
+				if ( isset( $orderby ) && ! empty( $orderby ) ){
+					switch ( $orderby ) {
+						case 'Ticket':
+							$query->set( 'orderby', 'post_ID' );
+							break;
+						case 'Create_By':
+							$query->set( 'orderby', 'Date' );
+							break;
+						case 'Updated_By':
+							$query->set( 'orderby', 'modified' );
+							break;
+					}
+				} else {
+					$query->set( 'orderby', 'modified' );
+					$query->set( 'order', 'desc' );
+				}
 
 				if ( isset( $_GET['created_by'] ) ) {
 

@@ -80,6 +80,8 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 		 * Short code callback for Display Support Form
 		 *
 		 * @since 0.1
+		 *
+		 * [rt_hd_support_form]
 		 */
 		function rt_hd_support_form_callback() {
 
@@ -92,95 +94,72 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 			}
 
 			if ( isset( $_GET['order_id'] ) ) {
-
-
 				$order = new WC_Order( $_GET['order_id'] );
 				$items = $order->get_items();
-
 				$order_email = $order->billing_email;
-
-
 				foreach ( $items as $item ) {
 					$product_name         = $item['name'];
 					$product_id           = $item['product_id'];
 					$product_variation_id = $item['variation_id'];
-
 					$option .= "<option value=$product_id>$product_name</option>";
 				}
 			} else {
-				$arg = array(
+				$arg      = array(
 					'post_type' => 'product',
 					'nopagging' => true,
 				);
-
 				$products = get_posts( $arg );
-
 				foreach ( $products as $product ) {
 					$option .= "<option value=$product->ID>$product->post_title</option>";
 				}
-			}
-			?>
+			} ?>
 			<script type="text/javascript">
-				jQuery( document ).ready( function ( $ ) {
+				jQuery(document).ready(function ($) {
 					//print list of selected file
-
-					$( "#filesToUpload" ).change( function () {
-
-						var input = document.getElementById( 'filesToUpload' );
-
+					$("#filesToUpload").change(function () {
+						var input = document.getElementById('filesToUpload');
 						var list = '';
-
 						//for every file...
-						for ( var x = 0; x < input.files.length; x ++ ) {
+						for (var x = 0; x < input.files.length; x++) {
 							//add to list
 
 							list += '<li>' + input.files[x].name + '</li>';
 						}
-
-						$( "#fileList" ).html( list );
-
-					} );
-
-				} );
+						$("#fileList").html(list);
+					});
+				});
 			</script>
 
 			<h2><?php _e( 'Get Support', 'RT_HD_TEXT_DOMAIN' ); ?></h2>
 			<form method="post" action="" class="comment-form" enctype="multipart/form-data">
-
 				<p>
-					<label><?php _e( 'Product', RT_HD_TEXT_DOMAIN ); ?></label> <select name="post[product_id]">
+					<label><?php _e( 'Product', RT_HD_TEXT_DOMAIN ); ?></label>
+					<select name="post[product_id]">
 						<option value="">Choose Product</option>
-						<?php echo esc_html( $option ); ?>
+						<?php echo balanceTags( $option ); ?>
 					</select>
 				</p>
-
 				<p>
-					<label><?php _e( 'Email', RT_HD_TEXT_DOMAIN ); ?></label> <input type="text" name="post[email]"
-					                                                                 value="<?php echo sanitize_email( $order_email ) ?>"/>
+					<label><?php _e( 'Email', RT_HD_TEXT_DOMAIN ); ?></label>
+					<input type="text" name="post[email]" value="<?php echo sanitize_email( $order_email ) ?>"/>
 				</p>
 
 				<p>
-					<label><?php _e( 'Description', RT_HD_TEXT_DOMAIN ); ?></label> <textarea
-						name="post[description]"></textarea>
+					<label><?php _e( 'Description', RT_HD_TEXT_DOMAIN ); ?></label>
+					<textarea name="post[description]"></textarea>
 				</p>
 
 				<p>
 					<input type="file" id="filesToUpload" name="attachment[]" multiple="multiple"/>
-
-				<ul id="fileList">
-					<li>No Files Selected</li>
-				</ul>
+					<ul id="fileList">
+						<li>No Files Selected</li>
+					</ul>
 				</p>
-
 				<p>
 					<input type="submit" value="Submit"/>
 				</p>
-
-
 			</form>
-
 		<?php
-
 		}
 
 		/**
@@ -209,10 +188,11 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 				$data['email']
 			);
 
-			update_post_meta( $rt_hd_tickets_id, '_rtbiz_hd_woocommerce_product_id', $data['product_id'] );
+			global $rtbiz_wc_product;
+			$product_taxonomy = $rtbiz_wc_product->get_taxonomy( $data['product_id'] );
+			wp_set_post_terms( $rt_hd_tickets_id, array( $product_taxonomy->term_id ) , $rtbiz_wc_product->product_slug );
 
 			if ( $_FILES ) {
-
 				$files = $_FILES['attachment'];
 				foreach ( $files['name'] as $key => $value ) {
 					if ( $files['name'][ $key ] ) {
@@ -234,9 +214,8 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 			}
 
 			if ( isset( $_GET['order_id'] ) ) {
-				update_post_meta( $rt_hd_tickets_id, '_rtbiz_hd__woocommerce_order_id', $_GET['order_id'] );
+				update_post_meta( $rt_hd_tickets_id, '_rtbiz_hd_woocommerce_order_id', $_GET['order_id'] );
 			}
-
 		}
 
 		/**
@@ -289,7 +268,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 		function rt_hd_tickets_callback( $atts ) {
 			global $rt_hd_module;
 			$labels = $rt_hd_module->labels;
-			$a      = shortcode_atts(
+			$arg_shortcode = shortcode_atts(
 				array(
 					'email' => '',
 					'user'  => '',
@@ -299,25 +278,26 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 				'post_type'   => Rt_HD_Module::$post_type,
 				'post_status' => 'any',
 				'nopaging'    => true,
-
 			);
+			$tickets = null;
+			if ( ! empty( $arg_shortcode['email'] ) || ! empty( $arg_shortcode['user'] ) ){
 
-			if ( ! empty( $a['email'] ) ) {
+				if ( ! empty( $arg_shortcode['email'] ) ) {
+					$person = rt_biz_get_person_by_email( $arg_shortcode['email'] );
+					if ( isset( $person ) && ! empty( $person ) ) {
+						$args['connected_items'] = $person[0]->ID;
+						$args['connected_type']  = Rt_HD_Module::$post_type .'_to_' . rtbiz_post_type_name( 'contact' );
+						$tickets = get_posts( $args );
+					}
+				}
 
-				$person = rt_biz_get_person_by_email( $a['email'] );
-
-				$args['connected_items'] = $person[0]->ID;
-				$args['connected_type']  = 'rt_ticket_to_rt_contact';
-
-			}
-
-			if ( ! empty( $a['user'] ) ) {
-
-				$args['author'] = $a['user'];
-
-			}
-
-			$tickets = get_posts( $args ); ?>
+				if ( ! empty( $arg_shortcode['user'] ) ) {
+					$args['author'] = $arg_shortcode['user'];
+					$tickets = get_posts( $args );
+				}
+			} else {
+				$tickets = get_posts( $args );
+			} ?>
 
 			<h2><?php _e( 'Tikets', RT_HD_TEXT_DOMAIN ); ?></h2>
 
@@ -331,19 +311,23 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 					<th>Status</th>
 					<th></th>
 				</tr>
-				<?php foreach ( $tickets as $ticket ) {
+			<?php if ( isset( $tickets ) && ! empty( $tickets ) ) {
+				foreach ( $tickets as $ticket ) {
 					$rthd_unique_id = get_post_meta( $ticket->ID, '_rtbiz_hd_unique_id', true );
 					$date           = new DateTime( $ticket->post_modified );
 					?>
 					<tr>
 						<td> #<?php echo esc_attr( $ticket->ID ) ?> </td>
-						<td> <?php echo esc_attr( human_time_diff( $date->format( 'U' ), time() ) ) .esc_attr( __( ' ago' ) ) ?> </td>
-						<td> <?php echo esc_attr( $ticket->post_status )?> </td>
+						<td> <?php echo esc_attr( human_time_diff( $date->format( 'U' ), time() ) ) . esc_attr( __( ' ago' ) ) ?> </td>
+						<td> <?php echo esc_attr( $ticket->post_status ) ?> </td>
 						<td><a class="button support" target="_blank"
 						       href="<?php echo esc_url( trailingslashit( site_url() ) ) . esc_attr( strtolower( $labels['name'] ) ) . '/?rthd_unique_id=' . esc_attr( $rthd_unique_id ); ?>"><?php _e( 'Link' ); ?></a>
 						</td>
 					</tr>
-				<?php } ?>
+				<?php }
+			} else { ?>
+					<tr><td colspan="4">No Ticketes Found !</td></tr>
+			<?php } ?>
 			</table>
 		<?php
 		}
