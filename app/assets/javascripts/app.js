@@ -20,7 +20,6 @@ jQuery( document ).ready( function ( $ ) {
 		var followuptype = $( "#followup-type" ).val();
 
 		var requestArray = new Object();
-
 		requestArray['post_type'] = rthd_post_type;
 		requestArray["comment_id"] = $( "#edit-comment-id" ).val();
 		requestArray["action"] = "rthd_add_new_followup_front";
@@ -43,6 +42,7 @@ jQuery( document ).ready( function ( $ ) {
 		} )
 
 
+		console.log(requestArray);
 		requestArray['user_edit'] = rthd_user_edit;
 		$.ajax( {
 			        url: ajaxurl,
