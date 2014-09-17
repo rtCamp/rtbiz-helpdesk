@@ -318,7 +318,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 					?>
 					<tr>
 						<td> #<?php echo esc_attr( $ticket->ID ) ?> </td>
-						<td> <?php echo esc_attr( human_time_diff( $date->format( 'U' ), time() ) ) . esc_attr( __( ' ago' ) ) ?> </td>
+						<td> <?php echo esc_attr( human_time_diff( $date->format( 'U' ), current_time( 'timestamp' ) ) ) . esc_attr( __( ' ago' ) ) ?> </td>
 						<td> <?php echo esc_attr( $ticket->post_status ) ?> </td>
 						<td><a class="button support" target="_blank"
 						       href="<?php echo esc_url( trailingslashit( site_url() ) ) . esc_attr( strtolower( $labels['name'] ) ) . '/?rthd_unique_id=' . esc_attr( $rthd_unique_id ); ?>"><?php _e( 'Link' ); ?></a>

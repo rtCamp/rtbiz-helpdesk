@@ -50,10 +50,6 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 			$rtcamp_users = Rt_HD_Utils::get_hd_rtcamp_user(); ?>
 
 			<style type="text/css">
-				#minor-publishing-actions, #misc-publishing-actions, #visibility, #delete-action {
-					display: none
-				}
-
 				.hide {
 					display: none;
 				}

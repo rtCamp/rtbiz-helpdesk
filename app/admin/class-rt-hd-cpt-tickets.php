@@ -261,9 +261,9 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 		public function remove_meta_boxes() {
 			remove_meta_box( 'tagsdiv-' . rthd_attribute_taxonomy_name( 'closing-reason' ), Rt_HD_Module::$post_type, 'side' );
 			remove_meta_box( 'revisionsdiv', Rt_HD_Module::$post_type, 'normal' );
-			remove_meta_box( 'commentsdiv', Rt_HD_Module::$post_type, 'normal' );
 			remove_meta_box( 'commentstatusdiv', Rt_HD_Module::$post_type, 'normal' );
 			remove_meta_box( 'slugdiv', Rt_HD_Module::$post_type, 'normal' );
+			remove_meta_box( 'postcustom', Rt_HD_Module::$post_type, 'normal' );
 		}
 
 		/**
@@ -272,7 +272,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 		 * @since  0.1
 		 */
 		public function rename_meta_boxes() {
-
+			add_meta_box( 'commentsdiv',  __( 'Comments' ), 'post_comment_meta_box',  Rt_HD_Module::$post_type,  'advanced', 'high' );
 		}
 
 		/**
@@ -281,7 +281,8 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 		 * @since  0.1
 		 */
 		public function add_meta_boxes() {
-			add_meta_box( 'rt-hd-ticket-data', __( 'Ticket Information', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Ticket_Info::ui', Rt_HD_Module::$post_type, 'normal', 'high' );
+			add_meta_box( 'rt-hd-ticket-title',  __( 'Ticket Title', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Ticket_Title::ui',  Rt_HD_Module::$post_type,  'normal', 'high' );
+			add_meta_box( 'rt-hd-ticket-data', __( 'Ticket Information', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Ticket_Info::ui', Rt_HD_Module::$post_type, 'side', 'default' );
 			add_meta_box( 'rt-hd-subscriiber', __( 'Subscriiber', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Subscribers::ui', Rt_HD_Module::$post_type, 'side', 'default' );
 			add_meta_box( 'rt-hd-attachment', __( 'Attachment', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Attachment::ui', Rt_HD_Module::$post_type, 'side', 'default' );
 			add_meta_box( 'rt-hd-external-link', __( 'External Link', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_External_Link::ui', Rt_HD_Module::$post_type, 'side', 'default' );

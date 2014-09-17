@@ -46,7 +46,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		function hooks() {
-			add_filter( 'comments_clauses', array( $this, 'filter_comment_from_admin' ), 100, 1 );
+			//add_filter( 'comments_clauses', array( $this, 'filter_comment_from_admin' ), 100, 1 );
 
 			add_action( 'comment_post', array( $this, 'mail_new_comment_data' ), 10, 2 );
 

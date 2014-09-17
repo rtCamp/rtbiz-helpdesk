@@ -78,16 +78,16 @@ if ( $user_edit ) {
 						$page          = 0;
 						$comment_count = count( get_comments(
 													array(
-														'meta_key'   => '_rthd_privacy',
-														'meta_value' => 'no',
+														//'meta_key'   => '_rthd_privacy',
+														//'meta_value' => 'no',
 														'order'      => 'DESC',
 														'post_id'    => $post->ID,
 														'post_type'  => $post_type,
 													) ) );
 						$comments      = get_comments(
 							array(
-								'meta_key'   => '_rthd_privacy',
-								'meta_value' => 'no',
+								//'meta_key'   => '_rthd_privacy',
+								//'meta_value' => 'no',
 								'order'      => 'DESC',
 								'post_id'    => $post->ID,
 								'post_type'  => $post_type,

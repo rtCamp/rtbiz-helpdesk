@@ -72,8 +72,9 @@ if ( ! class_exists( 'RT_Meta_Box_Attachment' ) ) {
 		public static function save( $post_id, $post ) {
 
 			global $rt_hd_tickets_operation;
-
-			$rt_hd_tickets_operation->ticket_attachment_update( $_POST['attachment'], $post_id );
+			if ( isset( $_POST['attachment'] ) && ! empty( $_POST['attachment'] ) ){
+				$rt_hd_tickets_operation->ticket_attachment_update( $_POST['attachment'], $post_id );
+			}
 
 		}
 	}
