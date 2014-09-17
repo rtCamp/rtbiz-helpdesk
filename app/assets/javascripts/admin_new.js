@@ -13,6 +13,7 @@ jQuery(function () {
             rthdAdmin.initattchmentJS();
             rthdAdmin.initExternalFileJS();
             rthdAdmin.initSubscriberSearch();
+	      //  rthdAdmin.initAddNewFollowUp();
         },
         initToolTop: function () {
             jQuery(".tips, .help_tip").tipTip({
@@ -200,7 +201,136 @@ jQuery(function () {
             } catch (e) {
 
             }
-        }
+        },
+
+	    /*
+	    * Add new Follow up ajax call
+	    */
+	    initAddNewFollowUp: function(){
+		    jQuery( "#savefollwoup" ).click( function () {
+			    var followuptype = jQuery( "#followup-type" ).val();
+			    if ( followuptype == "ac_import" ) {
+				    get_task_comments( jQuery( "#ac_project_id" ).val(), jQuery( "#ac_task_id" ).val() );
+				    return false;
+			    }
+			    if ( followuptype == "gm_import" ) {
+				    var email = jQuery( "#gm-from-email" ).val();
+				    if ( email == null || email == "" ) {
+					    alert( "No Mailbox selected" )
+					    return;
+				    }
+				    var thread_id = jQuery( "#gm-thread-id" ).val();
+				    if ( thread_id == "" ) {
+					    alert( "Please enter thread id" );
+					    return;
+				    }
+
+				    var requestArray = new Object();
+				    requestArray["thread_id"] = thread_id;
+				    requestArray["action"] = "rthd_gmail_import_thread_request";
+				    requestArray["email"] = email;
+				    requestArray["post_id"] = jQuery( "#ticket_id" ).val();
+				    ;
+				    jQuery.ajax( {
+					            url: ajaxurl,
+					            dataType: "json",
+					            type: 'post',
+					            data: requestArray,
+					            success: function ( data ) {
+						            if ( data.status ) {
+							            jQuery( "#div-add-followup" ).trigger( 'reveal:close' );
+						            } else {
+							            alert( data.message )
+						            }
+					            }
+				            } );
+
+				    return;
+			    }
+
+			    var requestArray = new Object();
+
+			    requestArray['post_type'] = rthd_post_type;
+			    requestArray["comment_id"] = jQuery( "#edit-comment-id" ).val();
+			    requestArray["action"] = "rthd_add_new_followup_ajax";
+			    requestArray["followuptype"] = followuptype;
+
+			    requestArray["followup_post_id"] = jQuery( "#ticket_id" ).val();
+			    requestArray["follwoup-time"] = jQuery( "#follwoup-time" ).val();
+
+			    requestArray['followup_private'] = (jQuery( '#followup-private' ).is( ':checked' )) ? 'yes' : 'no';
+
+			    if ( jQuery( "#followup_content" ).val() == "" ) {
+				    jQuery( "#followup_content" ).val( tinyMCE.get( 'followup_content' ).getContent() );
+			    }
+			    requestArray["followup_content"] = jQuery( "#followup_content" ).val();
+			    if ( requestArray["followup_content"] == "" ) {
+				    alert( "Please Type Content Atleast" );
+				    return false;
+			    }
+			    requestArray["attachemntlist"] = new Array();
+			    jQuery( "#attachmentList input" ).each( function () {
+				    requestArray["attachemntlist"].push( jQuery( this ).val() );
+			    } )
+
+			    if ( followuptype == "mail" ) {
+				    if ( jQuery( "#email_from_ac" ).val() == null || jQuery( "#email_from_ac" ).val().trim() == "" ) {
+					    addError( jQuery( "#email_from_ac" ), "Invalid Mail form Address" );
+					    return false;
+				    }
+				    removeError( jQuery( "#email_from_ac" ) );
+				    requestArray["comment-reply-from"] = jQuery( "#email_from_ac" ).val();
+				    var errorFlag = true;
+				    requestArray["comment-reply-to"] = new Array();
+				    jQuery( "#comment-reply-to" ).parent().find( "input[type=hidden]" ).each( function () {
+					    errorFlag = false;
+					    requestArray["comment-reply-to"].push( jQuery( this ).val() );
+				    } );
+				    requestArray["comment-reply-cc"] = new Array();
+				    jQuery( "#comment-reply-cc" ).parent().find( "input[type=hidden]" ).each( function () {
+					    errorFlag = false;
+					    requestArray["comment-reply-cc"].push( jQuery( this ).val() );
+				    } );
+				    requestArray["comment-reply-bcc"] = new Array();
+				    jQuery( "#comment-reply-bcc" ).parent().find( "input[type=hidden]" ).each( function () {
+					    errorFlag = false;
+					    requestArray["comment-reply-bcc"].push( jQuery( this ).val() );
+				    } );
+
+				    if ( errorFlag ) {
+					    alert( "Please Select Any Receipent" );
+					    return false;
+				    }
+			    }
+			    requestArray['user_edit'] = rthd_user_edit;
+			    jQuery.ajax( {
+				            url: ajaxurl,
+				            dataType: "json",
+				            type: 'post',
+				            data: requestArray,
+				            success: function ( data ) {
+					            if ( data.status ) {
+						            jQuery( "#followup_content" ).val( '' );
+						            jQuery( "#div-add-followup" ).trigger( 'reveal:close' );
+						            if ( jQuery( "#edit-comment-id" ).val() != "" ) {
+							            jQuery( "#comment-" + jQuery( "#edit-comment-id" ).val() ).remove();
+							            jQuery( "#header-" + jQuery( "#edit-comment-id" ).val() ).remove();
+						            }
+						            jQuery( "#commentlist" ).prepend( data.data );
+						            jQuery( "#commentlist .comment-wrapper" ).filter( ":first" ).show();
+						            //                        var date = jQuery("#commentlist .comment-header:first-child .comment-date");
+						            //                        date.attr("title",date.html());
+						            //                        date.html(moment(new Date(date.attr("title"))).fromNow());
+					            } else {
+						            alert( data.message )
+					            }
+				            }
+			            } );
+
+		    } );
+	    }
+
+
     }
     rthdAdmin.init();
 });

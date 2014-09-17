@@ -1205,7 +1205,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			}
 			$ticket_unique_id = $_POST['followup_ticket_unique_id'];
 			$args             = array(
-				'meta_key'    => 'rthd_unique_id',
+				'meta_key'    => '_rtbiz_hd_unique_id',
 				'meta_value'  => $ticket_unique_id,
 				'post_status' => 'any',
 				'post_type'   => Rt_HD_Module::$post_type,

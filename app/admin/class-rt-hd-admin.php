@@ -68,7 +68,7 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 				wp_enqueue_style( 'rthd_admin_styles', RT_HD_URL . 'app/assets/css/admin_new.css', array(), RT_HD_VERSION );
 				wp_enqueue_style( 'rthd_css', RT_HD_URL . 'app/assets/css/rt-hd-css.css', array(), RT_HD_VERSION );
 				wp_enqueue_script( 'jquery-tiptip', RT_HD_URL . 'app/assets/javascripts/jquery-tiptip/jquery.tipTip.js', array( 'jquery' ), RT_HD_VERSION, true );
-				wp_enqueue_script( 'rthd_admin_js', RT_HD_URL . 'app/assets/javascripts/admin_new.js', array( 'jquery-tiptip' ), RT_HD_VERSION, true );
+				wp_enqueue_script( 'rthd-admin-js', RT_HD_URL . 'app/assets/javascripts/admin_new.js', array( 'jquery-tiptip' ), RT_HD_VERSION, true );
 
 			}
 
@@ -88,14 +88,14 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		function localize_scripts() {
-			$pagearray = array( 'rthd-add-module', 'rthd-gravity-mapper', 'rthd-add-' . Rt_HD_Module::$post_type );
-			if ( wp_script_is( 'rthd-admin-js' ) && isset( $_REQUEST['post_type'] ) && isset( $_REQUEST['page'] ) && in_array( $_REQUEST['page'], $pagearray ) ) {
+			global $post, $pagenow, $wp_scripts;
+			if ( in_array( $pagenow, array( 'edit.php', 'post.php', 'post-new.php' ) ) ) {
 				$user_edit = false;
 				if ( current_user_can( 'edit_' . Rt_HD_Module::$post_type ) ) {
 					$user_edit = true;
 				}
 				wp_localize_script( 'rthd-admin-js', 'ajaxurl', admin_url( 'admin-ajax.php' ) );
-				wp_localize_script( 'rthd-admin-js', 'rthd_post_type', $_REQUEST['post_type'] );
+				wp_localize_script( 'rthd-admin-js', 'rthd_post_type', get_post_type( $_GET['post'] ) );
 				wp_localize_script( 'rthd-admin-js', 'rthd_user_edit', array( $user_edit ) );
 			} else {
 				wp_localize_script( 'rthd-admin-js', 'rthd_user_edit', array( '' ) );

@@ -31,6 +31,10 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 		 */
 		var $client = null;
 
+		function __construct() {
+			add_action( 'init', array( $this, 'save_replay_by_email' ) );
+		}
+
 
 		/**
 		 *
@@ -102,7 +106,9 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 		 * @param $value
 		 */
 		public function rthd_reply_by_email_view( $field, $value ) {
-			global $rt_hd_settings;
+
+			global $rt_hd_settings, $rt_hd_imap_server_model;
+
 
 			$this->goole_oauth();
 
@@ -232,7 +238,7 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 											<input type="hidden" name="rthd_submit_enable_reply_by_email" value="save"/>
 											<a
 												class='button remove-google-ac'
-												href='<?php echo esc_url( admin_url( 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&page=rthd-settings&tab=my-settings&type=personal&email=' . $email ) ); ?>'>Remove
+												href='<?php echo esc_url( admin_url( 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&page=rthd-settings&tab=my-settings&rthd_submit_enable_reply_by_email=save&type=personal&email=' . $email ) ); ?>'>Remove
 												A/C</a>
 											<?php if ( $ac->type == 'goauth' ) { ?>
 												<a class='button button-primary'
@@ -294,6 +300,48 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 					<button class="button button-primary" type="submit"><?php _e( 'Save' ); ?></button>
 				</p>
 			<?PHP
+			}
+		}
+
+		public function save_replay_by_email() {
+
+			global $rt_hd_settings, $redux_helpdesk_settings;
+
+			if ( isset( $redux_helpdesk_settings ) && isset( $redux_helpdesk_settings['rthd_enable_reply_by_email'] ) && $redux_helpdesk_settings['rthd_enable_reply_by_email'] == 1 && isset( $_REQUEST['rthd_submit_enable_reply_by_email'] ) && $_REQUEST['rthd_submit_enable_reply_by_email'] == 'save' ) {
+				if ( isset( $_POST['mail_ac'] ) && is_email( $_POST['mail_ac'] ) ) {
+					if ( isset( $_POST['imap_password'] ) ) {
+						$token = rthd_encrypt_decrypt( $_POST['imap_password'] );
+					} else {
+						$token = null;
+					}
+					if ( isset( $_POST['imap_server'] ) ) {
+						$imap_server = $_POST['imap_server'];
+					} else {
+						$imap_server = null;
+					}
+					$email_ac   = $rt_hd_settings->get_email_acc( $_POST['mail_ac'] );
+					$email_data = null;
+					if ( isset( $_POST['mail_folders'] ) && ! empty( $_POST['mail_folders'] ) && is_array( $_POST['mail_folders'] ) && ! empty( $email_ac ) ) {
+						$email_data                 = maybe_unserialize( $email_ac->email_data );
+						$email_data['mail_folders'] = implode( ',', $_POST['mail_folders'] );
+					}
+					if ( isset( $_POST['inbox_folder'] ) && ! empty( $_POST['inbox_folder'] ) && ! empty( $email_ac ) ) {
+						if ( is_null( $email_data ) ) {
+							$email_data = maybe_unserialize( $email_ac->email_data );
+						}
+						$email_data['inbox_folder'] = $_POST['inbox_folder'];
+					}
+					$rt_hd_settings->update_mail_acl( $_POST['mail_ac'], $token, maybe_serialize( $email_data ), $imap_server );
+				}
+				if ( isset( $_REQUEST['email'] ) && is_email( $_REQUEST['email'] ) ) {
+					$rt_hd_settings->delete_user_google_ac( $_REQUEST['email'] );
+					echo '<script>window.location="' . esc_url( add_query_arg(
+							array(
+								'post_type' => Rt_HD_Module::$post_type,
+								'page'      => 'rthd-settings',
+							), admin_url( 'edit.php' ) ) ) . '";</script>';
+					die();
+				}
 			}
 		}
 

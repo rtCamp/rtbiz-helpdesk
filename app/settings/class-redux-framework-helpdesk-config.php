@@ -31,118 +31,12 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			}
 
 			add_action( 'plugins_loaded', array( $this, 'init_settings' ), 15 );
-			add_action( 'init', array( $this, 'save_imap_servers' ) );
-			add_action( 'init', array( $this, 'save_replay_by_email' ) );
+
+
 		}
 
-		function save_imap_servers( $rthd_imap_servers_changed = null, $rthd_imap_servers = null ) {
-			if ( ! ( isset ( $_POST['rthd_imap_servers_changed'] ) && isset( $_POST['rthd_imap_servers'] ) ) ) {
-				if ( isset ( $rthd_imap_servers_changed ) && ! empty( $rthd_imap_servers_changed ) ) {
-					$_POST['rthd_imap_servers_changed'] = $rthd_imap_servers_changed;
-					//	echo "1st";
-				}
-				if ( isset ( $rthd_imap_servers ) && ! empty( $rthd_imap_servers ) ) {
-					$_POST['rthd_imap_servers'] = $rthd_imap_servers;
-					//echo "2nd";
-				}
-			}
 
 
-			if ( isset( $_POST['rthd_imap_servers_changed'] ) ) {
-
-				global $rt_hd_imap_server_model;
-				$old_servers = $rt_hd_imap_server_model->get_all_servers();
-
-				if ( isset( $_POST['rthd_imap_servers'] ) ) {
-					$new_servers = $_POST['rthd_imap_servers'];
-
-					// Handle / Update Existing Servers
-					foreach ( $old_servers as $id => $server ) {
-						if ( isset( $new_servers[ $server->id ] ) ) {
-							if ( empty( $new_servers[ $server->id ]['server_name'] ) || empty( $new_servers[ $server->id ]['incoming_imap_server'] ) || empty( $new_servers[ $server->id ]['incoming_imap_port'] ) || empty( $new_servers[ $server->id ]['outgoing_smtp_server'] ) || empty( $new_servers[ $server->id ]['outgoing_smtp_port'] ) ) {
-								continue;
-							}
-							$args = array(
-								'server_name'          => $new_servers[ $server->id ]['server_name'],
-								'incoming_imap_server' => $new_servers[ $server->id ]['incoming_imap_server'],
-								'incoming_imap_port'   => $new_servers[ $server->id ]['incoming_imap_port'],
-								'incoming_imap_enc'    => ( isset( $new_servers[ $server->id ]['incoming_imap_enc'] ) && ! empty( $new_servers[ $server->id ]['incoming_imap_enc'] ) ) ? $new_servers[ $server->id ]['incoming_imap_enc'] : null,
-								'outgoing_smtp_server' => $new_servers[ $server->id ]['outgoing_smtp_server'],
-								'outgoing_smtp_port'   => $new_servers[ $server->id ]['outgoing_smtp_port'],
-								'outgoing_smtp_enc'    => ( isset( $new_servers[ $server->id ]['outgoing_smtp_enc'] ) && ! empty( $new_servers[ $server->id ]['outgoing_smtp_enc'] ) ) ? $new_servers[ $server->id ]['outgoing_smtp_enc'] : null,
-							);
-							$rt_hd_imap_server_model->update_server( $args, $server->id );
-
-						} else {
-							$rt_hd_imap_server_model->delete_server( $server->id );
-						}
-					}
-
-					// New Server in the list
-					if ( ! empty( $new_servers['new']['server_name'] ) && ! empty( $new_servers['new']['incoming_imap_server'] ) && ! empty( $new_servers['new']['incoming_imap_port'] ) && ! empty( $new_servers['new']['outgoing_smtp_server'] ) && ! empty( $new_servers['new']['outgoing_smtp_port'] ) ) {
-
-						$args = array(
-							'server_name'          => $new_servers['new']['server_name'],
-							'incoming_imap_server' => $new_servers['new']['incoming_imap_server'],
-							'incoming_imap_port'   => $new_servers['new']['incoming_imap_port'],
-							'incoming_imap_enc'    => ( isset( $new_servers[ $server->id ]['incoming_imap_enc'] ) && ! empty( $new_servers[ $server->id ]['incoming_imap_enc'] ) ) ? $new_servers[ $server->id ]['incoming_imap_enc'] : null,
-							'outgoing_smtp_server' => $new_servers['new']['outgoing_smtp_server'],
-							'outgoing_smtp_port'   => $new_servers['new']['outgoing_smtp_port'],
-							'outgoing_smtp_enc'    => ( isset( $new_servers[ $server->id ]['outgoing_smtp_enc'] ) && ! empty( $new_servers[ $server->id ]['outgoing_smtp_enc'] ) ) ? $new_servers[ $server->id ]['outgoing_smtp_enc'] : null,
-						);
-						$rt_hd_imap_server_model->add_server( $args );
-
-						return true;
-					}
-				} else {
-					foreach ( $old_servers as $server ) {
-						$rt_hd_imap_server_model->delete_server( $server->id );
-					}
-				}
-			}
-		}
-
-		public function save_replay_by_email() {
-
-			global $rt_hd_settings, $redux_helpdesk_settings;
-
-			if ( isset( $redux_helpdesk_settings ) && isset( $redux_helpdesk_settings['rthd_enable_reply_by_email'] ) && $redux_helpdesk_settings['rthd_enable_reply_by_email'] == 1 && isset( $_POST['rthd_submit_enable_reply_by_email'] ) && $_POST['rthd_submit_enable_reply_by_email'] == 'save' ) {
-				if ( isset( $_POST['mail_ac'] ) && is_email( $_POST['mail_ac'] ) ) {
-					if ( isset( $_POST['imap_password'] ) ) {
-						$token = rthd_encrypt_decrypt( $_POST['imap_password'] );
-					} else {
-						$token = null;
-					}
-					if ( isset( $_POST['imap_server'] ) ) {
-						$imap_server = $_POST['imap_server'];
-					} else {
-						$imap_server = null;
-					}
-					$email_ac   = $rt_hd_settings->get_email_acc( $_POST['mail_ac'] );
-					$email_data = null;
-					if ( isset( $_POST['mail_folders'] ) && ! empty( $_POST['mail_folders'] ) && is_array( $_POST['mail_folders'] ) && ! empty( $email_ac ) ) {
-						$email_data                 = maybe_unserialize( $email_ac->email_data );
-						$email_data['mail_folders'] = implode( ',', $_POST['mail_folders'] );
-					}
-					if ( isset( $_POST['inbox_folder'] ) && ! empty( $_POST['inbox_folder'] ) && ! empty( $email_ac ) ) {
-						if ( is_null( $email_data ) ) {
-							$email_data = maybe_unserialize( $email_ac->email_data );
-						}
-						$email_data['inbox_folder'] = $_POST['inbox_folder'];
-					}
-					$rt_hd_settings->update_mail_acl( $_POST['mail_ac'], $token, maybe_serialize( $email_data ), $imap_server );
-				}
-				if ( isset( $_REQUEST['email'] ) && is_email( $_REQUEST['email'] ) ) {
-					$rt_hd_settings->delete_user_google_ac( $_REQUEST['email'] );
-					echo '<script>window.location="' . esc_url( add_query_arg(
-																	array(
-																		'post_type' => Rt_HD_Module::$post_type,
-																		'page'      => 'rthd-settings',
-																	), admin_url( 'edit.php' ) ) ) . '";</script>';
-					die();
-				}
-			}
-		}
 
 		public function init_settings() {
 			// Set the default arguments
@@ -369,9 +263,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'id'       => 'rthd_reply_by_email_view',
 						'type'     => 'callback',
 						'callback' => 'rthd_reply_by_email_view',
-						//'callback' => 'RT_HD_Setting_Inbound_Email::rthd_reply_by_email_view',
-						//'callback' => array( &$reply_by_email, 'rthd_reply_by_email_view' ),
-						//'callback' => array( new RT_HD_Setting_Inbound_Email(), 'rthd_reply_by_email_view' ),
 					),
 				),
 			);
