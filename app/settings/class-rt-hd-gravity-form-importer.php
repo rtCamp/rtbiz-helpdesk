@@ -1064,8 +1064,12 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 				}
 
 				if ( $autoDieFlag && isset( $module_settings['attach_contacts'] ) && $module_settings['attach_contacts'] == 'yes' ) {
-					$map_data['titleprefix'] = '';
-					$map_data['titlesuffix'] = '';
+					if ( ! isset( $map_data['titleprefix'] ) ) {
+						$map_data['titleprefix'] = '';
+					}
+					if ( ! isset( $map_data['titlesuffix'] ) ) {
+						$map_data['titlesuffix'] = '';
+					}
 					if ( ! isset( $map_data['contactname'] ) ) {
 						$contactname = '';
 					} else {
@@ -1092,7 +1096,9 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 							}
 						}
 					}
-					$map_data['title'] = 'Enquiry From ' . $contactname;
+					if ( ! isset( $map_data['title'] ) ) {
+						$map_data['title'] = 'Enquiry From ' . $contactname;
+					}
 				}
 
 				$response[0] = $this->create_tickets_from_map_data( $map_data, $gravity_lead_id, $type );
@@ -1307,6 +1313,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 			if ( ! isset( $titlesuffix ) ) {
 				$titlesuffix = '';
 			}
+
 			if ( $title == '' ) {
 				if ( $type == 'csv' ) {
 					$title = 'CSV Entry ' . $gravity_lead_id;

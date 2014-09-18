@@ -57,8 +57,7 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 
 			if ( ( $google_client_id == '' || $google_client_secret == '' ) ) {
 				echo '<div id="error_handle" class="error"><p>Please set google api detail on Google API <a href="' . esc_url( admin_url( 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&page=rthd-settings&type=googleApi&tab=admin-settings' ) ) . '">setting</a> page </p></div>';
-
-				return;
+				return false;
 			}
 
 			include_once RT_HD_PATH_VENDOR . 'google-api-php-client/Google_Client.php';
@@ -99,6 +98,7 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 					$rt_hd_settings->add_user_google_ac( rthd_encrypt_decrypt( $password ), $email, maybe_serialize( $email_data ), $this->user_id, 'imap', $imap_server );
 				}
 			}
+			return true;
 		}
 
 		/**
@@ -109,8 +109,10 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 
 			global $rt_hd_settings, $rt_hd_imap_server_model;
 
-
-			$this->goole_oauth();
+			$responce = $this->goole_oauth();
+			if ( $responce == false ){
+				return;
+			}
 
 			$google_acs = $rt_hd_settings->get_user_google_ac( $this->user_id );
 			$authUrl    = $this->client->createAuthUrl();
@@ -332,6 +334,11 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 						$email_data['inbox_folder'] = $_POST['inbox_folder'];
 					}
 					$rt_hd_settings->update_mail_acl( $_POST['mail_ac'], $token, maybe_serialize( $email_data ), $imap_server );
+
+					if ( isset( $_POST['mail_ac'] ) ) {
+						$redux_helpdesk_settings['rthd_system_email'] = $_POST['mail_ac'];
+						update_option( 'redux_helpdesk_settings', $redux_helpdesk_settings );
+					}
 				}
 				if ( isset( $_REQUEST['email'] ) && is_email( $_REQUEST['email'] ) ) {
 					$rt_hd_settings->delete_user_google_ac( $_REQUEST['email'] );

@@ -107,7 +107,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		public function insert_new_ticket( $title, $body, $userid, $mailtime, $allemail, $uploaded, $senderEmail, $messageid = '', $inreplyto = '', $references = '', $subscriber = array() ) {
-			global $rt_hd_module, $rt_hd_tickets_operation;
+			global $rt_hd_module, $rt_hd_tickets_operation, $rt_hd_ticket_history_model;
 
 			$d             = new DateTime( $mailtime );
 			$timeStamp     = $d->getTimestamp();
@@ -135,6 +135,16 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			);
 
 			$post_id = $rt_hd_tickets_operation->ticket_default_field_update( $postArray, $dataArray, $post_type );
+
+			$rt_hd_ticket_history_model->insert(
+				array(
+					'ticket_id'   => $post_id,
+					'type'        => 'post_status',
+					'old_value'   => 'auto-draft',
+					'new_value'   => $postArray['post_status'],
+					'update_time' => current_time( 'mysql' ),
+					'updated_by'  => get_current_user_id(),
+				) );
 
 			$rt_hd_tickets_operation->ticket_subscribe_update( $subscriber, $postArray['post_author'], $post_id );
 

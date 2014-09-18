@@ -446,7 +446,7 @@ function rthd_get_settings() {
 	$settings = array(
 		'attach_contacts'         => 'yes',
 		'attach_accounts'         => 'yes',
-		'system_email'            => isset( $redux_helpdesk_settings['rthd_outgoing_email_from_address'] ) && ! empty( $redux_helpdesk_settings['rthd_outgoing_email_from_address'] ) ? $redux_helpdesk_settings['rthd_outgoing_email_from_address'] : '',
+		'system_email'            => isset( $redux_helpdesk_settings['rthd_system_email'] ) && ! empty( $redux_helpdesk_settings['rthd_system_email'] ) ? $redux_helpdesk_settings['rthd_system_email'] : '',
 		'outbound_emails'         => isset( $redux_helpdesk_settings['rthd_outgoing_email_from_address'] ) && ! empty( $redux_helpdesk_settings['rthd_outgoing_email_from_address'] ) ? $redux_helpdesk_settings['rthd_outgoing_email_from_address'] : '',
 		'outgoing_email_delivery' => isset( $redux_helpdesk_settings['rthd_outgoing_email_delivery'] ) && ! empty( $redux_helpdesk_settings['rthd_outgoing_email_delivery'] ) ? $redux_helpdesk_settings['rthd_outgoing_email_delivery'] : '',
 	);

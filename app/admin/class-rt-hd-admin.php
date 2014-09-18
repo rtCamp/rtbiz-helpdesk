@@ -65,6 +65,7 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 
 					wp_enqueue_script( 'moment-js', RT_HD_URL . 'app/assets/javascripts/moment.js', array( 'jquery' ), RT_HD_VERSION, true );
 				}
+				wp_enqueue_style( 'rthd_date_styles', '//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css', array(), RT_HD_VERSION );
 				wp_enqueue_style( 'rthd_admin_styles', RT_HD_URL . 'app/assets/css/admin_new.css', array(), RT_HD_VERSION );
 				wp_enqueue_style( 'rthd_css', RT_HD_URL . 'app/assets/css/rt-hd-css.css', array(), RT_HD_VERSION );
 				wp_enqueue_script( 'jquery-tiptip', RT_HD_URL . 'app/assets/javascripts/jquery-tiptip/jquery.tipTip.js', array( 'jquery' ), RT_HD_VERSION, true );

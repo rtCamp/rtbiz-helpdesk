@@ -37,8 +37,9 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Title' ) ) {
 					display: none;
 				}
 			</style>
-			<h2><?php printf( 'Ticket #%s' , $post->ID ); ?></h2>
-			<!--<textarea class="wp-editor-area" style="height: 102px" autocomplete="off" cols="40" name="content" id="content"><?php /*echo esc_html( $post->content ); */?></textarea>-->
+			<h2><?php printf( 'Ticket #%s : ' , $post->ID ); ?><input name="post_title" size="30" value="<?php echo esc_html( $post->post_title ); ?>" id="title" autocomplete="off" type="text"></h2>
+			<textarea class="wp-editor-area" style="width: 100%" autocomplete="off" cols="40" name="content" id="content"><?php echo esc_html( $post->post_content ); ?></textarea>
+			<?php /* RT_Meta_Box_Ticket_Title::post_comment_meta_box( $post ); */?>
 		<?php
 		}
 	}
