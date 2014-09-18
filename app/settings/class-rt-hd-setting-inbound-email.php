@@ -342,7 +342,7 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 				}
 				if ( isset( $_REQUEST['email'] ) && is_email( $_REQUEST['email'] ) ) {
 					$rt_hd_settings->delete_user_google_ac( $_REQUEST['email'] );
-					echo '<script>window.location="' . esc_url( add_query_arg(
+					echo '<script>window.location="' . esc_url_raw( add_query_arg(
 							array(
 								'post_type' => Rt_HD_Module::$post_type,
 								'page'      => 'rthd-settings',
