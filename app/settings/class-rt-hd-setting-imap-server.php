@@ -203,10 +203,10 @@ if ( ! class_exists( 'RT_HD_Setting_Imap_Server' ) ) {
 							'server_name'          => $new_servers['new']['server_name'],
 							'incoming_imap_server' => $new_servers['new']['incoming_imap_server'],
 							'incoming_imap_port'   => $new_servers['new']['incoming_imap_port'],
-							'incoming_imap_enc'    => ( isset( $new_servers[ $server->id ]['incoming_imap_enc'] ) && ! empty( $new_servers[ $server->id ]['incoming_imap_enc'] ) ) ? $new_servers[ $server->id ]['incoming_imap_enc'] : null,
+							'incoming_imap_enc'    => ( isset( $new_servers['new']['incoming_imap_enc'] ) && ! empty( $new_servers['new']['incoming_imap_enc'] ) ) ? $new_servers['new']['incoming_imap_enc'] : null,
 							'outgoing_smtp_server' => $new_servers['new']['outgoing_smtp_server'],
 							'outgoing_smtp_port'   => $new_servers['new']['outgoing_smtp_port'],
-							'outgoing_smtp_enc'    => ( isset( $new_servers[ $server->id ]['outgoing_smtp_enc'] ) && ! empty( $new_servers[ $server->id ]['outgoing_smtp_enc'] ) ) ? $new_servers[ $server->id ]['outgoing_smtp_enc'] : null,
+							'outgoing_smtp_enc'    => ( isset( $new_servers['new']['outgoing_smtp_enc'] ) && ! empty( $new_servers['new']['outgoing_smtp_enc'] ) ) ? $new_servers['new']['outgoing_smtp_enc'] : null,
 						);
 						$rt_hd_imap_server_model->add_server( $args );
 

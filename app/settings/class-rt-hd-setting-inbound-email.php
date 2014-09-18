@@ -275,7 +275,7 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 				</p>
 				<p id="rthd_add_imap_acc_form" autocomplete="off" class="rthd-hide-row">
 					<input type="hidden" name="rthd_add_imap_email" value="1"/>
-					<select required="required" name="rthd_imap_server">
+					<select  name="rthd_imap_server">
 						<option value=""><?php _e( 'Select Mail Server' ); ?></option>
 				<?php
 				$imap_servers = $rt_hd_imap_server_model->get_all_servers();
@@ -285,8 +285,8 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 						value="<?php echo esc_attr( $server->id ); ?>"><?php echo esc_html( $server->server_name ); ?></option>
 				<?php } ?>
 					</select>
-					<input type="email" required="required" autocomplete="off" name="rthd_imap_user_email"
-					       placeholder="Email"/> <input type="password" required="required" autocomplete="off"
+					<input type="email"  autocomplete="off" name="rthd_imap_user_email"
+					       placeholder="Email"/> <input type="password" autocomplete="off"
 					                                    name="rthd_imap_user_pwd" placeholder="Password"/>
 					<input type="hidden" name="rthd_submit_enable_reply_by_email" value="save"/>
 					<button class="button button-primary" type="submit"><?php _e( 'Save' ); ?></button>
