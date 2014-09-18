@@ -168,7 +168,6 @@ if ( ! class_exists( 'RT_HD_Setting_Imap_Server' ) ) {
 
 
 			if ( isset( $_POST['rthd_imap_servers_changed'] ) ) {
-
 				global $rt_hd_imap_server_model;
 				$old_servers = $rt_hd_imap_server_model->get_all_servers();
 

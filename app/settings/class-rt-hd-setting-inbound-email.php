@@ -87,17 +87,6 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 				wp_redirect( $google_client_redirect_url );
 			}
 
-			if ( isset( $_REQUEST['rthd_add_imap_email'] ) ) {
-				if ( isset( $_POST['rthd_imap_user_email'] ) && ! empty( $_POST['rthd_imap_user_email'] ) && isset( $_POST['rthd_imap_user_pwd'] ) && ! empty( $_POST['rthd_imap_user_pwd'] ) && isset( $_POST['rthd_imap_server'] ) && ! empty( $_POST['rthd_imap_server'] ) ) {
-					$password    = $_POST['rthd_imap_user_pwd'];
-					$email       = $_POST['rthd_imap_user_email'];
-					$email_data  = array(
-						'email' => $email,
-					);
-					$imap_server = $_POST['rthd_imap_server'];
-					$rt_hd_settings->add_user_google_ac( rthd_encrypt_decrypt( $password ), $email, maybe_serialize( $email_data ), $this->user_id, 'imap', $imap_server );
-				}
-			}
 			return true;
 		}
 
@@ -240,7 +229,7 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 											<input type="hidden" name="rthd_submit_enable_reply_by_email" value="save"/>
 											<a
 												class='button remove-google-ac'
-												href='<?php echo esc_url( admin_url( 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&page=rthd-settings&tab=my-settings&rthd_submit_enable_reply_by_email=save&type=personal&email=' . $email ) ); ?>'>Remove
+												href='<?php echo esc_url( admin_url( 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&page=rthd-settings&rthd_submit_enable_reply_by_email=save&email=' . $email ) ); ?>'>Remove
 												A/C</a>
 											<?php if ( $ac->type == 'goauth' ) { ?>
 												<a class='button button-primary'
@@ -299,6 +288,7 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 					<input type="email" required="required" autocomplete="off" name="rthd_imap_user_email"
 					       placeholder="Email"/> <input type="password" required="required" autocomplete="off"
 					                                    name="rthd_imap_user_pwd" placeholder="Password"/>
+					<input type="hidden" name="rthd_submit_enable_reply_by_email" value="save"/>
 					<button class="button button-primary" type="submit"><?php _e( 'Save' ); ?></button>
 				</p>
 			<?PHP
@@ -342,12 +332,31 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 				}
 				if ( isset( $_REQUEST['email'] ) && is_email( $_REQUEST['email'] ) ) {
 					$rt_hd_settings->delete_user_google_ac( $_REQUEST['email'] );
+					if ( isset( $email ) ) {
+						$redux_helpdesk_settings['rthd_system_email'] = '';
+						update_option( 'redux_helpdesk_settings', $redux_helpdesk_settings );
+					}
 					echo '<script>window.location="' . esc_url_raw( add_query_arg(
 							array(
 								'post_type' => Rt_HD_Module::$post_type,
 								'page'      => 'rthd-settings',
 							), admin_url( 'edit.php' ) ) ) . '";</script>';
 					die();
+				}
+				if ( isset( $_REQUEST['rthd_add_imap_email'] ) ) {
+					if ( isset( $_POST['rthd_imap_user_email'] ) && ! empty( $_POST['rthd_imap_user_email'] ) && isset( $_POST['rthd_imap_user_pwd'] ) && ! empty( $_POST['rthd_imap_user_pwd'] ) && isset( $_POST['rthd_imap_server'] ) && ! empty( $_POST['rthd_imap_server'] ) ) {
+						$password    = $_POST['rthd_imap_user_pwd'];
+						$email       = $_POST['rthd_imap_user_email'];
+						$email_data  = array(
+							'email' => $email,
+						);
+						$imap_server = $_POST['rthd_imap_server'];
+						$rt_hd_settings->add_user_google_ac( rthd_encrypt_decrypt( $password ), $email, maybe_serialize( $email_data ), $this->user_id, 'imap', $imap_server );
+						if ( isset( $email ) ) {
+							$redux_helpdesk_settings['rthd_system_email'] = $email;
+							update_option( 'redux_helpdesk_settings', $redux_helpdesk_settings );
+						}
+					}
 				}
 			}
 		}

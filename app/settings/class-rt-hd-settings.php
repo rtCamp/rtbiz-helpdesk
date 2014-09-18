@@ -123,11 +123,11 @@ if ( ! class_exists( 'Rt_HD_Settings' ) ) {
 		 */
 		public function get_user_google_ac( $user_id = 0 ) {
 			global $rt_hd_mail_accounts_model;
-			if ( $user_id == 0 ) {
+			/*if ( $user_id == 0 ) {
 				$user_id = get_current_user_id();
 			}
-
-			return $rt_hd_mail_accounts_model->get_mail_account( array( 'user_id' => $user_id ) );
+			return $rt_hd_mail_accounts_model->get_mail_account( array( 'user_id' => $user_id ) );*/
+			return $rt_hd_mail_accounts_model->get_mail_account( array() );
 		}
 
 		/**
@@ -311,7 +311,7 @@ if ( ! class_exists( 'Rt_HD_Settings' ) ) {
 			$result = $rt_hd_mail_accounts_model->remove_mail_account(
 				array(
 					'email'   => $email,
-					'user_id' => $user_id,
+					//'user_id' => $user_id,
 				) );
 			$this->update_gmail_ac_count();
 
