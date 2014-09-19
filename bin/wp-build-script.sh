@@ -70,8 +70,7 @@ for WP_VERSION in 4.0 3.9; do
 
         for WP_MULTISITE in 0 1; do
             LOG_FILE="${CI_BUILD_ID}_php-${PHP_VERSION}_wp-${WP_VERSION}_m-${WP_MULTISITE}.log"
-            run_test > $LOG_FILE
-            run_test
+            run_test | tee $LOG_FILE
             if [ $? -eq 0 ]; then
                 STATUS="PASS"
             else
