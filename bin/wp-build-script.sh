@@ -64,7 +64,7 @@ for WP_VERSION in 4.0 3.9; do
 
     for PHP_VERSION in 5.2.17 5.3.29 5.4.32 5.5.16 5.6.0; do
 
-        export $PATH=/opt/phpbrew/php/php-${PHP_VERSION}/bin:$OLD_PATH
+        export PATH=/opt/phpbrew/php/php-${PHP_VERSION}/bin:$OLD_PATH
         
         php --version
 
