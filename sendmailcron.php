@@ -29,42 +29,39 @@ foreach ( $emailRow as $email ) {
 		);
 	}
 	if ( $rt_hd_settings->update_sent_email( $email->id, 'p', 'no' ) > 0 ) {
-		echo esc_attr( $email->id );
 		$updateFlag = false;
 		try {
 			if ( isset( $settings['outgoing_email_delivery'] ) && ! empty( $settings['outgoing_email_delivery'] ) ) {
 				if ( $settings['outgoing_email_delivery'] == 'wp_mail' ) {
 
-					$arrayBCC  = unserialize( $email->bccemail );
+					$arrayBCC = unserialize( $email->bccemail );
 					$arrayCC   = unserialize( $email->ccemail );
 					$arrayTo   = unserialize( $email->toemail );
-					$bccemails = '';
+					$headers[] = 'From:' . $settings['outbound_emails'];
+					add_filter( 'wp_mail_from', 'rthd_my_mail_from' );
 					if ( ! empty( $arrayBCC ) ) {
 						foreach ( $arrayBCC as $temail ) {
-							$bccemails .= isset( $temail['name'] ) ? $temail['name'] : '';
-							$bccemails .= '<' . $temail['email'] . '>, ';
+							add_filter( 'wp_mail_content_type', 'rthd_set_html_content_type' );
+							$res = wp_mail( array( $temail['email'] ), $email->subject, $email->body, $headers );
+							remove_filter( 'wp_mail_content_type', 'rthd_set_html_content_type' );
 						}
 					}
-					$ccemails = '';
+
 					if ( ! empty( $arrayCC ) ) {
 						foreach ( $arrayCC as $temail ) {
-							$ccemails .= isset( $temail['name'] ) ? $temail['name'] : '';
-							$ccemails .= '<' . $temail['email'] . '>, ';
+							add_filter( 'wp_mail_content_type', 'rthd_set_html_content_type' );
+							$res = wp_mail( array( $temail['email'] ), $email->subject, $email->body, $headers );
+							remove_filter( 'wp_mail_content_type', 'rthd_set_html_content_type' );
 						}
 					}
 
 					if ( ! empty( $arrayTo ) ) {
 						foreach ( $arrayTo as $key => $temail ) {
-							$arrayTo[ $key ] = $temail['email'];
+							add_filter( 'wp_mail_content_type', 'rthd_set_html_content_type' );
+							$res = wp_mail( array( $temail['email'] ), $email->subject, $email->body, $headers );
+							remove_filter( 'wp_mail_content_type', 'rthd_set_html_content_type' );
 						}
 					}
-					$headers[] = 'From: <' . $email->fromemail . '>';
-					$headers[] = 'Bcc: ' . $bccemails;
-					$headers[] = 'Cc: ' . $ccemails;
-					add_filter( 'wp_mail_content_type', 'rthd_set_html_content_type' );
-					wp_mail( $arrayTo, $email->subject, $email->body, $headers );
-					remove_filter( 'wp_mail_content_type', 'rthd_set_html_content_type' );
-
 				} elseif ( $settings['outgoing_email_delivery'] == 'user_mail_login' ) {
 					$hdZendEmail->sendemail( $email->fromemail, $accessTokenArray[ $email->fromemail ]['token'], $accessTokenArray[ $email->fromemail ]['email_type'], $accessTokenArray[ $email->fromemail ]['imap_server'], $email->subject, $email->body, unserialize( $email->toemail ), unserialize( $email->ccemail ), unserialize( $email->bccemail ), unserialize( $email->attachement ) );
 				} elseif ( $settings['outgoing_email_delivery'] == 'amazon_ses' ) {

@@ -85,12 +85,20 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 		 */
 		function rt_hd_support_form_callback() {
 
+			if ( ! is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
+				?><div>WooCommerce Plugin is not activated!</div><?php
+				return;
+			}
+
 			$option      = '';
 			$order_email = '';
 
 			// Save ticket if data has been posted
 			if ( ! empty( $_POST ) ) {
-				self::save();
+				$post_id  = self::save();
+				if ( isset( $post_id ) && ! empty( $post_id ) && is_int( $post_id ) ){
+					?><div id="info" class="success">Your Support request Accepted..</div><?php
+				}
 			}
 
 			if ( isset( $_GET['order_id'] ) ) {
@@ -134,19 +142,19 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 			<form method="post" action="" class="comment-form" enctype="multipart/form-data">
 				<p>
 					<label><?php _e( 'Product', RT_HD_TEXT_DOMAIN ); ?></label>
-					<select name="post[product_id]">
+					<select name="post[product_id]" required="required">
 						<option value="">Choose Product</option>
 						<?php echo balanceTags( $option ); ?>
 					</select>
 				</p>
 				<p>
 					<label><?php _e( 'Email', RT_HD_TEXT_DOMAIN ); ?></label>
-					<input type="text" name="post[email]" value="<?php echo sanitize_email( $order_email ) ?>"/>
+					<input type="email" required="required" name="post[email]" value="<?php echo sanitize_email( $order_email ) ?>"/>
 				</p>
 
 				<p>
 					<label><?php _e( 'Description', RT_HD_TEXT_DOMAIN ); ?></label>
-					<textarea name="post[description]"></textarea>
+					<textarea name="post[description]" required="required"></textarea>
 				</p>
 
 				<p>
@@ -171,13 +179,13 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 		 */
 		function save() {
 
-			global $rt_hd_contacts, $rt_hd_import_operation, $redux_helpdesk_settings;;
+			global $rtbiz_wc_product, $rt_hd_import_operation, $redux_helpdesk_settings;;
 
 			$data = $_POST['post'];
 
-
 			$product = get_product( $data['product_id'] );
 
+			//Ticket created
 			$rt_hd_tickets_id = $rt_hd_import_operation->insert_new_ticket(
 				"Support for {$product->post->post_title}",
 				$data['description'],
@@ -188,10 +196,13 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 				$data['email']
 			);
 
-			global $rtbiz_wc_product;
+			// rt_wc_product taxonomy assign
 			$product_taxonomy = $rtbiz_wc_product->get_taxonomy( $data['product_id'] );
-			wp_set_post_terms( $rt_hd_tickets_id, array( $product_taxonomy->term_id ) , $rtbiz_wc_product->product_slug );
+			if ( isset( $product_taxonomy ) && ! empty( $product_taxonomy )  ) {
+				wp_set_post_terms( $rt_hd_tickets_id, array( $product_taxonomy->term_id ), $rtbiz_wc_product->product_slug );
+			}
 
+			// Created attachment
 			if ( $_FILES ) {
 				$files = $_FILES['attachment'];
 				foreach ( $files['name'] as $key => $value ) {
@@ -207,15 +218,24 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 						$_FILES = array( 'upload_attachment' => $file );
 
 						foreach ( $_FILES as $file => $array ) {
-							$newupload = self::insert_attachment( $file, $rt_hd_tickets_id );
+							$attach_id = self::insert_attachment( $file, $rt_hd_tickets_id );
+							$filepath = get_attached_file( $attach_id );
+							$post_attachment_hashes = get_post_meta( $rt_hd_tickets_id, '_rtbiz_hd_attachment_hash' );
+							if ( ! empty( $post_attachment_hashes ) && ! in_array( md5_file( $filepath ), $post_attachment_hashes ) ) {
+								add_post_meta( $attach_id, '_wp_attached_file', $filepath );
+								add_post_meta( $rt_hd_tickets_id, '_rtbiz_hd_attachment_hash', md5_file( $filepath ) );
+							}
 						}
 					}
 				}
 			}
 
+			//Stoe Order ID
 			if ( isset( $_GET['order_id'] ) ) {
 				update_post_meta( $rt_hd_tickets_id, '_rtbiz_hd_woocommerce_order_id', $_GET['order_id'] );
 			}
+
+			return $rt_hd_tickets_id;
 		}
 
 		/**
