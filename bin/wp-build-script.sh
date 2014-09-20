@@ -45,7 +45,8 @@ function run_test ()
     # PHP Setup Code
 
     #script
-    find . -path ./bin -prune -o \( -name '*.php' -o -name '*.inc' \) -exec php -lf {} \;
+    find ./app \( -name "*.php" -o -name "*.inc" \)  ! -path "./app/assets/*" ! -path "./app/vendor/*" ! -path "./app/lib/*" ! -path "./app/schema/*" -exec php -lf {} \;
+    
     if [ -e phpunit.xml ] || [ -e phpunit.xml.dist ]; then phpunit || return 1; fi
     $PHPCS_DIR/scripts/phpcs --standard=$WPCS_STANDARD $(if [ -n "$PHPCS_IGNORE" ]; then echo --ignore=$PHPCS_IGNORE; fi) $(find . -name '*.php') || return 1
     jshint . || return 1
