@@ -70,13 +70,12 @@ for WP_VERSION in 4.0 3.9; do
         php --version
 
         for WP_MULTISITE in 0 1; do
-            LOG_FILE="${CI_BUILD_ID}_php-${PHP_VERSION}_wp-${WP_VERSION}_m-${WP_MULTISITE}.log"
-            run_test | tee $LOG_FILE
+            LOG_FILE="/home/gitlab_ci_runner/log/${CI_BUILD_ID}_php-${PHP_VERSION}_wp-${WP_VERSION}_m-${WP_MULTISITE}.log"
+            run_test > $LOG_FILE
             if [ $? -eq 0 ]; then
                 STATUS="PASS"
             else
                 STATUS="FAIL"
-                cat $LOG_FILE
             fi
             display_op $STATUS $PHP_VERSION $WP_VERSION $WP_MULTISITE $LOG_FILE
             final_op=$final_op."\n$STATUS $PHP_VERSION $WP_VERSION $WP_MULTISITE $LOG_FILE"
