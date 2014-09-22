@@ -23,7 +23,7 @@ jQuery( document ).ready( function ( $ ) {
 		requestArray['post_type'] = rthd_post_type;
 		requestArray["comment_id"] = $( "#edit-comment-id" ).val();
 		requestArray["action"] = "rthd_add_new_followup_front";
-		requestArray["followuptype"] = 'note';
+		requestArray["followuptype"] = '';//'note';
 
 		requestArray["followup_ticket_unique_id"] = $( "#ticket_unique_id" ).val();
 		requestArray["follwoup-time"] = $( "#follwoup-time" ).val();
