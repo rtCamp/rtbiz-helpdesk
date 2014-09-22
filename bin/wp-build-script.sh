@@ -45,9 +45,10 @@ function run_test ()
     # PHP Setup Code
 
     #script
-    find . -path ./bin -prune -o \( -name '*.php' -o -name '*.inc' \) -exec php -lf {} \;
+    find ./app \( -name "*.php" -o -name "*.inc" \)  ! -path "./app/assets/*" ! -path "./app/vendor/*" ! -path "./app/lib/*" ! -path "./app/schema/*" -exec php -lf {} \;
+    
     if [ -e phpunit.xml ] || [ -e phpunit.xml.dist ]; then phpunit || return 1; fi
-    $PHPCS_DIR/scripts/phpcs --standard=$WPCS_STANDARD $(if [ -n "$PHPCS_IGNORE" ]; then echo --ignore=$PHPCS_IGNORE; fi) $(find . -name '*.php') || return 1
+    $PHPCS_DIR/scripts/phpcs --standard=$WPCS_STANDARD $(if [ -n "$PHPCS_IGNORE" ]; then echo --ignore=$PHPCS_IGNORE; fi) $(find ./app -name "*.php" ! -path "./app/assets/*" ! -path "./app/vendor/*" ! -path "./app/lib/*" ! -path "./app/schema/*" ) || return 1
     jshint . || return 1
 }
 
@@ -69,13 +70,12 @@ for WP_VERSION in 4.0 3.9; do
         php --version
 
         for WP_MULTISITE in 0 1; do
-            LOG_FILE="${CI_BUILD_ID}_php-${PHP_VERSION}_wp-${WP_VERSION}_m-${WP_MULTISITE}.log"
-            run_test | tee $LOG_FILE
+            LOG_FILE="/home/gitlab_ci_runner/log/${CI_BUILD_ID}_php-${PHP_VERSION}_wp-${WP_VERSION}_m-${WP_MULTISITE}.log"
+            run_test > $LOG_FILE
             if [ $? -eq 0 ]; then
                 STATUS="PASS"
             else
                 STATUS="FAIL"
-                cat $LOG_FILE
             fi
             display_op $STATUS $PHP_VERSION $WP_VERSION $WP_MULTISITE $LOG_FILE
             final_op=$final_op."\n$STATUS $PHP_VERSION $WP_VERSION $WP_MULTISITE $LOG_FILE"
