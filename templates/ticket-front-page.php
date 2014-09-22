@@ -91,8 +91,8 @@ if ( $user_edit ) {
 								'order'      => 'DESC',
 								'post_id'    => $post->ID,
 								'post_type'  => $post_type,
-								'number'     => '10',
-								'offset'     => $page * 10,
+								//								'number'     => '10',
+								//								'offset'     => $page * 10,
 							) );
 						?>
 						<div class="large-12 columns <?php echo esc_attr( ( empty( $comments ) ) ? 'hide' : '' ); ?>">
@@ -148,10 +148,10 @@ if ( $user_edit ) {
 	$all_hd_participants = array_filter( array_unique( $all_hd_participants ) );
 	?>
 						</div>
-						<div
-							class="large-12 columns <?php echo esc_attr( ( ( $page + 1 ) < ( $comment_count / 10 ) ) ? '' : 'hide' ); ?>">
-							<button id="load_more_btn" class="button large expand"><?php _e( 'LOAD MORE' ); ?></button>
-						</div>
+						<!--<div
+							class="large-12 columns <?php /*echo esc_attr( ( ( $page + 1 ) < ( $comment_count / 10 ) ) ? '' : 'hide' ); */?>">
+							<button id="load_more_btn" class="button large expand"><?php /*_e( 'LOAD MORE' ); */?></button>
+						</div>-->
 					</div>
 				</fieldset>
 			</div>
