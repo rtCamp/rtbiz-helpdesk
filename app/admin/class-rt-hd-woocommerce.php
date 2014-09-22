@@ -90,6 +90,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 				return;
 			}
 
+			wp_enqueue_style( 'support-form-style', RT_HD_URL . 'app/assets/css/support_form_front.css', false, RT_HD_VERSION, 'all' );
 			$option      = '';
 			$order_email = '';
 
@@ -139,33 +140,34 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 			</script>
 
 			<h2><?php _e( 'Get Support', 'RT_HD_TEXT_DOMAIN' ); ?></h2>
-			<form method="post" action="" class="comment-form" enctype="multipart/form-data">
-				<p>
-					<label><?php _e( 'Product', RT_HD_TEXT_DOMAIN ); ?></label>
-					<select name="post[product_id]" required="required">
+			<form method="post" action="" class="comment-form pure-form pure-form-aligned" enctype="multipart/form-data">
+				<div class="pure-control-group">
+					<!--					<label>--><?php //_e( 'Product', RT_HD_TEXT_DOMAIN ); ?><!--</label>-->
+					<select name="post[product_id]">
 						<option value="">Choose Product</option>
 						<?php echo balanceTags( $option ); ?>
 					</select>
-				</p>
-				<p>
-					<label><?php _e( 'Email', RT_HD_TEXT_DOMAIN ); ?></label>
-					<input type="email" required="required" name="post[email]" value="<?php echo sanitize_email( $order_email ) ?>"/>
-				</p>
+				</div>
+				<div class="pure-control-group">
+					<!--					<label for="email">--><?php //_e( 'Email', RT_HD_TEXT_DOMAIN ); ?><!--</label>-->
+					<input id="email" placeholder="email" type="email" name="post[email]" value="<?php echo sanitize_email( $order_email ) ?>" />
+				</div>
 
-				<p>
-					<label><?php _e( 'Description', RT_HD_TEXT_DOMAIN ); ?></label>
-					<textarea name="post[description]" required="required"></textarea>
-				</p>
+				<div class="pure-control-group">
+					<!--					<label>--><?php //_e( 'Description', RT_HD_TEXT_DOMAIN ); ?><!--</label>-->
+					<textarea name="post[description]" placeholder="Description" rows="10" cols="10" ></textarea>
 
-				<p>
+				</div>
+
+				 <div class="pure-control-group">
 					<input type="file" id="filesToUpload" name="attachment[]" multiple="multiple"/>
 					<ul id="fileList">
 						<li>No Files Selected</li>
 					</ul>
-				</p>
-				<p>
+				 </div>
+				<div class="pure-control-group">
 					<input type="submit" value="Submit"/>
-				</p>
+				</div>
 			</form>
 		<?php
 		}

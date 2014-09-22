@@ -285,7 +285,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 			add_meta_box( 'rt-hd-ticket-data', __( 'Ticket Information', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Ticket_Info::ui', Rt_HD_Module::$post_type, 'side', 'default' );
 			add_meta_box( 'rt-hd-subscriiber', __( 'Subscriiber', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Subscribers::ui', Rt_HD_Module::$post_type, 'side', 'default' );
 			add_meta_box( 'rt-hd-attachment', __( 'Attachment', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Attachment::ui', Rt_HD_Module::$post_type, 'side', 'default' );
-			add_meta_box( 'rt-hd-external-link', __( 'External Link', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_External_Link::ui', Rt_HD_Module::$post_type, 'side', 'default' );
+			add_meta_box( 'rt-hd-external-link', __( 'External Links', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_External_Link::ui', Rt_HD_Module::$post_type, 'side', 'default' );
 		}
 
 		/**

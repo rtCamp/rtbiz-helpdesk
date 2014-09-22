@@ -64,14 +64,13 @@ for WP_VERSION in 4.0 3.9; do
 
     for PHP_VERSION in 5.2.17 5.3.29 5.4.32 5.5.16 5.6.0; do
 
-        export $PATH=/opt/phpbrew/php/php-${PHP_VERSION}/bin:$OLD_PATH
+        export PATH=/opt/phpbrew/php/php-${PHP_VERSION}/bin:$OLD_PATH
         
         php --version
 
         for WP_MULTISITE in 0 1; do
             LOG_FILE="${CI_BUILD_ID}_php-${PHP_VERSION}_wp-${WP_VERSION}_m-${WP_MULTISITE}.log"
-            run_test > $LOG_FILE
-            run_test
+            run_test | tee $LOG_FILE
             if [ $? -eq 0 ]; then
                 STATUS="PASS"
             else
