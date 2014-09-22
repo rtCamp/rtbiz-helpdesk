@@ -81,15 +81,20 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Comments' ) ) {
 				) );
 			//echo( json_encode($comments) );
 			$ticket_unique_id = get_post_meta( $post->ID, '_rtbiz_hd_unique_id', true );
+			$current_user = wp_get_current_user();
 			?>
 			<form id="add_followup_form" method="post">
 			<input type="hidden" id='ticket_unique_id' value="<?php echo esc_attr( $ticket_unique_id ); ?>"/>
-				<input id="edit-comment-id" type="hidden"> <textarea id="followup_content" name="followup_content" placeholder="Add new followup"></textarea>
-				<button class="mybutton add-savefollowup" id="savefollwoup" type="button">Add</button>
+				<input id="user-avatar" type="hidden" value="<?php echo get_avatar( get_current_user_id(),40 ); ?>">
+				<input id="user-email" type="hidden" value="<?php echo sanitize_email( $current_user->user_email ); ?>">
+				<input id="user-name" type="hidden" value="<?php echo esc_attr( $current_user->display_name ); ?>">
+				<input id="edit-comment-id" type="hidden"> <textarea id="followup_content" name="followup_content" placeholder="Add new followup" style="width: 100%"></textarea>
+				<button class="mybutton add-savefollowup button" id="savefollwoup" type="button">Add followup</button>
+
 				<!--<button class="mybutton right" type="submit" >Add</button>-->
 				<!--<input type="file" class="right" name="ticket_attach_file" id="ticket_attach_file" multiple />-->
 			</form>
-			<ol class="discussion">
+			<ol class="discussion" id="chat-UI">
 				<?php foreach ( $comments as $comment ) {
 				if ( ( $comment->user_id ) == ( get_current_user_id() ) ) {
 					RT_Meta_Box_Ticket_Comments::author_comment( $comment );

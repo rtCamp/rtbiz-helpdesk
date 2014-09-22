@@ -17,7 +17,6 @@ jQuery(function () {
         },
         initAddNewFollowUp : function(){
             jQuery( "#savefollwoup" ).click( function () {
-                alert( 'hi' );
                 var followuptype = jQuery( "#followup-type" ).val();
 
                 var requestArray = new Object();
@@ -52,20 +51,25 @@ jQuery(function () {
                     data: requestArray,
                     success: function ( data ) {
                         if ( data.status ) {
-                            jQuery( "#followup_content" ).val( '' );
-                            jQuery( "#commentlist" ).prepend( data.data );
-                            jQuery( ".moment-from-now" ).each( function () {
 
+
+                           /* jQuery( "#commentlist" ).prepend( data.data );
+                            jQuery( ".moment-from-now" ).each( function () {
+s
                                 if ( jQuery( this ).is( ".comment-date" ) ) {
                                     jQuery( this ).html( moment( new Date( jQuery( this ).attr( "title" ) ) ).fromNow() );
                                 } else {
                                     jQuery( this ).html( moment( new Date( jQuery( this ).html() ) ).fromNow() );
                                 }
-                            } );
-                            jQuery( "#commentlist .comment-wrapper" ).filter( ":first" ).show();
+                            } );*/
+	                        var newcomment=" <li class='self'> <div class='avatar'> " + jQuery("#user-avatar" ).val() + " </div> <div class='messages'> <p>" + jQuery('#followup_content' ).val() + " </p> <time title='just now' ><span title='"+ jQuery('#user_email').val() +"'>" +jQuery('#user-name' ).val()+ "</span>  • now </time> </div> </li>";
+	                        console.log(newcomment);
+	                        jQuery('#chat-UI' ).prepend(newcomment);
+	                        jQuery( "#followup_content" ).val( '' );
+                            /*jQuery( "#commentlist .comment-wrapper" ).filter( ":first" ).show();
                             if ( ! jQuery( '.accordion-expand-all' ).parent().is( ':visible' ) ) {
                                 jQuery( '.accordion-expand-all' ).parent().show();
-                            }
+                            }*/
                         } else {
                             alert( data.message );
                         }
