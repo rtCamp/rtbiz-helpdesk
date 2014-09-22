@@ -1195,9 +1195,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$commentdata['comment_agent']     = substr( $_SERVER['HTTP_USER_AGENT'], 0, 254 );
 			if ( isset( $_REQUEST['follwoup-time'] ) && $_REQUEST['follwoup-time'] != '' ) {
 				$d                           = new DateTime( $_REQUEST['follwoup-time'] );
-				$UTC                         = new DateTimeZone( 'UTC' );
 				$commentdata['comment_date'] = $d->format( 'Y-m-d H:i:s' );
-				$d->setTimezone( $UTC );
 				$commentdata['comment_date_gmt'] = $d->format( 'Y-m-d H:i:s' );
 			} else {
 				$commentdata['comment_date']     = current_time( 'mysql' );

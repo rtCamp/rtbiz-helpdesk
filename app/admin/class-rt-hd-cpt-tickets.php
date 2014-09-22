@@ -286,7 +286,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 		 * @since  0.1
 		 */
 		public function rename_meta_boxes() {
-			add_meta_box( 'commentsdiv',  __( 'Comments' ), 'post_comment_meta_box',  Rt_HD_Module::$post_type,  'advanced', 'high' );
+			//add_meta_box( 'commentsdiv',  __( 'Comments' ), 'post_comment_meta_box',  Rt_HD_Module::$post_type,  'advanced', 'high' );
 		}
 
 		/**
