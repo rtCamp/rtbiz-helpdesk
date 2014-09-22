@@ -386,6 +386,10 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 
 				}
 
+				if ( isset( $_GET['assigned'] ) ) {
+					$query->set( 'author', $_GET['assigned'] );
+				}
+
 				if ( isset( $_GET['updated_by'] ) ) {
 
 					$query->set( 'meta_query', array(
