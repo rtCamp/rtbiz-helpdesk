@@ -179,7 +179,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$rt_hd_email_notification->notification_new_ticket_assigned( $post_id, $userid, $labels['name'], $uploaded );
 			}
 
-			$rt_hd_email_notification->ticket_created_notification( $post_id, $userid, $labels['name'], $body, $uploaded );
+			$rt_hd_email_notification->ticket_created_notification( $post_id,$labels['name'], $body, $allemail, $uploaded );
 
 			return $post_id;
 		}

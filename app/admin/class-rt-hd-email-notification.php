@@ -170,12 +170,14 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$unique_id = get_post_meta( $post_id, '_rtbiz_hd_unique_id', true );
 			$body      = $body . '<br />To View ' . $post_type . " Click <a href='" . trailingslashit( site_url() ) . strtolower( $post_type ) . '/?rthd_unique_id=' . $unique_id . "'>here</a>. <br/>";
 			$notify_emails = array();
-			foreach ( $allemail as $email ) {
-				if ( is_email( $email['address'] ) ) {
-					$notify_emails[] = array( 'email' => $email['address'], 'name' => $email['name'] );
+			if ( isset( $allemail ) && ! empty( $allemail ) ) {
+				foreach ( $allemail as $email ) {
+					if ( is_email( $email['address'] ) ) {
+						$notify_emails[] = array( 'email' => $email['address'], 'name' => $email['name'] );
+					}
 				}
+				$this->insert_new_send_email( $title, $body, array(), array(), $notify_emails, $uploaded, $post_id );
 			}
-			$this->insert_new_send_email( $title, $body, array(), array(), $notify_emails, $uploaded, $post_id );
 		}
 
 		/**

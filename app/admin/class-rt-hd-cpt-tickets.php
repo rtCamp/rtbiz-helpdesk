@@ -138,6 +138,19 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 				case 'rthd_ticket_title' :
 
 					printf( __( '%s : %s', RT_HD_PATH_ADMIN ), '<a href="' . esc_url( admin_url( 'post.php?post=' . absint( $post->ID ) . '&action=edit' ) ) . '"><strong>' . esc_attr( _x( '#', 'hash before order number', 'RT_HD_PATH_ADMIN' ) . esc_attr( $post->ID ) ) . '</strong></a>', $post->post_title );
+
+					$user_id   = $post->post_author;
+					$user_info = get_userdata( $user_id );
+					$url       = esc_url(
+						add_query_arg(
+							array(
+								'post_type'  => Rt_HD_Module::$post_type,
+								'assigned' => $user_id,
+							), 'edit.php' ) );
+
+					if ( $user_info ) {
+						printf( " Assigned to <a href='%s'>%s</a>", $url, $user_info->user_login );
+					}
 					break;
 
 				case 'rthd_ticket_created_by':
