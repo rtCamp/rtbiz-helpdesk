@@ -17,8 +17,9 @@ WP_CORE_DIR=/tmp/wordpress/
 set -ex
 
 install_wp() {
-    rm -rf WP_CORE_DIR
+    rm -rf $WP_CORE_DIR
 	mkdir -p $WP_CORE_DIR
+    
     cd $WP_CORE_DIR
 	wp core download --version=$WP_VERSION
 
