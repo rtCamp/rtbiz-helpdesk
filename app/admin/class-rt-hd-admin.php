@@ -96,7 +96,8 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 					$user_edit = true;
 				}
 				wp_localize_script( 'rthd-admin-js', 'ajaxurl', admin_url( 'admin-ajax.php' ) );
-				wp_localize_script( 'rthd-admin-js', 'rthd_post_type', get_post_type( $_GET['post'] ) );
+				$rthd_post_type = isset( $_GET['post'] ) ? get_post_type( $_GET['post'] )  :'';
+				wp_localize_script( 'rthd-admin-js', 'rthd_post_type', $rthd_post_type );
 				wp_localize_script( 'rthd-admin-js', 'rthd_user_edit', array( $user_edit ) );
 			} else {
 				wp_localize_script( 'rthd-admin-js', 'rthd_user_edit', array( '' ) );
