@@ -496,8 +496,6 @@ if ( ! class_exists( 'Rt_HD_Settings' ) ) {
 				'id'   => $sentEmailID,
 				'sent' => $oldStatus,
 			) );
-			echo esc_attr( $rows_affected );
-
 			return $rows_affected;
 		}
 

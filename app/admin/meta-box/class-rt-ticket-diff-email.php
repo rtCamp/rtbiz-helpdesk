@@ -90,7 +90,7 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 
 			// Author
 			$oldUser = get_user_by( 'id', $oldpost->post_author );
-			$newUser = get_user_by( 'id', $_POST['post_author'] );
+			$newUser = get_user_by( 'id', $newTicket['post_author'] );
 
 			$diff = rthd_text_diff( $oldUser->display_name, $newUser->display_name );
 			if ( $diff ) {
@@ -114,7 +114,7 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 
 			// Attachments Diff
 			if ( isset( $_POST['attachment'] ) ) {
-				$old_attachments = get_posts(
+				$old_attachments       = get_posts(
 					array(
 						'post_parent'    => $post_id,
 						'post_type'      => 'attachment',
@@ -214,8 +214,8 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 			}
 
 			$rt_ticket_email_content['closing_reason_history_id'] = $closing_reason_history_id;
-			$rt_ticket_email_content['oldUser']                   = $oldUser;
-			$rt_ticket_email_content['newUser']                   = $newUser;
+			$rt_ticket_email_content['oldUser']                   = $oldpost->post_author;
+			$rt_ticket_email_content['newUser']                   = $newTicket['post_author'];
 			$rt_ticket_email_content['bccemails']                 = $bccemails;
 			$rt_ticket_email_content['newSubscriberList']         = $newSubscriberList;
 			$rt_ticket_email_content['oldSubscriberList']         = $oldSubscriberList;
@@ -229,11 +229,9 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		public static function save( $post_id, $post ) {
-			global $rt_ticket_email_content, $rt_hd_settings, $rt_hd_import_operation, $rt_hd_module;
+			global $rt_ticket_email_content, $rt_hd_module, $rt_hd_email_notification;
 
 			$emailTable        = "<table style='width: 100%; border-collapse: collapse; border: none;'>";
-			$post_type         = Rt_HD_Module::$post_type;
-			$module_settings   = rthd_get_settings();
 			$updateFlag        = true;
 			$oldUser           = $rt_ticket_email_content['oldUser'];
 			$newUser           = $rt_ticket_email_content['newUser'];
@@ -241,82 +239,33 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 			$oldSubscriberList = $rt_ticket_email_content['oldSubscriberList'];
 			$emailHTML         = $rt_ticket_email_content['emailHTML'];
 			$bccemails         = $rt_ticket_email_content['bccemails'];
+			$labels        = $rt_hd_module->labels;
 
-			$flag        = true;
-			$systemEmail = ( isset( $module_settings['system_email'] ) ) ? $module_settings['system_email'] : '';
-			if ( $systemEmail ) {
-				if ( ! is_email( $systemEmail ) ) {
-					$flag = false;
+			if ( $updateFlag ) {
+				if ( $oldUser != $newUser ) {
+					$rt_hd_email_notification->notification_new_ticket_assigned( $post_id, $newUser, $labels['name'], array() );
+					$rt_hd_email_notification->notification_new_ticket_reassigned( $post_id, $oldUser, $newUser, $labels['name'], array() );
+				}
+
+				if ( ! empty( $newSubscriberList ) ) {
+					$rt_hd_email_notification->notification_ticket_subscribed( $post_id, $labels['name'], $newSubscriberList );
+				}
+
+				if ( ! empty( $oldSubscriberList ) ) {
+					$rt_hd_email_notification->notification_ticket_unsubscribed( $post_id, $labels['name'], $oldSubscriberList );
+				}
+
+				if ( $emailHTML != '' && ! empty( $bccemails ) ) {
+					$emailHTML = $emailTable . $emailHTML;
+					$rt_hd_email_notification->notification_ticket_updated( $post_id, $labels['name'], $emailHTML, $bccemails );
 				}
 			} else {
-				$flag = false;
-			}
-			if ( $flag ) {
-				$accessToken = $rt_hd_settings->get_accesstoken_from_email( $systemEmail, $signature, $email_type, $imap_server );
-				$hdZendEmail = new Rt_HD_Zend_Mail();
-				if ( strpos( $signature, '</' ) == false ) {
-					$signature = htmlentities( $signature );
-					$signature = preg_replace( '/(\n|\r|\r\n)/i', '<br />', $signature );
-					$signature = preg_replace( '/  /i', '  ', $signature );
+				$newUser = get_user_by( 'id', $post['post_author'] );
+				if ( $newUser ) {
+					$rt_hd_email_notification->notification_new_ticket_assigned( $post_id, $newUser, $labels['name'], array() );
 				}
-				$title_suffix = $rt_hd_import_operation->create_title_for_mail( $post_id );
-				$current_user = wp_get_current_user();
-				if ( $updateFlag ) {
-					if ( $oldUser->ID != $newUser->ID ) {
-						$title      = '[Assigned You] ' . $title_suffix;
-						$emailHTML1 = '<b>' . $current_user->display_name . "</b> assigned you new ticket.<br /> To View Ticket Click <a href='" . admin_url( "edit.php?post_type={$post_type}&page=rthd-add-" . $post_type . '&' . $post_type . '_id=' . $post_id ) . "'>here</a>.";
-
-						$rt_hd_settings->insert_new_send_email( $systemEmail, $title, $emailHTML1, array(), array(), array(
-							array(
-								'email' => $newUser->user_email,
-								'name'  => $newUser->display_name,
-							),
-						), array(), $post_id, 'post' );
-						$title      = '[Reassigned] ' . $title_suffix;
-						$emailHTML1 = 'You are no longer responsible for this ticket. It has been reassigned to ' . $newUser->display_name . " .<br /> To View Ticket Click <a href='" . admin_url( "edit.php?post_type={$post_type}&page=rthd-add-" . $post_type . '&' . $post_type . '_id=' . $post_id ) . "'>here</a>.";
-						$rt_hd_settings->insert_new_send_email( $systemEmail, $title, $emailHTML1, array(), array(), array(
-							array(
-								'email' => $oldUser->user_email,
-								'name'  => $oldUser->display_name,
-							),
-						), array(), $post_id, 'post' );
-					}
-
-					if ( ! empty( $newSubscriberList ) ) {
-						$title      = '[Subscribe] ' . $title_suffix;
-						$emailHTML1 = "You have been <b>subscribed</b> to this ticket.<br /> To View Ticket Click <a href='" . admin_url( "edit.php?post_type={$post_type}&page=rthd-add-" . $post_type . '&' . $post_type . '_id=' . $post_id ) . "'>here</a>.";
-						$rt_hd_settings->insert_new_send_email( $systemEmail, $title, $emailHTML1, array(), array(), $newSubscriberList, array(), $post_id, 'post' );
-					}
-
-					if ( ! empty( $oldSubscriberList ) ) {
-						$title      = '[Unsubscribe] ' . $title_suffix;
-						$emailHTML1 = "You have been <b>unsubscribed</b> to this ticket.<br /> To View Ticket Click <a href='" . admin_url( "edit.php?post_type={$post_type}&page=rthd-add-" . $post_type . '&' . $post_type . '_id=' . $post_id ) . "'>here</a>.";
-						$rt_hd_settings->insert_new_send_email( $systemEmail, $title, $emailHTML1, array(), array(), $oldSubscriberList, array(), $post_id, 'post' );
-					}
-					if ( $emailHTML != '' && ! empty( $bccemails ) ) {
-						$emailHTML = $emailTable . $emailHTML . "</table> </br> To View Ticket Click <a href='" . admin_url( "edit.php?post_type={$post_type}&page=rthd-add-" . $post_type . '&' . $post_type . '_id=' . $post_id ) . "'>here</a>.";
-						$emailHTML .= '<br />' . 'Ticket updated by : <a target="_blank" href="">' . get_the_author_meta( 'display_name', get_current_user_id() ) . '</a>';
-						$emailHTML .= '<br />' . $signature;
-						$title = '[Ticket Updated] ' . $title_suffix;
-						$rt_hd_settings->insert_new_send_email( $systemEmail, $title, stripslashes( $emailHTML ), array(), array(), $bccemails, array(), $post_id, 'post' );
-					}
-				} else {
-					$newUser = get_user_by( 'id', $post['post_author'] );
-					if ( $newUser ) {
-						$title     = '[Assigned You] ' . $title_suffix;
-						$emailHTML = "New ticket assigned to you.<br /> To View Ticket Click <a href='" . admin_url( "edit.php?post_type={$post_type}&page=rthd-add-" . $post_type . '&' . $post_type . '_id=' . $post_id ) . "'>here</a>.";
-						$rt_hd_settings->insert_new_send_email( $systemEmail, $title, $emailHTML, array(), array(), array(
-							array(
-								'email' => $newUser->user_email,
-								'name'  => $newUser->display_name,
-							),
-						), array(), $post_id, 'post' );
-					}
-					if ( ! empty( $bccemails ) ) {
-						$title     = '[Subscribe] ' . $title_suffix;
-						$emailHTML = "You have been <b>subscribed</b> to this ticket.<br /> To View Ticket Click <a href='" . admin_url( "edit.php?post_type={$post_type}&page=rthd-add-" . $post_type . '&' . $post_type . '_id=' . $post_id ) . "'>here</a>.";
-						$rt_hd_settings->insert_new_send_email( $systemEmail, $title, $emailHTML, array(), array(), $bccemails, array(), $post_id, 'post' );
-					}
+				if ( ! empty( $bccemails ) ) {
+					$rt_hd_email_notification->notification_ticket_subscribed( $post_id, $labels['name'], $bccemails );
 				}
 			}
 		}

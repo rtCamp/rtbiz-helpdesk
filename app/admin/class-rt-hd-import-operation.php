@@ -170,87 +170,16 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				update_post_meta( $post_id, '_rtbiz_hd_references', $references );
 			}
 
-
 			//send Notification
-			global $bulkimport, $gravity_auto_import, $rt_hd_email_notification;
-
-			$flag        = true;
-			$systemEmail = ( isset( $settings['system_email'] ) ) ? $settings['system_email'] : '';
-			if ( $systemEmail ) {
-				if ( ! is_email( $systemEmail ) ) {
-					$flag = false;
-				}
+			global $bulkimport, $gravity_auto_import, $rt_hd_email_notification, $helpdesk_import_ticket_id;
+			if ( isset( $gravity_auto_import ) && $gravity_auto_import ) {
+				$helpdesk_import_ticket_id = $post_id;
+				add_filter( 'gform_pre_send_email', array( &$this, 'hijack_mail_subject' ), 999, 2 );
 			} else {
-				$flag = false;
-			}
-			if ( ! isset( $bulkimport ) ) {
-				$bulkimport = false;
+				$rt_hd_email_notification->notification_new_ticket_assigned( $post_id, $userid, $labels['name'], $uploaded );
 			}
 
-			if ( $flag && ! $bulkimport && ! isset( $gravity_auto_import ) ) {
-
-				$title = '[New ' . $labels['name'] . ']' . $this->create_title_for_mail( $post_id );
-				$body  = $body . '<br />To View ' . $labels['name'] . " Click <a href='" . admin_url( "edit.php?post_type={$post_type}&page=rthd-add-{$post_type}&{$post_type}_id=" . $post_id ) . "'>here</a>. <br/>";
-				$body .= 'Ticket created by : <a target="_blank" href="">' . get_the_author_meta( 'display_name', get_current_user_id() ) . '</a>';
-
-				$outbound_emails = ( isset( $settings['outbound_emails'] ) && ! empty( $settings['outbound_emails'] ) ) ? explode( ',', $settings['outbound_emails'] ) : '';
-				$notify_emails   = array();
-
-				if ( isset( $outbound_emails ) && ! empty( $outbound_emails ) ) {
-					foreach ( $outbound_emails as $email ) {
-						if ( is_email( $email ) ) {
-							$notify_emails[] = array(
-								'email' => $email,
-								'name'  => $rt_hd_module->name . ' Outbound Email',
-							);
-						}
-					}
-				}
-
-				$rt_hd_email_notification->insert_new_send_email( $systemEmail, $title, $body, array(), array(), $notify_emails, $uploaded, $post_id, 'comment' );
-
-			} else {
-				global $helpdesk_import_ticket_id;
-
-				if ( isset( $gravity_auto_import ) && $gravity_auto_import ) {
-					//add_filter  [Helpdesk #$post_id]
-					$helpdesk_import_ticket_id = $post_id;
-					add_filter( 'gform_pre_send_email', array( &$this, 'hijack_mail_subject' ), 999, 2 );
-				} else {
-					// if system email is not set
-					// ( or in future mail module is disabled then it needs to be handled )
-					// send mail using wp_mail
-
-					$user    = get_user_by( 'id', $userid );
-					$to      = $user->user_email;
-					$title   = '[New ' . $labels['name'] . ']' . $this->create_title_for_mail( $post_id );
-					$body    = $body . '<br />To View ' . $labels['name'] . " Click <a href='" . admin_url( "edit.php?post_type={$post_type}&page=rthd-add-{$post_type}&{$post_type}_id=" . $post_id ) . "'>here</a>. <br/>";
-					$headers = 'Content-Type: text/html';
-					wp_mail( $to, $title, $body, $headers, $uploaded );
-				}
-			}
-
-			$title     = '[New ' . $labels['name'] . ']' . $this->create_title_for_mail( $post_id );
-			$unique_id = get_post_meta( $post_id, '_rtbiz_hd_unique_id', true );
-			$body      = $body . '<br />To View ' . $labels['name'] . " Click <a href='" . trailingslashit( site_url() ) . strtolower( $labels['name'] ) . '/?rthd_unique_id=' . $unique_id . "'>here</a>. <br/>";
-
-			$notify_emails = array();
-			foreach ( $allemail as $email ) {
-				if ( is_email( $email['address'] ) ) {
-					$notify_emails[] = array( 'email' => $email['address'], 'name' => $email['name'] );
-				}
-			}
-
-			if ( $flag ) {
-				$rt_hd_email_notification->insert_new_send_email( $systemEmail, $title, $body, array(), array(), $notify_emails, $uploaded, $post_id, 'comment' );
-			} else {
-				$to = array();
-				foreach ( $notify_emails as $email ) {
-					$to[] = $email['email'];
-				}
-				$headers = 'Content-Type: text/html';
-				wp_mail( $to, $title, $body, $headers, $uploaded );
-			}
+			$rt_hd_email_notification->ticket_created_notification( $post_id,$labels['name'], $body, $allemail, $uploaded );
 
 			return $post_id;
 		}
@@ -269,7 +198,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			global $helpdesk_import_ticket_id, $rt_hd_module;
 			$post_type       = get_post_type( $helpdesk_import_ticket_id );
 			$data['subject'] = '[' . strtoupper( $rt_hd_module->name ) . ' #' . $helpdesk_import_ticket_id . ']' . $data['subject'];
-			$hd_url          = admin_url( "edit.php?post_type={$post_type}&page=rthd-add-{$post_type}&{$post_type}_id=" . $helpdesk_import_ticket_id );
+			$hd_url          = admin_url( "post.php?post={$helpdesk_import_ticket_id}action=edit" );
 			$data['message'] = str_replace( '--rtcamp_hd_link--', $hd_url, $data['message'] );
 
 			return $data;

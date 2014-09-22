@@ -529,3 +529,9 @@ function rthd_get_redux_settings() {
 
 	return $GLOBALS['redux_helpdesk_settings'];
 }
+
+function rthd_my_mail_from( $email )
+{
+	$settings = rthd_get_settings();
+	return $settings['outbound_emails'];
+}

@@ -143,50 +143,57 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			}
 
 			// ACTUAL DECLARATION OF SECTIONS
+			$general_fields = array(
+				array(
+					'id'          => 'rthd_menu_label',
+					'type'        => 'text',
+					'title'       => __( 'Menu Label' ),
+					'subtitle'    => __( 'Menu Label Identity for the Plugin.' ),
+					'desc'        => __( 'This label will be used for the Menu Item label for Helpdesk' ),
+					'default'     => __( 'rtHelpdesk' ),
+					'placeholder' => __( 'rtHelpdesk, Helpdesk, etc.' ),
+				),
+				array(
+					'id'       => 'rthd_logo_url',
+					'type'     => 'media',
+					'url'      => true,
+					'title'    => __( 'Logo' ),
+					'desc'     => __( 'This logo will be used for all the Menu, Submenu, Post Types Menu Icons in Helpdesk.' ),
+					'subtitle' => __( 'Upload any logo using the WordPress native uploader, preferrably with the size of 16x16.' ),
+					'default'  => array(
+						'url' => RT_HD_URL . 'app/assets/img/hd-16X16.png',
+					),
+				),
+				array(
+					'id'       => 'rthd_default_user',
+					'type'     => 'select',
+					'options'  => $users_options,
+					'default'  => '1',
+					'title'    => __( 'Default Assignee' ),
+					'desc'     => __( 'Default User for HelpDesh ticket Assignee' ),
+					'subtitle' => __( 'Select User for Support ticket Assign' ),
+				),
+			);
+			if ( is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
+				$general_fields = array_merge(
+					$general_fields,
+					array(
+						array(
+							'id'       => 'rthd_support_page',
+							'type'     => 'select',
+							'data'     => 'pages',
+							'title'    => __( 'Support Page' ),
+							'desc'     => __( 'This Page will used for redirect support request in WooCommerce. Add [rt_hd_support_form] ShortCode in Page Content' ),
+							'subtitle' => __( 'Select Page for Product Support' ),
+
+						),
+					) );
+			}
 			$this->sections[] = array(
 				'icon'        => 'el-icon-cogs',
 				'title'       => __( 'General' ),
 				'permissions' => $admin_cap,
-				'fields'      => array(
-					array(
-						'id'          => 'rthd_menu_label',
-						'type'        => 'text',
-						'title'       => __( 'Menu Label' ),
-						'subtitle'    => __( 'Menu Label Identity for the Plugin.' ),
-						'desc'        => __( 'This label will be used for the Menu Item label for Helpdesk' ),
-						'default'     => __( 'rtHelpdesk' ),
-						'placeholder' => __( 'rtHelpdesk, Helpdesk, etc.' ),
-					),
-					array(
-						'id'       => 'rthd_logo_url',
-						'type'     => 'media',
-						'url'      => true,
-						'title'    => __( 'Logo' ),
-						'desc'     => __( 'This logo will be used for all the Menu, Submenu, Post Types Menu Icons in Helpdesk.' ),
-						'subtitle' => __( 'Upload any logo using the WordPress native uploader, preferrably with the size of 16x16.' ),
-						'default'  => array(
-							'url' => RT_HD_URL . 'app/assets/img/hd-16X16.png',
-						),
-					),
-					array(
-						'id'       => 'rthd_support_page',
-						'type'     => 'select',
-						'data'     => 'pages',
-						'title'    => __( 'Support Page' ),
-						'desc'     => __( 'This Page will used for redirect support request in WooCommerce. Add [rt_hd_support_form] ShortCode in Page Content' ),
-						'subtitle' => __( 'Select Page for Product Support' ),
-
-					),
-					array(
-						'id'       => 'rthd_default_user',
-						'type'     => 'select',
-						'options'  => $users_options,
-						'default'  => '1',
-						'title'    => __( 'Default Assignee' ),
-						'desc'     => __( 'Default User for HelpDesk ticket Assignee' ),
-						'subtitle' => __( 'Select User for Support ticket Assign' ),
-					),
-				),
+				'fields'      => $general_fields,
 			);
 
 			$redirect_url = get_option( 'rthd_googleapi_redirecturl' );

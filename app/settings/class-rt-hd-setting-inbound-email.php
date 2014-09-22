@@ -56,7 +56,6 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 			$google_client_redirect_url = get_site_option( 'rthd_googleapi_redirecturl', '' );
 
 			if ( ( $google_client_id == '' || $google_client_secret == '' ) ) {
-				echo '<div id="error_handle" class="error"><p>Please set google api detail on Google API <a href="' . esc_url( admin_url( 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&page=rthd-settings&type=googleApi&tab=admin-settings' ) ) . '">setting</a> page </p></div>';
 				return false;
 			}
 
@@ -99,12 +98,19 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 			global $rt_hd_settings, $rt_hd_imap_server_model;
 
 			$responce = $this->goole_oauth();
-			if ( $responce == false ){
+
+			$google_acs = $rt_hd_settings->get_user_google_ac( $this->user_id );
+
+			$imap_servers = $rt_hd_imap_server_model->get_all_servers();
+			if ( $responce == false && ( empty( $google_acs ) && empty( $imap_servers )  ) ){
+				echo '<div id="error_handle" class=""><p>Please set google api detail OR Imap Servers detail on <a href="' . esc_url( admin_url( 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&page=rthd-settings' ) ) . '">setting</a>  Page </p></div>';
 				return;
 			}
 
-			$google_acs = $rt_hd_settings->get_user_google_ac( $this->user_id );
-			$authUrl    = $this->client->createAuthUrl();
+			$authUrl = '';
+			if ( $responce != false ){
+				$authUrl    = $this->client->createAuthUrl();
+			}
 
 			$results           = Rt_HD_Utils::get_hd_rtcamp_user();
 			$arrSubscriberUser = array();
@@ -117,6 +123,7 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 			}
 			echo '<script> var arr_rtcamper=' . json_encode( $arrSubscriberUser ) . '; </script>';
 			$rCount = 0;
+
 			if ( isset( $google_acs ) && ! empty( $google_acs ) ) {
 				foreach ( $google_acs as $ac ) {
 					$rCount ++;
@@ -265,8 +272,11 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 				<p class="submit rthd-hide-row" id="rthd_email_acc_type_container">
 					<select id="rthd_select_email_acc_type">
 						<option value=""><?php _e( 'Select Type' ); ?></option>
+					<?php if ( $responce != false ){ ?>
 						<option value="goauth"><?php _e( 'Google OAuth App' ); ?></option>
+					<?php } if ( ! empty( $imap_servers ) ){?>
 						<option value="imap"><?php _e( 'IMAP' ); ?></option>
+					<?php } ?>
 					</select>
 				</p>
 				<p class="submit rthd-hide-row" id="rthd_goauth_container">
@@ -278,7 +288,6 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 					<select  name="rthd_imap_server">
 						<option value=""><?php _e( 'Select Mail Server' ); ?></option>
 				<?php
-				$imap_servers = $rt_hd_imap_server_model->get_all_servers();
 				foreach ( $imap_servers as $server ) {
 					?>
 					<option
