@@ -235,32 +235,32 @@ $post_status = $rt_hd_module->get_custom_statuses();
 				<?php } ?>
 			</div>
 		</div>
-		<?php if ( isset( $post->ID ) ) { ?>
+		<?php /*if ( isset( $post->ID ) ) { */?><!--
 
 			<div class="row collapse">
 				<div class="large-4 mobile-large-1 columns">
 					<span class="prefix" title="Modify Date"><label>Modify Date</label></span>
 				</div>
 				<div class="large-8 mobile-large-3 columns">
-					<?php if ( $user_edit ) { ?>
+					<?php /*if ( $user_edit ) { */?>
 						<input class="moment-from-now" type="text" placeholder="Modified on Date"
-						       value="<?php echo esc_attr( $modifydate ); ?>" title="<?php echo esc_attr( $modifydate ); ?>"
+						       value="<?php /*echo esc_attr( $modifydate ); */?>" title="<?php /*echo esc_attr( $modifydate ); */?>"
 						       readonly="readonly">
-					<?php } else { ?>
+					<?php /*} else { */?>
 						<div class="rthd_attr_border prefix rthd_view_mode moment-from-now"
-						     title="<?php echo esc_attr( $createdate ) ?>"><?php echo esc_attr( $createdate ) ?></div>
-					<?php } ?>
+						     title="<?php /*echo esc_attr( $createdate ) */?>"><?php /*echo esc_attr( $createdate ) */?></div>
+					<?php /*} */?>
 				</div>
 			</div>
-		<?php } ?>
-		<div class="row collapse">
+		--><?php /*} */?>
+	<!--	<div class="row collapse">
 			<div class="large-4 mobile-large-1 columns">
-				<span class="prefix" title="<?php _e( 'Assigned To' ); ?>"><label
-						for="post[post_author]"><?php _e( 'Assigned To' ); ?></label></span>
+				<span class="prefix" title="<?php /*_e( 'Assigned To' ); */?>"><label
+						for="post[post_author]"><?php /*_e( 'Assigned To' ); */?></label></span>
 			</div>
 			<div class="large-8 mobile-large-3 columns">
 				<?php
-$get_assigned_to = array();
+/*$get_assigned_to = array();
 if ( isset( $post->ID ) ) {
 	$post_author     = $post->post_author;
 	$get_assigned_to = get_post_meta( $post->ID, 'subscribe_to', true );
@@ -298,11 +298,11 @@ if ( ! empty( $results ) ) {
 		);
 	}
 }
-				?>
-				<?php if ( $user_edit ) { ?>
+				*/?>
+				<?php /*if ( $user_edit ) { */?>
 					<select name="post[post_author]">
 						<?php
-	if ( ! empty( $results ) ) {
+/*	if ( ! empty( $results ) ) {
 		foreach ( $results as $author ) {
 			if ( $author->ID == $post_author ) {
 				$selected = ' selected';
@@ -312,10 +312,10 @@ if ( ! empty( $results ) ) {
 			echo '<option value="' . esc_attr( $author->ID  ). '"' . esc_attr( $selected ) . '>' . esc_html( $author->display_name ). '</option>';
 		}
 	}
-						?>
+						*/?>
 					</select>
 <?php
-} else {
+/*} else {
 	if ( ! empty( $results ) ) {
 		foreach ( $results as $author ) {
 			if ( $author->ID == $post_author ) {
@@ -326,9 +326,9 @@ if ( ! empty( $results ) ) {
 	} else {
 		echo '<div class="rthd_attr_border rthd_view_mode">' . esc_html( __( 'Not Assigned yet ' ) ) . '</div>';
 	}
-} ?>
+} */?>
 			</div>
-		</div>
+		</div>-->
 	</fieldset>
 	<fieldset>
 		<legend><i class="foundicon-smiley"></i> <?php _e( 'Participants' ); ?></legend>
