@@ -1,6 +1,41 @@
 rthd_user_edit = rthd_user_edit[0];
 jQuery( document ).ready( function ( $ ) {
 
+
+		var options = {
+		//	target:        '#output1',      // target element(s) to be updated with server response
+			beforeSubmit:  showRequest,     // pre-submit callback
+			success:       showResponse,    // post-submit callback
+			url:    ajaxurl                 // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
+		};
+		// bind form using 'ajaxForm'
+		jQuery('#thumbnail_upload').ajaxForm(options);
+
+	function showRequest(formData, jqForm, options) {
+		//do extra stuff before submit like disable the submit button
+		jQuery('#output1').html('Sending...');
+		jQuery('#submit-ajax').attr("disabled", "disabled");
+	}
+	function showResponse(responseText, statusText, xhr, jQueryform)  {
+		var responseText = jQuery.parseJSON(responseText);
+		jQuery( '#output1' ).text( responseText.msg );
+		if(responseText.status ) {
+			var tempname;
+			if (responseText.name.length > 20 ){
+				tempname = responseText.name.substring(0,12) + "...";
+			}else{
+				tempname= responseText.name;
+			}
+			var attachhtml = "<div class='large-12 mobile-large-3 columns attachment-item' data-attachment-id='"+ responseText.attach_id +"'> <a class='rthd_attachment' title='' target='_blank' href='"+responseText.url+"'> <img height='20px' width='20px' src='"+responseText.img+"'><span title='"+responseText.name+"'> "+ tempname+" </span> </a><input type='hidden' name='attachment[]' value='"+ responseText.attach_id +"'></div>";
+			console.log(attachhtml);
+			jQuery('#attachment-files').prepend(attachhtml);
+			var control= jQuery('#thumbnail');
+			control.replaceWith( control = control.clone( true ) );
+			jQuery('#submit-ajax' ).removeAttr('disabled');
+		}
+
+	}
+
 	function format_date_moment() {
 		$( ".moment-from-now" ).each( function () {
 

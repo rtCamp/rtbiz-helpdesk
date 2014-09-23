@@ -132,7 +132,8 @@ if ( ! empty( $comment_attechment ) ) {
 		?>
 		<li>
 			<a href="<?php echo esc_url( $commenytAttechment ); ?>" title="Attachment"> <img
-					src="<?php echo esc_url( RT_HD_URL ) . 'assets/file-type/' . esc_attr( $extn ) . '.png'; ?>"/>
+					src="<?php echo esc_url( wp_mime_type_icon( 'image/jpeg' ) ); ?>"/>
+				<!--					src="--><?php //echo esc_url( RT_HD_URL  . 'assets/file-type/' .  $extn . '.png' ); ?><!--"/>-->
 				<span><?php echo esc_html( $fileName ); ?></span> </a>
 		</li>
 	<?php } ?>

@@ -7,6 +7,14 @@
  */
 global $rt_hd_module, $rt_hd_contacts, $rt_hd_accounts, $rt_hd_settings, $rt_hd_import_operation;
 
+add_action( 'wp_print_scripts', 'include_jquery_form_plugin' );
+function include_jquery_form_plugin() {
+
+	wp_enqueue_script( 'jquery' );
+	wp_enqueue_script( 'jquery-form', array( 'jquery' ), false, true );
+
+}
+
 get_header();
 
 do_action( 'rthd_ticket_front_page_after_header' );
@@ -70,9 +78,23 @@ if ( $user_edit ) {
 						                                                      placeholder="Add new followup"></textarea>
 						<button class="mybutton add-savefollowup" id="savefollwoup"
 						        type="button"><?php _e( 'Add' ); ?></button>
-						<!--<button class="mybutton right" type="submit" ><?php _e( 'Add' ); ?></button>-->
-						<!--<input type="file" class="right" name="ticket_attach_file" id="ticket_attach_file" multiple />-->
 					</form>
+
+					<!--<button class="mybutton right" type="submit" ><?php _e( 'Add' ); ?></button>-->
+					<form id="thumbnail_upload" method="post" action="#" enctype="multipart/form-data">
+						<input type="file" name="thumbnail" id="thumbnail"> <input type='hidden'
+						                                                           value='<?php wp_create_nonce( 'upload_thumb' ); ?>'
+						                                                           name='_nonce'/> <input type="hidden"
+						                                                                                  name="post_id"
+						                                                                                  id="post_id"
+						                                                                                  value="<?php echo esc_attr( $post->ID ); ?>">
+						<input type="hidden" name="action" id="action" value="my_upload_action"> <br/> <input
+							id="submit-ajax" name="submit-ajax" type="submit" value="upload" style="margin-top: 20px">
+					</form>
+					<div id="output1"></div>
+
+
+					<!--						<input type="file" class="right" name="ticket_attach_file" id="attachmentList" multiple />-->
 					<div class="row">
 						<?php
 						$page          = 0;
@@ -189,7 +211,7 @@ $post_status = $rt_hd_module->get_custom_statuses();
 } else {
 	foreach ( $post_status as $status ) {
 		if ( $status['slug'] == $pstatus ) {
-			echo '<div class="rthd_attr_border rthd_view_mode">' . esc_html( $status['name']  ). '</div>';
+			echo '<div class="rthd_attr_border prefix rthd_view_mode">' . esc_html( $status['name']  ). '</div>';
 			break;
 		}
 	}
@@ -208,7 +230,7 @@ $post_status = $rt_hd_module->get_custom_statuses();
 					<input name="post[post_date]" type="hidden"
 					       value="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>"/>
 				<?php } else { ?>
-					<div class="rthd_attr_border rthd_view_mode moment-from-now"
+					<div class="rthd_attr_border prefix rthd_view_mode moment-from-now"
 					     title="<?php echo esc_attr( $createdate )?>"><?php echo esc_attr( $createdate ) ?></div>
 				<?php } ?>
 			</div>
@@ -225,7 +247,7 @@ $post_status = $rt_hd_module->get_custom_statuses();
 						       value="<?php echo esc_attr( $modifydate ); ?>" title="<?php echo esc_attr( $modifydate ); ?>"
 						       readonly="readonly">
 					<?php } else { ?>
-						<div class="rthd_attr_border rthd_view_mode moment-from-now"
+						<div class="rthd_attr_border prefix rthd_view_mode moment-from-now"
 						     title="<?php echo esc_attr( $createdate ) ?>"><?php echo esc_attr( $createdate ) ?></div>
 					<?php } ?>
 				</div>
@@ -297,7 +319,7 @@ if ( ! empty( $results ) ) {
 	if ( ! empty( $results ) ) {
 		foreach ( $results as $author ) {
 			if ( $author->ID == $post_author ) {
-				echo '<div class="rthd_attr_border rthd_view_mode">' . get_avatar( $author->user_email, 17 ) . ' ' . esc_attr( $author->display_name  ). '</div>';
+				echo '<div class="rthd_attr_border rthd_view_mode prefix">' . get_avatar( $author->user_email, 17 ) . ' ' . esc_attr( $author->display_name  ). '</div>';
 				break;
 			}
 		}
@@ -352,7 +374,7 @@ if ( isset( $post->ID ) ) {
 		<?php if ( $user_edit ) { ?>
 			<a href="#" class="button" id="add_ticket_attachment"><?php _e( 'Add' ); ?></a>
 		<?php } ?>
-		<div class="scroll-height">
+		<div class="scroll-height" id="attachment-files">
 			<?php foreach ( $attachments as $attachment ) { ?>
 				<?php $extn_array = explode( '.', $attachment->guid );
 				$extn             = $extn_array[ count( $extn_array ) - 1 ]; ?>
@@ -360,8 +382,8 @@ if ( isset( $post->ID ) ) {
 				     data-attachment-id="<?php echo esc_attr( $attachment->ID ); ?>">
 					<a class="rthd_attachment" title="<?php echo esc_attr( $email ); ?>" target="_blank"
 					   href="<?php echo esc_url( wp_get_attachment_url( $attachment->ID ) ); ?>"> <img height="20px" width="20px"
-					                                                                        src="<?php echo esc_url( RT_HD_URL ) . 'assets/file-type/' . esc_url( $extn ) . '.png'; ?>"/>
-						<?php echo balanceTags( $attachment->post_title ); ?>
+					                                                                                   src="<?php echo esc_url(  wp_mime_type_icon( 'image/jpeg' ) ); ?>"/>
+					<span title="<?php echo balanceTags( $attachment->post_title ); ?>"> 	<?php echo esc_attr( strlen( balanceTags( $attachment->post_title ) ) > 12 ? substr( balanceTags( $attachment->post_title ), 0, 12 ). '...' : balanceTags( $attachment->post_title ) ); ?> </span>
 					</a>
 					<?php if ( $user_edit ) { ?>
 						<a href="#" class="rthd_delete_attachment right">x</a>
