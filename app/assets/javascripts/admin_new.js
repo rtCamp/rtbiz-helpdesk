@@ -26,20 +26,24 @@ jQuery(function () {
                 requestArray["followuptype"] = '';//'note';
 
                 requestArray["followup_ticket_unique_id"] = jQuery( "#ticket_unique_id" ).val();
+	            if ( ! requestArray["followup_ticket_unique_id"]) {
+		            alert('Please publish ticket before adding followup! :( ');
+		            return false;
+	            };
                 requestArray["follwoup-time"] = jQuery( "#follwoup-time" ).val();
 
                 if ( jQuery( "#followup_content" ).val() == "" && typeof tinyMCE != 'undefined' ) {
                     jQuery( "#followup_content" ).val( tinyMCE.get( 'followup_content' ).getContent() );
                 }
                 requestArray["followup_content"] = jQuery( "#followup_content" ).val();
-                if ( requestArray["followup_content"] == "" ) {
-                    alert( "Please Type Content Atleast" );
+                if ( ! requestArray["followup_content"] ) {
+                    alert( "Please input followup :/" );
                     return false;
                 }
                 requestArray["attachemntlist"] = new Array();
                 jQuery( "#attachmentList input" ).each( function () {
                     requestArray["attachemntlist"].push( jQuery( this ).val() );
-                } )
+                });
 
 
                 console.log(requestArray);
