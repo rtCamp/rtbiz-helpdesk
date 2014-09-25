@@ -102,7 +102,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 					if ( in_array( Rt_HD_Module::$post_type, array_keys( $rt_entity->enabled_post_types ) ) && $column == Rt_HD_Module::$post_type ) {
 						$post_details = get_post( $post_id );
 						$pages        = rt_biz_get_post_for_person_connection( $post_id, Rt_HD_Module::$post_type );
-						echo '<a href = edit.php?' . esc_url( $post_details->post_type ) . '=' . esc_url( $post_details->ID ) . '&post_type=' . esc_url( Rt_HD_Module::$post_type ) . '>' . esc_html( count( $pages ) ) . '</a>';
+						echo balanceTags( sprintf( '<a href="%s">%d</a>', add_query_arg( array( 'contact_id' => $post_details->ID, 'post_type' => Rt_HD_Module::$post_type ), admin_url( 'edit.php' ) ), count( $pages ) ) );
 					}
 					break;
 			}

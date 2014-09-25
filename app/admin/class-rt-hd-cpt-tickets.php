@@ -356,8 +356,25 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 		 * @param $query
 		 */
 		function pre_filter( $query ) {
+			//var_dump( $query );
 			if ( isset( $_GET['post_type'] ) && $_GET['post_type'] == Rt_HD_Module::$post_type ) {
 				$orderby = $query->get( 'orderby' );
+				if ( isset( $_GET['contact_id'] ) ) {
+					$formss = array();
+					$contact_id = $_GET['contact_id'];
+					global $wpdb;
+					global $rt_person;
+					$contact_froms = $wpdb->get_results(
+						"SELECT p2p_from
+							FROM wp_p2p
+								WHERE p2p_type = '".Rt_HD_Module::$post_type.'_to_'.$rt_person->post_type.
+										"' AND p2p_to = ". $contact_id);
+
+					foreach ( $contact_froms as $form ){
+						$formss[] = intval( $form->p2p_from );
+					}
+					$query->set( 'post__in', $formss );
+				}
 				if ( isset( $orderby ) && ! empty( $orderby ) ){
 					switch ( $orderby ) {
 						case 'Ticket':
@@ -401,6 +418,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 
 				}
 			}
+
 		}
 
 		/**
