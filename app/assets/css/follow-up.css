@@ -128,3 +128,9 @@
 		opacity: 0.5;
 	}
 }
+
+.ui-widget-header{
+	background: none !important;
+	border: none !important;
+	border-bottom: 1px solid #eee !important;
+}

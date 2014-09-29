@@ -44,6 +44,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			add_action( 'init', array( $this, 'init' ), 6 );
 
 			add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
+
 		}
 
 		/**
@@ -310,7 +311,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 				$ui = $wp_scripts->query( 'jquery-ui-core' );
 				// tell WordPress to load the Smoothness theme from Google CDN
 				$protocol = is_ssl() ? 'https' : 'http';
-				$url      = '$protocol://ajax.googleapis.com/ajax/libs/jqueryui/' . $ui->ver . '/themes/smoothness/jquery-ui.css';
+				$url      = "$protocol://ajax.googleapis.com/ajax/libs/jqueryui/" . $ui->ver . '/themes/smoothness/jquery-ui.css';
 				if ( ! wp_style_is( 'jquery-ui-smoothness' ) ) {
 					wp_enqueue_style( 'jquery-ui-smoothness', $url, false, null );
 				}

@@ -72,14 +72,14 @@ if ( $user_edit ) {
 			<div id="followup_wrapper">
 				<fieldset>
 					<legend>Followup</legend>
-					<form id="add_followup_form" method="post">
+					<!--<form id="add_followup_form" method="post">
 						<input type='hidden' id='edit-comment-id'/> <textarea id="followup_content"
 						                                                      name="followup_content"
 						                                                      placeholder="Add new followup"></textarea>
 						<button class="mybutton add-savefollowup" id="savefollwoup"
-						        type="button"><?php _e( 'Add' ); ?></button>
+						        type="button"><?php /*_e( 'Add' ); */?></button>
 					</form>
-
+-->
 					<!--<button class="mybutton right" type="submit" ><?php _e( 'Add' ); ?></button>-->
 					<form id="thumbnail_upload" method="post" action="#" enctype="multipart/form-data">
 						<input type="file" name="thumbnail" id="thumbnail"> <input type='hidden'
@@ -97,7 +97,7 @@ if ( $user_edit ) {
 					<!--						<input type="file" class="right" name="ticket_attach_file" id="attachmentList" multiple />-->
 					<div class="row">
 						<?php
-						$page          = 0;
+/*						$page          = 0;
 						$comment_count = count( get_comments(
 													array(
 														//'meta_key'   => '_rthd_privacy',
@@ -116,16 +116,16 @@ if ( $user_edit ) {
 								//								'number'     => '10',
 								//								'offset'     => $page * 10,
 							) );
-						?>
-						<div class="large-12 columns <?php echo esc_attr( ( empty( $comments ) ) ? 'hide' : '' ); ?>">
+						*/?>
+	<!--					<div class="large-12 columns <?php /*echo esc_attr( ( empty( $comments ) ) ? 'hide' : '' ); */?>">
 							<a class="accordion-expand-all right" href="#" data-isallopen="false"><i
 									class="general foundicon-down-arrow" title="Expand All"></i></a>
 						</div>
-						<div class="large-12 columns" id="commentlist">
+	-->					<div class="large-12 columns" id="commentlist">
 
 	<?php
-
-	global $prev_month, $prev_year, $prev_day;
+	rthd_get_template( 'admin/followup-common.php', array( 'post' => $post ) );
+/*	global $prev_month, $prev_year, $prev_day;
 	$prev_month = '';
 	$prev_day   = '';
 	$prev_year  = '';
@@ -167,7 +167,7 @@ if ( $user_edit ) {
 			$all_hd_participants = array_merge( $all_hd_participants, $p_arr );
 		}
 	}
-	$all_hd_participants = array_filter( array_unique( $all_hd_participants ) );
+	$all_hd_participants = array_filter( array_unique( $all_hd_participants ) );*/
 	?>
 						</div>
 						<!--<div

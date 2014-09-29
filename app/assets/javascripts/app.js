@@ -33,7 +33,6 @@ jQuery( document ).ready( function ( $ ) {
 			control.replaceWith( control = control.clone( true ) );
 			jQuery('#submit-ajax' ).removeAttr('disabled');
 		}
-
 	}
 
 	function format_date_moment() {
@@ -51,7 +50,7 @@ jQuery( document ).ready( function ( $ ) {
 
 	$( '.rthd_sticky_div' ).stickyfloat( {duration: 400, delay: 3, offsetY: 40} );
 
-	$( "#savefollwoup" ).click( function () {
+	/*$( "#savefollwoup" ).click( function () {
 		var followuptype = $( "#followup-type" ).val();
 
 		var requestArray = new Object();
@@ -99,7 +98,7 @@ jQuery( document ).ready( function ( $ ) {
 			        }
 		        } );
 
-	} );
+	} );*/
 
 	$( "#commentlist .comment-wrapper" ).filter( ":first" ).show();
 
@@ -166,4 +165,153 @@ jQuery( document ).ready( function ( $ ) {
 			}
 		} );
 	} );
+
+		var commentid;
+		jQuery("#delfollowup" ).click(function() {
+			var r = confirm( "Are you sure you want to remove this Followup?" );
+			if ( r != true ) {
+				e.preventDefault();
+				return false;
+			}
+			jQuery.ajax( { url: ajaxurl,
+				             type: 'POST',
+				             dataType: 'json',
+				             data: {
+					             action: 'helpdesk_delete_followup',
+					             comment_id: commentid,
+				             },
+				             success: function ( data ) {
+					             if ( data.status ) {
+						             jQuery( "#comment-" + commentid ).fadeOut( 500, function () {
+							             jQuery( this ).remove();
+						             } );
+						             jQuery("#dialog-form").dialog().dialog("close");
+					             } else {
+						             alert( "error in delete comment from server" );
+					             }
+				             },
+				             error: function ( xhr, textStatus, errorThrown ) {
+					             alert( "error in remove " );
+				             }
+			             } );
+
+		});
+
+	jQuery( 'li.self .messages' ).click( function () {
+		jQuery('#edited_followup_content' ).val( jQuery(this).find('p').text().replace(/\s+/g, " ") );
+
+		commentid=jQuery(this).find('#followup-id' ).val();
+		jQuery("#dialog-form").dialog().dialog("close");
+		jQuery( "#dialog-form" ).dialog( "open" );
+
+	} );
+
+		jQuery("#editfollowup" ).click(function(){
+			var requestArray = new Object();
+			if (! jQuery('#edited_followup_content' ).val()){
+				alert("Please enter comment");
+				return false;
+			}
+			if (jQuery('#edited_followup_content' ).val().replace(/\s+/g, " ") === jQuery('#comment-'+commentid ).find('p' ).val().replace(/\s+/g, " ") ){
+				alert('You have not edited comment! :/');
+				return false;
+			}
+			requestArray['post_type'] = rthd_post_type;
+			requestArray["comment_id"] = commentid ;
+			requestArray["action"] = "rthd_add_new_followup_ajax";
+			requestArray['followuptype']="comment";
+			requestArray['followup_ticket_unique_id']=jQuery('#ticket_unique_id' ).val();
+			requestArray['followup_private']='no';
+			requestArray['followup_post_id']=jQuery('#post-id' ).val();
+			//requestArray["followuptype"] = followuptype;
+			//requestArray["followup_post_id"] = jQuery( "#ticket_id" ).val();
+			//requestArray["follwoup-time"] = jQuery( "#follwoup-time" ).val();
+			requestArray["followup_content"]=jQuery('#edited_followup_content' ).val().replace(/\s+/g, " ");
+
+			jQuery.ajax(
+				{
+					url: ajaxurl,
+					dataType: "json",
+					type: 'post',
+					data: requestArray,
+					success: function ( data ) {
+						if ( data.status ) {
+							jQuery('#comment-'+commentid ).find('p' ).text(jQuery('#edited_followup_content' ).val().replace(/\s+/g, " "));
+							jQuery("#dialog-form").dialog().dialog("close");
+						} else {
+							alert( data.message )
+						}
+					},
+					error: function (data){
+						alert("Sorry something went wrong!");
+					}
+				} );
+		});
+
+
+		jQuery( "#savefollwoup" ).click( function () {
+			var followuptype = jQuery( "#followup-type" ).val();
+
+			var requestArray = new Object();
+			requestArray['post_type'] = rthd_post_type;
+			requestArray["comment_id"] = jQuery( "#edit-comment-id" ).val();
+			requestArray["action"] = "rthd_add_new_followup_front";
+			requestArray["followuptype"] = '';//'note';
+
+			requestArray["followup_ticket_unique_id"] = jQuery( "#ticket_unique_id" ).val();
+			if ( ! requestArray["followup_ticket_unique_id"]) {
+				alert('Please publish ticket before adding followup! :( ');
+				return false;
+			};
+			requestArray["follwoup-time"] = jQuery( "#follwoup-time" ).val();
+
+			if ( jQuery( "#followup_content" ).val() == "" && typeof tinyMCE != 'undefined' ) {
+				jQuery( "#followup_content" ).val( tinyMCE.get( 'followup_content' ).getContent() );
+			}
+			requestArray["followup_content"] = jQuery( "#followup_content" ).val();
+			if ( ! requestArray["followup_content"] ) {
+				alert( "Please input followup :/" );
+				return false;
+			}
+			requestArray["attachemntlist"] = new Array();
+			jQuery( "#attachmentList input" ).each( function () {
+				requestArray["attachemntlist"].push( jQuery( this ).val() );
+			});
+
+
+			console.log(requestArray);
+			requestArray['user_edit'] = rthd_user_edit;
+			jQuery.ajax( {
+				             url: ajaxurl,
+				             dataType: "json",
+				             type: 'post',
+				             data: requestArray,
+				             success: function ( data ) {
+					             if ( data.status ) {
+
+
+						             /* jQuery( "#commentlist" ).prepend( data.data );
+						              jQuery( ".moment-from-now" ).each( function () {
+						              s
+						              if ( jQuery( this ).is( ".comment-date" ) ) {
+						              jQuery( this ).html( moment( new Date( jQuery( this ).attr( "title" ) ) ).fromNow() );
+						              } else {
+						              jQuery( this ).html( moment( new Date( jQuery( this ).html() ) ).fromNow() );
+						              }
+						              } );*/
+						             var newcomment=" <li class='self'> <div class='avatar'> " + jQuery("#user-avatar" ).val() + " </div> <div class='messages'> <p>" + jQuery('#followup_content' ).val() + " </p> <time title='just now' ><span title='"+ jQuery('#user_email').val() +"'>" +jQuery('#user-name' ).val()+ "</span>  • now </time> </div> </li>";
+						             console.log(newcomment);
+						             jQuery('#chat-UI' ).prepend(newcomment);
+						             jQuery( "#followup_content" ).val( '' );
+						             /*jQuery( "#commentlist .comment-wrapper" ).filter( ":first" ).show();
+						              if ( ! jQuery( '.accordion-expand-all' ).parent().is( ':visible' ) ) {
+						              jQuery( '.accordion-expand-all' ).parent().show();
+						              }*/
+					             } else {
+						             alert( data.message );
+					             }
+				             }
+			             } );
+		} );
+
 } );
