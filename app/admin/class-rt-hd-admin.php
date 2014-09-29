@@ -70,6 +70,8 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 				wp_enqueue_style( 'rthd_css', RT_HD_URL . 'app/assets/css/rt-hd-css.css', array(), RT_HD_VERSION );
 				wp_enqueue_script( 'jquery-tiptip', RT_HD_URL . 'app/assets/javascripts/jquery-tiptip/jquery.tipTip.js', array( 'jquery' ), RT_HD_VERSION, true );
 				wp_enqueue_script( 'rthd-admin-js', RT_HD_URL . 'app/assets/javascripts/admin_new.js', array( 'jquery-tiptip' ), RT_HD_VERSION, true );
+				wp_enqueue_script( 'jquery' );
+				wp_enqueue_script( 'jquery-form', array( 'jquery' ), false, true );
 
 			}
 

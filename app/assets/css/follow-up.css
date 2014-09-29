@@ -119,6 +119,9 @@
 	font-size: 0.7rem;
 	color: #ccc;
 }
+.messages:hover{
+	cursor : help;
+}
 
 @keyframes pulse {
 	from {

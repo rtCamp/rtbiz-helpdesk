@@ -80,18 +80,7 @@ if ( $user_edit ) {
 						        type="button"><?php /*_e( 'Add' ); */?></button>
 					</form>
 -->
-					<!--<button class="mybutton right" type="submit" ><?php _e( 'Add' ); ?></button>-->
-					<form id="thumbnail_upload" method="post" action="#" enctype="multipart/form-data">
-						<input type="file" name="thumbnail" id="thumbnail"> <input type='hidden'
-						                                                           value='<?php wp_create_nonce( 'upload_thumb' ); ?>'
-						                                                           name='_nonce'/> <input type="hidden"
-						                                                                                  name="post_id"
-						                                                                                  id="post_id"
-						                                                                                  value="<?php echo esc_attr( $post->ID ); ?>">
-						<input type="hidden" name="action" id="action" value="my_upload_action"> <br/> <input
-							id="submit-ajax" name="submit-ajax" type="submit" value="upload" style="margin-top: 20px">
-					</form>
-					<div id="output1"></div>
+
 
 
 					<!--						<input type="file" class="right" name="ticket_attach_file" id="attachmentList" multiple />-->

@@ -37,53 +37,6 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 		public function __construct() {
 			add_filter( 'template_include', array( $this, 'template_include' ), 1, 1 );
 			add_filter( 'wp_title', array( $this, 'change_title' ), 9999, 1 );
-			//hook the Ajax call
-			//for logged-in users
-			add_action( 'wp_ajax_my_upload_action', array( $this, 'my_ajax_upload' ) );
-			//for none logged-in users
-			add_action( 'wp_ajax_nopriv_my_upload_action', array( $this, 'my_ajax_upload' ) );
-
-		}
-
-		/**
-		 * uploading file using ajax returns json of new created file details.
-		 *@since rt-Helpdesk 0.1
-		 */
-		function my_ajax_upload() {
-
-			//simple Security check
-			//check_ajax_referer('upload_thumb');
-			//get POST data
-			$post_id = $_POST['post_id'];
-			//require the needed files
-			require_once( ABSPATH . 'wp-admin' . '/includes/image.php' );
-			require_once( ABSPATH . 'wp-admin' . '/includes/file.php' );
-			require_once( ABSPATH . 'wp-admin' . '/includes/media.php' );
-			$returnData = array();
-			//then loop over the files that were sent and store them using  media_handle_upload();
-			//			var_dump($_FILES);
-			if ( $_FILES ) {
-				foreach ( $_FILES as $file => $array ) {
-					if ( $_FILES[ $file ]['error'] !== UPLOAD_ERR_OK ) {
-						$returnData['msg']    = 'upload error : ' . $_FILES[ $file ]['error'];
-						$returnData['status'] = false;
-						die();
-					}
-					$attach_id = media_handle_upload( $file, $post_id );
-				}
-			}
-
-
-			//and if you want to set that image as Post  then use:
-			update_post_meta( $post_id, '_thumbnail_id', $attach_id );
-			$returnData['status']    = true;
-			$returnData['attach_id'] = $attach_id;
-			$returnData['url']       = esc_url( wp_get_attachment_url( $attach_id ) );
-			$returnData['name']      = basename( get_attached_file( $attach_id ) );
-			$returnData['img']       = wp_mime_type_icon( 'image/jpeg' );
-			$returnData['msg']       = 'uploaded the new Thumbnail';
-			echo json_encode( $returnData );
-			die();
 		}
 
 		/**

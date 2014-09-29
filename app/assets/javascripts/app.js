@@ -1,15 +1,15 @@
 rthd_user_edit = rthd_user_edit[0];
 jQuery( document ).ready( function ( $ ) {
 
-
+	jQuery('#submit-ajax' ).click(function (){
 		var options = {
-		//	target:        '#output1',      // target element(s) to be updated with server response
+			//	target:        '#output1',      // target element(s) to be updated with server response
 			beforeSubmit:  showRequest,     // pre-submit callback
 			success:       showResponse,    // post-submit callback
-			url:    ajaxurl                 // since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
+			url:    ajaxurl                 //  ajaxurl is always defined in the admin header and points to admin-ajax.php
 		};
-		// bind form using 'ajaxForm'
-		jQuery('#thumbnail_upload').ajaxForm(options);
+		jQuery('#thumbnail_upload').ajaxSubmit(options );
+	});
 
 	function showRequest(formData, jqForm, options) {
 		//do extra stuff before submit like disable the submit button
@@ -49,56 +49,6 @@ jQuery( document ).ready( function ( $ ) {
 	format_date_moment();
 
 	$( '.rthd_sticky_div' ).stickyfloat( {duration: 400, delay: 3, offsetY: 40} );
-
-	/*$( "#savefollwoup" ).click( function () {
-		var followuptype = $( "#followup-type" ).val();
-
-		var requestArray = new Object();
-		requestArray['post_type'] = rthd_post_type;
-		requestArray["comment_id"] = $( "#edit-comment-id" ).val();
-		requestArray["action"] = "rthd_add_new_followup_front";
-		requestArray["followuptype"] = '';//'note';
-
-		requestArray["followup_ticket_unique_id"] = $( "#ticket_unique_id" ).val();
-		requestArray["follwoup-time"] = $( "#follwoup-time" ).val();
-
-		if ( jQuery( "#followup_content" ).val() == "" && typeof tinyMCE != 'undefined' ) {
-			jQuery( "#followup_content" ).val( tinyMCE.get( 'followup_content' ).getContent() );
-		}
-		requestArray["followup_content"] = $( "#followup_content" ).val();
-		if ( requestArray["followup_content"] == "" ) {
-			alert( "Please Type Content Atleast" );
-			return false;
-		}
-		requestArray["attachemntlist"] = new Array();
-		$( "#attachmentList input" ).each( function () {
-			requestArray["attachemntlist"].push( $( this ).val() );
-		} )
-
-
-		console.log(requestArray);
-		requestArray['user_edit'] = rthd_user_edit;
-		$.ajax( {
-			        url: ajaxurl,
-			        dataType: "json",
-			        type: 'post',
-			        data: requestArray,
-			        success: function ( data ) {
-				        if ( data.status ) {
-					        jQuery( "#followup_content" ).val( '' );
-					        $( "#commentlist" ).prepend( data.data );
-					        format_date_moment();
-					        $( "#commentlist .comment-wrapper" ).filter( ":first" ).show();
-					        if ( ! $( '.accordion-expand-all' ).parent().is( ':visible' ) ) {
-						        $( '.accordion-expand-all' ).parent().show();
-					        }
-				        } else {
-					        alert( data.message );
-				        }
-			        }
-		        } );
-
-	} );*/
 
 	$( "#commentlist .comment-wrapper" ).filter( ":first" ).show();
 
@@ -144,27 +94,6 @@ jQuery( document ).ready( function ( $ ) {
 		                  }
 	                  }, "#commentlist .comment-wrapper" );
 
-	var page = 1;
-	$( document ).on( 'click', '#load_more_btn', function ( e ) {
-		e.preventDefault();
-		$.post( ajaxurl, {
-			action: 'rthd_get_ticket_comments_ajax',
-			page: page,
-			ticket_unique_id: $( "#ticket_unique_id" ).val()
-		}, function ( data ) {
-			data = JSON.parse( data );
-			if ( typeof data.status != undefined && data.status == 'success' ) {
-				$( '#commentlist' ).append( data.data );
-				page ++;
-				if ( data.more == false ) {
-					$( "#load_more_btn" ).hide();
-				}
-				format_date_moment();
-			} else {
-				alert( data );
-			}
-		} );
-	} );
 
 		var commentid;
 		jQuery("#delfollowup" ).click(function() {

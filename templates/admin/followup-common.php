@@ -6,7 +6,7 @@ function right_comment( $comment ) {
 		<div class="avatar">
 			<?php echo get_avatar( $comment, 40 ); ?>
 		</div>
-			<div class="messages">
+			<div class="messages" title="Click for action">
 				<input id="followup-id" type="hidden" value="<?php echo esc_attr( $comment->comment_ID ); ?>">
 				<p><?php echo esc_attr( $comment->comment_content ); ?>
 				</p>
@@ -78,6 +78,18 @@ $current_user = wp_get_current_user();
 	<!--<button class="mybutton right" type="submit" >Add</button>-->
 	<!--<input type="file" class="right" name="ticket_attach_file" id="ticket_attach_file" multiple />-->
 </form>
+
+<form id="thumbnail_upload" method="post" enctype="multipart/form-data">
+	<input type="file" name="thumbnail" id="thumbnail"> <input type='hidden'
+	                                                           value='<?php wp_create_nonce( 'upload_thumb' ); ?>'
+	                                                           name='_nonce'/> <input type="hidden"
+	                                                                                  name="post_id"
+	                                                                                  id="post_id"
+	                                                                                  value="<?php echo esc_attr( $post->ID ); ?>">
+	<input type="hidden" name="action" id="action" value="my_upload_action"> <br/> <input
+		id="submit-ajax" name="submit-ajax" type="button" class="button" value="upload" style="margin-top: 5px">
+</form>
+<div id="output1"></div>
 <?php
 $user_edit = false;
 if ( current_user_can( "edit_{$post->post_type}" ) ) {
@@ -88,7 +100,7 @@ if ( $user_edit ){
 	?>
 	<div id="dialog-form" title="Edit Followup" style="display: none">
 		<textarea id="edited_followup_content" name="edited_followup_content" placeholder="Add new followup" style="width:100%"> </textarea>
-		<button class="edit-followup button button-primary" id="editfollowup" type="button"> Edit </button>
+		<button class="edit-followup button button-primary" id="editfollowup" type="button"> Update </button>
 		<button class="edit-followup button" id="delfollowup" type="button"> Delete </button>
 	</div>
 	<?php
