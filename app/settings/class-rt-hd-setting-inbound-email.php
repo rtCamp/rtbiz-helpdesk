@@ -102,6 +102,15 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 			$google_acs = $rt_hd_settings->get_user_google_ac( $this->user_id );
 
 			$imap_servers = $rt_hd_imap_server_model->get_all_servers();
+			if ( $responce == false &&( ! empty( $google_acs ) ) ) {
+				foreach ( $google_acs as $acs ){
+					if ( $acs->type == 'goauth' ) {
+						$rt_hd_settings->delete_user_google_ac( $acs->email );
+					}
+				}
+				$google_acs = $rt_hd_settings->get_user_google_ac( $this->user_id );
+			}
+
 			if ( $responce == false && ( empty( $google_acs ) && empty( $imap_servers )  ) ){
 				echo '<div id="error_handle" class=""><p>Please set google api detail OR Imap Servers detail on <a href="' . esc_url( admin_url( 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&page=rthd-settings' ) ) . '">setting</a>  Page </p></div>';
 				return;

@@ -245,10 +245,16 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'subtitle' => __( 'Events to be notified to users' ),
 						'desc'     => __( 'These events will be notified to the Notification Emails whenever they occur.' ),
 						'type'     => 'checkbox',
-						'options'  => array(
+						'options' => array(
 							'new_ticket_created'      => __( 'Whenever a New Ticket is created.' ),
-							'new_comment_added'       => __( 'Whenever a New Comment is added to a Ticket.' ),
+							'new_comment_added'       => __( 'Whenever a New follow up is added to a Ticket.' ),
+							'followup_edited'         => __( 'Whenever a follow up is edited' ),
+							'followup_deleted'        => __( 'Whenever a follow up is deleted' ),
 							'status_metadata_changed' => __( 'Whenever any status or metadata changed for a Ticket.' ),
+							'new_ticket_assigned'     => __( 'Whenever new ticket assigned' ),
+							'new_ticket_reassigned'   => __( 'Whenever new ticket reassigned' ),
+							'ticket_subscribed'       => __( 'Whenever new ticket subscribed' ),
+							'ticket_unsubscribed'     => __( 'Whenever new ticket unsubscribed' ),
 						),
 					),
 					array(

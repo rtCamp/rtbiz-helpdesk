@@ -864,7 +864,9 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		public function mail_new_comment_data( $comment_id ) {
-
+			if ( ! $this->check_setting_for_new_followup_email( ) ) {
+				return false;
+			}
 			if ( isset( $_REQUEST['commentSendAttachment'] ) && $_REQUEST['commentSendAttachment'] != '' ) {
 				$arrAttache = explode( ',', $_REQUEST['commentSendAttachment'] );
 				foreach ( $arrAttache as $strAttach ) {
@@ -1483,7 +1485,9 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 				$body .= '<br/> ';
 				if ( $flag ) {
-					$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, $_POST['comment_id'] );
+					if ( rthd_get_redux_settings( )['rthd_notification_events']['followup_edited'] == 1 ) {
+						$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, $_POST['comment_id'] );
+					}
 				}
 
 				$returnArray['status']        = true;
@@ -1618,6 +1622,9 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$email_type  = '';
 				$imap_server = '';
 				global $rt_hd_settings;
+				if ( ! $this->check_setting_for_new_followup_email( ) ) {
+					return false;
+				}
 				$accessToken = $rt_hd_settings->get_accesstoken_from_email( $fromemail, $signature, $email_type, $imap_server );
 
 				if ( strpos( $signature, '</' ) == false ) {
@@ -1934,7 +1941,19 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			if ( ! isset( $_POST['comment_id'] ) ) {
 				die( 0 );
 			}
+
 			$response['status'] = wp_delete_comment( $_POST['comment_id'], true );
+
+			if ( rthd_get_redux_settings( )['rthd_notification_events']['followup_deleted'] == 1 ) {
+				$currentUser = get_user_by( 'id', get_current_user_id() );
+				$comment = get_comment( $_POST['comment_id'] );
+				$body = ' Follwup Deleted by ' . $currentUser->display_name;
+				$body .= '<br/><b>Body : </b>' . $comment->comment_content;
+				$body .= '<br/> ';
+				$comment_post_ID = $_POST['post_id'];
+				$title           = $_POST['comment_id'] . ' follow up deleted ';
+				$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, $_POST['comment_id'] );
+			}
 			echo json_encode( $response );
 			die( 0 );
 		}
@@ -2011,6 +2030,12 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$rows_affected = $rt_hd_mail_thread_importer_model->add_thread( $args );
 
 			return $rows_affected;
+		}
+		public function check_setting_for_new_followup_email(){
+			if ( rthd_get_redux_settings( )['rthd_notification_events']['new_comment_added'] != 1 ){
+				return false;
+			}
+			return true;
 		}
 
 	}
