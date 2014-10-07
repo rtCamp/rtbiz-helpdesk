@@ -43,7 +43,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			$this->set_arguments();
 
 			// Set a few help tabs so you can see how it's done
-			$this->set_helptabs();
+			//			$this->set_helptabs();
 
 			// Create the sections and fields
 			$this->set_sections();
@@ -225,8 +225,8 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'options'  => array(
 							'wp_mail'         => __( 'WordPress wp_mail Function' ),
 							'user_mail_login' => __( 'User\'s own Mail Login - (Google OAuth / SMTP Login etc. as per configuration)' ),
-							'amazon_ses'      => __( 'Amazon SES - (Articles) - Not working as of now' ),
-							'google_smtp'     => __( 'Google SMTP - NOT Recommended (Articles) - Not working as of now' )
+							//							'amazon_ses'      => __( 'Amazon SES - (Articles) - Not working as of now' ),
+							//							'google_smtp'     => __( 'Google SMTP - NOT Recommended (Articles) - Not working as of now' )
 						),
 						'default'  => 'wp_mail',
 					),
@@ -389,7 +389,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 
 			return true;
 		}
-
+		/*
 		public function set_helptabs() {
 
 			// Custom page help tabs, displayed using the help API. Tabs are shown in order of definition.
@@ -409,7 +409,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			$this->args['help_sidebar'] = __( '<p>This is the sidebar content, HTML is allowed.</p>', 'redux-framework-demo' );
 
 			return true;
-		}
+		}*/
 
 		/**
 		 *
@@ -605,35 +605,35 @@ function rthd_imap_servers( $field, $value ) {
 /**
  * Custom function for the callback validation referenced above
  * */
-if ( ! function_exists( 'redux_validate_callback_function' ) ):
-
-	function redux_validate_callback_function( $field, $value, $existing_value ) {
-		$error = false;
-		$value = 'just testing';
-
-		/*
-		  do your validation
-
-		  if(something) {
-		  $value = $value;
-		  } elseif(something else) {
-		  $error = true;
-		  $value = $existing_value;
-		  $field['msg'] = 'your custom error message';
-		  }
-		 */
-
-		$return['value'] = $value;
-		if ( $error == true ) {
-			$return['error'] = $field;
-		}
-
-		return $return;
-	}
-
-
-
-
-
-
-endif;
+//if ( ! function_exists( 'redux_validate_callback_function' ) ):
+//
+//	function redux_validate_callback_function( $field, $value, $existing_value ) {
+//		$error = false;
+//		$value = 'just testing';
+//
+//		/*
+//		  do your validation
+//
+//		  if(something) {
+//		  $value = $value;
+//		  } elseif(something else) {
+//		  $error = true;
+//		  $value = $existing_value;
+//		  $field['msg'] = 'your custom error message';
+//		  }
+//		 */
+//
+//		$return['value'] = $value;
+//		if ( $error == true ) {
+//			$return['error'] = $field;
+//		}
+//
+//		return $return;
+//	}
+//
+//
+//
+//
+//
+//
+//endif;

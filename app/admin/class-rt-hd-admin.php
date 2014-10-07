@@ -42,7 +42,6 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		function load_styles_scripts() {
-
 			global $post, $pagenow, $wp_scripts;
 
 			if ( in_array( $pagenow, array( 'edit.php', 'post.php', 'post-new.php' ) ) ) {

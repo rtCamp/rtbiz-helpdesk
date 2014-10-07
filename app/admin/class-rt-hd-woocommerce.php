@@ -31,6 +31,8 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 			$this->hooks();
 		}
 
+		var $isWoocommerceActive;
+
 
 		/**
 		 * Hook
@@ -86,9 +88,10 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 		function rt_hd_support_form_callback() {
 
 			if ( ! is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
-				?>
-				<div>WooCommerce Plugin is not activated!</div><?php
-				return;
+				$isWoocommerceActive = false;
+			}
+			else {
+				$isWoocommerceActive = true;
 			}
 
 			wp_enqueue_style( 'support-form-style', RT_HD_URL . 'app/assets/css/support_form_front.css', false, RT_HD_VERSION, 'all' );
@@ -103,27 +106,28 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 					<div id="info" class="success">Your Support request Accepted..</div><?php
 				}
 			}
-
-			if ( isset( $_GET['order_id'] ) ) {
-				$order       = new WC_Order( $_GET['order_id'] );
-				$items       = $order->get_items();
-				$order_email = $order->billing_email;
-				foreach ( $items as $item ) {
-					$product_name         = $item['name'];
-					$product_id           = $item['product_id'];
-					$product_variation_id = $item['variation_id'];
-					$option .= "<option value=$product_id>$product_name</option>";
+			if ( $isWoocommerceActive ) {
+				if ( isset( $_GET['order_id'] ) ) {
+					$order       = new WC_Order( $_GET['order_id'] );
+					$items       = $order->get_items();
+					$order_email = $order->billing_email;
+					foreach ( $items as $item ) {
+						$product_name         = $item['name'];
+						$product_id           = $item['product_id'];
+						$product_variation_id = $item['variation_id'];
+						$option .= "<option value=$product_id>$product_name</option>";
+					}
+				} else {
+					$arg      = array(
+						'post_type' => 'product',
+						'nopagging' => true,
+					);
+					$products = get_posts( $arg );
+					foreach ( $products as $product ) {
+						$option .= "<option value=$product->ID>$product->post_title</option>";
+					}
 				}
-			} else {
-				$arg      = array(
-					'post_type' => 'product',
-					'nopagging' => true,
-				);
-				$products = get_posts( $arg );
-				foreach ( $products as $product ) {
-					$option .= "<option value=$product->ID>$product->post_title</option>";
-				}
-			} ?>
+			}?>
 			<script type="text/javascript">
 				jQuery(document).ready(function ($) {
 					//print list of selected file
@@ -144,13 +148,16 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 			<h2><?php _e( 'Get Support', 'RT_HD_TEXT_DOMAIN' ); ?></h2>
 			<form method="post" action="" class="comment-form pure-form pure-form-aligned"
 			      enctype="multipart/form-data">
-				<div class="pure-control-group">
-					<!--					<label>--><?php //_e( 'Product', RT_HD_TEXT_DOMAIN ); ?><!--</label>-->
-					<select name="post[product_id]">
-						<option value="">Choose Product</option>
-						<?php echo balanceTags( $option ); ?>
-					</select>
-				</div>
+
+				<?php if ( $isWoocommerceActive ) { ?>
+					<div class="pure-control-group">
+						<!--					<label>--><?php //_e( 'Product', RT_HD_TEXT_DOMAIN ); ?><!--</label>-->
+						<select name="post[product_id]">
+							<option value="">Choose Product</option>
+							<?php echo balanceTags( $option ); ?>
+						</select>
+					</div>
+				<?php } ?>
 				<div class="pure-control-group">
 					<!--					<label for="email">-->
 					<?php //_e( 'Email', RT_HD_TEXT_DOMAIN ); ?><!--</label>-->
@@ -189,12 +196,15 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 			global $rtbiz_wc_product, $rt_hd_import_operation, $redux_helpdesk_settings;;
 
 			$data = $_POST['post'];
-
-			$product = get_product( $data['product_id'] );
+			$productstr = 'Support';
+			if ( $this->isWoocommerceActive ) {
+				$product = get_product( $data['product_id'] );
+				$productstr = "Support for {$product->post->post_title}";
+			}
 
 			//Ticket created
 			$rt_hd_tickets_id = $rt_hd_import_operation->insert_new_ticket(
-				"Support for {$product->post->post_title}",
+				$productstr,
 				$data['description'],
 				$redux_helpdesk_settings['rthd_default_user'], // it will changed to dynamic once redux option for default assignee shell be introduced
 				'now',
@@ -203,10 +213,12 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 				$data['email']
 			);
 
-			// rt_wc_product taxonomy assign
-			$product_taxonomy = $rtbiz_wc_product->get_taxonomy( $data['product_id'] );
-			if ( isset( $product_taxonomy ) && ! empty( $product_taxonomy ) ) {
-				wp_set_post_terms( $rt_hd_tickets_id, array( $product_taxonomy->term_id ), $rtbiz_wc_product->product_slug );
+			if ( $this->isWoocommerceActive ) {
+				// rt_wc_product taxonomy assign
+				$product_taxonomy = $rtbiz_wc_product->get_taxonomy( $data['product_id'] );
+				if ( isset( $product_taxonomy ) && ! empty( $product_taxonomy ) ) {
+					wp_set_post_terms( $rt_hd_tickets_id, array( $product_taxonomy->term_id ), $rtbiz_wc_product->product_slug );
+				}
 			}
 
 			// Created attachment
@@ -237,9 +249,11 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 				}
 			}
 
-			//Stoe Order ID
-			if ( isset( $_GET['order_id'] ) ) {
-				update_post_meta( $rt_hd_tickets_id, '_rtbiz_hd_woocommerce_order_id', $_GET['order_id'] );
+			if ( $this->isWoocommerceActive ) {
+				//Store Order ID
+				if ( isset( $_GET['order_id'] ) ) {
+					update_post_meta( $rt_hd_tickets_id, '_rtbiz_hd_woocommerce_order_id', $_GET['order_id'] );
+				}
 			}
 
 			return $rt_hd_tickets_id;

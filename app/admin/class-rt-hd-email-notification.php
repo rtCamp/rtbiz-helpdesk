@@ -34,7 +34,6 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		 * @return mixed
 		 */
 		public function insert_new_send_email( $subject, $body, $toemail = array(), $ccemail = array(), $bccemail = array(), $attachement = array(), $refrence_id = 0, $refrence_type = 'notification' ) {
-
 			$user_id = get_current_user_id();
 			global $rt_hd_mail_outbound_model;
 			$settings = rthd_get_settings();
@@ -51,8 +50,59 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				'refrence_id'   => $refrence_id,
 				'refrence_type' => $refrence_type,
 			);
+			if ( $this->is_wp_email( ) ) {
+				$this->send_wp_email( $args );
+				return true;
+			}
+			else {
+				return $rt_hd_mail_outbound_model->add_outbound_mail( $args );
+			}
+		}
 
-			return $rt_hd_mail_outbound_model->add_outbound_mail( $args );
+		/**
+		 * send email using wp email
+		 * @param $args
+		 */
+		public function send_wp_email( $args ) {
+			$arrayBCC  = unserialize( $args['bccemail'] );
+			$arrayCC   = unserialize( $args['ccemail'] );
+			$arrayTo   = unserialize( $args['toemail'] );
+			$headers[] = 'From:' . $args['fromemail'];
+			add_filter( 'wp_mail_from', 'rthd_my_mail_from' );
+			if ( ! empty( $arrayBCC ) ) {
+				foreach ( $arrayBCC as $temail ) {
+					add_filter( 'wp_mail_content_type', 'rthd_set_html_content_type' );
+					$res = wp_mail( array( $temail['email'] ), $args['subject'], $args['body'], $headers );
+					remove_filter( 'wp_mail_content_type', 'rthd_set_html_content_type' );
+				}
+			}
+
+			if ( ! empty( $arrayCC ) ) {
+				foreach ( $arrayCC as $temail ) {
+					add_filter( 'wp_mail_content_type', 'rthd_set_html_content_type' );
+					$res = wp_mail( array( $temail['email'] ), $args['subject'], $args['body'], $headers );
+					remove_filter( 'wp_mail_content_type', 'rthd_set_html_content_type' );
+				}
+			}
+
+			if ( ! empty( $arrayTo ) ) {
+				foreach ( $arrayTo as $key => $temail ) {
+					add_filter( 'wp_mail_content_type', 'rthd_set_html_content_type' );
+					$res = wp_mail( array( $temail['email'] ), $args['subject'], $args['body'], $headers );
+					remove_filter( 'wp_mail_content_type', 'rthd_set_html_content_type' );
+				}
+			}
+		}
+
+		/**
+		 * check if user have selected wp_mail for sending email
+		 * @return bool
+		 */
+		public function is_wp_email() {
+			if ( rthd_get_redux_settings( )['rthd_outgoing_email_delivery'] == 'wp_mail' ) {
+				return true;
+			}
+			return false;
 		}
 
 		/**

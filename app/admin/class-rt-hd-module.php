@@ -126,6 +126,8 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 			$this->custom_menu_order = array(
 				'rthd-' . self::$post_type . '-dashboard',
 				'rthd-all-' . self::$post_type,
+				'edit_rtbiz_hd_tickets',
+				'edit_rtbiz_hd_tickets',
 				'rthd-add-' . self::$post_type,
 				$rt_hd_attributes->attributes_page_slug,
 			);
@@ -264,7 +266,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 		 * @since 0.1
 		 */
 		function hooks() {
-			//add_filter( 'custom_menu_order', array($this, 'custom_pages_order') );
+			add_filter( 'custom_menu_order', array( $this, 'custom_pages_order' ) );
 
 			add_action( 'rt_attributes_relations_added', array( $this, 'create_database_table' ) );
 			add_action( 'rt_attributes_relations_updated', array( $this, 'create_database_table' ) );
@@ -378,7 +380,8 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				$new_index = 5;
 				foreach ( $this->custom_menu_order as $item ) {
 					foreach ( $module_menu as $p_key => $menu_item ) {
-						if ( in_array( $item, $menu_item ) ) {
+						$out = array_filter( $menu_item, function( $in ) { return true !== $in; } );
+						if ( in_array( $item, $out ) ) {
 							$submenu[ 'edit.php?post_type=' . self::$post_type ][ $new_index ] = $menu_item;
 							unset ( $module_menu[ $p_key ] );
 							$new_index += 5;

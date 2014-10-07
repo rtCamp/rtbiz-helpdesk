@@ -32,43 +32,14 @@ foreach ( $emailRow as $email ) {
 		$updateFlag = false;
 		try {
 			if ( isset( $settings['outgoing_email_delivery'] ) && ! empty( $settings['outgoing_email_delivery'] ) ) {
-				if ( $settings['outgoing_email_delivery'] == 'wp_mail' ) {
-
-					$arrayBCC = unserialize( $email->bccemail );
-					$arrayCC   = unserialize( $email->ccemail );
-					$arrayTo   = unserialize( $email->toemail );
-					$headers[] = 'From:' . $settings['outbound_emails'];
-					add_filter( 'wp_mail_from', 'rthd_my_mail_from' );
-					if ( ! empty( $arrayBCC ) ) {
-						foreach ( $arrayBCC as $temail ) {
-							add_filter( 'wp_mail_content_type', 'rthd_set_html_content_type' );
-							$res = wp_mail( array( $temail['email'] ), $email->subject, $email->body, $headers );
-							remove_filter( 'wp_mail_content_type', 'rthd_set_html_content_type' );
-						}
-					}
-
-					if ( ! empty( $arrayCC ) ) {
-						foreach ( $arrayCC as $temail ) {
-							add_filter( 'wp_mail_content_type', 'rthd_set_html_content_type' );
-							$res = wp_mail( array( $temail['email'] ), $email->subject, $email->body, $headers );
-							remove_filter( 'wp_mail_content_type', 'rthd_set_html_content_type' );
-						}
-					}
-
-					if ( ! empty( $arrayTo ) ) {
-						foreach ( $arrayTo as $key => $temail ) {
-							add_filter( 'wp_mail_content_type', 'rthd_set_html_content_type' );
-							$res = wp_mail( array( $temail['email'] ), $email->subject, $email->body, $headers );
-							remove_filter( 'wp_mail_content_type', 'rthd_set_html_content_type' );
-						}
-					}
-				} elseif ( $settings['outgoing_email_delivery'] == 'user_mail_login' ) {
+				if ( $settings['outgoing_email_delivery'] == 'user_mail_login' ) {
 					$hdZendEmail->sendemail( $email->fromemail, $accessTokenArray[ $email->fromemail ]['token'], $accessTokenArray[ $email->fromemail ]['email_type'], $accessTokenArray[ $email->fromemail ]['imap_server'], $email->subject, $email->body, unserialize( $email->toemail ), unserialize( $email->ccemail ), unserialize( $email->bccemail ), unserialize( $email->attachement ) );
-				} elseif ( $settings['outgoing_email_delivery'] == 'amazon_ses' ) {
-
-				} elseif ( $settings['outgoing_email_delivery'] == 'google_smtp' ) {
-
 				}
+				//				elseif ( $settings['outgoing_email_delivery'] == 'amazon_ses' ) {
+				//
+				//				} elseif ( $settings['outgoing_email_delivery'] == 'google_smtp' ) {
+				//
+				//				}
 				$updateFlag = true;
 			}
 		} catch ( Exception $e ) {

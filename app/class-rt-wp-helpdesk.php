@@ -172,6 +172,8 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			$rt_hd_logs                  = new Rt_HD_Logs();
 
 			$rt_hd_woocommerce = new Rt_HD_Woocommerce();
+			global $Rt_Hd_Help;
+			$Rt_Hd_Help = new Rt_Hd_Help();
 
 		}
 
