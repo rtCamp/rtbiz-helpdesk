@@ -1302,9 +1302,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					'post_type' => $post_type,
 					'count'     => true,
 				) );
-
+			$returnArray['comment_id'] = $comment_ID;
 			echo json_encode( $returnArray );
-
 			ob_end_flush();
 			die( 0 );
 		}
@@ -1500,7 +1499,6 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 						'count'     => true,
 					) );
 				$returnArray['private']       = get_comment_meta( $_POST['comment_id'], '_rthd_privacy', true );
-
 				echo json_encode( $returnArray );
 				die( 0 );
 			}
@@ -1660,7 +1658,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$notificationFlag = $this->check_setting_for_new_followup_email();
 			$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, $comment_ID, $notificationFlag );
 			$returnArray['status'] = true;
-
+			$returnArray['comment_id'] = $comment_ID;
 			$returnArray['data']          = $this->genrate_comment_html_ajax( $comment );
 			$returnArray['comment_count'] = get_comments( array(
 															'order'     => 'DESC',

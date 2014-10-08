@@ -91,16 +91,10 @@ jQuery(function () {
 			                 } );
 
 		    });
-
-		    jQuery( 'li.self .messages' ).click( function () {
+			jQuery( document ).on('click', 'li.self .messages',function(){
+		    //jQuery( 'li.self .messages' ).click( function () {
 			    jQuery('#edited_followup_content' ).val( jQuery(this).find('p').text().replace(/\s+/g, " ") );
-			    function edituser() {
-			    }
 				commentid=jQuery(this).find('#followup-id' ).val();
-			    function deleteuser() {
-				    e.preventDefault();
-
-			    }
 			    jQuery("#dialog-form").dialog().dialog("close");
 			    jQuery( "#dialog-form" ).dialog( "open" );
 
@@ -179,7 +173,7 @@ jQuery(function () {
                 });
 
 
-                console.log(requestArray);
+                //console.log(requestArray);
                 requestArray['user_edit'] = rthd_user_edit;
                 jQuery.ajax( {
                     url: ajaxurl,
@@ -199,8 +193,9 @@ s
                                     jQuery( this ).html( moment( new Date( jQuery( this ).html() ) ).fromNow() );
                                 }
                             } );*/
-	                        var newcomment=" <li class='self'> <div class='avatar'> " + jQuery("#user-avatar" ).val() + " </div> <div class='messages'> <p>" + jQuery('#followup_content' ).val() + " </p> <time title='just now' ><span title='"+ jQuery('#user_email').val() +"'>" +jQuery('#user-name' ).val()+ "</span>  • now </time> </div> </li>";
-	                        console.log(newcomment);
+	                        //console.log(JSON.stringify(data));
+	                        var newcomment=" <li class='self' id='comment-" + data.comment_id + "'> <div class='avatar'> " + jQuery("#user-avatar" ).val() + " </div> <div class='messages' title='click for action'> <input id='followup-id' type='hidden' value='"+ data.comment_id + "'> <p>" + jQuery('#followup_content' ).val() + " </p> <time><span title='"+ jQuery('#user_email').val() +"'>" +jQuery('#user-name' ).val()+ "</span>  • now </time> </div> </li>";
+	                        //console.log(newcomment);
 	                        jQuery('#chat-UI' ).prepend(newcomment);
 	                        jQuery( "#followup_content" ).val( '' );
                             /*jQuery( "#commentlist .comment-wrapper" ).filter( ":first" ).show();
