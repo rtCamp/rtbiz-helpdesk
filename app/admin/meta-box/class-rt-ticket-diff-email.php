@@ -259,6 +259,9 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 					$emailHTML = $emailTable . $emailHTML;
 					$rt_hd_email_notification->notification_ticket_updated( $post_id, $labels['name'], $emailHTML, $bccemails );
 				}
+				else {
+					$rt_hd_email_notification->notification_ticket_updated( $post_id, $labels['name'], $emailHTML, array() );
+				}
 			} else {
 				$newUser = get_user_by( 'id', $post['post_author'] );
 				if ( $newUser ) {
@@ -266,6 +269,9 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 				}
 				if ( ! empty( $bccemails ) ) {
 					$rt_hd_email_notification->notification_ticket_subscribed( $post_id, $labels['name'], $bccemails );
+				}
+				else {
+					$rt_hd_email_notification->ticket_created_notification( $post_id, $labels['name'], array() );
 				}
 			}
 		}

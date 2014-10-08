@@ -102,12 +102,14 @@ jQuery( document ).ready( function ( $ ) {
 				e.preventDefault();
 				return false;
 			}
+			postid= jQuery('#post-id' ).val();
 			jQuery.ajax( { url: ajaxurl,
 				             type: 'POST',
 				             dataType: 'json',
 				             data: {
 					             action: 'helpdesk_delete_followup',
 					             comment_id: commentid,
+					             post_id : postid,
 				             },
 				             success: function ( data ) {
 					             if ( data.status ) {

@@ -253,9 +253,11 @@ $post_status = $rt_hd_module->get_custom_statuses();
 	} ?>
 		</ul>
 		<ul class="rthd-participant-list large-block-grid-1 small-block-grid-1">
-			<?php foreach ( $all_hd_participants as $email ) {
-				echo "<li class='contact-list'>" . "<div class='row collapse'>" . "<div class='large-2 columns'> " . get_avatar( $email, 24 ) . '</div>' . "<div class='large-9 columns'><a target='_blank' class='heading' href='mailto:" . sanitize_email( $email ) . "' title='" . sanitize_email( $email ). "'>" . sanitize_email( $email  ). '</a></div>' . '</div>' . '</li>';
-			} ?>
+			<?php if ( isset($all_hd_participants) ) {
+		foreach ( $all_hd_participants as $email ) {
+			echo "<li class='contact-list'>" . "<div class='row collapse'>" . "<div class='large-2 columns'> " . get_avatar( $email, 24 ) . '</div>' . "<div class='large-9 columns'><a target='_blank' class='heading' href='mailto:" . sanitize_email( $email ) . "' title='" . sanitize_email( $email ) . "'>" . sanitize_email( $email ) . '</a></div>' . '</div>' . '</li>';
+		}
+			}?>
 		</ul>
 	</fieldset>
 <?php

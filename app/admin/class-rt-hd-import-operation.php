@@ -155,7 +155,6 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 */
 		public function insert_new_ticket( $title, $body, $userid, $mailtime, $allemail, $uploaded, $senderEmail, $messageid = '', $inreplyto = '', $references = '', $subscriber = array() ) {
 			global $rt_hd_module, $rt_hd_tickets_operation, $rt_hd_ticket_history_model;
-
 			$d             = new DateTime( $mailtime );
 			$timeStamp     = $d->getTimestamp();
 			$post_date     = gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) + ( get_option( 'gmt_offset' ) * 3600 ) ) );
@@ -769,7 +768,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$body .= '<br/><b>From : </b>' . $comment_author_email;
 				$body .= '<br/><b>Body : </b>' . $comment_content;
 				$body .= '<br/> ';
-				$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, $comment_id );
+				$notificationFlag = $this->check_setting_for_new_followup_email();
+				$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, $comment_id, $notificationFlag );
 			}
 
 			return true;
@@ -1047,7 +1047,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$signature   = '';
 			$email_type  = '';
 			$imap_server = '';
-			global $rt_hd_settings;
+			global $rt_hd_settings,$rt_hd_email_notification;
 			$accessToken = $rt_hd_settings->get_accesstoken_from_email( $fromemail, $signature, $email_type, $imap_server );
 
 			if ( strpos( $signature, '</' ) == false ) {
@@ -1058,8 +1058,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 
 			$mailbody .= '<br />' . $signature;
-			global $rt_hd_settings;
-			$tmpMailOutbountId = $rt_hd_settings->insert_new_send_email( $_POST['comment-reply-from'], $title, $mailbody, $toEmail, $ccEmail, $bccEmail, $attachment, $comment_id, 'comment' );
+			//			$tmpMailOutbountId = $rt_hd_settings->insert_new_send_email( $_POST['comment-reply-from'], $title, $mailbody, $toEmail, $ccEmail, $bccEmail, $attachment, $comment_id, 'comment' );
+			$tmpMailOutbountId = $rt_hd_email_notification->insert_new_send_email( $title, $mailbody, $toEmail, $ccEmail, $bccEmail, $attachment, $comment_id, 'comment' );
 
 			return true;
 		}
@@ -1290,8 +1290,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$body = ' New Follwup Added ' . ( ( ! empty( $currentUser->display_name ) ) ? 'by ' . $currentUser->display_name : 'annonymously' );
 			$body .= '<br/><b>Body : </b>' . $comment->comment_content;
 			$body .= '<br/> ';
-
-			$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, $comment_ID );
+			$notificationFlag = $this->check_setting_for_new_followup_email();
+			$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, $comment_ID, $notificationFlag );
 
 			$returnArray['status']        = true;
 			//			$returnArray['data']          = $this->generate_comment_html_front( $comment );
@@ -1485,9 +1485,9 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 				$body .= '<br/> ';
 				if ( $flag ) {
-					if ( rthd_get_redux_settings( )['rthd_notification_events']['followup_edited'] == 1 ) {
-						$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, $_POST['comment_id'] );
-					}
+					$notificationFlag = ( rthd_get_redux_settings( )['rthd_notification_events']['followup_edited'] == 1 );
+					$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, $_POST['comment_id'],$notificationFlag );
+
 				}
 
 				$returnArray['status']        = true;
@@ -1621,11 +1621,11 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$signature   = '';
 				$email_type  = '';
 				$imap_server = '';
-				global $rt_hd_settings;
+				global $rt_hd_email_notification,$rt_hd_settings;
 				if ( ! $this->check_setting_for_new_followup_email( ) ) {
 					return false;
 				}
-				$accessToken = $rt_hd_settings->get_accesstoken_from_email( $fromemail, $signature, $email_type, $imap_server );
+				//				$accessToken = $rt_hd_settings->get_accesstoken_from_email( $fromemail, $signature, $email_type, $imap_server );
 
 				if ( strpos( $signature, '</' ) == false ) {
 					$signature = htmlentities( $signature );
@@ -1633,7 +1633,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					$signature = preg_replace( '/  /i', '  ', $signature );
 				}
 				$mailbody .= '<br />' . $signature;
-				$rt_hd_settings->insert_new_send_email( $_POST['comment-reply-from'], $title, $mailbody, $toEmail, $ccEmail, $bccEmail, $attachment, $comment_ID, 'comment' );
+				$rt_hd_email_notification->insert_new_send_email( $title, $mailbody, $toEmail, $ccEmail, $bccEmail, $attachment, $comment_ID, 'comment' );
 			}
 
 			update_comment_meta( $comment_ID, '_email_from', $_POST['comment-reply-from'] );
@@ -1657,7 +1657,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$body .= '<br/><b>Body : </b>' . $comment->comment_content;
 
 			$body .= '<br/> ';
-			$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, $comment_ID );
+			$notificationFlag = $this->check_setting_for_new_followup_email();
+			$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, $comment_ID, $notificationFlag );
 			$returnArray['status'] = true;
 
 			$returnArray['data']          = $this->genrate_comment_html_ajax( $comment );
@@ -1708,7 +1709,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		function notify_subscriber_via_email( $post_id, $title, $body, $comment_id ) {
+		function notify_subscriber_via_email( $post_id, $title, $body, $comment_id, $notificationFlag ) {
 			$oldSubscriberArr = get_post_meta( $post_id, '_rtbiz_hd_subscribe_to', true );
 			$bccemails        = array();
 			if ( $oldSubscriberArr && is_array( $oldSubscriberArr ) && ! empty( $oldSubscriberArr ) ) {
@@ -1720,27 +1721,37 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$flag            = true;
 			$post_type       = get_post_type( $post_id );
 			$module_settings = rthd_get_settings();
-			$systemEmail     = ( isset( $module_settings['system_email'] ) ) ? $module_settings['system_email'] : '';
-			if ( $systemEmail ) {
-				if ( ! is_email( $systemEmail ) ) {
-					$flag = false;
-				}
-			} else {
-				$flag = false;
-			}
-			if ( $flag && ! empty( $bccemails ) ) {
-				global $rt_hd_settings;
-				$accessToken = $rt_hd_settings->get_accesstoken_from_email( $systemEmail, $signature, $email_type, $imap_server );
+			//			$systemEmail     = ( isset( $module_settings['system_email'] ) ) ? $module_settings['system_email'] : '';
+			global $redux_helpdesk_settings;
+			//			if ( $systemEmail ) {
+			//				if ( ! is_email( $systemEmail ) ) {
+			//					$flag = false;
+			//				}
+			//			} else {
+			//				$flag = false;
+			//			}
+			//			if ( $flag && ! empty( $bccemails ) ) {
+			//				global $rt_hd_settings;
+			//				$accessToken = $rt_hd_settings->get_accesstoken_from_email( $systemEmail, $signature, $email_type, $imap_server );
+			//
+			//				if ( strpos( $signature, '</' ) == false ) {
+			//					$signature = htmlentities( $signature );
+			//					$signature = preg_replace( '/(\n|\r|\r\n)/i', '<br />', $signature );
+			//					$signature = preg_replace( '/  /i', '  ', $signature );
+			//				}
 
-				if ( strpos( $signature, '</' ) == false ) {
-					$signature = htmlentities( $signature );
-					$signature = preg_replace( '/(\n|\r|\r\n)/i', '<br />', $signature );
-					$signature = preg_replace( '/  /i', '  ', $signature );
-				}
+				global $rt_hd_email_notification;
 				$emailHTML = $body . "</br> To View Follwup Click <a href='" . admin_url( 'edit.php?post_type={$post_type}&page=rthd-add-{$post_type}&{$post_type}_id=' . $post_id ) . "'>here</a>.<br/>";
-				$emailHTML .= '<br />' . $signature;
-				$rt_hd_settings->insert_new_send_email( $systemEmail, $title, $emailHTML, array(), array(), $bccemails, array(), $comment_id, 'comment' );
+			if ( $notificationFlag ) {
+				$cc = array();
+				foreach ( $redux_helpdesk_settings['rthd_notification_emails'] as $email ) {
+					array_push( $cc, array( 'email' => $email ) );
+				}
+				$rt_hd_email_notification->insert_new_send_email( $title, $emailHTML, array(), $cc, $bccemails, array(), $comment_id, 'comment' );
 			}
+			//				$emailHTML .= '<br />' . $signature;
+			//				$rt_hd_settings->insert_new_send_email( $systemEmail, $title, $emailHTML, array(), array(), $bccemails, array(), $comment_id, 'comment' );
+			//			}
 		}
 
 		/**
@@ -1923,7 +1934,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$body .= "<br/> AC Project : <a href='http://ac.rtcamp.com/projects/" . $project_id . '/tasks/' . $task_id . "' > AC Link </a>";
 			$body .= '<br/> ';
 
-			$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, 0 );
+			$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, 0 ,true );
 			$respoArray['status']  = true;
 			$respoArray['message'] = 'Done Import';
 			$respoArray['data']    = $commentstr;
@@ -1941,19 +1952,17 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			if ( ! isset( $_POST['comment_id'] ) ) {
 				die( 0 );
 			}
-
+			$comment          = get_comment( $_POST['comment_id'] );
 			$response['status'] = wp_delete_comment( $_POST['comment_id'], true );
 
-			if ( rthd_get_redux_settings( )['rthd_notification_events']['followup_deleted'] == 1 ) {
-				$currentUser = get_user_by( 'id', get_current_user_id() );
-				$comment = get_comment( $_POST['comment_id'] );
-				$body = ' Follwup Deleted by ' . $currentUser->display_name;
-				$body .= '<br/><b>Body : </b>' . $comment->comment_content;
-				$body .= '<br/> ';
-				$comment_post_ID = $_POST['post_id'];
-				$title           = $_POST['comment_id'] . ' follow up deleted ';
-				$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, $_POST['comment_id'] );
-			}
+			$notificationFlag = ( rthd_get_redux_settings()['rthd_notification_events']['followup_deleted'] == 1 );
+			$currentUser      = get_user_by( 'id', get_current_user_id() );
+			$body             = ' Follwup Deleted by ' . $currentUser->display_name;
+			$body .= '<br/><b>Body : </b>' . $comment->comment_content;
+			$body .= '<br/> ';
+			$comment_post_ID = $_POST['post_id'];
+			$title           = '[Follwup Deleted]' . $this -> create_title_for_mail( $comment_post_ID );
+			$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, $_POST['comment_id'], $notificationFlag );
 			echo json_encode( $response );
 			die( 0 );
 		}
