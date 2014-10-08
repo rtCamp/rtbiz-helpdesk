@@ -219,7 +219,7 @@ class test_Rt_HD_Tickets_Operation extends RT_WP_TestCase {
 		//current user 1
 		$subscribe_to = array( '2' );
 		$this->rthdTicketOperation->ticket_subscribe_update( null, '1', $this->post_ID );
-		$this->assertEquals( '', get_post_meta( $this->post_ID, '_rtbiz_hd_subscribe_to', true ) );
+		$this->assertEquals( array(), get_post_meta( $this->post_ID, '_rtbiz_hd_subscribe_to', true ) );
 		$this->rthdTicketOperation->ticket_subscribe_update( $subscribe_to, '1', $this->post_ID );
 		$this->assertEquals( array( '2' ), get_post_meta( $this->post_ID, '_rtbiz_hd_subscribe_to', true ) );
 		$this->rthdTicketOperation->ticket_subscribe_update( $subscribe_to, '3', $this->post_ID );

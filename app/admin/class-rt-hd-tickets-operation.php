@@ -361,7 +361,6 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 		 * @return bool
 		 */
 		function ticket_subscribe_update( $subscribe_to, $post_author, $post_id ) {
-
 			if ( isset( $post_id ) && ! empty( $post_id ) ) {
 
 				if ( ! isset( $subscribe_to ) || empty( $subscribe_to ) ) {
@@ -371,12 +370,11 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 				if ( intval( $post_author ) != get_current_user_id() && ! in_array( get_current_user_id(), $subscribe_to ) ) {
 					$subscribe_to[] = get_current_user_id();
 				}
-
-				if ( isset( $subscribe_to ) && ! empty( $subscribe_to ) ) {
+				//				if ( isset( $subscribe_to ) && ! empty( $subscribe_to ) ) {
 					update_post_meta( $post_id, '_rtbiz_hd_subscribe_to', $subscribe_to );
 
 					return true;
-				}
+				//				}
 			}
 
 			return false;

@@ -297,7 +297,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 		public function add_meta_boxes() {
 			add_meta_box( 'rt-hd-ticket-title',  __( 'Ticket Title', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Ticket_Title::ui',  Rt_HD_Module::$post_type,  'normal', 'high' );
 			add_meta_box( 'rt-hd-ticket-data', __( 'Ticket Information', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Ticket_Info::ui', Rt_HD_Module::$post_type, 'side', 'default' );
-			add_meta_box( 'rt-hd-subscriiber', __( 'Subscriiber', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Subscribers::ui', Rt_HD_Module::$post_type, 'side', 'default' );
+			add_meta_box( 'rt-hd-subscriiber', __( 'Subscriber', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Subscribers::ui', Rt_HD_Module::$post_type, 'side', 'default' );
 			add_meta_box( 'rt-hd-attachment', __( 'Attachment', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Attachment::ui', Rt_HD_Module::$post_type, 'side', 'default' );
 			add_meta_box( 'rt-hd-external-link', __( 'External Link', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_External_Link::ui', Rt_HD_Module::$post_type, 'side', 'default' );
 			add_meta_box( 'rt-hd-ticket-follow-up',  __( 'Follow Up', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Ticket_Comments::ui',  Rt_HD_Module::$post_type,  'normal', 'default' );
