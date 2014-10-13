@@ -5,8 +5,7 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-
-/* 
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -31,7 +30,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 			$this->hooks();
 		}
 
-		var $isWoocommerceActive;
+		var $isWoocommerceActive, $iseddActive;
 
 
 		/**
@@ -78,6 +77,25 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 		}
 
 
+		function check_active_plugin(){
+			$activePlugin = rt_biz_get_settings( 'product_plugin' );
+			if ( is_plugin_active( 'woocommerce/woocommerce.php' ) && 'woocommerce' === $activePlugin ) {
+				$this->isWoocommerceActive = true;
+				$this->iseddActive = false;
+				$this->activePostType = 'product';
+			}
+			else if ( is_plugin_active( 'easy-digital-downloads/easy-digital-downloads.php' ) && 'edd' === $activePlugin ) {
+				$this->iseddActive = true;
+				$this->isWoocommerceActive  = false;
+				$this->activePostType = 'download';
+			}
+			else {
+				$this->iseddActive = false;
+				$this->isWoocommerceActive = false;
+			}
+		}
+
+
 		/**
 		 * Short code callback for Display Support Form
 		 *
@@ -86,14 +104,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 		 * [rt_hd_support_form]
 		 */
 		function rt_hd_support_form_callback() {
-
-			if ( ! is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
-				$isWoocommerceActive = false;
-			}
-			else {
-				$isWoocommerceActive = true;
-			}
-
+			$this->check_active_plugin();
 			wp_enqueue_style( 'support-form-style', RT_HD_URL . 'app/assets/css/support_form_front.css', false, RT_HD_VERSION, 'all' );
 			$option      = '';
 			$order_email = '';
@@ -106,7 +117,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 					<div id="info" class="success">Your Support request Accepted..</div><?php
 				}
 			}
-			if ( $isWoocommerceActive ) {
+			if ( $this->iseddActive || $this->isWoocommerceActive ) {
 				if ( isset( $_GET['order_id'] ) ) {
 					$order       = new WC_Order( $_GET['order_id'] );
 					$items       = $order->get_items();
@@ -119,7 +130,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 					}
 				} else {
 					$arg      = array(
-						'post_type' => 'product',
+						'post_type' => $this->activePostType,
 						'nopagging' => true,
 					);
 					$products = get_posts( $arg );
@@ -149,7 +160,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 			<form method="post" action="" class="comment-form pure-form pure-form-aligned"
 			      enctype="multipart/form-data">
 
-				<?php if ( $isWoocommerceActive ) { ?>
+				<?php if ( $this->iseddActive || $this->isWoocommerceActive ) { ?>
 					<div class="pure-control-group">
 						<!--					<label>--><?php //_e( 'Product', RT_HD_TEXT_DOMAIN ); ?><!--</label>-->
 						<select name="post[product_id]">
@@ -192,14 +203,18 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 		 * @global type $rt_hd_contacts
 		 */
 		function save() {
-
-			global $rtbiz_wc_product, $rt_hd_import_operation, $redux_helpdesk_settings;;
+			$this->check_active_plugin();
+			global $rtbiz_product_sync, $rt_hd_import_operation, $redux_helpdesk_settings;;
 
 			$data = $_POST['post'];
 			$productstr = 'Support';
 			if ( $this->isWoocommerceActive ) {
 				$product = get_product( $data['product_id'] );
-				$productstr = "Support for {$product->post->post_title}";
+				$productstr = 'Support for '. $product->post->post_title;
+			}
+			else if ( $this->iseddActive ){
+				$product = edd_get_download( $data['product_id'] );
+				$productstr = 'Support for '.$product->post_title;
 			}
 
 			//Ticket created
@@ -213,11 +228,11 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 				$data['email']
 			);
 
-			if ( $this->isWoocommerceActive ) {
+			if ( $this->isWoocommerceActive || $this->iseddActive ) {
 				// rt_wc_product taxonomy assign
-				$product_taxonomy = $rtbiz_wc_product->get_taxonomy( $data['product_id'] );
+				$product_taxonomy = $rtbiz_product_sync->get_taxonomy( $data['product_id'] );
 				if ( isset( $product_taxonomy ) && ! empty( $product_taxonomy ) ) {
-					wp_set_post_terms( $rt_hd_tickets_id, array( $product_taxonomy->term_id ), $rtbiz_wc_product->product_slug );
+					wp_set_post_terms( $rt_hd_tickets_id, array( $product_taxonomy->term_id ), $rtbiz_product_sync->product_slug );
 				}
 			}
 
@@ -252,7 +267,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 			if ( $this->isWoocommerceActive ) {
 				//Store Order ID
 				if ( isset( $_GET['order_id'] ) ) {
-					update_post_meta( $rt_hd_tickets_id, '_rtbiz_hd_woocommerce_order_id', $_GET['order_id'] );
+					update_post_meta( $rt_hd_tickets_id, '_rtbiz_hd_woocommerce_order_id', esc_attr( $_GET['order_id'] ) );
 				}
 			}
 

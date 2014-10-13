@@ -74,7 +74,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 			$this->labels = array(
 				'name'          => __( 'Ticket', RT_HD_TEXT_DOMAIN ),
 				'singular_name' => __( 'Ticket', RT_HD_TEXT_DOMAIN ),
-				'menu_name'     => isset ( $settings['rthd_menu_label'] ) ? $settings['rthd_menu_label'] : 'rtHelpdesk',
+				'menu_name'     => isset( $settings['rthd_menu_label'] ) ? $settings['rthd_menu_label'] : 'rtHelpdesk',
 				'all_items'     => __( 'Tickets', RT_HD_TEXT_DOMAIN ),
 				'add_new'       => __( 'Add Ticket', RT_HD_TEXT_DOMAIN ),
 				'add_new_item'  => __( 'Add Ticket', RT_HD_TEXT_DOMAIN ),
@@ -150,10 +150,10 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 			}
 
 			$settings = rthd_get_settings();
-			if ( isset( $settings['attach_contacts'] ) && $settings['attach_contacts'] == 'yes' ) {
+			if ( isset( $settings['attach_contacts'] ) && 'yes' === $settings['attach_contacts'] ) {
 				rt_biz_register_person_connection( self::$post_type, $this->labels['name'] );
 			}
-			if ( isset( $settings['attach_accounts'] ) && $settings['attach_accounts'] == 'yes' ) {
+			if ( isset( $settings['attach_accounts'] ) && 'yes' === $settings['attach_accounts'] ) {
 				rt_biz_register_organization_connection( self::$post_type, $this->labels['name'] );
 			}
 
@@ -237,7 +237,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 
 			foreach ( $relations as $relation ) {
 				$attr      = $rt_hd_attributes_model->get_attribute( $relation->attr_id );
-				if ( $attr->attribute_store_as == 'taxonomy' ){
+				if ( 'taxonomy' === $attr->attribute_store_as ){
 					$attr_name = str_replace( '-', '_', rtbiz_post_type_name( $attr->attribute_name ) );
 				} else {
 					$attr_name = str_replace( '-', '_', rthd_attribute_taxonomy_name( $attr->attribute_name ) );
@@ -246,11 +246,11 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 			}
 
 			$settings = rthd_get_settings();
-			if ( isset( $settings['attach_contacts'] ) && $settings['attach_contacts'] == 'yes' ) {
+			if ( isset( $settings['attach_contacts'] ) && 'yes' === $settings['attach_contacts'] ) {
 				$contact_name = rt_biz_get_person_post_type();
 				$sql .= "{$contact_name} TEXT,\n";
 			}
-			if ( isset( $settings['attach_accounts'] ) && $settings['attach_accounts'] == 'yes' ) {
+			if ( isset( $settings['attach_accounts'] ) && 'yes' === $settings['attach_accounts'] ) {
 				$contact_name = rt_biz_get_organization_post_type();
 				$sql .= "{$contact_name} TEXT,\n";
 			}
@@ -279,7 +279,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 			add_action( 'wp_before_admin_bar_render', array( $this, 'ticket_chnage_action_publish_update' ), 11 );
 
 			add_filter( 'rtlib_user_group_support', array( $this, 'add_department_support' ) );
-			add_filter( 'rtlib_wc_product_support', array( $this, 'add_wc_product_support' ) );
+			add_filter( 'rtlib_product_support', array( $this, 'add_wc_product_support' ) );
 
 		}
 
@@ -309,7 +309,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 		 */
 		function ticket_chnage_action_publish_update() {
 			global $pagenow, $post;
-			if ( get_post_type() == self::$post_type && ( $pagenow == 'edit.php' || $pagenow == 'post-new.php' || ( isset( $_GET['action'] ) && $_GET['action'] ) == 'edit' ) ) {
+			if ( get_post_type() == self::$post_type && ( 'edit.php' === $pagenow || 'post-new.php' === $pagenow || 'edit' === ( isset( $_GET['action'] ) && $_GET['action'] ) ) ) {
 				if ( ! isset( $post ) ) {
 					return;
 				}
@@ -383,7 +383,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 						$out = array_filter( $menu_item, function( $in ) { return true !== $in; } );
 						if ( in_array( $item, $out ) ) {
 							$submenu[ 'edit.php?post_type=' . self::$post_type ][ $new_index ] = $menu_item;
-							unset ( $module_menu[ $p_key ] );
+							unset( $module_menu[ $p_key ] );
 							$new_index += 5;
 							break;
 						}
@@ -394,7 +394,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 						$menu_item[0] = '--- ' . $menu_item[0];
 					}
 					$submenu[ 'edit.php?post_type=' . self::$post_type ][ $new_index ] = $menu_item;
-					unset ( $module_menu[ $p_key ] );
+					unset( $module_menu[ $p_key ] );
 					$new_index += 5;
 				}
 			}
