@@ -31,8 +31,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			}
 
 			add_action( 'plugins_loaded', array( $this, 'init_settings' ), 15 );
-
-
 		}
 
 
@@ -174,21 +172,19 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					'subtitle' => __( 'Select User for Support ticket Assign' ),
 				),
 			);
-			if ( is_plugin_active( 'woocommerce/woocommerce.php' ) ) {
-				$general_fields = array_merge(
-					$general_fields,
+			$general_fields = array_merge(
+				$general_fields,
+				array(
 					array(
-						array(
-							'id'       => 'rthd_support_page',
-							'type'     => 'select',
-							'data'     => 'pages',
-							'title'    => __( 'Support Page' ),
-							'desc'     => __( 'This Page will used for redirect support request in WooCommerce. Add [rt_hd_support_form] ShortCode in Page Content' ),
-							'subtitle' => __( 'Select Page for Product Support' ),
+						'id'       => 'rthd_support_page',
+						'type'     => 'select',
+						'data'     => 'pages',
+						'title'    => __( 'Support Page' ),
+						'desc'     => __( 'This Page will used for redirect support request in WooCommerce. Add [rt_hd_support_form] ShortCode in Page Content' ),
+						'subtitle' => __( 'Select Page for Product Support' ),
 
-						),
-					) );
-			}
+					),
+				) );
 			$this->sections[] = array(
 				'icon'        => 'el-icon-cogs',
 				'title'       => __( 'General' ),
@@ -420,8 +416,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 
 			//$theme = wp_get_theme(); // For use with some settings. Not necessary.
 			$author_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
-
-
 			$this->args = array(
 				// TYPICAL -> Change these values as you need/desire
 				'opt_name'           => 'redux_helpdesk_settings',
@@ -516,7 +510,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				)
 			);
 
-
 			// SOCIAL ICONS -> Setup custom links in the footer for quick links in your panel footer icons.
 			$this->args['share_icons'][] = array(
 				'url'   => 'https://github.com/ReduxFramework/ReduxFramework',
@@ -541,7 +534,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			);
 
 			// Panel Intro text -> before the form
-			if ( ! isset( $this->args['global_variable'] ) || $this->args['global_variable'] !== false ) {
+			if ( ! isset( $this->args['global_variable'] ) || false !== $this->args['global_variable'] ) {
 				if ( ! empty( $this->args['global_variable'] ) ) {
 					$v = $this->args['global_variable'];
 				} else {
@@ -559,7 +552,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 		}
 
 	}
-
 
 }
 
