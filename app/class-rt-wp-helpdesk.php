@@ -140,7 +140,6 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			$taxonomy_metadata = new Rt_Helpdesk_Taxonomy_Metadata\Taxonomy_Metadata();
 			$taxonomy_metadata->activate();
 
-
 			$rt_hd_closing_reason = new Rt_HD_Closing_Reason();
 			$rt_hd_attributes     = new Rt_HD_Attributes();
 			$rt_hd_module         = new Rt_HD_Module();
@@ -231,12 +230,12 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 				return;
 			}
 
-			if ( ! isset( $_REQUEST['rthd_unique_id'] ) || ( isset( $_REQUEST['rthd_unique_id'] ) && empty( $_REQUEST['rthd_unique_id'] ) ) ) {
-				if ( ! isset( $rthd_unique_id ) || empty( $rthd_unique_id ) ) {
-					return;
-				} else {
+			if ( ( ! isset( $_REQUEST['rthd_unique_id'] ) || empty( $_REQUEST['rthd_unique_id'] ) )&& ( isset( $rthd_unique_id ) && ! empty( $rthd_unique_id ) ) ) {
 					$_REQUEST['rthd_unique_id'] = $rthd_unique_id;
-				}
+			}
+
+			if ( ! isset( $_REQUEST['rthd_unique_id'] ) || empty( $_REQUEST['rthd_unique_id'] ) ){
+				return;
 			}
 
 			$args = array(
@@ -281,7 +280,6 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 				'rt-jquery-tagit-js',
 			), RT_HD_VERSION, true );
 
-
 			wp_enqueue_script( 'moment-js', RT_HD_URL . 'app/assets/javascripts/moment.js', array( 'jquery' ), RT_HD_VERSION, true );
 
 			if ( ! wp_script_is( 'jquery-ui-accordion' ) ) {
@@ -298,7 +296,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			wp_enqueue_style( 'rthd-admin-css', RT_HD_URL . 'app/assets/css/admin.css', false, RT_HD_VERSION, 'all' );
 
 			if ( ! wp_script_is( 'jquery-ui-datepicker' ) ) {
-				wp_enqueue_script( 'jquery-ui-datepicker' );
+				wp_enqueue_scrispt( 'jquery-ui-datepicker' );
 			}
 
 			if ( ! wp_script_is( 'jquery-ui-autocomplete' ) ) {
@@ -318,12 +316,9 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 					wp_enqueue_style( 'jquery-ui-smoothness', $url, false, null );
 				}
 			}
-
 			$this->localize_scripts();
-
 			return true;
 		}
-
 		/**
 		 * This is functions localize values for JScript
 		 * @since 0.1

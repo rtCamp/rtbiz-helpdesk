@@ -114,31 +114,41 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 				$post_id = self::save();
 				if ( isset( $post_id ) && ! empty( $post_id ) && is_int( $post_id ) ) {
 					?>
-					<div id="info" class="success">Your Support request Accepted..</div><?php
+					<div id="info" class="success">Your Support request have been Submitted.</div><?php
 				}
 			}
-			if ( $this->iseddActive || $this->isWoocommerceActive ) {
-				if ( isset( $_GET['order_id'] ) ) {
-					$order       = new WC_Order( $_GET['order_id'] );
-					$items       = $order->get_items();
-					$order_email = $order->billing_email;
-					foreach ( $items as $item ) {
-						$product_name         = $item['name'];
-						$product_id           = $item['product_id'];
-						$product_variation_id = $item['variation_id'];
-						$option .= "<option value=$product_id>$product_name</option>";
-					}
-				} else {
-					$arg      = array(
-						'post_type' => $this->activePostType,
-						'nopagging' => true,
-					);
-					$products = get_posts( $arg );
-					foreach ( $products as $product ) {
-						$option .= "<option value=$product->ID>$product->post_title</option>";
-					}
-				}
-			}?>
+			//			if ( $this->iseddActive || $this->isWoocommerceActive ) {
+			//				if ( isset( $_GET['order_id'] ) ) {
+			//					$order       = new WC_Order( $_GET['order_id'] );
+			//					$items       = $order->get_items();
+			//					$order_email = $order->billing_email;
+			//					foreach ( $items as $item ) {
+			//						$product_name         = $item['name'];
+			//						$product_id           = $item['product_id'];
+			//						$product_variation_id = $item['variation_id'];
+			//						$option .= "<option value=$product_id>$product_name</option>";
+			//					}
+			//				} else {
+			//					$arg      = array(
+			//						'post_type' => $this->activePostType,
+			//						'nopagging' => true,
+			//					);
+			//					$products = get_posts( $arg );
+			//					foreach ( $products as $product ) {
+			//						$option .= "<option value=$product->ID>$product->post_title</option>";
+			//					}
+			//				}
+			//			}
+
+			global $rtbiz_product_sync;
+			$terms = get_terms( $rtbiz_product_sync->product_slug, array( 'hide_empty' => 0 ) );
+			$product_exists = false;
+			foreach ( $terms as $tm ) {
+				$option .= '<option value= '. $tm->term_id.' > '.$tm->name.'</option>';
+				$product_exists = true;
+			}
+			?>
+
 			<script type="text/javascript">
 				jQuery(document).ready(function ($) {
 					//print list of selected file
@@ -160,7 +170,13 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 			<form method="post" action="" class="comment-form pure-form pure-form-aligned"
 			      enctype="multipart/form-data">
 
-				<?php if ( $this->iseddActive || $this->isWoocommerceActive ) { ?>
+				<div class="pure-control-group">
+					<!--					<label for="email">-->
+					<?php //_e( 'Email', RT_HD_TEXT_DOMAIN ); ?><!--</label>-->
+					<input id="title" placeholder="Title" type="text" name="post[title]" required />
+				</div>
+
+				<?php if ( $product_exists ) { ?>
 					<div class="pure-control-group">
 						<!--					<label>--><?php //_e( 'Product', RT_HD_TEXT_DOMAIN ); ?><!--</label>-->
 						<select name="post[product_id]">
@@ -207,15 +223,15 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 			global $rtbiz_product_sync, $rt_hd_import_operation, $redux_helpdesk_settings;;
 
 			$data = $_POST['post'];
-			$productstr = 'Support';
-			if ( $this->isWoocommerceActive ) {
+			$productstr = $data['title'];
+			/*if ( $this->isWoocommerceActive ) {
 				$product = get_product( $data['product_id'] );
 				$productstr = 'Support for '. $product->post->post_title;
 			}
 			else if ( $this->iseddActive ){
 				$product = edd_get_download( $data['product_id'] );
 				$productstr = 'Support for '.$product->post_title;
-			}
+			}*/
 
 			//Ticket created
 			$rt_hd_tickets_id = $rt_hd_import_operation->insert_new_ticket(
@@ -228,12 +244,18 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 				$data['email']
 			);
 
-			if ( $this->isWoocommerceActive || $this->iseddActive ) {
-				// rt_wc_product taxonomy assign
-				$product_taxonomy = $rtbiz_product_sync->get_taxonomy( $data['product_id'] );
-				if ( isset( $product_taxonomy ) && ! empty( $product_taxonomy ) ) {
-					wp_set_post_terms( $rt_hd_tickets_id, array( $product_taxonomy->term_id ), $rtbiz_product_sync->product_slug );
-				}
+			//			if ( $this->isWoocommerceActive || $this->iseddActive ) {
+			//				 rt_wc_product taxonomy assign
+			//				$product_taxonomy = $rtbiz_product_sync->get_taxonomy( $data['product_id'] );
+			//				if ( isset( $product_taxonomy ) && ! empty( $product_taxonomy ) ) {
+			//					wp_set_post_terms( $rt_hd_tickets_id, array( $product_taxonomy->term_id ), $rtbiz_product_sync->product_slug );
+			//				}
+			//			}
+
+			if ( isset( $data['product_id'] ) ) {
+				global $rtbiz_product_sync;
+				$term = get_term_by( 'id', $data['product_id'], $rtbiz_product_sync->product_slug );
+				wp_set_post_terms( $rt_hd_tickets_id, array( $term->term_id ), $rtbiz_product_sync->product_slug );
 			}
 
 			// Created attachment

@@ -83,7 +83,7 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 						'update_time' => current_time( 'mysql' ),
 						'updated_by'  => get_current_user_id(),
 					) );
-				if ( $_POST['post_status'] === 'trash' ) {
+				if ( 'trash' === $_POST['post_status'] ) {
 					$closing_reason_history_id = $id;
 				}
 			}

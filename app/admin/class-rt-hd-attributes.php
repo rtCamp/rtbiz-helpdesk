@@ -380,9 +380,9 @@ if ( ! class_exists( 'Rt_HD_Attributes' ) ) {
 					<?php if ( $edit ) {
 						$this->render_dropdown( $attr, $options );
 					} else {
-                        $term = get_term( $selected_term, rtbiz_post_type_name( $attr->attribute_name ) );
-                        ?><span class="rthd_view_mode"><?php echo esc_html( $term->name ); ?></span><?php
-                    } ?>
+						$term = get_term( $selected_term, rtbiz_post_type_name( $attr->attribute_name ) );
+						?><span class="rthd_view_mode"><?php echo esc_html( $term->name ); ?></span><?php
+					} ?>
 					</div>
 					<?php break;
 				case 'rating-stars':

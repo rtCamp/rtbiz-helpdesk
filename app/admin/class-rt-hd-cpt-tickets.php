@@ -277,7 +277,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 			remove_meta_box( 'revisionsdiv', Rt_HD_Module::$post_type, 'normal' );
 			remove_meta_box( 'commentstatusdiv', Rt_HD_Module::$post_type, 'normal' );
 			remove_meta_box( 'slugdiv', Rt_HD_Module::$post_type, 'normal' );
-			remove_meta_box( 'postcustom', Rt_HD_Module::$post_type, 'normal' );
+			//			remove_meta_box( 'postcustom', Rt_HD_Module::$post_type, 'normal' );
 		}
 
 		/**
@@ -339,7 +339,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 			}
 
 			do_action( 'rt_hd_process_' . $post->post_type . '_meta', $post_id, $post );;
-			if ( $post->post_status == 'trash' ) {
+			if ( 'trash' == $post->post_status ) {
 
 				$url = add_query_arg( array( 'post_type' => Rt_HD_Module::$post_type ), admin_url( 'edit.php' ) );
 				wp_safe_redirect( $url );

@@ -93,7 +93,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		 * @since 0.1
 		 */
 		function page_actions() {
-			if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] === 'rthd-' . Rt_HD_Module::$post_type . '-dashboard' ) {
+			if ( isset( $_REQUEST['page'] ) && 'rthd-' . Rt_HD_Module::$post_type . '-dashboard' === $_REQUEST['page'] ) {
 				do_action( 'add_meta_boxes_' . $this->screen_id, null );
 				do_action( 'add_meta_boxes', $this->screen_id, null );
 
@@ -161,7 +161,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			$relations = $rt_hd_attributes_relationship_model->get_relations_by_post_type( Rt_HD_Module::$post_type );
 			foreach ( $relations as $r ) {
 				$attr = $rt_hd_attributes_model->get_attribute( $r->attr_id );
-				if ( $attr->attribute_store_as == 'taxonomy' ) {
+				if ( 'taxonomy' == $attr->attribute_store_as ) {
 					add_meta_box( 'rthd-tickets-by-' . $attr->attribute_name, $attr->attribute_label . ' ' . __( 'Wise Tickets', RT_HD_TEXT_DOMAIN ), array(
 						$this,
 						'dashboard_attributes_widget_content',

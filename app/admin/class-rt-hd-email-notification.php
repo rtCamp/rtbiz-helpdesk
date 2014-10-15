@@ -52,6 +52,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			);
 			if ( $this->is_wp_email( ) ) {
 				$this->send_wp_email( $args );
+				$rt_hd_mail_outbound_model->add_outbound_mail( $args );
 				return true;
 			}
 			else {
@@ -99,7 +100,8 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		 * @return bool
 		 */
 		public function is_wp_email() {
-			if ( rthd_get_redux_settings( )['rthd_outgoing_email_delivery'] == 'wp_mail' ) {
+			$redux = rthd_get_redux_settings();
+			if ( 'wp_mail' == $redux['rthd_outgoing_email_delivery'] ) {
 				return true;
 			}
 			return false;
@@ -114,7 +116,8 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		 * @param $uploaded
 		 */
 		public function notification_new_ticket_assigned( $post_id, $assignee, $post_type, $uploaded ) {
-			$notificationFlag = ( rthd_get_redux_settings( )['rthd_notification_events']['new_ticket_assigned'] == 1 ) ;
+			$redux = rthd_get_redux_settings();
+			$notificationFlag = ( $redux['rthd_notification_events']['new_ticket_assigned'] == 1 ) ;
 			$cc = array();
 			if ( $notificationFlag ) {
 				$cc = $this->get_notification_emails();
@@ -130,7 +133,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$title = '[New ' . $post_type . ' Assigned You]' . $this->create_title_for_mail( $post_id );
 
 			$body = $current_user->display_name . '</b> assigned you new ticket.';
-			$body .= '<br />To View ' . $post_type . " Click <a href='" . admin_url( 'post.php?post=' . $post_id . 'action=edit' ) . "'>here</a>. <br/>";
+			$body .= '<br />To View ' . $post_type . " Click <a href='" . admin_url( 'post.php?post=' . $post_id . '&action=edit' ) . "'>here</a>. <br/>";
 			$body .= 'Ticket created by : <a target="_blank" href="">' . $current_user->display_name . '</a>';
 			// added Notification Emails
 			$this->insert_new_send_email( $title, $body, $to, $cc, array(), $uploaded, $post_id, 'post' );
@@ -147,7 +150,8 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		 * @param $uploaded
 		 */
 		public function notification_new_ticket_reassigned( $post_id, $oldassignee, $assignee, $post_type, $body, $uploaded ) {
-			$notificationFlag = ( rthd_get_redux_settings( )['rthd_notification_events']['new_ticket_reassigned'] == 1 ) ;
+			$redux = rthd_get_redux_settings();
+			$notificationFlag = ( $redux['rthd_notification_events']['new_ticket_reassigned'] == 1 ) ;
 			$cc = array();
 			if ( $notificationFlag ) {
 				$cc = $this->get_notification_emails();
@@ -179,7 +183,8 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		 * @param $newSubscriberList
 		 */
 		public function notification_ticket_subscribed( $post_id, $post_type, $newSubscriberList ) {
-			$notificationFlag = ( rthd_get_redux_settings( )['rthd_notification_events']['ticket_subscribed'] == 1 ) ;
+			$redux = rthd_get_redux_settings();
+			$notificationFlag = ( $redux['rthd_notification_events']['ticket_subscribed'] == 1 ) ;
 			$cc = array();
 			if ( $notificationFlag ) {
 				$cc = $this->get_notification_emails();
@@ -210,7 +215,8 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		 * @param $oldSubscriberList
 		 */
 		public function notification_ticket_unsubscribed( $post_id, $post_type, $oldSubscriberList  ) {
-			$notificationFlag = ( rthd_get_redux_settings( )['rthd_notification_events']['ticket_unsubscribed'] == 1 ) ;
+			$redux = rthd_get_redux_settings();
+			$notificationFlag = ( $redux['rthd_notification_events']['ticket_unsubscribed'] == 1 ) ;
 			$cc = array();
 			if ( $notificationFlag ) {
 				$cc = $this->get_notification_emails();
@@ -221,8 +227,9 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$body .= '<br />To View ' . $post_type . " Click <a href='" . trailingslashit( site_url() ) . strtolower( $post_type ) . '/?rthd_unique_id=' . $unique_id . "'>here</a>. <br/>";
 			$this->insert_new_send_email( $title, $body, array(), array(), $oldSubscriberList, array(), $post_id, 'post' );
 			if ( $notificationFlag ){
+				$body = '';
 				foreach ( $oldSubscriberList as $user ){
-					$body = 'Name: '.$user['name']. '('.$user['email'].')' ;
+					$body .= 'Name: '.$user['name']. '('.$user['email'].')' ;
 					$body .= '<br />';
 				}
 				$body .= 'have been <b>unsubscribed</b> from this ticket';
@@ -240,19 +247,22 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		 * @param $bccemails
 		 */
 		public function notification_ticket_updated( $post_id, $post_type, $body, $bccemails ) {
-			$notificationFlag = ( rthd_get_redux_settings( )['rthd_notification_events']['status_metadata_changed'] == 1 ) ;
+			$redux = rthd_get_redux_settings();
+			$notificationFlag = ( $redux['rthd_notification_events']['status_metadata_changed'] == 1 ) ;
 			$cc = array();
 			if ( $notificationFlag ) {
 				$cc = $this->get_notification_emails();
 			}
 			global $current_user;
+			$post_author_id = get_post_field( 'post_author', $post_id );
+			$userSub     = get_user_by( 'id', intval( $post_author_id ) );
+			$to[] = array( 'email' => $userSub->user_email, 'name' => $userSub->display_name );
 
 			$title = '[' . $post_type . ' Updated]' . $this->create_title_for_mail( $post_id );
 			$unique_id = get_post_meta( $post_id, '_rtbiz_hd_unique_id', true );
 			$body .= '<br />To View ' . $post_type . " Click <a href='" . trailingslashit( site_url() ) . strtolower( $post_type ) . '/?rthd_unique_id=' . $unique_id . "'>here</a>. <br/>";
 			$body .= '<br />' . 'Ticket updated by : <a target="_blank" href="">' . $current_user->display_name . '</a>';
-			$this->insert_new_send_email( $title, stripslashes( $body ), array(), $cc, $bccemails, array(), $post_id, 'post' );
-
+			$this->insert_new_send_email( $title, stripslashes( $body ), $to, $cc, $bccemails, array(), $post_id, 'post' );
 		}
 
 		/**
@@ -263,7 +273,8 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		 * @param $uploaded
 		 */
 		public function ticket_created_notification( $post_id, $post_type, $body, $allemail, $uploaded ) {
-			$notificationFlag = ( rthd_get_redux_settings( )['rthd_notification_events']['new_ticket_created'] == 1 );
+			$redux = rthd_get_redux_settings();
+			$notificationFlag = ( $redux['rthd_notification_events']['new_ticket_created'] == 1 );
 			$cc = array();
 			if ( $notificationFlag ) {
 				$cc = $this->get_notification_emails();

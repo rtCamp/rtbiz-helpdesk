@@ -72,6 +72,15 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 				wp_enqueue_script( 'jquery' );
 				wp_enqueue_script( 'jquery-form', array( 'jquery' ), false, true );
 
+				wp_enqueue_style( 'rthd-followup-css', RT_HD_URL . 'app/assets/css/follow-up.css', false, RT_HD_VERSION, 'all' );
+				global $wp_scripts;
+				$ui = $wp_scripts->query( 'jquery-ui-core' );
+				// tell WordPress to load the Smoothness theme from Google CDN
+				$protocol = is_ssl() ? 'https' : 'http';
+				$url      = "$protocol://ajax.googleapis.com/ajax/libs/jqueryui/" . $ui->ver . '/themes/smoothness/jquery-ui.css';
+				if ( ! wp_style_is( 'jquery-ui-smoothness' ) ) {
+					wp_enqueue_style( 'jquery-ui-smoothness', $url, false, null );
+				}
 			}
 
 			if ( ! wp_script_is( 'jquery-ui-progressbar' ) ) {
@@ -132,7 +141,7 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 			$attrs     = rthd_get_all_attributes();
 			$attr_list = array( 'contacts', 'accounts' );
 			foreach ( $attrs as $attr ) {
-				if ( $attr->attribute_store_as == 'taxonomy' ) {
+				if ( 'taxonomy' == $attr->attribute_store_as ) {
 					$attr_list[] = $attr->attribute_name;
 				}
 			}

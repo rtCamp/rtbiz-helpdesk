@@ -49,7 +49,7 @@ if ( ! class_exists( 'Rt_HD_ACL' ) ) {
 			$settings               = rthd_get_redux_settings();
 			$module_key             = rt_biz_sanitize_module_key( RT_HD_TEXT_DOMAIN );
 			$modules[ $module_key ] = array(
-				'label'      => isset ( $settings['rthd_menu_label'] ) ? $settings['rthd_menu_label'] : 'rtHelpdesk',
+				'label'      => isset( $settings['rthd_menu_label'] ) ? $settings['rthd_menu_label'] : 'rtHelpdesk',
 				'post_types' => array( Rt_HD_Module::$post_type ),
 			);
 

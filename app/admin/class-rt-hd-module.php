@@ -309,7 +309,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 		 */
 		function ticket_chnage_action_publish_update() {
 			global $pagenow, $post;
-			if ( get_post_type() == self::$post_type && ( 'edit.php' === $pagenow || 'post-new.php' === $pagenow || 'edit' === ( isset( $_GET['action'] ) && $_GET['action'] ) ) ) {
+			if ( get_post_type() == self::$post_type && (  'post.php' === $pagenow ||'edit.php' === $pagenow || 'post-new.php' === $pagenow || 'edit' == ( isset( $_GET['action'] ) && $_GET['action'] ) ) ) {
 				if ( ! isset( $post ) ) {
 					return;
 				}
@@ -371,6 +371,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 		 */
 		function custom_pages_order( $menu_order ) {
 			global $submenu;
+			//			error_log( var_export( $submenu,true ) ." ", 3, "/var/tmp/my-errors.log");
 			global $menu;
 			if ( isset( $submenu[ 'edit.php?post_type=' . self::$post_type ] ) && ! empty( $submenu[ 'edit.php?post_type=' . self::$post_type ] ) ) {
 				$module_menu = $submenu[ 'edit.php?post_type=' . self::$post_type ];

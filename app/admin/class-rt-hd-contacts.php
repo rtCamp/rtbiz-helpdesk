@@ -137,7 +137,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 					add_post_meta( $contact->ID, '_transaction_id', $transaction_id, true );
 				}
 				$userid = $this->get_user_from_email( $email );
-				if ( $userid != 1 ) {
+				if ( 1 != $userid ) {
 					rt_biz_add_entity_meta( $contact->ID, $this->user_id, $userid );
 				}
 			}
@@ -335,7 +335,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 					if ( isset( $accountData['contactmeta'] ) && ! empty( $accountData['contactmeta'] ) ) {
 						foreach ( $accountData['contactmeta'] as $cmeta => $metavalue ) {
 							foreach ( $metavalue as $metadata ) {
-								if ( strstr( $cmeta, 'email' ) != false ) {
+								if ( false != strstr( $cmeta, 'email' ) ) {
 									$result = rt_biz_get_person_by_email( $metadata );
 									if ( $result && ! empty( $result ) ) {
 										$returnArray['status']  = false;
@@ -362,7 +362,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 
 						foreach ( $accountData['contactmeta'] as $cmeta => $metavalue ) {
 							foreach ( $metavalue as $metadata ) {
-								if ( strstr( $cmeta, 'email' ) != false ) {
+								if ( false != strstr( $cmeta, 'email' ) ) {
 									$email = $metadata;
 								}
 
