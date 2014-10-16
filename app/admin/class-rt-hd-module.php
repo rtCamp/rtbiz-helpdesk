@@ -278,7 +278,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 
 			add_action( 'wp_before_admin_bar_render', array( $this, 'ticket_chnage_action_publish_update' ), 11 );
 
-			add_filter( 'rtlib_user_group_support', array( $this, 'add_department_support' ) );
+			//			add_filter( 'rtlib_user_group_support', array( $this, 'add_department_support' ) );
 			add_filter( 'rtlib_product_support', array( $this, 'add_wc_product_support' ) );
 
 		}

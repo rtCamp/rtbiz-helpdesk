@@ -117,6 +117,7 @@ jQuery(function () {
 			    requestArray['followup_ticket_unique_id']=jQuery('#ticket_unique_id' ).val();
 			    requestArray['followup_private']='no';
 			    requestArray['followup_post_id']=jQuery('#post-id' ).val();
+			    requestArray['private_comment']= jQuery('#edit-private-comment').is(':checked') ;
 			    //requestArray["followuptype"] = followuptype;
 			    //requestArray["followup_post_id"] = jQuery( "#ticket_id" ).val();
 			    //requestArray["follwoup-time"] = jQuery( "#follwoup-time" ).val();
@@ -151,7 +152,7 @@ jQuery(function () {
                 requestArray["comment_id"] = jQuery( "#edit-comment-id" ).val();
                 requestArray["action"] = "rthd_add_new_followup_front";
                 requestArray["followuptype"] = '';//'note';
-
+	            requestArray['private_comment']= jQuery('#add-private-comment').is(':checked') ;
                 requestArray["followup_ticket_unique_id"] = jQuery( "#ticket_unique_id" ).val();
 	            if ( ! requestArray["followup_ticket_unique_id"]) {
 		            alert('Please publish ticket before adding followup! :( ');

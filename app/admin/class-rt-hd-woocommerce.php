@@ -186,10 +186,17 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 					</div>
 				<?php } ?>
 				<div class="pure-control-group">
+
+					<?php
+					$email = '';
+			if ( is_user_logged_in() ) {
+				$current_user = wp_get_current_user();
+				$email = $current_user->user_email;
+			} ?>
 					<!--					<label for="email">-->
 					<?php //_e( 'Email', RT_HD_TEXT_DOMAIN ); ?><!--</label>-->
 					<input id="email" placeholder="email" type="email" name="post[email]"
-					       value="<?php echo sanitize_email( $order_email ) ?>"/>
+					       value="<?php echo sanitize_email( $email ) ?>"/>
 				</div>
 
 				<div class="pure-control-group">
