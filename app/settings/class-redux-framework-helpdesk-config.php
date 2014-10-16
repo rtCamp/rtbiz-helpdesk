@@ -424,9 +424,9 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				// Name that appears at the top of your panel
 				'display_version'    => RT_HD_VERSION,
 				// Version that appears at the top of your panel
-				'menu_type'          => 'menu',
+				'menu_type'          => 'submenu',
 				//Specify if the admin menu should appear or not. Options: menu or submenu (Under appearance only)
-				'allow_sub_menu'     => true,
+				'allow_sub_menu'     => false,
 				// Show the sections below the admin menu item or not
 				'menu_title'         => __( 'Settings' ),
 				'page_title'         => __( 'Settings' ),
@@ -534,16 +534,16 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			);
 
 			// Panel Intro text -> before the form
-			if ( ! isset( $this->args['global_variable'] ) || false !== $this->args['global_variable'] ) {
-				if ( ! empty( $this->args['global_variable'] ) ) {
-					$v = $this->args['global_variable'];
-				} else {
-					$v = str_replace( '-', '_', $this->args['opt_name'] );
-				}
-				$this->args['intro_text'] = sprintf( __( '<p>Did you know that Redux sets a global variable for you? To access any of your saved options from within your code you can use your global variable: <strong>$%1$s</strong></p>', 'redux-framework-demo' ), $v );
-			} else {
-				$this->args['intro_text'] = __( '<p>This text is displayed above the options panel. It isn\'t required, but more info is always better! The intro_text field accepts all HTML.</p>', 'redux-framework-demo' );
-			}
+//			if ( ! isset( $this->args['global_variable'] ) || false !== $this->args['global_variable'] ) {
+//				if ( ! empty( $this->args['global_variable'] ) ) {
+//					$v = $this->args['global_variable'];
+//				} else {
+//					$v = str_replace( '-', '_', $this->args['opt_name'] );
+//				}
+//				$this->args['intro_text'] = sprintf( __( '<p>Did you know that Redux sets a global variable for you? To access any of your saved options from within your code you can use your global variable: <strong>$%1$s</strong></p>', 'redux-framework-demo' ), $v );
+//			} else {
+//				$this->args['intro_text'] = __( '<p>This text is displayed above the options panel. It isn\'t required, but more info is always better! The intro_text field accepts all HTML.</p>', 'redux-framework-demo' );
+//			}
 
 			// Add content after the form.
 			$this->args['footer_text'] = __( '<p>This text is displayed below the options panel. It isn\'t required, but more info is always better! The footer_text field accepts all HTML.</p>', 'redux-framework-demo' );

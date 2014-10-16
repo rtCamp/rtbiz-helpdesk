@@ -33,7 +33,6 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 		 */
 		function hooks() {
 			add_action( 'admin_enqueue_scripts', array( $this, 'load_styles_scripts' ) );
-			add_action( 'admin_menu', array( $this, 'register_menu' ), 1 );
 			add_filter( 'pre_insert_term', array( $this, 'remove_wocommerce_actions' ), 10, 2 );
 		}
 
@@ -112,22 +111,6 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 			} else {
 				wp_localize_script( 'rthd-admin-js', 'rthd_user_edit', array( '' ) );
 			}
-		}
-
-		/**
-		 * Register menu entry to WP
-		 *
-		 * @since 0.1
-		 */
-		function register_menu() {
-			return add_submenu_page( 'edit.php?post_type=' . Rt_HD_Module::$post_type, __( 'Settings' ), __( 'Settings' ), $this->author_cap, 'rthd-settings', array(
-				$this,
-				'settings_ui',
-			) );
-		}
-
-		function settings_ui() {
-
 		}
 
 		/**
