@@ -131,6 +131,13 @@ jQuery( document ).ready( function ( $ ) {
 	jQuery( document ).on('click', 'li.self .messages',function(){
 		jQuery('#edited_followup_content' ).val( jQuery(this).find('p').text().replace(/\s+/g, " ") );
 		commentid=jQuery(this).find('#followup-id' ).val();
+		var that = jQuery(this).find( '#is-private-comment' ).val();
+		if (that && that=='true' || that == true){
+			jQuery('#edit-private' ).prop('checked',true);
+		}
+		else{
+			jQuery('#edit-private' ).prop('checked',false);
+		}
 		jQuery("#dialog-form").dialog().dialog("close");
 		jQuery( "#dialog-form" ).dialog( "open" );
 
@@ -151,10 +158,10 @@ jQuery( document ).ready( function ( $ ) {
 			requestArray["action"] = "rthd_add_new_followup_ajax";
 			requestArray['followuptype']="comment";
 			requestArray['followup_ticket_unique_id']=jQuery('#ticket_unique_id' ).val();
-			requestArray['followup_private']='no';
+			//requestArray['followup_private']='no';
 			requestArray['followup_post_id']=jQuery('#post-id' ).val();
-			requestArray['private_comment']= jQuery('#edit-private-comment').is(':checked') ;
-			//requestArray["followuptype"] = followuptype;
+			requestArray['followup_private']= jQuery('#edit-private').is(':checked') ;
+			requestArray["followuptype"] = 'comment';
 			//requestArray["followup_post_id"] = jQuery( "#ticket_id" ).val();
 			//requestArray["follwoup-time"] = jQuery( "#follwoup-time" ).val();
 			requestArray["followup_content"]=jQuery('#edited_followup_content' ).val().replace(/\s+/g, " ");
@@ -168,9 +175,10 @@ jQuery( document ).ready( function ( $ ) {
 					success: function ( data ) {
 						if ( data.status ) {
 							jQuery('#comment-'+commentid ).find('p' ).text(jQuery('#edited_followup_content' ).val().replace(/\s+/g, " "));
+							jQuery('#comment-'+commentid ).find( '#is-private-comment' ).val(data.private);
 							jQuery("#dialog-form").dialog().dialog("close");
 						} else {
-							alert( data.message )
+							alert( data.message );
 						}
 					},
 					error: function (data){
@@ -231,10 +239,11 @@ jQuery( document ).ready( function ( $ ) {
 						              jQuery( this ).html( moment( new Date( jQuery( this ).html() ) ).fromNow() );
 						              }
 						              } );*/
-						             var newcomment=" <li class='self' id='comment-" + data.comment_id + "'> <div class='avatar'> " + jQuery("#user-avatar" ).val() + " </div> <div class='messages' title='click for action'> <input id='followup-id' type='hidden' value='"+ data.comment_id + "'> <p>" + jQuery('#followup_content' ).val() + " </p> <time><span title='"+ jQuery('#user_email').val() +"'>" +jQuery('#user-name' ).val()+ "</span>  • now </time> </div> </li>";
+						             var newcomment=" <li class='self' id='comment-" + data.comment_id + "'> <div class='avatar'> " + jQuery("#user-avatar" ).val() + " </div> <div class='messages' title='click for action'> <input id='followup-id' type='hidden' value='"+ data.comment_id + "'> <input id='is-private-comment' type='hidden' value='" + data.private + "'> <p>" + jQuery('#followup_content' ).val() + " </p> <time><span title='"+ jQuery('#user_email').val() +"'>" +jQuery('#user-name' ).val()+ "</span>  • now </time> </div> </li>";
 						             //console.log(newcomment);
 						             jQuery('#chat-UI' ).prepend(newcomment);
 						             jQuery( "#followup_content" ).val( '' );
+						             jQuery('#add-private-comment' ).prop('checked',false );
 						             /*jQuery( "#commentlist .comment-wrapper" ).filter( ":first" ).show();
 						              if ( ! jQuery( '.accordion-expand-all' ).parent().is( ':visible' ) ) {
 						              jQuery( '.accordion-expand-all' ).parent().show();

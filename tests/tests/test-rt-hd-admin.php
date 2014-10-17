@@ -22,9 +22,9 @@ class test_Rt_HD_Admin extends RT_WP_TestCase {
 	/**
 	 * Test register_menu
 	 */
-	function  test_register_menu() {
-		$this->assertEquals( 'admin_page_rthd-settings', $this->rthdAdmin->register_menu() );
-	}
+//	function  test_register_menu() {
+//		$this->assertEquals( 'admin_page_rthd-settings', $this->rthdAdmin->register_menu() );
+//	}
 
 }
  

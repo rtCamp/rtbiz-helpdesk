@@ -1296,6 +1296,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					'count'     => true,
 				) );
 			$returnArray['comment_id'] = $comment_ID;
+			$returnArray['private']       = get_comment_meta( $comment_ID, '_rthd_privacy', true );
 			echo json_encode( $returnArray );
 			ob_end_flush();
 			die( 0 );
@@ -1408,7 +1409,6 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 			if ( isset( $_POST['comment_id'] ) && intval( $_POST['comment_id'] ) > 0 ) {
 				$commentdata = get_comment( $_POST['comment_id'], ARRAY_A );
-
 				$oldCommentBody = $commentdata['comment_content'];
 
 				$commentdata['comment_content'] = $comment_content;
@@ -1728,7 +1728,11 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$to      = array();
 				$persons = rt_biz_get_post_for_person_connection( $post_id, Rt_HD_Module::$post_type );
 				foreach ( $persons as $person ) {
-					array_push( $to, array( 'email' => $person->post_title ) );
+					global $rt_person;
+					$emails = get_post_meta( $person->ID, Rt_Entity::$meta_key_prefix.$rt_person->email_key );
+					foreach ( $emails as $email ) {
+						array_push( $to, array( 'email' => $email ) );
+					}
 				}
 				$rthd_unique_id = get_post_meta( $post_id, '_rtbiz_hd_unique_id', true );
 				//				if ( ! empty( $rthd_unique_id ) ) {
@@ -1737,19 +1741,22 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					$bd     = $body . " Click <a href='" . esc_url( trailingslashit( site_url() ) . strtolower( $labels['name'] ) . '?rthd_unique_id=' . $rthd_unique_id ) . "'> here </a> to view ticket";
 					$rt_hd_email_notification->insert_new_send_email( $title, $bd, $to, array(), array(), array(), $comment_id, 'comment' );
 				//				}
+
 			}
 			// $emailHTML = $body . "</br> To View Follwup Click <a href='" . admin_url( 'edit.php?post_type={$post_type}&page=rthd-add-{$post_type}&{$post_type}_id=' . $post_id ) . "'>here</a>.<br/>";
 			$cc = array();
 			if ( $notificationFlag ) {
-				foreach ( $redux_helpdesk_settings['rthd_notification_emails'] as $email ) {
-					array_push( $cc, array( 'email' => $email ) );
+				if ( isset( $redux_helpdesk_settings['rthd_notification_emails'] ) ) {
+					foreach ( $redux_helpdesk_settings['rthd_notification_emails'] as $email ) {
+						array_push( $cc, array( 'email' => $email ) );
+					}
 				}
 				// $rt_hd_email_notification->insert_new_send_email( $title, $emailHTML, array(), $cc, $bccemails, array(), $comment_id, 'comment' );
 			}
 			$post_author_id = get_post_field( 'post_author', $post_id );
 			$userSub     = get_user_by( 'id', intval( $post_author_id ) );
 			$to[] = array( 'email' => $userSub->user_email, 'name' => $userSub->display_name );
-			$emailHTML = $body . "</br> To View Follwup Click <a href='". get_edit_post_link( $post_id ) . '>here</a>.<br/>';
+			$emailHTML = $body . "</br> To View Follwup Click <a href='". get_edit_post_link( $post_id ) . "'>here</a>.<br/>";
 			//			array_push( $to, array( 'email' => $userSub->user_email, 'name' => $userSub->display_name ) );
 			//			error_log( var_export( $to , true)." ", 3, "/var/tmp/my-errors.log");
 			// error_log(var_export($to, true)." : -> system", 3, "/var/tmp/my-errors.log");

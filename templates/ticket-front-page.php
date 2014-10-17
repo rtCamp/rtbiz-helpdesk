@@ -225,19 +225,20 @@ $post_status = $rt_hd_module->get_custom_statuses();
 			</div>
 		</div>
 	</fieldset>
-	<fieldset>
-		<legend><i class="foundicon-smiley"></i> <?php _e( 'Participants' ); ?></legend>
+
+	<!--	<fieldset>
+		<legend><i class="foundicon-smiley"></i> <?php /*_e( 'Participants' ); */?></legend>
 		<script>
-			var arr_subscriber_user =<?php echo json_encode( $arrSubscriberUser ); ?>;
-			var ac_auth_token = '<?php echo balanceTags( get_user_meta( get_current_user_id(), 'rthd_activecollab_token', true ) ); ?>';
-			var ac_default_project = '<?php echo balanceTags( get_user_meta( get_current_user_id(), 'rthd_activecollab_default_project', true ) ); ?>';
+			var arr_subscriber_user =<?php /*echo json_encode( $arrSubscriberUser ); */?>;
+			var ac_auth_token = '<?php /*echo balanceTags( get_user_meta( get_current_user_id(), 'rthd_activecollab_token', true ) ); */?>';
+			var ac_default_project = '<?php /*echo balanceTags( get_user_meta( get_current_user_id(), 'rthd_activecollab_default_project', true ) ); */?>';
 		</script>
 		<ul class="rthd-participant-list large-block-grid-1 small-block-grid-1">
-			<?php echo balanceTags( $subScribetHTML ); ?>
+			<?php /*echo balanceTags( $subScribetHTML ); */?>
 		</ul>
-		<?php if ( isset( $module_settings['attach_contacts'] ) && $module_settings['attach_contacts'] == 'yes' ) { ?>
+		<?php /*if ( isset( $module_settings['attach_contacts'] ) && $module_settings['attach_contacts'] == 'yes' ) { */?>
 		<ul class="rthd-participant-list large-block-grid-1 small-block-grid-1">
-	<?php if ( isset( $post->ID ) ) {
+	<?php /*if ( isset( $post->ID ) ) {
 		$scriptstr   = '';
 		$ticket_term = rt_biz_get_post_for_person_connection( $post->ID, $post->post_type, $fetch_person = true );
 		foreach ( $ticket_term as $tterm ) {
@@ -250,18 +251,20 @@ $post_status = $rt_hd_module->get_custom_statuses();
 			}
 			echo "<li id='hd-contact-" . esc_attr( $tterm->term_id ). "' class='contact-list' >" . "<div class='row collapse'>" . "<div class='large-2 columns'> " . get_avatar( $email, 24 ) . '</div>' . "<div id='hd-contact-meta-" . esc_attr( $tterm->term_id  ). "'  class='large-9 columns'><a target='_blank' class='heading' href='mailto:" . sanitize_email( $email ) . "' title='" . esc_attr( $tterm->name  ). "'>" . esc_attr( $tterm->name  ). '</a></div>' . '</div>' . '</li>';
 		}
-	} ?>
+	} */?>
 		</ul>
 		<ul class="rthd-participant-list large-block-grid-1 small-block-grid-1">
-			<?php if ( isset($all_hd_participants) ) {
+			<?php /*if ( isset($all_hd_participants) ) {
 		foreach ( $all_hd_participants as $email ) {
 			echo "<li class='contact-list'>" . "<div class='row collapse'>" . "<div class='large-2 columns'> " . get_avatar( $email, 24 ) . '</div>' . "<div class='large-9 columns'><a target='_blank' class='heading' href='mailto:" . sanitize_email( $email ) . "' title='" . sanitize_email( $email ) . "'>" . sanitize_email( $email ) . '</a></div>' . '</div>' . '</li>';
 		}
-			}?>
+			}*/?>
 		</ul>
-	</fieldset>
+	</fieldset>-->
+
+
 <?php
-}
+//}
 $attachments = array();
 if ( isset( $post->ID ) ) {
 	$attachments = get_children( array( 'post_parent' => $post->ID, 'post_type' => 'attachment', ) );

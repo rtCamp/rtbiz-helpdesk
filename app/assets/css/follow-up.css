@@ -140,4 +140,13 @@
 
 #private-comment{
 	float:right;
+	color: #d02600;
+}
+
+.private-comment-display{
+	color: red;
+}
+
+#edit-private-comment{
+	color: #d02600;
 }
