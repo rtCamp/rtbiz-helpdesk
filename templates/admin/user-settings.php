@@ -10,7 +10,7 @@ if ( ! isset( $_REQUEST['type'] ) ) {
 	$_REQUEST['type'] = 'personal';
 }
 
-if ( $_REQUEST['type'] == 'personal' && isset( $_POST['mail_ac'] ) && is_email( $_POST['mail_ac'] ) ) {
+if ( 'personal' == $_REQUEST['type'] && isset( $_POST['mail_ac'] ) && is_email( $_POST['mail_ac'] ) ) {
 	if ( isset( $_POST['allow_users'] ) ) {
 		$allow_users = $_POST['allow_users'];
 	} else {
@@ -40,7 +40,7 @@ if ( $_REQUEST['type'] == 'personal' && isset( $_POST['mail_ac'] ) && is_email( 
 	}
 	$rt_hd_settings->update_mail_acl( $_POST['mail_ac'], $token, maybe_serialize( $email_data ), $allow_users, $_POST['emailsignature'], $imap_server );
 }
-if ( $_REQUEST['type'] == 'personal' && isset( $_REQUEST['email'] ) && is_email( $_REQUEST['email'] ) ) {
+if ( 'personal' == $_REQUEST['type'] && isset( $_REQUEST['email'] ) && is_email( $_REQUEST['email'] ) ) {
 	$rt_hd_settings->delete_user_google_ac( $_REQUEST['email'] );
 	echo '<script>window.location="' . esc_attr( add_query_arg(
 			array(
@@ -78,23 +78,23 @@ $rt_hd_settings->update_gmail_ac_count();
 ?>
 	<ul class="subsubsub">
 		<li>
-			<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&page=rthd-settings&type=personal&tab=my-settings' ) ); ?>' <?php if ( $_REQUEST['type'] == 'personal' ) {
+			<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&page=rthd-settings&type=personal&tab=my-settings' ) ); ?>" <?php if ( 'personal' == $_REQUEST['type'] ) {
 				echo " class='current'";
 			} ?> ><?php _e( 'Personal Emails' ); ?></a> |
 		</li>
 		<li>
-			<a href='<?php echo esc_url( admin_url( 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&page=rthd-settings&type=activecollab&tab=my-settings' ) ); ?>' <?php if ( $_REQUEST['type'] == 'activecollab' ) {
+			<a href='<?php echo esc_url( admin_url( 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&page=rthd-settings&type=activecollab&tab=my-settings' ) ); ?>' <?php if ( 'activecollab' == $_REQUEST['type'] ) {
 				echo " class='current'";
 			} ?> ><?php _e( 'Active Collab' ); ?></a></li>
 	</ul>
 
-<?php if ( $_REQUEST['type'] != 'personal' ) { ?>
+<?php if ( 'personal' != $_REQUEST['type'] ) { ?>
 	<form method="post">
 	<?php } ?>
 	<table class="form-table hd-option">
 	<tbody>
 	<?php
-if ( $_REQUEST['type'] == 'personal' ) {
+if ( 'personal' == $_REQUEST['type'] ) {
 	$redirect_url = get_site_option( 'rthd_googleapi_redirecturl' );
 	if ( ! $redirect_url ) {
 		$redirect_url = esc_url( admin_url( 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&page=rthd-settings&tab=my-settings&type=personal' ) );
@@ -169,7 +169,7 @@ if ( $_REQUEST['type'] == 'personal' ) {
 		$mail_folders   = array_filter( explode( ',', $mail_folders ) );
 		$inbox_folder   = ( isset( $ac->email_data['inbox_folder'] ) ) ? $ac->email_data['inbox_folder'] : '';
 
-		if ( $ac->type == 'goauth' ) {
+		if ( 'goauth' == $ac->type ) {
 			$token = json_decode( $ac->outh_token );
 			$client->setAccessToken( $ac->outh_token );
 			if ( $client->isAccessTokenExpired() ) {
@@ -228,7 +228,7 @@ if ( $_REQUEST['type'] == 'personal' ) {
 								          id='emailsignature'><?php echo esc_attr( isset( $ac->signature ) ? $ac->signature : '' ); ?></textarea>
 							</td>
 						</tr>
-						<?php if ( $ac->type == 'imap' ) { ?>
+						<?php if ( 'imap' == $ac->type ) { ?>
 							<tr valign="top">
 								<td></td>
 								<th scope="row"><label><?php _e( 'IMAP Server' ); ?></label></th>
@@ -295,7 +295,7 @@ if ( $_REQUEST['type'] == 'personal' ) {
 							<th scope="row"><label></label></th>
 							<td>
 								<button class='button' type='submit'>Save Changes</button>
-								<?php if ( $ac->type == 'goauth' ) { ?>
+								<?php if ( 'goauth' == $ac->type ) { ?>
 									<a class='button button-primary' href='<?php echo esc_url( $authUrl ); ?>'>Re Connect Google
 										Now</a>
 								<?php } ?>
@@ -324,7 +324,7 @@ if ( $_REQUEST['type'] == 'personal' ) {
 	</script>
 	<?php
 } else {
-	if ( $_REQUEST['type'] == 'activecollab' ) {
+	if ( 'activecollab' == $_REQUEST['type'] ) {
 		?>
 		<tr valign="top">
 			<th scope="row"><label for="rthd_wellcome_text">Active Collab Token</label></th>
@@ -343,7 +343,7 @@ if ( $_REQUEST['type'] == 'personal' ) {
 } ?>
 	</tbody>
 	</table>
-<?php if ( $_REQUEST['type'] != 'personal' ) { ?>
+<?php if ( 'personal' != $_REQUEST['type'] ) { ?>
 	<p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary"
 	                         value="<?php esc_attr_e( 'Save Changes' ); ?>"/></p>
 	</form>

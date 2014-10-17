@@ -753,12 +753,18 @@ jQuery( document ).ready( function ( $ ) {
 		if ( jQuery( this ).val() == 'goauth' ) {
 			jQuery( '#rthd_goauth_container' ).removeClass( 'rthd-hide-row' ).addClass( 'rthd-show-row' );
 			jQuery( '#rthd_add_imap_acc_form' ).removeClass( 'rthd-show-row' ).addClass( 'rthd-hide-row' );
+			jQuery( '#rthd_add_imap_acc_form input[type=email]' ).remove();
+			jQuery( '#rthd_add_imap_acc_form input[type=password]' ).remove();
 		} else if ( jQuery( this ).val() == 'imap' ) {
 			jQuery( '#rthd_add_imap_acc_form' ).removeClass( 'rthd-hide-row' ).addClass( 'rthd-show-row' );
 			jQuery( '#rthd_goauth_container' ).removeClass( 'rthd-show-row' ).addClass( 'rthd-hide-row' );
+			jQuery( '#rthd_add_imap_acc_form' ).append( '<input type="email" autocomplete="off" name="rthd_imap_user_email" placeholder="Email"/>' );
+			jQuery( '#rthd_add_imap_acc_form' ).append( '<input type="password" autocomplete="off" name="rthd_imap_user_pwd" placeholder="Password"/>' );
 		} else {
 			jQuery( '#rthd_goauth_container' ).removeClass( 'rthd-show-row' ).addClass( 'rthd-hide-row' );
 			jQuery( '#rthd_add_imap_acc_form' ).removeClass( 'rthd-show-row' ).addClass( 'rthd-hide-row' );
+			jQuery( '#rthd_add_imap_acc_form input[type=email]' ).remove();
+			jQuery( '#rthd_add_imap_acc_form input[type=password]' ).remove();
 		}
 	} );
 
