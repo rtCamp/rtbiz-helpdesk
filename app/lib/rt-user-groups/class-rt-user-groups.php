@@ -1201,7 +1201,6 @@ if ( ! class_exists( 'RT_User_Groups' ) ) {
 
 			return $user_ids;
 		}
-
 	}
 
 }
