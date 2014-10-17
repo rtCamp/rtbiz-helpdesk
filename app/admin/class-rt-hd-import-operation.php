@@ -1422,7 +1422,11 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					$d->setTimezone( $UTC );
 					$commentdata['comment_date_gmt'] = $d->format( 'Y-m-d H:i:s' );
 				}
+				else {
+					$newDate = current_time( 'mysql', 1 );
+				}
 				wp_update_comment( $commentdata );
+				$old_privacy = get_comment_meta( $_POST['comment_id'], '_rthd_privacy' ,true );
 				update_comment_meta( $_POST['comment_id'], '_rthd_privacy', $comment_privacy );
 				$comment = get_comment( $_POST['comment_id'] );
 				if ( isset( $_REQUEST['attachemntlist'] ) && ! empty( $_REQUEST['attachemntlist'] ) ) {
@@ -1457,9 +1461,18 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$title       = '[Follwup Updated]' . $this->create_title_for_mail( $comment_post_ID );
 
 				$body = ' Follwup Updated by ' . $currentUser->display_name;
-				$body .= '<br/><b>Type : </b>' . $followuptype;
+				$body .= '<br/><b>Type : </b> <br/>' . $followuptype;
 
 				$flag = false;
+
+				$old_privacy_text = ( $old_privacy == 'true' )?'yes':'no';
+				$new_privacy = ( $comment_privacy == 'true' )?'yes':'no';
+
+				$diff = rthd_text_diff( $old_privacy_text, $new_privacy );
+				if ( $diff ) {
+					$body .= '<br/><b>Private : </b>' . $diff;
+					$flag = true;
+				}
 
 				$diff = rthd_text_diff( $oldDate, $newDate );
 				if ( $diff ) {
@@ -1471,6 +1484,9 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				if ( $diff ) {
 					$flag = true;
 					$body .= '<br/><b>Body : </b>' . $diff;
+				}
+				else {
+					$body .= '<br/><b>Body : </b>' . trim( html_entity_decode( strip_tags( $commentdata['comment_content'] ) ) );
 				}
 
 				$body .= '<br/> ';
