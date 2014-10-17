@@ -106,27 +106,10 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 				}
 				add_action( 'admin_enqueue_scripts', 'rtbiz_plugins_enque_js' );
 				add_action( 'wp_ajax_rtBiz_hd_active_plugin', array( $this, 'rt_biz_hd_activate_plugin_ajax' ), 10 );
-				//				add_action( 'admin_notices', array( $this, 'rt_biz_admin_notice' ) );
 				add_action( 'admin_notices', array( $this, 'admin_notice_rtbiz_not_installed' ) );
 			}
 
 			return $flag;
-		}
-
-		/**
-		 * if rtbiz plugin is not installed or activated it gives notification to user to do so.
-		 *
-		 * @since 0.1
-		 */
-		function rt_biz_admin_notice() {
-			?>
-			<div class="updated">
-				<p><?php _e( 'rtHelpdesk : It seems that rtBiz plugin is not installed or activated. Please', RT_HD_TEXT_DOMAIN ) ?>
-					<a href="<?php echo esc_url( admin_url( 'plugin-install.php?tab=search&s=rtbiz' ) ); ?>"><?php _e( 'install' ); ?></a>,
-					<a href="<?php echo esc_url( admin_url( 'plugins.php?s=rtbiz' ) ); ?>"><?php _e( 'activate' ); ?></a> <?php _e( 'it.' ); ?>
-				</p>
-			</div>
-		<?php
 		}
 
 		/**
@@ -368,21 +351,24 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 		}
 
 
+
+		/**
+		 * if rtbiz plugin is not installed or activated it gives notification to user to do so.
+		 *
+		 * @since 0.1
+		 */
 		function admin_notice_rtbiz_not_installed() {
-			?>
-			<div class="error rtBiz-not-installed-error">
-				<?php
 			if ( $this->is_rt_biz_plugin_installed( 'rtbiz' ) && ! $this->is_rt_biz_plugin_active( 'rtbiz' ) ) {
 				$path  = $this->get_path_for_rt_biz_plugins( 'rtbiz' );
 				$nonce = wp_create_nonce( 'rtBiz_activate_plugin_' . $path );
 				?>
+			<div class="error rtBiz-not-installed-error">
 				<p><b><?php _e( 'rtBiz Helpdesk:' ) ?></b> <?php _e( 'Click' ) ?> <a href="#"
 				                                                            onclick="activate_rtBiz_plugins('<?php echo $path ?>','rtBiz_hd_active_plugin','<?php echo $nonce; ?>')">here</a> <?php _e( 'to activate rtBiz.', 'rtbiz' ) ?>
 				</p>
-			<?php
-			} ?>
 			</div>
-		<?php
+			<?php
+			}
 		}
 
 		function get_path_for_rt_biz_plugins( $slug ) {

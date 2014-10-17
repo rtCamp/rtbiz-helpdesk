@@ -9,7 +9,7 @@
  * Author URI: http://rtcamp.com
  * License: GPL
  * Text Domain: rt_helpdesk
- * Contributors: Udit<uditdesai@rtcamp.com>, Dipesh<dipesh.kakadiya@rtcamp.com>
+ * Contributors: Udit<udit.desai@rtcamp.com>, Dipesh<dipesh.kakadiya@rtcamp.com>
  */
 
 if ( ! defined( 'RT_HD_VERSION' ) ) {
