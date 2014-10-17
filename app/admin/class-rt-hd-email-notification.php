@@ -51,8 +51,11 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				'refrence_type' => $refrence_type,
 			);
 			if ( $this->is_wp_email( ) ) {
-				$this->send_wp_email( $args );
-				$rt_hd_mail_outbound_model->add_outbound_mail( $args );
+				$id = $rt_hd_mail_outbound_model->add_outbound_mail( $args );
+				$sendflag = $this->send_wp_email( $args );
+				if ( $sendflag ){
+					$rt_hd_mail_outbound_model->update_outbound_mail( array( 'sent' => 'yes' ), array( 'id' => $id ) );
+				}
 				return true;
 			}
 			else {
@@ -70,11 +73,15 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$arrayTo   = unserialize( $args['toemail'] );
 			$headers[] = 'From:' . $args['fromemail'];
 			add_filter( 'wp_mail_from', 'rthd_my_mail_from' );
+			$emailsendflag = true;
 			if ( ! empty( $arrayBCC ) ) {
 				foreach ( $arrayBCC as $temail ) {
 					add_filter( 'wp_mail_content_type', 'rthd_set_html_content_type' );
 					$res = wp_mail( array( $temail['email'] ), $args['subject'], $args['body'], $headers );
 					remove_filter( 'wp_mail_content_type', 'rthd_set_html_content_type' );
+					if ( ! $res ) {
+						$emailsendflag = false;
+					}
 				}
 			}
 
@@ -83,6 +90,9 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 					add_filter( 'wp_mail_content_type', 'rthd_set_html_content_type' );
 					$res = wp_mail( array( $tomail ['email'] ), $args['subject'], $args['body'], $headers );
 					remove_filter( 'wp_mail_content_type', 'rthd_set_html_content_type' );
+					if ( ! $res ) {
+						$emailsendflag = false;
+					}
 				}
 			}
 
@@ -91,8 +101,12 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 					add_filter( 'wp_mail_content_type', 'rthd_set_html_content_type' );
 					$res = wp_mail( array( $temail['email'] ), $args['subject'], $args['body'], $headers );
 					remove_filter( 'wp_mail_content_type', 'rthd_set_html_content_type' );
+					if ( ! $res ) {
+						$emailsendflag = false;
+					}
 				}
 			}
+			return $emailsendflag;
 		}
 
 		/**
