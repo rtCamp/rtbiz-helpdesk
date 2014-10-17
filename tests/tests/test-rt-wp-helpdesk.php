@@ -67,7 +67,7 @@ class test_RT_WP_Help_desk extends RT_WP_TestCase {
 		$this->assertTrue( class_exists( 'Rt_HD_User_Settings' ), 'Class Rt_HD_User_Settings does not exist' );
 		$this->assertTrue( class_exists( 'Rt_HD_Logs' ), 'Class Rt_HD_Logs does not exist' );
 
-		$this->assertTrue( class_exists( 'Rt_HD_Woocommerce' ), 'Class Rt_HD_Woocommerce does not exist' );
+		$this->assertTrue( class_exists( 'Rt_HD_Woocommerce_EDD' ), 'Class Rt_HD_Woocommerce_EDD does not exist' );
 
 		$this->assertTrue( class_exists( 'Rt_HD_Admin' ), 'Class Rt_HD_Admin does not exist' );
 

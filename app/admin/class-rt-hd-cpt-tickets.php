@@ -273,7 +273,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 		 * @since  0.1
 		 */
 		public function remove_meta_boxes() {
-			remove_meta_box( 'tagsdiv-' . rthd_attribute_taxonomy_name( 'closing-reason' ), Rt_HD_Module::$post_type, 'side' );
+			remove_meta_box( rthd_attribute_taxonomy_name( 'closing-reason' ) . 'div' , Rt_HD_Module::$post_type, 'side' );
 			remove_meta_box( 'revisionsdiv', Rt_HD_Module::$post_type, 'normal' );
 			remove_meta_box( 'commentstatusdiv', Rt_HD_Module::$post_type, 'normal' );
 			remove_meta_box( 'slugdiv', Rt_HD_Module::$post_type, 'normal' );

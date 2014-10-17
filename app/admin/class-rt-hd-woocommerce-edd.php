@@ -12,14 +12,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 
 
-if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
+if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 
 	/**
-	 * Class Rt_HD_Woocommerce
-	 * Provide wooCommerce integration with HelpDesk for product support
+	 * Class Rt_HD_Woocommerce_EDD
+	 * Provide wooCommerce & EDD integration with HelpDesk for product support
 	 *
 	 */
-	class Rt_HD_Woocommerce {
+	class Rt_HD_Woocommerce_EDD {
 
 		/**
 		 * construct
@@ -42,6 +42,8 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 
 			// filter for add new action link on My Account page
 			add_filter( 'woocommerce_my_account_my_orders_actions', array( $this, 'wocommerce_actions_link' ), 10, 2 );
+			add_action( 'edd_purchase_history_header_after', array( $this, 'edd_action_link_header' ) );
+			add_action( 'edd_purchase_history_row_end', array( $this, 'edd_support_link' ), 10, 2 );
 
 			// shortcode for get support form
 			add_shortcode( 'rt_hd_support_form', array( $this, 'rt_hd_support_form_callback' ) );
@@ -51,6 +53,19 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 
 		}
 
+		function edd_action_link_header() {
+			?>
+			<th class="edd_rt_hd_support"><?php _e('Support', 'edd'); ?></th>
+			<?php
+		}
+
+		function edd_support_link( $payment_id, $payment_data ) {
+			global $redux_helpdesk_settings;
+			$page = get_post( $redux_helpdesk_settings['rthd_support_page'] );
+			?>
+			<td class="edd_rt_hd_support"><a href="<?php echo "/{$page->post_name}/?order_id={$payment_id}&order_type=edd"; ?>"><?php _e( 'Get Support', RT_HD_TEXT_DOMAIN ) ?></a></td>
+			<?php
+		}
 
 		/**
 		 * Add new action link for Get Support in woocommerce order list
@@ -66,9 +81,9 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 		 */
 		function wocommerce_actions_link( $actions, $order ) {
 			global $redux_helpdesk_settings;
-			$page               = get_page( $redux_helpdesk_settings['rthd_support_page'] );
+			$page               = get_post( $redux_helpdesk_settings['rthd_support_page'] );
 			$actions['support'] = array(
-				'url'  => "/{$page->post_name}/?order_id={$order->id}",
+				'url'  => "/{$page->post_name}/?order_id={$order->id}&order_type=woocommerce",
 				'name' => __( 'Get Support', RT_HD_TEXT_DOMAIN )
 			);
 
@@ -117,28 +132,6 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 					<div id="info" class="success">Your Support request have been Submitted.</div><?php
 				}
 			}
-			//			if ( $this->iseddActive || $this->isWoocommerceActive ) {
-			//				if ( isset( $_GET['order_id'] ) ) {
-			//					$order       = new WC_Order( $_GET['order_id'] );
-			//					$items       = $order->get_items();
-			//					$order_email = $order->billing_email;
-			//					foreach ( $items as $item ) {
-			//						$product_name         = $item['name'];
-			//						$product_id           = $item['product_id'];
-			//						$product_variation_id = $item['variation_id'];
-			//						$option .= "<option value=$product_id>$product_name</option>";
-			//					}
-			//				} else {
-			//					$arg      = array(
-			//						'post_type' => $this->activePostType,
-			//						'nopagging' => true,
-			//					);
-			//					$products = get_posts( $arg );
-			//					foreach ( $products as $product ) {
-			//						$option .= "<option value=$product->ID>$product->post_title</option>";
-			//					}
-			//				}
-			//			}
 
 			global $rtbiz_product_sync;
 			$terms = get_terms( $rtbiz_product_sync->product_slug, array( 'hide_empty' => 0 ) );
@@ -170,6 +163,14 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 			<form method="post" action="" class="comment-form pure-form pure-form-aligned"
 			      enctype="multipart/form-data">
 
+				<?php if ( isset( $_REQUEST[ 'order_id' ] ) ) { ?>
+					<input type="hidden" name="post[order_id]" value="<?php echo $_REQUEST[ 'order_id' ]; ?>">
+				<?php } ?>
+
+				<?php if ( isset( $_REQUEST[ 'order_type' ] ) ) { ?>
+					<input type="hidden" name="post[order_type]" value="<?php echo $_REQUEST[ 'order_type' ]; ?>">
+				<?php } ?>
+
 				<div class="pure-control-group">
 					<!--					<label for="email">-->
 					<?php //_e( 'Email', RT_HD_TEXT_DOMAIN ); ?><!--</label>-->
@@ -195,7 +196,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 			} ?>
 					<!--					<label for="email">-->
 					<?php //_e( 'Email', RT_HD_TEXT_DOMAIN ); ?><!--</label>-->
-					<input id="email" placeholder="email" type="email" name="post[email]"
+					<input id="email" placeholder="Email" type="email" name="post[email]"
 					       value="<?php echo sanitize_email( $email ) ?>"/>
 				</div>
 
@@ -231,14 +232,6 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 
 			$data = $_POST['post'];
 			$productstr = $data['title'];
-			/*if ( $this->isWoocommerceActive ) {
-				$product = get_product( $data['product_id'] );
-				$productstr = 'Support for '. $product->post->post_title;
-			}
-			else if ( $this->iseddActive ){
-				$product = edd_get_download( $data['product_id'] );
-				$productstr = 'Support for '.$product->post_title;
-			}*/
 
 			//Ticket created
 			$rt_hd_tickets_id = $rt_hd_import_operation->insert_new_ticket(
@@ -251,16 +244,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 				$data['email']
 			);
 
-			//			if ( $this->isWoocommerceActive || $this->iseddActive ) {
-			//				 rt_wc_product taxonomy assign
-			//				$product_taxonomy = $rtbiz_product_sync->get_taxonomy( $data['product_id'] );
-			//				if ( isset( $product_taxonomy ) && ! empty( $product_taxonomy ) ) {
-			//					wp_set_post_terms( $rt_hd_tickets_id, array( $product_taxonomy->term_id ), $rtbiz_product_sync->product_slug );
-			//				}
-			//			}
-
 			if ( isset( $data['product_id'] ) ) {
-				global $rtbiz_product_sync;
 				$term = get_term_by( 'id', $data['product_id'], $rtbiz_product_sync->product_slug );
 				wp_set_post_terms( $rt_hd_tickets_id, array( $term->term_id ), $rtbiz_product_sync->product_slug );
 			}
@@ -293,11 +277,18 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 				}
 			}
 
-			if ( $this->isWoocommerceActive ) {
+			if ( isset( $data[ 'order_id' ] ) && $data[ 'order_type' ] ) {
 				//Store Order ID
-				if ( isset( $_GET['order_id'] ) ) {
-					update_post_meta( $rt_hd_tickets_id, '_rtbiz_hd_woocommerce_order_id', esc_attr( $_GET['order_id'] ) );
+				update_post_meta( $rt_hd_tickets_id, 'rtbiz_hd_order_id', esc_attr( $data[ 'order_id' ] ) );
+				update_post_meta( $rt_hd_tickets_id, 'rtbiz_hd_order_type', esc_attr( $data[ 'order_type' ] ) );
+
+				$link = '';
+				if ( 'woocommerce' === $data[ 'order_type' ] ) {
+					$link = add_query_arg( 'post', $_REQUEST[ 'order_id' ], admin_url( 'post.php?action=edit' ) );
+				} else if ( 'edd' === $data[ 'order_type' ] ) {
+					$link = add_query_arg( 'id', $_REQUEST[ 'order_id' ], admin_url( 'edit.php?post_type=download&page=edd-payment-history&view=view-order-details' ) );
 				}
+				update_post_meta( $rt_hd_tickets_id, 'rtbiz_hd_order_link', $link );
 			}
 
 			return $rt_hd_tickets_id;
@@ -384,7 +375,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 				$tickets = get_posts( $args );
 			} ?>
 
-			<h2><?php _e( 'Tikets', RT_HD_TEXT_DOMAIN ); ?></h2>
+			<h2><?php _e( 'Tickets', RT_HD_TEXT_DOMAIN ); ?></h2>
 
 			<?php
 			printf( _n( 'One Ticket Found.', '%d Tickets Found.', count( $tickets ), 'my-RT_HD_TEXT_DOMAIN-domain' ), count( $tickets ) );
@@ -392,6 +383,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 			<table class="shop_table my_account_orders">
 				<tr>
 					<th>Ticket ID</th>
+					<th>Title</th>
 					<th>Last Updated</th>
 					<th>Status</th>
 					<th></th>
@@ -403,6 +395,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 						?>
 						<tr>
 							<td> #<?php echo esc_attr( $ticket->ID ) ?> </td>
+							<td><?php echo $ticket->post_title; ?></td>
 							<td> <?php echo esc_attr( human_time_diff( $date->format( 'U' ), current_time( 'timestamp' ) ) ) . esc_attr( __( ' ago' ) ) ?> </td>
 							<td> <?php echo esc_attr( $ticket->post_status ) ?> </td>
 							<td><a class="button support" target="_blank"
@@ -414,7 +407,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce' ) ) {
 			} else {
 					?>
 					<tr>
-						<td colspan="4">No Ticketes Found !</td>
+						<td colspan="4">No Tickets Found !</td>
 					</tr>
 				<?php } ?>
 			</table>

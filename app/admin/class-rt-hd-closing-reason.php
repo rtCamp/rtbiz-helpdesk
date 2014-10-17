@@ -50,7 +50,7 @@ if ( ! class_exists( 'Rt_HD_Closing_Reason' ) ) {
 			);
 			$editor_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
 			return register_taxonomy( rthd_attribute_taxonomy_name( 'closing-reason' ), array( $this->post_type ), array(
-				'hierarchical'          => false,
+				'hierarchical'          => true,
 				'labels'                => $labels,
 				'show_ui'               => true,
 				'query_var'             => true,
