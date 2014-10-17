@@ -156,14 +156,17 @@ $current_user = wp_get_current_user();
 </form>
 <div id="output1"></div>
 <?php
-$user_edit = false;
-if ( current_user_can( "edit_{$post->post_type}" ) ) {
-	$user_edit = true;
-}
 
-if ( $user_edit ){
+$user_edit = current_user_can( rt_biz_get_access_role_cap( RT_BIZ_TEXT_DOMAIN, 'editor' ) );
+
+//$user_edit = false;
+//if ( current_user_can( "edit_{$post->post_type}" ) ) {
+//	$user_edit = true;
+//}
+
+if ( $user_edit ) {
 	?>
-	<div id="dialog-form" title="Edit Followup" style="display: none">
+	<div id="dialog-form" title="Edit Followup" style='display: none'>
 		<textarea id="edited_followup_content" name="edited_followup_content" placeholder="Add new followup" style="width:100%"> </textarea>
 		<div id ='edit-private-comment'>	<input id="edit-private" type="checkbox" name="private" value="yes" text="check to make comment private">Private<br></div>
 		<button class="edit-followup button button-primary" id="editfollowup" type="button"> Update </button>
