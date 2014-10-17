@@ -28,6 +28,7 @@ class test_Rt_HD_ACL extends RT_WP_TestCase {
 				'rt_helpdesk' => array(
 					'label'      => 'rtHelpdesk',
 					'post_types' => array( 'rtbiz_hd_ticket' ),
+					'require_support' => true
 				)
 			), $this->rthdAcl->register_rt_hd_module( array() ) );
 	}

@@ -1203,7 +1203,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$post_type       = $rthd_ticket->post_type;
 
 			$comment_content = $_POST['followup_content'];
-			$comment_privacy = 'no';
+			$comment_privacy = $_POST['private_comment'];
 			global $wpdb;
 			$user = wp_get_current_user();
 			if ( $user->exists() ) {
@@ -1731,12 +1731,12 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					array_push( $to, array( 'email' => $person->post_title ) );
 				}
 				$rthd_unique_id = get_post_meta( $post_id, '_rtbiz_hd_unique_id', true );
-				if ( ! empty( $rthd_unique_id ) ) {
+				//				if ( ! empty( $rthd_unique_id ) ) {
 					global $rt_hd_module;
 					$labels = $rt_hd_module->labels;
 					$bd     = $body . " Click <a href='" . esc_url( trailingslashit( site_url() ) . strtolower( $labels['name'] ) . '?rthd_unique_id=' . $rthd_unique_id ) . "'> here </a> to view ticket";
 					$rt_hd_email_notification->insert_new_send_email( $title, $bd, $to, array(), array(), array(), $comment_id, 'comment' );
-				}
+				//				}
 			}
 			// $emailHTML = $body . "</br> To View Follwup Click <a href='" . admin_url( 'edit.php?post_type={$post_type}&page=rthd-add-{$post_type}&{$post_type}_id=' . $post_id ) . "'>here</a>.<br/>";
 			$cc = array();
@@ -1749,7 +1749,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$post_author_id = get_post_field( 'post_author', $post_id );
 			$userSub     = get_user_by( 'id', intval( $post_author_id ) );
 			$to[] = array( 'email' => $userSub->user_email, 'name' => $userSub->display_name );
-			$emailHTML = $body . "</br> To View Follwup Click <a href='" . admin_url( 'edit.php?post=' . $post_id ."&action=edit'" ) . '>here</a>.<br/>';
+			$emailHTML = $body . "</br> To View Follwup Click <a href='". get_edit_post_link( $post_id ) . '>here</a>.<br/>';
 			//			array_push( $to, array( 'email' => $userSub->user_email, 'name' => $userSub->display_name ) );
 			//			error_log( var_export( $to , true)." ", 3, "/var/tmp/my-errors.log");
 			// error_log(var_export($to, true)." : -> system", 3, "/var/tmp/my-errors.log");
