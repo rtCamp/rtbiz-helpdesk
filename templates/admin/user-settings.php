@@ -78,7 +78,7 @@ $rt_hd_settings->update_gmail_ac_count();
 ?>
 	<ul class="subsubsub">
 		<li>
-			<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&page=rthd-settings&type=personal&tab=my-settings' ) ); ?>' <?php if ( $_REQUEST['type'] == 'personal' ) {
+			<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&page=rthd-settings&type=personal&tab=my-settings' ) ); ?>" <?php if ( $_REQUEST['type'] == 'personal' ) {
 				echo " class='current'";
 			} ?> ><?php _e( 'Personal Emails' ); ?></a> |
 		</li>

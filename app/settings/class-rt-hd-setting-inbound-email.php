@@ -288,10 +288,13 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 					<?php } ?>
 					</select>
 				</p>
+				<?php if ( $responce != false ) { ?>
 				<p class="submit rthd-hide-row" id="rthd_goauth_container">
 					<a class='button button-primary'
 					   href='<?php echo esc_url( $authUrl ); ?>'><?php _e( 'Connect New Google A/C' ); ?></a>
 				</p>
+				<?php } ?>
+				<?php if ( $imap_servers ) { ?>
 				<p id="rthd_add_imap_acc_form" autocomplete="off" class="rthd-hide-row">
 					<input type="hidden" name="rthd_add_imap_email" value="1"/>
 					<select  name="rthd_imap_server">
@@ -303,13 +306,9 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 						value="<?php echo esc_attr( $server->id ); ?>"><?php echo esc_html( $server->server_name ); ?></option>
 				<?php } ?>
 					</select>
-					<input type="email"  autocomplete="off" name="rthd_imap_user_email"
-					       placeholder="Email"/> <input type="password" autocomplete="off"
-					                                    name="rthd_imap_user_pwd" placeholder="Password"/>
-					<input type="hidden" name="rthd_submit_enable_reply_by_email" value="save"/>
-					<button class="button button-primary" type="submit"><?php _e( 'Save' ); ?></button>
 				</p>
-			<?PHP
+			<?php
+				}
 			}
 		}
 
