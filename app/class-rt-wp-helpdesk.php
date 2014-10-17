@@ -358,17 +358,21 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 		 * @since 0.1
 		 */
 		function admin_notice_rtbiz_not_installed() {
+			?>
+			<div class="error rtBiz-not-installed-error">
+			<?php
 			if ( $this->is_rt_biz_plugin_installed( 'rtbiz' ) && ! $this->is_rt_biz_plugin_active( 'rtbiz' ) ) {
 				$path  = $this->get_path_for_rt_biz_plugins( 'rtbiz' );
 				$nonce = wp_create_nonce( 'rtBiz_activate_plugin_' . $path );
 				?>
-			<div class="error rtBiz-not-installed-error">
 				<p><b><?php _e( 'rtBiz Helpdesk:' ) ?></b> <?php _e( 'Click' ) ?> <a href="#"
 				                                                            onclick="activate_rtBiz_plugins('<?php echo $path ?>','rtBiz_hd_active_plugin','<?php echo $nonce; ?>')">here</a> <?php _e( 'to activate rtBiz.', 'rtbiz' ) ?>
 				</p>
+			<?php } else { ?>
+				<p><b><?php _e( 'rtBiz Helpdesk:' ) ?></b> <?php _e( 'rtBiz Core plugin is not found on this site. Please install & activate it in order to use this plugin.', RT_HD_TEXT_DOMAIN ); ?></p>
+			<?php } ?>
 			</div>
 			<?php
-			}
 		}
 
 		function get_path_for_rt_biz_plugins( $slug ) {
