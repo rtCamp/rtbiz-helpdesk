@@ -141,3 +141,7 @@
 #private-comment{
 	float:right;
 }
+
+.private-comment-display{
+	color: red;
+}

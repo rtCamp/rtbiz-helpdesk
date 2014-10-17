@@ -311,8 +311,10 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		function get_notification_emails() {
 			global $redux_helpdesk_settings;
 			$cc = array();
-			foreach ( $redux_helpdesk_settings['rthd_notification_emails'] as $email ) {
-				array_push( $cc, array( 'email' => $email ) );
+			if ( isset( $redux_helpdesk_settings['rthd_notification_emails'] ) ) {
+				foreach ( $redux_helpdesk_settings['rthd_notification_emails'] as $email ) {
+					array_push( $cc, array( 'email' => $email ) );
+				}
 			}
 			return $cc;
 		}
