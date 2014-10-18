@@ -46,10 +46,10 @@ function right_comment( $comment, $user_edit ) {
 			<div class="avatar">
 				<?php echo get_avatar( $comment, 40 ); ?>
 			</div>
-			<div class="messages" title="Click for action">
+			<div class="messages private-comment-display" title="Click for action">
 				<input id="followup-id" type="hidden" value="<?php echo esc_attr( $comment->comment_ID ); ?>">
 
-				<p class="private-comment-display"><?php echo 'This followup has been marked private.'; ?>
+				<p><?php echo 'This followup has been marked private.'; ?>
 				</p>
 
 				<time title="<?php echo esc_attr( $comment->comment_date ); ?>"
@@ -105,8 +105,8 @@ function left_comment( $comment, $user_edit ) {
 			<div class="avatar">
 				<?php echo get_avatar( $comment, 40 ); ?>
 			</div>
-			<div class="messages">
-				<p class="private-comment-display"><?php echo 'This followup has been marked private.' ?></p>
+			<div class="messages private-comment-display">
+				<p><?php echo 'This followup has been marked private.' ?></p>
 
 				<time title="<?php echo esc_attr( $comment->comment_date ); ?>"
 				      datetime="<?php echo esc_attr( $comment->comment_date ); ?>"><span

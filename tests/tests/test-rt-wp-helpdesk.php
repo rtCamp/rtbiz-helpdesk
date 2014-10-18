@@ -79,7 +79,7 @@ class test_RT_WP_Help_desk extends RT_WP_TestCase {
 	 */
 	function  test_check_function() {
 		$this->assertTrue( method_exists( $this->rtwpHelpDesk, 'check_rt_biz_dependecy' ), 'Class RT_WP_Helpdesk does not have method check_rt_biz_dependecy' );
-		$this->assertTrue( method_exists( $this->rtwpHelpDesk, 'rt_biz_admin_notice' ), 'Class RT_WP_Helpdesk does not have method rt_biz_admin_notice' );
+		$this->assertTrue( method_exists( $this->rtwpHelpDesk, 'admin_notice_rtbiz_not_installed' ), 'Class RT_WP_Helpdesk does not have method rt_biz_admin_notice' );
 		$this->assertTrue( method_exists( $this->rtwpHelpDesk, 'init_globals' ), 'Class RT_WP_Helpdesk does not have method init_globals' );
 		$this->assertTrue( method_exists( $this->rtwpHelpDesk, 'admin_init' ), 'Class RT_WP_Helpdesk does not have method admin_init' );
 		$this->assertTrue( method_exists( $this->rtwpHelpDesk, 'update_database' ), 'Class RT_WP_Helpdesk does not have method update_database' );

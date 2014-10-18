@@ -117,7 +117,7 @@
 }
 .messages time {
 	font-size: 0.7rem;
-	color: #ccc;
+	color: #777;
 }
 .messages:hover{
 	cursor : help;
@@ -144,7 +144,8 @@
 }
 
 .private-comment-display{
-	color: red;
+	/*color: red;*/
+	background: pink;
 }
 
 #edit-private-comment{

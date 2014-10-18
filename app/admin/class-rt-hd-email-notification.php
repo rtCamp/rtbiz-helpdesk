@@ -56,7 +56,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				if ( $sendflag ){
 					$rt_hd_mail_outbound_model->update_outbound_mail( array( 'sent' => 'yes' ), array( 'id' => $id ) );
 				}
-				return true;
+				return $sendflag;
 			}
 			else {
 				return $rt_hd_mail_outbound_model->add_outbound_mail( $args );

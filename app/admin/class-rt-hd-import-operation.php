@@ -1741,23 +1741,22 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			//				}
 
 			if ( $contactFlag ) {
-				$to      = array();
+				$tocontact      = array();
 				$persons = rt_biz_get_post_for_person_connection( $post_id, Rt_HD_Module::$post_type );
 				foreach ( $persons as $person ) {
 					global $rt_person;
 					$emails = get_post_meta( $person->ID, Rt_Entity::$meta_key_prefix.$rt_person->email_key );
 					foreach ( $emails as $email ) {
-						array_push( $to, array( 'email' => $email ) );
+						array_push( $tocontact, array( 'email' => $email ) );
 					}
 				}
 				$rthd_unique_id = get_post_meta( $post_id, '_rtbiz_hd_unique_id', true );
 				//				if ( ! empty( $rthd_unique_id ) ) {
-					global $rt_hd_module;
-					$labels = $rt_hd_module->labels;
-					$bd     = $body . " Click <a href='" . esc_url( trailingslashit( site_url() ) . strtolower( $labels['name'] ) . '?rthd_unique_id=' . $rthd_unique_id ) . "'> here </a> to view ticket";
-					$rt_hd_email_notification->insert_new_send_email( $title, $bd, $to, array(), array(), array(), $comment_id, 'comment' );
+				global $rt_hd_module;
+				$labels = $rt_hd_module->labels;
+				$bd     = $body . " Click <a href='" . esc_url( trailingslashit( site_url() ) . strtolower( $labels['name'] ) . '?rthd_unique_id=' . $rthd_unique_id ) . "'> here </a> to view ticket";
+				$rt_hd_email_notification->insert_new_send_email( $title, $bd, $tocontact, array(), array(), array(), $comment_id, 'comment' );
 				//				}
-
 			}
 			// $emailHTML = $body . "</br> To View Follwup Click <a href='" . admin_url( 'edit.php?post_type={$post_type}&page=rthd-add-{$post_type}&{$post_type}_id=' . $post_id ) . "'>here</a>.<br/>";
 			$cc = array();
@@ -1768,11 +1767,14 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					}
 				}
 				// $rt_hd_email_notification->insert_new_send_email( $title, $emailHTML, array(), $cc, $bccemails, array(), $comment_id, 'comment' );
+
 			}
 			$post_author_id = get_post_field( 'post_author', $post_id );
 			$userSub     = get_user_by( 'id', intval( $post_author_id ) );
 			$to[] = array( 'email' => $userSub->user_email, 'name' => $userSub->display_name );
-			$emailHTML = $body . "</br> To View Follwup Click <a href='". get_edit_post_link( $post_id ) . "'>here</a>.<br/>";
+			//			$emailHTML = $body . "</br> To View Follwup Click <a href='". get_edit_post_link( $post_id ) . "'>here</a>.<br/>";
+			$emailHTML = $body . "</br> To View Follwup Click <a href='". admin_url().'post.php?post='.$post_id.'&action=edit'."'>here</a>.<br/>";
+
 			//			array_push( $to, array( 'email' => $userSub->user_email, 'name' => $userSub->display_name ) );
 			//			error_log( var_export( $to , true)." ", 3, "/var/tmp/my-errors.log");
 			// error_log(var_export($to, true)." : -> system", 3, "/var/tmp/my-errors.log");
