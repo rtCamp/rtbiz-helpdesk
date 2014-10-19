@@ -91,7 +91,7 @@ jQuery(function () {
 			                 } );
 
 		    });
-			jQuery( document ).on('click', 'li.self .messages',function(){
+			jQuery( document ).on('click', 'li.editable .messages',function(){
 		    //jQuery( 'li.self .messages' ).click( function () {
 			    jQuery('#edited_followup_content' ).val( jQuery(this).find('p').text().replace(/\s+/g, " ") );
 				commentid=jQuery(this).find('#followup-id' ).val();

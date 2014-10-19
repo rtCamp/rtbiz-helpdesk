@@ -17,7 +17,7 @@ function right_comment( $comment, $user_edit ) {
 	if ( $display_private_comment_flag ) {
 		?>
 
-		<li class="self" id="comment-<?php echo esc_attr( $comment->comment_ID ); ?>">
+		<li class="self editable" id="comment-<?php echo esc_attr( $comment->comment_ID ); ?>">
 
 			<div class="avatar">
 				<?php echo get_avatar( $comment, 40 ); ?>
@@ -83,11 +83,14 @@ function left_comment( $comment, $user_edit ) {
 	//	error_log( $display_private_comment_flag . ": -> system", 3, "/var/tmp/my-errors.log");
 	if ( $display_private_comment_flag ) {
 		?>
-		<li class="other">
+		<li class="other editable" id="comment-<?php echo esc_attr( $comment->comment_ID ); ?>">
 			<div class="avatar">
 				<?php echo get_avatar( $comment, 40 ); ?>
 			</div>
-			<div class="messages">
+			<div class="messages" title="click for action">
+				<input id="followup-id" type="hidden" value="<?php echo esc_attr( $comment->comment_ID ); ?>">
+				<input id="is-private-comment" type="hidden" value="<?php echo esc_attr( $is_comment_private[0] ); ?>">
+
 				<p><?php echo esc_attr( $comment->comment_content ); ?></p>
 
 				<time title="<?php echo esc_attr( $comment->comment_date ); ?>"
