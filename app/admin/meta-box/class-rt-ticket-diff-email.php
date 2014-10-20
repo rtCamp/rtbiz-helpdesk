@@ -260,7 +260,10 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 					$rt_hd_email_notification->notification_ticket_updated( $post_id, $labels['name'], $emailHTML, $bccemails );
 				}
 				else {
-					$rt_hd_email_notification->notification_ticket_updated( $post_id, $labels['name'], $emailHTML, array() );
+					if ( $emailHTML != '' ) {
+						$emailHTML = $emailTable . $emailHTML;
+						$rt_hd_email_notification->notification_ticket_updated( $post_id, $labels['name'], $emailHTML, array() );
+					}
 				}
 			} else {
 				$newUser = get_user_by( 'id', $post['post_author'] );
