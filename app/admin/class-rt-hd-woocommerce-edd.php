@@ -51,6 +51,35 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 
 			add_action( 'woocommerce_after_my_account', array( $this, 'woo_my_tickets_my_account' ) );
 
+			// Metaboxes for Orders
+			// WP 3.0+
+			add_action( 'add_meta_boxes', array( $this, 'order_support_history' ) );
+			// backwards compatible
+			add_action( 'admin_init', array( $this, 'order_support_history' ), 1 );
+		}
+
+		function order_support_history( $post ) {
+			add_meta_box( 'rtbiz-helpdesk-support-info', __( 'Support History' ), array( $this, 'support_info' ), 'shop_order', 'side' );
+			add_action( 'edd_view_order_details_main_after', array( $this, 'edd_support_info' ), 700 );
+		}
+
+		function support_info( $post ) {
+			echo balanceTags( do_shortcode( '[rt_hd_tickets order=' . $post->ID . ']' ) );
+		}
+
+		function edd_support_info( $order_id ) {
+			?>
+			<div class="postbox-container">
+				<div id="normal-sortables" class="meta-box-sortables ui-sortable">
+					<div class="postbox">
+						<h3 class="hndle"><?php _e( 'Support History' ); ?></h3>
+						<div class="inside" style="margin: 0; padding: 0;">
+							<?php $this->support_info( get_post( $order_id ) ); ?>
+						</div>
+					</div>
+				</div>
+			</div>
+			<?php
 		}
 
 		function edd_action_link_header() {
@@ -348,6 +377,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 				array(
 					'email' => '',
 					'user'  => '',
+				    'order' => '',
 				), $atts );
 
 			$args    = array(
@@ -371,6 +401,14 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 					$args['author'] = $arg_shortcode['user'];
 					$tickets        = get_posts( $args );
 				}
+			} else if ( ! empty( $arg_shortcode[ 'order' ] ) ) {
+				$args[ 'meta_query' ] = array(
+					array(
+						'key' => 'rtbiz_hd_order_id',
+					    'value' => $arg_shortcode[ 'order' ],
+					),
+				);
+				$tickets = get_posts( $args );
 			} else {
 				$tickets = get_posts( $args );
 			} ?>
@@ -392,6 +430,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 				foreach ( $tickets as $ticket ) {
 						$rthd_unique_id = get_post_meta( $ticket->ID, '_rtbiz_hd_unique_id', true );
 						$date           = new DateTime( $ticket->post_modified );
+						$link           = ( is_admin() ) ? get_edit_post_link( $ticket->ID ) : esc_url( trailingslashit( site_url() ) ) . esc_attr( strtolower( $labels['name'] ) ) . '/?rthd_unique_id=' . esc_attr( $rthd_unique_id );
 						?>
 						<tr>
 							<td> #<?php echo esc_attr( $ticket->ID ) ?> </td>
@@ -399,7 +438,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 							<td> <?php echo esc_attr( human_time_diff( $date->format( 'U' ), current_time( 'timestamp' ) ) ) . esc_attr( __( ' ago' ) ) ?> </td>
 							<td> <?php echo esc_attr( $ticket->post_status ) ?> </td>
 							<td><a class="button support" target="_blank"
-							       href="<?php echo esc_url( trailingslashit( site_url() ) ) . esc_attr( strtolower( $labels['name'] ) ) . '/?rthd_unique_id=' . esc_attr( $rthd_unique_id ); ?>"><?php _e( 'Link' ); ?></a>
+							       href="<?php echo $link; ?>"><?php _e( 'Link' ); ?></a>
 							</td>
 						</tr>
 					<?php
