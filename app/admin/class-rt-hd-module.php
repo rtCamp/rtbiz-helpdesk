@@ -277,10 +277,6 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 			add_action( 'rt_attributes_relations_deleted', array( $this, 'update_ticket_table' ), 10, 1 );
 
 			add_action( 'wp_before_admin_bar_render', array( $this, 'ticket_chnage_action_publish_update' ), 11 );
-
-			//			add_filter( 'rtlib_user_group_support', array( $this, 'add_department_support' ) );
-			add_filter( 'rtlib_product_support', array( $this, 'add_wc_product_support' ) );
-
 		}
 
 		/**
@@ -328,36 +324,6 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				});
 				</script>';
 			}
-		}
-
-		/**
-		 * Add department support for rtbiz-HelpDesk
-		 *
-		 * @since 0.1
-		 *
-		 * @param $post_types
-		 *
-		 * @return array
-		 */
-		function add_department_support( $post_types ) {
-			$post_types[] = self::$post_type;
-
-			return $post_types;
-		}
-
-		/**
-		 * Add wooCommerce Product taxonomy support for rtbiz-HelpDesk
-		 *
-		 * @since 0.1
-		 *
-		 * @param $post_types
-		 *
-		 * @return array
-		 */
-		function add_wc_product_support( $post_types ) {
-			$post_types[] = self::$post_type;
-
-			return $post_types;
 		}
 
 		/**
