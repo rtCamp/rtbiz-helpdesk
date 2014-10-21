@@ -25,7 +25,6 @@ class test_Rt_HD_Module extends RT_WP_TestCase {
 		$this->assertTrue( method_exists( $this->rthdModule, 'init_hd' ), 'Class Rt_HD_Module does not have method init_hd' );
 		$this->assertTrue( method_exists( $this->rthdModule, 'register_custom_post' ), 'Class Rt_HD_Module does not have method register_custom_post' );
 		$this->assertTrue( method_exists( $this->rthdModule, 'register_custom_statuses' ), 'Class Rt_HD_Module does not have method register_custom_statuses' );
-		$this->assertTrue( method_exists( $this->rthdModule, 'add_department_support' ), 'Class Rt_HD_Module does not have method add_department_support' );
 	}
 
 	/**
@@ -76,11 +75,5 @@ class test_Rt_HD_Module extends RT_WP_TestCase {
 		$this->assertTrue( is_object( $this->rthdModule->register_custom_statuses( $status ) ) );
 	}
 
-	/**
-	 * Test add_department_support
-	 */
-	function  test_add_department_support() {
-		$this->assertEquals( array( 'rtbiz_hd_ticket' ) , $this->rthdModule->add_department_support( array() ) );
-	}
 }
  

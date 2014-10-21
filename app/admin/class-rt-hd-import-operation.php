@@ -84,7 +84,6 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			require_once( ABSPATH . 'wp-admin' . '/includes/media.php' );
 			$returnData = array();
 			//then loop over the files that were sent and store them using  media_handle_upload();
-			//			var_dump($_FILES);
 			if ( $_FILES ) {
 				foreach ( $_FILES as $file => $array ) {
 					if ( $_FILES[ $file ]['error'] !== UPLOAD_ERR_OK ) {
@@ -1774,9 +1773,6 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			//			$emailHTML = $body . "</br> To View Follwup Click <a href='". get_edit_post_link( $post_id ) . "'>here</a>.<br/>";
 			$emailHTML = $body . "</br> To View Follwup Click <a href='". admin_url().'post.php?post='.$post_id.'&action=edit'."'>here</a>.<br/>";
 
-			//			array_push( $to, array( 'email' => $userSub->user_email, 'name' => $userSub->display_name ) );
-			//			error_log( var_export( $to , true)." ", 3, "/var/tmp/my-errors.log");
-			// error_log(var_export($to, true)." : -> system", 3, "/var/tmp/my-errors.log");
 			// $emailHTML .= '<br />' . $signature;
 			$rt_hd_email_notification->insert_new_send_email( $title, $emailHTML, $to, $cc, $bccemails, array(), $comment_id, 'comment' );
 			//			}

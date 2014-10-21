@@ -13,7 +13,6 @@ function right_comment( $comment, $user_edit ) {
 	else {
 		$display_private_comment_flag = true;
 	}
-	//	error_log( $display_private_comment_flag . ": -> system", 3, "/var/tmp/my-errors.log");
 	if ( $display_private_comment_flag ) {
 		?>
 
@@ -80,7 +79,6 @@ function left_comment( $comment, $user_edit ) {
 	else {
 		$display_private_comment_flag = true;
 	}
-	//	error_log( $display_private_comment_flag . ": -> system", 3, "/var/tmp/my-errors.log");
 	if ( $display_private_comment_flag ) {
 		?>
 		<li class="other editable" id="comment-<?php echo esc_attr( $comment->comment_ID ); ?>">

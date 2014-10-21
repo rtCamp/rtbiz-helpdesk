@@ -358,7 +358,6 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 		 * @param $query
 		 */
 		function pre_filter( $query ) {
-			//var_dump( $query );
 			if ( isset( $_GET['post_type'] ) && $_GET['post_type'] == Rt_HD_Module::$post_type ) {
 				$orderby = $query->get( 'orderby' );
 				if ( isset( $_GET['contact_id'] ) ) {

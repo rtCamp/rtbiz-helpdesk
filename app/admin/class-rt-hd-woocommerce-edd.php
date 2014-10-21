@@ -84,7 +84,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 
 		function edd_action_link_header() {
 			?>
-			<th class="edd_rt_hd_support"><?php _e('Support', 'edd'); ?></th>
+			<th class="edd_rt_hd_support"><?php _e( 'Support', 'edd' ); ?></th>
 			<?php
 		}
 
@@ -192,12 +192,12 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 			<form method="post" action="" class="comment-form pure-form pure-form-aligned"
 			      enctype="multipart/form-data">
 
-				<?php if ( isset( $_REQUEST[ 'order_id' ] ) ) { ?>
-					<input type="hidden" name="post[order_id]" value="<?php echo $_REQUEST[ 'order_id' ]; ?>">
+				<?php if ( isset( $_REQUEST['order_id'] ) ) { ?>
+					<input type="hidden" name="post[order_id]" value="<?php echo $_REQUEST['order_id']; ?>">
 				<?php } ?>
 
-				<?php if ( isset( $_REQUEST[ 'order_type' ] ) ) { ?>
-					<input type="hidden" name="post[order_type]" value="<?php echo $_REQUEST[ 'order_type' ]; ?>">
+				<?php if ( isset( $_REQUEST['order_type'] ) ) { ?>
+					<input type="hidden" name="post[order_type]" value="<?php echo $_REQUEST['order_type']; ?>">
 				<?php } ?>
 
 				<div class="pure-control-group">
@@ -275,7 +275,9 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 
 			if ( isset( $data['product_id'] ) ) {
 				$term = get_term_by( 'id', $data['product_id'], $rtbiz_product_sync->product_slug );
-				wp_set_post_terms( $rt_hd_tickets_id, array( $term->term_id ), $rtbiz_product_sync->product_slug );
+				if ( $term ) {
+					wp_set_post_terms( $rt_hd_tickets_id, array( $term->term_id ), $rtbiz_product_sync->product_slug );
+				}
 			}
 
 			// Created attachment
@@ -306,16 +308,16 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 				}
 			}
 
-			if ( isset( $data[ 'order_id' ] ) && $data[ 'order_type' ] ) {
+			if ( isset( $data['order_id'] ) && $data['order_type'] ) {
 				//Store Order ID
-				update_post_meta( $rt_hd_tickets_id, 'rtbiz_hd_order_id', esc_attr( $data[ 'order_id' ] ) );
-				update_post_meta( $rt_hd_tickets_id, 'rtbiz_hd_order_type', esc_attr( $data[ 'order_type' ] ) );
+				update_post_meta( $rt_hd_tickets_id, 'rtbiz_hd_order_id', esc_attr( $data['order_id'] ) );
+				update_post_meta( $rt_hd_tickets_id, 'rtbiz_hd_order_type', esc_attr( $data['order_type'] ) );
 
 				$link = '';
-				if ( 'woocommerce' === $data[ 'order_type' ] ) {
-					$link = add_query_arg( 'post', $_REQUEST[ 'order_id' ], admin_url( 'post.php?action=edit' ) );
-				} else if ( 'edd' === $data[ 'order_type' ] ) {
-					$link = add_query_arg( 'id', $_REQUEST[ 'order_id' ], admin_url( 'edit.php?post_type=download&page=edd-payment-history&view=view-order-details' ) );
+				if ( 'woocommerce' === $data['order_type'] ) {
+					$link = add_query_arg( 'post', $_REQUEST['order_id'], admin_url( 'post.php?action=edit' ) );
+				} else if ( 'edd' === $data['order_type'] ) {
+					$link = add_query_arg( 'id', $_REQUEST['order_id'], admin_url( 'edit.php?post_type=download&page=edd-payment-history&view=view-order-details' ) );
 				}
 				update_post_meta( $rt_hd_tickets_id, 'rtbiz_hd_order_link', $link );
 			}
@@ -377,7 +379,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 				array(
 					'email' => '',
 					'user'  => '',
-				    'order' => '',
+					'order' => '',
 				), $atts );
 
 			$args    = array(
@@ -401,11 +403,11 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 					$args['author'] = $arg_shortcode['user'];
 					$tickets        = get_posts( $args );
 				}
-			} else if ( ! empty( $arg_shortcode[ 'order' ] ) ) {
-				$args[ 'meta_query' ] = array(
+			} else if ( ! empty( $arg_shortcode['order'] ) ) {
+				$args['meta_query'] = array(
 					array(
 						'key' => 'rtbiz_hd_order_id',
-					    'value' => $arg_shortcode[ 'order' ],
+						'value' => $arg_shortcode['order'],
 					),
 				);
 				$tickets = get_posts( $args );
