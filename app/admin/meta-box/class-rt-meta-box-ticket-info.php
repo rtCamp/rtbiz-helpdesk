@@ -214,5 +214,41 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 			$rt_hd_tickets_operation->ticket_attribute_update( $newTicket, $post->post_type, $post_id, 'meta' );
 
 		}
+
+		public static function custom_post_status_rendar() {
+			global $post, $pagenow, $rt_hd_module;
+			$flag = false;
+			if ( isset( $post ) && ! empty( $post ) && $post->post_type === Rt_HD_Module::$post_type ) {
+				if ( 'edit.php' == $pagenow || 'post-new.php' == $pagenow ) {
+					$flag = true;
+				}
+			}
+			if ( isset( $post ) && ! empty( $post ) && 'post.php' == $pagenow && get_post_type( $post->ID ) === Rt_HD_Module::$post_type ) {
+				$flag = true;
+			}
+			if ( $flag ) {
+				$option      = '';
+				$post_status = $rt_hd_module->get_custom_statuses();
+				foreach ( $post_status as $status ) {
+					if ( $post->post_status == $status['slug'] ) {
+						$complete = " selected='selected'";
+					} else {
+						$complete = '';
+					}
+					$option .= "<option value='" . $status['slug'] . "' " . $complete . '>' . $status['name'] . '</option>';
+				}
+
+				echo '<script>
+                        jQuery(document).ready(function($) {
+                            $("select#post_status").html("'. $option .'");
+                            $(".inline-edit-status select").html("'. $option .'");
+
+                            $(document).on("change","#rthd_post_status",function(){
+                                $("#post_status").val($(this).val());
+                            });
+                               });
+                        </script>';
+			}
+		}
 	}
 }

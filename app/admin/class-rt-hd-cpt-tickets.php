@@ -54,6 +54,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 			add_action( 'untrashed_post', array( $this, 'after_restore_trashed_ticket' ) );
 			add_action( 'before_delete_post', array( $this, 'before_ticket_deleted' ) );
 			add_action( 'wp_trash_post', array( $this, 'before_ticket_trashed' ) );
+			add_action( 'wp_before_admin_bar_render', 'RT_Meta_Box_Ticket_Info::custom_post_status_rendar', 10 );
 		}
 
 		/**
