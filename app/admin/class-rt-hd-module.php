@@ -277,6 +277,12 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 			add_action( 'rt_attributes_relations_deleted', array( $this, 'update_ticket_table' ), 10, 1 );
 
 			add_action( 'wp_before_admin_bar_render', array( $this, 'ticket_chnage_action_publish_update' ), 11 );
+			
+			add_action( 'show_user_profile', array( $this, 'add_rthd_notification_events_field' ) );
+			add_action( 'edit_user_profile', array( $this, 'add_rthd_notification_events_field' ) );
+			
+			add_action( 'personal_options_update', array( $this, 'save_rthd_notification_events_field' ) );
+			add_action( 'edit_user_profile_update', array( $this, 'save_rthd_notification_events_field' ) );
 		}
 
 		/**
@@ -366,6 +372,65 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 			}
 
 			return $menu_order;
+		}
+
+		/**
+		 * Display the Notification info for a user
+		 *
+		 * @since 1.0
+		 * @param WP_User $user
+		 */
+		public function add_rthd_notification_events_field( $user ) {
+			
+			$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
+	
+			if ( ! current_user_can( $cap ) )
+				return;
+	
+			if ( current_user_can( $cap, $user->ID ) ) {
+				?>
+					<table class="form-table">
+						<tbody>
+							<tr>
+								<?php 
+									$settings = rthd_get_redux_settings();
+									$label = $settings['rthd_menu_label'] . ' Notification';
+								?>
+								<th><label for="rthelpdesk_notification_events"><?php _e( $label , RT_HD_TEXT_DOMAIN ); ?></label></th>
+								<td>
+									<input name="rthelpdesk_notification_events" type="checkbox" id="rthelpdesk_notification_events" value="0"
+									<?php
+										$rthelpdesk_notification_events = get_user_meta( $user->ID, 'rthelpdesk_notification_events', true );
+										if ( $rthelpdesk_notification_events == 1 ){
+											echo 'checked="checked"';
+										}
+									?>
+									 />
+									<span class="description"><?php _e( 'Turn On Event Notification', RT_HD_TEXT_DOMAIN ); ?></span>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				<?php 
+			}
+		}
+		
+		/**
+		 * Save Notification Fields on edit user pages
+		 *
+		 * @param mixed $user_id User ID of the user being saved
+		 */
+		public function save_rthd_notification_events_field( $user_id ) {
+			if ( isset( $_POST['rthelpdesk_notification_events'] ) ){
+				$_POST['rthelpdesk_notification_events'] = 1;
+			} else {
+				$_POST['rthelpdesk_notification_events'] = 0;
+			}
+			
+			$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
+			
+			if ( current_user_can( $cap, $user_id ) )
+				update_user_meta( $user_id, 'rthelpdesk_notification_events', sanitize_text_field( $_POST[ 'rthelpdesk_notification_events' ] ) );
 		}
 	}
 }
