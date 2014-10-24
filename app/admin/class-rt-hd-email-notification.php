@@ -45,7 +45,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				$bcc_user = get_user_by( 'email', $bcc_email_id );
 				$user_rthelpdesk_notification_events = get_user_meta( $bcc_user->ID, 'rthelpdesk_notification_events', true );
 				
-				if ( $user_rthelpdesk_notification_events == 0 ){ // if sets no
+				if (  ! empty( $user_rthelpdesk_notification_events ) && ( 0 == $user_rthelpdesk_notification_events ) ){ // if sets no
 					unset( $bccemail[ array_search( $bcc_email_id, $bcc_email_ids) ]); // Remove from the list who does not want.
 				}
 			}
