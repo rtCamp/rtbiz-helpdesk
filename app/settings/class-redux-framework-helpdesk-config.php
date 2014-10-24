@@ -30,7 +30,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				return;
 			}
 
-			add_action( 'plugins_loaded', array( $this, 'init_settings' ), 15 );
+			add_action( 'plugins_loaded', array( $this, 'init_settings' ), 25 );
 		}
 
 
@@ -511,27 +511,27 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			);
 
 			// SOCIAL ICONS -> Setup custom links in the footer for quick links in your panel footer icons.
-			$this->args['share_icons'][] = array(
-				'url'   => 'https://github.com/ReduxFramework/ReduxFramework',
-				'title' => 'Visit us on GitHub',
-				'icon'  => 'el-icon-github',
-				//'img'   => '', // You can use icon OR img. IMG needs to be a full URL.
-			);
-			$this->args['share_icons'][] = array(
-				'url'   => 'https://www.facebook.com/pages/Redux-Framework/243141545850368',
-				'title' => 'Like us on Facebook',
-				'icon'  => 'el-icon-facebook',
-			);
-			$this->args['share_icons'][] = array(
-				'url'   => 'http://twitter.com/reduxframework',
-				'title' => 'Follow us on Twitter',
-				'icon'  => 'el-icon-twitter',
-			);
-			$this->args['share_icons'][] = array(
-				'url'   => 'http://www.linkedin.com/company/redux-framework',
-				'title' => 'Find us on LinkedIn',
-				'icon'  => 'el-icon-linkedin',
-			);
+//			$this->args['share_icons'][] = array(
+//				'url'   => 'https://github.com/ReduxFramework/ReduxFramework',
+//				'title' => 'Visit us on GitHub',
+//				'icon'  => 'el-icon-github',
+//				//'img'   => '', // You can use icon OR img. IMG needs to be a full URL.
+//			);
+//			$this->args['share_icons'][] = array(
+//				'url'   => 'https://www.facebook.com/pages/Redux-Framework/243141545850368',
+//				'title' => 'Like us on Facebook',
+//				'icon'  => 'el-icon-facebook',
+//			);
+//			$this->args['share_icons'][] = array(
+//				'url'   => 'http://twitter.com/reduxframework',
+//				'title' => 'Follow us on Twitter',
+//				'icon'  => 'el-icon-twitter',
+//			);
+//			$this->args['share_icons'][] = array(
+//				'url'   => 'http://www.linkedin.com/company/redux-framework',
+//				'title' => 'Find us on LinkedIn',
+//				'icon'  => 'el-icon-linkedin',
+//			);
 
 			// Panel Intro text -> before the form
 //			if ( ! isset( $this->args['global_variable'] ) || false !== $this->args['global_variable'] ) {
@@ -546,7 +546,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 //			}
 
 			// Add content after the form.
-			$this->args['footer_text'] = __( '<p>This text is displayed below the options panel. It isn\'t required, but more info is always better! The footer_text field accepts all HTML.</p>', 'redux-framework-demo' );
+//			$this->args['footer_text'] = __( '<p>This text is displayed below the options panel. It isn\'t required, but more info is always better! The footer_text field accepts all HTML.</p>', 'redux-framework-demo' );
 
 			return true;
 		}
