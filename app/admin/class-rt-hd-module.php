@@ -277,10 +277,11 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 			add_action( 'rt_attributes_relations_deleted', array( $this, 'update_ticket_table' ), 10, 1 );
 
 			add_action( 'wp_before_admin_bar_render', array( $this, 'ticket_chnage_action_publish_update' ), 11 );
-			
+			add_action( 'user_register', array( $this, 'new_user_registration_save'), 10, 1 );
+
 			add_action( 'show_user_profile', array( $this, 'add_rthd_notification_events_field' ) );
 			add_action( 'edit_user_profile', array( $this, 'add_rthd_notification_events_field' ) );
-			
+
 			add_action( 'personal_options_update', array( $this, 'save_rthd_notification_events_field' ) );
 			add_action( 'edit_user_profile_update', array( $this, 'save_rthd_notification_events_field' ) );
 		}
@@ -381,18 +382,18 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 		 * @param WP_User $user
 		 */
 		public function add_rthd_notification_events_field( $user ) {
-			
+
 			$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
-	
+
 			if ( ! current_user_can( $cap ) )
 				return;
-	
+
 			if ( current_user_can( $cap, $user->ID ) ) {
 				?>
 					<table class="form-table">
 						<tbody>
 							<tr>
-								<?php 
+								<?php
 									$settings = rthd_get_redux_settings();
 									$label = $settings['rthd_menu_label'] . ' Notification';
 								?>
@@ -411,10 +412,10 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 							</tr>
 						</tbody>
 					</table>
-				<?php 
+				<?php
 			}
 		}
-		
+
 		/**
 		 * Save Notification Fields on edit user pages
 		 *
@@ -426,11 +427,19 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 			} else {
 				$_POST['rthelpdesk_notification_events'] = 0;
 			}
-			
+
 			$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
-			
+
 			if ( current_user_can( $cap, $user_id ) )
 				update_user_meta( $user_id, 'rthelpdesk_notification_events', sanitize_text_field( $_POST[ 'rthelpdesk_notification_events' ] ) );
+		}
+
+		/*
+		 *
+		 *
+		 */
+	 	public function new_user_registration_save( $user_id ) {
+			add_user_meta( $user_id, 'rthelpdesk_notification_events', 1);
 		}
 	}
 }
