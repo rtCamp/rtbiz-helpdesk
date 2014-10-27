@@ -40,24 +40,20 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			
 			$bcc_email_ids = array();
 			$bcc_email_ids = wp_list_pluck( $bccemail, 'email' );
-			echo "<pre>";
-			print_r($bccemail);
 			
 			foreach ( $bcc_email_ids as $bcc_email_id ) {
 				$bcc_user = get_user_by( 'email', $bcc_email_id );
 				if ( $bcc_user != false ){
 					$user_rthelpdesk_notification_events = get_user_meta( $bcc_user->ID, 'rthelpdesk_notification_events', true );
 					if (  0 == $user_rthelpdesk_notification_events ){ // if sets no
-						print_r($bcc_email_id);
 						unset( $bccemail[ array_search( $bcc_email_id, $bcc_email_ids) ]); // Remove from the list who does not want.
 					}
 				}
 			}
-			print_r($bccemail);
-			echo "</pre>";
-			/*
+			
 			$cc_email_ids = array();
 			$cc_email_ids = wp_list_pluck( $ccemail, 'email' );	
+			
 			foreach ( $cc_email_ids as $cc_email_id ) {
 				$cc_user = get_user_by( 'email', $cc_email_id );
 				if ( $cc_user != false ){
@@ -81,7 +77,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 					}
 				}
 			}
-			*/
+			
 			$args = array(
 				'user_id'       => $user_id,
 				'fromemail'     => $settings['outbound_emails'],
