@@ -191,7 +191,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$body .= '<br />To View ' . $post_type . " Click <a href='" . admin_url( 'post.php?post=' . $post_id . '&action=edit' ) . "'>here</a>. <br/>";
 			$body .= 'Ticket created by : <a target="_blank" href="">' . $current_user->display_name . '</a>';
 			// added Notification Emails
-			$this->insert_new_send_email( $title, $body, $to, $cc, array(), $uploaded, $post_id, 'post' ); die();
+			$this->insert_new_send_email( $title, $body, $to, $cc, array(), $uploaded, $post_id, 'post' );
 		}
 
 		/**
@@ -227,7 +227,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$body .= '<br />To View ' . $post_type . " Click <a href='" . trailingslashit( site_url() ) . strtolower( $post_type ) . '/?rthd_unique_id=' . $unique_id . "'>here</a>. <br/>";
 			$body .= 'Ticket Updated by : <a target="_blank" href="">' . $current_user->display_name . '</a>';
 			// added Notification Emails
-			$this->insert_new_send_email( $title, $body, $to, $cc, array(), $uploaded, $post_id, 'post' );die();
+			$this->insert_new_send_email( $title, $body, $to, $cc, array(), $uploaded, $post_id, 'post' );
 		}
 
 		/**
@@ -258,7 +258,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				$body .= ' have been <b>subscribed</b> to this ticket';
 				$unique_id = get_post_meta( $post_id, '_rtbiz_hd_unique_id', true );
 				$body .= '<br />To View ' . $post_type . " Click <a href='" . trailingslashit( site_url() ) . strtolower( $post_type ) . '/?rthd_unique_id=' . $unique_id . "'>here</a>. <br/>";
-				$this->insert_new_send_email( $title, $body, array(), $cc, array(), array(), $post_id, 'post' );die();
+				$this->insert_new_send_email( $title, $body, array(), $cc, array(), array(), $post_id, 'post' );
 			}
 		}
 
@@ -290,7 +290,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				$body .= 'have been <b>unsubscribed</b> from this ticket';
 				$unique_id = get_post_meta( $post_id, '_rtbiz_hd_unique_id', true );
 				$body .= '<br />To View ' . $post_type . " Click <a href='" . trailingslashit( site_url() ) . strtolower( $post_type ) . '/?rthd_unique_id=' . $unique_id . "'>here</a>. <br/>";
-				$this->insert_new_send_email( $title, $body, array(), $cc, array(), array(), $post_id, 'post' );die();
+				$this->insert_new_send_email( $title, $body, array(), $cc, array(), array(), $post_id, 'post' );
 			}
 		}
 
@@ -317,7 +317,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$unique_id = get_post_meta( $post_id, '_rtbiz_hd_unique_id', true );
 			$body .= '<br />To View ' . $post_type . " Click <a href='" . trailingslashit( site_url() ) . strtolower( $post_type ) . '/?rthd_unique_id=' . $unique_id . "'>here</a>. <br/>";
 			$body .= '<br />' . 'Ticket updated by : <a target="_blank" href="">' . $current_user->display_name . '</a>';
-			$this->insert_new_send_email( $title, stripslashes( $body ), $to, $cc, $bccemails, array(), $post_id, 'post' );die();
+			$this->insert_new_send_email( $title, stripslashes( $body ), $to, $cc, $bccemails, array(), $post_id, 'post' );
 		}
 
 		/**
@@ -345,7 +345,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 					}
 				}
 			}
-			$this->insert_new_send_email( $title, $body, array(), $cc, $notify_emails, $uploaded, $post_id );die();
+			$this->insert_new_send_email( $title, $body, array(), $cc, $notify_emails, $uploaded, $post_id );
 		}
 
 		/**
