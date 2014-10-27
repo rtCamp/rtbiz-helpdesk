@@ -49,6 +49,32 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 					unset( $bccemail[ array_search( $bcc_email_id, $bcc_email_ids) ]); // Remove from the list who does not want.
 				}
 			}
+			
+			$cc_email_ids = array();
+			$cc_email_ids = wp_list_pluck( $ccemail, 'email' );	
+			foreach ( $cc_email_ids as $cc_email_id ) {
+				$cc_user = get_user_by( 'email', $cc_email_id );
+				if ( $cc_user != false ){
+					$user_rthelpdesk_notification_events = get_user_meta( $cc_user->ID, 'rthelpdesk_notification_events', true );
+					if (  0 == $user_rthelpdesk_notification_events ){ // if sets no
+						unset( $ccemail[ array_search( $cc_email_id, $cc_email_ids) ]); // Remove from the list who does not want.
+					}
+				}
+				
+			}
+			
+			$to_email_ids = array();
+			$to_email_ids = wp_list_pluck( $toemail, 'email' );
+			
+			foreach ( $to_email_ids as $to_email_id ) {
+				$to_user = get_user_by( 'email', $to_email_id );
+				if ( $to_user != false ){
+					$user_rthelpdesk_notification_events = get_user_meta( $to_user->ID, 'rthelpdesk_notification_events', true );
+					if (  0 == $user_rthelpdesk_notification_events ){ // if sets no
+						unset( $toemail[ array_search( $to_email_id, $to_email_ids) ]); // Remove from the list who does not want.
+					}
+				}
+			}
 
 			$args = array(
 				'user_id'       => $user_id,
