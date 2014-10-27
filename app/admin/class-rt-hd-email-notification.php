@@ -37,7 +37,47 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$user_id = get_current_user_id();
 			global $rt_hd_mail_outbound_model;
 			$settings = rthd_get_settings();
-
+			
+			$bcc_email_ids = array();
+			$bcc_email_ids = wp_list_pluck( $bccemail, 'email' );
+			
+			foreach ( $bcc_email_ids as $bcc_email_id ) {
+				$bcc_user = get_user_by( 'email', $bcc_email_id );
+				if ( $bcc_user != false ){
+					$user_rthelpdesk_notification_events = get_user_meta( $bcc_user->ID, 'rthelpdesk_notification_events', true );
+					if (  0 == $user_rthelpdesk_notification_events ){ // if sets no
+						unset( $bccemail[ array_search( $bcc_email_id, $bcc_email_ids) ]); // Remove from the list who does not want.
+					}
+				}
+			}
+			
+			$cc_email_ids = array();
+			$cc_email_ids = wp_list_pluck( $ccemail, 'email' );	
+			
+			foreach ( $cc_email_ids as $cc_email_id ) {
+				$cc_user = get_user_by( 'email', $cc_email_id );
+				if ( $cc_user != false ){
+					$user_rthelpdesk_notification_events = get_user_meta( $cc_user->ID, 'rthelpdesk_notification_events', true );
+					if (  0 == $user_rthelpdesk_notification_events ){ // if sets no
+						unset( $ccemail[ array_search( $cc_email_id, $cc_email_ids) ]); // Remove from the list who does not want.
+					}
+				}
+				
+			}
+			
+			$to_email_ids = array();
+			$to_email_ids = wp_list_pluck( $toemail, 'email' );
+			
+			foreach ( $to_email_ids as $to_email_id ) {
+				$to_user = get_user_by( 'email', $to_email_id );
+				if ( $to_user != false ){
+					$user_rthelpdesk_notification_events = get_user_meta( $to_user->ID, 'rthelpdesk_notification_events', true );
+					if (  0 == $user_rthelpdesk_notification_events ){ // if sets no
+						unset( $toemail[ array_search( $to_email_id, $to_email_ids) ]); // Remove from the list who does not want.
+					}
+				}
+			}
+			
 			$args = array(
 				'user_id'       => $user_id,
 				'fromemail'     => $settings['outbound_emails'],
@@ -50,6 +90,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				'refrence_id'   => $refrence_id,
 				'refrence_type' => $refrence_type,
 			);
+			
 			if ( $this->is_wp_email( ) ) {
 				$id = $rt_hd_mail_outbound_model->add_outbound_mail( $args );
 				$sendflag = $this->send_wp_email( $args );
