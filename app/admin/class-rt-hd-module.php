@@ -402,7 +402,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 									<input name="rthelpdesk_notification_events" type="checkbox" id="rthelpdesk_notification_events" value="0"
 									<?php
 										$rthelpdesk_notification_events = get_user_meta( $user->ID, 'rthelpdesk_notification_events', true );
-										if ( $rthelpdesk_notification_events == 1 ){
+										if ( $rthelpdesk_notification_events == 1 || ! is_numeric( $rthelpdesk_notification_events ) ){
 											echo 'checked="checked"';
 										}
 									?>
