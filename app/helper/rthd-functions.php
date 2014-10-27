@@ -535,3 +535,13 @@ function rthd_my_mail_from( $email )
 	$settings = rthd_get_settings();
 	return $settings['outbound_emails'];
 }
+
+// user notification preference
+function rthd_get_user_notification_preference( $user_id ) {
+	$pref = get_user_meta( $user_id, 'rthd_notification_pref', true );
+	if ( empty( $pref ) ) {
+		update_user_meta( $user_id, 'rthd_notification_pref', 'yes' );
+		$pref = 'yes';
+	}
+	return $pref;
+}
