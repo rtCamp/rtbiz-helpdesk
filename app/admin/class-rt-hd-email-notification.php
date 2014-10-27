@@ -49,7 +49,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 					unset( $bccemail[ array_search( $bcc_email_id, $bcc_email_ids) ]); // Remove from the list who does not want.
 				}
 			}
-			
+			/*
 			$cc_email_ids = array();
 			$cc_email_ids = wp_list_pluck( $ccemail, 'email' );	
 			foreach ( $cc_email_ids as $cc_email_id ) {
@@ -75,7 +75,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 					}
 				}
 			}
-
+			*/
 			$args = array(
 				'user_id'       => $user_id,
 				'fromemail'     => $settings['outbound_emails'],
