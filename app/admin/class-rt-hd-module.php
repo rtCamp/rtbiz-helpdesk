@@ -419,7 +419,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 		/**
 		 * Save Notification Fields on edit user pages
 		 *
-		 * @param mixed $user_id User ID of the user being saved
+		 * @param int $user_id User ID of the user being saved
 		 */
 		public function save_rthd_notification_events_field( $user_id ) {
 			if ( isset( $_POST['rthelpdesk_notification_events'] ) ){
@@ -434,9 +434,11 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				update_user_meta( $user_id, 'rthelpdesk_notification_events', sanitize_text_field( $_POST[ 'rthelpdesk_notification_events' ] ) );
 		}
 
-		/*
+		/**
+		 * Add metadata upon new user registration.
 		 *
-		 *
+		 * @param int $user_id User ID of the new user being created.
+		 * 
 		 */
 	 	public function new_user_registration_save( $user_id ) {
 			add_user_meta( $user_id, 'rthelpdesk_notification_events', 1);
