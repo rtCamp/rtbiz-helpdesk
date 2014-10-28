@@ -52,7 +52,7 @@ if ( ! class_exists( 'RT_Meta_Box_Attachment' ) ) {
 					<a href="#" class="delete_row rthd_delete_attachment">x</a> <a target="_blank"
 					                                                               href="<?php echo esc_url( wp_get_attachment_url( $attachment->ID ) ); ?>">
 						<img height="20px" width="20px"
-						     src="<?php echo esc_url( RT_HD_URL . 'assets/file-type/' . $extn . '.png' ); ?>"/><?php
+						     src="<?php echo esc_url( RT_HD_URL . 'app/assets/file-type/' . $extn . '.png' ); ?>"/><?php
 						echo esc_attr( $attachment->post_title ); ?>
 					</a> <input type="hidden" name="attachment[]" value="<?php echo esc_attr( $attachment->ID ); ?>"/>
 					</li><?php

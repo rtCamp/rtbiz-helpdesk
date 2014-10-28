@@ -138,7 +138,7 @@ if ( isset( $post->ID ) ) {
 				     data-attachment-id="<?php echo esc_attr( $attachment->ID ); ?>">
 					<a class="rthd_attachment" title="<?php echo balanceTags( $attachment->post_title ); ?>" target="_blank"
 					   href="<?php echo esc_url( wp_get_attachment_url( $attachment->ID ) ); ?>"> <img height="20px" width="20px"
-					                                                                                   src="<?php echo esc_url(  wp_mime_type_icon( 'image/jpeg' ) ); ?>"/>
+					                                                                                   src="<?php echo esc_url( RT_HD_URL . 'app/assets/file-type/' . $extn . '.png' ); ?>"/>
 					<span title="<?php echo balanceTags( $attachment->post_title ); ?>"> 	<?php echo esc_attr( strlen( balanceTags( $attachment->post_title ) ) > 12 ? substr( balanceTags( $attachment->post_title ), 0, 12 ). '...' : balanceTags( $attachment->post_title ) ); ?> </span>
 					</a>
 					<?php if ( $user_edit ) { ?>
