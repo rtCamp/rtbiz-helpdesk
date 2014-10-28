@@ -42,10 +42,10 @@ $user_edit       = false;
 	$createdate = $create->format( 'M d, Y h:i A' );
 	$modifydate = $modify->format( 'M d, Y h:i A' );
 	?>
-	<div id="add-new-post" class="row">
+	<div id="add-new-post">
 	<input type="hidden" id='ticket_unique_id' value="<?php echo esc_attr( $ticket_unique_id ); ?>"/>
 
-	<div class="large-12 columns">
+	<div>
 		<?php if ( $user_edit ) { ?>
 			<input name="post[post_title]" id="new_<?php echo esc_attr( $post_type ) ?>_title" type="text"
 			       placeholder="<?php _e( esc_attr( ucfirst( $labels['name'] ) ) . ' Subject' ); ?>"
@@ -54,10 +54,7 @@ $user_edit       = false;
 			<h4><?php echo esc_attr( ( isset( $post->ID ) ) ? $post->post_title : '' ); ?></h4>
 		<?php } ?>
 	</div>
-	<div class="large-12 columns">
-	<div class="large-9 small-12 columns">
-		<div class="row expand">
-			<div class="large-12 columns">
+	<div>
 <?php
 if ( $user_edit ) {
 	wp_editor( ( isset( $post->ID ) ) ? $post->post_content : '', 'post[post_content]' );
@@ -65,28 +62,22 @@ if ( $user_edit ) {
 	echo '<span>' . balanceTags( ( isset( $post->ID ) ) ? $post->post_content : '' ) . '</span>';
 }
 ?>
-			</div>
-		</div>
+
+	</div>
 		<br/><br/>
 		<?php if ( isset( $post->ID ) ) { ?>
 			<div id="followup_wrapper">
-
-					<h2>Followup</h2>
-					<div class="row">
-						<div class="large-12 columns" id="commentlist">
-							<?php rthd_get_template( 'admin/followup-common.php', array( 'post' => $post ) ); ?>
-						</div>
-					</div>
+				<h2>Followup</h2>
+				<div id="commentlist">
+					<?php rthd_get_template( 'admin/followup-common.php', array( 'post' => $post ) ); ?>
+				</div>
 			</div>
 		<?php } ?>
-	</div>
-	<div class="large-3 columns rthd_sticky_div">
-		<h2><i class="foundicon-idea"></i> <?php _e( esc_attr( ucfirst( $labels['name'] ) ) . ' Information' ); ?></h2>
-		<div class="row collapse">
-			<div class="small-4 large-4  columns">
+		</div>
+		<div class="rthd_sticky_div">
+			<h2><i class="foundicon-idea"></i> <?php _e( esc_attr( ucfirst( $labels['name'] ) ) . ' Information' ); ?></h2>
+			<div>
 				<span class="prefix" title="Status">Status</span>
-			</div>
-			<div class="small-8 large-8 columns">
 				<?php
 if ( isset( $post->ID ) ) {
 	$pstatus = $post->post_status;
@@ -117,12 +108,8 @@ $post_status = $rt_hd_module->get_custom_statuses();
 	}
 } ?>
 			</div>
-		</div>
-		<div class="row collapse">
-			<div class="large-4 small-4 columns">
+			<div>
 				<span class="prefix" title="Create Date"><label>Create Date</label></span>
-			</div>
-			<div class="large-8 mobile-large-2 columns">
 				<?php if ( $user_edit ) { ?>
 					<input class="datetimepicker moment-from-now" type="text" placeholder="Select Create Date"
 					       value="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>"
@@ -134,22 +121,20 @@ $post_status = $rt_hd_module->get_custom_statuses();
 					     title="<?php echo esc_attr( $createdate )?>"><?php echo esc_attr( $createdate ) ?></div>
 				<?php } ?>
 			</div>
-		</div>
 <?php
 $attachments = array();
 if ( isset( $post->ID ) ) {
 	$attachments = get_children( array( 'post_parent' => $post->ID, 'post_type' => 'attachment', ) );
 } ?>
-	<fieldset>
-		<legend><i class="foundicon-paper-clip"></i> <?php _e( 'Attachments' ); ?></legend>
+			<h2><i class="foundicon-paper-clip"></i> <?php _e( 'Attachments' ); ?></h2>
 		<?php if ( $user_edit ) { ?>
 			<a href="#" class="button" id="add_ticket_attachment"><?php _e( 'Add' ); ?></a>
 		<?php } ?>
-		<div class="scroll-height" id="attachment-files">
+			<div id="attachment-files">
 			<?php foreach ( $attachments as $attachment ) { ?>
 				<?php $extn_array = explode( '.', $attachment->guid );
 				$extn             = $extn_array[ count( $extn_array ) - 1 ]; ?>
-				<div class="large-12 mobile-large-3 columns attachment-item"
+				<div class="attachment-item"
 				     data-attachment-id="<?php echo esc_attr( $attachment->ID ); ?>">
 					<a class="rthd_attachment" title="<?php echo balanceTags( $attachment->post_title ); ?>" target="_blank"
 					   href="<?php echo esc_url( wp_get_attachment_url( $attachment->ID ) ); ?>"> <img height="20px" width="20px"
@@ -162,9 +147,8 @@ if ( isset( $post->ID ) ) {
 					<input type="hidden" name="attachment[]" value="<?php echo esc_attr( $attachment->ID ); ?>"/>
 				</div>
 			<?php } ?>
+			</div>
 		</div>
-	</fieldset>
-	</div>
 	</div>
 	</div>
 	</div>

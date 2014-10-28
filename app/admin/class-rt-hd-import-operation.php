@@ -1285,7 +1285,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, $comment_ID, $notificationFlag, true );
 
 			$returnArray['status']        = true;
-			//			$returnArray['data']          = $this->generate_comment_html_front( $comment );
+
 			$returnArray['comment_count'] = get_comments(
 				array(
 					'order'     => 'DESC',
@@ -1299,70 +1299,6 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			ob_end_flush();
 			die( 0 );
 		}
-
-		/**
-		 * Get tickets from ajax
-		 *
-		 * @since rt-Helpdesk 0.1
-		 */
-		/*		function get_ticket_comments_ajax() {
-			if ( ! isset( $_POST['ticket_unique_id'] ) ) {
-				wp_die( 'Invalid Request' );
-			}
-			if ( ! isset( $_POST['page'] ) ) {
-				wp_die( 'Invalid Request' );
-			}
-
-			$ticket_unique_id = $_POST['ticket_unique_id'];
-			$args             = array(
-				'meta_key'    => 'rthd_unique_id',
-				'meta_value'  => $ticket_unique_id,
-				'post_status' => 'any',
-				'post_type'   => Rt_HD_Module::$post_type,
-			);
-			$ticketpost       = get_posts( $args );
-			if ( empty( $ticketpost ) ) {
-				wp_die( 'Invalid Ticket' );
-			}
-			$rthd_ticket   = $ticketpost[0];
-			$page          = $_POST['page'];
-			$comment_count = count( get_comments(
-										array(
-											'meta_key'   => '_rthd_privacy',
-											'meta_value' => 'no',
-											'order'      => 'DESC',
-											'post_id'    => $rthd_ticket->ID,
-											'post_type'  => $rthd_ticket->post_type,
-											) ) );
-			$comments = get_comments(
-				array(
-					'meta_key'   => '_rthd_privacy',
-					'meta_value' => 'no',
-					'order'      => 'DESC',
-					'post_id'    => $rthd_ticket->ID,
-					'post_type'  => $rthd_ticket->post_type,
-					'number'     => '10',
-					'offset'     => $page * 10,
-				) );
-			ob_start();
-			foreach ( $comments as $comment ) {
-				echo balanceTags( $this->generate_comment_html_front( $comment ) );
-			} //End Loop for comments
-
-			$returnStr = ob_get_clean();
-			$more      = false;
-			if ( ( $page + 1 ) < ( $comment_count / 10 ) ) {
-				$more = true;
-			}
-			$returnArray = array(
-				'status'       => 'success',
-				'data'         => $returnStr,
-				'more'         => $more,
-				'result_count' => sizeof( $comments )
-			);
-			echo json_encode( $returnArray );
-			die( 0 );
-		}*/
 
 		/**
 		 * add new followup on AJAX
@@ -1659,7 +1595,6 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, $comment_ID, $notificationFlag, true );
 			$returnArray['status'] = true;
 			$returnArray['comment_id'] = $comment_ID;
-			$returnArray['data']          = $this->genrate_comment_html_ajax( $comment );
 			$returnArray['comment_count'] = get_comments( array(
 															'order'     => 'DESC',
 															'post_id'   => $comment_post_ID,
@@ -1776,59 +1711,6 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			// $emailHTML .= '<br />' . $signature;
 			$rt_hd_email_notification->insert_new_send_email( $title, $emailHTML, $to, $cc, $bccemails, array(), $comment_id, 'comment' );
 			//			}
-		}
-
-		/**
-		 * Generate comment
-		 *
-		 * @param $comment
-		 *
-		 * @return string
-		 *
-		 * @since rt-Helpdesk 0.1
-		 */
-		function generate_comment_html_front( $comment ) {
-			$user_edit = false;
-			if ( isset( $_POST['user_edit'] ) ) {
-				$user_edit = $_POST['user_edit'];
-			}
-
-			global $prev_month, $prev_year, $prev_day;
-			$prev_month = '';
-			$prev_day   = '';
-			$prev_year  = '';
-			ob_start();
-			rthd_get_template( 'followup.php', array( 'comment' => $comment, 'user_edit' => $user_edit, ) );
-			$commentstr = ob_get_clean();
-
-			return $commentstr;
-		}
-
-		/**
-		 * generate comment for ajax call
-		 *
-		 * @param $comment
-		 *
-		 * @return string
-		 *
-		 * @since rt-Helpdesk 0.1
-		 */
-		function genrate_comment_html_ajax( $comment ) {
-
-			$user_edit = false;
-			if ( isset( $_POST['user_edit'] ) ) {
-				$user_edit = $_POST['user_edit'];
-			}
-
-			global $prev_month, $prev_year, $prev_day;
-			$prev_month = '';
-			$prev_day   = '';
-			$prev_year  = '';
-			ob_start();
-			rthd_get_template( 'admin/followup.php', array( 'comment' => $comment, 'user_edit' => $user_edit, ) );
-			$commentstr = ob_get_clean();
-
-			return $commentstr;
 		}
 
 		/**

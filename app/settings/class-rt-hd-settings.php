@@ -38,21 +38,7 @@ if ( ! class_exists( 'Rt_HD_Settings' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		public function __construct() {
-		}
-
-		/**
-		 * setup ui template
-		 *
-		 * @since rt-Helpdesk 0.1
-		 */
-		function ui() {
-			global $rt_hd_settings;
-			$args = array(
-				'rt_hd_settings' => $rt_hd_settings,
-			);
-			rthd_get_template( 'admin/settings.php', $args );
-		}
+		public function __construct() {}
 
 		/**
 		 * update sync meta time
