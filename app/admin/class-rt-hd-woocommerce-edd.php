@@ -394,7 +394,13 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 			if ( ! empty( $arg_shortcode['email'] ) || ! empty( $arg_shortcode['user'] ) ) {
 
 				if ( ! empty( $arg_shortcode['email'] ) ) {
-					$person = rt_biz_get_person_by_email( $arg_shortcode['email'] );
+
+					if ( $arg_shortcode['email'] == '{{logged_in_user}}' ) {
+						global $current_user;
+						$person = rt_biz_get_person_by_email( $current_user->user_email );
+					} else {
+						$person = rt_biz_get_person_by_email( $arg_shortcode['email'] );
+					}
 					if ( isset( $person ) && ! empty( $person ) ) {
 						$args['connected_items'] = $person[0]->ID;
 						$args['connected_type']  = Rt_HD_Module::$post_type . '_to_' . rtbiz_post_type_name( 'contact' );
