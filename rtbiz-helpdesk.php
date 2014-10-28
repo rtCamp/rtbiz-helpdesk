@@ -1,15 +1,15 @@
 <?php
 
 /**
- * Plugin Name: rtbiz Helpdesk
+ * Plugin Name: rtBiz Helpdesk
  * Plugin URI: http://rtcamp.com/
- * Description: HelpDesk System for handle & track User request for Help
+ * Description: Helpdesk System for handle & track User request for Help
  * Version: 1.0
  * Author: rtCamp
  * Author URI: http://rtcamp.com
  * License: GPL
  * Text Domain: rt_helpdesk
- * Contributors: Udit<udit.desai@rtcamp.com>, Dipesh<dipesh.kakadiya@rtcamp.com>
+ * Contributors: Udit<udit.desai@rtcamp.com>, Dipesh<dipesh.kakadiya@rtcamp.com>, Utkarsh<utkarsh.patel@rtcamp.com>
  */
 
 if ( ! defined( 'RT_HD_VERSION' ) ) {
