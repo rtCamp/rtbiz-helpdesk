@@ -137,7 +137,7 @@ $current_user = wp_get_current_user();
 	<input id="user-name" type="hidden" value="<?php echo esc_attr( $current_user->display_name ); ?>">
 	<input id="post-id" type="hidden" value="<?php echo esc_attr( $post->ID ); ?>">
 	<input id="edit-comment-id" type="hidden">
-	<textarea id="followup_content" name="followup_content" placeholder="Add new followup" style="width: 100%"></textarea>
+	<textarea id="followup_content" name="followup_content" placeholder="Add new followup"></textarea>
 <div id ='private-comment'>	<input id="add-private-comment" type="checkbox" name="private" value="yes" text="check to make comment private">Private<br></div>
 	<button class="mybutton add-savefollowup button" id="savefollwoup" type="button">Add followup</button>
 
