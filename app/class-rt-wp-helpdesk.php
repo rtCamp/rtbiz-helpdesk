@@ -259,7 +259,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 				'jquery-ui-slider',
 			), RT_HD_VERSION, true );
 
-			wp_enqueue_script( 'foundation.zepto', RT_HD_URL . 'app/assets/javascripts/vendor/zepto.js', array( 'jquery' ), '', true );
+//			wp_enqueue_script( 'foundation.zepto', RT_HD_URL . 'app/assets/javascripts/vendor/zepto.js', array( 'jquery' ), '', true );
 			wp_enqueue_script( 'jquery.foundation.reveal', RT_HD_URL . 'app/assets/javascripts/jquery.foundation.reveal.js', array( 'foundation-js' ), '', true );
 			wp_enqueue_script( 'jquery.foundation.form', RT_HD_URL . 'app/assets/javascripts/foundation/foundation.forms.js', array( 'foundation-js' ), '', true );
 			wp_enqueue_script( 'jquery.foundation.tabs', RT_HD_URL . 'app/assets/javascripts/foundation/foundation.section.js', array( 'foundation-js' ), '', true );

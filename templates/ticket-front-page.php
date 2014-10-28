@@ -296,9 +296,6 @@ if ( isset( $post->ID ) ) {
 	</div>
 	</div>
 	</div>
-	<script>
-		var arr_comment_reply_to = <?php echo json_encode( $arrCommentReply ); ?>;
-	</script>
 	</div>
 <?php
 do_action( 'rthd_ticket_front_page_before_footer' );

@@ -635,46 +635,6 @@ jQuery( document ).ready( function ( $ ) {
 	enter_key_to_click( "new-account-meta", "account-add-new-meta" )
 	enter_key_to_click( "new-contact-meta", "contact-add-new-meta" )
 
-	if ( $( ".email-auto-complete" ).length > 0 ) {
-		$( ".email-auto-complete" ).each( function () {
-			$( this ).tagit( {
-				                 tagSource: arr_comment_reply_to,
-				                 singleFieldOverride: true,
-				                 itemName: this.id
-			                 } );
-		} );
-	}
-	jQuery( "#sendCommentMail" ).change( function ( e ) {
-		if ( jQuery( this ).attr( 'checked' ) == undefined ) {
-			sendMailVal = 'member';
-			jQuery.each( arr_comment_reply_to, function ( i, person ) {
-				if ( person.contact ) {
-					var tHide = jQuery( "#comment-reply-to" ).parent().parent().find( "ul" ).find( "input[value='" + person.email + "']" );
-					if ( tHide.length > 0 ) {
-						$( tHide ).parent().remove();
-					}
-				}
-			} );
-		} else {
-			sendMailVal = 'all';
-			clientFlag = true;
-			var tStr = '';
-			jQuery.each( arr_comment_reply_to, function ( i, person ) {
-				if ( person.contact ) {
-					if ( jQuery( "#comment-reply-to" ).html().indexOf( person.email ) == - 1 ) {
-						tStr += '<li class="tagit-choice ui-widget-content ui-state-default ui-corner-all"><span class="tagit-label">'
-						tStr += person.imghtml + person.label + '<a class="tagit-close custome-tagit-close"><span class="text-icon">×</span><span class="ui-icon ui-icon-close"></span></a>'
-						tStr += '</span><input type="hidden" style="display:none;" value="' + person.email + '" name="helpdesk-email-to[' + new Date().getTime() + ']"></li>'
-					}
-				}
-			} )
-			jQuery( "#comment-reply-to" ).parent().parent().find( "ul" ).prepend( tStr );
-			$( ".custome-tagit-close" ).click( function () {
-				$( this ).parent().parent().remove();
-			} )
-		}
-
-	} );
 
 	jQuery( document ).on( 'click', '.rthd_delete_attachment', function ( e ) {
 		e.preventDefault();

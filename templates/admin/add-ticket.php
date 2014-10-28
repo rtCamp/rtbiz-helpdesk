@@ -1356,9 +1356,6 @@ if ( isset( $_REQUEST['rt_ticket_id'] ) ) {
 	<?php } ?>
 
 </div>
-<script>
-	var arr_comment_reply_to = <?php echo json_encode( $arrCommentReply ); ?>;
-</script>
 
 
 
