@@ -150,3 +150,15 @@
 #edit-private-comment{
 	color: #d02600;
 }
+
+#followup_content{
+	width:100%;
+}
+
+.helpdeskspinner{
+	display:none;
+}
+
+#edited_followup_content{
+	width:100%;
+}

@@ -61,7 +61,8 @@ $current_user = wp_get_current_user();
 	<div id ='private-comment'>
 		<label for="add-private-comment"><input id="add-private-comment" type="checkbox" name="private" value="yes" text="check to make comment private"><?php _e('Private'); ?></label>
 	</div>
-	<button class="mybutton add-savefollowup button" id="savefollwoup" type="button">Add followup</button>
+	<button class="add-savefollowup btn-primary btn" id="savefollwoup" type="button">Add followup</button>
+	<img id='hdspinner' class="helpdeskspinner" src="<?php echo admin_url().'images/spinner.gif'; ?>">
 </form>
 
 <form id="thumbnail_upload" method="post" enctype="multipart/form-data">
@@ -69,9 +70,7 @@ $current_user = wp_get_current_user();
 	<input type='hidden' value='<?php wp_create_nonce( 'upload_thumb' ); ?>' name='_nonce' />
 	<input type="hidden" name="post_id" id="post_id" value="<?php echo esc_attr( $post->ID ); ?>" />
 	<input type="hidden" name="action" id="action" value="my_upload_action" />
-	<input id="submit-ajax" name="submit-ajax" type="button" class="button" value="upload" />
 </form>
-<div id="attachment_output"></div>
 <?php
 
 $user_edit = current_user_can( rt_biz_get_access_role_cap( RT_BIZ_TEXT_DOMAIN, 'editor' ) );
@@ -81,6 +80,7 @@ if ( $user_edit ) {
 		<textarea id="edited_followup_content" name="edited_followup_content" placeholder="Add new followup"></textarea>
 		<div id="edit-private-comment">
 			<label for="edit-private"><input id="edit-private" type="checkbox" name="private" value="yes" text="check to make comment private"><?php _e('Private'); ?></label>
+			<img id='edithdspinner' class="helpdeskspinner" src="<?php echo admin_url().'images/spinner.gif'; ?>">
 		</div>
 		<button class="edit-followup button button-primary" id="editfollowup" type="button">Update</button>
 		<button class="edit-followup button" id="delfollowup" type="button">Delete</button>

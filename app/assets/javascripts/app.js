@@ -1,38 +1,6 @@
 rthd_user_edit = rthd_user_edit[0];
 jQuery( document ).ready( function ( $ ) {
 
-	jQuery('#submit-ajax' ).click(function (){
-		var options = {
-			beforeSubmit:  showRequest,     // pre-submit callback
-			success:       showResponse,    // post-submit callback
-			url:    ajaxurl                 //  ajaxurl is always defined in the admin header and points to admin-ajax.php
-		};
-		jQuery('#thumbnail_upload').ajaxSubmit(options );
-	});
-
-	function showRequest(formData, jqForm, options) {
-		//do extra stuff before submit like disable the submit button
-		jQuery('#output1').html('Sending...');
-		jQuery('#submit-ajax').attr("disabled", "disabled");
-	}
-	function showResponse(responseText, statusText, xhr, jQueryform)  {
-		var responseText = jQuery.parseJSON(responseText);
-		jQuery( '#attachment_output' ).text( responseText.msg );
-		if(responseText.status ) {
-			var tempname;
-			if (responseText.name.length > 20 ){
-				tempname = responseText.name.substring(0,12) + "...";
-			}else{
-				tempname= responseText.name;
-			}
-			var attachhtml = "<div class='large-12 mobile-large-3 columns attachment-item' data-attachment-id='"+ responseText.attach_id +"'> <a class='rthd_attachment' title='' target='_blank' href='"+responseText.url+"'> <img height='20px' width='20px' src='"+responseText.img+"'><span title='"+responseText.name+"'> "+ tempname+" </span> </a><input type='hidden' name='attachment[]' value='"+ responseText.attach_id +"'></div>";
-			console.log(attachhtml);
-			jQuery('#attachment-files').prepend(attachhtml);
-			var control= jQuery('#thumbnail');
-			control.replaceWith( control = control.clone( true ) );
-			jQuery('#submit-ajax' ).removeAttr('disabled');
-		}
-	}
 
 	function format_date_moment() {
 		$( ".moment-from-now" ).each( function () {
@@ -101,6 +69,8 @@ jQuery( document ).ready( function ( $ ) {
 				e.preventDefault();
 				return false;
 			}
+			jQuery(this).attr('disabled','disabled');
+			jQuery('#edithdspinner' ).show();
 			postid= jQuery('#post-id' ).val();
 			jQuery.ajax( { url: ajaxurl,
 				             type: 'POST',
@@ -119,9 +89,13 @@ jQuery( document ).ready( function ( $ ) {
 					             } else {
 						             alert( "error in delete comment from server" );
 					             }
+					             jQuery('#edithdspinner' ).hide();
+					             jQuery("#delfollowup" ).removeAttr('disabled');
 				             },
 				             error: function ( xhr, textStatus, errorThrown ) {
 					             alert( "error in remove " );
+					             jQuery('#edithdspinner' ).hide();
+					             jQuery("#delfollowup" ).removeAttr('disabled');
 				             }
 			             } );
 
@@ -152,6 +126,9 @@ jQuery( document ).ready( function ( $ ) {
 				alert('You have not edited comment! :/');
 				return false;
 			}
+			jQuery('#edithdspinner' ).show();
+			jQuery(this).attr('disabled','disabled');
+
 			requestArray['post_type'] = rthd_post_type;
 			requestArray["comment_id"] = commentid ;
 			requestArray["action"] = "rthd_add_new_followup_ajax";
@@ -179,15 +156,52 @@ jQuery( document ).ready( function ( $ ) {
 						} else {
 							alert( data.message );
 						}
+						jQuery('#edithdspinner' ).hide();
+						jQuery("#editfollowup" ).removeAttr('disabled');
 					},
 					error: function (data){
 						alert("Sorry something went wrong!");
+						jQuery('#edithdspinner' ).hide();
+						jQuery("#editfollowup" ).removeAttr('disabled');
 					}
 				} );
 		});
+	function showRequest(formData, jqForm, options) {
+		//do extra stuff before submit like disable the submit button
+	}
+	function showResponse(responseText, statusText, xhr, jQueryform)  {
+		var responseText = jQuery.parseJSON(responseText);
+		if(responseText.status ) {
+			var tempname;
+			if (responseText.name.length > 20 ){
+				tempname = responseText.name.substring(0,12) + "...";
+			}else{
+				tempname= responseText.name;
+			}
+			var attachhtml = "<div class='large-12 mobile-large-3 columns attachment-item' data-attachment-id='"+ responseText.attach_id +"'> <a class='rthd_attachment' title='' target='_blank' href='"+responseText.url+"'> <img height='20px' width='20px' src='"+responseText.img+"'><span title='"+responseText.name+"'> "+ tempname+" </span> </a><input type='hidden' name='attachment[]' value='"+ responseText.attach_id +"'></div>";
+			console.log(attachhtml);
+			jQuery('#attachment-files').prepend(attachhtml);
+			var control= jQuery('#thumbnail');
+			control.replaceWith( control = control.clone( true ) );
+			jQuery('#hdspinner' ).hide();
+		}
+	}
 
 
 		jQuery( "#savefollwoup" ).click( function () {
+			var flagspinner = false;
+			jQuery('#hdspinner' ).show();
+			jQuery(this).attr('disabled','disabled');
+
+			if ( jQuery('#thumbnail' ).val() ){
+				var options = {
+					beforeSubmit:  showRequest,     // pre-submit callback
+					success:       showResponse,    // post-submit callback
+					url:    ajaxurl                 //  ajaxurl is always defined in the admin header and points to admin-ajax.php
+				};
+				flagspinner=true;
+				jQuery('#thumbnail_upload').ajaxSubmit(options );
+			}
 			var followuptype = jQuery( "#followup-type" ).val();
 
 			var requestArray = new Object();
@@ -200,16 +214,17 @@ jQuery( document ).ready( function ( $ ) {
 			requestArray["followup_ticket_unique_id"] = jQuery( "#ticket_unique_id" ).val();
 			if ( ! requestArray["followup_ticket_unique_id"]) {
 				alert('Please publish ticket before adding followup! :( ');
+				jQuery( '#hdspinner' ).hide();
+				jQuery(this).removeAttr('disabled');
 				return false;
 			};
 			requestArray["follwoup-time"] = jQuery( "#follwoup-time" ).val();
 
-			if ( jQuery( "#followup_content" ).val() == "" && typeof tinyMCE != 'undefined' ) {
-				jQuery( "#followup_content" ).val( tinyMCE.get( 'followup_content' ).getContent() );
-			}
 			requestArray["followup_content"] = jQuery( "#followup_content" ).val();
 			if ( ! requestArray["followup_content"] ) {
 				alert( "Please input followup :/" );
+				jQuery( '#hdspinner' ).hide();
+				jQuery(this).removeAttr('disabled');
 				return false;
 			}
 			requestArray["attachemntlist"] = new Array();
@@ -227,29 +242,18 @@ jQuery( document ).ready( function ( $ ) {
 				             data: requestArray,
 				             success: function ( data ) {
 					             if ( data.status ) {
-
-
-						             /* jQuery( "#commentlist" ).prepend( data.data );
-						              jQuery( ".moment-from-now" ).each( function () {
-						              s
-						              if ( jQuery( this ).is( ".comment-date" ) ) {
-						              jQuery( this ).html( moment( new Date( jQuery( this ).attr( "title" ) ) ).fromNow() );
-						              } else {
-						              jQuery( this ).html( moment( new Date( jQuery( this ).html() ) ).fromNow() );
-						              }
-						              } );*/
 						             var newcomment=" <li class='self editable' id='comment-" + data.comment_id + "'> <div class='avatar'> " + jQuery("#user-avatar" ).val() + " </div> <div class='messages' title='click for action'> <input id='followup-id' type='hidden' value='"+ data.comment_id + "'> <input id='is-private-comment' type='hidden' value='" + data.private + "'> <p>" + jQuery('#followup_content' ).val() + " </p> <time><span title='"+ jQuery('#user_email').val() +"'>" +jQuery('#user-name' ).val()+ "</span>  • now </time> </div> </li>";
 						             //console.log(newcomment);
 						             jQuery('#chat-UI' ).prepend(newcomment);
 						             jQuery( "#followup_content" ).val( '' );
 						             jQuery('#add-private-comment' ).prop('checked',false );
-						             /*jQuery( "#commentlist .comment-wrapper" ).filter( ":first" ).show();
-						              if ( ! jQuery( '.accordion-expand-all' ).parent().is( ':visible' ) ) {
-						              jQuery( '.accordion-expand-all' ).parent().show();
-						              }*/
 					             } else {
 						             alert( data.message );
 					             }
+					             if (! flagspinner) {
+						             jQuery( '#hdspinner' ).hide();
+					             }
+					             jQuery('#savefollwoup').removeAttr('disabled');
 				             }
 			             } );
 		} );
