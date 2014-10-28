@@ -171,20 +171,26 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					'desc'     => __( 'Default User for HelpDesh ticket Assignee' ),
 					'subtitle' => __( 'Select User for Support ticket Assign' ),
 				),
-			);
-			$general_fields = array_merge(
-				$general_fields,
 				array(
-					array(
-						'id'       => 'rthd_support_page',
-						'type'     => 'select',
-						'data'     => 'pages',
-						'title'    => __( 'Support Page' ),
-						'desc'     => __( 'This Page will used for redirect support request in WooCommerce. Add [rt_hd_support_form] ShortCode in Page Content' ),
-						'subtitle' => __( 'Select Page for Product Support' ),
+					'id'       => 'rthd_support_page',
+					'type'     => 'select',
+					'data'     => 'pages',
+					'title'    => __( 'Support Page' ),
+					'desc'     => __( 'This Page will used for redirect support request in WooCommerce. Add [rt_hd_support_form] ShortCode in Page Content' ),
+					'subtitle' => __( 'Select Page for Product Support' ),
 
-					),
-				) );
+				),
+//				array(
+//					'id'       => 'rthd_enable_style',
+//					'type'     => 'switch',
+//					'title'    => __( 'Enable Helpdesk Styles' ),
+//					'subtitle' => __( 'This will enable/disable the default Helpdesk Styles that gets enqueued. You can override the styles and include yours by disabling this.' ),
+//					'default'  => true,
+//					'on'       => __( 'Enable' ),
+//					'off'      => __( 'Disable' ),
+//				),
+			);
+
 			$this->sections[] = array(
 				'icon'        => 'el-icon-cogs',
 				'title'       => __( 'General' ),
