@@ -1,132 +1,52 @@
-<?PHP
+<?php
 
-function right_comment( $comment, $user_edit ) {
+function rthd_render_comment( $comment, $user_edit, $type = 'right' ) {
+
 	$is_comment_private = get_comment_meta( $comment->comment_ID, '_rthd_privacy' );
 	if ( ( isset( $is_comment_private ) && is_array( $is_comment_private ) ) && 'true' == $is_comment_private[0] ) {
 		if ( $user_edit ) {
 			$display_private_comment_flag = true;
-		}
-		else {
+		} else {
 			$display_private_comment_flag = false;
 		}
-	}
-	else {
+	} else {
 		$display_private_comment_flag = true;
 	}
-	if ( $display_private_comment_flag ) {
-		?>
 
-		<li class="self editable" id="comment-<?php echo esc_attr( $comment->comment_ID ); ?>">
+	$side_class = ( $type == 'right' ) ? 'self' : ( ( $type == 'left' ) ? 'other' : '' );
+	$editable_class = ( $display_private_comment_flag ) ? 'editable' : '';
 
-			<div class="avatar">
-				<?php echo get_avatar( $comment, 40 ); ?>
-			</div>
-			<div class="messages" title="Click for action">
-				<input id="followup-id" type="hidden" value="<?php echo esc_attr( $comment->comment_ID ); ?>">
-				<input id="is-private-comment" type="hidden" value="<?php echo esc_attr( $is_comment_private[0] ); ?>">
+	?>
+	<li class="<?php echo $side_class . ' ' . $editable_class; ?>" id="comment-<?php echo esc_attr( $comment->comment_ID ); ?>">
 
-				<p><?php echo esc_attr( $comment->comment_content ); ?>
-				</p>
+		<div class="avatar">
+			<?php echo get_avatar( $comment, 40 ); ?>
+		</div>
+		<div class="messages <?php echo ( $display_private_comment_flag ) ? '' : 'private-comment-display'; ?>" title="Click for action">
+			<input id="followup-id" type="hidden" value="<?php echo esc_attr( $comment->comment_ID ); ?>">
+			<input id="is-private-comment" type="hidden" value="<?php echo esc_attr( $is_comment_private[0] ); ?>">
 
-				<time title="<?php echo esc_attr( $comment->comment_date ); ?>"
-				      datetime="<?php echo esc_attr( $comment->comment_date ); ?>"><span
-						title="<?php echo esc_attr( ( $comment->comment_author_email == '' ) ? $comment->comment_author_IP : $comment->comment_author_email ); ?>"><?php echo esc_attr( ( $comment->comment_author == '' ) ? 'Anonymous' : $comment->comment_author ); ?> </span>
-					&middot; <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date_gmt ), current_time( 'timestamp' ) ) ); ?>
-				</time>
-
-			</div>
-		</li>
-	<?php
-	}
-	else {
-		?>
-		<li class="self" id="comment-<?php echo esc_attr( $comment->comment_ID ); ?>">
-
-			<div class="avatar">
-				<?php echo get_avatar( $comment, 40 ); ?>
-			</div>
-			<div class="messages private-comment-display" title="Click for action">
-				<input id="followup-id" type="hidden" value="<?php echo esc_attr( $comment->comment_ID ); ?>">
-
-				<p><?php echo 'This followup has been marked private.'; ?>
-				</p>
-
-				<time title="<?php echo esc_attr( $comment->comment_date ); ?>"
-				      datetime="<?php echo esc_attr( $comment->comment_date ); ?>"><span
-						title="<?php echo esc_attr( ( $comment->comment_author_email == '' ) ? $comment->comment_author_IP : $comment->comment_author_email ); ?>"><?php echo esc_attr( ( $comment->comment_author == '' ) ? 'Anonymous' : $comment->comment_author ); ?> </span>
-					&middot; <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date_gmt ), current_time( 'timestamp' ) ) ); ?>
-				</time>
-
-			</div>
-		</li>
-		<?php
-	}
-}
-
-/**
- * @param $comment
- */
-function left_comment( $comment, $user_edit ) {
-	$is_comment_private = get_comment_meta( $comment->comment_ID, '_rthd_privacy' );
-	if ( ( isset( $is_comment_private ) && is_array( $is_comment_private ) ) && 'true' == $is_comment_private[0] ) {
-		if ( $user_edit ) {
-			$display_private_comment_flag = true;
-		}
-		else {
-			$display_private_comment_flag = false;
-		}
-	}
-	else {
-		$display_private_comment_flag = true;
-	}
-	if ( $display_private_comment_flag ) {
-		?>
-		<li class="other editable" id="comment-<?php echo esc_attr( $comment->comment_ID ); ?>">
-			<div class="avatar">
-				<?php echo get_avatar( $comment, 40 ); ?>
-			</div>
-			<div class="messages" title="click for action">
-				<input id="followup-id" type="hidden" value="<?php echo esc_attr( $comment->comment_ID ); ?>">
-				<input id="is-private-comment" type="hidden" value="<?php echo esc_attr( $is_comment_private[0] ); ?>">
-
+			<?php if( $display_private_comment_flag ) { ?>
 				<p><?php echo esc_attr( $comment->comment_content ); ?></p>
+			<?php } else { ?>
+				<p><?php _e( 'This followup has been marked private.', RT_HD_TEXT_DOMAIN ); ?></p>
+			<?php } ?>
 
-				<time title="<?php echo esc_attr( $comment->comment_date ); ?>"
-				      datetime="<?php echo esc_attr( $comment->comment_date ); ?>"><span
-						title="<?php echo esc_attr( ( $comment->comment_author_email == '' ) ? $comment->comment_author_IP : $comment->comment_author_email ); ?>"><?php echo esc_attr( ( $comment->comment_author == '' ) ? 'Anonymous' : $comment->comment_author ); ?> </span>
-					&middot; <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date_gmt ), current_time( 'timestamp' ) ) ); ?>
-				</time>
-			</div>
-		</li>
+			<time title="<?php echo esc_attr( $comment->comment_date ); ?>" datetime="<?php echo esc_attr( $comment->comment_date ); ?>">
+				<span title="<?php echo esc_attr( ( $comment->comment_author_email == '' ) ? $comment->comment_author_IP : $comment->comment_author_email ); ?>"><?php echo esc_attr( ( $comment->comment_author == '' ) ? 'Anonymous' : $comment->comment_author ); ?> </span>
+				&middot; <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date_gmt ), current_time( 'timestamp' ) ) ); ?>
+			</time>
+
+		</div>
+	</li>
 	<?php
-	}
-	else {
-		?>
-		<li class="other">
-			<div class="avatar">
-				<?php echo get_avatar( $comment, 40 ); ?>
-			</div>
-			<div class="messages private-comment-display">
-				<p><?php echo 'This followup has been marked private.' ?></p>
-
-				<time title="<?php echo esc_attr( $comment->comment_date ); ?>"
-				      datetime="<?php echo esc_attr( $comment->comment_date ); ?>"><span
-						title="<?php echo esc_attr( ( $comment->comment_author_email == '' ) ? $comment->comment_author_IP : $comment->comment_author_email ); ?>"><?php echo esc_attr( ( $comment->comment_author == '' ) ? 'Anonymous' : $comment->comment_author ); ?> </span>
-					&middot; <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date_gmt ), current_time( 'timestamp' ) ) ); ?>
-				</time>
-			</div>
-		</li>
-
-
-		<?php
-	}
 }
-$comments = get_comments(
-	array(
-		'post_id' => $post->ID,
-		'status'  => 'approve', //Change this to the type of comments to be displayed
-	) );
-//echo( json_encode($comments) );
+
+$comments = get_comments( array(
+	'post_id' => $post->ID,
+	'status'  => 'approve',
+) );
+
 $ticket_unique_id = get_post_meta( $post->ID, '_rtbiz_hd_unique_id', true );
 $current_user = wp_get_current_user();
 ?>
@@ -138,53 +58,46 @@ $current_user = wp_get_current_user();
 	<input id="post-id" type="hidden" value="<?php echo esc_attr( $post->ID ); ?>">
 	<input id="edit-comment-id" type="hidden">
 	<textarea id="followup_content" name="followup_content" placeholder="Add new followup"></textarea>
-<div id ='private-comment'>	<input id="add-private-comment" type="checkbox" name="private" value="yes" text="check to make comment private">Private<br></div>
+	<div id ='private-comment'>
+		<label for="add-private-comment"><input id="add-private-comment" type="checkbox" name="private" value="yes" text="check to make comment private"><?php _e('Private'); ?></label>
+	</div>
 	<button class="mybutton add-savefollowup button" id="savefollwoup" type="button">Add followup</button>
-
-	<!--<button class="mybutton right" type="submit" >Add</button>-->
-	<!--<input type="file" class="right" name="ticket_attach_file" id="ticket_attach_file" multiple />-->
 </form>
 
 <form id="thumbnail_upload" method="post" enctype="multipart/form-data">
-	<input type="file" name="thumbnail" id="thumbnail"> <input type='hidden'
-	                                                           value='<?php wp_create_nonce( 'upload_thumb' ); ?>'
-	                                                           name='_nonce'/> <input type="hidden"
-	                                                                                  name="post_id"
-	                                                                                  id="post_id"
-	                                                                                  value="<?php echo esc_attr( $post->ID ); ?>">
-	<input type="hidden" name="action" id="action" value="my_upload_action"> <br/> <input
-		id="submit-ajax" name="submit-ajax" type="button" class="button" value="upload" style="margin-top: 5px">
+	<input type="file" name="thumbnail" id="thumbnail" />
+	<input type='hidden' value='<?php wp_create_nonce( 'upload_thumb' ); ?>' name='_nonce' />
+	<input type="hidden" name="post_id" id="post_id" value="<?php echo esc_attr( $post->ID ); ?>" />
+	<input type="hidden" name="action" id="action" value="my_upload_action" />
+	<input id="submit-ajax" name="submit-ajax" type="button" class="button" value="upload" />
 </form>
-<div id="output1"></div>
+<div id="attachment_output"></div>
 <?php
 
 $user_edit = current_user_can( rt_biz_get_access_role_cap( RT_BIZ_TEXT_DOMAIN, 'editor' ) );
-
-//$user_edit = false;
-//if ( current_user_can( "edit_{$post->post_type}" ) ) {
-//	$user_edit = true;
-//}
-
 if ( $user_edit ) {
 	?>
 	<div id="dialog-form" title="Edit Followup" style='display: none'>
-		<textarea id="edited_followup_content" name="edited_followup_content" placeholder="Add new followup" style="width:100%"> </textarea>
-		<div id ='edit-private-comment'>	<input id="edit-private" type="checkbox" name="private" value="yes" text="check to make comment private">Private<br></div>
-		<button class="edit-followup button button-primary" id="editfollowup" type="button"> Update </button>
-		<button class="edit-followup button" id="delfollowup" type="button"> Delete </button>
+		<textarea id="edited_followup_content" name="edited_followup_content" placeholder="Add new followup"></textarea>
+		<div id="edit-private-comment">
+			<label for="edit-private"><input id="edit-private" type="checkbox" name="private" value="yes" text="check to make comment private"><?php _e('Private'); ?></label>
+		</div>
+		<button class="edit-followup button button-primary" id="editfollowup" type="button">Update</button>
+		<button class="edit-followup button" id="delfollowup" type="button">Delete</button>
 	</div>
 	<?php
 }
 ?>
-<ol class="discussion" id="chat-UI">
+
+<ul class="discussion" id="chat-UI">
 	<?php foreach ( $comments as $comment ) {
 	if ( ( $comment->user_id ) == ( get_current_user_id() ) ) {
-		right_comment( $comment , $user_edit );
+		rthd_render_comment( $comment, $user_edit, 'right' );
 	} else {
-		left_comment( $comment, $user_edit );
+		rthd_render_comment( $comment, $user_edit, 'left' );
 	}
 	} ?>
-</ol>
+</ul>
 <?php
 wp_enqueue_script( 'jquery-ui-dialog' );
 ?>

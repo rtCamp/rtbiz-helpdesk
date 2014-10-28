@@ -72,104 +72,16 @@ if ( $user_edit ) {
 			<div id="followup_wrapper">
 
 					<h2>Followup</h2>
-					<!--<form id="add_followup_form" method="post">
-						<input type='hidden' id='edit-comment-id'/> <textarea id="followup_content"
-						                                                      name="followup_content"
-						                                                      placeholder="Add new followup"></textarea>
-						<button class="mybutton add-savefollowup" id="savefollwoup"
-						        type="button"><?php /*_e( 'Add' ); */?></button>
-					</form>
--->
-
-
-
-					<!--						<input type="file" class="right" name="ticket_attach_file" id="attachmentList" multiple />-->
 					<div class="row">
-						<?php
-/*						$page          = 0;
-						$comment_count = count( get_comments(
-													array(
-														//'meta_key'   => '_rthd_privacy',
-														//'meta_value' => 'no',
-														'order'      => 'DESC',
-														'post_id'    => $post->ID,
-														'post_type'  => $post_type,
-													) ) );
-						$comments      = get_comments(
-							array(
-								//'meta_key'   => '_rthd_privacy',
-								//'meta_value' => 'no',
-								'order'      => 'DESC',
-								'post_id'    => $post->ID,
-								'post_type'  => $post_type,
-								//								'number'     => '10',
-								//								'offset'     => $page * 10,
-							) );
-						*/?>
-	<!--					<div class="large-12 columns <?php /*echo esc_attr( ( empty( $comments ) ) ? 'hide' : '' ); */?>">
-							<a class="accordion-expand-all right" href="#" data-isallopen="false"><i
-									class="general foundicon-down-arrow" title="Expand All"></i></a>
+						<div class="large-12 columns" id="commentlist">
+							<?php rthd_get_template( 'admin/followup-common.php', array( 'post' => $post ) ); ?>
 						</div>
-	-->					<div class="large-12 columns" id="commentlist">
-
-	<?php
-	rthd_get_template( 'admin/followup-common.php', array( 'post' => $post ) );
-/*	global $prev_month, $prev_year, $prev_day;
-	$prev_month = '';
-	$prev_day   = '';
-	$prev_year  = '';
-	foreach ( $comments as $comment ) {
-		rthd_get_template( 'followup.php',
-							array(
-								'comment'   => $comment,
-								'user_edit' => $user_edit,
-							) );
-	} //End Loop for comments
-
-	$all_hd_participants = array();
-	$comments = get_comments(
-		array(
-			'meta_key'   => '_rthd_privacy',
-			'meta_value' => 'no',
-			'order'      => 'DESC',
-			'post_id'    => $post->ID,
-			'post_type'  => $post_type,
-		) );
-	foreach ( $comments as $comment ) {
-		$participants = '';
-		$to           = get_comment_meta( $comment->comment_ID, '_email_to', true );
-		if ( ! empty( $to ) ) {
-			$participants .= $to . ',';
-		}
-		$cc = get_comment_meta( $comment->comment_ID, '_email_cc', true );
-		if ( ! empty( $cc ) ) {
-			$participants .= $cc . ',';
-		}
-		$bcc = get_comment_meta( $comment->comment_ID, '_email_bcc', true );
-		if ( ! empty( $bcc ) ) {
-			$participants .= $bcc;
-		}
-
-		if ( ! empty( $participants ) ) {
-			$p_arr               = explode( ',', $participants );
-			$p_arr               = array_unique( $p_arr );
-			$all_hd_participants = array_merge( $all_hd_participants, $p_arr );
-		}
-	}
-	$all_hd_participants = array_filter( array_unique( $all_hd_participants ) );*/
-	?>
-						</div>
-						<!--<div
-							class="large-12 columns <?php /*echo esc_attr( ( ( $page + 1 ) < ( $comment_count / 10 ) ) ? '' : 'hide' ); */?>">
-							<button id="load_more_btn" class="button large expand"><?php /*_e( 'LOAD MORE' ); */?></button>
-						</div>-->
 					</div>
 			</div>
 		<?php } ?>
 	</div>
 	<div class="large-3 columns rthd_sticky_div">
-	<fieldset>
-		<legend><i class="foundicon-idea"></i> <?php _e( esc_attr( ucfirst( $labels['name'] ) ) . ' Information' ); ?></legend>
+		<h2><i class="foundicon-idea"></i> <?php _e( esc_attr( ucfirst( $labels['name'] ) ) . ' Information' ); ?></h2>
 		<div class="row collapse">
 			<div class="small-4 large-4  columns">
 				<span class="prefix" title="Status">Status</span>
@@ -223,47 +135,7 @@ $post_status = $rt_hd_module->get_custom_statuses();
 				<?php } ?>
 			</div>
 		</div>
-	</fieldset>
-
-	<!--	<fieldset>
-		<legend><i class="foundicon-smiley"></i> <?php /*_e( 'Participants' ); */?></legend>
-		<script>
-			var arr_subscriber_user =<?php /*echo json_encode( $arrSubscriberUser ); */?>;
-			var ac_auth_token = '<?php /*echo balanceTags( get_user_meta( get_current_user_id(), 'rthd_activecollab_token', true ) ); */?>';
-			var ac_default_project = '<?php /*echo balanceTags( get_user_meta( get_current_user_id(), 'rthd_activecollab_default_project', true ) ); */?>';
-		</script>
-		<ul class="rthd-participant-list large-block-grid-1 small-block-grid-1">
-			<?php /*echo balanceTags( $subScribetHTML ); */?>
-		</ul>
-		<?php /*if ( isset( $module_settings['attach_contacts'] ) && $module_settings['attach_contacts'] == 'yes' ) { */?>
-		<ul class="rthd-participant-list large-block-grid-1 small-block-grid-1">
-	<?php /*if ( isset( $post->ID ) ) {
-		$scriptstr   = '';
-		$ticket_term = rt_biz_get_post_for_person_connection( $post->ID, $post->post_type, $fetch_person = true );
-		foreach ( $ticket_term as $tterm ) {
-			$email = get_term_meta( $tterm->term_id, $rt_hd_contacts->email_key, true );
-			if ( in_array( $email, $all_hd_participants ) ) {
-				$key = array_search( $email, $all_hd_participants );
-				if ( $key !== false ) {
-					unset( $all_hd_participants[ $key ] );
-				}
-			}
-			echo "<li id='hd-contact-" . esc_attr( $tterm->term_id ). "' class='contact-list' >" . "<div class='row collapse'>" . "<div class='large-2 columns'> " . get_avatar( $email, 24 ) . '</div>' . "<div id='hd-contact-meta-" . esc_attr( $tterm->term_id  ). "'  class='large-9 columns'><a target='_blank' class='heading' href='mailto:" . sanitize_email( $email ) . "' title='" . esc_attr( $tterm->name  ). "'>" . esc_attr( $tterm->name  ). '</a></div>' . '</div>' . '</li>';
-		}
-	} */?>
-		</ul>
-		<ul class="rthd-participant-list large-block-grid-1 small-block-grid-1">
-			<?php /*if ( isset($all_hd_participants) ) {
-		foreach ( $all_hd_participants as $email ) {
-			echo "<li class='contact-list'>" . "<div class='row collapse'>" . "<div class='large-2 columns'> " . get_avatar( $email, 24 ) . '</div>' . "<div class='large-9 columns'><a target='_blank' class='heading' href='mailto:" . sanitize_email( $email ) . "' title='" . sanitize_email( $email ) . "'>" . sanitize_email( $email ) . '</a></div>' . '</div>' . '</li>';
-		}
-			}*/?>
-		</ul>
-	</fieldset>-->
-
-
 <?php
-//}
 $attachments = array();
 if ( isset( $post->ID ) ) {
 	$attachments = get_children( array( 'post_parent' => $post->ID, 'post_type' => 'attachment', ) );

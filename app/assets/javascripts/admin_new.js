@@ -21,7 +21,6 @@ jQuery(function () {
 
 			jQuery('#submit-ajax' ).click(function (){
 				var options = {
-					//	target:        '#output1',      // target element(s) to be updated with server response
 					beforeSubmit:  showRequest,     // pre-submit callback
 					success:       showResponse,    // post-submit callback
 					url:    ajaxurl                 //  ajaxurl is always defined in the admin header and points to admin-ajax.php
@@ -35,12 +34,12 @@ jQuery(function () {
 			    //do extra stuff before submit like disable the submit button
 			    //e.preventDefault();
 			    //alert("Hello");
-			    jQuery('#output1').html('Sending...');
+			    jQuery('#attachment_output').html('Sending...');
 			    jQuery('#submit-ajax').attr("disabled", "disabled");
 		    }
 		    function showResponse ( responseText, statusText, xhr, jQueryform )  {
 			    var responseText = jQuery.parseJSON(responseText);
-			    jQuery( '#output1' ).text( responseText.msg );
+			    jQuery( '#attachment_output' ).text( responseText.msg );
 			    if(responseText.status ) {
 				    var tempname;
 				    if (responseText.name.length > 20 ){

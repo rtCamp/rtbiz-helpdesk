@@ -3,7 +3,6 @@ jQuery( document ).ready( function ( $ ) {
 
 	jQuery('#submit-ajax' ).click(function (){
 		var options = {
-			//	target:        '#output1',      // target element(s) to be updated with server response
 			beforeSubmit:  showRequest,     // pre-submit callback
 			success:       showResponse,    // post-submit callback
 			url:    ajaxurl                 //  ajaxurl is always defined in the admin header and points to admin-ajax.php
@@ -18,7 +17,7 @@ jQuery( document ).ready( function ( $ ) {
 	}
 	function showResponse(responseText, statusText, xhr, jQueryform)  {
 		var responseText = jQuery.parseJSON(responseText);
-		jQuery( '#output1' ).text( responseText.msg );
+		jQuery( '#attachment_output' ).text( responseText.msg );
 		if(responseText.status ) {
 			var tempname;
 			if (responseText.name.length > 20 ){
