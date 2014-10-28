@@ -101,7 +101,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$returnData['url']       = esc_url( wp_get_attachment_url( $attach_id ) );
 			$returnData['name']      = basename( get_attached_file( $attach_id ) );
 			$returnData['img']       = wp_mime_type_icon( 'image/jpeg' );
-			$returnData['msg']       = 'uploaded the new Thumbnail';
+			$returnData['msg']       = 'uploaded new file. Please check the attachment section.';
 			echo json_encode( $returnData );
 			die();
 		}

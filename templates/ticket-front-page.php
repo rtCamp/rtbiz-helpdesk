@@ -280,7 +280,7 @@ if ( isset( $post->ID ) ) {
 				$extn             = $extn_array[ count( $extn_array ) - 1 ]; ?>
 				<div class="large-12 mobile-large-3 columns attachment-item"
 				     data-attachment-id="<?php echo esc_attr( $attachment->ID ); ?>">
-					<a class="rthd_attachment" title="<?php echo esc_attr( $email ); ?>" target="_blank"
+					<a class="rthd_attachment" title="<?php echo balanceTags( $attachment->post_title ); ?>" target="_blank"
 					   href="<?php echo esc_url( wp_get_attachment_url( $attachment->ID ) ); ?>"> <img height="20px" width="20px"
 					                                                                                   src="<?php echo esc_url(  wp_mime_type_icon( 'image/jpeg' ) ); ?>"/>
 					<span title="<?php echo balanceTags( $attachment->post_title ); ?>"> 	<?php echo esc_attr( strlen( balanceTags( $attachment->post_title ) ) > 12 ? substr( balanceTags( $attachment->post_title ), 0, 12 ). '...' : balanceTags( $attachment->post_title ) ); ?> </span>
