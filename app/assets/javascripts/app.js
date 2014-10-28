@@ -48,7 +48,7 @@ jQuery( document ).ready( function ( $ ) {
 
 	format_date_moment();
 
-	$( '.rthd_sticky_div' ).stickyfloat( {duration: 400, delay: 3, offsetY: 40} );
+	$( '.rthd_sticky_div' ).stickyfloat( {duration: 400, delay: 3} );
 
 	$( "#commentlist .comment-wrapper" ).filter( ":first" ).show();
 
