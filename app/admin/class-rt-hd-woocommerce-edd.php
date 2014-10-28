@@ -163,7 +163,10 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 			}
 
 			global $rtbiz_product_sync;
-			$terms = get_terms( $rtbiz_product_sync->product_slug, array( 'hide_empty' => 0 ) );
+			$terms = array();
+			if ( isset( $rtbiz_product_sync ) ) {
+				$terms = get_terms( $rtbiz_product_sync->product_slug, array( 'hide_empty' => 0 ) );
+			}
 			$product_exists = false;
 			foreach ( $terms as $tm ) {
 				$option .= '<option value= '. $tm->term_id.' > '.$tm->name.'</option>';
