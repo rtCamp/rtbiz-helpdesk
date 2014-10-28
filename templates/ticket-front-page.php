@@ -70,8 +70,8 @@ if ( $user_edit ) {
 		<br/><br/>
 		<?php if ( isset( $post->ID ) ) { ?>
 			<div id="followup_wrapper">
-				<fieldset>
-					<legend>Followup</legend>
+
+					<h2>Followup</h2>
 					<!--<form id="add_followup_form" method="post">
 						<input type='hidden' id='edit-comment-id'/> <textarea id="followup_content"
 						                                                      name="followup_content"
@@ -164,7 +164,6 @@ if ( $user_edit ) {
 							<button id="load_more_btn" class="button large expand"><?php /*_e( 'LOAD MORE' ); */?></button>
 						</div>-->
 					</div>
-				</fieldset>
 			</div>
 		<?php } ?>
 	</div>
