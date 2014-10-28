@@ -52,7 +52,7 @@
 .discussion {
 	list-style: none;
 	background: #e5e5e5;
-	margin: 10px 0;
+	margin: 20px 0;
 	padding: 0 0 50px 0;
 }
 .discussion li {
@@ -138,8 +138,11 @@
 }
 
 #private-comment{
-	float:right;
 	color: #d02600;
+}
+
+.add-savefollowup {
+	float: right;
 }
 
 .private-comment-display{
