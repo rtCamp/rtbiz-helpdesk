@@ -31,7 +31,7 @@ function right_comment( $comment, $user_edit ) {
 				<time title="<?php echo esc_attr( $comment->comment_date ); ?>"
 				      datetime="<?php echo esc_attr( $comment->comment_date ); ?>"><span
 						title="<?php echo esc_attr( ( $comment->comment_author_email == '' ) ? $comment->comment_author_IP : $comment->comment_author_email ); ?>"><?php echo esc_attr( ( $comment->comment_author == '' ) ? 'Anonymous' : $comment->comment_author ); ?> </span>
-					• <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date_gmt ), current_time( 'timestamp' ) ) ); ?>
+					&period; <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date_gmt ), current_time( 'timestamp' ) ) ); ?>
 				</time>
 
 			</div>
@@ -54,7 +54,7 @@ function right_comment( $comment, $user_edit ) {
 				<time title="<?php echo esc_attr( $comment->comment_date ); ?>"
 				      datetime="<?php echo esc_attr( $comment->comment_date ); ?>"><span
 						title="<?php echo esc_attr( ( $comment->comment_author_email == '' ) ? $comment->comment_author_IP : $comment->comment_author_email ); ?>"><?php echo esc_attr( ( $comment->comment_author == '' ) ? 'Anonymous' : $comment->comment_author ); ?> </span>
-					• <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date_gmt ), current_time( 'timestamp' ) ) ); ?>
+					&period; <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date_gmt ), current_time( 'timestamp' ) ) ); ?>
 				</time>
 
 			</div>
@@ -94,7 +94,7 @@ function left_comment( $comment, $user_edit ) {
 				<time title="<?php echo esc_attr( $comment->comment_date ); ?>"
 				      datetime="<?php echo esc_attr( $comment->comment_date ); ?>"><span
 						title="<?php echo esc_attr( ( $comment->comment_author_email == '' ) ? $comment->comment_author_IP : $comment->comment_author_email ); ?>"><?php echo esc_attr( ( $comment->comment_author == '' ) ? 'Anonymous' : $comment->comment_author ); ?> </span>
-					• <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date_gmt ), current_time( 'timestamp' ) ) ); ?>
+					&period; <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date_gmt ), current_time( 'timestamp' ) ) ); ?>
 				</time>
 			</div>
 		</li>
@@ -112,7 +112,7 @@ function left_comment( $comment, $user_edit ) {
 				<time title="<?php echo esc_attr( $comment->comment_date ); ?>"
 				      datetime="<?php echo esc_attr( $comment->comment_date ); ?>"><span
 						title="<?php echo esc_attr( ( $comment->comment_author_email == '' ) ? $comment->comment_author_IP : $comment->comment_author_email ); ?>"><?php echo esc_attr( ( $comment->comment_author == '' ) ? 'Anonymous' : $comment->comment_author ); ?> </span>
-					• <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date_gmt ), current_time( 'timestamp' ) ) ); ?>
+					&period; <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date_gmt ), current_time( 'timestamp' ) ) ); ?>
 				</time>
 			</div>
 		</li>
