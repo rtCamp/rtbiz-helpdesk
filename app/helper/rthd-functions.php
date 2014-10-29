@@ -317,7 +317,7 @@ function rthd_get_user_ids( $user ) {
 function rthd_update_post_term_count( $terms, $taxonomy ) {
 	global $wpdb;
 
-	$object_types = ( array ) $taxonomy->object_type;
+	$object_types = (array) $taxonomy->object_type;
 
 	foreach ( $object_types as &$object_type ) {
 		list( $object_type ) = explode( ':', $object_type );
@@ -334,16 +334,16 @@ function rthd_update_post_term_count( $terms, $taxonomy ) {
 		$object_types = esc_sql( array_filter( $object_types, 'post_type_exists' ) );
 	}
 
-	foreach ( ( array ) $terms as $term ) {
+	foreach ( (array) $terms as $term ) {
 		$count = 0;
 
 		// Attachments can be 'inherit' status, we need to base count off the parent's status if so
 		if ( $check_attachments ) {
-			$count += ( int ) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->term_relationships, $wpdb->posts p1 WHERE p1.ID = $wpdb->term_relationships.object_id  AND post_type = 'attachment' AND term_taxonomy_id = %d", $term ) );
+			$count += (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->term_relationships, $wpdb->posts p1 WHERE p1.ID = $wpdb->term_relationships.object_id  AND post_type = 'attachment' AND term_taxonomy_id = %d", $term ) );
 		}
 
 		if ( $object_types ) {
-			$count += ( int ) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->term_relationships, $wpdb->posts WHERE $wpdb->posts.ID = $wpdb->term_relationships.object_id  AND post_type IN ('" . implode( "', '", $object_types ) . "') AND term_taxonomy_id = %d", $term ) );
+			$count += (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->term_relationships, $wpdb->posts WHERE $wpdb->posts.ID = $wpdb->term_relationships.object_id  AND post_type IN ('" . implode( "', '", $object_types ) . "') AND term_taxonomy_id = %d", $term ) );
 		}
 
 		do_action( 'edit_term_taxonomy', $term, $taxonomy );
@@ -544,4 +544,30 @@ function rthd_get_user_notification_preference( $user_id ) {
 		$pref = 'yes';
 	}
 	return $pref;
+}
+
+function rthd_create_new_ticket_title( $key, $post_id ){
+	$redux = rthd_get_redux_settings();
+	if ( isset( $redux[ $key ] ) ) {
+		return rthd_generate_email_title( $post_id, $redux[ $key ] );
+	}
+	return null;
+}
+
+function rthd_get_email_signature_settings(){
+	$redux = rthd_get_redux_settings();
+	if ( isset( $redux['rthd_enable_signature'] ) && 1 == $redux['rthd_enable_signature'] && isset( $redux['rthd_email_signature'] ) ) {
+		return $redux['rthd_email_signature'];
+	}
+	return null;
+}
+
+
+function rthd_generate_email_title( $post_id, $title ) {
+	if ( ! is_null( $title ) ){
+		$title = str_replace( '{ticket_title}',get_the_title( $post_id ), $title );
+		$title = str_replace( '{ticket_id}', $post_id, $title );
+		return $title;
+	}
+	return null;
 }

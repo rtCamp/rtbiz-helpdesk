@@ -180,15 +180,15 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					'subtitle' => __( 'Select Page for Product Support' ),
 
 				),
-//				array(
-//					'id'       => 'rthd_enable_style',
-//					'type'     => 'switch',
-//					'title'    => __( 'Enable Helpdesk Styles' ),
-//					'subtitle' => __( 'This will enable/disable the default Helpdesk Styles that gets enqueued. You can override the styles and include yours by disabling this.' ),
-//					'default'  => true,
-//					'on'       => __( 'Enable' ),
-//					'off'      => __( 'Disable' ),
-//				),
+				//				array(
+				//					'id'       => 'rthd_enable_style',
+				//					'type'     => 'switch',
+				//					'title'    => __( 'Enable Helpdesk Styles' ),
+				//					'subtitle' => __( 'This will enable/disable the default Helpdesk Styles that gets enqueued. You can override the styles and include yours by disabling this.' ),
+				//					'default'  => true,
+				//					'on'       => __( 'Enable' ),
+				//					'off'      => __( 'Disable' ),
+				//				),
 			);
 
 			$this->sections[] = array(
@@ -320,6 +320,112 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				),
 			);
 
+			$this->sections[] = array(
+				'icon'        => 'el-icon-edit',
+				'title'       => __( 'Customize Notification Emails ' ),
+				'permissions' => $admin_cap,
+				'fields'      => array(
+					array(
+						'id'       => 'rthd_new_ticket_email_title',
+						'type'     => 'text',
+						'title'    => __( 'Title for new Ticket' ),
+						'subtitle' => __( 'This is title for new ticket created' ),
+						'desc'     => __( 'You can use {ticket_id} and {ticket_title}' ),
+						'default'  => '[New ticket Created] Ticket #{ticket_id} : {ticket_title}',
+					),
+					array(
+						'id'       => 'rthd_new_followup_email_title',
+						'type'     => 'text',
+						'title'    => __( 'Title for new Follow up ' ),
+						'subtitle' => __( 'This is title for when new Follow up is added' ),
+						'desc'     => __( 'You can use {ticket_id} and {ticket_title}' ),
+						'default'  => '[New Followup added] Ticket #{ticket_id} : {ticket_title}',
+					),
+					array(
+						'id'       => 'rthd_update_followup_email_title',
+						'type'     => 'text',
+						'title'    => __( 'Title for Follow up update ' ),
+						'subtitle' => __( 'This is title for Follow up updated' ),
+						'desc'     => __( 'You can use {ticket_id} and {ticket_title}' ),
+						'default'  => '[Followup Updated] Ticket #{ticket_id} : {ticket_title}',
+					),
+					array(
+						'id'       => 'rthd_delete_followup_email_title',
+						'type'     => 'text',
+						'title'    => __( 'Title for Follow up deleted ' ),
+						'subtitle' => __( 'This is title for Follow up deleted' ),
+						'desc'     => __( 'You can use {ticket_id} and {ticket_title}' ),
+						'default'  => '[Followup Deleted] Ticket #{ticket_id} : {ticket_title}',
+					),
+					array(
+						'id'       => 'rthd_update_ticket_email_title',
+						'type'     => 'text',
+						'title'    => __( 'Title for Follow up deleted ' ),
+						'subtitle' => __( 'This is title for Follow up deleted' ),
+						'desc'     => __( 'You can use {ticket_id} and {ticket_title}' ),
+						'default'  => '[Followup Deleted] Ticket #{ticket_id} : {ticket_title}',
+					),
+					array(
+						'id'       => 'rthd_ticket_assign_email_title',
+						'type'     => 'text',
+						'title'    => __( 'Title for new ticket Assign' ),
+						'subtitle' => __( 'This is title when new ticket Assign' ),
+						'desc'     => __( 'You can use {ticket_id} and {ticket_title}' ),
+						'default'  => '[Ticket Assign] Ticket #{ticket_id} : {ticket_title}',
+					),
+					array(
+						'id'       => 'rthd_ticket_reassign_email_title',
+						'type'     => 'text',
+						'title'    => __( 'Title for new ticket Reassign' ),
+						'subtitle' => __( 'This is title when new ticket Reassign' ),
+						'desc'     => __( 'You can use {ticket_id} and {ticket_title}' ),
+						'default'  => '[Ticket Reassign] Ticket #{ticket_id} : {ticket_title}',
+					),
+					array(
+						'id'       => 'rthd_ticket_subscribe_email_title',
+						'type'     => 'text',
+						'title'    => __( 'Title for ticket Subscribe' ),
+						'subtitle' => __( 'This is title when new ticket Subscribe' ),
+						'desc'     => __( 'You can use {ticket_id} and {ticket_title}' ),
+						'default'  => '[Ticket Subscribe] Ticket #{ticket_id} : {ticket_title}',
+					),
+					array(
+						'id'       => 'rthd_ticket_unsubscribe_email_title',
+						'type'     => 'text',
+						'title'    => __( 'Title for ticket Subscribe' ),
+						'subtitle' => __( 'This is title when new ticket Unsubscribe' ),
+						'desc'     => __( 'You can use {ticket_id} and {ticket_title}' ),
+						'default'  => '[Ticket Unsubscribe] Ticket #{ticket_id} : {ticket_title}',
+					),
+					array(
+						'id'       => 'rthd_enable_signature',
+						'type'     => 'switch',
+						'title'    => __( 'Enable email Title' ),
+						'subtitle' => __( 'This will enable/disable signature for all email send via rtCamp Helpdesk.' ),
+						'default'  => false,
+						'on'       => __( 'Enable' ),
+						'off'      => __( 'Disable' ),
+					),
+					array(
+						'id'           => 'rthd_email_signature',
+						'type'         => 'textarea',
+						'title'        => __( 'Email Signature' ),
+						'subtitle'     => __( 'Add here Email Signature' ),
+						'desc'         => esc_attr( 'You can add email signature here that will be send with every email send with the Idea plugin, Allowed tags are <a> <br> <em> <strong>.' ),
+						'validate'     => 'html_custom',
+						'default'      => esc_attr( '<br />Send via rtCamp Helpdesk Plugin<br />' ),
+						'allowed_html' => array(
+							'a'      => array(
+								'href'  => array(),
+								'title' => array()
+							),
+							'br'     => array(),
+							'em'     => array(),
+							'strong' => array()
+						),
+					),
+				)
+			);
 			ob_start();
 			rthd_ticket_impoters();
 			$importers_content = ob_get_clean();
@@ -517,42 +623,42 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			);
 
 			// SOCIAL ICONS -> Setup custom links in the footer for quick links in your panel footer icons.
-//			$this->args['share_icons'][] = array(
-//				'url'   => 'https://github.com/ReduxFramework/ReduxFramework',
-//				'title' => 'Visit us on GitHub',
-//				'icon'  => 'el-icon-github',
-//				//'img'   => '', // You can use icon OR img. IMG needs to be a full URL.
-//			);
-//			$this->args['share_icons'][] = array(
-//				'url'   => 'https://www.facebook.com/pages/Redux-Framework/243141545850368',
-//				'title' => 'Like us on Facebook',
-//				'icon'  => 'el-icon-facebook',
-//			);
-//			$this->args['share_icons'][] = array(
-//				'url'   => 'http://twitter.com/reduxframework',
-//				'title' => 'Follow us on Twitter',
-//				'icon'  => 'el-icon-twitter',
-//			);
-//			$this->args['share_icons'][] = array(
-//				'url'   => 'http://www.linkedin.com/company/redux-framework',
-//				'title' => 'Find us on LinkedIn',
-//				'icon'  => 'el-icon-linkedin',
-//			);
+			//			$this->args['share_icons'][] = array(
+			//				'url'   => 'https://github.com/ReduxFramework/ReduxFramework',
+			//				'title' => 'Visit us on GitHub',
+			//				'icon'  => 'el-icon-github',
+			//				//'img'   => '', // You can use icon OR img. IMG needs to be a full URL.
+			//			);
+			//			$this->args['share_icons'][] = array(
+			//				'url'   => 'https://www.facebook.com/pages/Redux-Framework/243141545850368',
+			//				'title' => 'Like us on Facebook',
+			//				'icon'  => 'el-icon-facebook',
+			//			);
+			//			$this->args['share_icons'][] = array(
+			//				'url'   => 'http://twitter.com/reduxframework',
+			//				'title' => 'Follow us on Twitter',
+			//				'icon'  => 'el-icon-twitter',
+			//			);
+			//			$this->args['share_icons'][] = array(
+			//				'url'   => 'http://www.linkedin.com/company/redux-framework',
+			//				'title' => 'Find us on LinkedIn',
+			//				'icon'  => 'el-icon-linkedin',
+			//			);
 
-			// Panel Intro text -> before the form
-//			if ( ! isset( $this->args['global_variable'] ) || false !== $this->args['global_variable'] ) {
-//				if ( ! empty( $this->args['global_variable'] ) ) {
-//					$v = $this->args['global_variable'];
-//				} else {
-//					$v = str_replace( '-', '_', $this->args['opt_name'] );
-//				}
-//				$this->args['intro_text'] = sprintf( __( '<p>Did you know that Redux sets a global variable for you? To access any of your saved options from within your code you can use your global variable: <strong>$%1$s</strong></p>', 'redux-framework-demo' ), $v );
-//			} else {
-//				$this->args['intro_text'] = __( '<p>This text is displayed above the options panel. It isn\'t required, but more info is always better! The intro_text field accepts all HTML.</p>', 'redux-framework-demo' );
-//			}
+						// Panel Intro text -> before the form
+			//			if ( ! isset( $this->args['global_variable'] ) || false !== $this->args['global_variable'] ) {
+			//				if ( ! empty( $this->args['global_variable'] ) ) {
+			//					$v = $this->args['global_variable'];
+			//				} else {
+			//					$v = str_replace( '-', '_', $this->args['opt_name'] );
+			//				}
+			//				$this->args['intro_text'] = sprintf( __( '<p>Did you know that Redux sets a global variable for you? To access any of your saved options from within your code you can use your global variable: <strong>$%1$s</strong></p>', 'redux-framework-demo' ), $v );
+			//			} else {
+			//				$this->args['intro_text'] = __( '<p>This text is displayed above the options panel. It isn\'t required, but more info is always better! The intro_text field accepts all HTML.</p>', 'redux-framework-demo' );
+			//			}
 
-			// Add content after the form.
-//			$this->args['footer_text'] = __( '<p>This text is displayed below the options panel. It isn\'t required, but more info is always better! The footer_text field accepts all HTML.</p>', 'redux-framework-demo' );
+						// Add content after the form.
+			//			$this->args['footer_text'] = __( '<p>This text is displayed below the options panel. It isn\'t required, but more info is always better! The footer_text field accepts all HTML.</p>', 'redux-framework-demo' );
 
 			return true;
 		}

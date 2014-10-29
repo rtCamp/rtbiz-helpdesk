@@ -63,8 +63,8 @@ class test_Rt_HD_Tickets_Operation extends RT_WP_TestCase {
 		$this->assertEquals( Rt_HD_Module::$post_type, $post->post_type );
 		$this->assertEquals( $post_date_gmt, $post->post_date_gmt );
 
-		$this->assertEquals( '1', get_post_meta( $this->post_ID, '_rtbiz_hd_created_by', true ) );
-		$this->assertEquals( '1', get_post_meta( $this->post_ID, '_rtbiz_hd_updated_by', true ) );
+		$this->assertEquals( get_current_user_id(), get_post_meta( $this->post_ID, '_rtbiz_hd_created_by', true ) );
+		$this->assertEquals( get_current_user_id(), get_post_meta( $this->post_ID, '_rtbiz_hd_updated_by', true ) );
 		$this->assertFalse( is_null( get_post_meta( $this->post_ID, '_rtbiz_hd_unique_id', true ) ) );
 
 		$this->assertTrue( $this->rthdticketModel->is_exist( $this->post_ID ) );
@@ -119,7 +119,7 @@ class test_Rt_HD_Tickets_Operation extends RT_WP_TestCase {
 		);
 		$this->rthdTicketOperation->ticket_closing_field_update( $newTicket, $this->post_ID );
 		$this->assertEquals( $closing_date, get_post_meta( $this->post_ID, '_rtbiz_hd_closing_date', true ) );
-		$this->assertEquals( '1', get_post_meta( $this->post_ID, '_rtbiz_hd_closed_by', true ) );
+		$this->assertEquals( get_current_user_id(), get_post_meta( $this->post_ID, '_rtbiz_hd_closed_by', true ) );
 
 		$post_terms = wp_get_post_terms( $this->post_ID, rthd_attribute_taxonomy_name( 'closing-reason' ) );
 		$this->assertTrue( is_array( $post_terms ) );
@@ -219,11 +219,11 @@ class test_Rt_HD_Tickets_Operation extends RT_WP_TestCase {
 		//current user 1
 		$subscribe_to = array( '2' );
 		$this->rthdTicketOperation->ticket_subscribe_update( null, '1', $this->post_ID );
-		$this->assertEquals( array(), get_post_meta( $this->post_ID, '_rtbiz_hd_subscribe_to', true ) );
+		$this->assertEquals( array(get_current_user_id()), get_post_meta( $this->post_ID, '_rtbiz_hd_subscribe_to', true ) );
 		$this->rthdTicketOperation->ticket_subscribe_update( $subscribe_to, '1', $this->post_ID );
-		$this->assertEquals( array( '2' ), get_post_meta( $this->post_ID, '_rtbiz_hd_subscribe_to', true ) );
+		$this->assertEquals( array( '2' ,get_current_user_id()), get_post_meta( $this->post_ID, '_rtbiz_hd_subscribe_to', true ) );
 		$this->rthdTicketOperation->ticket_subscribe_update( $subscribe_to, '3', $this->post_ID );
-		$this->assertEquals( array( '2', '1'), get_post_meta( $this->post_ID, '_rtbiz_hd_subscribe_to', true ) );
+		$this->assertEquals( array( '2',get_current_user_id()), get_post_meta( $this->post_ID, '_rtbiz_hd_subscribe_to', true ) );
 	}
 }
  

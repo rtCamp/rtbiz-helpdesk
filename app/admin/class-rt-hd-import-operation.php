@@ -758,7 +758,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			}
 			global $threadPostId;
 			if ( ! isset( $threadPostId ) ) {
-				$title = '[New Follwup Added]' . $this->create_title_for_mail( $comment_post_ID );
+				//				$title = '[New Follwup Added]' . $this->create_title_for_mail( $comment_post_ID );
+				$title = rthd_create_new_ticket_title( 'rthd_new_followup_email_title', $comment_post_ID );;
 				$body  = ' New Follwup Added by ' . $comment_author . ' - ' . $comment_author_email;
 				$body .= '<br/><b>Type : </b>' . 'Mail';
 				$body .= '<br/><b>From : </b>' . $comment_author_email;
@@ -1276,7 +1277,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				update_comment_meta( $comment_ID, '_email_from', $currentUser->user_email );
 			}
 
-			$title = '[New Follwup Added]' . $this->create_title_for_mail( $comment_post_ID );
+			//			$title = '[New Follwup Added]' . $this->create_title_for_mail( $comment_post_ID );
+			$title = rthd_create_new_ticket_title( 'rthd_new_followup_email_title', $comment_post_ID );;
 
 			$body = ' New Follwup Added ' . ( ( ! empty( $currentUser->display_name ) ) ? 'by ' . $currentUser->display_name : 'annonymously' );
 			$body .= '<br/><b>Body : </b>' . $comment->comment_content;
@@ -1392,7 +1394,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				}
 
 				$currentUser = get_user_by( 'id', get_current_user_id() );
-				$title       = '[Follwup Updated]' . $this->create_title_for_mail( $comment_post_ID );
+				//				$title       = '[Follwup Updated]' . $this->create_title_for_mail( $comment_post_ID );
+				$title       = rthd_create_new_ticket_title( 'rthd_update_followup_email_title', $comment_post_ID );
 
 				$body = ' Follwup Updated by ' . $currentUser->display_name;
 				$body .= '<br/><b>Type : </b> <br/>' . $followuptype;
@@ -1431,7 +1434,6 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				}
 
 				$returnArray['status']        = true;
-				$returnArray['data']          = $this->genrate_comment_html_ajax( $comment );
 				$returnArray['comment_count'] = get_comments(
 					array(
 						'order'     => 'DESC',
@@ -1578,7 +1580,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			update_comment_meta( $comment_ID, '_email_bcc', $bcc );
 
 			$currentUser = get_user_by( 'id', get_current_user_id() );
-			$title       = '[New Follwup Added]' . $this->create_title_for_mail( $comment_post_ID );
+			//			$title       = '[New Follwup Added]' . $this->create_title_for_mail( $comment_post_ID );
+			$title       = rthd_create_new_ticket_title( 'rthd_new_followup_email_title', $comment_post_ID );
 			$body = ' New Follwup Added by ' . $currentUser->display_name;
 			$body .= '<br/><b>Type : </b>' . $followuptype;
 			if ( 'mail' == $followuptype ) {
@@ -1863,7 +1866,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$body .= '<br/><b>Body : </b>' . $comment->comment_content;
 			$body .= '<br/> ';
 			$comment_post_ID = $_POST['post_id'];
-			$title           = '[Follwup Deleted]' . $this -> create_title_for_mail( $comment_post_ID );
+			//			$title           = '[Follwup Deleted]' . $this -> create_title_for_mail( $comment_post_ID );
+			$title           = rthd_create_new_ticket_title( 'rthd_delete_followup_email_title', $comment_post_ID );
 			$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, $_POST['comment_id'], $notificationFlag, false );
 			echo json_encode( $response );
 			die( 0 );
