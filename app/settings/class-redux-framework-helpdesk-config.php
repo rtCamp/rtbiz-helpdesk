@@ -148,6 +148,8 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				$default_assignee = 1;
 			}
 
+			var_dump($default_assignee);
+
 			// ACTUAL DECLARATION OF SECTIONS
 			$general_fields = array(
 				array(
