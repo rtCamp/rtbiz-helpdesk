@@ -150,8 +150,8 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 		function rt_hd_support_form_callback() {
 			$this->check_active_plugin();
 			wp_enqueue_style( 'support-form-style', RT_HD_URL . 'app/assets/css/support_form_front.css', false, RT_HD_VERSION, 'all' );
-			$option      = '';
-			$order_email = '';
+			$product_option = '';
+			$order_email    = '';
 
 			// Save ticket if data has been posted
 			if ( ! empty( $_POST ) ) {
@@ -169,86 +169,11 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 			}
 			$product_exists = false;
 			foreach ( $terms as $tm ) {
-				$option .= '<option value= '. $tm->term_id.' > '.$tm->name.'</option>';
+				$product_option .= '<option value= '. $tm->term_id.' > '.$tm->name.'</option>';
 				$product_exists = true;
 			}
-			?>
 
-			<script type="text/javascript">
-				jQuery(document).ready(function ($) {
-					//print list of selected file
-					$("#filesToUpload").change(function () {
-						var input = document.getElementById('filesToUpload');
-						var list = '';
-						//for every file...
-						for (var x = 0; x < input.files.length; x++) {
-							//add to list
-
-							list += '<li>' + input.files[x].name + '</li>';
-						}
-						$("#fileList").html(list);
-					});
-				});
-			</script>
-
-			<h2><?php _e( 'Get Support', 'RT_HD_TEXT_DOMAIN' ); ?></h2>
-			<form method="post" action="" class="comment-form pure-form pure-form-aligned"
-			      enctype="multipart/form-data">
-
-				<?php if ( isset( $_REQUEST['order_id'] ) ) { ?>
-					<input type="hidden" name="post[order_id]" value="<?php echo $_REQUEST['order_id']; ?>">
-				<?php } ?>
-
-				<?php if ( isset( $_REQUEST['order_type'] ) ) { ?>
-					<input type="hidden" name="post[order_type]" value="<?php echo $_REQUEST['order_type']; ?>">
-				<?php } ?>
-
-				<div class="pure-control-group">
-					<!--					<label for="email">-->
-					<?php //_e( 'Email', RT_HD_TEXT_DOMAIN ); ?><!--</label>-->
-					<input id="title" placeholder="Title" type="text" name="post[title]" required />
-				</div>
-
-				<?php if ( $product_exists ) { ?>
-					<div class="pure-control-group">
-						<!--					<label>--><?php //_e( 'Product', RT_HD_TEXT_DOMAIN ); ?><!--</label>-->
-						<select name="post[product_id]">
-							<option value="">Choose Product</option>
-							<?php echo balanceTags( $option ); ?>
-						</select>
-					</div>
-				<?php } ?>
-				<div class="pure-control-group">
-
-					<?php
-					$email = '';
-			if ( is_user_logged_in() ) {
-				$current_user = wp_get_current_user();
-				$email = $current_user->user_email;
-			} ?>
-					<!--					<label for="email">-->
-					<?php //_e( 'Email', RT_HD_TEXT_DOMAIN ); ?><!--</label>-->
-					<input id="email" placeholder="Email" type="email" name="post[email]"
-					       value="<?php echo sanitize_email( $email ) ?>"/>
-				</div>
-
-				<div class="pure-control-group">
-					<!--					<label>--><?php //_e( 'Description', RT_HD_TEXT_DOMAIN ); ?><!--</label>-->
-					<textarea name="post[description]" placeholder="Description" rows="10" cols="10"></textarea>
-
-				</div>
-
-				<div class="pure-control-group">
-					<input type="file" id="filesToUpload" name="attachment[]" multiple="multiple"/>
-					<ul id="fileList">
-						<li>No Files Selected</li>
-					</ul>
-				</div>
-				<div class="pure-control-group">
-					<input type="submit" value="Submit"/>
-				</div>
-			</form>
-		<?php
+			rthd_get_template( 'support-form.php', array( 'product_exists' => $product_exists, 'product_option' => $product_option ) );
 		}
 
 		/**
