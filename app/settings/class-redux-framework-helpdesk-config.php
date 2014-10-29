@@ -143,12 +143,10 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			$admins = get_users( array( 'role' => 'administrator' ) );
 			if ( ! empty( $admins ) ) {
 				$default_assignee = $admins[0];
-				$default_assignee = $default_assignee->ID;
+				$default_assignee = strval( $default_assignee->ID );
 			} else {
-				$default_assignee = 1;
+				$default_assignee = strval( 1 );
 			}
-
-			var_dump($default_assignee);
 
 			// ACTUAL DECLARATION OF SECTIONS
 			$general_fields = array(
