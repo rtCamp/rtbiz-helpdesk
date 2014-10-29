@@ -140,6 +140,14 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				$users_options[ $user->ID ] = $user->user_login;
 			}
 
+			$admins = get_users( array( 'role' => 'administrator' ) );
+			if ( ! empty( $admins ) ) {
+				$default_assignee = $admins[0];
+				$default_assignee = strval( $default_assignee->ID );
+			} else {
+				$default_assignee = strval( 1 );
+			}
+
 			// ACTUAL DECLARATION OF SECTIONS
 			$general_fields = array(
 				array(
@@ -166,9 +174,9 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					'id'       => 'rthd_default_user',
 					'type'     => 'select',
 					'options'  => $users_options,
-					'default'  => '1',
+					'default'  => $default_assignee,
 					'title'    => __( 'Default Assignee' ),
-					'desc'     => __( 'Default User for HelpDesh ticket Assignee' ),
+					'desc'     => __( 'Default User for Helpdesk ticket Assignee' ),
 					'subtitle' => __( 'Select User for Support ticket Assign' ),
 				),
 				array(

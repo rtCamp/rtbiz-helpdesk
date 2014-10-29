@@ -51,15 +51,15 @@ $ticket_unique_id = get_post_meta( $post->ID, '_rtbiz_hd_unique_id', true );
 $current_user = wp_get_current_user();
 ?>
 <form id="add_followup_form" method="post">
-	<input type="hidden" id='ticket_unique_id' value="<?php echo esc_attr( $ticket_unique_id ); ?>"/>
-	<input id="user-avatar" type="hidden" value="<?php echo get_avatar( get_current_user_id(),40 ); ?>">
-	<input id="user-email" type="hidden" value="<?php echo sanitize_email( $current_user->user_email ); ?>">
-	<input id="user-name" type="hidden" value="<?php echo esc_attr( $current_user->display_name ); ?>">
-	<input id="post-id" type="hidden" value="<?php echo esc_attr( $post->ID ); ?>">
-	<input id="edit-comment-id" type="hidden">
+	<input type="hidden" id='ticket_unique_id' value="<?php echo esc_attr( $ticket_unique_id ); ?>" />
+	<input id="user-avatar" type="hidden" value="<?php echo get_avatar( get_current_user_id(), 80); ?>" />
+	<input id="user-email" type="hidden" value="<?php echo sanitize_email( $current_user->user_email ); ?>" />
+	<input id="user-name" type="hidden" value="<?php echo esc_attr( $current_user->display_name ); ?>" />
+	<input id="post-id" type="hidden" value="<?php echo esc_attr( $post->ID ); ?>" />
+	<input id="edit-comment-id" type="hidden" />
 	<textarea id="followup_content" name="followup_content" placeholder="Add new followup"></textarea>
-	<div id ='private-comment'>
-		<label for="add-private-comment"><input id="add-private-comment" type="checkbox" name="private" value="yes" text="check to make comment private"><?php _e('Private'); ?></label>
+	<div id="private-comment">
+		<label for="add-private-comment"><input id="add-private-comment" type="checkbox" name="private" value="yes" text="check to make comment private" /><?php _e('Private'); ?></label>
 	</div>
 	<button class="add-savefollowup btn-primary btn" id="savefollwoup" type="button">Add followup</button>
 	<img id='hdspinner' class="helpdeskspinner" src="<?php echo admin_url().'images/spinner.gif'; ?>">
@@ -67,11 +67,10 @@ $current_user = wp_get_current_user();
 
 <form id="thumbnail_upload" method="post" enctype="multipart/form-data">
 	<input type="file" name="thumbnail" id="thumbnail" />
-	<input type='hidden' value='<?php wp_create_nonce( 'upload_thumb' ); ?>' name='_nonce' />
+	<input type='hidden' value='<?php wp_create_nonce('upload_thumb'); ?>' name='_nonce' />
 	<input type="hidden" name="post_id" id="post_id" value="<?php echo esc_attr( $post->ID ); ?>" />
 	<input type="hidden" name="action" id="action" value="my_upload_action" />
-</form>
-<?php
+</form><?php
 
 $user_edit = current_user_can( rt_biz_get_access_role_cap( RT_BIZ_TEXT_DOMAIN, 'editor' ) );
 if ( $user_edit ) {
