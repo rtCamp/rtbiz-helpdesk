@@ -30,7 +30,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 			$this->hooks();
 		}
 
-		var $isWoocommerceActive, $iseddActive;
+		var $isWoocommerceActive, $iseddActive, $activePostType, $order_post_type;
 
 
 		/**
@@ -127,15 +127,19 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 				$this->isWoocommerceActive = true;
 				$this->iseddActive = false;
 				$this->activePostType = 'product';
+				$this->order_post_type = 'shop_order';
 			}
 			else if ( is_plugin_active( 'easy-digital-downloads/easy-digital-downloads.php' ) && 'edd' === $activePlugin ) {
 				$this->iseddActive = true;
 				$this->isWoocommerceActive  = false;
 				$this->activePostType = 'download';
+				$this->order_post_type = 'edd_payment';
 			}
 			else {
 				$this->iseddActive = false;
 				$this->isWoocommerceActive = false;
+				$this->activePostType = false;
+				$this->order_post_type = false;
 			}
 		}
 
@@ -169,6 +173,29 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 			}
 			$product_exists = false;
 			foreach ( $terms as $tm ) {
+				if ( isset( $_REQUEST['order_id'] ) && $this->order_post_type == get_post_type( $_REQUEST['order_id'] ) ) {
+					if ( $this->isWoocommerceActive ) {
+						$order = new WC_Order( $_REQUEST['order_id'] );
+						if ( !empty( $order ) ) {
+							$items = $order->get_items();
+							$product_ids = wp_list_pluck( $items, 'product_id' );
+							$term_product_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $tm->term_id, '_product_id', true );
+							if ( ! in_array( $term_product_id, $product_ids ) ) {
+								continue;
+							}
+						}
+					} else if ( $this->iseddActive ) {
+						$payment = get_post( $_REQUEST['order_id'] );
+						if ( !empty( $payment ) ) {
+							$items = edd_get_payment_meta_downloads( $payment->ID );
+							$product_ids = wp_list_pluck( $items, 'id' );
+							$term_product_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $tm->term_id, '_product_id', true );
+							if ( ! in_array( $term_product_id, $product_ids ) ) {
+								continue;
+							}
+						}
+					}
+				}
 				$product_option .= '<option value= '. $tm->term_id.' > '.$tm->name.'</option>';
 				$product_exists = true;
 			}
