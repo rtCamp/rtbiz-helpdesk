@@ -351,7 +351,11 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 
 					if ( $arg_shortcode['email'] == '{{logged_in_user}}' ) {
 						global $current_user;
-						$person = rt_biz_get_person_by_email( $current_user->user_email );
+						if ( isset( $current_user->user_email ) && ! empty( $current_user->user_email ) ) {
+							$person = rt_biz_get_person_by_email( $current_user->user_email );
+						} else {
+							$person = '';
+						}
 					} else {
 						$person = rt_biz_get_person_by_email( $arg_shortcode['email'] );
 					}
