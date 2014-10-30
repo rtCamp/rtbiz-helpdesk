@@ -23,6 +23,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( ! class_exists( 'Rt_HD_Logs' ) ) {
 	class Rt_HD_Logs {
 		function ui() {
+
+			if ( ! isset( $_REQUEST['generate_log'] ) ) {
+			?>
+				<div class="updated"><p><?php _e( 'Log generation is a heavy process. So please be patient.' ); ?></p></div>
+				<a class="button" href="<?php echo add_query_arg( 'generate_log', 'yes' ); ?>"><?php _e( 'Generate Log' ); ?></a>
+			<?php
+				return;
+			}
+
 			global $wpdb;
 			$editor_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
 			//			if( !current_user_can( $editor_cap ) ) {
