@@ -434,9 +434,15 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					),
 				)
 			);
-			ob_start();
-			rthd_ticket_impoters();
-			$importers_content = ob_get_clean();
+
+			// Only initiates in case of settings page is getting displayed. Not otherwise
+			if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] == self::$page_slug ) {
+				ob_start();
+				rthd_ticket_impoters();
+				$importers_content = ob_get_clean();
+			} else {
+				$importers_content = '';
+			}
 			$this->sections[]  = array(
 				'title'       => __( 'Importers' ),
 				'desc'        => __( 'This section lets you import tickets into Helpdesk System from either a CSV file or any other Form Manager Plugin e.g., Gravity Forms.' ),
@@ -452,9 +458,14 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				),
 			);
 
-			ob_start();
-			rthd_ticket_import_mapper();
-			$import_mapper_content = ob_get_clean();
+			// Only initiates in case of settings page is getting displayed. Not otherwise
+			if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] == self::$page_slug ) {
+				ob_start();
+				rthd_ticket_import_mapper();
+				$import_mapper_content = ob_get_clean();
+			} else {
+				$import_mapper_content = '';
+			}
 			$this->sections[]      = array(
 				'title'       => __( 'Mapper' ),
 				'desc'        => __( 'This section lets you view all the Import Mappings existing for ticket importing into Helpdesk System.' ),
@@ -470,9 +481,14 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				),
 			);
 
-			ob_start();
-			rthd_ticket_import_logs();
-			$import_log_content = ob_get_clean();
+			// Only initiates in case of settings page is getting displayed. Not otherwise
+			if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] == self::$page_slug ) {
+				ob_start();
+				rthd_ticket_import_logs();
+				$import_log_content = ob_get_clean();
+			} else {
+				$import_log_content = '';
+			}
 			$this->sections[]   = array(
 				'title'       => __( 'Import Logs' ),
 				'icon'        => 'el-icon-list-alt',

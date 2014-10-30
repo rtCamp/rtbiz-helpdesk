@@ -85,18 +85,7 @@ if ( ! class_exists( 'Rt_HD_Logs' ) ) {
 				$left = 0;
 			}
 			$taxmeta = $wpdb->prefix . 'taxonomymeta';
-			if ( class_exists( 'RGFormsModel' ) ) {
-				$gravity_query = ',(select count(*) from ' . RGFormsModel::get_lead_meta_table_name() . ' where meta_value like p.meta_value) as gravity_meta ';
-			} else {
-				$gravity_query = '';
-			}
-			$gravitymeta = '';
-			$sql         = $wpdb->prepare( "select p.meta_value as trans_id, (select count(*) from $wpdb->postmeta where meta_value
-			  like p.meta_value) as post, (select count(*) from $taxmeta where meta_value like p.meta_value) as texonomy {$gravity_query} ,
-					(select a.post_title from $wpdb->posts a left join $wpdb->postmeta b on b.post_id=a.id where b.meta_value=p.meta_value limit 1) as title,
-					(select a.post_date from $wpdb->posts a left join $wpdb->postmeta b on b.post_id=a.id where b.meta_value=p.meta_value order by a.post_date asc limit 1) as firstdate,
-					(select a.post_date from $wpdb->posts a left join $wpdb->postmeta b on b.post_id=a.id where b.meta_value=p.meta_value order by a.post_date desc limit 1) as lastdate
-					from (select distinct meta_value from $wpdb->postmeta where meta_key like '_transaction_id' order by convert(meta_value, UNSIGNED INTEGER) desc limit %d, %d) as p;", $left, $size );
+			$sql         = $wpdb->prepare( "select p.meta_value as trans_id from (select distinct meta_value from $wpdb->postmeta where meta_key like '_transaction_id' order by convert(meta_value, UNSIGNED INTEGER) desc limit %d, %d) as p;", $left, $size );
 			$result      = $wpdb->get_results( $sql );
 			?>
 			<br/>
@@ -121,9 +110,6 @@ if ( ! class_exists( 'Rt_HD_Logs' ) ) {
 					<th>
 						<?php _e( 'Taxonomy Count', RT_HD_TEXT_DOMAIN ); ?>
 					</th>
-					<!--                        <th>
-												Gravity Meta Count
-											</th>-->
 					<th>
 						<?php _e( 'Transaction Start Time', RT_HD_TEXT_DOMAIN ); ?>
 					</th>
@@ -141,27 +127,35 @@ if ( ! class_exists( 'Rt_HD_Logs' ) ) {
 							<?php echo esc_attr( $rslt->trans_id ); ?>
 						</td>
 						<td>
-							<?php echo esc_attr( $rslt->title ); ?>
+							<?php
+								$title = $wpdb->get_var( "select a.post_title from $wpdb->posts a left join $wpdb->postmeta b on b.post_id=a.id where b.meta_value=$rslt->trans_id limit 1" );
+								echo ( ! empty( $title ) ) ? $title : "-NA-";
+							?>
 						</td>
 						<td>
-							<?php echo esc_attr( $rslt->firstdate ); ?>
+							<?php
+								$first_date = $wpdb->get_var( "select a.post_date from $wpdb->posts a left join $wpdb->postmeta b on b.post_id=a.id where b.meta_value=$rslt->trans_id order by a.post_date asc limit 1" );
+								echo ( ! empty( $first_date ) ) ? $first_date : "-NA-";
+							?>
 						</td>
 						<td>
-							<?php echo esc_attr( $rslt->lastdate ); ?>
+							<?php
+								$last_date = $wpdb->get_var( "select a.post_date from $wpdb->posts a left join $wpdb->postmeta b on b.post_id=a.id where b.meta_value=$rslt->trans_id order by a.post_date desc limit 1" );
+								echo ( ! empty( $last_date ) ) ? $last_date : "-NA-";
+							?>
 						</td>
 						<td>
-							<?php echo esc_attr( $rslt->post ); ?>
+							<?php
+								$post_count = $wpdb->get_var( "select count(*) as post_count from $wpdb->postmeta where meta_value like $rslt->trans_id" );
+								echo ( ! empty( $post_count ) ) ? $post_count : "-NA-";
+							?>
 						</td>
-
 						<td>
-							<?php echo esc_attr( $rslt->texonomy ); ?>
+							<?php
+								$tax_count = $wpdb->get_var( "select count(*) as tax_count from $taxmeta where meta_value like $rslt->trans_id" );
+								echo ( ! empty( $tax_count ) ) ? $tax_count : "-NA-";
+							?>
 						</td>
-						<!--                        <td>
-			<?php if ( isset( $rslt->gravity_meta ) ) {
-							echo esc_attr( $rslt->gravity_meta );
-						} ?>
-						</td>-->
-
 						<td>
 							<?php echo esc_attr( date( 'Y-m-d H:i:s', intval( $rslt->trans_id ) ) );
 							?>
