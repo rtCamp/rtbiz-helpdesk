@@ -85,7 +85,8 @@ if ( ! class_exists( 'Rt_HD_Logs' ) ) {
 				$left = 0;
 			}
 			$taxmeta = $wpdb->prefix . 'taxonomymeta';
-			$sql         = $wpdb->prepare( "select p.meta_value as trans_id from (select distinct meta_value from $wpdb->postmeta where meta_key like '_transaction_id' order by convert(meta_value, UNSIGNED INTEGER) desc limit %d, %d) as p;", $left, $size );
+			$post_type = Rt_HD_Module::$post_type;
+			$sql         = $wpdb->prepare( "select p.meta_value as trans_id from (select distinct meta_value from $wpdb->posts as p left join $wpdb->postmeta as m on p.ID = m.post_id where p.post_type=$post_type m.meta_key like '_transaction_id' order by convert(meta_value, UNSIGNED INTEGER) desc limit %d, %d) as p;", $left, $size );
 			$result      = $wpdb->get_results( $sql );
 			?>
 			<br/>
