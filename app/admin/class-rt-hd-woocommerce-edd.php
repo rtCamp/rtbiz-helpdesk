@@ -151,7 +151,8 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 		 *
 		 * [rt_hd_support_form]
 		 */
-		function rt_hd_support_form_callback() {
+		function rt_hd_support_form_callback( $attr ) {
+			ob_start();
 			$this->check_active_plugin();
 			wp_enqueue_style( 'support-form-style', RT_HD_URL . 'app/assets/css/support_form_front.css', false, RT_HD_VERSION, 'all' );
 			$product_option = '';
@@ -201,6 +202,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 			}
 
 			rthd_get_template( 'support-form.php', array( 'product_exists' => $product_exists, 'product_option' => $product_option ) );
+			return apply_filters( 'rt_hd_support_form_shorcode', ob_get_clean(), $attr );
 		}
 
 		/**
