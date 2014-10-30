@@ -44,7 +44,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$signature = rthd_get_email_signature_settings();
 			$args = array(
 				'user_id'       => $user_id,
-				'fromemail'     => $settings['rthd_outgoing_email_from_address'],
+				'fromemail'     => ( $settings['rthd_outgoing_email_delivery'] == 'wp_mail' ) ? $settings['rthd_outgoing_email_from_address'] : $settings['rthd_outgoing_email_mailbox'],
 				'toemail'       => serialize( $toemail ),
 				'ccemail'       => serialize( $ccemail ),
 				'bccemail'      => serialize( $bccemail ),
@@ -61,8 +61,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 					$rt_hd_mail_outbound_model->update_outbound_mail( array( 'sent' => 'yes' ), array( 'id' => $id ) );
 				}
 				return $sendflag;
-			}
-			else {
+			} else {
 				return $rt_hd_mail_outbound_model->add_outbound_mail( $args );
 			}
 		}
@@ -192,12 +191,14 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			global $current_user;
 			$newUser  = get_user_by( 'id', $assignee );
 			$oldUser  = get_user_by( 'id', $oldassignee );
-			$to    = array(
-				array(
-					'email' => $oldUser->user_email,
-					'name'  => $oldUser->display_name,
-				),
-			);
+			if ( ! empty( $oldUser->user_email ) && ! empty( $oldUser->display_name ) ) {
+				$to = array( array(
+						'email' => $oldUser->user_email,
+						'name'  => $oldUser->display_name,
+				), );
+			} else {
+				$to = array();
+			}
 
 			$title = rthd_create_new_ticket_title( 'rthd_ticket_reassign_email_title', $post_id );
 

@@ -318,7 +318,8 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 			}
 			$message->setBody( $bodyPart );
 
-			return $transport->send( $message );
+			$transport->send( $message );
+			return true;
 		}
 
 		/**

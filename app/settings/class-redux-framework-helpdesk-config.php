@@ -148,6 +148,12 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				$default_assignee = strval( 1 );
 			}
 
+			$system_emails = rthd_get_all_system_emails();
+			$mailbox_options = array();
+			foreach( $system_emails as $email ) {
+				$mailbox_options[ $email ] = $email;
+			}
+
 			// ACTUAL DECLARATION OF SECTIONS
 			$general_fields = array(
 				array(
@@ -218,13 +224,11 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				'permissions' => $admin_cap,
 				'fields'      => array(
 					array(
-						'id'       => 'rthd_outgoing_email_from_address',
-						'title'    => __( 'Outgoing Emails\' FROM Address' ),
-						'subtitle' => __( 'Outgoing System Email used for all Helpdesk Communication' ),
-						'desc'     => sprintf( '%s <a href="%s">%s</a>. %s.', __( 'WordPress by default sends email using (mostly postfix) FROM/TO value set to Admin Email taken from' ), admin_url( 'options-general.php' ), __( 'here' ), __( 'System Email Address to be used for outbound emails. This Address will be used as FROM: email address for all outgoing emails' ) ),
-						'type'     => 'text',
-						'default'  => get_option( 'admin_email' ),
-						'validate' => 'email',
+						'id'          => 'rthd_reply_by_email_view',
+						'title'       => __( 'Mailbox' ),
+						'subtitle'    => __( 'This section lets you configure your mailbox for Helpdesk.'  ),
+						'type'        => 'callback',
+						'callback'    => 'rthd_reply_by_email_view',
 					),
 					array(
 						'id'       => 'rthd_outgoing_email_delivery',
@@ -234,11 +238,37 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'type'     => 'radio',
 						'options'  => array(
 							'wp_mail'         => __( 'WordPress wp_mail Function' ),
-							'user_mail_login' => __( 'User\'s own Mail Login - (Google OAuth / SMTP Login etc. as per configuration)' ),
-							//							'amazon_ses'      => __( 'Amazon SES - (Articles) - Not working as of now' ),
-							//							'google_smtp'     => __( 'Google SMTP - NOT Recommended (Articles) - Not working as of now' )
+							'user_mail_login' => __( 'User\'s own Mail Login - (Google OAuth / SMTP Login etc. as per configuration.)' ),
 						),
 						'default'  => 'wp_mail',
+					),
+					array(
+						'id'       => 'rthd_outgoing_email_from_address',
+						'title'    => __( 'Outgoing Emails\' FROM Address' ),
+						'subtitle' => __( 'Outgoing System Email used for all Helpdesk Communication' ),
+						'desc'     => sprintf( '%s <a href="%s">%s</a>. %s.', __( 'WordPress by default sends email using (mostly postfix) FROM/TO value set to Admin Email taken from' ), admin_url( 'options-general.php' ), __( 'here' ), __( 'System Email Address to be used for outbound emails. This Address will be used as FROM: email address for all outgoing emails' ) ),
+						'type'     => 'text',
+						'default'  => get_option( 'admin_email' ),
+						'validate' => 'email',
+						'required' => array( 'rthd_outgoing_email_delivery', '=', 'wp_mail' ),
+					),
+					array(
+						'id'       => 'rthd_outgoing_email_mailbox',
+						'title'    => __( 'Outgoing Emails\' Mailbox' ),
+						'subtitle' => __( 'The mailbox to be used in order to send outgoing emails/notifications.' ),
+						'desc'     => sprintf( __( 'Choose the one email from the configured mailboxes. If there\'s no item found then please configure mailbox.'  ) ),
+						'type'     => 'select',
+						'options'  => $mailbox_options,
+						'required' => array( 'rthd_outgoing_email_delivery', '=', 'user_mail_login' ),
+					),
+					array(
+						'id'       => 'rthd_enable_reply_by_email',
+						'type'     => 'switch',
+						'title'    => __( 'Enable Reply by Email' ),
+						'subtitle' => __( 'This feature parse the mailbox you\'ve added in Helpdesk system and converts mails into tickets.'  ),
+						'default'  => false,
+						'on'       => __( 'Enable' ),
+						'off'      => __( 'Disable' ),
 					),
 					array(
 						'id'         => 'rthd_notification_emails',
@@ -267,26 +297,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 							'ticket_subscribed'       => __( 'Whenever new ticket subscribed' ),
 							'ticket_unsubscribed'     => __( 'Whenever new ticket unsubscribed' ),
 						),
-					),
-					array(
-						'id'       => 'rthd_enable_reply_by_email',
-						'type'     => 'switch',
-						'title'    => __( 'Enable Reply by Email' ),
-						'subtitle' => __( 'This feature' ),
-						'default'  => false,
-						'on'       => __( 'Enable' ),
-						'off'      => __( 'Disable' ),
-					),
-					array(
-						'id'       => 'section-media-start',
-						'type'     => 'section',
-						'indent'   => true, // Indent all options below until the next 'section' option is set.
-						'required' => array( 'rthd_enable_reply_by_email', '=', 1 ),
-					),
-					array(
-						'id'       => 'rthd_reply_by_email_view',
-						'type'     => 'callback',
-						'callback' => 'rthd_reply_by_email_view',
 					),
 				),
 			);
@@ -409,11 +419,17 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					array(
 						'id'       => 'rthd_enable_signature',
 						'type'     => 'switch',
-						'title'    => __( 'Enable email Title' ),
+						'title'    => __( 'Enable email Signature' ),
 						'subtitle' => __( 'This will enable/disable signature for all email send via rtCamp Helpdesk.' ),
-						'default'  => false,
+						'default'  => true,
 						'on'       => __( 'Enable' ),
 						'off'      => __( 'Disable' ),
+					),
+					array(
+						'id'       => 'section-email-signature',
+						'type'     => 'section',
+						'indent'   => true, // Indent all options below until the next 'section' option is set.
+						'required' => array( 'rthd_enable_signature', '=', 1 ),
 					),
 					array(
 						'id'           => 'rthd_email_signature',

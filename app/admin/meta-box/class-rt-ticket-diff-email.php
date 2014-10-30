@@ -92,7 +92,7 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 			$oldUser = get_user_by( 'id', $oldpost->post_author );
 			$newUser = get_user_by( 'id', $newTicket['post_author'] );
 
-			$diff = rthd_text_diff( $oldUser->display_name, $newUser->display_name );
+			$diff = rthd_text_diff( ( ( ! empty( $oldUser->display_name ) ) ? $oldUser->display_name : '-NA-' ), ( ( ! empty( $newUser->display_name ) ) ? $newUser->display_name : '-NA-' ) );
 			if ( $diff ) {
 				$emailHTML .= '<tr><th style="padding: .5em;border: 0;"> Assigned To</th><td>' . $diff . '</td><td></td></tr>';
 			}

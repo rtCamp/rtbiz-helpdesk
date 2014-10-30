@@ -19,6 +19,7 @@ $accessTokenArray = array();
 $signature        = '';
 $settings         = rthd_get_redux_settings();
 foreach ( $emailRow as $email ) {
+	var_dump($email);
 	if ( ! isset( $accessTokenArray[ $email->fromemail ] ) ) {
 		$email_type                            = '';
 		$imap_server                           = '';
@@ -28,12 +29,13 @@ foreach ( $emailRow as $email ) {
 			'imap_server' => $imap_server,
 		);
 	}
+	var_dump($accessTokenArray);
 	if ( $rt_hd_settings->update_sent_email( $email->id, 'p', 'no' ) > 0 ) {
 		$updateFlag = false;
 		try {
 			if ( isset( $settings['rthd_outgoing_email_delivery'] ) && ! empty( $settings['rthd_outgoing_email_delivery'] ) ) {
 				if ( $settings['rthd_outgoing_email_delivery'] == 'user_mail_login' ) {
-					$hdZendEmail->sendemail( $email->fromemail, $accessTokenArray[ $email->fromemail ]['token'], $accessTokenArray[ $email->fromemail ]['email_type'], $accessTokenArray[ $email->fromemail ]['imap_server'], $email->subject, $email->body, unserialize( $email->toemail ), unserialize( $email->ccemail ), unserialize( $email->bccemail ), unserialize( $email->attachement ) );
+					var_dump($hdZendEmail->sendemail( $email->fromemail, $accessTokenArray[ $email->fromemail ]['token'], $accessTokenArray[ $email->fromemail ]['email_type'], $accessTokenArray[ $email->fromemail ]['imap_server'], $email->subject, $email->body, unserialize( $email->toemail ), unserialize( $email->ccemail ), unserialize( $email->bccemail ), unserialize( $email->attachement ) ));
 				}
 				$updateFlag = true;
 			}
