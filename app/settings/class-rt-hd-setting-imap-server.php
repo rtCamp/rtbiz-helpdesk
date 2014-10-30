@@ -55,7 +55,6 @@ if ( ! class_exists( 'RT_HD_Setting_Imap_Server' ) ) {
 
 			foreach( $default_imap_servers as $server ) {
 				$existing_server = $rt_hd_imap_server_model->get_servers( array( 'incoming_imap_server' => $server['incoming_imap_server'] ) );
-				var_dump($existing_server);
 				if( empty( $existing_server ) ) {
 					$rt_hd_imap_server_model->add_server( $server );
 				}

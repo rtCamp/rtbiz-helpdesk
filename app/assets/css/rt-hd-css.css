@@ -137,12 +137,8 @@ li.toplevel_page_hd-dashboard a:active {
 	font-weight: bold
 }
 
-.hd-google-profile-table {
-	border: 1px;
-}
-
-.hd-google-profile-table td.long, .hd-google-profile-table textArea {
-	width: 400px;
+.hd-google-profile-table td.long, .hd-google-profile-table textarea {
+	width: 450px;
 }
 
 .mail-acl_user img {

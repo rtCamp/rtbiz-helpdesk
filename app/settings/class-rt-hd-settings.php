@@ -318,6 +318,7 @@ if ( ! class_exists( 'Rt_HD_Settings' ) ) {
 		public function update_mail_acl( $email, $token = null, $email_data = null, $imap_server = null ) {
 			global $rt_hd_mail_accounts_model;
 
+			$args = array();
 			if ( $email_data != null ) {
 				$args['email_data'] = $email_data;
 			}

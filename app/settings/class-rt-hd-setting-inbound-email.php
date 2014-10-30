@@ -191,42 +191,15 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 					} catch ( Exception $e ) {
 						echo '<tr valign="top"><td></td><td></td><td><p class="description">' . esc_html( $e->getMessage() ) . '</p></td></tr>';
 					}
-					if ( $login_successful ) {
-							if ( 'imap' == $ac->type ) { ?>
-								<tr valign="top">
-									<td></td>
-									<th scope="row"><label><?php _e( 'IMAP Server' ); ?></label></th>
-									<td class="long">
-										<select required="required" name="imap_server">
-											<option value=""><?php _e( 'Select Mail Server' ); ?></option>
-											<?php $imap_servers = $rt_hd_imap_server_model->get_all_servers();
-											foreach ( $imap_servers as $server ) {
-												?>
-												<option <?php echo esc_html( ( isset( $ac->imap_server ) && $ac->imap_server == $server->id ) ? 'selected="selected"' : '' ); ?>
-													value="<?php echo esc_attr( $server->id ); ?>"><?php echo esc_html( $server->server_name ); ?></option>
-											<?php } ?>
-										</select>
-									</td>
-								</tr>
-								<tr valign="top">
-									<!--											<td></td>-->
-									<!--											<th scope="row"><label>--><?php //_e( 'Password' ); ?><!--</label></th>-->
-									<!--											<td class="long"><input required="required" autocomplete="off"-->
-									<!--											                        type="password"-->
-									<!--											                        name="imap_password" placeholder="Password"-->
-									<!--											                        value="--><?php //echo esc_attr( rthd_encrypt_decrypt( $token ) ); ?><!--"/>-->
-									<!--											</td>-->
-								</tr>
-							<?php
-							}
 					?>
 									<tr valign="top">
 										<td>
 											<label><?php echo balanceTags( $personMarkup ); ?></label>
 											<?php if ( isset( $ac->email_data['name'] ) ) { echo $ac->email_data['name']; } ?> <br/><a href='mailto:<?php echo $email ?>'><?php echo $email ?></a>
 										</td>
+										<?php if ( $login_successful ) { ?>
 										<th scope="row"><label><?php _e( 'Mail Folders to read' ); ?></label></th>
-										<td>
+										<td class="long">
 											<label>
 												<?php _e( 'Inbox Folder' ); ?>
 												<select data-email-id="<?php echo esc_attr( $ac->id ); ?>"
@@ -247,8 +220,8 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 						<p class="description"><?php _e( 'No Folders found.' ); ?></p>
 					<?php } ?>
 										</td>
+										<?php } ?>
 									</tr>
-						<?php } ?>
 									<tr valign="top">
 										<td></td>
 										<th scope="row"><label></label></th>
