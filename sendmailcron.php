@@ -1,4 +1,24 @@
 <?php
+
+
+/**
+ * This file needs to be in Cron in order to start sending all the mails from the DB Queue.
+ *
+ * # "crontab -l" : This will dispaly the current crons which are set.
+ *
+ * # "crontab -e" : This will allow you to edit/add crons on the server.
+ *
+ * # Add following line in the crontab
+ */
+// # */1 * * * * cd /var/www/test.com/htdocs/wp-content/plugins/rtbiz-helpdesk && php sendmailcron.php >> /var/log/helpdesk_send_mail_cron_log.log 2>&1
+/**
+ * # Save the crontab. And cron will start to execute. The above line will run this script every 1 minute and log the output in the log file.
+ *
+ * # You can change the time accordingly.
+ *
+ */
+
+
 if ( ! defined( 'WP_LOAD_PATH' ) ) {
 	$path = '../../../';
 	if ( file_exists( $path . 'wp-load.php' ) ) {

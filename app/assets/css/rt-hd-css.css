@@ -122,6 +122,10 @@ li.toplevel_page_hd-dashboard a:active {
 	vertical-align: middle
 }
 
+.hd-option {
+	margin-bottom: 10px;
+}
+
 .hd-option input[type=text] {
 	width: 400px
 }
