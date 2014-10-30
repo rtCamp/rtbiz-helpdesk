@@ -2,8 +2,9 @@
 /**
  * Don't load this file directly!
  */
-if (!defined('ABSPATH'))
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -13,37 +14,89 @@ if (!defined('ABSPATH'))
 
 /**
  * Description of RtHDIMAPServerModel
+ * IMAP server model for database table
  *
  * @author udit
+ *
+ * @since  rt-Helpdesk 0.1
  */
-if ( !class_exists( 'Rt_HD_IMAP_Server_Model' ) ) {
+if ( ! class_exists( 'Rt_HD_IMAP_Server_Model' ) ) {
+	/**
+	 * Class Rt_HD_IMAP_Server_Model
+	 */
 	class Rt_HD_IMAP_Server_Model extends RT_DB_Model {
 		public function __construct() {
 			parent::__construct( 'wp_hd_imap_server' );
 		}
 
+		/**
+		 * get all servers
+		 *
+		 * @return array
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
 		function get_all_servers() {
 			return parent::get( array() );
 		}
 
+		/**
+		 * delete server from id
+		 *
+		 * @param $id
+		 *
+		 * @return int
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
 		function delete_server( $id ) {
 			return parent::delete( array( 'id' => $id ) );
 		}
 
+		/**
+		 * add server
+		 *
+		 * @param $data
+		 *
+		 * @return int
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
 		function add_server( $data ) {
 			return parent::insert( $data );
 		}
 
+		/**
+		 * update server
+		 *
+		 * @param $data
+		 * @param $id
+		 *
+		 * @return mixed
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
 		function update_server( $data, $id ) {
 			return parent::update( $data, array( 'id' => $id ) );
 		}
 
+		/**
+		 * get server
+		 *
+		 * @param $id
+		 *
+		 * @return bool
+		 *
+		 * @since rt-Helpdesk 0.1
+		 *
+		 */
 		function get_server( $id ) {
 			$servers = parent::get( array( 'id' => $id ) );
-			$server = false;
+			$server  = false;
 			if ( ! empty( $servers ) ) {
 				$server = $servers[0];
 			}
+
 			return $server;
 		}
 	}

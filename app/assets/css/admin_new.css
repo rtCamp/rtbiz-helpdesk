@@ -1,0 +1,148 @@
+.tips {
+	cursor: help;
+	text-decoration: none
+}
+
+img.tips {
+	padding: 5px 0 0
+}
+
+#tiptip_holder {
+	display: none;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 99999
+}
+
+#tiptip_holder.tip_top {
+	padding-bottom: 5px
+}
+
+#tiptip_holder.tip_top #tiptip_arrow_inner {
+	margin-top: -7px;
+	margin-left: -6px;
+	border-top-color: #464646
+}
+
+#tiptip_holder.tip_bottom {
+	padding-top: 5px
+}
+
+#tiptip_holder.tip_bottom #tiptip_arrow_inner {
+	margin-top: -5px;
+	margin-left: -6px;
+	border-bottom-color: #464646
+}
+
+#tiptip_holder.tip_right {
+	padding-left: 5px
+}
+
+#tiptip_holder.tip_right #tiptip_arrow_inner {
+	margin-top: -6px;
+	margin-left: -5px;
+	border-right-color: #464646
+}
+
+#tiptip_holder.tip_left {
+	padding-right: 5px
+}
+
+#tiptip_holder.tip_left #tiptip_arrow_inner {
+	margin-top: -6px;
+	margin-left: -7px;
+	border-left-color: #464646
+}
+
+#tiptip_content, .chart-tooltip, .wc_error_tip {
+	font-size: 11px;
+	color: #fff;
+	padding: .5em;
+	background: #464646;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	-webkit-box-shadow: 1px 1px 3px rgba(0, 0, 0, .1);
+	-moz-box-shadow: 1px 1px 3px rgba(0, 0, 0, .1);
+	box-shadow: 1px 1px 3px rgba(0, 0, 0, .1);
+	text-align: center;
+	max-width: 150px
+}
+
+#tiptip_content code, .chart-tooltip code, .wc_error_tip code {
+	background: #888;
+	padding: 1px
+}
+
+#tiptip_arrow, #tiptip_arrow_inner {
+	position: absolute;
+	border-color: transparent;
+	border-style: solid;
+	border-width: 6px;
+	height: 0;
+	width: 0
+}
+
+#rt-hd-ticket-data .inside {
+	padding: 0;
+}
+
+.row_group {
+	padding: 10px 10px;
+}
+
+.row_group input, .row_group select {
+	width: 100%;
+	vertical-align: top;
+	margin: 0;
+	font-weight: 400;
+	line-height: 1.5em;
+}
+
+#divSubscriberList .contact-list {
+	display: inline-block;
+	text-align: center;
+	margin-right: 10px;
+}
+
+#divAttachmentList .attachment-item {
+	background: #F8F8F8;
+}
+
+.delete_row {
+	position: relative;
+	display: block;
+	float: right;
+	text-align: center;
+	color: #FFF;
+	background-color: #000;
+	border-radius: 100%;
+	padding: 0 5px;
+	box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
+	text-decoration: none;
+}
+
+#divSubscriberList .delete_row {
+	margin-left: -15px;
+	margin-top: -10px;
+}
+
+#divAttachmentList .delete_row, #external-files-container .delete_row {
+	margin: -15px;
+}
+
+#add_new_ex_file {
+	margin-top: 10px;
+}
+
+#external-files-container .row_group {
+	background: #F8F8F8;
+	margin-bottom: 10px;
+}
+
+
+/*Redux Setting Heder Css*/
+.redux-container #redux-header .display_header {
+    margin: 0;
+}
