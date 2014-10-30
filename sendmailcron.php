@@ -17,7 +17,7 @@ if ( empty( $emailRow ) ) {
 $hdZendEmail      = new Rt_HD_Zend_Mail();
 $accessTokenArray = array();
 $signature        = '';
-$settings         = rthd_get_settings();
+$settings         = rthd_get_redux_settings();
 foreach ( $emailRow as $email ) {
 	if ( ! isset( $accessTokenArray[ $email->fromemail ] ) ) {
 		$email_type                            = '';
@@ -31,15 +31,10 @@ foreach ( $emailRow as $email ) {
 	if ( $rt_hd_settings->update_sent_email( $email->id, 'p', 'no' ) > 0 ) {
 		$updateFlag = false;
 		try {
-			if ( isset( $settings['outgoing_email_delivery'] ) && ! empty( $settings['outgoing_email_delivery'] ) ) {
-				if ( $settings['outgoing_email_delivery'] == 'user_mail_login' ) {
+			if ( isset( $settings['rthd_outgoing_email_delivery'] ) && ! empty( $settings['rthd_outgoing_email_delivery'] ) ) {
+				if ( $settings['rthd_outgoing_email_delivery'] == 'user_mail_login' ) {
 					$hdZendEmail->sendemail( $email->fromemail, $accessTokenArray[ $email->fromemail ]['token'], $accessTokenArray[ $email->fromemail ]['email_type'], $accessTokenArray[ $email->fromemail ]['imap_server'], $email->subject, $email->body, unserialize( $email->toemail ), unserialize( $email->ccemail ), unserialize( $email->bccemail ), unserialize( $email->attachement ) );
 				}
-				//				elseif ( $settings['outgoing_email_delivery'] == 'amazon_ses' ) {
-				//
-				//				} elseif ( $settings['outgoing_email_delivery'] == 'google_smtp' ) {
-				//
-				//				}
 				$updateFlag = true;
 			}
 		} catch ( Exception $e ) {

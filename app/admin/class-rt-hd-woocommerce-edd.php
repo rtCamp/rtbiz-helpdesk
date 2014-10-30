@@ -210,7 +210,6 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 		 *
 		 * @since 0.1
 		 *
-		 * @global type $rt_hd_contacts
 		 */
 		function save() {
 			$this->check_active_plugin();
@@ -223,7 +222,6 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 			$rt_hd_tickets_id = $rt_hd_import_operation->insert_new_ticket(
 				$productstr,
 				$data['description'],
-				$redux_helpdesk_settings['rthd_default_user'], // it will changed to dynamic once redux option for default assignee shell be introduced
 				'now',
 				array( array( 'address' => $data['email'], 'name' => '' ) ),
 				array(),

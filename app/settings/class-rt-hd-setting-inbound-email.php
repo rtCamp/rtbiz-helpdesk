@@ -99,7 +99,7 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 
 			$responce = $this->goole_oauth();
 
-			$google_acs = $rt_hd_settings->get_user_google_ac( $this->user_id );
+			$google_acs = $rt_hd_settings->get_user_google_ac();
 
 			$imap_servers = $rt_hd_imap_server_model->get_all_servers();
 			if ( false == $responce &&( ! empty( $google_acs ) ) ) {
@@ -108,7 +108,7 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 						$rt_hd_settings->delete_user_google_ac( $acs->email );
 					}
 				}
-				$google_acs = $rt_hd_settings->get_user_google_ac( $this->user_id );
+				$google_acs = $rt_hd_settings->get_user_google_ac();
 			}
 
 			if ( false == $responce && ( empty( $google_acs ) && empty( $imap_servers )  ) ){
@@ -324,18 +324,9 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 						$email_data['inbox_folder'] = $_POST['inbox_folder'];
 					}
 					$rt_hd_settings->update_mail_acl( $_POST['mail_ac'], $token, maybe_serialize( $email_data ), $imap_server );
-
-					if ( isset( $_POST['mail_ac'] ) ) {
-						$redux_helpdesk_settings['rthd_system_email'] = $_POST['mail_ac'];
-						update_option( 'redux_helpdesk_settings', $redux_helpdesk_settings );
-					}
 				}
 				if ( isset( $_REQUEST['email'] ) && is_email( $_REQUEST['email'] ) ) {
 					$rt_hd_settings->delete_user_google_ac( $_REQUEST['email'] );
-					if ( isset( $email ) ) {
-						$redux_helpdesk_settings['rthd_system_email'] = '';
-						update_option( 'redux_helpdesk_settings', $redux_helpdesk_settings );
-					}
 					echo '<script>window.location="' . esc_url_raw( add_query_arg(
 							array(
 								'post_type' => Rt_HD_Module::$post_type,
@@ -352,10 +343,6 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 						);
 						$imap_server = $_POST['rthd_imap_server'];
 						$rt_hd_settings->add_user_google_ac( rthd_encrypt_decrypt( $password ), $email, maybe_serialize( $email_data ), $this->user_id, 'imap', $imap_server );
-						if ( isset( $email ) ) {
-							$redux_helpdesk_settings['rthd_system_email'] = $email;
-							update_option( 'redux_helpdesk_settings', $redux_helpdesk_settings );
-						}
 					}
 				}
 			}

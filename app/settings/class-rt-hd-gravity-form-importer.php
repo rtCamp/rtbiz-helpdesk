@@ -138,109 +138,104 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 				}
 			}
 
-			$module_settings = rthd_get_settings();
-			if ( isset( $module_settings['attach_contacts'] ) && $module_settings['attach_contacts'] == 'yes' ) {
-				$temp_arr           = array(
-					'contactname'      => array(
-						'display_name' => 'Contact Name',
-						'slug'         => 'contactname',
-						'required'     => false,
-						'multiple'     => false,
-						'type'         => 'text',
-					),
-					'contactfirstname' => array(
-						'display_name' => 'Contact First Name',
-						'slug'         => 'contactfirstname',
-						'required'     => false,
-						'multiple'     => false,
-						'type'         => 'text',
-					),
-					'contacttitle'     => array(
-						'display_name' => 'Contact Title',
-						'slug'         => 'contacttitle',
-						'required'     => false,
-						'multiple'     => false,
-						'type'         => 'text',
-					),
-					'contactlastname'  => array(
-						'display_name' => 'Contact Last Name',
-						'slug'         => 'contactlastname',
-						'required'     => false,
-						'multiple'     => false,
-						'type'         => 'text',
-					),
-					'contactaddress'   => array(
-						'display_name' => 'Contact Address',
-						'slug'         => 'contactaddress',
-						'required'     => false,
-						'multiple'     => false,
-						'type'         => 'text',
-					),
-					'contactemail'     => array(
-						'display_name' => 'Contact Email',
-						'slug'         => 'contactemail',
-						'required'     => true,
-						'multiple'     => true,
-						'type'         => 'email',
-					),
-					'contactskypeid'   => array(
-						'display_name' => 'Contact Skype Id',
-						'slug'         => 'contactskypeid',
-						'required'     => false,
-						'multiple'     => true,
-						'type'         => 'text',
-					),
-					'contactphoneno'   => array(
-						'display_name' => 'Contact Phone No',
-						'slug'         => 'contactphoneno',
-						'required'     => false,
-						'multiple'     => true,
-						'type'         => 'text',
-					),
-					'contactmeta'      => array(
-						'display_name' => 'Contact Meta',
-						'slug'         => 'contactmeta',
-						'required'     => false,
-						'multiple'     => true,
-						'type'         => 'any',
-					),
-				);
-				$this->ticket_field = array_merge( $this->ticket_field, $temp_arr );
-			}
+			$temp_arr           = array(
+				'contactname'      => array(
+					'display_name' => 'Contact Name',
+					'slug'         => 'contactname',
+					'required'     => false,
+					'multiple'     => false,
+					'type'         => 'text',
+				),
+				'contactfirstname' => array(
+					'display_name' => 'Contact First Name',
+					'slug'         => 'contactfirstname',
+					'required'     => false,
+					'multiple'     => false,
+					'type'         => 'text',
+				),
+				'contacttitle'     => array(
+					'display_name' => 'Contact Title',
+					'slug'         => 'contacttitle',
+					'required'     => false,
+					'multiple'     => false,
+					'type'         => 'text',
+				),
+				'contactlastname'  => array(
+					'display_name' => 'Contact Last Name',
+					'slug'         => 'contactlastname',
+					'required'     => false,
+					'multiple'     => false,
+					'type'         => 'text',
+				),
+				'contactaddress'   => array(
+					'display_name' => 'Contact Address',
+					'slug'         => 'contactaddress',
+					'required'     => false,
+					'multiple'     => false,
+					'type'         => 'text',
+				),
+				'contactemail'     => array(
+					'display_name' => 'Contact Email',
+					'slug'         => 'contactemail',
+					'required'     => true,
+					'multiple'     => true,
+					'type'         => 'email',
+				),
+				'contactskypeid'   => array(
+					'display_name' => 'Contact Skype Id',
+					'slug'         => 'contactskypeid',
+					'required'     => false,
+					'multiple'     => true,
+					'type'         => 'text',
+				),
+				'contactphoneno'   => array(
+					'display_name' => 'Contact Phone No',
+					'slug'         => 'contactphoneno',
+					'required'     => false,
+					'multiple'     => true,
+					'type'         => 'text',
+				),
+				'contactmeta'      => array(
+					'display_name' => 'Contact Meta',
+					'slug'         => 'contactmeta',
+					'required'     => false,
+					'multiple'     => true,
+					'type'         => 'any',
+				),
+			);
+			$this->ticket_field = array_merge( $this->ticket_field, $temp_arr );
 
-			if ( isset( $module_settings['attach_accounts'] ) && $module_settings['attach_accounts'] == 'yes' ) {
-				$temp_arr           = array(
-					'accountname'    => array(
-						'display_name' => 'Account Name',
-						'slug'         => 'accountname',
-						'required'     => false,
-						'multiple'     => false,
-						'type'         => 'any',
-					),
-					'accountaddress' => array(
-						'display_name' => 'Account Address',
-						'slug'         => 'accountaddress',
-						'required'     => false,
-						'multiple'     => false,
-						'type'         => 'any',
-					),
-					'accountcountry' => array(
-						'display_name' => 'Account Country',
-						'slug'         => 'accountcountry',
-						'required'     => false,
-						'multiple'     => false,
-						'type'         => 'any',
-					),
-					'accountmeta'    => array(
-						'display_name' => 'Account Meta',
-						'slug'         => 'accountmeta',
-						'required'     => false,
-						'multiple'     => true,
-						'type'         => 'any',
-					),
-				);
-				$this->ticket_field = array_merge( $this->ticket_field, $temp_arr );
-			}
+			$temp_arr           = array(
+				'accountname'    => array(
+					'display_name' => 'Account Name',
+					'slug'         => 'accountname',
+					'required'     => false,
+					'multiple'     => false,
+					'type'         => 'any',
+				),
+				'accountaddress' => array(
+					'display_name' => 'Account Address',
+					'slug'         => 'accountaddress',
+					'required'     => false,
+					'multiple'     => false,
+					'type'         => 'any',
+				),
+				'accountcountry' => array(
+					'display_name' => 'Account Country',
+					'slug'         => 'accountcountry',
+					'required'     => false,
+					'multiple'     => false,
+					'type'         => 'any',
+				),
+				'accountmeta'    => array(
+					'display_name' => 'Account Meta',
+					'slug'         => 'accountmeta',
+					'required'     => false,
+					'multiple'     => true,
+					'type'         => 'any',
+				),
+			);
+			$this->ticket_field = array_merge( $this->ticket_field, $temp_arr );
 		}
 
 		/**
@@ -925,8 +920,6 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 
 			//** END of remove woocommerce hooks **//
 
-			$module_settings = rthd_get_settings();
-
 			$response    = array();
 			$autoDieFlag = ! $autoDieFlag;
 
@@ -1063,7 +1056,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 					$map_data['creationdate'] = $lead_data['date_created'];
 				}
 
-				if ( $autoDieFlag && isset( $module_settings['attach_contacts'] ) && $module_settings['attach_contacts'] == 'yes' ) {
+				if ( $autoDieFlag ) {
 					if ( ! isset( $map_data['titleprefix'] ) ) {
 						$map_data['titleprefix'] = '';
 					}
@@ -1241,10 +1234,14 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		function create_tickets_from_map_data( $map_data, $gravity_lead_id, $type ) {
+
+			$contactemail = array();
+			$description = '';
+			$assignedto = false;
+
 			extract( $map_data, EXTR_OVERWRITE );
 
 			global $transaction_id;
-			$module_settings = rthd_get_settings();
 			$post_type       = Rt_HD_Module::$post_type;
 			$ticketModel     = new Rt_HD_Ticket_Model();
 			if ( isset( $creationdate ) ) {
@@ -1280,31 +1277,29 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 				$title = '';
 			}
 
-			if ( isset( $module_settings['attach_contacts'] ) && $module_settings['attach_contacts'] == 'yes' ) {
-				if ( ! isset( $contactname ) ) {
-					$contactname = '';
-				}
-				if ( isset( $contactfirstname ) ) {
-					$contactname = $contactfirstname . ' ' . $contactname;
-				}
+			if ( ! isset( $contactname ) ) {
+				$contactname = '';
+			}
+			if ( isset( $contactfirstname ) ) {
+				$contactname = $contactfirstname . ' ' . $contactname;
+			}
 
-				if ( isset( $contactlastname ) ) {
-					$contactname .= ' ' . $contactlastname;
-				}
+			if ( isset( $contactlastname ) ) {
+				$contactname .= ' ' . $contactlastname;
+			}
 
-				if ( isset( $contacttitle ) ) {
-					$contactname = $contacttitle . ' ' . $contactname;
-				}
+			if ( isset( $contacttitle ) ) {
+				$contactname = $contacttitle . ' ' . $contactname;
+			}
 
-				foreach ( $contactemail as $email ) {
-					if ( empty( $fromemail ) ) {
-						$fromemail['address'] = $email['value'];
-						if ( isset( $contactname ) && trim( $contactname ) != '' ) {
-							$fromemail['name'] = $contactname;
-						}
+			foreach ( $contactemail as $email ) {
+				if ( empty( $fromemail ) ) {
+					$fromemail['address'] = $email['value'];
+					if ( isset( $contactname ) && trim( $contactname ) != '' ) {
+						$fromemail['name'] = $contactname;
 					}
-					$allemail[] = array( 'address' => $email['value'], 'name' => $contactname );
 				}
+				$allemail[] = array( 'address' => $email['value'], 'name' => $contactname );
 			}
 
 			if ( ! isset( $titleprefix ) ) {
@@ -1608,79 +1603,74 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 					}
 				}
 
-				if ( isset( $module_settings['attach_contacts'] ) && $module_settings['attach_contacts'] == 'yes' ) {
-
-					$contact = rt_biz_get_person_by_email( $fromemail['address'] );
-					if ( ! empty( $contact ) && isset( $contact[0] ) ) {
-						$contact = $contact[0];
-						if ( isset( $contactskypeid ) && ! empty( $contactskypeid ) ) {
-							foreach ( $contactskypeid as $cSkype ) {
-								rt_biz_add_entity_meta( $contact->ID, 'contact_skype_id', $cSkype['value'] );
-							}
-						}
-						if ( isset( $contactphoneno ) && ! empty( $contactphoneno ) ) {
-							foreach ( $contactphoneno as $cphone ) {
-								rt_biz_add_entity_meta( $contact->ID, 'contact_phone', $cphone['value'] );
-							}
-						}
-						if ( isset( $contactaddress ) && ! empty( $contactaddress ) ) {
-							rt_biz_add_entity_meta( $contact->ID, 'contact_address', $contactaddress );
-						}
-						if ( isset( $contactmeta ) && ! empty( $contactmeta ) ) {
-							foreach ( $contactmeta as $cmeta ) {
-								rt_biz_add_entity_meta( $contact->ID, $cmeta['key'], $cmeta['value'] );
-							}
+				$contact = rt_biz_get_person_by_email( $fromemail['address'] );
+				if ( ! empty( $contact ) && isset( $contact[0] ) ) {
+					$contact = $contact[0];
+					if ( isset( $contactskypeid ) && ! empty( $contactskypeid ) ) {
+						foreach ( $contactskypeid as $cSkype ) {
+							rt_biz_add_entity_meta( $contact->ID, 'contact_skype_id', $cSkype['value'] );
 						}
 					}
-
-					// Contact will be linked with the ticket later while creating the ticket.
+					if ( isset( $contactphoneno ) && ! empty( $contactphoneno ) ) {
+						foreach ( $contactphoneno as $cphone ) {
+							rt_biz_add_entity_meta( $contact->ID, 'contact_phone', $cphone['value'] );
+						}
+					}
+					if ( isset( $contactaddress ) && ! empty( $contactaddress ) ) {
+						rt_biz_add_entity_meta( $contact->ID, 'contact_address', $contactaddress );
+					}
+					if ( isset( $contactmeta ) && ! empty( $contactmeta ) ) {
+						foreach ( $contactmeta as $cmeta ) {
+							rt_biz_add_entity_meta( $contact->ID, $cmeta['key'], $cmeta['value'] );
+						}
+					}
 				}
 
-				if ( isset( $module_settings['attach_accounts'] ) && $module_settings['attach_accounts'] == 'yes' ) {
-					if ( isset( $accountname ) && trim( $accountname ) != '' ) {
-						if ( ! isset( $accountaddress ) ) {
-							$accountaddress = '';
-						}
-						if ( ! isset( $accountcountry ) ) {
-							$accountcountry = '';
-						}
-						if ( ! isset( $accountnote ) ) {
-							$accountnote = '';
-						}
-						if ( ! isset( $accountmeta ) ) {
-							$accountmeta = array();
-						}
-						$account_id = $rt_hd_import_operation->post_exists( $accountname );
+				// Contact will be linked with the ticket later while creating the ticket.
 
-						if ( ! empty( $account_id ) && get_post_type( $account_id ) === rt_biz_get_organization_post_type() ) {
-							if ( isset( $transaction_id ) && $transaction_id > 0 ) {
-								delete_post_meta( $account_id, '_transaction_id' );
-								add_post_meta( $account_id, '_transaction_id', $transaction_id, true );
-							}
-						} else {
-							$account_id = rt_biz_add_organization( $accountname, $accountnote, $accountaddress, $accountcountry, $accountmeta );
-							if ( isset( $transaction_id ) && $transaction_id > 0 ) {
-								add_post_meta( $account_id, '_transaction_id', $transaction_id, true );
-							}
+				if ( isset( $accountname ) && trim( $accountname ) != '' ) {
+					if ( ! isset( $accountaddress ) ) {
+						$accountaddress = '';
+					}
+					if ( ! isset( $accountcountry ) ) {
+						$accountcountry = '';
+					}
+					if ( ! isset( $accountnote ) ) {
+						$accountnote = '';
+					}
+					if ( ! isset( $accountmeta ) ) {
+						$accountmeta = array();
+					}
+					$account_id = $rt_hd_import_operation->post_exists( $accountname );
+
+					if ( ! empty( $account_id ) && get_post_type( $account_id ) === rt_biz_get_organization_post_type() ) {
+						if ( isset( $transaction_id ) && $transaction_id > 0 ) {
+							delete_post_meta( $account_id, '_transaction_id' );
+							add_post_meta( $account_id, '_transaction_id', $transaction_id, true );
 						}
-						$account = get_post( $account_id );
-
-						rt_biz_connect_post_to_organization( $post_type, $ticket_id, $account );
-
-						// Update Index Table
-						$attr_name = rt_biz_get_organization_post_type();
-						if ( ! empty( $attr_name ) ) {
-							$where = array( 'post_id' => $ticket_id );
-							$data  = array(
-								$attr_name        => $account->ID,
-								'date_update'     => current_time( 'mysql' ),
-								'date_update_gmt' => gmdate( 'Y-m-d H:i:s' ),
-								'user_updated_by' => get_current_user_id(),
-							);
-							$ticketModel->update_ticket( $data, $where );
-
-							//	System Notification -- Accounts Updated
+					} else {
+						$account_id = rt_biz_add_organization( $accountname, $accountnote, $accountaddress, $accountcountry, $accountmeta );
+						if ( isset( $transaction_id ) && $transaction_id > 0 ) {
+							add_post_meta( $account_id, '_transaction_id', $transaction_id, true );
 						}
+					}
+					$account = get_post( $account_id );
+
+					rt_biz_connect_post_to_organization( $post_type, $ticket_id, $account );
+
+					// Update Index Table
+					$attr_name = rt_biz_get_organization_post_type();
+					if ( ! empty( $attr_name ) ) {
+						$where = array( 'post_id' => $ticket_id );
+						$data  = array(
+							$attr_name        => $account->ID,
+							'date_update'     => current_time( 'mysql' ),
+							'date_update_gmt' => gmdate( 'Y-m-d H:i:s' ),
+							'user_updated_by' => get_current_user_id(),
+						);
+						$ticketModel->update_ticket( $data, $where );
+
+						//	System Notification -- Accounts Updated
 					}
 				}
 			}

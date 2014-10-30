@@ -201,11 +201,16 @@ function rthd_extract_key_from_attributes( $attr ) {
  * @return bool
  */
 function rthd_is_system_email( $email ) {
-	$settings = rthd_get_settings();
-	if ( isset( $settings['system_email'] ) && $email == $settings['system_email'] ) {
-		return true;
-	}
+	global $rt_hd_settings;
+	$google_acs = $rt_hd_settings->get_user_google_ac();
 
+	foreach ( $google_acs as $ac ) {
+		$ac->email_data = unserialize( $ac->email_data );
+		$ac_email          = filter_var( $ac->email_data['email'], FILTER_SANITIZE_EMAIL );
+		if ( $ac_email == $email ) {
+			return true;
+		}
+	}
 	return false;
 }
 
@@ -214,10 +219,15 @@ function rthd_is_system_email( $email ) {
  * @return array
  */
 function rthd_get_all_system_emails() {
+	global $rt_hd_settings;
+
 	$emails   = array();
-	$settings = rthd_get_settings();
-	if ( isset( $settings['system_email'] ) && ! empty( $settings['system_email'] ) ) {
-		$emails[] = $settings['system_email'];
+	$google_acs = $rt_hd_settings->get_user_google_ac();
+
+	foreach ( $google_acs as $ac ) {
+		$ac->email_data = unserialize( $ac->email_data );
+		$ac_email          = filter_var( $ac->email_data['email'], FILTER_SANITIZE_EMAIL );
+		$emails[] = $ac_email;
 	}
 
 	return $emails;
@@ -250,6 +260,7 @@ function rthd_get_all_participants( $ticket_id ) {
 	//	}
 
 	$comments = get_comments( array( 'order' => 'DESC', 'post_id' => $ticket_id, 'post_type' => $ticket->post_type ) );
+	$all_p = array();
 	foreach ( $comments as $comment ) {
 		$p  = '';
 		$to = get_comment_meta( $comment->comment_ID, '_email_to', true );
@@ -437,81 +448,6 @@ function rthd_text_diff( $left_string, $right_string, $args = null ) {
 }
 
 /**
- * get settings
- * @return mixed
- * @since rt-Helpdesk 0.1
- */
-function rthd_get_settings() {
-	global $redux_helpdesk_settings;
-	$settings = array(
-		'attach_contacts'         => 'yes',
-		'attach_accounts'         => 'yes',
-		'system_email'            => isset( $redux_helpdesk_settings['rthd_system_email'] ) && ! empty( $redux_helpdesk_settings['rthd_system_email'] ) ? $redux_helpdesk_settings['rthd_system_email'] : '',
-		'outbound_emails'         => isset( $redux_helpdesk_settings['rthd_outgoing_email_from_address'] ) && ! empty( $redux_helpdesk_settings['rthd_outgoing_email_from_address'] ) ? $redux_helpdesk_settings['rthd_outgoing_email_from_address'] : '',
-		'outgoing_email_delivery' => isset( $redux_helpdesk_settings['rthd_outgoing_email_delivery'] ) && ! empty( $redux_helpdesk_settings['rthd_outgoing_email_delivery'] ) ? $redux_helpdesk_settings['rthd_outgoing_email_delivery'] : '',
-	);
-
-	//$settings = get_site_option( 'rt_helpdesk_settings', $default );
-	return $settings;
-}
-
-/**
- * update given settings
- *
- * @param $key
- * @param $value
- *
- * @since rt-Helpdesk 0.1
- */
-function rthd_update_settings( $key, $value ) {
-
-}
-
-/**
- * get menu label
- * @return mixed
- * @since rt-Helpdesk 0.1
- */
-function rthd_get_menu_label() {
-	$menu_label = get_site_option( 'rthd_menu_label', __( 'rtHelpdesk' ) );
-
-	return $menu_label;
-}
-
-/**
- * update menu label
- *
- * @param $menu_label
- *
- * @since rt-Helpdesk 0.1
- */
-function rthd_update_menu_label( $menu_label ) {
-	update_site_option( 'rthd_menu_label', $menu_label );
-}
-
-/**
- * get url logo
- * @return mixed
- * @since rt-Helpdesk 0.1
- */
-function rthd_get_logo_url() {
-	$logo_url = get_site_option( 'rthd_logo_url', RT_HD_URL . 'app/assets/img/hd-16X16.png' );
-
-	return $logo_url;
-}
-
-/**
- * update url logo
- *
- * @param $logo_url
- *
- * @since rt-Helpdesk 0.1
- */
-function rthd_update_logo_url( $logo_url ) {
-	update_site_option( 'rthd_logo_url', $logo_url );
-}
-
-/**
  * return content type
  * @return string
  * @since rt-Helpdesk 0.1
@@ -530,10 +466,9 @@ function rthd_get_redux_settings() {
 	return $GLOBALS['redux_helpdesk_settings'];
 }
 
-function rthd_my_mail_from( $email )
-{
-	$settings = rthd_get_settings();
-	return $settings['outbound_emails'];
+function rthd_my_mail_from( $email ) {
+	$settings = rthd_get_redux_settings();
+	return $settings['rthd_outgoing_email_from_address'];
 }
 
 // user notification preference

@@ -38,7 +38,6 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 
 			// CPT Edit/Add View
 			add_action( 'add_meta_boxes', array( $this, 'remove_meta_boxes' ), 10 );
-			add_action( 'add_meta_boxes', array( $this, 'rename_meta_boxes' ), 20 );
 			add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ), 30 );
 			add_action( 'save_post', array( $this, 'save_meta_boxes' ), 1, 2 );
 
@@ -278,16 +277,6 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 			remove_meta_box( 'revisionsdiv', Rt_HD_Module::$post_type, 'normal' );
 			remove_meta_box( 'commentstatusdiv', Rt_HD_Module::$post_type, 'normal' );
 			remove_meta_box( 'slugdiv', Rt_HD_Module::$post_type, 'normal' );
-			//			remove_meta_box( 'postcustom', Rt_HD_Module::$post_type, 'normal' );
-		}
-
-		/**
-		 * Rename Meta box name on Edit post View for ticket
-		 *
-		 * @since  0.1
-		 */
-		public function rename_meta_boxes() {
-			//add_meta_box( 'commentsdiv',  __( 'Comments' ), 'post_comment_meta_box',  Rt_HD_Module::$post_type,  'advanced', 'high' );
 		}
 
 		/**

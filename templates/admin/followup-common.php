@@ -2,8 +2,8 @@
 
 function rthd_render_comment( $comment, $user_edit, $type = 'right' ) {
 
-	$is_comment_private = get_comment_meta( $comment->comment_ID, '_rthd_privacy' );
-	if ( ( isset( $is_comment_private ) && is_array( $is_comment_private ) ) && 'true' == $is_comment_private[0] ) {
+	$is_comment_private = get_comment_meta( $comment->comment_ID, '_rthd_privacy', true );
+	if ( ! empty( $is_comment_private ) && 'true' == $is_comment_private ) {
 		if ( $user_edit ) {
 			$display_private_comment_flag = true;
 		} else {
@@ -20,14 +20,14 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right' ) {
 	<li class="<?php echo $side_class . ' ' . $editable_class; ?>" id="comment-<?php echo esc_attr( $comment->comment_ID ); ?>">
 
 		<div class="avatar">
-			<?php echo get_avatar( $comment, 40 ); ?>
+			<?php echo get_avatar( $comment->comment_author_email, 40 ); ?>
 		</div>
 		<div class="messages <?php echo ( $display_private_comment_flag ) ? '' : 'private-comment-display'; ?>" title="Click for action">
 			<input id="followup-id" type="hidden" value="<?php echo esc_attr( $comment->comment_ID ); ?>">
-			<input id="is-private-comment" type="hidden" value="<?php echo esc_attr( $is_comment_private[0] ); ?>">
+			<input id="is-private-comment" type="hidden" value="<?php echo esc_attr( $is_comment_private ); ?>">
 
 			<?php if( $display_private_comment_flag ) { ?>
-				<p><?php echo esc_attr( $comment->comment_content ); ?></p>
+				<p><?php echo $comment->comment_content; ?></p>
 			<?php } else { ?>
 				<p><?php _e( 'This followup has been marked private.', RT_HD_TEXT_DOMAIN ); ?></p>
 			<?php } ?>

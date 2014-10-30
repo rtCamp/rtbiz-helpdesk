@@ -149,13 +149,9 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				$this->register_custom_statuses( $status );
 			}
 
-			$settings = rthd_get_settings();
-			if ( isset( $settings['attach_contacts'] ) && 'yes' === $settings['attach_contacts'] ) {
-				rt_biz_register_person_connection( self::$post_type, $this->labels['name'] );
-			}
-			if ( isset( $settings['attach_accounts'] ) && 'yes' === $settings['attach_accounts'] ) {
-				rt_biz_register_organization_connection( self::$post_type, $this->labels['name'] );
-			}
+			rt_biz_register_person_connection( self::$post_type, $this->labels['name'] );
+
+			rt_biz_register_organization_connection( self::$post_type, $this->labels['name'] );
 
 			$this->db_ticket_table_update();
 		}
@@ -170,14 +166,14 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 		 * @return object|\WP_Error
 		 */
 		function register_custom_post( $menu_position ) {
-			$hd_logo_url = rthd_get_logo_url();
+			$settings = rthd_get_redux_settings();
 
 			$args = array(
 				'labels'             => $this->labels,
 				'public'             => false,
 				'publicly_queryable' => false,
 				'show_ui'            => true, // Show the UI in admin panel
-				'menu_icon'          => $hd_logo_url,
+				'menu_icon'          => $settings['rthd_logo_url']['url'],
 				'menu_position'      => $menu_position,
 				'supports'           => array( 'title', 'editor', 'comments', 'custom-fields', 'revisions' ),
 				'capability_type'    => self::$post_type,
@@ -245,15 +241,11 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				$sql .= "{$attr_name} TEXT,\n";
 			}
 
-			$settings = rthd_get_settings();
-			if ( isset( $settings['attach_contacts'] ) && 'yes' === $settings['attach_contacts'] ) {
-				$contact_name = rt_biz_get_person_post_type();
-				$sql .= "{$contact_name} TEXT,\n";
-			}
-			if ( isset( $settings['attach_accounts'] ) && 'yes' === $settings['attach_accounts'] ) {
-				$contact_name = rt_biz_get_organization_post_type();
-				$sql .= "{$contact_name} TEXT,\n";
-			}
+			$contact_name = rt_biz_get_person_post_type();
+			$sql .= "{$contact_name} TEXT,\n";
+
+			$contact_name = rt_biz_get_organization_post_type();
+			$sql .= "{$contact_name} TEXT,\n";
 
 			$sql .= 'PRIMARY KEY  (id) ) CHARACTER SET utf8 COLLATE utf8_general_ci;';
 

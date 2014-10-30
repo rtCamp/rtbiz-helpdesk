@@ -5,7 +5,7 @@
  *
  * @author udit
  */
-global $rt_hd_module, $rt_hd_contacts, $rt_hd_accounts, $rt_hd_settings, $rt_hd_import_operation;
+global $rt_hd_module;
 
 add_action( 'wp_print_scripts', 'include_jquery_form_plugin' );
 function include_jquery_form_plugin() {
@@ -21,7 +21,6 @@ do_action( 'rthd_ticket_front_page_after_header' );
 
 global $rthd_ticket;
 $post_type       = get_post_type( $rthd_ticket );
-$module_settings = rthd_get_settings();
 $labels          = $rt_hd_module->labels;
 $post_id         = $rthd_ticket->ID;
 $user_edit       = false;

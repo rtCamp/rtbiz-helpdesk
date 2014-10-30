@@ -148,7 +148,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		public function insert_new_ticket( $title, $body, $userid, $mailtime, $allemail, $uploaded, $senderEmail, $messageid = '', $inreplyto = '', $references = '', $subscriber = array() ) {
+		public function insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $senderEmail, $messageid = '', $inreplyto = '', $references = '', $subscriber = array() ) {
 			global $rt_hd_module, $rt_hd_tickets_operation, $rt_hd_ticket_history_model;
 			$d             = new DateTime( $mailtime );
 			$timeStamp     = $d->getTimestamp();
@@ -156,10 +156,10 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$post_date_gmt = gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) ) );
 			$post_type     = Rt_HD_Module::$post_type;
 			$labels        = $rt_hd_module->labels;
-			$settings      = rthd_get_settings();
+			$settings      = rthd_get_redux_settings();
 
 			$postArray = array(
-				'post_author'   => $userid,
+				'post_author'   => $settings['rthd_default_user'],
 				'post_content'  => $body,
 				'post_date'     => $post_date,
 				'post_status'   => 'publish',
@@ -192,9 +192,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 			$rt_hd_tickets_operation->ticket_subscribe_update( $subscriber, $postArray['post_author'], $post_id );
 
-			if ( isset( $settings['attach_contacts'] ) && 'yes' == $settings['attach_contacts'] ) {
-				$this->add_contacts_to_post( $allemail, $post_id );
-			}
+			$this->add_contacts_to_post( $allemail, $post_id );
 
 			$this->add_attachment_to_post( $uploaded, $post_id, $post_type );
 
@@ -220,7 +218,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$helpdesk_import_ticket_id = $post_id;
 				add_filter( 'gform_pre_send_email', array( &$this, 'hijack_mail_subject' ), 999, 2 );
 			} else {
-				$rt_hd_email_notification->notification_new_ticket_assigned( $post_id, $userid, $labels['name'], $uploaded );
+				$rt_hd_email_notification->notification_new_ticket_assigned( $post_id, $settings['rthd_default_user'], $labels['name'], $uploaded );
 			}
 
 			$rt_hd_email_notification->ticket_created_notification( $post_id,$labels['name'], $body, $allemail, $uploaded );
@@ -424,12 +422,12 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		) {
 			global $rt_hd_contacts;
 
-			if ( false === $userid ) {
+			if ( empty( $userid ) ) {
 				$userid = $rt_hd_contacts->get_user_from_email( $fromemail['address'] );
 			}
 			//always true in mail cron  is use for importer
 			if ( ! $check_duplicate ) {
-				return $this->insert_new_ticket( $title, $body, $userid, $mailtime, $allemail, $uploaded, $fromemail['address'] );
+				return $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'] );
 			}
 			//-----------------------------------------------------------------------------//
 			global $threadPostId;
@@ -459,7 +457,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			} else {
 				$postid = $threadPostId;
 			}
-			echo "POST ID : ".$postid . "\r\n";
+			echo "POST ID : ". var_export( $postid, true ) . "\r\n";
 			$dndEmails = array();
 
 			if ( $postid && get_post( $postid ) != null ) {
@@ -484,16 +482,16 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					return $this->insert_post_comment( $existPostId, $userid, $body, $fromemail['name'], $fromemail['address'], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $subscriber );
 				} else {
 					if ( $systemEmail ) {
-						return $this->insert_new_ticket( $title, $body, $userid, $mailtime, $allemail, $uploaded, $fromemail['address'], $messageid, $inreplyto, $references, $subscriber );
+						return $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], $messageid, $inreplyto, $references, $subscriber );
 					}
 				}
 			} else {
 				$existPostId = $this->post_exists( $title, $mailtime );
 				//if given post title exits then it will be add as comment other wise as post
-				echo esc_attr( $existPostId );
+				echo "Post Exists : ". var_export( $existPostId, true ) . "\r\n";
 				if ( ! $existPostId ) {
 					if ( $systemEmail ) {
-						return $this->insert_new_ticket( $title, $body, $userid, $mailtime, $allemail, $uploaded, $fromemail['address'], $messageid, $inreplyto, $references, $subscriber );
+						return $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], $messageid, $inreplyto, $references, $subscriber );
 					}
 				} else {
 					return $this->insert_post_comment( $existPostId, $userid, $body, $fromemail['name'], $fromemail['address'], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $subscriber );
@@ -666,7 +664,6 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		public function insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, $uploaded, $allemails, $dndEmails, $messageid = '', $inreplyto = '', $references = '', $subscriber = array() ) {
 
 			$post_type       = get_post_type( $comment_post_ID );
-			$module_settings = rthd_get_settings();
 			$ticketModel     = new Rt_HD_Ticket_Model();
 			$d               = new DateTime( $commenttime );
 			$UTC             = new DateTimeZone( 'UTC' );
@@ -754,9 +751,9 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			update_post_meta( $comment_post_ID, '_rtbiz_hd_subscribe_to', $subscriber );
 
 			$this->add_attachment_to_post( $uploaded, $comment_post_ID, $post_type, false, $comment_id );
-			if ( isset( $module_settings['attach_contacts'] ) && 'yes' == $module_settings['attach_contacts'] ) {
-				$this->add_contacts_to_post( $allemails, $comment_post_ID );
-			}
+
+			$this->add_contacts_to_post( $allemails, $comment_post_ID );
+
 			global $threadPostId;
 			if ( ! isset( $threadPostId ) ) {
 				//				$title = '[New Follwup Added]' . $this->create_title_for_mail( $comment_post_ID );
@@ -897,25 +894,6 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			}
 
 			$title = $this->create_title_for_mail( $comment_post_ID );
-			/* $dndEmailList = '';
-				foreach ($allemails as $aEmail) {
-					$dndEmailList .= "," . $aEmail["address"];
-				}
-				$dndEmailList = strtolower($dndEmailList) . ",";
-
-				//$postterms = wp_get_post_terms($comment_post_ID, $contacts->slug);
-
-				$ticket_email = array_merge(get_post_meta($comment_post_ID, "ticket_email"), $this->get_comment_emails($comment_post_ID));
-
-				$bcc = "";
-				$sep = "";
-				$sendToMemerOnly = false;
-
-
-
-				if (isset($_REQUEST["commentSendMail"]) && $_REQUEST["commentSendMail"] == "member") {
-					$sendToMemerOnly = true;
-				}*/
 
 			$mailbody = $comment->comment_content;
 
@@ -927,81 +905,11 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					$attachfile = get_attached_file( intval( $strAttach ) );
 					if ( $attachfile ) {
 						$attachment[] = $attachfile;
-						//add_comment_meta($comment_id, "attachment", wp_get_attachment_url(intval($strAttach)));
 					}
 				}
 			} else {
 				$_REQUEST['commentSendAttachment'] = '';
 			}
-			/*if (isset($_REQUEST["commentReplyTo"]) && $_REQUEST["commentReplyTo"] != "") {
-				$commentReplyTo = explode(",", $_REQUEST["commentReplyTo"]);
-			}
-			foreach ($postterms as $bemail) {
-				//$bemail = get_term_meta($pterm->term_id, $contacts->email_key, true);
-				if (in_array($bemail, $dndEmails)) {
-					continue;
-				}
-				if ($sendToMemerOnly) {
-					$userid = @email_exists($bemail);
-					$user = new WP_User($userid);
-					$flag = false;
-					foreach ($user->roles as $role) {
-						if ($role == $contacts->user_role) {
-							$flag = true;
-							break;
-						}
-					}
-					if ($flag)
-						continue;
-				}
-				if (!(strpos($dndEmailList, strtolower($bemail)) === false)) {
-					continue;
-				}
-				if ($senderemail == $bemail) {
-					continue;
-				}
-				if (!in_array($bemail, $commentReplyTo)) {
-					continue;
-				}
-				if (strpos($bcc, $bemail) === false) {
-					if ($bcc == "") {
-						$toemail = $bemail;
-						$bcc = "Bcc: ";
-						continue;
-					}
-					$bcc.=$sep . $bemail;
-					$sep = ",";
-				}
-			}
-
-			$subscribe_to = get_post_meta($comment_post_ID, 'subscribe_to', true);
-			if (is_array($subscribe_to) && sizeof($subscribe_to) > 0) {
-				foreach ($subscribe_to as $subscriber) {
-					$bemail = get_user_meta(intval($subscriber), "user_email", true);
-					if (in_array($bemail, $dndEmails)) {
-						continue;
-					}
-					if ($senderemail == $bemail) {
-						continue;
-					}
-					if (!in_array($bemail, $commentReplyTo)) {
-						continue;
-					}
-					if (strpos($bcc, $bemail) === false) {
-						if ($bcc == "") {
-							$toemail = $bemail;
-							$bcc = "Bcc: ";
-							continue;
-						}
-						$bcc.=$sep . $bemail;
-						$sep = ",";
-					}
-				}
-			}
-
-			$headers = array();
-			if ($sep == ",")
-				$headers[] = $bcc;*/
 
 			if ( isset( $uploaded ) && is_array( $uploaded ) && ! empty( $uploaded ) ) {
 				foreach ( $uploaded as $upload ) {
@@ -1051,7 +959,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$signature = preg_replace( '/  /i', '  ', $signature );
 			}
 			$mailbody .= '<br />' . $signature;
-			//			$tmpMailOutbountId = $rt_hd_settings->insert_new_send_email( $_POST['comment-reply-from'], $title, $mailbody, $toEmail, $ccEmail, $bccEmail, $attachment, $comment_id, 'comment' );
+
 			$tmpMailOutbountId = $rt_hd_email_notification->insert_new_send_email( $title, $mailbody, $toEmail, $ccEmail, $bccEmail, $attachment, $comment_id, 'comment' );
 
 			return true;
@@ -1655,27 +1563,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					$bccemails[] = array( 'email' => $userSub->user_email, 'name' => $userSub->display_name );
 				}
 			}
-			$flag            = true;
-			$post_type       = get_post_type( $post_id );
-			$module_settings = rthd_get_settings();
-			//			$systemEmail     = ( isset( $module_settings['system_email'] ) ) ? $module_settings['system_email'] : '';
+
 			global $redux_helpdesk_settings, $rt_hd_email_notification;
-			//			if ( $systemEmail ) {
-			//				if ( ! is_email( $systemEmail ) ) {
-			//					$flag = false;
-			//				}
-			//			} else {
-			//				$flag = false;
-			//			}
-			//			if ( $flag && ! empty( $bccemails ) ) {
-			//				global $rt_hd_settings;
-			//				$accessToken = $rt_hd_settings->get_accesstoken_from_email( $systemEmail, $signature, $email_type, $imap_server );
-			//
-			//				if ( strpos( $signature, '</' ) == false ) {
-			//					$signature = htmlentities( $signature );
-			//					$signature = preg_replace( '/(\n|\r|\r\n)/i', '<br />', $signature );
-			//					$signature = preg_replace( '/  /i', '  ', $signature );
-			//				}
 
 			if ( $contactFlag ) {
 				$tocontact      = array();
@@ -1688,14 +1577,14 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					}
 				}
 				$rthd_unique_id = get_post_meta( $post_id, '_rtbiz_hd_unique_id', true );
-				//				if ( ! empty( $rthd_unique_id ) ) {
+
 				global $rt_hd_module;
 				$labels = $rt_hd_module->labels;
 				$bd     = $body . " Click <a href='" . esc_url( trailingslashit( site_url() ) . strtolower( $labels['name'] ) . '?rthd_unique_id=' . $rthd_unique_id ) . "'> here </a> to view ticket";
 				$rt_hd_email_notification->insert_new_send_email( $title, $bd, $tocontact, array(), array(), array(), $comment_id, 'comment' );
-				//				}
+
 			}
-			// $emailHTML = $body . "</br> To View Follwup Click <a href='" . admin_url( 'edit.php?post_type={$post_type}&page=rthd-add-{$post_type}&{$post_type}_id=' . $post_id ) . "'>here</a>.<br/>";
+
 			$cc = array();
 			if ( $notificationFlag ) {
 				if ( isset( $redux_helpdesk_settings['rthd_notification_emails'] ) ) {
@@ -1703,18 +1592,13 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 						array_push( $cc, array( 'email' => $email ) );
 					}
 				}
-				// $rt_hd_email_notification->insert_new_send_email( $title, $emailHTML, array(), $cc, $bccemails, array(), $comment_id, 'comment' );
-
 			}
 			$post_author_id = get_post_field( 'post_author', $post_id );
 			$userSub     = get_user_by( 'id', intval( $post_author_id ) );
 			$to[] = array( 'email' => $userSub->user_email, 'name' => $userSub->display_name );
-			//			$emailHTML = $body . "</br> To View Follwup Click <a href='". get_edit_post_link( $post_id ) . "'>here</a>.<br/>";
 			$emailHTML = $body . "</br> To View Follwup Click <a href='". admin_url().'post.php?post='.$post_id.'&action=edit'."'>here</a>.<br/>";
 
-			// $emailHTML .= '<br />' . $signature;
 			$rt_hd_email_notification->insert_new_send_email( $title, $emailHTML, $to, $cc, $bccemails, array(), $comment_id, 'comment' );
-			//			}
 		}
 
 		/**

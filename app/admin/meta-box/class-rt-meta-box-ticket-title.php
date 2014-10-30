@@ -39,10 +39,32 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Title' ) ) {
 				#title {
 					width: 85%;
 				}
+
+				#content {
+					color: black;
+				}
 			</style>
+			<script>
+				jQuery(window).ready(function($) {
+					$('#post-body-content #wp-content-editor-tools' ).remove();
+					$('#post-body-content #wp-content-editor-container' ).remove();
+				});
+			</script>
 			<h2><?php printf( 'Ticket #%s : ' , $post->ID ); ?><input name="post_title" size="30" value="<?php echo esc_html( $post->post_title ); ?>" id="title" autocomplete="off" type="text"></h2>
-			<textarea class="wp-editor-area" style="width: 100%" autocomplete="off" cols="40" name="content" id="content"><?php echo esc_html( $post->post_content ); ?></textarea>
-			<?php /* RT_Meta_Box_Ticket_Title::post_comment_meta_box( $post ); */?>
+			<?php
+				wp_editor( $post->post_content, 'content', array(
+					'textarea_name' => 'content',
+					'editor_class' => 'wp-editor-area',
+					'editor_height' => 360,
+					'textarea_rows' => 15,
+					'media_buttons' => false,
+					'teeny' => true,
+					'tinymce' => array(
+						'resize' => false,
+						'add_unload_trigger' => false,
+					),
+				) );
+			?>
 		<?php
 		}
 	}

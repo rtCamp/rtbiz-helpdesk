@@ -36,7 +36,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		public function insert_new_send_email( $subject, $body, $toemail = array(), $ccemail = array(), $bccemail = array(), $attachement = array(), $refrence_id = 0, $refrence_type = 'notification' ) {
 			$user_id = get_current_user_id();
 			global $rt_hd_mail_outbound_model;
-			$settings = rthd_get_settings();
+			$settings = rthd_get_redux_settings();
 
 			$toemail = $this->filter_user_notification_preference( $toemail );
 			$ccemail = $this->filter_user_notification_preference( $ccemail );
@@ -44,7 +44,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$signature = rthd_get_email_signature_settings();
 			$args = array(
 				'user_id'       => $user_id,
-				'fromemail'     => $settings['outbound_emails'],
+				'fromemail'     => $settings['rthd_outgoing_email_from_address'],
 				'toemail'       => serialize( $toemail ),
 				'ccemail'       => serialize( $ccemail ),
 				'bccemail'      => serialize( $bccemail ),
@@ -180,10 +180,9 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		 * @param $oldassignee
 		 * @param $assignee
 		 * @param $post_type
-		 * @param $body
 		 * @param $uploaded
 		 */
-		public function notification_new_ticket_reassigned( $post_id, $oldassignee, $assignee, $post_type, $body, $uploaded ) {
+		public function notification_new_ticket_reassigned( $post_id, $oldassignee, $assignee, $post_type, $uploaded ) {
 			$redux = rthd_get_redux_settings();
 			$notificationFlag = ( $redux['rthd_notification_events']['new_ticket_reassigned'] == 1 ) ;
 			$cc = array();
@@ -199,7 +198,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 					'name'  => $oldUser->display_name,
 				),
 			);
-			//			$title = '[Reassigned ' . $post_type . ']' . $this->create_title_for_mail( $post_id );
+
 			$title = rthd_create_new_ticket_title( 'rthd_ticket_reassign_email_title', $post_id );
 
 			$body = 'You are no longer responsible for this ticket. It has been reassigned to ' . $newUser->display_name;
