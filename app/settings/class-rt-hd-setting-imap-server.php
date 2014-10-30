@@ -17,6 +17,49 @@ if ( ! class_exists( 'RT_HD_Setting_Imap_Server' ) ) {
 
 		function __construct() {
 			add_action( 'init', array( $this, 'save_imap_servers' ) );
+			$updateDB = new RT_DB_Update( trailingslashit( RT_HD_PATH ) . 'rtbiz-helpdesk.php', trailingslashit( RT_HD_PATH_SCHEMA ) );
+			add_action( 'rt_db_update_finished_' . str_replace( '-', '_', sanitize_title( $updateDB->rt_plugin_info->name ) ), array( $this, 'default_imap_servers' ) );
+		}
+
+		function default_imap_servers() {
+			global $rt_hd_imap_server_model;
+			$default_imap_servers = array(
+				array(
+					'server_name' => 'Google',
+					'incoming_imap_server' => 'imap.gmail.com',
+					'incoming_imap_port' => '993',
+					'incoming_imap_enc' => 'ssl',
+					'outgoing_smtp_server' => 'smtp.gmail.com',
+					'outgoing_smtp_port' => '587',
+					'outgoing_smtp_enc' => 'tls',
+				),
+				array(
+					'server_name' => 'Outlook',
+					'incoming_imap_server' => 'imap-mail.outlook.com',
+					'incoming_imap_port' => '993',
+					'incoming_imap_enc' => 'ssl',
+					'outgoing_smtp_server' => 'smtp-mail.outlook.com',
+					'outgoing_smtp_port' => '587',
+					'outgoing_smtp_enc' => 'tls',
+				),
+				array(
+					'server_name' => 'Yahoo',
+					'incoming_imap_server' => 'imap.mail.yahoo.com',
+					'incoming_imap_port' => '993',
+					'incoming_imap_enc' => 'ssl',
+					'outgoing_smtp_server' => 'smtp.mail.yahoo.com',
+					'outgoing_smtp_port' => '587',
+					'outgoing_smtp_enc' => 'tls',
+				),
+			);
+
+			foreach( $default_imap_servers as $server ) {
+				$existing_server = $rt_hd_imap_server_model->get_servers( array( 'incoming_imap_server' => $server['incoming_imap_server'] ) );
+				var_dump($existing_server);
+				if( empty( $existing_server ) ) {
+					$rt_hd_imap_server_model->add_server( $server );
+				}
+			}
 		}
 
 		function rthd_imap_servers( $field, $value ) {

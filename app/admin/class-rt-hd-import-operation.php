@@ -459,6 +459,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			} else {
 				$postid = $threadPostId;
 			}
+			echo "POST ID : ".$postid . "\r\n";
 			$dndEmails = array();
 
 			if ( $postid && get_post( $postid ) != null ) {

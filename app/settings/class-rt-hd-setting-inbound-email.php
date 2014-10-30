@@ -177,45 +177,54 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 							<td>
 								<input type="hidden" name='mail_ac' value="<?php echo esc_attr( $email ); ?>"/>
 								<table class='hd-google-profile-table'>
-					<?php if ( 'imap' == $ac->type ) { ?>
-										<tr valign="top">
-											<td></td>
-											<th scope="row"><label><?php _e( 'IMAP Server' ); ?></label></th>
-											<td class="long">
-												<select required="required" name="imap_server">
-													<option value=""><?php _e( 'Select Mail Server' ); ?></option>
-						<?php $imap_servers = $rt_hd_imap_server_model->get_all_servers();
-						foreach ( $imap_servers as $server ) {
-							?>
-							<option <?php echo esc_html( ( isset( $ac->imap_server ) && $ac->imap_server == $server->id ) ? 'selected="selected"' : '' ); ?>
-								value="<?php echo esc_attr( $server->id ); ?>"><?php echo esc_html( $server->server_name ); ?></option>
-						<?php } ?>
-												</select>
-											</td>
-										</tr>
-										<tr valign="top">
-											<td></td>
-											<th scope="row"><label><?php _e( 'Password' ); ?></label></th>
-											<td class="long"><input required="required" autocomplete="off"
-											                        type="password"
-											                        name="imap_password" placeholder="Password"
-											                        value="<?php echo esc_attr( rthd_encrypt_decrypt( $token ) ); ?>"/>
-											</td>
-										</tr>
 					<?php
-					}
 					$all_folders = null;
+					$login_successful = true;
 					try {
 						$hdZendEmail = new Rt_HD_Zend_Mail();
-						if ( $hdZendEmail->try_lmap_login( $email, $token, $email_type, $imap_server ) ) {
+						if ( $hdZendEmail->try_imap_login( $email, $token, $email_type, $imap_server ) ) {
 							$storage     = new ImapStorage( $hdZendEmail->imap );
 							$all_folders = $storage->getFolders();
+						} else {
+							$login_successful = false;
 						}
 					} catch ( Exception $e ) {
 						echo '<tr valign="top"><td></td><td></td><td><p class="description">' . esc_html( $e->getMessage() ) . '</p></td></tr>';
-					} ?>
+					}
+					if ( $login_successful ) {
+							if ( 'imap' == $ac->type ) { ?>
+								<tr valign="top">
+									<td></td>
+									<th scope="row"><label><?php _e( 'IMAP Server' ); ?></label></th>
+									<td class="long">
+										<select required="required" name="imap_server">
+											<option value=""><?php _e( 'Select Mail Server' ); ?></option>
+											<?php $imap_servers = $rt_hd_imap_server_model->get_all_servers();
+											foreach ( $imap_servers as $server ) {
+												?>
+												<option <?php echo esc_html( ( isset( $ac->imap_server ) && $ac->imap_server == $server->id ) ? 'selected="selected"' : '' ); ?>
+													value="<?php echo esc_attr( $server->id ); ?>"><?php echo esc_html( $server->server_name ); ?></option>
+											<?php } ?>
+										</select>
+									</td>
+								</tr>
+								<tr valign="top">
+									<!--											<td></td>-->
+									<!--											<th scope="row"><label>--><?php //_e( 'Password' ); ?><!--</label></th>-->
+									<!--											<td class="long"><input required="required" autocomplete="off"-->
+									<!--											                        type="password"-->
+									<!--											                        name="imap_password" placeholder="Password"-->
+									<!--											                        value="--><?php //echo esc_attr( rthd_encrypt_decrypt( $token ) ); ?><!--"/>-->
+									<!--											</td>-->
+								</tr>
+							<?php
+							}
+					?>
 									<tr valign="top">
-										<td><label><?php echo balanceTags( $personMarkup ); ?></label></td>
+										<td>
+											<label><?php echo balanceTags( $personMarkup ); ?></label>
+											<?php if ( isset( $ac->email_data['name'] ) ) { echo $ac->email_data['name']; } ?> <br/><a href='mailto:<?php echo $email ?>'><?php echo $email ?></a>
+										</td>
 										<th scope="row"><label><?php _e( 'Mail Folders to read' ); ?></label></th>
 										<td>
 											<label>
@@ -228,6 +237,7 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 														$hdZendEmail->render_folders_dropdown( $all_folders, $value = $inbox_folder );
 													} ?>
 												</select> </label>
+												<p class="description"><?php _e( 'Choosing an Inbox Folder is mandatory in order to parse the emails from Mailbox.' ) ?></p>
 											<?php if ( in_array( $email, rthd_get_all_system_emails() ) ) { ?>
 												<p class="description"><?php _e( 'This is linked as a system mail. Hence it will only read the Inbox Folder; no matter what folder you choose over here. These will be ignored.' ); ?></p>
 											<?php } ?>
@@ -238,6 +248,7 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 					<?php } ?>
 										</td>
 									</tr>
+						<?php } ?>
 									<tr valign="top">
 										<td></td>
 										<th scope="row"><label></label></th>
@@ -249,8 +260,7 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 												A/C</a>
 											<?php if ( 'goauth' == $ac->type ) { ?>
 												<a class='button button-primary'
-												   href='<?php echo esc_url( $authUrl ); ?>'>Re
-													Connect Google Now</a>
+												   href='<?php echo esc_url( $authUrl ); ?>'>ReConnect Google Now</a>
 											<?php } ?>
 										</td>
 									</tr>
@@ -316,7 +326,7 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 
 			global $rt_hd_settings, $redux_helpdesk_settings;
 
-			if ( isset( $redux_helpdesk_settings ) && isset( $redux_helpdesk_settings['rthd_enable_reply_by_email'] ) && 1 == $redux_helpdesk_settings['rthd_enable_reply_by_email'] && isset( $_REQUEST['rthd_submit_enable_reply_by_email'] ) && 'save' == $_REQUEST['rthd_submit_enable_reply_by_email'] ) {
+			if ( isset( $redux_helpdesk_settings ) && isset( $redux_helpdesk_settings['rthd_enable_reply_by_email'] ) && 1 == $redux_helpdesk_settings['rthd_enable_reply_by_email'] && ( ( isset( $_REQUEST['rthd_submit_enable_reply_by_email'] ) && 'save' == $_REQUEST['rthd_submit_enable_reply_by_email'] ) || ( isset( $_REQUEST['rthd_add_imap_email'] ) && $_REQUEST['rthd_add_imap_email'] ) ) ) {
 				if ( isset( $_POST['mail_ac'] ) && is_email( $_POST['mail_ac'] ) ) {
 					if ( isset( $_POST['imap_password'] ) ) {
 						$token = rthd_encrypt_decrypt( $_POST['imap_password'] );

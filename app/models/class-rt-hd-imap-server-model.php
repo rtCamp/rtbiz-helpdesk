@@ -90,14 +90,19 @@ if ( ! class_exists( 'Rt_HD_IMAP_Server_Model' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 *
 		 */
-		function get_server( $id ) {
-			$servers = parent::get( array( 'id' => $id ) );
+		function get_server_by_id( $id ) {
+			$servers = $this->get_servers( array( 'id' => $id ) );
 			$server  = false;
 			if ( ! empty( $servers ) ) {
 				$server = $servers[0];
 			}
 
 			return $server;
+		}
+
+		function get_servers( $data ) {
+			$servers = parent::get( $data );
+			return $servers;
 		}
 	}
 }

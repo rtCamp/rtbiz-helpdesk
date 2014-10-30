@@ -70,7 +70,7 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 				} else {
 					?>
 					<option
-					value="<?php echo esc_attr( $folder->getGlobalName() ); ?>" <?php ( $folder->getGlobalName() == $value ) ? 'selected="selected"' : '' ?>><?php echo esc_html( $folder->getGlobalName() ); ?></option><?php
+					value="<?php echo esc_attr( $folder->getGlobalName() ); ?>" <?php echo ( $folder->getGlobalName() == $value ) ? 'selected="selected"' : '' ?>><?php echo esc_html( $folder->getGlobalName() ); ?></option><?php
 				}
 				$folders->next();
 			}
@@ -99,7 +99,7 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 					$this->render_folders_checkbox( $folder, $element_name, $values, $data_str, $inbox_folder );
 					echo '</li>';
 				} else {
-					echo '<li>&nbsp;&nbsp;&nbsp;<label ' . esc_attr( ( $folder->getGlobalName() == $inbox_folder ) ? 'style="display: none;"' : '' ) . '><input type="checkbox" ' . esc_attr( $data_str ) . ' name="' . esc_attr( $element_name ) . '[]" value="' . esc_attr( $folder->getGlobalName() ) . '" ' . esc_attr( ( in_array( $folder->getGlobalName(), $values ) ) ? 'checked="checked"' : '' ) . ' />';
+					echo '<li>&nbsp;&nbsp;&nbsp;<label ' . ( ( $folder->getGlobalName() == $inbox_folder ) ? 'style="display: none;"' : '' ) . '><input type="checkbox" ' . esc_attr( $data_str ) . ' name="' . esc_attr( $element_name ) . '[]" value="' . esc_attr( $folder->getGlobalName() ) . '" ' . esc_attr( ( in_array( $folder->getGlobalName(), $values ) ) ? 'checked="checked"' : '' ) . ' />';
 					echo esc_html( $folder->getGlobalName() ). '</label></li>';
 				}
 				$folders->next();
@@ -175,7 +175,7 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 *
 		 */
-		function try_lmap_login( $email, $accessToken, $email_type, $imap_server ) {
+		function try_imap_login( $email, $accessToken, $email_type, $imap_server ) {
 			$this->imap = new Zend\Mail\Protocol\Imap();
 
 			switch ( $email_type ) {
@@ -185,7 +185,7 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 					return $this->oauth2_authenticate( $this->imap, $email, $accessToken );
 				case 'imap':
 					global $rt_hd_imap_server_model;
-					$server = $rt_hd_imap_server_model->get_server( $imap_server );
+					$server = $rt_hd_imap_server_model->get_server_by_id( $imap_server );
 					if ( empty( $server ) ) {
 						echo 'Mail Server Not Found. Invalid Server id.';
 
@@ -223,7 +223,7 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 		 */
 		public function sendemail( $fromemail, $accessToken, $email_type, $imap_server, $subject, $body, $toEmail, $ccEmail, $bccEmail, $attachemnts, $mailtype = 'notification' ) {
 			set_time_limit( 0 );
-			if ( ! $this->try_lmap_login( $fromemail, $accessToken, $email_type, $imap_server ) ) {
+			if ( ! $this->try_imap_login( $fromemail, $accessToken, $email_type, $imap_server ) ) {
 				return false;
 			}
 
@@ -240,7 +240,7 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 					break;
 				case 'imap':
 					global $rt_hd_imap_server_model;
-					$server = $rt_hd_imap_server_model->get_server( $imap_server );
+					$server = $rt_hd_imap_server_model->get_server_by_id( $imap_server );
 					if ( empty( $server ) ) {
 						echo 'Mail Server Not Found. Invalid Server id.';
 
@@ -404,7 +404,7 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 		public function reademail( $email, $accessToken, $email_type, $imap_server, $lastDate, $user_id, $isSystemEmail = false, $signature = '', $isThreadImporter = false ) {
 			set_time_limit( 0 );
 			global $signature, $rt_hd_settings;
-			if ( ! $this->try_lmap_login( $email, $accessToken, $email_type, $imap_server ) ) {
+			if ( ! $this->try_imap_login( $email, $accessToken, $email_type, $imap_server ) ) {
 				$rt_hd_settings->update_sync_status( $email, false );
 				echo 'login fail';
 
@@ -491,7 +491,7 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 				}
 				foreach ( $mail_folders as $folder ) {
 					$storage->selectFolder( $folder );
-					echo sanitize_email( $email ) . ' : Reading - ' . esc_attr( $folder ) . '\r\n';
+					echo sanitize_email( $email ) . " : Reading - " . esc_attr( $folder ) . "\r\n";
 					$sync_inbox_type = $folder;
 					if ( ! isset( $rt_mail_uid[ $sync_inbox_type ] ) ) {
 						$rt_mail_uid[ $sync_inbox_type ] = 0;
@@ -506,7 +506,7 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 					} else {
 						$arrayMailIds = $storage->protocol->search( array( 'SINCE ' . $lastDate ) );
 					}
-					echo sanitize_email( $email ) . ' : Found ' . esc_attr( count( $arrayMailIds ) ) . ' Mails \r\n';
+					echo sanitize_email( $email ) . " : Found " . esc_attr( count( $arrayMailIds ) ) . " Mails \r\n";
 					$this->rt_parse_email( $email, $storage, $arrayMailIds, $hdUser, $user_id, $isSystemEmail );
 				}
 				$rt_hd_settings->update_sync_meta_time( $email, current_time( 'mysql' ) );
@@ -676,7 +676,7 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 					if ( ! isset( $message->subject ) ) {
 						$message->subject = ' ';
 					}
-					echo sanitize_email( $email ) . ' Parsing Mail ' . esc_attr( $message->subject ) . '\r\n';
+					echo sanitize_email( $email ) . " Parsing Mail " . esc_attr( $message->subject ) . "\r\n";
 					$subscriber = array();
 					$from       = array();
 					$allEmails  = array();
@@ -888,6 +888,8 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 					$subject      = Rt_HD_Utils::force_utf_8( $subject );
 					$txtBody      = Rt_HD_Utils::force_utf_8( $txtBody );
 					$success_flag = $rt_hd_import_operation->process_email_to_ticket( $subject, $htmlBody, $from, $message->date, $allEmails, $attachements, $txtBody, true, $user_id, $messageid, $inreplyto, $references, $isSystemEmail, $subscriber );
+
+					echo "Mail Parse Status : " . var_export( $success_flag, true ) . "\n\r";
 
 					if ( ! $success_flag ) {
 						foreach ( $attachements as $attachement ) {

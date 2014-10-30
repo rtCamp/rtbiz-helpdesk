@@ -19,7 +19,7 @@ if ( isset( $redux_helpdesk_settings ) && isset( $redux_helpdesk_settings['rthd_
 		return;
 	}
 	$email = $emailRow->email;
-	echo '\r\n' . sanitize_email( $email ) . ' Selected. \r\n';
+	echo "\r\n" . sanitize_email( $email ) . " Selected. \r\n";
 
 	$rt_hd_settings->update_sync_status( $email, true );
 	$last_sync_time = $emailRow->last_mail_time;
