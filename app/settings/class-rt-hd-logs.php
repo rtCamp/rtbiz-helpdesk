@@ -26,8 +26,8 @@ if ( ! class_exists( 'Rt_HD_Logs' ) ) {
 
 			if ( ! isset( $_REQUEST['generate_log'] ) ) {
 			?>
-				<div class="updated"><p><?php _e( 'Log generation is a heavy process. So please be patient.' ); ?></p></div>
 				<a class="button" href="<?php echo add_query_arg( 'generate_log', 'yes' ); ?>"><?php _e( 'Generate Log' ); ?></a>
+				<div class="redux-container-multi_text" style="display: inline"><p class="redux-multi-text-remove"><?php _e( 'Log generation is a heavy process. So please be patient.' ); ?></p></div>
 			<?php
 				return;
 			}
