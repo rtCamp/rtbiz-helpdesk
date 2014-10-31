@@ -413,7 +413,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 			} else {
 					?>
 					<tr>
-						<td colspan="4">No Tickets Found !</td>
+						<td colspan="5">No Tickets Found !</td>
 					</tr>
 				<?php } ?>
 			</table>
