@@ -179,3 +179,35 @@ li.toplevel_page_hd-dashboard a:active {
 .rthd-show-row {
 	display: block;
 }
+
+#mail_folder_container {
+	margin-top: 10px;
+}
+
+#mail_folder_container > ul {
+	border-bottom: 1px dotted #DDD;
+	padding: 0 0 10px;
+}
+
+#mail_folder_container li {
+	margin: 5px 0;
+}
+
+#mail_folder_container li.has_children {
+	clear: both;
+	overflow: hidden;
+	padding-left: 20px;
+}
+
+#mail_folder_container li.has_children ul {
+	width: 33.33%;
+	float: left;
+}
+
+#mail_folder_container li.folder_title {
+	width: 33.33%;
+}
+
+#mail_folder_container li.folder_item {
+
+}

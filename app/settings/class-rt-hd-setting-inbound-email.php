@@ -195,11 +195,22 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 									<tr valign="top">
 										<td>
 											<label><?php echo balanceTags( $personMarkup ); ?></label>
-											<?php if ( isset( $ac->email_data['name'] ) ) { echo $ac->email_data['name']; } ?> <br/><a href='mailto:<?php echo $email ?>'><?php echo $email ?></a>
+											<strong><?php if ( isset( $ac->email_data['name'] ) ) { echo $ac->email_data['name']; } ?> <br/><a href='mailto:<?php echo $email ?>'><?php echo $email ?></a></strong>
+											<input type="hidden" name="rthd_submit_enable_reply_by_email" value="save"/>
+											<a
+												class='button remove-google-ac right'
+												href='<?php echo esc_url( admin_url( 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&page=rthd-settings&rthd_submit_enable_reply_by_email=save&email=' . $email ) ); ?>'>Remove
+												A/C</a>
+											<?php if ( 'goauth' == $ac->type ) { ?>
+												<a class='button button-primary right'
+												   href='<?php echo esc_url( $authUrl ); ?>'>ReConnect Google Now</a>
+											<?php } ?>
 										</td>
+									</tr>
+									<tr valign="top">
 										<?php if ( $login_successful ) { ?>
-										<th scope="row"><label><?php _e( 'Mail Folders to read' ); ?></label></th>
 										<td class="long">
+											<br/><label><strong><?php _e( 'Mail Folders to read' ); ?></strong></label><br/>
 											<label>
 												<?php _e( 'Inbox Folder' ); ?>
 												<select data-email-id="<?php echo esc_attr( $ac->id ); ?>"
@@ -215,27 +226,14 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 												<p class="description"><?php _e( 'This is linked as a system mail. Hence it will only read the Inbox Folder; no matter what folder you choose over here. These will be ignored.' ); ?></p>
 											<?php } ?>
 					<?php if ( ! is_null( $all_folders ) ) {
+						echo '<div id="mail_folder_container">';
 						$hdZendEmail->render_folders_checkbox( $all_folders, $element_name = 'mail_folders', $values = $mail_folders, $data_str = 'data-email-id=' . $ac->id, $inbox_folder );
+						echo '</div>';
 					} else { ?>
 						<p class="description"><?php _e( 'No Folders found.' ); ?></p>
 					<?php } ?>
 										</td>
 										<?php } ?>
-									</tr>
-									<tr valign="top">
-										<td></td>
-										<th scope="row"><label></label></th>
-										<td>
-											<input type="hidden" name="rthd_submit_enable_reply_by_email" value="save"/>
-											<a
-												class='button remove-google-ac'
-												href='<?php echo esc_url( admin_url( 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&page=rthd-settings&rthd_submit_enable_reply_by_email=save&email=' . $email ) ); ?>'>Remove
-												A/C</a>
-											<?php if ( 'goauth' == $ac->type ) { ?>
-												<a class='button button-primary'
-												   href='<?php echo esc_url( $authUrl ); ?>'>ReConnect Google Now</a>
-											<?php } ?>
-										</td>
 									</tr>
 								</table>
 							</td>
@@ -250,8 +248,10 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 								prev_value = $(this).data('prev-value');
 								$(this).data('prev-value', inbox);
 								var email_id = $(this).data('email-id');
-								$('input[data-email-id="' + email_id + '"][value="' + inbox + '"]').parent().css('display', 'none');
-								$('input[data-email-id="' + email_id + '"][value="' + prev_value + '"]').parent().css('display', 'inline');
+								$('input[data-email-id="' + email_id + '"][value="' + inbox + '"]').attr('disabled', 'disabled');
+								$('input[data-email-id="' + email_id + '"][value="' + inbox + '"]').attr('checked', false);
+								$('input[data-email-id="' + email_id + '"][value="' + inbox + '"]').prop('checked', false);
+								$('input[data-email-id="' + email_id + '"][value="' + prev_value + '"]').removeAttr('disabled');
 							});
 						});
 					</script>
@@ -278,7 +278,7 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 				</p>
 				<?php } ?>
 				<?php if ( $imap_servers ) { ?>
-				<p id="rthd_add_imap_acc_form" autocomplete="off" class="rthd-hide-row">
+				<p class="submit rthd-hide-row" id="rthd_add_imap_acc_form" autocomplete="off">
 					<input type="hidden" name="rthd_add_imap_email" value="1"/>
 					<select  name="rthd_imap_server">
 						<option value=""><?php _e( 'Select Mail Server' ); ?></option>
@@ -299,7 +299,7 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 
 			global $rt_hd_settings, $redux_helpdesk_settings;
 
-			if ( isset( $redux_helpdesk_settings ) && isset( $redux_helpdesk_settings['rthd_enable_reply_by_email'] ) && 1 == $redux_helpdesk_settings['rthd_enable_reply_by_email'] && ( ( isset( $_REQUEST['rthd_submit_enable_reply_by_email'] ) && 'save' == $_REQUEST['rthd_submit_enable_reply_by_email'] ) || ( isset( $_REQUEST['rthd_add_imap_email'] ) && $_REQUEST['rthd_add_imap_email'] ) ) ) {
+			if ( ( isset( $_REQUEST['rthd_submit_enable_reply_by_email'] ) && 'save' == $_REQUEST['rthd_submit_enable_reply_by_email'] ) || ( isset( $_REQUEST['rthd_add_imap_email'] ) && $_REQUEST['rthd_add_imap_email'] ) ) {
 				if ( isset( $_POST['mail_ac'] ) && is_email( $_POST['mail_ac'] ) ) {
 					if ( isset( $_POST['imap_password'] ) ) {
 						$token = rthd_encrypt_decrypt( $_POST['imap_password'] );

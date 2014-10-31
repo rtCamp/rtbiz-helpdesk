@@ -94,12 +94,12 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 				echo '<ul>';
 				$folder = $folders->current();
 				if ( $folder->getChildren() ) {
-					echo '<li><strong>' .esc_html( $folder->getGlobalName() ) . '</strong></li>';
-					echo '<li>';
+					echo '<li class="folder_title"><strong>' .esc_html( $folder->getGlobalName() ) . '</strong></li>';
+					echo '<li  class="has_children">';
 					$this->render_folders_checkbox( $folder, $element_name, $values, $data_str, $inbox_folder );
 					echo '</li>';
 				} else {
-					echo '<li>&nbsp;&nbsp;&nbsp;<label ' . ( ( $folder->getGlobalName() == $inbox_folder ) ? 'style="display: none;"' : '' ) . '><input type="checkbox" ' . esc_attr( $data_str ) . ' name="' . esc_attr( $element_name ) . '[]" value="' . esc_attr( $folder->getGlobalName() ) . '" ' . esc_attr( ( in_array( $folder->getGlobalName(), $values ) ) ? 'checked="checked"' : '' ) . ' />';
+					echo '<li class="folder_item">&nbsp;&nbsp;&nbsp;<label><input type="checkbox" ' . ( ( $folder->getGlobalName() == $inbox_folder ) ? 'disabled="disabled"' : '' ) . esc_attr( $data_str ) . ' name="' . esc_attr( $element_name ) . '[]" value="' . esc_attr( $folder->getGlobalName() ) . '" ' . esc_attr( ( in_array( $folder->getGlobalName(), $values ) ) ? 'checked="checked"' : '' ) . ' />';
 					echo esc_html( $folder->getGlobalName() ). '</label></li>';
 				}
 				$folders->next();
