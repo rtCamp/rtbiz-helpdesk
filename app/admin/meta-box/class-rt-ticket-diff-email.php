@@ -243,7 +243,7 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 
 			if ( $updateFlag ) {
 				if ( $oldUser != $newUser ) {
-					$rt_hd_email_notification->notification_new_ticket_assigned( $post_id, $newUser, $labels['name'], array() );
+					$rt_hd_email_notification->notification_new_ticket_assigned( $post_id, $newUser, $labels['name'] );
 					$rt_hd_email_notification->notification_new_ticket_reassigned( $post_id, $oldUser, $newUser, $labels['name'], array() );
 				}
 
@@ -268,7 +268,7 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 			} else {
 				$newUser = get_user_by( 'id', $post['post_author'] );
 				if ( $newUser ) {
-					$rt_hd_email_notification->notification_new_ticket_assigned( $post_id, $newUser, $labels['name'], array() );
+					$rt_hd_email_notification->notification_new_ticket_assigned( $post_id, $newUser, $labels['name'] );
 				}
 				if ( ! empty( $bccemails ) ) {
 					$rt_hd_email_notification->notification_ticket_subscribed( $post_id, $labels['name'], $bccemails );

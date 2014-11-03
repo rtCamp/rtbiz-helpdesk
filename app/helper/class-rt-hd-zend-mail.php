@@ -303,7 +303,7 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 
 			$bodyPart->addPart( $bodyMessage );
 
-			if ( ! empty( $attachemnts ) ) {
+			if ( ! empty( $attachemnts ) && is_array( $attachemnts ) ) {
 				foreach ( $attachemnts as $attach ) {
 					$file_array = explode( '/', $attach );
 					$fileName   = $file_array[ count( $file_array ) - 1 ];

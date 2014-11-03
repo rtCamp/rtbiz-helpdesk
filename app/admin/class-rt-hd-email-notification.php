@@ -145,16 +145,26 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		 * @param $post_id
 		 * @param $assignee
 		 * @param $post_type
+		 * @param $contacts
 		 * @param $uploaded
+		 * @param $mail_parse
 		 */
-		public function notification_new_ticket_assigned( $post_id, $assignee, $post_type, $uploaded ) {
+		public function notification_new_ticket_assigned( $post_id, $assignee, $post_type, $contacts = array(), $uploaded = array(), $mail_parse = false ) {
 			$redux = rthd_get_redux_settings();
 			$notificationFlag = ( $redux['rthd_notification_events']['new_ticket_assigned'] == 1 ) ;
 			$cc = array();
 			if ( $notificationFlag ) {
 				$cc = $this->get_notification_emails();
 			}
+
 			global $current_user;
+			$ticket_creaters = array();
+			foreach ( $contacts as $c ) {
+				if ( isset($c['name']) && ! empty( $c['name'] ) ) {
+					$ticket_creaters[] = $c['name'];
+				}
+			}
+
 			$newUser  = get_user_by( 'id', $assignee );
 			$to    = array(
 				array(
@@ -162,12 +172,17 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 					'name'  => $newUser->display_name,
 				),
 			);
-			//			$title = '[New ' . $post_type . ' Assigned You]' . $this->create_title_for_mail( $post_id );
+
 			$title = rthd_create_new_ticket_title( 'rthd_ticket_assign_email_title', $post_id );
 
-			$body = $current_user->display_name . '</b> assigned you new ticket.';
+			$body = '';
+			if ( $mail_parse ) {
+				$body = 'New ticket is assigned to you.';
+			} else {
+				$body = '<b>'.$current_user->display_name . '</b> assigned you new ticket.';
+			}
 			$body .= '<br />To View ' . $post_type . " Click <a href='" . admin_url( 'post.php?post=' . $post_id . '&action=edit' ) . "'>here</a>. <br/>";
-			$body .= 'Ticket created by : <a target="_blank" href="">' . $current_user->display_name . '</a>';
+			$body .= 'Ticket created by : <b>' . ( ( $mail_parse ) ? implode( ',', $ticket_creaters ) : $current_user->display_name ) . '</b>';
 			// added Notification Emails
 			$this->insert_new_send_email( $title, $body, $to, $cc, array(), $uploaded, $post_id, 'post' );
 		}

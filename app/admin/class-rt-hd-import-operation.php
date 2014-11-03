@@ -134,7 +134,6 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 *
 		 * @param        $title
 		 * @param        $body
-		 * @param        $userid
 		 * @param        $mailtime
 		 * @param        $allemail
 		 * @param        $uploaded
@@ -218,7 +217,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$helpdesk_import_ticket_id = $post_id;
 				add_filter( 'gform_pre_send_email', array( &$this, 'hijack_mail_subject' ), 999, 2 );
 			} else {
-				$rt_hd_email_notification->notification_new_ticket_assigned( $post_id, $settings['rthd_default_user'], $labels['name'], $uploaded );
+				$rt_hd_email_notification->notification_new_ticket_assigned( $post_id, $settings['rthd_default_user'], $labels['name'], $allemail, $uploaded, $mail_parse = true );
 			}
 
 			$rt_hd_email_notification->ticket_created_notification( $post_id,$labels['name'], $body, $allemail, $uploaded );
@@ -1551,6 +1550,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 * @param $title
 		 * @param $body
 		 * @param $comment_id
+		 * @param $notificationFlag
+		 * @param $contactFlag
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
