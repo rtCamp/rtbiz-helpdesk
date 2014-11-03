@@ -194,7 +194,7 @@ if ( ! class_exists( 'RT_HD_Setting_Inbound_Email' ) ) {
 					?>
 									<tr valign="top">
 										<td>
-											<label><?php echo balanceTags( $personMarkup ); ?></label>
+<!--											<label>--><?php //echo balanceTags( $personMarkup ); ?><!--</label>-->
 											<strong><?php if ( isset( $ac->email_data['name'] ) ) { echo $ac->email_data['name']; } ?> <br/><a href='mailto:<?php echo $email ?>'><?php echo $email ?></a></strong>
 											<input type="hidden" name="rthd_submit_enable_reply_by_email" value="save"/>
 											<a
