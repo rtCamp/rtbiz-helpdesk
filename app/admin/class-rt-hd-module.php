@@ -97,12 +97,12 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 		function get_custom_statuses() {
 			$this->statuses = array(
 				array(
-					'slug'        => 'unanswered',
+					'slug'        => 'hd-unanswered',
 					'name'        => __( 'Unanswered', RT_HD_TEXT_DOMAIN ),
 					'description' => __( 'Ticket is unanswered. It needs to be replied. The default state.', RT_HD_TEXT_DOMAIN ),
 				),
 				array(
-					'slug'        => 'answered',
+					'slug'        => 'hd-answered',
 					'name'        => __( 'Answered', RT_HD_TEXT_DOMAIN ),
 					'description' => __( 'Ticket is answered. Expecting further communication from client', RT_HD_TEXT_DOMAIN ),
 				),

@@ -35,7 +35,7 @@ class test_Rt_HD_Tickets_Operation extends RT_WP_TestCase {
 			'post_author'   => 1,
 			'post_content'  => 'Unit test yoyo !!',
 			'post_date'     => $post_date,
-			'post_status'   => 'unanswered',
+			'post_status'   => 'hd-unanswered',
 			'post_title'    => 'Unit test',
 			'post_type'     => Rt_HD_Module::$post_type,
 			'post_date_gmt' => $post_date_gmt,
@@ -58,7 +58,7 @@ class test_Rt_HD_Tickets_Operation extends RT_WP_TestCase {
 		$this->assertEquals( '1', $post->post_author );
 		$this->assertEquals( 'Unit test yoyo !!', $post->post_content );
 		$this->assertEquals( $post_date, $post->post_date );
-		$this->assertEquals( 'unanswered', $post->post_status );
+		$this->assertEquals( 'hd-unanswered', $post->post_status );
 		$this->assertEquals( 'Unit test', $post->post_title );
 		$this->assertEquals( Rt_HD_Module::$post_type, $post->post_type );
 		$this->assertEquals( $post_date_gmt, $post->post_date_gmt );
@@ -78,7 +78,7 @@ class test_Rt_HD_Tickets_Operation extends RT_WP_TestCase {
 		$post_date_gmt = gmdate( 'Y-m-d H:i:s' );
 		$postArray     = array(
 			'post_content' => 'Unit test yoyo updated !!',
-			'post_status'  => 'answered',
+			'post_status'  => 'hd-answered',
 			'post_title'   => 'Unit test done',
 		);
 
@@ -95,7 +95,7 @@ class test_Rt_HD_Tickets_Operation extends RT_WP_TestCase {
 		$this->assertTrue( is_object( $post ) );
 		$this->assertEquals( $this->post_ID, $post->ID );
 		$this->assertEquals( 'Unit test yoyo updated !!', $post->post_content );
-		$this->assertEquals( 'answered', $post->post_status );
+		$this->assertEquals( 'hd-answered', $post->post_status );
 		$this->assertEquals( 'Unit test done', $post->post_title );
 	}
 

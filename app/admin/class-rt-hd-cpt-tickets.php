@@ -127,13 +127,19 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 		 */
 		function manage_custom_columns( $column ) {
 
-			global $post;
+			global $post, $rt_hd_module;
 
 			switch ( $column ) {
 
 				case 'rthd_ticket_status' :
-
-					printf( '<mark class="%s tips" data-tip="%s">%s</mark>', sanitize_title( $post->post_status ), esc_html__( $post->post_status, RT_HD_PATH_ADMIN ), esc_html__( $post->post_status, RT_HD_PATH_ADMIN ) );
+					$post_status_list = $rt_hd_module->get_custom_statuses();
+					$post_status = $post->post_status;
+					foreach ( $post_status_list as $status ) {
+						if ( $status['slug'] == $post->post_status ) {
+							$post_status = $status['name'];
+						}
+					}
+					printf( '<mark class="%s tips" data-tip="%s">%s</mark>', $post_status, esc_html__( $post_status, RT_HD_PATH_ADMIN ), esc_html__( $post_status, RT_HD_PATH_ADMIN ) );
 					break;
 
 				case 'rthd_ticket_title' :
@@ -432,13 +438,13 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 						'ticket_id'   => $post_id,
 						'type'        => 'post_status',
 						'old_value'   => 'trash',
-						'new_value'   => 'unanswered',
+						'new_value'   => 'hd-unanswered',
 						'message'     => null,
 						'update_time' => current_time( 'mysql' ),
 						'updated_by'  => get_current_user_id(),
 					) );
 
-				$ticket->post_status = 'unanswered';
+				$ticket->post_status = 'hd-unanswered';
 				wp_update_post( $ticket );
 
 			}

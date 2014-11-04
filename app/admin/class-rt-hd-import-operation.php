@@ -177,14 +177,14 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$post_id = $rt_hd_tickets_operation->ticket_default_field_update( $postArray, $dataArray, $post_type );
 
 			// Updating Post Status from publish to unanswered
-			$rt_hd_tickets_operation->ticket_default_field_update( array( 'post_status' => 'unanswered' ), array( 'post_status' => 'unanswered' ), $post_type, $post_id );
+			$rt_hd_tickets_operation->ticket_default_field_update( array( 'post_status' => 'hd-unanswered' ), array( 'post_status' => 'hd-unanswered' ), $post_type, $post_id );
 
 			$rt_hd_ticket_history_model->insert(
 				array(
 					'ticket_id'   => $post_id,
 					'type'        => 'post_status',
 					'old_value'   => 'auto-draft',
-					'new_value'   => 'unanswered',
+					'new_value'   => 'hd-unanswered',
 					'update_time' => current_time( 'mysql' ),
 					'updated_by'  => get_current_user_id(),
 				) );
