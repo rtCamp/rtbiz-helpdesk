@@ -43,6 +43,8 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 				return false;
 			}
 
+			var_dump('yoyo');
+
 			$this->init_globals();
 
 			add_action( 'init', array( $this, 'admin_init' ), 5 );

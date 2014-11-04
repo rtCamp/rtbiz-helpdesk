@@ -39,7 +39,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 		 *
 		 * @return null
 		 */
-			function ticket_default_field_update( $postArray, $dataArray, $post_type, $post_id = null ) {
+		function ticket_default_field_update( $postArray, $dataArray, $post_type, $post_id = null ) {
 
 			global $rt_hd_cpt_tickets, $rt_hd_ticket_history_model;
 

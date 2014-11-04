@@ -18,7 +18,7 @@ if ( ! defined( 'RT_HD_VERSION' ) ) {
 	 *
 	 * @since 0.1
 	 */
-	define( 'RT_HD_VERSION', '0.1' );
+	define( 'RT_HD_VERSION', '1.0' );
 }
 if ( ! defined( 'RT_HD_TEXT_DOMAIN' ) ) {
 	/**

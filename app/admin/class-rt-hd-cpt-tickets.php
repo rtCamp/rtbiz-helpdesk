@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
+if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 	/**
 	 * Class Rt_HD_CPT_Tickets
 	 * Customise ticket CPT List view & Add/edit Post view
@@ -85,7 +85,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 		 *
 		 * @return array
 		 */
-		public function edit_custom_columns( ) {
+		public function edit_custom_columns() {
 			$columns = array();
 
 			$columns['cb']                         = '<input type="checkbox" />';
@@ -97,7 +97,6 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 			$columns['rthd_ticket_closing_reason'] = __( 'Closing Reason', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_contacts']       = __( 'Contacts', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_accounts']       = __( 'Accounts', RT_HD_TEXT_DOMAIN );
-			$columns['rthd_ticket_actions']        = __( 'Actions', RT_HD_TEXT_DOMAIN );
 
 			return $columns;
 		}
@@ -118,6 +117,24 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 			return $columns;
 		}
 
+		function row_actions( $actions, $always_visible = false ) {
+			$action_count = count( $actions );
+			$i = 0;
+
+			if ( !$action_count )
+				return '';
+
+			$out = '<div class="' . ( $always_visible ? 'row-actions visible' : 'row-actions' ) . '">';
+			foreach ( $actions as $action => $link ) {
+				++$i;
+				( $i == $action_count ) ? $sep = '' : $sep = ' | ';
+				$out .= "<span class='$action'>$link$sep</span>";
+			}
+			$out .= '</div>';
+
+			return $out;
+		}
+
 		/**
 		 * Edit Content of List view Columns
 		 *
@@ -128,6 +145,9 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 		function manage_custom_columns( $column ) {
 
 			global $post, $rt_hd_module;
+
+			$can_edit_post = current_user_can( 'edit_'.Rt_HD_Module::$post_type );
+			$post_type_object = get_post_type_object( $post->post_type );
 
 			switch ( $column ) {
 
@@ -158,6 +178,31 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 					if ( $user_info ) {
 						printf( " Assigned to <a href='%s'>%s</a>", $url, $user_info->user_login );
 					}
+
+					$actions = array();
+					if ( $can_edit_post && 'trash' != $post->post_status ) {
+						$actions['edit'] = '<a href="' . get_edit_post_link( $post->ID, true ) . '" title="' . esc_attr( __( 'Edit this item' ) ) . '">' . __( 'Edit' ) . '</a>';
+						$actions['inline hide-if-no-js'] = '<a href="#" class="editinline" title="' . esc_attr( __( 'Edit this item inline' ) ) . '">' . __( 'Quick&nbsp;Edit' ) . '</a>';
+					}
+
+					if ( 'trash' == $post->post_status ) {
+						$actions['untrash'] = "<a title='" . esc_attr( __( 'Restore this item from the Trash' ) ) . "' href='" . wp_nonce_url( admin_url( sprintf( $post_type_object->_edit_link . '&amp;action=untrash', $post->ID ) ), 'untrash-post_' . $post->ID ) . "'>" . __( 'Restore' ) . "</a>";
+					} else {
+						$actions['trash'] = "<a class='submitdelete' title='" . esc_attr( __( 'Move this item to the Trash' ) ) . "' href='" . get_delete_post_link( $post->ID ) . "'>" . __( 'Trash' ) . "</a>";
+					}
+
+					if ( 'trash' == $post->post_status ) {
+						$actions['delete'] = "<a class='submitdelete' title='" . esc_attr( __( 'Delete this item permanently' ) ) . "' href='" . get_delete_post_link( $post->ID, '', true ) . "'>" . __( 'Delete Permanently' ) . "</a>";
+					}
+
+					$labels    = $rt_hd_module->labels;
+					$rthd_unique_id = get_post_meta( $post->ID, '_rtbiz_hd_unique_id', true );
+					$actions['view'] = '<a href="' . esc_url( trailingslashit( site_url() ) . strtolower( $labels['name'] ) . '/?rthd_unique_id=' . $rthd_unique_id ) . '" title="' . esc_attr( sprintf( __( 'Preview &#8220;%s&#8221;' ), $post->post_title ) ) . '" rel="permalink">' . __( 'View' ) . '</a>';
+
+					echo $this->row_actions( $actions );
+
+					get_inline_data( $post );
+
 					break;
 
 				case 'rthd_ticket_created_by':
@@ -493,7 +538,6 @@ if ( ! class_exists( 'Rt_HD_Tickets_List_View' ) ) {
 						'update_time' => current_time( 'mysql' ),
 						'updated_by'  => get_current_user_id(),
 					) );
-
 			}
 		}
 	}
