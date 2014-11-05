@@ -171,4 +171,4 @@ function rt_hd_check_dependency() {
 	}
 }
 
-add_action( 'init', 'rt_hd_check_dependency' );
+//add_action( 'init', 'rt_hd_check_dependency' );

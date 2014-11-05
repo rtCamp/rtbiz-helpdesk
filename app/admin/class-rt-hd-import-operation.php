@@ -456,7 +456,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			} else {
 				$postid = $threadPostId;
 			}
-			echo "POST ID : ". var_export( $postid, true ) . "\r\n";
+			error_log( "POST ID : ". var_export( $postid, true ) . "\r\n" );
 			$dndEmails = array();
 
 			if ( $postid && get_post( $postid ) != null ) {
@@ -487,7 +487,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			} else {
 				$existPostId = $this->post_exists( $title, $mailtime );
 				//if given post title exits then it will be add as comment other wise as post
-				echo "Post Exists : ". var_export( $existPostId, true ) . "\r\n";
+				error_log( "Post Exists : ". var_export( $existPostId, true ) . "\r\n" );
 				if ( ! $existPostId ) {
 					if ( $systemEmail ) {
 						return $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], $messageid, $inreplyto, $references, $subscriber );

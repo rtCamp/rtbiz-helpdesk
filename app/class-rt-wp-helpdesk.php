@@ -43,8 +43,6 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 				return false;
 			}
 
-			var_dump('yoyo');
-
 			$this->init_globals();
 
 			add_action( 'init', array( $this, 'admin_init' ), 5 );
@@ -121,7 +119,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 		 */
 		function init_globals() {
 
-			global $rt_hd_mail_accounts_model, $rt_hd_mail_acl_model, $rt_hd_mail_thread_importer_model, $rt_hd_mail_message_model, $rt_hd_mail_outbound_model, $rt_hd_gravity_fields_mapping_model, $rt_hd_ticket_history_model, $rt_hd_imap_server_model, $rthd_form, $taxonomy_metadata, $rt_hd_reports, $rt_hd_closing_reason, $rt_hd_attributes, $rt_hd_dashboard, $rt_hd_module, $rt_hd_cpt_tickets, $rt_hd_acl, $rt_hd_accounts, $rt_hd_contacts, $rt_hd_tickets_operation, $rt_hd_email_notification, $rt_hd_import_operation, $rt_hd_gravity_form_importer, $rt_hd_gravity_form_mapper, $rt_hd_settings, $rt_hd_user_settings, $rt_hd_logs, $rt_hd_woocommerce_edd;
+			global $rt_hd_mail_accounts_model, $rt_hd_mail_acl_model, $rt_hd_mail_thread_importer_model, $rt_hd_mail_message_model, $rt_hd_mail_outbound_model, $rt_hd_gravity_fields_mapping_model, $rt_hd_ticket_history_model, $rt_hd_imap_server_model, $rthd_form, $taxonomy_metadata, $rt_hd_reports, $rt_hd_closing_reason, $rt_hd_attributes, $rt_hd_dashboard, $rt_hd_module, $rt_hd_cpt_tickets, $rt_hd_acl, $rt_hd_accounts, $rt_hd_contacts, $rt_hd_tickets_operation, $rt_hd_email_notification, $rt_hd_import_operation, $rt_hd_gravity_form_importer, $rt_hd_gravity_form_mapper, $rt_hd_settings, $rt_hd_user_settings, $rt_hd_logs, $rt_hd_woocommerce_edd, $rt_hd_crons;
 
 			//Model class init
 			$rt_hd_mail_accounts_model          = new Rt_HD_Mail_Accounts_Model();
@@ -171,6 +169,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			global $Rt_Hd_Help;
 			$Rt_Hd_Help = new Rt_Hd_Help();
 
+			$rt_hd_crons = new Rt_HD_Crons();
 		}
 
 		/**

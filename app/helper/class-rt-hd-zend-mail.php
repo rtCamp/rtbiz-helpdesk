@@ -407,7 +407,7 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 			global $signature, $rt_hd_settings;
 			if ( ! $this->try_imap_login( $email, $accessToken, $email_type, $imap_server ) ) {
 				$rt_hd_settings->update_sync_status( $email, false );
-				echo 'login fail';
+				error_log( 'login fail' );
 
 				return false;
 			}
@@ -423,7 +423,7 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 			if ( empty( $email_acc ) ) {
 				$rt_hd_settings->update_sync_meta_time( $email, current_time( 'mysql' ) );
 				$rt_hd_settings->update_sync_status( $email, false );
-				echo 'email fail';
+				error_log( 'email fail' );
 
 				return false;
 			}
@@ -433,7 +433,7 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 			if ( empty( $email_data['inbox_folder'] ) ) {
 				$rt_hd_settings->update_sync_meta_time( $email, current_time( 'mysql' ) );
 				$rt_hd_settings->update_sync_status( $email, false );
-				echo 'inbox folder fail';
+				error_log( 'inbox folder fail' );
 
 				return false;
 			}
@@ -492,7 +492,7 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 				}
 				foreach ( $mail_folders as $folder ) {
 					$storage->selectFolder( $folder );
-					echo sanitize_email( $email ) . " : Reading - " . esc_attr( $folder ) . "\r\n";
+					error_log( sanitize_email( $email ) . " : Reading - " . esc_attr( $folder ) . "\r\n" );
 					$sync_inbox_type = $folder;
 					if ( ! isset( $rt_mail_uid[ $sync_inbox_type ] ) ) {
 						$rt_mail_uid[ $sync_inbox_type ] = 0;
@@ -507,7 +507,7 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 					} else {
 						$arrayMailIds = $storage->protocol->search( array( 'SINCE ' . $lastDate ) );
 					}
-					echo sanitize_email( $email ) . " : Found " . esc_attr( count( $arrayMailIds ) ) . " Mails \r\n";
+					error_log( sanitize_email( $email ) . " : Found " . esc_attr( count( $arrayMailIds ) ) . " Mails \r\n" );
 					$this->rt_parse_email( $email, $storage, $arrayMailIds, $hdUser, $user_id, $isSystemEmail );
 				}
 				$rt_hd_settings->update_sync_meta_time( $email, current_time( 'mysql' ) );
@@ -677,7 +677,7 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 					if ( ! isset( $message->subject ) ) {
 						$message->subject = ' ';
 					}
-					echo sanitize_email( $email ) . " Parsing Mail " . esc_attr( $message->subject ) . "\r\n";
+					error_log( sanitize_email( $email ) . " Parsing Mail " . esc_attr( $message->subject ) . "\r\n" );
 					$subscriber = array();
 					$from       = array();
 					$allEmails  = array();
@@ -890,7 +890,7 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 					$txtBody      = Rt_HD_Utils::force_utf_8( $txtBody );
 					$success_flag = $rt_hd_import_operation->process_email_to_ticket( $subject, $htmlBody, $from, $message->date, $allEmails, $attachements, $txtBody, true, $user_id, $messageid, $inreplyto, $references, $isSystemEmail, $subscriber );
 
-					echo "Mail Parse Status : " . var_export( $success_flag, true ) . "\n\r";
+					error_log( "Mail Parse Status : " . var_export( $success_flag, true ) . "\n\r" );
 
 					if ( ! $success_flag ) {
 						foreach ( $attachements as $attachement ) {

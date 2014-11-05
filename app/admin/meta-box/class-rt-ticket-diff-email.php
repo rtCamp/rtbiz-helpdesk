@@ -200,16 +200,20 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 			$bccemails         = array();
 			foreach ( $_POST['subscribe_to'] as $emailsubscriber ) {
 				$userSub     = get_user_by( 'id', intval( $emailsubscriber ) );
-				$bccemails[] = array( 'email' => $userSub->user_email, 'name' => $userSub->display_name );
-				if ( in_array( $emailsubscriber, $newAddedSubscriber ) ) {
-					$newSubscriberList[] = array( 'email' => $userSub->user_email, 'name' => $userSub->display_name );
+				if ( ! empty( $userSub ) ) {
+					$bccemails[] = array( 'email' => $userSub->user_email, 'name' => $userSub->display_name );
+					if ( in_array( $emailsubscriber, $newAddedSubscriber ) ) {
+						$newSubscriberList[] = array( 'email' => $userSub->user_email, 'name' => $userSub->display_name );
+					}
 				}
 			}
 
 			if ( ! empty( $removedSUbscriber ) ) {
 				foreach ( $removedSUbscriber as $emailsubscriber ) {
 					$userSub             = get_user_by( 'id', intval( $emailsubscriber ) );
-					$oldSubscriberList[] = array( 'email' => $userSub->user_email, 'name' => $userSub->display_name );
+					if ( ! empty( $userSub->use ) ) {
+						$oldSubscriberList[] = array( 'email' => $userSub->user_email, 'name' => $userSub->display_name );
+					}
 				}
 			}
 
