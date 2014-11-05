@@ -236,6 +236,7 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 			global $rt_ticket_email_content, $rt_hd_module, $rt_hd_email_notification;
 
 			$emailTable        = "<table style='width: 100%; border-collapse: collapse; border: none;'>";
+			$emailTableEnd     = "</table>";
 			$updateFlag        = true;
 			$oldUser           = $rt_ticket_email_content['oldUser'];
 			$newUser           = $rt_ticket_email_content['newUser'];
@@ -260,12 +261,12 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 				}
 
 				if ( $emailHTML != '' && ! empty( $bccemails ) ) {
-					$emailHTML = $emailTable . $emailHTML;
+					$emailHTML = $emailTable . $emailHTML . $emailTableEnd;
 					$rt_hd_email_notification->notification_ticket_updated( $post_id, $labels['name'], $emailHTML, $bccemails );
 				}
 				else {
 					if ( $emailHTML != '' ) {
-						$emailHTML = $emailTable . $emailHTML;
+						$emailHTML = $emailTable . $emailHTML . $emailTableEnd;
 						$rt_hd_email_notification->notification_ticket_updated( $post_id, $labels['name'], $emailHTML, array() );
 					}
 				}

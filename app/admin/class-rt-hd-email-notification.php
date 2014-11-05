@@ -160,8 +160,10 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			global $current_user;
 			$ticket_creaters = array();
 			foreach ( $contacts as $c ) {
-				if ( isset($c['name']) && ! empty( $c['name'] ) ) {
+				if ( ! empty( $c['name'] ) ) {
 					$ticket_creaters[] = $c['name'];
+				} else if ( ! empty( $c['email'] ) ) {
+					$ticket_creaters[] = $c['email'];
 				}
 			}
 
