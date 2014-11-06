@@ -197,7 +197,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 
 					$labels    = $rt_hd_module->labels;
 					$rthd_unique_id = get_post_meta( $post->ID, '_rtbiz_hd_unique_id', true );
-					$actions['view'] = '<a href="' . esc_url( trailingslashit( site_url() ) . strtolower( $labels['name'] ) . '/?rthd_unique_id=' . $rthd_unique_id ) . '" title="' . esc_attr( sprintf( __( 'Preview &#8220;%s&#8221;' ), $post->post_title ) ) . '" rel="permalink">' . __( 'View' ) . '</a>';
+					$actions['view'] = '<a href="' . esc_url( trailingslashit( site_url() ) . strtolower( $labels['name'] ) . '/' . $rthd_unique_id ) . '" title="' . esc_attr( sprintf( __( 'Preview &#8220;%s&#8221;' ), $post->post_title ) ) . '" rel="permalink">' . __( 'View' ) . '</a>';
 
 					echo $this->row_actions( $actions );
 

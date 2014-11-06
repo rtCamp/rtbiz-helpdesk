@@ -35,8 +35,15 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		public function __construct() {
+			add_action ( 'init', array( $this, 'add_rewrite_endpoint' ) );
 			add_filter( 'template_include', array( $this, 'template_include' ), 1, 1 );
 			add_filter( 'wp_title', array( $this, 'change_title' ), 9999, 1 );
+		}
+
+		function add_rewrite_endpoint() {
+			global $rt_hd_module;
+			$labels    = $rt_hd_module->labels;
+			add_rewrite_endpoint( strtolower( $labels['name'] ), EP_ALL );
 		}
 
 		/**
@@ -68,26 +75,25 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		function template_include( $template ) {
-			global $wp_query;
+			global $wp_query, $rt_hd_module;
 
-			if ( ! isset( $wp_query->query_vars['name'] ) ) {
+			$labels = $rt_hd_module->labels;
+
+			if ( ! isset( $wp_query->query_vars[ strtolower( $labels['name'] ) ] ) ) {
 				return $template;
 			}
 
-			$name = $wp_query->query_vars['name'];
+			$name = strtolower( $labels['name'] );
+			$rthd_unique_id = $wp_query->query_vars[ strtolower( $labels['name'] ) ];
 
 			$post_type = rthd_post_type_name( $name );
 			if ( $post_type != Rt_HD_Module::$post_type ) {
 				return $template;
 			}
 
-			if ( ! isset( $_REQUEST['rthd_unique_id'] ) || ( isset( $_REQUEST['rthd_unique_id'] ) && empty( $_REQUEST['rthd_unique_id'] ) ) ) {
-				return $template;
-			}
-
 			$args = array(
 				'meta_key'    => '_rtbiz_hd_unique_id',
-				'meta_value'  => $_REQUEST['rthd_unique_id'],
+				'meta_value'  => $rthd_unique_id,
 				'post_status' => 'any',
 				'post_type'   => $post_type,
 			);

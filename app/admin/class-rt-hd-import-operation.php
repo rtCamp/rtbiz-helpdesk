@@ -1581,7 +1581,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 				global $rt_hd_module;
 				$labels = $rt_hd_module->labels;
-				$bd     = $body . " Click <a href='" . esc_url( trailingslashit( site_url() ) . strtolower( $labels['name'] ) . '?rthd_unique_id=' . $rthd_unique_id ) . "'> here </a> to view ticket";
+				$bd     = $body . " Click <a href='" . esc_url( trailingslashit( site_url() ) . strtolower( $labels['name'] ) . '/' . $rthd_unique_id ) . "'> here </a> to view ticket";
 				$rt_hd_email_notification->insert_new_send_email( $title, $bd, $tocontact, array(), array(), array(), $comment_id, 'comment' );
 
 			}
