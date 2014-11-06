@@ -42,8 +42,8 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 
 			// filter for add new action link on My Account page
 			add_filter( 'woocommerce_my_account_my_orders_actions', array( $this, 'wocommerce_actions_link' ), 10, 2 );
-			add_action( 'edd_purchase_history_header_after', array( $this, 'edd_action_link_header' ) );
-			add_action( 'edd_purchase_history_row_end', array( $this, 'edd_support_link' ), 10, 2 );
+			add_action( 'edd_download_history_header_end', array( $this, 'edd_action_link_header' ) );
+			add_action( 'edd_download_history_row_end', array( $this, 'edd_support_link' ), 10, 2 );
 
 			// shortcode for get support form
 			add_shortcode( 'rt_hd_support_form', array( $this, 'rt_hd_support_form_callback' ) );
@@ -88,11 +88,11 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 			<?php
 		}
 
-		function edd_support_link( $payment_id, $payment_data ) {
+		function edd_support_link( $payment_id, $download_id ) {
 			global $redux_helpdesk_settings;
 			$page = get_post( $redux_helpdesk_settings['rthd_support_page'] );
 			?>
-			<td class="edd_rt_hd_support"><a href="<?php echo "/{$page->post_name}/?order_id={$payment_id}&order_type=edd"; ?>"><?php _e( 'Get Support', RT_HD_TEXT_DOMAIN ) ?></a></td>
+			<td class="edd_rt_hd_support"><a href="<?php echo "/{$page->post_name}/?product_id={$download_id}&order_id={$payment_id}&order_type=edd"; ?>"><?php _e( 'Get Support', RT_HD_TEXT_DOMAIN ) ?></a></td>
 			<?php
 		}
 
@@ -174,6 +174,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 			}
 			$product_exists = false;
 			foreach ( $terms as $tm ) {
+				$term_product_id = '';
 				if ( isset( $_REQUEST['order_id'] ) && $this->order_post_type == get_post_type( $_REQUEST['order_id'] ) ) {
 					if ( $this->isWoocommerceActive ) {
 						$order = new WC_Order( $_REQUEST['order_id'] );
@@ -197,7 +198,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 						}
 					}
 				}
-				$product_option .= '<option value= '. $tm->term_id.' > '.$tm->name.'</option>';
+				$product_option .= '<option value="' . $tm->term_id . '" ' . ( ( ! empty( $_REQUEST['product_id'] ) && $term_product_id == $_REQUEST['product_id'] ) ? 'selected="selected"' : '' ) . '> '.$tm->name.'</option>';
 				$product_exists = true;
 			}
 
