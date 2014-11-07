@@ -91,7 +91,7 @@ jQuery(function () {
 				    alert("Please enter comment");
 				    return false;
 			    }
-			    if (jQuery('#edited_followup_content' ).val().replace(/\s+/g, " ") === jQuery('#comment-'+commentid ).find('p' ).val().replace(/\s+/g, " ") ){
+			    if (jQuery('#edited_followup_content' ).val().replace(/\s+/g, " ") === jQuery('#comment-'+commentid ).find('.comment-content' ).val().replace(/\s+/g, " ") ){
 				    alert('You have not edited comment! :/');
 				    return false;
 			    }
@@ -108,8 +108,7 @@ jQuery(function () {
 			    requestArray["followuptype"] = 'comment';
 			    //requestArray["followup_post_id"] = jQuery( "#ticket_id" ).val();
 			    //requestArray["follwoup-time"] = jQuery( "#follwoup-time" ).val();
-				requestArray["followup_content"]=jQuery('#edited_followup_content' ).val().replace(/\s+/g, " ");
-
+			    requestArray["followup_content"]=jQuery('#edited_followup_content' ).val();
 			    jQuery.ajax(
 				    {
 					    url: ajaxurl,
@@ -118,7 +117,7 @@ jQuery(function () {
 					    data: requestArray,
 					    success: function ( data ) {
 						    if ( data.status ) {
-							    jQuery('#comment-'+commentid ).find('p' ).text(jQuery('#edited_followup_content' ).val().replace(/\s+/g, " "));
+							    jQuery('#comment-'+commentid ).find('.comment-content' ).html(data.comment_content);
 							    jQuery('#comment-'+commentid ).find( '#is-private-comment' ).val(data.private);
 							    jQuery("#dialog-form").dialog().dialog("close");
 						    } else {

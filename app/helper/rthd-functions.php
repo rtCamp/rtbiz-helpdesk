@@ -534,13 +534,13 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 		<div class="messages <?php echo ( $display_private_comment_flag ) ? '' : 'private-comment-display'; ?>" title="Click for action">
 			<input id="followup-id" type="hidden" value="<?php echo esc_attr( $comment->comment_ID ); ?>">
 			<input id="is-private-comment" type="hidden" value="<?php echo esc_attr( $is_comment_private ); ?>">
-
+			<div class="comment-content">
 			<?php if( $display_private_comment_flag ) { ?>
 				<p><?php echo wpautop( make_clickable( $comment->comment_content ) ); ?></p>
 			<?php } else { ?>
 				<p><?php _e( 'This followup has been marked private.', RT_HD_TEXT_DOMAIN ); ?></p>
 			<?php } ?>
-
+			</div>
 			<time title="<?php echo esc_attr( $comment->comment_date ); ?>" datetime="<?php echo esc_attr( $comment->comment_date ); ?>">
 				<span title="<?php echo esc_attr( ( $comment->comment_author_email == '' ) ? $comment->comment_author_IP : $comment->comment_author_email ); ?>"><?php echo esc_attr( ( $comment->comment_author == '' ) ? 'Anonymous' : $comment->comment_author ); ?> </span>
 				&middot; <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ); ?>

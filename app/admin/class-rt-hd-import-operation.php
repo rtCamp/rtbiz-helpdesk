@@ -1332,7 +1332,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					$body .= '<br/><b>Body : </b>' . $diff;
 				}
 				else {
-					$body .= '<br/><b>Body : </b>' . trim( html_entity_decode( strip_tags( $commentdata['comment_content'] ) ) );
+					$body .= '<br/><b>Body : </b>' . wpautop( make_clickable( $comment->comment_content ) );
 				}
 
 				$body .= '<br/> ';
@@ -1351,6 +1351,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 						'count'     => true,
 					) );
 				$returnArray['private']       = get_comment_meta( $_POST['comment_id'], '_rthd_privacy', true );
+				$returnArray['comment_content'] = wpautop( make_clickable( $comment->comment_content ) );
 				echo json_encode( $returnArray );
 				die( 0 );
 			}
