@@ -55,6 +55,12 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 				}
 			</style>
 
+			<style type="text/css">
+				#minor-publishing-actions, #misc-publishing-actions {
+					display: none
+				}
+			</style>
+
 			<div class="row_group">
 				<span class="prefix" title="<?php _e( 'Assigned To', RT_HD_TEXT_DOMAIN ); ?>"><label
 						for="post[post_author]"><strong><?php _e( 'Assigned To' ); ?></strong></label></span> <select
