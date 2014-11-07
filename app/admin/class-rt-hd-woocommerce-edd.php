@@ -27,6 +27,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 		 * @since 0.1
 		 */
 		function __construct() {
+			$this->check_active_plugin();
 			$this->hooks();
 		}
 
@@ -153,17 +154,33 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 		 */
 		function rt_hd_support_form_callback( $attr ) {
 			ob_start();
-			$this->check_active_plugin();
 			wp_enqueue_style( 'support-form-style', RT_HD_URL . 'app/assets/css/support_form_front.css', false, RT_HD_VERSION, 'all' );
 			$product_option = '';
 			$order_email    = '';
+
+			if ( !empty( $_REQUEST['order_id'] ) ) {
+				$order = new WC_Order( $_REQUEST['order_id'] );
+				var_dump($order);
+				if ( empty( $order ) ) {
+				?>
+					<div class="error">It looks like you are trying to get support for an invalid order. Please create a fresh support.</div>
+				<?php
+					unset( $_REQUEST['order_id'] );
+					unset( $_GET['order_id'] );
+					unset( $_POST['order_id'] );
+				}
+
+				global $current_user;
+//				if ( $current_user->user_email == $order-> )
+			}
 
 			// Save ticket if data has been posted
 			if ( ! empty( $_POST ) ) {
 				$post_id = self::save();
 				if ( isset( $post_id ) && ! empty( $post_id ) && is_int( $post_id ) ) {
-					?>
-					<div id="info" class="success">Your Support request have been Submitted.</div><?php
+				?>
+					<div id="info" class="success">Your Support request have been Submitted.</div>
+				<?php
 				}
 			}
 
@@ -213,7 +230,6 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 		 *
 		 */
 		function save() {
-			$this->check_active_plugin();
 			global $rtbiz_product_sync, $rt_hd_import_operation, $redux_helpdesk_settings;;
 
 			$data = $_POST['post'];
