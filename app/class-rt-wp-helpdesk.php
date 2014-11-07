@@ -216,21 +216,11 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 		function load_scripts( $rthd_unique_id = null ) {
 			global $wp_query;
 
-			if ( ! isset( $wp_query->query_vars['name'] ) ) {
-				return;
-			}
-			$name = $wp_query->query_vars['name'];
-
-			$post_type = rthd_post_type_name( $name );
-			if ( $post_type != Rt_HD_Module::$post_type ) {
+			if ( ! isset( $wp_query->query_vars[ Rt_HD_Module::$post_type ] ) ) {
 				return;
 			}
 
-			if ( ( ! isset( $_REQUEST['rthd_unique_id'] ) || empty( $_REQUEST['rthd_unique_id'] ) )&& ( isset( $rthd_unique_id ) && ! empty( $rthd_unique_id ) ) ) {
-					$_REQUEST['rthd_unique_id'] = $rthd_unique_id;
-			}
-
-			if ( ! isset( $_REQUEST['rthd_unique_id'] ) || empty( $_REQUEST['rthd_unique_id'] ) ){
+			if ( ! isset( $wp_query->query_vars['rthd_unique_id'] ) || ( isset( $wp_query->query_vars['rthd_unique_id'] ) && empty( $wp_query->query_vars['rthd_unique_id'] ) ) ) {
 				return;
 			}
 
@@ -238,15 +228,11 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 				'meta_key'    => '_rtbiz_hd_unique_id',
 				'meta_value'  => $_REQUEST['rthd_unique_id'],
 				'post_status' => 'any',
-				'post_type'   => $post_type,
+				'post_type'   => Rt_HD_Module::$post_type,
 			);
 
 			$ticketpost = get_posts( $args );
 			if ( empty( $ticketpost ) ) {
-				return;
-			}
-			$ticket = $ticketpost[0];
-			if ( $post_type != $ticket->post_type ) {
 				return;
 			}
 
