@@ -150,10 +150,6 @@
 	background: pink;
 }
 
-#edit-private-comment{
-	color: #d02600;
-}
-
 #followup_content{
 	width:100%;
 }
@@ -164,4 +160,16 @@
 
 #edited_followup_content{
 	width:100%;
+}
+
+.red-color{
+	color: #d02600;
+}
+
+.edit-action-button button[type='button']{
+	float: right;
+}
+
+#editfollowup{
+	margin-left: 5px;
 }

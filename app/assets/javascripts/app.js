@@ -112,6 +112,10 @@ jQuery( document ).ready( function ( $ ) {
 			jQuery('#edit-private' ).prop('checked',false);
 		}
 		jQuery("#dialog-form").dialog().dialog("close");
+		jQuery( "#dialog-form" ).dialog({
+			                                width :600,
+			                                height:300
+		                                });
 		jQuery( "#dialog-form" ).dialog( "open" );
 
 	} );

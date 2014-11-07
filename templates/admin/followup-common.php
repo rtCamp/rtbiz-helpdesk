@@ -33,13 +33,15 @@ $user_edit = current_user_can( rt_biz_get_access_role_cap( RT_BIZ_TEXT_DOMAIN, '
 if ( $user_edit ) {
 	?>
 	<div id="dialog-form" title="Edit Followup" style='display: none'>
-		<textarea id="edited_followup_content" name="edited_followup_content" placeholder="Add new followup"></textarea>
-		<div id="edit-private-comment">
+		<textarea id="edited_followup_content" name="edited_followup_content" placeholder="Add new followup" rows="9"></textarea>
+		<div id="edit-private-comment" class="red-color">
 			<label for="edit-private"><input id="edit-private" type="checkbox" name="private" value="yes" text="check to make comment private"><?php _e('Private'); ?></label>
 			<img id='edithdspinner' class="helpdeskspinner" src="<?php echo admin_url().'images/spinner.gif'; ?>">
 		</div>
+		<div class="edit-action-button">
 		<button class="edit-followup button button-primary" id="editfollowup" type="button">Update</button>
-		<button class="edit-followup button" id="delfollowup" type="button">Delete</button>
+		<button class="edit-followup button red-color" id="delfollowup" type="button">Delete</button>
+		</div>
 	</div>
 	<?php
 }
