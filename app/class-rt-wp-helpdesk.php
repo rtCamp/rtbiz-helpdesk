@@ -226,7 +226,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 
 			$args = array(
 				'meta_key'    => '_rtbiz_hd_unique_id',
-				'meta_value'  => $_REQUEST['rthd_unique_id'],
+				'meta_value'  => $wp_query->query_vars['rthd_unique_id'],
 				'post_status' => 'any',
 				'post_type'   => Rt_HD_Module::$post_type,
 			);
@@ -279,7 +279,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 					wp_enqueue_style( 'jquery-ui-smoothness', $url, false, null );
 				}
 			}
-			$this->localize_scripts();
+			$this->localize_scripts( $wp_query->query_vars['rthd_unique_id'] );
 			return true;
 		}
 		/**
@@ -288,17 +288,13 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 		 */
 		function localize_scripts( $rthd_unique_id = null ) {
 
-			if ( ! isset( $_REQUEST['rthd_unique_id'] ) || empty( $_REQUEST['rthd_unique_id'] ) ) {
-				if ( isset( $rthd_unique_id ) && ! empty( $rthd_unique_id ) ) {
-					$_REQUEST['rthd_unique_id'] = $rthd_unique_id;
-				} else {
-					return;
-				}
+			if ( empty( $rthd_unique_id ) ) {
+				return;
 			}
-			$unique_id  = $_REQUEST['rthd_unique_id'];
+
 			$args       = array(
 				'meta_key'    => '_rtbiz_hd_unique_id',
-				'meta_value'  => $unique_id,
+				'meta_value'  => $rthd_unique_id,
 				'post_status' => 'any',
 				'post_type'   => Rt_HD_Module::$post_type,
 			);
