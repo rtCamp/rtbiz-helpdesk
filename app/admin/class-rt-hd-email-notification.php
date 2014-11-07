@@ -49,7 +49,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				'ccemail'       => serialize( $ccemail ),
 				'bccemail'      => serialize( $bccemail ),
 				'subject'       => $subject,
-				'body'          => $body.'</br>'. ( ( is_null( $signature ) ) ? '' : $signature ) ,
+				'body'          => $body.'<br/>'. ( ( is_null( $signature ) ) ? '' : '<div style="color:#666;">' . $signature . '</div>' ) . '<br/>' ,
 				'attachement'   => serialize( $attachement ),
 				'refrence_id'   => $refrence_id,
 				'refrence_type' => $refrence_type,

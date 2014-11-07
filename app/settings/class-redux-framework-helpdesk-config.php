@@ -379,7 +379,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					array(
 						'id'       => 'rthd_update_ticket_email_title',
 						'type'     => 'text',
-						'title'    => __( 'Title when Ticket meta is Updated ' ),
+						'title'    => __( 'Title when Ticket is Updated ' ),
 						'subtitle' => __( 'This is title whenever ticket meta is changed' ),
 						'desc'     => __( 'You can use {ticket_id} and {ticket_title}' ),
 						'default'  => '[Ticket Updated] Ticket #{ticket_id} : {ticket_title}',
@@ -438,7 +438,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'subtitle'     => __( 'Add here Email Signature' ),
 						'desc'         => esc_attr( 'You can add email signature here that will be send with every email send with the Idea plugin, Allowed tags are <a> <br> <em> <strong>.' ),
 						'validate'     => 'html_custom',
-						'default'      => esc_attr( '<br />Send via rtCamp Helpdesk Plugin<br />' ),
+						'default'      => esc_attr( ' -- Sent via rtBiz Helpdesk Plugin' ),
 						'allowed_html' => array(
 							'a'      => array(
 								'href'  => array(),
