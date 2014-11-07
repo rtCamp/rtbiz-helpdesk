@@ -242,7 +242,7 @@ jQuery( document ).ready( function ( $ ) {
 				             data: requestArray,
 				             success: function ( data ) {
 					             if ( data.status ) {
-						             var newcomment=" <li class='self editable' id='comment-" + data.comment_id + "'> <div class='avatar'> " + jQuery("#user-avatar" ).val() + " </div> <div class='messages' title='click for action'> <input id='followup-id' type='hidden' value='"+ data.comment_id + "'> <input id='is-private-comment' type='hidden' value='" + data.private + "'> <p>" + jQuery('#followup_content' ).val() + " </p> <time><span title='"+ jQuery('#user_email').val() +"'>" +jQuery('#user-name' ).val()+ "</span>  • now </time> </div> </li>";
+						             var newcomment=data.comment_content;
 						             //console.log(newcomment);
 						             jQuery('#chat-UI' ).prepend(newcomment);
 						             jQuery( "#followup_content" ).val( '' );

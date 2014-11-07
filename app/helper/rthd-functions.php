@@ -506,3 +506,53 @@ function rthd_generate_email_title( $post_id, $title ) {
 	}
 	return null;
 }
+
+function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = true ) {
+
+	ob_start();
+
+	$is_comment_private = get_comment_meta( $comment->comment_ID, '_rthd_privacy', true );
+	if ( ! empty( $is_comment_private ) && 'true' == $is_comment_private ) {
+		if ( $user_edit ) {
+			$display_private_comment_flag = true;
+		} else {
+			$display_private_comment_flag = false;
+		}
+	} else {
+		$display_private_comment_flag = true;
+	}
+
+	$side_class = ( $type == 'right' ) ? 'self' : ( ( $type == 'left' ) ? 'other' : '' );
+	$editable_class = ( $display_private_comment_flag ) ? 'editable' : '';
+
+	?>
+	<li class="<?php echo $side_class . ' ' . $editable_class; ?>" id="comment-<?php echo esc_attr( $comment->comment_ID ); ?>">
+
+		<div class="avatar">
+			<?php echo get_avatar( $comment->comment_author_email, 40 ); ?>
+		</div>
+		<div class="messages <?php echo ( $display_private_comment_flag ) ? '' : 'private-comment-display'; ?>" title="Click for action">
+			<input id="followup-id" type="hidden" value="<?php echo esc_attr( $comment->comment_ID ); ?>">
+			<input id="is-private-comment" type="hidden" value="<?php echo esc_attr( $is_comment_private ); ?>">
+
+			<?php if( $display_private_comment_flag ) { ?>
+				<p><?php echo wpautop( make_clickable( $comment->comment_content ) ); ?></p>
+			<?php } else { ?>
+				<p><?php _e( 'This followup has been marked private.', RT_HD_TEXT_DOMAIN ); ?></p>
+			<?php } ?>
+
+			<time title="<?php echo esc_attr( $comment->comment_date ); ?>" datetime="<?php echo esc_attr( $comment->comment_date ); ?>">
+				<span title="<?php echo esc_attr( ( $comment->comment_author_email == '' ) ? $comment->comment_author_IP : $comment->comment_author_email ); ?>"><?php echo esc_attr( ( $comment->comment_author == '' ) ? 'Anonymous' : $comment->comment_author ); ?> </span>
+				&middot; <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date_gmt ), current_time( 'timestamp' ) ) ); ?>
+			</time>
+
+		</div>
+	</li>
+<?php
+	$comment_html = ob_get_clean();
+	if ( $echo ) {
+		echo $comment_html;
+	} else {
+		return $comment_html;
+	}
+}

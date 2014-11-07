@@ -1189,7 +1189,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$title = rthd_create_new_ticket_title( 'rthd_new_followup_email_title', $comment_post_ID );;
 
 			$body = ' New Follwup Added ' . ( ( ! empty( $currentUser->display_name ) ) ? 'by ' . $currentUser->display_name : 'annonymously' );
-			$body .= '<br/><b>Body : </b>' . $comment->comment_content;
+			$body .= '<br/><b>Body : </b>' . wpautop( make_clickable( $comment->comment_content ) );
 			$body .= '<br/> ';
 			$notificationFlag = $this->check_setting_for_new_followup_email();
 			$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, $comment_ID, $notificationFlag, true );
@@ -1205,6 +1205,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				) );
 			$returnArray['comment_id'] = $comment_ID;
 			$returnArray['private']       = get_comment_meta( $comment_ID, '_rthd_privacy', true );
+			$returnArray['comment_content'] = rthd_render_comment( get_comment( $comment_ID ), true, 'right', false );
 			echo json_encode( $returnArray );
 			ob_end_flush();
 			die( 0 );
