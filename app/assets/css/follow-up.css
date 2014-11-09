@@ -184,6 +184,7 @@
 
 .rthd-container {
 	margin: 10px;
+	overflow: auto;
 }
 
 .rthd-clearfix {

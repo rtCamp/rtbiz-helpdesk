@@ -16,8 +16,11 @@ global $rthd_messages;
 
 <div class="rthd-container">
 	<?php
-		foreach ( $rthd_messages as $message ) {
-			echo $message;
+		foreach ( $rthd_messages as $key => $message ) {
+			if ( $message['displayed'] == 'no' ) {
+				echo '<div class="' . $message['type'] . '">' . $message['message'] . '</div>';
+				$rthd_messages[$key]['displayed'] = 'yes';
+			}
 		}
 	?>
 </div>
