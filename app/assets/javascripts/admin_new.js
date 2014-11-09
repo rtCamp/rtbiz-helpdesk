@@ -91,7 +91,7 @@ jQuery(function () {
 				    alert("Please enter comment");
 				    return false;
 			    }
-			    if (jQuery('#edited_followup_content' ).val().replace(/\s+/g, " ") === jQuery('#comment-'+commentid ).find('.comment-content' ).val().replace(/\s+/g, " ") ){
+			    if (jQuery('#edited_followup_content' ).val().replace(/\s+/g, " ") === jQuery('#comment-'+commentid ).find('.rthd-comment-content' ).val().replace(/\s+/g, " ") ){
 				    alert('You have not edited comment! :/');
 				    return false;
 			    }
@@ -117,7 +117,7 @@ jQuery(function () {
 					    data: requestArray,
 					    success: function ( data ) {
 						    if ( data.status ) {
-							    jQuery('#comment-'+commentid ).find('.comment-content' ).html(data.comment_content);
+							    jQuery('#comment-'+commentid ).find('.rthd-comment-content' ).html(data.comment_content);
 							    jQuery('#comment-'+commentid ).find( '#is-private-comment' ).val(data.private);
 							    jQuery("#dialog-form").dialog().dialog("close");
 						    } else {

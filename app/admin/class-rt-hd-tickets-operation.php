@@ -39,7 +39,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 		 *
 		 * @return null
 		 */
-		function ticket_default_field_update( $postArray, $dataArray, $post_type, $post_id = null ) {
+		function ticket_default_field_update( $postArray, $dataArray, $post_type, $post_id = '', $created_by = '', $updated_by = '' ) {
 
 			global $rt_hd_cpt_tickets, $rt_hd_ticket_history_model;
 
@@ -51,9 +51,9 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 
 				$ticketModel = new Rt_HD_Ticket_Model();
 
-				if ( is_null( $post_id ) ) { // new post
+				if ( empty( $post_id ) ) { // new post
 					$post_id = @wp_insert_post( $postArray );
-					update_post_meta( $post_id, '_rtbiz_hd_created_by', get_current_user_id() );
+					update_post_meta( $post_id, '_rtbiz_hd_created_by', ( empty( $created_by) ) ? get_current_user_id() : $created_by );
 					$dataArray = array_merge( $dataArray, array(
 						'date_create'     => $postArray['post_date'],
 						'date_create_gmt' => $postArray['post_date_gmt'],
@@ -77,7 +77,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 					return false;
 				}
 
-				update_post_meta( $post_id, '_rtbiz_hd_updated_by', get_current_user_id() );
+				update_post_meta( $post_id, '_rtbiz_hd_updated_by', ( empty( $updated_by ) ? get_current_user_id() : $updated_by ) );
 				$dataArray = array_merge( $dataArray, array(
 					'date_update'     => current_time( 'mysql' ),
 					'date_update_gmt' => gmdate( 'Y-m-d H:i:s' ),

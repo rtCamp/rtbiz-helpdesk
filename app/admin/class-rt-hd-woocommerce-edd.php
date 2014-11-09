@@ -343,7 +343,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 				'post_status' => 'any',
 				'nopaging'    => true,
 			);
-			$tickets = null;
+			$tickets = array();
 			if ( ! empty( $arg_shortcode['email'] ) || ! empty( $arg_shortcode['user'] ) ) {
 
 				if ( ! empty( $arg_shortcode['email'] ) ) {
@@ -394,7 +394,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 					<th>Status</th>
 					<th></th>
 				</tr>
-			<?php if ( isset( $tickets ) && ! empty( $tickets ) ) {
+			<?php if ( ! empty( $tickets ) ) {
 				foreach ( $tickets as $ticket ) {
 						$rthd_unique_id = get_post_meta( $ticket->ID, '_rtbiz_hd_unique_id', true );
 						$date           = new DateTime( $ticket->post_modified );

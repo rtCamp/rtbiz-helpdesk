@@ -91,9 +91,9 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 			$columns['cb']                         = '<input type="checkbox" />';
 			$columns['rthd_ticket_title']          = __( 'Ticket', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_status']         = '<span class="status_head tips" data-tip="' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '">' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '</span>';
-			$columns['rthd_ticket_created_by']     = __( 'Create_By', RT_HD_TEXT_DOMAIN );
-			$columns['rthd_ticket_updated_by']     = __( 'Updated_By', RT_HD_TEXT_DOMAIN );
-			$columns['rthd_ticket_closed_by']      = __( 'ClosedBy', RT_HD_TEXT_DOMAIN );
+			$columns['rthd_ticket_created_by']     = __( 'Created By', RT_HD_TEXT_DOMAIN );
+			$columns['rthd_ticket_updated_by']     = __( 'Updated By', RT_HD_TEXT_DOMAIN );
+			$columns['rthd_ticket_closed_by']      = __( 'Closed By', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_closing_reason'] = __( 'Closing Reason', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_contacts']       = __( 'Contacts', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_accounts']       = __( 'Accounts', RT_HD_TEXT_DOMAIN );
@@ -112,8 +112,8 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 		 */
 		function sortable_column( $columns ) {
 			$columns['rthd_ticket_title']          = __( 'Ticket', RT_HD_TEXT_DOMAIN );
-			$columns['rthd_ticket_created_by']     = __( 'Create_By', RT_HD_TEXT_DOMAIN );
-			$columns['rthd_ticket_updated_by']     = __( 'Updated_By', RT_HD_TEXT_DOMAIN );
+			$columns['rthd_ticket_created_by']     = __( 'Created By', RT_HD_TEXT_DOMAIN );
+			$columns['rthd_ticket_updated_by']     = __( 'Updated By', RT_HD_TEXT_DOMAIN );
 			return $columns;
 		}
 

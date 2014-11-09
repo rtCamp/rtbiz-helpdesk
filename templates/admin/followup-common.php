@@ -14,7 +14,7 @@ $current_user = wp_get_current_user();
 	<input id="user-name" type="hidden" value="<?php echo esc_attr( $current_user->display_name ); ?>" />
 	<input id="post-id" type="hidden" value="<?php echo esc_attr( $post->ID ); ?>" />
 	<input id="edit-comment-id" type="hidden" />
-	<textarea id="followup_content" name="followup_content" placeholder="Add new followup"></textarea>
+	<textarea id="followup_content" class="followup-content" name="followup_content" placeholder="Add new followup"></textarea>
 	<div id="private-comment">
 		<label for="add-private-comment"><input id="add-private-comment" type="checkbox" name="private" value="yes" text="check to make comment private" /><?php _e('Private'); ?></label>
 	</div>
@@ -33,7 +33,7 @@ $user_edit = current_user_can( rt_biz_get_access_role_cap( RT_BIZ_TEXT_DOMAIN, '
 if ( $user_edit ) {
 	?>
 	<div id="dialog-form" title="Edit Followup" style='display: none'>
-		<textarea id="edited_followup_content" name="edited_followup_content" placeholder="Add new followup" rows="9"></textarea>
+		<textarea id="edited_followup_content" name="edited_followup_content" placeholder="Add new followup" rows="5"></textarea>
 		<div id="edit-private-comment" class="red-color">
 			<label for="edit-private"><input id="edit-private" type="checkbox" name="private" value="yes" text="check to make comment private"><?php _e('Private'); ?></label>
 			<img id='edithdspinner' class="helpdeskspinner" src="<?php echo admin_url().'images/spinner.gif'; ?>">
@@ -56,6 +56,3 @@ if ( $user_edit ) {
 	}
 	} ?>
 </ul>
-<?php
-wp_enqueue_script( 'jquery-ui-dialog' );
-?>

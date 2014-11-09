@@ -15,7 +15,7 @@ jQuery( document ).ready( function ( $ ) {
 
 	format_date_moment();
 
-	$( '.rthd_sticky_div' ).stickyfloat( {duration: 400, delay: 3} );
+	$( '.rthd_sticky_div' ).stickyfloat( { duration: 400, delay: 3 } );
 
 	$( "#commentlist .comment-wrapper" ).filter( ":first" ).show();
 
@@ -63,7 +63,7 @@ jQuery( document ).ready( function ( $ ) {
 
 
 		var commentid;
-		jQuery("#delfollowup" ).click(function() {
+		jQuery("#delfollowup" ).click(function(e) {
 			var r = confirm( "Are you sure you want to remove this Followup?" );
 			if ( r != true ) {
 				e.preventDefault();
@@ -102,7 +102,7 @@ jQuery( document ).ready( function ( $ ) {
 		});
 
 	jQuery( document ).on('click', 'li.editable .messages',function(){
-		jQuery('#edited_followup_content' ).val( jQuery(this).find('.comment-content' ).text());
+		jQuery('#edited_followup_content' ).val( jQuery(this).find('.rthd-comment-content' ).text());
 		commentid=jQuery(this).find('#followup-id' ).val();
 		var that = jQuery(this).find( '#is-private-comment' ).val();
 		if (that && that=='true' || that == true){
@@ -126,7 +126,7 @@ jQuery( document ).ready( function ( $ ) {
 				alert("Please enter comment");
 				return false;
 			}
-			if (jQuery('#edited_followup_content' ).val().replace(/\s+/g, " ") === jQuery('#comment-'+commentid ).find('.comment-content' ).val().replace(/\s+/g, " ") ){
+			if (jQuery('#edited_followup_content' ).val().replace(/\s+/g, " ") === jQuery('#comment-'+commentid ).find('.rthd-comment-content' ).val().replace(/\s+/g, " ") ){
 				alert('You have not edited comment! :/');
 				return false;
 			}
@@ -153,7 +153,7 @@ jQuery( document ).ready( function ( $ ) {
 					data: requestArray,
 					success: function ( data ) {
 						if ( data.status ) {
-							jQuery('#comment-'+commentid ).find('.comment-content' ).html(data.comment_content);
+							jQuery('#comment-'+commentid ).find('.rthd-comment-content' ).html(data.comment_content);
 							jQuery('#comment-'+commentid ).find( '#is-private-comment' ).val(data.private);
 							jQuery("#dialog-form").dialog().dialog("close");
 						} else {

@@ -486,7 +486,7 @@ function rthd_create_new_ticket_title( $key, $post_id ){
 	if ( isset( $redux[ $key ] ) ) {
 		return rthd_generate_email_title( $post_id, $redux[ $key ] );
 	}
-	return null;
+	return '';
 }
 
 function rthd_get_email_signature_settings(){
@@ -494,17 +494,17 @@ function rthd_get_email_signature_settings(){
 	if ( isset( $redux['rthd_enable_signature'] ) && 1 == $redux['rthd_enable_signature'] && isset( $redux['rthd_email_signature'] ) ) {
 		return $redux['rthd_email_signature'];
 	}
-	return null;
+	return '';
 }
 
 
 function rthd_generate_email_title( $post_id, $title ) {
-	if ( ! is_null( $title ) ){
+	if ( ! empty( $title ) ){
 		$title = str_replace( '{ticket_title}',get_the_title( $post_id ), $title );
 		$title = str_replace( '{ticket_id}', $post_id, $title );
 		return $title;
 	}
-	return null;
+	return '';
 }
 
 function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = true ) {
@@ -534,7 +534,7 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 		<div class="messages <?php echo ( $display_private_comment_flag ) ? '' : 'private-comment-display'; ?>" title="Click for action">
 			<input id="followup-id" type="hidden" value="<?php echo esc_attr( $comment->comment_ID ); ?>">
 			<input id="is-private-comment" type="hidden" value="<?php echo esc_attr( $is_comment_private ); ?>">
-			<div class="comment-content">
+			<div class="rthd-comment-content">
 			<?php if( $display_private_comment_flag ) { ?>
 				<p><?php echo wpautop( make_clickable( $comment->comment_content ) ); ?></p>
 			<?php } else { ?>

@@ -65,7 +65,8 @@ class test_Rt_HD_Tickets_Operation extends RT_WP_TestCase {
 
 		$this->assertEquals( get_current_user_id(), get_post_meta( $this->post_ID, '_rtbiz_hd_created_by', true ) );
 		$this->assertEquals( get_current_user_id(), get_post_meta( $this->post_ID, '_rtbiz_hd_updated_by', true ) );
-		$this->assertFalse( is_null( get_post_meta( $this->post_ID, '_rtbiz_hd_unique_id', true ) ) );
+		$unique_id = get_post_meta( $this->post_ID, '_rtbiz_hd_unique_id', true );
+		$this->assertFalse( empty( $unique_id ) );
 
 		$this->assertTrue( $this->rthdticketModel->is_exist( $this->post_ID ) );
 	}

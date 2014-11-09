@@ -131,12 +131,6 @@
 	}
 }
 
-.ui-widget-header{
-	background: none !important;
-	border: none !important;
-	border-bottom: 1px solid #eee !important;
-}
-
 #private-comment{
 	color: #d02600;
 }
@@ -150,8 +144,9 @@
 	background: pink;
 }
 
-#followup_content{
+.followup-content {
 	width:100%;
+	padding: 0;
 }
 
 .helpdeskspinner{
@@ -172,4 +167,25 @@
 
 #editfollowup{
 	margin-left: 5px;
+}
+
+#rthd-ticket {
+	width: 65%;
+	float: left;
+	margin-right: 5px;
+}
+
+#rthd-sidebar {
+	width: 32%;
+	float: left;
+	margin-left: 5px;
+	position: relative;
+}
+
+.rthd-container {
+	margin: 10px;
+}
+
+.rthd-clearfix {
+	clear: both;
 }

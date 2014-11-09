@@ -196,18 +196,7 @@ if ( ! class_exists( 'RT_HD_Setting_Imap_Server' ) ) {
 		<?php
 		}
 
-		function save_imap_servers( $rthd_imap_servers_changed = null, $rthd_imap_servers = null ) {
-			if ( ! ( isset ( $_POST['rthd_imap_servers_changed'] ) && isset( $_POST['rthd_imap_servers'] ) ) ) {
-				if ( isset ( $rthd_imap_servers_changed ) && ! empty( $rthd_imap_servers_changed ) ) {
-					$_POST['rthd_imap_servers_changed'] = $rthd_imap_servers_changed;
-					//	echo "1st";
-				}
-				if ( isset ( $rthd_imap_servers ) && ! empty( $rthd_imap_servers ) ) {
-					$_POST['rthd_imap_servers'] = $rthd_imap_servers;
-					//echo "2nd";
-				}
-			}
-
+		function save_imap_servers() {
 
 			if ( isset( $_POST['rthd_imap_servers_changed'] ) ) {
 				global $rt_hd_imap_server_model;
@@ -226,10 +215,10 @@ if ( ! class_exists( 'RT_HD_Setting_Imap_Server' ) ) {
 								'server_name'          => $new_servers[ $server->id ]['server_name'],
 								'incoming_imap_server' => $new_servers[ $server->id ]['incoming_imap_server'],
 								'incoming_imap_port'   => $new_servers[ $server->id ]['incoming_imap_port'],
-								'incoming_imap_enc'    => ( isset( $new_servers[ $server->id ]['incoming_imap_enc'] ) && ! empty( $new_servers[ $server->id ]['incoming_imap_enc'] ) ) ? $new_servers[ $server->id ]['incoming_imap_enc'] : null,
+								'incoming_imap_enc'    => ( ! empty( $new_servers[ $server->id ]['incoming_imap_enc'] ) ) ? $new_servers[ $server->id ]['incoming_imap_enc'] : '',
 								'outgoing_smtp_server' => $new_servers[ $server->id ]['outgoing_smtp_server'],
 								'outgoing_smtp_port'   => $new_servers[ $server->id ]['outgoing_smtp_port'],
-								'outgoing_smtp_enc'    => ( isset( $new_servers[ $server->id ]['outgoing_smtp_enc'] ) && ! empty( $new_servers[ $server->id ]['outgoing_smtp_enc'] ) ) ? $new_servers[ $server->id ]['outgoing_smtp_enc'] : null,
+								'outgoing_smtp_enc'    => ( ! empty( $new_servers[ $server->id ]['outgoing_smtp_enc'] ) ) ? $new_servers[ $server->id ]['outgoing_smtp_enc'] : '',
 							);
 							$rt_hd_imap_server_model->update_server( $args, $server->id );
 
@@ -245,10 +234,10 @@ if ( ! class_exists( 'RT_HD_Setting_Imap_Server' ) ) {
 							'server_name'          => $new_servers['new']['server_name'],
 							'incoming_imap_server' => $new_servers['new']['incoming_imap_server'],
 							'incoming_imap_port'   => $new_servers['new']['incoming_imap_port'],
-							'incoming_imap_enc'    => ( isset( $new_servers['new']['incoming_imap_enc'] ) && ! empty( $new_servers['new']['incoming_imap_enc'] ) ) ? $new_servers['new']['incoming_imap_enc'] : null,
+							'incoming_imap_enc'    => ( ! empty( $new_servers['new']['incoming_imap_enc'] ) ) ? $new_servers['new']['incoming_imap_enc'] : '',
 							'outgoing_smtp_server' => $new_servers['new']['outgoing_smtp_server'],
 							'outgoing_smtp_port'   => $new_servers['new']['outgoing_smtp_port'],
-							'outgoing_smtp_enc'    => ( isset( $new_servers['new']['outgoing_smtp_enc'] ) && ! empty( $new_servers['new']['outgoing_smtp_enc'] ) ) ? $new_servers['new']['outgoing_smtp_enc'] : null,
+							'outgoing_smtp_enc'    => ( ! empty( $new_servers['new']['outgoing_smtp_enc'] ) ) ? $new_servers['new']['outgoing_smtp_enc'] : '',
 						);
 						$rt_hd_imap_server_model->add_server( $args );
 

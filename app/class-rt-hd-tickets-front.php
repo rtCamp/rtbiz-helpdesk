@@ -98,6 +98,18 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 				return $template;
 			}
 
+			if ( ! is_user_logged_in() ) {
+				$redirect_url = ( ( is_ssl() ) ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+				$login_url = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( $redirect_url ) );
+				$message = sprintf( '%s <a href="%s">%s</a> %s', __( 'You are not logged in. Please login' ), $login_url, __( 'here' ), __( 'to view this ticket.' ) );
+				global $rthd_messages;
+				$rthd_messages[] = array( 'type' => 'error', 'message' => $message, 'displayed' => 'no' );
+				global $rthd_front_page_title;
+				$rthd_front_page_title = __( 'Helpdesk' );
+
+				return rthd_locate_template( 'ticket-error-page.php' );
+			}
+
 			$args = array(
 				'meta_key'    => '_rtbiz_hd_unique_id',
 				'meta_value'  => $wp_query->query_vars['rthd_unique_id'],
@@ -121,14 +133,14 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 		}
 
 		function load_scripts() {
-			wp_enqueue_style( 'rthd-followup-css', RT_HD_URL . 'app/assets/css/follow-up.css', false, RT_HD_VERSION, 'all' );
+			wp_enqueue_style( 'rthd-followup-css', RT_HD_URL . 'app/assets/css/follow-up.css', array(), RT_HD_VERSION, 'all' );
 			global $wp_scripts;
 			$ui = $wp_scripts->query( 'jquery-ui-core' );
 			// tell WordPress to load the Smoothness theme from Google CDN
 			$protocol = is_ssl() ? 'https' : 'http';
 			$url      = "$protocol://ajax.googleapis.com/ajax/libs/jqueryui/" . $ui->ver . '/themes/smoothness/jquery-ui.css';
 			if ( ! wp_style_is( 'jquery-ui-smoothness' ) ) {
-				wp_enqueue_style( 'jquery-ui-smoothness', $url, false, null );
+				wp_enqueue_style( 'jquery-ui-smoothness', $url, array(), RT_HD_VERSION, 'all' );
 			}
 		}
 

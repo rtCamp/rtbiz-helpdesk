@@ -36,8 +36,6 @@ if ( ! class_exists( 'Rt_HD_Ticket_Model' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		function is_exist( $post_id ) {
-			$args = array();
-			$list = null;
 			if ( ! empty( $post_id ) ) {
 				$args = array( 'post_id' => $post_id );
 				$list = parent::get( $args );

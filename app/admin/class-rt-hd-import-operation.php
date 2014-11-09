@@ -148,7 +148,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		public function insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $senderEmail, $messageid = '', $inreplyto = '', $references = '', $subscriber = array() ) {
-			global $rt_hd_module, $rt_hd_tickets_operation, $rt_hd_ticket_history_model;
+			global $rt_hd_module, $rt_hd_tickets_operation, $rt_hd_ticket_history_model, $rt_hd_contacts;
 			$d             = new DateTime( $mailtime );
 			$timeStamp     = $d->getTimestamp();
 			$post_date     = gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) + ( get_option( 'gmt_offset' ) * 3600 ) ) );
@@ -156,6 +156,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$post_type     = Rt_HD_Module::$post_type;
 			$labels        = $rt_hd_module->labels;
 			$settings      = rthd_get_redux_settings();
+
+			$userid = $rt_hd_contacts->get_user_from_email( $senderEmail );
 
 			$postArray = array(
 				'post_author'   => $settings['rthd_default_user'],
@@ -174,10 +176,10 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				'post_title'   => $postArray['post_title'],
 			);
 
-			$post_id = $rt_hd_tickets_operation->ticket_default_field_update( $postArray, $dataArray, $post_type );
+			$post_id = $rt_hd_tickets_operation->ticket_default_field_update( $postArray, $dataArray, $post_type, '', $userid, $userid );
 
 			// Updating Post Status from publish to unanswered
-			$rt_hd_tickets_operation->ticket_default_field_update( array( 'post_status' => 'hd-unanswered' ), array( 'post_status' => 'hd-unanswered' ), $post_type, $post_id );
+			$rt_hd_tickets_operation->ticket_default_field_update( array( 'post_status' => 'hd-unanswered' ), array( 'post_status' => 'hd-unanswered' ), $post_type, $post_id, $userid, $userid );
 
 			$rt_hd_ticket_history_model->insert(
 				array(
@@ -195,6 +197,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 			$this->add_attachment_to_post( $uploaded, $post_id, $post_type );
 
+			update_post_meta( $post_id, '_rtbiz_hd_email', $senderEmail );
 			update_post_meta( $post_id, '_rtbiz_hd_email', $senderEmail );
 
 			global $transaction_id;
@@ -1709,7 +1712,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$commentstr .= $comment_author;
 				$commentstr .= '</b></label><a class="folowup-hover" href="#editFollowup" title="Edit" data-comment-id="' . $lastCommentId . '">Edit</a>';
 				$commentstr .= '<a class="folowup-hover delete" href="#deleteFollowup" title="Delete" data-comment-id="' . $lastCommentId . '">Delete</a>';
-				$commentstr .= '</div><div class="large-10 columns comment-content">';
+				$commentstr .= '</div><div class="large-10 columns rthd-comment-content">';
 				$commentstr .= $comment_content . '</div></div></td><td class="large-2 centered">';
 				$commentstr .= '<label class="comment-type"><b>' . ucfirst( $comment_type ) . '</b></label>';
 				$commentstr .= '<div class="row collapse"><p class="comment-date">';

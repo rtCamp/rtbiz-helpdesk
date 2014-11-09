@@ -5,28 +5,18 @@
  *
  * @author udit
  */
-global $rt_hd_module;
-
-add_action( 'wp_print_scripts', 'include_jquery_form_plugin' );
-function include_jquery_form_plugin() {
-
-	wp_enqueue_script( 'jquery' );
-	wp_enqueue_script( 'jquery-form', array( 'jquery' ), false, true );
-
-}
-
 get_header();
 
 do_action( 'rthd_ticket_front_page_after_header' );
 
-global $rthd_ticket;
+global $rthd_ticket, $rt_hd_module;
 $post_type       = get_post_type( $rthd_ticket );
 $labels          = $rt_hd_module->labels;
 $post_id         = $rthd_ticket->ID;
 $user_edit       = false;
 
 ?>
-	<div class="rthd-container">
+	<div class="rthd-container rthd-clearfix">
 	<?php
 	global $wpdb;
 	echo "<script> var arr_ticketmeta_key=''; </script>";
@@ -41,28 +31,29 @@ $user_edit       = false;
 	$createdate = $create->format( 'M d, Y h:i A' );
 	$modifydate = $modify->format( 'M d, Y h:i A' );
 	?>
-	<div id="add-new-post">
-	<input type="hidden" id='ticket_unique_id' value="<?php echo esc_attr( $ticket_unique_id ); ?>"/>
+	<div id="rthd-ticket">
+		<input type="hidden" id='ticket_unique_id' value="<?php echo esc_attr( $ticket_unique_id ); ?>"/>
 
-	<div>
+		<div>
 		<?php if ( $user_edit ) { ?>
 			<input name="post[post_title]" id="new_<?php echo esc_attr( $post_type ) ?>_title" type="text"
 			       placeholder="<?php _e( esc_attr( ucfirst( $labels['name'] ) ) . ' Subject' ); ?>"
 			       value="<?php echo esc_attr( ( isset( $post->ID ) ) ? $post->post_title : '' ); ?>"/>
 		<?php } else { ?>
-			<h4><?php echo esc_attr( ( isset( $post->ID ) ) ? $post->post_title : '' ); ?></h4>
+			<h2><?php echo esc_attr( ( isset( $post->ID ) ) ? '[#'.$post_id.'] '.$post->post_title : '' ); ?></h2>
 		<?php } ?>
-	</div>
-	<div>
+		</div>
+		<div class="rthd-ticket-description">
+			<h4><?php _e('Description:'); ?></h4>
 <?php
 if ( $user_edit ) {
 	wp_editor( ( isset( $post->ID ) ) ? $post->post_content : '', 'post[post_content]' );
 } else {
-	echo '<span>' . balanceTags( ( isset( $post->ID ) ) ? $post->post_content : '' ) . '</span>';
+	echo ( isset( $post->ID ) ) ? wpautop( make_clickable( $post->post_content ) ) : '';
 }
 ?>
 
-	</div>
+		</div>
 		<br/><br/>
 		<?php if ( isset( $post->ID ) ) { ?>
 			<div id="followup_wrapper">
@@ -72,21 +63,21 @@ if ( $user_edit ) {
 				</div>
 			</div>
 		<?php } ?>
-		</div>
-		<div class="rthd_sticky_div">
-			<h2><i class="foundicon-idea"></i> <?php _e( esc_attr( ucfirst( $labels['name'] ) ) . ' Information' ); ?></h2>
-			<div>
-				<span class="prefix" title="Status">Status</span>
-				<?php
+	</div>
+	<div id="rthd-sidebar" class="rthd_sticky_div">
+		<h2><i class="foundicon-idea"></i> <?php _e( esc_attr( ucfirst( $labels['name'] ) ) . ' Information' ); ?></h2>
+		<div>
+			<span class="prefix" title="Status">Status</span>
+			<?php
 if ( isset( $post->ID ) ) {
 	$pstatus = $post->post_status;
 } else {
 	$pstatus = '';
 }
 $post_status = $rt_hd_module->get_custom_statuses();
-				?>
-				<?php if ( $user_edit ) { ?>
-					<select class="right" name="post[post_status]">
+
+if ( $user_edit ) { ?>
+			<select class="right" name="post[post_status]">
 		<?php foreach ( $post_status as $status ) {
 		if ( $status['slug'] == $pstatus ) {
 			$selected = 'selected="selected"';
@@ -96,7 +87,7 @@ $post_status = $rt_hd_module->get_custom_statuses();
 
 	echo balanceTags( printf( '<option value="%s" %s >%s</option>', $status['slug'], $selected, $status['name'] ) );
 } ?>
-					</select>
+			</select>
 <?php
 } else {
 	foreach ( $post_status as $status ) {
@@ -106,26 +97,48 @@ $post_status = $rt_hd_module->get_custom_statuses();
 		}
 	}
 } ?>
-			</div>
-			<div>
-				<span class="prefix" title="Create Date"><label>Create Date</label></span>
-				<?php if ( $user_edit ) { ?>
-					<input class="datetimepicker moment-from-now" type="text" placeholder="Select Create Date"
-					       value="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>"
-					       title="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>">
-					<input name="post[post_date]" type="hidden"
-					       value="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>"/>
-				<?php } else { ?>
-					<div class="rthd_attr_border prefix rthd_view_mode moment-from-now"
-					     title="<?php echo esc_attr( $createdate )?>"><?php echo esc_attr( $createdate ) ?></div>
-				<?php } ?>
-			</div>
-<?php
+		</div>
+		<div>
+			<span class="prefix" title="Create Date"><label>Create Date</label></span>
+			<?php if ( $user_edit ) { ?>
+				<input class="datetimepicker moment-from-now" type="text" placeholder="Select Create Date"
+				       value="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>"
+				       title="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>">
+				<input name="post[post_date]" type="hidden"
+				       value="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>"/>
+			<?php } else { ?>
+				<div class="rthd_attr_border prefix rthd_view_mode moment-from-now"
+				     title="<?php echo esc_attr( $createdate )?>"><?php echo esc_attr( $createdate ) ?></div>
+			<?php } ?>
+		</div>
+		<div>
+		<?php
+			$created_by = get_user_by( 'id', get_post_meta( $post->ID, '_rtbiz_hd_created_by', true ) );
+			if ( ! empty( $created_by ) ) {
+		?>
+			<span class="prefix" title="Status">Created By</span>
+			<span class=""> <?php echo $created_by->display_name ?></span>
+		<?php } ?>
+		</div>
+	<?php
+		$comment = get_comments(array('post_id'=>$post->ID,'number' => 1));
+
+		if ( ! empty( $comment ) ){
+			$comment = $comment[0];
+		?>
+
+		<div>
+			<span class="prefix" title="Status">Last reply:</span>
+			<span class="rthd_attr_border prefix rthd_view_mode"> <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) )) ."ago by ". $comment->comment_author; ?></span>
+		</div>
+	<?php }
+
 $attachments = array();
 if ( isset( $post->ID ) ) {
 	$attachments = get_children( array( 'post_parent' => $post->ID, 'post_type' => 'attachment', ) );
 } ?>
-			<h2><i class="foundicon-paper-clip"></i> <?php _e( 'Attachments' ); ?></h2>
+		<h2><i class="foundicon-paper-clip"></i> <?php _e( 'Attachments' ); ?></h2>
+		<div>
 		<?php if ( $user_edit ) { ?>
 			<a href="#" class="button" id="add_ticket_attachment"><?php _e( 'Add' ); ?></a>
 		<?php } ?>
@@ -145,12 +158,11 @@ if ( isset( $post->ID ) ) {
 					<?php } ?>
 					<input type="hidden" name="attachment[]" value="<?php echo esc_attr( $attachment->ID ); ?>"/>
 				</div>
-			<?php } ?>
+		<?php } ?>
 			</div>
 		</div>
 	</div>
-	</div>
-	</div>
+</div>
 <?php
 do_action( 'rthd_ticket_front_page_before_footer' );
 get_footer();

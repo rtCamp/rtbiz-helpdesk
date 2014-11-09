@@ -43,6 +43,9 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 				return false;
 			}
 
+			global $rthd_messages;
+			$rthd_messages = array();
+
 			$this->init_globals();
 
 			add_action( 'init', array( $this, 'admin_init' ), 5 );
@@ -213,7 +216,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 		 *
 		 * @since 0.1
 		 */
-		function load_scripts( $rthd_unique_id = null ) {
+		function load_scripts() {
 			global $wp_query;
 
 			if ( ! isset( $wp_query->query_vars[ Rt_HD_Module::$post_type ] ) ) {
@@ -241,22 +244,10 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 				'jquery-ui-slider',
 			), RT_HD_VERSION, true );
 
-
-			wp_enqueue_script( 'jquery.foundation.form', RT_HD_URL . 'app/assets/javascripts/foundation/foundation.forms.js', array( 'foundation-js' ), '', true );
-
 			wp_enqueue_script( 'sticky-kit', RT_HD_URL . 'app/assets/javascripts/stickyfloat.js', array( 'jquery' ), RT_HD_VERSION, true );
 			wp_enqueue_script( 'rthd-app-js', RT_HD_URL . 'app/assets/javascripts/app.js', array( 'jquery' ), RT_HD_VERSION, true );
 
 			wp_enqueue_script( 'moment-js', RT_HD_URL . 'app/assets/javascripts/moment.js', array( 'jquery' ), RT_HD_VERSION, true );
-
-			if ( ! wp_script_is( 'jquery-ui-accordion' ) ) {
-				wp_enqueue_script( 'jquery-ui-accordion' );
-			}
-
-			wp_enqueue_style( 'foundation-icon-general-css', RT_HD_URL . 'app/assets/css/general_foundicons.css', false, '', 'all' );
-			wp_enqueue_style( 'foundation-icon-general-ie-css', RT_HD_URL . 'app/assets/css/general_foundicons_ie7.css', false, '', 'all' );
-			wp_enqueue_style( 'foundation-icon-social-css', RT_HD_URL . 'app/assets/css/social_foundicons.css', false, '', 'all' );
-			wp_enqueue_style( 'foundation-icon-social-ie-css', RT_HD_URL . 'app/assets/css/social_foundicons_ie7.css', false, '', 'all' );
 
 			if ( ! wp_script_is( 'jquery-ui-datepicker' ) ) {
 				wp_enqueue_scrispt( 'jquery-ui-datepicker' );
@@ -269,6 +260,9 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 				), '1.9.2', true );
 			}
 
+			wp_enqueue_script( 'jquery-form', array( 'jquery' ), false, true );
+			wp_enqueue_script( 'jquery-ui-dialog' );
+
 			global $wp_scripts;
 			if ( ! wp_script_is( 'jquery-ui-core' ) ) {
 				$ui = $wp_scripts->query( 'jquery-ui-core' );
@@ -276,7 +270,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 				$protocol = is_ssl() ? 'https' : 'http';
 				$url      = "$protocol://ajax.googleapis.com/ajax/libs/jqueryui/" . $ui->ver . '/themes/smoothness/jquery-ui.css';
 				if ( ! wp_style_is( 'jquery-ui-smoothness' ) ) {
-					wp_enqueue_style( 'jquery-ui-smoothness', $url, false, null );
+					wp_enqueue_style( 'jquery-ui-smoothness', $url, array(), RT_HD_VERSION, 'all' );
 				}
 			}
 			$this->localize_scripts( $wp_query->query_vars['rthd_unique_id'] );
@@ -286,7 +280,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 		 * This is functions localize values for JScript
 		 * @since 0.1
 		 */
-		function localize_scripts( $rthd_unique_id = null ) {
+		function localize_scripts( $rthd_unique_id = '' ) {
 
 			if ( empty( $rthd_unique_id ) ) {
 				return;
