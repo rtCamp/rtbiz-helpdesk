@@ -1,12 +1,13 @@
 .discussion {
 	list-style: none;
-	margin: 20px 0;
-	padding: 0 0 50px 0;
+	/*margin: 20px 0;*/
+	/*padding: 0 0 50px 0;*/
 }
 .discussion li {
 	padding: 25px 0;
 	overflow: hidden;
 	display: flex;
+	border-bottom: 1px solid #DDD;
 }
 .discussion .avatar {
 	min-width: 40px;
@@ -67,10 +68,6 @@
 .messages time {
 	color: #777;
 }
-.messages:hover{
-	cursor : help;
-}
-
 #private-comment{
 	color: #d02600;
 }
@@ -133,4 +130,14 @@
 
 .rthd-clearfix {
 	clear: both;
+}
+.editfollowuplink{
+	color : #777
+}
+.editfollowuplink:hover{
+	text-decoration: underline;
+}
+
+#thumbnail_upload{
+	margin-bottom: 15px;
 }

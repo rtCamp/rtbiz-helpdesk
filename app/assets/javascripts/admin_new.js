@@ -65,11 +65,14 @@ jQuery(function () {
 		    } );
 
 		    });
-			jQuery( document ).on('click', 'li.editable .messages',function(){
+		    jQuery( document ).on('click', '.editfollowuplink',function(){
+			    //jQuery( document ).on('click', 'li.editable .messages',function(){
 		    //jQuery( 'li.self .messages' ).click( function () {
-			    jQuery('#edited_followup_content' ).val( jQuery(this).find('p').text().replace(/\s+/g, " ") );
-				commentid=jQuery(this).find('#followup-id' ).val();
-				var that = jQuery(this).find( '#is-private-comment' ).val();
+			 //   jQuery('#edited_followup_content' ).val( jQuery(this).find('p').text().replace(/\s+/g, " ") );
+			    var select =jQuery(this ).parents().parents();
+			    jQuery('#edited_followup_content' ).val(jQuery(this ).parents().siblings('.rthd-comment-content' ).text().trim());
+			    commentid=select.find('#followup-id' ).val();
+			    var that = select.find( '#is-private-comment' ).val();
 				 if (that && that=='true' || that == true){
 					 jQuery('#edit-private' ).prop('checked',true);
 				 }

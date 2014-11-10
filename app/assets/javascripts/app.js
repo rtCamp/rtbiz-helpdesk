@@ -98,13 +98,13 @@ jQuery( document ).ready( function ( $ ) {
 					             jQuery("#delfollowup" ).removeAttr('disabled');
 				             }
 			             } );
-
 		});
 
-	jQuery( document ).on('click', 'li.editable .messages',function(){
-		jQuery('#edited_followup_content' ).val( jQuery(this).find('.rthd-comment-content' ).text());
-		commentid=jQuery(this).find('#followup-id' ).val();
-		var that = jQuery(this).find( '#is-private-comment' ).val();
+	jQuery( document ).on('click', '.editfollowuplink',function(){
+		var select =jQuery(this ).parents().parents();
+		jQuery('#edited_followup_content' ).val(jQuery(this ).parents().siblings('.rthd-comment-content' ).text().trim());
+		commentid=select.find('#followup-id' ).val();
+		var that = select.find( '#is-private-comment' ).val();
 		if (that && that=='true' || that == true){
 			jQuery('#edit-private' ).prop('checked',true);
 		}
