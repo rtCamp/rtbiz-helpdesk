@@ -59,7 +59,8 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 			$rt_ticket_email_content = array();
 
 			$oldpost   = get_post( $post_id );
-			$newTicket = $_POST['post'];
+			$newTicket = ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] = 'inline-save' ) ? get_post( $_REQUEST['post_ID'] ) : $_POST['post'];
+			$newTicket = ( array ) $newTicket;
 
 			$emailHTML = $diff = $closing_reason_history_id = '';
 

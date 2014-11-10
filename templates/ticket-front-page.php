@@ -61,29 +61,26 @@ if ( isset( $post->ID ) ) {
 } else {
 	$pstatus = '';
 }
-$post_status = $rt_hd_module->get_custom_statuses();
-
-if ( $user_edit ) { ?>
-			<select class="right" name="post[post_status]">
-		<?php foreach ( $post_status as $status ) {
-		if ( $status['slug'] == $pstatus ) {
-			$selected = 'selected="selected"';
-		} else {
-			$selected = '';
+$style = 'padding: 5px; border: 1px solid black; border-radius: 5px;';
+$flag = false;
+$post_statuses = $rt_hd_module->get_custom_statuses();
+foreach ( $post_statuses as $status ) {
+	if ( $status['slug'] == $pstatus ) {
+		$pstatus = $status['name'];
+		if ( ! empty( $status['style'] ) ) {
+			$style = $status['style'];
 		}
-
-	echo balanceTags( printf( '<option value="%s" %s >%s</option>', $status['slug'], $selected, $status['name'] ) );
-} ?>
-			</select>
-<?php
-} else {
-	foreach ( $post_status as $status ) {
-		if ( $status['slug'] == $pstatus ) {
-			echo '<div class="rthd_attr_border prefix rthd_view_mode">' . esc_html( $status['name']  ). '</div>';
-			break;
-		}
+		$flag = true;
+		break;
 	}
-} ?>
+}
+if ( ! $flag ) {
+	$pstatus = ucfirst( $pstatus );
+}
+if( ! empty( $pstatus ) ) {
+	printf( '<mark style="%s" class="%s tips" data-tip="%s">%s</mark>', $style, $pstatus, $pstatus, $pstatus );
+}
+?>
 		</div>
 		<div>
 			<span class="prefix" title="Create Date"><label>Create Date</label></span>

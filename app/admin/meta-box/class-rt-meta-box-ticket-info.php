@@ -180,13 +180,14 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 
 			global $rt_hd_tickets_operation;
 
-			$newTicket = $_POST['post']; //post data
+			$newTicket = ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] = 'inline-save' ) ? get_post( $_REQUEST['post_ID'] ) : $_POST['post'];
+			$newTicket = ( array ) $newTicket;
 
 			//Create Date
 			$creationdate = $newTicket['post_date'];
 			if ( isset( $creationdate ) && $creationdate != '' ) {
 				try {
-					$dr                         = date_create_from_format( 'M d, Y H:i A', $creationdate );
+					$dr                         = date_create_from_format( 'Y-m-d H:i:s', $creationdate );
 					$timeStamp                  = $dr->getTimestamp();
 					$newTicket['post_date']     = gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) ) );
 					$newTicket['post_date_gmt'] = get_gmt_from_date( $dr->format( 'Y-m-d H:i:s' ) );

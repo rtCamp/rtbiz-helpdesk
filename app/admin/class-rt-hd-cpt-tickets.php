@@ -154,12 +154,22 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 				case 'rthd_ticket_status' :
 					$post_status_list = $rt_hd_module->get_custom_statuses();
 					$post_status = $post->post_status;
+					$style = 'padding: 5px; border: 1px solid black; border-radius: 5px;';
+					$flag = false;
 					foreach ( $post_status_list as $status ) {
 						if ( $status['slug'] == $post->post_status ) {
 							$post_status = $status['name'];
+							if ( ! empty( $status['style'] ) ) {
+								$style = $status['style'];
+							}
+							$flag = true;
+							break;
 						}
 					}
-					printf( '<mark class="%s tips" data-tip="%s">%s</mark>', $post_status, esc_html__( $post_status, RT_HD_PATH_ADMIN ), esc_html__( $post_status, RT_HD_PATH_ADMIN ) );
+					if ( ! $flag ) {
+						$post_status = ucfirst( $post->post_status );
+					}
+					printf( '<mark style="%s" class="%s tips" data-tip="%s">%s</mark>', $style, $post_status, esc_html__( $post_status, RT_HD_PATH_ADMIN ), esc_html__( $post_status, RT_HD_PATH_ADMIN ) );
 					break;
 
 				case 'rthd_ticket_title' :
