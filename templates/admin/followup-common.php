@@ -29,7 +29,7 @@ $current_user = wp_get_current_user();
 	<input type="hidden" name="action" id="action" value="my_upload_action" />
 </form><?php
 
-$user_edit = current_user_can( rt_biz_get_access_role_cap( RT_BIZ_TEXT_DOMAIN, 'editor' ) );
+$user_edit = current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' ) );
 if ( $user_edit ) {
 	?>
 	<div id="dialog-form" title="Edit Followup" style='display: none'>
