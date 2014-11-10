@@ -1602,7 +1602,11 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$post_author_id = get_post_field( 'post_author', $post_id );
 			$userSub     = get_user_by( 'id', intval( $post_author_id ) );
 			$to[] = array( 'email' => $userSub->user_email, 'name' => $userSub->display_name );
-			$emailHTML = $body . "</br> To View Follwup Click <a href='". admin_url().'post.php?post='.$post_id.'&action=edit'."'>here</a>.<br/>";
+			global $rt_hd_module;
+			$labels = $rt_hd_module->labels;
+			//			$emailHTML = $body . "</br> To View Follwup Click <a href='". admin_url().'post.php?post='.$post_id.'&action=edit'."'>here</a>.<br/>";
+			$rthd_unique_id = get_post_meta( $post_id, '_rtbiz_hd_unique_id', true );
+			$emailHTML     = $body . " Click <a href='" . esc_url( trailingslashit( site_url() ) . strtolower( $labels['name'] ) . '/' . $rthd_unique_id ) . "'> here </a> to view ticket";
 
 			$rt_hd_email_notification->insert_new_send_email( $title, $emailHTML, $to, $cc, $bccemails, array(), $comment_id, 'comment' );
 		}

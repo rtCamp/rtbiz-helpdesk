@@ -183,7 +183,8 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			} else {
 				$body = '<b>'.$current_user->display_name . '</b> assigned you new ticket.';
 			}
-			$body .= '<br />To View ' . $post_type . " Click <a href='" . admin_url( 'post.php?post=' . $post_id . '&action=edit' ) . "'>here</a>. <br/>";
+			$unique_id = get_post_meta( $post_id, '_rtbiz_hd_unique_id', true );
+			$body .= '<br />To View ' . $post_type . " Click <a href='" . trailingslashit( site_url() ) . strtolower( $post_type ) . '/' . $unique_id . "'>here</a>. <br/>";
 			$body .= 'Ticket created by : <b>' . ( ( $mail_parse ) ? implode( ',', $ticket_creaters ) : $current_user->display_name ) . '</b>';
 			// added Notification Emails
 			$this->insert_new_send_email( $title, $body, $to, $cc, array(), $uploaded, $post_id, 'post' );
