@@ -1,57 +1,5 @@
-@import url(./weloveiconfonts.css);
-[class*="typicons-"]:before {
-	font-family: 'Typicons', sans-serif;
-}
-
-.module {
-	width: 300px;
-	margin: 20px auto;
-}
-
-.top-bar {
-	background: #666;
-	color: white;
-	padding: 0.5rem;
-	position: relative;
-	overflow: hidden;
-}
-.top-bar h1 {
-	display: inline;
-	font-size: 1.1rem;
-}
-.top-bar .typicons-message {
-	display: inline-block;
-	padding: 4px 5px 2px 5px;
-}
-.top-bar .typicons-minus {
-	position: relative;
-	top: 3px;
-}
-.top-bar .left {
-	float: left;
-}
-.top-bar .right {
-	float: right;
-	padding-top: 5px;
-}
-.top-bar > * {
-	position: relative;
-}
-.top-bar::before {
-	content: "";
-	position: absolute;
-	top: -100%;
-	left: 0;
-	right: 0;
-	bottom: -100%;
-	opacity: 0.25;
-	background: radial-gradient(#ffffff, #000000);
-	animation: pulse 1s ease alternate infinite;
-}
-
 .discussion {
 	list-style: none;
-	background: #e5e5e5;
 	margin: 20px 0;
 	padding: 0 0 50px 0;
 }
@@ -185,6 +133,10 @@
 .rthd-container {
 	margin: 10px;
 	overflow: auto;
+}
+
+.rthd-ticket-description {
+	word-wrap: break-word;
 }
 
 .rthd-clearfix {
