@@ -35,24 +35,11 @@ $user_edit       = false;
 		<input type="hidden" id='ticket_unique_id' value="<?php echo esc_attr( $ticket_unique_id ); ?>"/>
 
 		<div>
-		<?php if ( $user_edit ) { ?>
-			<input name="post[post_title]" id="new_<?php echo esc_attr( $post_type ) ?>_title" type="text"
-			       placeholder="<?php _e( esc_attr( ucfirst( $labels['name'] ) ) . ' Subject' ); ?>"
-			       value="<?php echo esc_attr( ( isset( $post->ID ) ) ? $post->post_title : '' ); ?>"/>
-		<?php } else { ?>
 			<h2><?php echo esc_attr( ( isset( $post->ID ) ) ? '[#'.$post_id.'] '.$post->post_title : '' ); ?></h2>
-		<?php } ?>
 		</div>
 		<div class="rthd-ticket-description">
 			<h4><?php _e('Description:'); ?></h4>
-<?php
-if ( $user_edit ) {
-	wp_editor( ( isset( $post->ID ) ) ? $post->post_content : '', 'post[post_content]' );
-} else {
-	echo ( isset( $post->ID ) ) ? wpautop( make_clickable( $post->post_content ) ) : '';
-}
-?>
-
+			<?php echo ( isset( $post->ID ) ) ? apply_filters( 'the_content', balanceTags( $post->post_content ) ) : ''; ?>
 		</div>
 		<br/><br/>
 		<?php if ( isset( $post->ID ) ) { ?>
