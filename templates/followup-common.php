@@ -4,12 +4,12 @@ $Limit =10;
 $totalComment= get_comments_number($post->ID);
 
 $comments = get_comments( array(
-	                          'post_id' => $post->ID,
-	                          'status'  => 'approve',
-	                          'order'   => 'ASC',
-	                          'number' => $Limit,
-	                          'offset' => 0,
-                          ) );
+	'post_id' => $post->ID,
+	'status'  => 'approve',
+	'order'   => 'ASC',
+	'number' => $Limit,
+	'offset' => 0,
+) );
 
 $user_edit = current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' ) );
 if ( $user_edit ) {
@@ -71,12 +71,11 @@ if ( ! empty( $post->post_content ) ) {
 	} ?>
 </ul>
 <?php if ($Limit < $totalComment){ ?>
-	<div class='content-stream stream-loading'>
+<div class='content-stream stream-loading'>
     <input id="followup-offset" type="hidden" value="<?php echo esc_attr( $offset ); ?>" />
     <input id="followup-limit" type="hidden" value="<?php echo esc_attr( $Limit ); ?>" />
     <input id="followup-totalcomment" type="hidden" value="<?php echo esc_attr( $totalComment); ?>" />
-    <input id="edit-comment-id" type="hidden" />
-		<a href="#" id="followup-load-more" > Load more</a>
-		<img id='load-more-hdspinner' class="helpdeskspinner js-loading-placeholder" src="<?php echo admin_url().'images/spinner.gif'; ?>">
-	</div>
+	<a href="#" id="followup-load-more" > Load more</a>
+	<img id='load-more-hdspinner' class="helpdeskspinner js-loading-placeholder" src="<?php echo admin_url().'images/spinner.gif'; ?>">
+</div>
 <?php } ?>

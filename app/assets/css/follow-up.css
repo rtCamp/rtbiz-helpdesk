@@ -171,3 +171,31 @@
 .editfollowuplink:hover{
 	text-decoration: underline;
 }
+
+#followup-load-more{
+	text-decoration: none;
+	width: 100%;
+	background: #DDD;
+	color: #999;
+	text-transform: uppercase;
+	padding: 15px 140px;
+}
+
+#followup-load-more:hover{
+	background: #999;
+	color: #eaeaea;
+}
+
+.content-stream.stream-loading {
+	text-align: center;
+	background: 0 0;
+	background-position: center 10px;
+	color: #999;
+	padding: 30px 0;
+	box-sizing: border-box;
+	-webkit-font-smoothing:antialiased;
+	-moz-osx-font-smoothing:grayscale;
+	font-size: 1.25em;
+	line-height: 150%;
+
+}
