@@ -16,7 +16,111 @@ jQuery(function () {
 	        rthdAdmin.initAddNewFollowUp();
 	        rthdAdmin.initEditFollowUp();
 	        rthdAdmin.initUploadAjax();
+	        rthdAdmin.initLoadMore();
+
         },
+	    initLoadMore: function(){
+
+		    (function($) {
+			    "use strict";
+			    var isLoading= false;
+			    /**
+			     * Quick implementation of infinite scroll
+			     */
+			    var $stream = $('.js-stream');
+			    $(window).load(function (e) {
+				    if ( ! $stream.length ) {
+					    return;
+				    }
+				    //var isLoading = false;
+				    //var $showMore = $('<a class="activate-infinite-scroll" href="#">Show more posts</a>');
+				    var $showMore = $('#followup-load-more');
+				    var loadingLabel = $('.js-loading-placeholder').text();
+				    var $placeHolder = $('.js-loading-placeholder');
+				    //$placeHolder.addClass('is-inactive').html($showMore);
+				    console.log('check');
+
+				    var scrollHandler = function (e) {
+					    if ( isLoading ) {
+						    return;
+					    }
+
+					    var $loadingPlaceholder = $( '.js-loading-placeholder' );
+					    var scrollTopTrigger = $loadingPlaceholder.length === 0 ? null : $loadingPlaceholder.offset().top;
+					    if ( $(window).scrollTop() < scrollTopTrigger - $(window).height() ) {
+						    return;
+					    }
+					    if ( !scrollTopTrigger ) {
+						    return;
+					    }
+					    isLoading = true;
+
+					    var requestArray = new Object();
+					    requestArray['offset'] = parseInt(jQuery('#followup-offset' ).val(),10);
+					    requestArray['limit'] = parseInt(jQuery('#followup-limit' ).val(),10);
+					    requestArray["action"] = "load_more_followup";
+					    requestArray['post_id'] =  jQuery('#post-id' ).val();
+					    //jQuery(this ).hide();
+					    //jQuery('#load-more-hdspinner' ).show();
+
+					    var totalcomment=parseInt( jQuery('#followup-totalcomment' ).val(),10);
+					    if (requestArray['offset'] == 0){
+						    if(requestArray['limit'] >= totalcomment){
+							    console.log(requestArray['limit'] + ' off limit 0 ' + totalcomment);
+							    return false;
+						    }
+					    }
+					    else{
+						    //if( ( requestArray['offset'] + requestArray['limit']) >= totalcomment ){
+						    if( ( requestArray['offset']) >= totalcomment ){
+							    console.log(requestArray['offset'] + ' off limit' + totalcomment);
+							    jQuery('#followup-load-more' ).hide();
+							    return false;
+						    }
+					    }
+					    jQuery('#load-more-hdspinner' ).show();
+					    jQuery.ajax( {
+						                 url: ajaxurl,
+						                 dataType: "json",
+						                 type: 'post',
+						                 data: requestArray,
+						                 success: function ( data ) {
+							                 if (data.status){
+								                 jQuery('#followup-offset' ).val(data.offset);
+								                 jQuery('#chat-UI' ).append(data.comments);
+							                 }
+							                 else{
+								                 $(window).off('scroll', scrollHandler);
+							                 }
+							                 jQuery('#load-more-hdspinner' ).hide();
+							                 //jQuery('#followup-load-more' ).show();
+						                 },
+						                 error: function(){
+							                 //jQuery('#followup-load-more' ).show();
+							                 //jQuery('#load-more-hdspinner' ).hide();
+							                 $(window).off('scroll', scrollHandler);
+							                 alert('Error, while loading more followup :(');
+							                 return false;
+						                 },
+						                 complete: function () {
+							                 isLoading = false;
+						                 }
+					                 });
+				    };
+				    scrollHandler = $.throttle( 500, scrollHandler );
+
+				    // Activate infinite scroll manually. Allows footer to be reached by default.
+				    $showMore.on('click' ,function(e) {
+					    e.preventDefault();
+					    $(window).on('scroll', scrollHandler).trigger('scroll');
+					    $(this).animate({'opacity' : 0}, 1, function() {
+						    $(this).replaceWith(loadingLabel);
+						    $placeHolder.removeClass('is-inactive');
+					    });
+				    });
+			    });
+		    })(jQuery);
+	    },
 	    initUploadAjax: function( ){
 
 			//jQuery('#submit-ajax' ).click(function (){
@@ -69,10 +173,10 @@ jQuery(function () {
 			    //jQuery( document ).on('click', 'li.editable .messages',function(){
 		    //jQuery( 'li.self .messages' ).click( function () {
 			 //   jQuery('#edited_followup_content' ).val( jQuery(this).find('p').text().replace(/\s+/g, " ") );
-			    var select =jQuery(this ).parents().parents();
+			    var select =jQuery(this ).parents();
 			    jQuery('#edited_followup_content' ).val(jQuery(this ).parents().siblings('.rthd-comment-content' ).text().trim());
-			    commentid=select.find('#followup-id' ).val();
-			    var that = select.find( '#is-private-comment' ).val();
+			    commentid=select.siblings('#followup-id' ).val();
+			    var that = select.siblings( '#is-private-comment' ).val();
 				 if (that && that=='true' || that == true){
 					 jQuery('#edit-private' ).prop('checked',true);
 				 }
@@ -215,7 +319,7 @@ jQuery(function () {
                     success: function ( data ) {
                         if ( data.status ) {
 	                        var newcomment=data.comment_content;
-	                        jQuery('#chat-UI' ).prepend(newcomment);
+	                        jQuery('#chat-UI' ).append(newcomment);
 	                        jQuery( "#followup_content" ).val( '' );
 	                        jQuery('#add-private-comment' ).prop('checked',false );
                         } else {

@@ -37,14 +37,13 @@ $user_edit       = false;
 		<div>
 			<h2><?php echo esc_attr( ( isset( $post->ID ) ) ? '[#'.$post_id.'] '.$post->post_title : '' ); ?></h2>
 		</div>
-		<div class="rthd-ticket-description">
-			<h4><?php _e('Description:'); ?></h4>
-			<?php echo ( isset( $post->ID ) ) ? apply_filters( 'the_content', balanceTags( $post->post_content ) ) : ''; ?>
-		</div>
+<!--		<div class="rthd-ticket-description">-->
+<!--			<h4>--><?php //_e('Description:'); ?><!--</h4>-->
+<!--			--><?php //echo ( isset( $post->ID ) ) ? apply_filters( 'the_content', balanceTags( $post->post_content ) ) : ''; ?>
+<!--		</div>-->
 		<br/><br/>
 		<?php if ( isset( $post->ID ) ) { ?>
 			<div id="followup_wrapper">
-				<h2>Followup</h2>
 				<div id="commentlist">
 					<?php rthd_get_template( 'admin/followup-common.php', array( 'post' => $post ) ); ?>
 				</div>

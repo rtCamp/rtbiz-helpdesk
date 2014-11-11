@@ -65,6 +65,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			add_action( 'wp_ajax_nopriv_my_upload_action', array( $this, 'my_ajax_upload' ) );
 			add_action( 'wp_ajax_helpdesk_delete_followup', array( $this, 'delete_followup_ajax' ) );
 			add_action( 'wp_ajax_rthd_gmail_import_thread_request', array( $this, 'gmail_thread_import_request' ) );
+			add_action( 'wp_ajax_load_more_followup', array( $this, 'load_more_followup' ) );
+			add_action( 'wp_ajax_nopriv_load_more_followup', array( $this, 'load_more_followup' ) );
 		}
 
 
@@ -1847,6 +1849,45 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				return false;
 			}
 			return true;
+		}
+
+		function load_more_followup(){
+			$response = array();
+			$response['status']= false;
+			if (isset($_POST['post_id']) && isset($_POST['offset']) && isset($_POST['limit'])  ){
+				$postid=  $_POST['post_id'];
+				$offset=  $_POST['offset'];
+				$Limit=  $_POST['limit'];
+				$offset=  $offset+$Limit;
+			}
+			else{
+				echo json_encode($response);
+				die();
+			}
+
+			$comments = get_comments( array(
+				                          'post_id' => $postid,
+				                          'status'  => 'approve',
+				                          'order'   => 'ASC',
+				                          'number' => $Limit,
+				                          'offset' => $offset,
+			                          ) );
+			$user_edit = current_user_can( rt_biz_get_access_role_cap( RT_BIZ_TEXT_DOMAIN, 'editor' ) );
+			$commenthtml='';
+			foreach ( $comments as $comment ) {
+				if ( ( $comment->user_id ) == ( get_current_user_id() ) ) {
+					$commenthtml .=rthd_render_comment( $comment, $user_edit, 'right' ,false);
+				} else {
+					$commenthtml.= rthd_render_comment( $comment, $user_edit, 'left', false);
+				}
+			}
+			$response['offset']= $offset;
+			$response['comments']= $commenthtml;
+			$response['status']= true;
+			echo json_encode($response);
+			die();
+
+
 		}
 
 	}
