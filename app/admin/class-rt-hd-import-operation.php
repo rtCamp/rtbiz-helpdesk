@@ -758,9 +758,9 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 			global $threadPostId;
 			if ( ! isset( $threadPostId ) ) {
-				//				$title = '[New Follwup Added]' . $this->create_title_for_mail( $comment_post_ID );
 				$title = rthd_create_new_ticket_title( 'rthd_new_followup_email_title', $comment_post_ID );;
-				$body  = ' New Follwup Added by ' . $comment_author . ' - ' . $comment_author_email;
+				$body = '<span style="color:#777">< ! ------------------ REPLY ABOVE THIS LINE ------------------ ! ></span><br />';
+				$body  .= '<br/><strong>New Followup Added by ' . $comment_author . ' - ' . $comment_author_email . ':</strong>';
 				$body .= '<br/><b>Type : </b>' . 'Mail';
 				$body .= '<br/><b>From : </b>' . $comment_author_email;
 				$body .= '<br/><b>Body : </b>' . $comment_content;
@@ -1188,11 +1188,10 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				update_comment_meta( $comment_ID, '_email_from', $currentUser->user_email );
 			}
 
-			//			$title = '[New Follwup Added]' . $this->create_title_for_mail( $comment_post_ID );
 			$title = rthd_create_new_ticket_title( 'rthd_new_followup_email_title', $comment_post_ID );;
 
 			$body = '<span style="color:#777">< ! ------------------ REPLY ABOVE THIS LINE ------------------ ! ></span><br />';
-			$body .= '<br />New Follwup Added ' . ( ( ! empty( $currentUser->display_name ) ) ? 'by ' . $currentUser->display_name : 'annonymously' ) . ':<br />';
+			$body .= '<br /><strong>New Followup Added ' . ( ( ! empty( $currentUser->display_name ) ) ? 'by ' . $currentUser->display_name : 'annonymously' ) . ':</strong><br />';
 			$body .= '<br/>' . apply_filters( 'the_content', $comment->comment_content );
 			$body .= '<br/>';
 			$notificationFlag = $this->check_setting_for_new_followup_email();
@@ -1494,11 +1493,10 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			update_comment_meta( $comment_ID, '_email_bcc', $bcc );
 
 			$currentUser = get_user_by( 'id', get_current_user_id() );
-			//			$title       = '[New Follwup Added]' . $this->create_title_for_mail( $comment_post_ID );
 			$title       = rthd_create_new_ticket_title( 'rthd_new_followup_email_title', $comment_post_ID );
 
 			$body = '<span style="color:#777">< ! ------------------ REPLY ABOVE THIS LINE ------------------ ! ></span><br />';
-			$body .= 'New Follwup Added by ' . $currentUser->display_name.':<br />';
+			$body .= '<br/><strong>New Followup Added by ' . $currentUser->display_name.':</strong><br />';
 			if ( 'mail' == $followuptype ) {
 				$body .= '<br/><b>From : </b>' . $_POST['comment-reply-from'];
 				$body .= '<br/><b>To : </b>' . $to;
