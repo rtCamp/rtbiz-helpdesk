@@ -806,7 +806,6 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 										$filename = time() . '.' . Rt_HD_Utils::get_extention( $ContentType );
 									}
 
-									//->getFieldValue('name');
 									if ( trim( $filename ) == '' ) {
 										$filename = time() . '.' . Rt_HD_Utils::get_extention( $ContentType );
 									}
@@ -822,19 +821,20 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 									}
 									if ( $uploaded['error'] == false ) {
 										Rt_HD_Utils::log( "[Attachement Created] File:{$uploaded['file']} ; URL: {$uploaded['url']}", 'mail-attachement.txt' );
-										$file             = array();
-										$extn_array       = explode( '.', $filename );
-										$extn             = $extn_array[ count( $extn_array ) - 1 ];
-										$file['file']     = $uploaded['file'];
-										$file['url']      = $uploaded['url'];
-										$file['filename'] = $filename;
-										$file['extn']     = $extn;
-										$file['type']     = $ContentType;
-										$attachements[]   = $file;
+										$file                  = array();
+										$extn_array            = explode( '.', $filename );
+										$extn                  = $extn_array[ count( $extn_array ) - 1 ];
+										$file['file']          = $uploaded['file'];
+										$file['url']           = $uploaded['url'];
+										$file['filename']      = $filename;
+										$file['extn']          = $extn;
+										$file['type']          = $ContentType;
+										$file['xattachmentid'] = $part->getHeader('xattachmentid')->getFieldValue();
+										$attachements[]        = $file;
 									} else {
-										echo esc_attr( $filename ) . '\r\n';
+										error_log( 'Attachment Failed ... ' . esc_attr( $filename ) . '\r\n' );
 										ob_start();
-										//var_dump( $uploaded );
+										error_log( var_export( $uploaded, true ) );
 										$data = ob_get_clean();
 										Rt_HD_Utils::log( "[Attachement Failed] Email: {$email};Message-Id: {$message->messageid}; Data : $data ", 'error-mail-attachement.txt' );
 									}
@@ -884,6 +884,11 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 					if ( isset( $message->references ) ) {
 						$references = $message->references;
 					}
+
+					foreach( $attachements as $a ) {
+						$htmlBody = str_replace( 'src="cid:' . $a['xattachmentid'] . '"', 'src="' . $a['url'] . '"', $htmlBody );
+					}
+
 					$subject      = $message->subject;
 					$htmlBody     = Rt_HD_Utils::force_utf_8( $htmlBody );
 					$subject      = Rt_HD_Utils::force_utf_8( $subject );
