@@ -75,10 +75,10 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 			$old_status = ucfirst( $oldpost->post_status );
 			$new_status = ucfirst( $_POST['post_status'] );
 			foreach ( $post_statuses as $status ) {
-				if ( $status['slug'] == $old_status ) {
+				if ( ucfirst( $status['slug'] ) == $old_status ) {
 					$old_status = $status['name'];
 				}
-				if ( $status['slug'] == $new_status ) {
+				if ( ucfirst( $status['slug'] ) == $new_status ) {
 					$new_status = $status['name'];
 				}
 			}

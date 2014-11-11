@@ -57,7 +57,7 @@ if ( ! empty( $post->post_content ) ) {
 		</li>
 	</ul>
 <?php }?>
-<ul class="discussion inner js-inner stream js-stream latest-posts" id="chat-UI">
+<ul class="discussion js-stream" id="chat-UI">
 	<?php foreach ( $comments as $comment ) {
 
 		$comment_user  = get_user_by( 'id', $comment->user_id );
@@ -70,12 +70,11 @@ if ( ! empty( $post->post_content ) ) {
 		rthd_render_comment( $comment, $user_edit, $comment_render_type );
 	} ?>
 </ul>
+<input id="followup-offset" type="hidden" value="<?php echo esc_attr( $offset ); ?>" />
+<input id="followup-limit" type="hidden" value="<?php echo esc_attr( $Limit ); ?>" />
+<input id="followup-totalcomment" type="hidden" value="<?php echo esc_attr( $totalComment); ?>" />
 <?php if ($Limit < $totalComment){ ?>
-<div class='content-stream stream-loading'>
-    <input id="followup-offset" type="hidden" value="<?php echo esc_attr( $offset ); ?>" />
-    <input id="followup-limit" type="hidden" value="<?php echo esc_attr( $Limit ); ?>" />
-    <input id="followup-totalcomment" type="hidden" value="<?php echo esc_attr( $totalComment); ?>" />
+<div class="content-stream stream-loading js-loading-placeholder">
 	<a href="#" id="followup-load-more" > Load more</a>
-	<img id='load-more-hdspinner' class="helpdeskspinner js-loading-placeholder" src="<?php echo admin_url().'images/spinner.gif'; ?>">
 </div>
 <?php } ?>

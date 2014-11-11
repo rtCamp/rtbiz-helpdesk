@@ -567,8 +567,7 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 				<?php }
 				if ($display_private_comment_flag){
 				?> |
-				<a class="editfollowuplink"> Edit
-				</a>
+				<a href="#" class="editfollowuplink">Edit</a>
 				<?php
 				} ?>
 			</time>

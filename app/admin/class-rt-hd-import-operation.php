@@ -1634,23 +1634,36 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			}
 
 			$comments = get_comments( array(
-				                          'post_id' => $postid,
-				                          'status'  => 'approve',
-				                          'order'   => 'ASC',
-				                          'number' => $Limit,
-				                          'offset' => $offset,
-			                          ) );
+	              'post_id' => $postid,
+	              'status'  => 'approve',
+	              'order'   => 'ASC',
+	              'number' => $Limit,
+	              'offset' => $offset,
+	          ) );
 			$user_edit = current_user_can( rt_biz_get_access_role_cap( RT_BIZ_TEXT_DOMAIN, 'editor' ) );
 			$commenthtml='';
+			$count = 0;
 			foreach ( $comments as $comment ) {
-				if ( ( $comment->user_id ) == ( get_current_user_id() ) ) {
-					$commenthtml .=rthd_render_comment( $comment, $user_edit, 'right' ,false);
-				} else {
-					$commenthtml.= rthd_render_comment( $comment, $user_edit, 'left', false);
+				$comment_user  = get_user_by( 'id', $comment->user_id );
+				$comment_render_type = 'left';
+				if ( ! empty( $comment_user ) ) {
+					if ( $comment_user->has_cap( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' ) ) ) {
+						$comment_render_type = 'right';
+					}
 				}
+				$commenthtml .= rthd_render_comment( $comment, $user_edit, $comment_render_type, false );
+				$count++;
 			}
+
+			$placeholder = '';
+			if ( ! ( $count < $Limit ) ) {
+				$placeholder = '<div class="content-stream stream-loading js-loading-placeholder"><img id="load-more-hdspinner" class="js-loading-placeholder" src="' . admin_url() . 'images/spinner.gif' . '" /></div>';
+			}
+
+			$response['count n limit'] = $count . ' : ' . $Limit;
 			$response['offset']= $offset;
 			$response['comments']= $commenthtml;
+			$response['placeholder'] = $placeholder;
 			$response['status']= true;
 			echo json_encode($response);
 			die();

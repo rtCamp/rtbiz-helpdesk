@@ -21,7 +21,7 @@ jQuery(function () {
 
 		    (function($) {
 			    "use strict";
-			    var isLoading= false;
+
 			    /**
 			     * Quick implementation of infinite scroll
 			     */
@@ -30,13 +30,11 @@ jQuery(function () {
 				    if ( ! $stream.length ) {
 					    return;
 				    }
-				    //var isLoading = false;
-				    //var $showMore = $('<a class="activate-infinite-scroll" href="#">Show more posts</a>');
+				    var isLoading = false;
 				    var $showMore = $('#followup-load-more');
-				    var loadingLabel = $('.js-loading-placeholder').text();
 				    var $placeHolder = $('.js-loading-placeholder');
-				    //$placeHolder.addClass('is-inactive').html($showMore);
-				    console.log('check');
+
+				    $showMore.show();
 
 				    var scrollHandler = function (e) {
 					    if ( isLoading ) {
@@ -51,59 +49,56 @@ jQuery(function () {
 					    if ( !scrollTopTrigger ) {
 						    return;
 					    }
-					    isLoading = true;
 
 					    var requestArray = new Object();
-					    requestArray['offset'] = parseInt(jQuery('#followup-offset' ).val(),10);
-					    requestArray['limit'] = parseInt(jQuery('#followup-limit' ).val(),10);
+					    requestArray['offset'] = parseInt(jQuery('#followup-offset').val(),10);
+					    requestArray['limit'] = parseInt(jQuery('#followup-limit').val(),10);
 					    requestArray["action"] = "load_more_followup";
 					    requestArray['post_id'] =  jQuery('#post-id' ).val();
-					    //jQuery(this ).hide();
-					    //jQuery('#load-more-hdspinner' ).show();
 
 					    var totalcomment=parseInt( jQuery('#followup-totalcomment' ).val(),10);
-					    if (requestArray['offset'] == 0){
-						    if(requestArray['limit'] >= totalcomment){
-							    console.log(requestArray['limit'] + ' off limit 0 ' + totalcomment);
-							    return false;
-						    }
+					    if ( requestArray['offset'] == 0 && requestArray['limit'] >= totalcomment ) {
+						    $loadingPlaceholder.remove();
+						    $(window).off('scroll', scrollHandler);
+						    return;
+					    } else if ( ( requestArray['offset']) >= totalcomment ) {
+						    $loadingPlaceholder.remove();
+						    $(window).off('scroll', scrollHandler);
+						    return;
 					    }
-					    else{
-						    //if( ( requestArray['offset'] + requestArray['limit']) >= totalcomment ){
-						    if( ( requestArray['offset']) >= totalcomment ){
-							    console.log(requestArray['offset'] + ' off limit' + totalcomment);
-							    jQuery('#followup-load-more' ).hide();
-							    return false;
-						    }
-					    }
-					    jQuery('#load-more-hdspinner' ).show();
+
+					    isLoading = true;
 					    jQuery.ajax( {
-						                 url: ajaxurl,
-						                 dataType: "json",
-						                 type: 'post',
-						                 data: requestArray,
-						                 success: function ( data ) {
-							                 if (data.status){
-								                 jQuery('#followup-offset' ).val(data.offset);
-								                 jQuery('#chat-UI' ).append(data.comments);
-							                 }
-							                 else{
-								                 $(window).off('scroll', scrollHandler);
-							                 }
-							                 jQuery('#load-more-hdspinner' ).hide();
-							                 //jQuery('#followup-load-more' ).show();
-						                 },
-						                 error: function(){
-							                 //jQuery('#followup-load-more' ).show();
-							                 //jQuery('#load-more-hdspinner' ).hide();
-							                 $(window).off('scroll', scrollHandler);
-							                 alert('Error, while loading more followup :(');
-							                 return false;
-						                 },
-						                 complete: function () {
-							                 isLoading = false;
-						                 }
-					                 });
+							url: ajaxurl,
+							dataType: "json",
+							type: 'post',
+							data: requestArray,
+							success: function ( data ) {
+								if (data.status){
+									jQuery('#followup-offset' ).val(data.offset);
+									jQuery('#chat-UI' ).append(data.comments);
+									$loadingPlaceholder.replaceWith( data.placeholder );
+
+									if ( data.placeholder == '' ) {
+										$loadingPlaceholder.remove();
+										$(window).off('scroll', scrollHandler);
+									}
+
+								} else {
+									$loadingPlaceholder.remove();
+									$(window).off('scroll', scrollHandler);
+								}
+							},
+							error: function(){
+								$loadingPlaceholder.remove();
+							$(window).off('scroll', scrollHandler);
+								return false;
+							},
+							complete: function () {
+								isLoading = false;
+							}
+						});
+
 				    };
 				    scrollHandler = $.throttle( 500, scrollHandler );
 
@@ -111,9 +106,8 @@ jQuery(function () {
 				    $showMore.on('click' ,function(e) {
 					    e.preventDefault();
 					    $(window).on('scroll', scrollHandler).trigger('scroll');
-					    $(this).animate({'opacity' : 0}, 1, function() {
-						    $(this).replaceWith(loadingLabel);
-						    $placeHolder.removeClass('is-inactive');
+					    $(this).animate({'opacity' : 0}, 500, function() {
+						    $(this ).replaceWith($placeHolder.html());
 					    });
 				    });
 			    });
@@ -158,7 +152,8 @@ jQuery(function () {
 		    } );
 
 		    });
-		    jQuery( document ).on('click', '.editfollowuplink',function(){
+		    jQuery( document ).on('click', '.editfollowuplink',function(e){
+			    e.preventDefault();
 			    //jQuery( document ).on('click', 'li.editable .messages',function(){
 		    //jQuery( 'li.self .messages' ).click( function () {
 			 //   jQuery('#edited_followup_content' ).val( jQuery(this).find('p').text().replace(/\s+/g, " ") );

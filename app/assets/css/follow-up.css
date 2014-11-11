@@ -168,9 +168,6 @@
 .editfollowuplink{
 	color : #777
 }
-.editfollowuplink:hover{
-	text-decoration: underline;
-}
 
 #followup-load-more{
 	text-decoration: none;
@@ -188,10 +185,8 @@
 
 .content-stream.stream-loading {
 	text-align: center;
-	background: 0 0;
-	background-position: center 10px;
 	color: #999;
-	padding: 30px 0;
+	padding: 0 0 30px;
 	box-sizing: border-box;
 	-webkit-font-smoothing:antialiased;
 	-moz-osx-font-smoothing:grayscale;
