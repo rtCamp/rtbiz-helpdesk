@@ -263,15 +263,16 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			wp_enqueue_script( 'jquery-form', array( 'jquery' ), false, true );
 			wp_enqueue_script( 'jquery-ui-dialog' );
 
+			wp_enqueue_style( 'rthd-followup-css', RT_HD_URL . 'app/assets/css/follow-up.css', array(), RT_HD_VERSION, 'all' );
+			wp_enqueue_media();
+
 			global $wp_scripts;
-			if ( ! wp_script_is( 'jquery-ui-core' ) ) {
-				$ui = $wp_scripts->query( 'jquery-ui-core' );
-				// tell WordPress to load the Smoothness theme from Google CDN
-				$protocol = is_ssl() ? 'https' : 'http';
-				$url      = "$protocol://ajax.googleapis.com/ajax/libs/jqueryui/" . $ui->ver . '/themes/smoothness/jquery-ui.css';
-				if ( ! wp_style_is( 'jquery-ui-smoothness' ) ) {
-					wp_enqueue_style( 'jquery-ui-smoothness', $url, array(), RT_HD_VERSION, 'all' );
-				}
+			$ui = $wp_scripts->query( 'jquery-ui-core' );
+			// tell WordPress to load the Smoothness theme from Google CDN
+			$protocol = is_ssl() ? 'https' : 'http';
+			$url      = "$protocol://ajax.googleapis.com/ajax/libs/jqueryui/" . $ui->ver . '/themes/smoothness/jquery-ui.css';
+			if ( ! wp_style_is( 'jquery-ui-smoothness' ) ) {
+				wp_enqueue_style( 'jquery-ui-smoothness', $url, array(), RT_HD_VERSION, 'all' );
 			}
 			$this->localize_scripts( $wp_query->query_vars['rthd_unique_id'] );
 			return true;

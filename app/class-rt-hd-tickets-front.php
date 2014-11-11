@@ -128,20 +128,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 			global $rthd_front_page_title;
 			$labels    = $rt_hd_module->labels;
 			$rthd_front_page_title = ucfirst( $labels['name'] ) . ' | ' . $rthd_ticket->post_title;
-			add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
 			return rthd_locate_template( 'ticket-front-page.php' );
-		}
-
-		function load_scripts() {
-			wp_enqueue_style( 'rthd-followup-css', RT_HD_URL . 'app/assets/css/follow-up.css', array(), RT_HD_VERSION, 'all' );
-			global $wp_scripts;
-			$ui = $wp_scripts->query( 'jquery-ui-core' );
-			// tell WordPress to load the Smoothness theme from Google CDN
-			$protocol = is_ssl() ? 'https' : 'http';
-			$url      = "$protocol://ajax.googleapis.com/ajax/libs/jqueryui/" . $ui->ver . '/themes/smoothness/jquery-ui.css';
-			if ( ! wp_style_is( 'jquery-ui-smoothness' ) ) {
-				wp_enqueue_style( 'jquery-ui-smoothness', $url, array(), RT_HD_VERSION, 'all' );
-			}
 		}
 
 	}

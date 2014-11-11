@@ -107,8 +107,6 @@ if ( ! class_exists( 'RT_Meta_Box_Subscribers ' ) ) {
 			      title="<?php _e( 'Subscribers', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Subscribers', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
 			<script>
 				var arr_subscriber_user =<?php echo json_encode( $arrSubscriberUser ); ?>;
-				var ac_auth_token = '<?php echo esc_attr( get_user_meta( get_current_user_id(), 'rthd_activecollab_token', true ) ); ?>';
-				var ac_default_project = '<?php echo esc_attr( get_user_meta( get_current_user_id(), 'rthd_activecollab_default_project', true ) ); ?>';
 			</script>
 			<input type="text" placeholder="Type Subscribers Name to select" id="subscriber_user_ac"/>
 			<ul id="divSubscriberList" class="">

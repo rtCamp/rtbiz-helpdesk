@@ -28,7 +28,7 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Comments' ) ) {
 	class RT_Meta_Box_Ticket_Comments {
 
 		public static function ui( $post ) {
-			rthd_get_template( 'admin/followup-common.php', array( 'post' => $post ) );
+			rthd_get_template( 'followup-common.php', array( 'post' => $post ) );
 		}
 
 	}

@@ -89,13 +89,14 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$arrayBCC  = unserialize( $args['bccemail'] );
 			$arrayCC   = unserialize( $args['ccemail'] );
 			$arrayTo   = unserialize( $args['toemail'] );
+			$attachments = unserialize( $args['attachement'] );
 			$headers[] = 'From:' . $args['fromemail'];
 			add_filter( 'wp_mail_from', 'rthd_my_mail_from' );
 			$emailsendflag = true;
 			if ( ! empty( $arrayBCC ) ) {
 				foreach ( $arrayBCC as $temail ) {
 					add_filter( 'wp_mail_content_type', 'rthd_set_html_content_type' );
-					$res = wp_mail( array( $temail['email'] ), $args['subject'], $args['body'], $headers );
+					$res = wp_mail( array( $temail['email'] ), $args['subject'], $args['body'], $headers, $attachments );
 					remove_filter( 'wp_mail_content_type', 'rthd_set_html_content_type' );
 					if ( ! $res ) {
 						$emailsendflag = false;
@@ -106,7 +107,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			if ( ! empty( $arrayCC ) ) {
 				foreach ( $arrayCC as $tomail ) {
 					add_filter( 'wp_mail_content_type', 'rthd_set_html_content_type' );
-					$res = wp_mail( array( $tomail ['email'] ), $args['subject'], $args['body'], $headers );
+					$res = wp_mail( array( $tomail ['email'] ), $args['subject'], $args['body'], $headers, $attachments );
 					remove_filter( 'wp_mail_content_type', 'rthd_set_html_content_type' );
 					if ( ! $res ) {
 						$emailsendflag = false;
@@ -117,7 +118,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			if ( ! empty( $arrayTo ) ) {
 				foreach ( $arrayTo as $key => $temail ) {
 					add_filter( 'wp_mail_content_type', 'rthd_set_html_content_type' );
-					$res = wp_mail( array( $temail['email'] ), $args['subject'], $args['body'], $headers );
+					$res = wp_mail( array( $temail['email'] ), $args['subject'], $args['body'], $headers, $attachments );
 					remove_filter( 'wp_mail_content_type', 'rthd_set_html_content_type' );
 					if ( ! $res ) {
 						$emailsendflag = false;

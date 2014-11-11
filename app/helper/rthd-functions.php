@@ -543,15 +543,34 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 			</div>
 			<time title="<?php echo esc_attr( $comment->comment_date ); ?>" datetime="<?php echo esc_attr( $comment->comment_date ); ?>">
 				<span title="<?php echo esc_attr( ( $comment->comment_author_email == '' ) ? $comment->comment_author_IP : $comment->comment_author_email ); ?>"><?php echo esc_attr( ( $comment->comment_author == '' ) ? 'Anonymous' : $comment->comment_author ); ?> </span>
-				&middot; <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) );
+				| <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) );
+				$comment_attechment = get_comment_meta( $comment->comment_ID, "attachment" );
+				$comment_attechment = array_unique( $comment_attechment );
+				if ( ! empty( $comment_attechment ) ) { ?>
+				|
+				<ul class="comment_attechment">
+				<?php foreach ( $comment_attechment as $a ) {
+					$extn_array = explode( '.', $a );
+					$extn = $extn_array[ count( $extn_array ) - 1 ];
+
+					$file_array = explode( '/', $a );
+					$fileName = $file_array[ count( $file_array ) - 1 ];
+				?>
+					<li>
+						<a href="<?php echo $a; ?>" title="<?php echo $fileName; ?>" >
+							<img height="20px" width="20px" src="<?php echo RT_HD_URL . "app/assets/file-type/" . $extn . ".png"; ?>" />
+							<span><?php echo ( ( strlen( $fileName ) ) > 12 ? substr( $fileName, 0, 12 ) . '...' : $fileName ); ?></span>
+						</a>
+					</li>
+				<?php } ?>
+				</ul>
+				<?php }
 				if ($display_private_comment_flag){
-				?> &middot;
+				?> |
 				<a class="editfollowuplink"> Edit
 				</a>
 				<?php
-				}
-				?>
-
+				} ?>
 			</time>
 
 		</div>

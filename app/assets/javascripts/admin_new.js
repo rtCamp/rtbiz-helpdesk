@@ -2,7 +2,7 @@
  * Created by sai on 6/9/14.
  */
 jQuery(function () {
-    var file_frame_ticket, file_frame_followup;
+    var file_frame_ticket;
     var rthdAdmin = {
 
         init: function () {
@@ -15,17 +15,7 @@ jQuery(function () {
             rthdAdmin.initSubscriberSearch();
 	        rthdAdmin.initAddNewFollowUp();
 	        rthdAdmin.initEditFollowUp();
-	        rthdAdmin.initUploadAjax();
         },
-	    initUploadAjax: function( ){
-
-			//jQuery('#submit-ajax' ).click(function (){
-			//
-			//});
-		    // bind form using 'ajaxForm'
-		    //jQuery('#thumbnail_upload').ajaxForm(options);
-
-	    },
 	    initEditFollowUp: function () {
 			var commentid;
 		    jQuery("#delfollowup" ).click(function() {
@@ -139,43 +129,45 @@ jQuery(function () {
 		    });
 	    },
         initAddNewFollowUp : function(){
-	        function showRequest(formData, jqForm, options) {
-		        //do extra stuff before submit like disable the submit button
-		        //e.preventDefault();
-		        //alert("Hello");
-	        }
-	        function showResponse ( responseText, statusText, xhr, jQueryform )  {
-		        var responseText = jQuery.parseJSON(responseText);
-		        if(responseText.status ) {
-			        var tempname;
-			        if (responseText.name.length > 20 ){
-				        tempname = responseText.name.substring(0,12) + "...";
-			        }else{
-				        tempname= responseText.name;
-			        }
-			        //var attachhtml = "<div class='large-12 mobile-large-3 columns attachment-item' data-attachment-id='"+ responseText.attach_id +"'> <a class='rthd_attachment' title='' target='_blank' href='"+responseText.url+"'> <img height='20px' width='20px' src='"+responseText.img+"'><span title='"+responseText.name+"'> "+ tempname+" </span> </a><input type='hidden' name='attachment[]' value='"+ responseText.attach_id +"'></div>";
-			        var attachhtml = "<li data-attachment-id='"+ responseText.attach_id +"' class='attachment-item row_group'> <a href='#' class='delete_row rthd_delete_attachment'>x</a> <a target='_blank' href='"+responseText.url+"'> <img height='20px' width='20px' src='"+responseText.img+"'>"+ tempname+"</a> <input type='hidden' name='attachment[]' value='153'></li>";
-			        jQuery('#divAttachmentList').prepend(attachhtml);
-			        var control= jQuery('#thumbnail');
-			        control.replaceWith( control = control.clone( true ) );
-			        //jQuery('#submit-ajax' ).removeAttr('disabled');
-			        jQuery('#hdspinner' ).hide();
+
+	        jQuery(document).on( 'click', '.add-followup-attachment', function (e) {
+		        e.preventDefault();
+		        if (file_frame_ticket) {
+			        file_frame_ticket.open();
+			        return;
 		        }
-	        }
+		        file_frame_ticket = wp.media.frames.file_frame = wp.media({
+				title: jQuery(this).data('uploader_title'),
+				searchable: true,
+				button: {
+					text: 'Attach Selected Files'
+				},
+				multiple: true // Set to true to allow multiple files to be selected
+				});
+		        file_frame_ticket.on('select', function () {
+			        var selection = file_frame_ticket.state().get('selection');
+			        var strAttachment = '';
+			        selection.map(function (attachment) {
+				        attachment = attachment.toJSON();
+				        strAttachment = '<li data-attachment-id="' + attachment.id + '" class="attachment-item">';
+				        strAttachment += '<a href="#" class="rthd_delete_attachment">x</a>';
+				        strAttachment += '<a target="_blank" href="' + attachment.url + '"><img height="20px" width="20px" src="' + attachment.icon + '" > ' + attachment.filename + '</a>';
+				        strAttachment += '<input type="hidden" name="attachemntitem[]" value="' + attachment.id + '" /></div>';
+
+				        jQuery("#attachmentList").append(strAttachment);
+
+				        // Do something with attachment.id and/or attachment.url here
+			        });
+			        // Do something with attachment.id and/or attachment.url here
+		        });
+		        file_frame_ticket.open();
+	        });
+
             jQuery( "#savefollwoup" ).click( function () {
 	            var flagspinner = false;
 	            jQuery('#hdspinner' ).show();
 	            jQuery(this).attr('disabled','disabled');
 
-	            if ( jQuery('#thumbnail' ).val() ){
-		            var options = {
-			            beforeSubmit:  showRequest,     // pre-submit callback
-			            success:       showResponse,    // post-submit callback
-			            url:    ajaxurl                 //  ajaxurl is always defined in the admin header and points to admin-ajax.php
-		            };
-		            flagspinner=true;
-		            jQuery('#thumbnail_upload').ajaxSubmit(options );
-	            }
 	            var followuptype = jQuery( "#followup-type" ).val();
                 var requestArray = new Object();
                 requestArray['post_type'] = rthd_post_type;
@@ -218,6 +210,7 @@ jQuery(function () {
 	                        jQuery('#chat-UI' ).prepend(newcomment);
 	                        jQuery( "#followup_content" ).val( '' );
 	                        jQuery('#add-private-comment' ).prop('checked',false );
+	                        jQuery('#attachmentList' ).html('');
                         } else {
                             alert( data.message );
                         }

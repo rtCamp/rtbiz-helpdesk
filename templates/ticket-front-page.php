@@ -19,8 +19,6 @@ $user_edit       = false;
 	<div class="rthd-container rthd-clearfix">
 	<?php
 	global $wpdb;
-	echo "<script> var arr_ticketmeta_key=''; </script>";
-
 
 	$post             = get_post( $post_id );
 	$ticket_unique_id = get_post_meta( $post_id, '_rtbiz_hd_unique_id', true );
@@ -37,16 +35,14 @@ $user_edit       = false;
 		<div>
 			<h2><?php echo esc_attr( ( isset( $post->ID ) ) ? '[#'.$post_id.'] '.$post->post_title : '' ); ?></h2>
 		</div>
-		<div class="rthd-ticket-description">
-			<h4><?php _e('Description:'); ?></h4>
-			<?php echo ( isset( $post->ID ) ) ? apply_filters( 'the_content', balanceTags( $post->post_content ) ) : ''; ?>
-		</div>
 		<br/><br/>
 		<?php if ( isset( $post->ID ) ) { ?>
 			<div id="followup_wrapper">
-				<h2>Followup</h2>
 				<div id="commentlist">
-					<?php rthd_get_template( 'admin/followup-common.php', array( 'post' => $post ) ); ?>
+					<?php rthd_get_template( 'followup-common.php', array( 'post' => $post ) ); ?>
+				</div>
+				<div class="add-followup-form">
+					<?php rthd_get_template('ticket-add-followup-form.php', array('post' => $post, 'ticket_unique_id' => $ticket_unique_id)); ?>
 				</div>
 			</div>
 		<?php } ?>
@@ -83,26 +79,16 @@ if( ! empty( $pstatus ) ) {
 ?>
 		</div>
 		<div>
-			<span class="prefix" title="Create Date"><label>Create Date</label></span>
-			<?php if ( $user_edit ) { ?>
-				<input class="datetimepicker moment-from-now" type="text" placeholder="Select Create Date"
-				       value="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>"
-				       title="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>">
-				<input name="post[post_date]" type="hidden"
-				       value="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>"/>
-			<?php } else { ?>
-				<div class="rthd_attr_border prefix rthd_view_mode moment-from-now"
-				     title="<?php echo esc_attr( $createdate )?>"><?php echo esc_attr( $createdate ) ?></div>
-			<?php } ?>
-		</div>
-		<div>
-		<?php
-			$created_by = get_user_by( 'id', get_post_meta( $post->ID, '_rtbiz_hd_created_by', true ) );
-			if ( ! empty( $created_by ) ) {
-		?>
-			<span class="prefix" title="Status">Created By</span>
-			<span class=""> <?php echo $created_by->display_name ?></span>
-		<?php } ?>
+                <span title="Create Date"><strong>Created: </strong></span>
+			<div class="prefix" title="<?php echo esc_attr( $createdate )?>">
+			<?php
+				echo esc_attr( human_time_diff( strtotime( $createdate ), current_time( 'timestamp' ) ) ) . ' ago';
+				$created_by = get_user_by( 'id', get_post_meta( $post->ID, '_rtbiz_hd_created_by', true ) );
+				if ( ! empty( $created_by ) ) {
+					echo ' by ' . $created_by->display_name;
+				}
+			?>
+			</div>
 		</div>
 	<?php
 		$comment = get_comments(array('post_id'=>$post->ID,'number' => 1));
@@ -117,34 +103,35 @@ if( ! empty( $pstatus ) ) {
 		</div>
 	<?php }
 
-$attachments = array();
 if ( isset( $post->ID ) ) {
 	$attachments = get_children( array( 'post_parent' => $post->ID, 'post_type' => 'attachment', ) );
-} ?>
+
+	if ( ! empty( $attachments ) ) { ?>
+
 		<h2><i class="foundicon-paper-clip"></i> <?php _e( 'Attachments' ); ?></h2>
 		<div>
-		<?php if ( $user_edit ) { ?>
-			<a href="#" class="button" id="add_ticket_attachment"><?php _e( 'Add' ); ?></a>
-		<?php } ?>
 			<div id="attachment-files">
-			<?php foreach ( $attachments as $attachment ) { ?>
-				<?php $extn_array = explode( '.', $attachment->guid );
-				$extn             = $extn_array[ count( $extn_array ) - 1 ]; ?>
-				<div class="attachment-item"
-				     data-attachment-id="<?php echo esc_attr( $attachment->ID ); ?>">
-					<a class="rthd_attachment" title="<?php echo balanceTags( $attachment->post_title ); ?>" target="_blank"
-					   href="<?php echo esc_url( wp_get_attachment_url( $attachment->ID ) ); ?>"> <img height="20px" width="20px"
-					                                                                                   src="<?php echo esc_url( RT_HD_URL . 'app/assets/file-type/' . $extn . '.png' ); ?>"/>
-					<span title="<?php echo balanceTags( $attachment->post_title ); ?>"> 	<?php echo esc_attr( strlen( balanceTags( $attachment->post_title ) ) > 12 ? substr( balanceTags( $attachment->post_title ), 0, 12 ). '...' : balanceTags( $attachment->post_title ) ); ?> </span>
-					</a>
-					<?php if ( $user_edit ) { ?>
-						<a href="#" class="rthd_delete_attachment right">x</a>
-					<?php } ?>
-					<input type="hidden" name="attachment[]" value="<?php echo esc_attr( $attachment->ID ); ?>"/>
-				</div>
-		<?php } ?>
+				<?php foreach ( $attachments as $attachment ) { ?>
+					<?php $extn_array = explode( '.', $attachment->guid );
+					$extn             = $extn_array[ count( $extn_array ) - 1 ]; ?>
+					<div class="attachment-item"
+					     data-attachment-id="<?php echo esc_attr( $attachment->ID ); ?>">
+						<a class="rthd_attachment" title="<?php echo balanceTags( $attachment->post_title ); ?>" target="_blank"
+						   href="<?php echo esc_url( wp_get_attachment_url( $attachment->ID ) ); ?>"> <img height="20px" width="20px"
+						                                                                                   src="<?php echo esc_url( RT_HD_URL . 'app/assets/file-type/' . $extn . '.png' ); ?>"/>
+							<span title="<?php echo balanceTags( $attachment->post_title ); ?>"> 	<?php echo esc_attr( strlen( balanceTags( $attachment->post_title ) ) > 12 ? substr( balanceTags( $attachment->post_title ), 0, 12 ). '...' : balanceTags( $attachment->post_title ) ); ?> </span>
+						</a>
+						<?php if ( $user_edit ) { ?>
+							<a href="#" class="rthd_delete_attachment right">x</a>
+						<?php } ?>
+						<input type="hidden" name="attachment[]" value="<?php echo esc_attr( $attachment->ID ); ?>"/>
+					</div>
+				<?php } ?>
 			</div>
 		</div>
+
+	<?php }
+} ?>
 	</div>
 </div>
 <?php

@@ -71,7 +71,18 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 			}
 
 			// Status Diff
-			$diff = rthd_text_diff( $oldpost->post_status, $_POST['post_status'] );
+			$post_statuses = $rt_hd_module->get_custom_statuses();
+			$old_status = ucfirst( $oldpost->post_status );
+			$new_status = ucfirst( $_POST['post_status'] );
+			foreach ( $post_statuses as $status ) {
+				if ( $status['slug'] == $old_status ) {
+					$old_status = $status['name'];
+				}
+				if ( $status['slug'] == $new_status ) {
+					$new_status = $status['name'];
+				}
+			}
+			$diff = rthd_text_diff( $old_status, $new_status );
 			if ( $diff ) {
 				$emailHTML .= '<tr><th style="padding: .5em;border: 0;"> Status </th><td>' . $diff . '</td><td></td></tr>';
 				/* Insert History for status */
