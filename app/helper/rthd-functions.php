@@ -541,21 +541,18 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 				<p><?php _e( 'This followup has been marked private.', RT_HD_TEXT_DOMAIN ); ?></p>
 			<?php } ?>
 			</div>
-			<time title="<?php echo esc_attr( $comment->comment_date ); ?>" datetime="<?php echo esc_attr( $comment->comment_date ); ?>">
-				<span title="<?php echo esc_attr( ( $comment->comment_author_email == '' ) ? $comment->comment_author_IP : $comment->comment_author_email ); ?>"><?php echo esc_attr( ( $comment->comment_author == '' ) ? 'Anonymous' : $comment->comment_author ); ?> </span>
-				| <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) );
-				$comment_attechment = get_comment_meta( $comment->comment_ID, "attachment" );
-				$comment_attechment = array_unique( $comment_attechment );
-				if ( ! empty( $comment_attechment ) ) { ?>
-				|
-				<ul class="comment_attechment">
+			<?php
+			$comment_attechment = get_comment_meta( $comment->comment_ID, "attachment" );
+			$comment_attechment = array_unique( $comment_attechment );
+			if ( ! empty( $comment_attechment ) ) { ?>
+			<ul class="comment_attechment">
 				<?php foreach ( $comment_attechment as $a ) {
 					$extn_array = explode( '.', $a );
 					$extn = $extn_array[ count( $extn_array ) - 1 ];
 
 					$file_array = explode( '/', $a );
 					$fileName = $file_array[ count( $file_array ) - 1 ];
-				?>
+					?>
 					<li>
 						<a href="<?php echo $a; ?>" title="<?php echo $fileName; ?>" >
 							<img height="20px" width="20px" src="<?php echo RT_HD_URL . "app/assets/file-type/" . $extn . ".png"; ?>" />
@@ -563,8 +560,11 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 						</a>
 					</li>
 				<?php } ?>
-				</ul>
-				<?php }
+			</ul>
+			<?php } ?>
+			<time title="<?php echo esc_attr( $comment->comment_date ); ?>" datetime="<?php echo esc_attr( $comment->comment_date ); ?>">
+				<span title="<?php echo esc_attr( ( $comment->comment_author_email == '' ) ? $comment->comment_author_IP : $comment->comment_author_email ); ?>"><?php echo esc_attr( ( $comment->comment_author == '' ) ? 'Anonymous' : $comment->comment_author ); ?> </span>
+				| <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) );
 				if ($display_private_comment_flag){
 				?> |
 				<a href="#" class="editfollowuplink">Edit</a>
