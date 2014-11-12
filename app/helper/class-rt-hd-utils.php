@@ -33,6 +33,7 @@ if ( ! class_exists( 'Rt_HD_Utils' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		static public function force_utf_8( $string ) {
+			return preg_replace('/[^(\x20-\x7F)]*/','', $string);
 			$string = preg_replace( '/[\x00-\x08\x10\x0B\x0C\x0E-\x19\x7F]' .
 									'|(?<=^|[\x00-\x7F])[\x80-\xBF]+' .
 									'|([\xC0\xC1]|[\xF0-\xFF])[\x80-\xBF]*' .

@@ -959,7 +959,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$comment_post_ID = $rthd_ticket->ID;
 			$post_type       = $rthd_ticket->post_type;
 
-			$comment_content = $_POST['followup_content'];
+			$comment_content = Rt_HD_Utils::force_utf_8( $_POST['followup_content'] );
 			$comment_privacy = $_POST['private_comment'];
 			global $wpdb;
 			$user = wp_get_current_user();
@@ -1092,7 +1092,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				echo json_encode( $returnArray );
 				die( 0 );
 			}
-			$comment_content = $_POST['followup_content'];
+			$comment_content = Rt_HD_Utils::force_utf_8( $_POST['followup_content'] );
 			$comment_privacy = $_POST['followup_private'];
 			global $wpdb;
 			$user = wp_get_current_user();
