@@ -24,7 +24,7 @@ if ( ! class_exists( 'Rt_HD_Crons' ) ) {
 			add_action( 'init', array( $this, 'setup_schedule' ) );
 			register_deactivation_hook( trailingslashit( RT_HD_PATH ) . 'rtbiz-helpdesk.php', array( $this, 'disable_cron_on_deactivation' ) );
 
-//			add_action( 'rt_hd_parse_email_cron', array( $this, 'rt_hd_parse_email' ) );
+			add_action( 'rt_hd_parse_email_cron', array( $this, 'rt_hd_parse_email' ) );
 			add_action( 'rt_hd_send_email_cron', array( $this, 'rt_hd_send_email' ) );
 		}
 
@@ -48,9 +48,9 @@ if ( ! class_exists( 'Rt_HD_Crons' ) ) {
 		}
 
 		function setup_schedule() {
-//			if ( ! wp_next_scheduled( 'rt_hd_parse_email_cron' ) ) {
-//				wp_schedule_event( time(), 'every_5_minutes', 'rt_hd_parse_email_cron');
-//			}
+			if ( ! wp_next_scheduled( 'rt_hd_parse_email_cron' ) ) {
+				wp_schedule_event( time(), 'every_5_minutes', 'rt_hd_parse_email_cron');
+			}
 
 			if ( ! wp_next_scheduled( 'rt_hd_send_email_cron' ) ) {
 				wp_schedule_event( time(), 'every_minute', 'rt_hd_send_email_cron');
