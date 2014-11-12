@@ -347,7 +347,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'title'    => __( 'Title for new Ticket' ),
 						'subtitle' => __( 'This is title for new ticket created' ),
 						'desc'     => __( 'You can use {ticket_id} and {ticket_title}' ),
-						'default'  => '[New ticket Created] Ticket #{ticket_id} : {ticket_title}',
+						'default'  => '{ticket_title}',
 					),
 					array(
 						'id'       => 'rthd_new_followup_email_title',
@@ -355,7 +355,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'title'    => __( 'Title for new Follow up ' ),
 						'subtitle' => __( 'This is title for when new Follow up is added' ),
 						'desc'     => __( 'You can use {ticket_id} and {ticket_title}' ),
-						'default'  => '[New Followup added] Ticket #{ticket_id} : {ticket_title}',
+						'default'  => '{ticket_title}',
 					),
 					array(
 						'id'       => 'rthd_update_followup_email_title',
@@ -363,7 +363,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'title'    => __( 'Title when Follow up updated ' ),
 						'subtitle' => __( 'This is title for Follow up updated' ),
 						'desc'     => __( 'You can use {ticket_id} and {ticket_title}' ),
-						'default'  => '[Followup Updated] Ticket #{ticket_id} : {ticket_title}',
+						'default'  => '{ticket_title}',
 					),
 					array(
 						'id'       => 'rthd_delete_followup_email_title',
@@ -371,7 +371,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'title'    => __( 'Title when Follow up deleted ' ),
 						'subtitle' => __( 'This is title for Follow up deleted' ),
 						'desc'     => __( 'You can use {ticket_id} and {ticket_title}' ),
-						'default'  => '[Followup Deleted] Ticket #{ticket_id} : {ticket_title}',
+						'default'  => '{ticket_title}',
 					),
 					array(
 						'id'       => 'rthd_update_ticket_email_title',
@@ -379,7 +379,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'title'    => __( 'Title when Ticket is Updated ' ),
 						'subtitle' => __( 'This is title whenever ticket meta is changed' ),
 						'desc'     => __( 'You can use {ticket_id} and {ticket_title}' ),
-						'default'  => '[Ticket Updated] Ticket #{ticket_id} : {ticket_title}',
+						'default'  => '{ticket_title}',
 					),
 					array(
 						'id'       => 'rthd_ticket_assign_email_title',
@@ -387,7 +387,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'title'    => __( 'Title when ticket Assign' ),
 						'subtitle' => __( 'This is title when new ticket Assign' ),
 						'desc'     => __( 'You can use {ticket_id} and {ticket_title}' ),
-						'default'  => '[Ticket Assign] Ticket #{ticket_id} : {ticket_title}',
+						'default'  => '{ticket_title}',
 					),
 					array(
 						'id'       => 'rthd_ticket_reassign_email_title',
@@ -395,7 +395,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'title'    => __( 'Title when ticket Reassign' ),
 						'subtitle' => __( 'This is title when new ticket Reassign' ),
 						'desc'     => __( 'You can use {ticket_id} and {ticket_title}' ),
-						'default'  => '[Ticket Reassign] Ticket #{ticket_id} : {ticket_title}',
+						'default'  => '{ticket_title}',
 					),
 					array(
 						'id'       => 'rthd_ticket_subscribe_email_title',
@@ -403,7 +403,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'title'    => __( 'Title when ticket Subscribe' ),
 						'subtitle' => __( 'This is title when new ticket Subscribe' ),
 						'desc'     => __( 'You can use {ticket_id} and {ticket_title}' ),
-						'default'  => '[Ticket Subscribe] Ticket #{ticket_id} : {ticket_title}',
+						'default'  => '{ticket_title}',
 					),
 					array(
 						'id'       => 'rthd_ticket_unsubscribe_email_title',
@@ -411,7 +411,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'title'    => __( 'Title when ticket Unsubscribe' ),
 						'subtitle' => __( 'This is title when new ticket Unsubscribe' ),
 						'desc'     => __( 'You can use {ticket_id} and {ticket_title}' ),
-						'default'  => '[Ticket Unsubscribe] Ticket #{ticket_id} : {ticket_title}',
+						'default'  => '{ticket_title}',
 					),
 					array(
 						'id'       => 'rthd_enable_signature',

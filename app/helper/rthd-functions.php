@@ -486,7 +486,8 @@ function rthd_create_new_ticket_title( $key, $post_id ){
 	if ( isset( $redux[ $key ] ) ) {
 		return rthd_generate_email_title( $post_id, $redux[ $key ] );
 	}
-	return '';
+	$prefix = '[' . ucfirst( Rt_HD_Module::$name ) . ' #' . $post_id . ']';
+	return $prefix;
 }
 
 function rthd_get_email_signature_settings(){
@@ -499,12 +500,10 @@ function rthd_get_email_signature_settings(){
 
 
 function rthd_generate_email_title( $post_id, $title ) {
-	if ( ! empty( $title ) ){
-		$title = str_replace( '{ticket_title}',get_the_title( $post_id ), $title );
-		$title = str_replace( '{ticket_id}', $post_id, $title );
-		return $title;
-	}
-	return '';
+	$prefix = '[' . ucfirst( Rt_HD_Module::$name ) . ' #' . $post_id . ']';
+	$title = $prefix.$title;
+	$title = str_replace( '{ticket_title}',get_the_title( $post_id ), $title );
+	return $title;
 }
 
 function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = true ) {

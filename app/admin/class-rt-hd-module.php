@@ -29,7 +29,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 		 *
 		 * @since 0.1
 		 */
-		var $name = 'Helpdesk';
+		static $name = 'Helpdesk';
 		/**
 		 * @var array Labels for rtbiz-HelpDesk CPT [ Ticket ]
 		 *

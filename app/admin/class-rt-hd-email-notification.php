@@ -243,7 +243,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			if ( $notificationFlag ) {
 				$cc = $this->get_notification_emails();
 			}
-			//			$title = '[Subscribe ' . $post_type . ']' . $this->create_title_for_mail( $post_id );
+
 			$title = rthd_create_new_ticket_title( 'rthd_ticket_subscribe_email_title', $post_id );
 			$body = 'You have been <b>subscribed</b> to this ticket';
 			$unique_id = get_post_meta( $post_id, '_rtbiz_hd_unique_id', true );
@@ -276,7 +276,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			if ( $notificationFlag ) {
 				$cc = $this->get_notification_emails();
 			}
-			//			$title = '[Unsubscribe ' . $post_type . ']' . $this->create_title_for_mail( $post_id );
+
 			$title = rthd_create_new_ticket_title( 'rthd_ticket_unsubscribe_email_title', $post_id );
 			$body = 'You have been <b>unsubscribed</b> to this ticket';
 			$unique_id = get_post_meta( $post_id, '_rtbiz_hd_unique_id', true );
@@ -314,7 +314,6 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$userSub     = get_user_by( 'id', intval( $post_author_id ) );
 			$to[] = array( 'email' => $userSub->user_email, 'name' => $userSub->display_name );
 
-			//			$title = '[' . $post_type . ' Updated]' . $this->create_title_for_mail( $post_id );
 			$title = rthd_create_new_ticket_title( 'rthd_update_ticket_email_title', $post_id );
 			$unique_id = get_post_meta( $post_id, '_rtbiz_hd_unique_id', true );
 			$body .= '<br />To View ' . $post_type . " Click <a href='" . trailingslashit( site_url() ) . strtolower( $post_type ) . '/' . $unique_id . "'>here</a>. <br/>";
@@ -336,7 +335,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			if ( $notificationFlag ) {
 				$cc = $this->get_notification_emails();
 			}
-			//			$title     = '[New ' . $post_type . ']' . $this->create_title_for_mail( $post_id );
+
 			$title     = rthd_create_new_ticket_title( 'rthd_new_ticket_email_title',$post_id );
 			$unique_id = get_post_meta( $post_id, '_rtbiz_hd_unique_id', true );
 			$body      = $body . '<br />To View ' . $post_type . " Click <a href='" . trailingslashit( site_url() ) . strtolower( $post_type ) . '/' . $unique_id . "'>here</a>. <br/>";
@@ -349,21 +348,6 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				}
 			}
 			$this->insert_new_send_email( $title, $body, array(), $cc, $notify_emails, $uploaded, $post_id );
-		}
-
-		/**
-		 * create email title
-		 *
-		 * @param $post_id
-		 *
-		 * @return string
-		 *
-		 * @since rt-Helpdesk 0.1
-		 */
-		function create_title_for_mail( $post_id ) {
-			global $rt_hd_module;
-
-			return '[' . strtoupper( $rt_hd_module->name ) . ' #' . $post_id . '] ' . get_the_title( $post_id );
 		}
 
 		function get_notification_emails() {

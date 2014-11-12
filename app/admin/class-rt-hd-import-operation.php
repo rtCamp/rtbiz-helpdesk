@@ -190,28 +190,12 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		function hijack_mail_subject( $data, $message_format ) {
-			global $helpdesk_import_ticket_id, $rt_hd_module;
-			$post_type       = get_post_type( $helpdesk_import_ticket_id );
-			$data['subject'] = '[' . strtoupper( $rt_hd_module->name ) . ' #' . $helpdesk_import_ticket_id . ']' . $data['subject'];
+			global $helpdesk_import_ticket_id;
+			$data['subject'] = '[' . ucfirst( Rt_HD_Module::$name ) . ' #' . $helpdesk_import_ticket_id . ']' . $data['subject'];
 			$hd_url          = admin_url( "post.php?post={$helpdesk_import_ticket_id}action=edit" );
 			$data['message'] = str_replace( '--rtcamp_hd_link--', $hd_url, $data['message'] );
 
 			return $data;
-		}
-
-		/**
-		 * create email title
-		 *
-		 * @param $post_id
-		 *
-		 * @return string
-		 *
-		 * @since rt-Helpdesk 0.1
-		 */
-		function create_title_for_mail( $post_id ) {
-			global $rt_hd_module;
-
-			return '[' . strtoupper( $rt_hd_module->name ) . ' #' . $post_id . '] ' . get_the_title( $post_id );
 		}
 
 		/**
@@ -310,11 +294,10 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		function get_post_id_from_subject( $subject ) {
-			//\[([a-z]+)\ \#([1-9]+)\]
-			global $rt_hd_module;
-			$pattern     = '/\[([a-z]+)\ \#([0-9]+)\]/im';
+			//\[([A-Za-z]+)\ \#([1-9]+)\]
+			$pattern     = '/\[([A-Za-z]+)\ \#([0-9]+)\]/im';
 			$intMatch    = preg_match_all( $pattern, $subject, $matches );
-			$module_name = strtolower( $rt_hd_module->name );
+			$module_name = strtolower( Rt_HD_Module::$name );
 			$post_type   = Rt_HD_Module::$post_type;
 			if ( count( $matches ) > 0 ) {
 				if ( isset( $matches[2][0] ) && isset( $matches[1][0] ) ) {
@@ -393,9 +376,12 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 				$postid = $this->get_post_id_from_subject( $title );
 
+				error_log("POST ID FOUND FROM MAIL SUBJECT\n\r");
+
 				if ( ! $postid ) {
 					//get postID from inreply to and refrence meta
 					$postid = $this->get_post_id_from_mail_meta( $inreplyto, $references );
+					error_log("POST ID FOUND FROM MAIL META\n\r");
 				}
 
 				//if we got post id from subject
@@ -415,6 +401,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			//if subject is re to post title
 
 			if ( $replyFlag ) {
+				error_log("MAIL IS A REPLY / FORWARD OF PREVIOUS TICKET\n\r");
 				$title       = str_replace( 'Re:', '', $title );
 				$title       = str_replace( 're:', '', $title );
 				$title       = trim( $title );
@@ -776,27 +763,6 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		}
 
 		/**
-		 * Get comment emails
-		 *
-		 * @param $post_id
-		 *
-		 * @return array emails
-		 *
-		 * @since rt-Helpdesk 0.1
-		 */
-		public function get_comment_emails( $post_id ) {
-			global $wpdb;
-
-			$retuls    = ( $wpdb->prepare( "select distinct comment_author_email as email from $wpdb->comments where comment_post_ID = %d;", $post_id ) );
-			$arrReturn = array();
-			foreach ( $retuls as $email ) {
-				$arrReturn[] = $email->email;
-			}
-
-			return $arrReturn;
-		}
-
-		/**
 		 * Send new mail as someone post new comment
 		 *
 		 * @param $comment_id
@@ -838,9 +804,9 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				return true;
 			}
 
-			$title = $this->create_title_for_mail( $comment_post_ID );
+			$title = rthd_create_new_ticket_title( 'rthd_new_followup_email_title', $comment_post_ID );
 
-			$mailbody = $comment->comment_content;
+			$mailbody = apply_filters( 'the_content', balanceTags( $comment->comment_content, true ) );
 
 			//commentSendAttachment
 			$attachment = array();
@@ -886,28 +852,11 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				//to set default email
 			}
 			if ( empty( $toEmail ) && empty( $ccEmail ) && empty( $bccEmail ) ) {
-				return true;
-			}
-
-			if ( ! $this->is_allow_to_sendemail_fromemail( $fromemail ) ) {
 				return false;
 			}
-			$signature   = '';
-			$email_type  = '';
-			$imap_server = '';
-			global $rt_hd_settings,$rt_hd_email_notification;
-			$accessToken = $rt_hd_settings->get_accesstoken_from_email( $fromemail, $signature, $email_type, $imap_server );
 
-			if ( false == strpos( $signature, '</' ) ) {
-				$signature = htmlentities( $signature );
-				$signature = preg_replace( '/(\n|\r|\r\n)/i', '<br />\n', $signature );
-				$signature = preg_replace( '/  /i', '  ', $signature );
-			}
-			$mailbody .= '<br />' . $signature;
-
-			$tmpMailOutbountId = $rt_hd_email_notification->insert_new_send_email( $title, $mailbody, $toEmail, $ccEmail, $bccEmail, $attachment, $comment_id, 'comment' );
-
-			return true;
+			global $rt_hd_email_notification;
+			return $rt_hd_email_notification->insert_new_send_email( $title, $mailbody, $toEmail, $ccEmail, $bccEmail, $attachment, $comment_id, 'comment' );
 		}
 
 		/**
@@ -1206,7 +1155,6 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				}
 
 				$currentUser = get_user_by( 'id', get_current_user_id() );
-				//				$title       = '[Follwup Updated]' . $this->create_title_for_mail( $comment_post_ID );
 				$title       = rthd_create_new_ticket_title( 'rthd_update_followup_email_title', $comment_post_ID );
 
 				$body = ' Follwup Updated by ' . $currentUser->display_name;
@@ -1531,7 +1479,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$body .= '<br/><b>Body : </b>' . $comment->comment_content;
 			$body .= '<br/> ';
 			$comment_post_ID = $_POST['post_id'];
-			//			$title           = '[Follwup Deleted]' . $this -> create_title_for_mail( $comment_post_ID );
+
 			$title           = rthd_create_new_ticket_title( 'rthd_delete_followup_email_title', $comment_post_ID );
 			$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, array(), $_POST['comment_id'], $notificationFlag, false );
 			echo json_encode( $response );

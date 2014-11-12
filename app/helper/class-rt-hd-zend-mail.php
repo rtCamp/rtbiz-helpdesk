@@ -473,7 +473,7 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 							$this->rt_parse_email( $email, $storage, $allMailArray, $hdUser, $user_id, $isSystemEmail );
 							global $rt_hd_import_operation;
 
-							$title = '[New Follwup Imported]' . $rt_hd_import_operation->create_title_for_mail( $threadPostId );
+							$title = rthd_create_new_ticket_title( 'rthd_new_followup_email_title', $threadId );
 							$body  = 'New ' . count( $allMailArray ) . ' Follwup Imported From Gmail threads';
 							$body .= '<br/><b>Email Ac : </b>' . $email;
 							$body .= '<br/><b>Thread ID: </b>' . $threadId;

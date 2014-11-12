@@ -351,7 +351,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 					$post_type    = Rt_HD_Module::$post_type;
 					$hd_ticket_id = intval( $this->gform_get_meta( $gr_lead_id, 'helpdesk-' . $post_type . '-post-id' ) );
 					if ( $hd_ticket_id ) {
-						echo 'Linked ' . esc_html( $rt_hd_module->name ) . " Post : <a href='" . esc_url( get_edit_post_link( $hd_ticket_id ) ) . "' >" . esc_html( get_the_title( $hd_ticket_id ) ) . '</a><br/>';
+						echo 'Linked ' . esc_html( Rt_HD_Module::$name ) . " Post : <a href='" . esc_url( get_edit_post_link( $hd_ticket_id ) ) . "' >" . esc_html( get_the_title( $hd_ticket_id ) ) . '</a><br/>';
 					}
 				}
 			}
