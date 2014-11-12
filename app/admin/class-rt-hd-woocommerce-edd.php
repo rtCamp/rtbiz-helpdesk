@@ -222,7 +222,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 			//Ticket created
 			$rt_hd_tickets_id = $rt_hd_import_operation->insert_new_ticket(
 				$productstr,
-				$data['description'],
+				stripslashes($data['description']),
 				'now',
 				array( array( 'address' => $data['email'], 'name' => '' ) ),
 				array(),
