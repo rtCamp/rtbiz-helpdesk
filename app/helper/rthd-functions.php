@@ -534,7 +534,17 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 			<input id="followup-id" type="hidden" value="<?php echo esc_attr( $comment->comment_ID ); ?>">
 			<input id="is-private-comment" type="hidden" value="<?php echo esc_attr( $is_comment_private ); ?>">
 			<div class="rthd-comment-content">
-			<?php if( $display_private_comment_flag ) { ?>
+			<?php if( $display_private_comment_flag ) {
+				if ( isset( $comment->comment_content ) && $comment->comment_content != '' ) {
+					if ( strpos( '<body', $comment->comment_content ) !== false ) {
+						preg_match_all( '/<body[^>]*>(.*?)<\/body>/s', $comment->comment_content, $output_array );
+						if ( count( $output_array ) > 0 ) {
+							$comment->comment_content = $output_array[0];
+						}
+					}
+					$comment->comment_content = Rt_HD_Utils::force_utf_8( $comment->comment_content );
+				}
+			?>
 				<p><?php echo wpautop( make_clickable( $comment->comment_content ) ); ?></p>
 			<?php } else { ?>
 				<p><?php _e( 'This followup has been marked private.', RT_HD_TEXT_DOMAIN ); ?></p>
