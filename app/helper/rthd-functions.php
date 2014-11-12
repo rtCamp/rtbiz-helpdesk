@@ -501,7 +501,7 @@ function rthd_get_email_signature_settings(){
 
 function rthd_generate_email_title( $post_id, $title ) {
 	$prefix = '[' . ucfirst( Rt_HD_Module::$name ) . ' #' . $post_id . ']';
-	$title = $prefix.$title;
+	$title = $prefix.' '.$title;
 	$title = str_replace( '{ticket_title}',get_the_title( $post_id ), $title );
 	return $title;
 }
