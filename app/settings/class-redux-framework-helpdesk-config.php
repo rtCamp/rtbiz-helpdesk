@@ -187,7 +187,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					'type'     => 'select',
 					'data'     => 'pages',
 					'title'    => __( 'Support Page' ),
-					'desc'     => __( 'This Page will used for redirect support request in WooCommerce. Add [rt_hd_support_form] ShortCode in Page Content' ),
+					'desc'     => __( 'This page will be used to create new support requests from front-end. Add [rt_hd_support_form] Shortcode in page-content. Rest will be taken care by HelpDesk.' ),
 					'subtitle' => __( 'Select Page for Product Support' ),
 
 				),

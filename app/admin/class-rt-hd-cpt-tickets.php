@@ -85,13 +85,14 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 		 *
 		 * @return array
 		 */
-		public function edit_custom_columns() {
+		public function edit_custom_columns($cols) {
 			$columns = array();
 
 			$columns['cb']                         = '<input type="checkbox" />';
 			$columns['rthd_ticket_title']          = __( 'Ticket', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_status']         = '<span class="status_head tips" data-tip="' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '">' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '</span>';
 			$columns['rthd_ticket_created_by']     = __( 'Created By', RT_HD_TEXT_DOMAIN );
+			$columns['comments'] = $cols['comments'];
 			$columns['rthd_ticket_updated_by']     = __( 'Updated By', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_closed_by']      = __( 'Closed By', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_closing_reason'] = __( 'Closing Reason', RT_HD_TEXT_DOMAIN );
