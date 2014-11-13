@@ -159,7 +159,6 @@ register_activation_hook( __FILE__, 'init_call_flush_rewrite_rules' );
 
 function do_flush_rewrite_rules(){
 	if ( is_admin() && 'true' == get_option( 'rt_HD_call_rewrite' ) ) {
-		error_log(":: <<<<<<<<<<<-: -> custom Error \n", 3, "/var/tmp/my-errors.log");
 		flush_rewrite_rules();
 		delete_option( 'rt_HD_call_rewrite' );
 	}
