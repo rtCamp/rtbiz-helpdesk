@@ -153,22 +153,7 @@ function rt_hd_init() {
 
 	global $rt_wp_hd;
 	$rt_wp_hd = new RT_WP_Helpdesk();
-	add_action( 'init', 'do_flush_rewrite_rules' ,20 );
 }
-register_activation_hook( __FILE__, 'init_call_flush_rewrite_rules' );
-
-function do_flush_rewrite_rules(){
-	if ( is_admin() && 'true' == get_option( 'rt_HD_call_rewrite' ) ) {
-		flush_rewrite_rules();
-		delete_option( 'rt_HD_call_rewrite' );
-	}
-}
-
-function init_call_flush_rewrite_rules(){
-	add_option( 'rt_HD_call_rewrite', 'true' );
-}
-
-
 add_action( 'rt_biz_init', 'rt_hd_init', 1 );
 
 /**
@@ -184,5 +169,10 @@ function rt_hd_check_dependency() {
 		$rt_wp_hd = new RT_WP_Helpdesk();
 	}
 }
-
 //add_action( 'init', 'rt_hd_check_dependency' );
+
+
+register_activation_hook( __FILE__, 'init_call_flush_rewrite_rules' );
+function init_call_flush_rewrite_rules(){
+	add_option( 'rthd_flush_rewrite_rules', 'true' );
+}
