@@ -44,7 +44,7 @@ if ( ! empty( $post->post_content ) ) {
 			<div class="messages">
 				<div class="rthd-comment-content">
 				<?php
-					$content = balanceTags( ( isset($post->ID) ) ? $post->post_content : '', true );
+					$content = balanceTags( ( isset($post->ID) ) ? make_clickable( $post->post_content ) : '', true );
 					echo apply_filters('the_content', $content);
 				?>
 				</div>

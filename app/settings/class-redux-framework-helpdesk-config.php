@@ -339,6 +339,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			$this->sections[] = array(
 				'icon'        => 'el-icon-edit',
 				'title'       => __( 'Customize Notification Emails ' ),
+				'desc'     => __( 'You can use {ticket_title} as a placeholder.' ),
 				'permissions' => $admin_cap,
 				'fields'      => array(
 					array(
@@ -346,7 +347,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'type'     => 'text',
 						'title'    => __( 'Title for new Ticket' ),
 						'subtitle' => __( 'This is title for new ticket created' ),
-						'desc'     => __( 'You can use {ticket_id} and {ticket_title}' ),
 						'default'  => '{ticket_title}',
 					),
 					array(
@@ -354,7 +354,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'type'     => 'text',
 						'title'    => __( 'Title for new Follow up ' ),
 						'subtitle' => __( 'This is title for when new Follow up is added' ),
-						'desc'     => __( 'You can use {ticket_id} and {ticket_title}' ),
 						'default'  => '{ticket_title}',
 					),
 					array(
@@ -362,7 +361,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'type'     => 'text',
 						'title'    => __( 'Title when Follow up updated ' ),
 						'subtitle' => __( 'This is title for Follow up updated' ),
-						'desc'     => __( 'You can use {ticket_id} and {ticket_title}' ),
 						'default'  => '{ticket_title}',
 					),
 					array(
@@ -370,7 +368,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'type'     => 'text',
 						'title'    => __( 'Title when Follow up deleted ' ),
 						'subtitle' => __( 'This is title for Follow up deleted' ),
-						'desc'     => __( 'You can use {ticket_id} and {ticket_title}' ),
 						'default'  => '{ticket_title}',
 					),
 					array(
@@ -378,7 +375,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'type'     => 'text',
 						'title'    => __( 'Title when Ticket is Updated ' ),
 						'subtitle' => __( 'This is title whenever ticket meta is changed' ),
-						'desc'     => __( 'You can use {ticket_id} and {ticket_title}' ),
 						'default'  => '{ticket_title}',
 					),
 					array(
@@ -386,7 +382,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'type'     => 'text',
 						'title'    => __( 'Title when ticket Assign' ),
 						'subtitle' => __( 'This is title when new ticket Assign' ),
-						'desc'     => __( 'You can use {ticket_id} and {ticket_title}' ),
 						'default'  => '{ticket_title}',
 					),
 					array(
@@ -394,7 +389,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'type'     => 'text',
 						'title'    => __( 'Title when ticket Reassign' ),
 						'subtitle' => __( 'This is title when new ticket Reassign' ),
-						'desc'     => __( 'You can use {ticket_id} and {ticket_title}' ),
 						'default'  => '{ticket_title}',
 					),
 					array(
@@ -402,7 +396,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'type'     => 'text',
 						'title'    => __( 'Title when ticket Subscribe' ),
 						'subtitle' => __( 'This is title when new ticket Subscribe' ),
-						'desc'     => __( 'You can use {ticket_id} and {ticket_title}' ),
 						'default'  => '{ticket_title}',
 					),
 					array(
@@ -410,7 +403,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'type'     => 'text',
 						'title'    => __( 'Title when ticket Unsubscribe' ),
 						'subtitle' => __( 'This is title when new ticket Unsubscribe' ),
-						'desc'     => __( 'You can use {ticket_id} and {ticket_title}' ),
 						'default'  => '{ticket_title}',
 					),
 					array(
