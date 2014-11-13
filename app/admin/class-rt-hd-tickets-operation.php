@@ -32,16 +32,18 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 		 *
 		 * @since 0.1
 		 *
-		 * @param      $postArray
-		 * @param      $dataArray
-		 * @param      $post_type
-		 * @param null $post_id
+		 * @param $postArray
+		 * @param $dataArray
+		 * @param $post_type
+		 * @param $post_id
+		 * @param $created_by
+		 * @param $updated_by
 		 *
 		 * @return null
 		 */
 		function ticket_default_field_update( $postArray, $dataArray, $post_type, $post_id = '', $created_by = '', $updated_by = '' ) {
 
-			global $rt_hd_cpt_tickets, $rt_hd_ticket_history_model;
+			global $rt_hd_cpt_tickets;
 
 			if ( ! isset( $post_type ) || empty( $post_type ) ) {
 				return;

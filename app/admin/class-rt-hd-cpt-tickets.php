@@ -409,7 +409,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 		 * @param $query
 		 */
 		function pre_filter( $query ) {
-			if ( isset( $_GET['post_type'] ) && $_GET['post_type'] == Rt_HD_Module::$post_type ) {
+			if ( isset( $_GET['post_type'] ) && $_GET['post_type'] == Rt_HD_Module::$post_type && $query->is_main_query() ) {
 				$orderby = $query->get( 'orderby' );
 				if ( isset( $_GET['contact_id'] ) ) {
 					$formss = array();
@@ -423,6 +423,22 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 										"' AND p2p_to = ". $contact_id);
 
 					foreach ( $contact_froms as $form ){
+						$formss[] = intval( $form->p2p_from );
+					}
+					$query->set( 'post__in', $formss );
+				}
+				if ( isset( $_GET['account_id'] ) ) {
+					$formss = array();
+					$account_id = $_GET['account_id'];
+					global $wpdb;
+					global $rt_organization;
+					$account_froms = $wpdb->get_results(
+						"SELECT p2p_from
+							FROM wp_p2p
+								WHERE p2p_type = '".Rt_HD_Module::$post_type.'_to_'.$rt_organization->post_type.
+										"' AND p2p_to = ". $account_id);
+
+					foreach ( $account_froms as $form ){
 						$formss[] = intval( $form->p2p_from );
 					}
 					$query->set( 'post__in', $formss );

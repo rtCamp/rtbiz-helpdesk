@@ -337,7 +337,6 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 				$url  = add_query_arg(
 					array(
 						'post_type' => Rt_HD_Module::$post_type,
-						'page'      => 'rthd-all-' . Rt_HD_Module::$post_type,
 						'assignee'  => $user->ID,
 					), admin_url( 'edit.php' ) );
 				if ( ! empty( $user ) ) {
@@ -385,9 +384,8 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			foreach ( $results as $item ) {
 				$url    = add_query_arg(
 					array(
-						'post_type' => Rt_HD_Module::$post_type,
-						'page'      => 'rthd-all-' . Rt_HD_Module::$post_type,
-						$account    => $item->account_id,
+						'post_type'  => Rt_HD_Module::$post_type,
+						'account_id' => $item->account_id,
 					), admin_url( 'edit.php' ) );
 				$rows[] = array(
 					'<a href="' . $url . '">' . $item->account_name . '</a>',
@@ -435,9 +433,8 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			foreach ( $results as $item ) {
 				$url    = add_query_arg(
 					array(
-						'post_type' => Rt_HD_Module::$post_type,
-						'page'      => 'rthd-all-' . Rt_HD_Module::$post_type,
-						$contact    => $item->contact_id,
+						'post_type'  => Rt_HD_Module::$post_type,
+						'contact_id' => $item->contact_id,
 					), admin_url( 'edit.php' ) );
 				$rows[] = array(
 					'<a href="' . $url . '">' . $item->contact_name . '</a>',
