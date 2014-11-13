@@ -404,7 +404,29 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 							<td> #<?php echo esc_attr( $ticket->ID ) ?> </td>
 							<td><?php echo $ticket->post_title; ?></td>
 							<td> <?php echo esc_attr( human_time_diff( $date->format( 'U' ), current_time( 'timestamp' ) ) ) . esc_attr( __( ' ago' ) ) ?> </td>
-							<td> <?php echo esc_attr( $ticket->post_status ) ?> </td>
+							<td>
+							<?php
+								$style = 'padding: 5px; border: 1px solid black; border-radius: 5px;';
+								$flag = false;
+								$post_statuses = $rt_hd_module->get_custom_statuses();
+								foreach ( $post_statuses as $status ) {
+									if ( $status['slug'] == $ticket->post_status ) {
+										$ticket->post_status = $status['name'];
+										if ( ! empty( $status['style'] ) ) {
+											$style = $status['style'];
+										}
+										$flag = true;
+										break;
+									}
+								}
+								if ( ! $flag ) {
+									$ticket->post_status = ucfirst( $ticket->post_status );
+								}
+								if( ! empty( $ticket->post_status ) ) {
+									printf( '<mark style="%s" class="%s tips" data-tip="%s">%s</mark>', $style, $ticket->post_status, $ticket->post_status, $ticket->post_status );
+								}
+							?>
+							</td>
 							<td><a class="button support" target="_blank"
 							       href="<?php echo $link; ?>"><?php _e( 'Link' ); ?></a>
 							</td>
