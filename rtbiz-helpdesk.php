@@ -4,7 +4,7 @@
  * Plugin Name: rtBiz Helpdesk
  * Plugin URI: http://rtcamp.com/
  * Description: Helpdesk System for handle & track User request for Help
- * Version: 1.0
+ * Version: 1.1
  * Author: rtCamp
  * Author URI: http://rtcamp.com
  * License: GPL
