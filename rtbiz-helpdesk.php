@@ -4,7 +4,7 @@
  * Plugin Name: rtBiz Helpdesk
  * Plugin URI: http://rtcamp.com/
  * Description: Helpdesk System for handle & track User request for Help
- * Version: 1.1
+ * Version: 1.0
  * Author: rtCamp
  * Author URI: http://rtcamp.com
  * License: GPL
@@ -153,7 +153,22 @@ function rt_hd_init() {
 
 	global $rt_wp_hd;
 	$rt_wp_hd = new RT_WP_Helpdesk();
+	add_action( 'init', 'do_flush_rewrite_rules' ,20 );
 }
+register_activation_hook( __FILE__, 'init_call_flush_rewrite_rules' );
+
+function do_flush_rewrite_rules(){
+	if ( is_admin() && 'true' == get_option( 'rt_HD_call_rewrite' ) ) {
+		error_log(":: <<<<<<<<<<<-: -> custom Error \n", 3, "/var/tmp/my-errors.log");
+		flush_rewrite_rules();
+		delete_option( 'rt_HD_call_rewrite' );
+	}
+}
+
+function init_call_flush_rewrite_rules(){
+	add_option( 'rt_HD_call_rewrite', 'true' );
+}
+
 
 add_action( 'rt_biz_init', 'rt_hd_init', 1 );
 

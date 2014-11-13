@@ -199,17 +199,6 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 		function update_database() {
 			$updateDB = new RT_DB_Update( trailingslashit( RT_HD_PATH ) . 'rtbiz-helpdesk.php', trailingslashit( RT_HD_PATH_SCHEMA ) );
 			$updateDB->do_upgrade();
-			add_action( 'rt_db_update_finished_' . str_replace( '-', '_', sanitize_title( $updateDB->rt_plugin_info->name ) ), array( $this,
-			                                                                                                                          'init_call_flush_rewrite_rules'
-			) );
-		}
-
-		function do_flush_rewrite_rules(){
-			flush_rewrite_rules(false);
-		}
-
-		function init_call_flush_rewrite_rules(){
-			add_action('init',array($this,'do_flush_rewrite_rules'),11);
 		}
 
 		/**
