@@ -36,9 +36,19 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 		 */
 		public function __construct() {
 			add_action( 'init', array( $this, 'add_rewrite_rule' ) );
-			add_action ( 'init', array( $this, 'add_rewrite_tag' ) );
+			add_action( 'init', array( $this, 'add_rewrite_tag' ) );
+
+			add_action( 'init', array( $this, 'flush_rewrite_rules' ), 15 );
+
 			add_filter( 'template_include', array( $this, 'template_include' ), 1, 1 );
 			add_filter( 'wp_title', array( $this, 'change_title' ), 9999, 1 );
+		}
+
+		function flush_rewrite_rules() {
+			if ( is_admin() && 'true' == get_option( 'rthd_flush_rewrite_rules' ) ) {
+				flush_rewrite_rules();
+				delete_option( 'rthd_flush_rewrite_rules' );
+			}
 		}
 
 		function add_rewrite_endpoint() {

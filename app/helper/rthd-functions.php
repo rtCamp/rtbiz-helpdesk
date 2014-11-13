@@ -501,7 +501,7 @@ function rthd_get_email_signature_settings(){
 
 function rthd_generate_email_title( $post_id, $title ) {
 	$prefix = '[' . ucfirst( Rt_HD_Module::$name ) . ' #' . $post_id . ']';
-	$title = $prefix.$title;
+	$title = $prefix.' '.$title;
 	$title = str_replace( '{ticket_title}',get_the_title( $post_id ), $title );
 	return $title;
 }
@@ -545,7 +545,7 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 					$comment->comment_content = Rt_HD_Utils::force_utf_8( $comment->comment_content );
 				}
 			?>
-				<p><?php echo wpautop( make_clickable( $comment->comment_content ) ); ?></p>
+				<p><?php echo apply_filters( 'the_content', balanceTags( $comment->comment_content, true ) ); ?></p>
 			<?php } else { ?>
 				<p><?php _e( 'This followup has been marked private.', RT_HD_TEXT_DOMAIN ); ?></p>
 			<?php } ?>
@@ -573,7 +573,7 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 			<?php } ?>
 			<time title="<?php echo esc_attr( $comment->comment_date ); ?>" datetime="<?php echo esc_attr( $comment->comment_date ); ?>">
 				<span title="<?php echo esc_attr( ( $comment->comment_author_email == '' ) ? $comment->comment_author_IP : $comment->comment_author_email ); ?>"><?php echo esc_attr( ( $comment->comment_author == '' ) ? 'Anonymous' : $comment->comment_author ); ?> </span>
-				| <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) );
+				| <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . ' ago';
 				if ($user_edit){
 				?> |
 				<a href="#" class="editfollowuplink">Edit</a>
