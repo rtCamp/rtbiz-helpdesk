@@ -11,8 +11,8 @@ $comments = get_comments( array(
 	'offset' => 0,
 ) );
 
-$user_edit = current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' ) );
-if ( $user_edit ) {
+//$user_edit = current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' ) );
+//if ( $user_edit ) {
 	?>
 	<div id="dialog-form" title="Edit Followup" style='display: none'>
 		<textarea id="edited_followup_content" name="edited_followup_content" placeholder="Add new followup" rows="5"></textarea>
@@ -26,7 +26,7 @@ if ( $user_edit ) {
 		</div>
 	</div>
 <?php
-}
+//}
 if ( ! empty( $post->post_content ) ) {
 
 	$author_id=$post->post_author;
@@ -58,8 +58,11 @@ if ( ! empty( $post->post_content ) ) {
 	</ul>
 <?php }?>
 <ul class="discussion js-stream" id="chat-UI">
-	<?php foreach ( $comments as $comment ) {
 
+	<?php
+	$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
+	foreach ( $comments as $comment ) {
+		$user_edit = current_user_can( $cap ) || (get_current_user_id() == $comment->user_id );
 		$comment_user  = get_user_by( 'id', $comment->user_id );
 		$comment_render_type = 'left';
 		if ( ! empty( $comment_user ) ) {

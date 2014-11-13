@@ -1008,8 +1008,28 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$comment    = get_comment( $comment_ID );
 			$attachment = array();
 			$uploaded   = array();
-			if ( isset( $_REQUEST['attachemntlist'] ) && ! empty( $_REQUEST['attachemntlist'] ) ) {
-				foreach ( $_REQUEST['attachemntlist'] as $strAttach ) {
+
+			//then loop over the files that were sent and store them using  media_handle_upload();
+			//			var_dump($_FILES);
+			require_once( ABSPATH . 'wp-admin' . '/includes/image.php' );
+			require_once( ABSPATH . 'wp-admin' . '/includes/file.php' );
+			require_once( ABSPATH . 'wp-admin' . '/includes/media.php' );
+			$attachment_IDs=array();
+			if ( ! empty($_FILES['attachemntlist']['name'])) {
+				foreach ( $_FILES as $file => $array ) {
+					if ( $_FILES[ $file ]['error'] !== UPLOAD_ERR_OK ) {
+						$returnArray['error']    = 'upload error : ' . $_FILES[ $file ]['error'];
+						$returnArray['status'] = false;
+						echo json_encode( $returnArray );
+						ob_end_flush();
+						die();
+					}
+					$attach_id = media_handle_upload( $file, "" );;
+					array_push($attachment_IDs,$attach_id);
+				}
+			}
+			if ( isset( $attachment_IDs ) && ! empty( $attachment_IDs ) ) {
+				foreach ( $attachment_IDs as $strAttach ) {
 					$attachfile = get_attached_file( intval( $strAttach ) );
 					if ( $attachfile ) {
 						$attachment[] = wp_get_attachment_url( intval( $strAttach ) );
@@ -1057,12 +1077,14 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$returnArray['private']       = get_comment_meta( $comment_ID, '_rthd_privacy', true );
 			$comment_user  = get_user_by( 'id', $comment->user_id );
 			$comment_render_type = 'left';
+			$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
 			if ( ! empty( $comment_user ) ) {
-				if ( $comment_user->has_cap( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' ) ) ) {
+				if ( $comment_user->has_cap( $cap ) ) {
 					$comment_render_type = 'right';
 				}
 			}
-			$returnArray['comment_content'] = rthd_render_comment( get_comment( $comment_ID ), true, $comment_render_type, false );
+			$user_edit = current_user_can( $cap ) || (get_current_user_id() == $comment->user_id );
+			$returnArray['comment_content'] = rthd_render_comment( get_comment( $comment_ID ), $user_edit, $comment_render_type, false );
 			echo json_encode( $returnArray );
 			ob_end_flush();
 			die( 0 );
@@ -1086,12 +1108,6 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$followuptype    = $_POST['followuptype'];
 			$comment_post_ID = $_POST['followup_post_id'];
 			$post_type       = get_post_type( $comment_post_ID );
-			if ( ! current_user_can( 'edit_post', $comment_post_ID ) ) {
-				$returnArray['status']  = false;
-				$returnArray['message'] = 'Unauthorized Access';
-				echo json_encode( $returnArray );
-				die( 0 );
-			}
 			$comment_content = Rt_HD_Utils::force_utf_8( $_POST['followup_content'] );
 			$comment_privacy = $_POST['followup_private'];
 			global $wpdb;
@@ -1111,6 +1127,14 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 			if ( isset( $_POST['comment_id'] ) && intval( $_POST['comment_id'] ) > 0 ) {
 				$commentdata = get_comment( $_POST['comment_id'], ARRAY_A );
+				$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
+				$user_edit = current_user_can( $cap ) || (get_current_user_id() == $commentdata['user_id'] );
+				if ( !$user_edit ) {
+					$returnArray['status']  = false;
+					$returnArray['message'] = 'Unauthorized Access';
+					echo json_encode( $returnArray );
+					die( 0 );
+				}
 				$oldCommentBody = $commentdata['comment_content'];
 
 				$commentdata['comment_content'] = $comment_content;
@@ -1588,7 +1612,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 	              'number' => $Limit,
 	              'offset' => $offset,
 	          ) );
-			$user_edit = current_user_can( rt_biz_get_access_role_cap( RT_BIZ_TEXT_DOMAIN, 'editor' ) );
+//			$user_edit = current_user_can( rt_biz_get_access_role_cap( RT_BIZ_TEXT_DOMAIN, 'editor' ) );
 			$commenthtml='';
 			$count = 0;
 			foreach ( $comments as $comment ) {
@@ -1599,6 +1623,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 						$comment_render_type = 'right';
 					}
 				}
+				$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
+				$user_edit = current_user_can( $cap ) || (get_current_user_id() == $comment->user_id );
 				$commenthtml .= rthd_render_comment( $comment, $user_edit, $comment_render_type, false );
 				$count++;
 			}

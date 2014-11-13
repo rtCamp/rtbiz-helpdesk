@@ -574,7 +574,7 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 			<time title="<?php echo esc_attr( $comment->comment_date ); ?>" datetime="<?php echo esc_attr( $comment->comment_date ); ?>">
 				<span title="<?php echo esc_attr( ( $comment->comment_author_email == '' ) ? $comment->comment_author_IP : $comment->comment_author_email ); ?>"><?php echo esc_attr( ( $comment->comment_author == '' ) ? 'Anonymous' : $comment->comment_author ); ?> </span>
 				| <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) );
-				if ($display_private_comment_flag){
+				if ($user_edit){
 				?> |
 				<a href="#" class="editfollowuplink">Edit</a>
 				<?php
