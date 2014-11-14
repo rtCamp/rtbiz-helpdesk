@@ -460,6 +460,17 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 					$query->set( 'order', 'desc' );
 				}
 
+				if ( isset( $_GET['product_id'] ) ) {
+					global $rtbiz_product_sync;
+					$query->set( 'tax_query', array(
+						array(
+							'taxonomy' => $rtbiz_product_sync->product_slug,
+							'field' => 'term_id',
+						    'terms' => $_GET['product_id'],
+						),
+					) );
+				}
+
 				if ( isset( $_GET['created_by'] ) ) {
 
 					$query->set( 'meta_query', array(
