@@ -158,8 +158,12 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 			$product_option = '';
 			$order_email    = '';
 
-			// Save ticket if data has been posted
-			if ( ! empty( $_POST ) ) {
+			if( ! isset( $_POST['post'] ) || empty( $_POST['post'] ) || ! isset( $_POST['post']['title'] ) || empty( $_POST['post']['title'] ) || ! isset( $_POST['post']['product_id'] ) || empty( $_POST['post']['product_id'] ) || ! isset( $_POST['post']['email'] ) || empty( $_POST['post']['email'] ) ){
+				?>
+				<div id="info" class="error">Please fill all the details.</div>
+				<?php
+			}
+			else{ 			// Save ticket if data has been posted
 				$post_id = self::save();
 				if ( isset( $post_id ) && ! empty( $post_id ) && is_int( $post_id ) ) {
 					?>
@@ -214,7 +218,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 		 */
 		function save() {
 			$this->check_active_plugin();
-			global $rtbiz_product_sync, $rt_hd_import_operation, $redux_helpdesk_settings;;
+			global $rtbiz_product_sync, $rt_hd_import_operation, $redux_helpdesk_settings;
 
 			$data = $_POST['post'];
 			$productstr = $data['title'];

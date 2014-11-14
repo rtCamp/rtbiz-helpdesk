@@ -31,7 +31,7 @@ jQuery(document).ready(function ($) {
 
 	<?php if ( $product_exists ) { ?>
 		<div>
-			<select name="post[product_id]">
+			<select name="post[product_id]" required >
 				<option value="">Choose Product</option>
 				<?php echo balanceTags( $product_option ); ?>
 			</select>
@@ -46,11 +46,11 @@ jQuery(document).ready(function ($) {
 		$email = $current_user->user_email;
 	} ?>
 	<div>
-		<input id="email" placeholder="Email" type="email" name="post[email]" value="<?php echo sanitize_email( $email ) ?>"/>
+		<input id="email" placeholder="Email" type="email" name="post[email]" value="<?php echo sanitize_email( $email ) ?>" required />
 	</div>
 
 	<div>
-		<textarea name="post[description]" placeholder="Description" rows="10" cols="10"></textarea>
+		<textarea name="post[description]" placeholder="Description" rows="10" cols="10" required></textarea>
 	</div>
 
 	<div>
