@@ -42,7 +42,7 @@ if ( ! empty( $post->post_content ) ) {
 		<li class="left">
 			<div class="avatar">
 				<?php
-				echo get_avatar( $authoremail, 40 ); ?>
+				echo get_avatar( $authoremail, 42 ); ?>
 			</div>
 			<div class="messages">
 				<div class="rthd-comment-content">
@@ -64,9 +64,13 @@ if ( ! empty( $post->post_content ) ) {
 <?php if ($Limit < $totalComment){
 	echo '<div class="rthdcenter"><img id="load-more-hdspinner" class="helpdeskspinner" src="' . admin_url() . 'images/spinner.gif' . '" /></div>';
 	?>
-	<div class="content-stream stream-loading js-loading-placeholder">
-		<a href="#" id="followup-load-more" > Load more</a>
-	</div>
+	<!--<div class="content-stream stream-loading js-loading-placeholder">
+	</div>-->
+	<ul class="discussion ">
+		<li>
+			<a href="#" class="load-more" id="followup-load-more" > Load more</a>
+		</li>
+	</ul>
 <?php } ?>
 
 <ul class="discussion js-stream" id="chat-UI">

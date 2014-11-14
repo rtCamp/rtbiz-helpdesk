@@ -528,7 +528,7 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 	<li class="<?php echo $side_class . ' ' . $editable_class; ?>" id="comment-<?php echo esc_attr( $comment->comment_ID ); ?>">
 
 		<div class="avatar">
-			<?php echo get_avatar( $comment->comment_author_email, 40 ); ?>
+			<?php echo get_avatar( $comment->comment_author_email, 42 ); ?>
 		</div>
 		<div class="messages <?php echo ( $display_private_comment_flag ) ? '' : 'private-comment-display'; ?>">
 			<input id="followup-id" type="hidden" value="<?php echo esc_attr( $comment->comment_ID ); ?>">
