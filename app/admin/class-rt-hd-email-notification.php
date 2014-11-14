@@ -44,6 +44,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$signature = rthd_get_email_signature_settings();
 			$args = array(
 				'user_id'       => $user_id,
+				'fromname'      => $settings['rthd_outgoing_email_from_name'],
 				'fromemail'     => ( $settings['rthd_outgoing_email_delivery'] == 'wp_mail' ) ? $settings['rthd_outgoing_email_from_address'] : $settings['rthd_outgoing_email_mailbox'],
 				'toemail'       => serialize( $toemail ),
 				'ccemail'       => serialize( $ccemail ),
@@ -90,7 +91,8 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$arrayCC   = unserialize( $args['ccemail'] );
 			$arrayTo   = unserialize( $args['toemail'] );
 			$attachments = unserialize( $args['attachement'] );
-			$headers[] = 'From:' . $args['fromemail'];
+			$blog_title = get_bloginfo();
+			$headers[] = 'From: ' . ( ( ! empty( $args['fromname'] ) ) ? $args['fromname'] : $blog_title ) . ' <' . $args['fromemail'] . '>';
 			add_filter( 'wp_mail_from', 'rthd_my_mail_from' );
 			$emailsendflag = true;
 			if ( ! empty( $arrayBCC ) ) {

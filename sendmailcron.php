@@ -55,10 +55,11 @@ if ( ! empty( $settings['rthd_outgoing_email_delivery'] ) && $settings['rthd_out
 		if ( $rt_hd_settings->update_sent_email( $email->id, 'p', 'no' ) > 0 ) {
 			$updateFlag = false;
 			try {
-				var_dump($hdZendEmail->sendemail( $email->fromemail, $accessTokenArray[ $email->fromemail ]['token'], $accessTokenArray[ $email->fromemail ]['email_type'], $accessTokenArray[ $email->fromemail ]['imap_server'], $email->subject, $email->body, unserialize( $email->toemail ), unserialize( $email->ccemail ), unserialize( $email->bccemail ), unserialize( $email->attachement ) ));
+				$fromname = ( ! empty( $email->fromname ) ) ? $email->fromname : get_bloginfo();
+				var_dump($hdZendEmail->sendemail( $fromname, $email->fromemail, $accessTokenArray[ $email->fromemail ]['token'], $accessTokenArray[ $email->fromemail ]['email_type'], $accessTokenArray[ $email->fromemail ]['imap_server'], $email->subject, $email->body, unserialize( $email->toemail ), unserialize( $email->ccemail ), unserialize( $email->bccemail ), unserialize( $email->attachement ) ));
 				$updateFlag = true;
 			} catch ( Exception $e ) {
-				//var_dump( $e->getMessage() );
+				var_dump( $e->getMessage() );
 				$updateFlag = false;
 			}
 			if ( $updateFlag ) {

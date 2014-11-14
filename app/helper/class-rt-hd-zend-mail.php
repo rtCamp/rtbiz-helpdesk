@@ -221,7 +221,7 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		public function sendemail( $fromemail, $accessToken, $email_type, $imap_server, $subject, $body, $toEmail, $ccEmail, $bccEmail, $attachemnts, $mailtype = 'notification' ) {
+		public function sendemail( $fromname, $fromemail, $accessToken, $email_type, $imap_server, $subject, $body, $toEmail, $ccEmail, $bccEmail, $attachemnts, $mailtype = 'notification' ) {
 			set_time_limit( 0 );
 			if ( ! $this->try_imap_login( $fromemail, $accessToken, $email_type, $imap_server ) ) {
 				return false;
@@ -264,7 +264,7 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 			$transport->setOptions( $options );
 
 			$message = new Message();
-			$message->addFrom( $fromemail );
+			$message->addFrom( $fromemail, $fromname );
 
 			$message->addCustomeHeader( 'X-Helpdesk', $mailtype );
 

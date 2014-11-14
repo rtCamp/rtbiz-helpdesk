@@ -141,7 +141,8 @@ if ( ! class_exists( 'Rt_HD_Crons' ) ) {
 				if ( $rt_hd_settings->update_sent_email( $email->id, 'p', 'no' ) > 0 ) {
 					$updateFlag = false;
 					try {
-						$result = $hdZendEmail->sendemail( $email->fromemail, $accessTokenArray[ $email->fromemail ]['token'], $accessTokenArray[ $email->fromemail ]['email_type'], $accessTokenArray[ $email->fromemail ]['imap_server'], $email->subject, $email->body, unserialize( $email->toemail ), unserialize( $email->ccemail ), unserialize( $email->bccemail ), unserialize( $email->attachement ) );
+						$fromname = ( ! empty( $email->fromname ) ) ? $email->fromname : get_bloginfo();
+						$result = $hdZendEmail->sendemail( $fromname, $email->fromemail, $accessTokenArray[ $email->fromemail ]['token'], $accessTokenArray[ $email->fromemail ]['email_type'], $accessTokenArray[ $email->fromemail ]['imap_server'], $email->subject, $email->body, unserialize( $email->toemail ), unserialize( $email->ccemail ), unserialize( $email->bccemail ), unserialize( $email->attachement ) );
 						error_log( var_export( $result, true ) );
 						if ( $result ) {
 							$updateFlag = true;
