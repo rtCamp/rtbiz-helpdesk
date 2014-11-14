@@ -28,7 +28,7 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 		 */
 		public static function ui( $post ) {
 
-			global $rt_hd_module, $rt_hd_closing_reason, $rt_hd_attributes;
+			global $rt_hd_module, $rt_hd_attributes;
 			$labels    = $rt_hd_module->labels;
 			$post_type = Rt_HD_Module::$post_type;
 
@@ -40,13 +40,6 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 
 			$post_author = $post->post_author;
 
-			$close_date_meta = get_post_meta( $post->ID, '_rtbiz_hd_closing_date', true );
-			if ( ! empty( $close_date_meta ) ) {
-				$closingdate = new DateTime( $close_date_meta );
-				$closingdate = $closingdate->format( 'M d, Y h:i A' );
-			} else {
-				$closingdate = '';
-			}
 			$rtcamp_users = Rt_HD_Utils::get_hd_rtcamp_user(); ?>
 
 			<style type="text/css">
@@ -116,7 +109,6 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 				       title="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>"> <input
 					name="post[post_date]" type="hidden"
 					value="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>"/>
-				<!--<span class="postfix datepicker-toggle" data-datepicker="closing-date"><label class="foundicon-calendar">[]</label></span>-->
 			</div>
 
 			<div class="row_group">
@@ -125,26 +117,9 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 				<input class="moment-from-now" type="text" placeholder="Modified on Date"
 				       value="<?php echo esc_attr( $modifydate ); ?>" title="<?php echo esc_attr( $modifydate ); ?>"
 				       readonly="readonly">
-				<!--<span class="postfix datepicker-toggle" data-datepicker="closing-date"><label class="foundicon-calendar">[]</label></span>-->
 			</div>
 
-			<div class="row_group">
-				<span class="prefix"
-				      title="<?php _e( 'Closing Date', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Closing Date', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
-				<input class="datepicker moment-from-now" type="text" placeholder="Select Closing Date"
-				       value="<?php echo esc_attr( ( isset( $closingdate ) ) ? $closingdate : '' ); ?>"
-				       title="<?php echo esc_attr( ( isset( $closingdate ) ) ? $closingdate : '' ); ?>"> <input
-					name="post[closing-date]" type="hidden"
-					value="<?php echo esc_attr( ( isset( $closingdate ) ) ? $closingdate : '' ); ?>"/>
-				<!--<span class="postfix datepicker-toggle" data-datepicker="closing-date"><label class="foundicon-calendar">[]</label></span>-->
-			</div>
-
-			<div class="row_group">
-			<span class="prefix"
-			      title="<?php _e( 'Closing Reason', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Closing Reason', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
-			<?php $rt_hd_closing_reason->get_closing_reasons( ( isset( $post->ID ) ) ? $post->ID : '', true ); ?>
-			</div><?php
-
+			<?php
 			$rthd_unique_id = get_post_meta( $post->ID, '_rtbiz_hd_unique_id', true );
 			if ( ! empty( $rthd_unique_id ) ) {
 				?>
@@ -215,9 +190,6 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 			);
 
 			$rt_hd_tickets_operation->ticket_default_field_update( $postArray, $dataArray, $post->post_type, $post_id );
-
-			$rt_hd_tickets_operation->ticket_closing_field_update( $newTicket, $post_id );
-
 			$rt_hd_tickets_operation->ticket_attribute_update( $newTicket, $post->post_type, $post_id, 'meta' );
 
 		}

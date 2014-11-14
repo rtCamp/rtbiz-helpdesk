@@ -137,7 +137,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 				$this,
 				'tickets_by_status',
 			), $rt_hd_dashboard->screen_id, 'column1' );
-			/* Line Chart for Closed::Won */
+			/* Line Chart for Answered::Archived */
 			add_meta_box( 'rthd-daily-tickets', __( 'Daily Tickets', RT_HD_TEXT_DOMAIN ), array(
 				$this,
 				'daily_tickets',

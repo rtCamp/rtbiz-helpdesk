@@ -101,43 +101,6 @@ class test_Rt_HD_Tickets_Operation extends RT_WP_TestCase {
 	}
 
 	/**
-	 * Test ticket_closing_field_update
-	 */
-	function  test_ticket_closing_field_update() {
-		$closing_date = current_time( 'mysql' );
-		$term         = wp_insert_term(
-			'Demo', // the term
-			rthd_attribute_taxonomy_name( 'closing-reason' ), // the taxonomy
-			array(
-				'description' => 'demo closing reason',
-				'slug'        => 'demo',
-			)
-		);
-		$this->assertTrue( is_array( $term ) );
-		$newTicket = array(
-			'closing-date'   => $closing_date,
-			'closing_reason' => array( $term['term_id'] ),
-		);
-		$this->rthdTicketOperation->ticket_closing_field_update( $newTicket, $this->post_ID );
-		$this->assertEquals( $closing_date, get_post_meta( $this->post_ID, '_rtbiz_hd_closing_date', true ) );
-		$this->assertEquals( get_current_user_id(), get_post_meta( $this->post_ID, '_rtbiz_hd_closed_by', true ) );
-
-		$post_terms = wp_get_post_terms( $this->post_ID, rthd_attribute_taxonomy_name( 'closing-reason' ) );
-		$this->assertTrue( is_array( $post_terms ) );
-
-		//Compare term
-		foreach ( $post_terms as $post_term ) {
-			$this->assertTrue( is_object( $post_term ) );
-			$this->assertEquals( $term['term_id'], $post_term->term_id );
-			$this->assertEquals( 'Demo', $post_term->name );
-			$this->assertEquals( 'demo', $post_term->slug );
-			$this->assertEquals( 'demo closing reason', $post_term->description );
-			$this->assertEquals( $term['term_taxonomy_id'], $post_term->term_taxonomy_id );
-			$this->assertEquals( rthd_attribute_taxonomy_name( 'closing-reason' ), $post_term->taxonomy );
-		}
-	}
-
-	/**
 	 * Test ticket_attribute_update
 	 */
 	function  test_ticket_attribute_update() {

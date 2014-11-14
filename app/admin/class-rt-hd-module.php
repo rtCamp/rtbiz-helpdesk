@@ -111,7 +111,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				array(
 					'slug'        => 'hd-archived',
 					'name'        => __( 'Archived', RT_HD_TEXT_DOMAIN ),
-					'description' => __( 'Ticket is archived/closed. Client can re-open if they wish to.', RT_HD_TEXT_DOMAIN ),
+					'description' => __( 'Ticket is archived. Client can re-open if they wish to.', RT_HD_TEXT_DOMAIN ),
 					'style'       => 'padding: 5px; background: #CCCCCC; color: #404040; border: 1px solid #404040; border-radius: 5px;'
 				),
 			);
@@ -140,7 +140,6 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 
 		/**
 		 * register rtbiz-HelpDesk CPT [ Ticket ] & define connection with other post type [ person, organization ]
-		 * calling closing-reason
 		 *
 		 * @since 0.1
 		 */
@@ -232,7 +231,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 			global $rt_hd_attributes_relationship_model, $rt_hd_attributes_model;
 			$relations  = $rt_hd_attributes_relationship_model->get_relations_by_post_type( self::$post_type );
 			$table_name = rthd_get_ticket_table_name();
-			$sql        = "CREATE TABLE {$table_name} (\n" . "id BIGINT(20) NOT NULL AUTO_INCREMENT,\n" . "post_id BIGINT(20),\n" . "post_title TEXT,\n" . "post_content TEXT,\n" . "assignee BIGINT(20),\n" . "date_create TIMESTAMP NOT NULL DEFAULT 0,\n" . "date_create_gmt TIMESTAMP NOT NULL DEFAULT 0,\n" . "date_update TIMESTAMP NOT NULL DEFAULT 0,\n" . "date_update_gmt TIMESTAMP NOT NULL DEFAULT 0,\n" . "date_closing TIMESTAMP NOT NULL DEFAULT 0,\n" . "date_closing_gmt TIMESTAMP NOT NULL DEFAULT 0,\n" . "post_status VARCHAR(20),\n" . "user_created_by BIGINT(20),\n" . "user_updated_by BIGINT(20),\n" . "user_closed_by BIGINT(20),\n" . "last_comment_id BIGINT(20),\n" . "flag VARCHAR(3),\n" . str_replace( '-', '_', rthd_attribute_taxonomy_name( 'closing_reason' ) ) . " TEXT,\n";
+			$sql        = "CREATE TABLE {$table_name} (\n" . "id BIGINT(20) NOT NULL AUTO_INCREMENT,\n" . "post_id BIGINT(20),\n" . "post_title TEXT,\n" . "post_content TEXT,\n" . "assignee BIGINT(20),\n" . "date_create TIMESTAMP NOT NULL DEFAULT 0,\n" . "date_create_gmt TIMESTAMP NOT NULL DEFAULT 0,\n" . "date_update TIMESTAMP NOT NULL DEFAULT 0,\n" . "date_update_gmt TIMESTAMP NOT NULL DEFAULT 0,\n" . "post_status VARCHAR(20),\n" . "user_created_by BIGINT(20),\n" . "user_updated_by BIGINT(20),\n" . "last_comment_id BIGINT(20),\n" . "flag VARCHAR(3),\n";
 
 			foreach ( $relations as $relation ) {
 				$attr      = $rt_hd_attributes_model->get_attribute( $relation->attr_id );

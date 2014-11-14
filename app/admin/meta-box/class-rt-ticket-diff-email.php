@@ -30,7 +30,7 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		public static function store_old_post_data( $post_id, $post ) {
-			global $rt_hd_ticket_history_model, $rt_hd_closing_reason, $rt_hd_module, $rt_hd_attributes, $rt_ticket_email_content;
+			global $rt_hd_ticket_history_model, $rt_hd_module, $rt_hd_attributes, $rt_ticket_email_content;
 
 			// $post_id and $post are required
 			if ( empty( $post_id ) || empty( $post ) ) {
@@ -62,7 +62,7 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 			$newTicket = ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] = 'inline-save' ) ? get_post( $_REQUEST['post_ID'] ) : $_POST['post'];
 			$newTicket = ( array ) $newTicket;
 
-			$emailHTML = $diff = $closing_reason_history_id = '';
+			$emailHTML = $diff = '';
 
 			// Title Diff
 			$diff = rthd_text_diff( $oldpost->post_title, $_POST['post_title'] );
@@ -95,9 +95,6 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 						'update_time' => current_time( 'mysql' ),
 						'updated_by'  => get_current_user_id(),
 					) );
-				if ( 'trash' === $_POST['post_status'] ) {
-					$closing_reason_history_id = $id;
-				}
 			}
 
 			// Author
@@ -113,15 +110,6 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 			$diff = rthd_text_diff( strip_tags( $oldpost->post_content ), strip_tags( $_POST['post_content'] ) );
 			if ( $diff ) {
 				$emailHTML .= '<tr><th style="padding: .5em;border: 0;"> Ticket Content</th><td>' . $diff . '</td><td></td></tr>';
-			}
-
-			// Closing Date Diff
-			if ( isset( $newTicket['closing-date'] ) && ! empty( $newTicket['closing-date'] ) ) {
-				$oldclosingdate = get_post_meta( $post_id, '_rtbiz_hd_closing_date', true );
-				$diff           = rthd_text_diff( $oldclosingdate, $newTicket['closing-date'] );
-				if ( $diff ) {
-					$emailHTML .= '<tr><th style="padding: .5em;border: 0;">Closing Date</th><td>' . $diff . '</td><td></td></tr>';
-				}
 			}
 
 			// Attachments Diff
@@ -171,10 +159,6 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 					$emailHTML .= '<tr><th style="padding: .5em;border: 0;">External Files Links</th><td>' . $diff . '</td><td></td></tr>';
 				}
 			}
-
-			// Cloasing Reason Diff
-			$closing_reason_diff = $rt_hd_closing_reason->closing_reason_diff( $post_id, $newTicket );
-			$emailHTML .= $closing_reason_diff;
 
 			// Attributes-meta Diff
 			$attributes = rthd_get_attributes( Rt_HD_Module::$post_type, 'meta' );
@@ -229,7 +213,6 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 				}
 			}
 
-			$rt_ticket_email_content['closing_reason_history_id'] = $closing_reason_history_id;
 			$rt_ticket_email_content['oldUser']                   = $oldpost->post_author;
 			$rt_ticket_email_content['newUser']                   = $newTicket['post_author'];
 			$rt_ticket_email_content['bccemails']                 = $bccemails;

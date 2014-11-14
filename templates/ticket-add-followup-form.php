@@ -28,11 +28,8 @@ global $current_user;
 	<input id="attachemntlist" name="attachemntlist" type="file" />
 	</div>
 
-<!--	<ul id="attachmentList"></ul>-->
-
 	<div class="rthd-clearfix"></div>
 	<button class="add-savefollowup btn-primary btn" id="savefollwoup" type="button">Add followup</button>
-<!--	<button class="add-followup-attachment btn" id="rthd-add-followup-attachment" type="button">Add Attachment</button>-->
 	<img id='hdspinner' class="helpdeskspinner" src="<?php echo admin_url().'images/spinner.gif'; ?>">
 	<div class="rthd-clearfix"></div>
 </form>

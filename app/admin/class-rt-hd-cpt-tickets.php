@@ -23,18 +23,11 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 		 * @since  0.1
 		 */
 		function __construct() {
-			//add_filter( 'media_view_strings', array( $this, 'change_insert_media_title' ) );
 
 			// CPT List View
 			add_filter( 'manage_edit-' . Rt_HD_Module::$post_type . '_columns', array( $this, 'edit_custom_columns' ) );
-			add_action( 'manage_' . Rt_HD_Module::$post_type . '_posts_custom_column', array(
-				$this,
-				'manage_custom_columns',
-			), 2 );
-			add_filter( 'manage_edit-' . Rt_HD_Module::$post_type . '_sortable_columns', array(
-				$this,
-				'sortable_column',
-			) );
+			add_action( 'manage_' . Rt_HD_Module::$post_type . '_posts_custom_column', array( $this, 'manage_custom_columns' ), 2 );
+			add_filter( 'manage_edit-' . Rt_HD_Module::$post_type . '_sortable_columns', array( $this, 'sortable_column' ) );
 
 			// CPT Edit/Add View
 			add_action( 'add_meta_boxes', array( $this, 'remove_meta_boxes' ), 10 );
@@ -57,29 +50,9 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 		}
 
 		/**
-		 * change title of media upload page
-		 *
-		 * @since  0.1
-		 *
-		 * @param $strings
-		 *
-		 * @return mixed
-		 */
-		function change_insert_media_title( $strings ) {
-			global $post_type;
-
-			if ( $post_type == Rt_HD_Module::$post_type ) {
-				$obj = get_post_type_object( Rt_HD_Module::$post_type );
-
-				$strings['insertIntoPost']     = sprintf( __( 'Insert into %s', RT_HD_PATH_ADMIN ), $obj->labels->singular_name );
-				$strings['uploadedToThisPost'] = sprintf( __( 'Uploaded to this %s', RT_HD_PATH_ADMIN ), $obj->labels->singular_name );
-			}
-
-			return $strings;
-		}
-
-		/**
 		 * Edit Column list view on Tickets List view page
+		 *
+		 * @param $cols
 		 *
 		 * @since  0.1
 		 *
@@ -88,16 +61,14 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 		public function edit_custom_columns($cols) {
 			$columns = array();
 
-			$columns['cb']                         = '<input type="checkbox" />';
-			$columns['rthd_ticket_title']          = __( 'Ticket', RT_HD_TEXT_DOMAIN );
-			$columns['rthd_ticket_status']         = '<span class="status_head tips" data-tip="' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '">' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '</span>';
-			$columns['rthd_ticket_created_by']     = __( 'Created By', RT_HD_TEXT_DOMAIN );
-			$columns['comments'] = $cols['comments'];
-			$columns['rthd_ticket_updated_by']     = __( 'Updated By', RT_HD_TEXT_DOMAIN );
-			$columns['rthd_ticket_closed_by']      = __( 'Closed By', RT_HD_TEXT_DOMAIN );
-			$columns['rthd_ticket_closing_reason'] = __( 'Closing Reason', RT_HD_TEXT_DOMAIN );
-			$columns['rthd_ticket_contacts']       = __( 'Contacts', RT_HD_TEXT_DOMAIN );
-			$columns['rthd_ticket_accounts']       = __( 'Accounts', RT_HD_TEXT_DOMAIN );
+			$columns['cb']                     = '<input type="checkbox" />';
+			$columns['rthd_ticket_title']      = __( 'Ticket', RT_HD_TEXT_DOMAIN );
+			$columns['rthd_ticket_status']     = '<span class="status_head tips" data-tip="' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '">' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '</span>';
+			$columns['rthd_ticket_created_by'] = __( 'Created By', RT_HD_TEXT_DOMAIN );
+			$columns['comments']               = $cols['comments'];
+			$columns['rthd_ticket_updated_by'] = __( 'Updated By', RT_HD_TEXT_DOMAIN );
+			$columns['rthd_ticket_contacts']   = __( 'Contacts', RT_HD_TEXT_DOMAIN );
+			$columns['rthd_ticket_accounts']   = __( 'Accounts', RT_HD_TEXT_DOMAIN );
 
 			return $columns;
 		}
@@ -258,39 +229,6 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 					printf( '</span>' );
 					break;
 
-				case 'rthd_ticket_closed_by':
-					$closeDate = get_post_meta( $post->ID, '_rtbiz_hd_closing_date', true );
-					if ( $closeDate ) {
-						$date     = new DateTime( $closeDate );
-						$datediff = human_time_diff( $date->format( 'U' ), current_time( 'timestamp' ) ) . __( ' ago' );
-						printf( __( '<span class="created-by tips" data-tip="%s">%s', RT_HD_PATH_ADMIN ), get_the_modified_date( 'd-m-Y H:i' ), $datediff );
-
-						$user_id   = get_post_meta( $post->ID, '_rtbiz_hd_closed_by', true );
-						$user_info = get_userdata( $user_id );
-						$url       = esc_url(
-							add_query_arg(
-								array(
-									'post_type'  => Rt_HD_Module::$post_type,
-									'updated_by' => $user_id,
-								), 'edit.php' ) );
-
-						if ( $user_info ) {
-							printf( ' by <a href="%s">%s</a></span>', $url, $user_info->user_login );
-						}
-
-						printf( '</span>' );
-					} else {
-						echo esc_html( '-' );
-					}
-					break;
-
-				case 'rthd_ticket_closing_reason':
-
-					$term_name = wp_get_post_terms( $post->ID, rthd_attribute_taxonomy_name( 'closing-reason' ), array( 'fields' => 'names' ) );
-					echo esc_attr( ! empty( $term_name ) ? $term_name[0] : '-' );
-
-					break;
-
 				case 'rthd_ticket_contacts' :
 
 					$contacts = rt_biz_get_post_for_person_connection( $post->ID, Rt_HD_Module::$post_type );
@@ -335,7 +273,6 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 		 * @since  0.1
 		 */
 		public function remove_meta_boxes() {
-			remove_meta_box( rthd_attribute_taxonomy_name( 'closing-reason' ) . 'div' , Rt_HD_Module::$post_type, 'side' );
 			remove_meta_box( 'revisionsdiv', Rt_HD_Module::$post_type, 'normal' );
 			remove_meta_box( 'commentstatusdiv', Rt_HD_Module::$post_type, 'normal' );
 			remove_meta_box( 'slugdiv', Rt_HD_Module::$post_type, 'normal' );
