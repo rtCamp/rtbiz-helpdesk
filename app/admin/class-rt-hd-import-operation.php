@@ -1598,7 +1598,9 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$postid=  $_POST['post_id'];
 				$offset=  $_POST['offset'];
 				$Limit=  $_POST['limit'];
-				$offset=  $offset+$Limit;
+				//				if ( ! isset($_POST['getall']) && $_POST['all']!='true') {
+				//					$offset = $offset + $Limit;
+				//				}
 			}
 			else{
 				echo json_encode($response);

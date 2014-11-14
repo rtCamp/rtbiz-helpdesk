@@ -171,14 +171,48 @@ jQuery( document ).ready( function ( $ ) {
          } );
 	} );
 
+	jQuery('#followup-load-more' ).click(function (){
+		var requestArray = new Object();
+		var totalcomment=parseInt( jQuery('#followup-totalcomment' ).val(),10);
+		var limit = parseInt(jQuery('#followup-limit').val(),10);
+		if( limit != 3 ){
+			return;
+		}
+		jQuery(this ).parent().hide();
+		jQuery('#load-more-hdspinner' ).show();
+		requestArray['limit']=totalcomment-3;
+		requestArray['offset']=0;
+		requestArray["action"] = "load_more_followup";
+		requestArray['post_id'] =  jQuery('#post-id' ).val();
+		//requestArray['all'] =  'true';
+		jQuery.ajax( {
+			             url: ajaxurl,
+			             dataType: "json",
+			             type: 'post',
+			             data: requestArray,
+			             success: function ( data ) {
+				             if (data.status) {
+					             jQuery( '#followup-offset' ).val( data.offset );
+					             jQuery( '#chat-UI' ).prepend( data.comments );
+				             }
+				             jQuery('#load-more-hdspinner' ).hide();
+			             },
+			             error: function(){
+				             jQuery('#load-more-hdspinner' ).hide();
+				             return false;
+			             },
+		             });
+
+	});
+
 } );
 
-(function($) {
+/*(function($) {
 	"use strict";
 
-	/**
+	*//**
 	 * Quick implementation of infinite scroll
-	 */
+	 *//*
 	var $stream = $('.js-stream');
 	$(window).load(function (e) {
 		if ( ! $stream.length ) {
@@ -265,4 +299,4 @@ jQuery( document ).ready( function ( $ ) {
 			});
 		});
 	});
-})(jQuery);
+})(jQuery);*/
