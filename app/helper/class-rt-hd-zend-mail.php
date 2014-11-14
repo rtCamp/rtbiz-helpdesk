@@ -649,6 +649,9 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 						$UmailId      = $tempUIDArray['uid'];
 					}
 					$mailId    = $this->get_number_by_unique_id( $UmailId, $storage );
+					if ( empty( $mailId ) ) {
+						continue;
+					}
 					$message   = $storage->getMessage( $mailId ); //1474);
 					$lastFlags = $message->getFlags();
 					try {
@@ -829,7 +832,9 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 										$file['filename']      = $filename;
 										$file['extn']          = $extn;
 										$file['type']          = $ContentType;
-										$file['xattachmentid'] = $part->getHeader('xattachmentid')->getFieldValue();
+										if ( $part->hasHeader( 'xattachmentid' ) ) {
+											$file['xattachmentid'] = $part->getHeader('xattachmentid')->getFieldValue();
+										}
 										$attachements[]        = $file;
 									} else {
 										error_log( 'Attachment Failed ... ' . esc_attr( $filename ) . '\r\n' );
@@ -886,7 +891,9 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 					}
 
 					foreach( $attachements as $a ) {
-						$htmlBody = str_replace( 'src="cid:' . $a['xattachmentid'] . '"', 'src="' . $a['url'] . '"', $htmlBody );
+						if ( ! empty( $a['xattachmentid'] ) ) {
+							$htmlBody = str_replace( 'src="cid:' . $a['xattachmentid'] . '"', 'src="' . $a['url'] . '"', $htmlBody );
+						}
 					}
 
 					$subject      = $message->subject;
