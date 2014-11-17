@@ -61,14 +61,14 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 		public function edit_custom_columns($cols) {
 			$columns = array();
 
-			$columns['cb']                     = '<input type="checkbox" />';
-			$columns['rthd_ticket_title']      = __( 'Ticket', RT_HD_TEXT_DOMAIN );
-			$columns['rthd_ticket_status']     = '<span class="status_head tips" data-tip="' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '">' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '</span>';
-			$columns['rthd_ticket_created_by'] = __( 'Created By', RT_HD_TEXT_DOMAIN );
-			$columns['comments']               = $cols['comments'];
-			$columns['rthd_ticket_updated_by'] = __( 'Updated By', RT_HD_TEXT_DOMAIN );
-			$columns['rthd_ticket_contacts']   = __( 'Contacts', RT_HD_TEXT_DOMAIN );
-			$columns['rthd_ticket_accounts']   = __( 'Accounts', RT_HD_TEXT_DOMAIN );
+			$columns['cb']                         = '<input type="checkbox" />';
+			$columns['rthd_ticket_title']          = __( 'Ticket', RT_HD_TEXT_DOMAIN );
+			$columns['rthd_ticket_status']         = '<span class="status_head tips" data-tip="' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '">' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '</span>';
+			$columns['rthd_ticket_created_by']     = __( 'Created By', RT_HD_TEXT_DOMAIN );
+			$columns['rthd_ticket_followup']       = $cols['comments'];
+            $columns['rthd_ticket_updated_by']     = __( 'Updated By', RT_HD_TEXT_DOMAIN );
+			$columns['rthd_ticket_contacts']       = __( 'Contacts', RT_HD_TEXT_DOMAIN );
+			$columns['rthd_ticket_accounts']       = __( 'Accounts', RT_HD_TEXT_DOMAIN );
 
 			return $columns;
 		}
@@ -86,7 +86,8 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 			$columns['rthd_ticket_title']          = __( 'Ticket', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_created_by']     = __( 'Created By', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_updated_by']     = __( 'Updated By', RT_HD_TEXT_DOMAIN );
-			return $columns;
+            $columns['rthd_ticket_followup'] =  __( 'comments', RT_HD_TEXT_DOMAIN );
+            return $columns;
 		}
 
 		function row_actions( $actions, $always_visible = false ) {
@@ -122,6 +123,10 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 			$post_type_object = get_post_type_object( $post->post_type );
 
 			switch ( $column ) {
+
+                case 'rthd_ticket_followup' :
+                    echo '<div class="post-com-count-wrapper"><a class="post-com-count"><span class="comment-count">'.( $post->comment_count).'</span></a></div>';
+                    break;
 
 				case 'rthd_ticket_status' :
 					$post_status_list = $rt_hd_module->get_custom_statuses();
