@@ -89,6 +89,7 @@ ul#chat-UI {
 }
 .messages time {
 	color: #777;
+    float: right;
 }
 
 .messages .comment_attechment {
@@ -278,7 +279,9 @@ ul#chat-UI {
     margin-bottom: 10px;
 }
 
-
+.followup-information span{
+    color: #06C;
+}
 
 .load-more-count {
     color: #7ebbff;

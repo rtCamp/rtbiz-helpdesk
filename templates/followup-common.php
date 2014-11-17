@@ -70,7 +70,7 @@ if ( ! empty( $post->post_content ) ) {
 		<li><a class="load-more-block" href="#">
 			<p>
 			<label class="load-more-circle" id="followup-load-more-count"><?php echo $offset ?></label>
-				<label class="load-more-count">count</label>
+				<label class="load-more-count">more</label>
 				<label class="load-more-loading">...</label>
 			</p>
             </a>
