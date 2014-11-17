@@ -53,9 +53,9 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 					display: none
 				}
 			</style>
-
+            <input type="hidden" name="rthd_check_matabox" value="true">
 			<div class="row_group">
-				<span class="prefix" title="<?php _e( 'Assigned To', RT_HD_TEXT_DOMAIN ); ?>"><label
+                    <span class="prefix" title="<?php _e( 'Assigned To', RT_HD_TEXT_DOMAIN ); ?>"><label
 						for="post[post_author]"><strong><?php _e( 'Assigned To' ); ?></strong></label></span> <select
 					name="post[post_author]"><?php
 			if ( ! empty( $rtcamp_users ) ) {
@@ -209,15 +209,21 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 		public static function save( $post_id, $post ) {
 
 			global $rt_hd_tickets_operation;
-
-			$newTicket = ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] = 'inline-save' ) ? get_post( $_REQUEST['post_ID'] ) : $_POST['post'];
+            if (isset($_REQUEST['rthd_check_matabox']) && 'true' == $_REQUEST['rthd_check_matabox'] ){
+                $newTicket = $_POST['post'];
+                $datetimeformat =  'M d, Y h:i A';
+            }
+            else{
+                $newTicket = $_POST;
+                $datetimeformat = 'Y-m-d H:i:s';
+            }
 			$newTicket = ( array ) $newTicket;
 
 			//Create Date
 			$creationdate = $newTicket['post_date'];
 			if ( isset( $creationdate ) && $creationdate != '' ) {
 				try {
-					$dr                         = date_create_from_format( 'Y-m-d H:i:s', $creationdate );
+					$dr                         = date_create_from_format( $datetimeformat, $creationdate );
 					$timeStamp                  = $dr->getTimestamp();
 					$newTicket['post_date']     = gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) ) );
 					$newTicket['post_date_gmt'] = get_gmt_from_date( $dr->format( 'Y-m-d H:i:s' ) );
