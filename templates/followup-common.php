@@ -66,8 +66,14 @@ if ( ! empty( $post->post_content ) ) {
 	?>
 	<!--<div class="content-stream stream-loading js-loading-placeholder">
 	</div>-->
-	<ul class="discussion ">
-		<li>
+	<ul class="discussion load-more-ul ">
+		<li><a class="load-more-block" href="#">
+			<p>
+			<label class="load-more-circle" id="followup-load-more-count"><?php echo $offset ?></label>
+				<label class="load-more-count">count</label>
+				<label class="load-more-loading">...</label>
+			</p>
+            </a>
 			<a href="#" class="load-more" id="followup-load-more" > Load more</a>
 		</li>
 	</ul>

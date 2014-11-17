@@ -171,7 +171,8 @@ jQuery( document ).ready( function ( $ ) {
          } );
 	} );
 
-	jQuery('#followup-load-more' ).click(function (){
+	jQuery('#followup-load-more, .load-more-block' ).click(function (e){
+        e.preventDefault();
 		var requestArray = new Object();
 		var totalcomment=parseInt( jQuery('#followup-totalcomment' ).val(),10);
 		var limit = parseInt(jQuery('#followup-limit').val(),10);

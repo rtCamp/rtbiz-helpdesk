@@ -531,6 +531,18 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 			<?php echo get_avatar( $comment->comment_author_email, 42 ); ?>
 		</div>
 		<div class="messages <?php echo ( $display_private_comment_flag ) ? '' : 'private-comment-display'; ?>">
+    <div class="followup-information">
+        <span title="<?php echo esc_attr( ( $comment->comment_author_email == '' ) ? $comment->comment_author_IP : $comment->comment_author_email ); ?>"><?php echo esc_attr( ( $comment->comment_author == '' ) ? 'Anonymous' : $comment->comment_author ); ?> </span>
+            <time title="<?php echo esc_attr( $comment->comment_date ); ?>" datetime="<?php echo esc_attr( $comment->comment_date ); ?>">
+
+                <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . ' ago';
+                if ($user_edit){
+                    ?> |
+                    <a href="#" class="editfollowuplink">Edit</a>
+                <?php
+                } ?>
+            </time>
+            </div>
 			<input id="followup-id" type="hidden" value="<?php echo esc_attr( $comment->comment_ID ); ?>">
 			<input id="is-private-comment" type="hidden" value="<?php echo esc_attr( $is_comment_private ); ?>">
 			<div class="rthd-comment-content">
@@ -571,15 +583,7 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 				<?php } ?>
 			</ul>
 			<?php } ?>
-			<time title="<?php echo esc_attr( $comment->comment_date ); ?>" datetime="<?php echo esc_attr( $comment->comment_date ); ?>">
-				<span title="<?php echo esc_attr( ( $comment->comment_author_email == '' ) ? $comment->comment_author_IP : $comment->comment_author_email ); ?>"><?php echo esc_attr( ( $comment->comment_author == '' ) ? 'Anonymous' : $comment->comment_author ); ?> </span>
-				| <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . ' ago';
-				if ($user_edit){
-				?> |
-				<a href="#" class="editfollowuplink">Edit</a>
-				<?php
-				} ?>
-			</time>
+
 
 		</div>
 	</li>

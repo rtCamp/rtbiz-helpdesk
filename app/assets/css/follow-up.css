@@ -204,13 +204,13 @@ ul#chat-UI {
 
 .load-more{
 	position: relative;
-	background: #093b73;
+	background: #06C;
 	border: 1px solid #f5f5f5;
 }
 .load-more:after, .load-more:before {
 	right: 100%;
-	top: 50%;
-	border: solid transparent;
+    top: 20px;
+    border: solid transparent;
 	content: " ";
 	height: 0;
 	width: 0;
@@ -220,15 +220,15 @@ ul#chat-UI {
 
 .load-more:after {
 	border-color: rgba(9, 59, 115, 0);
-	border-right-color: #093b73;
-	border-width: 30px;
-	margin-top: -30px;
+	border-right-color: #06C;
+	border-width: 9px;
+	margin-top: -7px;
 }
 .load-more:before {
 	border-color: rgba(245, 245, 245, 0);
 	border-right-color: #f5f5f5;
-	border-width: 31px;
-	margin-top: -31px;
+	border-width: 8px;
+	margin-top: -8px;
 }
 
 #followup-load-more{
@@ -254,4 +254,58 @@ ul#chat-UI {
 
 .rthdcenter{
 	text-align: center;
+}
+
+.load-more-ul li a p{
+    background: none repeat scroll 0 0 #06C;
+    /*border: 1px solid #eee;*/
+    color: #fff;
+    border-radius: 50%;
+    text-align: center;
+    z-index: 1;
+    height: 44px;
+    padding: 5px;
+}
+.load-more-ul a p label:hover{
+    cursor: pointer;
+}
+
+.load-more-ul li a{
+    text-decoration: none;
+}
+
+.followup-information{
+    margin-bottom: 10px;
+}
+
+
+
+.load-more-count {
+    color: #7ebbff;
+    font-size: 10px;
+    position: relative;
+    top: -2px;
+}
+
+.load-more-block {
+    height: 42px;
+    line-height: 1;
+    position: relative;
+    width: 42px;
+    z-index: 10;
+}
+
+#followup-load-more {
+    color: #fff;
+    display: inline-block;
+    left: 20px;
+    padding: 10px 20px;
+}
+
+#followup-load-more-count{
+    display: block;
+}
+
+.load-more-loading{
+    display: none;
 }
