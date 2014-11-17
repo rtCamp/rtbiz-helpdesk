@@ -102,6 +102,61 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 			</div>
 
 			<div class="row_group">
+				<span class="prefix" title="<?php _e( 'Created By', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Created By', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
+				<input type="text" name="created_by" class="user-autocomplete" placeholder="Search for User" />
+				<div id="selected_user">
+				<?php
+					$created_by = get_user_by( 'id', get_post_meta( $post->ID, '_rtbiz_hd_created_by', true ) );
+					if ( ! empty( $created_by ) ) { ?>
+					<div id="rt-hd-created-by-<?php echo $created_by->ID; ?>"><?php echo get_avatar( $created_by->user_email, 25 ) . $created_by->display_name; ?>&nbsp;<a href="#deleteContactUser">X</a><input type="hidden" name="post[rthd_created_by]" value="<?php echo $created_by->ID; ?>" /></div>
+					<?php } ?>
+				</div>
+
+				<script>
+					jQuery(document ).ready(function($) {
+						if ( jQuery( ".user-autocomplete" ).length > 0 ) {
+							jQuery( ".user-autocomplete" ).autocomplete( {
+								source: function( request, response ) {
+									$.ajax( {
+									 url: ajaxurl,
+									 dataType: "json",
+									 type: 'post',
+									 data: {
+									     action: 'seach_user_from_name',
+									     maxRows: 10,
+									     query: request.term
+									 },
+									 success: function( data ) {
+									     response( $.map( data, function( item ) {
+									         return {
+									             id: item.id,
+									             imghtml: item.imghtml,
+									             label: item.label
+									         }
+									     } ) );
+									 }
+									} );
+								}, minLength: 2,
+								select: function( event, ui ) {
+									jQuery( "#selected_user" ).html( "<div id='rt-hd-created-by-" + ui.item.id + "'>" + ui.item.imghtml + ui.item.label + " &nbsp;<a href='#deleteContactUser'>X</a><input type='hidden' name='post[rthd_created_by]' value='" + ui.item.id + "' /></div>" )
+									jQuery( ".user-autocomplete" ).val( "" );
+									return false;
+								}
+							} ).data( 'ui-autocomplete' )._renderItem = function( ul, item ) {
+								return $( '<li></li>' ).data( 'ui-autocomplete-item', item ).append( '<a>' + item.imghtml + '&nbsp;' + item.label + '</a>' ).appendTo( ul );
+							};
+
+							$( document ).on( "click", "a[href=#deleteContactUser]", function() {
+								$( this ).parent().remove();
+							} );
+						}
+
+					});
+				</script>
+
+			</div>
+
+			<div class="row_group">
 				<span class="prefix"
 				      title="<?php _e( 'Create Date', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Create Date', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
 				<input class="datetimepicker moment-from-now" type="text" placeholder="Select Create Date"
@@ -189,7 +244,12 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 				'post_title'   => $post->post_title,
 			);
 
-			$rt_hd_tickets_operation->ticket_default_field_update( $postArray, $dataArray, $post->post_type, $post_id );
+			$created_by = '';
+			if ( ! empty( $newTicket['rthd_created_by'] ) ) {
+				$created_by = $newTicket['rthd_created_by'];
+			}
+
+			$rt_hd_tickets_operation->ticket_default_field_update( $postArray, $dataArray, $post->post_type, $post_id, $created_by );
 			$rt_hd_tickets_operation->ticket_attribute_update( $newTicket, $post->post_type, $post_id, 'meta' );
 
 		}

@@ -59,12 +59,16 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 					$dataArray = array_merge( $dataArray, array(
 						'date_create'     => $postArray['post_date'],
 						'date_create_gmt' => $postArray['post_date_gmt'],
-						'user_created_by' => get_current_user_id(),
+						'user_created_by' => ( empty( $created_by) ) ? get_current_user_id() : $created_by,
 					) );
 				} else { //update post
 					// unhook this function so it doesn't loop infinitely
 					remove_action( 'save_post', array( $rt_hd_cpt_tickets, 'save_meta_boxes' ), 1, 2 );
 					remove_action( 'pre_post_update', 'RT_Ticket_Diff_Email::store_old_post_data', 1, 2 );
+
+					if ( ! empty( $created_by ) ) {
+						update_post_meta( $post_id, '_rtbiz_hd_created_by', $created_by );
+					}
 
 					// update the post, which calls save_post again
 					$postArray = array_merge( $postArray, array( 'ID' => $post_id ) );
