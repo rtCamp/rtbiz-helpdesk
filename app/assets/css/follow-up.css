@@ -41,8 +41,6 @@ ul#chat-UI {
 .discussion .avatar img {
 	display: block;
 	max-width: 100%;
-	/*border: 1px solid #eeeeee;*/
-	/*box-shadow: 0 0 2px rgba(0,0,0,0.15) ;*/
 }
 
 .self .avatar:after, .other .avatar:after, .self .avatar:before, .other .avatar:before {
@@ -72,17 +70,10 @@ ul#chat-UI {
 	border-right-color: #FFC0CB;
 }
 
-.self {
-	/*justify-content: flex-end;*/
-	/*align-items: flex-end;*/
-}
 .self .messages {
-	/*order: 1;*/
-	/*border-bottom-right-radius: 0;*/
 	word-wrap: break-word;
 }
 .self .avatar {
-	/*order: 2;*/
 	position: relative;
 }
 
@@ -91,7 +82,6 @@ ul#chat-UI {
 	background: #FAFAFA;
 	padding: 10px;
 	border-radius: 2px;
-	/*box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);*/
 	width: 100%;
 }
 .messages p {
@@ -250,7 +240,6 @@ li.load-more-spinner-li {
 
 .load-more-ul li a p{
     background: none repeat scroll 0 0 #06C;
-    /*border: 1px solid #eee;*/
     color: #fff;
     border-radius: 50%;
     text-align: center;
