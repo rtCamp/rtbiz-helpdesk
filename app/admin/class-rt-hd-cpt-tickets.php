@@ -65,7 +65,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 			$columns['rthd_ticket_title']          = __( 'Ticket', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_status']         = '<span class="status_head tips" data-tip="' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '">' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '</span>';
 			$columns['rthd_ticket_created_by']     = __( 'Created By', RT_HD_TEXT_DOMAIN );
-			$columns['rthd_ticket_followup']       = $cols['comments'];
+			$columns['rthd_ticket_followup']       = '<span class="vers"><span title="Comments" class="comment-grey-bubble">Comments</span></span>';
             $columns['rthd_ticket_updated_by']     = __( 'Updated By', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_contacts']       = __( 'Contacts', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_accounts']       = __( 'Accounts', RT_HD_TEXT_DOMAIN );
@@ -86,7 +86,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 			$columns['rthd_ticket_title']          = __( 'Ticket', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_created_by']     = __( 'Created By', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_updated_by']     = __( 'Updated By', RT_HD_TEXT_DOMAIN );
-            $columns['rthd_ticket_followup'] =  __( 'comments', RT_HD_TEXT_DOMAIN );
+            $columns['rthd_ticket_followup']       = __( 'comments', RT_HD_TEXT_DOMAIN );
             return $columns;
 		}
 
