@@ -1,14 +1,17 @@
 <?php
 $offset = 0;
-$Limit =10;
+$Limit =3;
 $totalComment= get_comments_number($post->ID);
+if($totalComment >= $Limit){
+	$offset=$totalComment-3;
+}
 
 $comments = get_comments( array(
 	'post_id' => $post->ID,
 	'status'  => 'approve',
 	'order'   => 'ASC',
 	'number' => $Limit,
-	'offset' => 0,
+	'offset' => $offset,
 ) );
 
 //$user_edit = current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' ) );
@@ -39,7 +42,7 @@ if ( ! empty( $post->post_content ) ) {
 		<li class="left">
 			<div class="avatar">
 				<?php
-				echo get_avatar( $authoremail, 40 ); ?>
+				echo get_avatar( $authoremail, 42 ); ?>
 			</div>
 			<div class="messages">
 				<div class="rthd-comment-content">
@@ -57,6 +60,25 @@ if ( ! empty( $post->post_content ) ) {
 		</li>
 	</ul>
 <?php }?>
+
+<?php if ($Limit < $totalComment){
+	echo '<div class="rthdcenter"><img id="load-more-hdspinner" class="helpdeskspinner" src="' . admin_url() . 'images/spinner.gif' . '" /></div>';
+	?>
+	<!--<div class="content-stream stream-loading js-loading-placeholder">
+	</div>-->
+	<ul class="discussion load-more-ul ">
+		<li><a class="load-more-block" href="#">
+			<p>
+			<label class="load-more-circle" id="followup-load-more-count"><?php echo $offset ?></label>
+				<label class="load-more-count">more</label>
+				<label class="load-more-loading">...</label>
+			</p>
+            </a>
+			<a href="#" class="load-more" id="followup-load-more" > Load more</a>
+		</li>
+	</ul>
+<?php } ?>
+
 <ul class="discussion js-stream" id="chat-UI">
 
 	<?php
@@ -76,8 +98,3 @@ if ( ! empty( $post->post_content ) ) {
 <input id="followup-offset" type="hidden" value="<?php echo esc_attr( $offset ); ?>" />
 <input id="followup-limit" type="hidden" value="<?php echo esc_attr( $Limit ); ?>" />
 <input id="followup-totalcomment" type="hidden" value="<?php echo esc_attr( $totalComment); ?>" />
-<?php if ($Limit < $totalComment){ ?>
-<div class="content-stream stream-loading js-loading-placeholder">
-	<a href="#" id="followup-load-more" > Load more</a>
-</div>
-<?php } ?>
