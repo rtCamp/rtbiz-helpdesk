@@ -396,6 +396,8 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 						case 'Updated_By':
 							$query->set( 'orderby', 'modified' );
 							break;
+                        case 'comments':
+                            $query->set('orderby','comment_count');
 					}
 				} else {
 					$query->set( 'orderby', 'modified' );
