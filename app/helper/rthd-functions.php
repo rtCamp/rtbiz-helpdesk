@@ -525,7 +525,7 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 	$editable_class = ( $display_private_comment_flag ) ? 'editable' : '';
 
 	?>
-	<li class="<?php echo $side_class . ' ' . $editable_class; ?>" id="comment-<?php echo esc_attr( $comment->comment_ID ); ?>">
+	<li class="<?php echo $side_class . ' ' . $editable_class . ' ' . ( ( $display_private_comment_flag ) ? '' : 'private-comment-item' ); ?>" id="comment-<?php echo esc_attr( $comment->comment_ID ); ?>">
 
 		<div class="avatar">
 			<?php echo get_avatar( $comment->comment_author_email, 42 ); ?>

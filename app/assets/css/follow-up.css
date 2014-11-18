@@ -68,6 +68,10 @@ ul#chat-UI {
 	border-width: 8px;
 	margin-top: -8px;
 }
+.private-comment-item.self .avatar:after, .private-comment-item.other .avatar:after {
+	border-right-color: #FFC0CB;
+}
+
 
 
 .self {

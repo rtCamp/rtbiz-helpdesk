@@ -83,10 +83,10 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 		 * @return mixed
 		 */
 		function sortable_column( $columns ) {
-			$columns['rthd_ticket_title']          = __( 'Ticket', RT_HD_TEXT_DOMAIN );
-			$columns['rthd_ticket_created_by']     = __( 'Created By', RT_HD_TEXT_DOMAIN );
-			$columns['rthd_ticket_updated_by']     = __( 'Updated By', RT_HD_TEXT_DOMAIN );
-            $columns['rthd_ticket_followup']       = __( 'comments', RT_HD_TEXT_DOMAIN );
+			$columns['rthd_ticket_title']      = 'ticket';
+			$columns['rthd_ticket_created_by'] = 'created_by';
+			$columns['rthd_ticket_updated_by'] = 'updated_by';
+			$columns['rthd_ticket_followup']   = 'comments';
             return $columns;
 		}
 
@@ -387,13 +387,13 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 				}
 				if ( isset( $orderby ) && ! empty( $orderby ) ){
 					switch ( $orderby ) {
-						case 'Ticket':
+						case 'ticket':
 							$query->set( 'orderby', 'post_ID' );
 							break;
-						case 'Create_By':
+						case 'create_by':
 							$query->set( 'orderby', 'Date' );
 							break;
-						case 'Updated_By':
+						case 'updated_by':
 							$query->set( 'orderby', 'modified' );
 							break;
                         case 'comments':
