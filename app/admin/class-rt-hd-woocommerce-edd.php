@@ -56,6 +56,46 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 			add_action( 'add_meta_boxes', array( $this, 'order_support_history' ) );
 			// backwards compatible
 			add_action( 'admin_init', array( $this, 'order_support_history' ), 1 );
+
+			// User Purchase History on Ticket Page
+			add_action( 'rtbiz_hd_user_purchase_history', array( $this, 'user_purchase_history' ) );
+		}
+
+		function user_purchase_history( $ticket_id ) {
+			$created_by = get_user_by( 'id', get_post_meta( $ticket_id, '_rtbiz_hd_created_by', true ) );
+			if ( !empty( $created_by ) ) {
+				$this->check_active_plugin();
+				if ( $this->isWoocommerceActive ) {
+					//
+					$payments = get_posts( array(
+                       'numberposts' => -1,
+                       'meta_key'    => '_billing_email',
+                       'meta_value'  => $created_by->user_email,
+                       'post_type'   => $this->order_post_type,
+                       'order'       => 'ASC',
+                       'post_status' => 'any',
+					) );
+				} else if ( $this->iseddActive ) {
+					$payments = get_posts( array(
+					   'numberposts' => -1,
+					   'meta_key'    => '_edd_payment_user_email',
+					   'meta_value'  => $created_by->user_email,
+					   'post_type'   => $this->order_post_type,
+					   'order'       => 'ASC',
+					   'post_status' => 'any',
+					) );
+				}
+				if ( ! empty( $payments ) ) {
+					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_wrapper_start', '<div>' );
+					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_heading', '<h2>' . __( 'Purchase History' ) . '</h2>' );
+					echo '<ul>';
+					foreach ($payments as $key => $payment ) {
+						echo '<li><a href="' . admin_url( "edit.php?post_type=download&page=edd-payment-history&view=view-order-details&id={$payment->ID}" ) . '">' . sprintf( __( 'Order #%d', RT_HD_TEXT_DOMAIN ), $payment->ID ) . '</a></li>';
+					}
+					echo '</ul>';
+					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_wrapper_end', '</div>' );
+				}
+			}
 		}
 
 		function order_support_history( $post ) {
@@ -128,14 +168,12 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 				$this->iseddActive = false;
 				$this->activePostType = 'product';
 				$this->order_post_type = 'shop_order';
-			}
-			else if ( is_plugin_active( 'easy-digital-downloads/easy-digital-downloads.php' ) && 'edd' === $activePlugin ) {
+			} else if ( is_plugin_active( 'easy-digital-downloads/easy-digital-downloads.php' ) && 'edd' === $activePlugin ) {
 				$this->iseddActive = true;
 				$this->isWoocommerceActive  = false;
 				$this->activePostType = 'download';
 				$this->order_post_type = 'edd_payment';
-			}
-			else {
+			} else {
 				$this->iseddActive = false;
 				$this->isWoocommerceActive = false;
 				$this->activePostType = false;

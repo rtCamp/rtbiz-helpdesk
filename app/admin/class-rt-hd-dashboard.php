@@ -162,10 +162,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			foreach ( $relations as $r ) {
 				$attr = $rt_hd_attributes_model->get_attribute( $r->attr_id );
 				if ( 'taxonomy' == $attr->attribute_store_as ) {
-					add_meta_box( 'rthd-tickets-by-' . $attr->attribute_name, $attr->attribute_label . ' ' . __( 'Wise Tickets', RT_HD_TEXT_DOMAIN ), array(
-						$this,
-						'dashboard_attributes_widget_content',
-					), $rt_hd_dashboard->screen_id, 'column1', 'default', array( 'attribute_id' => $attr->id ) );
+					add_meta_box( 'rthd-tickets-by-' . $attr->attribute_name, $attr->attribute_label . ' ' . __( 'Wise Tickets', RT_HD_TEXT_DOMAIN ), array( $this, 'dashboard_attributes_widget_content' ), $rt_hd_dashboard->screen_id, 'column1', 'default', array( 'attribute_id' => $attr->id ) );
 				}
 			}
 		}

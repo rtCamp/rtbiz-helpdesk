@@ -50,7 +50,7 @@ $user_edit       = false;
 	<div id="rthd-sidebar" class="rthd_sticky_div">
 		<h2><i class="foundicon-idea"></i> <?php _e( esc_attr( ucfirst( $labels['name'] ) ) . ' Information' ); ?></h2>
 		<div>
-			<span class="prefix" title="Status">Status</span>
+			<span title="Status"><strong>Status: </strong></span>
 			<?php
 if ( isset( $post->ID ) ) {
 	$pstatus = $post->post_status;
@@ -79,8 +79,8 @@ if( ! empty( $pstatus ) ) {
 ?>
 		</div>
 		<div>
-                <span title="Create Date"><strong>Created: </strong></span>
-			<div class="prefix" title="<?php echo esc_attr( $createdate )?>">
+            <span title="Create Date"><strong>Created: </strong></span>
+			<span title="<?php echo esc_attr( $createdate )?>">
 			<?php
 				echo esc_attr( human_time_diff( strtotime( $createdate ), current_time( 'timestamp' ) ) ) . ' ago';
 				$created_by = get_user_by( 'id', get_post_meta( $post->ID, '_rtbiz_hd_created_by', true ) );
@@ -88,7 +88,7 @@ if( ! empty( $pstatus ) ) {
 					echo ' by ' . $created_by->display_name;
 				}
 			?>
-			</div>
+			</span>
 		</div>
 	<?php
 		$comment = get_comments(array('post_id'=>$post->ID,'number' => 1));
@@ -98,7 +98,7 @@ if( ! empty( $pstatus ) ) {
 		?>
 
 		<div>
-			<span class="prefix" title="Status">Last reply:</span>
+			<span title="Status"><strong>Last reply: </strong></span>
 			<span class="rthd_attr_border prefix rthd_view_mode"> <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) )) ."ago by ". $comment->comment_author; ?></span>
 		</div>
 	<?php }
@@ -131,6 +131,57 @@ if ( isset( $post->ID ) ) {
 		</div>
 
 	<?php }
+
+	$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
+	if ( current_user_can( $cap ) ) {
+
+		// Products
+		global $rtbiz_product_sync;
+		$products = array();
+		if ( ! empty( $rtbiz_product_sync ) ) {
+			$products = wp_get_post_terms( $post->ID, $rtbiz_product_sync->product_slug );
+		}
+		$base_url = add_query_arg( array( 'post_type' => $post->post_type ), admin_url( 'edit.php' ) );
+		if ( ! $products instanceof WP_Error && ! empty( $products ) ) { ?>
+		<div>
+			<h2><?php _e( 'Ticket Products' ); ?></h2>
+			<ul>
+				<?php foreach ( $products as $p ) {
+					$url = add_query_arg( 'product_id', $p->term_id, $base_url );
+				?>
+				<li><a href="<?php echo $url; ?>"><?php echo $p->name; ?></a></li>
+				<?php } ?>
+			</ul>
+		</div>
+		<?php }
+
+		// Attributes
+		global $rt_hd_attributes_relationship_model;
+		$relations = $rt_hd_attributes_relationship_model->get_relations_by_post_type( Rt_HD_Module::$post_type );
+		foreach ( $relations as $r ) {
+			$attr = $rt_hd_attributes_model->get_attribute( $r->attr_id );
+			if ( 'taxonomy' == $attr->attribute_store_as ) {
+				$taxonomy = $rt_hd_rt_attributes->get_taxonomy_name( $attr->attribute_name );
+				$terms = wp_get_post_terms( $post->ID, $taxonomy );
+
+				if ( ! $terms instanceof WP_Error && ! empty( $terms ) ) {
+				?>
+				<div>
+					<h2><?php echo $attr->attribute_label; ?></h2>
+					<ul>
+					<?php foreach ( $terms as $t ) { ?>
+						<li><?php echo $t->name; ?></li>
+					<?php } ?>
+					</ul>
+				</div>
+				<?php
+				}
+			}
+		}
+
+		// Order History
+		do_action( 'rtbiz_hd_user_purchase_history', $post->ID );
+	}
 } ?>
 	</div>
 </div>
