@@ -42,7 +42,24 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 
 			add_filter( 'template_include', array( $this, 'template_include' ), 1, 1 );
 			add_filter( 'wp_title', array( $this, 'change_title' ), 9999, 1 );
+
+			add_action( 'admin_bar_menu', array( $this, 'admin_bar_edit_menu' ), 90 );
 		}
+
+
+		function admin_bar_edit_menu( $wp_admin_bar ) {
+			global $rthd_ticket, $rt_hd_module;
+			$labels    = $rt_hd_module->labels;
+			$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
+			if ( ! empty( $rthd_ticket ) && current_user_can( $cap ) ) {
+				$wp_admin_bar->add_menu( array(
+					'id' => 'edit',
+					'title' => $labels['edit_item'],
+					'href' => get_edit_post_link( $rthd_ticket->ID ),
+				) );
+			}
+		}
+
 
 		function flush_rewrite_rules() {
 			if ( is_admin() && 'true' == get_option( 'rthd_flush_rewrite_rules' ) ) {
