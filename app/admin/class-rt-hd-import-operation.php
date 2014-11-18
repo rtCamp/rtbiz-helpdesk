@@ -929,6 +929,16 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			return $ContentType;
 		}
 
+
+        function process_file_attachment($file){
+            if ($_FILES[$file]['error'] !== UPLOAD_ERR_OK) __return_false();
+            require_once(ABSPATH . "wp-admin" . '/includes/image.php');
+            require_once(ABSPATH . "wp-admin" . '/includes/file.php');
+            require_once(ABSPATH . "wp-admin" . '/includes/media.php');
+            $attachment_id = media_handle_upload($file, "");
+            return $attachment_id;
+        }
+
 		/**
 		 * Add follow up of tickets on front end
 		 *
@@ -1011,24 +1021,27 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 			//then loop over the files that were sent and store them using  media_handle_upload();
 			//			var_dump($_FILES);
-			require_once( ABSPATH . 'wp-admin' . '/includes/image.php' );
-			require_once( ABSPATH . 'wp-admin' . '/includes/file.php' );
-			require_once( ABSPATH . 'wp-admin' . '/includes/media.php' );
 			$attachment_IDs=array();
-			if ( ! empty($_FILES['attachemntlist']['name'])) {
-				foreach ( $_FILES as $file => $array ) {
-					if ( $_FILES[ $file ]['error'] !== UPLOAD_ERR_OK ) {
-						$returnArray['error']    = 'upload error : ' . $_FILES[ $file ]['error'];
-						$returnArray['status'] = false;
-						echo json_encode( $returnArray );
-						ob_end_flush();
-						die();
-					}
-					$attach_id = media_handle_upload( $file, "" );;
-					array_push($attachment_IDs,$attach_id);
-				}
-			}
-			if ( isset( $attachment_IDs ) && ! empty( $attachment_IDs ) ) {
+            if ( ! empty($_FILES['attachemntlist']['name'])) {
+                $files = $_FILES['attachemntlist'];
+                foreach ($files['name'] as $key => $value) {
+                    if ($files['name'][$key]) {
+                        $file = array(
+                            'name' => $files['name'][$key],
+                            'type' => $files['type'][$key],
+                            'tmp_name' => $files['tmp_name'][$key],
+                            'error' => $files['error'][$key],
+                            'size' => $files['size'][$key]
+                        );
+                        $_FILES = array("attachemntlist" => $file);
+                        foreach ($_FILES as $file => $array) {
+                            $attach_id = $this->process_file_attachment($file);
+                            array_push($attachment_IDs, $attach_id);
+                        }
+                    }
+                }
+            }
+            if ( isset( $attachment_IDs ) && ! empty( $attachment_IDs ) ) {
 				foreach ( $attachment_IDs as $strAttach ) {
 					$attachfile = get_attached_file( intval( $strAttach ) );
 					if ( $attachfile ) {

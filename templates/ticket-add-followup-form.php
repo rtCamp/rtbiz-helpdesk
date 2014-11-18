@@ -25,7 +25,7 @@ global $current_user;
 		<label for="add-private-comment"><input id="add-private-comment" type="checkbox" name="private_comment" value="yes" text="check to make comment private" /><?php _e('Private'); ?></label>
 	</div>
 	<div>
-	<input id="attachemntlist" name="attachemntlist" type="file" />
+	<input id="attachemntlist" name="attachemntlist[]" type="file" multiple />
 	</div>
 
 	<div class="rthd-clearfix"></div>
