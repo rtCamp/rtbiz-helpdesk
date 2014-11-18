@@ -35,7 +35,7 @@ if ( ! empty( $post->post_content ) ) {
 	$authoremail = $authorinfo->user_email;
 	$authorname =  $authorinfo->display_name;
 	?>
-	<ul class="discussion">
+	<ul class="discussion" id="ticket-content-UI">
 		<li class="other ticketother">
 			<div class="avatar">
 				<?php
@@ -65,7 +65,7 @@ if ( ! empty( $post->post_content ) ) {
 	?>
 	<!--<div class="content-stream stream-loading js-loading-placeholder">
 	</div>-->
-	<ul class="discussion load-more-ul ">
+	<ul class="discussion load-more-ul" id="load-more-UI">
 		<li><a class="load-more-block" href="#">
 			<p>
 			<label class="load-more-circle" id="followup-load-more-count"><?php echo $offset ?></label>
