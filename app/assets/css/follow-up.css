@@ -8,9 +8,9 @@ ul#chat-UI {
 }
 .discussion > li {
 	padding: 25px 0;
+	margin: 0;
 	overflow: hidden;
 	display: flex;
-	/*border-bottom: 1px solid #DDD;*/
 	position: relative;
 }
 
@@ -71,8 +71,6 @@ ul#chat-UI {
 .private-comment-item.self .avatar:after, .private-comment-item.other .avatar:after {
 	border-right-color: #FFC0CB;
 }
-
-
 
 .self {
 	/*justify-content: flex-end;*/
@@ -206,15 +204,6 @@ ul#chat-UI {
 	color : #777
 }
 
-#followup-load-more{
-	/*text-decoration: none;*/
-	/*width: 100%;*/
-	/*background: #DDD;*/
-	/*color: #999;*/
-	/*text-transform: uppercase;*/
-	/*padding: 15px 140px;*/
-}
-
 .load-more{
 	position: relative;
 	background: #06C;
@@ -268,7 +257,13 @@ li.load-more-spinner-li {
     z-index: 1;
     height: 44px;
     padding: 5px;
+	margin: 0;
 }
+
+.wp-admin .load-more-ul li a p {
+	padding: 0;
+}
+
 .load-more-ul a p label {
 	margin: 0;
 }
