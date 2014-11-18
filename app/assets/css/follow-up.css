@@ -38,7 +38,7 @@ ul#chat-UI {
 }
 
 .self .avatar:after, .other .avatar:after, .self .avatar:before, .other .avatar:before {
-	left: 43px;
+	left: 46px;
 	top: 22px;
 	border: solid transparent;
 	content: " ";
@@ -237,21 +237,7 @@ ul#chat-UI {
 	padding: 10px 20px;
 	color: #fff;
 	left: 39px;
-	/*background: #999;*/
-	/*color: #eaeaea;*/
 }
-
-/*.content-stream.stream-loading {*/
-	/*text-align: center;*/
-	/*color: #999;*/
-	/*padding: 0 0 30px;*/
-	/*box-sizing: border-box;*/
-	/*-webkit-font-smoothing:antialiased;*/
-	/*-moz-osx-font-smoothing:grayscale;*/
-	/*font-size: 1.25em;*/
-	/*line-height: 150%;*/
-/**/
-/*}*/
 
 .rthdcenter{
 	text-align: center;
@@ -287,7 +273,7 @@ ul#chat-UI {
     color: #7ebbff;
     font-size: 10px;
     position: relative;
-    top: -2px;
+    top: -7px;
 }
 
 .load-more-block {
@@ -311,4 +297,25 @@ ul#chat-UI {
 
 .load-more-loading{
     display: none;
+}
+
+
+.ticketcontent{
+    border: 1px solid #BBB;
+}
+
+.ticketother .avatar:before {
+    border-right-color: #bbb;
+}
+
+#followup-load-more:hover {
+    background: #039;
+}
+
+#followup-load-more:hover:after {
+    border-right-color: #039;
+}
+
+.load-more-ul li a p:hover {
+    background: #039;
 }
