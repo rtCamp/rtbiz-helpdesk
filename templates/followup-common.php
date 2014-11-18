@@ -14,8 +14,6 @@ $comments = get_comments( array(
 	'offset' => $offset,
 ) );
 
-//$user_edit = current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' ) );
-//if ( $user_edit ) {
 	?>
 	<div id="dialog-form" title="Edit Followup" style='display: none'>
 		<textarea id="edited_followup_content" name="edited_followup_content" placeholder="Add new followup" rows="5"></textarea>
@@ -29,7 +27,6 @@ $comments = get_comments( array(
 		</div>
 	</div>
 <?php
-//}
 if ( ! empty( $post->post_content ) ) {
 
 	$author_id=$post->post_author;
@@ -39,23 +36,25 @@ if ( ! empty( $post->post_content ) ) {
 	$authorname =  $authorinfo->display_name;
 	?>
 	<ul class="discussion">
-		<li class="left">
+		<li class="other ticketother">
 			<div class="avatar">
 				<?php
 				echo get_avatar( $authoremail, 42 ); ?>
 			</div>
-			<div class="messages">
+			<div class="messages ticketcontent">
+                <div class="followup-information">
+                    <span title="<?php echo esc_attr( $authoremail ); ?>"><?php echo esc_attr( ( $authorname== '' ) ? 'Anonymous' : $authorname ); ?> </span>
+                    <time title="<?php echo esc_attr( $post->post_date); ?>" datetime="<?php echo esc_attr( $post->post_date); ?>">
+                        <?php echo esc_attr( human_time_diff( strtotime( $post->post_date), current_time( 'timestamp' ) ) ) . ' ago';
+                        ?>
+                    </time>
+            </div>
 				<div class="rthd-comment-content">
 				<?php
 					$content = balanceTags( ( isset($post->ID) ) ? make_clickable( $post->post_content ) : '', true );
 					echo apply_filters('the_content', $content);
 				?>
 				</div>
-				<time title="<?php echo esc_attr( $post->post_date); ?>" datetime="<?php echo esc_attr( $post->post_date); ?>">
-					<span title="<?php echo esc_attr( $authoremail ); ?>"><?php echo esc_attr( ( $authorname== '' ) ? 'Anonymous' : $authorname ); ?> </span>
-					| <?php echo esc_attr( human_time_diff( strtotime( $post->post_date), current_time( 'timestamp' ) ) ) . ' ago';
-					?>
-				</time>
 			</div>
 		</li>
 	</ul>

@@ -535,7 +535,7 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
         <span title="<?php echo esc_attr( ( $comment->comment_author_email == '' ) ? $comment->comment_author_IP : $comment->comment_author_email ); ?>"><?php echo esc_attr( ( $comment->comment_author == '' ) ? 'Anonymous' : $comment->comment_author ); ?> </span>
     <?php if ($user_edit){
     ?>
-    <a href="#" class="editfollowuplink">Edit</a>
+    | <a href="#" class="editfollowuplink">Edit</a>
 <?php
 } ?>
             <time title="<?php echo esc_attr( $comment->comment_date ); ?>" datetime="<?php echo esc_attr( $comment->comment_date ); ?>">
