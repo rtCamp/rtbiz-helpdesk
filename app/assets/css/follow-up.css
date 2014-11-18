@@ -265,6 +265,9 @@ ul#chat-UI {
     height: 44px;
     padding: 5px;
 }
+.load-more-ul a p label {
+	margin: 0;
+}
 .load-more-ul a p label:hover{
     cursor: pointer;
 }
@@ -285,7 +288,7 @@ ul#chat-UI {
     color: #7ebbff;
     font-size: 10px;
     position: relative;
-    top: -7px;
+    top: -2px;
 }
 
 .load-more-block {
@@ -306,11 +309,6 @@ ul#chat-UI {
 #followup-load-more-count{
     display: block;
 }
-
-.load-more-loading{
-    display: none;
-}
-
 
 .ticketcontent{
     border: 1px solid #BBB;

@@ -61,19 +61,16 @@ if ( ! empty( $post->post_content ) ) {
 <?php }?>
 
 <?php if ($Limit < $totalComment){
-	echo '<div class="rthdcenter"><img id="load-more-hdspinner" class="helpdeskspinner" src="' . admin_url() . 'images/spinner.gif' . '" /></div>';
 	?>
-	<!--<div class="content-stream stream-loading js-loading-placeholder">
-	</div>-->
 	<ul class="discussion load-more-ul" id="load-more-UI">
 		<li><a class="load-more-block" href="#">
 			<p>
-			<label class="load-more-circle" id="followup-load-more-count"><?php echo $offset ?></label>
+				<label class="load-more-circle" id="followup-load-more-count"><?php echo $offset ?></label>
 				<label class="load-more-count">more</label>
-				<label class="load-more-loading">...</label>
 			</p>
             </a>
 			<a href="#" class="load-more" id="followup-load-more" > Load more</a>
+			<div class="rthdcenter"><img id="load-more-hdspinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" /></div>
 		</li>
 	</ul>
 <?php } ?>
