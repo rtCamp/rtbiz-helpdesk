@@ -24,6 +24,14 @@ ul#chat-UI {
 	width: 2px;
 }
 
+#chat-UI.discussion > li:last-child:before {
+	height: 20%
+}
+
+#ticket-content-UI.discussion > li:before {
+	top: 30%;
+}
+
 .discussion .avatar {
 	border-radius: 100%;
 	min-width: 40px;
