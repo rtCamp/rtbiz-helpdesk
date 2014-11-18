@@ -70,6 +70,8 @@ if ( ! empty( $post->post_content ) ) {
 			</p>
             </a>
 			<a href="#" class="load-more" id="followup-load-more" > Load more</a>
+		</li>
+		<li class="load-more-spinner-li">
 			<div class="rthdcenter"><img id="load-more-hdspinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" /></div>
 		</li>
 	</ul>

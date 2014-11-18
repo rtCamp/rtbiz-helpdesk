@@ -253,6 +253,10 @@ ul#chat-UI {
 
 .rthdcenter{
 	text-align: center;
+	width: 100%;
+}
+li.load-more-spinner-li {
+	padding: 0;
 }
 
 .load-more-ul li a p{
@@ -304,6 +308,7 @@ ul#chat-UI {
     display: inline-block;
     left: 20px;
     padding: 10px 20px;
+	margin-right: 20px;
 }
 
 #followup-load-more-count{
