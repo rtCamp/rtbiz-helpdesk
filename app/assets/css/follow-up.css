@@ -108,6 +108,7 @@ ul#chat-UI {
 #private-comment{
 	color: #d02600;
 	display: inline-block;
+	font-size: 14px;
 }
 
 .add-savefollowup {
@@ -119,17 +120,21 @@ ul#chat-UI {
 	margin-right: 10px;
 }
 
-#attachmentList {
+#attachemntlist {
+	line-height: 20px;
+}
+
+#attachment-files {
 	display: inline-block;
 }
 
-#attachmentList .attachment-item {
+#attachment-files .attachment-item {
 	display: inline-block;
 	list-style: none;
 	margin: 0 10px;
 }
 
-#attachmentList .rthd_delete_attachment {
+#attachment-files .rthd_delete_attachment {
 	color: red;
 	float: right;
 	margin-left: 10px;
@@ -143,6 +148,7 @@ ul#chat-UI {
 .followup-content {
 	width:100%;
 	padding: 0;
+	height: 200px;
 }
 
 .helpdeskspinner{

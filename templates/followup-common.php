@@ -39,7 +39,7 @@ if ( ! empty( $post->post_content ) ) {
 		<li class="other ticketother">
 			<div class="avatar">
 				<?php
-				echo get_avatar( $authoremail, 42 ); ?>
+				echo get_avatar( $authoremail, 48 ); ?>
 			</div>
 			<div class="messages ticketcontent">
                 <div class="followup-information">
