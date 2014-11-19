@@ -29,7 +29,7 @@ ul#chat-UI {
 }
 
 #ticket-content-UI.discussion > li:before {
-	top: 30%;
+	top: 30px;
 }
 
 .discussion .avatar {
