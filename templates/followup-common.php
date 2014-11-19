@@ -29,11 +29,13 @@ $comments = get_comments( array(
 <?php
 if ( ! empty( $post->post_content ) ) {
 
-	$author_id=$post->post_author;
-	$authorinfo = get_userdata( $author_id );
-
-	$authoremail = $authorinfo->user_email;
-	$authorname =  $authorinfo->display_name;
+	$created_by = get_user_by( 'id', get_post_meta( $post->ID, '_rtbiz_hd_created_by', true ) );
+	$authorname = 'Annonymous';
+	$authoremail = '';
+	if ( ! empty( $created_by ) ) {
+		$authorname = $created_by->display_name;
+		$authoremail = $created_by->user_email;
+	}
 	?>
 	<ul class="discussion" id="ticket-content-UI">
 		<li class="other ticketother">

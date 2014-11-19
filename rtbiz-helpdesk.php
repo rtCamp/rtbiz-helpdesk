@@ -169,7 +169,7 @@ function rt_hd_check_dependency() {
 		$rt_wp_hd = new RT_WP_Helpdesk();
 	}
 }
-//add_action( 'init', 'rt_hd_check_dependency' );
+add_action( 'init', 'rt_hd_check_dependency' );
 
 
 register_activation_hook( __FILE__, 'init_call_flush_rewrite_rules' );
