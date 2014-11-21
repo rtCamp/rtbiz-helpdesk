@@ -36,6 +36,10 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
+        public static $FOLLOWUP_PUBLIC = 0;
+        public static $FOLLOWUP_SENSITIVE = 10;
+        public static $FOLLOWUP_STAFF = 20;
+
 		public function __construct() {
 			$this->hooks();
 		}
@@ -1011,9 +1015,10 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$commentdata['comment_date_gmt'] = current_time( 'mysql', 1 );
 			}
 			$commentdata['comment_approved'] = 1;
+            $commentdata['comment_type']=$comment_privacy;
 			$comment_ID                      = wp_insert_comment( $commentdata );
 
-			update_comment_meta( $comment_ID, '_rthd_privacy', $comment_privacy );
+//			update_comment_meta( $comment_ID, '_rthd_privacy', $comment_privacy );
 
 			$comment    = get_comment( $comment_ID );
 			$attachment = array();
@@ -1087,7 +1092,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					'count'     => true,
 				) );
 			$returnArray['comment_id'] = $comment_ID;
-			$returnArray['private']       = get_comment_meta( $comment_ID, '_rthd_privacy', true );
+			$returnArray['private']       = $comment_privacy;
 			$comment_user  = get_user_by( 'id', $comment->user_id );
 			$comment_render_type = 'left';
 			$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
@@ -1164,9 +1169,15 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				else {
 					$newDate = current_time( 'mysql', 1 );
 				}
-				wp_update_comment( $commentdata );
-				$old_privacy = get_comment_meta( $_POST['comment_id'], '_rthd_privacy' ,true );
-				update_comment_meta( $_POST['comment_id'], '_rthd_privacy', $comment_privacy );
+                $old_privacy=  $commentdata['comment_type'];
+                $commentdata['comment_type']= $comment_privacy;
+                //				update_comment_meta( $_POST['comment_id'], '_rthd_privacy', $comment_privacy );
+                wp_update_comment( $commentdata );
+
+//				$old_privacy = get_comment_meta( $_POST['comment_id'], '_rthd_privacy' ,true );
+
+//				update_comment_meta( $_POST['comment_id'], '_rthd_privacy', $comment_privacy );
+
 				$comment = get_comment( $_POST['comment_id'] );
 				$uploaded = array();
 				$attachment = array();
@@ -1199,8 +1210,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 				$flag = false;
 
-				$old_privacy_text = ( $old_privacy == 'true' )?'yes':'no';
-				$new_privacy = ( $comment_privacy == 'true' )?'yes':'no';
+				$old_privacy_text = rthd_get_comment_type($old_privacy);
+				$new_privacy = rthd_get_comment_type($comment_privacy);
 
 				$diff = rthd_text_diff( $old_privacy_text, $new_privacy );
 				if ( $diff ) {
@@ -1231,14 +1242,14 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				}
 
 				$returnArray['status']        = true;
-				$returnArray['comment_count'] = get_comments(
-					array(
-						'order'     => 'DESC',
-						'post_id'   => $comment_post_ID,
-						'post_type' => $post_type,
-						'count'     => true,
-					) );
-				$returnArray['private']       = get_comment_meta( $_POST['comment_id'], '_rthd_privacy', true );
+//				$returnArray['comment_count'] = get_comments(
+//					array(
+//						'order'     => 'DESC',
+//						'post_id'   => $comment_post_ID,
+//						'post_type' => $post_type,
+//						'count'     => true,
+//					) );
+				$returnArray['private']       = $comment->comment_type;
 				$returnArray['comment_content'] = wpautop( make_clickable( $comment->comment_content ) );
 				echo json_encode( $returnArray );
 				die( 0 );
@@ -1271,9 +1282,10 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$commentdata['comment_date_gmt'] = current_time( 'mysql', 1 );
 			}
 			$commentdata['comment_approved'] = 1;
-			$comment_ID                      = wp_insert_comment( $commentdata );
+            $commentdata['comment_type']= $comment_privacy;
+            $comment_ID                      = wp_insert_comment( $commentdata );
 
-			update_comment_meta( $comment_ID, '_rthd_privacy', $comment_privacy );
+//			update_comment_meta( $comment_ID, '_rthd_privacy', $comment_privacy );
 
 			$comment = get_comment( $comment_ID );
 
@@ -1400,7 +1412,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 															'post_type' => $post_type,
 															'count'     => true,
 															) );
-			$returnArray['private']       = get_comment_meta( $comment_ID, '_rthd_privacy', true );
+			$returnArray['private']       = $comment_privacy;
 
 			echo json_encode( $returnArray );
 

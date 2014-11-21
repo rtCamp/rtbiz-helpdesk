@@ -545,7 +545,7 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
             </time>
             </div>
 			<input id="followup-id" type="hidden" value="<?php echo esc_attr( $comment->comment_ID ); ?>">
-			<input id="is-private-comment" type="hidden" value="<?php echo esc_attr( $is_comment_private ); ?>">
+			<input id="is-private-comment" type="hidden" value="<?php echo esc_attr( $comment->comment_type); ?>">
 			<div class="rthd-comment-content">
 			<?php if( $display_private_comment_flag ) {
 				if ( isset( $comment->comment_content ) && $comment->comment_content != '' ) {
@@ -595,4 +595,21 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 	} else {
 		return $comment_html;
 	}
+}
+
+
+function rthd_get_comment_type($comment_type_value){
+    switch($comment_type_value){
+        case Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC:
+            return 'Public';
+            break;
+        case Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE:
+            return 'Logged in user only';
+            break;
+        case Rt_HD_Import_Operation::$FOLLOWUP_STAFF:
+            return 'Only Staff';
+            break;
+        default:
+            return 'undefined';
+    }
 }

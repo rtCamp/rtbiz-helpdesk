@@ -18,7 +18,12 @@ $comments = get_comments( array(
 	<div id="dialog-form" title="Edit Followup" style='display: none'>
 		<textarea id="edited_followup_content" name="edited_followup_content" placeholder="Add new followup" rows="5"></textarea>
 		<div id="edit-private-comment" class="red-color">
-			<label for="edit-private"><input id="edit-private" type="checkbox" name="private" value="yes" text="check to make comment private"><?php _e('Private'); ?></label>
+<!--			<label for="edit-private"><input id="edit-private" type="checkbox" name="private" value="yes" text="check to make comment private">--><?php //_e('Private'); ?><!--</label>-->
+            <select name="private" id="edit-private" >
+                <option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ) ?> </option>
+                <option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ) ?> </option>
+                <option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_STAFF ) ?> </option>
+            </select>
 			<img id='edithdspinner' class="helpdeskspinner" src="<?php echo admin_url().'images/spinner.gif'; ?>">
 		</div>
 		<div class="edit-action-button">

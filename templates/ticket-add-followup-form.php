@@ -19,7 +19,13 @@ global $current_user;
 	<input id="edit-comment-id" name="comment_id" type="hidden" />
 	<textarea id="followup_content" class="followup-content" name="followup_content" placeholder="Add new followup"></textarea>
 	<div id="private-comment">
-		<label for="add-private-comment"><input id="add-private-comment" type="checkbox" name="private_comment" value="yes" text="check to make comment private" /><?php _e('Private'); ?></label>
+<!--		<label for="add-private-comment"><input id="add-private-comment" type="checkbox" name="private_comment" value="yes" text="check to make comment private" />--><?php //_e('Private'); ?><!--</label>-->
+        <select name="private_comment" id="add-private-comment" >
+            <option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ) ?> </option>
+            <option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ) ?> </option>
+            <option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_STAFF ) ?> </option>
+        </select>
+
 	</div>
 	<div>
 		<input id="attachemntlist" name="attachemntlist[]" type="file" multiple />
