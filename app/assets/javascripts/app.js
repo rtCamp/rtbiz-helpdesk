@@ -151,6 +151,9 @@ jQuery( document ).ready( function ( $ ) {
 		}
 		var formData = new FormData(jQuery('#add_followup_form')[0]);
 		formData.append("private_comment", jQuery('#add-private-comment').is(':checked'));
+        if(jQuery('#rthd_keep_status')){
+            formData.append("rthd_keep_status", jQuery('#rthd_keep_status').is(':checked'));
+        }
 		jQuery.ajax( {
              url: ajaxurl,
              dataType: "json",
@@ -169,6 +172,11 @@ jQuery( document ).ready( function ( $ ) {
 		             jQuery('#add-private-comment' ).prop('checked',false );
 		             var control = jQuery('#attachemntlist' );
 		             control.replaceWith( control = control.clone( true ) );
+                     if (data.ticket_status=='answered'){
+                         if(jQuery('#rthd_keep_status')){
+                             jQuery('#rthd_keep_status').parent().hide();
+                         }
+                     }
 	             } else {
 		             alert( data.message );
 	             }

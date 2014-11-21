@@ -20,6 +20,9 @@ global $current_user;
 	<textarea id="followup_content" class="followup-content" name="followup_content" placeholder="Add new followup"></textarea>
 	<div id="private-comment">
 		<label for="add-private-comment"><input id="add-private-comment" type="checkbox" name="private_comment" value="yes" text="check to make comment private" /><?php _e('Private'); ?></label>
+<?php if (current_user_can(rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' )) && $post->post_status != 'hd-answered' ){ ?>
+    <label for="rthd_keep_status"><input id="rthd_keep_status" type="checkbox" name="rthd_keep_status" text="check keep status unanswered" /><?php _e('Keep unanswered'); ?></label>
+        <?php } ?>
 	</div>
 	<div>
 		<input id="attachemntlist" name="attachemntlist[]" type="file" multiple />

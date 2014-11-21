@@ -1061,6 +1061,20 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 				$this->add_attachment_to_post( $uploaded, $comment_post_ID, $comment_ID );
 			}
+            /*
+             *This code is for issue Issue #43
+             * Toggle Ticket Status
+             *
+             */
+            if ( isset($_POST['rthd_keep_status']) && !empty($_POST['rthd_keep_status'])){
+                if ($_POST['rthd_keep_status']=='false'){
+                    $returnArray['ticket_status']= rthd_toggle_status($comment_post_ID);
+                }
+            }
+            else{
+                $returnArray['ticket_status']= rthd_toggle_status($comment_post_ID);
+            }
+            /* end of status toogle code */
 
 			$currentUser = get_user_by( 'id', get_current_user_id() );
 

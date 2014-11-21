@@ -25,7 +25,7 @@ ul#chat-UI {
 }
 
 #chat-UI.discussion > li:last-child:before {
-	height: 30%
+	height: 45%
 }
 
 #ticket-content-UI.discussion > li:before {

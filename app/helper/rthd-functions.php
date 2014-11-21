@@ -596,3 +596,22 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 		return $comment_html;
 	}
 }
+
+function rthd_toggle_status($postid){
+    $post = get_post($postid);
+    $authorcap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
+    if (  current_user_can( $authorcap ) ) {
+        if( $post->post_status != 'hd-answered' ){
+            wp_update_post(array( 'ID'=>$postid ,'post_status'=>'hd-answered'));
+            return 'answered';
+        }
+    }
+    else{
+        if( $post->post_status != 'hd-unanswered' ){
+            wp_update_post(array( 'ID'=>$postid ,'post_status'=>'hd-unanswered'));
+            return 'unanswered';
+        }
+
+    }
+    return false;
+}
