@@ -50,7 +50,7 @@ jQuery(function () {
 				                 error: function(){
 					                 jQuery('#load-more-hdspinner' ).hide();
 					                 return false;
-				                 },
+				                 }
 			                 });
 
 		    });
@@ -311,6 +311,10 @@ jQuery(function () {
                                              if(jQuery('#rthd_keep_status')){
                                                  jQuery('#rthd_keep_status').parent().hide();
                                              }
+                                         } else {
+	                                         if ( jQuery('#rthd_keep_status' ).length > 0 ) {
+		                                         jQuery('#rthd_keep_status' ).prop("checked",false);
+	                                         }
                                          }
 				                     } else {
 					                     alert( data.message );
