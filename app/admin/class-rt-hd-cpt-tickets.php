@@ -70,8 +70,9 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 			$columns['rthd_ticket_title']          = __( 'Ticket', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_status']         = '<span class="status_head tips" data-tip="' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '">' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '</span>';
 			$columns['rthd_ticket_created_by']     = __( 'Created By', RT_HD_TEXT_DOMAIN );
-			$columns['rthd_ticket_followup']       = __( 'Comment Info', RT_HD_TEXT_DOMAIN );
+			$columns['rthd_ticket_followup']       = __( 'Comments', RT_HD_TEXT_DOMAIN );
             $columns['rthd_ticket_updated_by']     = __( 'Updated By', RT_HD_TEXT_DOMAIN );
+			$columns['rthd_ticket_last_reply_by']     = __( 'Last Reply By', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_contacts']       = __( 'Contacts', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_accounts']       = __( 'Accounts', RT_HD_TEXT_DOMAIN );
 
@@ -134,11 +135,17 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
                 case 'rthd_ticket_followup' :
                     $comment = get_comments(array('post_id'=>$post->ID,'number' => 1));
                     echo '<span class="post-com-count-wrapper"><a class="post-com-count"><span class="comment-count">'.( $post->comment_count).'</span></a></span>';
-                    if ( ! empty( $comment ) ) {
-                        $comment = $comment[0];
-                        echo ''.esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) )) ." ago by ". $comment->comment_author ;
-                    }
                     break;
+
+				case 'rthd_ticket_last_reply_by' :
+					$comment = get_comments(array('post_id'=>$post->ID,'number' => 1));
+					if ( ! empty( $comment ) ) {
+						$comment = $comment[0];
+						echo ''.esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) )) ." ago by ". $comment->comment_author ;
+					} else {
+						echo '-';
+					}
+					break;
 
 				case 'rthd_ticket_status' :
 					$post_status_list = $rt_hd_module->get_custom_statuses();
