@@ -3,10 +3,10 @@
  */
 
 
-function activate_rtBiz_plugins( path, action, rtm_nonce ) {
-	jQuery('.rtBiz-not-installed-error').removeClass('error');
-	jQuery('.rtBiz-not-installed-error').addClass('updated');
-	jQuery('.rtBiz-not-installed-error p').html('<b>rtBiz Helpdesk  :</b> rtBiz will be activated. Please wait. <div class="spinner"> </div>');
+function activate_rthd_plugin( path, action, rtm_nonce ) {
+	jQuery('.rtbiz-not-installed-error').removeClass('error');
+	jQuery('.rtbiz-not-installed-error').addClass('updated');
+	jQuery('.rtbiz-not-installed-error p').html('<b>rtBiz Helpdesk  :</b> rtBiz will be activated. Please wait. <div class="spinner"> </div>');
 	jQuery("div.spinner").show();
 	var param = {
 		action: action,

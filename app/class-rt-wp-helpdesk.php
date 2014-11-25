@@ -27,14 +27,16 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 		 */
 		public $templateURL;
 
+		public $plugins_dependency = array();
+
 		/**
 		 * Constructor of RT_WP_Helpdesk checks dependency and initialize all classes and set all hooks for this class
 		 *
 		 * @since 0.1
 		 */
 		public function __construct() {
-			global $rtbiz_plugins;
-			$rtbiz_plugins = array(
+
+			$this->plugins_dependency = array(
 				'rtbiz' => array(
 					'project_type' => 'all', 'name' => esc_html__( 'WordPress for Business.', 'rt_biz' ), 'active' => class_exists( 'Rt_Biz' ), 'filename' => 'index.php',),
 			);
@@ -103,16 +105,17 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			}
 
 			if ( ! $flag ) {
-				function rtbiz_plugins_enque_js() {
-					wp_enqueue_script( 'rtbiz-hd-plugins', RT_HD_URL . 'app/assets/javascripts/rtbiz_plugin_check.js', '', false, true );
-					wp_localize_script( 'rtbiz-hd-plugins', 'rtbiz_ajax_url', admin_url( 'admin-ajax.php' ) );
-				}
-				add_action( 'admin_enqueue_scripts', 'rtbiz_plugins_enque_js' );
-				add_action( 'wp_ajax_rtBiz_hd_active_plugin', array( $this, 'rt_biz_hd_activate_plugin_ajax' ), 10 );
+				add_action( 'admin_enqueue_scripts', array( $this, 'rthd_plugins_enque_js' ) );
+				add_action( 'wp_ajax_rtBiz_hd_active_plugin', array( $this, 'rthd_activate_plugin_ajax' ), 10 );
 				add_action( 'admin_notices', array( $this, 'admin_notice_rtbiz_not_installed' ) );
 			}
 
 			return $flag;
+		}
+
+		function rthd_plugins_enque_js() {
+			wp_enqueue_script( 'rtbiz-hd-plugins', RT_HD_URL . 'app/assets/javascripts/rthd_plugin_check.js', '', false, true );
+			wp_localize_script( 'rtbiz-hd-plugins', 'rtbiz_ajax_url', admin_url( 'admin-ajax.php' ) );
 		}
 
 		/**
@@ -292,14 +295,14 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 		 */
 		function admin_notice_rtbiz_not_installed() {
 			?>
-			<div class="error rtBiz-not-installed-error">
+			<div class="error rtbiz-not-installed-error">
 			<?php
 			if ( $this->is_rt_biz_plugin_installed( 'rtbiz' ) && ! $this->is_rt_biz_plugin_active( 'rtbiz' ) ) {
-				$path  = $this->get_path_for_rt_biz_plugins( 'rtbiz' );
-				$nonce = wp_create_nonce( 'rtBiz_activate_plugin_' . $path );
+				$path  = $this->get_path_for_rt_biz_plugin( 'rtbiz' );
+				$nonce = wp_create_nonce( 'rthd_activate_plugin_' . $path );
 				?>
 				<p><b><?php _e( 'rtBiz Helpdesk:' ) ?></b> <?php _e( 'Click' ) ?> <a href="#"
-				                                                            onclick="activate_rtBiz_plugins('<?php echo $path ?>','rtBiz_hd_active_plugin','<?php echo $nonce; ?>')">here</a> <?php _e( 'to activate rtBiz.', 'rtbiz' ) ?>
+				                                                            onclick="activate_rthd_plugin('<?php echo $path ?>','rthd_active_plugin','<?php echo $nonce; ?>')">here</a> <?php _e( 'to activate rtBiz.', 'rtbiz' ) ?>
 				</p>
 			<?php } else { ?>
 				<p><b><?php _e( 'rtBiz Helpdesk:' ) ?></b> <?php _e( 'rtBiz Core plugin is not found on this site. Please install & activate it in order to use this plugin.', RT_HD_TEXT_DOMAIN ); ?></p>
@@ -308,29 +311,29 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			<?php
 		}
 
-		function get_path_for_rt_biz_plugins( $slug ) {
-			global $rtbiz_plugins;
-			$filename = ( ! empty( $rtbiz_plugins[ $slug ]['filename'] ) ) ? $rtbiz_plugins[ $slug ]['filename'] : $slug . '.php';
+		function get_path_for_rt_biz_plugin( $slug ) {
+
+			$filename = ( ! empty( $this->plugins_dependency[ $slug ]['filename'] ) ) ? $this->plugins_dependency[ $slug ]['filename'] : $slug . '.php';
 
 			return $slug . '/' . $filename;
 		}
 
 		function is_rt_biz_plugin_active( $slug ) {
-			global $rtbiz_plugins;
-			if ( empty( $rtbiz_plugins[ $slug ] ) ) {
+
+			if ( empty( $this->plugins_dependency[ $slug ] ) ) {
 				return false;
 			}
 
-			return $rtbiz_plugins[ $slug ]['active'];
+			return $this->plugins_dependency[ $slug ]['active'];
 		}
 
 		function is_rt_biz_plugin_installed( $slug ) {
-			global $rtbiz_plugins;
-			if ( empty( $rtbiz_plugins[ $slug ] ) ) {
+
+			if ( empty( $this->plugins_dependency[ $slug ] ) ) {
 				return false;
 			}
 
-			if ( $this->is_rt_biz_plugin_active( $slug ) || file_exists( WP_PLUGIN_DIR . '/' . $this->get_path_for_rt_biz_plugins( $slug ) ) ) {
+			if ( $this->is_rt_biz_plugin_active( $slug ) || file_exists( WP_PLUGIN_DIR . '/' . $this->get_path_for_rt_biz_plugin( $slug ) ) ) {
 				return true;
 			}
 
@@ -340,7 +343,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 		/**
 		 * ajax call for active plugin
 		 */
-		function rt_biz_hd_activate_plugin_ajax() {
+		function rthd_activate_plugin_ajax() {
 			if ( empty( $_POST['path'] ) ) {
 				die( __( 'ERROR: No slug was passed to the AJAX callback.', 'rt_biz' ) );
 			}
