@@ -127,6 +127,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 					}
 				}
 			}
+			remove_filter( 'wp_mail_from', 'rthd_my_mail_from' );
 			return $emailsendflag;
 		}
 
