@@ -183,7 +183,7 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 
 				<div class="rthd_attr_border">
 					<a class="rthd_public_link" target="_blank"
-					   href="<?php echo esc_url( trailingslashit( site_url() ) . strtolower( $labels['name'] ) . '/' . $rthd_unique_id ); ?>"><?php _e( 'Link' ); ?></a>
+					   href="<?php echo rthd_is_unique_hash_enabled() ? rthd_get_unique_hash_url( $post->ID ) : get_post_permalink( $post->ID ); ?>"><?php _e( 'Link' ); ?></a>
 				</div>
 				</div>
 			<?php }

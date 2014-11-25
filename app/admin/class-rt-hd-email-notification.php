@@ -333,8 +333,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			}
 
 			$title     = rthd_create_new_ticket_title( 'rthd_new_ticket_email_title',$post_id );
-			$unique_id = get_post_meta( $post_id, '_rtbiz_hd_unique_id', true );
-			$body      = $body . '<br />To View ' . $post_type . " Click <a href='" . trailingslashit( site_url() ) . strtolower( $post_type ) . '/' . $unique_id . "'>here</a>. <br/>";
+			$body      = $body . '<br />To View ' . $post_type . " Click <a href='" . ( rthd_is_unique_hash_enabled() ? rthd_get_unique_hash_url( $post_id ) : get_post_permalink( $post_id ) ) . "'>here</a>. <br/>";
 			$notify_emails = array();
 			if ( isset( $allemail ) && ! empty( $allemail ) ) {
 				foreach ( $allemail as $email ) {
