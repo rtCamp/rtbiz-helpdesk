@@ -573,7 +573,7 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 					$comment->comment_content = Rt_HD_Utils::force_utf_8( $comment->comment_content );
 				}
 			?>
-				<p><?php echo apply_filters( 'the_content', balanceTags( make_clickable( $comment->comment_content ), true ) ); ?></p>
+				<p><?php echo apply_filters( 'the_content', wp_kses_post( balanceTags( make_clickable( $comment->comment_content ), true ) ) ); ?></p>
 			<?php } else { ?>
 				<p><?php _e( 'This followup has been marked private.', RT_HD_TEXT_DOMAIN ); ?></p>
 			<?php } ?>
