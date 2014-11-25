@@ -176,18 +176,17 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 
 			<?php
 			$rthd_unique_id = get_post_meta( $post->ID, '_rtbiz_hd_unique_id', true );
-			if ( ! empty( $rthd_unique_id ) ) {
-				?>
+			if ( ! empty( $rthd_unique_id ) && rthd_is_unique_hash_enabled() ) { ?>
 				<div class="row_group">
 				<span class="prefix"
-				      title="<?php _e( 'Public URL', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Public URL', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
+				      title="<?php _e( 'Public URL', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Unique Hash URL', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
 
 				<div class="rthd_attr_border">
 					<a class="rthd_public_link" target="_blank"
 					   href="<?php echo esc_url( trailingslashit( site_url() ) . strtolower( $labels['name'] ) . '/' . $rthd_unique_id ); ?>"><?php _e( 'Link' ); ?></a>
 				</div>
-				</div><?php
-			}
+				</div>
+			<?php }
 
 			$meta_attributes = rthd_get_attributes( $post_type, 'meta' );
 			foreach ( $meta_attributes as $attr ) {
@@ -241,6 +240,7 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 				'post_author'   => $newTicket['post_author'],
 				'post_date'     => $newTicket['post_date'],
 				'post_date_gmt' => $newTicket['post_date_gmt'],
+			    'post_name'     => $post_id,
 			);
 
 			$dataArray = array(

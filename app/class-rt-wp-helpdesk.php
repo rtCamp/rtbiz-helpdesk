@@ -216,25 +216,9 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 		 * @since 0.1
 		 */
 		function load_scripts() {
-			global $wp_query;
+			global $wp_query, $post;
 
-			if ( ! isset( $wp_query->query_vars[ Rt_HD_Module::$post_type ] ) ) {
-				return;
-			}
-
-			if ( ! isset( $wp_query->query_vars['rthd_unique_id'] ) || ( isset( $wp_query->query_vars['rthd_unique_id'] ) && empty( $wp_query->query_vars['rthd_unique_id'] ) ) ) {
-				return;
-			}
-
-			$args = array(
-				'meta_key'    => '_rtbiz_hd_unique_id',
-				'meta_value'  => $wp_query->query_vars['rthd_unique_id'],
-				'post_status' => 'any',
-				'post_type'   => Rt_HD_Module::$post_type,
-			);
-
-			$ticketpost = get_posts( $args );
-			if ( empty( $ticketpost ) ) {
+			if ( ! isset( $wp_query->query_vars['post_type'] ) || $wp_query->query_vars['post_type'] != Rt_HD_Module::$post_type || empty( $post ) ) {
 				return;
 			}
 
@@ -274,35 +258,25 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			if ( ! wp_style_is( 'jquery-ui-smoothness' ) ) {
 				wp_enqueue_style( 'jquery-ui-smoothness', $url, array(), RT_HD_VERSION, 'all' );
 			}
-			$this->localize_scripts( $wp_query->query_vars['rthd_unique_id'] );
-			return true;
+			$this->localize_scripts();
 		}
 		/**
 		 * This is functions localize values for JScript
 		 * @since 0.1
 		 */
-		function localize_scripts( $rthd_unique_id = '' ) {
+		function localize_scripts() {
 
-			if ( empty( $rthd_unique_id ) ) {
+			global $post;
+
+			if ( empty( $post ) ) {
 				return;
 			}
 
-			$args       = array(
-				'meta_key'    => '_rtbiz_hd_unique_id',
-				'meta_value'  => $rthd_unique_id,
-				'post_status' => 'any',
-				'post_type'   => Rt_HD_Module::$post_type,
-			);
-			$ticketpost = get_posts( $args );
-			if ( empty( $ticketpost ) ) {
-				return;
-			}
-			$ticket    = $ticketpost[0];
 			$user_edit = false;
 
 			if ( wp_script_is( 'rthd-app-js' ) ) {
 				wp_localize_script( 'rthd-app-js', 'ajaxurl', admin_url( 'admin-ajax.php' ) );
-				wp_localize_script( 'rthd-app-js', 'rthd_post_type', get_post_type( $ticket->ID ) );
+				wp_localize_script( 'rthd-app-js', 'rthd_post_type', get_post_type( $post->ID ) );
 				wp_localize_script( 'rthd-app-js', 'rthd_user_edit', array( $user_edit ) );
 			}
 

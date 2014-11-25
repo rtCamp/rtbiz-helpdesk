@@ -35,55 +35,33 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		public function __construct() {
-			add_action( 'init', array( $this, 'add_rewrite_rule' ) );
-			add_action( 'init', array( $this, 'add_rewrite_tag' ) );
 
 			add_action( 'init', array( $this, 'flush_rewrite_rules' ), 15 );
 
 			add_filter( 'template_include', array( $this, 'template_include' ), 1, 1 );
 			add_filter( 'wp_title', array( $this, 'change_title' ), 9999, 1 );
 
-			add_action( 'admin_bar_menu', array( $this, 'admin_bar_edit_menu' ), 90 );
+//			add_action( 'admin_bar_menu', array( $this, 'admin_bar_edit_menu' ), 90 );
 		}
 
-
 		function admin_bar_edit_menu( $wp_admin_bar ) {
-			global $rthd_ticket, $rt_hd_module;
+			global $rt_hd_module, $rtbiz_helpdesk_template, $post;
 			$labels    = $rt_hd_module->labels;
 			$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
-			if ( ! empty( $rthd_ticket ) && current_user_can( $cap ) ) {
+			if ( ! empty( $rtbiz_helpdesk_template ) && current_user_can( $cap ) ) {
 				$wp_admin_bar->add_menu( array(
 					'id' => 'edit',
 					'title' => $labels['edit_item'],
-					'href' => get_edit_post_link( $rthd_ticket->ID ),
+					'href' => get_edit_post_link( $post->ID ),
 				) );
 			}
 		}
-
 
 		function flush_rewrite_rules() {
 			if ( is_admin() && 'true' == get_option( 'rthd_flush_rewrite_rules' ) ) {
 				flush_rewrite_rules();
 				delete_option( 'rthd_flush_rewrite_rules' );
 			}
-		}
-
-		function add_rewrite_endpoint() {
-			global $rt_hd_module;
-			$labels    = $rt_hd_module->labels;
-			add_rewrite_endpoint( strtolower( $labels['name'] ), EP_ALL );
-		}
-
-		function add_rewrite_tag() {
-			add_rewrite_tag( '%rtbiz_hd_ticket%', '([^/]*)' );
-			add_rewrite_tag( '%rthd_unique_id%', '([^/]*)' );
-
-		}
-
-		function add_rewrite_rule() {
-			global $rt_hd_module;
-			$labels    = $rt_hd_module->labels;
-			add_rewrite_rule( '^' . strtolower( $labels['name'] ) . '/([A-Za-z0-9]*)$', 'index.php?rtbiz_hd_ticket=true&rthd_unique_id=$matches[1]', 'top' );
 		}
 
 		/**
@@ -115,15 +93,36 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		function template_include( $template ) {
-			global $wp_query;
+			global $wp_query, $post, $rtbiz_helpdesk_template, $rt_hd_module;
 
-			if ( ! isset( $wp_query->query_vars[ Rt_HD_Module::$post_type ] ) ) {
+			if ( empty( $wp_query->query_vars['post_type'] ) || $wp_query->query_vars['post_type'] != Rt_HD_Module::$post_type ) {
 				return $template;
 			}
 
-			if ( ! isset( $wp_query->query_vars['rthd_unique_id'] ) || ( isset( $wp_query->query_vars['rthd_unique_id'] ) && empty( $wp_query->query_vars['rthd_unique_id'] ) ) ) {
+			if ( rthd_is_unique_hash_enabled() && ! empty( $_REQUEST['rthd_unique_id'] ) ) {
+				$args = array(
+					'meta_key'    => '_rtbiz_hd_unique_id',
+					'meta_value'  => $_REQUEST['rthd_unique_id'],
+					'post_status' => 'any',
+					'post_type'   => Rt_HD_Module::$post_type,
+				);
+
+				$ticketpost = get_posts( $args );
+				if ( ! empty( $ticketpost ) ) {
+					$ticket = $ticketpost[0];
+					global $rthd_front_page_title;
+					$labels    = $rt_hd_module->labels;
+					$rthd_front_page_title = $ticket->post_title . ' | ' . get_bloginfo();
+					$post = $ticket;
+					setup_postdata( $post );
+				}
+			}
+
+			if ( empty( $post ) ) {
 				return $template;
 			}
+
+			$rtbiz_helpdesk_template = true;
 
 			if ( ! is_user_logged_in() ) {
 				$redirect_url = ( ( is_ssl() ) ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
@@ -137,24 +136,6 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 				return rthd_locate_template( 'ticket-error-page.php' );
 			}
 
-			$args = array(
-				'meta_key'    => '_rtbiz_hd_unique_id',
-				'meta_value'  => $wp_query->query_vars['rthd_unique_id'],
-				'post_status' => 'any',
-				'post_type'   => Rt_HD_Module::$post_type,
-			);
-
-			$ticketpost = get_posts( $args );
-			if ( empty( $ticketpost ) ) {
-				return $template;
-			}
-			$ticket = $ticketpost[0];
-
-			global $rthd_ticket, $rt_hd_module;
-			$rthd_ticket = $ticket;
-			global $rthd_front_page_title;
-			$labels    = $rt_hd_module->labels;
-			$rthd_front_page_title = ucfirst( $labels['name'] ) . ' | ' . $rthd_ticket->post_title;
 			return rthd_locate_template( 'ticket-front-page.php' );
 		}
 

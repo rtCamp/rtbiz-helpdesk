@@ -130,17 +130,16 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$post_id = $rt_hd_tickets_operation->ticket_default_field_update( $postArray, $dataArray, $post_type, '', $userid, $userid );
 
 			// Updating Post Status from publish to unanswered
-			$rt_hd_tickets_operation->ticket_default_field_update( array( 'post_status' => 'hd-unanswered' ), array( 'post_status' => 'hd-unanswered' ), $post_type, $post_id, $userid, $userid );
+			$rt_hd_tickets_operation->ticket_default_field_update( array( 'post_status' => 'hd-unanswered', 'post_name' => $post_id ), array( 'post_status' => 'hd-unanswered' ), $post_type, $post_id, $userid, $userid );
 
-			$rt_hd_ticket_history_model->insert(
-				array(
-					'ticket_id'   => $post_id,
-					'type'        => 'post_status',
-					'old_value'   => 'auto-draft',
-					'new_value'   => 'hd-unanswered',
-					'update_time' => current_time( 'mysql' ),
-					'updated_by'  => get_current_user_id(),
-				) );
+			$rt_hd_ticket_history_model->insert( array(
+				'ticket_id'   => $post_id,
+				'type'        => 'post_status',
+				'old_value'   => 'auto-draft',
+				'new_value'   => 'hd-unanswered',
+				'update_time' => current_time( 'mysql' ),
+				'updated_by'  => get_current_user_id(),
+			) );
 
 			$rt_hd_tickets_operation->ticket_subscribe_update( $subscriber, $postArray['post_author'], $post_id );
 
@@ -1482,11 +1481,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 						array_push( $tocontact, array( 'email' => $email ) );
 					}
 				}
-				$rthd_unique_id = get_post_meta( $post_id, '_rtbiz_hd_unique_id', true );
 
-				global $rt_hd_module;
-				$labels = $rt_hd_module->labels;
-				$bd     = $body . " Click <a href='" . esc_url( trailingslashit( site_url() ) . strtolower( $labels['name'] ) . '/' . $rthd_unique_id ) . "'> here </a> to view ticket";
+				$bd     = $body . " Click <a href='" . ( rthd_is_unique_hash_enabled() ? rthd_get_unique_hash_url( $post_id ) : get_post_permalink( $post_id ) ) . "'>here</a> to view ticket";
 				$rt_hd_email_notification->insert_new_send_email( $title, $bd, $tocontact, array(), array(), $attachment, $comment_id, 'comment' );
 
 			}
@@ -1502,11 +1498,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$post_author_id = get_post_field( 'post_author', $post_id );
 			$userSub     = get_user_by( 'id', intval( $post_author_id ) );
 			$to[] = array( 'email' => $userSub->user_email, 'name' => $userSub->display_name );
-			global $rt_hd_module;
-			$labels = $rt_hd_module->labels;
-			//			$emailHTML = $body . "</br> To View Follwup Click <a href='". admin_url().'post.php?post='.$post_id.'&action=edit'."'>here</a>.<br/>";
-			$rthd_unique_id = get_post_meta( $post_id, '_rtbiz_hd_unique_id', true );
-			$emailHTML     = $body . " Click <a href='" . esc_url( trailingslashit( site_url() ) . strtolower( $labels['name'] ) . '/' . $rthd_unique_id ) . "'> here </a> to view ticket";
+
+			$emailHTML     = $body . " Click <a href='" . ( rthd_is_unique_hash_enabled() ? rthd_get_unique_hash_url( $post_id ) : get_post_permalink( $post_id ) ) . "'>here</a> to view ticket";
 
 			$rt_hd_email_notification->insert_new_send_email( $title, $emailHTML, $to, $cc, $bccemails, $attachment, $comment_id, 'comment' );
 		}

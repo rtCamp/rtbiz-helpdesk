@@ -456,6 +456,21 @@ function rthd_set_html_content_type() {
 	return 'text/html';
 }
 
+function rthd_get_unique_hash_url( $ticket_id ) {
+	global $rt_hd_module;
+	$labels = $rt_hd_module->labels;
+	$rthd_unique_id = get_post_meta( $ticket_id, '_rtbiz_hd_unique_id', true );
+	return trailingslashit( site_url() ) . strtolower( $labels['name'] ) . '/?rthd_unique_id=' . $rthd_unique_id;
+}
+
+function rthd_is_unique_hash_enabled() {
+	$settings = rthd_get_redux_settings();
+	if ( ! empty( $settings['rthd_enable_ticket_unique_hash'] ) ) {
+		return true;
+	}
+	return false;
+}
+
 
 // Setting ApI
 function rthd_get_redux_settings() {
