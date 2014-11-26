@@ -677,8 +677,7 @@ function rthd_plugin_check_enque_js() {
  * @since 0.1
  */
 function rthd_admin_notice_dependency_not_installed() {
-	if ( ! rthd_is_plugin_installed( 'rtbiz' ) ) {
-		?>
+	if ( ! rthd_is_plugin_installed( 'rtbiz' ) ) { ?>
 		<div class="error rthd-plugin-not-installed-error">
 			<p><b><?php _e( 'rtBiz Helpdesk:' ) ?></b> <?php _e(  rthd_get_path_for_plugin( 'rtbiz' ) .' plugin is not found on this site. Please install & activate it in order to use this plugin.', RT_HD_TEXT_DOMAIN ); ?></p>
 		</div>
