@@ -43,6 +43,8 @@ if ( ! class_exists( 'Rt_HD_Utils' ) ) {
 
 //			$string = preg_replace( '/\xE0[\x80-\x9F][\x80-\xBF]' . '|\xED[\xA0-\xBF][\x80-\xBF]/S','?', $string );
 
+			$string = quoted_printable_decode( $string );
+
 			return $string;
 		}
 
