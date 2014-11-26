@@ -34,7 +34,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 		 */
 		public function __construct() {
 
-			if ( ! rthd_check_plugin_dependecy() || ! did_action( 'rt_biz_init' ) ) {
+			if ( ! rthd_check_plugin_dependecy() ) {
 				return false;
 			}
 
