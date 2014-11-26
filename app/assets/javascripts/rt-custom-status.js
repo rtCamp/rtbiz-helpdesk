@@ -693,31 +693,6 @@ jQuery( document ).ready( function ( $ ) {
 	} catch ( e ) {
 
 	}
-
-	jQuery( document ).on( 'click', ".delete-multiple", function ( e ) {
-		$( this ).prev().remove();
-		$( this ).remove();
-	} )
-	jQuery( document ).on( 'click', ".add-multiple", function ( e ) {
-		var tempVal = $( this ).prev().val();
-		var name = $( this ).prev().attr( "name" )
-		if ( tempVal == '' ) {
-			return;
-		}
-		if ( $( this ).data( "type" ) != undefined ) {
-			if ( $( this ).data( "type" ) == 'email' ) {
-				if ( ! IsEmail( tempVal ) ) {
-					return;
-				}
-			}
-		}
-
-		$( this ).prev().val( '' );
-
-		$( this ).after( "<button type='button' class='button delete-multiple'> - </button>" );
-		$( this ).after( "<input type='text' name='" + name + "' value='" + tempVal + "' class='input-multiple' />" );
-	} );
-
 	// Imap Servers
 	jQuery( document ).on( 'click', '.rthd-edit-server', function ( e ) {
 		e.preventDefault();
