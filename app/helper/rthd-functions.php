@@ -456,6 +456,21 @@ function rthd_set_html_content_type() {
 	return 'text/html';
 }
 
+function rthd_get_unique_hash_url( $ticket_id ) {
+	global $rt_hd_module;
+	$labels = $rt_hd_module->labels;
+	$rthd_unique_id = get_post_meta( $ticket_id, '_rtbiz_hd_unique_id', true );
+	return trailingslashit( site_url() ) . strtolower( $labels['name'] ) . '/?rthd_unique_id=' . $rthd_unique_id;
+}
+
+function rthd_is_unique_hash_enabled() {
+	$settings = rthd_get_redux_settings();
+	if ( ! empty( $settings['rthd_enable_ticket_unique_hash'] ) ) {
+		return true;
+	}
+	return false;
+}
+
 
 // Setting ApI
 function rthd_get_redux_settings() {
@@ -558,7 +573,7 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 					$comment->comment_content = Rt_HD_Utils::force_utf_8( $comment->comment_content );
 				}
 			?>
-				<p><?php echo apply_filters( 'the_content', balanceTags( make_clickable( $comment->comment_content ), true ) ); ?></p>
+				<p><?php echo apply_filters( 'the_content', wp_kses_post( balanceTags( make_clickable( $comment->comment_content ), true ) ) ); ?></p>
 			<?php } else { ?>
 				<p><?php _e( 'This followup has been marked private.', RT_HD_TEXT_DOMAIN ); ?></p>
 			<?php } ?>

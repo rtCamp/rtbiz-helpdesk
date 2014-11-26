@@ -201,9 +201,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 						$actions['delete'] = "<a class='submitdelete' title='" . esc_attr( __( 'Delete this item permanently' ) ) . "' href='" . get_delete_post_link( $post->ID, '', true ) . "'>" . __( 'Delete Permanently' ) . "</a>";
 					}
 
-					$labels    = $rt_hd_module->labels;
-					$rthd_unique_id = get_post_meta( $post->ID, '_rtbiz_hd_unique_id', true );
-					$actions['view'] = '<a href="' . esc_url( trailingslashit( site_url() ) . strtolower( $labels['name'] ) . '/' . $rthd_unique_id ) . '" title="' . esc_attr( sprintf( __( 'Preview &#8220;%s&#8221;' ), $post->post_title ) ) . '" rel="permalink">' . __( 'View' ) . '</a>';
+					$actions['view'] = '<a href="' . esc_url( get_post_permalink( $post->ID ) ) . '" title="' . esc_attr( sprintf( __( 'Preview &#8220;%s&#8221;' ), $post->post_title ) ) . '" rel="permalink">' . __( 'View' ) . '</a>';
 
 					echo $this->row_actions( $actions );
 

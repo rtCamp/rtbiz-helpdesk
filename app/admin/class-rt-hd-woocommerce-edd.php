@@ -438,9 +438,8 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 				</tr>
 			<?php if ( ! empty( $tickets ) ) {
 				foreach ( $tickets as $ticket ) {
-						$rthd_unique_id = get_post_meta( $ticket->ID, '_rtbiz_hd_unique_id', true );
-						$date           = new DateTime( $ticket->post_modified );
-						$link           = ( is_admin() ) ? get_edit_post_link( $ticket->ID ) : esc_url( trailingslashit( site_url() ) ) . esc_attr( strtolower( $labels['name'] ) ) . '/' . esc_attr( $rthd_unique_id );
+						$date = new DateTime( $ticket->post_modified );
+						$link = ( is_admin() ) ? get_edit_post_link( $ticket->ID ) : esc_url( ( rthd_is_unique_hash_enabled() ) ? rthd_get_unique_hash_url( $ticket->ID ) : get_post_permalink( $ticket->ID ) );
 						?>
 						<tr>
 							<td> #<?php echo esc_attr( $ticket->ID ) ?> </td>

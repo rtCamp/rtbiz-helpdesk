@@ -54,6 +54,7 @@ if ( ! class_exists( 'Rt_HD_User_Settings' ) ) {
 						?>
 						<th><label for="rthd_notification_pref"><?php _e( $label , RT_HD_TEXT_DOMAIN ); ?></label></th>
 						<td>
+							<label for="rthd_notification_pref">
 							<input name="rthd_notification_pref" type="checkbox" id="rthd_notification_pref" value="1"
 								<?php
 								$user_pref = rthd_get_user_notification_preference( $user->ID );
@@ -62,7 +63,8 @@ if ( ! class_exists( 'Rt_HD_User_Settings' ) ) {
 								}
 								?>
 								/>
-							<span class="description"><?php _e( 'Turn On Event Notification', RT_HD_TEXT_DOMAIN ); ?></span>
+								<span class="description"><?php _e( 'Turn On Event Notification', RT_HD_TEXT_DOMAIN ); ?></span>
+							</label>
 						</td>
 					</tr>
 					</tbody>

@@ -189,17 +189,17 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					'title'    => __( 'Support Page' ),
 					'desc'     => __( 'This page will be used to create new support requests from front-end. Add [rt_hd_support_form] Shortcode in page-content. Rest will be taken care by HelpDesk.' ),
 					'subtitle' => __( 'Select Page for Product Support' ),
-
 				),
-				//				array(
-				//					'id'       => 'rthd_enable_style',
-				//					'type'     => 'switch',
-				//					'title'    => __( 'Enable Helpdesk Styles' ),
-				//					'subtitle' => __( 'This will enable/disable the default Helpdesk Styles that gets enqueued. You can override the styles and include yours by disabling this.' ),
-				//					'default'  => true,
-				//					'on'       => __( 'Enable' ),
-				//					'off'      => __( 'Disable' ),
-				//				),
+				array(
+					'id'       => 'rthd_enable_ticket_unique_hash',
+					'type'     => 'switch',
+					'title'    => __( 'Enable Unique Hash URLs for Tickets' ),
+					'subtitle' => __( 'This will enable/disable Unique Hash URLs for Tickets.' ),
+					'desc'     => __( 'If enabled, this will generate a unique Hash URL for all the tickets through which tickets can be accessed in the front end. This unique URLs will be sent in all emails of Helpdesk. Tickets can be accessed from the default WordPress permalinks as well.' ),
+					'default'  => true,
+					'on'       => __( 'Enable' ),
+					'off'      => __( 'Disable' ),
+				),
 			);
 
 			$this->sections[] = array(

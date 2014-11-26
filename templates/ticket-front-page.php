@@ -9,10 +9,10 @@ get_header();
 
 do_action( 'rthd_ticket_front_page_after_header' );
 
-global $rthd_ticket, $rt_hd_module;
-$post_type       = get_post_type( $rthd_ticket );
+global $rt_hd_module, $post;
+$post_type       = get_post_type( $post );
 $labels          = $rt_hd_module->labels;
-$post_id         = $rthd_ticket->ID;
+$post_id         = $post->ID;
 $user_edit       = false;
 
 ?>
