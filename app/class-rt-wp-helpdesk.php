@@ -27,8 +27,6 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 		 */
 		public $templateURL;
 
-		public $plugins_dependency = array();
-
 		/**
 		 * Constructor of RT_WP_Helpdesk checks dependency and initialize all classes and set all hooks for this class
 		 *
@@ -36,12 +34,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 		 */
 		public function __construct() {
 
-			$this->plugins_dependency = array(
-				'rtbiz' => array(
-					'project_type' => 'all', 'name' => esc_html__( 'WordPress for Business.', 'rt_biz' ), 'active' => class_exists( 'Rt_Biz' ), 'filename' => 'index.php',),
-			);
-
-			if ( ! $this->check_rt_biz_dependecy() ) {
+			if ( ! rthd_check_plugin_dependecy() || ! did_action( 'rt_biz_init' ) ) {
 				return false;
 			}
 
@@ -55,67 +48,6 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 
 			add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
 
-		}
-
-		/**
-		 * check for rt biz dependency and if it does not find any single dependency then it returns false
-		 *
-		 * @since 0.1
-		 *
-		 * @return bool
-		 */
-		function check_rt_biz_dependecy() {
-
-			$flag          = true;
-			$used_function = array(
-				'rt_biz_get_module_users',
-				'rt_biz_get_entity_meta',
-				'rt_biz_get_post_for_organization_connection',
-				'rt_biz_get_post_for_person_connection',
-				'rt_biz_get_organization_post_type',
-				'rt_biz_get_person_post_type',
-				'rt_biz_search_organization',
-				'rt_biz_add_organization',
-				'rt_biz_organization_connection_to_string',
-				'rt_biz_connect_post_to_organization',
-				'rt_biz_clear_post_connections_to_organization',
-				'rt_biz_sanitize_module_key',
-				'rt_biz_get_access_role_cap',
-				'rt_biz_get_person_by_email',
-				'rt_biz_add_person',
-				'rt_biz_add_entity_meta',
-				'rt_biz_person_connection_to_string',
-				'rt_biz_connect_post_to_person',
-				'rt_biz_get_organization_to_person_connection',
-				'rt_biz_search_person',
-				'rt_biz_connect_organization_to_person',
-				'rt_biz_clear_post_connections_to_person',
-				'rt_biz_register_person_connection',
-				'rt_biz_register_organization_connection',
-				'rt_biz_get_organization_capabilities',
-				'rt_biz_get_person_capabilities',
-				'rt_biz_get_person_meta_fields',
-				'rt_biz_get_organization_meta_fields',
-			);
-
-			foreach ( $used_function as $fn ) {
-				if ( ! function_exists( $fn ) ) {
-					$flag = false;
-				}
-			}
-
-			if ( ! $flag ) {
-				add_action( 'admin_enqueue_scripts', array( $this, 'rthd_plugins_enque_js' ) );
-				add_action( 'wp_ajax_rtBiz_hd_active_plugin', array( $this, 'rthd_activate_plugin_ajax' ), 10 );
-				add_action( 'admin_notices', array( $this, 'admin_notice_rtbiz_not_installed' ) );
-			}
-
-			return $flag;
-		}
-
-		function rthd_plugins_enque_js() {
-			wp_enqueue_script( 'rtbiz-hd-plugins', RT_HD_URL . 'app/assets/javascripts/rthd_plugin_check.js', '', false, true );
-			wp_localize_script( 'rtbiz-hd-plugins', 'rtbiz_ajax_url', admin_url( 'admin-ajax.php' ) );
 		}
 
 		/**
@@ -285,95 +217,5 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 
 			return true;
 		}
-
-
-
-		/**
-		 * if rtbiz plugin is not installed or activated it gives notification to user to do so.
-		 *
-		 * @since 0.1
-		 */
-		function admin_notice_rtbiz_not_installed() {
-			?>
-			<div class="error rtbiz-not-installed-error">
-			<?php
-			if ( $this->is_rt_biz_plugin_installed( 'rtbiz' ) && ! $this->is_rt_biz_plugin_active( 'rtbiz' ) ) {
-				$path  = $this->get_path_for_rt_biz_plugin( 'rtbiz' );
-				$nonce = wp_create_nonce( 'rthd_activate_plugin_' . $path );
-				?>
-				<p><b><?php _e( 'rtBiz Helpdesk:' ) ?></b> <?php _e( 'Click' ) ?> <a href="#"
-				                                                            onclick="activate_rthd_plugin('<?php echo $path ?>','rthd_active_plugin','<?php echo $nonce; ?>')">here</a> <?php _e( 'to activate rtBiz.', 'rtbiz' ) ?>
-				</p>
-			<?php } else { ?>
-				<p><b><?php _e( 'rtBiz Helpdesk:' ) ?></b> <?php _e( 'rtBiz Core plugin is not found on this site. Please install & activate it in order to use this plugin.', RT_HD_TEXT_DOMAIN ); ?></p>
-			<?php } ?>
-			</div>
-			<?php
-		}
-
-		function get_path_for_rt_biz_plugin( $slug ) {
-
-			$filename = ( ! empty( $this->plugins_dependency[ $slug ]['filename'] ) ) ? $this->plugins_dependency[ $slug ]['filename'] : $slug . '.php';
-
-			return $slug . '/' . $filename;
-		}
-
-		function is_rt_biz_plugin_active( $slug ) {
-
-			if ( empty( $this->plugins_dependency[ $slug ] ) ) {
-				return false;
-			}
-
-			return $this->plugins_dependency[ $slug ]['active'];
-		}
-
-		function is_rt_biz_plugin_installed( $slug ) {
-
-			if ( empty( $this->plugins_dependency[ $slug ] ) ) {
-				return false;
-			}
-
-			if ( $this->is_rt_biz_plugin_active( $slug ) || file_exists( WP_PLUGIN_DIR . '/' . $this->get_path_for_rt_biz_plugin( $slug ) ) ) {
-				return true;
-			}
-
-			return false;
-		}
-
-		/**
-		 * ajax call for active plugin
-		 */
-		function rthd_activate_plugin_ajax() {
-			if ( empty( $_POST['path'] ) ) {
-				die( __( 'ERROR: No slug was passed to the AJAX callback.', 'rt_biz' ) );
-			}
-			check_ajax_referer( 'rtBiz_activate_plugin_' . $_POST['path'] );
-
-			if ( ! current_user_can( 'activate_plugins' ) ) {
-				die( __( 'ERROR: You lack permissions to activate plugins.', 'rt_biz' ) );
-			}
-
-			$this->rt_biz_activate_plugin( $_POST['path'] );
-
-			echo 'true';
-			die();
-		}
-
-		/**
-		 * @param $plugin_path
-		 * ajax call for active plugin calls this function to active plugin
-		 */
-		function rt_biz_activate_plugin( $plugin_path ) {
-
-			$activate_result = activate_plugin( $plugin_path );
-			if ( is_wp_error( $activate_result ) ) {
-				die( sprintf( __( 'ERROR: Failed to activate plugin: %s', 'rt_biz' ), $activate_result->get_error_message() ) );
-			}
-		}
-
-
-
-
 	}
-
 }

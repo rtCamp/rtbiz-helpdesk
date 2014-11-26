@@ -630,3 +630,128 @@ function rthd_toggle_status($postid){
     }
     return false;
 }
+
+
+/**
+ * check for rt biz dependency and if it does not find any single dependency then it returns false
+ *
+ * @since 0.1
+ *
+ * @return bool
+ */
+function rthd_check_plugin_dependecy() {
+
+	global $rthd_plugin_check;
+	$rthd_plugin_check = array(
+		'rtbiz' => array(
+			'project_type' => 'all',
+			'name' => esc_html__( 'WordPress for Business.', RT_HD_TEXT_DOMAIN ),
+			'active' => class_exists( 'Rt_Biz' ),
+			'filename' => 'index.php',
+		),
+	);
+
+	$flag = true;
+
+	if ( ! class_exists( 'Rt_Biz' ) || ! did_action( 'rt_biz_init' ) ) {
+		$flag = false;
+	}
+
+	if ( ! $flag ) {
+		add_action( 'admin_enqueue_scripts', 'rthd_plugin_check_enque_js' );
+		add_action( 'wp_ajax_rthd_activate_plugin', 'rthd_activate_plugin_ajax' );
+		add_action( 'admin_notices', 'rthd_admin_notice_dependency_not_installed' );
+	}
+
+	return $flag;
+}
+
+function rthd_plugin_check_enque_js() {
+	wp_enqueue_script( 'rtbiz-hd-plugin-check', RT_HD_URL . 'app/assets/javascripts/rthd_plugin_check.js', '', false, true );
+	wp_localize_script( 'rtbiz-hd-plugin-check', 'rthd_ajax_url', admin_url( 'admin-ajax.php' ) );
+}
+
+/**
+ * if rtbiz plugin is not installed or activated it gives notification to user to do so.
+ *
+ * @since 0.1
+ */
+function rthd_admin_notice_dependency_not_installed() {
+	if ( ! rthd_is_plugin_installed( 'rtbiz' ) ) {
+		?>
+		<div class="error rthd-plugin-not-installed-error">
+			<p><b><?php _e( 'rtBiz Helpdesk:' ) ?></b> <?php _e(  rthd_get_path_for_plugin( 'rtbiz' ) .' plugin is not found on this site. Please install & activate it in order to use this plugin.', RT_HD_TEXT_DOMAIN ); ?></p>
+		</div>
+	<?php } else {
+		if ( rthd_is_plugin_installed( 'rtbiz' ) && ! rthd_is_plugin_active( 'rtbiz' ) ) {
+			$path  = rthd_get_path_for_plugin( 'rtbiz' );
+			$nonce = wp_create_nonce( 'rthd_activate_plugin_' . $path );
+		?>
+		<div class="error rthd-plugin-not-installed-error">
+			<p><b><?php _e( 'rtBiz Helpdesk:' ) ?></b> <?php _e( 'Click' ) ?> <a href="#"
+			                                                                     onclick="activate_rthd_plugin('<?php echo $path ?>','rthd_activate_plugin','<?php echo $nonce; ?>')">here</a> <?php _e( 'to activate rtBiz.', 'rtbiz' ) ?>
+			</p>
+		</div>
+	<?php }
+	}
+}
+
+function rthd_get_path_for_plugin( $slug ) {
+	global $rthd_plugin_check;
+	$filename = ( ! empty( $rthd_plugin_check[ $slug ]['filename'] ) ) ? $rthd_plugin_check[ $slug ]['filename'] : $slug . '.php';
+
+	return $slug . '/' . $filename;
+}
+
+function rthd_is_plugin_active( $slug ) {
+	global $rthd_plugin_check;
+	if ( empty( $rthd_plugin_check[ $slug ] ) ) {
+		return false;
+	}
+
+	return $rthd_plugin_check[ $slug ]['active'];
+}
+
+function rthd_is_plugin_installed( $slug ) {
+	global $rthd_plugin_check;
+	if ( empty( $rthd_plugin_check[ $slug ] ) ) {
+		return false;
+	}
+
+	if ( rthd_is_plugin_active( $slug ) || file_exists( WP_PLUGIN_DIR . '/' . rthd_get_path_for_plugin( $slug ) ) ) {
+		return true;
+	}
+
+	return false;
+}
+
+/**
+ * ajax call for active plugin
+ */
+function rthd_activate_plugin_ajax() {
+	if ( empty( $_POST['path'] ) ) {
+		die( __( 'ERROR: No slug was passed to the AJAX callback.', 'rt_biz' ) );
+	}
+	check_ajax_referer( 'rthd_activate_plugin_' . $_POST['path'] );
+
+	if ( ! current_user_can( 'activate_plugins' ) ) {
+		die( __( 'ERROR: You lack permissions to activate plugins.', 'rt_biz' ) );
+	}
+
+	rthd_activate_plugin( $_POST['path'] );
+
+	echo 'true';
+	die();
+}
+
+/**
+ * @param $plugin_path
+ * ajax call for active plugin calls this function to active plugin
+ */
+function rthd_activate_plugin( $plugin_path ) {
+
+	$activate_result = activate_plugin( $plugin_path );
+	if ( is_wp_error( $activate_result ) ) {
+		die( sprintf( __( 'ERROR: Failed to activate plugin: %s', 'rt_biz' ), $activate_result->get_error_message() ) );
+	}
+}

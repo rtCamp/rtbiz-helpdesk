@@ -3,23 +3,23 @@
  */
 
 
-function activate_rthd_plugin( path, action, rtm_nonce ) {
-	jQuery('.rtbiz-not-installed-error').removeClass('error');
-	jQuery('.rtbiz-not-installed-error').addClass('updated');
-	jQuery('.rtbiz-not-installed-error p').html('<b>rtBiz Helpdesk  :</b> rtBiz will be activated. Please wait. <div class="spinner"> </div>');
+function activate_rthd_plugin( path, action, rthd_nonce ) {
+	jQuery('.rthd-plugin-not-installed-error').removeClass('error');
+	jQuery('.rthd-plugin-not-installed-error').addClass('updated');
+	jQuery('.rthd-plugin-not-installed-error p').html('<b>rtBiz Helpdesk  :</b> ' + path + ' will be activated. Please wait. <div class="spinner"> </div>');
 	jQuery("div.spinner").show();
 	var param = {
 		action: action,
 		path: path,
-		_ajax_nonce: rtm_nonce
+		_ajax_nonce: rthd_nonce
 	};
-	jQuery.post( rtbiz_ajax_url, param,function(data){
+	jQuery.post( rthd_ajax_url, param,function(data){
 		data = data.trim();
 		if(data == "true") {
-			jQuery('.rtBiz-not-installed-error p').html('<b>rtBiz Helpdesk  :</b> rtBiz activated.');
+			jQuery('.rthd-plugin-not-installed-error p').html('<b>rtBiz Helpdesk  :</b> ' + path + ' activated.');
 			location.reload();
 		} else {
-			jQuery('.rtBiz-not-installed-error p').html('<b>rtBiz Helpdesk  :</b> There is some problem. Please try again.');
+			jQuery('.rthd-plugin-not-installed-error p').html('<b>rtBiz Helpdesk  :</b> There is some problem. Please try again.');
 		}
 	});
 }

@@ -109,7 +109,7 @@ if ( ! defined( 'RT_HD_PATH_TEMPLATES' ) ) {
 	define( 'RT_HD_PATH_TEMPLATES', plugin_dir_path( __FILE__ ) . 'templates/' );
 }
 
-include_once RT_HD_PATH_LIB . 'rt-lib.php';
+include_once RT_HD_PATH_HELPER . 'rthd-functions.php';
 
 /**
  * Using rt-lib [ RT_WP_Autoload ] class, Includes all files & external Require Libraries with in given directory.
@@ -127,8 +127,6 @@ function rt_hd_include() {
 	include_once RT_HD_PATH_VENDOR . 'taxonomy-metadata.php';
 
 	require_once RT_HD_PATH_VENDOR . 'redux/ReduxCore/framework.php';
-
-	include_once RT_HD_PATH_HELPER . 'rthd-functions.php';
 
 	global $rthd_app_autoload, $rthd_admin_autoload, $rthd_admin_metabox_autoload, $rthd_models_autoload, $rthd_helper_autoload, $rthd_settings_autoload, $rthd_form_autoload, $rthd_reports_autoload;
 	$rthd_app_autoload           = new RT_WP_Autoload( RT_HD_PATH_APP );
@@ -162,14 +160,7 @@ add_action( 'rt_biz_init', 'rt_hd_init', 1 );
  *
  * @since 0.1
  */
-function rt_hd_check_dependency() {
-	global $rt_wp_hd;
-	if ( empty( $rt_wp_hd ) ) {
-		rt_hd_include();
-		$rt_wp_hd = new RT_WP_Helpdesk();
-	}
-}
-add_action( 'init', 'rt_hd_check_dependency' );
+add_action( 'init', 'rthd_check_plugin_dependecy' );
 
 
 register_activation_hook( __FILE__, 'init_call_flush_rewrite_rules' );
