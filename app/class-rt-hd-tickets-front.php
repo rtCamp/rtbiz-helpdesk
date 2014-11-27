@@ -40,8 +40,6 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 
 			add_filter( 'template_include', array( $this, 'template_include' ), 1, 1 );
 			add_filter( 'wp_title', array( $this, 'change_title' ), 9999, 1 );
-
-//			add_action( 'admin_bar_menu', array( $this, 'admin_bar_edit_menu' ), 90 );
 		}
 
 		function admin_bar_edit_menu( $wp_admin_bar ) {

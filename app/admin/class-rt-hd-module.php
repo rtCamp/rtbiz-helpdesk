@@ -201,9 +201,9 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 		function register_custom_statuses( $status ) {
 
 			return register_post_status( $status['slug'], array(
-				'label'       => $status['slug'],
-				'protected'   => true,
-				'_builtin'    => false,
+				'label'       => $status['name'],
+				'public'      => true,
+				'exclude_from_search' => false,
 				'label_count' => _n_noop( "{$status['name']} <span class='count'>(%s)</span>", "{$status['name']} <span class='count'>(%s)</span>" ),
 			) );
 
