@@ -735,13 +735,13 @@ function rthd_ticket_import_logs() {
  * @param $value
  */
 function rthd_reply_by_email_view( $field, $value ) {
-	global $rt_hd_settings_inbound_email;
-	$rt_hd_settings_inbound_email->rthd_reply_by_email_view( $field, $value );
+	global $rt_setting_inbound_email;
+	$rt_setting_inbound_email->rthd_reply_by_email_view( $field, $value );
 }
 
 function rthd_imap_servers( $field, $value ) {
-	global $rt_hd_settings_imap_server;
-	$rt_hd_settings_imap_server->rthd_imap_servers( $field,$value );
+	global $rt_setting_imap_server;
+	$rt_setting_imap_server->rthd_imap_servers( $field,$value );
 }
 
 /**

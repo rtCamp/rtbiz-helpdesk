@@ -1432,10 +1432,10 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 */
 		public function is_allow_to_sendemail_fromemail( $email ) {
 			$user_id = get_current_user_id();
-			global $wpdb, $rt_hd_mail_accounts_model, $rt_hd_mail_acl_model;
-			$sql    = $wpdb->prepare( '(select * from {$rt_hd_mail_accounts_model->table_name} where user_id=%d and email = %s)
+			global $wpdb, $rt_mail_accounts_model, $rt_hd_mail_acl_model;
+			$sql    = $wpdb->prepare( '(select * from {$rt_mail_accounts_model->table_name} where user_id=%d and email = %s)
                                 union (select a.* from {$rt_hd_mail_acl_model->table_name} b inner join
-                                {$rt_hd_mail_accounts_model->table_name} a on a.email=b.email where b.allow_user=%d and a.email=%s)', $user_id, $email, $user_id, $email );
+                                {$rt_mail_accounts_model->table_name} a on a.email=b.email where b.allow_user=%d and a.email=%s)', $user_id, $email, $user_id, $email );
 			$result = $wpdb->get_results( $sql );
 			if ( $result && ! empty( $result ) ) {
 				return true;
@@ -1551,11 +1551,11 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				die( 0 );
 			}
 
-			global $rt_hd_settings;
+			global $rt_mail_settings;
 			$signature    = '';
 			$email_type   = '';
 			$imap_server  = '';
-			$access_token = $rt_hd_settings->get_accesstoken_from_email( $_POST['email'], $signature, $email_type, $imap_server );
+			$access_token = $rt_mail_settings->get_accesstoken_from_email( $_POST['email'], $signature, $email_type, $imap_server );
 
 			if ( 'goauth' != $email_type ) {
 				$response['false']   = true;
@@ -1598,8 +1598,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				'user_id'  => $userid,
 				'status'   => 'r',
 			);
-			global $rt_hd_mail_thread_importer_model;
-			$rows_affected = $rt_hd_mail_thread_importer_model->add_thread( $args );
+			global $rt_mail_thread_importer_model;
+			$rows_affected = $rt_mail_thread_importer_model->add_thread( $args );
 
 			return $rows_affected;
 		}

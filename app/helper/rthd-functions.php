@@ -201,8 +201,8 @@ function rthd_extract_key_from_attributes( $attr ) {
  * @return bool
  */
 function rthd_is_system_email( $email ) {
-	global $rt_hd_settings;
-	$google_acs = $rt_hd_settings->get_user_google_ac();
+	global $rt_mail_settings;
+	$google_acs = $rt_mail_settings->get_user_google_ac();
 
 	foreach ( $google_acs as $ac ) {
 		$ac->email_data = unserialize( $ac->email_data );
@@ -219,10 +219,10 @@ function rthd_is_system_email( $email ) {
  * @return array
  */
 function rthd_get_all_system_emails() {
-	global $rt_hd_settings;
+	global $rt_mail_settings;
 
 	$emails   = array();
-	$google_acs = $rt_hd_settings->get_user_google_ac();
+	$google_acs = $rt_mail_settings->get_user_google_ac();
 
 	foreach ( $google_acs as $ac ) {
 		$ac->email_data = unserialize( $ac->email_data );
