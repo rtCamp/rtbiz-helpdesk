@@ -901,21 +901,7 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 					$subject      = Rt_HD_Utils::force_utf_8( $subject );
 					$txtBody      = Rt_HD_Utils::force_utf_8( $txtBody );
 
-                    include_once RT_HD_PATH_VENDOR . 'EmailReplyParser/src/autoload.php';
-
-                    $visibleText = \EmailReplyParser\EmailReplyParser::parseReply( $htmlBody );
-
-                    $dom = new DOMDocument;
-                    $dom->loadHTML( $visibleText );
-                    $xPath = new DOMXPath( $dom );
-                    $nodes = $xPath->query( '//*[@class="gmail_extra"]' );
-                    if( $nodes->item(0) ) {
-                        $nodes->item(0)->parentNode->removeChild( $nodes->item(0) );
-                    }
-
-                    $visibleHtml = $dom->saveHTML();
-
-					$success_flag = $rt_hd_import_operation->process_email_to_ticket( $subject, $visibleHtml, $from, $message->date, $allEmails, $attachements, $txtBody, true, $user_id, $messageid, $inreplyto, $references, $isSystemEmail, $subscriber );
+					$success_flag = $rt_hd_import_operation->process_email_to_ticket( $subject, $htmlBody, $from, $message->date, $allEmails, $attachements, $txtBody, true, $user_id, $messageid, $inreplyto, $references, $isSystemEmail, $subscriber );
 
 					error_log( "Mail Parse Status : " . var_export( $success_flag, true ) . "\n\r" );
 
