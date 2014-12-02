@@ -145,7 +145,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				$default_assignee = strval( 1 );
 			}
 
-			$system_emails = rt_get_all_system_emails();
+			$system_emails = rt_get_all_system_emails( array( 'module' => RT_HD_TEXT_DOMAIN, ) );
 			$mailbox_options = array();
 			foreach( $system_emails as $email ) {
 				$mailbox_options[ $email ] = $email;
