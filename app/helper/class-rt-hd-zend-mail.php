@@ -901,7 +901,10 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 					$subject      = Rt_HD_Utils::force_utf_8( $subject );
 					$txtBody      = Rt_HD_Utils::force_utf_8( $txtBody );
 
-					$success_flag = $rt_hd_import_operation->process_email_to_ticket( $subject, $htmlBody, $from, $message->date, $allEmails, $attachements, $txtBody, true, $user_id, $messageid, $inreplyto, $references, $isSystemEmail, $subscriber );
+					$offset = strpos( $htmlBody, '&lt; ! ------------------ REPLY ABOVE THIS LINE ------------------ ! &gt;' );
+					$visibleText = substr( $htmlBody, 0, ( $offset === false ) ? strlen( $htmlBody ) : $offset );
+
+					$success_flag = $rt_hd_import_operation->process_email_to_ticket( $subject, $visibleText, $from, $message->date, $allEmails, $attachements, $txtBody, true, $user_id, $messageid, $inreplyto, $references, $isSystemEmail, $subscriber );
 
 					error_log( "Mail Parse Status : " . var_export( $success_flag, true ) . "\n\r" );
 

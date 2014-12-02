@@ -570,6 +570,8 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 							$comment->comment_content = $output_array[0];
 						}
 					}
+					$offset = strpos( $comment->comment_content, '&lt; ! ------------------ REPLY ABOVE THIS LINE ------------------ ! &gt;' );
+					$comment->comment_content = substr( $comment->comment_content, 0 , ( $offset === false ) ? strlen( $comment->comment_content ) : $offset );
 					$comment->comment_content = Rt_HD_Utils::force_utf_8( $comment->comment_content );
 				}
 			?>
