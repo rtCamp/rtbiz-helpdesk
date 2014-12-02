@@ -56,6 +56,9 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			add_action( 'wp_ajax_helpdesk_delete_followup', array( $this, 'delete_followup_ajax' ) );
 			add_action( 'wp_ajax_load_more_followup', array( $this, 'load_more_followup' ) );
 			add_action( 'wp_ajax_nopriv_load_more_followup', array( $this, 'load_more_followup' ) );
+
+			add_action( 'read_rt_mailbox_email_'.RT_HD_TEXT_DOMAIN, array( $this, 'process_email_to_ticket' ), 10, 14 );
+
 		}
 
 		/**
@@ -316,7 +319,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 * @param        $body
 		 * @param        $fromemail
 		 * @param        $mailtime
-		 * @param        $allemail
+		 * @param        $allemails
 		 * @param        $uploaded
 		 * @param        $mailBodyText
 		 * @param bool   $check_duplicate
@@ -324,8 +327,11 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 * @param string $messageid
 		 * @param string $inreplyto
 		 * @param string $references
+		 * @param array  $rt_all_emails
 		 * @param bool   $systemEmail
-		 * @param array  $subscriber
+		 *
+		 * @internal param $allemail
+		 * @internal param array $subscriber
 		 *
 		 * @return bool
 		 *
@@ -336,7 +342,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$body,
 			$fromemail,
 			$mailtime,
-			$allemail,
+			$allemails,
 			$uploaded,
 			$mailBodyText,
 			$check_duplicate = true,
@@ -344,9 +350,28 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$messageid = '',
 			$inreplyto = '',
 			$references = '',
-			$systemEmail = false,
-			$subscriber = array()
+			$rt_all_emails  = array(),
+			$systemEmail = false
 		) {
+			//subscriber diff
+			$rtCampUser = Rt_HD_Utils::get_hd_rtcamp_user(); //todo : remove this call and do something else
+			$hdUser     = array();
+			foreach ( $rtCampUser as $rUser ) {
+				$hdUser[ $rUser->user_email ] = $rUser->ID;
+			}
+			$subscriber = array();
+			$allemail = array();
+			echo  var_export($allemails,true)."all users ";
+			echo  var_export($hdUser,true)."hd users ";
+			foreach ( $allemails as $mail ) {
+				if ( ! array_key_exists( $mail['address'], $hdUser ) ) {
+					$allemail[]= $mail;
+				} else {
+					$subscriber[]= $hdUser[$mail['address']];
+				}
+			}
+
+			echo  var_export($subscriber,true)."Subscriber ";
 			global $rt_hd_contacts;
 
 			if ( empty( $userid ) ) {
@@ -395,7 +420,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					$this->process_forward_email_data( $title, $body, $mailtime, $allemail, $mailBodyText, $dndEmails );
 				}
 
-				return $this->insert_post_comment( $postid, $userid, $body, $fromemail['name'], $fromemail['address'], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $subscriber );
+				return $this->insert_post_comment( $postid, $userid, $body, $fromemail['name'], $fromemail['address'], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $rt_all_emails , $subscriber);
 			}
 			//if subject is re to post title
 
@@ -592,7 +617,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		public function insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, $uploaded, $allemails, $dndEmails, $messageid = '', $inreplyto = '', $references = '', $subscriber = array() ) {
+		public function insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, $uploaded, $allemails, $dndEmails, $messageid = '', $inreplyto = '', $references = '', $rt_all_emails = array(), $subscriber = array() ) {
 
 			$post_type       = get_post_type( $comment_post_ID );
 			$ticketModel     = new Rt_HD_Ticket_Model();
@@ -661,9 +686,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$ticketModel->update_ticket( $data, $where );
 			/* System Notification -- Followup Added to the ticket */
 
-			global $rthd_all_emails;
-			if ( isset( $rthd_all_emails ) ) {
-				foreach ( $rthd_all_emails as $email ) {
+			if ( isset( $rt_all_emails  ) ) {
+				foreach ( $rt_all_emails  as $email ) {
 					if ( isset( $email['key'] ) ) {
 						$meta = get_comment_meta( $comment_id, '_email_' . $email['key'], true );
 						if ( empty( $meta ) ) {
