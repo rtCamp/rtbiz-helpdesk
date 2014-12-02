@@ -62,7 +62,7 @@ jQuery( document ).ready( function ( $ ) {
 		} );
 
 	}
-	$( ".remove-google-ac" ).click( function ( e ) {
+/*	$( ".remove-google-ac" ).click( function ( e ) {
 		var r = confirm( "Are you sure you want to remove this email A/C ?" );
 		if ( r == true ) {
 
@@ -70,7 +70,7 @@ jQuery( document ).ready( function ( $ ) {
 			e.preventDefault();
 			return false;
 		}
-	} );
+	} );*/
 
 
 	/**
@@ -694,7 +694,7 @@ jQuery( document ).ready( function ( $ ) {
 
 	}
 	// Imap Servers
-	jQuery( document ).on( 'click', '.rthd-edit-server', function ( e ) {
+	/*jQuery( document ).on( 'click', '.rthd-edit-server', function ( e ) {
 		e.preventDefault();
 		server_id = jQuery( this ).data( 'server-id' );
 		jQuery( '#rthd_imap_server_' + server_id ).toggleClass( 'rthd-hide-row' ).toggleClass( 'rthd-show-row' );
@@ -712,10 +712,10 @@ jQuery( document ).ready( function ( $ ) {
 			jQuery( this ).parent().parent().remove();
 		}
 	} );
-
+*/
 
 	// User Settings Page - Add Email
-	jQuery( document ).on( 'click', '#rthd_add_personal_email', function ( e ) {
+/*	jQuery( document ).on( 'click', '#rthd_add_personal_email', function ( e ) {
 		e.preventDefault();
 		jQuery( '#rthd_email_acc_type_container' ).toggleClass( 'rthd-hide-row' ).toggleClass( 'rthd-show-row' );
 		if ( jQuery( '#rthd_email_acc_type_container' ).hasClass( 'rthd-hide-row' ) ) {
@@ -741,7 +741,7 @@ jQuery( document ).ready( function ( $ ) {
 			jQuery( '#rthd_add_imap_acc_form input[type=email]' ).remove();
 			jQuery( '#rthd_add_imap_acc_form input[type=password]' ).remove();
 		}
-	} );
+	} );*/
 
 
 	/**

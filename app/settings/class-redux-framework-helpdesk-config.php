@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Zend\Mail\Storage\Imap as ImapStorage;
+//use Zend\Mail\Storage\Imap as ImapStorage;
 
 /**
  *
@@ -29,8 +29,8 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			if ( ! class_exists( 'ReduxFramework' ) ) {
 				return;
 			}
-
-			add_action( 'plugins_loaded', array( $this, 'init_settings' ), 25 );
+			// hook priority 25 because rtBiz email model is on after_theme 20 and we can not get 'rt_get_all_system_emails' before that
+			add_action( 'after_setup_theme', array( $this, 'init_settings' ), 25 );
 		}
 
 
@@ -125,7 +125,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 		}
 
 		public function set_sections() {
-			$reply_by_email = new RT_HD_Setting_Inbound_Email();
+			//			$reply_by_email = new RT_HD_Setting_Inbound_Email();
 			$author_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
 			$editor_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
 			$admin_cap  = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' );
@@ -145,7 +145,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				$default_assignee = strval( 1 );
 			}
 
-			$system_emails = rthd_get_all_system_emails();
+			$system_emails = rt_get_all_system_emails();
 			$mailbox_options = array();
 			foreach( $system_emails as $email ) {
 				$mailbox_options[ $email ] = $email;
@@ -221,13 +221,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				'permissions' => $admin_cap,
 				'fields'      => array(
 					array(
-						'id'          => 'rthd_reply_by_email_view',
-						'title'       => __( 'Mailbox' ),
-						'subtitle'    => __( 'This section lets you configure your mailbox for Helpdesk.'  ),
-						'type'        => 'callback',
-						'callback'    => 'rthd_reply_by_email_view',
-					),
-					array(
 						'id'       => 'rthd_outgoing_email_delivery',
 						'title'    => __( 'Outgoing Emails\' Delivery' ),
 						'subtitle' => __( 'This is how the emails will be sent from the Helpdesk system.' ),
@@ -267,15 +260,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'required' => array( 'rthd_outgoing_email_delivery', '=', 'user_mail_login' ),
 					),
 					array(
-						'id'       => 'rthd_enable_reply_by_email',
-						'type'     => 'switch',
-						'title'    => __( 'Enable Reply by Email' ),
-						'subtitle' => __( 'This feature parse the mailbox you\'ve added in Helpdesk system and converts mails into tickets.'  ),
-						'default'  => false,
-						'on'       => __( 'Enable' ),
-						'off'      => __( 'Disable' ),
-					),
-					array(
 						'id'         => 'rthd_notification_emails',
 						'title'      => __( 'Notification Emails' ),
 						'subtitle'   => __( 'Email addresses to be notified on events' ),
@@ -302,44 +286,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 							'ticket_subscribed'       => __( 'Whenever new ticket subscribed' ),
 							'ticket_unsubscribed'     => __( 'Whenever new ticket unsubscribed' ),
 						),
-					),
-				),
-			);
-
-			$this->sections[] = array(
-				'icon'        => 'el-icon-googleplus',
-				'title'       => __( 'Google OAuth' ),
-				'permissions' => $admin_cap,
-				'subsection'  => true,
-				'fields'      => array(
-					array(
-						'id'       => 'rthd_googleapi_clientid',
-						'type'     => 'text',
-						'title'    => __( 'Google API Client ID' ),
-						'subtitle' => __( 'Subtitle' ),
-						'desc'     => sprintf( '<p class="description">%s <a href="https://console.developers.google.com">%s</a>, %s <b>%s</b></p>', __( 'Create an app on' ), __( 'Google API Console' ), __( 'set authorized redirect urls to' ), $redirect_url ),
-					),
-					array(
-						'id'       => 'rthd_googleapi_clientsecret',
-						'type'     => 'text',
-						'title'    => __( 'Google API Client Secret' ),
-						'subtitle' => __( 'Subtitle' ),
-					),
-				),
-			);
-
-			$this->sections[] = array(
-				'icon'        => 'el-icon-network',
-				'title'       => __( 'IMAP Servers' ),
-				'permissions' => $admin_cap,
-				'subsection'  => true,
-				'fields'      => array(
-					array(
-						'id'       => 'rthd_imap_servers',
-						'type'     => 'callback',
-						'title'    => __( 'IMAP Servers' ),
-						'subtitle' => __( 'This section lets you configure different IMAP & SMTP Mail Servers e.g., Outlook, Google, Yahoo etc.' ),
-						'callback' => 'rthd_imap_servers',
 					),
 				),
 			);
@@ -535,27 +481,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 
 			return true;
 		}
-		/*
-		public function set_helptabs() {
-
-			// Custom page help tabs, displayed using the help API. Tabs are shown in order of definition.
-			$this->args['help_tabs'][] = array(
-				'id'      => 'redux-help-tab-1',
-				'title'   => __( 'Theme Information 1', 'redux-framework-demo' ),
-				'content' => __( '<p>This is the tab content, HTML is allowed.</p>', 'redux-framework-demo' )
-			);
-
-			$this->args['help_tabs'][] = array(
-				'id'      => 'redux-help-tab-2',
-				'title'   => __( 'Theme Information 2', 'redux-framework-demo' ),
-				'content' => __( '<p>This is the tab content, HTML is allowed.</p>', 'redux-framework-demo' )
-			);
-
-			// Set the help sidebar
-			$this->args['help_sidebar'] = __( '<p>This is the sidebar content, HTML is allowed.</p>', 'redux-framework-demo' );
-
-			return true;
-		}*/
 
 		/**
 		 *
@@ -659,45 +584,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					),
 				)
 			);
-
-			// SOCIAL ICONS -> Setup custom links in the footer for quick links in your panel footer icons.
-			//			$this->args['share_icons'][] = array(
-			//				'url'   => 'https://github.com/ReduxFramework/ReduxFramework',
-			//				'title' => 'Visit us on GitHub',
-			//				'icon'  => 'el-icon-github',
-			//				//'img'   => '', // You can use icon OR img. IMG needs to be a full URL.
-			//			);
-			//			$this->args['share_icons'][] = array(
-			//				'url'   => 'https://www.facebook.com/pages/Redux-Framework/243141545850368',
-			//				'title' => 'Like us on Facebook',
-			//				'icon'  => 'el-icon-facebook',
-			//			);
-			//			$this->args['share_icons'][] = array(
-			//				'url'   => 'http://twitter.com/reduxframework',
-			//				'title' => 'Follow us on Twitter',
-			//				'icon'  => 'el-icon-twitter',
-			//			);
-			//			$this->args['share_icons'][] = array(
-			//				'url'   => 'http://www.linkedin.com/company/redux-framework',
-			//				'title' => 'Find us on LinkedIn',
-			//				'icon'  => 'el-icon-linkedin',
-			//			);
-
-						// Panel Intro text -> before the form
-			//			if ( ! isset( $this->args['global_variable'] ) || false !== $this->args['global_variable'] ) {
-			//				if ( ! empty( $this->args['global_variable'] ) ) {
-			//					$v = $this->args['global_variable'];
-			//				} else {
-			//					$v = str_replace( '-', '_', $this->args['opt_name'] );
-			//				}
-			//				$this->args['intro_text'] = sprintf( __( '<p>Did you know that Redux sets a global variable for you? To access any of your saved options from within your code you can use your global variable: <strong>$%1$s</strong></p>', 'redux-framework-demo' ), $v );
-			//			} else {
-			//				$this->args['intro_text'] = __( '<p>This text is displayed above the options panel. It isn\'t required, but more info is always better! The intro_text field accepts all HTML.</p>', 'redux-framework-demo' );
-			//			}
-
-						// Add content after the form.
-			//			$this->args['footer_text'] = __( '<p>This text is displayed below the options panel. It isn\'t required, but more info is always better! The footer_text field accepts all HTML.</p>', 'redux-framework-demo' );
-
 			return true;
 		}
 
@@ -729,53 +615,3 @@ function rthd_ticket_import_logs() {
 	global $rt_hd_logs;
 	$rt_hd_logs->ui();
 }
-
-/**
- * @param $field
- * @param $value
- */
-function rthd_reply_by_email_view( $field, $value ) {
-	global $rt_hd_settings_inbound_email;
-	$rt_hd_settings_inbound_email->rthd_reply_by_email_view( $field, $value );
-}
-
-function rthd_imap_servers( $field, $value ) {
-	global $rt_hd_settings_imap_server;
-	$rt_hd_settings_imap_server->rthd_imap_servers( $field,$value );
-}
-
-/**
- * Custom function for the callback validation referenced above
- * */
-//if ( ! function_exists( 'redux_validate_callback_function' ) ):
-//
-//	function redux_validate_callback_function( $field, $value, $existing_value ) {
-//		$error = false;
-//		$value = 'just testing';
-//
-//		/*
-//		  do your validation
-//
-//		  if(something) {
-//		  $value = $value;
-//		  } elseif(something else) {
-//		  $error = true;
-//		  $value = $existing_value;
-//		  $field['msg'] = 'your custom error message';
-//		  }
-//		 */
-//
-//		$return['value'] = $value;
-//		if ( $error == true ) {
-//			$return['error'] = $field;
-//		}
-//
-//		return $return;
-//	}
-//
-//
-//
-//
-//
-//
-//endif;

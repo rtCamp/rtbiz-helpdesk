@@ -118,11 +118,9 @@ include_once RT_HD_PATH_HELPER . 'rthd-functions.php';
  */
 function rt_hd_include() {
 
-	include_once RT_HD_PATH_VENDOR . 'MailLib/zendAutoload.php';
 	include_once RT_HD_PATH_VENDOR . 'forceutf8/src/ForceUTF8/Encoding.php';
 	include_once RT_HD_PATH_VENDOR . 'excel_reader2.php';
 	include_once RT_HD_PATH_VENDOR . 'parsecsv.lib.php';
-	include_once RT_HD_PATH_VENDOR . 'rfc822_addresses.php';
 	include_once RT_HD_PATH_VENDOR . 'simplexlsx.php';
 	include_once RT_HD_PATH_VENDOR . 'taxonomy-metadata.php';
 
