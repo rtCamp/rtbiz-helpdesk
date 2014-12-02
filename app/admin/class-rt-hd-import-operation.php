@@ -354,7 +354,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$systemEmail = false
 		) {
 			//subscriber diff
-			$rtCampUser = Rt_HD_Utils::get_hd_rtcamp_user(); //todo : remove this call and do something else
+			$rtCampUser = Rt_HD_Utils::get_hd_rtcamp_user();
 			$hdUser     = array();
 			foreach ( $rtCampUser as $rUser ) {
 				$hdUser[ $rUser->user_email ] = $rUser->ID;
