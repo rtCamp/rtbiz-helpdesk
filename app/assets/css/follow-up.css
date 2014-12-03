@@ -326,3 +326,6 @@ li.load-more-spinner-li {
 .load-more-ul li a p:hover {
     background: #039;
 }
+.followup-information .private_comment_span{
+	color: red;
+}
