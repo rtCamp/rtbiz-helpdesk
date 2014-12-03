@@ -43,7 +43,11 @@ if ( ! class_exists( 'Rt_HD_Utils' ) ) {
 
 //			$string = preg_replace( '/\xE0[\x80-\x9F][\x80-\xBF]' . '|\xED[\xA0-\xBF][\x80-\xBF]/S','?', $string );
 
-			$string = quoted_printable_decode( $string );
+//			http://grokbase.com/t/php/php-notes/03bhzv260m/note-37492-added-to-function-quoted-printable-decode
+//			http://www.cnblogs.com/wangjiangze/archive/2013/04/16/3024446.html
+//			http://www.bestwebframeworks.com/tutorials/php/140/decode-and-solve-in-php-quoted-printable-characters-from-plain-emails/
+//			$string = quoted_printable_decode( $string );
+			$string = imap_qprint( $string );
 
 			return $string;
 		}
