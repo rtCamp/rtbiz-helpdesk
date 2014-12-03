@@ -1084,8 +1084,12 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$title = rthd_create_new_ticket_title( 'rthd_new_followup_email_title', $comment_post_ID );;
 
 			$body = '<span style="color:#777">< ! ------------------ REPLY ABOVE THIS LINE ------------------ ! ></span><br />';
-			$body .= '<br /><strong>New Followup Added ' . ( ( ! empty( $currentUser->display_name ) ) ? 'by ' . $currentUser->display_name : 'annonymously' ) . ':</strong><br />';
-			$body .= '<br/>' . apply_filters( 'the_content', $comment->comment_content );
+			if ( $comment_privacy == 'true' ){
+				$body .= '<br /> A private followup has been added ' . ( ( ! empty( $currentUser->display_name ) ) ? 'by ' . $currentUser->display_name : 'annonymously' ) .'. Please go to link and login to view the message.';
+			}else {
+				$body .= '<br /><strong>New Followup Added ' . ( ( ! empty( $currentUser->display_name ) ) ? 'by ' . $currentUser->display_name : 'annonymously' ) . ':</strong><br />';
+				$body .= '<br/>' . apply_filters( 'the_content', $comment->comment_content );
+			}
 			$body .= '<br/>';
 			$notificationFlag = $this->check_setting_for_new_followup_email();
 			$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, $attachment, $comment_ID, $notificationFlag, true );
@@ -1221,22 +1225,25 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					$flag = true;
 				}
 
-				$diff = rthd_text_diff( $oldDate, $newDate );
-				if ( $diff ) {
-					$body .= '<br/><b>Date : </b>' . $diff;
-					$flag = true;
-				}
-
-				$diff = rthd_text_diff( trim( html_entity_decode( strip_tags( $oldCommentBody ) ) ), trim( html_entity_decode( strip_tags( $commentdata['comment_content'] ) ) ) );
-				if ( $diff ) {
-					$flag = true;
-					$body .= '<br/><b>Body : </b>' . $diff;
+				if ( 'true' == $old_privacy || 'true' == $comment_privacy ){
+					$body .= '<br /> A <strong>private</strong> followup has been edited. Please go to link and login to view the message.';
 				}
 				else {
-					$body .= '<br/><b>Body : </b>' . wpautop( make_clickable( $comment->comment_content ) );
-				}
+					$diff = rthd_text_diff( $oldDate, $newDate );
+					if ( $diff ) {
+						$body .= '<br/><b>Date : </b>' . $diff;
+						$flag = true;
+					}
 
-				$body .= '<br/> ';
+					$diff = rthd_text_diff( trim( html_entity_decode( strip_tags( $oldCommentBody ) ) ), trim( html_entity_decode( strip_tags( $commentdata[ 'comment_content' ] ) ) ) );
+					if ( $diff ) {
+						$flag = true;
+						$body .= '<br/><b>Body : </b>' . $diff;
+					} else {
+						$body .= '<br/><b>Body : </b>' . wpautop( make_clickable( $comment->comment_content ) );
+					}
+					$body .= '<br/> ';
+				}
 				if ( $flag ) {
 					$redux = rthd_get_redux_settings();
 					$notificationFlag = ( $redux['rthd_notification_events']['followup_edited'] == 1 );
@@ -1400,7 +1407,12 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$body .= '<br/><b>BCC : </b>' . $bcc;
 			}
 
-			$body .= '<br/>' . apply_filters( 'the_content', $comment->comment_content );
+			if( isset( $comment_privacy ) && ! empty( $comment_privacy ) && 'true' == $comment_privacy ){
+				$body .= '<br /> A private followup has been added ' . ( ( ! empty( $currentUser->display_name ) ) ? 'by ' . $currentUser->display_name : 'annonymously' ) .'. Please go to link and login to view the message.';
+			}
+			else{
+				$body .= '<br/>' . apply_filters( 'the_content', $comment->comment_content );
+			}
 
 			$body .= '<br/> ';
 			$notificationFlag = $this->check_setting_for_new_followup_email();

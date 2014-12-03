@@ -553,7 +553,11 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
                     ?>
                     <a href="#" class="editfollowuplink">Edit</a> |
                 <?php
-                } ?>
+                }
+                if ( $is_comment_private == 'true' ){
+	                echo "<span class='private_comment_span'> Private </span> |";
+                }
+                ?>
                 <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . ' ago';
 ?>
 
