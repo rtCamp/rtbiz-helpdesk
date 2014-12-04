@@ -245,7 +245,7 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 
 			$dataArray = array(
 				'assignee'     => $postArray['post_author'],
-				'post_content' => $post->post_content,
+				'post_content' => rthd_content_filter( $post->post_content ),
 				'post_status'  => $post->post_status,
 				'post_title'   => $post->post_title,
 			);

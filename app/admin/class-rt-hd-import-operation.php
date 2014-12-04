@@ -1663,10 +1663,10 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		function load_more_followup(){
 			$response = array();
 			$response['status']= false;
-			if (isset($_POST['post_id']) && isset($_POST['offset']) && isset($_POST['limit'])  ){
-				$postid=  $_POST['post_id'];
-				$offset=  $_POST['offset'];
-				$Limit=  $_POST['limit'];
+			if (isset($_REQUEST['post_id']) && isset($_REQUEST['offset']) && isset($_REQUEST['limit'])  ){
+				$postid=  $_REQUEST['post_id'];
+				$offset=  $_REQUEST['offset'];
+				$Limit=  $_REQUEST['limit'];
 				//				if ( ! isset($_POST['getall']) && $_POST['all']!='true') {
 				//					$offset = $offset + $Limit;
 				//				}
