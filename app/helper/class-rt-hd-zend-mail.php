@@ -901,8 +901,17 @@ if ( ! class_exists( 'Rt_HD_Zend_Mail' ) ) {
 					$subject      = Rt_HD_Utils::force_utf_8( $subject );
 					$txtBody      = Rt_HD_Utils::force_utf_8( $txtBody );
 
+					$htmlBody = balanceTags( $htmlBody, true );
+
+					preg_match_all( '/<body\s[^>]*>(.*?)<\/body>/s', $htmlBody, $output_array );
+					if ( count( $output_array ) > 0 && ! empty( $output_array[1] ) ) {
+						$htmlBody = $output_array[1][0];
+					}
+
 					$offset = strpos( $htmlBody, '&lt; ! ------------------ REPLY ABOVE THIS LINE ------------------ ! &gt;' );
 					$visibleText = substr( $htmlBody, 0, ( $offset === false ) ? strlen( $htmlBody ) : $offset );
+
+					$visibleText = balanceTags( $visibleText, true );
 
 					$success_flag = $rt_hd_import_operation->process_email_to_ticket( $subject, $visibleText, $from, $message->date, $allEmails, $attachements, $txtBody, true, $user_id, $messageid, $inreplyto, $references, $isSystemEmail, $subscriber );
 
