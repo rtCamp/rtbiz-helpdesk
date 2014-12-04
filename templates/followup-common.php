@@ -53,8 +53,8 @@ if ( ! empty( $post->post_content ) ) {
             </div>
 				<div class="rthd-comment-content">
 				<?php
-					$content = wp_kses_post( balanceTags( ( isset($post->ID) ) ? make_clickable( $post->post_content ) : '', true ) );
-					echo apply_filters('the_content', $content);
+					$content = rthd_content_filter( isset( $post->ID ) ? $post->post_content : '' );
+					echo $content;
 				?>
 				</div>
 			</div>
