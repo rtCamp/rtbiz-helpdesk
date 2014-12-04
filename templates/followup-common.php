@@ -53,7 +53,7 @@ if ( ! empty( $post->post_content ) ) {
             </div>
 				<div class="rthd-comment-content">
 				<?php
-					$content = rthd_content_filter( $content );
+					$content = rthd_content_filter( isset( $post->ID ) ? $post->post_content : '' );
 					echo $content;
 				?>
 				</div>
