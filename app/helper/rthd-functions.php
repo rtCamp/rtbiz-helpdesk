@@ -510,16 +510,35 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 
 	ob_start();
 
-	$is_comment_private = get_comment_meta( $comment->comment_ID, '_rthd_privacy', true );
-	if ( ! empty( $is_comment_private ) && 'true' == $is_comment_private ) {
-		if ( $user_edit ) {
+	$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
+	$staffonly  = current_user_can( $cap );
+
+	//	$is_comment_private = get_comment_meta( $comment->comment_ID, '_rthd_privacy', true );
+	$display_private_comment_flag = false;
+	switch ( $comment->comment_type){
+		case Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC:
 			$display_private_comment_flag = true;
-		} else {
-			$display_private_comment_flag = false;
-		}
-	} else {
-		$display_private_comment_flag = true;
+			break;
+		case Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE:
+			if ( $user_edit ){
+				$display_private_comment_flag = true;
+			}
+			break;
+		case Rt_HD_Import_Operation::$FOLLOWUP_STAFF:
+			if( $staffonly ){
+				$display_private_comment_flag = true;
+			}
+			break;
 	}
+	//	if ( ! empty( $is_comment_private ) && 'true' == $is_comment_private ) {
+	//		if ( $user_edit ) {
+	//			$display_private_comment_flag = true;
+	//		} else {
+	//			$display_private_comment_flag = false;
+	//		}
+	//	} else {
+	//		$display_private_comment_flag = true;
+	//	}
 
 	$side_class = ( $type == 'right' ) ? 'self' : ( ( $type == 'left' ) ? 'other' : '' );
 	$editable_class = ( $display_private_comment_flag ) ? 'editable' : '';

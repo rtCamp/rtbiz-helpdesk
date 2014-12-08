@@ -23,7 +23,14 @@ global $current_user;
         <select name="private_comment" id="add-private-comment" >
             <option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ) ?> </option>
             <option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ) ?> </option>
+	        <?php
+	        $cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
+	        $staffonly  = current_user_can( $cap );
+
+	        if( $staffonly ){ ?>
             <option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_STAFF ) ?> </option>
+	        <?php }
+	        ?>
         </select>
 
 	</div>

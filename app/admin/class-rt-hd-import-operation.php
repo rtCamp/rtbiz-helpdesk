@@ -1171,14 +1171,16 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				}
                 $old_privacy=  $commentdata['comment_type'];
                 $commentdata['comment_type']= $comment_privacy;
-                //				update_comment_meta( $_POST['comment_id'], '_rthd_privacy', $comment_privacy );
-                wp_update_comment( $commentdata );
+                // update_comment_meta( $_POST['comment_id'], '_rthd_privacy', $comment_privacy );
+				// error_log(var_export($commentdata,true). ": -> asddddd ", 3, "/var/www/dummytest.com/logs/my-errors.log");
+
+				wp_update_comment( $commentdata );
 
 				//todo check if comment_type can be updated
 
-//				$old_privacy = get_comment_meta( $_POST['comment_id'], '_rthd_privacy' ,true );
+				//				$old_privacy = get_comment_meta( $_POST['comment_id'], '_rthd_privacy' ,true );
 
-//				update_comment_meta( $_POST['comment_id'], '_rthd_privacy', $comment_privacy );
+				//				update_comment_meta( $_POST['comment_id'], '_rthd_privacy', $comment_privacy );
 
 				$comment = get_comment( $_POST['comment_id'] );
 				$uploaded = array();
