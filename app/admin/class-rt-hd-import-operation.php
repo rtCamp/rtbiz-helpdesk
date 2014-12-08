@@ -1174,6 +1174,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
                 //				update_comment_meta( $_POST['comment_id'], '_rthd_privacy', $comment_privacy );
                 wp_update_comment( $commentdata );
 
+				//todo check if comment_type can be updated
+
 //				$old_privacy = get_comment_meta( $_POST['comment_id'], '_rthd_privacy' ,true );
 
 //				update_comment_meta( $_POST['comment_id'], '_rthd_privacy', $comment_privacy );
