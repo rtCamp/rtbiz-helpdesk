@@ -620,10 +620,10 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 function rthd_get_comment_type($comment_type_value){
     switch($comment_type_value){
         case Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC:
-            return 'Public';
+            return 'Logged in user only';
             break;
         case Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE:
-            return 'Logged in user only';
+            return 'Sensitive';
             break;
         case Rt_HD_Import_Operation::$FOLLOWUP_STAFF:
             return 'Only Staff';
