@@ -124,7 +124,6 @@ function rt_hd_include() {
 	include_once RT_HD_PATH_VENDOR . 'simplexlsx.php';
 	include_once RT_HD_PATH_VENDOR . 'taxonomy-metadata.php';
 
-	require_once RT_HD_PATH_VENDOR . 'redux/ReduxCore/framework.php';
 
 	global $rthd_app_autoload, $rthd_admin_autoload, $rthd_admin_metabox_autoload, $rthd_models_autoload, $rthd_helper_autoload, $rthd_settings_autoload, $rthd_form_autoload, $rthd_reports_autoload;
 	$rthd_app_autoload           = new RT_WP_Autoload( RT_HD_PATH_APP );
