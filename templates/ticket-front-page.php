@@ -99,7 +99,7 @@ if( ! empty( $pstatus ) ) {
 
 		<div>
 			<span title="Status"><strong>Last reply: </strong></span>
-			<span class="rthd_attr_border prefix rthd_view_mode"> <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) )) ."ago by ". $comment->comment_author; ?></span>
+			<span class="rthd_attr_border prefix rthd_view_mode"> <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) )) ." ago by ". $comment->comment_author; ?></span>
 		</div>
 	<?php }
 

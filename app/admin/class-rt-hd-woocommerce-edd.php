@@ -162,7 +162,9 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 
 
 		function check_active_plugin(){
-			$activePlugin = rt_biz_get_settings( 'product_plugin' );
+			$settings = biz_get_redux_settings();
+
+			$activePlugin = $settings['product_plugin'];
 			if ( is_plugin_active( 'woocommerce/woocommerce.php' ) && 'woocommerce' === $activePlugin ) {
 				$this->isWoocommerceActive = true;
 				$this->iseddActive = false;

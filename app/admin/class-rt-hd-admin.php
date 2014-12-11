@@ -71,6 +71,7 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 				wp_enqueue_script( 'rthd-app-loadmore', RT_HD_URL . 'app/assets/javascripts/jquery.ba-throttle-debounce.js', array( 'jquery' ), RT_HD_VERSION, true );
 				wp_enqueue_script( 'jquery' );
 				wp_enqueue_script( 'jquery-form', array( 'jquery' ), false, true );
+				wp_enqueue_script( 'jquery-ui-dialog' );
 
 				wp_enqueue_style( 'rthd-followup-css', RT_HD_URL . 'app/assets/css/follow-up.css', array(), RT_HD_VERSION, 'all' );
 				global $wp_scripts;
