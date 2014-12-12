@@ -253,7 +253,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 
 				case 'rthd_ticket_contacts' :
 
-					$contacts = rt_biz_get_post_for_person_connection( $post->ID, Rt_HD_Module::$post_type );
+					$contacts = rt_biz_get_post_for_contact_connection( $post->ID, Rt_HD_Module::$post_type );
 
 					if ( isset( $contacts ) && ! empty( $contacts ) ) {
 						$contact_name = array();
@@ -272,7 +272,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 
 				case 'rthd_ticket_accounts' :
 
-					$accounts = rt_biz_get_post_for_organization_connection( $post->ID, Rt_HD_Module::$post_type );
+					$accounts = rt_biz_get_post_for_company_connection( $post->ID, Rt_HD_Module::$post_type );
 					if ( isset( $accounts ) && ! empty( $accounts ) ) {
 						$account_name = array();
 						$base_url     = add_query_arg( array( 'post_type' => Rt_HD_Module::$post_type ), admin_url( 'edit.php' ) );
@@ -374,11 +374,11 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 					$formss = array();
 					$contact_id = $_GET['contact_id'];
 					global $wpdb;
-					global $rt_person;
+					global $rt_contact;
 					$contact_froms = $wpdb->get_results(
 						"SELECT p2p_from
 							FROM wp_p2p
-								WHERE p2p_type = '".Rt_HD_Module::$post_type.'_to_'.$rt_person->post_type.
+								WHERE p2p_type = '".Rt_HD_Module::$post_type.'_to_'.$rt_contact->post_type.
 										"' AND p2p_to = ". $contact_id);
 
 					foreach ( $contact_froms as $form ){
@@ -390,11 +390,11 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 					$formss = array();
 					$account_id = $_GET['account_id'];
 					global $wpdb;
-					global $rt_organization;
+					global $rt_company;
 					$account_froms = $wpdb->get_results(
 						"SELECT p2p_from
 							FROM wp_p2p
-								WHERE p2p_type = '".Rt_HD_Module::$post_type.'_to_'.$rt_organization->post_type.
+								WHERE p2p_type = '".Rt_HD_Module::$post_type.'_to_'.$rt_company->post_type.
 										"' AND p2p_to = ". $account_id);
 
 					foreach ( $account_froms as $form ){

@@ -251,7 +251,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			global $rt_hd_contacts;
 			$postterms = array();
 			foreach ( $allemail as $email ) {
-				$term = rt_biz_get_person_by_email( $email['address'] );
+				$term = rt_biz_get_contact_by_email( $email['address'] );
 				if ( ! empty( $term ) ) {
 					foreach ( $term as $tm ) {
 						$postterms[] = $tm->ID;
@@ -267,13 +267,13 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 					$post_type = get_post_type( $post_id );
 					foreach ( $postterms as $term ) {
-						rt_biz_connect_post_to_person( $post_type, $post_id, $term );
+						rt_biz_connect_post_to_contact( $post_type, $post_id, $term );
 					}
 
 					// Update Index
 					$ticketModel = new Rt_HD_Ticket_Model();
 					$where       = array( 'post_id' => $post_id );
-					$attr_name   = rt_biz_get_person_post_type();
+					$attr_name   = rt_biz_get_contact_post_type();
 					$data        = array(
 						$attr_name        => implode( ',', $postterms ),
 						'date_update'     => current_time( 'mysql' ),
@@ -1497,10 +1497,10 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 			if ( $contactFlag ) {
 				$tocontact      = array();
-				$persons = rt_biz_get_post_for_person_connection( $post_id, Rt_HD_Module::$post_type );
-				foreach ( $persons as $person ) {
-					global $rt_person;
-					$emails = get_post_meta( $person->ID, Rt_Entity::$meta_key_prefix.$rt_person->email_key );
+				$contacts = rt_biz_get_post_for_contact_connection( $post_id, Rt_HD_Module::$post_type );
+				foreach ( $contacts as $contact ) {
+					global $rt_contact;
+					$emails = get_post_meta( $contact->ID, Rt_Entity::$meta_key_prefix.$rt_contact->email_key );
 					foreach ( $emails as $email ) {
 						array_push( $tocontact, array( 'email' => $email ) );
 					}

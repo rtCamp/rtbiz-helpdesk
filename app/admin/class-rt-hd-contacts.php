@@ -59,8 +59,8 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		 */
 		public function contacts_columns( $columns, $rt_entity ) {
 
-			global $rt_person;
-			if ( $rt_entity->post_type != $rt_person->post_type ) {
+			global $rt_contact;
+			if ( $rt_entity->post_type != $rt_contact->post_type ) {
 				return $columns;
 			}
 
@@ -88,8 +88,8 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		 */
 		function manage_contacts_columns( $column, $post_id, $rt_entity ) {
 
-			global $rt_person;
-			if ( $rt_entity->post_type != $rt_person->post_type ) {
+			global $rt_contact;
+			if ( $rt_entity->post_type != $rt_contact->post_type ) {
 				return;
 			}
 
@@ -97,7 +97,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 				default:
 					if ( in_array( Rt_HD_Module::$post_type, array_keys( $rt_entity->enabled_post_types ) ) && $column == Rt_HD_Module::$post_type ) {
 						$post_details = get_post( $post_id );
-						$pages        = rt_biz_get_post_for_person_connection( $post_id, Rt_HD_Module::$post_type );
+						$pages        = rt_biz_get_post_for_contact_connection( $post_id, Rt_HD_Module::$post_type );
 						echo balanceTags( sprintf( '<a href="%s">%d</a>', add_query_arg( array( 'contact_id' => $post_details->ID, 'post_type' => Rt_HD_Module::$post_type ), admin_url( 'edit.php' ) ), count( $pages ) ) );
 					}
 					break;
@@ -116,13 +116,13 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		 */
 		public function insert_new_contact( $email, $title ) {
 
-			$contact = rt_biz_get_person_by_email( $email );
+			$contact = rt_biz_get_contact_by_email( $email );
 			if ( ! $contact ) {
 				if ( trim( $title ) == '' ) {
 					$title = $email;
 				}
 
-				$contact_id = rt_biz_add_person( $title );
+				$contact_id = rt_biz_add_contact( $title );
 				$contact    = get_post( $contact_id );
 			}
 			$contactmeta = rt_biz_get_entity_meta( $contact->ID, $this->email_key, true );
@@ -180,7 +180,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 			$contacts = $newTicket['contacts'];
 			$contacts = array_unique( $contacts );
 
-			$oldContactsString = rt_biz_person_connection_to_string( $post_id );
+			$oldContactsString = rt_biz_contact_connection_to_string( $post_id );
 			$newContactsSring  = '';
 			if ( ! empty( $contacts ) ) {
 				$contactsArr = array();
@@ -215,9 +215,9 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 
 			$post_type = get_post_type( $post_id );
 
-			rt_biz_clear_post_connections_to_person( $post_type, $post_id );
+			rt_biz_clear_post_connections_to_contact( $post_type, $post_id );
 			foreach ( $contacts as $contact ) {
-				rt_biz_connect_post_to_person( $post_type, $post_id, $contact );
+				rt_biz_connect_post_to_contact( $post_type, $post_id, $contact );
 			}
 		}
 
@@ -228,7 +228,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		 */
 		function get_account_contacts_ajax() {
 
-			$contacts = rt_biz_get_organization_to_person_connection( $_POST['query'] );
+			$contacts = rt_biz_get_company_to_contact_connection( $_POST['query'] );
 			$result   = array();
 			foreach ( $contacts as $contact ) {
 				$email    = rt_biz_get_entity_meta( $contact->ID, $this->email_key, true );
@@ -260,7 +260,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 			$post_type = get_post_type( $post_id );
 			$result    = get_post_meta( $post_id );
 
-			$accounts = rt_biz_get_post_for_organization_connection( $post_id, $post_type, $fetch_account = true );
+			$accounts = rt_biz_get_post_for_company_connection( $post_id, $post_type, $fetch_account = true );
 			foreach ( $accounts as $account ) {
 				$result['account_id'] = $account->ID;
 			}
@@ -278,7 +278,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 				wp_die( 'Opss!! Invalid request' );
 			}
 
-			$contacts = rt_biz_search_person( $_POST['query'] );
+			$contacts = rt_biz_search_contact( $_POST['query'] );
 			$result   = array();
 			foreach ( $contacts as $contact ) {
 				$result[] = array(
@@ -308,7 +308,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 				$returnArray['message'] = 'Invalid Data Please Check';
 			} else {
 				$post_id = post_exists( $accountData['new-contact-name'] );
-				if ( ! empty( $post_id ) && get_post_type( $post_id ) === rt_biz_get_person_post_type() ) {
+				if ( ! empty( $post_id ) && get_post_type( $post_id ) === rt_biz_get_contact_post_type() ) {
 					$returnArray['status']  = false;
 					$returnArray['message'] = 'Term Already Exits';
 				} else {
@@ -316,7 +316,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 						foreach ( $accountData['contactmeta'] as $cmeta => $metavalue ) {
 							foreach ( $metavalue as $metadata ) {
 								if ( false != strstr( $cmeta, 'email' ) ) {
-									$result = rt_biz_get_person_by_email( $metadata );
+									$result = rt_biz_get_contact_by_email( $metadata );
 									if ( $result && ! empty( $result ) ) {
 										$returnArray['status']  = false;
 										$returnArray['message'] = $metadata . ' is already exits';
@@ -328,12 +328,12 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 						}
 					}
 
-					$post_id = rt_biz_add_person( $accountData['new-contact-name'], $accountData['new-contact-description'] );
+					$post_id = rt_biz_add_contact( $accountData['new-contact-name'], $accountData['new-contact-description'] );
 
 					if ( isset( $accountData['new-contact-account'] ) && trim( $accountData['new-contact-account'] ) != ''
 					) {
 
-						rt_biz_connect_organization_to_person( $accountData['new-contact-account'], $post_id );
+						rt_biz_connect_company_to_contact( $accountData['new-contact-account'], $post_id );
 					}
 
 					$email = $accountData['new-contact-name'];

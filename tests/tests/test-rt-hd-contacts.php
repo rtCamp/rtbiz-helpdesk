@@ -23,11 +23,11 @@ class test_Rt_HD_Contacts extends RT_WP_TestCase {
 	 * Test contacts_columns
 	 */
 	function  test_contacts_columns() {
-		global $rt_person;
+		global $rt_contact;
 		$exp_output = array(
 			'rtbiz_hd_ticket' => 'Ticket',
 		);
-		$this->assertEquals( $exp_output, $this->rthdContacts->contacts_columns( array(), $rt_person ) );
+		$this->assertEquals( $exp_output, $this->rthdContacts->contacts_columns( array(), $rt_contact ) );
 	}
 
 	/**

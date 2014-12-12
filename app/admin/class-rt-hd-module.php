@@ -10,7 +10,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 	/**
 	 * Class Rt_HD_Module
 	 * Register rtbiz-HelpDesk CPT [ Ticket ] & statuses
-	 * Define connection with other post type [ person, organization ]
+	 * Define connection with other post type [ contact, company ]
 	 *
 	 * @since  0.1
 	 *
@@ -139,7 +139,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 		}
 
 		/**
-		 * register rtbiz-HelpDesk CPT [ Ticket ] & define connection with other post type [ person, organization ]
+		 * register rtbiz-HelpDesk CPT [ Ticket ] & define connection with other post type [ contact, company ]
 		 *
 		 * @since 0.1
 		 */
@@ -151,9 +151,9 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				$this->register_custom_statuses( $status );
 			}
 
-			rt_biz_register_person_connection( self::$post_type, $this->labels['name'] );
+			rt_biz_register_contact_connection( self::$post_type, $this->labels['name'] );
 
-			rt_biz_register_organization_connection( self::$post_type, $this->labels['name'] );
+			rt_biz_register_company_connection( self::$post_type, $this->labels['name'] );
 
 			$this->db_ticket_table_update();
 		}
@@ -248,10 +248,10 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				$sql .= "{$attr_name} TEXT,\n";
 			}
 
-			$contact_name = rt_biz_get_person_post_type();
+			$contact_name = rt_biz_get_contact_post_type();
 			$sql .= "{$contact_name} TEXT,\n";
 
-			$contact_name = rt_biz_get_organization_post_type();
+			$contact_name = rt_biz_get_company_post_type();
 			$sql .= "{$contact_name} TEXT,\n";
 
 			$sql .= 'PRIMARY KEY  (id) ) CHARACTER SET utf8 COLLATE utf8_general_ci;';

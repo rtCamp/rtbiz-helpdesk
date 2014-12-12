@@ -1602,7 +1602,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 					}
 				}
 
-				$contact = rt_biz_get_person_by_email( $fromemail['address'] );
+				$contact = rt_biz_get_contact_by_email( $fromemail['address'] );
 				if ( ! empty( $contact ) && isset( $contact[0] ) ) {
 					$contact = $contact[0];
 					if ( isset( $contactskypeid ) && ! empty( $contactskypeid ) ) {
@@ -1642,23 +1642,23 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 					}
 					$account_id = $rt_hd_import_operation->post_exists( $accountname );
 
-					if ( ! empty( $account_id ) && get_post_type( $account_id ) === rt_biz_get_organization_post_type() ) {
+					if ( ! empty( $account_id ) && get_post_type( $account_id ) === rt_biz_get_company_post_type() ) {
 						if ( isset( $transaction_id ) && $transaction_id > 0 ) {
 							delete_post_meta( $account_id, '_transaction_id' );
 							add_post_meta( $account_id, '_transaction_id', $transaction_id, true );
 						}
 					} else {
-						$account_id = rt_biz_add_organization( $accountname, $accountnote, $accountaddress, $accountcountry, $accountmeta );
+						$account_id = rt_biz_add_company( $accountname, $accountnote, $accountaddress, $accountcountry, $accountmeta );
 						if ( isset( $transaction_id ) && $transaction_id > 0 ) {
 							add_post_meta( $account_id, '_transaction_id', $transaction_id, true );
 						}
 					}
 					$account = get_post( $account_id );
 
-					rt_biz_connect_post_to_organization( $post_type, $ticket_id, $account );
+					rt_biz_connect_post_to_company( $post_type, $ticket_id, $account );
 
 					// Update Index Table
-					$attr_name = rt_biz_get_organization_post_type();
+					$attr_name = rt_biz_get_company_post_type();
 					if ( ! empty( $attr_name ) ) {
 						$where = array( 'post_id' => $ticket_id );
 						$data  = array(

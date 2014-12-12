@@ -60,8 +60,8 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 		 */
 		public function accounts_columns( $columns, $rt_entity ) {
 
-			global $rt_organization;
-			if ( $rt_entity->post_type != $rt_organization->post_type ) {
+			global $rt_company;
+			if ( $rt_entity->post_type != $rt_company->post_type ) {
 				return $columns;
 			}
 
@@ -85,8 +85,8 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 		 */
 		function manage_accounts_columns( $column, $post_id, $rt_entity ) {
 
-			global $rt_organization;
-			if ( $rt_entity->post_type != $rt_organization->post_type ) {
+			global $rt_company;
+			if ( $rt_entity->post_type != $rt_company->post_type ) {
 				return;
 			}
 
@@ -99,7 +99,7 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 				default:
 					if ( in_array( Rt_HD_Module::$post_type, array_keys( $rt_entity->enabled_post_types ) ) && $column == Rt_HD_Module::$post_type ) {
 						$post_details = get_post( $post_id );
-						$pages        = rt_biz_get_post_for_organization_connection( $post_id, Rt_HD_Module::$post_type );
+						$pages        = rt_biz_get_post_for_company_connection( $post_id, Rt_HD_Module::$post_type );
 						echo balanceTags( '<a href = edit.php?' . $post_details->post_type . '=' . $post_details->ID . '&post_type=' . Rt_HD_Module::$post_type . '>' . count( $pages ) . '</a>' );
 					}
 					break;
@@ -120,7 +120,7 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 				$returnArray['message'] = 'Invalid Data Please Check';
 			} else {
 				$post_id = post_exists( $accountData['new-account-name'] );
-				if ( ! empty( $post_id ) && get_post_type( $post_id ) === rt_biz_get_organization_post_type() ) {
+				if ( ! empty( $post_id ) && get_post_type( $post_id ) === rt_biz_get_company_post_type() ) {
 					$returnArray['status']  = false;
 					$returnArray['message'] = 'Account Already Exits';
 				} else {
@@ -137,7 +137,7 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 						$accountData['accountmeta'] = array();
 					}
 
-					$post_id = rt_biz_add_organization( $accountData['new-account-name'], $accountData['new-account-note'], $accountData['new-account-address'], $accountData['new-account-country'], $accountData['accountmeta'] );
+					$post_id = rt_biz_add_company( $accountData['new-account-name'], $accountData['new-account-note'], $accountData['new-account-address'], $accountData['new-account-country'], $accountData['accountmeta'] );
 
 					$post                  = get_post( $post_id );
 					$returnArray['status'] = true;
@@ -164,7 +164,7 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 				wp_die( 'Opss!! Invalid request' );
 			}
 
-			$accounts = rt_biz_search_organization( $_POST['query'] );
+			$accounts = rt_biz_search_company( $_POST['query'] );
 			$result   = array();
 			foreach ( $accounts as $account ) {
 				$result[] = array(
@@ -225,7 +225,7 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 			$accounts = $newTicket['accounts'];
 			$accounts = array_unique( $accounts );
 
-			$oldAccountsString = rt_biz_organization_connection_to_string( $post_id );
+			$oldAccountsString = rt_biz_company_connection_to_string( $post_id );
 			$newAccountsSring  = '';
 			if ( ! empty( $accounts ) ) {
 				$accountsArr = array();
@@ -260,9 +260,9 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 
 			$post_type = get_post_type( $post_id );
 
-			rt_biz_clear_post_connections_to_organization( $post_type, $post_id );
+			rt_biz_clear_post_connections_to_company( $post_type, $post_id );
 			foreach ( $accounts as $account ) {
-				rt_biz_connect_post_to_organization( $post_type, $post_id, $account );
+				rt_biz_connect_post_to_company( $post_type, $post_id, $account );
 			}
 		}
 	}
