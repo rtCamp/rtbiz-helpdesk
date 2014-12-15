@@ -422,10 +422,10 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 				}
 
 				if ( isset( $_GET['product_id'] ) ) {
-					global $rtbiz_product_sync;
+					global $rtbiz_offerings;
 					$query->set( 'tax_query', array(
 						array(
-							'taxonomy' => $rtbiz_product_sync->product_slug,
+							'taxonomy' => $rtbiz_offerings->offering_slug,
 							'field' => 'term_id',
 						    'terms' => $_GET['product_id'],
 						),

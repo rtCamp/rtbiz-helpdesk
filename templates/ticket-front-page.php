@@ -136,10 +136,10 @@ if ( isset( $post->ID ) ) {
 	if ( current_user_can( $cap ) ) {
 
 		// Products
-		global $rtbiz_product_sync;
+		global $rtbiz_offerings;
 		$products = array();
-		if ( ! empty( $rtbiz_product_sync ) ) {
-			$products = wp_get_post_terms( $post->ID, $rtbiz_product_sync->product_slug );
+		if ( ! empty( $rtbiz_offerings ) ) {
+			$products = wp_get_post_terms( $post->ID, $rtbiz_offerings->product_slug );
 		}
 		$base_url = add_query_arg( array( 'post_type' => $post->post_type ), admin_url( 'edit.php' ) );
 		if ( ! $products instanceof WP_Error && ! empty( $products ) ) { ?>
