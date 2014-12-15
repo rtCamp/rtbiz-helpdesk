@@ -31,7 +31,7 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 		 *
 		 * @since 0.1
 		 */
-		public $email_key = 'account_email';
+		public $email_key = 'account_primary_email';
 
 		/**
 		 * set hooks & ajax function
