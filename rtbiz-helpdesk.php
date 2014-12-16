@@ -160,7 +160,7 @@ add_action( 'rt_biz_init', 'rt_hd_init', 1 );
 add_action( 'init', 'rthd_check_plugin_dependecy' );
 
 
-register_activation_hook( __FILE__, 'init_call_flush_rewrite_rules' );
-function init_call_flush_rewrite_rules(){
+register_activation_hook( __FILE__, 'init_call_rtbiz_hd_flush_rewrite_rules' );
+function init_call_rtbiz_hd_flush_rewrite_rules(){
 	add_option( 'rthd_flush_rewrite_rules', 'true' );
 }

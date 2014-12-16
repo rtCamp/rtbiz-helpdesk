@@ -135,7 +135,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				$rt_hd_attributes->attributes_page_slug,
 			);
 
-			return $this->statuses;
+			return $this->custom_menu_order;
 		}
 
 		/**
@@ -180,10 +180,11 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				    'with_front' => false,
 				),
 				'show_ui'            => true, // Show the UI in admin panel
-				'menu_icon'          => $settings['rthd_logo_url']['url'],
+				'menu_icon'          => isset( $settings['rthd_logo_url'] ) ? $settings['rthd_logo_url']['url'] : RT_HD_URL . 'app/assets/img/hd-16X16.png' ,
 				'menu_position'      => $menu_position,
 				'supports'           => array( 'title', 'editor', 'comments', 'custom-fields', 'revisions' ),
 				'capability_type'    => self::$post_type,
+				'map_meta_cap'    => true,
 			);
 
 			return register_post_type( self::$post_type, $args );

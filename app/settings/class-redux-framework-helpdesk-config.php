@@ -134,7 +134,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			$users_options = array();
 
 			foreach ( $users as $user ) {
-				$users_options[ $user->ID ] = $user->user_login;
+				$users_options[ $user->ID ] = $user->display_name;
 			}
 
 			$admins = get_users( array( 'role' => 'administrator' ) );
