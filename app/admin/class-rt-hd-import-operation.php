@@ -950,6 +950,13 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			if ( ! isset( $_POST['followup_ticket_unique_id'] ) ) {
 				wp_die( 'Invalid Ticket' );
 			}
+			$returnArray     = array();
+			if ( ! is_user_logged_in() ){
+				$returnArray['status']  = false;
+				$returnArray['message'] = 'ERROR: please login to continue.';
+				echo json_encode( $returnArray );
+				die( 0 );
+			}
 			$ticket_unique_id = $_POST['followup_ticket_unique_id'];
 			$args             = array(
 				'meta_key'    => '_rtbiz_hd_unique_id',
@@ -963,7 +970,6 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			}
 			$rthd_ticket = $ticketpost[0];
 
-			$returnArray     = array();
 			$followuptype    = $_POST['followuptype'];
 			$comment_post_ID = $rthd_ticket->ID;
 			$post_type       = $rthd_ticket->post_type;
@@ -1135,6 +1141,12 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				wp_die( 'Invalid Post ID' );
 			}
 			$returnArray     = array();
+			if ( ! is_user_logged_in() ){
+				$returnArray['status']  = false;
+				$returnArray['message'] = 'ERROR: please login to continue.';
+				echo json_encode( $returnArray );
+				die( 0 );
+			}
 			$followuptype    = $_POST['followuptype'];
 			$comment_post_ID = $_POST['followup_post_id'];
 			$post_type       = get_post_type( $comment_post_ID );
