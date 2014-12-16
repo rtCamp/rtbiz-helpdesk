@@ -115,7 +115,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 			$postArray = array(
 				'post_author'   => $settings['rthd_default_user'],
-				'post_content'  => $body,
+				'post_content'  => rthd_content_filter( $body ),
 				'post_date'     => $post_date,
 				'post_status'   => 'publish',
 				'post_title'    => $title,
@@ -125,7 +125,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 			$dataArray = array(
 				'assignee'     => $postArray['post_author'],
-				'post_content' => $postArray['post_content'],
+				'post_content' => rthd_content_filter( $postArray['post_content'] ),
 				'post_status'  => $postArray['post_status'],
 				'post_title'   => $postArray['post_title'],
 			);
@@ -716,7 +716,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$body  .= '<br/><strong>New Followup Added by ' . $comment_author . ' - ' . $comment_author_email . ':</strong>';
 				$body .= '<br/><b>Type : </b>' . 'Mail';
 				$body .= '<br/><b>From : </b>' . $comment_author_email;
-				$body .= '<br/><b>Body : </b>' . $comment_content;
+				$body .= '<br/><b>Body : </b>' . rthd_content_filter( $comment_content );
 				$body .= '<br/> ';
 				$notificationFlag = $this->check_setting_for_new_followup_email();
 				$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, wp_list_pluck( $uploaded, 'url' ), $comment_id, $notificationFlag, true );
@@ -829,7 +829,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 			$title = rthd_create_new_ticket_title( 'rthd_new_followup_email_title', $comment_post_ID );
 
-			$mailbody = apply_filters( 'the_content', balanceTags( $comment->comment_content, true ) );
+			$mailbody = rthd_content_filter( $comment->comment_content );
 
 			//commentSendAttachment
 			$attachment = array();
@@ -975,9 +975,11 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				wp_die( 'Invalid Ticket' );
 			}
 			$returnArray     = array();
-			if (!is_user_logged_in()){
+			if ( ! is_user_logged_in() ){
 				$returnArray['status']  = false;
 				$returnArray['message'] = 'ERROR: please login to continue.';
+				echo json_encode( $returnArray );
+				die( 0 );
 			}
 			$ticket_unique_id = $_POST['followup_ticket_unique_id'];
 			$args             = array(
@@ -992,11 +994,12 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			}
 			$rthd_ticket = $ticketpost[0];
 
+			$returnArray     = array();
 			$followuptype    = $_POST['followuptype'];
 			$comment_post_ID = $rthd_ticket->ID;
 			$post_type       = $rthd_ticket->post_type;
 
-			$comment_content = Rt_HD_Utils::force_utf_8( $_POST['followup_content'] );
+			$comment_content = rthd_content_filter( $_POST['followup_content'] );
 			$comment_privacy = $_POST['private_comment'];
 			global $wpdb;
 			$user = wp_get_current_user();
@@ -1116,7 +1119,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$body .= '<br /> A private followup has been added ' . ( ( ! empty( $currentUser->display_name ) ) ? 'by ' . $currentUser->display_name : 'annonymously' ) .'. Please go to link and login to view the message.';
 			}else {
 				$body .= '<br /><strong>New Followup Added ' . ( ( ! empty( $currentUser->display_name ) ) ? 'by ' . $currentUser->display_name : 'annonymously' ) . ':</strong><br />';
-				$body .= '<br/>' . apply_filters( 'the_content', $comment->comment_content );
+				$body .= '<br/>' . rthd_content_filter( $comment->comment_content );
 			}
 			$body .= '<br/>';
 			$notificationFlag = $this->check_setting_for_new_followup_email();
@@ -1166,11 +1169,13 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			if ( ! is_user_logged_in() ){
 				$returnArray['status']  = false;
 				$returnArray['message'] = 'ERROR: please login to continue.';
+				echo json_encode( $returnArray );
+				die( 0 );
 			}
 			$followuptype    = $_POST['followuptype'];
 			$comment_post_ID = $_POST['followup_post_id'];
 			$post_type       = get_post_type( $comment_post_ID );
-			$comment_content = Rt_HD_Utils::force_utf_8( $_POST['followup_content'] );
+			$comment_content = rthd_content_filter( $_POST['followup_content'] );
 			$comment_privacy = $_POST['followup_private'];
 			global $wpdb;
 			$user = wp_get_current_user();
@@ -1272,7 +1277,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 						$flag = true;
 						$body .= '<br/><b>Body : </b>' . $diff;
 					} else {
-						$body .= '<br/><b>Body : </b>' . wpautop( make_clickable( $comment->comment_content ) );
+						$body .= '<br/><b>Body : </b>' . rthd_content_filter( $comment->comment_content );
 					}
 					$body .= '<br/> ';
 				}
@@ -1291,7 +1296,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 						'count'     => true,
 					) );
 				$returnArray['private']       = get_comment_meta( $_POST['comment_id'], '_rthd_privacy', true );
-				$returnArray['comment_content'] = wpautop( make_clickable( $comment->comment_content ) );
+				$returnArray['comment_content'] = rthd_content_filter( $comment->comment_content );
 				echo json_encode( $returnArray );
 				die( 0 );
 			}
@@ -1443,7 +1448,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$body .= '<br /> A private followup has been added ' . ( ( ! empty( $currentUser->display_name ) ) ? 'by ' . $currentUser->display_name : 'annonymously' ) .'. Please go to link and login to view the message.';
 			}
 			else{
-				$body .= '<br/>' . apply_filters( 'the_content', $comment->comment_content );
+				$body .= '<br/>' . rthd_content_filter( $comment->comment_content );
 			}
 
 			$body .= '<br/> ';
@@ -1700,7 +1705,6 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$placeholder = '<div class="content-stream stream-loading js-loading-placeholder"><img id="load-more-hdspinner" class="js-loading-placeholder" src="' . admin_url() . 'images/spinner.gif' . '" /></div>';
 			}
 
-			$response['count n limit'] = $count . ' : ' . $Limit;
 			$response['offset']= $offset;
 			$response['comments']= $commenthtml;
 			$response['placeholder'] = $placeholder;
