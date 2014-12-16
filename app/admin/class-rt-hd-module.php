@@ -288,7 +288,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 		 * @param $post_types
 		 */
 
-		function update_ticket_table( $attr_id, $post_types ) {
+		function update_ticket_table( $attr_id, $post_types = array() ) {
 			if ( isset( $post_types ) && in_array( self::$post_type, $post_types ) ) {
 				$updateDB = new RT_DB_Update( trailingslashit( RT_HD_PATH ) . 'rtbiz-helpdesk.php', trailingslashit( RT_HD_PATH_SCHEMA ) );
 				delete_option( $updateDB->db_version_option_name );

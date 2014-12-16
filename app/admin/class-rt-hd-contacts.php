@@ -20,7 +20,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		/**
 		 * @var string
 		 */
-		public $email_key = 'contact_email';
+		public $email_key = 'contact_primary_email';
 		/**
 		 * @var string
 		 */
