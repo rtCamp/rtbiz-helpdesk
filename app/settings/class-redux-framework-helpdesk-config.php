@@ -30,7 +30,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				return;
 			}
 			// hook priority 25 because rtBiz email model is on after_theme 20 and we can not get 'rt_get_all_system_emails' before that
-			add_action( 'after_setup_theme', array( $this, 'init_settings' ), 25 );
+			add_action( 'p2p_init', array( $this, 'init_settings' ), 30 );
 		}
 
 
@@ -130,7 +130,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			$editor_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
 			$admin_cap  = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' );
 
-			$users         = rt_biz_get_module_users( rt_biz_sanitize_module_key( RT_HD_TEXT_DOMAIN ) );
+			$users         = Rt_HD_Utils::get_hd_rtcamp_user();
 			$users_options = array();
 
 			foreach ( $users as $user ) {

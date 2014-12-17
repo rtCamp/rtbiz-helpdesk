@@ -165,7 +165,7 @@ if ( ! class_exists( 'Rt_HD_Utils' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		public static function get_hd_rtcamp_user() {
-			$users = rt_biz_get_module_users( RT_HD_TEXT_DOMAIN );
+			$users = rt_biz_get_module_employee( RT_HD_TEXT_DOMAIN );
 
 			return $users;
 		}
