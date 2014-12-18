@@ -35,7 +35,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		 */
 		public function insert_new_send_email( $subject, $body, $toemail = array(), $ccemail = array(), $bccemail = array(), $attachement = array(), $refrence_id = 0, $refrence_type = 'notification' ) {
 			$user_id = get_current_user_id();
-			global $rt_hd_mail_outbound_model;
+			global $rt_outbound_model;
 			$settings = rthd_get_redux_settings();
 
 			$toemail = $this->filter_user_notification_preference( $toemail );
@@ -56,14 +56,14 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				'refrence_type' => $refrence_type,
 			);
 			if ( $this->is_wp_email( ) ) {
-				$id = $rt_hd_mail_outbound_model->add_outbound_mail( $args );
+				$id = $rt_outbound_model->add_outbound_mail( $args );
 				$sendflag = $this->send_wp_email( $args );
 				if ( $sendflag ){
-					$rt_hd_mail_outbound_model->update_outbound_mail( array( 'sent' => 'yes' ), array( 'id' => $id ) );
+					$rt_outbound_model->update_outbound_mail( array( 'sent' => 'yes' ), array( 'id' => $id ) );
 				}
 				return $sendflag;
 			} else {
-				return $rt_hd_mail_outbound_model->add_outbound_mail( $args );
+				return $rt_outbound_model->add_outbound_mail( $args );
 			}
 		}
 

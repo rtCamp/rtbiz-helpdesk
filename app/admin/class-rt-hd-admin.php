@@ -42,8 +42,8 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 		 */
 		function load_styles_scripts() {
 			global $post, $pagenow, $wp_scripts;
-
-			if ( in_array( $pagenow, array( 'edit.php', 'post.php', 'post-new.php' ) ) ) {
+			$rthd_post_type = isset( $_GET['post'] ) ? get_post_type( $_GET['post'] )  :'';
+			if ( in_array( $pagenow, array( 'edit.php', 'post.php', 'post-new.php' ) ) && $rthd_post_type == Rt_HD_Module::$post_type ) {
 				if ( isset( $post->post_type ) && $post->post_type == Rt_HD_Module::$post_type ) {
 
 					wp_enqueue_script( 'jquery-ui-timepicker-addon', RT_HD_URL . 'app/assets/javascripts/jquery-ui-timepicker-addon.js', array(
@@ -71,6 +71,7 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 				wp_enqueue_script( 'rthd-app-loadmore', RT_HD_URL . 'app/assets/javascripts/jquery.ba-throttle-debounce.js', array( 'jquery' ), RT_HD_VERSION, true );
 				wp_enqueue_script( 'jquery' );
 				wp_enqueue_script( 'jquery-form', array( 'jquery' ), false, true );
+				wp_enqueue_script( 'jquery-ui-dialog' );
 
 				wp_enqueue_style( 'rthd-followup-css', RT_HD_URL . 'app/assets/css/follow-up.css', array(), RT_HD_VERSION, 'all' );
 				global $wp_scripts;
@@ -100,13 +101,13 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 		 */
 		function localize_scripts() {
 			global $post, $pagenow, $wp_scripts;
-			if ( in_array( $pagenow, array( 'edit.php', 'post.php', 'post-new.php' ) ) ) {
+			$rthd_post_type = isset( $_GET['post'] ) ? get_post_type( $_GET['post'] )  :'';
+			if ( in_array( $pagenow, array( 'edit.php', 'post.php', 'post-new.php' ) ) && $rthd_post_type == Rt_HD_Module::$post_type ) {
 				$user_edit = false;
 				if ( current_user_can( 'edit_' . Rt_HD_Module::$post_type ) ) {
 					$user_edit = true;
 				}
 				wp_localize_script( 'rthd-admin-js', 'ajaxurl', admin_url( 'admin-ajax.php' ) );
-				$rthd_post_type = isset( $_GET['post'] ) ? get_post_type( $_GET['post'] )  :'';
 				wp_localize_script( 'rthd-admin-js', 'rthd_post_type', $rthd_post_type );
 				wp_localize_script( 'rthd-admin-js', 'rthd_user_edit', array( $user_edit ) );
 			} else {

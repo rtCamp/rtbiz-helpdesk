@@ -48,7 +48,7 @@ if ( ! class_exists( 'Rt_Hd_Help' ) ) {
 						'id'        => 'create_organization_screen_content',
 						'title'     => __( 'Screen Content' ),
 						'content'   => '',
-						'post_type' => rt_biz_get_organization_post_type(),
+						'post_type' => rt_biz_get_company_post_type(),
 					),
 				),
 				'post.php'      => array(
@@ -68,13 +68,13 @@ if ( ! class_exists( 'Rt_Hd_Help' ) ) {
 						'id'        => 'edit_organization_overview',
 						'title'     => __( 'Overview' ),
 						'content'   => '',
-						'post_type' => rt_biz_get_organization_post_type(),
+						'post_type' => rt_biz_get_company_post_type(),
 					),
 					array(
 						'id'        => 'edit_organization_screen_content',
 						'title'     => __( 'Screen Content' ),
 						'content'   => '',
-						'post_type' => rt_biz_get_organization_post_type(),
+						'post_type' => rt_biz_get_company_post_type(),
 					),
 				),
 				'edit.php'      => array(
@@ -242,8 +242,8 @@ if ( ! class_exists( 'Rt_Hd_Help' ) ) {
 						<li>
 							<?php _e( 'You will see a numerous "Connected X" metaboxes in the side colum.' ); ?>
 							<?php _e( 'They are the supportive modules of the system which are connected to the Ticket.' ); ?>
-							<?php _e( 'E.g., An Customer is connected to a product since a person can be a part of an organization.' ); ?>
-							<?php _e( 'You can select any entity from the metabox to connect it to the person.' ); ?>
+							<?php _e( 'E.g., An Customer is connected to a product since a contact can be a part of an company.' ); ?>
+							<?php _e( 'You can select any entity from the metabox to connect it to the contact.' ); ?>
 						</li>
 						<li>
 							<?php _e( 'There might be metaboxes visible depending upon the plugins you\'ve activated on the site.' ); ?>
@@ -254,17 +254,17 @@ if ( ! class_exists( 'Rt_Hd_Help' ) ) {
 					break;
 				case 'edit_organization_screen_content':
 					?>
-					<p><?php _e( 'There are a few sections where you can save essential information about an Organization : ' ); ?></p>
+					<p><?php _e( 'There are a few sections where you can save essential information about an company : ' ); ?></p>
 					<ul>
-						<li><?php _e( 'There is a textbox for the title of a organization.' ); ?></li>
-						<li><?php _e( 'You can also put any description/comments related to the organization in to the rich text editor provided.' ); ?></li>
+						<li><?php _e( 'There is a textbox for the title of a company.' ); ?></li>
+						<li><?php _e( 'You can also put any description/comments related to the company in to the rich text editor provided.' ); ?></li>
 						<li>
 							<?php _e( 'There might be other extra attributes metaboxes depending upon how you add an attribute from the attributes page' ); ?>
 							<a href="<?php echo esc_url( add_query_arg( array( 'page' => Rt_Biz_Attributes::$attributes_page_slug ), admin_url( 'admin.php' ) ) ); ?>"><?php _e( 'here' ); ?></a>.
 						</li>
 						<li>
 							<?php _e( 'You will see a "Connected X" metaboxes in the side column.' ); ?>
-							<?php _e( 'You can select any entity from the metabox to connect it to the organization.' ); ?>
+							<?php _e( 'You can select any entity from the metabox to connect it to the company.' ); ?>
 						</li>
 					</ul>
 					<?php
@@ -296,7 +296,7 @@ if ( ! class_exists( 'Rt_Hd_Help' ) ) {
 						<li>
 							<?php _e( 'You can refine the list to show only Tickets in a specific category or from a specific month by using the dropdown menus above the Tickets list.' ); ?>
 							<?php _e( 'Click the Filter button after making your selection.' ); ?>
-							<?php _e( 'You also can refine the list by clicking on the author, organization or tag in the Tickets list.' ); ?>
+							<?php _e( 'You also can refine the list by clicking on the author, company or tag in the Tickets list.' ); ?>
 						</li>
 						<li><?php _e( 'You can also see the entity counts for respective modules, if activated, such as Lead Count, Ticket Count etc.' ) ?></li>
 					</ul>
@@ -332,7 +332,7 @@ if ( ! class_exists( 'Rt_Hd_Help' ) ) {
 				case 'user_group_overview':
 					?>
 					<p>
-						<?php _e( 'This screen is useful when you have to introduce departments within your organization.' ); ?>
+						<?php _e( 'This screen is useful when you have to introduce departments within your company.' ); ?>
 						<?php _e( 'You can create, edit, delete departments & perfom other CRUD operations from here.' ); ?>
 						<?php _e( 'These departments can be later assigned to contacts to further categorize them.' ); ?>
 						<?php _e( 'They will also be useful in defining Access Control for the system & its other modules.' ); ?>

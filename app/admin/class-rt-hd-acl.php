@@ -51,7 +51,7 @@ if ( ! class_exists( 'Rt_HD_ACL' ) ) {
 			$modules[ $module_key ] = array(
 				'label'      => isset( $settings['rthd_menu_label'] ) ? $settings['rthd_menu_label'] : 'rtHelpdesk',
 				'post_types' => array( Rt_HD_Module::$post_type ),
-				'require_user_groups' => true,
+				'require_department' => true,
 			    'require_product_sync' => true,
 			);
 

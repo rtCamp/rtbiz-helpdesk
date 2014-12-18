@@ -99,7 +99,7 @@ if( ! empty( $pstatus ) ) {
 
 		<div>
 			<span title="Status"><strong>Last reply: </strong></span>
-			<span class="rthd_attr_border prefix rthd_view_mode"> <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) )) ."ago by ". $comment->comment_author; ?></span>
+			<span class="rthd_attr_border prefix rthd_view_mode"> <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) )) ." ago by ". $comment->comment_author; ?></span>
 		</div>
 	<?php }
 
@@ -136,10 +136,10 @@ if ( isset( $post->ID ) ) {
 	if ( current_user_can( $cap ) ) {
 
 		// Products
-		global $rtbiz_product_sync;
+		global $rtbiz_offerings;
 		$products = array();
-		if ( ! empty( $rtbiz_product_sync ) ) {
-			$products = wp_get_post_terms( $post->ID, $rtbiz_product_sync->product_slug );
+		if ( ! empty( $rtbiz_offerings ) ) {
+			$products = wp_get_post_terms( $post->ID, $rtbiz_offerings->product_slug );
 		}
 		$base_url = add_query_arg( array( 'post_type' => $post->post_type ), admin_url( 'edit.php' ) );
 		if ( ! $products instanceof WP_Error && ! empty( $products ) ) { ?>

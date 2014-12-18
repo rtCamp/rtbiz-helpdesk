@@ -10,7 +10,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 	/**
 	 * Class Rt_HD_Module
 	 * Register rtbiz-HelpDesk CPT [ Ticket ] & statuses
-	 * Define connection with other post type [ person, organization ]
+	 * Define connection with other post type [ contact, company ]
 	 *
 	 * @since  0.1
 	 *
@@ -135,11 +135,11 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				$rt_hd_attributes->attributes_page_slug,
 			);
 
-			return $this->statuses;
+			return $this->custom_menu_order;
 		}
 
 		/**
-		 * register rtbiz-HelpDesk CPT [ Ticket ] & define connection with other post type [ person, organization ]
+		 * register rtbiz-HelpDesk CPT [ Ticket ] & define connection with other post type [ contact, company ]
 		 *
 		 * @since 0.1
 		 */
@@ -151,9 +151,9 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				$this->register_custom_statuses( $status );
 			}
 
-			rt_biz_register_person_connection( self::$post_type, $this->labels['name'] );
+			rt_biz_register_contact_connection( self::$post_type, $this->labels['name'] );
 
-			rt_biz_register_organization_connection( self::$post_type, $this->labels['name'] );
+			rt_biz_register_company_connection( self::$post_type, $this->labels['name'] );
 
 			$this->db_ticket_table_update();
 		}
@@ -180,10 +180,11 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				    'with_front' => false,
 				),
 				'show_ui'            => true, // Show the UI in admin panel
-				'menu_icon'          => $settings['rthd_logo_url']['url'],
+				'menu_icon'          => isset( $settings['rthd_logo_url'] ) ? $settings['rthd_logo_url']['url'] : RT_HD_URL . 'app/assets/img/hd-16X16.png' ,
 				'menu_position'      => $menu_position,
 				'supports'           => array( 'title', 'editor', 'comments', 'custom-fields', 'revisions' ),
 				'capability_type'    => self::$post_type,
+				'map_meta_cap'    => true,
 			);
 
 			return register_post_type( self::$post_type, $args );
@@ -248,10 +249,10 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				$sql .= "{$attr_name} TEXT,\n";
 			}
 
-			$contact_name = rt_biz_get_person_post_type();
+			$contact_name = rt_biz_get_contact_post_type();
 			$sql .= "{$contact_name} TEXT,\n";
 
-			$contact_name = rt_biz_get_organization_post_type();
+			$contact_name = rt_biz_get_company_post_type();
 			$sql .= "{$contact_name} TEXT,\n";
 
 			$sql .= 'PRIMARY KEY  (id) ) CHARACTER SET utf8 COLLATE utf8_general_ci;';
@@ -287,7 +288,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 		 * @param $post_types
 		 */
 
-		function update_ticket_table( $attr_id, $post_types ) {
+		function update_ticket_table( $attr_id, $post_types = array() ) {
 			if ( isset( $post_types ) && in_array( self::$post_type, $post_types ) ) {
 				$updateDB = new RT_DB_Update( trailingslashit( RT_HD_PATH ) . 'rtbiz-helpdesk.php', trailingslashit( RT_HD_PATH_SCHEMA ) );
 				delete_option( $updateDB->db_version_option_name );

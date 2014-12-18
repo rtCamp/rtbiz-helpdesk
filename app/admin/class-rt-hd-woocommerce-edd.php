@@ -162,7 +162,9 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 
 
 		function check_active_plugin(){
-			$activePlugin = rt_biz_get_settings( 'product_plugin' );
+			$settings = biz_get_redux_settings();
+
+			$activePlugin = $settings['product_plugin'];
 			if ( is_plugin_active( 'woocommerce/woocommerce.php' ) && 'woocommerce' === $activePlugin ) {
 				$this->isWoocommerceActive = true;
 				$this->iseddActive = false;
@@ -193,7 +195,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 			ob_start();
 			$this->check_active_plugin();
 			wp_enqueue_style( 'support-form-style', RT_HD_URL . 'app/assets/css/support_form_front.css', false, RT_HD_VERSION, 'all' );
-			$product_option = '';
+			$offering_option = '';
 			$order_email    = '';
 
 			$post_id = $this->save_support_form();
@@ -201,22 +203,22 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 				<div id="info" class="success">Your Support request have been Submitted.</div>
 			<?php }
 
-			global $rtbiz_product_sync;
+			global $rtbiz_offerings;
 			$terms = array();
-			if ( isset( $rtbiz_product_sync ) ) {
-				$terms = get_terms( $rtbiz_product_sync->product_slug, array( 'hide_empty' => 0 ) );
+			if ( isset( $rtbiz_offerings ) ) {
+				$terms = get_terms( Rt_Offerings::$offering_slug, array( 'hide_empty' => 0 ) );
 			}
-			$product_exists = false;
+			$offering_exists = false;
 			foreach ( $terms as $tm ) {
-				$term_product_id = '';
+				$term_offering_id = '';
 				if ( isset( $_REQUEST['order_id'] ) && $this->order_post_type == get_post_type( $_REQUEST['order_id'] ) ) {
 					if ( $this->isWoocommerceActive ) {
 						$order = new WC_Order( $_REQUEST['order_id'] );
 						if ( !empty( $order ) ) {
 							$items = $order->get_items();
 							$product_ids = wp_list_pluck( $items, 'product_id' );
-							$term_product_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $tm->term_id, '_product_id', true );
-							if ( ! in_array( $term_product_id, $product_ids ) ) {
+							$term_offering_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $tm->term_id, Rt_Offerings::$term_meta_key , true );
+							if ( ! in_array( $term_offering_id, $product_ids ) ) {
 								continue;
 							}
 						}
@@ -225,18 +227,19 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 						if ( !empty( $payment ) ) {
 							$items = edd_get_payment_meta_downloads( $payment->ID );
 							$product_ids = wp_list_pluck( $items, 'id' );
-							$term_product_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $tm->term_id, '_product_id', true );
-							if ( ! in_array( $term_product_id, $product_ids ) ) {
+							$term_offering_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $tm->term_id, Rt_Offerings::$term_meta_key, true );
+							if ( ! in_array( $term_offering_id, $product_ids ) ) {
 								continue;
 							}
 						}
 					}
 				}
-				$product_option .= '<option value="' . $tm->term_id . '" ' . ( ( ! empty( $_REQUEST['product_id'] ) && $term_product_id == $_REQUEST['product_id'] ) ? 'selected="selected"' : '' ) . '> '.$tm->name.'</option>';
-				$product_exists = true;
+				$offering_option .= '<option value="' . $tm->term_id . '" ' . ( ( ! empty( $_REQUEST['product_id'] ) && $term_offering_id == $_REQUEST['product_id'] ) ? 'selected="selected"' : '' ) . '> '.$tm->name.'</option>';
+				$offering_exists = true;
+				error_log(var_export($offering_exists,true). ": -> asddddd ", 3, "/var/www/dummytest.com/logs/my-errors.log");
 			}
 
-			rthd_get_template( 'support-form.php', array( 'product_exists' => $product_exists, 'product_option' => $product_option ) );
+			rthd_get_template( 'support-form.php', array( 'product_exists' => $offering_exists, 'product_option' => $offering_option ) );
 			return apply_filters( 'rt_hd_support_form_shorcode', ob_get_clean(), $attr );
 		}
 
@@ -247,7 +250,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 		 *
 		 */
 		function save_support_form() {
-			global $rtbiz_product_sync, $rt_hd_import_operation;
+			global $rtbiz_offerings, $rt_hd_import_operation;
 
 			if ( empty( $_POST['rthd_support_form_submit'] ) ) {
 				return false;
@@ -259,11 +262,11 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 			}
 
 			$data = $_POST['post'];
-			$productstr = $data['title'];
+			$offeringstr = $data['title'];
 
 			//Ticket created
 			$rt_hd_tickets_id = $rt_hd_import_operation->insert_new_ticket(
-				$productstr,
+				$offeringstr,
 				stripslashes($data['description']),
 				'now',
 				array( array( 'address' => $data['email'], 'name' => '' ) ),
@@ -272,9 +275,9 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 			);
 
 			if ( isset( $data['product_id'] ) ) {
-				$term = get_term_by( 'id', $data['product_id'], $rtbiz_product_sync->product_slug );
+				$term = get_term_by( 'id', $data['product_id'], Rt_Offerings::$offering_slug );
 				if ( $term ) {
-					wp_set_post_terms( $rt_hd_tickets_id, array( $term->term_id ), $rtbiz_product_sync->product_slug );
+					wp_set_post_terms( $rt_hd_tickets_id, array( $term->term_id ), Rt_Offerings::$offering_slug );
 				}
 			}
 
@@ -393,12 +396,12 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 					if ( $arg_shortcode['email'] == '{{logged_in_user}}' ) {
 						global $current_user;
 						if ( isset( $current_user->user_email ) && ! empty( $current_user->user_email ) ) {
-							$person = rt_biz_get_person_by_email( $current_user->user_email );
+							$person = rt_biz_get_contact_by_email( $current_user->user_email );
 						} else {
 							$person = '';
 						}
 					} else {
-						$person = rt_biz_get_person_by_email( $arg_shortcode['email'] );
+						$person = rt_biz_get_contact_by_email( $arg_shortcode['email'] );
 					}
 					if ( isset( $person ) && ! empty( $person ) ) {
 						$args['connected_items'] = $person[0]->ID;

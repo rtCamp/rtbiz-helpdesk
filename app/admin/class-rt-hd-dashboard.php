@@ -365,7 +365,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		function top_accounts() {
 			global $wpdb;
 			$table_name = rthd_get_ticket_table_name();
-			$account    = rt_biz_get_organization_post_type();
+			$account    = rt_biz_get_company_post_type();
 
 			$query = 'SELECT acc.ID AS account_id, acc.post_title AS account_name ' . ( ( isset( $wpdb->p2p ) ) ? ', COUNT( ticket.ID ) AS account_tickets ' : ' ' ) . "FROM {$wpdb->posts} AS acc " . ( ( isset( $wpdb->p2p ) ) ? "JOIN {$wpdb->p2p} AS p2p ON acc.ID = p2p.p2p_to " : ' ' ) . ( ( isset( $wpdb->p2p ) ) ? "JOIN {$table_name} AS ticket ON ticket.post_id = p2p.p2p_from " : ' ' ) . 'WHERE 2=2 ' . ( ( isset( $wpdb->p2p ) ) ? "AND p2p.p2p_type = '" . Rt_HD_Module::$post_type . "_to_{$account}' " : ' ' ) . "AND acc.post_type = '{$account}' " . 'GROUP BY acc.ID ' . ( ( isset( $wpdb->p2p ) ) ? 'ORDER BY account_tickets DESC ' : ' ' ) . 'LIMIT 0 , 10';
 
@@ -413,8 +413,8 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		function top_clients() {
 			global $wpdb;
 			$table_name = rthd_get_ticket_table_name();
-			$contact    = rt_biz_get_person_post_type();
-			$account    = rt_biz_get_organization_post_type();
+			$contact    = rt_biz_get_contact_post_type();
+			$account    = rt_biz_get_company_post_type();
 
 			$query = 'SELECT contact.ID AS contact_id, contact.post_title AS contact_name ' . ( ( isset( $wpdb->p2p ) ) ? ', COUNT( ticket.ID ) AS contact_tickets ' : ' ' ) . "FROM {$wpdb->posts} AS contact " . ( ( isset( $wpdb->p2p ) ) ? "JOIN {$wpdb->p2p} AS p2p_lc ON contact.ID = p2p_lc.p2p_to " : ' ' ) . ( ( isset( $wpdb->p2p ) ) ? "JOIN {$table_name} AS ticket ON ticket.post_id = p2p_lc.p2p_from " : ' ' ) . ( ( isset( $wpdb->p2p ) ) ? "LEFT JOIN {$wpdb->p2p} AS p2p_ac ON contact.ID = p2p_ac.p2p_to AND p2p_ac.p2p_type = '{$account}_to_{$contact}'  " : ' ' ) . 'WHERE 2=2 ' . ( ( isset( $wpdb->p2p ) ) ? "AND p2p_lc.p2p_type = '" . Rt_HD_Module::$post_type . "_to_{$contact}' " : ' ' ) . "AND contact.post_type = '{$contact}' " . ( ( isset( $wpdb->p2p ) ) ? 'AND p2p_ac.p2p_type IS NULL ' : ' ' ) . 'GROUP BY contact.ID ' . ( ( isset( $wpdb->p2p ) ) ? 'ORDER BY contact_tickets DESC ' : ' ' ) . 'LIMIT 0 , 10';
 

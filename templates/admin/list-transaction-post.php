@@ -80,8 +80,8 @@ foreach ( $example_data as $rslt ) {
 		</td>
 		<td>
 			<?php
-			$post_terms   = rt_biz_get_post_for_person_connection( $rslt->ID, $rslt->post_type, $fetch_person = true );
-			$contact_name = rt_biz_get_person_post_type();
+			$post_terms   = rt_biz_get_post_for_contact_connection( $rslt->ID, $rslt->post_type, $fetch_contact = true );
+			$contact_name = rt_biz_get_contact_post_type();
 
 			$sep      = '';
 			$base_url = add_query_arg(
@@ -102,8 +102,8 @@ foreach ( $example_data as $rslt ) {
 		</td>
 		<td>
 			<?php
-			$post_terms   = rt_biz_get_post_for_organization_connection( $rslt->ID, $rslt->post_type, $fetch_organization = true );
-			$account_name = rt_biz_get_organization_post_type();
+			$post_terms   = rt_biz_get_post_for_company_connection( $rslt->ID, $rslt->post_type, $fetch_company = true );
+			$account_name = rt_biz_get_company_post_type();
 
 			$sep = '';
 	if ( $post_terms ) {
