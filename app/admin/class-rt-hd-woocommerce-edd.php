@@ -206,7 +206,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 			global $rtbiz_offerings;
 			$terms = array();
 			if ( isset( $rtbiz_offerings ) ) {
-				$terms = get_terms( $rtbiz_offerings->offering_slug, array( 'hide_empty' => 0 ) );
+				$terms = get_terms( Rt_Offerings::$offering_slug, array( 'hide_empty' => 0 ) );
 			}
 			$offering_exists = false;
 			foreach ( $terms as $tm ) {
@@ -275,9 +275,9 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 			);
 
 			if ( isset( $data['product_id'] ) ) {
-				$term = get_term_by( 'id', $data['product_id'], $rtbiz_offerings->offering_slug );
+				$term = get_term_by( 'id', $data['product_id'], Rt_Offerings::$offering_slug );
 				if ( $term ) {
-					wp_set_post_terms( $rt_hd_tickets_id, array( $term->term_id ), $rtbiz_offerings->offering_slug );
+					wp_set_post_terms( $rt_hd_tickets_id, array( $term->term_id ), Rt_Offerings::$offering_slug );
 				}
 			}
 

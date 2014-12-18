@@ -402,7 +402,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 					global $rtbiz_offerings;
 					$query->set( 'tax_query', array(
 						array(
-							'taxonomy' => $rtbiz_offerings->offering_slug,
+							'taxonomy' => Rt_Offerings::$offering_slug,
 							'field' => 'term_id',
 						    'terms' => $_GET['product_id'],
 						),
