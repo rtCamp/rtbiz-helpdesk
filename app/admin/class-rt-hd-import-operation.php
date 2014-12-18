@@ -379,7 +379,17 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			}
 			//always true in mail cron  is use for importer
 			if ( ! $check_duplicate ) {
-				return $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'] );
+				$success_flag = $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'] );
+
+				error_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
+
+				if ( ! $success_flag ) {
+					foreach ( $uploaded as $u ) {
+						unlink( $u['file'] );
+					}
+				}
+
+				return;
 			}
 			//-----------------------------------------------------------------------------//
 			global $threadPostId;
@@ -420,7 +430,17 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					$this->process_forward_email_data( $title, $body, $mailtime, $allemail, $mailBodyText, $dndEmails );
 				}
 
-				return $this->insert_post_comment( $postid, $userid, $body, $fromemail['name'], $fromemail['address'], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $rt_all_emails , $subscriber);
+				$success_flag = $this->insert_post_comment( $postid, $userid, $body, $fromemail['name'], $fromemail['address'], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $rt_all_emails , $subscriber);
+
+				error_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
+
+				if ( ! $success_flag ) {
+					foreach ( $uploaded as $u ) {
+						unlink( $u['file'] );
+					}
+				}
+
+				return;
 			}
 			//if subject is re to post title
 
@@ -435,10 +455,26 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				}
 				//if given post title exits then it will be add as comment other wise as post
 				if ( $existPostId ) {
-					return $this->insert_post_comment( $existPostId, $userid, $body, $fromemail['name'], $fromemail['address'], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $subscriber );
+					$success_flag = $this->insert_post_comment( $existPostId, $userid, $body, $fromemail['name'], $fromemail['address'], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $subscriber );
+					error_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
+
+					if ( ! $success_flag ) {
+						foreach ( $uploaded as $u ) {
+							unlink( $u['file'] );
+						}
+					}
+					return;
 				} else {
 					if ( $systemEmail ) {
-						return $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], $messageid, $inreplyto, $references, $subscriber );
+						$success_flag = $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], $messageid, $inreplyto, $references, $subscriber );
+						error_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
+
+						if ( ! $success_flag ) {
+							foreach ( $uploaded as $u ) {
+								unlink( $u['file'] );
+							}
+						}
+						return;
 					}
 				}
 			} else {
@@ -447,10 +483,26 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				error_log( "Post Exists : ". var_export( $existPostId, true ) . "\r\n" );
 				if ( ! $existPostId ) {
 					if ( $systemEmail ) {
-						return $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], $messageid, $inreplyto, $references, $subscriber );
+						$success_flag = $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], $messageid, $inreplyto, $references, $subscriber );
+						error_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
+
+						if ( ! $success_flag ) {
+							foreach ( $uploaded as $u ) {
+								unlink( $u['file'] );
+							}
+						}
+						return;
 					}
 				} else {
-					return $this->insert_post_comment( $existPostId, $userid, $body, $fromemail['name'], $fromemail['address'], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $subscriber );
+					$success_flag = $this->insert_post_comment( $existPostId, $userid, $body, $fromemail['name'], $fromemail['address'], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $subscriber );
+					error_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
+
+					if ( ! $success_flag ) {
+						foreach ( $uploaded as $u ) {
+							unlink( $u['file'] );
+						}
+					}
+					return;
 				}
 			}
 
