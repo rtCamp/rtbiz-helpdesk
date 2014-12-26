@@ -57,7 +57,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			add_action( 'wp_ajax_load_more_followup', array( $this, 'load_more_followup' ) );
 			add_action( 'wp_ajax_nopriv_load_more_followup', array( $this, 'load_more_followup' ) );
 
-			add_action( 'read_rt_mailbox_email_'.RT_HD_TEXT_DOMAIN, array( $this, 'process_email_to_ticket' ), 10, 14 );
+			add_action( 'read_rt_mailbox_email_'.RT_HD_TEXT_DOMAIN, array( $this, 'process_email_to_ticket' ), 10, 15 );
 
 		}
 
@@ -338,6 +338,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		public function process_email_to_ticket(
+			$from_email,
 			$title,
 			$body,
 			$fromemail,
