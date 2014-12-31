@@ -139,7 +139,7 @@ if ( isset( $post->ID ) ) {
 		global $rtbiz_offerings;
 		$products = array();
 		if ( ! empty( $rtbiz_offerings ) ) {
-			$products = wp_get_post_terms( $post->ID, $rtbiz_offerings->product_slug );
+			$products = wp_get_post_terms( $post->ID, Rt_Offerings::$offering_slug );
 		}
 		$base_url = add_query_arg( array( 'post_type' => $post->post_type ), admin_url( 'edit.php' ) );
 		if ( ! $products instanceof WP_Error && ! empty( $products ) ) { ?>
