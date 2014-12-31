@@ -60,12 +60,7 @@ jQuery( document ).ready( function ( $ ) {
 		jQuery('#edited_followup_content' ).val(jQuery(this ).parents().siblings('.rthd-comment-content' ).html().trim());
 		commentid=select.siblings('#followup-id' ).val();
 		var that = select.siblings( '#is-private-comment' ).val();
-		if (that && that=='true' || that == true){
-			jQuery('#edit-private' ).prop('checked',true);
-		}
-		else{
-			jQuery('#edit-private' ).prop('checked',false);
-		}
+		jQuery('#edit-private' ).val(that);
 		jQuery("#dialog-form").dialog().dialog("close");
 		jQuery( "#dialog-form" ).dialog({
 	        width :600,
@@ -95,7 +90,7 @@ jQuery( document ).ready( function ( $ ) {
 		requestArray['followup_ticket_unique_id']=jQuery('#ticket_unique_id' ).val();
 		//requestArray['followup_private']='no';
 		requestArray['followup_post_id']=jQuery('#post-id' ).val();
-		requestArray['followup_private']= jQuery('#edit-private').is(':checked') ;
+		requestArray['followup_private']= jQuery('#edit-private').val() ;
 		requestArray["followuptype"] = 'comment';
 		//requestArray["followup_post_id"] = jQuery( "#ticket_id" ).val();
 		//requestArray["follwoup-time"] = jQuery( "#follwoup-time" ).val();
@@ -150,7 +145,7 @@ jQuery( document ).ready( function ( $ ) {
 			return false;
 		}
 		var formData = new FormData(jQuery('#add_followup_form')[0]);
-		formData.append("private_comment", jQuery('#add-private-comment').is(':checked'));
+		formData.append("private_comment", jQuery('#add-private-comment').val());
         if(jQuery('#rthd_keep_status')){
             formData.append("rthd_keep_status", jQuery('#rthd_keep_status').is(':checked'));
         }
@@ -169,7 +164,7 @@ jQuery( document ).ready( function ( $ ) {
 		             //console.log(newcomment);
 		             jQuery('#chat-UI' ).append(newcomment);
 		             jQuery( "#followup_content" ).val( '' );
-		             jQuery('#add-private-comment' ).prop('checked',false );
+		             jQuery('#add-private-comment' ).val(0);
 		             var control = jQuery('#attachemntlist' );
 		             control.replaceWith( control = control.clone( true ) );
                      if (data.ticket_status=='answered'){
