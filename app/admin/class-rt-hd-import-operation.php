@@ -1279,11 +1279,11 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
                 $old_privacy=  $commentdata['comment_type'];
                 $commentdata['comment_type']= $comment_privacy;
                 // update_comment_meta( $_POST['comment_id'], '_rthd_privacy', $comment_privacy );
-				// error_log(var_export($commentdata,true). ": -> asddddd ", 3, "/var/www/dummytest.com/logs/my-errors.log");
 
 				wp_update_comment( $commentdata );
 
-				//todo check if comment_type can be updated
+				//todo: remove below line when comment wordpress start supporting comment_type edit
+				rthd_edit_comment_type( $commentdata['comment_ID'], $comment_privacy );
 
 				//				$old_privacy = get_comment_meta( $_POST['comment_id'], '_rthd_privacy' ,true );
 
@@ -1356,13 +1356,13 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				}
 
 				$returnArray['status']        = true;
-//				$returnArray['comment_count'] = get_comments(
-//					array(
-//						'order'     => 'DESC',
-//						'post_id'   => $comment_post_ID,
-//						'post_type' => $post_type,
-//						'count'     => true,
-//					) );
+				//				$returnArray['comment_count'] = get_comments(
+				//					array(
+				//						'order'     => 'DESC',
+				//						'post_id'   => $comment_post_ID,
+				//						'post_type' => $post_type,
+				//						'count'     => true,
+				//					) );
 				$returnArray['private']       = $comment->comment_type;
 				$returnArray['comment_content'] = wpautop( make_clickable( $comment->comment_content ) );
 				echo json_encode( $returnArray );
@@ -1399,7 +1399,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
             $commentdata['comment_type']= $comment_privacy;
             $comment_ID                      = wp_insert_comment( $commentdata );
 
-//			update_comment_meta( $comment_ID, '_rthd_privacy', $comment_privacy );
+			//			update_comment_meta( $comment_ID, '_rthd_privacy', $comment_privacy );
 
 			$comment = get_comment( $comment_ID );
 

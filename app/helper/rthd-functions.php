@@ -510,7 +510,6 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 
 	$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' ); //todo: find employee users if then only visible
 	$staffonly  = current_user_can( $cap );
-
 	//	$is_comment_private = get_comment_meta( $comment->comment_ID, '_rthd_privacy', true );
 	$private_text = '';
 	$display_private_comment_flag = false;
@@ -527,7 +526,7 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 			$is_comment_private = True;
 			break;
 		case Rt_HD_Import_Operation::$FOLLOWUP_STAFF:
-			if( $staffonly ){
+			if ( $staffonly ){
 				$display_private_comment_flag = true;
 			}
 			$private_text = 'Staff only';
@@ -795,4 +794,13 @@ function rthd_get_comment_type($comment_type_value){
         default:
             return 'undefined';
     }
+}
+
+
+function rthd_edit_comment_type( $Comment_ID, $value ){
+	global $wpdb;
+	$wpdb->query(
+		$wpdb->prepare( "UPDATE $wpdb->comments SET comment_type=%s WHERE comment_ID = %d", $value, $Comment_ID )
+	);
+
 }
