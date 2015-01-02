@@ -326,7 +326,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		 */
 		public function ticket_created_notification( $post_id, $post_type, $body, $allemail, $uploaded ) {
 			$redux = rthd_get_redux_settings();
-			$notificationFlag = ( $redux['rthd_notification_events']['new_ticket_created'] == 1 );
+			$notificationFlag = ( isset( $redux['rthd_notification_events']) && $redux['rthd_notification_events']['new_ticket_created'] == 1 );
 			$cc = array();
 			if ( $notificationFlag ) {
 				$cc = $this->get_notification_emails();
