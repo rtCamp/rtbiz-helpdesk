@@ -236,7 +236,6 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 				}
 				$offering_option .= '<option value="' . $tm->term_id . '" ' . ( ( ! empty( $_REQUEST['product_id'] ) && $term_offering_id == $_REQUEST['product_id'] ) ? 'selected="selected"' : '' ) . '> '.$tm->name.'</option>';
 				$offering_exists = true;
-				error_log(var_export($offering_exists,true). ": -> asddddd ", 3, "/var/www/dummytest.com/logs/my-errors.log");
 			}
 
 			rthd_get_template( 'support-form.php', array( 'product_exists' => $offering_exists, 'product_option' => $offering_option ) );
