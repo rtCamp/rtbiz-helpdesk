@@ -562,11 +562,10 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
                 <?php
                 }
                 if ( $is_comment_private == true ){
-	                echo "<span class='private_comment_span'> $private_text </span> |";
+	                echo "<span class='private_comment_span'> $private_text </span> | ";
                 }
                 ?>
-                <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . ' ago';
-?>
+	            <?php echo '<a class="followup-hash-url" id="followup_'.$comment->comment_ID.'" href="#followup_'.$comment->comment_ID.'" >'.esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . ' ago </a>';?>
 
             </time>
             </div>

@@ -60,9 +60,45 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			add_action( 'wp_ajax_helpdesk_delete_followup', array( $this, 'delete_followup_ajax' ) );
 			add_action( 'wp_ajax_load_more_followup', array( $this, 'load_more_followup' ) );
 			add_action( 'wp_ajax_nopriv_load_more_followup', array( $this, 'load_more_followup' ) );
-
+			add_action( 'wp_ajax_rthd_add_new_ticket_ajax', array( $this, 'add_new_ticket_ajax' ) );
+			add_action( 'wp_ajax_nopriv_rthd_add_new_ticket_ajax', array( $this, 'add_new_ticket_ajax' ) );
 			add_action( 'read_rt_mailbox_email_'.RT_HD_TEXT_DOMAIN, array( $this, 'process_email_to_ticket' ), 10, 15 );
 
+		}
+
+		function add_new_ticket_ajax(){
+			$result = array();
+
+			if ( !isset( $_POST['nonce'] ) && ! wp_verify_nonce( $_POST['nonce'], 'rt_hd_ticket_edit' ) ){
+				$result['status'] = false;
+				$result['msg'] = "Incorrect nonce";
+				echo json_encode( $result );
+				die();
+			}
+			if ( ! isset( $_POST['post_id'] ) && ! isset( $_POST['body'] ) ){
+				$result['status'] = false;
+				$result['msg'] = "Incorrect Param";
+				echo json_encode( $result );
+				die();
+			}
+			wp_update_post( array (
+				                'ID'           => $_POST['post_id'],
+				                'post_content' => rthd_content_filter( $_POST['body'] ),
+			                ) );
+			$subject = rthd_create_new_ticket_title( 'rthd_update_ticket_email_title', $_POST['post_id'] );
+			$body = "Ticket content updated : ". rthd_content_filter( $_POST['body'] );
+			$flag = false;
+			$redux = rthd_get_redux_settings();
+			if ( 1 != $redux['rthd_notification_events']['status_metadata_changed'] ){
+				$flag = false;
+			}
+			else{
+				$flag = true;
+			}
+			$this->notify_subscriber_via_email( $_POST['post_id'], $subject, $body, array(), $_POST['post_id'], $flag, false );
+			$result['status'] = true;
+			echo json_encode( $result );
+			die();
 		}
 
 		/**
@@ -1586,16 +1622,6 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					}
 				}
 			}
-			$beforeHTML = apply_filters( 'rthd_before_email_body', $body );
-			$afterHTML = apply_filters( 'rthd_after_email_body', $body );
-
-			if ( ! has_filter( 'rthd_before_email_body' ) ) {
-				$beforeHTML = '';
-			}
-			if ( ! has_filter( 'rthd_after_email_body' ) ) {
-				$afterHTML = '';
-			}
-
 			global $redux_helpdesk_settings, $rt_hd_email_notification;
 
 			if ( $contactFlag ) {

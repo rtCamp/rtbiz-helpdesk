@@ -151,12 +151,16 @@ ul#chat-UI {
 	padding: 0;
 	height: 200px;
 }
+.followup-hash-url{
+	text-decoration: none;
+	color: inherit;
+}
 
 .helpdeskspinner{
 	display:none;
 }
 
-#edited_followup_content{
+#edited_followup_content, #edited_ticket_content{
 	width:100%;
 }
 
@@ -198,8 +202,8 @@ ul#chat-UI {
 .rthd-clearfix {
 	clear: both;
 }
-.editfollowuplink{
-	color : #777
+.editfollowuplink ,.edit-ticket-link{
+	color : #777;
 }
 
 .load-more{

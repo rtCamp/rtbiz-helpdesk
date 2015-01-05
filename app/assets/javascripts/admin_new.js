@@ -17,8 +17,53 @@ jQuery(function () {
 	        rthdAdmin.initEditFollowUp();
 	        //rthdAdmin.initLoadMore();
 	        rthdAdmin.initLoadAll();
+	        rthdAdmin.initEditContent();
         },
 
+	    initEditContent: function(){
+		    jQuery('.edit-ticket-link' ).click(function(){
+			    jQuery("#edit-ticket-data").dialog().dialog("close");
+			    jQuery( "#edit-ticket-data" ).dialog({
+				                                         width :600,
+				                                         height:250
+			                                         });
+			    jQuery( "#edit-ticket-data" ).dialog( "open" );
+
+			    jQuery('#edited_ticket_content' ).html(jQuery(this ).closest('.ticketcontent' ).find('.rthd-comment-content' ).html());
+		    });
+
+		    jQuery('#edit-ticket-content-click' ).click(function(){
+			    var requestArray = new Object();
+			    requestArray['action']= 'rthd_add_new_ticket_ajax';
+			    requestArray['post_id']= jQuery('#post-id' ).val();
+			    requestArray['body']= jQuery('#edited_ticket_content' ).val();
+			    requestArray['nonce']= jQuery('#edit_ticket_nonce' ).val();
+			    jQuery('#ticket-edithdspinner' ).show();
+			    jQuery(this).attr('disabled','disabled');
+			    jQuery.ajax( {
+				                 url: ajaxurl,
+				                 type: 'POST',
+				                 dataType: 'json',
+				                 data: requestArray,
+				                 success: function ( data ) {
+					                 if(data.status){
+						                 jQuery("#edit-ticket-data").dialog().dialog("close");
+						                 jQuery('#ticket-edithdspinner' ).hide();
+						                 jQuery("#edit-ticket-content-click" ).removeAttr('disabled');
+						                 jQuery('.edit-ticket-link' ).closest('.ticketcontent' ).find('.rthd-comment-content' ).html( jQuery('#edited_ticket_content' ).val());
+					                 }
+					                 else{
+						                 console.log(data.msg);
+					                 }
+				                 },
+				                 error: function ( xhr, textStatus, errorThrown ) {
+					                 alert( "Error" );
+					                 jQuery('#ticket-edithdspinner' ).hide();
+					                 jQuery("#edit-ticket-content-click" ).removeAttr('disabled');
+				                 }
+			                 });
+		    });
+	    },
 	    initLoadAll: function(){
 		    jQuery('#followup-load-more, .load-more-block' ).click(function (e){
 			    e.preventDefault();
