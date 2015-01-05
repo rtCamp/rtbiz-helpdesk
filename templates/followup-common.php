@@ -17,7 +17,7 @@ $comments = get_comments( array(
 $cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
 $created_by = get_post_meta( $post->ID, '_rtbiz_hd_created_by', true );
 
-$user_edit_content = current_user_can( $cap ) || (get_current_user_id() == $post->$created_by );
+$user_edit_content = current_user_can( $cap ) || ( get_current_user_id() == $post->$created_by );
 if ( $user_edit_content ){
 	?>
    <div id="edit-ticket-data" title="Edit Ticket" style="display: none;">
@@ -64,10 +64,16 @@ if ( ! empty( $post->post_content ) ) {
                 <div class="followup-information">
                     <span title="<?php echo esc_attr( $authoremail ); ?>"><?php echo esc_attr( ( $authorname== '' ) ? 'Anonymous' : $authorname ); ?> </span>
                     <time title="<?php echo esc_attr( $post->post_date); ?>" datetime="<?php echo esc_attr( $post->post_date); ?>">
-	                   <?php if ( $user_edit_content ){
-	                    ?>
-	                    <a href="#" class="edit-ticket-link">Edit</a> |
-	                    <?php } ?>
+	                   <?php if ( $user_edit_content ) {
+		                   ?>
+		                   <a href="#" class="edit-ticket-link">Edit</a> |
+		                   <?php
+		                   $data = get_post_meta( $post->ID, 'rt_hd_original_email_body', true );
+		                   if ( ! empty( $data ) ) {
+			                   ?>
+			                   <a href="?show_original=true" class="show-original-email"> Show original email</a> |
+		                   <?php }
+	                   }?>
 	                    <?php echo esc_attr( human_time_diff( strtotime( $post->post_date), current_time( 'timestamp' ) ) ) . ' ago';
                         ?>
                     </time>
@@ -104,7 +110,7 @@ if ( ! empty( $post->post_content ) ) {
 
 	<?php
 	foreach ( $comments as $comment ) {
-		$user_edit = current_user_can( $cap ) || (get_current_user_id() == $comment->user_id );
+		$user_edit = current_user_can( $cap ) || ( get_current_user_id() == $comment->user_id );
 		$comment_user  = get_user_by( 'id', $comment->user_id );
 		$comment_render_type = 'left';
 		if ( ! empty( $comment_user ) ) {

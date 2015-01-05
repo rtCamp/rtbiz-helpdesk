@@ -559,7 +559,12 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
                 <?php if ($user_edit){
                     ?>
                     <a href="#" class="editfollowuplink">Edit</a> |
-                <?php
+	                <?php
+	                $data = get_comment_meta( $comment->comment_ID, 'rt_hd_original_email', true );
+	                if ( ! empty( $data ) ) {
+		                ?>
+		                <a href="?show_original=true&comment-id=<?php echo $comment->comment_ID;?> " class="show-original-email"> Show original email</a> |
+                <?php }
                 }
                 if ( $is_comment_private == true ){
 	                echo "<span class='private_comment_span'> $private_text </span> | ";

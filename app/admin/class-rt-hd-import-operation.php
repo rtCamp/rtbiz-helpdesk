@@ -62,7 +62,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			add_action( 'wp_ajax_nopriv_load_more_followup', array( $this, 'load_more_followup' ) );
 			add_action( 'wp_ajax_rthd_add_new_ticket_ajax', array( $this, 'add_new_ticket_ajax' ) );
 			add_action( 'wp_ajax_nopriv_rthd_add_new_ticket_ajax', array( $this, 'add_new_ticket_ajax' ) );
-			add_action( 'read_rt_mailbox_email_'.RT_HD_TEXT_DOMAIN, array( $this, 'process_email_to_ticket' ), 10, 15 );
+			add_action( 'read_rt_mailbox_email_'.RT_HD_TEXT_DOMAIN, array( $this, 'process_email_to_ticket' ), 10, 16 );
 
 		}
 
@@ -141,7 +141,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		public function insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $senderEmail, $messageid = '', $inreplyto = '', $references = '', $subscriber = array() ) {
+		public function insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $senderEmail, $messageid = '', $inreplyto = '', $references = '', $subscriber = array(), $originalBody = '' ) {
 			global $rt_hd_module, $rt_hd_tickets_operation, $rt_hd_ticket_history_model, $rt_hd_contacts;
 			$d             = new DateTime( $mailtime );
 			$timeStamp     = $d->getTimestamp();
@@ -171,7 +171,9 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			);
 
 			$post_id = $rt_hd_tickets_operation->ticket_default_field_update( $postArray, $dataArray, $post_type, '', $userid, $userid );
-
+			if ( '' != $originalBody ) {
+				add_post_meta( $post_id, 'rt_hd_original_email_body', $originalBody );
+			}
 			// Updating Post Status from publish to unanswered
 			$rt_hd_tickets_operation->ticket_default_field_update( array( 'post_status' => 'hd-unanswered', 'post_name' => $post_id ), array( 'post_status' => 'hd-unanswered' ), $post_type, $post_id, $userid, $userid );
 
@@ -393,7 +395,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$references = '',
 			$rt_all_emails  = array(),
 			$systemEmail = false,
-			$from_email = ''
+			$from_email = '',
+			$originalBody = ''
 		) {
 			//subscriber diff
 			$rtCampUser = Rt_HD_Utils::get_hd_rtcamp_user();
@@ -472,7 +475,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					$this->process_forward_email_data( $title, $body, $mailtime, $allemail, $mailBodyText, $dndEmails );
 				}
 
-				$success_flag = $this->insert_post_comment( $postid, $userid, $body, $fromemail['name'], $fromemail['address'], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $rt_all_emails , $subscriber);
+				$success_flag = $this->insert_post_comment( $postid, $userid, $body, $fromemail['name'], $fromemail['address'], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $rt_all_emails , $subscriber, $originalBody);
 
 				error_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
 
@@ -497,7 +500,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				}
 				//if given post title exits then it will be add as comment other wise as post
 				if ( $existPostId ) {
-					$success_flag = $this->insert_post_comment( $existPostId, $userid, $body, $fromemail['name'], $fromemail['address'], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $subscriber );
+					$success_flag = $this->insert_post_comment( $existPostId, $userid, $body, $fromemail['name'], $fromemail['address'], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $subscriber, $originalBody );
 					error_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
 
 					if ( ! $success_flag ) {
@@ -508,7 +511,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					return;
 				} else {
 					if ( $systemEmail ) {
-						$success_flag = $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], $messageid, $inreplyto, $references, $subscriber );
+						$success_flag = $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], $messageid, $inreplyto, $references, $subscriber, $originalBody );
 						error_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
 
 						if ( ! $success_flag ) {
@@ -525,7 +528,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				error_log( "Post Exists : ". var_export( $existPostId, true ) . "\r\n" );
 				if ( ! $existPostId ) {
 					if ( $systemEmail ) {
-						$success_flag = $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], $messageid, $inreplyto, $references, $subscriber );
+						$success_flag = $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], $messageid, $inreplyto, $references, $subscriber, $originalBody );
 						error_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
 
 						if ( ! $success_flag ) {
@@ -536,7 +539,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 						return;
 					}
 				} else {
-					$success_flag = $this->insert_post_comment( $existPostId, $userid, $body, $fromemail['name'], $fromemail['address'], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $subscriber );
+					$success_flag = $this->insert_post_comment( $existPostId, $userid, $body, $fromemail['name'], $fromemail['address'], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $subscriber, $originalBody );
 					error_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
 
 					if ( ! $success_flag ) {
@@ -711,7 +714,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		public function insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, $uploaded, $allemails, $dndEmails, $messageid = '', $inreplyto = '', $references = '', $rt_all_emails = array(), $subscriber = array() ) {
+		public function insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, $uploaded, $allemails, $dndEmails, $messageid = '', $inreplyto = '', $references = '', $rt_all_emails = array(), $subscriber = array(), $originalBody = '' ) {
 
 			$post_type       = get_post_type( $comment_post_ID );
 			$ticketModel     = new Rt_HD_Ticket_Model();
@@ -758,6 +761,9 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			}
 
 			$comment_id = wp_insert_comment( $data );
+			if ( '' != $originalBody ) {
+				add_comment_meta( $comment_id, 'rt_hd_original_email', $originalBody );
+			}
 			if ( '' != $messageid ) {
 				add_comment_meta( $comment_id, '_messageid', $messageid );
 			}

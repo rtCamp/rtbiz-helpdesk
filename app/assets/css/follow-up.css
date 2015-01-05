@@ -70,7 +70,7 @@ ul#chat-UI {
 	border-right-color: #FFC0CB;
 }
 
-.self .messages {
+.self .messages, .other .messages, .rt-hd-ticket-front-title{
 	word-wrap: break-word;
 	word-break: normal;
 }
@@ -202,7 +202,7 @@ ul#chat-UI {
 .rthd-clearfix {
 	clear: both;
 }
-.editfollowuplink ,.edit-ticket-link{
+.editfollowuplink ,.edit-ticket-link, .show-original-email{
 	color : #777;
 }
 
@@ -332,4 +332,8 @@ li.load-more-spinner-li {
 }
 .followup-information .private_comment_span{
 	color: red;
+}
+
+.rt_original_email{
+	word-wrap: break-word;
 }

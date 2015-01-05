@@ -15,6 +15,19 @@ $labels          = $rt_hd_module->labels;
 $post_id         = $post->ID;
 $user_edit       = false;
 
+$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
+$user_edit_content = current_user_can( $cap );
+
+if ( ! empty( $_REQUEST['show_original'] ) && 'true' === $_REQUEST['show_original'] && empty( $_REQUEST['comment-id'] ) && $user_edit_content ){
+	$data = get_post_meta( $post->ID, 'rt_hd_original_email_body', true );
+	echo '<div class="rt_original_email">'.wpautop($data) .'</div>';
+	die();
+}
+if ( ! empty( $_REQUEST['show_original'] ) && 'true' === $_REQUEST['show_original'] && ! empty( $_REQUEST['comment-id'] ) && $user_edit_content ){
+	$data = get_comment_meta( $_REQUEST['comment-id'], 'rt_hd_original_email', true );
+	echo '<div class="rt_original_email">'.wpautop($data) .'</div>';
+	die();
+}
 ?>
 	<div class="rthd-container rthd-clearfix">
 	<?php
@@ -33,7 +46,7 @@ $user_edit       = false;
 		<input type="hidden" id='ticket_unique_id' value="<?php echo esc_attr( $ticket_unique_id ); ?>"/>
 
 		<div>
-			<h2><?php echo esc_attr( ( isset( $post->ID ) ) ? '[#'.$post_id.'] '.$post->post_title : '' ); ?></h2>
+			<h2 class="rt-hd-ticket-front-title"><?php echo esc_attr( ( isset( $post->ID ) ) ? '[#'.$post_id.'] '.$post->post_title : '' ); ?></h2>
 		</div>
 		<br/><br/>
 		<?php if ( isset( $post->ID ) ) { ?>
