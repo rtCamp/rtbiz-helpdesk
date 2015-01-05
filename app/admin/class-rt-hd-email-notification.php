@@ -155,7 +155,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		 */
 		public function notification_new_ticket_assigned( $post_id, $assignee, $post_type, $contacts = array(), $uploaded = array(), $mail_parse = false ) {
 			$redux = rthd_get_redux_settings();
-			$notificationFlag = ( $redux['rthd_notification_events']['new_ticket_assigned'] == 1 ) ;
+			$notificationFlag = ( isset( $redux['rthd_notification_events']) && $redux['rthd_notification_events']['new_ticket_assigned'] == 1 ) ;
 			$cc = array();
 			if ( $notificationFlag ) {
 				$cc = $this->get_notification_emails();
@@ -204,7 +204,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		 */
 		public function notification_new_ticket_reassigned( $post_id, $oldassignee, $assignee, $post_type, $uploaded ) {
 			$redux = rthd_get_redux_settings();
-			$notificationFlag = ( $redux['rthd_notification_events']['new_ticket_reassigned'] == 1 ) ;
+			$notificationFlag = ( isset( $redux['rthd_notification_events']) && $redux['rthd_notification_events']['new_ticket_reassigned'] == 1 ) ;
 			$cc = array();
 			if ( $notificationFlag ) {
 				$cc = $this->get_notification_emails();
@@ -239,7 +239,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		 */
 		public function notification_ticket_subscribed( $post_id, $post_type, $newSubscriberList ) {
 			$redux = rthd_get_redux_settings();
-			$notificationFlag = ( $redux['rthd_notification_events']['ticket_subscribed'] == 1 ) ;
+			$notificationFlag = ( isset( $redux['rthd_notification_events']) && $redux['rthd_notification_events']['ticket_subscribed'] == 1 ) ;
 			$cc = array();
 			if ( $notificationFlag ) {
 				$cc = $this->get_notification_emails();
@@ -270,7 +270,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		 */
 		public function notification_ticket_unsubscribed( $post_id, $post_type, $oldSubscriberList  ) {
 			$redux = rthd_get_redux_settings();
-			$notificationFlag = ( $redux['rthd_notification_events']['ticket_unsubscribed'] == 1 ) ;
+			$notificationFlag = ( isset( $redux['rthd_notification_events']) && $redux['rthd_notification_events']['ticket_unsubscribed'] == 1 ) ;
 			$cc = array();
 			if ( $notificationFlag ) {
 				$cc = $this->get_notification_emails();
@@ -301,7 +301,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		 */
 		public function notification_ticket_updated( $post_id, $post_type, $body, $bccemails ) {
 			$redux = rthd_get_redux_settings();
-			$notificationFlag = ( $redux['rthd_notification_events']['status_metadata_changed'] == 1 ) ;
+			$notificationFlag = ( isset( $redux['rthd_notification_events']) && $redux['rthd_notification_events']['status_metadata_changed'] == 1 ) ;
 			$cc = array();
 			if ( $notificationFlag ) {
 				$cc = $this->get_notification_emails();
