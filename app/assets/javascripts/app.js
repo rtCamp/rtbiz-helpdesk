@@ -34,11 +34,6 @@ jQuery( document ).ready( function ( $ ) {
 		return this.length !== 0;
 	};
 	var hashflag = false;
-	if ( ! check_hash_call_hash() ){
-		console.log('fail');
-		hashflag = true;
-		jQuery('#followup-load-more' ).trigger('click');
-	}
 	jQuery('.edit-ticket-link' ).click(function(){
 		jQuery("#edit-ticket-data").dialog().dialog("close");
 		jQuery( "#edit-ticket-data" ).dialog({
@@ -291,6 +286,11 @@ jQuery( document ).ready( function ( $ ) {
 		             });
 
 	});
+
+	if ( ! check_hash_call_hash() ){
+		hashflag = true;
+		jQuery('#followup-load-more' ).trigger('click');
+	}
 
 } );
 

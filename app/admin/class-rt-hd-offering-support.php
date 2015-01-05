@@ -27,7 +27,6 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 		 * @since 0.1
 		 */
 		function __construct() {
-			error_log(var_export("HIS",true). ": -> asddddd ", 3, "/var/www/dummytest.com/logs/my-errors.log");
 			$this->hooks();
 		}
 
