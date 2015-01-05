@@ -370,15 +370,15 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 * @param array  $rt_all_emails
 		 * @param bool   $systemEmail
 		 *
-		 * @internal param $allemail
-		 * @internal param array $subscriber
+		 * @param string $from_email
 		 *
 		 * @return bool
+		 * @internal param $allemail
+		 * @internal param array $subscriber
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		public function process_email_to_ticket(
-			$from_email,
 			$title,
 			$body,
 			$fromemail,
@@ -392,7 +392,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$inreplyto = '',
 			$references = '',
 			$rt_all_emails  = array(),
-			$systemEmail = false
+			$systemEmail = false,
+			$from_email = ''
 		) {
 			//subscriber diff
 			$rtCampUser = Rt_HD_Utils::get_hd_rtcamp_user();

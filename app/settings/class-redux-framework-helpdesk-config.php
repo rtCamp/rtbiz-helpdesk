@@ -24,6 +24,8 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 		public $ReduxFramework;
 		static $page_slug = 'rthd-settings';
 
+		static $hd_opt = 'redux_helpdesk_settings';
+
 		public function __construct() {
 
 			if ( ! class_exists( 'ReduxFramework' ) ) {
@@ -493,7 +495,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			$author_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
 			$this->args = array(
 				// TYPICAL -> Change these values as you need/desire
-				'opt_name'           => 'redux_helpdesk_settings',
+				'opt_name'           => self::$hd_opt,
 				// This is where your data is stored in the database and also becomes your global variable name.
 				'display_name'       => __( 'Settings' ),
 				// Name that appears at the top of your panel
