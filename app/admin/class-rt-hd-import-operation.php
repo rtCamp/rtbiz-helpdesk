@@ -1601,14 +1601,15 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		/**
 		 * notify subscriber via email
 		 *
-		 * @param $post_id
-		 * @param $title
-		 * @param $body
-		 * @param $attachment
-		 * @param $comment_id
-		 * @param $notificationFlag
-		 * @param $contactFlag
+		 * @param       $post_id
+		 * @param       $subject
+		 * @param       $body
+		 * @param array $attachment
+		 * @param       $comment_id
+		 * @param       $notificationFlag
+		 * @param       $contactFlag
 		 *
+		 * @internal param $title
 		 * @since rt-Helpdesk 0.1
 		 */
 		function notify_subscriber_via_email( $post_id, $subject, $body, $attachment = array(), $comment_id, $notificationFlag, $contactFlag ) {

@@ -12,14 +12,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 
 
-if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
+if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 
 	/**
-	 * Class Rt_HD_Woocommerce_EDD
+	 * Class Rt_HD_Offering_Support
 	 * Provide wooCommerce & EDD integration with HelpDesk for product support
 	 *
 	 */
-	class Rt_HD_Woocommerce_EDD {
+	class Rt_HD_Offering_Support {
 
 		/**
 		 * construct
@@ -27,6 +27,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 		 * @since 0.1
 		 */
 		function __construct() {
+			error_log(var_export("HIS",true). ": -> asddddd ", 3, "/var/www/dummytest.com/logs/my-errors.log");
 			$this->hooks();
 		}
 
