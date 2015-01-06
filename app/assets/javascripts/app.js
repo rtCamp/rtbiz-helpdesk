@@ -23,11 +23,7 @@ jQuery( document ).ready( function ( $ ) {
 	});*/
 
 	function check_hash_call_hash(){
-		var hash  = jQuery( window.location.hash ).exists();
-		if ( ! hash ){
-			return false;
-		}
-		return true;
+		return jQuery( window.location.hash ).exists();
 	}
 
 	$.fn.exists = function () {
@@ -286,10 +282,10 @@ jQuery( document ).ready( function ( $ ) {
 		             });
 
 	});
-
-	if ( ! check_hash_call_hash() ){
+	var hashcheck = check_hash_call_hash();
+	if ( !hashcheck  && window.location.hash.length !== 0 ){
 		hashflag = true;
-		jQuery('#followup-load-more' ).trigger('click');
+		jQuery( '#followup-load-more' ).trigger( 'click' );
 	}
 
 } );
