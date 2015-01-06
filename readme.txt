@@ -16,6 +16,15 @@ rtBiz Helpdesk is a premium addon of [rtBiz](https://wordpress.org/plugins/rtbiz
 
 rtBiz Helpdesk very smoothly integrates with [Easy Digital Downloads](https://wordpress.org/plugins/easy-digital-downloads) /  [WooCommerce](https://wordpress.org/plugins/woocommerce).
 
+** Features: **
+
+- Tickets
+- Followups
+- Reply-by-Email
+- Support Mailbox
+- Email Notifications
+- ACL
+
 ** License **
 
 Same [GPL] (http://www.gnu.org/licenses/gpl-2.0.txt) that WordPress uses!
