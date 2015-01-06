@@ -72,7 +72,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				'ccemail'       => serialize( $ccemail ),
 				'bccemail'      => serialize( $bccemail ),
 				'subject'       => $subject,
-				'body'          => rthd_content_filter( $htmlbody ) . '<br/>' . ( ( ! empty( $signature ) ) ? '<div style="color:#666;">' . $signature . '</div>' : '' ) . '<br/>' ,
+				'body'          => ( $htmlbody ) . '<br/>' . ( ( ! empty( $signature ) ) ? '<div style="color:#666;">' . $signature . '</div>' : '' ) . '<br/>' ,
 				'attachement'   => serialize( $attachement ),
 				'refrence_id'   => $refrence_id,
 				'refrence_type' => $refrence_type,

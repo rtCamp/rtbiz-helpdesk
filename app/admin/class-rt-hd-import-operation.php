@@ -812,8 +812,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			global $threadPostId;
 			if ( ! isset( $threadPostId ) ) {
 				$title = rthd_create_new_ticket_title( 'rthd_new_followup_email_title', $comment_post_ID );;
-				$body = '<span style="color:#777">< ! ------------------ REPLY ABOVE THIS LINE ------------------ ! ></span><br />';
-				$body  .= '<br/><strong>New Followup Added by ' . $comment_author . ' - ' . $comment_author_email . ':</strong>';
+				//				$body = '<span style="color:#777">< ! ------------------ REPLY ABOVE THIS LINE ------------------ ! ></span><br />';
+				$body  = '<br/><strong>New Followup Added by ' . $comment_author . ' - ' . $comment_author_email . ':</strong>';
 				$body .= '<br/><b>Type : </b>' . 'Mail';
 				$body .= '<br/><b>From : </b>' . $comment_author_email;
 				$body .= '<br/><b>Body : </b>' . rthd_content_filter( $comment_content );
@@ -1215,11 +1215,11 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 			$title = rthd_create_new_ticket_title( 'rthd_new_followup_email_title', $comment_post_ID );;
 
-			$body = '<span style="color:#777">< ! ------------------ REPLY ABOVE THIS LINE ------------------ ! ></span><br />';
+			//			$body = '<span style="color:#777">< ! ------------------ REPLY ABOVE THIS LINE ------------------ ! ></span><br />';
 			if ( $comment_privacy == 'true' ){
-				$body .= '<br /> A private followup has been added ' . ( ( ! empty( $currentUser->display_name ) ) ? 'by ' . $currentUser->display_name : 'annonymously' ) .'. Please go to link and login to view the message.';
+				$body = '<br /> A private followup has been added ' . ( ( ! empty( $currentUser->display_name ) ) ? 'by ' . $currentUser->display_name : 'annonymously' ) .'. Please go to link and login to view the message.';
 			}else {
-				$body .= '<br /><strong>New Followup Added ' . ( ( ! empty( $currentUser->display_name ) ) ? 'by ' . $currentUser->display_name : 'annonymously' ) . ':</strong><br />';
+				$body = '<br /><strong>New Followup Added ' . ( ( ! empty( $currentUser->display_name ) ) ? 'by ' . $currentUser->display_name : 'annonymously' ) . ':</strong><br />';
 				$body .= '<br/>' . rthd_content_filter( $comment->comment_content );
 			}
 			$body .= '<br/>';
@@ -1547,7 +1547,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$currentUser = get_user_by( 'id', get_current_user_id() );
 			$title       = rthd_create_new_ticket_title( 'rthd_new_followup_email_title', $comment_post_ID );
 
-//			$body = '<span style="color:#777">< ! ------------------ REPLY ABOVE THIS LINE ------------------ ! ></span><br />';
+			//			$body = '<span style="color:#777">< ! ------------------ REPLY ABOVE THIS LINE ------------------ ! ></span><br />';
 			$body = '<br/><strong>New Followup Added by ' . $currentUser->display_name.':</strong><br />';
 			if ( 'mail' == $followuptype ) {
 				$body .= '<br/><b>From : </b>' . $_POST['comment-reply-from'];
@@ -1645,7 +1645,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				global $rt_hd_module;
 				$labels = $rt_hd_module->labels;
 
-				$title     = $rt_hd_email_notification->get_email_title( $post_id, $labels['name'] );
+				$title     = '<span style="color:#777">'.htmlentities('< ! ------------------ REPLY ABOVE THIS LINE ------------------ ! >').'</span><br /> '.$rt_hd_email_notification->get_email_title( $post_id, $labels['name'] );
 				$rt_hd_email_notification->insert_new_send_email( $subject, $title, $body, $tocontact, array(), array(), $attachment, $comment_id, 'comment' );
 
 			}
@@ -1660,9 +1660,10 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			}
 			$post_author_id = get_post_field( 'post_author', $post_id );
 			$userSub     = get_user_by( 'id', intval( $post_author_id ) );
+			global $rt_hd_module;
+			$labels = $rt_hd_module->labels;
 			$to[] = array( 'email' => $userSub->user_email, 'name' => $userSub->display_name );
-			$title = '<span style="color:#777">< ! ------------------ REPLY ABOVE THIS LINE ------------------ ! ></span><br />';
-			$title .= '<div style="font-style:italic;color:#666">View ticket online: <a href="'.  ( rthd_is_unique_hash_enabled() ? rthd_get_unique_hash_url( $post_id ) : get_post_permalink( $post_id ) ) .'">click here </a></div>';
+			$title = '<span style="color:#777">'.htmlentities('< ! ------------------ REPLY ABOVE THIS LINE ------------------ ! >').'</span><br />'.$rt_hd_email_notification->get_email_title( $post_id, $labels['name'] ); ;
 
 			$rt_hd_email_notification->insert_new_send_email( $subject, $title, $body, $to, $cc, $bccemails, $attachment, $comment_id, 'comment' );
 		}
