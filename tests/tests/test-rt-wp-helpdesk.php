@@ -29,14 +29,7 @@ class test_RT_WP_Help_desk extends RT_WP_TestCase {
 	 */
 	function test_check_class_exist() {
 
-		$this->assertTrue( class_exists( 'Rt_HD_Mail_Accounts_Model' ), 'Class Rt_HD_Mail_Accounts_Model does not exist' );
 		$this->assertTrue( class_exists( 'Rt_HD_Mail_ACL_Model' ), 'Class Rt_HD_Mail_ACL_Model does not exist' );
-		$this->assertTrue( class_exists( 'Rt_HD_Mail_Thread_Importer_Model' ), 'Class Rt_HD_Mail_Thread_Importer_Model does not exist' );
-		$this->assertTrue( class_exists( 'Rt_HD_Mail_Message_Model' ), 'Class Rt_HD_Mail_Message_Model does not exist' );
-		$this->assertTrue( class_exists( 'Rt_HD_Mail_Outbound_Model' ), 'Class Rt_HD_Mail_Outbound_Model does not exist' );
-		$this->assertTrue( class_exists( 'Rt_HD_Gravity_Fields_Mapping_Model' ), 'Class Rt_HD_Gravity_Fields_Mapping_Model does not exist' );
-		$this->assertTrue( class_exists( 'Rt_HD_Ticket_History_Model' ), 'Class Rt_HD_Ticket_History_Model does not exist' );
-		$this->assertTrue( class_exists( 'Rt_HD_IMAP_Server_Model' ), 'Class Rt_HD_IMAP_Server_Model does not exist' );
 
 
 		$this->assertTrue( class_exists( 'Rt_Form' ), 'Class Rt_Form does not exist' );
@@ -56,13 +49,10 @@ class test_RT_WP_Help_desk extends RT_WP_TestCase {
 		$this->assertTrue( class_exists( 'RT_HD_Email_Notification' ), 'Class RT_HD_Email_Notification does not exist' );
 
 		$this->assertTrue( class_exists( 'Redux_Framework_Helpdesk_Config' ), 'Class Redux_Framework_Helpdesk_Config does not exist' );
-		$this->assertTrue( class_exists( 'RT_HD_Setting_Inbound_Email' ), 'Class RT_HD_Setting_Inbound_Email does not exist' );
 		$this->assertTrue( class_exists( 'Rt_HD_Import_Operation' ), 'Class Rt_HD_Import_Operation does not exist' );
-		$this->assertTrue( class_exists( 'RT_HD_Setting_Imap_Server' ), 'Class RT_HD_Setting_Imap_Server does not exist' );
 
 		$this->assertTrue( class_exists( 'Rt_HD_Gravity_Form_Importer' ), 'Class Rt_HD_Gravity_Form_Importer does not exist' );
 		$this->assertTrue( class_exists( 'Rt_HD_Gravity_Form_Mapper' ), 'Class Rt_HD_Gravity_Form_Mapper does not exist' );
-		$this->assertTrue( class_exists( 'Rt_HD_Settings' ), 'Class Rt_HD_Settings does not exist' );
 		$this->assertTrue( class_exists( 'Rt_HD_User_Settings' ), 'Class Rt_HD_User_Settings does not exist' );
 		$this->assertTrue( class_exists( 'Rt_HD_Logs' ), 'Class Rt_HD_Logs does not exist' );
 
@@ -77,8 +67,8 @@ class test_RT_WP_Help_desk extends RT_WP_TestCase {
 	 * Ensure that required function exist
 	 */
 	function  test_check_function() {
-		$this->assertTrue( method_exists( $this->rtwpHelpDesk, 'check_rt_biz_dependecy' ), 'Class RT_WP_Helpdesk does not have method check_rt_biz_dependecy' );
-		$this->assertTrue( method_exists( $this->rtwpHelpDesk, 'admin_notice_rtbiz_not_installed' ), 'Class RT_WP_Helpdesk does not have method rt_biz_admin_notice' );
+		$this->assertTrue( function_exists( 'rthd_admin_notice_dependency_not_installed' ) , 'Helpdesk does not have method rt_biz_admin_notice' );
+		$this->assertTrue( function_exists( 'rthd_check_plugin_dependecy' ) , 'Helpdesk does not have method rthd_check_plugin_dependecy' );
 		$this->assertTrue( method_exists( $this->rtwpHelpDesk, 'init_globals' ), 'Class RT_WP_Helpdesk does not have method init_globals' );
 		$this->assertTrue( method_exists( $this->rtwpHelpDesk, 'admin_init' ), 'Class RT_WP_Helpdesk does not have method admin_init' );
 		$this->assertTrue( method_exists( $this->rtwpHelpDesk, 'update_database' ), 'Class RT_WP_Helpdesk does not have method update_database' );
@@ -92,7 +82,7 @@ class test_RT_WP_Help_desk extends RT_WP_TestCase {
 	 * Ensure that rtbiz dependecy & it's function
 	 */
 	function test_check_rt_biz_dependecy() {
-		$this->assertTrue( $this->rtwpHelpDesk->check_rt_biz_dependecy(), 'rtbiz depend function not exist' );
+		$this->assertTrue( rthd_check_plugin_dependecy(), 'rtbiz depend function not exist' );
 	}
 }
  
