@@ -73,7 +73,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
                        'meta_value'  => $created_by->user_email,
                        'post_type'   => $this->order_post_type,
                        'order'       => 'ASC',
-                       'post_status' => 'any',
+                       'post_status' => 'wc-completed',
 					) );
 				} else if ( $this->iseddActive ) {
 					$payments = get_posts( array(
@@ -82,7 +82,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 					   'meta_value'  => $created_by->user_email,
 					   'post_type'   => $this->order_post_type,
 					   'order'       => 'ASC',
-					   'post_status' => 'any',
+					   'post_status' => 'publish',
 					) );
 				}
 				if ( ! empty( $payments ) ) {
