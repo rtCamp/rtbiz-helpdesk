@@ -59,7 +59,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			}
 			$htmlbody = $title.'<hr />'. $beforeHTML . $body . $afterHTML .'<hr/>';
 			$settings = rthd_get_redux_settings();
-
+			$attachments = wp_list_pluck( $attachement, 'file' );
 			$toemail = $this->filter_user_notification_preference( $toemail );
 			$ccemail = $this->filter_user_notification_preference( $ccemail );
 			$bccemail = $this->filter_user_notification_preference( $bccemail );
@@ -73,7 +73,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				'bccemail'      => serialize( $bccemail ),
 				'subject'       => $subject,
 				'body'          => ( $htmlbody ) . '<br/>' . ( ( ! empty( $signature ) ) ? '<div style="color:#666;">' . $signature . '</div>' : '' ) . '<br/>' ,
-				'attachement'   => serialize( $attachement ),
+				'attachement'   => serialize( $attachments ),
 				'refrence_id'   => $refrence_id,
 				'refrence_type' => $refrence_type,
 			);

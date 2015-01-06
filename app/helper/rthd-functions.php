@@ -640,7 +640,7 @@ function rthd_content_filter( $content ) {
 	return wpautop( wp_kses_post( balanceTags( make_clickable( $content ), true ) ) );
 }
 
-function rthd_toggle_status($postid){
+function rthd_toggle_status( $postid ){
     $post = get_post($postid);
     $authorcap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
     if (  current_user_can( $authorcap ) ) {
