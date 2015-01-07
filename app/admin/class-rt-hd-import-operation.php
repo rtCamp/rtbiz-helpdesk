@@ -1224,7 +1224,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			}
 			$body .= '<br/>';
 			$notificationFlag = $this->check_setting_for_new_followup_email();
-			$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, $attachment, $comment_ID, $notificationFlag, true );
+			$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, $uploaded, $comment_ID, $notificationFlag, true );
 
 			$returnArray['status']        = true;
 

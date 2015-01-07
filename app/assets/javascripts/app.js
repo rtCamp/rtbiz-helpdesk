@@ -202,8 +202,18 @@ jQuery( document ).ready( function ( $ ) {
 			jQuery(this).removeAttr('disabled');
 			return false;
 		}
-		var formData = new FormData(jQuery('#add_followup_form')[0]);
+		var formData = new FormData();
 		formData.append("private_comment", jQuery('#add-private-comment').val());
+		formData.append("followup_ticket_unique_id", jQuery('#ticket_unique_id').val());
+		formData.append("post_type", jQuery('#post_type').val());
+		formData.append("action", jQuery('#action').val());
+		formData.append("followuptype", jQuery('#followuptype').val());
+		formData.append("follwoup-time", jQuery('#follwoup-time').val());
+		formData.append("followup_content", jQuery('#followup_content').val());
+		var files = jQuery('#attachemntlist')[0];
+		jQuery.each(jQuery("#attachemntlist")[0].files, function(i, file) {
+			formData.append('attachemntlist['+i+']', file);
+		});
         if(jQuery('#rthd_keep_status')){
             formData.append("rthd_keep_status", jQuery('#rthd_keep_status').is(':checked'));
         }
