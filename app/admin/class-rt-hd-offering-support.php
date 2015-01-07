@@ -123,17 +123,24 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 		}
 
 		function edd_action_link_header() {
-			?>
-			<th class="edd_rt_hd_support"><?php _e( 'Support', 'edd' ); ?></th>
+			global $redux_helpdesk_settings;
+			if ( isset( $redux_helpdesk_settings['rthd_support_page'] ) && ! empty( $redux_helpdesk_settings['rthd_support_page'] ) ) {
+				?>
+				<th class="edd_rt_hd_support"><?php _e( 'Support', 'edd' ); ?></th>
 			<?php
+			}
 		}
 
 		function edd_support_link( $payment_id, $download_id ) {
 			global $redux_helpdesk_settings;
-			$page = get_post( $redux_helpdesk_settings['rthd_support_page'] );
-			?>
-			<td class="edd_rt_hd_support"><a href="<?php echo "/{$page->post_name}/?product_id={$download_id}&order_id={$payment_id}&order_type=edd"; ?>"><?php _e( 'Get Support', RT_HD_TEXT_DOMAIN ) ?></a></td>
+			if ( isset( $redux_helpdesk_settings['rthd_support_page'] ) && ! empty( $redux_helpdesk_settings['rthd_support_page'] ) ) {
+				$page = get_post( $redux_helpdesk_settings[ 'rthd_support_page' ] );
+				?>
+				<td class="edd_rt_hd_support"><a
+						href="<?php echo "/{$page->post_name}/?product_id={$download_id}&order_id={$payment_id}&order_type=edd"; ?>"><?php _e( 'Get Support', RT_HD_TEXT_DOMAIN ) ?></a>
+				</td>
 			<?php
+			}
 		}
 
 		/**
@@ -150,14 +157,14 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 		 */
 		function wocommerce_actions_link( $actions, $order ) {
 			global $redux_helpdesk_settings;
-			$page               = get_post( $redux_helpdesk_settings['rthd_support_page'] );
-			$actions['support'] = array(
-				'url'  => "/{$page->post_name}/?order_id={$order->id}&order_type=woocommerce",
-				'name' => __( 'Get Support', RT_HD_TEXT_DOMAIN )
-			);
-
+			if ( isset( $redux_helpdesk_settings['rthd_support_page'] ) && ! empty( $redux_helpdesk_settings['rthd_support_page'] ) ) {
+				$page                 = get_post( $redux_helpdesk_settings[ 'rthd_support_page' ] );
+				$actions[ 'support' ] = array(
+					'url'  => "/{$page->post_name}/?order_id={$order->id}&order_type=woocommerce",
+					'name' => __( 'Get Support', RT_HD_TEXT_DOMAIN )
+				);
+			}
 			return $actions;
-
 		}
 
 
@@ -209,28 +216,38 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 				$terms = get_terms( Rt_Offerings::$offering_slug, array( 'hide_empty' => 0 ) );
 			}
 			$offering_exists = false;
+			$wrong_user_flag = false;
 			foreach ( $terms as $tm ) {
 				$term_offering_id = '';
+				$loggedin_id = get_current_user_id();
 				if ( isset( $_REQUEST['order_id'] ) && $this->order_post_type == get_post_type( $_REQUEST['order_id'] ) ) {
 					if ( $this->isWoocommerceActive ) {
 						$order = new WC_Order( $_REQUEST['order_id'] );
-						if ( !empty( $order ) ) {
-							$items = $order->get_items();
-							$product_ids = wp_list_pluck( $items, 'product_id' );
-							$term_offering_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $tm->term_id, Rt_Offerings::$term_meta_key , true );
-							if ( ! in_array( $term_offering_id, $product_ids ) ) {
-								continue;
+						if ( $loggedin_id = $order->get_user_id() ) {
+							if ( ! empty( $order ) ) {
+								$items            = $order->get_items();
+								$product_ids      = wp_list_pluck( $items, 'product_id' );
+								$term_offering_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $tm->term_id, Rt_Offerings::$term_meta_key, true );
+								if ( ! in_array( $term_offering_id, $product_ids ) ) {
+									continue;
+								}
 							}
+						} else {
+							$wrong_user_flag = true;
 						}
 					} else if ( $this->iseddActive ) {
 						$payment = get_post( $_REQUEST['order_id'] );
-						if ( !empty( $payment ) ) {
-							$items = edd_get_payment_meta_downloads( $payment->ID );
-							$product_ids = wp_list_pluck( $items, 'id' );
-							$term_offering_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $tm->term_id, Rt_Offerings::$term_meta_key, true );
-							if ( ! in_array( $term_offering_id, $product_ids ) ) {
-								continue;
+						if ( $loggedin_id == $payment->post_author ) {
+							if ( ! empty( $payment ) ) {
+								$items            = edd_get_payment_meta_downloads( $payment->ID );
+								$product_ids      = wp_list_pluck( $items, 'id' );
+								$term_offering_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $tm->term_id, Rt_Offerings::$term_meta_key, true );
+								if ( ! in_array( $term_offering_id, $product_ids ) ) {
+									continue;
+								}
 							}
+						} else {
+							$wrong_user_flag = true;
 						}
 					}
 				}
@@ -238,7 +255,12 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 				$offering_exists = true;
 			}
 
-			rthd_get_template( 'support-form.php', array( 'product_exists' => $offering_exists, 'product_option' => $offering_option ) );
+			if ( $wrong_user_flag ){
+				echo '<span> You have not placed this order, Please login from account that placed this order. </span>';
+			}
+			else {
+				rthd_get_template( 'support-form.php', array( 'product_exists' => $offering_exists, 'product_option' => $offering_option ) );
+			}
 			return apply_filters( 'rt_hd_support_form_shorcode', ob_get_clean(), $attr );
 		}
 
