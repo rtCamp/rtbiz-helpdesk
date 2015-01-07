@@ -402,6 +402,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 					'email' => '',
 					'user'  => '',
 					'order' => '',
+					'show_support_form_link' => 'no',
 				), $atts );
 
 			$args    = array(
@@ -451,7 +452,15 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 
 			<?php
 			printf( _n( 'One Ticket Found.', '%d Tickets Found.', count( $tickets ), 'my-RT_HD_TEXT_DOMAIN-domain' ), count( $tickets ) );
-			?>
+			if ( 'yes' == $arg_shortcode['show_support_form_link'] ) {
+				global $redux_helpdesk_settings;
+				if ( isset( $redux_helpdesk_settings['rthd_support_page'] ) && ! empty( $redux_helpdesk_settings['rthd_support_page'] ) ) {
+					$page    = get_post( $redux_helpdesk_settings['rthd_support_page'] );
+					?>
+					<a href="<?php echo "/{$page->post_name}"; ?>"><?php _e( '(Get Support)', RT_HD_TEXT_DOMAIN ) ?></a>
+				<?php
+				}
+			}?>
 			<table class="shop_table my_account_orders">
 				<tr>
 					<th>Ticket ID</th>
