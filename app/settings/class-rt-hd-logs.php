@@ -95,7 +95,9 @@ if ( ! class_exists( 'Rt_HD_Logs' ) ) {
 			}
 			$taxmeta = $wpdb->prefix . 'taxonomymeta';
 			$post_type = Rt_HD_Module::$post_type;
-			$sql         = $wpdb->prepare( "select p.meta_value as trans_id from (select distinct meta_value from $wpdb->posts as p left join $wpdb->postmeta as m on p.ID = m.post_id where p.post_type=$post_type m.meta_key like '_transaction_id' order by convert(meta_value, UNSIGNED INTEGER) desc limit %d, %d) as p;", $left, $size );
+
+			$sql         = $wpdb->prepare( 'select gf2.meta_value as trans_id from ' . RGFormsModel::get_lead_meta_table_name() . ' as gf1, ' . RGFormsModel::get_lead_meta_table_name() . " as gf2 where gf1.meta_key LIKE 'helpdesk-" . $post_type . "-post-id' and gf2.meta_key LIKE '_transaction_id' and gf1.lead_id = gf2.lead_id group by convert( gf2.meta_value, UNSIGNED INTEGER) order by convert( gf2.meta_value, UNSIGNED INTEGER) desc limit %d, %d", $left, $size );
+			//$sql         = $wpdb->prepare( "select p.meta_value as trans_id from (select distinct meta_value from $wpdb->posts as p left join $wpdb->postmeta as m on p.ID = m.post_id where p.post_type=$post_type m.meta_key like '_transaction_id' order by convert(meta_value, UNSIGNED INTEGER) desc limit %d, %d) as p;", $left, $size );
 			$result      = $wpdb->get_results( $sql );
 			?>
 			<br/>
@@ -105,9 +107,9 @@ if ( ! class_exists( 'Rt_HD_Logs' ) ) {
 					<th>
 						<?php _e( 'Transaction Id', RT_HD_TEXT_DOMAIN ); ?>
 					</th>
-					<th>
-						<?php _e( 'Title', RT_HD_TEXT_DOMAIN ); ?>
-					</th>
+<!--					<th>-->
+<!--						--><?php //_e( 'Title', RT_HD_TEXT_DOMAIN ); ?>
+<!--					</th>-->
 					<th>
 						<?php _e( 'First Date', RT_HD_TEXT_DOMAIN ); ?>
 					</th>
@@ -136,12 +138,12 @@ if ( ! class_exists( 'Rt_HD_Logs' ) ) {
 						<td>
 							<?php echo esc_attr( $rslt->trans_id ); ?>
 						</td>
-						<td>
-							<?php
-								$title = $wpdb->get_var( "select a.post_title from $wpdb->posts a left join $wpdb->postmeta b on b.post_id=a.id where b.meta_value=$rslt->trans_id limit 1" );
-								echo ( ! empty( $title ) ) ? $title : "-NA-";
-							?>
-						</td>
+<!--						<td>-->
+<!--							--><?php
+//								$title = $wpdb->get_var( "select a.post_title from $wpdb->posts a left join $wpdb->postmeta b on b.post_id=a.id where b.meta_value=$rslt->trans_id and b.post_id=$rslt->post_id limit 1" );
+//								echo ( ! empty( $title ) ) ? $title : "-NA-";
+//							?>
+<!--						</td>-->
 						<td>
 							<?php
 								$first_date = $wpdb->get_var( "select a.post_date from $wpdb->posts a left join $wpdb->postmeta b on b.post_id=a.id where b.meta_value=$rslt->trans_id order by a.post_date asc limit 1" );

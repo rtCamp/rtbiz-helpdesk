@@ -406,8 +406,6 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			}
 			$subscriber = array();
 			$allemail = array();
-			echo  var_export($allemails,true)."all users ";
-			echo  var_export($hdUser,true)."hd users ";
 			foreach ( $allemails as $mail ) {
 				if ( ! array_key_exists( $mail['address'], $hdUser ) ) {
 					$allemail[]= $mail;
@@ -416,7 +414,6 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				}
 			}
 
-			echo  var_export($subscriber,true)."Subscriber ";
 			global $rt_hd_contacts;
 
 			if ( empty( $userid ) ) {
@@ -434,7 +431,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					}
 				}
 
-				return;
+				return $success_flag;
 			}
 			//-----------------------------------------------------------------------------//
 			global $threadPostId;
@@ -485,7 +482,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					}
 				}
 
-				return;
+				return $success_flag;
 			}
 			//if subject is re to post title
 
@@ -508,7 +505,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 							unlink( $u['file'] );
 						}
 					}
-					return;
+					return $success_flag;
 				} else {
 					if ( $systemEmail ) {
 						$success_flag = $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], $messageid, $inreplyto, $references, $subscriber, $originalBody );
@@ -519,7 +516,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 								unlink( $u['file'] );
 							}
 						}
-						return;
+						return $success_flag;
 					}
 				}
 			} else {
@@ -536,7 +533,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 								unlink( $u['file'] );
 							}
 						}
-						return;
+						return $success_flag;
 					}
 				} else {
 					$success_flag = $this->insert_post_comment( $existPostId, $userid, $body, $fromemail['name'], $fromemail['address'], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $subscriber, $originalBody );
@@ -547,7 +544,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 							unlink( $u['file'] );
 						}
 					}
-					return;
+					return $success_flag;
 				}
 			}
 
