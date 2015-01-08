@@ -54,6 +54,11 @@ jQuery(document).ready(function ($) {
 	</div>
 
 	<div>
+		<input type="checkbox" name="post[adult_ticket]" value="1" />
+		<span class="description"><?php _e( 'Adult Content', RT_HD_TEXT_DOMAIN ); ?></span>
+	</div>
+
+	<div>
 		<input type="file" id="filesToUpload" name="attachment[]" multiple="multiple"/>
 		<ul id="fileList">
 			<li>No Files Selected</li>

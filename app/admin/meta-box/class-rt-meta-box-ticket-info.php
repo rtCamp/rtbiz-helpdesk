@@ -173,6 +173,20 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 				       value="<?php echo esc_attr( $modifydate ); ?>" title="<?php echo esc_attr( $modifydate ); ?>"
 				       readonly="readonly">
 			</div>
+			<?php
+			//adult content
+			$text = '';
+			$val = rthd_get_adult_ticket_meta( $post->ID );
+				if ( 'yes' == $val ){
+					$text = 'checked="checked"';
+				}
+			?>
+			<div class="row_group">
+				<span class="prefix"
+				      title="<?php _e( 'Adult Content', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Adult Content', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
+				<input type="checkbox" name="post[adult_ticket]" style="width: auto" <?php echo $text; ?>
+				       value="1">
+			</div>
 
 			<?php
 			$rthd_unique_id = get_post_meta( $post->ID, '_rtbiz_hd_unique_id', true );
@@ -218,6 +232,10 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
             }
 			$newTicket = ( array ) $newTicket;
 
+			//Adult Content
+			if ( $newTicket['adult_ticket'] ){
+				rthd_save_adult_ticket_meta( $post_id, 'yes' );
+			}
 			//Create Date
 			$creationdate = $newTicket['post_date'];
 			if ( isset( $creationdate ) && $creationdate != '' ) {

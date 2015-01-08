@@ -277,6 +277,36 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 			add_action( 'rt_attributes_relations_deleted', array( $this, 'update_ticket_table' ), 10, 1 );
 
 			add_action( 'wp_before_admin_bar_render', array( $this, 'ticket_chnage_action_publish_update' ), 11 );
+			add_action( 'parse_query', array( $this, 'adult_post_filter' ) );
+		}
+
+
+		/**
+		 * Filter adult pref
+		 * @param $query
+		 */
+		function adult_post_filter( $query ){
+
+			if ( is_admin() && $query->query['post_type']== self::$post_type ) {
+				$qv = &$query->query_vars;
+
+				$current_user = get_current_user_id();
+				$pref = rthd_get_user_adult_preference( $current_user );
+				if ( 'no' == $pref ){
+					$qv['meta_query'] = array(
+						'relation' => 'OR',
+						array(
+							'key'     => 'rthd_ticket_adult_content',
+							'compare' => 'NOT EXISTS',
+						),
+						array(
+							'key'     => 'rthd_ticket_adult_content',
+							'value'   => 'yes',
+							'compare' => '!='
+						),
+					);
+				}
+			}
 		}
 
 		/**
