@@ -26,11 +26,12 @@ if ( ! class_exists( 'Rt_HD_User_Settings' ) ) {
 			add_action( 'show_user_profile', array( $this, 'add_rthd_notification_events_field' ) );
 			add_action( 'edit_user_profile', array( $this, 'add_rthd_notification_events_field' ) );
 
-			add_action( 'show_user_profile', array( $this, 'add_rthd_adult_filter' ) );
-			add_action( 'edit_user_profile', array( $this, 'add_rthd_adult_filter' ) );
-			add_action( 'personal_options_update', array( $this, 'save_rthd_adult_filter' ) );
-			add_action( 'edit_user_profile_update', array( $this, 'save_rthd_adult_filter' ) );
-
+			if ( rthd_get_redux_adult_filter() ) {
+				add_action( 'show_user_profile', array( $this, 'add_rthd_adult_filter' ) );
+				add_action( 'edit_user_profile', array( $this, 'add_rthd_adult_filter' ) );
+				add_action( 'personal_options_update', array( $this, 'save_rthd_adult_filter' ) );
+				add_action( 'edit_user_profile_update', array( $this, 'save_rthd_adult_filter' ) );
+			}
 			add_action( 'personal_options_update', array( $this, 'save_rthd_notification_events_field' ) );
 			add_action( 'edit_user_profile_update', array( $this, 'save_rthd_notification_events_field' ) );
 		}
@@ -42,8 +43,9 @@ if ( ! class_exists( 'Rt_HD_User_Settings' ) ) {
 		public function add_rthd_adult_filter( $user ){
 			$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
 
-			if ( ! current_user_can( $cap ) )
+			if ( ! current_user_can( $cap ) ){
 				return;
+			}
 			if ( current_user_can( $cap, $user->ID ) ) {
 				?>
 				<table class="form-table">
@@ -57,7 +59,7 @@ if ( ! class_exists( 'Rt_HD_User_Settings' ) ) {
 								<input name="rthd_adult_pref" type="checkbox" id="rthd_adult_pref" value="1"
 									<?php
 									$user_pref = rthd_get_user_adult_preference( $user->ID );
-									if ( $user_pref == 'yes' ){
+									if ( 'yes' == $user_pref ){
 										echo 'checked="checked"';
 									}
 									?>

@@ -479,7 +479,16 @@ function rthd_get_user_notification_preference( $user_id ) {
 	return $pref;
 }
 
-//adult conrent preference
+//adult filter redux setting
+function rthd_get_redux_adult_filter(){
+	$settings = rthd_get_redux_settings();
+	if ( ! empty( $settings['rthd_enable_ticket_adult_content'] ) ) {
+		return true;
+	}
+	return false;
+}
+
+//adult content preference
 function rthd_get_user_adult_preference( $user_id ) {
 	$pref = get_user_meta( $user_id, 'rthd_adult_pref', true );
 	if ( empty( $pref ) ) {

@@ -277,7 +277,9 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 			add_action( 'rt_attributes_relations_deleted', array( $this, 'update_ticket_table' ), 10, 1 );
 
 			add_action( 'wp_before_admin_bar_render', array( $this, 'ticket_chnage_action_publish_update' ), 11 );
-			add_action( 'parse_query', array( $this, 'adult_post_filter' ) );
+			if ( rthd_get_redux_adult_filter() ) {
+				add_action( 'parse_query', array( $this, 'adult_post_filter' ) );
+			}
 		}
 
 
