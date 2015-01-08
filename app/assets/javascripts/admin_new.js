@@ -327,8 +327,8 @@ jQuery(function () {
 		        var formData = new FormData();
 		        formData.append("private_comment", jQuery('#add-private-comment').val());
 		        formData.append("followup_ticket_unique_id", jQuery('#ticket_unique_id').val());
-		        formData.append("post_type", jQuery('#post_type').val());
-		        formData.append("action", jQuery('#action').val());
+		        formData.append("post_type", jQuery('#followup_post_type').val());
+		        formData.append("action", 'rthd_add_new_followup_front');
 		        formData.append("followuptype", jQuery('#followuptype').val());
 		        formData.append("follwoup-time", jQuery('#follwoup-time').val());
 		        formData.append("followup_content", jQuery('#followup_content').val());

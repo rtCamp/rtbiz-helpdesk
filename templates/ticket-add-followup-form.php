@@ -10,8 +10,7 @@ global $current_user;
 ?>
 <!--<form id="add_followup_form" method="post" enctype="multipart/form-data">-->
 	<input type="hidden" id='ticket_unique_id' name="followup_ticket_unique_id" value="<?php echo esc_attr( $ticket_unique_id ); ?>" />
-	<input type="hidden" id="post_type" name="post_type" value="<?php echo Rt_HD_Module::$post_type ?>" />
-	<input type="hidden" id="action" name="action" value="rthd_add_new_followup_front" />
+	<input type="hidden" id="followup_post_type" name="post_type" value="<?php echo Rt_HD_Module::$post_type ?>" />
 	<input type="hidden" id="followuptype" name="followuptype" value="" />
 	<input type="hidden" id="follwoup-time" name="follwoup-time" value="" />
 
