@@ -29,7 +29,7 @@ if ( ! empty( $_REQUEST['show_original'] ) && 'true' === $_REQUEST['show_origina
 	die();
 }
 ?>
-	<div class="rthd-container rthd-clearfix">
+	<div id="add-new-post" class="rthd-container row">
 	<?php
 	global $wpdb;
 
@@ -62,8 +62,8 @@ if ( ! empty( $_REQUEST['show_original'] ) && 'true' === $_REQUEST['show_origina
 	</div>
 	<div id="rthd-sidebar" class="rthd_sticky_div">
 		<h2><i class="foundicon-idea"></i> <?php _e( esc_attr( ucfirst( $labels['name'] ) ) . ' Information' ); ?></h2>
-		<div>
-			<span title="Status"><strong>Status: </strong></span>
+		<div class="rt-hd-ticket-info">
+			<span class="prefix" title="Status"><strong>Status: </strong></span>
 			<?php
 if ( isset( $post->ID ) ) {
 	$pstatus = $post->post_status;
@@ -91,9 +91,9 @@ if( ! empty( $pstatus ) ) {
 }
 ?>
 		</div>
-		<div>
+		<div class="rt-hd-ticket-info">
             <span title="Create Date"><strong>Created: </strong></span>
-			<span title="<?php echo esc_attr( $createdate )?>">
+			<span class="prefix" title="<?php echo esc_attr( $createdate )?>">
 			<?php
 				echo esc_attr( human_time_diff( strtotime( $createdate ), current_time( 'timestamp' ) ) ) . ' ago';
 				$created_by = get_user_by( 'id', get_post_meta( $post->ID, '_rtbiz_hd_created_by', true ) );
@@ -110,7 +110,7 @@ if( ! empty( $pstatus ) ) {
 			$comment = $comment[0];
 		?>
 
-		<div>
+		<div class="rt-hd-ticket-info">
 			<span title="Status"><strong>Last reply: </strong></span>
 			<span class="rthd_attr_border prefix rthd_view_mode"> <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) )) ." ago by ". $comment->comment_author; ?></span>
 		</div>
@@ -122,7 +122,7 @@ if ( isset( $post->ID ) ) {
 	if ( ! empty( $attachments ) ) { ?>
 
 		<h2><i class="foundicon-paper-clip"></i> <?php _e( 'Attachments' ); ?></h2>
-		<div>
+		<div class="rt-hd-ticket-info">
 			<div id="attachment-files">
 				<?php foreach ( $attachments as $attachment ) { ?>
 					<?php $extn_array = explode( '.', $attachment->guid );
@@ -156,7 +156,7 @@ if ( isset( $post->ID ) ) {
 		}
 		$base_url = add_query_arg( array( 'post_type' => $post->post_type ), admin_url( 'edit.php' ) );
 		if ( ! $products instanceof WP_Error && ! empty( $products ) ) { ?>
-		<div>
+		<div class="rt-hd-ticket-info">
 			<h2><?php _e( 'Ticket Products' ); ?></h2>
 			<ul>
 				<?php foreach ( $products as $p ) {
@@ -179,7 +179,7 @@ if ( isset( $post->ID ) ) {
 
 				if ( ! $terms instanceof WP_Error && ! empty( $terms ) ) {
 				?>
-				<div>
+				<div class="rt-hd-ticket-info">
 					<h2><?php echo $attr->attribute_label; ?></h2>
 					<ul>
 					<?php foreach ( $terms as $t ) { ?>
