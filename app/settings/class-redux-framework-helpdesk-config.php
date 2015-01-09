@@ -63,6 +63,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			// add_filter('redux/options/'.$this->args['opt_name'].'/defaults', array( $this,'change_defaults' ) );
 			// Dynamically add a section. Can be also used to modify sections/fields
 			// add_filter('redux/options/' . $this->args['opt_name'] . '/sections', array($this, 'dynamic_section'));
+			//			add_action("redux/options/{$this->args['opt_name']}/saved",  array( $this, 'on_redux_save' ), 10, 2 );
 
 			$this->ReduxFramework = new ReduxFramework( $this->sections, $this->args );
 
@@ -113,7 +114,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			return $defaults;
 		}
 
-		// Remove the demo link and the notice of integrated demo from the redux-framework plugin
+		// Remove the demo link and the notice of integrated demo from the redux-framework cplugin
 		function remove_demo() {
 
 			// Used to hide the demo mode link from the plugin page. Only used when Redux is a plugin.
@@ -149,7 +150,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 
 			$system_emails = rt_get_all_system_emails( array( 'module' => RT_HD_TEXT_DOMAIN, ) );
 			$mailbox_options = array();
-			foreach( $system_emails as $email ) {
+			foreach ( $system_emails as $email ) {
 				$mailbox_options[ $email ] = $email;
 			}
 
@@ -207,7 +208,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					'type'     => 'switch',
 					'title'    => __( 'Enable Ticket Adult Filter' ),
 					'subtitle' => __( 'This will enable/disable Adult filter for Tickets.' ),
-					'desc'     => __( 'If enabled, this will show option in Wordpress user for show adult contents by default it will be off, customer can mark ticket to be adult or not, and it can manually turn on of in ticket information box, if it is on and user preference in on then only adult ticket will be shown else it will be invisible.' ),
+					'desc'     => __( 'If enabled, this will show option in personal setting for show adult contents by default it will be off, customer can mark ticket to be adult or not, and it can manually turn on/off in ticket information box, if it is on and user preference in on then only adult ticket will be shown else it will be invisible. If disabled, all tickets will be shown' ),
 					'default'  => false,
 					'on'       => __( 'Enable' ),
 					'off'      => __( 'Disable' ),
@@ -219,6 +220,35 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				'title'       => __( 'General' ),
 				'permissions' => $admin_cap,
 				'fields'      => $general_fields,
+			);
+
+			$personal_fields = array(
+				array(
+					'id'       => 'rthd_user_ticket_notification',
+					'type'     => 'callback',
+					'callback' => 'ui_notification',
+					'title'    => __( 'Enable Email to ticket notifiaction' ),
+					'subtitle' => __( 'This will enable/disable email notifications for Tickets.' ),
+					'desc'     => __( 'If enabled, it will send you email notifications on ticket you are Subscribed to.' ),
+				),
+			);
+
+			if ( rthd_get_redux_adult_filter() ) {
+				$personal_fields[] = array(
+					'id'       => 'rthd_user_adult_content_pref',
+					'type'     => 'callback',
+					'callback' => 'ui_adult_notification',
+					'title'    => __( 'Enable display adult content' ),
+					'subtitle' => __( 'This will enable/disable adult content to you' ),
+					'desc'     => __( 'If enabled, it will show you adult content with normal, If disabled, will skip adult content for you' ),
+				);
+			}
+
+			$this->sections[] = array(
+				'icon'        => 'el-icon-cogs',
+				'title'       => __( 'Personal Settings' ),
+				'fields'      => $personal_fields,
+				'permissions' => $author_cap,
 			);
 
 			$redirect_url = get_option( 'rthd_googleapi_redirecturl' );
@@ -266,7 +296,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'id'       => 'rthd_outgoing_email_mailbox',
 						'title'    => __( 'Outgoing Emails\' Mailbox' ),
 						'subtitle' => __( 'The mailbox to be used in order to send outgoing emails/notifications.' ),
-						'desc'     => sprintf( __( 'Choose the one email from the configured mailboxes. If there\'s no item found then please configure mailbox.'  ) ),
+						'desc'     => sprintf( __( 'Choose the one email from the configured mailboxes. If there\'s no item found then please configure mailbox.' ) ),
 						'type'     => 'select',
 						'options'  => $mailbox_options,
 						'required' => array( 'rthd_outgoing_email_delivery', '=', 'user_mail_login' ),
@@ -626,4 +656,14 @@ function rthd_ticket_import_mapper() {
 function rthd_ticket_import_logs() {
 	global $rt_hd_logs;
 	$rt_hd_logs->ui();
+}
+
+function ui_notification(){
+	global $rt_hd_user_settings;
+	$rt_hd_user_settings->add_rthd_notification_events_field( wp_get_current_user() );
+}
+
+function ui_adult_notification(){
+	global $rt_hd_user_settings;
+	$rt_hd_user_settings->add_rthd_adult_filter( wp_get_current_user() );
 }
