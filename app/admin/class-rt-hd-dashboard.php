@@ -165,7 +165,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 					'tickets_by_products',
 				), $rt_hd_dashboard->screen_id, 'column5' );
 
-				add_meta_box( 'rthd-customer-by-product-tickets', __( 'Ticket by Customer Who Purchased Product', RT_HD_TEXT_DOMAIN ), array(
+				add_meta_box( 'rthd-customer-by-product-tickets', __( 'Ticket Conversion from Sales', RT_HD_TEXT_DOMAIN ), array(
 					$this,
 					'tickets_by_product_purchase',
 				), $rt_hd_dashboard->screen_id, 'column6' );
@@ -185,6 +185,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			$data_source = array();
 			$email_not_unique = $rt_hd_offering_support->get_emails_of_customer();
 			if ( empty( $email_not_unique ) ){
+				echo 'No customers found who have created any ticket.';
 				return;
 			}
 			$emails      = array_unique( $email_not_unique );
@@ -211,20 +212,23 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 				),
 			);
 			$posts = new WP_Query( $query );
-			$count_email= array();
+			$count_email = array();
+			if ( ! $posts->have_posts() ){
+				echo 'No customers found who have created any ticket.';
+				return;
+			}
 			foreach ( $posts->posts as $post ){
-				error_log(var_export($post,true). ": -> asddddd ", 3, "/var/www/dummytest.com/logs/my-errors.log");
 				$user_id_meta = get_post_meta( $post->ID,'_rtbiz_hd_created_by', true );
-				if (isset($count_email[$user_id_meta])){
-					$count_email[$user_id_meta] +=1;
+				if ( isset( $count_email[ $user_id_meta ] ) ) {
+					$count_email[ $user_id_meta ] += 1;
 				}
-				else{
-					$count_email[$user_id_meta] = 1;
+				else {
+					$count_email[ $user_id_meta ] = 1;
 				}
 			}
 			$count = count( $count_email );
-			$rows[] = array( __( 'Tickets' ), $count );
-			$rows[] = array( __( 'Uncategorized' ), count( $emails ) - $count );
+			$rows[] = array( __( 'Customer who created Tickets' ), $count );
+			$rows[] = array( __( 'Customers have not created any Tickets' ), count( $emails ) - $count );
 			$data_source['cols'] = $cols;
 			$data_source['rows'] = $rows;
 			$this->charts[] = array(
