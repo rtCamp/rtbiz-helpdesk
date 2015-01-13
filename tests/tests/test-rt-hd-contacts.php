@@ -47,7 +47,6 @@ class test_Rt_HD_Contacts extends RT_WP_TestCase {
 	function  test_get_user_from_email() {
 		$userid = wp_create_user( 'dipesh.kakadiya111@gmail.com', 'dips', 'dipesh.kakadiya111@gmail.com' );
 		$this->assertEquals( $userid, $this->rthdContacts->get_user_from_email( 'dipesh.kakadiya111@gmail.com' ) );
-		$this->assertEquals( 1, $this->rthdContacts->get_user_from_email( 'dipesh.kakadiya@rtcamp.com' ) );
 	}
 }
  

@@ -14,6 +14,64 @@ jQuery( document ).ready( function ( $ ) {
 	if ( ! jQuery.browser.mobile ) {
 		$( '.rthd_sticky_div' ).stickyfloat( { duration: 400, delay: 3 } );
 	}
+	/*jQuery( '.followup-hash-url' ).click( function(e) {
+		//e.preventDefault();
+		jQuery(document).scrollTop( ( jQuery( window.location.hash ).offset().top ) - 100 );
+	});
+	jQuery(function() {
+		jQuery(document).scrollTop( ( jQuery( window.location.hash ).offset().top ) - 100 );
+	});*/
+
+	function check_hash_call_hash(){
+		return jQuery( window.location.hash ).exists();
+	}
+
+	$.fn.exists = function () {
+		return this.length !== 0;
+	};
+	var hashflag = false;
+	jQuery('.edit-ticket-link' ).click(function(){
+		jQuery("#edit-ticket-data").dialog().dialog("close");
+		jQuery( "#edit-ticket-data" ).dialog({
+			                                width :600,
+			                                height:250
+		                                });
+		jQuery( "#edit-ticket-data" ).dialog( "open" );
+
+		jQuery('#edited_ticket_content' ).html(jQuery(this ).closest('.ticketcontent' ).find('.rthd-comment-content' ).html());
+	});
+
+	jQuery('#edit-ticket-content-click' ).click(function(){
+		var requestArray = new Object();
+		requestArray['action']= 'rthd_add_new_ticket_ajax';
+		requestArray['post_id']= jQuery('#post-id' ).val();
+		requestArray['body']= jQuery('#edited_ticket_content' ).val();
+		requestArray['nonce']= jQuery('#edit_ticket_nonce' ).val();
+		jQuery('#ticket-edithdspinner' ).show();
+		jQuery(this).attr('disabled','disabled');
+		jQuery.ajax( {
+			             url: ajaxurl,
+			             type: 'POST',
+			             dataType: 'json',
+			             data: requestArray,
+			             success: function ( data ) {
+			                if(data.status){
+				                jQuery("#edit-ticket-data").dialog().dialog("close");
+				                jQuery('#ticket-edithdspinner' ).hide();
+				                jQuery("#edit-ticket-content-click" ).removeAttr('disabled');
+				                jQuery('.edit-ticket-link' ).closest('.ticketcontent' ).find('.rthd-comment-content' ).html( jQuery('#edited_ticket_content' ).val());
+			                }
+				             else{
+				                console.log(data.msg);
+			                }
+			             },
+			             error: function ( xhr, textStatus, errorThrown ) {
+				             alert( "Error" );
+				             jQuery('#ticket-edithdspinner' ).hide();
+				             jQuery("#edit-ticket-content-click" ).removeAttr('disabled');
+			             }
+		             });
+	});
 
 	var commentid;
 	jQuery("#delfollowup" ).click(function(e) {
@@ -60,12 +118,7 @@ jQuery( document ).ready( function ( $ ) {
 		jQuery('#edited_followup_content' ).val(jQuery(this ).parents().siblings('.rthd-comment-content' ).html().trim());
 		commentid=select.siblings('#followup-id' ).val();
 		var that = select.siblings( '#is-private-comment' ).val();
-		if (that && that=='true' || that == true){
-			jQuery('#edit-private' ).prop('checked',true);
-		}
-		else{
-			jQuery('#edit-private' ).prop('checked',false);
-		}
+		jQuery('#edit-private' ).val(that);
 		jQuery("#dialog-form").dialog().dialog("close");
 		jQuery( "#dialog-form" ).dialog({
 	        width :600,
@@ -95,7 +148,7 @@ jQuery( document ).ready( function ( $ ) {
 		requestArray['followup_ticket_unique_id']=jQuery('#ticket_unique_id' ).val();
 		//requestArray['followup_private']='no';
 		requestArray['followup_post_id']=jQuery('#post-id' ).val();
-		requestArray['followup_private']= jQuery('#edit-private').is(':checked') ;
+		requestArray['followup_private']= jQuery('#edit-private').val() ;
 		requestArray["followuptype"] = 'comment';
 		//requestArray["followup_post_id"] = jQuery( "#ticket_id" ).val();
 		//requestArray["follwoup-time"] = jQuery( "#follwoup-time" ).val();
@@ -149,8 +202,18 @@ jQuery( document ).ready( function ( $ ) {
 			jQuery(this).removeAttr('disabled');
 			return false;
 		}
-		var formData = new FormData(jQuery('#add_followup_form')[0]);
-		formData.append("private_comment", jQuery('#add-private-comment').is(':checked'));
+		var formData = new FormData();
+		formData.append("private_comment", jQuery('#add-private-comment').val());
+		formData.append("followup_ticket_unique_id", jQuery('#ticket_unique_id').val());
+		formData.append("post_type", jQuery('#followup_post_type').val());
+		formData.append("action", 'rthd_add_new_followup_front');
+		formData.append("followuptype", jQuery('#followuptype').val());
+		formData.append("follwoup-time", jQuery('#follwoup-time').val());
+		formData.append("followup_content", jQuery('#followup_content').val());
+		var files = jQuery('#attachemntlist')[0];
+		jQuery.each(jQuery("#attachemntlist")[0].files, function(i, file) {
+			formData.append('attachemntlist['+i+']', file);
+		});
         if(jQuery('#rthd_keep_status')){
             formData.append("rthd_keep_status", jQuery('#rthd_keep_status').is(':checked'));
         }
@@ -169,7 +232,7 @@ jQuery( document ).ready( function ( $ ) {
 		             //console.log(newcomment);
 		             jQuery('#chat-UI' ).append(newcomment);
 		             jQuery( "#followup_content" ).val( '' );
-		             jQuery('#add-private-comment' ).prop('checked',false );
+		             jQuery('#add-private-comment' ).val(0);
 		             var control = jQuery('#attachemntlist' );
 		             control.replaceWith( control = control.clone( true ) );
                      if (data.ticket_status=='answered'){
@@ -216,6 +279,9 @@ jQuery( document ).ready( function ( $ ) {
 				             if (data.status) {
 					             jQuery( '#followup-offset' ).val( data.offset );
 					             jQuery( '#chat-UI' ).prepend( data.comments );
+					             if ( check_hash_call_hash() && hashflag ){
+						             jQuery(document).scrollTop( ( jQuery( window.location.hash ).offset().top ) - 50 );
+					             }
 				             }
 				             jQuery('#load-more-hdspinner' ).hide();
 			             },
@@ -226,6 +292,11 @@ jQuery( document ).ready( function ( $ ) {
 		             });
 
 	});
+	var hashcheck = check_hash_call_hash();
+	if ( !hashcheck  && window.location.hash.length !== 0 ){
+		hashflag = true;
+		jQuery( '#followup-load-more' ).trigger( 'click' );
+	}
 
 } );
 

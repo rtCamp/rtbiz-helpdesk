@@ -70,9 +70,9 @@ ul#chat-UI {
 	border-right-color: #FFC0CB;
 }
 
-.self .messages {
+.self .messages, .other .messages, .rt-hd-ticket-front-title{
 	word-wrap: break-word;
-	word-break: break-all;
+	word-break: normal;
 }
 .self .avatar {
 	position: relative;
@@ -151,12 +151,16 @@ ul#chat-UI {
 	padding: 0;
 	height: 200px;
 }
+.followup-hash-url{
+	text-decoration: none;
+	color: inherit;
+}
 
 .helpdeskspinner{
 	display:none;
 }
 
-#edited_followup_content{
+#edited_followup_content, #edited_ticket_content{
 	width:100%;
 }
 
@@ -192,14 +196,14 @@ ul#chat-UI {
 
 .rthd-ticket-description {
 	word-wrap: break-word;
-	word-break: break-all;
+	word-break: normal;
 }
 
 .rthd-clearfix {
 	clear: both;
 }
-.editfollowuplink{
-	color : #777
+.editfollowuplink ,.edit-ticket-link, .show-original-email{
+	color : #777;
 }
 
 .load-more{
@@ -328,4 +332,14 @@ li.load-more-spinner-li {
 }
 .followup-information .private_comment_span{
 	color: red;
+}
+
+.rt_original_email{
+	word-wrap: break-word;
+}
+
+.rt-hd-ticket-info{
+	border-bottom: 1px dotted #ddd;
+	font-size: 14px;
+	padding: 5px 10px;
 }

@@ -133,7 +133,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			global $rt_hd_dashboard, $rt_hd_attributes_model, $rt_hd_attributes_relationship_model;
 
 			/* Pie Chart - Progress Indicator (Post status based) */
-			add_meta_box( 'rthd-tickets-by-status', __( 'Status wise Tickets', RT_HD_TEXT_DOMAIN ), array(
+			add_meta_box( 'rthd-tickets-by-status', __( 'Tickets by Status', RT_HD_TEXT_DOMAIN ), array(
 				$this,
 				'tickets_by_status',
 			), $rt_hd_dashboard->screen_id, 'column1' );
@@ -158,6 +158,18 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 				'top_clients',
 			), $rt_hd_dashboard->screen_id, 'column4' );
 
+			$settings = biz_get_redux_settings();
+			if ( isset( $settings['offering_plugin'] ) && 'none' != $settings['offering_plugin'] ) {
+				add_meta_box( 'rthd-tickets-by-product', __( 'Tickets by Offerings', RT_HD_TEXT_DOMAIN ), array(
+					$this,
+					'tickets_by_products',
+				), $rt_hd_dashboard->screen_id, 'column5' );
+
+				add_meta_box( 'rthd-customer-by-product-tickets', __( 'Ticket Conversion from Sales', RT_HD_TEXT_DOMAIN ), array(
+					$this,
+					'tickets_by_product_purchase',
+				), $rt_hd_dashboard->screen_id, 'column6' );
+			}
 			$relations = $rt_hd_attributes_relationship_model->get_relations_by_post_type( Rt_HD_Module::$post_type );
 			foreach ( $relations as $r ) {
 				$attr = $rt_hd_attributes_model->get_attribute( $r->attr_id );
@@ -165,6 +177,145 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 					add_meta_box( 'rthd-tickets-by-' . $attr->attribute_name, $attr->attribute_label . ' ' . __( 'Wise Tickets', RT_HD_TEXT_DOMAIN ), array( $this, 'dashboard_attributes_widget_content' ), $rt_hd_dashboard->screen_id, 'column1', 'default', array( 'attribute_id' => $attr->id ) );
 				}
 			}
+		}
+
+		function tickets_by_product_purchase( $obj, $args ){
+
+			global $rt_hd_offering_support;
+			$data_source = array();
+			$email_not_unique = $rt_hd_offering_support->get_emails_of_customer();
+			if ( empty( $email_not_unique ) ){
+				echo 'No customers found who have created any ticket.';
+				return;
+			}
+			$emails      = array_unique( $email_not_unique );
+			$post_type   = Rt_HD_Module::$post_type;
+			$cols        = array( __( 'Purchase', RT_BIZ_TEXT_DOMAIN ), __( 'Count', RT_BIZ_TEXT_DOMAIN ) );
+			$rows        = array();
+			$ids         = array();
+			foreach ( $emails as $email ){
+				$user = get_user_by( 'email', $email );
+				$ids[] = $user->ID;
+			}
+			$query = array(
+				'post_type' => $post_type,
+				'post_status' => 'any',
+				'nopaging' => true,
+				'meta_key' => '_rtbiz_hd_created_by',
+				'orderby' => 'meta_value',
+				'meta_query' => array(
+					array(
+						'key' => '_rtbiz_hd_created_by',
+						'value' => $ids,
+						'compare' => 'IN',
+					),
+				),
+			);
+			$posts = new WP_Query( $query );
+			$count_email = array();
+			if ( ! $posts->have_posts() ){
+				echo 'No customers found who have created any ticket.';
+				return;
+			}
+			foreach ( $posts->posts as $post ){
+				$user_id_meta = get_post_meta( $post->ID,'_rtbiz_hd_created_by', true );
+				if ( isset( $count_email[ $user_id_meta ] ) ) {
+					$count_email[ $user_id_meta ] += 1;
+				}
+				else {
+					$count_email[ $user_id_meta ] = 1;
+				}
+			}
+			$count = count( $count_email );
+			$rows[] = array( __( 'Customer who created Tickets' ), $count );
+			$rows[] = array( __( 'Customers have not created any Tickets' ), count( $emails ) - $count );
+			$data_source['cols'] = $cols;
+			$data_source['rows'] = $rows;
+			$this->charts[] = array(
+				'id' => $args['id'],
+				'chart_type' => 'pie',
+				'data_source' => $data_source,
+				'dom_element' => 'rtbiz_pie_'.$args['id'],
+				'options' => array(
+					'title' => $args['title'],
+				),
+			);
+			?>
+			<div id="<?php echo 'rtbiz_pie_'.$args['id']; ?>"></div>
+		<?php
+		}
+
+		function get_post_count_excluding_tax( $taxonomy, $post_type ){
+			$terms_name = get_terms( $taxonomy , array( 'fields' => 'id=>slug' ) );
+			$count = 0;
+			if ( ! $terms_name instanceof WP_Error && ! empty( $terms_name ) ) {
+				$terms_names = array_values( $terms_name );
+				$posts = new WP_Query( array(
+					                       'post_type' => $post_type,
+					                       'post_status' => 'any',
+					                       'nopaging' => true,
+					                       'tax_query' => array(
+						                       array(
+							                       'taxonomy'  => $taxonomy,
+							                       'field'     => 'slug',
+							                       'terms'     => $terms_names,
+							                       'operator'  => 'NOT IN',
+						                       ),
+					                       ),
+				                       ) );
+
+				$count = count( $posts->posts );
+			}
+			return $count;
+		}
+
+		/**
+		 * Tickets by product pi chart
+		 */
+		function tickets_by_products( $obj, $args ){
+			$taxonomy    = Rt_Offerings::$offering_slug;
+			$terms       = get_terms( $taxonomy );
+			$data_source = array();
+			$cols        = array( __( 'Offerings', RT_BIZ_TEXT_DOMAIN ), __( 'Count', RT_BIZ_TEXT_DOMAIN ) );
+			$rows        = array();
+			$post_type   = Rt_HD_Module::$post_type;
+			$total       = 0;
+
+			if ( ! $terms instanceof WP_Error ) {
+				foreach ( $terms as $t ) {
+					$posts = new WP_Query( array(
+						                       'post_type' => $post_type,
+						                       'post_status' => 'any',
+						                       'nopaging' => true,
+						                       $taxonomy => $t->slug,
+					                       ) );
+
+					$rows[] = array(
+						$t->name,
+						count( $posts->posts ),
+					);
+					$total += count( $posts->posts );
+				}
+			}
+
+			$rows[] = array( __( 'Uncategorized' ), $this->get_post_count_excluding_tax( $taxonomy, $post_type ) );
+
+			$data_source['cols'] = $cols;
+			$data_source['rows'] = $rows;
+
+			$this->charts[] = array(
+				'id' => $args['id'],
+				'chart_type' => 'pie',
+				'data_source' => $data_source,
+				'dom_element' => 'rtbiz_pie_'.$args['id'],
+				'options' => array(
+					'title' => $args['title'],
+				),
+			);
+			?>
+			<div id="<?php echo 'rtbiz_pie_'.$args['id']; ?>"></div>
+		<?php
+
 		}
 
 		/**

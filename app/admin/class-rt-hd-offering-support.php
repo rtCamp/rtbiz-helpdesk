@@ -12,14 +12,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 
 
-if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
+if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 
 	/**
-	 * Class Rt_HD_Woocommerce_EDD
+	 * Class Rt_HD_Offering_Support
 	 * Provide wooCommerce & EDD integration with HelpDesk for product support
 	 *
 	 */
-	class Rt_HD_Woocommerce_EDD {
+	class Rt_HD_Offering_Support {
 
 		/**
 		 * construct
@@ -61,6 +61,39 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 			add_action( 'rtbiz_hd_user_purchase_history', array( $this, 'user_purchase_history' ) );
 		}
 
+		function get_emails_of_customer(){
+			$this->check_active_plugin();
+			if ( $this->isWoocommerceActive ) {
+				//
+				$payments = get_posts( array(
+					                       'numberposts' => -1,
+					                       'meta_key'    => '_billing_email',
+					                       'order'       => 'ASC',
+					                       'post_status' => 'wc-completed',
+				                       ) );
+			} else if ( $this->iseddActive ) {
+				$payments = get_posts( array(
+					                       'numberposts' => -1,
+					                       'post_type'   => $this->order_post_type,
+					                       'order'       => 'ASC',
+					                       'post_status' => 'publish',
+				                       ) );
+			}
+			$emails = array();
+
+			if ( ! empty( $payments ) ){
+				foreach ( $payments as $payment ){
+					if ( $this->isWoocommerceActive ) {
+						$emails[] =get_post_meta( $payment->ID, '_billing_email', true );
+					}
+					else if( $this->iseddActive ){
+						$emails[] =get_post_meta( $payment->ID, '_edd_payment_user_email', true );
+					}
+				}
+			}
+			return $emails;
+		}
+
 		function user_purchase_history( $ticket_id ) {
 			$created_by = get_user_by( 'id', get_post_meta( $ticket_id, '_rtbiz_hd_created_by', true ) );
 			if ( !empty( $created_by ) ) {
@@ -73,7 +106,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
                        'meta_value'  => $created_by->user_email,
                        'post_type'   => $this->order_post_type,
                        'order'       => 'ASC',
-                       'post_status' => 'any',
+                       'post_status' => 'wc-completed',
 					) );
 				} else if ( $this->iseddActive ) {
 					$payments = get_posts( array(
@@ -82,7 +115,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 					   'meta_value'  => $created_by->user_email,
 					   'post_type'   => $this->order_post_type,
 					   'order'       => 'ASC',
-					   'post_status' => 'any',
+					   'post_status' => 'publish',
 					) );
 				}
 				if ( ! empty( $payments ) ) {
@@ -123,17 +156,24 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 		}
 
 		function edd_action_link_header() {
-			?>
-			<th class="edd_rt_hd_support"><?php _e( 'Support', 'edd' ); ?></th>
+			global $redux_helpdesk_settings;
+			if ( isset( $redux_helpdesk_settings['rthd_support_page'] ) && ! empty( $redux_helpdesk_settings['rthd_support_page'] ) ) {
+				?>
+				<th class="edd_rt_hd_support"><?php _e( 'Support', 'edd' ); ?></th>
 			<?php
+			}
 		}
 
 		function edd_support_link( $payment_id, $download_id ) {
 			global $redux_helpdesk_settings;
-			$page = get_post( $redux_helpdesk_settings['rthd_support_page'] );
-			?>
-			<td class="edd_rt_hd_support"><a href="<?php echo "/{$page->post_name}/?product_id={$download_id}&order_id={$payment_id}&order_type=edd"; ?>"><?php _e( 'Get Support', RT_HD_TEXT_DOMAIN ) ?></a></td>
+			if ( isset( $redux_helpdesk_settings['rthd_support_page'] ) && ! empty( $redux_helpdesk_settings['rthd_support_page'] ) ) {
+				$page = get_post( $redux_helpdesk_settings[ 'rthd_support_page' ] );
+				?>
+				<td class="edd_rt_hd_support"><a
+						href="<?php echo "/{$page->post_name}/?product_id={$download_id}&order_id={$payment_id}&order_type=edd"; ?>"><?php _e( 'Get Support', RT_HD_TEXT_DOMAIN ) ?></a>
+				</td>
 			<?php
+			}
 		}
 
 		/**
@@ -150,14 +190,14 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 		 */
 		function wocommerce_actions_link( $actions, $order ) {
 			global $redux_helpdesk_settings;
-			$page               = get_post( $redux_helpdesk_settings['rthd_support_page'] );
-			$actions['support'] = array(
-				'url'  => "/{$page->post_name}/?order_id={$order->id}&order_type=woocommerce",
-				'name' => __( 'Get Support', RT_HD_TEXT_DOMAIN )
-			);
-
+			if ( isset( $redux_helpdesk_settings['rthd_support_page'] ) && ! empty( $redux_helpdesk_settings['rthd_support_page'] ) ) {
+				$page                 = get_post( $redux_helpdesk_settings[ 'rthd_support_page' ] );
+				$actions[ 'support' ] = array(
+					'url'  => "/{$page->post_name}/?order_id={$order->id}&order_type=woocommerce",
+					'name' => __( 'Get Support', RT_HD_TEXT_DOMAIN )
+				);
+			}
 			return $actions;
-
 		}
 
 
@@ -209,37 +249,51 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 				$terms = get_terms( Rt_Offerings::$offering_slug, array( 'hide_empty' => 0 ) );
 			}
 			$offering_exists = false;
+			$wrong_user_flag = false;
 			foreach ( $terms as $tm ) {
 				$term_offering_id = '';
+				$loggedin_id = get_current_user_id();
 				if ( isset( $_REQUEST['order_id'] ) && $this->order_post_type == get_post_type( $_REQUEST['order_id'] ) ) {
 					if ( $this->isWoocommerceActive ) {
 						$order = new WC_Order( $_REQUEST['order_id'] );
-						if ( !empty( $order ) ) {
-							$items = $order->get_items();
-							$product_ids = wp_list_pluck( $items, 'product_id' );
-							$term_offering_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $tm->term_id, Rt_Offerings::$term_meta_key , true );
-							if ( ! in_array( $term_offering_id, $product_ids ) ) {
-								continue;
+						if ( $loggedin_id = $order->get_user_id() ) {
+							if ( ! empty( $order ) ) {
+								$items            = $order->get_items();
+								$product_ids      = wp_list_pluck( $items, 'product_id' );
+								$term_offering_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $tm->term_id, Rt_Offerings::$term_meta_key, true );
+								if ( ! in_array( $term_offering_id, $product_ids ) ) {
+									continue;
+								}
 							}
+						} else {
+							$wrong_user_flag = true;
 						}
 					} else if ( $this->iseddActive ) {
 						$payment = get_post( $_REQUEST['order_id'] );
-						if ( !empty( $payment ) ) {
-							$items = edd_get_payment_meta_downloads( $payment->ID );
-							$product_ids = wp_list_pluck( $items, 'id' );
-							$term_offering_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $tm->term_id, Rt_Offerings::$term_meta_key, true );
-							if ( ! in_array( $term_offering_id, $product_ids ) ) {
-								continue;
+						if ( $loggedin_id == $payment->post_author ) {
+							if ( ! empty( $payment ) ) {
+								$items            = edd_get_payment_meta_downloads( $payment->ID );
+								$product_ids      = wp_list_pluck( $items, 'id' );
+								$term_offering_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $tm->term_id, Rt_Offerings::$term_meta_key, true );
+								if ( ! in_array( $term_offering_id, $product_ids ) ) {
+									continue;
+								}
 							}
+						} else {
+							$wrong_user_flag = true;
 						}
 					}
 				}
 				$offering_option .= '<option value="' . $tm->term_id . '" ' . ( ( ! empty( $_REQUEST['product_id'] ) && $term_offering_id == $_REQUEST['product_id'] ) ? 'selected="selected"' : '' ) . '> '.$tm->name.'</option>';
 				$offering_exists = true;
-				error_log(var_export($offering_exists,true). ": -> asddddd ", 3, "/var/www/dummytest.com/logs/my-errors.log");
 			}
 
-			rthd_get_template( 'support-form.php', array( 'product_exists' => $offering_exists, 'product_option' => $offering_option ) );
+			if ( $wrong_user_flag ){
+				echo '<span> You have not placed this order, Please login from account that placed this order. </span>';
+			}
+			else {
+				rthd_get_template( 'support-form.php', array( 'product_exists' => $offering_exists, 'product_option' => $offering_option ) );
+			}
 			return apply_filters( 'rt_hd_support_form_shorcode', ob_get_clean(), $attr );
 		}
 
@@ -381,6 +435,7 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 					'email' => '',
 					'user'  => '',
 					'order' => '',
+					'show_support_form_link' => 'no',
 				), $atts );
 
 			$args    = array(
@@ -430,7 +485,15 @@ if ( ! class_exists( 'Rt_HD_Woocommerce_EDD' ) ) {
 
 			<?php
 			printf( _n( 'One Ticket Found.', '%d Tickets Found.', count( $tickets ), 'my-RT_HD_TEXT_DOMAIN-domain' ), count( $tickets ) );
-			?>
+			if ( 'yes' == $arg_shortcode['show_support_form_link'] ) {
+				global $redux_helpdesk_settings;
+				if ( isset( $redux_helpdesk_settings['rthd_support_page'] ) && ! empty( $redux_helpdesk_settings['rthd_support_page'] ) ) {
+					$page    = get_post( $redux_helpdesk_settings['rthd_support_page'] );
+					?>
+					<a href="<?php echo "/{$page->post_name}"; ?>"><?php _e( '(Get Support)', RT_HD_TEXT_DOMAIN ) ?></a>
+				<?php
+				}
+			}?>
 			<table class="shop_table my_account_orders">
 				<tr>
 					<th>Ticket ID</th>

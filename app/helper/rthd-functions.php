@@ -508,16 +508,40 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 
 	ob_start();
 
-	$is_comment_private = get_comment_meta( $comment->comment_ID, '_rthd_privacy', true );
-	if ( ! empty( $is_comment_private ) && 'true' == $is_comment_private ) {
-		if ( $user_edit ) {
+	$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' ); //todo: find employee users if then only visible
+	$staffonly  = current_user_can( $cap );
+	//	$is_comment_private = get_comment_meta( $comment->comment_ID, '_rthd_privacy', true );
+	$private_text = '';
+	$display_private_comment_flag = false;
+	$is_comment_private = false;
+	switch ( $comment->comment_type ) {
+		case Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC:
 			$display_private_comment_flag = true;
-		} else {
-			$display_private_comment_flag = false;
-		}
-	} else {
-		$display_private_comment_flag = true;
+			break;
+		case Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE:
+			if ( $user_edit ){
+				$display_private_comment_flag = true;
+			}
+			$private_text = 'Private';
+			$is_comment_private = True;
+			break;
+		case Rt_HD_Import_Operation::$FOLLOWUP_STAFF:
+			if ( $staffonly ){
+				$display_private_comment_flag = true;
+			}
+			$private_text = 'Staff only';
+			$is_comment_private = True;
+			break;
 	}
+	//	if ( ! empty( $is_comment_private ) && 'true' == $is_comment_private ) {
+	//		if ( $user_edit ) {
+	//			$display_private_comment_flag = true;
+	//		} else {
+	//			$display_private_comment_flag = false;
+	//		}
+	//	} else {
+	//		$display_private_comment_flag = true;
+	//	}
 
 	$side_class = ( $type == 'right' ) ? 'self' : ( ( $type == 'left' ) ? 'other' : '' );
 	$editable_class = ( $display_private_comment_flag ) ? 'editable' : '';
@@ -535,19 +559,23 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
                 <?php if ($user_edit){
                     ?>
                     <a href="#" class="editfollowuplink">Edit</a> |
-                <?php
+	                <?php
+	                $data = get_comment_meta( $comment->comment_ID, 'rt_hd_original_email', true );
+	                if ( ! empty( $data ) ) {
+		                ?>
+		                <a href="?show_original=true&comment-id=<?php echo $comment->comment_ID;?> " class="show-original-email"> Show original email</a> |
+                <?php }
                 }
-                if ( $is_comment_private == 'true' ){
-	                echo "<span class='private_comment_span'> Private </span> |";
+                if ( $is_comment_private == true ){
+	                echo "<span class='private_comment_span'> $private_text </span> | ";
                 }
                 ?>
-                <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . ' ago';
-?>
+	            <?php echo '<a class="followup-hash-url" id="followup_'.$comment->comment_ID.'" href="#followup_'.$comment->comment_ID.'" >'.esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . ' ago </a>';?>
 
             </time>
             </div>
 			<input id="followup-id" type="hidden" value="<?php echo esc_attr( $comment->comment_ID ); ?>">
-			<input id="is-private-comment" type="hidden" value="<?php echo esc_attr( $is_comment_private ); ?>">
+			<input id="is-private-comment" type="hidden" value="<?php echo esc_attr( $comment->comment_type); ?>">
 			<div class="rthd-comment-content">
 			<?php if( $display_private_comment_flag ) {
 				if ( isset( $comment->comment_content ) && $comment->comment_content != '' ) {
@@ -612,7 +640,7 @@ function rthd_content_filter( $content ) {
 	return wpautop( wp_kses_post( balanceTags( make_clickable( $content ), true ) ) );
 }
 
-function rthd_toggle_status($postid){
+function rthd_toggle_status( $postid ){
     $post = get_post($postid);
     $authorcap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
     if (  current_user_can( $authorcap ) ) {
@@ -753,4 +781,30 @@ function rthd_activate_plugin( $plugin_path ) {
 	if ( is_wp_error( $activate_result ) ) {
 		die( sprintf( __( 'ERROR: Failed to activate plugin: %s', 'rt_biz' ), $activate_result->get_error_message() ) );
 	}
+}
+
+
+function rthd_get_comment_type($comment_type_value){
+    switch($comment_type_value){
+        case Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC:
+            return 'Logged in user only';
+            break;
+        case Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE:
+            return 'Sensitive';
+            break;
+        case Rt_HD_Import_Operation::$FOLLOWUP_STAFF:
+            return 'Only Staff';
+            break;
+        default:
+            return 'undefined';
+    }
+}
+
+
+function rthd_edit_comment_type( $Comment_ID, $value ){
+	global $wpdb;
+	$wpdb->query(
+		$wpdb->prepare( "UPDATE $wpdb->comments SET comment_type=%s WHERE comment_ID = %d", $value, $Comment_ID )
+	);
+
 }

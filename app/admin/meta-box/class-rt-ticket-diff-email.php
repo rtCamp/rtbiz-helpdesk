@@ -167,7 +167,7 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 				$emailHTML .= $attr_diff;
 			}
 
-			// Attributes-texonomies Diff
+			// Attributes-taxonomies Diff
 			$attributes = rthd_get_attributes( Rt_HD_Module::$post_type, 'taxonomy' );
 			foreach ( $attributes as $attr ) {
 				$attr_diff = $rt_hd_attributes->attribute_diff( $attr, $post_id, $_POST['tax_input'] );
