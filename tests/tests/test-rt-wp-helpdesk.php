@@ -52,7 +52,6 @@ class test_RT_WP_Help_desk extends RT_WP_TestCase {
 		$this->assertTrue( class_exists( 'Rt_HD_Import_Operation' ), 'Class Rt_HD_Import_Operation does not exist' );
 
 		$this->assertTrue( class_exists( 'Rt_HD_Gravity_Form_Importer' ), 'Class Rt_HD_Gravity_Form_Importer does not exist' );
-		$this->assertTrue( class_exists( 'Rt_HD_Gravity_Form_Mapper' ), 'Class Rt_HD_Gravity_Form_Mapper does not exist' );
 		$this->assertTrue( class_exists( 'Rt_HD_User_Settings' ), 'Class Rt_HD_User_Settings does not exist' );
 		$this->assertTrue( class_exists( 'Rt_HD_Logs' ), 'Class Rt_HD_Logs does not exist' );
 
