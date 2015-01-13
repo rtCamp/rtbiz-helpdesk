@@ -36,9 +36,9 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-        public static $FOLLOWUP_PUBLIC = 0;
-        public static $FOLLOWUP_SENSITIVE = 10;
-        public static $FOLLOWUP_STAFF = 20;
+		public static $FOLLOWUP_PUBLIC = 10;
+		public static $FOLLOWUP_SENSITIVE = 20;
+		public static $FOLLOWUP_STAFF = 30;
 
 		public function __construct() {
 			$this->hooks();
