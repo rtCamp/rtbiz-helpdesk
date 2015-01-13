@@ -32,6 +32,12 @@
 			<div id="postbox-container-4" class="postbox-container">
 				<?php do_meta_boxes( '', 'column4', null ); ?>
 			</div>
+			<div id="postbox-container-4" class="postbox-container">
+				<?php do_meta_boxes( '', 'column5', null ); ?>
+			</div>
+			<div id="postbox-container-4" class="postbox-container">
+				<?php do_meta_boxes( '', 'column6', null ); ?>
+			</div>
 
 		</div>
 		<!-- #post-body -->
