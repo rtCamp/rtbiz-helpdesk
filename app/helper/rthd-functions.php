@@ -512,7 +512,7 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 	$staffonly  = current_user_can( $cap );
 	//	$is_comment_private = get_comment_meta( $comment->comment_ID, '_rthd_privacy', true );
 	$private_text = '';
-	$display_private_comment_flag = false;
+	$display_private_comment_flag = true;
 	$is_comment_private = false;
 	switch ( $comment->comment_type ) {
 		case Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC:
@@ -523,14 +523,14 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 				$display_private_comment_flag = true;
 			}
 			$private_text = 'Private';
-			$is_comment_private = True;
+			$is_comment_private = true;
 			break;
 		case Rt_HD_Import_Operation::$FOLLOWUP_STAFF:
 			if ( $staffonly ){
 				$display_private_comment_flag = true;
 			}
 			$private_text = 'Staff only';
-			$is_comment_private = True;
+			$is_comment_private = true;
 			break;
 	}
 	//	if ( ! empty( $is_comment_private ) && 'true' == $is_comment_private ) {
