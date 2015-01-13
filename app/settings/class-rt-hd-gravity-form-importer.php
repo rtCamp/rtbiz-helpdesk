@@ -38,8 +38,24 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 		 *  add hooks for importing Graviy form
 		 */
 		public function __construct() {
-			add_action( 'init', array( $this, 'init_importer' ) );
-			$this->hd_importer_ajax_hooks();
+
+			add_action( 'rtlib_importer_posttype', array( $this, 'add_hd_importer' ) );
+			add_action( 'rtlib_importer_fields', array( $this, 'init_importer' ) );
+			add_action( 'rtlib_add_mapping_field_ui', array( $this, 'add_hd_mapping_field_ui' ) );
+
+			add_action( 'rtlib_map_import_callback', array( $this, 'process_import' ), 1, 6 );
+
+			add_action( 'rtlib_gravity_form_lead_meta', array( $this, 'gravity_form_lead_meta' ), 1, 2 );
+			add_action( 'rtlib_gform_add_custome_field', array( $this, 'rthd_add_custome_field' ), 1, 2 );
+
+		}
+
+		function  add_hd_importer( $post_type ){
+			$post_type[ Rt_HD_Module::$post_type ] = array(
+				'module' => RT_HD_TEXT_DOMAIN,
+				'lable' => 'Ticket',
+			);
+			return $post_type;
 		}
 
 		/**
@@ -47,9 +63,9 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		function init_importer() {
+		function init_importer( $field_array ) {
 			global $rt_hd_attributes_relationship_model;
-			$this->ticket_field = array(
+			$ticket_field = array(
 				'title'        => array(
 					'display_name' => 'Title',
 					'slug'         => 'title',
@@ -113,27 +129,27 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 				$relation                    = $relation[0];
 				$attr_settings               = maybe_unserialize( $relation->settings );
 				$slug                        = str_replace( array( '-' ), '_', $attr->attribute_name );
-				$this->ticket_field[ $slug ] = array(
+				$ticket_field[ $slug ] = array(
 					'display_name' => $attr->attribute_label,
 					'slug'         => $slug,
 					'required'     => ( isset( $attr_settings['is_required'] ) && $attr_settings['is_required'] == 'yes' ) ? true : false,
 				);
 				switch ( $attr->attribute_store_as ) {
 					case 'meta':
-						$this->ticket_field[ $slug ]['multiple'] = false;
-						$this->ticket_field[ $slug ]['type']     = $attr->attribute_render_type;
+						$ticket_field[ $slug ]['multiple'] = false;
+						$ticket_field[ $slug ]['type']     = $attr->attribute_render_type;
 						break;
 					case 'taxonomy':
-						$this->ticket_field[ $slug ]['type']          = 'defined';
-						$this->ticket_field[ $slug ]['definedsource'] = 'arr_' . $slug;
+						$ticket_field[ $slug ]['type']          = 'defined';
+						$ticket_field[ $slug ]['definedsource'] = 'arr_' . $slug;
 						if ( $attr->attribute_render_type == 'checklist' ) {
-							$this->ticket_field[ $slug ]['multiple'] = true;
+							$ticket_field[ $slug ]['multiple'] = true;
 						} else {
-							$this->ticket_field[ $slug ]['multiple'] = false;
+							$ticket_field[ $slug ]['multiple'] = false;
 						}
 						break;
 					default:
-						do_action( 'rthd_gravity_form_fields_map' & $this->ticket_field[ $slug ], $attr );
+						do_action( 'rthd_gravity_form_fields_map' & $ticket_field[ $slug ], $attr );
 						break;
 				}
 			}
@@ -203,7 +219,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 					'type'         => 'any',
 				),
 			);
-			$this->ticket_field = array_merge( $this->ticket_field, $temp_arr );
+			$ticket_field = array_merge( $ticket_field, $temp_arr );
 
 			$temp_arr           = array(
 				'accountname'    => array(
@@ -235,419 +251,22 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 					'type'         => 'any',
 				),
 			);
-			$this->ticket_field = array_merge( $this->ticket_field, $temp_arr );
+			$field_array[ Rt_HD_Module::$post_type ] = array_merge( $ticket_field, $temp_arr );
+			return $field_array;
 		}
 
-		/**
-		 * import call from ajax
-		 *
-		 * @since rt-Helpdesk 0.1
-		 */
-		public function hd_importer_ajax_hooks() {
-			add_action( 'wp_ajax_rthd_map_import', array( $this, 'rthd_map_import_callback' ) );
-			add_action( 'wp_ajax_rthd_map_import_feauture', array( $this, 'rthd_map_import_feauture' ) );
-			add_action( 'wp_ajax_rthd_import', array( $this, 'importer' ) );
-			add_action( 'init', array( $this, 'install_gravity_form_hook' ) );
-			add_action( 'wp_ajax_rthd_gravity_dummy_data', array( $this, 'get_random_gravity_data' ) );
-			add_action( 'wp_ajax_rthd_defined_map_feild_value', array( $this, 'rthd_defined_map_field_value' ) );
-		}
+		function add_hd_mapping_field_ui( $post_type ){
 
-		/**
-		 * install gravity form Hooks
-		 */
-		public function install_gravity_form_hook() {
-			add_action( 'gform_entry_info', array( $this, 'gravity_form_lead_meta' ), 1, 2 );
-			add_action( 'gform_entry_created', array( $this, 'rthd_auto_import' ), 1, 2 );
-			add_filter( 'gform_pre_submission_filter', array( $this, 'rthd_add_custome_field' ), 1, 1 );
-		}
-
-		/**
-		 * Add custom field
-		 *
-		 * @param $data
-		 *
-		 * @return mixed
-		 *
-		 * @since rt-Helpdesk 0.1
-		 */
-		public function rthd_add_custome_field( $data ) {
-
-			global $rt_hd_gravity_fields_mapping_model;
-			$form_id       = $data['id'];
-			$form_mappings = $rt_hd_gravity_fields_mapping_model->get_mapping( $form_id );
-			foreach ( $form_mappings as $mapping ) {
-				if ( $mapping->enable == 'yes' ) {
-					$found_history_field = false;
-					if ( ! $found_history_field && isset( $data['notification']['message'] ) ) {
-						$data['notification']['message'] .= '<br />rtHelpdesk Ticket :<a href="--rtcamp_hd_link--">rtHelpdesk Link</a>';
-
-						// Hides field output of fields set to a Visibility of Admin Only
-						// Ref: http://www.gravityhelp.com/documentation/page/Merge_Tags
-						if ( isset( $data['autoResponder']['message'] ) ) {
-							$data['autoResponder']['message'] = str_replace( '{all_fields}', '{all_fields:noadmin}', $data['autoResponder']['message'] );
-						}
-						/* "icing on the cake" by rtCamp - End */
-					}
-				}
+			if ( $post_type != Rt_HD_Module::$post_type ){
+				return;
 			}
 
-			return $data;
-		}
-
-		/**
-		 * define map field value
-		 *
-		 * @since rt-Helpdesk 0.1
-		 */
-		public function rthd_defined_map_field_value() {
-			$form_id = $_REQUEST['map_form_id'];
-			if ( isset( $_REQUEST['mapSourceType'] ) && $_REQUEST['mapSourceType'] == 'gravity' ) {
-				$field_id  = intval( $_REQUEST['field_id'] );
-				$tableName = RGFormsModel::get_lead_details_table_name();
-				global $wpdb;
-				$result = $wpdb->get_results( $wpdb->prepare( "select distinct value from $tableName where form_id= %d and field_number = %d ", $form_id, $field_id ) );
-			} else {
-				$field_id = $_REQUEST['field_id'];
-				$csv      = new parseCSV();
-				$csv->auto( $form_id );
-				$result   = array();
-				$field_id = str_replace( '-s-', ' ', $field_id );
-				foreach ( $csv->data as $cdt ) {
-					$tmpArr = array( 'value' => $cdt[ $field_id ] );
-					if ( ! in_array( $tmpArr, $result ) ) {
-						$result[] = $tmpArr;
-					}
-					if ( count( $result ) > 15 ) {
-						break;
-					}
-				}
-			}
-			header( 'Content-Type: application/json' );
-			if ( count( $result ) < 15 ) {
-				echo json_encode( $result );
-			} else {
-				echo json_encode( array() );
-			}
-			die( 0 );
-		}
-
-
-		/**
-		 * gracity form lead meta
-		 *
-		 * @param $form_id
-		 * @param $gr_lead
-		 *
-		 * @since rt-Helpdesk 0.1
-		 */
-		function gravity_form_lead_meta( $form_id, $gr_lead ) {
-			global $rt_hd_gravity_fields_mapping_model;
-			$gr_lead_id = absint( $gr_lead['id'] );
-			$mappings   = $rt_hd_gravity_fields_mapping_model->get_mapping( $form_id );
-			foreach ( $mappings as $mapping ) {
-				if ( $mapping->enable == 'yes' ) {
-					global $rt_hd_module;
-					$labels       = $rt_hd_module->labels;
-					$post_type    = Rt_HD_Module::$post_type;
-					$hd_ticket_id = intval( $this->gform_get_meta( $gr_lead_id, 'helpdesk-' . $post_type . '-post-id' ) );
-					if ( $hd_ticket_id ) {
-						echo 'Linked ' . esc_html( Rt_HD_Module::$name ) . " Post : <a href='" . esc_url( get_edit_post_link( $hd_ticket_id ) ) . "' >" . esc_html( get_the_title( $hd_ticket_id ) ) . '</a><br/>';
-					}
-				}
-			}
-		}
-
-		/**
-		 * Load handlebars template
-		 *
-		 * @since rt-Helpdesk 0.1
-		 */
-		function load_handlebars_templates() {
-			?>
-			<script id="map_table_content" type="text/x-handlebars-template">
-				<table>
-					{{#each data}}
-					<tr>
-						<td>{{this.value}}</td>
-						<td>
-							<select data-map-value='{{this.value}}'> {{#each ../mapData}}
-								<option value="{{this.slug}}"
-								{{{mapfieldnew this.display ../value}}}>{{this.display}}</option>
-								{{/each}} </select>
-						</td>
-						{{/each}}
-				</table>
-			</script>
-			<script id="defined_filed-option" type="text/x-handlebars-template">
-				{{#each this}}
-				<option value="{{this.slug}}">{{this.display}}</option>				{{/each}}
-			</script>
-			<script id="key-type-option" type="text/x-handlebars-template">
-				<option value="">--Select Key--</option>				{{#each this}}
-				<option value="{{this.meta_key}}">{{this.meta_key}}</option>				{{/each}}
-			</script>
-
-		<?php
-		}
-
-
-		/**
-		 * UI render
-		 * @since rt-Helpdesk 0.1
-		 */
-		public function ui() {
 			global $rt_hd_module;
-			$post_type = Rt_HD_Module::$post_type;
-
-			if ( ! isset( $_REQUEST['type'] ) ) {
-				$_REQUEST['type'] = 'csv';
-			}
-			$this->load_handlebars_templates();
+			ob_start();
 			?>
-			<ul class="subsubsub">
-				<li>
-					<a href="<?php echo esc_url( admin_url( "edit.php?post_type=$post_type&page=rthd-settings&type=csv" ) ); ?>" <?php if ( $_REQUEST['type'] == 'csv' ) {
-						echo " class='current'";
-					} ?>>CSV</a> |
-				</li>
-				<li>
-					<a href="<?php echo esc_url( admin_url( "edit.php?post_type=$post_type&page=rthd-settings&type=gravity" ) ); ?>" <?php if ( $_REQUEST['type'] == 'gravity' ) {
-						echo " class='current'";
-					} ?> >Gravity</a></li>
-
-			</ul>
-			<?php
-			if ( $_REQUEST['type'] == 'gravity' ) {
-				$formname = '';
-				$forms    = $this->get_forms();
-				if ( isset( $forms ) && ! empty( $forms ) ) {
-					$noFormflag = false;
-					if ( isset( $_POST['mapSource'] ) && trim( $_POST['mapSource'] ) == '' ) {
-						$class = ' class="form-invalid" ';
-					} else {
-						$class = '';
-					}
-					$form_select = '<select name="mapSource" id="mapSource" ' . $class . '>';
-					$form_select .= '<option value="">' . __( 'Please select a form', RT_HD_TEXT_DOMAIN ) . '</option>';
-					foreach ( $forms as $id => $form ) {
-						if ( isset( $_POST['mapSource'] ) && intval( $_POST['mapSource'] ) == $id ) {
-							$selected = "selected='selected'";
-							$formname = $form;
-						} else {
-							$selected = '';
-						}
-						$form_select .= '<option value="' . $id . '"' . $selected . '>' . $form . '</option>';
-					}
-				} else {
-					$form_select = '<strong>Please create some forms!</strong>';
-					$noFormflag  = true;
-				}
-				?>
-				<form action="" method="post">
-					<table class="form-table">
-						<tr>
-							<th scope="row"><label
-									for="mapSource"><?php _e( 'Select a Form:', RT_HD_TEXT_DOMAIN ); ?></label></th>
-							<td>
-								<?php echo balanceTags( $form_select ); ?>
-							</td>
-						</tr>
-						<?php if ( ! $noFormflag ) : ?>
-							<tr>
-								<th scope="row"></th>
-								<td><input type="button" id="map_submit" name="map_submit" value="Next"
-								           class="button button-primary"/></td>
-							</tr>
-						<?php endif; ?>
-					</table>
-					<div id="mapping-form"></div>
-				</form>
-			<?php
-			} else if ( $_REQUEST['type'] == 'csv' ) {
-				?>
-				<form action="" method="post" enctype="multipart/form-data">
-					<table class="form-table">
-						<tr>
-							<th scope="row"><label
-									for="map_upload"><?php _e( 'Upload a data file:', RT_HD_TEXT_DOMAIN ); ?></label>
-							</th>
-							<td>
-								<input type="file" name="map_upload" id="map_upload"/>
-							</td>
-						</tr>
-						<tr>
-							<td><input type="submit" name="map_submit" value="Upload" class="button"/></td>
-						</tr>
-					</table>
-				</form>
-			<?php
-			}
-		}
-
-
-		/**
-		 * Importer
-		 *
-		 * @since rt-Helpdesk 0.1
-		 */
-		public function importer() {
-			global $rt_hd_module;
-
-			$flag      = true;
-			$post_type = Rt_HD_Module::$post_type;
-
-			if ( $_REQUEST['type'] == 'csv' ) {
-				if ( isset( $_FILES['map_upload'] ) && $_FILES['map_upload']['error'] == 0 ) {
-					if ( $_FILES['map_upload']['type'] != 'text/csv' ) {
-						echo "<div class='error'>" . esc_html( __( 'Please upload a CSV file only!', RT_HD_TEXT_DOMAIN ) ) . '</div>';
-
-						return;
-					}
-					//Upload the file to 'Uploads' folder
-					$file   = $_FILES['map_upload'];
-					$upload = wp_handle_upload( $file, array( 'test_form' => false ) );
-					if ( isset( $upload['error'] ) ) {
-						?>
-						<div id="map_message" class="error"><p><?php echo esc_html( $upload['error'] ); ?>  </p></div>
-						<?php
-						return false;;
-					}
-					if ( ! $flag ) {
-						return;
-					}
-					$csv = new parseCSV();
-					$csv->auto( $upload['file'] );
-					$data = $csv->data[ rand( 1, count( $csv->data ) - 1 ) ];
-					?>
-					<div id="map_message" class="updated map_message"><p>
-							<?php _e( 'File uploaded:', RT_HD_TEXT_DOMAIN ); ?>
-							<strong><?php echo esc_html( $_FILES['map_upload']['name'] ); ?></strong>
-							<?php _e( 'Total Rows:', RT_HD_TEXT_DOMAIN ); ?>
-							<strong><?php echo esc_html( count( $csv->data ) ); ?></strong></p>
-					</div>
-
-					<form method="post" action="" id="rtHelpdeskMappingForm" name="rtHelpdeskMappingForm">
-					<input type="hidden" name="mapSource" id="mapSource"
-					       value="<?php echo esc_attr( $upload['file'] ); ?>"/>
-					<input type="hidden" name="mapSourceType" id="mapSourceType"
-					       value="<?php echo esc_attr( $_REQUEST['type'] ); ?>"/>
-					<input type="hidden" name="mapEntryCount" id="mapEntryCount"
-					       value="<?php echo esc_attr( count( $csv->data ) ); ?>"/>
-					<table class="wp-list-table widefat fixed" id="map_mapping_table">
-					<thead>
-					<tr>
-						<th scope="row"><?php _e( 'Column Name', RT_HD_TEXT_DOMAIN ); ?></th>
-						<th scope="row"><?php _e( 'Field Name', RT_HD_TEXT_DOMAIN ); ?></th>
-						<th scope="row"><?php _e( 'Default Value', RT_HD_TEXT_DOMAIN ); ?></th>
-						<th scope="row"><a href="#dummyDataPrev"> << </a><?php _e( 'Sample', RT_HD_TEXT_DOMAIN ); ?> <a
-								href="#dummyDataNext"> >> </a></th>
-					</tr>
-					</thead>
-					<tbody style="background: white;">
-					<?php foreach ( $csv->titles as $value ) { ?>
-						<tr>
-							<td><?php echo esc_html( ucfirst( $value ) ); ?></td>
-							<td>
-						<?php
-						$fieldname   = str_replace( ' ', '-s-', $value );
-						$form_fields = '<select data-og="' . $fieldname . '" name="field-' . $fieldname . '"  id="field-' . $fieldname . '" class="map_form_fields map_form_fixed_fields">';
-						$form_fields .= '<option value="">Choose a field or Skip it</option>';
-						foreach ( $this->ticket_field as $key => $lfield ) {
-							/*if ($lfield["type"] == 'defined')
-								continue;*/
-							$form_fields .= '<option value="' . $lfield['slug'] . '">' . ucfirst( $lfield['display_name'] ) . '</option>';
-						}
-						//$form_fields .= '<option value="ticketmeta">Other Field</option>';
-						$form_fields .= '</select>';
-						echo balanceTags( $form_fields );
-						?>
-							</td>
-							<td></td>
-							<td class='helpdesk-dummy-data'
-							    data-field-name="<?php echo esc_attr( $value ); ?>"><?php echo esc_html( $data[ $value ] ); ?></td>
-						</tr>
-					<?php } ?>
-					</tbody>
-
-				<?php
-				} else {
-					echo "<div class='error'><p>" . esc_html( __( 'Please Select File', RT_HD_TEXT_DOMAIN ) ) . '</p></div>';
-
-					return false;
-				}
-			} else {
-				global $rt_hd_gravity_fields_mapping_model;
-				$form_id    = intval( $_REQUEST['mapSource'] );
-				$form_data  = RGFormsModel::get_form_meta( $form_id );
-				$form_count = RGFormsModel::get_form_counts( $form_id );
-				if ( ! $form_data ) {
-					?>
-					<div id="map_message" class="error">Invalid Form</div>
-
-					<?php
-					return false;
-				}
-				if ( ! $flag ) {
-					return;
-				}
-				?>
-				<div id="map_message" class="updated map_message">
-					Form Selected : <strong><?php echo esc_html( $form_data['title'] ); ?></strong><br/> Total Entries:
-					<strong><?php echo esc_html( $form_count['total'] ); ?></strong>
-				</div>
-				<form method="post" action="" id="rtHelpdeskMappingForm" name="rtHelpdeskMappingForm">
-				<input type="hidden" name="mapSource" id="mapSource" value="<?php echo esc_attr( $form_id ); ?>"/>
-				<input type="hidden" name="mapSourceType" id="mapSourceType"
-				       value="<?php echo esc_attr( $_REQUEST['type'] ); ?>"/>
-				<input type="hidden" name="mapEntryCount" id="mapEntryCount"
-				       value="<?php echo esc_attr( $form_count['total'] ); ?>"/>
-				<table class="wp-list-table widefat fixed posts" >
-				<thead>
-				<tr>
-					<th scope="row"><?php _e( 'Field Name', RT_HD_TEXT_DOMAIN ); ?></th>
-					<th scope="row"><?php _e( 'Helpdesk Column Name', RT_HD_TEXT_DOMAIN ); ?></th>
-					<th scope="row"><?php _e( 'Default Value', RT_HD_TEXT_DOMAIN ); ?></th>
-					<th scope="row"><a href="#dummyDataPrev"> << </a><?php _e( 'Sample', RT_HD_TEXT_DOMAIN ); ?><a
-							href="#dummyDataNext"> >> </a></th>
-				</tr>
-				</thead>
-				<tbody style=" background: white; ">
-				<?php
-				$formdummydata = RGFormsModel::get_leads( $form_id, 0, 'ASC', '', 0, 1 );
-				foreach ( $form_data['fields'] as &$field ) {
-					?>
-					<tr data-field-name="<?php echo esc_attr( $field['label'] ); ?>">
-						<td><?php echo esc_html( ucfirst( $field['label'] ) ); ?> <input type="hidden"
-						                                                                 value="<?php echo esc_attr( ucfirst( $field['type'] ) ); ?>"/>
-						</td>
-						<td>
-					<?php
-					$form_fields = '<select name="field-' . $field['id'] . '"  id="field-' . $field['id'] . '" class="map_form_fields map_form_fixed_fields">';
-					$form_fields .= '<option value="">Choose a field or Skip it</option>';
-					foreach ( $this->ticket_field as $key => $lfield ) {
-						/*if (isset($lfield["type"]) &&  $lfield["type"]== 'defined')
-							continue;*/
-						$form_fields .= '<option value="' . esc_attr( $lfield['slug'] ) . '">' . esc_html( ucfirst( $lfield['display_name'] ) ) . '</option>';
-					}
-					//                                                /$form_fields .= '<option value="ticketmeta">Other Field</option>';
-					$form_fields .= '</select>';
-					echo balanceTags( $form_fields );
-					?>
-						</td>
-						<td></td>
-						<td class='helpdesk-dummy-data'
-						    data-field-name="<?php echo esc_attr( $field['id'] ); ?>"><?php echo esc_html( ( isset( $formdummydata[0][ $field['id'] ] ) ) ? $formdummydata[0][ $field['id'] ] : '' ); ?></td>
-					</tr>
-				<?php
-				}
-				?>
-				</tbody>
-			<?php } ?>
-
-			<tfoot>
 			<tr>
 				<td>
-					Status
+				 Status
 				</td>
 				<td>
 			<?php
@@ -675,8 +294,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 			<?php
 			global $wpdb;
 			$results          = Rt_HD_Utils::get_hd_rtcamp_user();
-			$meta_key_results = $wpdb->get_results( " select distinct meta_key from $wpdb->postmeta inner join $wpdb->posts on post_id=ID
-				 and post_type='" . $post_type . "' and  not meta_key like '\_%' order by meta_key" );
+			$meta_key_results = $wpdb->get_results( " select distinct meta_key from $wpdb->postmeta inner join $wpdb->posts on post_id=ID and post_type='" . $post_type . "' and  not meta_key like '\_%' order by meta_key" );
 
 			$arr_assignedto = array();
 			if ( ! empty( $results ) ) {
@@ -709,195 +327,97 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 				<tr>
 					<td><?php echo esc_html( $attr->attribute_label ); ?></td>
 					<td>
-				<?php
-				switch ( $attr->attribute_store_as ) {
-					case 'taxonomy':
-						$attr_terms = get_terms( rthd_attribute_taxonomy_name( $attr->attribute_name ), array(
-							'hide_empty' => false,
-							'orderby'    => $attr->attribute_orderby,
-							'order'      => 'ASC',
-						) );
-						$term_array = array();
-						if ( is_array( $attr_terms ) && count( $attr_terms ) > 0 ) {
-							echo '<select name="' . esc_attr( str_replace( array( '-' ), '_', $attr->attribute_name ) ) . '">';
-							echo '<option value="" >Select ' . esc_html( $attr->attribute_label ) . '</option>';
-							foreach ( $attr_terms as $term ) {
-								echo '<option value="' . esc_attr( $term->slug ) . '" >' . esc_html( $term->name ) . '</option>';
-								$term_array[] = array( 'slug' => $term->slug, 'display' => $term->name );
-							}
-							echo '</select>';
-						} else {
-							echo 'No ' . esc_html( $attr->attribute_label ) . ' found';
+						<?php
+						switch ( $attr->attribute_store_as ) {
+							case 'taxonomy':
+								$attr_terms = get_terms( rthd_attribute_taxonomy_name( $attr->attribute_name ), array(
+									'hide_empty' => false,
+									'orderby'    => $attr->attribute_orderby,
+									'order'      => 'ASC',
+								) );
+								$term_array = array();
+								if ( is_array( $attr_terms ) && count( $attr_terms ) > 0 ) {
+									echo '<select name="' . esc_attr( str_replace( array( '-' ), '_', $attr->attribute_name ) ) . '">';
+									echo '<option value="" >Select ' . esc_html( $attr->attribute_label ) . '</option>';
+									foreach ( $attr_terms as $term ) {
+										echo '<option value="' . esc_attr( $term->slug ) . '" >' . esc_html( $term->name ) . '</option>';
+										$term_array[] = array( 'slug' => $term->slug, 'display' => $term->name );
+									}
+									echo '</select>';
+								} else {
+									echo 'No ' . esc_html( $attr->attribute_label ) . ' found';
+								}
+								echo '<script> var arr_' . esc_attr( str_replace( array( '-' ), '_', $attr->attribute_name ) ) . '=' . json_encode( $term_array ) . '; </script>';
+								break;
+							case 'meta':
+								echo '<input type="text" name="' . esc_attr( str_replace( array( '-' ), '_', $attr->attribute_name ) ) . '" />';
+								break;
+							default:
+								do_action( 'rthd_gravity_form_fields_map_default_value' & $this->ticket_field[ $attr->attribute_name ], $attr );
+								break;
 						}
-						echo '<script> var arr_' . esc_attr( str_replace( array( '-' ), '_', $attr->attribute_name ) ) . '=' . json_encode( $term_array ) . '; </script>';
-						break;
-					case 'meta':
-						echo '<input type="text" name="' . esc_attr( str_replace( array( '-' ), '_', $attr->attribute_name ) ) . '" />';
-						break;
-					default:
-						do_action( 'rthd_gravity_form_fields_map_default_value' & $this->ticket_field[ $attr->attribute_name ], $attr );
-						break;
-				}
-					?>
+						?>
 					</td>
 					<td></td>
 					<td></td>
 				</tr>
 			<?php
 			}
-			?>
-
-			<tr>
-				<td>
-					Date Format
-				</td>
-				<td>
-					<input type="text" value="" name="dateformat"/> <a
-						href='http://www.php.net/manual/en/datetime.createfromformat.php' target='_blank'>Refrence</a>
-				</td>
-				<td></td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>
-					Title Prefix
-				</td>
-				<td>
-					<input type="text" value="" name="titleprefix"/>
-				</td>
-				<td></td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>
-					Title Suffix
-				</td>
-				<td>
-					<input type="text" value="" name="titlesuffix"/>
-				</td>
-				<td></td>
-				<td></td>
-			</tr>
-
-			<tr>
-				<td>
-			<?php
-			$form_fields = '<select name="otherfield0" class="other-field">';
-			$form_fields .= '<option value="">Select</option>';
-			foreach ( $this->ticket_field as $lfield ) {
-				if ( isset( $lfield['type'] ) && $lfield['type'] == 'defined' ) {
-					continue;
-				}
-				$form_fields .= '<option value="' . esc_attr( $lfield['slug'] ) . '">' . esc_html( ucfirst( $lfield['display_name'] ) ) . '</option>';
-			}
-			$form_fields .= '</select>';
-			echo balanceTags( $form_fields );
-			?>
-				</td>
-				<td>
-					<input type="text" value="" id="otherfield0"/>
-				</td>
-				<td></td>
-				<td></td>
-			</tr>
-			<tr>
-				<td>
-
-				</td>
-				<td>
-					<label><input type="checkbox" value="" id="forceimport"/>Also Import previously Imported
-						Entry(Duplicate)</label>
-				</td>
-				<td>
-
-				</td>
-				<td></td>
-			</tr>
-			</tfoot>
-			</table>
-			<script>
-				var transaction_id =<?php echo esc_attr( time() ); ?>;
-				var arr_map_fields =<?php echo json_encode( $this->ticket_field ); ?>;
-				<?php if ( $_REQUEST['type'] == 'gravity' ) { ?>
-				var arr_lead_id = <?php $this->get_all_gravity_lead( $form_id ); ?>;
-			<?php } else {
-			$jsonArray = array();
-			$rCount = 0;
-				foreach ( $csv->data as $cdata ) {
-					$jsonArray[] = array( 'id' => $rCount++ );
-				}
-			?>
-		var arr_lead_id = <?php echo json_encode( $jsonArray ); ?>;
-			<?php } ?>
-			</script>
-			<input type="button" name="map_mapping_import" id="map_mapping_import" value="Import"
-			       class="button button-primary"/>
-			</form>
-			<div id='startImporting'>
-				<h2> <?php _e( esc_attr( sprintf( 'Importing %s into Helpdesk...', isset( $formname ) ? $formname : '' ) ), RT_HD_TEXT_DOMAIN ); ?></h2>
-
-				<div id="progressbar"></div>
-				<div class="myupdate">
-					<p> <?php _e( 'Successfully imported :', RT_HD_TEXT_DOMAIN ); ?> <span
-							id='sucessfullyImported'>0</span></p>
-				</div>
-				<div class="myerror">
-					<p> <?php _e( 'Failed to import :', RT_HD_TEXT_DOMAIN ); ?> <span id='failImported'>0</span></p>
-				</div>
-				<div class="importloading">
-
-				</div>
-				<div class="sucessmessage">
-					<?php if ( $_REQUEST['type'] == 'gravity' ) {
-					_e( 'Would u like to import future entries automatically?', RT_HD_TEXT_DOMAIN );?> &nbsp; <input
-						type='button' id='futureYes' value='Yes' class="button button-primary"/>&nbsp;<input
-						type='button' id='futureNo' value='No' class="button "/></div>
-				<?php } else { ?>
-					<h3><?php _e( 'Done !', RT_HD_TEXT_DOMAIN ); ?></h3>
-					<span id="extra-data-importer"></span>
-
-				<?php } ?>
-
-			</div>
-			<?php    die();
-
+			return ob_get_clean();
 		}
 
-
 		/**
-		 * map import feature
+		 * Add custom field
+		 *
+		 * @param $data
+		 *
+		 * @return mixed
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		public function rthd_map_import_feauture() {
-			global $rt_hd_gravity_fields_mapping_model;
+		public function rthd_add_custome_field( $data, $form_mappings ) {
 
-			$response = array();
-			header( 'Content-Type: application/json' );
-			if ( ! isset( $_REQUEST['map_form_id'] ) ) {
-				$response['status'] = false;
-			} else {
-				$form_id  = $_REQUEST['map_form_id'];
-				$map_data = maybe_serialize( $_REQUEST['map_data'] );
+			foreach ( $form_mappings as $mapping ) {
+				if ( $mapping->enable == 'yes' ) {
+					$found_history_field = false;
+					if ( ! $found_history_field && isset( $data['notification']['message'] ) ) {
+						$data['notification']['message'] .= '<br />rtHelpdesk Ticket :<a href="--rtcamp_hd_link--">rtHelpdesk Link</a>';
 
-				$mapping = $rt_hd_gravity_fields_mapping_model->get_mapping( $form_id );
-				if ( ! empty( $mapping ) ) {
-					$data  = array( 'mapping' => $map_data, );
-					$where = array( 'form_id' => $form_id, );
-					$rt_hd_gravity_fields_mapping_model->update_mapping( $data, $where );
-				} else {
-					$data = array(
-						'form_id' => $form_id,
-						'mapping' => $map_data,
-					);
-					$rt_hd_gravity_fields_mapping_model->add_mapping( $data );
+						// Hides field output of fields set to a Visibility of Admin Only
+						// Ref: http://www.gravityhelp.com/documentation/page/Merge_Tags
+						if ( isset( $data['autoResponder']['message'] ) ) {
+							$data['autoResponder']['message'] = str_replace( '{all_fields}', '{all_fields:noadmin}', $data['autoResponder']['message'] );
+						}
+						/* "icing on the cake" by rtCamp - End */
+					}
 				}
-				$response['status'] = true;
 			}
-			echo json_encode( $response );
-			die( 0 );
+
+			return $data;
 		}
 
+		/**
+		 * gracity form lead meta
+		 *
+		 * @param $gr_lead_id
+		 * @param $mappings
+		 *
+		 * @since rt-Helpdesk 0.1
+		 */
+		function gravity_form_lead_meta( $gr_lead_id, $mappings ) {
+			global $rt_importer;
+			foreach ( $mappings as $mapping ) {
+				if ( $mapping->enable == 'yes' ) {
+					global $rt_hd_module;
+					$labels       = $rt_hd_module->labels;
+					$post_type    = Rt_HD_Module::$post_type;
+					$hd_ticket_id = intval( $rt_importer->gform_get_meta( $gr_lead_id, 'helpdesk-' . $post_type . '-post-id' ) );
+					if ( $hd_ticket_id ) {
+						echo 'Linked ' . esc_html( Rt_HD_Module::$name ) . " Post : <a href='" . esc_url( get_edit_post_link( $hd_ticket_id ) ) . "' >" . esc_html( get_the_title( $hd_ticket_id ) ) . '</a><br/>';
+					}
+				}
+			}
+		}
 
 		/**
 		 * process import
@@ -913,6 +433,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 		 */
 		function process_import( $map_data, $form_id, $gravity_lead_id, $type, $forceImport = false, $autoDieFlag = true ) {
 			//** remove woocommerce hooks **//
+			global $rt_importer;
 
 			remove_action( 'create_term', 'woocommerce_create_term', 5, 3 );
 			remove_action( 'delete_term', 'woocommerce_delete_term', 5, 3 );
@@ -931,7 +452,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 				}
 				$response[0]['lead_id'] = $gravity_lead_id;
 				if ( ! $forceImport ) {
-					$alreadyImported = $this->gform_get_meta( $gravity_lead_id, 'import-to-helpdesk' );
+					$alreadyImported = $rt_importer->gform_get_meta( $gravity_lead_id, 'import-to-helpdesk' );
 					if ( $alreadyImported ) {
 						if ( $autoDieFlag ) {
 							return true;
@@ -1234,6 +755,8 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 		 */
 		function create_tickets_from_map_data( $map_data, $gravity_lead_id, $type ) {
 
+			global $rt_importer;
+
 			$contactemail = array();
 			$description = '';
 			$assignedto = false;
@@ -1241,6 +764,10 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 			extract( $map_data, EXTR_OVERWRITE );
 
 			global $transaction_id;
+			if ( empty( $transaction_id ) ){
+				$transaction_id = esc_attr( time() );
+			}
+
 			$post_type       = Rt_HD_Module::$post_type;
 			$ticketModel     = new Rt_HD_Ticket_Model();
 			if ( isset( $creationdate ) ) {
@@ -1327,10 +854,10 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 				$response['status'] = false;
 			} else {
 				if ( $type == 'gravity' ) {
-					$this->gform_update_meta( $gravity_lead_id, 'import-to-helpdesk', 1 );
-					$this->gform_update_meta( $gravity_lead_id, 'helpdesk-' . $post_type . '-post-id', $ticket_id );
+					$rt_importer->gform_update_meta( $gravity_lead_id, 'import-to-helpdesk', 1 );
+					$rt_importer->gform_update_meta( $gravity_lead_id, 'helpdesk-' . $post_type . '-post-id', $ticket_id );
 					if ( isset( $transaction_id ) && $transaction_id > 0 ) {
-						$this->gform_update_meta( $gravity_lead_id, '_transaction_id', $transaction_id );
+						$rt_importer->gform_update_meta( $gravity_lead_id, '_transaction_id', $transaction_id );
 					}
 				}
 				$response['status'] = true;
@@ -1675,214 +1202,6 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 			}
 
 			return $response;
-		}
-
-
-		/**
-		 * map import call back
-		 *
-		 * @since rt-Helpdesk 0.1
-		 */
-		public function rthd_map_import_callback() {
-			if ( ! isset( $_REQUEST['gravity_lead_id'] ) ) {
-				echo json_encode( array( array( 'status' => false ) ) );
-				die( 0 );
-			}
-			global $bulkimport;
-			$bulkimport         = true;
-			$map_index_lead_id  = $_REQUEST['gravity_lead_id'];
-			$map_source_form_id = $_REQUEST['map_form_id'];
-			$map_data           = $_REQUEST['map_data'];
-			if ( isset( $_REQUEST['forceimport'] ) && $_REQUEST['forceimport'] == 'false' ) {
-				$forceImport = false;
-			} else {
-				$forceImport = true;
-			}
-			global $transaction_id;
-			$transaction_id = $_REQUEST['trans_id'];
-			$type           = $_REQUEST['mapSourceType'];
-			$this->process_import( $map_data, $map_source_form_id, $map_index_lead_id, $type, $forceImport );
-		}
-
-		/**
-		 * auto import
-		 *
-		 * @param $lead
-		 * @param $form
-		 *
-		 * @since rt-Helpdesk 0.1
-		 */
-		public function rthd_auto_import( $lead, $form ) {
-			//gform_after_submission
-			global $rt_hd_gravity_fields_mapping_model;
-			$form_id       = $form['id'];
-			$form_mappings = $rt_hd_gravity_fields_mapping_model->get_mapping( $form_id );
-			foreach ( $form_mappings as $fm ) {
-				$map_data = maybe_unserialize( $fm->mapping );
-				if ( ! empty( $map_data ) && $fm->enable == 'yes' ) {
-					global $gravity_auto_import;
-					$gravity_auto_import = true;
-					$forceImport         = false;
-					$gravity_lead_id     = $lead['id'];
-					$type                = 'gravity';
-					$this->process_import( $map_data, $form_id, $gravity_lead_id, $type, $forceImport, false );
-				}
-			}
-		}
-
-		/**
-		 * get forms
-		 *
-		 * @return bool
-		 *
-		 * @since rt-Helpdesk 0.1
-		 */
-		function get_forms() {
-			if ( ! class_exists( 'RGForms' ) ) {
-				return false;
-			}
-			$active = RGForms::get( 'active' ) == '' ? null : RGForms::get( 'active' );
-			$forms  = RGFormsModel::get_forms( $active, 'title' );
-			if ( isset( $forms ) && ! empty( $forms ) ) {
-				foreach ( $forms as $form ) {
-					$return[ $form->id ] = $form->title;
-				}
-
-				return $return;
-			} else {
-				return false;
-			}
-		}
-
-		/**
-		 *
-		 * get all gravity lead
-		 *
-		 * @param $form_id
-		 *
-		 * @since rt-Helpdesk 0.1
-		 */
-		function get_all_gravity_lead( $form_id ) {
-			$gravityLeadTableName = RGFormsModel::get_lead_table_name();
-			global $wpdb;
-			$sql = $wpdb->prepare( "SELECT id FROM $gravityLeadTableName WHERE form_id=%d AND status='active'", $form_id );
-			echo json_encode( $wpdb->get_results( $sql, ARRAY_A ) );
-		}
-
-		/**
-		 * function to handle lead meta
-		 *
-		 * @param $entry_id
-		 * @param $meta_key
-		 *
-		 * @return bool|mixed
-		 *
-		 * @since rt-Helpdesk 0.1
-		 */
-		function gform_get_meta( $entry_id, $meta_key ) {
-			global $wpdb, $_gform_lead_meta;
-
-			//get from cache if available
-			$cache_key = $entry_id . ' ' . $meta_key;
-			if ( array_key_exists( $cache_key, $_gform_lead_meta ) ) {
-				return $_gform_lead_meta[ $cache_key ];
-			}
-
-			$table_name                     = RGFormsModel::get_lead_meta_table_name();
-			$value                          = $wpdb->get_var( $wpdb->prepare( "SELECT meta_value FROM {$table_name} WHERE lead_id=%d AND meta_key=%s", $entry_id, $meta_key ) );
-			$meta_value                     = $value == null ? false : maybe_unserialize( $value );
-			$_gform_lead_meta[ $cache_key ] = $meta_value;
-
-			return $meta_value;
-		}
-
-		/**
-		 * gform update meta
-		 *
-		 * @param $entry_id
-		 * @param $meta_key
-		 * @param $meta_value
-		 *
-		 * @since rt-Helpdesk 0.1
-		 */
-		function gform_update_meta( $entry_id, $meta_key, $meta_value ) {
-			global $wpdb, $_gform_lead_meta;
-			$table_name = RGFormsModel::get_lead_meta_table_name();
-
-			$meta_value  = maybe_serialize( $meta_value );
-			$meta_exists = gform_get_meta( $entry_id, $meta_key ) !== false;
-			if ( $meta_exists ) {
-				$wpdb->update( $table_name, array( 'meta_value' => $meta_value ), array(
-					'lead_id'  => $entry_id,
-					'meta_key' => $meta_key,
-				), array( '%s' ), array( '%d', '%s' ) );
-			} else {
-				$wpdb->insert( $table_name, array(
-					'lead_id'    => $entry_id,
-					'meta_key'   => $meta_key,
-					'meta_value' => $meta_value,
-				), array( '%d', '%s', '%s' ) );
-			}
-
-			//updates cache
-			$cache_key = $entry_id . '_' . $meta_key;
-			if ( array_key_exists( $cache_key, $_gform_lead_meta ) ) {
-				$_gform_lead_meta[ $cache_key ] = maybe_unserialize( $meta_value );
-			}
-		}
-
-		/**
-		 * gform delete meta
-		 *
-		 * @param        $entry_id
-		 * @param string $meta_key
-		 *
-		 * @since rt-Helpdesk 0.1
-		 *
-		 */
-		function gform_delete_meta( $entry_id, $meta_key = '' ) {
-			global $wpdb, $_gform_lead_meta;
-			$table_name  = RGFormsModel::get_lead_meta_table_name();
-			$meta_filter = empty( $meta_key ) ? '' : $wpdb->prepare( 'AND meta_key=%s', $meta_key );
-
-			$wpdb->query( $wpdb->prepare( "DELETE FROM {$table_name} WHERE lead_id=%d {$meta_filter}", $entry_id ) );
-
-			//clears cache.
-			$_gform_lead_meta = array();
-		}
-
-		/**
-		 * get random gravity data
-		 *
-		 * @since rt-Helpdesk 0.1
-		 */
-		function get_random_gravity_data() {
-			//mapSourceType
-
-			header( 'Content-Type: application/json' );
-			$form_id = $_REQUEST['map_form_id'];
-			if ( isset( $_REQUEST['mapSourceType'] ) && $_REQUEST['mapSourceType'] == 'gravity' ) {
-				$lead_id       = intval( $_REQUEST['dummy_lead_id'] );
-				$formdummydata = RGFormsModel::get_lead( $lead_id );
-
-				foreach ( $formdummydata as $key => $val ) {
-					if ( ! ( strpos( strval( $key ), '.' ) === false ) ) {
-						$pieces = explode( '.', $key );
-
-						if ( ! isset( $formdummydata[ intval( $pieces[0] ) ] ) ) {
-							$formdummydata[ intval( $pieces[0] ) ] = '';
-						}
-						$formdummydata[ intval( $pieces[0] ) ] .= $val . ' ';
-					}
-				}
-				echo json_encode( $formdummydata );
-			} else {
-				$lead_id = intval( $_REQUEST['dummy_lead_id'] );
-				$csv     = new parseCSV();
-				$csv->auto( $form_id );
-				echo json_encode( $csv->data[ $lead_id ] );
-			}
-			die( 0 );
 		}
 	}
 }
