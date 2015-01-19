@@ -14,11 +14,27 @@ $comments = get_comments( array(
 	'offset' => $offset,
 ) );
 
+$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
+$created_by = get_post_meta( $post->ID, '_rtbiz_hd_created_by', true );
+
+$user_edit_content = current_user_can( $cap ) || ( get_current_user_id() == $post->$created_by );
+if ( $user_edit_content ){
 	?>
+   <div id="edit-ticket-data" title="Edit Ticket" style="display: none;">
+	   <textarea id="edited_ticket_content" name="edited_ticket_content" placeholder="Edit ticket" rows="5"></textarea>
+	   <button class="edit-ticket button button-primary" id="edit-ticket-content-click" type="button">Update</button>
+	   <?php wp_nonce_field('rt_hd_ticket_edit','edit_ticket_nonce'); ?>
+	   <img id='ticket-edithdspinner' class="helpdeskspinner" src="<?php echo admin_url().'images/spinner.gif'; ?>">
+   </div>
+<?php } ?>
 	<div id="dialog-form" title="Edit Followup" style='display: none'>
-		<textarea id="edited_followup_content" name="edited_followup_content" placeholder="Add new followup" rows="5"></textarea>
+		<textarea id="edited_followup_content" name="edited_followup_content" placeholder="edit followup" rows="5"></textarea>
 		<div id="edit-private-comment" class="red-color">
-			<label for="edit-private"><input id="edit-private" type="checkbox" name="private" value="yes" text="check to make comment private"><?php _e('Private'); ?></label>
+            <select name="private" id="edit-private" >
+                <option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ) ?> </option>
+                <option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ) ?> </option>
+                <option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_STAFF ) ?> </option>
+            </select>
 			<img id='edithdspinner' class="helpdeskspinner" src="<?php echo admin_url().'images/spinner.gif'; ?>">
 		</div>
 		<div class="edit-action-button">
@@ -47,8 +63,17 @@ if ( ! empty( $post->post_content ) ) {
                 <div class="followup-information">
                     <span title="<?php echo esc_attr( $authoremail ); ?>"><?php echo esc_attr( ( $authorname== '' ) ? 'Anonymous' : $authorname ); ?> </span>
                     <time title="<?php echo esc_attr( $post->post_date); ?>" datetime="<?php echo esc_attr( $post->post_date); ?>">
-                        <?php echo esc_attr( human_time_diff( strtotime( $post->post_date), current_time( 'timestamp' ) ) ) . ' ago';
-                        ?>
+	                   <?php if ( $user_edit_content ) {
+		                   ?>
+		                   <a href="#" class="edit-ticket-link">Edit</a> |
+		                   <?php
+		                   $data = get_post_meta( $post->ID, 'rt_hd_original_email_body', true );
+		                   if ( ! empty( $data ) ) {
+			                   ?>
+			                   <a href="?show_original=true" class="show-original-email"> Show original email</a> |
+		                   <?php }
+	                   }?>
+	                    <?php echo '<a class="followup-hash-url" id="ticket_description'.'" href="#ticket_description" >'. esc_attr( human_time_diff( strtotime( $post->post_date), current_time( 'timestamp' ) ) ) . ' ago</a>';?>
                     </time>
             </div>
 				<div class="rthd-comment-content">
@@ -82,9 +107,8 @@ if ( ! empty( $post->post_content ) ) {
 <ul class="discussion js-stream" id="chat-UI">
 
 	<?php
-	$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
 	foreach ( $comments as $comment ) {
-		$user_edit = current_user_can( $cap ) || (get_current_user_id() == $comment->user_id );
+		$user_edit = current_user_can( $cap ) || ( get_current_user_id() == $comment->user_id );
 		$comment_user  = get_user_by( 'id', $comment->user_id );
 		$comment_render_type = 'left';
 		if ( ! empty( $comment_user ) ) {

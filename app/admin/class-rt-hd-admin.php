@@ -34,6 +34,10 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 		function hooks() {
 			add_action( 'admin_enqueue_scripts', array( $this, 'load_styles_scripts' ) );
 			add_filter( 'pre_insert_term', array( $this, 'remove_wocommerce_actions' ), 10, 2 );
+
+			//upload folder change
+			//			add_filter( 'wp_handle_upload_prefilter', array( $this, 'handle_upload_prefilter' ) );
+			//			add_filter( 'wp_handle_upload', array( $this, 'handle_upload' ) );
 		}
 
 		/**
@@ -137,6 +141,56 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 
 			return $term;
 		}
+
+		/**
+		 * add filter for Update path of helpdesk upload
+		 *
+		 * @param $file
+		 *
+		 * @return mixed
+		 */
+		function handle_upload_prefilter( $file ) {
+			$postype = $_REQUEST['post_type'];
+			if ( empty( $postype ) && !empty( $_REQUEST['post_id'] ) ){
+				$postype = get_post_type( $_REQUEST['post_id'] );
+			}
+			if( $postype == Rt_HD_Module::$post_type ){
+				add_filter( 'upload_dir', array( $this, 'custom_upload_dir' ) );
+			}
+			return $file;
+		}
+
+		/**
+		 * remode filter for Update path of helpdesk upload
+		 *
+		 * @param $fileinfo
+		 *
+		 * @return mixed
+		 */
+		function handle_upload( $fileinfo )   {
+			$postype = $_REQUEST['post_type'];
+			if ( empty( $postype ) && !empty( $_REQUEST['post_id'] ) ) {
+				$postype = get_post_type( $_REQUEST['post_id'] );
+			}
+			if ( $postype == Rt_HD_Module::$post_type ) {
+				remove_filter( 'upload_dir', array( $this, 'custom_upload_dir' ) );
+			}
+			return $fileinfo;
+		}
+
+		/**
+		 * Update path for helpdesk upload
+		 *
+		 * @param $args
+		 *
+		 * @return mixed
+		 */
+		function custom_upload_dir($args) {
+			$args['path'] = $args['basedir'] . '/' . RT_HD_TEXT_DOMAIN . $args['subdir'];
+			$args['url'] = $args['baseurl'] . '/' . RT_HD_TEXT_DOMAIN . $args['subdir'];
+			return $args;
+		}
+
 
 
 	}

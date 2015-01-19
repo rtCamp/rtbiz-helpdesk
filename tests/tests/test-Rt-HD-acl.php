@@ -23,15 +23,17 @@ class test_Rt_HD_ACL extends RT_WP_TestCase {
 	 * Test register_rt_hd_module
 	 */
 	function  test_register_rt_hd_module() {
+		$tmp = $this->rthdAcl->register_rt_hd_module( array() );
+
 		$this->assertEquals(
 			array(
-				'rt_helpdesk' => array(
-					'label'      => 'rtHelpdesk',
-					'post_types' => array( 'rtbiz_hd_ticket' ),
-					'require_user_groups' => true,
-				    'require_product_sync' => true,
-				)
-			), $this->rthdAcl->register_rt_hd_module( array() ) );
+				'label'      => isset( $settings['rthd_menu_label'] ) ? $settings['rthd_menu_label'] : 'rtHelpdesk',
+				'post_types' => array( Rt_HD_Module::$post_type ),
+				'department_support' => array( Rt_HD_Module::$post_type ),
+				'offering_support' => array( Rt_HD_Module::$post_type ),
+				'setting_option_name' => Redux_Framework_Helpdesk_Config::$hd_opt, // Use For ACL
+
+			), $tmp['rt_helpdesk'] );
 	}
 }
  

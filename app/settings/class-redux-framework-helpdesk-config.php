@@ -400,52 +400,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			// Only initiates in case of settings page is getting displayed. Not otherwise
 			if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] == self::$page_slug ) {
 				ob_start();
-				rthd_ticket_impoters();
-				$importers_content = ob_get_clean();
-			} else {
-				$importers_content = '';
-			}
-			$this->sections[]  = array(
-				'title'       => __( 'Importers' ),
-				'desc'        => __( 'This section lets you import tickets into Helpdesk System from either a CSV file or any other Form Manager Plugin e.g., Gravity Forms.' ),
-				'icon'        => 'el-icon-upload',
-				'permissions' => $editor_cap,
-				//'subsection' => true,
-				'fields'      => array(
-					array(
-						'id'      => 'rthd_ticket_importers',
-						'type'    => 'raw',
-						'content' => $importers_content,
-					),
-				),
-			);
-
-			// Only initiates in case of settings page is getting displayed. Not otherwise
-			if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] == self::$page_slug ) {
-				ob_start();
-				rthd_ticket_import_mapper();
-				$import_mapper_content = ob_get_clean();
-			} else {
-				$import_mapper_content = '';
-			}
-			$this->sections[]      = array(
-				'title'       => __( 'Mapper' ),
-				'desc'        => __( 'This section lets you view all the Import Mappings existing for ticket importing into Helpdesk System.' ),
-				'icon'        => 'el-icon-map-marker',
-				'permissions' => $editor_cap,
-				'subsection'  => true,
-				'fields'      => array(
-					array(
-						'id'      => 'rthd_ticket_import_mapper',
-						'type'    => 'raw',
-						'content' => $import_mapper_content,
-					),
-				),
-			);
-
-			// Only initiates in case of settings page is getting displayed. Not otherwise
-			if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] == self::$page_slug ) {
-				ob_start();
 				rthd_ticket_import_logs();
 				$import_log_content = ob_get_clean();
 			} else {
@@ -455,7 +409,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				'title'       => __( 'Import Logs' ),
 				'icon'        => 'el-icon-list-alt',
 				'permissions' => $editor_cap,
-				'subsection'  => true,
+				//'subsection'  => true,
 				'fields'      => array(
 					array(
 						'id'      => 'rthd_ticket_import_logs',
@@ -601,16 +555,6 @@ function rthd_get_redux_post_settings( $post ) {
 	$data = wp_parse_args( get_post_meta( $post->ID, 'redux_helpdesk_settings', true ), $GLOBALS['redux_helpdesk_settings'] );
 
 	return $GLOBALS['redux_helpdesk_settings'];
-}
-
-function rthd_ticket_impoters() {
-	global $rt_hd_gravity_form_importer;
-	$rt_hd_gravity_form_importer->ui();
-}
-
-function rthd_ticket_import_mapper() {
-	global $rt_hd_gravity_form_mapper;
-	$rt_hd_gravity_form_mapper->ui();
 }
 
 function rthd_ticket_import_logs() {
