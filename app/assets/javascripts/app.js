@@ -161,8 +161,7 @@ jQuery( document ).ready( function ( $ ) {
 				data: requestArray,
 				success: function ( data ) {
 					if ( data.status ) {
-						jQuery('#comment-'+commentid ).find('.rthd-comment-content' ).html(data.comment_content);
-						jQuery('#comment-'+commentid ).find( '#is-private-comment' ).val(data.private);
+						jQuery('#comment-'+commentid ).replaceWith(data.comment_content);
 						jQuery("#dialog-form").dialog().dialog("close");
 					} else {
 						alert( data.message );

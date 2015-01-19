@@ -1324,14 +1324,9 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 				//todo: remove below line when comment wordpress start supporting comment_type edit
 				rthd_edit_comment_type( $commentdata['comment_ID'], $comment_privacy );
-
-				//				$old_privacy = get_comment_meta( $_POST['comment_id'], '_rthd_privacy' ,true );
-
-				//				update_comment_meta( $_POST['comment_id'], '_rthd_privacy', $comment_privacy );
-
-				$comment = get_comment( $_POST['comment_id'] );
 				$uploaded = array();
 				$attachment = array();
+				$comment = get_comment( $_POST['comment_id'] );
 				if ( isset( $_REQUEST['attachemntlist'] ) && ! empty( $_REQUEST['attachemntlist'] ) ) {
 					delete_comment_meta( $_POST['comment_id'], 'attachment' );
 					foreach ( $_REQUEST['attachemntlist'] as $strAttach ) {
@@ -1404,7 +1399,17 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				//						'count'     => true,
 				//					) );
 				$returnArray['private']       = $comment->comment_type;
-				$returnArray['comment_content'] = wpautop( make_clickable( $comment->comment_content ) );
+				//				$returnArray['comment_content'] = wpautop( make_clickable( $comment->comment_content ) );
+				$comment_render_type = 'left';
+				$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
+				if ( ! empty( $comment_user ) ) {
+					if ( $comment_user->has_cap( $cap ) ) {
+						$comment_render_type = 'right';
+					}
+				}
+				clean_comment_cache( $comment->comment_ID  );
+				$user_edit = current_user_can( $cap ) || ( get_current_user_id() == $comment->user_id );
+				$returnArray['comment_content'] = rthd_render_comment( get_comment( $comment->comment_ID ), $user_edit, $comment_render_type, false );
 				echo json_encode( $returnArray );
 				die( 0 );
 			}

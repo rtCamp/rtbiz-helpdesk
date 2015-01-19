@@ -29,7 +29,7 @@ if ( $user_edit_content ){
 <?php } ?>
 	<div id="dialog-form" title="Edit Followup" style='display: none'>
 		<textarea id="edited_followup_content" name="edited_followup_content" placeholder="edit followup" rows="5"></textarea>
-		<div id="edit-private-comment" class="red-color">
+		<div id="edit-private-comment">
             <select name="private" id="edit-private" >
                 <option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ) ?> </option>
                 <option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ) ?> </option>
