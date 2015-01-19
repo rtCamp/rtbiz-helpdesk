@@ -83,7 +83,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 
 			//Setting
 
-			global $rt_hd_redux_framework_Helpdesk_Config, $rt_hd_import_operation;
+			global $rt_hd_redux_framework_Helpdesk_Config, $rt_hd_import_operation, $rt_hd_offering_support;
 
 			$rt_hd_redux_framework_Helpdesk_Config = new Redux_Framework_Helpdesk_Config();
 			$rt_hd_import_operation                = new Rt_HD_Import_Operation();
