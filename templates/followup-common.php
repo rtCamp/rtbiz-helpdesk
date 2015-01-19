@@ -73,8 +73,7 @@ if ( ! empty( $post->post_content ) ) {
 			                   <a href="?show_original=true" class="show-original-email"> Show original email</a> |
 		                   <?php }
 	                   }?>
-	                    <?php echo esc_attr( human_time_diff( strtotime( $post->post_date), current_time( 'timestamp' ) ) ) . ' ago';
-                        ?>
+	                    <?php echo '<a class="followup-hash-url" id="ticket_description'.'" href="#ticket_description" >'. esc_attr( human_time_diff( strtotime( $post->post_date), current_time( 'timestamp' ) ) ) . ' ago</a>';?>
                     </time>
             </div>
 				<div class="rthd-comment-content">

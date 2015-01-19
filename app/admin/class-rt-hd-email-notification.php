@@ -25,7 +25,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		 * @return string Body Title
 		 */
 		public function get_email_title( $post_id, $posttype ){
-			return '<div style="font-style:italic;color:#666">View '.$posttype.' online: <a href="'.  ( rthd_is_unique_hash_enabled() ? rthd_get_unique_hash_url( $post_id ) : get_post_permalink( $post_id ) ) .'">click here </a></div>';
+			return '<br/><div style="font-style:italic;color:#666">View '.$posttype.' online: <a href="'.  ( rthd_is_unique_hash_enabled() ? rthd_get_unique_hash_url( $post_id ) : get_post_permalink( $post_id ) ) .'">click here </a></div><br/>';
 		}
 		/**
 		 * Add Notification Email into Queue

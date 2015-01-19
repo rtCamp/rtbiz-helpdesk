@@ -522,7 +522,7 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 			if ( $user_edit ){
 				$display_private_comment_flag = true;
 			}
-			$private_text = 'Private';
+			$private_text = 'Sensitive';
 			$is_comment_private = true;
 			break;
 		case Rt_HD_Import_Operation::$FOLLOWUP_STAFF:
