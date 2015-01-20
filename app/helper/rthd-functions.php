@@ -688,10 +688,68 @@ function rthd_check_plugin_dependecy() {
 	if ( ! $flag ) {
 		add_action( 'admin_enqueue_scripts', 'rthd_plugin_check_enque_js' );
 		add_action( 'wp_ajax_rthd_activate_plugin', 'rthd_activate_plugin_ajax' );
+		add_action( 'wp_ajax_rthd_install_plugin', 'rthd_install_plugin_ajax' );
 		add_action( 'admin_notices', 'rthd_admin_notice_dependency_not_installed' );
 	}
 
 	return $flag;
+}
+
+function rthd_install_plugin_ajax(){
+		if ( empty( $_POST['plugin_slug'] ) ) {
+			die( __( 'ERROR: No slug was passed to the AJAX callback.', RT_HD_TEXT_DOMAIN ) );
+		}
+		check_ajax_referer( 'rthd_install_plugin_rtbiz');
+
+		if ( ! current_user_can( 'install_plugins' ) || ! current_user_can( 'activate_plugins' ) ) {
+			die( __( 'ERROR: You lack permissions to install and/or activate plugins.', RT_HD_TEXT_DOMAIN ) );
+		}
+		rthd_install_plugin( $_POST['plugin_slug'] );
+
+		echo 'true';
+		die();
+}
+
+function rthd_install_plugin( $plugin_slug ){
+	include_once( ABSPATH . 'wp-admin/includes/plugin-install.php' );
+
+	$api = plugins_api( 'plugin_information', array( 'slug' => $plugin_slug, 'fields' => array( 'sections' => false ) ) );
+
+	if ( is_wp_error( $api ) ) {
+		die( sprintf( __( 'ERROR: Error fetching plugin information: %s', RT_HD_TEXT_DOMAIN ), $api->get_error_message() ) );
+	}
+
+	if ( ! class_exists( 'Plugin_Upgrader' ) ) {
+		require_once( ABSPATH . 'wp-admin/includes/class-wp-upgrader.php' );
+	}
+
+	if ( ! class_exists( 'Rt_HD_Plugin_Upgrader_Skin' ) ) {
+		require_once( RT_HD_PATH . 'app/admin/class-rt-hd-plugin-upgrader-skin.php' );
+	}
+
+	$upgrader = new Plugin_Upgrader( new Rt_HD_Plugin_Upgrader_Skin( array(
+		                                                                  'nonce'  => 'install-plugin_' . $plugin_slug,
+		                                                                  'plugin' => $plugin_slug,
+		                                                                  'api'    => $api,
+	                                                                  ) ) );
+
+	$install_result = $upgrader->install( $api->download_link );
+
+	if ( ! $install_result || is_wp_error( $install_result ) ) {
+		// $install_result can be false if the file system isn't writeable.
+		$error_message = __( 'Please ensure the file system is writeable', RT_HD_TEXT_DOMAIN );
+
+		if ( is_wp_error( $install_result ) ) {
+			$error_message = $install_result->get_error_message();
+		}
+
+		die( sprintf( __( 'ERROR: Failed to install plugin: %s', RT_HD_TEXT_DOMAIN ), $error_message ) );
+	}
+
+	$activate_result = activate_plugin(rthd_get_path_for_plugin( $plugin_slug ) );
+	if ( is_wp_error( $activate_result ) ) {
+		die( sprintf( __( 'ERROR: Failed to activate plugin: %s', RT_HD_TEXT_DOMAIN ), $activate_result->get_error_message() ) );
+	}
 }
 
 function rthd_plugin_check_enque_js() {
@@ -707,7 +765,11 @@ function rthd_plugin_check_enque_js() {
 function rthd_admin_notice_dependency_not_installed() {
 	if ( ! rthd_is_plugin_installed( 'rtbiz' ) ) { ?>
 		<div class="error rthd-plugin-not-installed-error">
-			<p><b><?php _e( 'rtBiz Helpdesk:' ) ?></b> <?php _e(  rthd_get_path_for_plugin( 'rtbiz' ) .' plugin is not found on this site. Please install & activate it in order to use this plugin.', RT_HD_TEXT_DOMAIN ); ?></p>
+<?php			$nonce = wp_create_nonce( 'rthd_install_plugin_rtbiz' ); ?>
+
+			<p><b><?php _e( 'rtBiz Helpdesk:' ) ?></b> <?php _e( 'Click' ) ?> <a href="#"
+			                                                                     onclick="install_rthd_plugin('rtbiz','rthd_install_plugin','<?php echo $nonce ?>')">here</a> <?php _e( 'to install rtBiz.', RT_HD_TEXT_DOMAIN ) ?>
+			</p>
 		</div>
 	<?php } else {
 		if ( rthd_is_plugin_installed( 'rtbiz' ) && ! rthd_is_plugin_active( 'rtbiz' ) ) {
@@ -716,7 +778,7 @@ function rthd_admin_notice_dependency_not_installed() {
 		?>
 		<div class="error rthd-plugin-not-installed-error">
 			<p><b><?php _e( 'rtBiz Helpdesk:' ) ?></b> <?php _e( 'Click' ) ?> <a href="#"
-			                                                                     onclick="activate_rthd_plugin('<?php echo $path ?>','rthd_activate_plugin','<?php echo $nonce; ?>')">here</a> <?php _e( 'to activate rtBiz.', 'rtbiz' ) ?>
+			                                                                     onclick="activate_rthd_plugin('<?php echo $path ?>','rthd_activate_plugin','<?php echo $nonce; ?>')">here</a> <?php _e( 'to activate rtBiz.', RT_HD_TEXT_DOMAIN ) ?>
 			</p>
 		</div>
 	<?php }
@@ -757,12 +819,12 @@ function rthd_is_plugin_installed( $slug ) {
  */
 function rthd_activate_plugin_ajax() {
 	if ( empty( $_POST['path'] ) ) {
-		die( __( 'ERROR: No slug was passed to the AJAX callback.', 'rt_biz' ) );
+		die( __( 'ERROR: No slug was passed to the AJAX callback.', RT_HD_TEXT_DOMAIN ) );
 	}
 	check_ajax_referer( 'rthd_activate_plugin_' . $_POST['path'] );
 
 	if ( ! current_user_can( 'activate_plugins' ) ) {
-		die( __( 'ERROR: You lack permissions to activate plugins.', 'rt_biz' ) );
+		die( __( 'ERROR: You lack permissions to activate plugins.', RT_HD_TEXT_DOMAIN ) );
 	}
 
 	rthd_activate_plugin( $_POST['path'] );
@@ -779,7 +841,7 @@ function rthd_activate_plugin( $plugin_path ) {
 
 	$activate_result = activate_plugin( $plugin_path );
 	if ( is_wp_error( $activate_result ) ) {
-		die( sprintf( __( 'ERROR: Failed to activate plugin: %s', 'rt_biz' ), $activate_result->get_error_message() ) );
+		die( sprintf( __( 'ERROR: Failed to activate plugin: %s', RT_HD_TEXT_DOMAIN ), $activate_result->get_error_message() ) );
 	}
 }
 
