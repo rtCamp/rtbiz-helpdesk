@@ -22,9 +22,17 @@ class test_Rt_HD_Admin extends RT_WP_TestCase {
 	/**
 	 * Test register_menu
 	 */
-//	function  test_register_menu() {
-//		$this->assertEquals( 'admin_page_rthd-settings', $this->rthdAdmin->register_menu() );
-//	}
+	function  test_custom_upload_dir() {
+
+		$arg = array(
+			'basedir'=>'upload',
+			'baseurl'=>'http://hd.com/upload',
+		    'subdir'=>'/2012/12/12/',
+		);
+		$arg = $this->rthdAdmin->custom_upload_dir( $arg );
+		$this->assertEquals( 'upload/rt_helpdesk/2012/12/12/', $arg['path'] );
+		$this->assertEquals( 'http://hd.com/upload/rt_helpdesk/2012/12/12/', $arg['url'] );
+	}
 
 }
  

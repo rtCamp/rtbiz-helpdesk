@@ -30,6 +30,7 @@ class test_RT_WP_Help_desk extends RT_WP_TestCase {
 	function test_check_class_exist() {
 
 		$this->assertTrue( class_exists( 'Rt_HD_Mail_ACL_Model' ), 'Class Rt_HD_Mail_ACL_Model does not exist' );
+		$this->assertTrue( class_exists( 'Rt_HD_Ticket_History_Model' ), 'Class Rt_HD_Ticket_History_Model does not exist' );
 
 
 		$this->assertTrue( class_exists( 'Rt_Form' ), 'Class Rt_Form does not exist' );

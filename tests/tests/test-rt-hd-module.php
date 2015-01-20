@@ -25,6 +25,12 @@ class test_Rt_HD_Module extends RT_WP_TestCase {
 		$this->assertTrue( method_exists( $this->rthdModule, 'init_hd' ), 'Class Rt_HD_Module does not have method init_hd' );
 		$this->assertTrue( method_exists( $this->rthdModule, 'register_custom_post' ), 'Class Rt_HD_Module does not have method register_custom_post' );
 		$this->assertTrue( method_exists( $this->rthdModule, 'register_custom_statuses' ), 'Class Rt_HD_Module does not have method register_custom_statuses' );
+
+
+		$this->assertTrue( method_exists( $this->rthdModule, 'create_database_table' ), 'Class Rt_HD_Module does not have method create_database_table' );
+		$this->assertTrue( method_exists( $this->rthdModule, 'update_ticket_table' ), 'Class Rt_HD_Module does not have method update_ticket_table' );
+		$this->assertTrue( method_exists( $this->rthdModule, 'ticket_chnage_action_publish_update' ), 'Class Rt_HD_Module does not have method ticket_chnage_action_publish_update' );
+		$this->assertTrue( method_exists( $this->rthdModule, 'custom_pages_order' ), 'Class Rt_HD_Module does not have method custom_pages_order' );
 	}
 
 	/**
