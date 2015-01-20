@@ -31,6 +31,8 @@ Same [GPL] (http://www.gnu.org/licenses/gpl-2.0.txt) that WordPress uses!
 
 **Coming soon:**
 
+- Adult Filter and its user preferences
+
 **See room for improvement?**
 
 Great! There are several ways you can get involved to help make rtBiz Helpdesk better:
@@ -40,7 +42,7 @@ Great! There are several ways you can get involved to help make rtBiz Helpdesk b
 
 == Installation ==
 
-* You can download the plugin from [My Account](http://rtcamp.com/my-account/) section on our store. Unzip it and upload it to the plugins folder of your WordPress installation (`wp-content/plugins/` directory of your WordPress installation).
+* You can download the plugin from [My Account](https://rtcamp.com/my-account/) section on our store. Unzip it and upload it to the plugins folder of your WordPress installation (`wp-content/plugins/` directory of your WordPress installation).
 * Activate it through the 'Plugins' section.
 * rtBiz Helpdesk is dependent on [rtBiz](https://wordpress.org/plugins/rtbiz/) plugin. So once you activate rtBiz Helpdesk, it will ask you to install & activate rtBiz plugin.
 
@@ -52,6 +54,7 @@ Please refer to the documentation.
 
 == Screenshots ==
 
+1. Dashboard
 
 == Changelog ==
 
