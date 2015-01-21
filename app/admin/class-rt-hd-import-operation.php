@@ -1091,7 +1091,6 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			}
 			$rthd_ticket = $ticketpost[0];
 
-			$returnArray     = array();
 			$followuptype    = $_POST['followuptype'];
 			$comment_post_ID = $rthd_ticket->ID;
 			$post_type       = $rthd_ticket->post_type;
@@ -1639,7 +1638,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$contacts = rt_biz_get_post_for_contact_connection( $post_id, Rt_HD_Module::$post_type );
 				foreach ( $contacts as $contact ) {
 					global $rt_contact;
-					$emails = get_post_meta( $contact->ID, Rt_Entity::$meta_key_prefix.$rt_contact->email_key );
+					$emails = get_post_meta( $contact->ID, Rt_Entity::$meta_key_prefix.$rt_contact->primary_email_key );
 					foreach ( $emails as $email ) {
 						array_push( $tocontact, array( 'email' => $email ) );
 					}
