@@ -1648,8 +1648,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				global $rt_hd_module;
 				$labels = $rt_hd_module->labels;
 
-				$title     = '<span style="color:#777">'.htmlentities('< ! ------------------ REPLY ABOVE THIS LINE ------------------ ! >').'</span><br /> '.$rt_hd_email_notification->get_email_title( $post_id, $labels['name'] );
-				$rt_hd_email_notification->insert_new_send_email( $subject, $title, $body, $tocontact, array(), array(), $attachment, $comment_id, 'comment' );
+				$title     = $rt_hd_email_notification->get_email_title( $post_id, $labels['name'] );
+				$rt_hd_email_notification->insert_new_send_email( $subject, $title, $body, $tocontact, array(), array(), $attachment, $comment_id, 'comment', true );
 
 			}
 
@@ -1666,9 +1666,9 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			global $rt_hd_module;
 			$labels = $rt_hd_module->labels;
 			$to[] = array( 'email' => $userSub->user_email, 'name' => $userSub->display_name );
-			$title = '<span style="color:#777">'.htmlentities('< ! ------------------ REPLY ABOVE THIS LINE ------------------ ! >').'</span><br />'.$rt_hd_email_notification->get_email_title( $post_id, $labels['name'] ); ;
+			$title = $rt_hd_email_notification->get_email_title( $post_id, $labels['name'] ); ;
 
-			$rt_hd_email_notification->insert_new_send_email( $subject, $title, $body, $to, $cc, $bccemails, $attachment, $comment_id, 'comment' );
+			$rt_hd_email_notification->insert_new_send_email( $subject, $title, $body, $to, $cc, $bccemails, $attachment, $comment_id, 'comment', true );
 		}
 
 		/**

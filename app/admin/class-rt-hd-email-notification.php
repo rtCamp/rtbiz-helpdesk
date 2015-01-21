@@ -27,6 +27,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		public function get_email_title( $post_id, $posttype ){
 			return '<br/><div style="font-style:italic;color:#666">View '.$posttype.' online: <a href="'.  ( rthd_is_unique_hash_enabled() ? rthd_get_unique_hash_url( $post_id ) : get_post_permalink( $post_id ) ) .'">click here </a></div><br/>';
 		}
+
 		/**
 		 * Add Notification Email into Queue
 		 *
@@ -42,9 +43,11 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		 * @param int    $refrence_id
 		 * @param string $refrence_type
 		 *
+		 * @param bool   $reply_above_line
+		 *
 		 * @return mixed
 		 */
-		public function insert_new_send_email( $subject, $title, $body, $toemail = array(), $ccemail = array(), $bccemail = array(), $attachement = array(), $refrence_id = 0, $refrence_type = 'notification' ) {
+		public function insert_new_send_email( $subject, $title, $body, $toemail = array(), $ccemail = array(), $bccemail = array(), $attachement = array(), $refrence_id = 0, $refrence_type = 'notification', $reply_above_line = false ) {
 			$user_id = get_current_user_id();
 			global $rt_outbound_model;
 
@@ -57,8 +60,13 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			if ( ! has_filter( 'rthd_after_email_body' ) ) {
 				$afterHTML = '';
 			}
+			$reply_txt = '';
+			if ( $reply_above_line ){
+				$reply_txt = '<div style="color:#777">'.htmlentities('< ! ------- REPLY ABOVE THIS LINE ------- ! >').'</div><br /> ';
+			}
+
 			$date = strtotime(current_time( 'mysql', 1 ));
-			$htmlbody = $title. $beforeHTML .'<div style="border: 1px solid #DFE9f2;padding: 20px;background: #f1f6fa;">' .$body.'<div style="float: right;color: gray;">' .date( 'D, M, d, Y, H:i', $date ). '</div></div>' . $afterHTML;
+			$htmlbody = $reply_txt. $beforeHTML .'<div style="border: 1px solid #DFE9f2;padding: 20px;background: #f1f6fa;">' .$body.'<div style="float: right;color: gray;">' .date( 'D, M, d, Y, H:i', $date ). '</div></div>' . $afterHTML . $title;
 			$settings = rthd_get_redux_settings();
 			$attachments = wp_list_pluck( $attachement, 'file' );
 			$toemail = $this->filter_user_notification_preference( $toemail );

@@ -630,7 +630,7 @@ function rthd_content_filter( $content ) {
 		$content = $output_array[1][0];
 	}
 
-	$offset = strpos( $content, '&lt; ! ------------------ REPLY ABOVE THIS LINE ------------------ ! &gt;' );
+	$offset = strpos( $content, '&lt; ! ------- REPLY ABOVE THIS LINE ------- ! &gt;' );
 	$content = substr( $content, 0 , ( $offset === false ) ? strlen( $content ) : $offset );
 
 	$content = balanceTags( $content, true );
