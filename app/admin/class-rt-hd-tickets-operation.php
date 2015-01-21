@@ -181,7 +181,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 		 * @return bool
 		 */
 		function ticket_attachment_update( $new_attachments, $post_id ) {
-
+			global $rt_hd_admin;
 			if ( isset( $post_id ) && ! empty( $post_id ) ) {
 				$old_attachments = get_posts( array(
 												'post_parent'    => $post_id,
@@ -214,7 +214,9 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 									'post_parent'    => $post_id,
 									'post_author'    => get_current_user_id(),
 								);
+								add_filter( 'upload_dir', array( $rt_hd_admin, 'custom_upload_dir' ) );//added hook for add addon specific folder for attachment
 								wp_insert_attachment( $args, $file->guid, $post_id );
+								remove_filter( 'upload_dir', array( $rt_hd_admin, 'custom_upload_dir' ) );//remove hook for add addon specific folder for attachment
 
 								add_post_meta( $post_id, '_rtbiz_hd_attachment_hash', md5_file( $filepath ) );
 

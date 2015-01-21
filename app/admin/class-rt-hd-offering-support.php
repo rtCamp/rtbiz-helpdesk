@@ -404,6 +404,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 		 * @return int| WP_Error
 		 */
 		static function insert_attachment( $file_handler, $post_id ) {
+			global $rt_hd_admin;
 			// check to make sure its a successful upload
 			if ( $_FILES[ $file_handler ]['error'] !== UPLOAD_ERR_OK ) {
 				__return_false();
@@ -413,7 +414,9 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 			require_once( ABSPATH . 'wp-admin' . '/includes/file.php' );
 			require_once( ABSPATH . 'wp-admin' . '/includes/media.php' );
 
+			add_filter( 'upload_dir', array( $rt_hd_admin, 'custom_upload_dir' ) );//added hook for add addon specific folder for attachment
 			$attach_id = media_handle_upload( $file_handler, $post_id );
+			remove_filter( 'upload_dir', array( $rt_hd_admin, 'custom_upload_dir' ) );//remove hook for add addon specific folder for attachment
 
 			return $attach_id;
 		}
