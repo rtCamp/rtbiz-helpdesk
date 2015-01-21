@@ -1646,11 +1646,11 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 			}
 
-			$cc = array();
+			//			$cc = array();
 			if ( $notificationFlag ) {
 				if ( isset( $redux_helpdesk_settings['rthd_notification_emails'] ) ) {
 					foreach ( $redux_helpdesk_settings['rthd_notification_emails'] as $email ) {
-						array_push( $cc, array( 'email' => $email ) );
+						array_push( $bccemails, array( 'email' => $email ) );
 					}
 				}
 			}
@@ -1661,7 +1661,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$to[] = array( 'email' => $userSub->user_email, 'name' => $userSub->display_name );
 			$title = '<span style="color:#777">'.htmlentities('< ! ------------------ REPLY ABOVE THIS LINE ------------------ ! >').'</span><br />'.$rt_hd_email_notification->get_email_title( $post_id, $labels['name'] ); ;
 
-			$rt_hd_email_notification->insert_new_send_email( $subject, $title, $body, $to, $cc, $bccemails, $attachment, $comment_id, 'comment' );
+			$rt_hd_email_notification->insert_new_send_email( $subject, $title, $body, $to, array(), $bccemails, $attachment, $comment_id, 'comment' );
 		}
 
 		/**

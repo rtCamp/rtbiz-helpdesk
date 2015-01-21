@@ -309,7 +309,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 					$body .= '<br />';
 				}
 				$body .= 'have been <b>unsubscribed</b> from this ticket';
-				$this->insert_new_send_email( $subject, $title, $body, array(), $cc, array(), array(), $post_id, 'post' );
+				$this->insert_new_send_email( $subject, $title, $body, array(), array(), $cc, array(), $post_id, 'post' );
 			}
 		}
 
@@ -323,9 +323,11 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		public function notification_ticket_updated( $post_id, $post_type, $body, $bccemails ) {
 			$redux = rthd_get_redux_settings();
 			$notificationFlag = ( isset( $redux['rthd_notification_events']) && $redux['rthd_notification_events']['status_metadata_changed'] == 1 ) ;
-			$cc = array();
 			if ( $notificationFlag ) {
 				$cc = $this->get_notification_emails();
+				foreach ($cc as $email){
+					$bccemails[] = $email;
+				}
 			}
 			global $current_user;
 			$post_author_id = get_post_field( 'post_author', $post_id );
@@ -335,7 +337,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$subject = rthd_create_new_ticket_title( 'rthd_update_ticket_email_title', $post_id );
 			$title = $this->get_email_title( $post_id, $post_type );
 			$body .= '<br />' . 'Ticket updated by : <a target="_blank" href="">' . $current_user->display_name . '</a>';
-			$this->insert_new_send_email( $subject, $title, stripslashes( $body ), $to, $cc, $bccemails, array(), $post_id, 'post' );
+			$this->insert_new_send_email( $subject, $title, stripslashes( $body ), $to, array(), $bccemails, array(), $post_id, 'post' );
 		}
 
 		/**
@@ -348,9 +350,9 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		public function ticket_created_notification( $post_id, $post_type, $body, $allemail, $uploaded ) {
 			$redux = rthd_get_redux_settings();
 			$notificationFlag = ( isset( $redux['rthd_notification_events']) && $redux['rthd_notification_events']['new_ticket_created'] == 1 );
-			$cc = array();
+			$bcc = array();
 			if ( $notificationFlag ) {
-				$cc = $this->get_notification_emails();
+				$bcc = $this->get_notification_emails();
 			}
 
 			$subject     = rthd_create_new_ticket_title( 'rthd_new_ticket_email_title',$post_id );
@@ -359,11 +361,16 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			if ( isset( $allemail ) && ! empty( $allemail ) ) {
 				foreach ( $allemail as $email ) {
 					if ( is_email( $email['address'] ) ) {
-						$notify_emails[] = array( 'email' => $email['address'], 'name' => $email['name'] );
+						if ( $this->is_internal_user( $email['address'] ) ){
+							$notify_emails[] = array( 'email' => $email['address'], 'name' => $email['name'] );
+						}
+						else{
+							$bcc[] = array( 'email' => $email['address'], 'name' => $email['name'] );
+						}
 					}
 				}
 			}
-			$this->insert_new_send_email( $subject, $title, $body, array(), $cc, $notify_emails, $uploaded, $post_id );
+			$this->insert_new_send_email( $subject, $title, $body, $notify_emails, array(), $bcc , $uploaded, $post_id );
 		}
 
 		function get_notification_emails() {
@@ -375,6 +382,34 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				}
 			}
 			return $cc;
+		}
+
+		function sort_emails( $emails ){
+			$sortedEmail = array();
+			$sortedEmail['client'] = array();
+			$sortedEmail['internal'] = array();
+			$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
+			foreach ( $emails as $email ){
+				$user     = get_user_by( 'email', $email );
+				if ( user_can( $user, $cap)){
+					$sortedEmail['internal'][] = $email;
+				}
+				else{
+					$sortedEmail['client'][] = $email;
+				}
+			}
+			return $sortedEmail;
+		}
+
+		function is_internal_user( $email ){
+			$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
+			$user     = get_user_by( 'email', $email );
+			if ( user_can( $user, $cap ) ){
+				return true;
+			}
+			else {
+				return false;
+			}
 		}
 	}
 }
