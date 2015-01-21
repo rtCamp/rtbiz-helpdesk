@@ -810,10 +810,12 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			if ( ! isset( $threadPostId ) ) {
 				$title = rthd_create_new_ticket_title( 'rthd_new_followup_email_title', $comment_post_ID );;
 				//				$body = '<span style="color:#777">< ! ------------------ REPLY ABOVE THIS LINE ------------------ ! ></span><br />';
-				$body  = '<br/><strong>New Followup Added by ' . $comment_author . ' - ' . $comment_author_email . ':</strong>';
-				$body .= '<br/><b>Type : </b>' . 'Mail';
-				$body .= '<br/><b>From : </b>' . $comment_author_email;
-				$body .= '<br/><b>Body : </b>' . rthd_content_filter( $comment_content );
+				//				$body  = '<br/><strong>New Followup Added by ' . $comment_author . ' - ' . $comment_author_email . ':</strong>';
+				$body  = '<br/><strong>New Followup Added by ' . $comment_author .':</strong>';
+				//				$body .= '<br/><b>Type : </b>' . 'Mail';
+				//				$body .= '<br/><b>From : </b>' . $comment_author_email;
+				//				$body .= '<br/><b>Body : </b>' . rthd_content_filter( $comment_content );
+				$body .=  rthd_content_filter( $comment_content );
 				$body .= '<br/> ';
 				$notificationFlag = $this->check_setting_for_new_followup_email();
 				$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, wp_list_pluck( $uploaded, 'url' ), $comment_id, $notificationFlag, true );
@@ -1215,10 +1217,10 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			if ( $comment_privacy == 'true' ){
 				$body = '<br /> A private followup has been added ' . ( ( ! empty( $currentUser->display_name ) ) ? 'by ' . $currentUser->display_name : 'annonymously' ) .'. Please go to link and login to view the message.';
 			}else {
-				$body = '<br /><strong>New Followup Added ' . ( ( ! empty( $currentUser->display_name ) ) ? 'by ' . $currentUser->display_name : 'annonymously' ) . ':</strong><br />';
-				$body .= '<br/>' . rthd_content_filter( $comment->comment_content );
+				$body = '<strong>New Followup Added ' . ( ( ! empty( $currentUser->display_name ) ) ? 'by ' . $currentUser->display_name : 'annonymously' ) . ':</strong>';
+				$body .= rthd_content_filter( $comment->comment_content );
 			}
-			$body .= '<br/>';
+			//			$body .= '<br/>';
 			$notificationFlag = $this->check_setting_for_new_followup_email();
 			$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, $uploaded, $comment_ID, $notificationFlag, true );
 
