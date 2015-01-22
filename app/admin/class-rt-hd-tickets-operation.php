@@ -68,6 +68,16 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 
 					if ( ! empty( $created_by ) ) {
 						update_post_meta( $post_id, '_rtbiz_hd_created_by', $created_by );
+					} else {
+						$created_by = get_post_meta( $post_id, '_rtbiz_hd_created_by', true );
+						if ( empty( $created_by ) ){
+							update_post_meta( $post_id, '_rtbiz_hd_created_by', get_current_user_id() );
+							$dataArray = array_merge( $dataArray, array(
+								'date_create'     => current_time( 'mysql' ),
+								'date_create_gmt' => gmdate( 'Y-m-d H:i:s' ),
+								'user_created_by' => ( empty( $created_by) ) ? get_current_user_id() : $created_by,
+							) );
+						}
 					}
 
 					// update the post, which calls save_post again
