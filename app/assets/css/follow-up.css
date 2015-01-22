@@ -346,11 +346,6 @@ li.load-more-spinner-li {
 
 .rt-hd-ticket-history{
 	border-bottom: 1px dotted #ddd;
-	padding: 5px 10px;
-}
-
-.rt-hd-ticket-history ul{
-	font-size: 14px;
 }
 
 .rt-hd-ticket-history ul li{
