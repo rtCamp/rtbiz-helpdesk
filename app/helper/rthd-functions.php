@@ -870,3 +870,23 @@ function rthd_edit_comment_type( $Comment_ID, $value ){
 	);
 
 }
+
+function rthd_status_markup( $pstatus ){
+	global $rt_hd_module;
+	$style         = 'padding: 5px; border: 1px solid black; border-radius: 5px;';
+	$post_statuses = $rt_hd_module->get_custom_statuses();
+	foreach ( $post_statuses as $status ) {
+		if ( $status[ 'slug' ] == $pstatus ) {
+			$pstatus = $status[ 'name' ];
+			if ( ! empty( $status[ 'style' ] ) ) {
+				$style = $status[ 'style' ];
+			}
+			$pstatus = ucfirst( $pstatus );
+			break;
+		}
+	}
+	if ( ! empty( $pstatus ) ) {
+		return '<mark style="' . $style .  '" class="' . $pstatus .  ' tips" data-tip="' . $pstatus .  '">' . $pstatus .  '</mark>';
+	}
+	return '';
+}

@@ -343,3 +343,19 @@ li.load-more-spinner-li {
 	font-size: 14px;
 	padding: 5px 10px;
 }
+
+.rt-hd-ticket-history{
+	border-bottom: 1px dotted #ddd;
+	padding: 5px 10px;
+}
+
+.rt-hd-ticket-history ul{
+	font-size: 14px;
+	list-style: none;
+}
+
+.rt-hd-ticket-history ul li{
+	padding: 5px;
+	margin: 5px 0px;
+	border-bottom: 1px dotted #ddd;
+}
