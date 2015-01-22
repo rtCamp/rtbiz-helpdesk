@@ -298,12 +298,12 @@ jQuery( document ).ready( function ( $ ) {
 	}
 
 	//front end ticket update
-	jQuery( '#rthd-status-list' ).hide();
+	//jQuery( '#rthd-status-list' ).hide();
 	jQuery( '#rthd-change-status' ).click(function (e){
-		jQuery( '#rthd-status-list' ).show();
-		jQuery( this ).hide();
+		//jQuery( '#rthd-status-list' ).show();
+		//jQuery( this ).hide();
 	});
-	jQuery( '#rthd-ticket-edit' ).click(function (e){
+	jQuery( '#rthd-status-list' ).change(function (e){
 		var requestArray = new Object();
 		requestArray['post_id'] =  jQuery('#post-id' ).val();
 		requestArray['post_status'] =  jQuery('#rthd-status-list' ).val();

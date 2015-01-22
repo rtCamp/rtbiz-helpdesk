@@ -554,7 +554,17 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 		</div>
 		<div class="messages <?php echo ( $display_private_comment_flag ) ? '' : 'private-comment-display'; ?>">
     <div class="followup-information">
-        <span title="<?php echo esc_attr( ( $comment->comment_author_email == '' ) ? $comment->comment_author_IP : $comment->comment_author_email ); ?>"><?php echo esc_attr( ( $comment->comment_author == '' ) ? 'Anonymous' : $comment->comment_author ); ?> </span>
+	    <?php
+	    if ( current_user_can( $cap ) ){
+		    $commentAuthorLink = '<a class="rthd-ticket-author-link" href="'.rthd_biz_user_profile_link( $comment->comment_author_email ).'">'.$comment->comment_author.'</a>';
+	    }
+	    else{
+		    $commentAuthorLink = $comment->comment_author;
+	    }
+
+	    ?>
+
+        <span title="<?php echo esc_attr( ( $comment->comment_author_email == '' ) ? $comment->comment_author_IP : $comment->comment_author_email ); ?>"><?php echo ( ( $comment->comment_author == '' ) ? 'Anonymous' : $commentAuthorLink ); ?> </span>
             <time title="<?php echo esc_attr( $comment->comment_date ); ?>" datetime="<?php echo esc_attr( $comment->comment_date ); ?>">
                 <?php if ($user_edit){
                     ?>
@@ -889,4 +899,14 @@ function rthd_status_markup( $pstatus ){
 		return '<mark style="' . $style .  '" class="' . $pstatus .  ' tips" data-tip="' . $pstatus .  '">' . $pstatus .  '</mark>';
 	}
 	return '';
+}
+
+function rthd_biz_user_profile_link( $email ){
+	$post = rt_biz_get_contact_by_email( $email );
+	if (!empty($post)){
+		return get_edit_post_link($post[0]->ID);
+	}
+	else {
+		return '#';
+	}
 }

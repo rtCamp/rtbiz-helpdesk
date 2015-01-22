@@ -43,6 +43,8 @@ if ( ! $show_original_email ) {
 	$modify     = new DateTime( $post->post_modified );
 	$createdate = $create->format( 'M d, Y h:i A' );
 	$modifydate = $modify->format( 'M d, Y h:i A' );
+	$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
+
 	?>
 	<div id="rthd-ticket">
 		<input type="hidden" id='ticket_unique_id' value="<?php echo esc_attr( $ticket_unique_id ); ?>"/>
@@ -68,26 +70,31 @@ if ( ! $show_original_email ) {
 
 			<div>
 				<h2><i class="foundicon-idea"></i> <?php _e( esc_attr( ucfirst( $labels[ 'name' ] ) ) . ' Information' ); ?></h2>
-				<input type="button" id="rthd-ticket-edit" name="rthd_ticket_edit" class="" value="Edit ticket">
+		<?php if ( current_user_can( $cap ) ){ ?>
+		<a id='ticket-information-edit-ticket-link' href="<?php echo get_edit_post_link( $post->ID )  ?>">Edit <?php _e( esc_attr( ucfirst( $labels[ 'name' ] ) ) ); ?></a>
+		<?php } ?>
 				<div class="rthd-clearfix"></div>
 			</div>
 
 			<div class="rt-hd-ticket-info">
 				<span class="prefix" title="Status"><strong>Status: </strong></span>
 				<?php
-				if ( isset( $post->ID ) ) {
+					if ( current_user_can( $cap ) ){
+					?>
+						<select id="rthd-status-list" name="rt-hd-status" class="">
+							<?php $post_statuses = $rt_hd_module->get_custom_statuses();
+							foreach ( $post_statuses as $status ) {
+								$selected = ( $status[ 'slug' ] == $post->post_status ) ? 'selected' : '';?>
+								<option value="<?php echo esc_attr( $status[ 'slug' ] ); ?>" <?php echo esc_attr( $selected ); ?> ><?php echo esc_html( $status[ 'name' ] ); ?></option>
+							<?php } ?>
+						</select> </div> <?php
+					}
+				else if ( isset( $post->ID ) ) {
 					$pstatus = $post->post_status;
 					echo '<div id="rthd-status-visiable" >' . rthd_status_markup( $pstatus ) . '</div>';
 				}
 				?>
-				<input type="button" id="rthd-change-status" name="rthd_change_status" value="change status">
-				<select id="rthd-status-list" name="rt-hd-status" class="">
-					<?php $post_statuses = $rt_hd_module->get_custom_statuses();
-					foreach ( $post_statuses as $status ) {
-						$selected = ( $status[ 'slug' ] == $pstatus ) ? 'selected' : '';?>
-						<option value="<?php echo esc_attr( $status[ 'slug' ] ); ?>" <?php echo esc_attr( $selected ); ?> ><?php echo esc_html( $status[ 'name' ] ); ?></option>
-					<?php } ?>
-				</select>
+
 			</div>
 			<div class="rt-hd-ticket-info">
 				<span title="Create Date"><strong>Created: </strong></span>
@@ -96,7 +103,11 @@ if ( ! $show_original_email ) {
 			echo esc_attr( human_time_diff( strtotime( $createdate ), current_time( 'timestamp' ) ) ) . ' ago';
 			$created_by = get_user_by( 'id', get_post_meta( $post->ID, '_rtbiz_hd_created_by', true ) );
 			if ( ! empty( $created_by ) ) {
-				echo ' by ' . $created_by->display_name;
+				if ( current_user_can( $cap ) ){
+					echo ' by <a href="'.rthd_biz_user_profile_link($created_by->user_email).'">' . $created_by->display_name.'</a>';
+				} else {
+					echo ' by ' . $created_by->display_name;
+				}
 			}
 			?>
 			</span>
@@ -106,11 +117,17 @@ if ( ! $show_original_email ) {
 
 			if ( ! empty( $comment ) ) {
 				$comment = $comment[ 0 ];
+				if ( current_user_can( $cap ) ){
+					$commentlink = '<a href="'.rthd_biz_user_profile_link($comment->comment_author_email).'" >'.$comment->comment_author.'</a>';
+				}
+				else {
+					$commentlink = $comment->comment_author;
+				}
 				?>
 
 				<div class="rt-hd-ticket-info">
 					<span title="Status"><strong>Last reply: </strong></span> <span
-						class="rthd_attr_border prefix rthd_view_mode"> <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . " ago by " . $comment->comment_author; ?></span>
+						class="rthd_attr_border prefix rthd_view_mode"> <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . " ago by " . $commentlink; ?></span>
 				</div>
 			<?php }
 
@@ -147,7 +164,6 @@ if ( ! $show_original_email ) {
 
 				<?php }
 
-				$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
 				if ( current_user_can( $cap ) ) {
 
 					// Products

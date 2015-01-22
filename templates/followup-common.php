@@ -61,7 +61,15 @@ if ( ! empty( $post->post_content ) ) {
 			</div>
 			<div class="messages ticketcontent">
                 <div class="followup-information">
-                    <span title="<?php echo esc_attr( $authoremail ); ?>"><?php echo esc_attr( ( $authorname== '' ) ? 'Anonymous' : $authorname ); ?> </span>
+	                <?php
+	                if ( current_user_can( $cap ) ){
+						$autherLink = '<a class="rthd-ticket-author-link" href="'.rthd_biz_user_profile_link( $authoremail ).'">'.$authorname.'</a>';
+	                }
+	                else{
+		                $autherLink = $authorname;
+	                }
+	                ?>
+                    <span title="<?php echo esc_attr( $authoremail ); ?>"><?php echo ( $autherLink ); ?> </span>
                     <time title="<?php echo esc_attr( $post->post_date); ?>" datetime="<?php echo esc_attr( $post->post_date); ?>">
 	                   <?php if ( $user_edit_content ) {
 		                   ?>

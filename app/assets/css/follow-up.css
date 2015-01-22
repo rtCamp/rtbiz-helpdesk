@@ -367,7 +367,6 @@ li.load-more-spinner-li {
 #rthd-status-visiable{
 	display: inline-block;
 }
-
-#rthd-status-list{
-	display: none;
+#ticket-information-edit-ticket-link{
+	float: right;
 }
