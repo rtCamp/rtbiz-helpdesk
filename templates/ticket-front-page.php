@@ -188,21 +188,23 @@ if ( ! $show_original_email ) {
 			}
 
 			$created_by = get_user_by( 'id', get_post_meta( $post->ID, '_rtbiz_hd_created_by', true ) );
-			$otherposts = get_posts( array( 'post_type' => Rt_HD_Module::$post_type,'post_status' => 'any', 'meta_query' => array(
+			$otherposts = get_posts( array( 'post_type' => Rt_HD_Module::$post_type,'post_status' => 'any', 'post__not_in' => array( $post->ID ) ,'meta_query' => array(
 				array(
 					'key'     => '_rtbiz_hd_created_by',
 					'value'   => $created_by->ID,
 				),
-			), )); ?>
-
+			), ));
+			if ( $otherposts ) {
+			?>
 			<div class="rt-hd-ticket-history">
 				<h2><?php echo __( 'Ticket History' ); ?></h2>
 				<ul>
 					<?php foreach ( $otherposts as $p ) { ?>
-						<li><a href="<?php echo '#'; ?>" ><?php echo $p->post_title; ?> <?php echo rthd_status_markup( $p->post_status ); ?> </a></li>
+						<li><a href="<?php echo ( rthd_is_unique_hash_enabled() ? rthd_get_unique_hash_url( $p->ID ) : get_post_permalink( $p->ID ) ) ; ?>" ><?php echo $p->post_title; ?>  </a><?php echo rthd_status_markup( $p->post_status ); ?></li>
 					<?php } ?>
 				</ul>
 			</div>
+			<?php } ?>
 		</div>
 	</div>
 <?php
