@@ -200,7 +200,7 @@ if ( ! $show_original_email ) {
 				<h2><?php echo __( 'Ticket History' ); ?></h2>
 				<ul>
 					<?php foreach ( $otherposts as $p ) { ?>
-						<li><a href="<?php echo get_post_permalink( $p->ID ); ?>" ><?php echo $p->post_title; ?>  </a><?php echo rthd_status_markup( $p->post_status ); ?></li>
+						<li><a href="<?php echo get_post_permalink( $p->ID ); ?>" ><?php echo '[#' . $p->ID. '] ' . $p->post_title; ?>  </a><?php echo rthd_status_markup( $p->post_status ); ?></li>
 					<?php } ?>
 				</ul>
 			</div>
