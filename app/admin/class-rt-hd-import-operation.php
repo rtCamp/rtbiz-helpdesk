@@ -63,7 +63,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			add_action( 'wp_ajax_rthd_add_new_ticket_ajax', array( $this, 'add_new_ticket_ajax' ) );
 			add_action( 'wp_ajax_nopriv_rthd_add_new_ticket_ajax', array( $this, 'add_new_ticket_ajax' ) );
 			add_action( 'read_rt_mailbox_email_'.RT_HD_TEXT_DOMAIN, array( $this, 'process_email_to_ticket' ), 10, 16 );
-
+			add_action( 'wp_ajax_front_end_status_change', array( $this, 'front_end_status_change' ) );
+			add_action( 'wp_ajax_front_end_status_change', array( $this, 'front_end_status_change' ) );
 		}
 
 		function add_new_ticket_ajax(){
@@ -1832,8 +1833,22 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$response['status']= true;
 			echo json_encode($response);
 			die();
+		}
 
-
+		function front_end_status_change(){
+			$response = array();
+			$response['status']= false;
+			$post_id = $_POST['post_id'];
+			$post_status = $_POST['post_status'];
+			if ( $post_id ){
+				$ticket = array( 'ID' => $post_id,
+				                      'post_status' => $post_status,);
+				wp_update_post( $ticket );
+			}
+			$response['stauts_markup']= rthd_status_markup( $post_status );
+			$response['status']= true;
+			echo json_encode($response);
+			die();
 		}
 
 	}

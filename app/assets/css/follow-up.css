@@ -361,3 +361,20 @@ li.load-more-spinner-li {
 .rt-hd-ticket-history ul li mark{
 	float: right;
 }
+
+#rthd-ticket-edit{
+	float: right;
+	padding: 5px;
+}
+
+#rthd-change-status{
+	padding: 5px;
+}
+
+#rthd-status-visiable{
+	display: inline-block;
+}
+
+#rthd-status-list{
+	display: none;
+}

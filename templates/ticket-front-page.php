@@ -65,17 +65,29 @@ if ( ! $show_original_email ) {
 			<?php } ?>
 		</div>
 		<div id="rthd-sidebar" class="rthd_sticky_div">
-			<h2><i class="foundicon-idea"></i> <?php _e( esc_attr( ucfirst( $labels[ 'name' ] ) ) . ' Information' ); ?>
-			</h2>
+
+			<div>
+				<h2><i class="foundicon-idea"></i> <?php _e( esc_attr( ucfirst( $labels[ 'name' ] ) ) . ' Information' ); ?></h2>
+				<input type="button" id="rthd-ticket-edit" name="rthd_ticket_edit" class="" value="Edit ticket">
+				<div class="rthd-clearfix"></div>
+			</div>
 
 			<div class="rt-hd-ticket-info">
 				<span class="prefix" title="Status"><strong>Status: </strong></span>
 				<?php
 				if ( isset( $post->ID ) ) {
 					$pstatus = $post->post_status;
-					echo rthd_status_markup( $pstatus );
+					echo '<div id="rthd-status-visiable" >' . rthd_status_markup( $pstatus ) . '</div>';
 				}
 				?>
+				<input type="button" id="rthd-change-status" name="rthd_change_status" value="change status">
+				<select id="rthd-status-list" name="rt-hd-status" class="">
+					<?php $post_statuses = $rt_hd_module->get_custom_statuses();
+					foreach ( $post_statuses as $status ) {
+						$selected = ( $status[ 'slug' ] == $pstatus ) ? 'selected' : '';?>
+						<option value="<?php echo esc_attr( $status[ 'slug' ] ); ?>" <?php echo esc_attr( $selected ); ?> ><?php echo esc_html( $status[ 'name' ] ); ?></option>
+					<?php } ?>
+				</select>
 			</div>
 			<div class="rt-hd-ticket-info">
 				<span title="Create Date"><strong>Created: </strong></span>

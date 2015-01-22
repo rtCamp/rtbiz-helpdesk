@@ -297,6 +297,39 @@ jQuery( document ).ready( function ( $ ) {
 		jQuery( '#followup-load-more' ).trigger( 'click' );
 	}
 
+	//front end ticket update
+	jQuery( '#rthd-status-list' ).hide();
+	jQuery( '#rthd-change-status' ).click(function (e){
+		jQuery( '#rthd-status-list' ).show();
+		jQuery( this ).hide();
+	});
+	jQuery( '#rthd-ticket-edit' ).click(function (e){
+		var requestArray = new Object();
+		requestArray['post_id'] =  jQuery('#post-id' ).val();
+		requestArray['post_status'] =  jQuery('#rthd-status-list' ).val();
+		requestArray["action"] = "front_end_status_change";
+		jQuery('#load-more-hdspinner' ).show();
+		jQuery.ajax( {
+			             url: ajaxurl,
+			             dataType: "json",
+			             type: 'post',
+			             data: requestArray,
+			             success: function ( data ) {
+				             if (data.status) {
+					            jQuery( '#rthd-status-visiable' ).html( data.stauts_markup );
+					             jQuery( '#rthd-change-status' ).show();
+					             jQuery( '#rthd-status-list' ).hide();
+				             }
+				             jQuery('#load-more-hdspinner' ).hide();
+			             },
+			             error: function(){
+				             jQuery('#load-more-hdspinner' ).hide();
+				             return false;
+			             },
+		             });
+	});
+
+
 } );
 
 /*(function($) {
