@@ -361,7 +361,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			if ( isset( $allemail ) && ! empty( $allemail ) ) {
 				foreach ( $allemail as $email ) {
 					if ( is_email( $email['address'] ) ) {
-						if ( $this->is_internal_user( $email['address'] ) ){
+						if ( ! $this->is_internal_user( $email['address'] ) ){
 							$notify_emails[] = array( 'email' => $email['address'], 'name' => $email['name'] );
 						}
 						else{
