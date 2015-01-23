@@ -42,6 +42,13 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 			add_filter( 'wp_title', array( $this, 'change_title' ), 9999, 1 );
 		}
 
+		function restrict_seo_on_helpdesk() {
+			add_filter( 'jetpack_enable_open_graph', '__return_false' );
+			remove_action( 'wpseo_head', array( $GLOBALS[ 'wpseo_og' ], 'opengraph' ), 30 );
+			remove_action( 'wpseo_head', array( 'WPSEO_GooglePlus', 'get_instance' ), 35 );
+			remove_action( 'wpseo_head', array( 'WPSEO_Twitter', 'get_instance' ), 40 );
+		}
+
 		function admin_bar_edit_menu( $wp_admin_bar ) {
 			global $rt_hd_module, $rtbiz_helpdesk_template, $post;
 			$labels    = $rt_hd_module->labels;
@@ -121,6 +128,9 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 			}
 
 			$rtbiz_helpdesk_template = true;
+
+			// Restrict SEO META tags for Helpdesk Ticket Page.
+			$this->restrict_seo_on_helpdesk();
 
 			if ( ! is_user_logged_in() ) {
 				$redirect_url = ( ( is_ssl() ) ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];

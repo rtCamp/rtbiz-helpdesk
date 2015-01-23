@@ -47,7 +47,6 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			add_action( 'init', array( $this, 'init' ), 6 );
 
 			add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
-			add_filter( 'jetpack_enable_open_graph', '__return_false' );
 
 		}
 
