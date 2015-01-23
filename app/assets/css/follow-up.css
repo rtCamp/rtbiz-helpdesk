@@ -280,7 +280,7 @@ li.load-more-spinner-li {
     margin-bottom: 10px;
 }
 
-.followup-information span{
+.followup-information span,.followup-information span a{
     color: #06C;
 }
 
