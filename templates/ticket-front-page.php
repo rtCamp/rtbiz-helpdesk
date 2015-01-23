@@ -69,10 +69,11 @@ if ( ! $show_original_email ) {
 		<div id="rthd-sidebar" class="rthd_sticky_div">
 
 			<div>
-				<h2><i class="foundicon-idea"></i> <?php _e( esc_attr( ucfirst( $labels[ 'name' ] ) ) . ' Information' ); ?></h2>
+				<h2><i class="foundicon-idea"></i> <?php _e( esc_attr( ucfirst( $labels[ 'name' ] ) ) . ' Information' ); ?>
+
 		<?php if ( current_user_can( $cap ) ){ ?>
 		<a id='ticket-information-edit-ticket-link' href="<?php echo get_edit_post_link( $post->ID )  ?>">Edit <?php _e( esc_attr( ucfirst( $labels[ 'name' ] ) ) ); ?></a>
-		<?php } ?>
+		<?php } ?></h2>
 				<div class="rthd-clearfix"></div>
 			</div>
 

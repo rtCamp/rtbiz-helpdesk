@@ -33,9 +33,16 @@ jQuery( document ).ready( function ( $ ) {
 	jQuery('.edit-ticket-link' ).click(function(e){
 		e.preventDefault();
 		jQuery('#edit-ticket-data' ).slideToggle('slow');
+		if ( jQuery('#dialog-form').is(":visible")){
+			jQuery('#dialog-form' ).slideToggle('slow');
+		}
+		if ( ! jQuery('#edit-ticket-data').is(":visible")){
+			jQuery('#edit-ticket-data' ).slideToggle('slow');
+		}
 		jQuery('#new-followup-form' ).hide();
 		jQuery(document).scrollTop( ( jQuery('#edit-ticket-data').offset().top ) - 50 );
 		//jQuery('#editedticketcontent' ).html(jQuery(this ).closest('.ticketcontent' ).find('.rthd-comment-content' ).html());
+		tinyMCE.get('editedticketcontent' ).focus();
 		tinyMCE.get('editedticketcontent' ).setContent((jQuery(this ).closest('.ticketcontent' ).find('.rthd-comment-content' ).html()));
 	});
 
@@ -68,6 +75,7 @@ jQuery( document ).ready( function ( $ ) {
 				                jQuery('.edit-ticket-link' ).closest('.ticketcontent' ).find('.rthd-comment-content' ).html( tinyMCE.get('editedticketcontent' ).getContent() );
 				                jQuery('#edit-ticket-data' ).hide();
 				                jQuery('#new-followup-form' ).slideToggle('slow');
+				                jQuery(document).scrollTop( ( jQuery('.ticketcontent').offset().top ) - 50 );
 			                }
 				             else{
 				                console.log(data.msg);
@@ -129,6 +137,7 @@ jQuery( document ).ready( function ( $ ) {
 	jQuery( document ).on('click', '.editfollowuplink',function(e){
 		e.preventDefault();
 		var select =jQuery(this ).parents();
+		tinyMCE.get('editedfollowupcontent' ).focus();
 		tinyMCE.get('editedfollowupcontent' ).setContent(jQuery(this ).parents().siblings('.rthd-comment-content' ).html().trim());
 		commentid=select.siblings('#followup-id' ).val();
 		var that = select.siblings( '#is-private-comment' ).val();
@@ -136,6 +145,9 @@ jQuery( document ).ready( function ( $ ) {
 		jQuery('#new-followup-form' ).hide();
 		if ( ! jQuery('#dialog-form').is(":visible")){
 			jQuery('#dialog-form' ).slideToggle('slow');
+		}
+		if ( jQuery('#edit-ticket-data').is(":visible")){
+			jQuery('#edit-ticket-data' ).slideToggle('slow');
 		}
 		jQuery(document).scrollTop( ( jQuery('#dialog-form').offset().top ) - 50 );
 
@@ -245,6 +257,7 @@ jQuery( document ).ready( function ( $ ) {
 		             var newcomment=data.comment_content;
 		             //console.log(newcomment);
 		             jQuery('#chat-UI' ).append(newcomment);
+		             tinyMCE.get('followupcontent' ).focus();
 		             tinyMCE.get('followupcontent' ).setContent('');
 		             jQuery('#add-private-comment' ).val(0);
 		             var control = jQuery('#attachemntlist' );
