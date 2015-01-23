@@ -107,7 +107,6 @@ ul#chat-UI {
 }
 
 #private-comment{
-	color: #d02600;
 	display: inline-block;
 	font-size: 14px;
 }
@@ -160,7 +159,7 @@ ul#chat-UI {
 	display:none;
 }
 
-#edited_followup_content, #edited_ticket_content{
+#editedfollowupcontent, #editedticketcontent{
 	width:100%;
 }
 

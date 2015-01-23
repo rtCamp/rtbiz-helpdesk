@@ -17,15 +17,16 @@ global $current_user;
 	<input id="post-id" type="hidden" value="<?php echo esc_attr( $post->ID ); ?>" />
 	<input id="edit-comment-id" name="comment_id" type="hidden" />
 <?php
-$editor_id = 'followup_content';
-$settings = array( 'media_buttons' => false, 'editor_class' => 'followup_content',  'tinymce' => array(
+$editor_id = 'followupcontent';
+$settings = array( 'media_buttons' => false, 'editor_class' => 'followupcontent',  'tinymce' => array(
 	'height' => 200,
 ));
 wp_editor( '', $editor_id, $settings );
 ?>
 
-<!--	<textarea id="followup_content" class="followup-content" name="followup_content" placeholder="Add new followup"></textarea>-->
+<!--	<textarea id="followupcontent" class="followup-content" name="followupcontent" placeholder="Add new followup"></textarea>-->
 	<div id="private-comment">
+		<span class="rthd-visibility"> Visibility: </span>
 		<select id="private_comment" name="private_comment" id="add-private-comment" >
 			<option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ) ?> </option>
 			<option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ) ?> </option>
@@ -39,10 +40,10 @@ wp_editor( '', $editor_id, $settings );
 			?>
 		</select>
 		<?php if (current_user_can(rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' )) && $post->post_status != 'hd-answered' ){ ?>
-    <label for="rthd_keep_status"><input id="rthd_keep_status" type="checkbox" name="rthd_keep_status" text="check keep status unanswered" /><?php _e('Keep unanswered'); ?></label>
         <?php } ?>
 
 	</div>
+	<div> <label for="rthd_keep_status"><input id="rthd_keep_status" type="checkbox" name="rthd_keep_status" text="check keep status unanswered" /><?php _e('Keep unanswered'); ?></label></div>
 	<div>
 		<input id="attachemntlist" name="attachemntlist[]" type="file" multiple />
 		<button class="add-savefollowup btn-primary btn" id="savefollwoup" type="button">Add followup</button>

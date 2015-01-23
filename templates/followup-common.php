@@ -18,17 +18,8 @@ $cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
 $created_by = get_post_meta( $post->ID, '_rtbiz_hd_created_by', true );
 
 $user_edit_content = current_user_can( $cap ) || ( get_current_user_id() == $post->$created_by );
-if ( $user_edit_content ){
-	?>
-   <div id="edit-ticket-data" title="Edit Ticket" style="display: none;">
-	   <textarea id="edited_ticket_content" name="edited_ticket_content" placeholder="Edit ticket" rows="5"></textarea>
-	   <button class="edit-ticket button button-primary" id="edit-ticket-content-click" type="button">Update</button>
-	   <?php wp_nonce_field('rt_hd_ticket_edit','edit_ticket_nonce'); ?>
-	   <img id='ticket-edithdspinner' class="helpdeskspinner" src="<?php echo admin_url().'images/spinner.gif'; ?>">
-   </div>
-<?php } ?>
 
-<?php
+
 if ( ! empty( $post->post_content ) ) {
 
 	$created_by = get_user_by( 'id', get_post_meta( $post->ID, '_rtbiz_hd_created_by', true ) );
@@ -117,19 +108,24 @@ if ( ! empty( $post->post_content ) ) {
 <input id="followup-limit" type="hidden" value="<?php echo esc_attr( $Limit ); ?>" />
 <input id="followup-totalcomment" type="hidden" value="<?php echo esc_attr( $totalComment); ?>" />
 <div id="dialog-form" title="Edit Followup" style='display: none'>
-<!--	<textarea id="edited_followup_content" name="edited_followup_content" placeholder="edit followup" rows="5"></textarea>-->
+<!--	<textarea id="editedfollowupcontent" name="editedfollowupcontent" placeholder="edit followup" rows="5"></textarea>-->
 	<?php
-	$editor_id = 'edited_followup_content';
+	$editor_id = 'editedfollowupcontent';
 	$settings = array( 'media_buttons' => false, 'tinymce' => array(
 		'height' => 200,
 	));
 	wp_editor( '', $editor_id, $settings );
 	?>
 	<div id="edit-private-comment">
+		<span class="rthd-visibility"> Visibility: </span>
 		<select name="private" id="edit-private" >
 			<option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ) ?> </option>
 			<option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ) ?> </option>
-			<option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_STAFF ) ?> </option>
+			<?php
+			if ( current_user_can( $cap ) ){ ?>
+				<option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_STAFF ) ?> </option>
+			<?php }
+			?>
 		</select>
 		<img id='edithdspinner' class="helpdeskspinner" src="<?php echo admin_url().'images/spinner.gif'; ?>">
 	</div>
@@ -139,3 +135,21 @@ if ( ! empty( $post->post_content ) ) {
 		<button class="edit-followup button button-primary" id="editfollowup" type="button">Update</button>
 	</div>
 </div>
+<?php
+	if ( $user_edit_content ){
+	?>
+	<div id="edit-ticket-data" title="Edit Ticket" style="display: none;">
+		<?php
+		$editor_id = 'editedticketcontent';
+		$settings = array( 'media_buttons' => false, 'tinymce' => array(
+			'height' => 200,
+		));
+		wp_editor( '', $editor_id, $settings );
+		?>
+		<!--	   <textarea id="editedticketcontent" name="editedticketcontent" placeholder="Edit ticket" rows="5"></textarea>-->
+		<button class="edit-ticket button button-primary" id="edit-ticket-content-click" type="button">Update</button>
+		<?php wp_nonce_field('rt_hd_ticket_edit','edit_ticket_nonce'); ?>
+		<img id='ticket-edithdspinner' class="helpdeskspinner" src="<?php echo admin_url().'images/spinner.gif'; ?>">
+		<a href="#" class="close-edit-content">Close</a>
+	</div>
+<?php } ?>

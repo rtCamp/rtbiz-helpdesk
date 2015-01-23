@@ -21,22 +21,27 @@ jQuery(function () {
         },
 
 	    initEditContent: function(){
-		    jQuery('.edit-ticket-link' ).click(function(){
-			    jQuery("#edit-ticket-data").dialog().dialog("close");
-			    jQuery( "#edit-ticket-data" ).dialog({
-				                                         width :600,
-				                                         height:250
-			                                         });
-			    jQuery( "#edit-ticket-data" ).dialog( "open" );
-
-			    jQuery('#edited_ticket_content' ).html(jQuery(this ).closest('.ticketcontent' ).find('.rthd-comment-content' ).html());
+		    jQuery('.edit-ticket-link' ).click(function(e){
+			    e.preventDefault();
+			    jQuery('#edit-ticket-data' ).slideToggle('slow');
+			    jQuery('#new-followup-form' ).hide();
+			    jQuery(document).scrollTop( ( jQuery('#edit-ticket-data').offset().top ) - 50 );
+			    tinyMCE.get('editedticketcontent' ).setContent((jQuery(this ).closest('.ticketcontent' ).find('.rthd-comment-content' ).html()));
+		    });
+		    jQuery('.close-edit-content' ).click(function(e){
+			    e.preventDefault();
+			    jQuery('#edit-ticket-data' ).slideToggle('slow');
+			    jQuery('#new-followup-form' ).show();
 		    });
 
 		    jQuery('#edit-ticket-content-click' ).click(function(){
+			    jQuery('#edit-ticket-data' ).slideToggle('slow');
+			    jQuery('#new-followup-form' ).hide();
 			    var requestArray = new Object();
 			    requestArray['action']= 'rthd_add_new_ticket_ajax';
 			    requestArray['post_id']= jQuery('#post-id' ).val();
-			    requestArray['body']= jQuery('#edited_ticket_content' ).val();
+			    var content = tinyMCE.get('editedticketcontent' ).getContent();
+			    requestArray['body']= content;
 			    requestArray['nonce']= jQuery('#edit_ticket_nonce' ).val();
 			    jQuery('#ticket-edithdspinner' ).show();
 			    jQuery(this).attr('disabled','disabled');
@@ -47,10 +52,11 @@ jQuery(function () {
 				                 data: requestArray,
 				                 success: function ( data ) {
 					                 if(data.status){
-						                 jQuery("#edit-ticket-data").dialog().dialog("close");
 						                 jQuery('#ticket-edithdspinner' ).hide();
 						                 jQuery("#edit-ticket-content-click" ).removeAttr('disabled');
-						                 jQuery('.edit-ticket-link' ).closest('.ticketcontent' ).find('.rthd-comment-content' ).html( jQuery('#edited_ticket_content' ).val());
+						                 jQuery('.edit-ticket-link' ).closest('.ticketcontent' ).find('.rthd-comment-content' ).html( tinyMCE.get('editedticketcontent' ).getContent() );
+						                 jQuery('#edit-ticket-data' ).hide();
+						                 jQuery('#new-followup-form' ).slideToggle('slow');
 					                 }
 					                 else{
 						                 console.log(data.msg);
@@ -244,7 +250,7 @@ jQuery(function () {
 		    jQuery( document ).on('click', '.editfollowuplink',function(e){
 			    e.preventDefault();
 			    var select =jQuery(this ).parents();
-			    tinyMCE.get('edited_followup_content' ).setContent(jQuery(this ).parents().siblings('.rthd-comment-content' ).html().trim());
+			    tinyMCE.get('editedfollowupcontent' ).setContent(jQuery(this ).parents().siblings('.rthd-comment-content' ).html().trim());
 			    commentid=select.siblings('#followup-id' ).val();
 			    var that = select.siblings( '#is-private-comment' ).val();
                  jQuery('#edit-private' ).val(that);
@@ -258,7 +264,7 @@ jQuery(function () {
 
 		    jQuery("#editfollowup" ).click(function(){
 			    var requestArray = new Object();
-			    var content =  tinyMCE.get('edited_followup_content' ).getContent();
+			    var content =  tinyMCE.get('editedfollowupcontent' ).getContent();
 			    if (! content){
 				    alert("Please enter comment");
 				    return false;
@@ -321,7 +327,7 @@ jQuery(function () {
 			        jQuery(this).removeAttr('disabled');
 			        return false;
 		        };
-		        if ( ! tinyMCE.get('followup_content' ).getContent()) {
+		        if ( ! tinyMCE.get('followupcontent' ).getContent()) {
 			        alert( "Please input followup :/" );
 			        jQuery( '#hdspinner' ).hide();
 			        jQuery(this).removeAttr('disabled');
@@ -334,7 +340,7 @@ jQuery(function () {
 		        formData.append("action", 'rthd_add_new_followup_front');
 		        formData.append("followuptype", jQuery('#followuptype').val());
 		        formData.append("follwoup-time", jQuery('#follwoup-time').val());
-		        formData.append("followup_content", tinyMCE.get('followup_content' ).getContent());
+		        formData.append("followup_content", tinyMCE.get('followupcontent' ).getContent());
 		        var files = jQuery('#attachemntlist')[0];
 		        jQuery.each(jQuery("#attachemntlist")[0].files, function(i, file) {
 			        formData.append('attachemntlist['+i+']', file);
@@ -356,7 +362,7 @@ jQuery(function () {
 					                     var newcomment=data.comment_content;
 					                     //console.log(newcomment);
 					                     jQuery('#chat-UI' ).append(newcomment);
-					                     tinyMCE.get('followup_content' ).setContent('');
+					                     tinyMCE.get('followupcontent' ).setContent('');
 					                     jQuery('#add-private-comment' ).val(0);
 					                     var control = jQuery('#attachemntlist' );
 					                     control.replaceWith( control = control.clone( true ) );

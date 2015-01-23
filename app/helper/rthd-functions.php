@@ -856,10 +856,10 @@ function rthd_activate_plugin( $plugin_path ) {
 }
 
 
-function rthd_get_comment_type($comment_type_value){
-    switch($comment_type_value){
+function rthd_get_comment_type( $comment_type_value ){
+    switch( $comment_type_value ){
         case Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC:
-            return 'Logged in user only';
+            return 'Default';
             break;
         case Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE:
             return 'Sensitive';
