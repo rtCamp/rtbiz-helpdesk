@@ -8,6 +8,7 @@
 
 global $current_user;
 ?>
+<div id="new-followup-form">
 	<input type="hidden" id='ticket_unique_id' name="followup_ticket_unique_id" value="<?php echo esc_attr( $ticket_unique_id ); ?>" />
 	<input type="hidden" id="followup_post_type" name="post_type" value="<?php echo Rt_HD_Module::$post_type ?>" />
 	<input type="hidden" id="followuptype" name="followuptype" value="" />
@@ -15,7 +16,15 @@ global $current_user;
 
 	<input id="post-id" type="hidden" value="<?php echo esc_attr( $post->ID ); ?>" />
 	<input id="edit-comment-id" name="comment_id" type="hidden" />
-	<textarea id="followup_content" class="followup-content" name="followup_content" placeholder="Add new followup"></textarea>
+<?php
+$editor_id = 'followup_content';
+$settings = array( 'media_buttons' => false, 'editor_class' => 'followup_content',  'tinymce' => array(
+	'height' => 200,
+));
+wp_editor( '', $editor_id, $settings );
+?>
+
+<!--	<textarea id="followup_content" class="followup-content" name="followup_content" placeholder="Add new followup"></textarea>-->
 	<div id="private-comment">
 		<select id="private_comment" name="private_comment" id="add-private-comment" >
 			<option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ) ?> </option>
@@ -42,3 +51,4 @@ global $current_user;
 	<div class="rthd-clearfix"></div>
 	<img id='hdspinner' class="helpdeskspinner" src="<?php echo admin_url().'images/spinner.gif'; ?>">
 	<div class="rthd-clearfix"></div>
+</div>

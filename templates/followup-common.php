@@ -27,21 +27,7 @@ if ( $user_edit_content ){
 	   <img id='ticket-edithdspinner' class="helpdeskspinner" src="<?php echo admin_url().'images/spinner.gif'; ?>">
    </div>
 <?php } ?>
-	<div id="dialog-form" title="Edit Followup" style='display: none'>
-		<textarea id="edited_followup_content" name="edited_followup_content" placeholder="edit followup" rows="5"></textarea>
-		<div id="edit-private-comment">
-            <select name="private" id="edit-private" >
-                <option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ) ?> </option>
-                <option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ) ?> </option>
-                <option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_STAFF ) ?> </option>
-            </select>
-			<img id='edithdspinner' class="helpdeskspinner" src="<?php echo admin_url().'images/spinner.gif'; ?>">
-		</div>
-		<div class="edit-action-button">
-			<button class="edit-followup button red-color" id="delfollowup" type="button">Delete</button>
-			<button class="edit-followup button button-primary" id="editfollowup" type="button">Update</button>
-		</div>
-	</div>
+
 <?php
 if ( ! empty( $post->post_content ) ) {
 
@@ -130,3 +116,26 @@ if ( ! empty( $post->post_content ) ) {
 <input id="followup-offset" type="hidden" value="<?php echo esc_attr( $offset ); ?>" />
 <input id="followup-limit" type="hidden" value="<?php echo esc_attr( $Limit ); ?>" />
 <input id="followup-totalcomment" type="hidden" value="<?php echo esc_attr( $totalComment); ?>" />
+<div id="dialog-form" title="Edit Followup" style='display: none'>
+<!--	<textarea id="edited_followup_content" name="edited_followup_content" placeholder="edit followup" rows="5"></textarea>-->
+	<?php
+	$editor_id = 'edited_followup_content';
+	$settings = array( 'media_buttons' => false, 'tinymce' => array(
+		'height' => 200,
+	));
+	wp_editor( '', $editor_id, $settings );
+	?>
+	<div id="edit-private-comment">
+		<select name="private" id="edit-private" >
+			<option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ) ?> </option>
+			<option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ) ?> </option>
+			<option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_STAFF ) ?> </option>
+		</select>
+		<img id='edithdspinner' class="helpdeskspinner" src="<?php echo admin_url().'images/spinner.gif'; ?>">
+	</div>
+	<a href="#" class="close-edit-followup">Close</a>
+	<div class="edit-action-button">
+		<button class="edit-followup button red-color" id="delfollowup" type="button">Delete</button>
+		<button class="edit-followup button button-primary" id="editfollowup" type="button">Update</button>
+	</div>
+</div>

@@ -87,7 +87,7 @@ if ( ! $show_original_email ) {
 								$selected = ( $status[ 'slug' ] == $post->post_status ) ? 'selected' : '';?>
 								<option value="<?php echo esc_attr( $status[ 'slug' ] ); ?>" <?php echo esc_attr( $selected ); ?> ><?php echo esc_html( $status[ 'name' ] ); ?></option>
 							<?php } ?>
-						</select> </div> <?php
+						</select> <img id="status-change-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" /><?php
 					}
 				else if ( isset( $post->ID ) ) {
 					$pstatus = $post->post_status;

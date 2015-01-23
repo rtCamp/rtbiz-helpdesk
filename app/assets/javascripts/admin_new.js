@@ -220,9 +220,9 @@ jQuery(function () {
 						                 jQuery( "#comment-" + commentid ).fadeOut( 500, function () {
 							                 jQuery( this ).remove();
 						                 } );
-						                 jQuery("#dialog-form").dialog().dialog("close");
+						                 jQuery( '.close-edit-followup' ).trigger( 'click' );
 					                 } else {
-						                 alert( "error in delete comment from server" );
+						                 alert( "Error while deleting comment from server" );
 					                 }
 					                 jQuery('#edithdspinner' ).hide();
 					                 jQuery("#delfollowup" ).removeAttr('disabled');
@@ -234,33 +234,36 @@ jQuery(function () {
 				                 }
 		    } );
 
+		    jQuery('.close-edit-followup' ).click(function (e){
+			    e.preventDefault();
+			    jQuery('#dialog-form' ).slideToggle('slow');
+			    jQuery('#new-followup-form' ).show();
+		    });
+
 		    });
 		    jQuery( document ).on('click', '.editfollowuplink',function(e){
 			    e.preventDefault();
-			    //jQuery( document ).on('click', 'li.editable .messages',function(){
-		    //jQuery( 'li.self .messages' ).click( function () {
-			 //   jQuery('#edited_followup_content' ).val( jQuery(this).find('p').text().replace(/\s+/g, " ") );
 			    var select =jQuery(this ).parents();
-			    jQuery('#edited_followup_content' ).val(jQuery(this ).parents().siblings('.rthd-comment-content' ).html().trim());
+			    tinyMCE.get('edited_followup_content' ).setContent(jQuery(this ).parents().siblings('.rthd-comment-content' ).html().trim());
 			    commentid=select.siblings('#followup-id' ).val();
 			    var that = select.siblings( '#is-private-comment' ).val();
                  jQuery('#edit-private' ).val(that);
-			    jQuery("#dialog-form").dialog().dialog("close");
-				jQuery( "#dialog-form" ).dialog({
-					                              width :600,
-					                              height:300
-				                              });
-			    jQuery( "#dialog-form" ).dialog( "open" );
+			    jQuery('#new-followup-form' ).hide();
+			    if ( ! jQuery('#dialog-form').is(":visible")){
+				    jQuery('#dialog-form' ).slideToggle('slow');
+			    }
+			    jQuery(document).scrollTop( ( jQuery('#dialog-form').offset().top ) - 50 );
 
 		    } );
 
 		    jQuery("#editfollowup" ).click(function(){
 			    var requestArray = new Object();
-			    if (! jQuery('#edited_followup_content' ).val()){
+			    var content =  tinyMCE.get('edited_followup_content' ).getContent();
+			    if (! content){
 				    alert("Please enter comment");
 				    return false;
 			    }
-			    if (jQuery('#edited_followup_content' ).val().replace(/\s+/g, " ") == jQuery('#comment-'+commentid ).find('.rthd-comment-content' ).val().replace(/\s+/g, " ") ){
+			    if (content.replace(/\s+/g, " ") === jQuery('#comment-'+commentid ).find('.rthd-comment-content' ).val().replace(/\s+/g, " ") ){
 				    alert('You have not edited comment! :/');
 				    return false;
 			    }
@@ -277,7 +280,7 @@ jQuery(function () {
 			    requestArray["followuptype"] = 'comment';
 			    //requestArray["followup_post_id"] = jQuery( "#ticket_id" ).val();
 			    //requestArray["follwoup-time"] = jQuery( "#follwoup-time" ).val();
-			    requestArray["followup_content"]=jQuery('#edited_followup_content' ).val();
+			    requestArray["followup_content"] = content;
 			    jQuery.ajax(
 				    {
 					    url: ajaxurl,
@@ -287,7 +290,8 @@ jQuery(function () {
 					    success: function ( data ) {
 						    if ( data.status ) {
 							    jQuery('#comment-'+commentid ).replaceWith(data.comment_content);
-							    jQuery("#dialog-form").dialog().dialog("close");
+							    jQuery( '.close-edit-followup' ).trigger( 'click' );
+							    jQuery(document).scrollTop( ( jQuery('#comment-'+commentid ).offset().top ) - 50 );
 						    } else {
 							    alert( data.message );
 						    }
@@ -317,7 +321,7 @@ jQuery(function () {
 			        jQuery(this).removeAttr('disabled');
 			        return false;
 		        };
-		        if ( ! jQuery( "#followup_content" ).val()) {
+		        if ( ! tinyMCE.get('followup_content' ).getContent()) {
 			        alert( "Please input followup :/" );
 			        jQuery( '#hdspinner' ).hide();
 			        jQuery(this).removeAttr('disabled');
@@ -330,7 +334,7 @@ jQuery(function () {
 		        formData.append("action", 'rthd_add_new_followup_front');
 		        formData.append("followuptype", jQuery('#followuptype').val());
 		        formData.append("follwoup-time", jQuery('#follwoup-time').val());
-		        formData.append("followup_content", jQuery('#followup_content').val());
+		        formData.append("followup_content", tinyMCE.get('followup_content' ).getContent());
 		        var files = jQuery('#attachemntlist')[0];
 		        jQuery.each(jQuery("#attachemntlist")[0].files, function(i, file) {
 			        formData.append('attachemntlist['+i+']', file);
@@ -352,7 +356,7 @@ jQuery(function () {
 					                     var newcomment=data.comment_content;
 					                     //console.log(newcomment);
 					                     jQuery('#chat-UI' ).append(newcomment);
-					                     jQuery( "#followup_content" ).val( '' );
+					                     tinyMCE.get('followup_content' ).setContent('');
 					                     jQuery('#add-private-comment' ).val(0);
 					                     var control = jQuery('#attachemntlist' );
 					                     control.replaceWith( control = control.clone( true ) );
