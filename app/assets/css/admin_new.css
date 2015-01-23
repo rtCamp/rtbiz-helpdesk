@@ -15,10 +15,6 @@ img.tips {
 	z-index: 99999
 }
 
-.rt-hd-created-by img{
-	border-radius: 12px;
-}
-
 #tiptip_holder.tip_top {
 	padding-bottom: 5px
 }
@@ -104,10 +100,14 @@ img.tips {
 	line-height: 1.5em;
 }
 
-#divSubscriberList .contact-list {
+#divSubscriberList .contact-list, .rt-hd-created-by{
 	display: inline-block;
 	text-align: center;
 	margin-right: 10px;
+}
+.rt-hd-created-by{
+	margin-top: 10px;
+	margin-left: 10px;
 }
 
 #divAttachmentList .attachment-item {
