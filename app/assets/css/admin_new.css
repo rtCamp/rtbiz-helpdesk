@@ -15,6 +15,10 @@ img.tips {
 	z-index: 99999
 }
 
+.rt-hd-created-by img{
+	border-radius: 12px;
+}
+
 #tiptip_holder.tip_top {
 	padding-bottom: 5px
 }

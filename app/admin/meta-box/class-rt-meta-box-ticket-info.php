@@ -108,7 +108,7 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 				<?php
 					$created_by = get_user_by( 'id', get_post_meta( $post->ID, '_rtbiz_hd_created_by', true ) );
 					if ( ! empty( $created_by ) ) { ?>
-					<div id="rt-hd-created-by-<?php echo $created_by->ID; ?>"><?php echo get_avatar( $created_by->user_email, 25 ) . $created_by->display_name; ?>&nbsp;<a href="#deleteContactUser">X</a><input type="hidden" name="post[rthd_created_by]" value="<?php echo $created_by->ID; ?>" /></div>
+					<div id="rt-hd-created-by-<?php echo $created_by->ID; ?>" class="rt-hd-created-by"><?php echo get_avatar( $created_by->user_email, 25 )."<a href='".rthd_biz_user_profile_link( $created_by->user_email )."'>" . $created_by->display_name; ?>&nbsp;</a><a href="#deleteContactUser">X</a><input type="hidden" name="post[rthd_created_by]" value="<?php echo $created_by->ID; ?>" /></div>
 					<?php } ?>
 				</div>
 
@@ -131,14 +131,15 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 									         return {
 									             id: item.id,
 									             imghtml: item.imghtml,
-									             label: item.label
+									             label: item.label,
+										         editlink: item.editlink
 									         }
 									     } ) );
 									 }
 									} );
 								}, minLength: 2,
 								select: function( event, ui ) {
-									jQuery( "#selected_user" ).html( "<div id='rt-hd-created-by-" + ui.item.id + "'>" + ui.item.imghtml + ui.item.label + " &nbsp;<a href='#deleteContactUser'>X</a><input type='hidden' name='post[rthd_created_by]' value='" + ui.item.id + "' /></div>" )
+									jQuery( "#selected_user" ).html( "<div id='rt-hd-created-by-" + ui.item.id + "' class='rt-hd-created-by'>" + ui.item.imghtml +"<a href='"+ui.item.editlink+"'>"+ ui.item.label + "</a> &nbsp;<a href='#deleteContactUser'>X</a><input type='hidden' name='post[rthd_created_by]' value='" + ui.item.id + "' /></div>" )
 									jQuery( ".user-autocomplete" ).val( "" );
 									return false;
 								}
