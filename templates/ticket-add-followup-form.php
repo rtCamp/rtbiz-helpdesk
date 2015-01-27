@@ -17,7 +17,7 @@ global $current_user;
 	<input id="edit-comment-id" name="comment_id" type="hidden" />
 	<textarea id="followup_content" class="followup-content" name="followup_content" placeholder="Add new followup"></textarea>
 	<div id="private-comment">
-		<select id="private_comment" name="private_comment" id="add-private-comment" >
+		<select name="private_comment" id="add-private-comment" >
 			<option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ) ?> </option>
 			<option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ) ?> </option>
 			<?php

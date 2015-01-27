@@ -354,7 +354,7 @@ jQuery(function () {
 					                     //console.log(newcomment);
 					                     jQuery('#chat-UI' ).append(newcomment);
 					                     jQuery( "#followup_content" ).val( '' );
-					                     jQuery('#add-private-comment' ).val(0);
+					                     jQuery('#add-private-comment' ).val(10);
 					                     var control = jQuery('#attachemntlist' );
 					                     control.replaceWith( control = control.clone( true ) );
                                          if (data.ticket_status=='answered'){
