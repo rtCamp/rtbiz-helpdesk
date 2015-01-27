@@ -57,7 +57,8 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			if ( ! has_filter( 'rthd_after_email_body' ) ) {
 				$afterHTML = '';
 			}
-			$htmlbody = $title.'<hr />'. $beforeHTML . $body . $afterHTML .'<hr/>';
+			$htmlbody = rthd_content_filter( '<hr />'. $beforeHTML . $body . $afterHTML .'<hr/>' );
+			$htmlbody = $title . $htmlbody;
 			$settings = rthd_get_redux_settings();
 			$attachments = wp_list_pluck( $attachement, 'file' );
 			$toemail = $this->filter_user_notification_preference( $toemail );
