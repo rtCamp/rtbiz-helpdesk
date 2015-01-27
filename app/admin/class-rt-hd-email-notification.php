@@ -66,7 +66,8 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			}
 
 			$date = strtotime(current_time( 'mysql', 1 ));
-			$htmlbody = $reply_txt. $title . $beforeHTML .'<div style="border: 1px solid #DFE9f2;padding: 20px;background: #f1f6fa;">' .$body.'<div style="float: right;color: gray;">' .date( 'D, M, d, Y, H:i', $date ). '</div></div>' . $afterHTML ;
+			$htmlbody = rthd_content_filter( $title . $beforeHTML .'<div style="border: 1px solid #DFE9f2;padding: 20px;background: #f1f6fa;">' .$body.'<div style="float: right;color: gray;">' .date( 'D, M, d, Y, H:i', $date ). '</div></div>' . $afterHTML );
+			$htmlbody = $reply_txt . $htmlbody;
 			$settings = rthd_get_redux_settings();
 			$attachments = wp_list_pluck( $attachement, 'file' );
 			$toemail = $this->filter_user_notification_preference( $toemail );
