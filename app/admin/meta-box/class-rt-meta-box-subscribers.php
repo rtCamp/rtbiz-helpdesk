@@ -75,18 +75,18 @@ if ( ! class_exists( 'RT_Meta_Box_Subscribers ' ) ) {
 
 					$subscriber_flag = true;
 
+					foreach ( $arrSubscriberUser as $s ) {
+						if ( $s['id'] == $author->ID ) {
+							$subscriber_flag = false;
+							break;
+						}
+					}
+
 					if ( $get_assigned_to && ! empty( $get_assigned_to ) && in_array( $author->ID, $get_assigned_to ) ) {
 						if ( in_array( $author->user_email, $all_hd_participants ) ) {
 							$key = array_search( $author->user_email, $all_hd_participants );
 							if ( $key !== false ) {
 								unset( $all_hd_participants[ $key ] );
-							}
-						}
-
-						foreach ( $arrSubscriberUser as $s ) {
-							if ( $s['id'] == $author->ID ) {
-								$subscriber_flag = false;
-								break;
 							}
 						}
 
