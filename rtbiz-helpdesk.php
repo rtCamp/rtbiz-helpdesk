@@ -8,7 +8,7 @@
  * Author: rtCamp
  * Author URI: http://rtcamp.com
  * License: GPL
- * Text Domain: rt_helpdesk
+ * Text Domain: rtbiz-helpdesk
  * Contributors: Udit<udit.desai@rtcamp.com>, Dipesh<dipesh.kakadiya@rtcamp.com>, Utkarsh<utkarsh.patel@rtcamp.com>
  */
 
@@ -26,7 +26,7 @@ if ( ! defined( 'RT_HD_TEXT_DOMAIN' ) ) {
 	 *
 	 * @since 0.1
 	 */
-	define( 'RT_HD_TEXT_DOMAIN', 'rt_helpdesk' );
+	define( 'RT_HD_TEXT_DOMAIN', 'rtbiz-helpdesk' );
 }
 if ( ! defined( 'RT_HD_PATH' ) ) {
 	/**
