@@ -11,6 +11,32 @@ rthd_user_edit = rthd_user_edit[0];
 var file_frame_ticket;
 jQuery( document ).ready( function ( $ ) {
 
+	function rthd_tinymce_set_content( id, text ) {
+		if( typeof tinymce != "undefined" ) {
+			var editor = tinymce.get( id );
+			if( editor && editor instanceof tinymce.Editor ) {
+				editor.setContent( text );
+				editor.save( { no_events: true } );
+			} else {
+				jQuery( '#'+id ).val( text );
+			}
+			return true;
+		}
+		return false;
+	}
+
+	function rthd_tinymce_get_content( id ) {
+		if( typeof tinymce != "undefined" ) {
+			var editor = tinymce.get( id );
+			if( editor && editor instanceof tinymce.Editor ) {
+				return editor.getContent();
+			} else {
+				return jQuery( '#'+id ).val();
+			}
+		}
+		return '';
+	}
+
 	if ( ! jQuery.browser.mobile ) {
 		$( '.rthd_sticky_div' ).stickyfloat( { duration: 400, delay: 3 } );
 	}
@@ -42,8 +68,7 @@ jQuery( document ).ready( function ( $ ) {
 		jQuery('#new-followup-form' ).hide();
 		jQuery(document).scrollTop( ( jQuery('#edit-ticket-data').offset().top ) - 50 );
 		//jQuery('#editedticketcontent' ).html(jQuery(this ).closest('.ticketcontent' ).find('.rthd-comment-content' ).html());
-		//tinymce.get('editedticketcontent' ).focus();
-		tinymce.get('editedticketcontent' ).setContent((jQuery(this ).closest('.ticketcontent' ).find('.rthd-comment-content' ).html()));
+		rthd_tinymce_set_content( 'editedticketcontent', jQuery(this).closest('.ticketcontent').find('.rthd-comment-content').html() );
 	});
 
 	jQuery('.close-edit-content' ).click(function(e){
@@ -58,7 +83,7 @@ jQuery( document ).ready( function ( $ ) {
 		var requestArray = new Object();
 		requestArray['action']= 'rthd_add_new_ticket_ajax';
 		requestArray['post_id']= jQuery('#post-id' ).val();
-		var content = tinymce.get('editedticketcontent' ).getContent();
+		var content = rthd_tinymce_get_content( 'editedticketcontent' );
 		requestArray['body']= content;
 		requestArray['nonce']= jQuery('#edit_ticket_nonce' ).val();
 		jQuery('#ticket-edithdspinner' ).show();
@@ -72,7 +97,7 @@ jQuery( document ).ready( function ( $ ) {
 			                if(data.status){
 				                jQuery('#ticket-edithdspinner' ).hide();
 				                jQuery("#edit-ticket-content-click" ).removeAttr('disabled');
-				                jQuery('.edit-ticket-link' ).closest('.ticketcontent' ).find('.rthd-comment-content' ).html( tinymce.get('editedticketcontent' ).getContent() );
+				                jQuery('.edit-ticket-link' ).closest('.ticketcontent' ).find('.rthd-comment-content' ).html( rthd_tinymce_get_content('editedticketcontent') );
 				                jQuery('#edit-ticket-data' ).hide();
 				                jQuery('#new-followup-form' ).slideToggle('slow');
 				                jQuery(document).scrollTop( ( jQuery('.ticketcontent').offset().top ) - 50 );
@@ -106,7 +131,7 @@ jQuery( document ).ready( function ( $ ) {
 			data: {
 				action: 'helpdesk_delete_followup',
 				comment_id: commentid,
-				post_id : postid,
+				post_id : postid
 			},
 			success: function ( data ) {
 				if ( data.status ) {
@@ -137,8 +162,7 @@ jQuery( document ).ready( function ( $ ) {
 	jQuery( document ).on('click', '.editfollowuplink',function(e){
 		e.preventDefault();
 		var select =jQuery(this ).parents();
-		//tinymce.get('editedfollowupcontent' ).focus();
-		tinymce.get('editedfollowupcontent' ).setContent(jQuery(this ).parents().siblings('.rthd-comment-content' ).html().trim());
+		rthd_tinymce_set_content( 'editedfollowupcontent', jQuery(this).parents().siblings('.rthd-comment-content').html().trim() );
 		commentid=select.siblings('#followup-id' ).val();
 		var that = select.siblings( '#is-private-comment' ).val();
 		jQuery('#edit-private' ).val(that);
@@ -155,7 +179,7 @@ jQuery( document ).ready( function ( $ ) {
 
 	jQuery("#editfollowup" ).click(function(){
 		var requestArray = new Object();
-		var content =  tinymce.get('editedfollowupcontent' ).getContent();
+		var content =  rthd_tinymce_get_content( 'editedfollowupcontent' );
 		if (! content){
 			alert("Please enter comment");
 			return false;
@@ -222,7 +246,7 @@ jQuery( document ).ready( function ( $ ) {
 			jQuery(this).removeAttr('disabled');
 			return false;
 		};
-		if ( ! tinymce.get('followupcontent' ).getContent()) {
+		if ( ! rthd_tinymce_get_content( 'followupcontent' ) ) {
 			alert( "Please input followup :/" );
 			jQuery( '#hdspinner' ).hide();
 			jQuery(this).removeAttr('disabled');
@@ -235,7 +259,7 @@ jQuery( document ).ready( function ( $ ) {
 		formData.append("action", 'rthd_add_new_followup_front');
 		formData.append("followuptype", jQuery('#followuptype').val());
 		formData.append("follwoup-time", jQuery('#follwoup-time').val());
-		formData.append("followup_content", tinymce.get('followupcontent' ).getContent());
+		formData.append("followup_content", rthd_tinymce_get_content( 'followupcontent' ) );
 		var files = jQuery('#attachemntlist')[0];
 		jQuery.each(jQuery("#attachemntlist")[0].files, function(i, file) {
 			formData.append('attachemntlist['+i+']', file);
@@ -257,8 +281,7 @@ jQuery( document ).ready( function ( $ ) {
 		             var newcomment=data.comment_content;
 		             //console.log(newcomment);
 		             jQuery('#chat-UI' ).append(newcomment);
-		             //tinymce.get('followupcontent' ).focus();
-		             tinymce.get('followupcontent' ).setContent('');
+		             rthd_tinymce_set_content( 'followupcontent', '' );
 		             jQuery('#add-private-comment' ).val(0);
 		             var control = jQuery('#attachemntlist' );
 		             control.replaceWith( control = control.clone( true ) );
@@ -315,7 +338,7 @@ jQuery( document ).ready( function ( $ ) {
 			             error: function(){
 				             jQuery('#load-more-hdspinner' ).hide();
 				             return false;
-			             },
+			             }
 		             });
 
 	});
@@ -351,7 +374,7 @@ jQuery( document ).ready( function ( $ ) {
 			             error: function(){
 				             jQuery('#status-change-spinner' ).hide();
 				             return false;
-			             },
+			             }
 		             });
 	});
 

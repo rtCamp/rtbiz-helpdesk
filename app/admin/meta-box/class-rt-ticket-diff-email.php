@@ -174,6 +174,11 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 				$emailHTML .= $attr_diff;
 			}
 
+			// add author into Subscribers List
+			if ( ! isset( $_POST['subscribe_to'] ) ) {
+				$_POST['subscribe_to'] = array();
+			}
+
 			//UnSubscribers List
 			$oldSubscriberArr = get_post_meta( $post_id, '_rtbiz_hd_subscribe_to', true );
 			if ( ! $oldSubscriberArr ) {
