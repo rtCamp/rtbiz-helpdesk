@@ -86,12 +86,23 @@ if ( ! class_exists( 'RT_Meta_Box_Subscribers ' ) ) {
 											"<br/><a target='_blank' class='subscribe-title heading' title='" . $author->display_name . "' href='" . rthd_biz_user_profile_link( $author->user_email ) . "'>" . $author->display_name . '</a>' .
 											"<input type='hidden' name='subscribe_to[]' value='" . $author->ID . "' /></li>";
 					}
-					$arrSubscriberUser[] = array(
-						'id'             => $author->ID,
-						'label'          => $author->display_name,
-						'imghtml'        => get_avatar( $author->user_email, 24 ),
-						'user_edit_link' => rthd_biz_user_profile_link( $author->user_email )
-					);
+
+					$subscriber_flag = true;
+					foreach ( $arrSubscriberUser as $s ) {
+						if ( $s['id'] == $author->ID ) {
+							$subscriber_flag = false;
+							break;
+						}
+					}
+					if ( $subscriber_flag ) {
+						$arrSubscriberUser[] = array(
+							'id'             => $author->ID,
+							'label'          => $author->display_name,
+							'imghtml'        => get_avatar( $author->user_email, 24 ),
+							'user_edit_link' => rthd_biz_user_profile_link( $author->user_email ),
+						);
+					}
+
 					$arrCommentReply[]   = array(
 						'userid'  => $author->ID,
 						'label'   => $author->display_name,

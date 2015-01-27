@@ -19,7 +19,7 @@ global $current_user;
 <?php
 $editor_id = 'followupcontent';
 $settings = array( 'media_buttons' => false, 'editor_class' => 'followupcontent',  'tinymce' => array(
-	'height' => 200,
+	'height' => 150,
 ));
 wp_editor( '', $editor_id, $settings );
 ?>

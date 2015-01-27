@@ -112,7 +112,7 @@ if ( ! empty( $post->post_content ) ) {
 	<?php
 	$editor_id = 'editedfollowupcontent';
 	$settings = array( 'media_buttons' => false, 'tinymce' => array(
-		'height' => 200,
+		'height' => 150,
 	));
 	wp_editor( '', $editor_id, $settings );
 	?>
@@ -142,7 +142,7 @@ if ( ! empty( $post->post_content ) ) {
 		<?php
 		$editor_id = 'editedticketcontent';
 		$settings = array( 'media_buttons' => false, 'tinymce' => array(
-			'height' => 200,
+			'height' => 150,
 		));
 		wp_editor( '', $editor_id, $settings );
 		?>
