@@ -309,6 +309,8 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 					$subscribe_to = array();
 				}
 
+				error_log(var_export($subscribe_to,true));
+
 				update_post_meta( $post_id, '_rtbiz_hd_subscribe_to', $subscribe_to );
 
 				return true;
