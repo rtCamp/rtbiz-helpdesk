@@ -1216,9 +1216,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			}
 
 			$title = rthd_create_new_ticket_title( 'rthd_new_followup_email_title', $comment_post_ID );;
-
-			//			$body = '<span style="color:#777">< ! ------------------ REPLY ABOVE THIS LINE ------------------ ! ></span><br />';
-			if ( $comment_privacy == 'true' ){
+			$contactFlag = ( $comment_privacy  == Rt_HD_Import_Operation::$FOLLOWUP_STAFF ) ? false : true;
+			if ( isset( $comment_privacy ) && ! empty( $comment_privacy ) && intval( $comment_privacy ) && $comment_privacy > Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC  ){
 				$body = '<br /> A private followup has been added ' . ( ( ! empty( $currentUser->display_name ) ) ? 'by ' . $currentUser->display_name : 'annonymously' ) .'. Please go to link and login to view the message.';
 			}else {
 				$body = '<strong>New Followup Added ' . ( ( ! empty( $currentUser->display_name ) ) ? 'by ' . $currentUser->display_name : 'annonymously' ) . ':</strong>';
@@ -1226,7 +1225,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			}
 			//			$body .= '<br/>';
 			$notificationFlag = $this->check_setting_for_new_followup_email();
-			$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, $uploaded, $comment_ID, $notificationFlag, true );
+			$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, $uploaded, $comment_ID, $notificationFlag, $contactFlag );
 
 			$returnArray['status']        = true;
 
@@ -1363,6 +1362,12 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 				$old_privacy_text = rthd_get_comment_type($old_privacy);
 				$new_privacy = rthd_get_comment_type($comment_privacy);
+				if ( intval( $old_privacy ) && $old_privacy > Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ){
+					$old_privacy = 'true';
+				}
+				if ( intval( $comment_privacy ) && $comment_privacy > Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ){
+					$comment_privacy = 'true';
+				}
 
 				$diff = rthd_text_diff( $old_privacy_text, $new_privacy );
 				if ( $diff ) {
@@ -1562,8 +1567,9 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$body .= '<br/><b>CC : </b>' . $cc;
 				$body .= '<br/><b>BCC : </b>' . $bcc;
 			}
+			$contactFlag = (intval( $comment_privacy ) == Rt_HD_Import_Operation::$FOLLOWUP_STAFF)? false : true;
 
-			if( isset( $comment_privacy ) && ! empty( $comment_privacy ) && 'true' == $comment_privacy ){
+			if ( isset( $comment_privacy ) && ! empty( $comment_privacy ) && intval( $comment_privacy ) && $comment_privacy > Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC  ){
 				$body .= '<br /> A private followup has been added ' . ( ( ! empty( $currentUser->display_name ) ) ? 'by ' . $currentUser->display_name : 'annonymously' ) .'. Please go to link and login to view the message.';
 			}
 			else{
@@ -1572,7 +1578,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 			$body .= '<br/> ';
 			$notificationFlag = $this->check_setting_for_new_followup_email();
-			$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, $attachment, $comment_ID, $notificationFlag, true );
+			$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, $attachment, $comment_ID, $notificationFlag, $contactFlag );
 			$returnArray['status'] = true;
 			$returnArray['comment_id'] = $comment_ID;
 			$returnArray['comment_count'] = get_comments( array(
