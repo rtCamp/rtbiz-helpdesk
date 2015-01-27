@@ -173,7 +173,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 			$post_id = $rt_hd_tickets_operation->ticket_default_field_update( $postArray, $dataArray, $post_type, '', $userid, $userid );
 			if ( '' != $originalBody ) {
-				add_post_meta( $post_id, 'rt_hd_original_email_body', $originalBody );
+				add_post_meta( $post_id, '_rt_hd_original_email_body', $originalBody );
 			}
 			// Updating Post Status from publish to unanswered
 			$rt_hd_tickets_operation->ticket_default_field_update( array( 'post_status' => 'hd-unanswered', 'post_name' => $post_id ), array( 'post_status' => 'hd-unanswered' ), $post_type, $post_id, $userid, $userid );

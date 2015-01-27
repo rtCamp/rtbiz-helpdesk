@@ -20,7 +20,7 @@ $user_edit_content = current_user_can( $cap );
 
 $show_original_email = false;
 if ( ! empty( $_REQUEST['show_original'] ) && 'true' === $_REQUEST['show_original'] && empty( $_REQUEST['comment-id'] ) && $user_edit_content ){
-	$data = get_post_meta( $post->ID, 'rt_hd_original_email_body', true );
+	$data = get_post_meta( $post->ID, '_rt_hd_original_email_body', true );
 	echo '<div class="rt_original_email">'.wpautop($data) .'</div>';
 	$show_original_email = true;
 }
