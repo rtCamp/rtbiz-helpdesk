@@ -72,6 +72,9 @@ if ( ! class_exists( 'RT_Meta_Box_Subscribers ' ) ) {
 			$subScribetHTML      = '';
 			if ( ! empty( $results ) ) {
 				foreach ( $results as $author ) {
+
+					$subscriber_flag = true;
+
 					if ( $get_assigned_to && ! empty( $get_assigned_to ) && in_array( $author->ID, $get_assigned_to ) ) {
 						if ( in_array( $author->user_email, $all_hd_participants ) ) {
 							$key = array_search( $author->user_email, $all_hd_participants );
@@ -80,20 +83,22 @@ if ( ! class_exists( 'RT_Meta_Box_Subscribers ' ) ) {
 							}
 						}
 
-						$subScribetHTML .= "<li id='subscribe-auth-" . $author->ID . "' class='contact-list'>" .
-											get_avatar( $author->user_email, 24 ) .
-											"<a href='#removeSubscriber' class='delete_row'>×</a>" .
-											"<br/><a target='_blank' class='subscribe-title heading' title='" . $author->display_name . "' href='" . rthd_biz_user_profile_link( $author->user_email ) . "'>" . $author->display_name . '</a>' .
-											"<input type='hidden' name='subscribe_to[]' value='" . $author->ID . "' /></li>";
-					}
+						foreach ( $arrSubscriberUser as $s ) {
+							if ( $s['id'] == $author->ID ) {
+								$subscriber_flag = false;
+								break;
+							}
+						}
 
-					$subscriber_flag = true;
-					foreach ( $arrSubscriberUser as $s ) {
-						if ( $s['id'] == $author->ID ) {
-							$subscriber_flag = false;
-							break;
+						if ( $subscriber_flag ) {
+							$subScribetHTML .= "<li id='subscribe-auth-" . $author->ID . "' class='contact-list'>" .
+							                   get_avatar( $author->user_email, 24 ) .
+							                   "<a href='#removeSubscriber' class='delete_row'>×</a>" .
+							                   "<br/><a target='_blank' class='subscribe-title heading' title='" . $author->display_name . "' href='" . rthd_biz_user_profile_link( $author->user_email ) . "'>" . $author->display_name . '</a>' .
+							                   "<input type='hidden' name='subscribe_to[]' value='" . $author->ID . "' /></li>";
 						}
 					}
+
 					if ( $subscriber_flag ) {
 						$arrSubscriberUser[] = array(
 							'id'             => $author->ID,
