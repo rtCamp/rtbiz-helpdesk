@@ -510,13 +510,13 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 
 	$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' ); //todo: find employee users if then only visible
 	$staffonly  = current_user_can( $cap );
-	//	$is_comment_private = get_comment_meta( $comment->comment_ID, '_rthd_privacy', true );
 	$private_text = '';
-	$display_private_comment_flag = true;
+	$display_private_comment_flag = false;
 	$is_comment_private = false;
 	switch ( $comment->comment_type ) {
 		case Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC:
 			$display_private_comment_flag = true;
+			$is_comment_private = false;
 			break;
 		case Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE:
 			if ( $user_edit ){
@@ -532,16 +532,11 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 			$private_text = 'Staff only';
 			$is_comment_private = true;
 			break;
+		default:
+			$display_private_comment_flag = true;
+			break;
 	}
-	//	if ( ! empty( $is_comment_private ) && 'true' == $is_comment_private ) {
-	//		if ( $user_edit ) {
-	//			$display_private_comment_flag = true;
-	//		} else {
-	//			$display_private_comment_flag = false;
-	//		}
-	//	} else {
-	//		$display_private_comment_flag = true;
-	//	}
+
 
 	$side_class = ( $type == 'right' ) ? 'self' : ( ( $type == 'left' ) ? 'other' : '' );
 	$editable_class = ( $display_private_comment_flag ) ? 'editable' : '';
