@@ -68,7 +68,7 @@ if ( ! class_exists( 'RT_Meta_Box_Subscribers ' ) ) {
 
 			$results             = Rt_HD_Utils::get_hd_rtcamp_user();
 			$arrCommentReply     = array();
-			$arrSubscriberUser[] = array();
+			$arrSubscriberUser   = array();
 			$subScribetHTML      = '';
 			if ( ! empty( $results ) ) {
 				foreach ( $results as $author ) {
