@@ -366,6 +366,13 @@ li.load-more-spinner-li {
 #rthd-status-visiable{
 	display: inline-block;
 }
-#ticket-information-edit-ticket-link{
-	float: right;
+#ticket-information-edit-ticket-link {
+	display: inline-block;
+	right: 0;
+	position: absolute;
+	margin-top: 10px;
+}
+
+.rt-hd-ticket-info-header {
+	display: inline-block;
 }
