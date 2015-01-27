@@ -367,7 +367,7 @@ li.load-more-spinner-li {
 	display: inline-block;
 }
 #ticket-information-edit-ticket-link {
-	display: inline-block;
+	display: inline;
 	right: 0;
 	position: absolute;
 	margin-top: 10px;
