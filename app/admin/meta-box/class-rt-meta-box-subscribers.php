@@ -149,8 +149,6 @@ if ( ! class_exists( 'RT_Meta_Box_Subscribers ' ) ) {
 			$newTicket = ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] = 'inline-save' ) ? get_post( $_REQUEST['post_ID'] ) : $_POST['post'];
 			$newTicket = ( array ) $newTicket;
 
-			error_log(var_export($_POST['subscribe_to'],true));
-
 			$rt_hd_tickets_operation->ticket_subscribe_update( $_POST['subscribe_to'], $newTicket['post_author'], $post_id );
 		}
 	}
