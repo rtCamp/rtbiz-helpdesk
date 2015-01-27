@@ -309,14 +309,9 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 					$subscribe_to = array();
 				}
 
-				if ( intval( $post_author ) != get_current_user_id() && ! in_array( get_current_user_id(), $subscribe_to ) ) {
-					$subscribe_to[] = get_current_user_id();
-				}
-				//				if ( isset( $subscribe_to ) && ! empty( $subscribe_to ) ) {
-					update_post_meta( $post_id, '_rtbiz_hd_subscribe_to', $subscribe_to );
+				update_post_meta( $post_id, '_rtbiz_hd_subscribe_to', $subscribe_to );
 
-					return true;
-				//				}
+				return true;
 			}
 
 			return false;
