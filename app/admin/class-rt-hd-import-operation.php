@@ -96,7 +96,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			else{
 				$flag = true;
 			}
-			$this->notify_subscriber_via_email( $_POST['post_id'], $subject, $body, array(), $_POST['post_id'], $flag, false );
+			$this->notify_subscriber_via_email( $_POST['post_id'], $subject, rthd_get_general_body_template( $body ), array(), $_POST['post_id'], $flag, false );
 			$result['status'] = true;
 			echo json_encode( $result );
 			die();
@@ -822,7 +822,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$body .=  rthd_content_filter( $comment_content );
 				$body .= '<br/> ';
 				$notificationFlag = $this->check_setting_for_new_followup_email();
-				$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, wp_list_pluck( $uploaded, 'url' ), $comment_id, $notificationFlag, true );
+				$this->notify_subscriber_via_email( $comment_post_ID, $title, rthd_get_general_body_template( $body ), wp_list_pluck( $uploaded, 'url' ), $comment_id, $notificationFlag, true );
 			}
 
 			return true;
@@ -982,7 +982,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			}
 
 			global $rt_hd_email_notification;
-			return $rt_hd_email_notification->insert_new_send_email( $subject, '', $mailbody, $toEmail, $ccEmail, $bccEmail, $attachment, $comment_id, 'comment' );
+			return $rt_hd_email_notification->insert_new_send_email( $subject, '', rthd_get_general_body_template( $mailbody ), $toEmail, $ccEmail, $bccEmail, $attachment, $comment_id, 'comment' );
 		}
 
 		/**
@@ -1225,7 +1225,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			}
 			//			$body .= '<br/>';
 			$notificationFlag = $this->check_setting_for_new_followup_email();
-			$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, $uploaded, $comment_ID, $notificationFlag, $contactFlag );
+			$this->notify_subscriber_via_email( $comment_post_ID, $title, rthd_get_general_body_template( $body ), $uploaded, $comment_ID, $notificationFlag, $contactFlag );
 
 			$returnArray['status']        = true;
 
@@ -1355,8 +1355,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$currentUser = get_user_by( 'id', get_current_user_id() );
 				$subject       = rthd_create_new_ticket_title( 'rthd_update_followup_email_title', $comment_post_ID );
 
-				$body = ' Follwup Updated by ' . $currentUser->display_name;
-				$body .= '<br/><b>Type : </b> <br/>' . $followuptype;
+				$body = '<div> A Follwup Updated by ' . $currentUser->display_name. '</div> <br/>';
+				$body .= '<div> The changes are as follows: </div><br/>';
 
 				$flag = false;
 
@@ -1368,35 +1368,30 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				if ( intval( $comment_privacy ) && $comment_privacy > Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ){
 					$comment_privacy = 'true';
 				}
-
+				$body_template = '';
 				$diff = rthd_text_diff( $old_privacy_text, $new_privacy );
 				if ( $diff ) {
-					$body .= '<br/><b>Private : </b>' . $diff;
+					$body_template .= '<br/><b>Type : </b>' . $diff;
 					$flag = true;
 				}
 
 				if ( 'true' == $old_privacy || 'true' == $comment_privacy ){
-					$body .= '<br /> A <strong>private</strong> followup has been edited. Please go to link and login to view the message.';
+					$body_template .= '<br /> A <strong>private</strong> followup has been edited. Please go to link and login to view the message.';
 				}
 				else {
-					$diff = rthd_text_diff( $oldDate, $newDate );
-					if ( $diff ) {
-						$body .= '<br/><b>Date : </b>' . $diff;
-						$flag = true;
-					}
-
 					$diff = rthd_text_diff( trim( html_entity_decode( strip_tags( $oldCommentBody ) ) ), trim( html_entity_decode( strip_tags( $commentdata[ 'comment_content' ] ) ) ) );
 					if ( $diff ) {
 						$flag = true;
-						$body .= '<br/><b>Body : </b>' . $diff;
+						$body_template .= '<br/><b>Body : </b>' . $diff;
 					} else {
-						$body .= '<br/><b>Body : </b>' . rthd_content_filter( $comment->comment_content );
+						$body_template .= '<br/><b>Body : </b>' . rthd_content_filter( $comment->comment_content );
 					}
-					$body .= '<br/> ';
+					$body_template .= '<br/> ';
 				}
 				if ( $flag ) {
 					$redux = rthd_get_redux_settings();
 					$notificationFlag = ( $redux['rthd_notification_events']['followup_edited'] == 1 );
+					$body = $body. rthd_get_general_body_template( $body_template );
 					$this->notify_subscriber_via_email( $comment_post_ID, $subject, $body, $attachment, $_POST['comment_id'],$notificationFlag, false );
 				}
 
@@ -1548,7 +1543,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					$signature = preg_replace( '/  /i', '  ', $signature );
 				}
 				$mailbody .= '<br />' . $signature;
-				$rt_hd_email_notification->insert_new_send_email( $subject, '', $mailbody, $toEmail, $ccEmail, $bccEmail, $attachment, $comment_ID, 'comment' );
+				$rt_hd_email_notification->insert_new_send_email( $subject, '', rthd_get_general_body_template( $mailbody ), $toEmail, $ccEmail, $bccEmail, $attachment, $comment_ID, 'comment' );
 			}
 
 			update_comment_meta( $comment_ID, '_email_from', $_POST['comment-reply-from'] );
@@ -1578,7 +1573,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 			$body .= '<br/> ';
 			$notificationFlag = $this->check_setting_for_new_followup_email();
-			$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, $attachment, $comment_ID, $notificationFlag, $contactFlag );
+			$this->notify_subscriber_via_email( $comment_post_ID, $title, rthd_get_general_body_template( $body ), $attachment, $comment_ID, $notificationFlag, $contactFlag );
 			$returnArray['status'] = true;
 			$returnArray['comment_id'] = $comment_ID;
 			$returnArray['comment_count'] = get_comments( array(
@@ -1702,7 +1697,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$comment_post_ID = $_POST['post_id'];
 
 			$title           = rthd_create_new_ticket_title( 'rthd_delete_followup_email_title', $comment_post_ID );
-			$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, array(), $_POST['comment_id'], $notificationFlag, false );
+			$this->notify_subscriber_via_email( $comment_post_ID, $title, rthd_get_general_body_template( $body ), array(), $_POST['comment_id'], $notificationFlag, false );
 			echo json_encode( $response );
 			die( 0 );
 		}

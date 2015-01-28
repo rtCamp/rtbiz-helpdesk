@@ -65,8 +65,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				$reply_txt = '<div style="color:#777">'.htmlentities('< ! ------- REPLY ABOVE THIS LINE ------- ! >').'</div><br /> ';
 			}
 
-			$date = strtotime(current_time( 'mysql', 1 ));
-			$htmlbody = rthd_content_filter( $title . $beforeHTML .'<div style="border: 1px solid #DFE9f2;padding: 20px;background: #f1f6fa;">' .$body.'<div style="float: right;color: gray;">' .date( 'D, M, d, Y, H:i', $date ). '</div></div>' . $afterHTML );
+			$htmlbody = rthd_content_filter( $title . $beforeHTML . $body . $afterHTML );
 			$htmlbody = $reply_txt . $htmlbody;
 			$settings = rthd_get_redux_settings();
 			$attachments = wp_list_pluck( $attachement, 'file' );
@@ -222,7 +221,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$title = $this->get_email_title( $post_id, $post_type );
 			$body .= 'Ticket created by : <b>' . ( ( $mail_parse ) ? implode( ',', $ticket_creaters ) : $current_user->display_name ) . '</b>';
 			// added Notification Emails
-			$this->insert_new_send_email( $subject, $title, $body, $to, $cc, array(), $uploaded, $post_id, 'post' );
+			$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $body ), $to, $cc, array(), $uploaded, $post_id, 'post' );
 		}
 
 		/**
@@ -259,7 +258,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$title = $this->get_email_title( $post_id, $post_type );
 			$body .= 'Ticket Updated by : <a target="_blank" href="">' . $current_user->display_name . '</a>';
 			// added Notification Emails
-			$this->insert_new_send_email( $subject, $title, $body, $to, $cc, array(), $uploaded, $post_id, 'post' );
+			$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $body ), $to, $cc, array(), $uploaded, $post_id, 'post' );
 		}
 
 		/**
@@ -280,7 +279,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$subject = rthd_create_new_ticket_title( 'rthd_ticket_subscribe_email_title', $post_id );
 			$body = 'You have been <b>subscribed</b> to this ticket';
 			$title = $this->get_email_title( $post_id, $post_type );
-			$this->insert_new_send_email( $subject, $title, $body, array(), array(), $newSubscriberList, array(), $post_id, 'post' );
+			$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $body ), array(), array(), $newSubscriberList, array(), $post_id, 'post' );
 
 			if ( $notificationFlag ){
 				foreach ( $newSubscriberList as $user ){
@@ -289,7 +288,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				}
 				$body .= ' have been <b>subscribed</b> to this ticket';
 				$title = $this->get_email_title( $post_id, $post_type );
-				$this->insert_new_send_email( $subject, $title, $body, array(), $cc, array(), array(), $post_id, 'post' );
+				$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $body ), array(), $cc, array(), array(), $post_id, 'post' );
 			}
 		}
 
@@ -311,7 +310,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$subject = rthd_create_new_ticket_title( 'rthd_ticket_unsubscribe_email_title', $post_id );
 			$body = 'You have been <b>unsubscribed</b> to this ticket';
 			$title = $this->get_email_title( $post_id, $post_type );
-			$this->insert_new_send_email( $subject, $title, $body, array(), array(), $oldSubscriberList, array(), $post_id, 'post' );
+			$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $body ), array(), array(), $oldSubscriberList, array(), $post_id, 'post' );
 			if ( $notificationFlag ){
 				$body = '';
 				foreach ( $oldSubscriberList as $user ){
@@ -319,7 +318,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 					$body .= '<br />';
 				}
 				$body .= 'have been <b>unsubscribed</b> from this ticket';
-				$this->insert_new_send_email( $subject, $title, $body, array(), array(), $cc, array(), $post_id, 'post' );
+				$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $body ), array(), array(), $cc, array(), $post_id, 'post' );
 			}
 		}
 
@@ -347,7 +346,8 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$subject = rthd_create_new_ticket_title( 'rthd_update_ticket_email_title', $post_id );
 			$title = $this->get_email_title( $post_id, $post_type );
 			$body .= '<br />' . 'Ticket updated by : <a target="_blank" href="">' . $current_user->display_name . '</a>';
-			$this->insert_new_send_email( $subject, $title, stripslashes( $body ), $to, array(), $bccemails, array(), $post_id, 'post' );
+			$body = stripslashes( $body );
+			$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $body ) , $to, array(), $bccemails, array(), $post_id, 'post' );
 		}
 
 		/**
@@ -382,13 +382,13 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			}
 			// client
 			$toBody = '<br/><strong>New Ticket Created :</strong><br />'.$body;
-			$this->insert_new_send_email( $subject, $title, $toBody, $notify_emails, array(), array() , $uploaded, $post_id );
+			$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $toBody ), $notify_emails, array(), array() , $uploaded, $post_id );
 			// internal emails
 			if ( ! empty( $bcc ) ){
 				$user = get_post_meta( $post_id, '_rtbiz_hd_updated_by', true );
 				$ticket_author = get_user_by( 'id', $user );
 				$toBody = '<br/><strong>New Ticket Created by ' . $ticket_author->display_name.':</strong><br />'.$body;
-				$this->insert_new_send_email( $subject, $title, $toBody, array(), array(), $bcc , $uploaded, $post_id );
+				$this->insert_new_send_email( $subject, $title, rt_biz_get_company_post_type( $toBody ), array(), array(), $bcc , $uploaded, $post_id );
 			}
 		}
 
