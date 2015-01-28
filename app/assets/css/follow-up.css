@@ -374,3 +374,8 @@ li.load-more-spinner-li {
 .rt-hd-ticket-info-header {
 	display: inline;
 }
+
+.rthd_order_status{
+	display: inline;
+	float: right;
+}

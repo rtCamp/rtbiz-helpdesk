@@ -106,7 +106,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
                        'meta_value'  => $created_by->user_email,
                        'post_type'   => $this->order_post_type,
                        'order'       => 'ASC',
-                       'post_status' => 'wc-completed',
+                       'post_status' => 'any', // wc-completed is for completed orders
 					) );
 				} else if ( $this->iseddActive ) {
 					$payments = get_posts( array(
@@ -115,15 +115,24 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 					   'meta_value'  => $created_by->user_email,
 					   'post_type'   => $this->order_post_type,
 					   'order'       => 'ASC',
-					   'post_status' => 'publish',
+					   'post_status' => 'any', // publish is for completed orders
 					) );
+					$order_post_status = edd_get_payment_statuses();
 				}
 				if ( ! empty( $payments ) ) {
 					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_wrapper_start', '<div>' );
 					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_heading', '<h2>' . __( 'Purchase History' ) . '</h2>' );
 					echo '<ul>';
 					foreach ($payments as $key => $payment ) {
-						echo '<li><a href="' . admin_url( "edit.php?post_type=download&page=edd-payment-history&view=view-order-details&id={$payment->ID}" ) . '">' . sprintf( __( 'Order #%d', RT_HD_TEXT_DOMAIN ), $payment->ID ) . '</a></li>';
+						$link = '';
+						if( $this->iseddActive ){
+							$status = $order_post_status[$payment->post_status];
+							$link =admin_url( "edit.php?post_type=download&page=edd-payment-history&view=view-order-details&id={$payment->ID}" ) ;
+						} else if( $this->isWoocommerceActive ) {
+							$status = wc_get_order_status_name($payment->post_status);
+							$link = get_edit_post_link( $payment->ID );
+						}
+						echo '<li><a href="' . $link . '">' . sprintf( __( 'Order #%d', RT_HD_TEXT_DOMAIN ), $payment->ID ) . '</a> <div class="rthd_order_status">'. $status .'</div></li>';
 					}
 					echo '</ul>';
 					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_wrapper_end', '</div>' );
