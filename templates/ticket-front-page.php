@@ -137,11 +137,9 @@ if ( ! $show_original_email ) {
 
 				if ( ! empty( $attachments ) ) {
 					$attach_cmt = rthd_get_attachment_url_from_followups( $post->ID );
-					?>
-
-					<h2><i class="foundicon-paper-clip"></i> <?php _e( 'Attachments' ); ?></h2>
-					<div class="rt-hd-ticket-info">
-						<div id="attachment-files">
+					$attachFlag  = true;
+					$tmphtml= '<h2><i class="foundicon-paper-clip"></i> '. __( 'Attachments' ) .'</h2> <div class="rt-hd-ticket-info"> <div id="attachment-files"> ';
+							?>
 							<?php foreach ( $attachments as $attachment ) {
 								$attachment_url = wp_get_attachment_url( $attachment->ID );
 								if ( in_array($attachment_url,$attach_cmt)){
@@ -149,7 +147,12 @@ if ( ! $show_original_email ) {
 								}
 								?>
 								<?php $extn_array = explode( '.', $attachment->guid );
-								$extn             = $extn_array[ count( $extn_array ) - 1 ]; ?>
+								$extn             = $extn_array[ count( $extn_array ) - 1 ];
+								if ( $attachFlag ){
+									echo $tmphtml;
+									$attachFlag = false;
+								}
+								?>
 								<div class="attachment-item"
 								     data-attachment-id="<?php echo esc_attr( $attachment->ID ); ?>">
 									<a class="rthd_attachment"
@@ -166,9 +169,12 @@ if ( ! $show_original_email ) {
 									<input type="hidden" name="attachment[]"
 									       value="<?php echo esc_attr( $attachment->ID ); ?>"/>
 								</div>
-							<?php } ?>
-						</div>
-					</div>
+							<?php }
+					if ( ! $attachFlag ){
+						echo '</div> </div>';
+					}
+					?>
+
 
 				<?php }
 
