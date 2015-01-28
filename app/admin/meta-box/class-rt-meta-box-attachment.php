@@ -39,18 +39,24 @@ if ( ! class_exists( 'RT_Meta_Box_Attachment' ) ) {
 											'post_parent'    => $post->ID,
 											'post_type'      => 'attachment',
 											) );
-			}?>
+			}
+			$attach_cmt = rthd_get_attachment_url_from_followups( $post->ID );
+			?>
 
 			<div id="attachment-container" class="row_group">
 			<a href="#" class="button" id="add_ticket_attachment"><?php _e( 'Add', RT_HD_TEXT_DOMAIN ); ?></a>
 			<ul id="divAttachmentList" class="scroll-height">
 				<?php
 			foreach ( $attachments as $attachment ) {
+				$attachment_url = wp_get_attachment_url( $attachment->ID );
+				if ( in_array($attachment_url,$attach_cmt)) {
+					continue;
+				}
 				$extn_array = explode( '.', $attachment->guid );
 				$extn       = $extn_array[ count( $extn_array ) - 1 ]; ?>
 				<li data-attachment-id="<?php echo esc_attr( $attachment->ID ); ?>" class="attachment-item row_group">
 					<a href="#" class="delete_row rthd_delete_attachment">x</a> <a target="_blank"
-					                                                               href="<?php echo esc_url( wp_get_attachment_url( $attachment->ID ) ); ?>">
+					                                                               href="<?php echo esc_url( $attachment_url ); ?>">
 						<img height="20px" width="20px"
 						     src="<?php echo esc_url( RT_HD_URL . 'app/assets/file-type/' . $extn . '.png' ); ?>"/><?php
 						echo esc_attr( $attachment->post_title ); ?>
