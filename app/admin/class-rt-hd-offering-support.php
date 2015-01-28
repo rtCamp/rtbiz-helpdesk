@@ -95,15 +95,14 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 		}
 
 		function user_purchase_history( $ticket_id ) {
-			$created_by = get_user_by( 'id', get_post_meta( $ticket_id, '_rtbiz_hd_created_by', true ) );
-			if ( !empty( $created_by ) ) {
+			$created_by_id = get_post_meta( $ticket_id, '_rtbiz_hd_created_by', true );
+			if ( !empty( $created_by_id ) ) {
 				$this->check_active_plugin();
 				if ( $this->isWoocommerceActive ) {
-					//
 					$payments = get_posts( array(
                        'numberposts' => -1,
-                       'meta_key'    => '_billing_email',
-                       'meta_value'  => $created_by->user_email,
+                       'meta_key'    => '_customer_user',
+                       'meta_value'  => $created_by_id,
                        'post_type'   => $this->order_post_type,
                        'order'       => 'ASC',
                        'post_status' => 'any', // wc-completed is for completed orders
@@ -111,8 +110,8 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 				} else if ( $this->iseddActive ) {
 					$payments = get_posts( array(
 					   'numberposts' => -1,
-					   'meta_key'    => '_edd_payment_user_email',
-					   'meta_value'  => $created_by->user_email,
+					   'meta_key'    => '_edd_payment_user_id',
+					   'meta_value'  => $created_by_id,
 					   'post_type'   => $this->order_post_type,
 					   'order'       => 'ASC',
 					   'post_status' => 'any', // publish is for completed orders
