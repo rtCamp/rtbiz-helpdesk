@@ -64,6 +64,7 @@ if ( ! class_exists( 'RT_Meta_Box_Attachment' ) ) {
 					</li><?php
 			} ?>
 			</ul>
+			<div class="rthd-attachment-note">Note : Attachments added from here will take visibility of the ticket. i.e., it will be visible to logged in users.</div>
 			</div><?php
 		}
 

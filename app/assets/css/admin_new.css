@@ -145,6 +145,10 @@ img.tips {
 	margin-bottom: 10px;
 }
 
+.rthd-attachment-note{
+	font-size: 11px;
+}
+
 
 /*Redux Setting Heder Css*/
 .redux-container #redux-header .display_header {
