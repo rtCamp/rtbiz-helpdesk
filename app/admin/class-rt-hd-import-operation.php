@@ -1371,7 +1371,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$body_template = '';
 				$diff = rthd_text_diff( $old_privacy_text, $new_privacy );
 				if ( $diff ) {
-					$body_template .= '<br/><b>Type : </b>' . $diff;
+					$body_template .= '<br/><b>Visibility : </b>' . $diff;
 					$flag = true;
 				}
 
@@ -1382,9 +1382,9 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					$diff = rthd_text_diff( trim( html_entity_decode( strip_tags( $oldCommentBody ) ) ), trim( html_entity_decode( strip_tags( $commentdata[ 'comment_content' ] ) ) ) );
 					if ( $diff ) {
 						$flag = true;
-						$body_template .= '<br/><b>Body : </b>' . $diff;
+						$body_template .= '<br/><b>Followup Content : </b>' . $diff;
 					} else {
-						$body_template .= '<br/><b>Body : </b>' . rthd_content_filter( $comment->comment_content );
+						$body_template .= '<br/><b>Followup Content : </b>' . rthd_content_filter( $comment->comment_content );
 					}
 					$body_template .= '<br/> ';
 				}
