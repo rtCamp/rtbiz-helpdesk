@@ -133,10 +133,11 @@ if ( ! $show_original_email ) {
 			<?php }
 
 			if ( isset( $post->ID ) ) {
-				$attach_cmt = rthd_get_attachment_url_from_followups( $post->ID );
 				$attachments = get_children( array( 'post_parent' => $post->ID, 'post_type' => 'attachment', ) );
 
-				if ( ! empty( $attachments ) ) { ?>
+				if ( ! empty( $attachments ) ) {
+					$attach_cmt = rthd_get_attachment_url_from_followups( $post->ID );
+					?>
 
 					<h2><i class="foundicon-paper-clip"></i> <?php _e( 'Attachments' ); ?></h2>
 					<div class="rt-hd-ticket-info">
