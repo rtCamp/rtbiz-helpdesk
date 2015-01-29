@@ -912,9 +912,9 @@ function rthd_biz_user_profile_link( $email ){
  * used in ticket front page / attachment metabox to hide followup attachments
  */
 function rthd_get_attachment_url_from_followups( $postid ){
-	$attach_comments = get_comments(array(
+	$attach_comments = get_comments( array(
 		                                'post_id' => $postid,
-		                                'fields' => 'comment_ID',
+		                                'fields' => 'ids',
 		                                'meta_query' => array(
 			                                array(
 				                                'key'   => 'attachment',
@@ -923,7 +923,7 @@ function rthd_get_attachment_url_from_followups( $postid ){
 	                                ));
 	$attach_cmt = array();
 	foreach ( $attach_comments as $comment ){
-		$attach_cmt[] = get_comment_meta($comment->comment_ID, 'attachment', true );
+		$attach_cmt[] = get_comment_meta($comment, 'attachment', true );
 	}
 	return $attach_cmt;
 }
