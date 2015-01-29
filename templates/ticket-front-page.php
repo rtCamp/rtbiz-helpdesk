@@ -122,7 +122,7 @@ $user_edit_content = current_user_can( $cap );
 				if ( ! empty( $attachments ) ) {
 					$attach_cmt = rthd_get_attachment_url_from_followups( $post->ID );
 					$attachFlag  = true;
-					$tmphtml= '<div class="rt-hd-ticket-info"><h2 class="rt-hd-ticket-info-header">'. __( 'Attachments' ) .'</h2></div><div class="rt-hd-ticket-info"><div id="attachment-files">';
+					$tmphtml= '<div class="rt-hd-ticket-info"><h2 class="rt-hd-ticket-info-header">'. __( 'Attachments' ) .'</h2></div><div class="rt-hd-ticket-info"><ul id="attachment-files">';
 							?>
 							<?php foreach ( $attachments as $attachment ) {
 								$attachment_url = wp_get_attachment_url( $attachment->ID );
@@ -137,7 +137,7 @@ $user_edit_content = current_user_can( $cap );
 									$attachFlag = false;
 								}
 								?>
-								<div class="attachment-item"
+								<li class="attachment-item"
 								     data-attachment-id="<?php echo esc_attr( $attachment->ID ); ?>">
 									<a class="rthd_attachment"
 									   title="<?php echo balanceTags( $attachment->post_title ); ?>" target="_blank"
@@ -152,10 +152,10 @@ $user_edit_content = current_user_can( $cap );
 									<?php } ?>
 									<input type="hidden" name="attachment[]"
 									       value="<?php echo esc_attr( $attachment->ID ); ?>"/>
-								</div>
+								</li>
 							<?php }
 					if ( ! $attachFlag ){
-						echo '</div> </div>';
+						echo '</ul> </div>';
 					}
 					?>
 
