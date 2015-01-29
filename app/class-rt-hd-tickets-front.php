@@ -37,9 +37,28 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 		public function __construct() {
 
 			add_action( 'init', array( $this, 'flush_rewrite_rules' ), 15 );
+			add_action( 'wp', array( $this, 'show_original_email' ) );
 
 			add_filter( 'template_include', array( $this, 'template_include' ), 1, 1 );
 			add_filter( 'wp_title', array( $this, 'change_title' ), 9999, 1 );
+		}
+
+		function show_original_email(){
+			global $post;
+
+			$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
+			$user_edit_content = current_user_can( $cap );
+
+			if ( ! empty( $_REQUEST['show_original'] ) && 'true' === $_REQUEST['show_original'] && empty( $_REQUEST['comment-id'] ) && $user_edit_content ){
+				$data = get_post_meta( $post->ID, '_rt_hd_original_email_body', true );
+				echo '<div class="rt_original_email">'.wpautop($data) .'</div>';
+				die(0);
+			}
+			if ( ! empty( $_REQUEST['show_original'] ) && 'true' === $_REQUEST['show_original'] && ! empty( $_REQUEST['comment-id'] ) && $user_edit_content ){
+				$data = get_comment_meta( $_REQUEST['comment-id'], 'rt_hd_original_email', true );
+				echo '<div class="rt_original_email">'.wpautop($data) .'</div>';
+				die(0);
+			}
 		}
 
 		function restrict_seo_on_helpdesk() {

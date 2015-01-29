@@ -17,19 +17,6 @@ $user_edit       = false;
 
 $cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
 $user_edit_content = current_user_can( $cap );
-
-$show_original_email = false;
-if ( ! empty( $_REQUEST['show_original'] ) && 'true' === $_REQUEST['show_original'] && empty( $_REQUEST['comment-id'] ) && $user_edit_content ){
-	$data = get_post_meta( $post->ID, '_rt_hd_original_email_body', true );
-	echo '<div class="rt_original_email">'.wpautop($data) .'</div>';
-	$show_original_email = true;
-}
-if ( ! empty( $_REQUEST['show_original'] ) && 'true' === $_REQUEST['show_original'] && ! empty( $_REQUEST['comment-id'] ) && $user_edit_content ){
-	$data = get_comment_meta( $_REQUEST['comment-id'], 'rt_hd_original_email', true );
-	echo '<div class="rt_original_email">'.wpautop($data) .'</div>';
-	$show_original_email = true;
-}
-if ( ! $show_original_email ) {
 	?>
 	<div id="add-new-post" class="rthd-container row">
 	<?php
@@ -248,6 +235,5 @@ if ( ! $show_original_email ) {
 		</div>
 	</div>
 <?php
-}
 do_action( 'rthd_ticket_front_page_before_footer' );
 get_footer();
