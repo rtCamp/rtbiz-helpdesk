@@ -219,7 +219,9 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				$body = '<b>'.$current_user->display_name . '</b> assigned you new ticket.';
 			}
 			$title = $this->get_email_title( $post_id, $post_type );
-			$body .= 'Ticket created by : <b>' . ( ( $mail_parse ) ? implode( ',', $ticket_creaters ) : $current_user->display_name ) . '</b>';
+			$user = get_post_meta( $post_id, '_rtbiz_hd_created_by', true );
+			$ticket_author = get_user_by( 'id', $user );
+			$body .= 'Ticket created by : <b>' . ( ( $mail_parse ) ? implode( ',', $ticket_creaters ) : $ticket_author->display_name ) . '</b>';
 			// added Notification Emails
 			$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $body ), $to, $cc, array(), $uploaded, $post_id, 'post' );
 		}
@@ -256,7 +258,9 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 
 			$body = 'You are no longer responsible for this ticket. It has been reassigned to ' . $newUser->display_name;
 			$title = $this->get_email_title( $post_id, $post_type );
-			$body .= 'Ticket Updated by : <a target="_blank" href="">' . $current_user->display_name . '</a>';
+			$user = get_post_meta( $post_id, '_rtbiz_hd_updated_by', true );
+			$ticket_update_user = get_user_by( 'id', $user );
+			$body .= 'Ticket Updated by : <a target="_blank" href="">' . $ticket_update_user->display_name . '</a>';
 			// added Notification Emails
 			$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $body ), $to, $cc, array(), $uploaded, $post_id, 'post' );
 		}
@@ -345,8 +349,9 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 
 			$subject = rthd_create_new_ticket_title( 'rthd_update_ticket_email_title', $post_id );
 			$title = $this->get_email_title( $post_id, $post_type );
-			$body .= '<br />' . 'Ticket updated by : <a target="_blank" href="">' . $current_user->display_name . '</a>';
-			$body = stripslashes( $body );
+			$user = get_post_meta( $post_id, '_rtbiz_hd_updated_by', true );
+			$ticket_update_user = get_user_by( 'id', $user );
+			$body .= '<br />' . 'Ticket updated by : <a target="_blank" href="">' . $ticket_update_user->display_name . '</a>';
 			$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $body ) , $to, array(), $bccemails, array(), $post_id, 'post' );
 		}
 
