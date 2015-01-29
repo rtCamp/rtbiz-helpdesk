@@ -122,7 +122,7 @@ $user_edit_content = current_user_can( $cap );
 				if ( ! empty( $attachments ) ) {
 					$attach_cmt = rthd_get_attachment_url_from_followups( $post->ID );
 					$attachFlag  = true;
-					$tmphtml= '<h2 class="rt-hd-ticket-info-header">'. __( 'Attachments' ) .'</h2> <div class="rt-hd-ticket-info"> <div id="attachment-files">';
+					$tmphtml= '<div class="rt-hd-ticket-info"> <h2 class="rt-hd-ticket-info-header">'. __( 'Attachments' ) .'</h2>  <div id="attachment-files">';
 							?>
 							<?php foreach ( $attachments as $attachment ) {
 								$attachment_url = wp_get_attachment_url( $attachment->ID );
