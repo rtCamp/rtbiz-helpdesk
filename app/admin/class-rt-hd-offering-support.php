@@ -249,7 +249,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 
 			$post_id = $this->save_support_form();
 			if ( ! empty( $post_id ) && is_int( $post_id ) ) { ?>
-				<div id="info" class="success">Your support request has been submitted. We will soon get back to you for your query.</div>
+				<div id="info" class="success">Your support request has been submitted. We will get back to you for your query soon.</div>
 			<?php }
 
 			global $rtbiz_offerings;
