@@ -104,7 +104,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 		 * @since 0.1
 		 */
 		function admin_init() {
-			$this->templateURL = apply_filters( 'rthd_template_url', 'rthelpdesk/' );
+			$this->templateURL = apply_filters( 'rthd_template_url', 'rtbiz-helpdesk/' );
 
 			$this->update_database();
 

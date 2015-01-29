@@ -161,8 +161,8 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					'title'       => __( 'Menu Label' ),
 					'subtitle'    => __( 'Menu Label Identity for the Plugin.' ),
 					'desc'        => __( 'This label will be used for the Menu Item label for Helpdesk' ),
-					'default'     => __( 'rtHelpdesk' ),
-					'placeholder' => __( 'rtHelpdesk, Helpdesk, etc.' ),
+					'default'     => __( 'Helpdesk' ),
+					'placeholder' => __( 'rtBiz Helpdesk, Support, etc.' ),
 				),
 				array(
 					'id'       => 'rthd_logo_url',

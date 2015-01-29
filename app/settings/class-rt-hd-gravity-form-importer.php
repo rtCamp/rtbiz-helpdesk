@@ -381,7 +381,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 				if ( $mapping->enable == 'yes' ) {
 					$found_history_field = false;
 					if ( ! $found_history_field && isset( $data['notification']['message'] ) ) {
-						$data['notification']['message'] .= '<br />rtHelpdesk Ticket :<a href="--rtcamp_hd_link--">rtHelpdesk Link</a>';
+						$data['notification']['message'] .= '<br />rtBiz Helpdesk Ticket :<a href="--rtcamp_hd_link--">rtBiz Helpdesk Link</a>';
 
 						// Hides field output of fields set to a Visibility of Admin Only
 						// Ref: http://www.gravityhelp.com/documentation/page/Merge_Tags

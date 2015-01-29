@@ -30,8 +30,8 @@ class test_Rt_HD_Admin extends RT_WP_TestCase {
 		    'subdir'=>'/2012/12/12/',
 		);
 		$arg = $this->rthdAdmin->custom_upload_dir( $arg );
-		$this->assertEquals( 'upload/rt_helpdesk/2012/12/12/', $arg['path'] );
-		$this->assertEquals( 'http://hd.com/upload/rt_helpdesk/2012/12/12/', $arg['url'] );
+		$this->assertEquals( 'upload/rtbiz-helpdesk/2012/12/12/', $arg['path'] );
+		$this->assertEquals( 'http://hd.com/upload/rtbiz-helpdesk/2012/12/12/', $arg['url'] );
 	}
 
 }

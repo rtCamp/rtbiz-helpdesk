@@ -113,7 +113,7 @@ if ( ! class_exists( 'Rt_HD_Utils' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		static public function log( $msg, $filename = 'error_log.txt' ) {
-			$log_file = '/tmp/rt_helpdesk' . $filename;
+			$log_file = '/tmp/rtbiz-helpdesk' . $filename;
 			if ( $fp = fopen( $log_file, 'a+' ) ) {
 				fwrite( $fp, "\n" . '[' . date( DATE_RSS ) . '] ' . $msg . "\n" );
 				fclose( $fp );
