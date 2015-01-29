@@ -122,7 +122,7 @@ $user_edit_content = current_user_can( $cap );
 				if ( ! empty( $attachments ) ) {
 					$attach_cmt = rthd_get_attachment_url_from_followups( $post->ID );
 					$attachFlag  = true;
-					$tmphtml= '<div class="rt-hd-ticket-info"> <h2 class="rt-hd-ticket-info-header">'. __( 'Attachments' ) .'</h2>  <div id="attachment-files">';
+					$tmphtml= '<div class="rt-hd-ticket-info"><h2 class="rt-hd-ticket-info-header">'. __( 'Attachments' ) .'</h2></div><div class="rt-hd-ticket-info"><div id="attachment-files">';
 							?>
 							<?php foreach ( $attachments as $attachment ) {
 								$attachment_url = wp_get_attachment_url( $attachment->ID );
@@ -174,6 +174,8 @@ $user_edit_content = current_user_can( $cap );
 					if ( ! $products instanceof WP_Error && ! empty( $products ) ) { ?>
 						<div class="rt-hd-ticket-info">
 							<h2 class="rt-hd-ticket-info-header"><?php _e( 'Ticket Products' ); ?></h2>
+						</div>
+						<div class="rt-hd-ticket-info">
 							<ul>
 								<?php foreach ( $products as $p ) {
 									$url = add_query_arg( 'product_id', $p->term_id, $base_url );
@@ -197,6 +199,8 @@ $user_edit_content = current_user_can( $cap );
 								?>
 								<div class="rt-hd-ticket-info">
 									<h2 class="rt-hd-ticket-info-header"><?php echo $attr->attribute_label; ?></h2>
+								</div>
+								<div class="rt-hd-ticket-info">
 									<ul>
 										<?php foreach ( $terms as $t ) { ?>
 											<li><?php echo $t->name; ?></li>
@@ -222,8 +226,10 @@ $user_edit_content = current_user_can( $cap );
 			), ));
 			if ( $otherposts ) {
 			?>
-			<div class="rt-hd-ticket-info rt-hd-ticket-history">
+			<div class="rt-hd-ticket-info">
 				<h2 class="rt-hd-ticket-info-header"><?php echo __( 'Ticket History' ); ?></h2>
+			</div>
+			<div class="rt-hd-ticket-info rt-hd-ticket-history">
 				<ul>
 					<?php foreach ( $otherposts as $p ) { ?>
 						<li><a href="<?php echo get_post_permalink( $p->ID ); ?>" ><?php echo '[#' . $p->ID. '] ' . esc_attr( strlen( balanceTags( $p->post_title ) ) > 15 ? substr( balanceTags( $p->post_title ), 0, 15 ) . '...' : balanceTags( $p->post_title ) ) ?>  </a><?php echo rthd_status_markup( $p->post_status ); ?></li>
