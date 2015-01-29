@@ -150,3 +150,15 @@ img.tips {
 .redux-container #redux-header .display_header {
     margin: 0;
 }
+
+/* Css for rtHelpdesk dashboard */
+#rthd-welcome-panel.welcome-panel .welcome-panel-close:before {
+	 background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+	 color: #bbb;
+	 content: "";
+	 display: block !important;
+	 font: 16px/1 "dashicons";
+	 height: 20px;
+	 text-align: center;
+	 width: 20px;
+}

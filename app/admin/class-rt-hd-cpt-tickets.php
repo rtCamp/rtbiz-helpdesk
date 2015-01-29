@@ -47,6 +47,9 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 			add_action( 'before_delete_post', array( $this, 'before_ticket_deleted' ) );
 			add_action( 'wp_trash_post', array( $this, 'before_ticket_trashed' ) );
 			add_action( 'wp_before_admin_bar_render', 'RT_Meta_Box_Ticket_Info::custom_post_status_rendar', 10 );
+			
+			// Add custom view name `My Tickets`
+			add_filter( 'views_edit-rtbiz_hd_ticket', array( &$this, 'display_custom_views' ) );
 		}
 
 		/**
@@ -176,12 +179,17 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 
 					$user_id   = $post->post_author;
 					$user_info = get_userdata( $user_id );
-					$url       = esc_url(
-						add_query_arg(
-							array(
-								'post_type'  => Rt_HD_Module::$post_type,
-								'assigned' => $user_id,
-							), 'edit.php' ) );
+					
+					$query_var = array(
+						'post_type'  => Rt_HD_Module::$post_type,
+						'assigned' => $user_id,
+					);
+					
+					if( $user_id == get_current_user_id() ) {
+						$query_var['post_status'] = 'assigned';
+					}
+					 
+					$url = esc_url( add_query_arg( $query_var, 'edit.php' ) );
 
 					if ( $user_info ) {
 						printf( " Assigned to <a href='%s'>%s</a>", $url, $user_info->display_name );
@@ -514,6 +522,30 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 						'updated_by'  => get_current_user_id(),
 					) );
 			}
+		}
+		
+		/**
+		 * Display custom views along with CPT status
+		 *
+		 * @param $views
+		 */
+		public function display_custom_views( $views ) {
+			global $wpdb;
+			
+			$current_user_id = get_current_user_id();
+			
+			$count_sql = sprintf( );
+			
+			$count_user_tickets = $count = $wpdb->get_var( $wpdb->prepare("SELECT COUNT(*) FROM $wpdb->posts WHERE post_type = '%s' AND post_author = %d", array( Rt_HD_Module::$post_type, $current_user_id ) ) );
+			
+			if ( $count_user_tickets ) {
+				if ( isset( $_GET['assigned'] ) && ( $_GET['assigned'] == $current_user_id ) )
+					$class = ' class="current"';
+			
+				$views['my-tickets'] = "<a href='edit.php?post_type=".Rt_HD_Module::$post_type."&assigned=$current_user_id&post_status=assigned'$class>" . sprintf( _nx( 'My Tickets <span class="count">(%s)</span>', 'My Tickets <span class="count">(%s)</span>', $count_user_tickets, RT_HD_TEXT_DOMAIN ), number_format_i18n( $count_user_tickets ) ) . '</a>';
+			}
+			
+			return $views;
 		}
 	}
 }

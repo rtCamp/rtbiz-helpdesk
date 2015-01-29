@@ -9,6 +9,23 @@
 global $current_user;
 ?>
 <div id="new-followup-form">
+
+	<script type="text/javascript">
+	jQuery(document).ready(function ($) {
+		//print list of selected file
+		$("#attachemntlist").change(function () {
+			var input = document.getElementById('attachemntlist');
+			var list = '';
+			//for every file...
+			for (var x = 0; x < input.files.length; x++) {
+				//add to list
+				list += '<li>' + input.files[x].name + '</li>';
+			}
+			$("#fileList").html(list);
+		});
+	});
+	</script>
+
 	<input type="hidden" id='ticket_unique_id' name="followup_ticket_unique_id" value="<?php echo esc_attr( $ticket_unique_id ); ?>" />
 	<input type="hidden" id="followup_post_type" name="post_type" value="<?php echo Rt_HD_Module::$post_type ?>" />
 	<input type="hidden" id="followuptype" name="followuptype" value="" />
@@ -46,6 +63,10 @@ wp_editor( '', $editor_id, $settings );
 	<div> <label for="rthd_keep_status"><input id="rthd_keep_status" type="checkbox" name="rthd_keep_status" text="check keep status unanswered" /><?php _e('Keep unanswered'); ?></label></div>
 	<div>
 		<input id="attachemntlist" name="attachemntlist[]" type="file" multiple />
+		<ul id="fileList">
+			<li>No Files Selected</li>
+		</ul>
+		<span class="followup-note"><b>Note:</b> Attachments will be uploaded when the form is submitted by clicking <i>Add Followup</i> button.</span>
 		<button class="add-savefollowup btn-primary btn" id="savefollwoup" type="button">Add followup</button>
 	</div>
 

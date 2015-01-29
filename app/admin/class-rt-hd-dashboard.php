@@ -37,6 +37,10 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		public function __construct() {
 			$this->screen_id = '';
 			$this->hook();
+			
+			add_action( 'wp_ajax_update_rt_hd_welcome_panel', array( $this, 'update_rt_hd_welcome_panel' ) );
+			
+			$this->setup_defaults();
 		}
 
 		/**
@@ -46,6 +50,15 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		 */
 		public function hook() {
 			add_action( 'admin_menu', array( $this, 'register_dashboard' ), 1 );
+		}
+		
+		/**
+		 * Setup default value for dashboard.
+		 */
+		function setup_defaults() {
+			if ( ! metadata_exists( 'user', get_current_user_id(), 'show_rt_hd_welcome_panel' ) ) {
+				update_user_meta( get_current_user_id(), 'show_rt_hd_welcome_panel', 1 );
+			}
 		}
 
 		/**
@@ -65,6 +78,12 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			/* Add callbacks for this screen only */
 			add_action( 'load-' . $this->screen_id, array( $this, 'page_actions' ), 9 );
 			add_action( 'admin_footer-' . $this->screen_id, array( $this, 'footer_scripts' ) );
+			
+			/* Add Welcome panel on rt helpdesk dashboard. */
+			add_action( 'rt_hd_welcome_panel', array( $this, 'rt_hd_welcome_panel' ) );
+			
+			/* Setup js for rtHelpdesk dashboard */
+			add_action( 'rthd_after_dashboard', array( $this, 'print_dashboard_js' ) );
 
 			/* Setup Google Charts */
 			add_action( 'rthd_after_dashboard', array( $this, 'render_google_charts' ) );
@@ -673,5 +692,126 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		function tickets_table_set_option( $status, $option, $value ) {
 			return $value;
 		}
+		
+		/**
+		 * Update rtHelpdesk welcome panel
+		 */
+		function update_rt_hd_welcome_panel() {
+		
+			check_ajax_referer( 'rthd-welcome-panel-nonce', 'rthdwelcomepanelnonce' );
+		
+			$author_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
+		
+			if ( ! current_user_can( $author_cap ) ) {
+				wp_die( -1 );
+			}
+		
+			update_user_meta( get_current_user_id(), 'show_rt_hd_welcome_panel', empty( $_POST['visible'] ) ? 0 : 1 );
+		
+			wp_die( 1 );
+		}
+		
+		/**
+		 * Check welcome panel for logged in user.
+		 */
+		function check_welcome_panel() {
+			if ( isset( $_GET['rthdwelcome'] ) ) {
+				$welcome_checked = empty( $_GET['rthdwelcome'] ) ? 0 : 1;
+				update_user_meta( get_current_user_id(), 'show_rt_hd_welcome_panel', $welcome_checked );
+			}
+		}
+		
+		/**
+		 * Display welcome widget on rtHelpdesk dashboard.
+		 */
+		function rt_hd_welcome_panel() {
+			global $rt_hd_attributes;
+			
+			$admin_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' );
+			$editor_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
+		?>
+			<div class="welcome-panel-content">
+				<h3><?php _e( 'Welcome to rtHelpdesk!' ); ?></h3>
+				<p class="about-description"><?php _e( 'We&#8217;ve assembled some links to get you started:' ); ?></p>
+				<div class="welcome-panel-column-container">
+					<div class="welcome-panel-column">
+						<?php if ( current_user_can( $admin_cap ) ): ?>
+							<h4><?php _e( 'Get Started' ); ?></h4>
+							<a id="rt-hd-customize-biz" class="button button-primary button-hero" href="<?php echo admin_url( 'admin.php?page=' . $this->screen_id ); ?>"><?php _e( 'Customize Your Helpdesk' ); ?></a>
+						<?php endif; ?>
+					</div>
+					<div class="welcome-panel-column">
+						<h4><?php _e( 'Next Steps' ); ?></h4>
+						<ul>
+							<?php if ( current_user_can( $editor_cap ) ) { ?>
+								<li><?php printf( '<a id="rtiz-add-ticket" href="%s" class="welcome-icon welcome-admin-users">' . __( 'Add new Ticket' ) . '</a>', admin_url( 'post-new.php?post_type=' . Rt_HD_Module::$post_type ) ); ?></li>
+								<li><?php printf( '<a href="%s" class="welcome-icon welcome-networking">' . __( 'Setup Attributes' ) . '</a>', admin_url( 'admin.php?page=' . $rt_hd_attributes->attributes_page_slug ) ); ?></li>
+							<?php } ?>
+						</ul>
+					</div>
+
+					<div class="welcome-panel-column welcome-panel-last">
+						<h4><?php _e( 'More Actions' ); ?></h4>
+						<ul>
+							<?php if ( current_user_can( $editor_cap ) ) { ?>
+								<li><?php printf( '<a href="%s" class="welcome-icon welcome-universal-access-alt">' . __( 'Add new Department' ) . '</a>', admin_url( 'edit-tags.php?taxonomy=' . RT_Departments::$slug . '&post_type=' . Rt_HD_Module::$post_type ) ); ?></li>
+							<?php } ?>
+
+							<li><?php printf( '<a href="%s" class="welcome-icon welcome-learn-more">' . __( 'Learn more about getting started' ) . '</a>', 'https://rtcamp.com/rtbiz/docs/' ); ?></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		<?php 
+		}
+		
+		/**
+		 * Add js for hide/show welcome panel in rtHelpdesk dashboard.
+		 */
+		function print_dashboard_js() {
+			if ( isset( $_GET['rthdwelcome'] ) ) {
+				$welcome_checked = empty( $_GET['rthdwelcome'] ) ? 0 : 1;
+				update_user_meta( get_current_user_id(), 'show_rt_hd_welcome_panel', $welcome_checked );
+			} else {
+				$welcome_checked = get_user_meta( get_current_user_id(), 'show_rt_hd_welcome_panel', true );
+				if ( 2 == $welcome_checked && wp_get_current_user()->user_email != get_option( 'admin_email' ) ) {
+					$welcome_checked = false;
+				}
+			}
+			?>
+			<script>
+				jQuery(document).ready( function($) {
+					var rthd_welcomePanel = $( '#rthd-welcome-panel' ),
+						rthd_welcomePanelHide = '#rthd_welcome_panel-hide',
+						rthd_updateWelcomePanel;
+
+					rthd_updateWelcomePanel = function( visible ) {
+						$.post( '<?php echo admin_url( 'admin-ajax.php' ); ?>', {
+							action: 'update_rt_hd_welcome_panel',
+							visible: visible,
+							rthdwelcomepanelnonce: $( '#rthdwelcomepanelnonce' ).val()
+						});
+					};
+
+					if ( rthd_welcomePanel.hasClass('hidden') && $(rthd_welcomePanelHide).prop('checked') ) {
+						rthd_welcomePanel.removeClass('hidden');
+					}
+
+					$('.welcome-panel-close, .welcome-panel-dismiss a', rthd_welcomePanel).click( function(e) {
+						e.preventDefault();
+						rthd_welcomePanel.addClass('hidden');
+						rthd_updateWelcomePanel( 0 );
+						$('#wp_welcome_panel-hide').prop('checked', false);
+					});
+
+					$(document).on('click', rthd_welcomePanelHide, function() {
+						rthd_welcomePanel.toggleClass('hidden', ! this.checked );
+						rthd_updateWelcomePanel( this.checked ? 1 : 0 );
+					} );
+
+					$('#screen-options-wrap #adv-settings .metabox-prefs' ).append("<label for='rthd_welcome_panel-hide'><input type='checkbox' id='rthd_welcome_panel-hide' value='rthd-welcome-panel' <?php echo checked( (bool) $welcome_checked, true, false ); ?> /><?php _e( 'Welcome', RT_HD_TEXT_DOMAIN ); ?></label>");
+				} );
+			</script>
+		<?php }
 	}
 }

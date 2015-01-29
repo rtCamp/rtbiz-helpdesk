@@ -353,6 +353,9 @@ li.load-more-spinner-li {
 .rt-hd-ticket-history ul li mark{
 	float: right;
 }
+.followup-note {
+	font-size: 13px;
+	color: grey;
 
 #rthd-ticket-edit{
 	float: right;
