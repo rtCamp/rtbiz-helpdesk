@@ -385,7 +385,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $toBody ), $notify_emails, array(), array() , $uploaded, $post_id );
 			// internal emails
 			if ( ! empty( $bcc ) ){
-				$user = get_post_meta( $post_id, '_rtbiz_hd_updated_by', true );
+				$user = get_post_meta( $post_id, '_rtbiz_hd_created_by', true );
 				$ticket_author = get_user_by( 'id', $user );
 				$toBody = '<br/><strong>New Ticket Created by ' . $ticket_author->display_name.':</strong><br />'.$body;
 				$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $toBody ), array(), array(), $bcc , $uploaded, $post_id );
