@@ -119,8 +119,10 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 					$order_post_status = edd_get_payment_statuses();
 				}
 				if ( ! empty( $payments ) ) {
-					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_wrapper_start', '<div class="rt-hd-ticket-info">' );
+					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_header_wrapper_start', '<div class="rt-hd-ticket-info">' );
 					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_heading', '<h2 class="rt-hd-ticket-info-header">' . __( 'Purchase History' ) . '</h2>' );
+					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_header_wrapper_end', '</div>' );
+					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_wrapper_start', '<div class="rt-hd-ticket-info">' );
 					echo '<ul>';
 					foreach ($payments as $key => $payment ) {
 						$link = '';
