@@ -50,18 +50,16 @@ if ( ! $show_original_email ) {
 		<input type="hidden" id='ticket_unique_id' value="<?php echo esc_attr( $ticket_unique_id ); ?>"/>
 
 			<div>
-				<h2 class="rt-hd-ticket-front-title"><?php echo esc_attr( ( isset( $post->ID ) ) ? '[#' . $post_id . '] ' . $post->post_title : '' ); ?></h2>
+				<h1 class="rt-hd-ticket-front-title"><?php echo esc_attr( ( isset( $post->ID ) ) ? '[#' . $post_id . '] ' . $post->post_title : '' ); ?></h1>
 			</div>
-			<br/><br/>
+
 			<?php if ( isset( $post->ID ) ) { ?>
 				<div id="followup_wrapper">
 					<div id="commentlist">
 						<?php rthd_get_template( 'followup-common.php', array( 'post' => $post ) ); ?>
 					</div>
 					<div class="add-followup-form">
-						<?php rthd_get_template( 'ticket-add-followup-form.php', array( 'post'             => $post,
-						                                                                'ticket_unique_id' => $ticket_unique_id
-						) ); ?>
+						<?php rthd_get_template( 'ticket-add-followup-form.php', array( 'post' => $post, 'ticket_unique_id' => $ticket_unique_id ) ); ?>
 					</div>
 				</div>
 			<?php } ?>
@@ -78,7 +76,7 @@ if ( ! $show_original_email ) {
 			</div>
 
 			<div class="rt-hd-ticket-info">
-				<span class="prefix" title="Status"><strong>Status: </strong></span>
+				<span title="Status"><strong>Status: </strong></span>
 				<?php
 					if ( current_user_can( $cap ) ){
 					?>
@@ -99,7 +97,7 @@ if ( ! $show_original_email ) {
 			</div>
 			<div class="rt-hd-ticket-info">
 				<span title="Create Date"><strong>Created: </strong></span>
-			<span class="prefix" title="<?php echo esc_attr( $createdate )?>">
+				<span title="<?php echo esc_attr( $createdate )?>">
 			<?php
 			echo esc_attr( human_time_diff( strtotime( $createdate ), current_time( 'timestamp' ) ) ) . ' ago';
 			$created_by = get_user_by( 'id', get_post_meta( $post->ID, '_rtbiz_hd_created_by', true ) );
@@ -111,7 +109,7 @@ if ( ! $show_original_email ) {
 				}
 			}
 			?>
-			</span>
+				</span>
 			</div>
 			<?php
 			$comment = get_comments( array( 'post_id' => $post->ID, 'number' => 1 ) );
@@ -127,8 +125,8 @@ if ( ! $show_original_email ) {
 				?>
 
 				<div class="rt-hd-ticket-info">
-					<span title="Status"><strong>Last reply: </strong></span> <span
-						class="rthd_attr_border prefix rthd_view_mode"> <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . " ago by " . $commentlink; ?></span>
+					<span title="Status"><strong>Last reply: </strong></span>
+					<span class="rthd_attr_border rthd_view_mode"> <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . " ago by " . $commentlink; ?></span>
 				</div>
 			<?php }
 

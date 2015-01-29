@@ -44,7 +44,7 @@ ul#chat-UI {
 }
 
 .self .avatar:after, .other .avatar:after, .self .avatar:before, .other .avatar:before {
-	left: 51px;
+	left: 94%;
 	top: 22px;
 	border: solid transparent;
 	content: " ";
@@ -176,15 +176,15 @@ ul#chat-UI {
 }
 
 #rthd-ticket {
-	width: 65%;
+	width: 63%;
 	float: left;
-	margin-right: 5px;
+	margin-right: 2%;
 }
 
 #rthd-sidebar {
-	width: 32%;
+	width: 33%;
 	float: left;
-	margin-left: 5px;
+	margin-left: 2%;
 	position: relative;
 }
 
@@ -207,12 +207,11 @@ ul#chat-UI {
 
 .load-more{
 	position: relative;
-	background: #06C;
 	border: 1px solid #f5f5f5;
 }
 .load-more:after, .load-more:before {
 	right: 100%;
-    top: 20px;
+    top: 25px;
     border: solid transparent;
 	content: " ";
 	height: 0;
@@ -237,7 +236,6 @@ ul#chat-UI {
 #followup-load-more{
 	display: inline-block;
 	padding: 10px 20px;
-	color: #fff;
 	left: 39px;
 }
 
@@ -249,9 +247,7 @@ li.load-more-spinner-li {
 	padding: 0;
 }
 
-.load-more-ul li a p{
-    background: none repeat scroll 0 0 #06C;
-    color: #fff;
+.load-more-ul li a.load-more-block {
     border-radius: 50%;
     text-align: center;
     z-index: 1;
@@ -267,12 +263,15 @@ li.load-more-spinner-li {
 .load-more-ul a p label {
 	margin: 0;
 }
-.load-more-ul a p label:hover{
+.load-more-ul a:hover{
     cursor: pointer;
 }
 
-.load-more-ul li a{
+.load-more-ul li a {
     text-decoration: none;
+	background: #06C;
+	color: #fff;
+	font-size: 20px;
 }
 
 .followup-information{
@@ -284,7 +283,6 @@ li.load-more-spinner-li {
 }
 
 .load-more-count {
-    color: #7ebbff;
     font-size: 10px;
     position: relative;
     top: -2px;
@@ -299,7 +297,6 @@ li.load-more-spinner-li {
 }
 
 #followup-load-more {
-    color: #fff;
     display: inline-block;
     left: 20px;
     padding: 10px 20px;
@@ -326,7 +323,7 @@ li.load-more-spinner-li {
     border-right-color: #039;
 }
 
-.load-more-ul li a p:hover {
+.load-more-ul li a:hover {
     background: #039;
 }
 .followup-information .private_comment_span{
@@ -357,6 +354,10 @@ li.load-more-spinner-li {
 #rthd-ticket-edit{
 	float: right;
 	padding: 5px;
+}
+
+#rthd-status-list {
+	width: auto;
 }
 
 #rthd-change-status{

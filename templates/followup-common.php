@@ -78,8 +78,8 @@ if ( ! empty( $post->post_content ) ) {
 	<ul class="discussion load-more-ul" id="load-more-UI">
 		<li><a class="load-more-block" href="#">
 			<p>
-				<label class="load-more-circle" id="followup-load-more-count"><?php echo $offset ?></label>
-				<label class="load-more-count">more</label>
+				<span class="load-more-circle" id="followup-load-more-count"><?php echo $offset ?></span>
+				<span class="load-more-count">more</span>
 			</p>
             </a>
 			<a href="#" class="load-more" id="followup-load-more" > Load more</a>
