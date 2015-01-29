@@ -319,8 +319,13 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 				return false;
 			}
 
-			if ( empty( $_POST['post'] ) || empty( $_POST['post']['title'] ) || empty( $_POST['post']['product_id'] ) || empty( $_POST['post']['email'] ) ) {
+			if ( empty( $_POST['post'] ) || empty( $_POST['post']['title'] ) || empty( $_POST['post']['email'] ) ) {
 				echo '<div id="info" class="error">Please fill all the details.</div>';
+				return false;
+			}
+
+			if ( ( $this->isWoocommerceActive || $this->isWoocommerceActive ) && empty( $_POST['post']['product_id'] ) ) {
+				echo '<div id="info" class="error">Please select a product to let us know more about your query.</div>';
 				return false;
 			}
 
