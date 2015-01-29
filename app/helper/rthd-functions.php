@@ -567,8 +567,9 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 	                <?php
 	                $data = get_comment_meta( $comment->comment_ID, 'rt_hd_original_email', true );
 	                if ( ! empty( $data ) ) {
+		                $href =  get_post_permalink( $comment->comment_post_ID ). '?show_original=true&comment-id='.$comment->comment_ID ;
 		                ?>
-		                <a href="?show_original=true&comment-id=<?php echo $comment->comment_ID;?> " class="show-original-email"> Show original email</a> |
+		                <a href="<?php echo $href;?>" class="show-original-email"> Show original email</a> |
                 <?php }
                 }
                 if ( $is_comment_private == true ){
