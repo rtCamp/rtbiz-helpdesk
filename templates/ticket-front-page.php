@@ -53,13 +53,12 @@ $user_edit_content = current_user_can( $cap );
 		</div>
 		<div id="rthd-sidebar" class="rthd_sticky_div">
 
-			<div>
+			<div class="rt-hd-ticket-info">
 				<h2 class="rt-hd-ticket-info-header"><i class="foundicon-idea"></i> <?php _e( esc_attr( ucfirst( $labels[ 'name' ] ) ) . ' Information' ); ?>
 				</h2>
 		<?php if ( current_user_can( $cap ) ){ ?>
 		<a id='ticket-information-edit-ticket-link' href="<?php echo get_edit_post_link( $post->ID )  ?>">Edit <?php _e( esc_attr( ucfirst( $labels[ 'name' ] ) ) ); ?></a>
 		<?php } ?>
-				<div class="rthd-clearfix"></div>
 			</div>
 
 			<div class="rt-hd-ticket-info">
@@ -123,7 +122,7 @@ $user_edit_content = current_user_can( $cap );
 				if ( ! empty( $attachments ) ) {
 					$attach_cmt = rthd_get_attachment_url_from_followups( $post->ID );
 					$attachFlag  = true;
-					$tmphtml= '<h2><i class="foundicon-paper-clip"></i> '. __( 'Attachments' ) .'</h2> <div class="rt-hd-ticket-info"> <div id="attachment-files"> ';
+					$tmphtml= '<h2 class="rt-hd-ticket-info-header">'. __( 'Attachments' ) .'</h2> <div class="rt-hd-ticket-info"> <div id="attachment-files">';
 							?>
 							<?php foreach ( $attachments as $attachment ) {
 								$attachment_url = wp_get_attachment_url( $attachment->ID );
@@ -174,7 +173,7 @@ $user_edit_content = current_user_can( $cap );
 					$base_url = add_query_arg( array( 'post_type' => $post->post_type ), admin_url( 'edit.php' ) );
 					if ( ! $products instanceof WP_Error && ! empty( $products ) ) { ?>
 						<div class="rt-hd-ticket-info">
-							<h2><?php _e( 'Ticket Products' ); ?></h2>
+							<h2 class="rt-hd-ticket-info-header"><?php _e( 'Ticket Products' ); ?></h2>
 							<ul>
 								<?php foreach ( $products as $p ) {
 									$url = add_query_arg( 'product_id', $p->term_id, $base_url );
@@ -197,7 +196,7 @@ $user_edit_content = current_user_can( $cap );
 							if ( ! $terms instanceof WP_Error && ! empty( $terms ) ) {
 								?>
 								<div class="rt-hd-ticket-info">
-									<h2><?php echo $attr->attribute_label; ?></h2>
+									<h2 class="rt-hd-ticket-info-header"><?php echo $attr->attribute_label; ?></h2>
 									<ul>
 										<?php foreach ( $terms as $t ) { ?>
 											<li><?php echo $t->name; ?></li>
@@ -223,8 +222,8 @@ $user_edit_content = current_user_can( $cap );
 			), ));
 			if ( $otherposts ) {
 			?>
-			<div class="rt-hd-ticket-history">
-				<h2><?php echo __( 'Ticket History' ); ?></h2>
+			<div class="rt-hd-ticket-info rt-hd-ticket-history">
+				<h2 class="rt-hd-ticket-info-header"><?php echo __( 'Ticket History' ); ?></h2>
 				<ul>
 					<?php foreach ( $otherposts as $p ) { ?>
 						<li><a href="<?php echo get_post_permalink( $p->ID ); ?>" ><?php echo '[#' . $p->ID. '] ' . esc_attr( strlen( balanceTags( $p->post_title ) ) > 15 ? substr( balanceTags( $p->post_title ), 0, 15 ) . '...' : balanceTags( $p->post_title ) ) ?>  </a><?php echo rthd_status_markup( $p->post_status ); ?></li>

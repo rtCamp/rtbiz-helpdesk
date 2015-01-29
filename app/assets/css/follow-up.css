@@ -336,10 +336,7 @@ li.load-more-spinner-li {
 
 .rt-hd-ticket-info{
 	border-bottom: 1px dotted #ddd;
-}
-
-.rt-hd-ticket-history{
-	border-bottom: 1px dotted #ddd;
+	padding: 10px 0;
 }
 
 .rt-hd-ticket-history ul li{
