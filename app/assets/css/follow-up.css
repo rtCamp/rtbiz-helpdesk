@@ -363,3 +363,7 @@ li.load-more-spinner-li {
 	display: inline;
 	float: right;
 }
+
+#savefollwoup, #submit-ajax, #rthd-add-followup-attachment {
+	border-radius: 3px;
+}
