@@ -14,8 +14,8 @@ jQuery(document).ready(function ($) {
 });
 </script>
 
-<h2><?php _e( 'Get Support', 'RT_HD_TEXT_DOMAIN' ); ?></h2>
-<form method="post" enctype="multipart/form-data">
+<div class="rthd-support-title"><?php _e( 'Get Support', 'RT_HD_TEXT_DOMAIN' ); ?></div>
+<form method="post" class="pure-form rthd_support_from" enctype="multipart/form-data">
 
 	<?php if ( isset( $_REQUEST['order_id'] ) ) { ?>
 		<input type="hidden" name="post[order_id]" value="<?php echo $_REQUEST['order_id']; ?>">
@@ -50,7 +50,7 @@ jQuery(document).ready(function ($) {
 	</div>
 
 	<div>
-		<textarea name="post[description]" placeholder="Description" rows="10" cols="10" required></textarea>
+		<textarea name="post[description]" placeholder="Description" rows="5" cols="20" required></textarea>
 	</div>
 
 	<div>
@@ -62,7 +62,7 @@ jQuery(document).ready(function ($) {
 
 	<div>
 		<input type="hidden" name="rthd_support_form_submit" value="1" />
-		<input type="submit" value="Submit"/>
+                <input class="btn btn-primary" type="submit" value="Submit" />
 	</div>
 
 </form>

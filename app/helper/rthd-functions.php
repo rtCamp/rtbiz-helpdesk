@@ -923,7 +923,10 @@ function rthd_get_attachment_url_from_followups( $postid ){
 	                                ));
 	$attach_cmt = array();
 	foreach ( $attach_comments as $comment ){
-		$attach_cmt[] = get_comment_meta($comment, 'attachment', true );
+		$url_arr = get_comment_meta($comment, 'attachment' );
+		foreach ( $url_arr as $url ){
+			$attach_cmt[] = $url;
+		}
 	}
 	return $attach_cmt;
 }
