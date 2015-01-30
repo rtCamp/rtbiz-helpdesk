@@ -12,3 +12,7 @@ reference: http://purecss.io/forms/
 	font-size: 28px;
 	margin-bottom: 20px;
 }
+
+.rthd_support_from div{
+	margin: 15px;
+}
