@@ -215,7 +215,14 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$helpdesk_import_ticket_id = $post_id;
 				add_filter( 'gform_pre_send_email', array( &$this, 'hijack_mail_subject' ), 999, 2 );
 			} else {
-				$rt_hd_email_notification->notification_new_ticket_assigned( $post_id, $settings['rthd_default_user'], $labels['name'], $allemail, $uploaded, $mail_parse = true );
+				$rt_hd_email_notification->notification_new_ticket_assigned( $post_id, $settings['rthd_default_user'], $labels['name'], $allemail, $uploaded, ! empty( $originalBody ));
+				/*
+				 * $orignalBody will be empty in case of gravity form imports
+				 * But it is taken care of by above if condition.
+				 * $originalBody will also be empty if a ticket is created from default support form
+				 * Hence pass $email_parse flag based on that.
+				 * $email_parse = ! empty( $originalBody )
+				 */
 			}
 
 			$rt_hd_email_notification->ticket_created_notification( $post_id,$labels['name'], $body, $allemail, $uploaded );
