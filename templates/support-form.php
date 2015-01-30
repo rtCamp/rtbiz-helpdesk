@@ -14,8 +14,8 @@ jQuery(document).ready(function ($) {
 });
 </script>
 
-<h2><?php _e( 'Get Support', 'RT_HD_TEXT_DOMAIN' ); ?></h2>
-<form method="post" enctype="multipart/form-data">
+<div class="rthd-support-title"><?php _e( 'Get Support', 'RT_HD_TEXT_DOMAIN' ); ?></div>
+<form method="post" class="pure-form" enctype="multipart/form-data">
 
 	<?php if ( isset( $_REQUEST['order_id'] ) ) { ?>
 		<input type="hidden" name="post[order_id]" value="<?php echo $_REQUEST['order_id']; ?>">
