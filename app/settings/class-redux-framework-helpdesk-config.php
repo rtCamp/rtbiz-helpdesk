@@ -256,7 +256,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'id'       => 'rthd_outgoing_email_mailbox',
 						'title'    => __( 'Outgoing Emails\' Mailbox' ),
 						'subtitle' => __( 'The mailbox to be used in order to send outgoing emails/notifications.' ),
-						'desc'     => sprintf( __( 'Choose the one email from the configured mailboxes. If there\'s no item found then please configure mailbox.'  ) ),
+						'desc'     => sprintf( '%s <a href="%s">%s</a>.', __( 'Choose the one email from the configured mailboxes. If there\'s no item found then please configure mailbox from' ), add_query_arg( 'page', RT_BIZ_Configuration::$page_slug, admin_url( 'admin.php' ) ), __( 'rtBiz' ) ),
 						'type'     => 'select',
 						'options'  => $mailbox_options,
 						'required' => array( 'rthd_outgoing_email_delivery', '=', 'user_mail_login' ),
