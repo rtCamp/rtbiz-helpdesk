@@ -238,7 +238,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'id'       => 'rthd_outgoing_email_from_name',
 						'title'    => __( 'Outgoing Emails\' FROM Name' ),
 						'subtitle' => __( 'Outgoing System Name used for all Helpdesk Communication' ),
-						'desc'     => sprintf( '%s <a href="%s">%s</a>. %s.', __( 'WordPress by default sends email using (mostly postfix) FROM/TO value set to Admin Email taken from' ), admin_url( 'options-general.php' ), __( 'here' ), __( 'System Name to be used for outbound emails. This Name will be used as FROM: name < email address > for all outgoing emails' ) ),
+						'desc'     => sprintf( '%s.', __( 'System Name to be used for outbound emails. This Name will be used as FROM: name < email address > for all outgoing emails' ) ),
 						'type'     => 'text',
 						'default'  => get_bloginfo(),
 					),
