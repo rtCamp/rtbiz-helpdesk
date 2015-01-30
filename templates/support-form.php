@@ -62,7 +62,7 @@ jQuery(document).ready(function ($) {
 
 	<div>
 		<input type="hidden" name="rthd_support_form_submit" value="1" />
-		<input type="submit" value="Submit"/>
+                <input class="btn btn-primary" type="submit" value="Submit" />
 	</div>
 
 </form>
