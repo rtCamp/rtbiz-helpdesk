@@ -46,7 +46,13 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 		 */
 		function load_styles_scripts() {
 			global $post, $pagenow, $wp_scripts;
-			$rthd_post_type = isset( $_GET['post'] ) ? get_post_type( $_GET['post'] )  :'';
+			
+			$rthd_post_type = '';
+			if( isset( $_GET['post'] ) )
+				$rthd_post_type = get_post_type( $_GET['post'] );
+			else if( isset( $_GET['post_type'] ) && $pagenow == 'post-new.php' )
+				$rthd_post_type = $_GET['post_type'];
+			
 			if ( in_array( $pagenow, array( 'edit.php', 'post.php', 'post-new.php' ) ) && $rthd_post_type == Rt_HD_Module::$post_type ) {
 				if ( isset( $post->post_type ) && $post->post_type == Rt_HD_Module::$post_type ) {
 
@@ -87,6 +93,9 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 					wp_enqueue_style( 'jquery-ui-smoothness', $url, array(), RT_HD_VERSION, 'all' );
 				}
 			}
+			
+			if( isset( $_GET['page'] ) && $_GET['page'] == 'rthd-rtbiz_hd_ticket-dashboard')
+				wp_enqueue_style( 'rthd_dashboard_css', RT_HD_URL . 'app/assets/css/dashboard.css', array(), RT_HD_VERSION );
 
 			if ( ! wp_script_is( 'jquery-ui-progressbar' ) ) {
 				wp_enqueue_script( 'jquery-ui-progressbar', '', array(

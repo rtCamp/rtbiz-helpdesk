@@ -530,19 +530,29 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 		 * @param $views
 		 */
 		public function display_custom_views( $views ) {
-			global $wpdb;
+			global $rt_hd_module; $ticket_statuses = array();
+			
+			foreach ($rt_hd_module->statuses as $status ) {
+				$ticket_statuses[] = $status['slug'];
+			}
 			
 			$current_user_id = get_current_user_id();
 			
-			$count_sql = sprintf( );
+			$count_user_tickets = new WP_Query(
+				array(
+					'posts_per_page'	=> -1,
+					'post_type' 	 	=> Rt_HD_Module::$post_type,
+					'post_status'		=> $ticket_statuses,
+					'author'			=> $current_user_id,
+				)
+			);
 			
-			$count_user_tickets = $count = $wpdb->get_var( $wpdb->prepare("SELECT COUNT(*) FROM $wpdb->posts WHERE post_type = '%s' AND post_author = %d", array( Rt_HD_Module::$post_type, $current_user_id ) ) );
-			
-			if ( $count_user_tickets ) {
+			if ( $count_user_tickets->post_count > 0 ) {
 				if ( isset( $_GET['assigned'] ) && ( $_GET['assigned'] == $current_user_id ) )
 					$class = ' class="current"';
-			
-				$views['my-tickets'] = "<a href='edit.php?post_type=".Rt_HD_Module::$post_type."&assigned=$current_user_id&post_status=assigned'$class>" . sprintf( _nx( 'My Tickets <span class="count">(%s)</span>', 'My Tickets <span class="count">(%s)</span>', $count_user_tickets, RT_HD_TEXT_DOMAIN ), number_format_i18n( $count_user_tickets ) ) . '</a>';
+				else
+					$class = '';
+				$views['my-tickets'] = "<a href='edit.php?post_type=".Rt_HD_Module::$post_type."&assigned=$current_user_id&post_status=assigned'$class>" . sprintf( _nx( 'My Tickets <span class="count">(%s)</span>', 'My Tickets <span class="count">(%s)</span>', $count_user_tickets->post_count, RT_HD_TEXT_DOMAIN ), number_format_i18n( $count_user_tickets->post_count ) ) . '</a>';
 			}
 			
 			return $views;

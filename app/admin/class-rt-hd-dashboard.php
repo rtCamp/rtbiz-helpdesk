@@ -737,7 +737,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 					<div class="welcome-panel-column">
 						<?php if ( current_user_can( $admin_cap ) ): ?>
 							<h4><?php _e( 'Get Started' ); ?></h4>
-							<a id="rt-hd-customize-biz" class="button button-primary button-hero" href="<?php echo admin_url( 'admin.php?page=' . $this->screen_id ); ?>"><?php _e( 'Customize Your Helpdesk' ); ?></a>
+							<a id="rt-hd-customize-biz" class="button button-primary button-hero" href="<?php echo admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&page=' . 'rthd-' . Rt_HD_Module::$post_type . '-dashboard' ); ?>"><?php _e( 'Customize Your Helpdesk' ); ?></a>
 						<?php endif; ?>
 					</div>
 					<div class="welcome-panel-column">
@@ -745,7 +745,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 						<ul>
 							<?php if ( current_user_can( $editor_cap ) ) { ?>
 								<li><?php printf( '<a id="rtiz-add-ticket" href="%s" class="welcome-icon welcome-admin-users">' . __( 'Add new Ticket' ) . '</a>', admin_url( 'post-new.php?post_type=' . Rt_HD_Module::$post_type ) ); ?></li>
-								<li><?php printf( '<a href="%s" class="welcome-icon welcome-networking">' . __( 'Setup Attributes' ) . '</a>', admin_url( 'admin.php?page=' . $rt_hd_attributes->attributes_page_slug ) ); ?></li>
+								<li><?php printf( '<a href="%s" class="welcome-icon welcome-networking">' . __( 'Setup Attributes' ) . '</a>', admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&page=' . $rt_hd_attributes->attributes_page_slug ) ); ?></li>
 							<?php } ?>
 						</ul>
 					</div>
@@ -801,7 +801,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 						e.preventDefault();
 						rthd_welcomePanel.addClass('hidden');
 						rthd_updateWelcomePanel( 0 );
-						$('#wp_welcome_panel-hide').prop('checked', false);
+						$('#rthd_welcome_panel-hide').prop('checked', false);
 					});
 
 					$(document).on('click', rthd_welcomePanelHide, function() {
