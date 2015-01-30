@@ -530,11 +530,6 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 		 * @param $views
 		 */
 		public function display_custom_views( $views ) {
-			global $rt_hd_module; $ticket_statuses = array();
-			
-			foreach ($rt_hd_module->statuses as $status ) {
-				$ticket_statuses[] = $status['slug'];
-			}
 			
 			$current_user_id = get_current_user_id();
 			
@@ -542,7 +537,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 				array(
 					'posts_per_page'	=> -1,
 					'post_type' 	 	=> Rt_HD_Module::$post_type,
-					'post_status'		=> $ticket_statuses,
+					'post_status'		=> 'any',
 					'author'			=> $current_user_id,
 				)
 			);
