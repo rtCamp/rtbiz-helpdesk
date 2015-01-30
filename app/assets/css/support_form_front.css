@@ -16,3 +16,11 @@ reference: http://purecss.io/forms/
 .rthd_support_from div{
 	margin: 15px;
 }
+
+.rthd_support_from div input, .rthd_support_from div textarea,.rthd_support_from div select{
+	width: 100%;
+}
+
+.rthd_support_from div input[type="submit"]{
+	width: auto;
+}

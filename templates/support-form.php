@@ -50,7 +50,7 @@ jQuery(document).ready(function ($) {
 	</div>
 
 	<div>
-		<textarea name="post[description]" placeholder="Description" rows="10" cols="10" required></textarea>
+		<textarea name="post[description]" placeholder="Description" rows="5" cols="20" required></textarea>
 	</div>
 
 	<div>
