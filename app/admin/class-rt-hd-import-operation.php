@@ -1698,13 +1698,13 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$redux = rthd_get_redux_settings();
 			$notificationFlag = ( $redux['rthd_notification_events']['followup_deleted'] == 1 );
 			$currentUser      = get_user_by( 'id', get_current_user_id() );
-			$body             = ' Follwup Deleted by ' . $currentUser->display_name;
-			$body .= '<br/><b>Body : </b>' . $comment->comment_content;
+			$body             = 'A Follwup is deleted by <b>' . $currentUser->display_name .'</b>';
+			$body .= '<br/>' .rthd_get_general_body_template( $comment->comment_content );
 			$body .= '<br/> ';
 			$comment_post_ID = $_POST['post_id'];
 
 			$title           = rthd_create_new_ticket_title( 'rthd_delete_followup_email_title', $comment_post_ID );
-			$this->notify_subscriber_via_email( $comment_post_ID, $title, rthd_get_general_body_template( $body ), array(), $_POST['comment_id'], $notificationFlag, false );
+			$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, array(), $_POST['comment_id'], $notificationFlag, false );
 			echo json_encode( $response );
 			die( 0 );
 		}
