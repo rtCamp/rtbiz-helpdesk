@@ -295,7 +295,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			$this->sections[] = array(
 				'icon'        => 'el-icon-edit',
 				'title'       => __( 'Customize Notification Emails ' ),
-				'desc'     => __( 'You can use {ticket_title} as a placeholder.' ),
+				'desc'     => __( 'You can use {ticket_title} as a placeholder.<p><b>Suggestion:</b> Use same title for all mail types to let users have all emails in single thread.</p>' ),
 				'permissions' => $admin_cap,
 				'fields'      => array(
 					array(
