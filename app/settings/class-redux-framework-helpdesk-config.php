@@ -125,6 +125,30 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			}
 
 		}
+	 public function mailbox_emails_list_callback(){
+		 $system_emails = rt_get_all_system_emails( array( 'module' => RT_HD_TEXT_DOMAIN, ) ); ?>
+		<div>
+			<?php
+			if ( !empty($system_emails )){ ?>
+				<p class="description"> Following mailboxes have been configured for Helpdesk. Emails from these mailboxes will be parsed and Helpdesk will use them to create new ticket / add new followup accordingly. You can configure these mailboxes from <a href="<?php echo add_query_arg( 'page', RT_BIZ_Configuration::$page_slug, admin_url( 'admin.php' ) ); ?>">rtBiz</a> </p>
+			<?php }
+			else{ ?>
+				<p class="description"> Right now there is no mailbox configured for Helpdesk in rtBiz. If you want to configure a mailbox for tickets / followups, you can do that from <a href="<?php echo add_query_arg( 'page', RT_BIZ_Configuration::$page_slug, admin_url( 'admin.php' ) ); ?>">rtBiz</a> </p>
+
+			<?php }
+			?>
+			<ul>
+		 <?php
+		 foreach( $system_emails as $email ) { ?>
+			 <li><input type="text" value="<?php echo $email; ?>" class="regular-text" readonly> </li>
+		<?php }?>
+			</ul>
+
+		</div>
+
+	 <?php
+
+	 }
 
 		public function set_sections() {
 			//			$reply_by_email = new RT_HD_Setting_Inbound_Email();
@@ -152,6 +176,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			foreach( $system_emails as $email ) {
 				$mailbox_options[ $email ] = $email;
 			}
+			$is_mailbox_configured = ( ! empty( $system_emails ) );
 
 			// ACTUAL DECLARATION OF SECTIONS
 			$general_fields = array(
@@ -216,80 +241,85 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				$redirect_url = admin_url( 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&page=rthd-settings' );
 				update_option( 'rthd_googleapi_redirecturl', $redirect_url );
 			}
+			$email_fields = array();
+
+			if ( $is_mailbox_configured ){
+				array_push( $email_fields, array(
+						'id'      => 'rt_hd_Mailboxes',
+						'type'    => 'callback',
+						'title'   => 'Mailboxes',
+						'subtitle' => __( 'Helpdesk Configured Mailbox(s)' ),
+						'desc'    => 'Following mailboxes have been configured for Helpdesk. Emails from these mailboxes will be parsed and Helpdesk will use them to create new ticket / add new followup accordingly. You can configure these mailboxes from <a href="'.add_query_arg( 'page', RT_BIZ_Configuration::$page_slug, admin_url( 'admin.php' ) ).'"rtBiz</a>',
+						'callback' => array( $this, 'mailbox_emails_list_callback' ),
+				) );
+			}
+
+			array_push( $email_fields, array(
+					'id'       => 'rthd_outgoing_email_from_name',
+					'title'    => __( 'Outgoing Emails\' FROM Name' ),
+					'subtitle' => __( 'Outgoing System Name used for all Helpdesk Communication' ),
+					'desc'     => sprintf( '%s.', __( 'System Name to be used for outbound emails. This Name will be used as FROM: name < email address > for all outgoing emails' ) ),
+					'type'     => 'text',
+					'default'  => get_bloginfo(),
+				) );
+
+			if ( $is_mailbox_configured ){
+				array_push( $email_fields, array(
+					'id'       => 'rthd_outgoing_email_mailbox',
+					'title'    => __( 'Outgoing Emails\' Mailbox' ),
+					'subtitle' => __( 'The mailbox to be used in order to send outgoing emails/notifications.' ),
+					'desc'     => sprintf( '%s <a href="%s">%s</a>.', __( 'Choose the one email from the configured mailboxes. If there\'s no item found then please configure mailbox from' ), add_query_arg( 'page', RT_BIZ_Configuration::$page_slug, admin_url( 'admin.php' ) ), __( 'rtBiz' ) ),
+					'type'     => 'select',
+					'options'  => $mailbox_options,
+				) );
+			}
+			else {
+				array_push( $email_fields, array(
+					'id'       => 'rthd_outgoing_email_from_address',
+					'title'    => __( 'Outgoing Emails\' FROM Address' ),
+					'subtitle' => __( 'Outgoing System Email used for all Helpdesk Communication' ),
+					'desc'     => sprintf( '%s <a href="%s">%s</a>. %s.', __( 'WordPress by default sends email using (mostly postfix) FROM/TO value set to Admin Email taken from' ), admin_url( 'options-general.php' ), __( 'here' ), __( 'System Email Address to be used for outbound emails. This Address will be used as FROM: name < email address > for all outgoing emails' ) ),
+					'type'     => 'text',
+					'default'  => get_option( 'admin_email' ),
+					'validate' => 'email',
+				) );
+			}
+				array_push( $email_fields,
+				array(
+					'id'         => 'rthd_notification_emails',
+					'title'      => __( 'Notification Emails' ),
+					'subtitle'   => __( 'Email addresses to be notified on events' ),
+					'desc'       => __( 'These email addresses will be notified of the events that occurs in HelpDesk Systems. This is a global list. All the subscribers also will be notified along with this list.' ),
+					'type'       => 'multi_text',
+					'validate'   => 'email',
+					'multi'      => true,
+					'show_empty' => false,
+				),
+				array(
+					'id'       => 'rthd_notification_events',
+					'title'    => __( 'Notification Events' ),
+					'subtitle' => __( 'Events to be notified to users' ),
+					'desc'     => __( 'These events will be notified to the Notification Emails whenever they occur.' ),
+					'type'     => 'checkbox',
+					'options' => array(
+						'new_ticket_created'      => __( 'Whenever a New Ticket is created.' ),
+						'new_comment_added'       => __( 'Whenever a New follow up is added to a Ticket.' ),
+						'followup_edited'         => __( 'Whenever a follow up is edited' ),
+						'followup_deleted'        => __( 'Whenever a follow up is deleted' ),
+						'status_metadata_changed' => __( 'Whenever any status or metadata changed for a Ticket.' ),
+						'new_ticket_assigned'     => __( 'Whenever new ticket assigned' ),
+						'new_ticket_reassigned'   => __( 'Whenever new ticket reassigned' ),
+						'ticket_subscribed'       => __( 'Whenever new ticket subscribed' ),
+						'ticket_unsubscribed'     => __( 'Whenever new ticket unsubscribed' ),
+					),
+				)
+			);
 
 			$this->sections[] = array(
 				'icon'        => 'el-icon-envelope',
 				'title'       => __( 'Mail Setup' ),
 				'permissions' => $admin_cap,
-				'fields'      => array(
-					array(
-						'id'       => 'rthd_outgoing_email_delivery',
-						'title'    => __( 'Outgoing Emails\' Delivery' ),
-						'subtitle' => __( 'This is how the emails will be sent from the Helpdesk system.' ),
-						'desc'     => __( '' ),
-						'type'     => 'radio',
-						'options'  => array(
-							'wp_mail'         => __( 'WordPress wp_mail Function' ),
-							'user_mail_login' => __( 'User\'s own Mail Login - (Google OAuth / SMTP Login etc. as per configuration.)' ),
-						),
-						'default'  => 'wp_mail',
-					),
-					array(
-						'id'       => 'rthd_outgoing_email_from_name',
-						'title'    => __( 'Outgoing Emails\' FROM Name' ),
-						'subtitle' => __( 'Outgoing System Name used for all Helpdesk Communication' ),
-						'desc'     => sprintf( '%s.', __( 'System Name to be used for outbound emails. This Name will be used as FROM: name < email address > for all outgoing emails' ) ),
-						'type'     => 'text',
-						'default'  => get_bloginfo(),
-					),
-					array(
-						'id'       => 'rthd_outgoing_email_from_address',
-						'title'    => __( 'Outgoing Emails\' FROM Address' ),
-						'subtitle' => __( 'Outgoing System Email used for all Helpdesk Communication' ),
-						'desc'     => sprintf( '%s <a href="%s">%s</a>. %s.', __( 'WordPress by default sends email using (mostly postfix) FROM/TO value set to Admin Email taken from' ), admin_url( 'options-general.php' ), __( 'here' ), __( 'System Email Address to be used for outbound emails. This Address will be used as FROM: name < email address > for all outgoing emails' ) ),
-						'type'     => 'text',
-						'default'  => get_option( 'admin_email' ),
-						'validate' => 'email',
-						'required' => array( 'rthd_outgoing_email_delivery', '=', 'wp_mail' ),
-					),
-					array(
-						'id'       => 'rthd_outgoing_email_mailbox',
-						'title'    => __( 'Outgoing Emails\' Mailbox' ),
-						'subtitle' => __( 'The mailbox to be used in order to send outgoing emails/notifications.' ),
-						'desc'     => sprintf( '%s <a href="%s">%s</a>.', __( 'Choose the one email from the configured mailboxes. If there\'s no item found then please configure mailbox from' ), add_query_arg( 'page', RT_BIZ_Configuration::$page_slug, admin_url( 'admin.php' ) ), __( 'rtBiz' ) ),
-						'type'     => 'select',
-						'options'  => $mailbox_options,
-						'required' => array( 'rthd_outgoing_email_delivery', '=', 'user_mail_login' ),
-					),
-					array(
-						'id'         => 'rthd_notification_emails',
-						'title'      => __( 'Notification Emails' ),
-						'subtitle'   => __( 'Email addresses to be notified on events' ),
-						'desc'       => __( 'These email addresses will be notified of the events that occurs in HelpDesk Systems. This is a global list. All the subscribers also will be notified along with this list.' ),
-						'type'       => 'multi_text',
-						'validate'   => 'email',
-						'multi'      => true,
-					    'show_empty' => false,
-					),
-					array(
-						'id'       => 'rthd_notification_events',
-						'title'    => __( 'Notification Events' ),
-						'subtitle' => __( 'Events to be notified to users' ),
-						'desc'     => __( 'These events will be notified to the Notification Emails whenever they occur.' ),
-						'type'     => 'checkbox',
-						'options' => array(
-							'new_ticket_created'      => __( 'Whenever a New Ticket is created.' ),
-							'new_comment_added'       => __( 'Whenever a New follow up is added to a Ticket.' ),
-							'followup_edited'         => __( 'Whenever a follow up is edited' ),
-							'followup_deleted'        => __( 'Whenever a follow up is deleted' ),
-							'status_metadata_changed' => __( 'Whenever any status or metadata changed for a Ticket.' ),
-							'new_ticket_assigned'     => __( 'Whenever new ticket assigned' ),
-							'new_ticket_reassigned'   => __( 'Whenever new ticket reassigned' ),
-							'ticket_subscribed'       => __( 'Whenever new ticket subscribed' ),
-							'ticket_unsubscribed'     => __( 'Whenever new ticket unsubscribed' ),
-						),
-					),
-				),
+				'fields'      => $email_fields,
 			);
 
 			$this->sections[] = array(

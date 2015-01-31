@@ -935,3 +935,11 @@ function rthd_get_general_body_template( $body ){
 	$date = strtotime( current_time( 'mysql', 1 ) );
 	return '<div style="border: 1px solid #DFE9f2;padding: 20px;background: #f1f6fa;">' . rthd_content_filter( $body ) . '<div style="float: right;color: gray;">' . date( 'D, M, d, Y, H:i', $date ) . '</div></div>';
 }
+
+function rthd_is_mailbox_configured(){
+	$system_emails = rt_get_all_system_emails( array( 'module' => RT_HD_TEXT_DOMAIN, ) );
+	if ( ! empty( $system_emails ) ){
+		return true;
+	}
+	return false;
+}

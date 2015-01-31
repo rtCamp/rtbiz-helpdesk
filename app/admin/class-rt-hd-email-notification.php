@@ -76,7 +76,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$args = array(
 				'user_id'       => $user_id,
 				'fromname'      => $settings['rthd_outgoing_email_from_name'],
-				'fromemail'     => ( $settings['rthd_outgoing_email_delivery'] == 'wp_mail' ) ? $settings['rthd_outgoing_email_from_address'] : $settings['rthd_outgoing_email_mailbox'],
+				'fromemail'     => ( rthd_is_mailbox_configured() ) ?  $settings['rthd_outgoing_email_mailbox'] : $settings['rthd_outgoing_email_from_address'],
 				'toemail'       => serialize( $toemail ),
 				'ccemail'       => serialize( $ccemail ),
 				'bccemail'      => serialize( $bccemail ),
@@ -167,11 +167,8 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		 * @return bool
 		 */
 		public function is_wp_email() {
-			$redux = rthd_get_redux_settings();
-			if ( 'wp_mail' == $redux['rthd_outgoing_email_delivery'] ) {
-				return true;
-			}
-			return false;
+			$flag = rthd_is_mailbox_configured();
+			return ( ! $flag );
 		}
 
 		/**
