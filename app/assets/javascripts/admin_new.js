@@ -364,7 +364,7 @@ jQuery(function () {
 			        return false;
 		        };
 		        if ( ! rthdAdmin.rthd_tinymce_get_content( 'followupcontent' ) ) {
-			        alert( "Please input followup :/" );
+			        alert( "Please input followup" );
 			        jQuery( '#hdspinner' ).hide();
 			        jQuery(this).removeAttr('disabled');
 			        return false;

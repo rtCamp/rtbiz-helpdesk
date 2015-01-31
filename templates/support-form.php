@@ -4,10 +4,12 @@ jQuery(document).ready(function ($) {
 	$("#filesToUpload").change(function () {
 		var input = document.getElementById('filesToUpload');
 		var list = '';
-		//for every file...
-		for (var x = 0; x < input.files.length; x++) {
-			//add to list
-			list += '<li>' + input.files[x].name + '</li>';
+		// If attachemnt are more then one then it display.
+		if( input.files.length > 1 ) {
+			for (var x = 0; x < input.files.length; x++) {
+				//add to list
+				list += '<li>' + input.files[x].name + '</li>';
+			}
 		}
 		$("#fileList").html(list);
 	});
