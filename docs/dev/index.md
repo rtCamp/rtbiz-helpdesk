@@ -1,1 +1,0 @@
-# rtBiz Helpdesk Developer Guide
