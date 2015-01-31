@@ -1,16 +1,45 @@
 <?php
 
-/*
+/**
  * rtHelpdesk Studio Dashboard Template
  *
  * @author udit
  */
+
+global $rt_hd_dashboard;
+$author_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
+
 ?>
 <div class="wrap">
 
 	<?php screen_icon(); ?>
 
 	<h2><?php _e( 'Helpdesk Dashboard' ); ?></h2>
+	
+	<?php
+	if ( current_user_can( $author_cap ) ) { 
+		$classes = 'welcome-panel';
+
+		$option = get_user_meta( get_current_user_id(), 'show_rt_hd_welcome_panel', true );
+		// 0 = hide, 1 = toggled to show or single site creator, 2 = multisite site owner
+		$hide = 0 == $option || ( 2 == $option && wp_get_current_user()->user_email != get_option( 'admin_email' ) );
+		if ( $hide ) {
+			$classes .= ' hidden';
+		}
+	?>
+
+		<div id="rthd-welcome-panel" class="<?php echo esc_attr( $classes ); ?>">
+			<?php wp_nonce_field( 'rthd-welcome-panel-nonce', 'rthdwelcomepanelnonce', false ); ?>
+			<a class="welcome-panel-close" href="<?php echo esc_url( admin_url( 'admin.php?page=' . $rt_hd_dashboard->screen_id . '&rthdwelcome=0' ) ); ?>"><?php _e( 'Dismiss' ); ?></a>
+			<?php
+			/**
+			 * Add content to the welcome panel on the admin dashboard.
+			 * @since 3.5.0
+			 */
+			do_action( 'rt_hd_welcome_panel' );
+			?>
+		</div>
+<?php } ?>
 
 	<div id="poststuff">
 
