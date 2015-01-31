@@ -19,4 +19,7 @@
 2. Options can be: a). Customers Only b). Logged in users Only c) Access to all
 3. Based on the option roles the access will be revisited.
 
+http://git.rtcamp.com/uploads/rtbiz/rtbiz/0557ad8cf8/IMG_5094.JPG
+
+
 
