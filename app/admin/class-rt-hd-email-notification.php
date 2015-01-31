@@ -380,13 +380,16 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				}
 			}
 			// client
-			$toBody = '<br/><strong>New Ticket Created :</strong><br />'.$body;
-			$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $toBody ), $notify_emails, array(), array() , $uploaded, $post_id );
+			$toBody = '<br/><strong>Thank you for opening a new support ticket. We will look into your request and respond as soon as possible.</strong><br />'.rthd_get_general_body_template ( $body );
+			$this->insert_new_send_email( $subject, $title, $toBody, $notify_emails, array(), array() , $uploaded, $post_id );
 			// internal emails
 			if ( ! empty( $bcc ) ){
 				$user = get_post_meta( $post_id, '_rtbiz_hd_created_by', true );
-				$ticket_author = get_user_by( 'id', $user );
-				$toBody = '<br/><strong>New Ticket Created by ' . $ticket_author->display_name.':</strong><br />'.$body;
+				$ticket_created_by = get_user_by( 'id', $user );
+				$post = get_post($post_id);
+				$assigne = $post->post_author;
+				$assigne_user = get_user_by( 'id', $assigne );
+				$toBody = '<br/>A new support ticket has been created by ' . $ticket_created_by->display_name.'<br />Ticket Assigned to: '.$assigne_user->display_name .'<br />'.  ( $body );
 				$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $toBody ), array(), array(), $bcc , $uploaded, $post_id );
 			}
 		}
