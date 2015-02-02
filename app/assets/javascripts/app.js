@@ -157,12 +157,13 @@ jQuery( document ).ready( function ( $ ) {
 		e.preventDefault();
 		jQuery('#dialog-form' ).slideToggle('slow');
 		jQuery('#new-followup-form' ).show();
+		jQuery(document).scrollTop( ( jQuery('#comment-'+commentid ).offset().top ) - 50 );
 	});
 
 	jQuery( document ).on('click', '.editfollowuplink',function(e){
 		e.preventDefault();
 		var select =jQuery(this ).parents();
-		rthd_tinymce_set_content( 'editedfollowupcontent', jQuery(this).parents().siblings('.rthd-comment-content').html().trim() );
+		rthd_tinymce_set_content( 'editedfollowupcontent', jQuery(this).parents().siblings('.rthd-comment-content').data('content') );
 		commentid=select.siblings('#followup-id' ).val();
 		var that = select.siblings( '#is-private-comment' ).val();
 		jQuery('#edit-private' ).val(that);

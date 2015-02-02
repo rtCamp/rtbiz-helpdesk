@@ -130,10 +130,10 @@ if ( ! empty( $post->post_content ) ) {
 		</select>
 		<img id='edithdspinner' class="helpdeskspinner" src="<?php echo admin_url().'images/spinner.gif'; ?>">
 	</div>
-	<a href="#" class="close-edit-followup">Close</a>
+	<button class="btn close-edit-followup">Close</button>
 	<div class="edit-action-button">
-		<button class="edit-followup button red-color" id="delfollowup" type="button">Delete</button>
-		<button class="edit-followup button button-primary" id="editfollowup" type="button">Update</button>
+		<button class="edit-followup btn red-color" id="delfollowup" type="button">Delete</button>
+		<button class="edit-followup btn btn-primary" id="editfollowup" type="button">Update</button>
 	</div>
 </div>
 <?php

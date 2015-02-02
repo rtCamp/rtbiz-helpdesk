@@ -277,13 +277,14 @@ jQuery(function () {
 			    e.preventDefault();
 			    jQuery('#dialog-form' ).slideToggle('slow');
 			    jQuery('#new-followup-form' ).show();
+			    jQuery(document).scrollTop( ( jQuery('#comment-'+commentid ).offset().top ) );
 		    });
 
 		    });
 		    jQuery( document ).on('click', '.editfollowuplink',function(e){
 			    e.preventDefault();
 			    var select =jQuery(this ).parents();
-				rthdAdmin.rthd_tinymce_set_content( 'editedfollowupcontent', jQuery(this).parents().siblings('.rthd-comment-content').html().trim() )
+			    rthd_tinymce_set_content( 'editedfollowupcontent', jQuery(this).parents().siblings('.rthd-comment-content').data('content'));
 			    commentid=select.siblings('#followup-id' ).val();
 			    var that = select.siblings( '#is-private-comment' ).val();
                  jQuery('#edit-private' ).val(that);
