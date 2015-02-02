@@ -58,12 +58,13 @@ jQuery(function () {
 			    }
 			    jQuery('#new-followup-form' ).hide();
 			    jQuery(document).scrollTop( ( jQuery('#edit-ticket-data').offset().top ) - 50 );
-			    rthdAdmin.rthd_tinymce_set_content( 'editedticketcontent', jQuery(this).closest('.ticketcontent').find('.rthd-comment-content').html() );
+			    rthd_tinymce_set_content( 'editedticketcontent', jQuery(this).closest('.ticketcontent').find('.rthd-comment-content' ).data('content') );
 		    });
 		    jQuery('.close-edit-content' ).click(function(e){
 			    e.preventDefault();
 			    jQuery('#edit-ticket-data' ).slideToggle('slow');
 			    jQuery('#new-followup-form' ).show();
+			    jQuery(document).scrollTop( ( jQuery('.ticketcontent').offset().top ) - 50 );
 		    });
 
 		    jQuery('#edit-ticket-content-click' ).click(function(){
@@ -306,7 +307,7 @@ jQuery(function () {
 				    alert("Please enter comment");
 				    return false;
 			    }
-			    if (content.replace(/\s+/g, " ") === jQuery('#comment-'+commentid ).find('.rthd-comment-content' ).val().replace(/\s+/g, " ") ){
+			    if (content.replace(/\s+/g, " ") === jQuery('#comment-'+commentid ).find('.rthd-comment-content' ).data('content') ){
 				    alert('You have not edited comment! :/');
 				    return false;
 			    }

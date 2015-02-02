@@ -62,7 +62,7 @@ if ( ! empty( $post->post_content ) ) {
 	                    <?php echo '<a class="followup-hash-url" id="ticket_description'.'" href="#ticket_description" >'. esc_attr( human_time_diff( strtotime( $post->post_date), current_time( 'timestamp' ) ) ) . ' ago</a>';?>
                     </time>
             </div>
-				<div class="rthd-comment-content">
+				<div class="rthd-comment-content" data-content="<?php echo ( isset( $post->ID ) ? $post->post_content : '' );?>">
 				<?php
 					$content = rthd_content_filter( isset( $post->ID ) ? $post->post_content : '' );
 					echo $content;
@@ -148,9 +148,9 @@ if ( ! empty( $post->post_content ) ) {
 		wp_editor( '', $editor_id, $settings );
 		?>
 		<!--	   <textarea id="editedticketcontent" name="editedticketcontent" placeholder="Edit ticket" rows="5"></textarea>-->
-		<button class="edit-ticket button button-primary" id="edit-ticket-content-click" type="button">Update</button>
+		<button class="edit-ticket btn btn-primary" id="edit-ticket-content-click" type="button">Update</button>
 		<?php wp_nonce_field('rt_hd_ticket_edit','edit_ticket_nonce'); ?>
 		<img id='ticket-edithdspinner' class="helpdeskspinner" src="<?php echo admin_url().'images/spinner.gif'; ?>">
-		<a href="#" class="close-edit-content">Close</a>
+		<button class="btn close-edit-content">Close</button>
 	</div>
 <?php } ?>
