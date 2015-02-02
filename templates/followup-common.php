@@ -62,7 +62,7 @@ if ( ! empty( $post->post_content ) ) {
 	                    <?php echo '<a class="followup-hash-url" id="ticket_description'.'" href="#ticket_description" >'. esc_attr( human_time_diff( strtotime( $post->post_date), current_time( 'timestamp' ) ) ) . ' ago</a>';?>
                     </time>
             </div>
-				<div class="rthd-comment-content" data-content="<?php echo ( isset( $post->ID ) ? $post->post_content : '' );?>">
+				<div class="rthd-comment-content" data-content="<?php echo ( isset( $post->ID ) ? esc_attr( $post->post_content ): '' );?>">
 				<?php
 					$content = rthd_content_filter( isset( $post->ID ) ? $post->post_content : '' );
 					echo $content;

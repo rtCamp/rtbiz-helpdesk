@@ -582,7 +582,7 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
             </div>
 			<input id="followup-id" type="hidden" value="<?php echo esc_attr( $comment->comment_ID ); ?>">
 			<input id="is-private-comment" type="hidden" value="<?php echo esc_attr( $comment->comment_type); ?>">
-			<div class="rthd-comment-content" data-content="<?php echo ( $display_private_comment_flag ) ? $comment->comment_content : '' ; ?>">
+			<div class="rthd-comment-content" data-content="<?php echo ( $display_private_comment_flag ) ? esc_attr( $comment->comment_content ): '' ; ?>">
 			<?php if( $display_private_comment_flag ) {
 				if ( isset( $comment->comment_content ) && $comment->comment_content != '' ) {
 					$comment->comment_content = rthd_content_filter( $comment->comment_content );
