@@ -727,11 +727,14 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		function rt_hd_welcome_panel() {
 			global $rt_hd_attributes;
 			
+			$settings = rthd_get_redux_settings();
+			$welcome_label = $settings['rthd_menu_label'];
+			
 			$admin_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' );
 			$editor_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
 		?>
 			<div class="welcome-panel-content">
-				<h3><?php _e( 'Welcome to rtHelpdesk!' ); ?></h3>
+				<h3><?php _e( 'Welcome to '.$welcome_label ); ?></h3>
 				<p class="about-description"><?php _e( 'We&#8217;ve assembled some links to get you started:' ); ?></p>
 				<div class="welcome-panel-column-container">
 					<div class="welcome-panel-column">

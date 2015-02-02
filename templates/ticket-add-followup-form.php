@@ -16,10 +16,12 @@ global $current_user;
 		$("#attachemntlist").change(function () {
 			var input = document.getElementById('attachemntlist');
 			var list = '';
-			//for every file...
-			for (var x = 0; x < input.files.length; x++) {
-				//add to list
-				list += '<li>' + input.files[x].name + '</li>';
+			// If attachemnt are more then one then it display.
+			if( input.files.length > 1 ) {
+				for (var x = 0; x < input.files.length; x++) {
+					//add to list
+					list += '<li>' + input.files[x].name + '</li>';
+				}
 			}
 			$("#fileList").html(list);
 		});
@@ -64,7 +66,6 @@ wp_editor( '', $editor_id, $settings );
 	<div>
 		<input id="attachemntlist" name="attachemntlist[]" type="file" multiple />
 		<ul id="fileList">
-			<li>No Files Selected</li>
 		</ul>
 		<span class="followup-note"><b>Note:</b> Attachments will be uploaded when the form is submitted by clicking <i>Add Followup</i> button.</span>
 		<button class="add-savefollowup btn-primary btn" id="savefollwoup" type="button">Add followup</button>
