@@ -58,7 +58,6 @@ jQuery(document).ready(function ($) {
 	<div>
 		<input type="file" id="filesToUpload" name="attachment[]" multiple="multiple"/>
 		<ul id="fileList">
-			<li>No Files Selected</li>
 		</ul>
 	</div>
 
