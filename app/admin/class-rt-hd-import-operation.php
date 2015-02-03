@@ -242,10 +242,10 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				 * Hence pass $email_parse flag based on that.
 				 * $email_parse = ! empty( $originalBody )
 				 */
-				$rt_hd_email_notification->notification_new_ticket_assigned( $post_id, $settings['rthd_default_user'], $labels['name'], $allemail, $uploaded, $email_parse = ! empty( $originalBody ) );
+				//$rt_hd_email_notification->notification_new_ticket_assigned( $post_id, $settings['rthd_default_user'], $labels['name'], $allemail, $uploaded, $email_parse = ! empty( $originalBody ) );
 			}
 
-			$rt_hd_email_notification->ticket_created_notification( $post_id,$labels['name'], $body, $allemail, $uploaded );
+			$rt_hd_email_notification->notification_new_ticket_created( $post_id,$labels['name'], $body, $allemail, $uploaded );
 
 			return $post_id;
 		}

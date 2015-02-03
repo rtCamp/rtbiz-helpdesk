@@ -25,7 +25,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		 * @return string Body Title
 		 */
 		public function get_email_title( $post_id, $posttype ){
-			return '<br/><div style="font-style:italic;color:#666">View '.$posttype.' online: <a href="'.  ( rthd_is_unique_hash_enabled() ? rthd_get_unique_hash_url( $post_id ) : get_post_permalink( $post_id ) ) .'">click here </a></div><br/>';
+			return '<br/><div style="font-style:italic;color:#666"><a href="'.  ( rthd_is_unique_hash_enabled() ? rthd_get_unique_hash_url( $post_id ) : get_post_permalink( $post_id ) ) .'">Click here</a> to view ticket online.</div><br/>';
 		}
 
 		/**
@@ -174,89 +174,90 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			return false;
 		}
 
+
 		/**
-		 * Send Notification to assigned
+		 * Notification while create ticket
 		 *
 		 * @param $post_id
-		 * @param $assignee
 		 * @param $post_type
-		 * @param $contacts
+		 * @param $body
+		 * @param $allemail
 		 * @param $uploaded
-		 * @param $mail_parse
 		 */
-		public function notification_new_ticket_assigned( $post_id, $assignee, $post_type, $contacts = array(), $uploaded = array(), $mail_parse = false ) {
-			$redux = rthd_get_redux_settings();
-			$notificationFlag = ( isset( $redux['rthd_notification_events']) && $redux['rthd_notification_events']['new_ticket_assigned'] == 1 ) ;
-			$cc = array();
-			if ( $notificationFlag ) {
-				$cc = $this->get_notification_emails();
-			}
+		//ticket_created_notification
+		public function notification_new_ticket_created( $post_id, $post_type, $body, $allemail, $uploaded ) {
+			$creatorEmail = $groupEmail = $assigneEmail = $subscriberEmail = array();
 
-			global $current_user;
-
-			$newUser  = get_user_by( 'id', $assignee );
-			$to    = array(
-				array(
-					'email' => $newUser->user_email,
-					'name'  => $newUser->display_name,
-				),
-			);
-
-			$subject = rthd_create_new_ticket_title( 'rthd_ticket_assign_email_title', $post_id );
-
-			$body = 'New ticket has been assigned to you.';
-			$ccBody = 'A New ticket has been assigned to '. $newUser->display_name ;
-			$title = $this->get_email_title( $post_id, $post_type );
 			$user = get_post_meta( $post_id, '_rtbiz_hd_created_by', true );
-			$ticket_author = get_user_by( 'id', $user );
-			$content_post = get_post( $post_id );
-			$body .= rthd_get_general_body_template ('Ticket created by <b>' . $ticket_author->display_name  . '</b> <div>'. $content_post->post_content. '</div>' ) ;
-			$ccBody .= rthd_get_general_body_template( 'Ticket created by <b>' . $ticket_author->display_name  . '</b> <div>'. $content_post->post_content . '</div>' ) ;
-			// added Notification Emails
-			$this->insert_new_send_email( $subject, $title, $body, $to, array(), array(), $uploaded, $post_id, 'post' );
-			$this->insert_new_send_email( $subject, $title, $ccBody, array(), $cc, array(), $uploaded, $post_id, 'post' );
-		}
+			$ticket_created_by = get_user_by( 'id', $user );
+			$post = get_post( $post_id );
+			$assigne_user = get_user_by( 'id', $post->post_author );
+			$produc_list = wp_get_object_terms( $post_id, Rt_Offerings::$offering_slug );
+			$arrProducts = array_unique( wp_list_pluck( $produc_list, 'name' ) );
+			$arrProducts = implode( ', ', $arrProducts );
 
-		/**
-		 * Send Notification to reassigned event
-		 *
-		 * @param $post_id
-		 * @param $oldassignee
-		 * @param $assignee
-		 * @param $post_type
-		 * @param $uploaded
-		 */
-		public function notification_new_ticket_reassigned( $post_id, $oldassignee, $assignee, $post_type, $uploaded ) {
 			$redux = rthd_get_redux_settings();
-			$notificationFlag = ( isset( $redux['rthd_notification_events']) && $redux['rthd_notification_events']['new_ticket_reassigned'] == 1 ) ;
-			$cc = array();
+			$notificationFlag = ( isset( $redux['rthd_notification_events']) && $redux['rthd_notification_events']['new_ticket_created'] == 1 );
 			if ( $notificationFlag ) {
-				$cc = $this->get_notification_emails();
-			}
-			global $current_user;
-			$newUser  = get_user_by( 'id', $assignee );
-			$oldUser  = get_user_by( 'id', $oldassignee );
-			if ( ! empty( $oldUser->user_email ) && ! empty( $oldUser->display_name ) ) {
-				$to = array( array(
-						'email' => $oldUser->user_email,
-						'name'  => $oldUser->display_name,
-				), );
-			} else {
-				$to = array();
+				$groupEmail = $this->get_notification_emails();
 			}
 
-			$subject = rthd_create_new_ticket_title( 'rthd_ticket_reassign_email_title', $post_id );
+			if ( isset( $allemail ) && ! empty( $allemail ) ) {
+				foreach ( $allemail as $email ) {
+					if ( is_email( $email['address'] ) ) {
+						if ( $email['address'] != $assigne_user->user_email ){ // check it's assignee email
+							if ( ! $this->is_internal_user( $email['address'] ) ){
+								$creatorEmail[] = array( 'email' => $email['address'], 'name' => $email['name'] );
+							}
+							else{
+								$groupEmail[] = array( 'email' => $email['address'], 'name' => $email['name'] );
+							}
+						}
+					}
+				}
+			}
 
-			$body = 'You are no longer responsible for this ticket. It has been reassigned to ' . $newUser->display_name;
-			$ccbody = $oldUser->display_name . ' is no longer responsible for this ticket. It has been reassigned to ' . $newUser->display_name;
+			$assigneEmail[] = array( 'email' => $assigne_user->user_email, 'name' => $assigne_user->display_name );
+
 			$title = $this->get_email_title( $post_id, $post_type );
-			$user = get_post_meta( $post_id, '_rtbiz_hd_updated_by', true );
-			$ticket_update_user = get_user_by( 'id', $user );
-			$body .= 'Ticket Updated by : <a target="_blank" href="">' . $ticket_update_user->display_name . '</a>';
-			$ccbody .= 'Ticket Updated by : <a target="_blank" href="">' . $ticket_update_user->display_name . '</a>';
-			// added Notification Emails
-			$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $body ), $to, array(), array(), $uploaded, $post_id, 'post' );
-			$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $ccbody ), array(), $cc, array(), $uploaded, $post_id, 'post' );
+			$subject     = rthd_create_new_ticket_title( 'rthd_new_ticket_email_title',$post_id );
+
+			//Customer Notification
+			if ( ! empty( $creatorEmail ) ) {
+				$htmlbody = '<strong>Thank you for opening a new support ticket. We will look into your request and respond as soon as possible.</strong><br/>';
+				$htmlbody .= '<hr style="color: #DCEAF5;" /><div>' . $body . '</div>';
+				$htmlbody = rthd_get_general_body_template( $htmlbody );
+
+				$this->insert_new_send_email( $subject, $title, $htmlbody, $creatorEmail, array(), array(), $uploaded, $post_id );
+			}
+			// Group Notification
+			if ( ! empty( $groupEmail ) ){
+				$htmlbody = 'A new support ticket is created by <strong>' . $ticket_created_by->display_name.'</strong>';
+				$htmlbody .= '<br/>Ticket Assigned to: <strong>' . $assigne_user->display_name.'</strong>';
+				//$htmlbody .= '<br/>Product: ' . $arrProducts . '<br/><br/>';
+				$htmlbody .= '<hr style="color: #DCEAF5;" /><div>' . $body . '</div>';
+				$htmlbody = rthd_get_general_body_template( $htmlbody );
+				$this->insert_new_send_email( $subject, $title, $htmlbody, array(), array(), $groupEmail , $uploaded, $post_id );
+			}
+
+			// Assignee Notification
+			if ( ! empty( $assigneEmail ) ){
+				$htmlbody = 'A new support ticket is created by <strong>' . $ticket_created_by->display_name.'</strong> is assigned to you';
+				//$htmlbody .= '<br/>Product: ' . $arrProducts . '<br/><br/><hr/>';
+				$htmlbody .= '<hr style="color: #DCEAF5;" /><div>' . $body . '</div>';
+				$htmlbody = rthd_get_general_body_template( $htmlbody );
+				$this->insert_new_send_email( $subject, $title, $htmlbody, array(), array(), $assigneEmail , $uploaded, $post_id );
+			}
+
+			// Subscrible Notification
+			if ( ! empty( $subscriberEmail ) ){
+				//A new support ticket is created by [CREATOR CONTACT NAME]. You have been subscribed to this ticket.
+				$htmlbody = 'A new support ticket is created by <strong>' . $ticket_created_by->display_name.'</strong>. You have been subscribed to this ticket.<br/>';
+				$htmlbody .= '<hr style="color: #DCEAF5;" /><div>' . $body . '</div>';
+				$htmlbody = rthd_get_general_body_template( $htmlbody );
+				$this->insert_new_send_email( $subject, $title, $htmlbody, array(), array(), $assigneEmail , $uploaded, $post_id );
+			}
+
 		}
 
 		/**
@@ -274,19 +275,26 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				$cc = $this->get_notification_emails();
 			}
 
-			$subject = rthd_create_new_ticket_title( 'rthd_ticket_subscribe_email_title', $post_id );
-			$body = 'You have been <b>subscribed</b> to this ticket';
+			// New subscriber added Notification to subscriber
 			$title = $this->get_email_title( $post_id, $post_type );
-			$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $body ), array(), array(), $newSubscriberList, array(), $post_id, 'post' );
+			$subject     = rthd_create_new_ticket_title( 'rthd_new_ticket_email_title', $post_id );
+			$htmlbody = 'You have been subscribed to this ticket. <a href="'.  ( rthd_is_unique_hash_enabled() ? rthd_get_unique_hash_url( $post_id ) : get_post_permalink( $post_id ) ) .'">Click here</a>';
+			$htmlbody = rthd_get_general_body_template( $htmlbody );
+			$this->insert_new_send_email( $subject, $title, $htmlbody, array(), array(), $newSubscriberList, array(), $post_id, 'post' );
 
+			//group notification for subscriber added
 			if ( $notificationFlag ){
+				$htmlbody = '';
 				foreach ( $newSubscriberList as $user ){
-					$body = 'Name: '.$user['name']. '('.$user['email'].')' ;
-					$body .= '<br />';
+					$htmlbody .= ' ' . $user['name']. ' ('.$user['email'].'),' ;
 				}
-				$body .= ' have been <b>subscribed</b> to this ticket';
-				$title = $this->get_email_title( $post_id, $post_type );
-				$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $body ), array(), $cc, array(), array(), $post_id, 'post' );
+				$htmlbody = trim( $htmlbody, ',' );
+				$htmlbody = trim( $htmlbody, ' ' );
+				$htmlbody .= ( count( $newSubscriberList ) >= 2 ) ? ' are ' : ' is ' ;
+				$htmlbody .= ' subscribed to this ticket. <a href="'.  ( rthd_is_unique_hash_enabled() ? rthd_get_unique_hash_url( $post_id ) : get_post_permalink( $post_id ) ) .'">Click here</a>';
+				$htmlbody = rthd_get_general_body_template( $htmlbody );
+
+				$this->insert_new_send_email( $subject, $title, $htmlbody, array(), $cc, array(), array(), $post_id, 'post' );
 			}
 		}
 
@@ -305,20 +313,120 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				$cc = $this->get_notification_emails();
 			}
 
-			$subject = rthd_create_new_ticket_title( 'rthd_ticket_unsubscribe_email_title', $post_id );
-			$body = 'You have been <b>unsubscribed</b> to this ticket';
+			//subscriber removed Notification
 			$title = $this->get_email_title( $post_id, $post_type );
-			$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $body ), array(), array(), $oldSubscriberList, array(), $post_id, 'post' );
+			$subject     = rthd_create_new_ticket_title( 'rthd_new_ticket_email_title', $post_id );
+
+//			$htmlbody = 'You have been no longer subscribed to this ticket.';
+//			$htmlbody = rthd_get_general_body_template( $htmlbody );
+//			$this->insert_new_send_email( $subject, $title, $htmlbody, array(), array(), $oldSubscriberList, array(), $post_id, 'post' );
+
 			if ( $notificationFlag ){
-				$body = '';
+				$htmlbody = '';
 				foreach ( $oldSubscriberList as $user ){
-					$body .= 'Name: '.$user['name']. '('.$user['email'].')' ;
-					$body .= '<br />';
+					$htmlbody .= ' ' . $user['name']. ' ('.$user['email'].'),' ;
 				}
-				$body .= 'have been <b>unsubscribed</b> from this ticket';
-				$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $body ), array(), array(), $cc, array(), $post_id, 'post' );
+				$htmlbody = trim( $htmlbody, ',' );
+				$htmlbody = trim( $htmlbody, ' ' );
+				$htmlbody .= ( count( $oldSubscriberList ) >= 2 ) ? ' are ' : ' is ' ;
+				$htmlbody .= ' un-subscribed to this ticket. <a href="'.  ( rthd_is_unique_hash_enabled() ? rthd_get_unique_hash_url( $post_id ) : get_post_permalink( $post_id ) ) .'">Click here</a>';
+				$htmlbody = rthd_get_general_body_template( $htmlbody );
+
+				$this->insert_new_send_email( $subject, $title, $htmlbody, array(), array(), $cc, array(), $post_id, 'post' );
 			}
 		}
+
+		/**
+		 * Send Notification to reassigned event
+		 *
+		 * @param $post_id
+		 * @param $oldassignee
+		 * @param $assignee
+		 * @param $post_type
+		 * @param $uploaded
+		 */
+		public function notification_new_ticket_reassigned( $post_id, $oldassignee, $assignee, $post_type, $uploaded ) {
+			$redux = rthd_get_redux_settings();
+			$notificationFlag = ( isset( $redux['rthd_notification_events']) && $redux['rthd_notification_events']['new_ticket_reassigned'] == 1 ) ;
+			$cc = array();
+			if ( $notificationFlag ) {
+				$cc = $this->get_notification_emails();
+			}
+
+			$oldUser  = get_user_by( 'id', $oldassignee );
+			if ( ! empty( $oldUser->user_email ) && ! empty( $oldUser->display_name ) ) {
+				$to = array( array(
+					             'email' => $oldUser->user_email,
+					             'name'  => $oldUser->display_name,
+				             ), );
+			} else {
+				$to = array();
+			}
+
+			// reassign Notification
+			$title = $this->get_email_title( $post_id, $post_type );
+			$subject = rthd_create_new_ticket_title( 'rthd_ticket_reassign_email_title', $post_id );
+			$htmlbody = 'You are no longer responsible for this ticket. ';
+			$htmlbody = rthd_get_general_body_template( $htmlbody );
+
+			$this->insert_new_send_email( $subject, $title, $htmlbody, $to, array(), array(), $uploaded, $post_id, 'post' );
+
+			// group reassign notification
+//			if ( $notificationFlag ){
+//				$htmlbody = $oldUser->display_name . ' ('. $oldUser->user_email .')' ;
+//				$htmlbody .= ' is no longer responsible for this ticket. <a href="'.  ( rthd_is_unique_hash_enabled() ? rthd_get_unique_hash_url( $post_id ) : get_post_permalink( $post_id ) ) .'">Click here</a>';
+//				$htmlbody = rthd_get_general_body_template( $htmlbody );
+//
+//				$this->insert_new_send_email( $subject, $title, $htmlbody, array(), array(), $cc, array(), $post_id, 'post' );
+//			}
+		}
+
+		/**
+		 * Send Notification to assigned
+		 *
+		 * @param $post_id
+		 * @param $assignee
+		 * @param $post_type
+		 * @param $contacts
+		 * @param $uploaded
+		 * @param $mail_parse
+		 */
+		public function notification_new_ticket_assigned( $post_id, $assignee, $post_type, $contacts = array(), $uploaded = array(), $mail_parse = false ) {
+			$redux = rthd_get_redux_settings();
+			$notificationFlag = ( isset( $redux['rthd_notification_events']) && $redux['rthd_notification_events']['new_ticket_assigned'] == 1 ) ;
+			$cc = array();
+			if ( $notificationFlag ) {
+				$cc = $this->get_notification_emails();
+			}
+
+			$newUser  = get_user_by( 'id', $assignee );
+			$to    = array(
+				array(
+					'email' => $newUser->user_email,
+					'name'  => $newUser->display_name,
+				),
+			);
+
+			// reassign Notification
+			$title = $this->get_email_title( $post_id, $post_type );
+			$subject = rthd_create_new_ticket_title( 'rthd_ticket_reassign_email_title', $post_id );
+//			$htmlbody = 'Ticket is reassigned to you';
+//			$htmlbody = rthd_get_general_body_template( $htmlbody );
+//
+//			$this->insert_new_send_email( $subject, $title, $htmlbody, $to, array(), array(), $uploaded, $post_id, 'post' );
+
+			// group reassign notification
+			if ( $notificationFlag ){
+				$htmlbody = 'Ticket is reassigned to ' . $newUser->display_name . ' ('. $newUser->user_email .')';
+				$htmlbody = rthd_get_general_body_template( $htmlbody );
+
+				$this->insert_new_send_email( $subject, $title, $htmlbody, array(), array(), $cc, array(), $post_id, 'post' );
+			}
+
+		}
+
+
+
 
 		/**
 		 * Send Notification on update ticket
@@ -354,51 +462,6 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$ticket_update_user = get_user_by( 'id', $user );
 			$body = '<br />' . 'Ticket updated by : <a target="_blank" href="">' . $ticket_update_user->display_name . '</a>'. $body;
 			$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $body ) , $to, array(), array_unique( $bccemails ), array(), $post_id, 'post' );
-		}
-
-		/**
-		 * @param $post_id
-		 * @param $post_type
-		 * @param $body
-		 * @param $allemail
-		 * @param $uploaded
-		 */
-		public function ticket_created_notification( $post_id, $post_type, $body, $allemail, $uploaded ) {
-			$redux = rthd_get_redux_settings();
-			$notificationFlag = ( isset( $redux['rthd_notification_events']) && $redux['rthd_notification_events']['new_ticket_created'] == 1 );
-			$bcc = array();
-			if ( $notificationFlag ) {
-				$bcc = $this->get_notification_emails();
-			}
-
-			$subject     = rthd_create_new_ticket_title( 'rthd_new_ticket_email_title',$post_id );
-			$title = $this->get_email_title( $post_id, $post_type );
-			$notify_emails = array();
-			if ( isset( $allemail ) && ! empty( $allemail ) ) {
-				foreach ( $allemail as $email ) {
-					if ( is_email( $email['address'] ) ) {
-						if ( ! $this->is_internal_user( $email['address'] ) ){
-							$notify_emails[] = array( 'email' => $email['address'], 'name' => $email['name'] );
-						}
-						else{
-							$bcc[] = array( 'email' => $email['address'], 'name' => $email['name'] );
-						}
-					}
-				}
-			}
-			// client
-			$toBody = '<br/><strong>Thank you for opening a new support ticket. We will look into your request and respond as soon as possible.</strong><br />'.rthd_get_general_body_template ( $body );
-			$this->insert_new_send_email( $subject, $title, $toBody, $notify_emails, array(), array() , $uploaded, $post_id );
-			// internal emails
-			if ( ! empty( $bcc ) ){
-				$user = get_post_meta( $post_id, '_rtbiz_hd_created_by', true );
-				$ticket_created_by = get_user_by( 'id', $user );
-				$post = get_post($post_id);
-				$assigne = $post->post_author;
-				$assigne_user = get_user_by( 'id', $assigne );
-				$toBody = '<br/>A new support ticket has been created by ' . $ticket_created_by->display_name.'<br />Ticket Assigned to: '.$assigne_user->display_name .'<br />'.  ( $body );
-				$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $toBody ), array(), array(), $bcc , $uploaded, $post_id );
-			}
 		}
 
 		function get_notification_emails() {
