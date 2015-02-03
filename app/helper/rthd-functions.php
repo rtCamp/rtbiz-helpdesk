@@ -942,3 +942,7 @@ function rthd_get_general_body_template( $body ){
 	$date = strtotime( current_time( 'mysql', 1 ) );
 	return '<div style="border: 1px solid #DFE9f2;padding: 20px;background: #f1f6fa;">' . rthd_content_filter( $body ) . '<div style="float: right;color: gray;">' . date( 'D, M, d, Y, H:i', $date ) . '</div></div>';
 }
+
+function rthd_update_ticket_updated_by_user( $post_id, $user_id ){
+	update_post_meta( $post_id, '_rtbiz_hd_updated_by',$user_id );
+}
