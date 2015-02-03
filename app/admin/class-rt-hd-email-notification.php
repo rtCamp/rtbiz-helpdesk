@@ -345,7 +345,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$title = $this->get_email_title( $post_id, $post_type );
 			$user = get_post_meta( $post_id, '_rtbiz_hd_updated_by', true );
 			$ticket_update_user = get_user_by( 'id', $user );
-			$body .= '<br />' . 'Ticket updated by : <a target="_blank" href="">' . $ticket_update_user->display_name . '</a>';
+			$body = '<br />' . 'Ticket updated by : <a target="_blank" href="">' . $ticket_update_user->display_name . '</a>'. $body;
 			$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $body ) , $to, array(), $bccemails, array(), $post_id, 'post' );
 		}
 
