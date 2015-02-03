@@ -1249,7 +1249,12 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$body = '<strong>New Followup Added ' . ( ( ! empty( $currentUser->display_name ) ) ? 'by ' . $currentUser->display_name : 'annonymously' ) . ':</strong>';
 				$body .= rthd_content_filter( $comment->comment_content );
 			}
-			//			$body .= '<br/>';
+			if ( get_current_user_id() == get_post_meta( $comment_post_ID, '_rtbiz_hd_created_by', true ) ) {
+				$body = '<br /> New follow up is added by <strong>you</strong>.';
+				$body .= rthd_content_filter( $comment->comment_content );
+				$this->notify_subscriber_via_email( $comment_post_ID, $title, rthd_get_general_body_template( $body ), $uploaded, $comment_ID, false, true, false );
+				$contactFlag = false;
+			}
 			$notificationFlag = $this->check_setting_for_new_followup_email();
 			$this->notify_subscriber_via_email( $comment_post_ID, $title, rthd_get_general_body_template( $body ), $uploaded, $comment_ID, $notificationFlag, $contactFlag );
 
@@ -1381,8 +1386,9 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$currentUser = get_user_by( 'id', get_current_user_id() );
 				$subject       = rthd_create_new_ticket_title( 'rthd_update_followup_email_title', $comment_post_ID );
 
-				$body = '<div> A Follwup Updated by ' . $currentUser->display_name. '</div> <br/>';
-				$body .= '<div> The changes are as follows: </div><br/>';
+				$updatedbybody = '<div> A Follwup Updated by ' . $currentUser->display_name. '</div> <br/>';
+				$creatorbody = '<div> A follow is updated by you</div> <br />';
+				$body = '<div> The changes are as follows: </div><br/>';
 
 				$flag = false;
 
@@ -1415,9 +1421,13 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					$body_template .= '<br/> ';
 				}
 				if ( $flag ) {
+					if ( get_current_user_id() == get_post_meta( $comment_post_ID, '_rtbiz_hd_created_by', true ) ) {
+						$contactbody = $creatorbody . $body. rthd_get_general_body_template( $body_template );
+						$this->notify_subscriber_via_email( $comment_post_ID, $subject, $contactbody, $attachment, $_POST['comment_id'],false, true, false );
+					}
 					$redux = rthd_get_redux_settings();
 					$notificationFlag = ( $redux['rthd_notification_events']['followup_edited'] == 1 );
-					$body = $body. rthd_get_general_body_template( $body_template );
+					$body = $updatedbybody . $body. rthd_get_general_body_template( $body_template );
 					$this->notify_subscriber_via_email( $comment_post_ID, $subject, $body, $attachment, $_POST['comment_id'],$notificationFlag, false );
 				}
 
@@ -1650,17 +1660,21 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 * @param       $notificationFlag
 		 * @param       $contactFlag
 		 *
+		 * @param bool  $subscriberFlag
+		 *
 		 * @internal param $title
 		 * @since rt-Helpdesk 0.1
 		 */
-		function notify_subscriber_via_email( $post_id, $subject, $body, $attachment = array(), $comment_id, $notificationFlag, $contactFlag ) {
-			$oldSubscriberArr = get_post_meta( $post_id, '_rtbiz_hd_subscribe_to', true );
+		function notify_subscriber_via_email( $post_id, $subject, $body, $attachment = array(), $comment_id, $notificationFlag, $contactFlag, $subscriberFlag = true ) {
 			$bccemails        = array();
-			if ( $oldSubscriberArr && is_array( $oldSubscriberArr ) && ! empty( $oldSubscriberArr ) ) {
-				foreach ( $oldSubscriberArr as $emailsubscriber ) {
-					$userSub     = get_user_by( 'id', intval( $emailsubscriber ) );
-					if ( ! empty( $userSub ) ) {
-						$bccemails[] = array( 'email' => $userSub->user_email, 'name' => $userSub->display_name );
+			if ( $subscriberFlag ){
+				$oldSubscriberArr = get_post_meta( $post_id, '_rtbiz_hd_subscribe_to', true );
+				if ( $oldSubscriberArr && is_array( $oldSubscriberArr ) && ! empty( $oldSubscriberArr ) ) {
+					foreach ( $oldSubscriberArr as $emailsubscriber ) {
+						$userSub     = get_user_by( 'id', intval( $emailsubscriber ) );
+						if ( ! empty( $userSub ) ) {
+							$bccemails[] = array( 'email' => $userSub->user_email, 'name' => $userSub->display_name );
+						}
 					}
 				}
 			}
