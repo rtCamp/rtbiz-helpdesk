@@ -529,6 +529,13 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 			if ( $staffonly ){
 				$display_private_comment_flag = true;
 			}
+			else {
+				ob_end_flush();
+				if ( ! $echo ) {
+					return '';
+				}
+				return;
+			}
 			$private_text = 'Staff only';
 			$is_comment_private = true;
 			break;
