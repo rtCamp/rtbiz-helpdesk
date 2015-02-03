@@ -63,8 +63,27 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			add_action( 'wp_ajax_rthd_add_new_ticket_ajax', array( $this, 'add_new_ticket_ajax' ) );
 			add_action( 'wp_ajax_nopriv_rthd_add_new_ticket_ajax', array( $this, 'add_new_ticket_ajax' ) );
 			add_action( 'read_rt_mailbox_email_'.RT_HD_TEXT_DOMAIN, array( $this, 'process_email_to_ticket' ), 10, 16 );
+			add_action( 'wp_ajax_ticket_bulk_edit', array( $this, 'ticket_bulk_edit' ) );
 			add_action( 'wp_ajax_front_end_status_change', array( $this, 'front_end_status_change' ) );
-			add_action( 'wp_ajax_front_end_status_change', array( $this, 'front_end_status_change' ) );
+		}
+
+		function ticket_bulk_edit(){
+			$post_ids = ( isset( $_POST[ 'post_ids' ] ) && !empty( $_POST[ 'post_ids' ] ) ) ? $_POST[ 'post_ids' ] : array();
+			$status = ( isset( $_POST[ 'ticket_status' ] ) && ! empty( $_POST[ 'ticket_status' ] ) ) ? $_POST[ 'ticket_status' ] : NULL;
+			if ( ! empty( $post_ids ) && is_array( $post_ids ) && ! empty( $status ) ) {
+				global $rt_hd_module;
+				$labels = $rt_hd_module->labels;
+				foreach( $post_ids as $post_id ) {
+					rthd_update_ticket_updated_by_user( $post_id, get_current_user_id() );
+					$old = get_post_status( $post_id );
+					if ( $old == $status ){
+						die();
+					}
+					global $rt_hd_email_notification;
+					$body = $labels['name'].' Status '.rthd_status_markup( $old ).' changed to '.rthd_status_markup( $status );
+					$rt_hd_email_notification->notification_ticket_updated( $post_id, $labels['name'], $body, array() );
+				}
+			}
 		}
 
 		function add_new_ticket_ajax(){
@@ -1847,6 +1866,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$response = array();
 			$response['status']= false;
 			$post_id = $_POST['post_id'];
+			$old = get_post_status( $post_id );
 			$post_status = $_POST['post_status'];
 			if ( $post_id ){
 				$ticket = array( 'ID' => $post_id,
@@ -1855,6 +1875,12 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			}
 			$response['stauts_markup']= rthd_status_markup( $post_status );
 			$response['status']= true;
+			global $rt_hd_module;
+			$labels = $rt_hd_module->labels;
+			rthd_update_ticket_updated_by_user( $post_id, get_current_user_id() );
+			global $rt_hd_email_notification;
+			$body = $labels['name'].' Status '.rthd_status_markup( $old ).' changed to '.rthd_status_markup( $post_status );
+			$rt_hd_email_notification->notification_ticket_updated( $post_id, $labels['name'], $body, array() );
 			echo json_encode($response);
 			die();
 		}

@@ -52,7 +52,11 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 				$rthd_post_type = get_post_type( $_GET['post'] );
 			else if( isset( $_GET['post_type'] ) && $pagenow == 'post-new.php' )
 				$rthd_post_type = $_GET['post_type'];
-			
+
+			if( $pagenow == 'edit.php' && isset( $post->post_type ) && $post->post_type == Rt_HD_Module::$post_type ){
+				wp_enqueue_script( 'rthd-bulk-edit', RT_HD_URL . 'app/assets/javascripts/rt_admin_bulk_edit.js', array( 'jquery' ), RT_HD_VERSION, true );
+			}
+
 			if ( in_array( $pagenow, array( 'edit.php', 'post.php', 'post-new.php' ) ) && $rthd_post_type == Rt_HD_Module::$post_type ) {
 				if ( isset( $post->post_type ) && $post->post_type == Rt_HD_Module::$post_type ) {
 
