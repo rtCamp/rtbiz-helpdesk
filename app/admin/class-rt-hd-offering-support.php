@@ -423,7 +423,18 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 			$uploaded = wp_upload_bits( $file_handler['name'], null, file_get_contents( $file_handler['tmp_name'] ) );
 			remove_filter( 'upload_dir', array( $rt_hd_admin, 'custom_upload_dir' ) );//remove hook for add addon specific folder for attachment
 
-			return $uploaded;
+			$file = array();
+			if ( false == $uploaded['error'] ) {
+				$extn_array            = explode( '.', $file_handler['name'] );
+				$extn                  = $extn_array[ count( $extn_array ) - 1 ];
+				$file['file']          = $uploaded['file'];
+				$file['url']           = $uploaded['url'];
+				$file['filename']      = $file_handler['name'];
+				$file['extn']          = $extn;
+				$file['type']          = $file_handler['type'];
+			}
+
+			return $file;
 		}
 
 
