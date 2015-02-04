@@ -205,7 +205,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			if ( isset( $allemail ) && ! empty( $allemail ) ) {
 				foreach ( $allemail as $email ) {
 					if ( is_email( $email['address'] ) ) {
-						if ( ! $this->is_internal_user( $email['address'] ) ){
+						if ( ! $this->is_internal_user( $email['address'] ) && $email['address'] != $ticket_created_by->user_email ){
 							$creatorEmail[] = array( 'email' => $email['address'], 'name' => $email['name'] );
 						}
 						else{
@@ -418,10 +418,10 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			// reassign Notification
 			$title = $this->get_email_title( $post_id, $post_type );
 			$subject = rthd_create_new_ticket_title( 'rthd_ticket_reassign_email_title', $post_id );
-//			$htmlbody = 'Ticket is reassigned to you';
-//			$htmlbody = rthd_get_general_body_template( $htmlbody );
-//
-//			$this->insert_new_send_email( $subject, $title, $htmlbody, $to, array(), array(), $uploaded, $post_id, 'post' );
+			$htmlbody = 'Ticket is reassigned to you';
+			$htmlbody = rthd_get_general_body_template( $htmlbody );
+
+			$this->insert_new_send_email( $subject, $title, $htmlbody, $to, array(), array(), $uploaded, $post_id, 'post' );
 
 			// group reassign notification
 			if ( $notificationFlag ){

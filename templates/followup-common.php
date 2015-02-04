@@ -94,7 +94,7 @@ if ( ! empty( $post->post_content ) ) {
 
 	<?php
 	foreach ( $comments as $comment ) {
-		$user_edit = current_user_can( $cap ) || ( get_current_user_id() == $comment->user_id );
+		$user_edit = current_user_can( $cap ) || ( get_current_user_id() == $comment->user_id ) || ( get_current_user_id() == get_post_meta( $post->ID, '_rtbiz_hd_created_by' ,true ) );
 		$comment_user  = get_user_by( 'id', $comment->user_id );
 		$comment_render_type = 'left';
 		if ( ! empty( $comment_user ) ) {
