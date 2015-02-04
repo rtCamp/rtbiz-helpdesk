@@ -504,7 +504,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 				$url  = add_query_arg(
 					array(
 						'post_type' => Rt_HD_Module::$post_type,
-						'assignee'  => $user->ID,
+						'assigned'  => $user->ID,
 					), admin_url( 'edit.php' ) );
 				if ( ! empty( $user ) ) {
 					array_unshift( $temp, '<a href="' . $url . '">' . $user->display_name . '</a>' );
