@@ -59,10 +59,11 @@ wp_editor( '', $editor_id, $settings );
 			?>
 		</select>
 		<?php if (current_user_can(rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' )) && $post->post_status != 'hd-answered' ){ ?>
+			<div> <label for="rthd_keep_status"><input id="rthd_keep_status" type="checkbox" name="rthd_keep_status" text="check keep status unanswered" /><?php _e('Keep unanswered'); ?></label></div>
         <?php } ?>
 
 	</div>
-	<div> <label for="rthd_keep_status"><input id="rthd_keep_status" type="checkbox" name="rthd_keep_status" text="check keep status unanswered" /><?php _e('Keep unanswered'); ?></label></div>
+
 	<div>
 		<input id="attachemntlist" name="attachemntlist[]" type="file" multiple />
 		<ul id="fileList">

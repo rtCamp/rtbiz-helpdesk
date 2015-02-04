@@ -1265,8 +1265,10 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 			$title = rthd_create_new_ticket_title( 'rthd_new_followup_email_title', $comment_post_ID );;
 			$contactFlag = ( $comment_privacy  == Rt_HD_Import_Operation::$FOLLOWUP_STAFF ) ? false : true;
+			$hideAttachmentFlag = false;
 			if ( isset( $comment_privacy ) && ! empty( $comment_privacy ) && intval( $comment_privacy ) && $comment_privacy > Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC  ){
-				$body = '<br /> A private followup has been added ' . ( ( ! empty( $currentUser->display_name ) ) ? 'by ' . $currentUser->display_name : 'annonymously' ) .'. Please go to link and login to view the message.';
+				$body = '<br /> A private followup has been added ' . ( ( ! empty( $currentUser->display_name ) ) ? 'by <strong>' . $currentUser->display_name : 'annonymously' ) .'<strong>. Please go to ticket to view content.';
+				$hideAttachmentFlag = true;
 			}else {
 				$body = '<strong>New Followup Added ' . ( ( ! empty( $currentUser->display_name ) ) ? 'by ' . $currentUser->display_name : 'annonymously' ) . ':</strong>';
 				$body .= rthd_content_filter( $comment->comment_content );
@@ -1278,6 +1280,9 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$contactFlag = false;
 			}
 			$notificationFlag = $this->check_setting_for_new_followup_email();
+			if ( $hideAttachmentFlag ){
+				$uploaded = array();
+			}
 			$this->notify_subscriber_via_email( $comment_post_ID, $title, rthd_get_general_body_template( $body ), $uploaded, $comment_ID, $notificationFlag, $contactFlag );
 
 			$returnArray['status']        = true;
@@ -1444,8 +1449,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				}
 				if ( $flag ) {
 					if ( get_current_user_id() == get_post_meta( $comment_post_ID, '_rtbiz_hd_created_by', true ) ) {
-						$contactbody = $creatorbody . $body. rthd_get_general_body_template( $body_template );
-						$this->notify_subscriber_via_email( $comment_post_ID, $subject, $contactbody, $attachment, $_POST['comment_id'],false, true, false, false );
+						$contactbody = $creatorbody . $body. $body_template;
+						$this->notify_subscriber_via_email( $comment_post_ID, $subject, rthd_get_general_body_template( $contactbody ), $attachment, $_POST['comment_id'],false, true, false, false );
 					}
 					$redux = rthd_get_redux_settings();
 					$notificationFlag = ( $redux['rthd_notification_events']['followup_edited'] == 1 );
@@ -1760,12 +1765,12 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$notificationFlag = ( $redux['rthd_notification_events']['followup_deleted'] == 1 );
 			$currentUser      = get_user_by( 'id', get_current_user_id() );
 			$body             = 'A Follwup is deleted by <b>' . $currentUser->display_name .'</b>';
-			$body .= '<br/>' .rthd_get_general_body_template( $comment->comment_content );
+			$body .= '<br/>'. $comment->comment_content ;
 			$body .= '<br/> ';
 			$comment_post_ID = $_POST['post_id'];
 
 			$title           = rthd_create_new_ticket_title( 'rthd_delete_followup_email_title', $comment_post_ID );
-			$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, array(), $_POST['comment_id'], $notificationFlag, false, true, true );
+			$this->notify_subscriber_via_email( $comment_post_ID, $title, rthd_get_general_body_template( $body ), array(), $_POST['comment_id'], $notificationFlag, false, true, true );
 			echo json_encode( $response );
 			die( 0 );
 		}
