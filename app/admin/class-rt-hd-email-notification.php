@@ -224,8 +224,10 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 
 			//Customer Notification
 			if ( ! empty( $creatorEmail ) ) {
-				$htmlbody = '<strong>Thank you for opening a new support ticket. We will look into your request and respond as soon as possible.</strong><br/>';
-				$htmlbody .= '<hr style="color: #DCEAF5;" /><div>' . $body . '</div>';
+				$htmlbody = 'Thank you for opening a new support ticket. We will look into your request and respond as soon as possible.<br/>';
+				if ( isset( $body ) && !empty( $body ) ){
+					$htmlbody .= '<hr style="color: #DCEAF5;" /><div>' . rthd_content_filter( $body ) . '</div>';
+				}
 				$htmlbody = rthd_get_general_body_template( $htmlbody );
 
 				$this->insert_new_send_email( $subject, $title, $htmlbody, $creatorEmail, array(), array(), $uploaded, $post_id );
@@ -235,7 +237,9 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				$htmlbody = 'A new support ticket is created by <strong>' . $ticket_created_by->display_name.'</strong>';
 				$htmlbody .= '<br/>Ticket Assigned to: <strong>' . $assigne_user->display_name.'</strong>';
 				//$htmlbody .= '<br/>Product: ' . $arrProducts . '<br/><br/>';
-				$htmlbody .= '<hr style="color: #DCEAF5;" /><div>' . $body . '</div>';
+				if ( isset( $body ) && !empty( $body ) ){
+					$htmlbody .= '<hr style="color: #DCEAF5;" /><div>' . rthd_content_filter( $body ) . '</div>';
+				}
 				$htmlbody = rthd_get_general_body_template( $htmlbody );
 				$this->insert_new_send_email( $subject, $title, $htmlbody, array(), array(), $groupEmail , $uploaded, $post_id );
 			}
@@ -244,8 +248,10 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			if ( ! empty( $assigneEmail ) ){
 				$htmlbody = 'A new support ticket is created by <strong>' . $ticket_created_by->display_name.'</strong> is assigned to you';
 				//$htmlbody .= '<br/>Product: ' . $arrProducts . '<br/><br/><hr/>';
-				$htmlbody .= '<hr style="color: #DCEAF5;" /><div>' . $body . '</div>';
-				$htmlbody = rthd_get_general_body_template( $htmlbody );
+				$htmlbody .= '<hr style="color: #DCEAF5;" /><div>' . rthd_content_filter( $body ) . '</div>';
+				if ( isset( $body ) && !empty( $body ) ){
+					$htmlbody .= '<hr style="color: #DCEAF5;" /><div>' . rthd_content_filter( $body ) . '</div>';
+				}
 				$this->insert_new_send_email( $subject, $title, $htmlbody, array(), array(), $assigneEmail , $uploaded, $post_id );
 			}
 
@@ -253,8 +259,10 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			if ( ! empty( $subscriberEmail ) ){
 				//A new support ticket is created by [CREATOR CONTACT NAME]. You have been subscribed to this ticket.
 				$htmlbody = 'A new support ticket is created by <strong>' . $ticket_created_by->display_name.'</strong>. You have been subscribed to this ticket.<br/>';
-				$htmlbody .= '<hr style="color: #DCEAF5;" /><div>' . $body . '</div>';
-				$htmlbody = rthd_get_general_body_template( $htmlbody );
+				$htmlbody .= '<hr style="color: #DCEAF5;" /><div>' . rthd_content_filter( $body ) . '</div>';
+				if ( isset( $body ) && !empty( $body ) ){
+					$htmlbody .= '<hr style="color: #DCEAF5;" /><div>' . rthd_content_filter( $body ) . '</div>';
+				}
 				$this->insert_new_send_email( $subject, $title, $htmlbody, array(), array(), $assigneEmail , $uploaded, $post_id );
 			}
 
