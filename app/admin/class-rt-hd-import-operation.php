@@ -1266,16 +1266,23 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$title = rthd_create_new_ticket_title( 'rthd_new_followup_email_title', $comment_post_ID );;
 			$contactFlag = ( $comment_privacy  == Rt_HD_Import_Operation::$FOLLOWUP_STAFF ) ? false : true;
 			$hideAttachmentFlag = false;
+			$creatorPrivate_flag = false;
 			if ( isset( $comment_privacy ) && ! empty( $comment_privacy ) && intval( $comment_privacy ) && $comment_privacy > Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC  ){
 				$body = '<br /> A private followup has been added ' . ( ( ! empty( $currentUser->display_name ) ) ? 'by <strong>' . $currentUser->display_name : 'annonymously' ) .'<strong>. Please go to ticket to view content.';
 				$hideAttachmentFlag = true;
+				$creatorPrivate_flag = true;
 			}else {
 				$body = '<strong>New Followup Added ' . ( ( ! empty( $currentUser->display_name ) ) ? 'by ' . $currentUser->display_name : 'annonymously' ) . ':</strong>';
 				$body .= rthd_content_filter( $comment->comment_content );
 			}
 			if ( get_current_user_id() == get_post_meta( $comment_post_ID, '_rtbiz_hd_created_by', true ) ) {
-				$creatorbody = '<br /> New follow up is added by <strong>you</strong>.';
-				$creatorbody .= rthd_content_filter( $comment->comment_content );
+				$creatorbody = '';
+				if ( ! $creatorPrivate_flag ){
+					$creatorbody = '<br /> New follow up is added by <strong>you</strong>.';
+					$creatorbody .= rthd_content_filter( $comment->comment_content );
+				} else {
+					$creatorbody = '<br /> A private followup has been added by <strong> you<strong>. Please go to ticket to view content.';
+				}
 				$this->notify_subscriber_via_email( $comment_post_ID, $title, rthd_get_general_body_template( $creatorbody ), $uploaded, $comment_ID, false, true, false, false );
 				$contactFlag = false;
 			}
