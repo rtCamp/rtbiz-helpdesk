@@ -1761,6 +1761,15 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				die( 0 );
 			}
 			$comment          = get_comment( $_POST['comment_id'] );
+			$attachments_urls = get_comment_meta( $_POST['comment_id'], 'attachment' );
+			$attachments = get_children( array( 'post_parent' => $comment->comment_post_ID, 'post_type' => 'attachment', ) );
+			if ( ! empty( $attachments ) && ! empty( $attachments_urls ) ){
+				foreach ( $attachments as $att ){
+					if ( in_array( wp_get_attachment_url( $att->ID ),$attachments_urls ) ){
+						wp_delete_attachment( $att->ID, true );
+					}
+				}
+			}
 			$response['status'] = wp_delete_comment( $_POST['comment_id'], true );
 			$redux = rthd_get_redux_settings();
 			$notificationFlag = ( $redux['rthd_notification_events']['followup_deleted'] == 1 );
