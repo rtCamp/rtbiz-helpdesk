@@ -205,7 +205,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			if ( isset( $allemail ) && ! empty( $allemail ) ) {
 				foreach ( $allemail as $email ) {
 					if ( is_email( $email['address'] ) ) {
-						if ( ! $this->is_internal_user( $email['address'] ) && $email['address'] != $ticket_created_by->user_email ){
+						if ( ! $this->is_internal_user( $email['address'] ) && $email['address'] == $ticket_created_by->user_email ){
 							$creatorEmail[] = array( 'email' => $email['address'], 'name' => $email['name'] );
 						}
 						else{
