@@ -204,7 +204,7 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 			if ( ! empty( $removedSUbscriber ) ) {
 				foreach ( $removedSUbscriber as $emailsubscriber ) {
 					$userSub             = get_user_by( 'id', intval( $emailsubscriber ) );
-					if ( ! empty( $userSub->use ) ) {
+					if ( ! empty( $userSub->user_email ) ) {
 						$oldSubscriberList[] = array( 'email' => $userSub->user_email, 'name' => $userSub->display_name );
 					}
 				}
@@ -271,7 +271,7 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 					$rt_hd_email_notification->notification_ticket_subscribed( $post_id, $labels['name'], $bccemails );
 				}
 				else {
-					$rt_hd_email_notification->ticket_created_notification( $post_id, $labels['name'], array() );
+					$rt_hd_email_notification->notification_new_ticket_created( $post_id, $labels['name'], array() );
 				}
 			}
 		}

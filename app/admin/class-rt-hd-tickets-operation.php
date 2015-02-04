@@ -24,6 +24,21 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 		 * @since 0.1
 		 */
 		public function __construct() {
+			add_action( 'save_post', array( $this, 'ticket_email_bulk_edit' ), 10, 3 );
+		}
+
+		function ticket_email_bulk_edit( $post_id, $post, $update ){
+			if ( Rt_HD_Module::$post_type != $post->post_type ) {
+				return;
+			}
+			if ( wp_is_post_revision( $post_id ) ){
+				return;
+			}
+			if ( ! $update ){
+				return;
+			}
+
+
 
 		}
 

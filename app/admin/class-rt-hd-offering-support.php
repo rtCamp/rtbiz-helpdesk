@@ -334,13 +334,34 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 			$data = $_POST['post'];
 			$offeringstr = $data['title'];
 
+			$uploaded = array();
+
+			// Created attachment
+			if ( $_FILES ) {
+				$attachment = $_FILES['attachment'];
+				foreach ( $attachment['name'] as $key => $value ) {
+					if ( $attachment['name'][ $key ] ) {
+						$file = array(
+							'name'     => $attachment['name'][ $key ],
+							'type'     => $attachment['type'][ $key ],
+							'tmp_name' => $attachment['tmp_name'][ $key ],
+							'error'    => $attachment['error'][ $key ],
+							'size'     => $attachment['size'][ $key ],
+						);
+						$uploaded[] = self::insert_attachment( $file );
+					}
+				}
+			}
+
+			$uploaded = array_filter( $uploaded );
+
 			//Ticket created
 			$rt_hd_tickets_id = $rt_hd_import_operation->insert_new_ticket(
 				$offeringstr,
 				stripslashes($data['description']),
 				'now',
 				array( array( 'address' => $data['email'], 'name' => '' ) ),
-				array(),
+				$uploaded,
 				$data['email']
 			);
 
@@ -348,34 +369,6 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 				$term = get_term_by( 'id', $data['product_id'], Rt_Offerings::$offering_slug );
 				if ( $term ) {
 					wp_set_post_terms( $rt_hd_tickets_id, array( $term->term_id ), Rt_Offerings::$offering_slug );
-				}
-			}
-
-			// Created attachment
-			if ( $_FILES ) {
-				$files = $_FILES['attachment'];
-				foreach ( $files['name'] as $key => $value ) {
-					if ( $files['name'][ $key ] ) {
-						$file = array(
-							'name'     => $files['name'][ $key ],
-							'type'     => $files['type'][ $key ],
-							'tmp_name' => $files['tmp_name'][ $key ],
-							'error'    => $files['error'][ $key ],
-							'size'     => $files['size'][ $key ],
-						);
-
-						$_FILES = array( 'upload_attachment' => $file );
-
-						foreach ( $_FILES as $file => $array ) {
-							$attach_id              = self::insert_attachment( $file, $rt_hd_tickets_id );
-							$filepath               = get_attached_file( $attach_id );
-							$post_attachment_hashes = get_post_meta( $rt_hd_tickets_id, '_rtbiz_hd_attachment_hash' );
-							if ( ! empty( $post_attachment_hashes ) && ! in_array( md5_file( $filepath ), $post_attachment_hashes ) ) {
-								add_post_meta( $attach_id, '_wp_attached_file', $filepath );
-								add_post_meta( $rt_hd_tickets_id, '_rtbiz_hd_attachment_hash', md5_file( $filepath ) );
-							}
-						}
-					}
 				}
 			}
 
@@ -419,22 +412,29 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 		 *
 		 * @return int| WP_Error
 		 */
-		static function insert_attachment( $file_handler, $post_id ) {
+		static function insert_attachment( $file_handler ) {
 			global $rt_hd_admin;
 			// check to make sure its a successful upload
 			if ( $_FILES[ $file_handler ]['error'] !== UPLOAD_ERR_OK ) {
-				__return_false();
+				__return_empty_array();
 			}
 
-			require_once( ABSPATH . 'wp-admin' . '/includes/image.php' );
-			require_once( ABSPATH . 'wp-admin' . '/includes/file.php' );
-			require_once( ABSPATH . 'wp-admin' . '/includes/media.php' );
-
 			add_filter( 'upload_dir', array( $rt_hd_admin, 'custom_upload_dir' ) );//added hook for add addon specific folder for attachment
-			$attach_id = media_handle_upload( $file_handler, $post_id );
+			$uploaded = wp_upload_bits( $file_handler['name'], null, file_get_contents( $file_handler['tmp_name'] ) );
 			remove_filter( 'upload_dir', array( $rt_hd_admin, 'custom_upload_dir' ) );//remove hook for add addon specific folder for attachment
 
-			return $attach_id;
+			$file = array();
+			if ( false == $uploaded['error'] ) {
+				$extn_array            = explode( '.', $file_handler['name'] );
+				$extn                  = $extn_array[ count( $extn_array ) - 1 ];
+				$file['file']          = $uploaded['file'];
+				$file['url']           = $uploaded['url'];
+				$file['filename']      = $file_handler['name'];
+				$file['extn']          = $extn;
+				$file['type']          = $file_handler['type'];
+			}
+
+			return $file;
 		}
 
 

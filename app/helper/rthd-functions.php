@@ -529,6 +529,13 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 			if ( $staffonly ){
 				$display_private_comment_flag = true;
 			}
+			else {
+				ob_end_flush();
+				if ( ! $echo ) {
+					return '';
+				}
+				return;
+			}
 			$private_text = 'Staff only';
 			$is_comment_private = true;
 			break;
@@ -933,5 +940,9 @@ function rthd_get_attachment_url_from_followups( $postid ){
 
 function rthd_get_general_body_template( $body ){
 	$date = strtotime( current_time( 'mysql', 1 ) );
-	return '<div style="border: 1px solid #DFE9f2;padding: 20px;background: #f1f6fa;">' . rthd_content_filter( $body ) . '<div style="float: right;color: gray;">' . date( 'D, M, d, Y, H:i', $date ) . '</div></div>';
+	return '<div style="border: 1px solid #DFE9f2;padding: 20px;background: #f1f6fa;">' . rthd_content_filter( $body ) . '<br/><div style="float: right;color: gray;">' . date( 'D, M, d, Y, H:i', $date ) . '</div></div>';
+}
+
+function rthd_update_ticket_updated_by_user( $post_id, $user_id ){
+	update_post_meta( $post_id, '_rtbiz_hd_updated_by',$user_id );
 }

@@ -63,8 +63,27 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			add_action( 'wp_ajax_rthd_add_new_ticket_ajax', array( $this, 'add_new_ticket_ajax' ) );
 			add_action( 'wp_ajax_nopriv_rthd_add_new_ticket_ajax', array( $this, 'add_new_ticket_ajax' ) );
 			add_action( 'read_rt_mailbox_email_'.RT_HD_TEXT_DOMAIN, array( $this, 'process_email_to_ticket' ), 10, 16 );
+			add_action( 'wp_ajax_ticket_bulk_edit', array( $this, 'ticket_bulk_edit' ) );
 			add_action( 'wp_ajax_front_end_status_change', array( $this, 'front_end_status_change' ) );
-			add_action( 'wp_ajax_front_end_status_change', array( $this, 'front_end_status_change' ) );
+		}
+
+		function ticket_bulk_edit(){
+			$post_ids = ( isset( $_POST[ 'post_ids' ] ) && !empty( $_POST[ 'post_ids' ] ) ) ? $_POST[ 'post_ids' ] : array();
+			$status = ( isset( $_POST[ 'ticket_status' ] ) && ! empty( $_POST[ 'ticket_status' ] ) ) ? $_POST[ 'ticket_status' ] : NULL;
+			if ( ! empty( $post_ids ) && is_array( $post_ids ) && ! empty( $status ) ) {
+				global $rt_hd_module;
+				$labels = $rt_hd_module->labels;
+				foreach( $post_ids as $post_id ) {
+					rthd_update_ticket_updated_by_user( $post_id, get_current_user_id() );
+					$old = get_post_status( $post_id );
+					if ( $old == $status ){
+						die();
+					}
+					global $rt_hd_email_notification;
+					$body = $labels['name'].' Status '.rthd_status_markup( $old ).' changed to '.rthd_status_markup( $status );
+					$rt_hd_email_notification->notification_ticket_updated( $post_id, $labels['name'], $body, array() );
+				}
+			}
 		}
 
 		function add_new_ticket_ajax(){
@@ -223,10 +242,10 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				 * Hence pass $email_parse flag based on that.
 				 * $email_parse = ! empty( $originalBody )
 				 */
-				$rt_hd_email_notification->notification_new_ticket_assigned( $post_id, $settings['rthd_default_user'], $labels['name'], $allemail, $uploaded, $email_parse = ! empty( $originalBody ) );
+				//$rt_hd_email_notification->notification_new_ticket_assigned( $post_id, $settings['rthd_default_user'], $labels['name'], $allemail, $uploaded, $email_parse = ! empty( $originalBody ) );
 			}
 
-			$rt_hd_email_notification->ticket_created_notification( $post_id,$labels['name'], $body, $allemail, $uploaded );
+			$rt_hd_email_notification->notification_new_ticket_created( $post_id,$labels['name'], $body, $allemail, $uploaded );
 
 			return $post_id;
 		}
@@ -1230,7 +1249,12 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$body = '<strong>New Followup Added ' . ( ( ! empty( $currentUser->display_name ) ) ? 'by ' . $currentUser->display_name : 'annonymously' ) . ':</strong>';
 				$body .= rthd_content_filter( $comment->comment_content );
 			}
-			//			$body .= '<br/>';
+			if ( get_current_user_id() == get_post_meta( $comment_post_ID, '_rtbiz_hd_created_by', true ) ) {
+				$body = '<br /> New follow up is added by <strong>you</strong>.';
+				$body .= rthd_content_filter( $comment->comment_content );
+				$this->notify_subscriber_via_email( $comment_post_ID, $title, rthd_get_general_body_template( $body ), $uploaded, $comment_ID, false, true, false );
+				$contactFlag = false;
+			}
 			$notificationFlag = $this->check_setting_for_new_followup_email();
 			$this->notify_subscriber_via_email( $comment_post_ID, $title, rthd_get_general_body_template( $body ), $uploaded, $comment_ID, $notificationFlag, $contactFlag );
 
@@ -1362,8 +1386,9 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$currentUser = get_user_by( 'id', get_current_user_id() );
 				$subject       = rthd_create_new_ticket_title( 'rthd_update_followup_email_title', $comment_post_ID );
 
-				$body = '<div> A Follwup Updated by ' . $currentUser->display_name. '</div> <br/>';
-				$body .= '<div> The changes are as follows: </div><br/>';
+				$updatedbybody = '<div> A Follwup Updated by ' . $currentUser->display_name. '</div> <br/>';
+				$creatorbody = '<div> A follow is updated by you</div> <br />';
+				$body = '<div> The changes are as follows: </div><br/>';
 
 				$flag = false;
 
@@ -1396,9 +1421,13 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					$body_template .= '<br/> ';
 				}
 				if ( $flag ) {
+					if ( get_current_user_id() == get_post_meta( $comment_post_ID, '_rtbiz_hd_created_by', true ) ) {
+						$contactbody = $creatorbody . $body. rthd_get_general_body_template( $body_template );
+						$this->notify_subscriber_via_email( $comment_post_ID, $subject, $contactbody, $attachment, $_POST['comment_id'],false, true, false );
+					}
 					$redux = rthd_get_redux_settings();
 					$notificationFlag = ( $redux['rthd_notification_events']['followup_edited'] == 1 );
-					$body = $body. rthd_get_general_body_template( $body_template );
+					$body = $updatedbybody . $body. rthd_get_general_body_template( $body_template );
 					$this->notify_subscriber_via_email( $comment_post_ID, $subject, $body, $attachment, $_POST['comment_id'],$notificationFlag, false );
 				}
 
@@ -1631,17 +1660,21 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 * @param       $notificationFlag
 		 * @param       $contactFlag
 		 *
+		 * @param bool  $subscriberFlag
+		 *
 		 * @internal param $title
 		 * @since rt-Helpdesk 0.1
 		 */
-		function notify_subscriber_via_email( $post_id, $subject, $body, $attachment = array(), $comment_id, $notificationFlag, $contactFlag ) {
-			$oldSubscriberArr = get_post_meta( $post_id, '_rtbiz_hd_subscribe_to', true );
+		function notify_subscriber_via_email( $post_id, $subject, $body, $attachment = array(), $comment_id, $notificationFlag, $contactFlag, $subscriberFlag = true ) {
 			$bccemails        = array();
-			if ( $oldSubscriberArr && is_array( $oldSubscriberArr ) && ! empty( $oldSubscriberArr ) ) {
-				foreach ( $oldSubscriberArr as $emailsubscriber ) {
-					$userSub     = get_user_by( 'id', intval( $emailsubscriber ) );
-					if ( ! empty( $userSub ) ) {
-						$bccemails[] = array( 'email' => $userSub->user_email, 'name' => $userSub->display_name );
+			if ( $subscriberFlag ){
+				$oldSubscriberArr = get_post_meta( $post_id, '_rtbiz_hd_subscribe_to', true );
+				if ( $oldSubscriberArr && is_array( $oldSubscriberArr ) && ! empty( $oldSubscriberArr ) ) {
+					foreach ( $oldSubscriberArr as $emailsubscriber ) {
+						$userSub     = get_user_by( 'id', intval( $emailsubscriber ) );
+						if ( ! empty( $userSub ) ) {
+							$bccemails[] = array( 'email' => $userSub->user_email, 'name' => $userSub->display_name );
+						}
 					}
 				}
 			}
@@ -1847,6 +1880,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$response = array();
 			$response['status']= false;
 			$post_id = $_POST['post_id'];
+			$old = get_post_status( $post_id );
 			$post_status = $_POST['post_status'];
 			if ( $post_id ){
 				$ticket = array( 'ID' => $post_id,
@@ -1855,6 +1889,12 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			}
 			$response['stauts_markup']= rthd_status_markup( $post_status );
 			$response['status']= true;
+			global $rt_hd_module;
+			$labels = $rt_hd_module->labels;
+			rthd_update_ticket_updated_by_user( $post_id, get_current_user_id() );
+			global $rt_hd_email_notification;
+			$body = $labels['name'].' Status '.rthd_status_markup( $old ).' changed to '.rthd_status_markup( $post_status );
+			$rt_hd_email_notification->notification_ticket_updated( $post_id, $labels['name'], $body, array() );
 			echo json_encode($response);
 			die();
 		}
