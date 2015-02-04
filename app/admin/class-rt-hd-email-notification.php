@@ -205,12 +205,12 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			if ( isset( $allemail ) && ! empty( $allemail ) ) {
 				foreach ( $allemail as $email ) {
 					if ( is_email( $email['address'] ) ) {
-						if ( $email['address'] != $assigne_user->user_email ){ // check it's assignee email
-							if ( ! $this->is_internal_user( $email['address'] ) ){
-								$creatorEmail[] = array( 'email' => $email['address'], 'name' => $email['name'] );
-							}
-							else{
-								$groupEmail[] = array( 'email' => $email['address'], 'name' => $email['name'] );
+						if ( ! $this->is_internal_user( $email['address'] ) ){
+							$creatorEmail[] = array( 'email' => $email['address'], 'name' => $email['name'] );
+						}
+						else{
+							if ( $email['address'] != $assigne_user->user_email ) { // check it's assignee email
+								$groupEmail[ ] = array( 'email' => $email[ 'address' ], 'name' => $email[ 'name' ] );
 							}
 						}
 					}
@@ -234,7 +234,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			}
 			// Group Notification
 			if ( ! empty( $groupEmail ) ){
-				$htmlbody = 'A new support ticket is created by <strong>' . $ticket_created_by->display_name.'</strong>';
+				$htmlbody = 'A new support ticket created by <strong>' . $ticket_created_by->display_name.'</strong>';
 				$htmlbody .= '<br/>Ticket Assigned to: <strong>' . $assigne_user->display_name.'</strong>';
 				//$htmlbody .= '<br/>Product: ' . $arrProducts . '<br/><br/>';
 				if ( isset( $body ) && !empty( $body ) ){
@@ -246,9 +246,8 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 
 			// Assignee Notification
 			if ( ! empty( $assigneEmail ) ){
-				$htmlbody = 'A new support ticket is created by <strong>' . $ticket_created_by->display_name.'</strong> is assigned to you';
+				$htmlbody = 'A new support ticket created by <strong>' . $ticket_created_by->display_name.'</strong> is assigned to you';
 				//$htmlbody .= '<br/>Product: ' . $arrProducts . '<br/><br/><hr/>';
-				$htmlbody .= '<hr style="color: #DCEAF5;" /><div>' . rthd_content_filter( $body ) . '</div>';
 				if ( isset( $body ) && !empty( $body ) ){
 					$htmlbody .= '<hr style="color: #DCEAF5;" /><div>' . rthd_content_filter( $body ) . '</div>';
 				}
@@ -258,7 +257,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			// Subscrible Notification
 			if ( ! empty( $subscriberEmail ) ){
 				//A new support ticket is created by [CREATOR CONTACT NAME]. You have been subscribed to this ticket.
-				$htmlbody = 'A new support ticket is created by <strong>' . $ticket_created_by->display_name.'</strong>. You have been subscribed to this ticket.<br/>';
+				$htmlbody = 'A new support ticket created by <strong>' . $ticket_created_by->display_name.'</strong>. You have been subscribed to this ticket.<br/>';
 				$htmlbody .= '<hr style="color: #DCEAF5;" /><div>' . rthd_content_filter( $body ) . '</div>';
 				if ( isset( $body ) && !empty( $body ) ){
 					$htmlbody .= '<hr style="color: #DCEAF5;" /><div>' . rthd_content_filter( $body ) . '</div>';
@@ -468,7 +467,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$title = $this->get_email_title( $post_id, $post_type );
 			$user = get_post_meta( $post_id, '_rtbiz_hd_updated_by', true );
 			$ticket_update_user = get_user_by( 'id', $user );
-			$body = '<br />' . 'Ticket updated by : <a target="_blank" href="">' . $ticket_update_user->display_name . '</a>'. $body;
+			$body = '<br />' . 'Ticket updated by : <strong>' . $ticket_update_user->display_name . '</strong>'. $body;
 			$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $body ) , $to, array(), array_unique( $bccemails ), array(), $post_id, 'post' );
 		}
 
