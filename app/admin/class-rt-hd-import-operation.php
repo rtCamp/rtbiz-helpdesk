@@ -812,6 +812,23 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			);
 			$ticketModel->update_ticket( $data, $where );
 			/* System Notification -- Followup Added to the ticket */
+			
+			/* Toggle Ticket Status */
+			global $rt_hd_email_notification;
+			$post = get_post( $comment_post_ID );
+			
+			if ( $rt_hd_email_notification->is_internal_user( $comment_author_email ) ) {
+				
+				if ( $post->post_status != 'hd-answered' ){
+					wp_update_post( array( 'ID'=>$comment_post_ID ,'post_status'=>'hd-answered') );
+				}
+			}
+			else {
+				if ( $post->post_status != 'hd-unanswered' ){
+					wp_update_post( array( 'ID'=>$comment_post_ID ,'post_status'=>'hd-unanswered') );
+				}
+			}
+			/* end of status toogle code */
 
 			if ( isset( $rt_all_emails  ) ) {
 				foreach ( $rt_all_emails  as $email ) {
