@@ -1282,6 +1282,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					$creatorbody .= rthd_content_filter( $comment->comment_content );
 				} else {
 					$creatorbody = '<br /> A private followup has been added by <strong> you<strong>. Please go to ticket to view content.';
+					$uploaded = array();
 				}
 				$this->notify_subscriber_via_email( $comment_post_ID, $title, rthd_get_general_body_template( $creatorbody ), $uploaded, $comment_ID, false, true, false, false );
 				$contactFlag = false;
