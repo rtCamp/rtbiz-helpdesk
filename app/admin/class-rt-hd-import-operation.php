@@ -1304,7 +1304,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					$comment_render_type = 'right';
 				}
 			}
-			$user_edit = current_user_can( $cap ) || (get_current_user_id() == $comment->user_id );
+			$user_edit = current_user_can( $cap ) || ( get_current_user_id() == $comment->user_id ) || ( get_current_user_id() == get_post_meta( $comment_post_ID, '_rtbiz_hd_created_by' ,true ) );
 			$returnArray['comment_content'] = rthd_render_comment( get_comment( $comment_ID ), $user_edit, $comment_render_type, false );
 			echo json_encode( $returnArray );
 			ob_end_flush();
@@ -1429,19 +1429,20 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				}
 				$body_template = '';
 				$diff = rthd_text_diff( $old_privacy_text, $new_privacy );
-				if ( $diff ) {
-					$body_template .= '<br/><b>Visibility : </b>' . $diff;
+				$diff_content = rthd_text_diff( trim( html_entity_decode( strip_tags( $oldCommentBody ) ) ), trim( html_entity_decode( strip_tags( $commentdata[ 'comment_content' ] ) ) ) );
+				if ( $diff || $diff_content ) {
+					if ( $diff ) {
+						$body_template .= '<br/><b>Visibility : </b>' . $diff;
+					}
 					$flag = true;
 				}
-
 				if ( 'true' == $old_privacy || 'true' == $comment_privacy ){
 					$body_template .= '<br /> A <strong>private</strong> followup has been edited. Please go to link and login to view the message.';
 				}
 				else {
-					$diff = rthd_text_diff( trim( html_entity_decode( strip_tags( $oldCommentBody ) ) ), trim( html_entity_decode( strip_tags( $commentdata[ 'comment_content' ] ) ) ) );
-					if ( $diff ) {
+					if ( $diff || $diff_content ) {
 						$flag = true;
-						$body_template .= '<br/><b>Followup Content : </b>' . $diff;
+						$body_template .= '<br/><b>Followup Content : </b>' . $diff_content;
 					} else {
 						$body_template .= '<br/><b>Followup Content : </b>' . rthd_content_filter( $comment->comment_content );
 					}
@@ -1476,7 +1477,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					}
 				}
 				clean_comment_cache( $comment->comment_ID  );
-				$user_edit = current_user_can( $cap ) || ( get_current_user_id() == $comment->user_id );
+				$user_edit = current_user_can( $cap ) || ( get_current_user_id() == $comment->user_id ) || ( get_current_user_id() == get_post_meta( $comment_post_ID, '_rtbiz_hd_created_by' ,true ) );
 				$returnArray['comment_content'] = rthd_render_comment( get_comment( $comment->comment_ID ), $user_edit, $comment_render_type, false );
 				echo json_encode( $returnArray );
 				die( 0 );
@@ -1891,7 +1892,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					}
 				}
 				$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
-				$user_edit = current_user_can( $cap ) || (get_current_user_id() == $comment->user_id );
+				$user_edit = current_user_can( $cap ) || ( get_current_user_id() == $comment->user_id ) || ( get_current_user_id() == get_post_meta( $postid, '_rtbiz_hd_created_by' ,true ) );
 				$commenthtml .= rthd_render_comment( $comment, $user_edit, $comment_render_type, false );
 				$count++;
 			}

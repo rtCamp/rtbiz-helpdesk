@@ -58,7 +58,7 @@ jQuery(function () {
 			    }
 			    jQuery('#new-followup-form' ).hide();
 			    jQuery(document).scrollTop( ( jQuery('#edit-ticket-data').offset().top ) - 50 );
-			    rthd_tinymce_set_content( 'editedticketcontent', jQuery(this).closest('.ticketcontent').find('.rthd-comment-content' ).data('content') );
+			    rthdAdmin.rthd_tinymce_set_content( 'editedticketcontent', jQuery(this).closest('.ticketcontent').find('.rthd-comment-content' ).data('content') );
 		    });
 		    jQuery('.close-edit-content' ).click(function(e){
 			    e.preventDefault();
@@ -285,7 +285,7 @@ jQuery(function () {
 		    jQuery( document ).on('click', '.editfollowuplink',function(e){
 			    e.preventDefault();
 			    var select =jQuery(this ).parents();
-			    rthd_tinymce_set_content( 'editedfollowupcontent', jQuery(this).parents().siblings('.rthd-comment-content').data('content'));
+			    rthdAdmin.rthd_tinymce_set_content( 'editedfollowupcontent', jQuery(this).parents().siblings('.rthd-comment-content').data('content'));
 			    commentid=select.siblings('#followup-id' ).val();
 			    var that = select.siblings( '#is-private-comment' ).val();
                  jQuery('#edit-private' ).val(that);
