@@ -863,7 +863,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				if ( $user->ID == get_post_meta( $comment_post_ID, '_rtbiz_hd_created_by', true ) ){
 					$creatorBody = '<br/>New Followup Added by <strong>You</strong>';
 					$creatorBody .=  rthd_content_filter( $comment_content );
-					$this->notify_subscriber_via_email( $comment_post_ID, $title, rthd_get_general_body_template( $creatorBody ), wp_list_pluck( $uploaded, 'url' ), $comment_id, false, true );
+					$this->notify_subscriber_via_email( $comment_post_ID, $title, rthd_get_general_body_template( $creatorBody ), wp_list_pluck( $uploaded, 'url' ), $comment_id, false, true, false, false );
 					$contactFlag = false;
 				}
 				$body  = '<br/>New Followup Added by <strong>' . $comment_author .'</strong>';
@@ -1274,7 +1274,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			if ( get_current_user_id() == get_post_meta( $comment_post_ID, '_rtbiz_hd_created_by', true ) ) {
 				$creatorbody = '<br /> New follow up is added by <strong>you</strong>.';
 				$creatorbody .= rthd_content_filter( $comment->comment_content );
-				$this->notify_subscriber_via_email( $comment_post_ID, $title, rthd_get_general_body_template( $creatorbody ), $uploaded, $comment_ID, false, true, false );
+				$this->notify_subscriber_via_email( $comment_post_ID, $title, rthd_get_general_body_template( $creatorbody ), $uploaded, $comment_ID, false, true, false, false );
 				$contactFlag = false;
 			}
 			$notificationFlag = $this->check_setting_for_new_followup_email();
@@ -1445,7 +1445,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				if ( $flag ) {
 					if ( get_current_user_id() == get_post_meta( $comment_post_ID, '_rtbiz_hd_created_by', true ) ) {
 						$contactbody = $creatorbody . $body. rthd_get_general_body_template( $body_template );
-						$this->notify_subscriber_via_email( $comment_post_ID, $subject, $contactbody, $attachment, $_POST['comment_id'],false, true, false );
+						$this->notify_subscriber_via_email( $comment_post_ID, $subject, $contactbody, $attachment, $_POST['comment_id'],false, true, false, false );
 					}
 					$redux = rthd_get_redux_settings();
 					$notificationFlag = ( $redux['rthd_notification_events']['followup_edited'] == 1 );
@@ -1687,15 +1687,17 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 * @internal param $title
 		 * @since rt-Helpdesk 0.1
 		 */
-		function notify_subscriber_via_email( $post_id, $subject, $body, $attachment = array(), $comment_id, $notificationFlag, $contactFlag, $subscriberFlag = true ) {
-			$bccemails        = array();
-			if ( $subscriberFlag ){
+		function notify_subscriber_via_email( $post_id, $subject, $body, $attachment = array(), $comment_id, $notificationFlag, $contactFlag, $subscriberFlag = true, $assigneeFlag = true ) {
+			$bccemails     = array();
+			$sendEmailFlag = false;
+			if ( $subscriberFlag ) {
 				$oldSubscriberArr = get_post_meta( $post_id, '_rtbiz_hd_subscribe_to', true );
 				if ( $oldSubscriberArr && is_array( $oldSubscriberArr ) && ! empty( $oldSubscriberArr ) ) {
 					foreach ( $oldSubscriberArr as $emailsubscriber ) {
-						$userSub     = get_user_by( 'id', intval( $emailsubscriber ) );
+						$userSub = get_user_by( 'id', intval( $emailsubscriber ) );
 						if ( ! empty( $userSub ) ) {
-							$bccemails[] = array( 'email' => $userSub->user_email, 'name' => $userSub->display_name );
+							$bccemails[ ]  = array( 'email' => $userSub->user_email, 'name' => $userSub->display_name );
+							$sendEmailFlag = true;
 						}
 					}
 				}
@@ -1717,7 +1719,6 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 				$title     = $rt_hd_email_notification->get_email_title( $post_id, $labels['name'] );
 				$rt_hd_email_notification->insert_new_send_email( $subject, $title, $body, $tocontact, array(), array(), $attachment, $comment_id, 'comment', true );
-
 			}
 
 			//			$cc = array();
@@ -1725,17 +1726,22 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				if ( isset( $redux_helpdesk_settings['rthd_notification_emails'] ) ) {
 					foreach ( $redux_helpdesk_settings['rthd_notification_emails'] as $email ) {
 						array_push( $bccemails, array( 'email' => $email ) );
+						$sendEmailFlag = true;
 					}
 				}
 			}
-			$post_author_id = get_post_field( 'post_author', $post_id );
-			$userSub     = get_user_by( 'id', intval( $post_author_id ) );
-			global $rt_hd_module;
-			$labels = $rt_hd_module->labels;
-			$to[] = array( 'email' => $userSub->user_email, 'name' => $userSub->display_name );
-			$title = $rt_hd_email_notification->get_email_title( $post_id, $labels['name'] ); ;
-
-			$rt_hd_email_notification->insert_new_send_email( $subject, $title, $body, $to, array(), $bccemails, $attachment, $comment_id, 'comment', true );
+			if ( $assigneeFlag ){
+				$post_author_id = get_post_field( 'post_author', $post_id );
+				$userSub     = get_user_by( 'id', intval( $post_author_id ) );
+				$to[] = array( 'email' => $userSub->user_email, 'name' => $userSub->display_name );
+				$sendEmailFlag = true;
+			}
+			if ( $sendEmailFlag ){
+				global $rt_hd_module;
+				$labels = $rt_hd_module->labels;
+				$title = $rt_hd_email_notification->get_email_title( $post_id, $labels['name'] );
+				$rt_hd_email_notification->insert_new_send_email( $subject, $title, $body, $to, array(), $bccemails, $attachment, $comment_id, 'comment', true );
+			}
 		}
 
 		/**
@@ -1759,7 +1765,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$comment_post_ID = $_POST['post_id'];
 
 			$title           = rthd_create_new_ticket_title( 'rthd_delete_followup_email_title', $comment_post_ID );
-			$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, array(), $_POST['comment_id'], $notificationFlag, false );
+			$this->notify_subscriber_via_email( $comment_post_ID, $title, $body, array(), $_POST['comment_id'], $notificationFlag, false, true, true );
 			echo json_encode( $response );
 			die( 0 );
 		}
