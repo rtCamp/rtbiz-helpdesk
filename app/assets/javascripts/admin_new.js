@@ -308,7 +308,7 @@ jQuery(function () {
 				    return false;
 			    }
 			    if (content.replace(/\s+/g, " ") === jQuery('#comment-'+commentid ).find('.rthd-comment-content' ).data('content') ){
-				    alert('You have not edited comment! :/');
+				    alert('You have not edited comment!');
 				    return false;
 			    }
 			    jQuery('#edithdspinner' ).show();

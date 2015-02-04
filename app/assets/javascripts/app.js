@@ -187,7 +187,7 @@ jQuery( document ).ready( function ( $ ) {
 			return false;
 		}
 		if (content === jQuery('#comment-'+commentid ).find('.rthd-comment-content' ).data('content') ){
-			alert('You have not edited comment! :/');
+			alert('You have not edited comment!');
 			return false;
 		}
 		jQuery('#edithdspinner' ).show();
@@ -249,7 +249,7 @@ jQuery( document ).ready( function ( $ ) {
 			return false;
 		};
 		if ( ! rthd_tinymce_get_content( 'followupcontent' ) ) {
-			alert( "Please input followup :/" );
+			alert( "Please input followup." );
 			jQuery( '#hdspinner' ).hide();
 			jQuery(this).removeAttr('disabled');
 			return false;
