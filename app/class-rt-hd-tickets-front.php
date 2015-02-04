@@ -41,6 +41,8 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 
 			add_filter( 'template_include', array( $this, 'template_include' ), 1, 1 );
 			add_filter( 'wp_title', array( $this, 'change_title' ), 9999, 1 );
+			
+			add_action( 'rthd_ticket_front_page_after_header', array( $this, 'set_rthd_ticket_post_data' ) );
 		}
 
 		function show_original_email(){
@@ -118,7 +120,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 		 */
 		function template_include( $template ) {
 			global $wp_query, $post, $rtbiz_helpdesk_template, $rt_hd_module;
-
+			$wrong_unique_id = false;
 			if ( empty( $wp_query->query_vars['post_type'] ) || $wp_query->query_vars['post_type'] != Rt_HD_Module::$post_type ) {
 				return $template;
 			}
@@ -140,10 +142,18 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 					$post = $ticket;
 					setup_postdata( $post );
 				}
+				else {
+					$wrong_unique_id = true;
+				}
+			}
+			else if( is_archive('ticket') ) {
+				$wrong_unique_id = true;
 			}
 
-			if ( empty( $post ) ) {
-				return $template;
+			if ( empty( $post ) || $wrong_unique_id ) {
+				$wp_query->is_404 = true;
+				$wp_query->set_404();
+				return get_404_template();
 			}
 
 			$rtbiz_helpdesk_template = true;
@@ -165,7 +175,34 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 
 			return rthd_locate_template( 'ticket-front-page.php' );
 		}
-
+		
+		/**
+		 * Set rthd ticket data.
+		 */
+		function set_rthd_ticket_post_data() {
+			global $post;
+		
+			if ( rthd_is_unique_hash_enabled() && ! empty( $_REQUEST['rthd_unique_id'] ) ) {
+				$args = array(
+						'meta_key'    => '_rtbiz_hd_unique_id',
+						'meta_value'  => $_REQUEST['rthd_unique_id'],
+						'post_status' => 'any',
+						'post_type'   => Rt_HD_Module::$post_type,
+				);
+		
+				$ticketpost = get_posts( $args );
+				if ( ! empty( $ticketpost ) ) {
+					$ticket = $ticketpost[0];
+					$post = $ticket;
+				}
+				else {
+					$post = null;
+				}
+			}
+			else {
+				$post = null;
+			}
+		}
 	}
 
 }
