@@ -1429,19 +1429,20 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				}
 				$body_template = '';
 				$diff = rthd_text_diff( $old_privacy_text, $new_privacy );
-				if ( $diff ) {
-					$body_template .= '<br/><b>Visibility : </b>' . $diff;
+				$diff_content = rthd_text_diff( trim( html_entity_decode( strip_tags( $oldCommentBody ) ) ), trim( html_entity_decode( strip_tags( $commentdata[ 'comment_content' ] ) ) ) );
+				if ( $diff || $diff_content ) {
+					if ( $diff ) {
+						$body_template .= '<br/><b>Visibility : </b>' . $diff;
+					}
 					$flag = true;
 				}
-
 				if ( 'true' == $old_privacy || 'true' == $comment_privacy ){
 					$body_template .= '<br /> A <strong>private</strong> followup has been edited. Please go to link and login to view the message.';
 				}
 				else {
-					$diff = rthd_text_diff( trim( html_entity_decode( strip_tags( $oldCommentBody ) ) ), trim( html_entity_decode( strip_tags( $commentdata[ 'comment_content' ] ) ) ) );
-					if ( $diff ) {
+					if ( $diff || $diff_content ) {
 						$flag = true;
-						$body_template .= '<br/><b>Followup Content : </b>' . $diff;
+						$body_template .= '<br/><b>Followup Content : </b>' . $diff_content;
 					} else {
 						$body_template .= '<br/><b>Followup Content : </b>' . rthd_content_filter( $comment->comment_content );
 					}
