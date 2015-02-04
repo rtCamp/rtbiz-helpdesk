@@ -59,9 +59,8 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 			$rt_ticket_email_content = array();
 
 			$oldpost   = get_post( $post_id );
-			$newTicket = ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] = 'inline-save' ) ? get_post( $_REQUEST['post_ID'] ) : $_POST['post'];
-			$newTicket = ( array ) $newTicket;
-
+			$newTicket = ( isset( $_POST['post'] ) && ! empty( $_POST['post'] ) ) ? $_POST['post'] : ( ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] = 'inline-save' ) ? get_post( $_REQUEST['post_ID'] ) : null );
+			$newTicket = (array) $newTicket;
 			$emailHTML = $diff = '';
 
 			// Title Diff
