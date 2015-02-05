@@ -72,6 +72,9 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$toemail = $this->filter_user_notification_preference( $toemail );
 			$ccemail = $this->filter_user_notification_preference( $ccemail );
 			$bccemail = $this->filter_user_notification_preference( $bccemail );
+			if ( $this->is_array_empty( $toemail ) && $this->is_array_empty( $ccemail ) && $this->is_array_empty( $bccemail ) ){  // check if all emails are empty do not send email
+				return false;
+			}
 			$signature = rthd_get_email_signature_settings();
 			$args = array(
 				'user_id'       => $user_id,
