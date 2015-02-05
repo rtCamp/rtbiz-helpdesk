@@ -1704,6 +1704,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		function delete_followup_ajax() {
+			global $rt_hd_email_notification;
 			$response = array();
 			if ( ! isset( $_POST['comment_id'] ) ) {
 				die( 0 );
@@ -1719,16 +1720,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				}
 			}
 			$response['status'] = wp_delete_comment( $_POST['comment_id'], true );
-			$redux = rthd_get_redux_settings();
-			$notificationFlag = ( $redux['rthd_notification_events']['followup_deleted'] == 1 );
-			$currentUser      = get_user_by( 'id', get_current_user_id() );
-			$body             = 'A Follwup is deleted by <b>' . $currentUser->display_name .'</b>';
-			$body .= '<br/>'. $comment->comment_content ;
-			$body .= '<br/> ';
-			$comment_post_ID = $_POST['post_id'];
-
-			$title           = rthd_create_new_ticket_title( 'rthd_delete_followup_email_title', $comment_post_ID );
-			$this->notify_subscriber_via_email( $comment_post_ID, $title, rthd_get_general_body_template( $body ), array(), $_POST['comment_id'], $notificationFlag, false, true, true );
+			$rt_hd_email_notification->notification_followup_deleted( $comment, get_current_user_id() );
 			echo json_encode( $response );
 			die( 0 );
 		}

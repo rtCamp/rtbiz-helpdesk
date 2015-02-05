@@ -238,19 +238,52 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		}
 
 
-		function is_array_empty($InputVariable)
-		{
+		public function notification_followup_deleted( $comment, $user_id ){
+			$User       = get_user_by( 'id', $user_id );
+			$bccemails  = array();
+			$body  = 'A Follwup is deleted by <Strong>{comment_author}</Strong>';
+			if ( ! ( isset( $comment->comment_type ) && ! empty( $comment->comment_type ) && intval( $comment->comment_type ) && $comment->comment_type > Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC  ) ) {
+				$body .= '<hr style="color: #DCEAF5;" /><div>' . rthd_content_filter( $comment->comment_content ) . '</div>';
+			}
+			$redux = rthd_get_redux_settings();
+			$notificationFlag = ( $redux['rthd_notification_events']['followup_deleted'] == 1 );
+			if ( $notificationFlag ) {
+				if ( isset( $redux['rthd_notification_emails'] ) ) {
+					foreach ( $redux['rthd_notification_emails'] as $email ) {
+						array_push( $bccemails, array( 'email' => $email ) );
+					}
+				}
+			}
+			$subscriber = $this->get_subscriber( $comment->comment_post_ID );
+			array_push( $bccemails, $subscriber );
+
+			$subject = rthd_create_new_ticket_title( 'rthd_new_followup_email_title', $comment->comment_post_ID );
+			global $rt_hd_module;
+			$labels = $rt_hd_module->labels;
+			$title = $this->get_email_title( $comment->comment_post_ID, $labels['name'] );
+			$assignee_email = array();
+			$assignee_email[] = $this->get_assigne_email( $comment->comment_post_ID );
+			$assignee_email = $this->exclude_author( $assignee_email, $User->user_email );
+
+			if ( user_can( $User, rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' ) ) ){
+				$bodyto = rthd_replace_followup_placeholder( $body, 'you' );
+				$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $bodyto ), array( array( 'email' => $User->user_email ) ), array(), array(), array(), $comment->comment_ID , 'comment', true );
+			}
+
+			$bodyto = rthd_replace_followup_placeholder( $body, $User->display_name );
+			$bccemails = $this->exclude_author( $bccemails, $User->user_email );
+			$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $bodyto ), $assignee_email, array(), $bccemails, array(), $comment->comment_ID , 'comment', true );
+		}
+
+		function is_array_empty( $InputVariable ) {
 			$Result = true;
 
-			if (is_array($InputVariable) && count($InputVariable) > 0)
-			{
-				foreach ($InputVariable as $Value)
-				{
+			if ( is_array( $InputVariable ) && count( $InputVariable ) > 0 ) {
+				foreach ($InputVariable as $Value) {
 					$Result = $Result && $this->is_array_empty($Value);
 				}
 			}
-			else
-			{
+			else {
 				$Result = empty($InputVariable);
 			}
 
