@@ -224,7 +224,29 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			// sending email to subscriber, assignee, global list and exclude if it is follow up author
 			$bccemails[] = $this->get_assigne_email( $comment->comment_post_ID );
 			$bccemails = $this->exclude_author( $bccemails, $comment->comment_author_email );
-			$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $toBody ), $toemails , array(), $bccemails, $uploaded, $comment->comment_ID , 'comment', true );
+			if ( ! $this->is_array_empty( $bccemails ) || ! $this->is_array_empty( $toemails ) ){ // check array is not empty
+				$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $toBody ), $toemails , array(), $bccemails, $uploaded, $comment->comment_ID , 'comment', true );
+			}
+		}
+
+
+		function is_array_empty($InputVariable)
+		{
+			$Result = true;
+
+			if (is_array($InputVariable) && count($InputVariable) > 0)
+			{
+				foreach ($InputVariable as $Value)
+				{
+					$Result = $Result && $this->is_array_empty($Value);
+				}
+			}
+			else
+			{
+				$Result = empty($InputVariable);
+			}
+
+			return $Result;
 		}
 
 
