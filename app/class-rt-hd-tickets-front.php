@@ -195,12 +195,6 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 					$ticket = $ticketpost[0];
 					$post = $ticket;
 				}
-				else {
-					$post = null;
-				}
-			}
-			else {
-				$post = null;
 			}
 		}
 	}
