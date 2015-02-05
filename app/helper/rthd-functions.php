@@ -519,7 +519,7 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 			$is_comment_private = false;
 			break;
 		case Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE:
-			if ( $user_edit ){
+			if ( $user_edit || ( get_current_user_id() == get_post_meta( $comment->comment_post_ID, '_rtbiz_hd_created_by' ,true ) ) ){
 				$display_private_comment_flag = true;
 			}
 			$private_text = 'Sensitive';
