@@ -179,7 +179,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 
 
 
-		public function notification_new_folowup_added( $comment, $comment_privacy, $uploaded ){
+		public function notification_new_followup_added( $comment, $comment_privacy, $uploaded ){
 
 			$contact_flag = true; // send email to contacts too
 			$redux = rthd_get_redux_settings();

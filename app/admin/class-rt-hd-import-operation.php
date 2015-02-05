@@ -857,7 +857,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			global $threadPostId;
 			if ( ! isset( $threadPostId ) ) {
 				global $rt_hd_email_notification;
-				$rt_hd_email_notification->notification_new_folowup_added( get_comment( $comment_id ), '10', $uploaded );
+				$rt_hd_email_notification->notification_new_followup_added( get_comment( $comment_id ), '10', $uploaded );
 			}
 
 			return true;
@@ -1251,7 +1251,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				update_comment_meta( $comment_ID, '_email_from', $currentUser->user_email );
 			}
 			// sending notification for followup added
-			$rt_hd_email_notification->notification_new_folowup_added( $comment, $comment_privacy, $uploaded );
+			$rt_hd_email_notification->notification_new_followup_added( $comment, $comment_privacy, $uploaded );
 
 			$returnArray['status']        = true;
 
@@ -1584,7 +1584,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			update_comment_meta( $comment_ID, '_email_bcc', $bcc );
 
 			global $rt_hd_email_notification;
-			$rt_hd_email_notification->notification_new_folowup_added( $comment, $comment_privacy, $uploaded );
+			$rt_hd_email_notification->notification_new_followup_added( $comment, $comment_privacy, $uploaded );
 
 			$returnArray['status'] = true;
 			$returnArray['comment_id'] = $comment_ID;
