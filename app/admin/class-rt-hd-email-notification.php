@@ -193,7 +193,9 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				$uploaded = array();
 			} else {
 				$body = 'New Followup Added by <strong>{comment_author}</strong>';
-				$body .= rthd_content_filter( $comment->comment_content );
+				if ( ! empty( $comment->comment_content ) ){
+					$body .= '<hr style="color: #DCEAF5;" /><div>' . rthd_content_filter( $comment->comment_content ) . '</div>';
+				}
 			}
 			$subject = rthd_create_new_ticket_title( 'rthd_new_followup_email_title', $comment->comment_post_ID );
 			global $rt_hd_module;
@@ -215,6 +217,8 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			// sending email to followup author
 			$toBody = rthd_replace_followup_placeholder( $body, 'you' );
 			$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $toBody ), array( array( 'email' => $comment->comment_author_email, 'name' => $comment->comment_author ) ), array(), array(), $uploaded, $comment->comment_ID , 'comment', true );
+
+			//group notification
 			$toBody = rthd_replace_followup_placeholder( $body, $comment->comment_author );
 			// sending email to contacts excluding if it is follow up author
 			if ( $contact_flag ){
@@ -224,6 +228,9 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 					$toemails = $contacts;
 				}
 			}
+
+
+
 			// sending email to subscriber, assignee, global list and exclude if it is follow up author
 			$bccemails[] = $this->get_assigne_email( $comment->comment_post_ID );
 			$bccemails = $this->exclude_author( $bccemails, $comment->comment_author_email );
