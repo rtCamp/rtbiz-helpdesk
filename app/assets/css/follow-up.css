@@ -391,3 +391,6 @@ li.load-more-spinner-li {
 	-webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.04);
 	box-shadow: 0 1px 1px rgba(0,0,0,0.04);
 }
+#rt-hd-ticket-follow-up .edit-action-button {
+	float: right;
+}
