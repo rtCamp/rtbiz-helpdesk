@@ -949,3 +949,7 @@ function rthd_get_general_body_template( $body ){
 function rthd_update_ticket_updated_by_user( $post_id, $user_id ){
 	update_post_meta( $post_id, '_rtbiz_hd_updated_by',$user_id );
 }
+
+function rthd_replace_followup_placeholder( $body , $name ){
+	return str_replace( '{comment_author}',$name, $body );
+}

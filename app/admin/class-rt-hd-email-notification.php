@@ -72,6 +72,9 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$toemail = $this->filter_user_notification_preference( $toemail );
 			$ccemail = $this->filter_user_notification_preference( $ccemail );
 			$bccemail = $this->filter_user_notification_preference( $bccemail );
+			if ( $this->is_array_empty( $toemail ) && $this->is_array_empty( $ccemail ) && $this->is_array_empty( $bccemail ) ){  // check if all emails are empty do not send email
+				return false;
+			}
 			$signature = rthd_get_email_signature_settings();
 			$args = array(
 				'user_id'       => $user_id,
@@ -175,6 +178,93 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		}
 
 
+
+		public function notification_new_folowup_added( $comment, $comment_privacy, $uploaded ){
+
+			$contact_flag = true; // send email to contacts too
+			$redux = rthd_get_redux_settings();
+			$notificationFlag = ( isset( $redux['rthd_notification_events']) && $redux['rthd_notification_events']['new_comment_added'] == 1 );
+
+			if ( isset( $comment_privacy ) && ! empty( $comment_privacy ) && intval( $comment_privacy ) && $comment_privacy > Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC  ){
+				if ( $comment_privacy == Rt_HD_Import_Operation::$FOLLOWUP_STAFF){
+					$contact_flag = false; // do not send email to contact in case of follow up staff
+				}
+				$body = '<br /> A private followup has been added by <strong>{comment_author}</strong>. Please go to ticket to view content.';
+				$uploaded = array();
+			} else {
+				$body = 'New Followup Added by <strong>{comment_author}</strong>';
+				$body .= rthd_content_filter( $comment->comment_content );
+			}
+			$subject = rthd_create_new_ticket_title( 'rthd_new_followup_email_title', $comment->comment_post_ID );
+			global $rt_hd_module;
+			$labels = $rt_hd_module->labels;
+			$title = $this->get_email_title( $comment->comment_post_ID, $labels['name'] );
+
+			$toemails = array();
+			$bccemails = array();
+			if ( $notificationFlag ) {
+				if ( isset( $redux['rthd_notification_emails'] ) ) {
+					foreach ( $redux['rthd_notification_emails'] as $email ) {
+						array_push( $bccemails, array( 'email' => $email ) );
+					}
+				}
+			}
+			$subscriber = $this->get_subscriber( $comment->comment_post_ID );
+			array_push( $bccemails, $subscriber );
+
+			// sending email to followup author
+			$toBody = rthd_replace_followup_placeholder( $body, 'you' );
+			$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $toBody ), array( array( 'email' => $comment->comment_author_email, 'name' => $comment->comment_author ) ), array(), array(), $uploaded, $comment->comment_ID , 'comment', true );
+			$toBody = rthd_replace_followup_placeholder( $body, $comment->comment_author );
+			// sending email to contacts excluding if it is follow up author
+			if ( $contact_flag ){
+				$contacts  = $this->get_contacts($comment->comment_post_ID );
+				$contacts = $this->exclude_author($contacts, $comment->comment_author_email);
+				if ( ! empty( $contacts ) ){
+					$toemails = $contacts;
+				}
+			}
+			// sending email to subscriber, assignee, global list and exclude if it is follow up author
+			$bccemails[] = $this->get_assigne_email( $comment->comment_post_ID );
+			$bccemails = $this->exclude_author( $bccemails, $comment->comment_author_email );
+			$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $toBody ), $toemails , array(), $bccemails, $uploaded, $comment->comment_ID , 'comment', true );
+		}
+
+
+		function is_array_empty($InputVariable)
+		{
+			$Result = true;
+
+			if (is_array($InputVariable) && count($InputVariable) > 0)
+			{
+				foreach ($InputVariable as $Value)
+				{
+					$Result = $Result && $this->is_array_empty($Value);
+				}
+			}
+			else
+			{
+				$Result = empty($InputVariable);
+			}
+
+			return $Result;
+		}
+
+
+		function exclude_author( $array ,$email ){
+			$new = array();
+
+			if ( ! empty( $array ) ){
+				foreach ( $array as $arr ) {
+					if ( ! empty ( $arr ) ){
+						if ( $arr['email'] != $email ) {
+							$new[] = $arr;
+						}
+					}
+				}
+			}
+			return $new;
+		}
 		/**
 		 * Notification while create ticket
 		 *
@@ -510,5 +600,41 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				return false;
 			}
 		}
+
+		public function get_subscriber( $post_id ){
+			$bccemails = array();
+			$oldSubscriberArr = get_post_meta( $post_id, '_rtbiz_hd_subscribe_to', true );
+			if ( $oldSubscriberArr && is_array( $oldSubscriberArr ) && ! empty( $oldSubscriberArr ) ) {
+				foreach ( $oldSubscriberArr as $emailsubscriber ) {
+					$userSub = get_user_by( 'id', intval( $emailsubscriber ) );
+					if ( ! empty( $userSub ) ) {
+						$bccemails[ ]  = array( 'email' => $userSub->user_email, 'name' => $userSub->display_name );
+						$sendEmailFlag = true;
+					}
+				}
+			}
+			return $bccemails;
+		}
+
+
+		public function get_contacts( $post_id ){
+			$tocontact      = array();
+			$contacts = rt_biz_get_post_for_contact_connection( $post_id, Rt_HD_Module::$post_type );
+			foreach ( $contacts as $contact ) {
+				global $rt_contact;
+				$emails = get_post_meta( $contact->ID, Rt_Entity::$meta_key_prefix.$rt_contact->primary_email_key );
+				foreach ( $emails as $email ) {
+					array_push( $tocontact, array( 'email' => $email ) );
+				}
+			}
+			return $tocontact;
+		}
+
+		public function get_assigne_email( $post_id ){
+			$post_author_id = get_post_field( 'post_author', $post_id );
+			$userSub     = get_user_by( 'id', intval( $post_author_id ) );
+			return  array( 'email' => $userSub->user_email, 'name' => $userSub->display_name );
+		}
+
 	}
 }
