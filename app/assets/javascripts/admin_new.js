@@ -274,13 +274,12 @@ jQuery(function () {
 				                 }
 		    } );
 
-		    jQuery('.close-edit-followup' ).click(function (e){
+	    	});
+		    jQuery(document).on('click', '.close-edit-followup', function (e){
 			    e.preventDefault();
 			    jQuery('#dialog-form' ).slideToggle('slow');
 			    jQuery('#new-followup-form' ).show();
 			    jQuery(document).scrollTop( ( jQuery('#comment-'+commentid ).offset().top ) );
-		    });
-
 		    });
 		    jQuery( document ).on('click', '.editfollowuplink',function(e){
 			    e.preventDefault();
