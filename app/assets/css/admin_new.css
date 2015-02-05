@@ -108,6 +108,12 @@ img.tips {
 .rt-hd-created-by{
 	margin-top: 10px;
 	margin-left: 10px;
+	width: 50px;
+}
+
+.rt-hd-created-by a:nth-last-child(2) {
+	word-wrap: break-word;
+	word-break: break-word;
 }
 
 #divAttachmentList .attachment-item {

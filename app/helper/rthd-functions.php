@@ -646,7 +646,7 @@ function rthd_content_filter( $content ) {
 		$content = $output_array[1][0];
 	}
 
-	$offset = strpos( $content, '&lt; ! ------- REPLY ABOVE THIS LINE ------- ! &gt;' );
+	$offset = strpos( $content, '[!-------REPLY ABOVE THIS LINE-------!]' );
 	$content = substr( $content, 0 , ( $offset === false ) ? strlen( $content ) : $offset );
 
 	$content = balanceTags( $content, true );
@@ -693,6 +693,12 @@ function rthd_check_plugin_dependecy() {
 			'active' => class_exists( 'Rt_Biz' ),
 			'filename' => 'index.php',
 		),
+		'posts-to-posts' => array(
+			'project_type' => 'all',
+			'name' => esc_html__( 'Create many-to-many relationships between all types of posts.', RT_HD_TEXT_DOMAIN ),
+			'active' => class_exists( 'P2P_Autoload' ),
+			'filename' => 'posts-to-posts.php',
+		),
 	);
 
 	$flag = true;
@@ -720,8 +726,15 @@ function rthd_install_plugin_ajax(){
 		if ( ! current_user_can( 'install_plugins' ) || ! current_user_can( 'activate_plugins' ) ) {
 			die( __( 'ERROR: You lack permissions to install and/or activate plugins.', RT_HD_TEXT_DOMAIN ) );
 		}
-		rthd_install_plugin( $_POST['plugin_slug'] );
+		$biz_installed = rthd_is_plugin_installed( 'rtbiz' ) ;
+		$p2p_installed = rthd_is_plugin_installed( 'posts-to-posts' ) ;
 
+		if( ! $p2p_installed ){
+			rthd_install_plugin('posts-to-posts');
+		}
+		if ( ! $biz_installed ){
+			rthd_install_plugin( 'rtbiz' );
+		}
 		echo 'true';
 		die();
 }
@@ -779,26 +792,52 @@ function rthd_plugin_check_enque_js() {
  * @since 0.1
  */
 function rthd_admin_notice_dependency_not_installed() {
-	if ( ! rthd_is_plugin_installed( 'rtbiz' ) ) { ?>
+	$biz_installed = rthd_is_plugin_installed( 'rtbiz' ) ;
+	$p2p_installed = rthd_is_plugin_installed( 'posts-to-posts' ) ;
+
+	if ( ! $biz_installed || ! $p2p_installed ) {
+		$msg = '';
+		if ( ! $biz_installed && ! $p2p_installed ){
+			$msg = 'rtBiz and post to post';
+		}
+		else if( ! $biz_installed ){
+			$msg = 'rtBiz';
+		}else if (! $p2p_installed ){
+			$msg = 'post to post';
+		}
+		?>
 		<div class="error rthd-plugin-not-installed-error">
 <?php			$nonce = wp_create_nonce( 'rthd_install_plugin_rtbiz' ); ?>
 
 			<p><b><?php _e( 'rtBiz Helpdesk:' ) ?></b> <?php _e( 'Click' ) ?> <a href="#"
-			                                                                     onclick="install_rthd_plugin('rtbiz','rthd_install_plugin','<?php echo $nonce ?>')">here</a> <?php _e( 'to install rtBiz.', RT_HD_TEXT_DOMAIN ) ?>
-			</p>
-		</div>
-	<?php } else {
-		if ( rthd_is_plugin_installed( 'rtbiz' ) && ! rthd_is_plugin_active( 'rtbiz' ) ) {
-			$path  = rthd_get_path_for_plugin( 'rtbiz' );
-			$nonce = wp_create_nonce( 'rthd_activate_plugin_' . $path );
-		?>
-		<div class="error rthd-plugin-not-installed-error">
-			<p><b><?php _e( 'rtBiz Helpdesk:' ) ?></b> <?php _e( 'Click' ) ?> <a href="#"
-			                                                                     onclick="activate_rthd_plugin('<?php echo $path ?>','rthd_activate_plugin','<?php echo $nonce; ?>')">here</a> <?php _e( 'to activate rtBiz.', RT_HD_TEXT_DOMAIN ) ?>
+			                                                                     onclick="install_rthd_plugin('<?php echo $msg ?>','rthd_install_plugin','<?php echo $nonce ?>')">here</a> <?php _e( 'to install '. $msg . '.', RT_HD_TEXT_DOMAIN ) ?>
 			</p>
 		</div>
 	<?php }
-	}
+		$rtbiz_active = rthd_is_plugin_active( 'rtbiz' );
+		$p2p_active = rthd_is_plugin_active( 'posts-to-posts' );
+		if ( ( $biz_installed && ! $rtbiz_active ) || ( $p2p_installed && ! $p2p_active ) ) {
+			$msg  = '';
+			if ( ( $biz_installed && ! $rtbiz_active ) && ( $p2p_installed && ! $p2p_active ) ) {
+				$msg = 'rtBiz and post to post';
+			}
+			else if ( $biz_installed && ! $rtbiz_active ){
+				$msg = 'rtBiz';
+			}
+			else if ( $p2p_installed && ! $p2p_active ){
+				$msg = 'post to post';
+			}
+
+			$path  = rthd_get_path_for_plugin( 'rtbiz' );
+			$nonce = wp_create_nonce( 'rthd_activate_plugin_' . $path );
+		?>
+		<div class="error rthd-plugin-not-active-error">
+			<p><b><?php _e( 'rtBiz Helpdesk:' ) ?></b> <?php _e( 'Click' ) ?> <a href="#"
+			                                                                     onclick="activate_rthd_plugin('<?php echo $msg ?>','rthd_activate_plugin','<?php echo $nonce; ?>')">here</a> <?php _e( 'to activate '.$msg.'.', RT_HD_TEXT_DOMAIN ) ?>
+			</p>
+		</div>
+	<?php }
+
 }
 
 function rthd_get_path_for_plugin( $slug ) {
@@ -837,13 +876,23 @@ function rthd_activate_plugin_ajax() {
 	if ( empty( $_POST['path'] ) ) {
 		die( __( 'ERROR: No slug was passed to the AJAX callback.', RT_HD_TEXT_DOMAIN ) );
 	}
-	check_ajax_referer( 'rthd_activate_plugin_' . $_POST['path'] );
+	$rtbizpath = rthd_get_path_for_plugin('rtbiz');
+	check_ajax_referer( 'rthd_activate_plugin_' . $rtbizpath  );
 
 	if ( ! current_user_can( 'activate_plugins' ) ) {
 		die( __( 'ERROR: You lack permissions to activate plugins.', RT_HD_TEXT_DOMAIN ) );
 	}
+	$rtbiz_active = rthd_is_plugin_active( 'rtbiz' );
+	$p2p_active = rthd_is_plugin_active( 'posts-to-posts' );
+	if ( ! $p2p_active ){
+		$p2ppath = rthd_get_path_for_plugin('posts-to-posts');
+		rthd_activate_plugin( $p2ppath  );
+	}
 
-	rthd_activate_plugin( $_POST['path'] );
+	if ( ! $rtbiz_active ){
+		rthd_activate_plugin( $rtbizpath );
+	}
+
 
 	echo 'true';
 	die();
