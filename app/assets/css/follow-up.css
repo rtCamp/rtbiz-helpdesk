@@ -356,7 +356,7 @@ li.load-more-spinner-li {
 	padding: 5px;
 }
 
-#rthd-status-list {
+#rthd-status-list, #rthd-assignee-list, #edit-private {
 	width: auto;
 }
 
