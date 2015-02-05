@@ -62,7 +62,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			}
 			$reply_txt = '';
 			if ( $reply_above_line ){
-				$reply_txt = '<div style="color:#777">'.htmlentities('< ! ------- REPLY ABOVE THIS LINE ------- ! >').'</div><br /> ';
+				$reply_txt = '<div style="color:#777">'.htmlentities('[!-------REPLY ABOVE THIS LINE-------!]').'</div><br /> ';
 			}
 
 			$htmlbody = $title . $beforeHTML . $body . $afterHTML;
