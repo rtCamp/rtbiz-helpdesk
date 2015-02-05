@@ -178,7 +178,11 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		}
 
 
-
+		/**
+		 * @param $comment Object
+		 * @param $comment_privacy int/string
+		 * @param $uploaded array
+		 */
 		public function notification_new_followup_added( $comment, $comment_privacy, $uploaded ){
 
 			$contact_flag = true; // send email to contacts too
@@ -238,6 +242,11 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		}
 
 
+		/**
+		 * This will handle all notification for deleting followup
+		 * @param $comment Object that is being deleted
+		 * @param $user_id int user id who deleted comment
+		 */
 		public function notification_followup_deleted( $comment, $user_id ){
 			$User       = get_user_by( 'id', $user_id );
 			$bccemails  = array();
@@ -257,7 +266,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$subscriber = $this->get_subscriber( $comment->comment_post_ID );
 			array_push( $bccemails, $subscriber );
 
-			$subject = rthd_create_new_ticket_title( 'rthd_new_followup_email_title', $comment->comment_post_ID );
+			$subject = rthd_create_new_ticket_title( 'rthd_delete_followup_email_title', $comment->comment_post_ID );
 			global $rt_hd_module;
 			$labels = $rt_hd_module->labels;
 			$title = $this->get_email_title( $comment->comment_post_ID, $labels['name'] );
@@ -273,6 +282,67 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$bodyto = rthd_replace_followup_placeholder( $body, $User->display_name );
 			$bccemails = $this->exclude_author( $bccemails, $User->user_email );
 			$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $bodyto ), $assignee_email, array(), $bccemails, array(), $comment->comment_ID , 'comment', true );
+		}
+
+		public function notification_followup_updated( $comment , $user_id, $old_privacy, $new_privacy, $old_content, $new_content ){
+			$user       = get_user_by( 'id', $user_id );
+			// find if followup was private before or right now it is private
+			$private_update = false;
+			if ( ( intval( $old_privacy ) && $old_privacy > Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ) || ( intval( $new_privacy ) && $new_privacy > Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ) ){
+				$private_update = true;
+			}
+
+			if ( $private_update ){
+				$body = '<div><br /> A <strong>private</strong> followup has been edited by <strong>{comment_author}</strong>. Please go to ticket to view content.</div>';
+			} else {
+				$body          = '<div> A Follwup Updated by <strong>{comment_author}.</strong></div>';
+				$body         .= '<br/><div> The changes are as follows: </div><br/>';
+			}
+			$diff_visibility = rthd_text_diff( rthd_get_comment_type( $old_privacy ), rthd_get_comment_type( $new_privacy ) );
+			$diff_followup_content = rthd_text_diff( trim( html_entity_decode( strip_tags( $old_content ) ) ), trim( html_entity_decode( strip_tags( $new_content ) ) ) );
+
+			if ( $diff_visibility ){
+				$body.= '<br/><b>Visibility : </b><hr style="color: #DCEAF5;" />' . $diff_visibility;
+			}
+			if ( ! $private_update ){ // not private then add diff content if exists or add actual content if no diff
+				if ($diff_followup_content){
+					$body .= '<br/><b>Followup Content : </b><hr style="color: #DCEAF5;" />' . $diff_followup_content;
+				}
+				else{
+					$body .= '<br/><b>Followup Content : </b><hr style="color: #DCEAF5;" />' . rthd_content_filter( $comment->comment_content );
+				}
+			}
+			global $rt_hd_module;
+			$labels = $rt_hd_module->labels;
+			$title = $this->get_email_title( $comment->comment_post_ID, $labels['name'] );
+			$subject = rthd_create_new_ticket_title( 'rthd_update_followup_email_title', $comment->comment_post_ID );
+			$bodyto = rthd_replace_followup_placeholder( $body, 'you' );
+			$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $bodyto ), array( array( 'email'=>$user->user_email ) ), array(), array(), array(), $comment->comment_ID , 'comment', true );
+			// Group notification
+			$bccemails = array();
+			$bodyto = rthd_replace_followup_placeholder( $body, $user->display_name );
+			$redux = rthd_get_redux_settings();
+			$notificationFlag = ( $redux['rthd_notification_events']['followup_edited'] == 1 );
+
+			if ( $notificationFlag ) {
+				if ( isset( $redux['rthd_notification_emails'] ) ) {
+					foreach ( $redux['rthd_notification_emails'] as $email ) {
+						array_push( $bccemails, array( 'email' => $email ) );
+					}
+				}
+			}
+
+			$subscriber = $this->get_subscriber( $comment->comment_post_ID );
+			array_push( $bccemails, $subscriber );
+			$bccemails = $this->exclude_author( $bccemails, $user->user_email );
+
+			$assignee_email = array();
+			$assignee_email[] = $this->get_assigne_email( $comment->comment_post_ID );
+			$assignee_email = $this->exclude_author( $assignee_email, $user->user_email );
+
+
+			$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $bodyto ), $assignee_email, array(), $bccemails, array(), $comment->comment_ID , 'comment', true );
+
 		}
 
 		function is_array_empty( $InputVariable ) {

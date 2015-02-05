@@ -1287,6 +1287,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		function add_new_followup_ajax() {
+			global $rt_hd_email_notification;
+
 			if ( ! isset( $_POST['followuptype'] ) ) {
 				wp_die( 'Invalid Request' );
 			}
@@ -1377,56 +1379,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					}
 					$this->add_attachment_to_post( $uploaded, $comment_post_ID, $_POST['comment_id'] );
 				}
-
-				$currentUser = get_user_by( 'id', get_current_user_id() );
-				$subject       = rthd_create_new_ticket_title( 'rthd_update_followup_email_title', $comment_post_ID );
-
-				$updatedbybody = '<div> A Follwup Updated by ' . $currentUser->display_name. '</div> <br/>';
-				$creatorbody = '<div> A follow is updated by you</div> <br />';
-				$body = '<div> The changes are as follows: </div><br/>';
-
-				$flag = false;
-
-				$old_privacy_text = rthd_get_comment_type($old_privacy);
-				$new_privacy = rthd_get_comment_type($comment_privacy);
-				if ( intval( $old_privacy ) && $old_privacy > Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ){
-					$old_privacy = 'true';
-				}
-				if ( intval( $comment_privacy ) && $comment_privacy > Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ){
-					$comment_privacy = 'true';
-				}
-				$body_template = '';
-				$diff = rthd_text_diff( $old_privacy_text, $new_privacy );
-				$diff_content = rthd_text_diff( trim( html_entity_decode( strip_tags( $oldCommentBody ) ) ), trim( html_entity_decode( strip_tags( $commentdata[ 'comment_content' ] ) ) ) );
-				if ( $diff || $diff_content ) {
-					if ( $diff ) {
-						$body_template .= '<br/><b>Visibility : </b>' . $diff;
-					}
-					$flag = true;
-				}
-				if ( 'true' == $old_privacy || 'true' == $comment_privacy ){
-					$body_template .= '<br /> A <strong>private</strong> followup has been edited. Please go to link and login to view the message.';
-				}
-				else {
-					if ( $diff || $diff_content ) {
-						$flag = true;
-						$body_template .= '<br/><b>Followup Content : </b>' . $diff_content;
-					} else {
-						$body_template .= '<br/><b>Followup Content : </b>' . rthd_content_filter( $comment->comment_content );
-					}
-					$body_template .= '<br/> ';
-				}
-				if ( $flag ) {
-					if ( get_current_user_id() == get_post_meta( $comment_post_ID, '_rtbiz_hd_created_by', true ) ) {
-						$contactbody = $creatorbody . $body. $body_template;
-						$this->notify_subscriber_via_email( $comment_post_ID, $subject, rthd_get_general_body_template( $contactbody ), $attachment, $_POST['comment_id'],false, true, false, false );
-					}
-					$redux = rthd_get_redux_settings();
-					$notificationFlag = ( $redux['rthd_notification_events']['followup_edited'] == 1 );
-					$body = $updatedbybody . $body. rthd_get_general_body_template( $body_template );
-					$this->notify_subscriber_via_email( $comment_post_ID, $subject, $body, $attachment, $_POST['comment_id'],$notificationFlag, false );
-				}
-
+				$rt_hd_email_notification->notification_followup_updated( $comment, get_current_user_id(),$old_privacy, $comment_privacy, $oldCommentBody, $commentdata[ 'comment_content' ] );
 				$returnArray['status']        = true;
 				//				$returnArray['comment_count'] = get_comments(
 				//					array(
@@ -1564,7 +1517,6 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$signature   = '';
 				$email_type  = '';
 				$imap_server = '';
-				global $rt_hd_email_notification;
 				if ( ! $this->check_setting_for_new_followup_email( ) ) {
 					return false;
 				}
@@ -1583,7 +1535,6 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			update_comment_meta( $comment_ID, '_email_cc', $cc );
 			update_comment_meta( $comment_ID, '_email_bcc', $bcc );
 
-			global $rt_hd_email_notification;
 			$rt_hd_email_notification->notification_new_followup_added( $comment, $comment_privacy, $uploaded );
 
 			$returnArray['status'] = true;
