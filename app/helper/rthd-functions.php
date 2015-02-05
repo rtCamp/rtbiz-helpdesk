@@ -653,7 +653,7 @@ function rthd_content_filter( $content ) {
 
 	$content = Rt_HD_Utils::force_utf_8( $content );
 
-	return wpautop( wp_kses_post( balanceTags( make_clickable( $content ), true ) ) );
+	return balanceTags( wpautop( wp_kses_post( balanceTags( make_clickable( $content ), true ) ) ), true );
 }
 
 function rthd_toggle_status( $postid ){

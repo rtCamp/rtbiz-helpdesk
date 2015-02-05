@@ -65,7 +65,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				$reply_txt = '<div style="color:#777">'.htmlentities('< ! ------- REPLY ABOVE THIS LINE ------- ! >').'</div><br /> ';
 			}
 
-			$htmlbody = rthd_content_filter( $title . $beforeHTML . $body . $afterHTML );
+			$htmlbody = $title . $beforeHTML . $body . $afterHTML;
 			$htmlbody = $reply_txt . $htmlbody;
 			$settings = rthd_get_redux_settings();
 			$attachments = wp_list_pluck( $attachement, 'file' );
