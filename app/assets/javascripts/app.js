@@ -379,6 +379,30 @@ jQuery( document ).ready( function ( $ ) {
 			             }
 		             });
 	});
+	
+	jQuery( '#rthd-assignee-list' ).change(function (e){
+		var requestArray = new Object();
+		requestArray['post_id'] =  jQuery('#post-id' ).val();
+		requestArray['post_author'] =  jQuery('#rthd-assignee-list' ).val();
+		requestArray["action"] = "front_end_assignee_change";
+		jQuery('#assignee-change-spinner' ).show();
+		jQuery.ajax( {
+             url: ajaxurl,
+             dataType: "json",
+             type: 'post',
+             data: requestArray,
+             success: function ( data ) {
+	             if (data.status) {
+		            //jQuery( '#rthd-status-visiable' ).html( data.stauts_markup );
+	             }
+	             jQuery('#assignee-change-spinner' ).hide();
+             },
+             error: function(){
+	             jQuery('#assignee-change-spinner' ).hide();
+	             return false;
+             }
+         });
+	});
 
 
 } );

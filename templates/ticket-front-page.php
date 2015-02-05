@@ -79,8 +79,36 @@ $user_edit_content = current_user_can( $cap );
 					echo '<div id="rthd-status-visiable" >' . rthd_status_markup( $pstatus ) . '</div>';
 				}
 				?>
-
 			</div>
+			<?php
+				if ( current_user_can( $cap ) ) {
+					$rtcamp_users = Rt_HD_Utils::get_hd_rtcamp_user();
+			?>
+				<div class="rt-hd-ticket-info">
+					<span title="<?php _e( 'Assigned To', RT_HD_TEXT_DOMAIN ); ?>">
+						<strong>
+							<?php _e( 'Assigned To', RT_HD_TEXT_DOMAIN ); ?>:
+						</strong>
+					</span>
+					<select id="rthd-assignee-list" name="rt-hd-assignee">
+						<?php
+							if ( ! empty( $rtcamp_users ) ) {
+								foreach ( $rtcamp_users as $author ) {
+									if ( $author->ID == $post->post_author ) {
+										$selected = ' selected="selected"';
+									} else {
+										$selected = ' ';
+									}
+									echo '<option value="' . esc_attr( $author->ID ) . '"' . esc_attr( $selected ) . '>' . esc_attr( $author->display_name ) . '</option>';
+								}
+							} 
+						?>
+					</select>
+					<img id="assignee-change-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
+				</div>
+			<?php 
+				}	
+			?>
 			<div class="rt-hd-ticket-info">
 				<span title="Create Date"><strong>Created: </strong></span>
 				<span title="<?php echo esc_attr( $createdate )?>">

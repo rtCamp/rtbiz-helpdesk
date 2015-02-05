@@ -65,6 +65,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			add_action( 'read_rt_mailbox_email_'.RT_HD_TEXT_DOMAIN, array( $this, 'process_email_to_ticket' ), 10, 16 );
 			add_action( 'wp_ajax_ticket_bulk_edit', array( $this, 'ticket_bulk_edit' ) );
 			add_action( 'wp_ajax_front_end_status_change', array( $this, 'front_end_status_change' ) );
+			add_action( 'wp_ajax_front_end_assignee_change', array( $this, 'front_end_assignee_change' ) );
 		}
 
 		function ticket_bulk_edit(){
@@ -1885,6 +1886,38 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			global $rt_hd_email_notification;
 			$body = $labels['name'].' Status '.rthd_status_markup( $old ).' changed to '.rthd_status_markup( $post_status );
 			$rt_hd_email_notification->notification_ticket_updated( $post_id, $labels['name'], $body, array() );
+			echo json_encode($response);
+			die();
+		}
+		
+		/**
+		 * Change ticket assignee. Request come from front end.
+		 */
+		function front_end_assignee_change(){
+			$response = array();
+			$response['status']= false;
+			$post_id = $_POST['post_id'];
+			$old_post = get_post( $post_id );
+			$new_assignee = $_POST['post_author'];
+			
+			if ( $old_post->post_author != $new_assignee ) {
+				if ( $post_id ){
+					$ticket = array( 'ID' => $post_id,
+							'post_author' => $new_assignee,);
+					wp_update_post( $ticket );
+				}
+				
+				$response['status']= true;
+				global $rt_hd_module;
+				
+				$labels = $rt_hd_module->labels;
+				rthd_update_ticket_updated_by_user( $post_id, get_current_user_id() );
+				
+				global $rt_hd_email_notification;
+				
+				$rt_hd_email_notification->notification_new_ticket_assigned( $post_id, $new_assignee, $labels['name'] );
+				$rt_hd_email_notification->notification_new_ticket_reassigned( $post_id, $old_post->post_author, $new_assignee, $labels['name'], array() );
+			}
 			echo json_encode($response);
 			die();
 		}
