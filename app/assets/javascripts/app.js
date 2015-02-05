@@ -277,7 +277,7 @@ jQuery( document ).ready( function ( $ ) {
 			 cache: false,
 			 contentType: false,
 			 processData: false,
-			 async: false,
+			 //async: false, // no more page freezing
              success: function ( data ) {
 	             if ( data.status ) {
 		             var newcomment=data.comment_content;

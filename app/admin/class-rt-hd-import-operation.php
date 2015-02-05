@@ -760,7 +760,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				'comment_author_email' => $comment_author_email,
 				'comment_author_url'   => 'http://',
 				'comment_content'      => $comment_content,
-				'comment_type'         => 'mail',
+				'comment_type'         => '10',
 				'comment_parent'       => 0,
 				'user_id'              => $userid,
 				'comment_author_IP'    => '127.0.0.1',
@@ -855,22 +855,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 			global $threadPostId;
 			if ( ! isset( $threadPostId ) ) {
-				$title = rthd_create_new_ticket_title( 'rthd_new_followup_email_title', $comment_post_ID );;
-				//				$body = '<span style="color:#777">< ! ------------------ REPLY ABOVE THIS LINE ------------------ ! ></span><br />';
-				//				$body  = '<br/><strong>New Followup Added by ' . $comment_author . ' - ' . $comment_author_email . ':</strong>';
-				$user = get_user_by( 'email', $comment_author_email );
-				$contactFlag = true;
-				if ( $user->ID == get_post_meta( $comment_post_ID, '_rtbiz_hd_created_by', true ) ){
-					$creatorBody = '<br/>New Followup Added by <strong>You</strong>';
-					$creatorBody .=  rthd_content_filter( $comment_content );
-					$this->notify_subscriber_via_email( $comment_post_ID, $title, rthd_get_general_body_template( $creatorBody ), wp_list_pluck( $uploaded, 'url' ), $comment_id, false, true, false, false );
-					$contactFlag = false;
-				}
-				$body  = '<br/>New Followup Added by <strong>' . $comment_author .'</strong>';
-				$body .=  rthd_content_filter( $comment_content );
-				$body .= '<br/> ';
-				$notificationFlag = $this->check_setting_for_new_followup_email();
-				$this->notify_subscriber_via_email( $comment_post_ID, $title, rthd_get_general_body_template( $body ), wp_list_pluck( $uploaded, 'url' ), $comment_id, $notificationFlag, $contactFlag );
+				global $rt_hd_email_notification;
+				$rt_hd_email_notification->notification_new_folowup_added( get_comment( $comment_id ), '10', $uploaded );
 			}
 
 			return true;
@@ -1119,6 +1105,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		function add_new_followup_front() {
+			global $rt_hd_email_notification;
 			if ( ! isset( $_POST['followuptype'] ) ) {
 				wp_die( 'Invalid Request' );
 			}
@@ -1262,36 +1249,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			if ( ! empty( $currentUser->user_email ) ) {
 				update_comment_meta( $comment_ID, '_email_from', $currentUser->user_email );
 			}
-
-			$title = rthd_create_new_ticket_title( 'rthd_new_followup_email_title', $comment_post_ID );;
-			$contactFlag = ( $comment_privacy  == Rt_HD_Import_Operation::$FOLLOWUP_STAFF ) ? false : true;
-			$hideAttachmentFlag = false;
-			$creatorPrivate_flag = false;
-			if ( isset( $comment_privacy ) && ! empty( $comment_privacy ) && intval( $comment_privacy ) && $comment_privacy > Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC  ){
-				$body = '<br /> A private followup has been added ' . ( ( ! empty( $currentUser->display_name ) ) ? 'by <strong>' . $currentUser->display_name : 'annonymously' ) .'<strong>. Please go to ticket to view content.';
-				$hideAttachmentFlag = true;
-				$creatorPrivate_flag = true;
-			}else {
-				$body = '<strong>New Followup Added ' . ( ( ! empty( $currentUser->display_name ) ) ? 'by ' . $currentUser->display_name : 'annonymously' ) . ':</strong>';
-				$body .= rthd_content_filter( $comment->comment_content );
-			}
-			if ( get_current_user_id() == get_post_meta( $comment_post_ID, '_rtbiz_hd_created_by', true ) ) {
-				$creatorbody = '';
-				if ( ! $creatorPrivate_flag ){
-					$creatorbody = '<br /> New follow up is added by <strong>you</strong>.';
-					$creatorbody .= rthd_content_filter( $comment->comment_content );
-				} else {
-					$creatorbody = '<br /> A private followup has been added by <strong> you<strong>. Please go to ticket to view content.';
-					$uploaded = array();
-				}
-				$this->notify_subscriber_via_email( $comment_post_ID, $title, rthd_get_general_body_template( $creatorbody ), $uploaded, $comment_ID, false, true, false, false );
-				$contactFlag = false;
-			}
-			$notificationFlag = $this->check_setting_for_new_followup_email();
-			if ( $hideAttachmentFlag ){
-				$uploaded = array();
-			}
-			$this->notify_subscriber_via_email( $comment_post_ID, $title, rthd_get_general_body_template( $body ), $uploaded, $comment_ID, $notificationFlag, $contactFlag );
+			// sending notification for followup added
+			$rt_hd_email_notification->notification_new_folowup_added( $comment, $comment_privacy, $uploaded );
 
 			$returnArray['status']        = true;
 
@@ -1623,29 +1582,9 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			update_comment_meta( $comment_ID, '_email_cc', $cc );
 			update_comment_meta( $comment_ID, '_email_bcc', $bcc );
 
-			$currentUser = get_user_by( 'id', get_current_user_id() );
-			$title       = rthd_create_new_ticket_title( 'rthd_new_followup_email_title', $comment_post_ID );
+			global $rt_hd_email_notification;
+			$rt_hd_email_notification->notification_new_folowup_added( $comment, $comment_privacy, $uploaded );
 
-			//			$body = '<span style="color:#777">< ! ------------------ REPLY ABOVE THIS LINE ------------------ ! ></span><br />';
-			$body = '<br/><strong>New Followup Added by ' . $currentUser->display_name.':</strong><br />';
-			if ( 'mail' == $followuptype ) {
-				$body .= '<br/><b>From : </b>' . $_POST['comment-reply-from'];
-				$body .= '<br/><b>To : </b>' . $to;
-				$body .= '<br/><b>CC : </b>' . $cc;
-				$body .= '<br/><b>BCC : </b>' . $bcc;
-			}
-			$contactFlag = (intval( $comment_privacy ) == Rt_HD_Import_Operation::$FOLLOWUP_STAFF)? false : true;
-
-			if ( isset( $comment_privacy ) && ! empty( $comment_privacy ) && intval( $comment_privacy ) && $comment_privacy > Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC  ){
-				$body .= '<br /> A private followup has been added ' . ( ( ! empty( $currentUser->display_name ) ) ? 'by ' . $currentUser->display_name : 'annonymously' ) .'. Please go to link and login to view the message.';
-			}
-			else{
-				$body .= '<br/>' . rthd_content_filter( $comment->comment_content );
-			}
-
-			$body .= '<br/> ';
-			$notificationFlag = $this->check_setting_for_new_followup_email();
-			$this->notify_subscriber_via_email( $comment_post_ID, $title, rthd_get_general_body_template( $body ), $attachment, $comment_ID, $notificationFlag, $contactFlag );
 			$returnArray['status'] = true;
 			$returnArray['comment_id'] = $comment_ID;
 			$returnArray['comment_count'] = get_comments( array(
