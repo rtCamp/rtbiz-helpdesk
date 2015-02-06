@@ -1002,3 +1002,11 @@ function rthd_update_ticket_updated_by_user( $post_id, $user_id ){
 function rthd_replace_followup_placeholder( $body , $name ){
 	return str_replace( '{comment_author}',$name, $body );
 }
+
+function rthd_is_mailbox_configured(){
+	$system_emails = rt_get_all_system_emails( array( 'module' => RT_HD_TEXT_DOMAIN, ) );
+	if ( ! empty( $system_emails ) ){
+		return true;
+	}
+	return false;
+}
