@@ -566,7 +566,7 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 
 	    ?>
 
-        <span title="<?php echo esc_attr( ( $comment->comment_author_email == '' ) ? $comment->comment_author_IP : $comment->comment_author_email ); ?>"><?php echo ( ( $comment->comment_author == '' ) ? 'Anonymous' : $commentAuthorLink ); ?> </span>
+        <span title="<?php echo esc_attr( ( $comment->comment_author_email == '' ) ? $comment->comment_author_IP : $comment->comment_author_email ); ?>"><?php echo ( ( $comment->comment_author == '' ) ? $comment->comment_author_email : $commentAuthorLink ); ?> </span>
             <time title="<?php echo esc_attr( $comment->comment_date ); ?>" datetime="<?php echo esc_attr( $comment->comment_date ); ?>">
                 <?php if ($user_edit){
                     ?>
@@ -1001,4 +1001,12 @@ function rthd_update_ticket_updated_by_user( $post_id, $user_id ){
 
 function rthd_replace_followup_placeholder( $body , $name ){
 	return str_replace( '{comment_author}',$name, $body );
+}
+
+function rthd_is_mailbox_configured(){
+	$system_emails = rt_get_all_system_emails( array( 'module' => RT_HD_TEXT_DOMAIN, ) );
+	if ( ! empty( $system_emails ) ){
+		return true;
+	}
+	return false;
 }
