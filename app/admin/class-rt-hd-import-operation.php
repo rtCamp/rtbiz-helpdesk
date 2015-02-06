@@ -229,6 +229,9 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			if ( $references != '' ) {
 				update_post_meta( $post_id, '_rtbiz_hd_references', $references );
 			}
+			
+			// Call action to add product info into ticket meta data.
+			do_action( 'rt_hd_add_ticket_offering_info', $post_id );
 
 			//send Notification
 			global $bulkimport, $gravity_auto_import, $rt_hd_email_notification, $helpdesk_import_ticket_id;

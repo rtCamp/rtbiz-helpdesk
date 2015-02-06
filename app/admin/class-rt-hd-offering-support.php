@@ -48,6 +48,9 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 			// shortcode for get support form
 			add_shortcode( 'rt_hd_support_form', array( $this, 'rt_hd_support_form_callback' ) );
 			add_shortcode( 'rt_hd_tickets', array( $this, 'rt_hd_tickets_callback' ) );
+			
+			// Add product information in ticket meta.
+			add_action( 'rt_hd_add_ticket_offering_info', array( &$this, 'rt_hd_add_ticket_offering_info_callback' ) );
 
 			add_action( 'woocommerce_after_my_account', array( $this, 'woo_my_tickets_my_account' ) );
 
@@ -366,27 +369,6 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 				$data['email']
 			);
 
-			if ( isset( $data['product_id'] ) ) {
-				$term = get_term_by( 'id', $data['product_id'], Rt_Offerings::$offering_slug );
-				if ( $term ) {
-					wp_set_post_terms( $rt_hd_tickets_id, array( $term->term_id ), Rt_Offerings::$offering_slug );
-				}
-			}
-
-			if ( isset( $data['order_id'] ) && $data['order_type'] ) {
-				//Store Order ID
-				update_post_meta( $rt_hd_tickets_id, 'rtbiz_hd_order_id', esc_attr( $data['order_id'] ) );
-				update_post_meta( $rt_hd_tickets_id, 'rtbiz_hd_order_type', esc_attr( $data['order_type'] ) );
-
-				$link = '';
-				if ( 'woocommerce' === $data['order_type'] ) {
-					$link = add_query_arg( 'post', $_REQUEST['order_id'], admin_url( 'post.php?action=edit' ) );
-				} else if ( 'edd' === $data['order_type'] ) {
-					$link = add_query_arg( 'id', $_REQUEST['order_id'], admin_url( 'edit.php?post_type=download&page=edd-payment-history&view=view-order-details' ) );
-				}
-				update_post_meta( $rt_hd_tickets_id, 'rtbiz_hd_order_link', $link );
-			}
-
 			return $rt_hd_tickets_id;
 		}
 
@@ -568,6 +550,36 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 				<?php } ?>
 			</table>
 		<?php
+		}
+		
+		/**
+		 * Add product information in ticket meta data.
+		 * @param int $rt_hd_ticket_id
+		 */
+		function rt_hd_add_ticket_offering_info_callback( $rt_hd_tickets_id ) {
+			
+			$data = $_POST['post'];
+			
+			if ( isset( $data['product_id'] ) ) {
+				$term = get_term_by( 'id', $data['product_id'], Rt_Offerings::$offering_slug );
+				if ( $term ) {
+					wp_set_post_terms( $rt_hd_tickets_id, array( $term->term_id ), Rt_Offerings::$offering_slug );
+				}
+			}
+			
+			if ( isset( $data['order_id'] ) && $data['order_type'] ) {
+				//Store Order ID
+				update_post_meta( $rt_hd_tickets_id, 'rtbiz_hd_order_id', esc_attr( $data['order_id'] ) );
+				update_post_meta( $rt_hd_tickets_id, 'rtbiz_hd_order_type', esc_attr( $data['order_type'] ) );
+			
+				$link = '';
+				if ( 'woocommerce' === $data['order_type'] ) {
+					$link = add_query_arg( 'post', $_REQUEST['order_id'], admin_url( 'post.php?action=edit' ) );
+				} else if ( 'edd' === $data['order_type'] ) {
+					$link = add_query_arg( 'id', $_REQUEST['order_id'], admin_url( 'edit.php?post_type=download&page=edd-payment-history&view=view-order-details' ) );
+				}
+				update_post_meta( $rt_hd_tickets_id, 'rtbiz_hd_order_link', $link );
+			}
 		}
 	}
 }
