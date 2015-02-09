@@ -36,8 +36,8 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 			add_filter( 'pre_insert_term', array( $this, 'remove_wocommerce_actions' ), 10, 2 );
 
 			//upload folder change
-			//			add_filter( 'wp_handle_upload_prefilter', array( $this, 'handle_upload_prefilter' ) );
-			//			add_filter( 'wp_handle_upload', array( $this, 'handle_upload' ) );
+			add_filter( 'wp_handle_upload_prefilter', array( $this, 'handle_upload_prefilter' ) );
+			add_filter( 'wp_handle_upload', array( $this, 'handle_upload' ) );
 		}
 
 		/**
