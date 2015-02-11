@@ -420,7 +420,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					array(
 						'id'      => 'rthd_ticket_import_view',
 						'type'    => 'raw',
-						'content' => rt_biz_gravity_importer_view(),
+						'content' => rthd_gravity_importer_view(),
 					),
 				),
 			);
@@ -607,4 +607,9 @@ function rthd_ticket_import_logs() {
 function rthd_mailbox_setup_view(){
 	$module_key = rt_biz_sanitize_module_key( RT_HD_TEXT_DOMAIN );
 	rt_biz_mailbox_setup_view( $module_key );
+}
+
+function rthd_gravity_importer_view(){
+	$module_key = rt_biz_sanitize_module_key( RT_HD_TEXT_DOMAIN );
+	return rt_biz_gravity_importer_view( $module_key );
 }
