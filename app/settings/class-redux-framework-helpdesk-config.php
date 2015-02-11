@@ -125,30 +125,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			}
 
 		}
-	 public function mailbox_emails_list_callback(){
-		 $system_emails = rt_get_all_system_emails( array( 'module' => RT_HD_TEXT_DOMAIN, ) ); ?>
-		<div>
-			<?php
-			if ( !empty($system_emails )){ ?>
-				<p class="description"> Following mailboxes have been configured for Helpdesk. Emails from these mailboxes will be parsed and Helpdesk will use them to create new ticket / add new followup accordingly. You can configure these mailboxes from <a href="<?php echo add_query_arg( 'page', RT_BIZ_Configuration::$page_slug, admin_url( 'admin.php' ) ); ?>">rtBiz</a> </p>
-			<?php }
-			else{ ?>
-				<p class="description"> Right now there is no mailbox configured for Helpdesk in rtBiz. If you want to configure a mailbox for creating new tickets / followups, you can do that from <a href="<?php echo add_query_arg( 'page', RT_BIZ_Configuration::$page_slug, admin_url( 'admin.php' ) ); ?>">rtBiz</a> </p>
-
-			<?php }
-			?>
-			<ul>
-		 <?php
-		 foreach( $system_emails as $email ) { ?>
-			 <li><input type="text" value="<?php echo $email; ?>" class="regular-text" readonly> </li>
-		<?php }?>
-			</ul>
-
-		</div>
-
-	 <?php
-
-	 }
 
 		public function set_sections() {
 			//			$reply_by_email = new RT_HD_Setting_Inbound_Email();
@@ -244,12 +220,12 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			$email_fields = array();
 
 			array_push( $email_fields, array(
-					'id'      => 'rt_hd_Mailboxes',
-					'type'    => 'callback',
-					'title'   => 'Mailboxes',
-					'subtitle' => __( 'Helpdesk Configured Mailbox(s)' ),
-					'desc'    => 'Following mailboxes have been configured for Helpdesk. Emails from these mailboxes will be parsed and Helpdesk will use them to create new ticket / add new followup accordingly. You can configure these mailboxes from <a href="'.add_query_arg( 'page', RT_BIZ_Configuration::$page_slug, admin_url( 'admin.php' ) ).'"rtBiz</a>',
-					'callback' => array( $this, 'mailbox_emails_list_callback' ),
+				'id'      => 'rt_hd_Mailboxes_setup',
+				'type'    => 'callback',
+				'title'   => 'Mailboxes Setup',
+				'subtitle' => __( 'Helpdesk Configured Mailbox(s)' ),
+				'desc'    => 'Following mailboxes have been configured for Helpdesk. Emails from these mailboxes will be parsed and Helpdesk will use them to create new ticket / add new followup accordingly. You can configure these mailboxes from <a href="'.add_query_arg( 'page', RT_BIZ_Configuration::$page_slug, admin_url( 'admin.php' ) ).'"rtBiz</a>',
+				'callback' => rthd_mailbox_setup_view,
 			) );
 
 			array_push( $email_fields, array(
@@ -425,6 +401,34 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				)
 			);
 
+			$this->sections[]   = array(
+				'title'       => __( 'Importer' ),
+				'icon'        => 'el-icon-list-alt',
+				'permissions' => $editor_cap,
+				//'subsection'  => true,
+				'fields'      => array(
+					array(
+						'id'      => 'rthd_ticket_import_view',
+						'type'    => 'raw',
+						'content' => rt_biz_gravity_importer_view(),
+					),
+				),
+			);
+
+			$this->sections[]   = array(
+				'title'       => __( 'Importer Mapper' ),
+				'icon'        => 'el-icon-list-alt',
+				'permissions' => $editor_cap,
+				'subsection'  => true,
+				'fields'      => array(
+					array(
+						'id'      => 'rthd_ticket_import_view',
+						'type'    => 'raw',
+						'content' => rt_biz_gravity_importer_mapper_view(),
+					),
+				),
+			);
+
 			// Only initiates in case of settings page is getting displayed. Not otherwise
 			if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] == self::$page_slug ) {
 				ob_start();
@@ -437,7 +441,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				'title'       => __( 'Import Logs' ),
 				'icon'        => 'el-icon-list-alt',
 				'permissions' => $editor_cap,
-				//'subsection'  => true,
+				'subsection'  => true,
 				'fields'      => array(
 					array(
 						'id'      => 'rthd_ticket_import_logs',
@@ -588,4 +592,9 @@ function rthd_get_redux_post_settings( $post ) {
 function rthd_ticket_import_logs() {
 	global $rt_hd_logs;
 	$rt_hd_logs->ui();
+}
+
+function rthd_mailbox_setup_view(){
+	$module_key = rt_biz_sanitize_module_key( RT_HD_TEXT_DOMAIN );
+	rt_biz_mailbox_setup_view( $module_key );
 }
