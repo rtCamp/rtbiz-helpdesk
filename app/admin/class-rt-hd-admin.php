@@ -163,7 +163,10 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 		 * @return mixed
 		 */
 		function handle_upload_prefilter( $file ) {
-			$postype = $_REQUEST['post_type'];
+			$postype = '';
+			if( isset( $_REQUEST['post_type'] ) ){
+				$postype = $_REQUEST['post_type'];
+			}
 			if ( empty( $postype ) && !empty( $_REQUEST['post_id'] ) ){
 				$postype = get_post_type( $_REQUEST['post_id'] );
 			}
@@ -181,7 +184,10 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 		 * @return mixed
 		 */
 		function handle_upload( $fileinfo )   {
-			$postype = $_REQUEST['post_type'];
+			$postype = '';
+			if( isset( $_REQUEST['post_type'] ) ){
+				$postype = $_REQUEST['post_type'];
+			}
 			if ( empty( $postype ) && !empty( $_REQUEST['post_id'] ) ) {
 				$postype = get_post_type( $_REQUEST['post_id'] );
 			}
