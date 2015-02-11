@@ -51,8 +51,15 @@ jQuery(document).ready(function ($) {
 		<input id="email" placeholder="Email" type="email" name="post[email]" value="<?php echo sanitize_email( $email ) ?>" required />
 	</div>
 
-	<div>
-		<textarea name="post[description]" placeholder="Description" rows="5" cols="20" required></textarea>
+	<div id="editor_container">
+<!--		<textarea name="post[description]" placeholder="Description" rows="5" cols="20" required></textarea>-->
+		<?php
+		$editor_id = 'post_description';
+		$settings = array( 'media_buttons' => false, 'editor_class' => 'post_description',  'tinymce' => array(
+			'height' => 150,
+		));
+		wp_editor( '', $editor_id, $settings );
+		?>
 	</div>
 
 	<div>

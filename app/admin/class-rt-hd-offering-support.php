@@ -335,6 +335,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 			}
 
 			$data = $_POST['post'];
+			$data['description'] = $_POST['post_description'];
 			$offeringstr = $data['title'];
 
 			$uploaded = array();

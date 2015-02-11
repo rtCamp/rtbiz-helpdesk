@@ -133,7 +133,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				<p class="description"> Following mailboxes have been configured for Helpdesk. Emails from these mailboxes will be parsed and Helpdesk will use them to create new ticket / add new followup accordingly. You can configure these mailboxes from <a href="<?php echo add_query_arg( 'page', RT_BIZ_Configuration::$page_slug, admin_url( 'admin.php' ) ); ?>">rtBiz</a> </p>
 			<?php }
 			else{ ?>
-				<p class="description"> Right now there is no mailbox configured for Helpdesk in rtBiz. If you want to configure a mailbox for tickets / followups, you can do that from <a href="<?php echo add_query_arg( 'page', RT_BIZ_Configuration::$page_slug, admin_url( 'admin.php' ) ); ?>">rtBiz</a> </p>
+				<p class="description"> Right now there is no mailbox configured for Helpdesk in rtBiz. If you want to configure a mailbox for creating new tickets / followups, you can do that from <a href="<?php echo add_query_arg( 'page', RT_BIZ_Configuration::$page_slug, admin_url( 'admin.php' ) ); ?>">rtBiz</a> </p>
 
 			<?php }
 			?>
@@ -243,16 +243,14 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			}
 			$email_fields = array();
 
-			if ( $is_mailbox_configured ){
-				array_push( $email_fields, array(
-						'id'      => 'rt_hd_Mailboxes',
-						'type'    => 'callback',
-						'title'   => 'Mailboxes',
-						'subtitle' => __( 'Helpdesk Configured Mailbox(s)' ),
-						'desc'    => 'Following mailboxes have been configured for Helpdesk. Emails from these mailboxes will be parsed and Helpdesk will use them to create new ticket / add new followup accordingly. You can configure these mailboxes from <a href="'.add_query_arg( 'page', RT_BIZ_Configuration::$page_slug, admin_url( 'admin.php' ) ).'"rtBiz</a>',
-						'callback' => array( $this, 'mailbox_emails_list_callback' ),
-				) );
-			}
+			array_push( $email_fields, array(
+					'id'      => 'rt_hd_Mailboxes',
+					'type'    => 'callback',
+					'title'   => 'Mailboxes',
+					'subtitle' => __( 'Helpdesk Configured Mailbox(s)' ),
+					'desc'    => 'Following mailboxes have been configured for Helpdesk. Emails from these mailboxes will be parsed and Helpdesk will use them to create new ticket / add new followup accordingly. You can configure these mailboxes from <a href="'.add_query_arg( 'page', RT_BIZ_Configuration::$page_slug, admin_url( 'admin.php' ) ).'"rtBiz</a>',
+					'callback' => array( $this, 'mailbox_emails_list_callback' ),
+			) );
 
 			array_push( $email_fields, array(
 					'id'       => 'rthd_outgoing_email_from_name',

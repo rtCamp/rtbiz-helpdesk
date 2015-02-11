@@ -281,6 +281,14 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $bodyto ), $assignee_email, array(), $bccemails, array(), $comment->comment_ID , 'comment', true );
 		}
 
+		/**
+		 * @param $comment object new comment object
+		 * @param $user_id int user who edited comment
+		 * @param $old_privacy int old privacy of followup
+		 * @param $new_privacy int new privacy of followup
+		 * @param $old_content string old string comment content
+		 * @param $new_content string new comment content
+		 */
 		public function notification_followup_updated( $comment , $user_id, $old_privacy, $new_privacy, $old_content, $new_content ){
 			$user       = get_user_by( 'id', $user_id );
 			// find if followup was private before or right now it is private
@@ -342,6 +350,11 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 
 		}
 
+		/**
+		 * @param $InputVariable array input multi dimensional array
+		 * Check if mult level array is empty or not
+		 * @return bool
+		 */
 		function is_array_empty( $InputVariable ) {
 			$Result = true;
 
@@ -358,6 +371,12 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		}
 
 
+		/**
+		 * @param $array array array of email
+		 * @param $email string email to exclude from email
+		 *
+		 * @return array
+		 */
 		function exclude_author( $array ,$email ){
 			$new = array();
 
@@ -726,6 +745,11 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			}
 		}
 
+		/**
+		 * @param $post_id
+		 * get post subscriber
+		 * @return array
+		 */
 		public function get_subscriber( $post_id ){
 			$bccemails = array();
 			$oldSubscriberArr = get_post_meta( $post_id, '_rtbiz_hd_subscribe_to', true );
@@ -742,6 +766,11 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		}
 
 
+		/**
+		 * @param $post_id
+		 * get post contacts
+		 * @return array
+		 */
 		public function get_contacts( $post_id ){
 			$tocontact      = array();
 			$contacts = rt_biz_get_post_for_contact_connection( $post_id, Rt_HD_Module::$post_type );
@@ -755,6 +784,11 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			return $tocontact;
 		}
 
+		/**
+		 * @param $post_id
+		 * get post assigne email
+		 * @return array
+		 */
 		public function get_assigne_email( $post_id ){
 			$post_author_id = get_post_field( 'post_author', $post_id );
 			$userSub     = get_user_by( 'id', intval( $post_author_id ) );

@@ -798,12 +798,12 @@ function rthd_admin_notice_dependency_not_installed() {
 	if ( ! $biz_installed || ! $p2p_installed ) {
 		$msg = '';
 		if ( ! $biz_installed && ! $p2p_installed ){
-			$msg = 'rtBiz and post to post';
+			$msg = 'rtBiz and post-to-post';
 		}
 		else if( ! $biz_installed ){
 			$msg = 'rtBiz';
 		}else if (! $p2p_installed ){
-			$msg = 'post to post';
+			$msg = 'post-to-post';
 		}
 		?>
 		<div class="error rthd-plugin-not-installed-error">
@@ -819,13 +819,13 @@ function rthd_admin_notice_dependency_not_installed() {
 		if ( ( $biz_installed && ! $rtbiz_active ) || ( $p2p_installed && ! $p2p_active ) ) {
 			$msg  = '';
 			if ( ( $biz_installed && ! $rtbiz_active ) && ( $p2p_installed && ! $p2p_active ) ) {
-				$msg = 'rtBiz and post to post';
+				$msg = 'rtBiz and post-to-post';
 			}
 			else if ( $biz_installed && ! $rtbiz_active ){
 				$msg = 'rtBiz';
 			}
 			else if ( $p2p_installed && ! $p2p_active ){
-				$msg = 'post to post';
+				$msg = 'post-to-post';
 			}
 
 			$path  = rthd_get_path_for_plugin( 'rtbiz' );
