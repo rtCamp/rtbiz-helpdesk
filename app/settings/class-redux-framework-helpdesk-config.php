@@ -270,6 +270,16 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					'show_empty' => false,
 				),
 				array(
+					'id'         => 'rthd_blacklist_emails',
+					'title'      => __( 'Blacklist Emails' ),
+					'subtitle'   => __( 'These email address will be blacklist for creating ticket / followup.' ),
+					'desc'       => __( 'All mails coming from these email will be blocked for Helpdesk system. It also accept arguments like *@example.com, *@example.*' ),
+					'type'       => 'multi_text',
+					'validate'   => 'email',
+					'multi'      => true,
+					'show_empty' => false,
+				),
+				array(
 					'id'       => 'rthd_notification_events',
 					'title'    => __( 'Notification Events' ),
 					'subtitle' => __( 'Events to be notified to users' ),

@@ -992,7 +992,7 @@ function rthd_get_attachment_url_from_followups( $postid ){
 
 function rthd_get_general_body_template( $body ){
 	$date = strtotime( current_time( 'mysql', 1 ) );
-	return '<div style="border: 1px solid #DFE9f2;padding: 20px;background: #f1f6fa;">' . rthd_content_filter( $body ) . '<br/><div style="float: right;color: gray;">' . date( 'D, M, d, Y, H:i', $date ) . '</div></div>';
+	return '<div style="border: 1px solid #DFE9f2;padding: 20px;background: #f1f6fa;">' . rthd_content_filter( $body ) . '<br/><div style="float: right;color: gray;">' . date( 'l M d, Y H:i (e P)', $date ) . '</div></div>';
 }
 
 function rthd_update_ticket_updated_by_user( $post_id, $user_id ){
