@@ -154,9 +154,10 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 
 			$userid = @email_exists( $email );
 			if ( ! $userid ) {
-				add_filter( 'wpmu_welcome_user_notification', '__return_false' );
+				//add_filter( 'wpmu_welcome_user_notification', '__return_false' );
 				$random_password = wp_generate_password( $length = 12, $include_standard_special_chars = false );
 				$userid          = wp_create_user( $email, $random_password, $email );
+				rthd_wp_new_user_notification( $userid, $random_password );
 			}
 			return $userid;
 		}
