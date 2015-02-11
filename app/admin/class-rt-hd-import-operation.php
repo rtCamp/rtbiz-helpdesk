@@ -429,6 +429,18 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$from_email = '',
 			$originalBody = ''
 		) {
+			$redux = rthd_get_redux_settings();
+			$is_black_list_empty = true;
+
+			if ( ! empty( $redux['rthd_blacklist_emails'] ) ){
+				$is_black_list_empty = false;
+				foreach ( $redux['rthd_blacklist_emails'] as $email ){
+					if ( preg_match( '/'.str_replace('*','\/*',$email).'/', $fromemail['address'] ) ){
+						return false;
+					}
+				}
+			}
+
 			//subscriber diff
 			$rtCampUser = Rt_HD_Utils::get_hd_rtcamp_user();
 			$hdUser     = array();
@@ -439,7 +451,15 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$allemail = array();
 			foreach ( $allemails as $mail ) {
 				if ( ! array_key_exists( $mail['address'], $hdUser ) ) {
-					$allemail[]= $mail;
+					if ( ! $is_black_list_empty ){
+						foreach ( $redux['rthd_blacklist_emails'] as $email ){
+							if ( ! preg_match( '/'.str_replace('*','\/*',$email).'/',  $mail['address'] ) ){
+								$allemail[]= $mail;
+							}
+						}
+					}else{
+						$allemail[]= $mail;
+					}
 				} else {
 					$subscriber[]= $hdUser[$mail['address']];
 				}
