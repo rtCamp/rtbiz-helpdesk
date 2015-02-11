@@ -225,7 +225,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				'title'   => 'Mailboxes Setup',
 				'subtitle' => __( 'Helpdesk Configured Mailbox(s)' ),
 				'desc'    => 'Following mailboxes have been configured for Helpdesk. Emails from these mailboxes will be parsed and Helpdesk will use them to create new ticket / add new followup accordingly. You can configure these mailboxes from <a href="'.add_query_arg( 'page', RT_BIZ_Configuration::$page_slug, admin_url( 'admin.php' ) ).'"rtBiz</a>',
-				'callback' => rthd_mailbox_setup_view,
+				'callback' => 'rthd_mailbox_setup_view',
 			) );
 
 			array_push( $email_fields, array(
@@ -272,8 +272,8 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				array(
 					'id'         => 'rthd_blacklist_emails',
 					'title'      => __( 'Blacklist Emails' ),
-					'subtitle'   => __( 'These email address will be blacklist for creating ticket / followup.' ),
-					'desc'       => __( 'All mails coming from these email will be blocked for Helpdesk system. It also accept arguments like *@example.com, *@example.*' ),
+					'subtitle'   => __( 'Email addresses to be blacklisted from creating tickets / follow-ups.' ),
+					'desc'       => __( 'All mails coming from these addresses will be blocked by Helpdesk. It also accept arguments like @example.com, @example.*' ),
 					'type'       => 'multi_text',
 					'validate'   => 'email',
 					'multi'      => true,
@@ -420,7 +420,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					array(
 						'id'      => 'rthd_ticket_import_view',
 						'type'    => 'raw',
-						'content' => rt_biz_gravity_importer_view(),
+						'content' => rthd_gravity_importer_view(),
 					),
 				),
 			);
@@ -607,4 +607,9 @@ function rthd_ticket_import_logs() {
 function rthd_mailbox_setup_view(){
 	$module_key = rt_biz_sanitize_module_key( RT_HD_TEXT_DOMAIN );
 	rt_biz_mailbox_setup_view( $module_key );
+}
+
+function rthd_gravity_importer_view(){
+	$module_key = rt_biz_sanitize_module_key( RT_HD_TEXT_DOMAIN );
+	return rt_biz_gravity_importer_view( $module_key );
 }
