@@ -400,8 +400,6 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 * @param string $messageid
 		 * @param string $inreplyto
 		 * @param string $references
-		 * @param array  $rt_all_emails
-		 * @param bool   $systemEmail
 		 *
 		 * @param string $from_email
 		 *
@@ -424,13 +422,20 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$messageid = '',
 			$inreplyto = '',
 			$references = '',
-			$rt_all_emails  = array(),
-			$systemEmail = false,
 			$from_email = '',
 			$originalBody = ''
 		) {
 			$redux = rthd_get_redux_settings();
 			$is_black_list_empty = true;
+
+			$contactEmail = array();
+			if( !empty( $allemail ) && is_array( $allemail ) ){
+				foreach( $allemail as $email  ){
+					if ( ! rthd_is_mailbox_email( $email['address'] ) ){ //check mail is exist in mailbox or not
+						$contactEmail = $email;
+					}
+				}
+			}
 
 			if ( ! empty( $redux['rthd_blacklist_emails'] ) ){
 				$is_black_list_empty = false;
@@ -523,7 +528,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					$this->process_forward_email_data( $title, $body, $mailtime, $allemail, $mailBodyText, $dndEmails );
 				}
 
-				$success_flag = $this->insert_post_comment( $postid, $userid, $body, $fromemail['name'], $fromemail['address'], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $rt_all_emails , $subscriber, $originalBody);
+				$success_flag = $this->insert_post_comment( $postid, $userid, $body, $fromemail['name'], $fromemail['address'], $mailtime, $uploaded, $contactEmail, $dndEmails, $messageid, $inreplyto, $references, $allemail , $subscriber, $originalBody);
 
 				error_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
 
@@ -558,34 +563,30 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					}
 					return $success_flag;
 				} else {
-					if ( $systemEmail ) {
-						$success_flag = $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], $messageid, $inreplyto, $references, $subscriber, $originalBody );
-						error_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
+					$success_flag = $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], $messageid, $inreplyto, $references, $subscriber, $originalBody );
+					error_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
 
-						if ( ! $success_flag ) {
-							foreach ( $uploaded as $u ) {
-								unlink( $u['file'] );
-							}
+					if ( ! $success_flag ) {
+						foreach ( $uploaded as $u ) {
+							unlink( $u['file'] );
 						}
-						return $success_flag;
 					}
+					return $success_flag;
 				}
 			} else {
 				$existPostId = $this->post_exists( $title, $mailtime );
 				//if given post title exits then it will be add as comment other wise as post
 				error_log( "Post Exists : ". var_export( $existPostId, true ) . "\r\n" );
 				if ( ! $existPostId ) {
-					if ( $systemEmail ) {
-						$success_flag = $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], $messageid, $inreplyto, $references, $subscriber, $originalBody );
-						error_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
+					$success_flag = $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], $messageid, $inreplyto, $references, $subscriber, $originalBody );
+					error_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
 
-						if ( ! $success_flag ) {
-							foreach ( $uploaded as $u ) {
-								unlink( $u['file'] );
-							}
+					if ( ! $success_flag ) {
+						foreach ( $uploaded as $u ) {
+							unlink( $u['file'] );
 						}
-						return $success_flag;
 					}
+					return $success_flag;
 				} else {
 					$success_flag = $this->insert_post_comment( $existPostId, $userid, $body, $fromemail['name'], $fromemail['address'], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $subscriber, $originalBody );
 					error_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
@@ -762,7 +763,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		public function insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, $uploaded, $allemails, $dndEmails, $messageid = '', $inreplyto = '', $references = '', $rt_all_emails = array(), $subscriber = array(), $originalBody = '' ) {
+		public function insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, $uploaded, $contactEmails, $dndEmails, $messageid = '', $inreplyto = '', $references = '', $allemails = array(), $subscriber = array(), $originalBody = '' ) {
 
 			$post_type       = get_post_type( $comment_post_ID );
 			$ticketModel     = new Rt_HD_Ticket_Model();
@@ -833,13 +834,13 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			);
 			$ticketModel->update_ticket( $data, $where );
 			/* System Notification -- Followup Added to the ticket */
-			
+
 			/* Toggle Ticket Status */
 			global $rt_hd_email_notification;
 			$post = get_post( $comment_post_ID );
-			
+
 			if ( $rt_hd_email_notification->is_internal_user( $comment_author_email ) ) {
-				
+
 				if ( $post->post_status != 'hd-answered' ){
 					wp_update_post( array( 'ID'=>$comment_post_ID ,'post_status'=>'hd-answered') );
 				}
@@ -851,8 +852,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			}
 			/* end of status toogle code */
 
-			if ( isset( $rt_all_emails  ) ) {
-				foreach ( $rt_all_emails  as $email ) {
+			if ( isset( $allemails  ) ) {
+				foreach ( $allemails  as $email ) {
 					if ( isset( $email['key'] ) ) {
 						$meta = get_comment_meta( $comment_id, '_email_' . $email['key'], true );
 						if ( empty( $meta ) ) {
@@ -872,7 +873,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 			$this->add_attachment_to_post( $uploaded, $comment_post_ID, $comment_id );
 
-			$this->add_contacts_to_post( $allemails, $comment_post_ID );
+			$this->add_contacts_to_post( $contactEmails, $comment_post_ID );
 
 			global $threadPostId;
 			if ( ! isset( $threadPostId ) ) {
@@ -1852,7 +1853,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			echo json_encode($response);
 			die();
 		}
-		
+
 		/**
 		 * Change ticket assignee. Request come from front end.
 		 */
@@ -1862,22 +1863,22 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$post_id = $_POST['post_id'];
 			$old_post = get_post( $post_id );
 			$new_assignee = $_POST['post_author'];
-			
+
 			if ( $old_post->post_author != $new_assignee ) {
 				if ( $post_id ){
 					$ticket = array( 'ID' => $post_id,
 							'post_author' => $new_assignee,);
 					wp_update_post( $ticket );
 				}
-				
+
 				$response['status']= true;
 				global $rt_hd_module;
-				
+
 				$labels = $rt_hd_module->labels;
 				rthd_update_ticket_updated_by_user( $post_id, get_current_user_id() );
-				
+
 				global $rt_hd_email_notification;
-				
+
 				$rt_hd_email_notification->notification_new_ticket_assigned( $post_id, $new_assignee, $labels['name'] );
 				$rt_hd_email_notification->notification_new_ticket_reassigned( $post_id, $old_post->post_author, $new_assignee, $labels['name'], array() );
 			}

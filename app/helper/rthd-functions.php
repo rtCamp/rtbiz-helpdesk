@@ -1004,8 +1004,19 @@ function rthd_replace_followup_placeholder( $body , $name ){
 }
 
 function rthd_is_mailbox_configured(){
-	$system_emails = rt_get_all_system_emails( array( 'module' => RT_HD_TEXT_DOMAIN, ) );
+	$system_emails = rt_get_mpdule_mailbox_emails( RT_HD_TEXT_DOMAIN );
 	if ( ! empty( $system_emails ) ){
+		return true;
+	}
+	return false;
+}
+
+function rthd_is_mailbox_email( $email ){
+	if ( empty( $email ) ){
+		return false;
+	}
+	$system_emails = rt_get_mpdule_mailbox_emails( RT_HD_TEXT_DOMAIN );
+	if ( in_array( $email, $system_emails ) ){
 		return true;
 	}
 	return false;
