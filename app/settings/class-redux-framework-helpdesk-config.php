@@ -277,7 +277,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					'subtitle'   => __( 'Email addresses to be blacklisted from creating tickets / follow-ups.' ),
 					'desc'       => __( 'All mails coming from these addresses will be blocked by Helpdesk. It also accept arguments like @example.com, @example.*' ),
 					'type'       => 'multi_text',
-					'validate'   => 'email',
 					'multi'      => true,
 					'show_empty' => false,
 				),
@@ -412,9 +411,24 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					),
 				)
 			);
+			$this->sections[]   = array(
+				'title'       => __( 'Contact Importer' ),
+				'icon'        => 'el-icon-list-alt',
+				'permissions' => $editor_cap,
+				//'subsection'  => true,
+				'fields'      => array(
+					array(
+						'id'      => 'rt_biz_export_users_to_contacts',
+						'type'    => 'callback',
+						'title'   => 'Export WP_Users to Contacts',
+						'subtitle' => __( 'You can Export selected users to contacts from users option.' ),
+						'callback' => 'rtbiz_export_wp_users_to_contacts',
+					),
+				),
+			);
 
 			$this->sections[]   = array(
-				'title'       => __( 'Importer' ),
+				'title'       => __( 'Gravity Importer' ),
 				'icon'        => 'el-icon-list-alt',
 				'permissions' => $editor_cap,
 				//'subsection'  => true,
