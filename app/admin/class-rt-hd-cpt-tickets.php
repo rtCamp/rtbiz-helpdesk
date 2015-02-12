@@ -40,7 +40,6 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 			add_action( 'rt_hd_process_' . Rt_HD_Module::$post_type . '_meta', 'RT_Meta_Box_Attachment::save', 10, 2 );
 			add_action( 'rt_hd_process_' . Rt_HD_Module::$post_type . '_meta', 'RT_Meta_Box_External_Link::save', 10, 2 );
 			add_action( 'rt_hd_process_' . Rt_HD_Module::$post_type . '_meta', 'RT_Ticket_Diff_Email::save', 10, 2 );
-			add_action( 'rt_hd_process_' . Rt_HD_Module::$post_type . '_meta', 'RT_Meta_Box_Notes::save', 10, 2 );
 
 			add_action( 'pre_get_posts', array( $this, 'pre_filter' ), 1 );
 			add_action( 'untrashed_post', array( $this, 'after_restore_trashed_ticket' ) );
@@ -296,7 +295,6 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 			add_meta_box( 'rt-hd-attachment', __( 'Attachment', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Attachment::ui', Rt_HD_Module::$post_type, 'side', 'default' );
 			add_meta_box( 'rt-hd-external-link', __( 'External Link', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_External_Link::ui', Rt_HD_Module::$post_type, 'side', 'default' );
 			add_meta_box( 'rt-hd-ticket-follow-up',  __( 'Follow Up', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Ticket_Comments::ui',  Rt_HD_Module::$post_type,  'normal', 'default' );
-			add_meta_box( 'rt-hd-ticket-notes',  __( 'Notes', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Notes::ui',  Rt_HD_Module::$post_type,  'side', 'default' );
 
 		}
 
