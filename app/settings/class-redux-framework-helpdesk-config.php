@@ -478,6 +478,21 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			);
 
 			$this->sections[] = array(
+				'icon'        => 'el-icon-key',
+				'title'       => __( 'License' ),
+				'permissions' => $admin_cap,
+				'fields'      => array(
+					array(
+						'id'      => 'rt_hd_activiation',
+						'type'    => 'callback',
+						'title'        => __( 'Plugin Activation' ),
+						'subtitle'     => __( 'Enter License Key and Activate plugin' ),
+						'callback' => 'rthd_activation_view',
+					)
+				),
+			);
+
+			$this->sections[] = array(
 				'title'   => __( 'Miscellaneous' ),
 				'heading' => __( 'Import / Export Settings' ),
 				'desc'    => __( 'Import and Export your settings from file, text or URL.' ),
@@ -628,4 +643,8 @@ function rthd_mailbox_setup_view(){
 function rthd_gravity_importer_view(){
 	$module_key = rt_biz_sanitize_module_key( RT_HD_TEXT_DOMAIN );
 	return rt_biz_gravity_importer_view( $module_key );
+}
+
+function rthd_activation_view(){
+	do_action( 'rthelpdesk_addon_license_details' );
 }
