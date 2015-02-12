@@ -478,8 +478,8 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			);
 
 			$this->sections[] = array(
-				'icon'        => 'el-icon-envelope',
-				'title'       => __( 'Activation' ),
+				'icon'        => 'el-icon-key',
+				'title'       => __( 'License' ),
 				'permissions' => $admin_cap,
 				'fields'      => array(
 					array(

@@ -89,7 +89,7 @@ if (!class_exists('Rt_HD_Edd_License')) {
             $license_key = trim( get_option( 'edd_rthelpdesk_license_key' ) );
 
             // setup the updater
-            $edd_updater = new EDD_SL_Plugin_Updater( EDD_RT_HELPDESK_STORE_URL, EDD_RT_HELPDESK_ITEM_NAME, array(
+            $edd_updater = new EDD_SL_Plugin_Updater( EDD_RT_HELPDESK_STORE_URL, RT_HD_BASE_NAME, array(
                 'version' => RT_HD_VERSION, // current version number
                 'license' => $license_key, // license key (used get_option above to retrieve from DB)
                 'item_name' => EDD_RT_HELPDESK_ITEM_NAME, // name of this plugin

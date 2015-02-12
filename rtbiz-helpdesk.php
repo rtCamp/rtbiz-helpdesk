@@ -28,6 +28,14 @@ if ( ! defined( 'RT_HD_TEXT_DOMAIN' ) ) {
 	 */
 	define( 'RT_HD_TEXT_DOMAIN', 'rtbiz-helpdesk' );
 }
+if ( ! defined( 'RT_HD_BASE_NAME' ) ) {
+	/**
+	 * Defines RT_HD_PATH if it does not exits.
+	 *
+	 * @since 0.1
+	 */
+	define( 'RT_HD_BASE_NAME', plugin_basename( __FILE__ ) );
+}
 if ( ! defined( 'RT_HD_PATH' ) ) {
 	/**
 	 * Defines RT_HD_PATH if it does not exits.
