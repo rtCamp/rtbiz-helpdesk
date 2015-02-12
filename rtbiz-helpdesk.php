@@ -109,6 +109,24 @@ if ( ! defined( 'RT_HD_PATH_TEMPLATES' ) ) {
 	define( 'RT_HD_PATH_TEMPLATES', plugin_dir_path( __FILE__ ) . 'templates/' );
 }
 
+if ( ! defined( 'EDD_RT_HELPDESK_STORE_URL' ) ) {
+	/**
+	 * Defines helpdesk store url
+	 *
+	 * @since 0.1
+	 */
+	define( 'EDD_RT_HELPDESK_STORE_URL', 'http://rtbiz.rtcamp.net/' );
+}
+
+if ( ! defined( 'EDD_RT_HELPDESK_ITEM_NAME' ) ){
+	/**
+	 * define helpdesk item slug
+	 *
+	 * @since 0.1
+	 */
+	define( 'EDD_RT_HELPDESK_ITEM_NAME', 'Helpdesk' );
+}
+
 include_once RT_HD_PATH_HELPER . 'rthd-functions.php';
 
 /**
@@ -136,6 +154,9 @@ function rt_hd_include() {
 	$rthd_reports_autoload       = new RT_WP_Autoload( RT_HD_PATH_LIB . 'rtreports/' );
 
 }
+
+include_once( RT_HD_PATH_VENDOR . 'edd-license/class-rt-hs-edd-license.php' );
+new Rt_HD_Edd_License();
 
 /**
  * Main function that initiate rt-helpdesk plugin
