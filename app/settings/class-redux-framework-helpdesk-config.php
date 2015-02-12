@@ -272,11 +272,11 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					'show_empty' => false,
 				),
 				array(
-					'id'         => 'rthd_blacklist_emails',
+					'id'         => 'rthd_blacklist_emails_textarea',
 					'title'      => __( 'Blacklist Emails' ),
 					'subtitle'   => __( 'Email addresses to be blacklisted from creating tickets / follow-ups.' ),
 					'desc'       => __( 'All mails coming from these addresses will be blocked by Helpdesk. It also accept arguments like @example.com, @example.*' ),
-					'type'       => 'multi_text',
+					'type'       => 'textarea',
 					'multi'      => true,
 					'show_empty' => false,
 				),

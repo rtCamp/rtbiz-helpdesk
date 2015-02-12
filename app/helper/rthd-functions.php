@@ -1053,3 +1053,11 @@ function rthd_wp_new_user_notification($user_id, $plaintext_pass = '') {
 	wp_mail($user->user_email, sprintf(__('[%s] Your username and password'), $blogname), $message);
 
 }
+function rthd_get_blacklist_emails(){
+	$redux = rthd_get_redux_settings();
+	$blacklist = array();
+	if ( isset( $redux['rthd_blacklist_emails_textarea'] ) && ! empty( $redux['rthd_blacklist_emails_textarea'] ) ){
+		$blacklist = explode( "\n", $redux['rthd_blacklist_emails_textarea'] );
+	}
+	return $blacklist;
+}
