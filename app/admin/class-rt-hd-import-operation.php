@@ -430,7 +430,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		) {
 			$redux = rthd_get_redux_settings();
 			$is_black_list_empty = true;
-
+			$black_list_emails = rthd_get_blacklist_emails();
 			$contactEmail = array();
 			if( !empty( $allemail ) && is_array( $allemail ) ){
 				foreach( $allemail as $email  ){
@@ -440,9 +440,9 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				}
 			}
 
-			if ( ! empty( $redux['rthd_blacklist_emails'] ) ){
+			if ( ! empty( $black_list_emails ) ){
 				$is_black_list_empty = false;
-				foreach ( $redux['rthd_blacklist_emails'] as $email ){
+				foreach ( $black_list_emails as $email ){
 					if ( preg_match( '/'.str_replace('*','\/*',$email).'/', $fromemail['address'] ) ){
 						return false;
 					}
@@ -460,7 +460,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			foreach ( $allemails as $mail ) {
 				if ( ! array_key_exists( $mail['address'], $hdUser ) ) {
 					if ( ! $is_black_list_empty ){
-						foreach ( $redux['rthd_blacklist_emails'] as $email ){
+						foreach ( $black_list_emails as $email ){
 							if ( ! preg_match( '/'.str_replace('*','\/*',$email).'/',  $mail['address'] ) ){
 								$allemail[]= $mail;
 							}
