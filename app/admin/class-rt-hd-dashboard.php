@@ -37,10 +37,15 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		public function __construct() {
 			$this->screen_id = '';
 			$this->hook();
-			
+
 			add_action( 'wp_ajax_update_rt_hd_welcome_panel', array( $this, 'update_rt_hd_welcome_panel' ) );
-			
+			add_action( 'rtbiz_welcome_panel_addon_link', array( $this, 'add_helpdesk_link' ) );
+
 			$this->setup_defaults();
+		}
+
+		public function add_helpdesk_link(){
+			?><a id="rtbiz-customize-helpdesk" class="button button-primary button-hero" href="<?php echo admin_url( 'admin.php?page=rthd-' . Rt_HD_Module::$post_type . '-dashboard' ); ?>"><?php _e( 'Helpdesk' ); ?></a><?php
 		}
 
 		/**
@@ -51,7 +56,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		public function hook() {
 			add_action( 'admin_menu', array( $this, 'register_dashboard' ), 1 );
 		}
-		
+
 		/**
 		 * Setup default value for dashboard.
 		 */
@@ -78,10 +83,10 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			/* Add callbacks for this screen only */
 			add_action( 'load-' . $this->screen_id, array( $this, 'page_actions' ), 9 );
 			add_action( 'admin_footer-' . $this->screen_id, array( $this, 'footer_scripts' ) );
-			
+
 			/* Add Welcome panel on rt helpdesk dashboard. */
 			add_action( 'rt_hd_welcome_panel', array( $this, 'rt_hd_welcome_panel' ) );
-			
+
 			/* Setup js for rtHelpdesk dashboard */
 			add_action( 'rthd_after_dashboard', array( $this, 'print_dashboard_js' ) );
 
@@ -692,25 +697,25 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		function tickets_table_set_option( $status, $option, $value ) {
 			return $value;
 		}
-		
+
 		/**
 		 * Update rtHelpdesk welcome panel
 		 */
 		function update_rt_hd_welcome_panel() {
-		
+
 			check_ajax_referer( 'rthd-welcome-panel-nonce', 'rthdwelcomepanelnonce' );
-		
+
 			$author_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
-		
+
 			if ( ! current_user_can( $author_cap ) ) {
 				wp_die( -1 );
 			}
-		
+
 			update_user_meta( get_current_user_id(), 'show_rt_hd_welcome_panel', empty( $_POST['visible'] ) ? 0 : 1 );
-		
+
 			wp_die( 1 );
 		}
-		
+
 		/**
 		 * Check welcome panel for logged in user.
 		 */
@@ -720,16 +725,16 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 				update_user_meta( get_current_user_id(), 'show_rt_hd_welcome_panel', $welcome_checked );
 			}
 		}
-		
+
 		/**
 		 * Display welcome widget on rtHelpdesk dashboard.
 		 */
 		function rt_hd_welcome_panel() {
 			global $rt_hd_attributes;
-			
+
 			$settings = rthd_get_redux_settings();
 			$welcome_label = $settings['rthd_menu_label'];
-			
+
 			$admin_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' );
 			$editor_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
 		?>
@@ -765,9 +770,9 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 					</div>
 				</div>
 			</div>
-		<?php 
+		<?php
 		}
-		
+
 		/**
 		 * Add js for hide/show welcome panel in rtHelpdesk dashboard.
 		 */
