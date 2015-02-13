@@ -125,9 +125,9 @@ if ( ! class_exists( 'Rt_HD_Logs' ) ) {
 					<th>
 						<?php _e( 'Transaction Start Time', RT_HD_TEXT_DOMAIN ); ?>
 					</th>
-					<th>
+					<!--<th>
 
-					</th>
+					</th>-->
 				</tr>
 				</thead>
 
@@ -172,15 +172,15 @@ if ( ! class_exists( 'Rt_HD_Logs' ) ) {
 							<?php echo esc_attr( date( 'Y-m-d H:i:s', intval( $rslt->trans_id ) ) );
 							?>
 						</td>
-						<td>
+						<!--<td>
 							<a class="revertChanges"
-							   href="edit.php?post_type=rt_ticket&page=rthd-settings&transa_id=<?php echo esc_attr( $rslt->trans_id ); ?>"
-							   data-trans="<?php echo esc_attr( $rslt->trans_id ); ?>"> Revert Changes </a> &nbsp; |
+							   href="edit.php?post_type=rt_ticket&page=rthd-settings&transa_id=<?php /*echo esc_attr( $rslt->trans_id ); */?>"
+							   data-trans="<?php /*echo esc_attr( $rslt->trans_id ); */?>"> Revert Changes </a> &nbsp; |
 							&nbsp; <a
-								href="edit.php?post_type=rt_ticket&page=rthd-settings&log-list=log-list&trans_id=<?php echo esc_attr( $rslt->trans_id ); ?>"
-								data-trans="<?php echo esc_attr( $rslt->trans_id ); ?>"> View Post </a>
+								href="edit.php?post_type=rt_ticket&page=rthd-settings&log-list=log-list&trans_id=<?php /*echo esc_attr( $rslt->trans_id ); */?>"
+								data-trans="<?php /*echo esc_attr( $rslt->trans_id ); */?>"> View Post </a>
 
-						</td>
+						</td>-->
 					</tr>
 
 
