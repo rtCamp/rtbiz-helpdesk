@@ -189,7 +189,26 @@ $user_edit_content = current_user_can( $cap );
 
 
 				<?php }
-
+				
+				/* Display reference link if any */
+				$ref_links = get_post_meta( $post->ID, '_rtbiz_hd_external_file' );
+				if( ! empty( $ref_links ) ) {
+				?>
+					<div class="rt-hd-ticket-info">
+						<h2 class="rt-hd-ticket-info-header"><?php _e( 'Reference Link' ); ?></h2>
+					</div>
+					<div class="rt-hd-ticket-info">
+						<ul>
+							<?php foreach ( $ref_links as $ref_link ) {
+								$ref_link = (array) json_decode( $ref_link );
+							?>
+								<li><a target="_blank" href="<?php echo $ref_link['link']; ?>"><?php echo $ref_link['title']; ?></a></li>
+							<?php } ?>
+						</ul>
+					</div>
+				<?php 
+				}
+				
 				if ( current_user_can( $cap ) ) {
 
 					// Products
