@@ -65,7 +65,6 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 				return $columns;
 			}
 
-			$columns['country'] = __( 'Country', RT_HD_TEXT_DOMAIN );
 			global $rt_hd_module;
 			if ( in_array( Rt_HD_Module::$post_type, array_keys( $rt_entity->enabled_post_types ) ) ) {
 				$columns[ Rt_HD_Module::$post_type ] = $rt_hd_module->labels['name'];
@@ -91,11 +90,6 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 			}
 
 			switch ( $column ) {
-				case 'country':
-					if ( class_exists( 'Rt_Entity' ) ) {
-						echo esc_attr( implode( ' , ', get_post_meta( $post_id, Rt_Entity::$meta_key_prefix . 'account_country' ) ) );
-					}
-					break;
 				default:
 					if ( in_array( Rt_HD_Module::$post_type, array_keys( $rt_entity->enabled_post_types ) ) && $column == Rt_HD_Module::$post_type ) {
 						$post_details = get_post( $post_id );
