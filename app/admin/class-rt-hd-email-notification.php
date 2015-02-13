@@ -468,7 +468,9 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				$htmlbody = 'A new support ticket created by <strong>' . $ticket_created_by->display_name.'</strong>';
 				$htmlbody .= '<br/>Ticket Assigned to: <strong>' . $assigne_user->display_name.'</strong>';
 				// Add product info into mail body.
-				$htmlbody .= "<p><b>Product: </b>" . $arrProducts . '</p> <br />';
+				if( ! empty( $arrProducts ) ) {
+					$htmlbody .= "<p><b>Product: </b>" . $arrProducts . '</p> <br />';
+				}
 				if ( isset( $body ) && !empty( $body ) ){
 					$htmlbody .= '<hr style="color: #DCEAF5;" /><div>' . rthd_content_filter( $body ) . '</div>';
 				}
@@ -480,7 +482,9 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			if ( ! empty( $assigneEmail ) ){
 				$htmlbody = 'A new support ticket created by <strong>' . $ticket_created_by->display_name.'</strong> is assigned to you';
 				// Add product info into mail body.
-				$htmlbody .= "<p><b>Product: </b>" . $arrProducts . '</p> <br />';
+				if( ! empty( $arrProducts ) ) {
+					$htmlbody .= "<p><b>Product: </b>" . $arrProducts . '</p> <br />';
+				}
 				if ( isset( $body ) && !empty( $body ) ){
 					$htmlbody .= '<hr style="color: #DCEAF5;" /><div>' . rthd_content_filter( $body ) . '</div>';
 				}
@@ -493,7 +497,9 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				//A new support ticket is created by [CREATOR CONTACT NAME]. You have been subscribed to this ticket.
 				$htmlbody = 'A new support ticket created by <strong>' . $ticket_created_by->display_name.'</strong>. You have been subscribed to this ticket.<br/>';
 				// Add product info into mail body.
-				$htmlbody .= "<p><b>Product: </b>" . $arrProducts . '</p> <br />';
+				if( ! empty( $arrProducts ) ) {
+					$htmlbody .= "<p><b>Product: </b>" . $arrProducts . '</p> <br />';
+				}
 				if ( isset( $body ) && !empty( $body ) ){
 					$htmlbody .= '<hr style="color: #DCEAF5;" /><div>' . rthd_content_filter( $body ) . '</div>';
 				}
