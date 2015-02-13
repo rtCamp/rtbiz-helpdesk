@@ -1052,6 +1052,7 @@ function rthd_wp_new_user_notification($user_id, $plaintext_pass = '') {
 
 	wp_mail($user->user_email, sprintf(__('[%s] Your username and password'), $blogname), $message);
 
+
 }
 
 function rthd_get_blacklist_emails(){
@@ -1061,4 +1062,15 @@ function rthd_get_blacklist_emails(){
 		$blacklist = explode( "\n", $redux['rthd_blacklist_emails_textarea'] );
 	}
 	return $blacklist;
+}
+
+/**
+ * Update rtHelpdesk settings.
+ * @param string    $option_name        Setting option name.
+ * @param string    $option_value       Setting option value.
+ */
+ function rthd_set_redux_settings( $option_name, $option_value ) {
+	global $rt_hd_redux_framework_Helpdesk_Config;
+	
+	$rt_hd_redux_framework_Helpdesk_Config->ReduxFramework->set( $option_name, $option_value );
 }
