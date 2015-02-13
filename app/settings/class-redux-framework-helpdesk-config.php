@@ -414,7 +414,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			$this->sections[]   = array(
 				'title'       => __( 'Contact Importer' ),
 				'icon'        => 'el-icon-list-alt',
-				'permissions' => $editor_cap,
+				'permissions' => $admin_cap,
 				//'subsection'  => true,
 				'fields'      => array(
 					array(
@@ -430,7 +430,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			$this->sections[]   = array(
 				'title'       => __( 'Gravity Importer' ),
 				'icon'        => 'el-icon-list-alt',
-				'permissions' => $editor_cap,
+				'permissions' => $admin_cap,
 				//'subsection'  => true,
 				'fields'      => array(
 					array(
@@ -444,7 +444,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			$this->sections[]   = array(
 				'title'       => __( 'Importer Mapper' ),
 				'icon'        => 'el-icon-list-alt',
-				'permissions' => $editor_cap,
+				'permissions' => $admin_cap,
 				'subsection'  => true,
 				'fields'      => array(
 					array(
@@ -466,7 +466,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			$this->sections[]   = array(
 				'title'       => __( 'Import Logs' ),
 				'icon'        => 'el-icon-list-alt',
-				'permissions' => $editor_cap,
+				'permissions' => $admin_cap,
 				'subsection'  => true,
 				'fields'      => array(
 					array(
@@ -497,6 +497,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				'heading' => __( 'Import / Export Settings' ),
 				'desc'    => __( 'Import and Export your settings from file, text or URL.' ),
 				'icon'    => 'el-icon-refresh',
+				'permissions' => $admin_cap,
 				'fields'  => array(
 					array(
 						'id'         => 'rthd_settings_import_export',
