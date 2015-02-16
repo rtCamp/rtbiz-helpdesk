@@ -155,7 +155,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				$mailbox_options[ $email ] = $email;
 			}
 			$is_mailbox_configured = ( ! empty( $system_emails ) );
-
+			$acl_page_link = '<a href="' . admin_url( 'admin.php?page=' . Rt_Biz::$access_control_slug ) . '">Access Control</a> page.';
 			// ACTUAL DECLARATION OF SECTIONS
 			$general_fields = array(
 				array(
@@ -184,7 +184,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					'options'  => $users_options,
 					'default'  => $default_assignee,
 					'title'    => __( 'Default Assignee' ),
-					'desc'     => __( 'Default assign will be rtbiz contact which have helpdesk access.' ),
+					'desc'     => __( 'Default assign will be rtbiz contact which have helpdesk access. You can change helpdesk access form rtBiz ' ) . $acl_page_link,
 					'subtitle' => __( 'Select user for HelpDesk ticket Assignee' ),
 				),
 				array(
