@@ -30,7 +30,7 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		public static function store_old_post_data( $post_id, $post ) {
-			global $rt_hd_ticket_history_model, $rt_hd_module, $rt_hd_attributes, $rt_ticket_email_content;
+			global $rt_hd_ticket_history_model, $rt_hd_module, $rt_hd_attributes, $rt_ticket_email_content, $rtbiz_department, $rtbiz_offerings;
 
 			// $post_id and $post are required
 			if ( empty( $post_id ) || empty( $post ) ) {
@@ -172,7 +172,20 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 				$attr_diff = $rt_hd_attributes->attribute_diff( $attr, $post_id, $_POST['tax_input'] );
 				$emailHTML .= $attr_diff;
 			}
-
+			
+			// Taxonomy Diff
+			if ( isset( $_POST['tax_input'] ) && isset( $_POST['tax_input'][ Rt_Offerings::$offering_slug ] ) ) {
+				$diff = rthd_get_taxonomy_diff( $post_id, Rt_Offerings::$offering_slug );
+				if ( $diff != '' ){
+					$emailHTML .= '<tr><th style="padding: .5em;border: 0;">'.$rtbiz_offerings->labels['name'].'</th><td>' . $diff . '</td><td></td></tr>';
+				}
+			}
+			if ( isset( $_POST['tax_input'] ) && isset( $_POST['tax_input'][ RT_Departments::$slug ] ) ) {
+				$diff = rthd_get_taxonomy_diff( $post_id, RT_Departments::$slug );
+				if ( $diff != '' ){
+					$emailHTML .= '<tr><th style="padding: .5em;border: 0;">'.$rtbiz_department->labels['name'].'</th><td>' . $diff . '</td><td></td></tr>';
+				}
+			}
 			// add author into Subscribers List
 			if ( ! isset( $_POST['subscribe_to'] ) ) {
 				$_POST['subscribe_to'] = array();

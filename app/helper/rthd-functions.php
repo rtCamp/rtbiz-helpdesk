@@ -1074,3 +1074,32 @@ function rthd_get_blacklist_emails(){
 
 	$rt_hd_redux_framework_Helpdesk_Config->ReduxFramework->set( $option_name, $option_value );
 }
+
+/**
+ * Get taxonomy diff.
+ */
+function rthd_get_taxonomy_diff( $post_id, $tax_slug ) {
+	
+	$post_terms = wp_get_post_terms( $post_id, $tax_slug );
+	$postterms  = array_filter( $_POST['tax_input'][ $tax_slug ] );
+	$termids    = wp_list_pluck( $post_terms, 'term_id' );
+	$diff       = array_diff( $postterms, $termids );
+	$diff2      = array_diff( $termids, $postterms );
+	$diff_tax1  = array();
+	$diff_tax2  = array();
+	foreach ( $diff as $tax_id ) {
+		$tmp          = get_term_by( 'id', $tax_id, $tax_slug );
+		$diff_tax1[] = $tmp->name;
+	}
+	
+	foreach ( $diff2 as $tax_id ) {
+		$tmp          = get_term_by( 'id', $tax_id, $tax_slug );
+		$diff_tax2[] = $tmp->name;
+	}
+	
+	
+	
+	$diff = rthd_text_diff( implode( ', ', $diff_tax2 ), implode( ', ', $diff_tax1 ) );
+	
+	return $diff;
+}
