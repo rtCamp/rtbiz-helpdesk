@@ -9,4 +9,5 @@
 * [Database](database/index.md)
 * [Contribute](contribute/index.md)
 * [Addons](addons/index.md)
+* [Settings](settings/README.md)
 
