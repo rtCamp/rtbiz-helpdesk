@@ -798,12 +798,12 @@ function rthd_admin_notice_dependency_not_installed() {
 	if ( ! $biz_installed || ! $p2p_installed ) {
 		$msg = '';
 		if ( ! $biz_installed && ! $p2p_installed ){
-			$msg = 'rtBiz and post-to-post';
+			$msg = 'rtBiz and Posts 2 Posts';
 		}
 		else if( ! $biz_installed ){
 			$msg = 'rtBiz';
 		}else if (! $p2p_installed ){
-			$msg = 'post-to-post';
+			$msg = 'Posts 2 Posts';
 		}
 		?>
 		<div class="error rthd-plugin-not-installed-error">
@@ -819,13 +819,13 @@ function rthd_admin_notice_dependency_not_installed() {
 		if ( ( $biz_installed && ! $rtbiz_active ) || ( $p2p_installed && ! $p2p_active ) ) {
 			$msg  = '';
 			if ( ( $biz_installed && ! $rtbiz_active ) && ( $p2p_installed && ! $p2p_active ) ) {
-				$msg = 'rtBiz and post-to-post';
+				$msg = 'rtBiz and Posts 2 Posts';
 			}
 			else if ( $biz_installed && ! $rtbiz_active ){
 				$msg = 'rtBiz';
 			}
 			else if ( $p2p_installed && ! $p2p_active ){
-				$msg = 'post-to-post';
+				$msg = 'Posts 2 Posts';
 			}
 
 			$path  = rthd_get_path_for_plugin( 'rtbiz' );
@@ -1071,6 +1071,6 @@ function rthd_get_blacklist_emails(){
  */
  function rthd_set_redux_settings( $option_name, $option_value ) {
 	global $rt_hd_redux_framework_Helpdesk_Config;
-	
+
 	$rt_hd_redux_framework_Helpdesk_Config->ReduxFramework->set( $option_name, $option_value );
 }
