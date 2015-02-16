@@ -12,7 +12,7 @@
  8 | Edit followup by *Staff / Assignee / Subscriber* | No** | Yes | Yes | Yes | No
  9 | Edit followup by *Creator / Contact* | No** | Yes | Yes | Yes | No
 10 | Edit Sensitive Followup by *Staff / Assignee / Subscriber* | Yes | Yes | Yes | Yes | Yes
-10 | Edit Sensitive Followup by *Creator / Contact* | Yes | Yes | Yes | Yes | Yes
-11 | Edit Staff Only Followup by *Staff / Assignee / Subscriber* | Yes** | Yes | Yes | Yes | No
-11 | Delete followup by *Creator / Contact* | No | Yes | Yes | Yes | No
-12 | Delete followup by *Staff / Assignee / Subscriber* | No | Yes | Yes | Yes | No
+11 | Edit Sensitive Followup by *Creator / Contact* | Yes | Yes | Yes | Yes | Yes
+12 | Edit Staff Only Followup by *Staff / Assignee / Subscriber* | Yes** | Yes | Yes | Yes | No
+13 | Delete followup by *Creator / Contact* | No | Yes | Yes | Yes | No
+14 | Delete followup by *Staff / Assignee / Subscriber* | No | Yes | Yes | Yes | No
