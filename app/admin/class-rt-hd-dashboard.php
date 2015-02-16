@@ -747,7 +747,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 					<div class="welcome-panel-column">
 						<?php if ( current_user_can( $admin_cap ) ): ?>
 							<h4><?php _e( 'Get Started' ); ?></h4>
-							<a id="rt-hd-customize-biz" class="button button-primary button-hero" href="<?php echo admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&page=' . Redux_Framework_Helpdesk_Config::$page_slug ); ?>"><?php _e( 'Customize Your Helpdesk' ); ?></a>
+							<a id="rt-hd-customize-biz" class="button button-primary button-hero" href="<?php echo admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&page=' . Redux_Framework_Helpdesk_Config::$page_slug ); ?>"><?php _e( 'Helpdesk Settings' ); ?></a>
 						<?php endif; ?>
 					</div>
 					<div class="welcome-panel-column">
