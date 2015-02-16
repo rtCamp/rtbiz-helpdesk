@@ -34,9 +34,9 @@ if (!class_exists('Rt_HD_Edd_License')) {
             ?>
             <div class="rthd-addon-license">
                 <div class="row">
-                    <div class="columns large-12 rthd-addon-license-status"><span class="rthd-addon-license-status-label">rtBiz Helpdesk : </span>
-					<span
-                        class="rthd-addon-license-status <?php echo $status_class ?>"><?php echo $status_value; ?></span>
+                    <div class="columns large-12 rthd-addon-license-status"></strong>
+                        <span class="rthd-addon-license-status-label"> Helpdesk Status: </span>
+					    <span class="rthd-addon-license-status <?php echo $status_class ?>"><?php echo $status_value; ?></span>
                     </div>
                 </div>
                 <div class="row">

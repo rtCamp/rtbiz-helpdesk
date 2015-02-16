@@ -156,3 +156,23 @@ img.tips {
 .redux-container #redux-header .display_header {
     margin: 0;
 }
+
+/* Activation page */
+
+.rthd-addon-license-status{
+	margin: 10px 0px;
+}
+
+.rthd-addon-license-status-label{
+	font-weight: bold;
+}
+
+.rthd-addon-license .form-table th, .rthd-addon-license .form-table td{
+	padding: 10px 0px !important;
+}
+
+.redux-main .rthd-addon-license .form-table tr:first-child th, .redux-main .rthd-addon-license .form-table tr:first-child td,
+.redux-main .rthd-addon-license .form-table:first-child tr th, .redux-main .rthd-addon-license .form-table:first-child tr td {
+	padding-top: 10px !important;
+}
+
