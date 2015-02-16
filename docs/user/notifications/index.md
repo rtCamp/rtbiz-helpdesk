@@ -1,4 +1,4 @@
-# Notificatin Emails
+# Notification Emails
 
    | Activity | Creator | Group | Assignee | Subscriber | Contact
 ---|----------|---------|-------|----------|------------|--------
