@@ -1031,8 +1031,10 @@ function rthd_is_mailbox_email( $email ){
  * @param string $plaintext_pass Optional. The user's plaintext password. Default empty.
  */
 function rthd_wp_new_user_notification($user_id, $plaintext_pass = '') {
+	global $wpdb, $wp_hasher;
+	
 	$user = get_userdata( $user_id );
-
+	
 	// The blogname option is escaped with esc_html on the way into the database in sanitize_option
 	// we want to reverse this for the plain text arena of emails.
 	$blogname = wp_specialchars_decode(get_option('blogname'), ENT_QUOTES);
@@ -1045,14 +1047,29 @@ function rthd_wp_new_user_notification($user_id, $plaintext_pass = '') {
 
 	if ( empty($plaintext_pass) )
 		return;
+	
+	$settings = rthd_get_redux_settings();
+	$module_label = $settings['rthd_menu_label'];
+	
+	// Generate something random for a password reset key.
+	$key = wp_generate_password( 20, false );
+	
+	if ( empty( $wp_hasher ) ) {
+		require_once ABSPATH . WPINC . '/class-phpass.php';
+		$wp_hasher = new PasswordHash( 8, true );
+	}
+	$hashed = $wp_hasher->HashPassword( $key );
+	$wpdb->update( $wpdb->users, array( 'user_activation_key' => $hashed ), array( 'user_login' => $user->user_login ) );
+	
+	$reset_pass_link = network_site_url("wp-login.php?action=rp&key=$key&login=" . rawurlencode( $user->user_login ), 'login');
+	
+	$message  = __( 'Howdy,' ) . "\r\n\r\n";
+	$message .= sprintf( __( 'A new account on %s has been created for you.' ), $module_label ) . "\r\n\r\n";
+	$message .= sprintf( __( 'Your username is: %s' ), $user->user_login ) . "\r\n";
+	$message .= sprintf( __( "Please visit following link to activate the account." . "\r\n" . "%s" ), $reset_pass_link) . "\r\n\r\n";
+	$message .= __( 'Thanks.' ) . "\r\n" . __( 'Admin.' );
 
-	$message  = sprintf(__('Username: %s'), $user->user_login) . "\r\n";
-	$message .= sprintf(__('Password: %s'), $plaintext_pass) . "\r\n";
-	$message .= wp_login_url() . "\r\n";
-
-	wp_mail($user->user_email, sprintf(__('[%s] Your username and password'), $blogname), $message);
-
-
+	wp_mail($user->user_email, sprintf(__('Your New %s Account'), $module_label), $message);
 }
 
 function rthd_get_blacklist_emails(){
@@ -1073,4 +1090,71 @@ function rthd_get_blacklist_emails(){
 	global $rt_hd_redux_framework_Helpdesk_Config;
 
 	$rt_hd_redux_framework_Helpdesk_Config->ReduxFramework->set( $option_name, $option_value );
+}
+
+/**
+ * Get taxonomy diff.
+ */
+function rthd_get_taxonomy_diff( $post_id, $tax_slug ) {
+	
+	$post_terms = wp_get_post_terms( $post_id, $tax_slug );
+	$postterms  = array_filter( $_POST['tax_input'][ $tax_slug ] );
+	$termids    = wp_list_pluck( $post_terms, 'term_id' );
+	$diff       = array_diff( $postterms, $termids );
+	$diff2      = array_diff( $termids, $postterms );
+	$diff_tax1  = array();
+	$diff_tax2  = array();
+	foreach ( $diff as $tax_id ) {
+		$tmp          = get_term_by( 'id', $tax_id, $tax_slug );
+		$diff_tax1[] = $tmp->name;
+	}
+	
+	foreach ( $diff2 as $tax_id ) {
+		$tmp          = get_term_by( 'id', $tax_id, $tax_slug );
+		$diff_tax2[] = $tmp->name;
+	}
+	
+	
+	
+	$diff = rthd_text_diff( implode( ', ', $diff_tax2 ), implode( ', ', $diff_tax1 ) );
+	
+	return $diff;
+}
+
+/**
+ * Check whether current user has contact connection to the ticket.
+ */
+function rthd_is_ticket_contact_connection( $post_id ) {
+	$flag = false;
+	
+	$current_user = get_user_by( 'id', get_current_user_id() );
+	$ticket_contacts = rt_biz_get_post_for_contact_connection( $post_id, Rt_HD_Module::$post_type );
+	
+	foreach ( $ticket_contacts as $ticket_contact ) {
+		
+		$contact_email = rt_biz_get_entity_meta( $ticket_contact->ID, 'contact_primary_email', true );
+		
+		if( $current_user->user_email == $contact_email ) {
+			$flag = true;
+		}
+	}
+	
+	return $flag;
+}
+
+/**
+ * Check whether current user is subscribe to the ticket.
+ */
+function rthd_is_ticket_subscriber( $post_id ) {
+	$flag = false;
+
+	$current_user = get_user_by( 'id', get_current_user_id() );
+	
+	$ticket_subscribers = get_post_meta( $post_id, '_rtbiz_hd_subscribe_to', true );
+	
+	if( in_array( get_current_user_id(), $ticket_subscribers ) ) {
+		$flag = true;
+	}
+
+	return $flag;
 }

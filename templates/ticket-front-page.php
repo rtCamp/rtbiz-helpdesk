@@ -262,6 +262,37 @@ $user_edit_content = current_user_can( $cap );
 					// Order History
 					do_action( 'rtbiz_hd_user_purchase_history', $post->ID );
 				}
+				
+				// Watch/Unwatch ticket feature.
+				$watch_unwatch_label = $watch_unwatch_value = '';
+				
+				if ( current_user_can( $cap ) ) {
+					if ( rthd_is_ticket_subscriber( $post->ID ) ) {
+						$watch_unwatch_label = 'Unwatch';
+						$watch_unwatch_value = 'unwatch';
+					}
+					else {
+						$watch_unwatch_label = 'Watch';
+						$watch_unwatch_value = 'watch';
+					}
+				}
+				else {
+					if ( rthd_is_ticket_contact_connection( $post->ID ) ) {
+						$watch_unwatch_label = 'Unwatch';
+						$watch_unwatch_value = 'unwatch';
+					}
+					else {
+						$watch_unwatch_label = 'Watch';
+						$watch_unwatch_value = 'watch';
+					}
+				}
+				if( ! empty( $watch_unwatch_label ) ) { ?>
+					<div class="rt-hd-ticket-info rt-hd-ticket-history">
+						<input type="button" id="rthd-ticket-watch-unwatch" data-value="<?php echo $watch_unwatch_value; ?>" value="<?php echo $watch_unwatch_label; ?>" />
+						<img id="watch-unwatch-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
+					</div>
+				<?php
+				}
 			}
 
 			$created_by = get_user_by( 'id', get_post_meta( $post->ID, '_rtbiz_hd_created_by', true ) );

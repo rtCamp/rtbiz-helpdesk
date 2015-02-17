@@ -66,27 +66,77 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			add_action( 'wp_ajax_ticket_bulk_edit', array( $this, 'ticket_bulk_edit' ) );
 			add_action( 'wp_ajax_front_end_status_change', array( $this, 'front_end_status_change' ) );
 			add_action( 'wp_ajax_front_end_assignee_change', array( $this, 'front_end_assignee_change' ) );
+			add_action( 'wp_ajax_front_end_ticket_watch_unwatch', array( $this, 'front_end_ticket_watch_unwatch' ) );
 		}
 
-		function ticket_bulk_edit(){
-			$post_ids = ( isset( $_POST[ 'post_ids' ] ) && !empty( $_POST[ 'post_ids' ] ) ) ? $_POST[ 'post_ids' ] : array();
+		function ticket_bulk_edit() {
+			
+			$post_ids = ( isset( $_POST[ 'post_ids' ] ) && ! empty( $_POST[ 'post_ids' ] ) ) ? $_POST[ 'post_ids' ] : array();
 			$status = ( isset( $_POST[ 'ticket_status' ] ) && ! empty( $_POST[ 'ticket_status' ] ) ) ? $_POST[ 'ticket_status' ] : NULL;
-			if ( ! empty( $post_ids ) && is_array( $post_ids ) && ! empty( $status ) ) {
-				global $rt_hd_module;
+			
+			if ( ! empty( $post_ids ) && is_array( $post_ids ) ) {
+				global $rt_hd_module, $rt_hd_email_notification, $rt_hd_ticket_history_model;
+				
 				$labels = $rt_hd_module->labels;
+				$flag = false;
+				 
 				foreach( $post_ids as $post_id ) {
-					rthd_update_ticket_updated_by_user( $post_id, get_current_user_id() );
-					$old = get_post_status( $post_id );
-					if ( $old == $status ){
-						die();
+					
+					$diff_body = '<table style="width:100%;border-collapse:collapse;border:none">';
+					
+					if ( ! empty( $status ) ) {
+						// Status Diff
+						$post_statuses = $rt_hd_module->get_custom_statuses();
+						$old_status = ucfirst( get_post_status( $post_id ) );
+						$new_status = ucfirst( $_POST['ticket_status'] );
+						foreach ( $post_statuses as $status ) {
+							if ( ucfirst( $status['slug'] ) == $old_status ) {
+								$old_status = $status['name'];
+							}
+							if ( ucfirst( $status['slug'] ) == $new_status ) {
+								$new_status = $status['name'];
+							}
+						}
+						$diff = rthd_text_diff( $old_status, $new_status );
+						if ( $diff ) {
+							$diff_body .= '<tr><th style="padding: .5em;border: 0;"> Status </th><td>' . $diff . '</td><td></td></tr>';
+							/* Insert History for status */
+							$id = $rt_hd_ticket_history_model->insert(
+								array(
+									'ticket_id'   => $post_id,
+									'type'        => 'post_status',
+									'old_value'   => $oldpost->post_status,
+									'new_value'   => $_POST['ticket_status'],
+									'update_time' => current_time( 'mysql' ),
+									'updated_by'  => get_current_user_id(),
+								) );
+						}
+						$flag = true;
 					}
-					global $rt_hd_email_notification;
-					$body = $labels['name'].' Status '.rthd_status_markup( $old ).' changed to '.rthd_status_markup( $status );
-					$rt_hd_email_notification->notification_ticket_updated( $post_id, $labels['name'], $body, array() );
+					
+					if ( isset( $_POST['tax_input'] ) && ! empty( $_POST['tax_input'] ) ) {
+						
+						foreach ( $_POST['tax_input'] as $tax_slug => $tax_ids ) {
+							$diff = rthd_get_taxonomy_diff( $post_id, $tax_slug );
+							
+							$tax_info = get_taxonomy( $tax_slug );
+							
+							if ( $diff != '' ) {
+								$diff_body .= '<tr><th style="padding: .5em;border: 0;">'.$tax_info->labels->name.'</th><td>' . $diff . '</td><td></td></tr>';
+								$flag = true;
+							}
+						}
+					}
+					
+					$diff_body .= '</table>';
+					
+					if( $flag ) {
+						$rt_hd_email_notification->notification_ticket_updated( $post_id, $labels['name'], $diff_body, array() );
+					}
 				}
 			}
 		}
-
+		
 		function add_new_ticket_ajax(){
 			$result = array();
 
@@ -1888,7 +1938,78 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			echo json_encode($response);
 			die();
 		}
-
+		
+		/**
+		 * User can watch/unwatch ticket.
+		 */
+		function front_end_ticket_watch_unwatch() {
+			global $rt_hd_email_notification;
+			
+			$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
+			$current_user_id = get_current_user_id();
+			$current_user = get_user_by( 'id', $current_user_id );
+			
+			$response = $subscriber_info = array();
+			$response['status']= false;
+			
+			$post_id = $_POST['post_id'];
+			$post_type = get_post_type( $post_id );
+			$watch_unwatch = $_POST['watch_unwatch'];
+			
+			$subscriber_info[] = array( 'email' => $current_user->user_email, 'name' => $current_user->display_name );
+			
+			if( 'watch' == $watch_unwatch ) {
+				if ( current_user_can( $cap ) ) {
+					// Add user to ticket subcriber list.
+					$ticket_subscribers = get_post_meta( $post_id, '_rtbiz_hd_subscribe_to', true );
+					
+					$ticket_subscribers[] = $current_user_id;
+					
+					update_post_meta( $post_id, '_rtbiz_hd_subscribe_to', $ticket_subscribers );
+					
+					$rt_hd_email_notification->notification_ticket_subscribed($post_id, $post_type, $subscriber_info );
+				}
+				else {
+					// Add user to tiket contact list.
+					$user_contact_info = rt_biz_get_contact_by_email( $current_user->user_email );
+					
+					rt_biz_connect_post_to_contact( $post_type, $post_id, $user_contact_info );
+				}
+				
+				$response['status']= true;
+				$response['label']= 'Unwatch';
+				$response['value']= 'unwatch';
+			}
+			else if( 'unwatch' == $watch_unwatch ) {
+				if ( current_user_can( $cap ) ) {
+					// Remove user from ticket subcriber list.
+					$ticket_subscribers = get_post_meta( $post_id, '_rtbiz_hd_subscribe_to', true );
+					$new_ticket_subscribers = array();
+					
+					foreach ( $ticket_subscribers as $ticket_subscriber ) {
+						if( $ticket_subscriber != $current_user_id ) {
+							$new_ticket_subscribers[] = $ticket_subscriber;
+						}
+					}
+					update_post_meta( $post_id, '_rtbiz_hd_subscribe_to', $new_ticket_subscribers );
+					
+					$rt_hd_email_notification->notification_ticket_unsubscribed( $post_id, $post_type, $subscriber_info );
+				}
+				else {
+					// Remove user from ticket contact list.
+					$user_contact_info = rt_biz_get_contact_by_email( $current_user->user_email );
+					
+					rt_biz_clear_post_connection_to_contact( $post_type, $post_id, $user_contact_info );
+				}
+				
+				$response['status']= true;
+				$response['label']= 'Watch';
+				$response['value']= 'watch';
+			}
+			
+			echo json_encode($response);
+			die();
+		}
 	}
 
 }
