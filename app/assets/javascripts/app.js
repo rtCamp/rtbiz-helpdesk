@@ -404,7 +404,30 @@ jQuery( document ).ready( function ( $ ) {
          });
 	});
 
-
+	jQuery( '#rthd-ticket-watch-unwatch' ).click(function (e){
+		var requestArray = new Object();
+		requestArray['post_id'] =  jQuery('#post-id' ).val();
+		requestArray['watch_unwatch'] =  jQuery(this).attr('data-value');
+		requestArray["action"] = "front_end_ticket_watch_unwatch";
+		jQuery('#watch-unwatch-spinner' ).show();
+		jQuery.ajax( {
+             url: ajaxurl,
+             dataType: "json",
+             type: 'post',
+             data: requestArray,
+             success: function ( data ) {
+            	 if (data.status) {
+		            jQuery('#rthd-ticket-watch-unwatch').val( data.label );
+		            jQuery('#rthd-ticket-watch-unwatch').attr('data-value', data.value);
+		         }
+	             jQuery('#watch-unwatch-spinner' ).hide();
+             },
+             error: function(){
+            	 jQuery('#watch-unwatch-spinner' ).hide();
+	             return false;
+             }
+         });
+	});
 } );
 
 /*(function($) {

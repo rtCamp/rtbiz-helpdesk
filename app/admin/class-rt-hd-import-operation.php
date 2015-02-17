@@ -66,6 +66,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			add_action( 'wp_ajax_ticket_bulk_edit', array( $this, 'ticket_bulk_edit' ) );
 			add_action( 'wp_ajax_front_end_status_change', array( $this, 'front_end_status_change' ) );
 			add_action( 'wp_ajax_front_end_assignee_change', array( $this, 'front_end_assignee_change' ) );
+			add_action( 'wp_ajax_front_end_ticket_watch_unwatch', array( $this, 'front_end_ticket_watch_unwatch' ) );
 		}
 
 		function ticket_bulk_edit() {
@@ -1937,7 +1938,78 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			echo json_encode($response);
 			die();
 		}
-
+		
+		/**
+		 * User can watch/unwatch ticket.
+		 */
+		function front_end_ticket_watch_unwatch() {
+			global $rt_hd_email_notification;
+			
+			$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
+			$current_user_id = get_current_user_id();
+			$current_user = get_user_by( 'id', $current_user_id );
+			
+			$response = $subscriber_info = array();
+			$response['status']= false;
+			
+			$post_id = $_POST['post_id'];
+			$post_type = get_post_type( $post_id );
+			$watch_unwatch = $_POST['watch_unwatch'];
+			
+			$subscriber_info[] = array( 'email' => $current_user->user_email, 'name' => $current_user->display_name );
+			
+			if( 'watch' == $watch_unwatch ) {
+				if ( current_user_can( $cap ) ) {
+					// Add user to ticket subcriber list.
+					$ticket_subscribers = get_post_meta( $post_id, '_rtbiz_hd_subscribe_to', true );
+					
+					$ticket_subscribers[] = $current_user_id;
+					
+					update_post_meta( $post_id, '_rtbiz_hd_subscribe_to', $ticket_subscribers );
+					
+					$rt_hd_email_notification->notification_ticket_subscribed($post_id, $post_type, $subscriber_info );
+				}
+				else {
+					// Add user to tiket contact list.
+					$user_contact_info = rt_biz_get_contact_by_email( $current_user->user_email );
+					
+					rt_biz_connect_post_to_contact( $post_type, $post_id, $user_contact_info );
+				}
+				
+				$response['status']= true;
+				$response['label']= 'Unwatch';
+				$response['value']= 'unwatch';
+			}
+			else if( 'unwatch' == $watch_unwatch ) {
+				if ( current_user_can( $cap ) ) {
+					// Remove user from ticket subcriber list.
+					$ticket_subscribers = get_post_meta( $post_id, '_rtbiz_hd_subscribe_to', true );
+					$new_ticket_subscribers = array();
+					
+					foreach ( $ticket_subscribers as $ticket_subscriber ) {
+						if( $ticket_subscriber != $current_user_id ) {
+							$new_ticket_subscribers[] = $ticket_subscriber;
+						}
+					}
+					update_post_meta( $post_id, '_rtbiz_hd_subscribe_to', $new_ticket_subscribers );
+					
+					$rt_hd_email_notification->notification_ticket_unsubscribed( $post_id, $post_type, $subscriber_info );
+				}
+				else {
+					// Remove user from ticket contact list.
+					$user_contact_info = rt_biz_get_contact_by_email( $current_user->user_email );
+					
+					rt_biz_clear_post_connection_to_contact( $post_type, $post_id, $user_contact_info );
+				}
+				
+				$response['status']= true;
+				$response['label']= 'Watch';
+				$response['value']= 'watch';
+			}
+			
+			echo json_encode($response);
+			die();
+		}
 	}
 
 }
