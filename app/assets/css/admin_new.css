@@ -113,7 +113,7 @@ img.tips {
 
 .rt-hd-created-by a:nth-last-child(2) {
 	word-wrap: break-word;
-	word-break: break-word;
+	word-break: break-all;
 }
 
 #divAttachmentList .attachment-item {
@@ -176,3 +176,10 @@ img.tips {
 	padding-top: 10px !important;
 }
 
+.rthd_log span{
+	margin: 0 !important;
+	padding: 0 !important;
+}
+.rthd-generate-log-button{
+	margin-top: 10px !important;
+}

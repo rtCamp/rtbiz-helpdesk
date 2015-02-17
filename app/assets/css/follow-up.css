@@ -72,8 +72,8 @@ ul#chat-UI {
 
 .self .messages, .other .messages, .rt-hd-ticket-front-title{
 	-ms-word-break:break-all;
-  	word-break:break-all;
-  	word-break:break-word;
+	word-wrap: break-word;
+	word-break: break-all;
   	-webkit-hyphens:auto;
   	-moz-hyphens:auto;
   	hyphens:auto;
@@ -177,8 +177,8 @@ ul#chat-UI {
 	margin-left: 2%;
 	position: relative;
 	-ms-word-break:break-all;
-  	word-break:break-all;
-  	word-break:break-word;
+	word-wrap: break-word;
+	word-break: break-all;
   	-webkit-hyphens:auto;
   	-moz-hyphens:auto;
   	hyphens:auto;
@@ -191,8 +191,8 @@ ul#chat-UI {
 
 .rthd-ticket-description {
 	-ms-word-break:break-all;
-  	word-break:break-all;
-  	word-break:break-word;
+	word-wrap: break-word;
+	word-break: break-all;
   	-webkit-hyphens:auto;
   	-moz-hyphens:auto;
   	hyphens:auto;
