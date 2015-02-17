@@ -1,3 +1,5 @@
-app/assets/.sass-cache/*
+*/.sass-cache/*
 .idea/
-
+_book
+node_modules
+*.log
