@@ -314,7 +314,7 @@ jQuery(function () {
 			    jQuery(this).attr('disabled','disabled');
 			    requestArray['post_type'] = rthd_post_type;
 			    requestArray["comment_id"] = commentid ;
-			    requestArray["action"] = "rthd_add_new_followup_ajax";
+			    requestArray["action"] = "rthd_update_followup_ajax";
 			    requestArray['followuptype']="comment";
 			    requestArray['followup_ticket_unique_id']=jQuery('#ticket_unique_id' ).val();
 			    //requestArray['followup_private']='no';
