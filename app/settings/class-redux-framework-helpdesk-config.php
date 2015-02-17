@@ -412,25 +412,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				)
 			);
 
-			$contact_importer_subtitle = __( '<div class="redux_field_th">Import WordPress Users to Contacts</div>' );
-			$contact_importer_subtitle .= __( 'Use this tool to import all current users to rtBiz Contacts. You can also import selected users from ' );
-			$contact_importer_subtitle .= '<a href="' . admin_url( "user.php" ) . '">WP users</a> page.';
-			$contact_importer_subtitle .= __( '<br/>All new users will automatically get exported as Contacts.<br/><br/>' );
-			$contact_importer_subtitle .= rtbiz_export_wp_users_to_contacts();
-			$this->sections[]   = array(
-				'title'       => __( 'Contact Importer' ),
-				'icon'        => 'el-icon-list-alt',
-				'permissions' => $editor_cap,
-				//'subsection'  => true,
-				'fields'      => array(
-					array(
-						'id'      => 'rt_biz_import_users_to_contacts',
-						'type'    => 'raw',
-						'content' => $contact_importer_subtitle,
-					),
-				),
-			);
-
 			$this->sections[]   = array(
 				'title'       => __( 'Gravity Importer' ),
 				'icon'        => 'el-icon-list-alt',
