@@ -10,4 +10,5 @@
 * [Contribute](contribute/index.md)
 * [Addons](addons/index.md)
 * [Settings](settings/README.md)
+* [Test Credentials](test_data/README.md)
 
