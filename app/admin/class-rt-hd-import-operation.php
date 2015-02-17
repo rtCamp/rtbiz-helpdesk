@@ -837,16 +837,18 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$commentDate    = gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) + ( get_option( 'gmt_offset' ) * 3600 ) ) );
 			$commentDateGmt = gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) ) );
 			global $signature;
+			$this->add_contacts_to_post( $allemails, $comment_post_ID );
 			$comment_content_old = $comment_content;
 			$comment_content     = str_replace( $signature, '', $comment_content );
 			$comment_author_ip = preg_replace( '/[^0-9a-fA-F:., ]/', '', $_SERVER['REMOTE_ADDR'] );
 			$comment_author_ip = empty( $comment_author_ip ) ? ' ' : $comment_author_ip;
 			$comment_agent = substr( $_SERVER['HTTP_USER_AGENT'], 0, 254 );
 			$comment_agent = empty( $comment_agent ) ? ' ' : $comment_author;
+			$user = get_user_by( 'email', $comment_author_email );
 
 			$data                = array(
 				'comment_post_ID'      => $comment_post_ID,
-				'comment_author'       => $comment_author,
+				'comment_author'       => $user->display_name,
 				'comment_author_email' => $comment_author_email,
 				'comment_author_url'   => 'http://',
 				'comment_content'      => $comment_content,
@@ -945,7 +947,6 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 			$this->add_attachment_to_post( $uploaded, $comment_post_ID, $comment_id );
 
-			$this->add_contacts_to_post( $allemails, $comment_post_ID );
 
 			global $threadPostId;
 			if ( ! isset( $threadPostId ) ) {
