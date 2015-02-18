@@ -118,7 +118,9 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 
 		/**
 		 * send email using wp email
+		 *
 		 * @param $args
+		 * @return bool
 		 */
 		public function send_wp_email( $args ) {
 			$arrayBCC  = unserialize( $args['bccemail'] );
@@ -288,8 +290,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			}
 
 			//sending emial to ticket assignee [ To ] | staff [ BCC ] | contact [ BCC ] | globel list [ BCC ]
-			$bodyto = rthd_replace_followup_placeholder( $body, $User->display_name );
-
+			$bodyto = rthd_replace_followup_placeholder( $body, $comment->comment_author );
 			$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $bodyto ), $assignee_email, array(), $bccemails, array(), $comment->comment_ID , 'comment', true );
 		}
 
@@ -367,7 +368,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			}
 
 			//sending emial to ticket assignee [ To ] | staff [ BCC ] | contact [ BCC ] | globel list [ BCC ]
-			$bodyto = rthd_replace_followup_placeholder( $body, $user->display_name );
+			$bodyto = rthd_replace_followup_placeholder( $body, $comment->comment_author );
 			$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $bodyto ), $assignee_email, array(), $bccemails, array(), $comment->comment_ID , 'comment', true );
 
 		}
