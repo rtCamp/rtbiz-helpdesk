@@ -696,7 +696,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$subscribers = get_post_meta( $post_id, '_rtbiz_hd_subscribe_to' );
 			foreach ( $subscribers as $s ){
 				$s_user     = get_user_by( 'id', intval( $s ) );
-				$bccemails[] =  $s_user->user_email;
+				$bccemails[] =  array( 'email' => $s_user->user_email );
 			}
 
 			global $current_user;
