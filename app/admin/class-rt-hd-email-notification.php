@@ -210,6 +210,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				$contacts  = $this->get_contacts($comment->comment_post_ID );
 				$bccemails = array_merge( $bccemails, $contacts );
 			}
+
 			$bccemails = $this->exclude_author( $bccemails, $comment->comment_author_email );
 
 
@@ -268,9 +269,6 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$subscriber = $this->get_subscriber( $comment->comment_post_ID );
 			$bccemails = array_merge( $bccemails, $subscriber );
 
-			// TODO : needed or not
-			$contacts  = $this->get_contacts( $comment->comment_post_ID );
-			$bccemails = array_merge( $bccemails, $contacts );
 			$bccemails = $this->exclude_author( $bccemails, $comment->comment_author_email );
 
 			$body  = 'A Follwup is deleted by <Strong>{comment_author}</Strong>';
@@ -329,6 +327,8 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			}
 			$subscriber = $this->get_subscriber( $comment->comment_post_ID );
 			$bccemails = array_merge( $bccemails, $subscriber );
+
+			$bccemails = $this->exclude_author( $bccemails, $comment->comment_author_email );
 
 			if ( $new_privacy == Rt_HD_Import_Operation::$FOLLOWUP_STAFF){
 				$contacts  = $this->get_contacts($comment->comment_post_ID );
