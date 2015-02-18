@@ -172,7 +172,7 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 				$attr_diff = $rt_hd_attributes->attribute_diff( $attr, $post_id, $_POST['tax_input'] );
 				$emailHTML .= $attr_diff;
 			}
-			
+
 			// Taxonomy Diff
 			if ( isset( $_POST['tax_input'] ) && isset( $_POST['tax_input'][ Rt_Offerings::$offering_slug ] ) ) {
 				$diff = rthd_get_taxonomy_diff( $post_id, Rt_Offerings::$offering_slug );
@@ -252,8 +252,7 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 
 			if ( $updateFlag ) {
 				if ( $oldUser != $newUser ) {
-					$rt_hd_email_notification->notification_new_ticket_assigned( $post_id, $newUser, $labels['name'] );
-					$rt_hd_email_notification->notification_new_ticket_reassigned( $post_id, $oldUser, $newUser, $labels['name'], array() );
+					$rt_hd_email_notification->notification_new_ticket_reassigned( $post_id, $oldUser, $newUser, $labels['name'] );
 				}
 
 				if ( ! empty( $newSubscriberList ) ) {
@@ -277,13 +276,13 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 			} else {
 				$newUser = get_user_by( 'id', $post['post_author'] );
 				if ( $newUser ) {
-					$rt_hd_email_notification->notification_new_ticket_assigned( $post_id, $newUser, $labels['name'] );
+					$rt_hd_email_notification->notification_new_ticket_reassigned( $post_id, '', $newUser, $labels['name'] );
 				}
 				if ( ! empty( $bccemails ) ) {
 					$rt_hd_email_notification->notification_ticket_subscribed( $post_id, $labels['name'], $bccemails );
 				}
 				else {
-					$rt_hd_email_notification->notification_new_ticket_created( $post_id, $labels['name'], array() );
+					$rt_hd_email_notification->notification_new_ticket_created( $post_id, $labels['name'] );
 				}
 			}
 		}

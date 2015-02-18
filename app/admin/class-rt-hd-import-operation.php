@@ -299,7 +299,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				//$rt_hd_email_notification->notification_new_ticket_assigned( $post_id, $settings['rthd_default_user'], $labels['name'], $allemail, $uploaded, $email_parse = ! empty( $originalBody ) );
 			}
 
-			$rt_hd_email_notification->notification_new_ticket_created( $post_id,$labels['name'], $body, $allemail, $uploaded );
+			$rt_hd_email_notification->notification_new_ticket_created( $post_id,$labels['name'], $body, $uploaded );
 
 			return $post_id;
 		}
@@ -1771,8 +1771,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 				global $rt_hd_email_notification;
 
-				$rt_hd_email_notification->notification_new_ticket_assigned( $post_id, $new_assignee, $labels['name'] );
-				$rt_hd_email_notification->notification_new_ticket_reassigned( $post_id, $old_post->post_author, $new_assignee, $labels['name'], array() );
+				$rt_hd_email_notification->notification_new_ticket_reassigned( $post_id, $old_post->post_author, $new_assignee, $labels['name'] );
 			}
 			echo json_encode($response);
 			die();
