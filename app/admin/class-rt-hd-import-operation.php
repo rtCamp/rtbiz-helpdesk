@@ -485,7 +485,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			if( !empty( $allemails ) && is_array( $allemails ) ){
 				foreach( $allemails as $email  ){
 					if ( ! rthd_is_mailbox_email( $email['address'] ) ){ //check mail is exist in mailbox or not
-						$contactEmail = $email;
+						$contactEmail[] = $email;
 					}
 				}
 			}
