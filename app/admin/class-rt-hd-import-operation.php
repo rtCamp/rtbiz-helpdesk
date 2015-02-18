@@ -105,8 +105,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 								array(
 									'ticket_id'   => $post_id,
 									'type'        => 'post_status',
-									'old_value'   => $oldpost->post_status,
-									'new_value'   => $_POST['ticket_status'],
+									'old_value'   => $old_status,
+									'new_value'   => $new_status,
 									'update_time' => current_time( 'mysql' ),
 									'updated_by'  => get_current_user_id(),
 								) );
@@ -482,8 +482,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 			//Exclude mailbox email form all emails
 			$contactEmail = array();
-			if( !empty( $allemail ) && is_array( $allemail ) ){
-				foreach( $allemail as $email  ){
+			if( !empty( $allemails ) && is_array( $allemails ) ){
+				foreach( $allemails as $email  ){
 					if ( ! rthd_is_mailbox_email( $email['address'] ) ){ //check mail is exist in mailbox or not
 						$contactEmail = $email;
 					}
