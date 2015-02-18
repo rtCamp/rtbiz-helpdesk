@@ -394,3 +394,7 @@ li.load-more-spinner-li {
 .edit-action-button {
 	float: right;
 }
+#clear-attachemntlist {
+	display: none;
+	text-decoration: underline;
+}
