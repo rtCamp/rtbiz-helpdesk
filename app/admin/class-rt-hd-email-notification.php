@@ -204,11 +204,11 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			}
 
 			$subscriber = $this->get_subscriber( $comment->comment_post_ID );
-			array_push( $bccemails, $subscriber );
+			$bccemails = array_merge( $bccemails, $subscriber );
 
 			if ( $comment_privacy == Rt_HD_Import_Operation::$FOLLOWUP_STAFF){
 				$contacts  = $this->get_contacts($comment->comment_post_ID );
-				array_push( $bccemails, $contacts );
+				$bccemails = array_merge( $bccemails, $contacts );
 			}
 			$bccemails = $this->exclude_author( $bccemails, $comment->comment_author_email );
 
@@ -231,7 +231,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$toBody = rthd_replace_followup_placeholder( $body, 'you' );
 			$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $toBody ), $followup_creator, array(), array(), $uploaded, $comment->comment_ID , 'comment', true );
 
-			//sending emial to ticket assignee [ To ] | staff [ BCC ] | contact [ BCC ] | globel list [ BCC ]
+			//sending email to ticket assignee [ To ] | staff [ BCC ] | contact [ BCC ] | globel list [ BCC ]
 			$toBody = rthd_replace_followup_placeholder( $body, $comment->comment_author );
 			$bccemails[] = $this->get_assigne_email( $comment->comment_post_ID );
 			$bccemails = $this->exclude_author( $bccemails, $comment->comment_author_email );
@@ -266,11 +266,11 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				}
 			}
 			$subscriber = $this->get_subscriber( $comment->comment_post_ID );
-			array_push( $bccemails, $subscriber );
+			$bccemails = array_merge( $bccemails, $subscriber );
 
 			// TODO : needed or not
 			$contacts  = $this->get_contacts( $comment->comment_post_ID );
-			array_push( $bccemails, $contacts );
+			$bccemails = array_merge( $bccemails, $contacts );
 			$bccemails = $this->exclude_author( $bccemails, $comment->comment_author_email );
 
 			$body  = 'A Follwup is deleted by <Strong>{comment_author}</Strong>';
@@ -328,12 +328,12 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				}
 			}
 			$subscriber = $this->get_subscriber( $comment->comment_post_ID );
-			array_push( $bccemails, $subscriber );
+			$bccemails = array_merge( $bccemails, $subscriber );
 
 			if ( $new_privacy == Rt_HD_Import_Operation::$FOLLOWUP_STAFF){
 				$contacts  = $this->get_contacts($comment->comment_post_ID );
 				$contacts = $this->exclude_author($contacts, $comment->comment_author_email);
-				array_push( $bccemails, $contacts );
+				$bccemails = array_merge( $bccemails, $contacts );
 			}
 
 			if ( $private_update ){
