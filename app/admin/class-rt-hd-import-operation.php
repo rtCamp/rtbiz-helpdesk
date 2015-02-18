@@ -1754,12 +1754,13 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$post_id = $_POST['post_id'];
 			$old_post = get_post( $post_id );
 			$new_assignee = $_POST['post_author'];
-
+			global $rt_hd_ticket_index_model;
 			if ( $old_post->post_author != $new_assignee ) {
 				if ( $post_id ){
 					$ticket = array( 'ID' => $post_id,
 							'post_author' => $new_assignee,);
 					wp_update_post( $ticket );
+					$rt_hd_ticket_index_model->update_ticket_assignee( $new_assignee, $post_id );
 				}
 
 				$response['status']= true;
