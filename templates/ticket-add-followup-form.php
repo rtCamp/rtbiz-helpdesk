@@ -24,7 +24,7 @@ global $current_user;
 				}
 			}
 			if( input.files.length > 0 ) { 
-				$("#clear-attachemntlist").show();	
+				$("#clear-attachemntlist").css("display", "block");	
 			}
 			$("#fileList").html(list);
 		});
@@ -79,9 +79,9 @@ wp_editor( '', $editor_id, $settings );
 
 	<div>
 		<input id="attachemntlist" name="attachemntlist[]" type="file" multiple />
-		<a id="clear-attachemntlist" href="javascript:;">Clear All</a>
 		<ul id="fileList">
 		</ul>
+		<a id="clear-attachemntlist" href="javascript:;">Clear All</a>
 		<span class="followup-note"><b>Note:</b> Attachments will be uploaded when the form is submitted by clicking <i>Add Followup</i> button.</span>
 		<button class="add-savefollowup btn-primary btn" id="savefollwoup" type="button">Add followup</button>
 	</div>

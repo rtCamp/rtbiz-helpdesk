@@ -37,6 +37,6 @@ reference: http://purecss.io/forms/
 }
 #clear-attachemntlist {
 	display: none;
-	text-decoration: underline;
 	border: none;
+	text-decoration: none;
 }
