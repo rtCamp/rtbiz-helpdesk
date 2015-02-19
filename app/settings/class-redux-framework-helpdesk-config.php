@@ -292,9 +292,9 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'followup_edited'         => __( 'When a follow up is edited' ),
 						'followup_deleted'        => __( 'When a follow up is deleted' ),
 						'status_metadata_changed' => __( 'When any status or metadata changed for a Ticket.' ),
-						'new_ticket_reassigned'   => __( 'When new ticket reassigned' ),
-						'ticket_subscribed'       => __( 'When new ticket subscribed' ),
-						'ticket_unsubscribed'     => __( 'When new ticket unsubscribed' ),
+						'new_ticket_reassigned'   => __( 'When ticket reassigned' ),
+						'ticket_subscribed'       => __( 'When ticket subscribed' ),
+						'ticket_unsubscribed'     => __( 'When ticket unsubscribed' ),
 					),
 				)
 			);
