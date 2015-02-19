@@ -1232,6 +1232,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$comment_content = rthd_content_filter( $_POST['followup_content'] );
 
 			$user = wp_get_current_user();
+			$userid = $comment_author = $comment_author_email = '';
+
 			if ( $user->exists() ) {
 				$userid              = $user->ID;
 				$comment_author       = esc_sql( $user->display_name );
