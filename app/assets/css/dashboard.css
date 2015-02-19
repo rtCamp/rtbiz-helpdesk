@@ -21,3 +21,11 @@
 #rthd-welcome-panel.welcome-panel .welcome-panel-close:hover:before {
 	color: #c00;
 }
+#rthd-new-support-page {
+	display: inline-block;	
+}
+#rthd-welcome-panel #rthd-support-spinner {
+  	display: none;
+  	vertical-align: middle;
+  	margin-left: 5px;
+}

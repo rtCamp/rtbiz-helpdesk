@@ -274,13 +274,12 @@ jQuery(function () {
 				                 }
 		    } );
 
-		    jQuery('.close-edit-followup' ).click(function (e){
+	    	});
+		    jQuery(document).on('click', '.close-edit-followup', function (e){
 			    e.preventDefault();
 			    jQuery('#dialog-form' ).slideToggle('slow');
 			    jQuery('#new-followup-form' ).show();
 			    jQuery(document).scrollTop( ( jQuery('#comment-'+commentid ).offset().top ) );
-		    });
-
 		    });
 		    jQuery( document ).on('click', '.editfollowuplink',function(e){
 			    e.preventDefault();
@@ -315,7 +314,7 @@ jQuery(function () {
 			    jQuery(this).attr('disabled','disabled');
 			    requestArray['post_type'] = rthd_post_type;
 			    requestArray["comment_id"] = commentid ;
-			    requestArray["action"] = "rthd_add_new_followup_ajax";
+			    requestArray["action"] = "rthd_update_followup_ajax";
 			    requestArray['followuptype']="comment";
 			    requestArray['followup_ticket_unique_id']=jQuery('#ticket_unique_id' ).val();
 			    //requestArray['followup_private']='no';

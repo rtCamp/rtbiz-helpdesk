@@ -9,4 +9,4 @@
 * [Contribute](contribute/index.md)
 * [Addons](addons/index.md)
 * [Users](users/README.md)
-
+* [Notifications](notifications/index.md)

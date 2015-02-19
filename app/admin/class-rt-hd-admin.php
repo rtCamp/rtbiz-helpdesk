@@ -46,11 +46,11 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 		 */
 		function load_styles_scripts() {
 			global $post, $pagenow, $wp_scripts;
-			
+
 			$rthd_post_type = '';
 			if( isset( $_GET['post'] ) )
 				$rthd_post_type = get_post_type( $_GET['post'] );
-			else if( isset( $_GET['post_type'] ) && $pagenow == 'post-new.php' )
+			else if( isset( $_GET['post_type'] ) && ( $pagenow == 'post-new.php' || $pagenow == 'edit.php' ) )
 				$rthd_post_type = $_GET['post_type'];
 
 			if( $pagenow == 'edit.php' && isset( $post->post_type ) && $post->post_type == Rt_HD_Module::$post_type ){
@@ -97,7 +97,7 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 					wp_enqueue_style( 'jquery-ui-smoothness', $url, array(), RT_HD_VERSION, 'all' );
 				}
 			}
-			
+
 			if( isset( $_GET['page'] ) && $_GET['page'] == 'rthd-rtbiz_hd_ticket-dashboard')
 				wp_enqueue_style( 'rthd_dashboard_css', RT_HD_URL . 'app/assets/css/dashboard.css', array(), RT_HD_VERSION );
 
@@ -109,7 +109,7 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 			}
 
 			wp_enqueue_script( 'rthd_setting_js', RT_HD_URL . 'app/assets/javascripts/rt-custom-status.js', RT_HD_VERSION, true );
-			$this->localize_scripts();
+			add_action( 'admin_enqueue_scripts', array( $this, 'localize_scripts' ) );
 		}
 
 		/**
@@ -163,7 +163,10 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 		 * @return mixed
 		 */
 		function handle_upload_prefilter( $file ) {
-			$postype = $_REQUEST['post_type'];
+			$postype = '';
+			if( isset( $_REQUEST['post_type'] ) ){
+				$postype = $_REQUEST['post_type'];
+			}
 			if ( empty( $postype ) && !empty( $_REQUEST['post_id'] ) ){
 				$postype = get_post_type( $_REQUEST['post_id'] );
 			}
@@ -181,7 +184,10 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 		 * @return mixed
 		 */
 		function handle_upload( $fileinfo )   {
-			$postype = $_REQUEST['post_type'];
+			$postype = '';
+			if( isset( $_REQUEST['post_type'] ) ){
+				$postype = $_REQUEST['post_type'];
+			}
 			if ( empty( $postype ) && !empty( $_REQUEST['post_id'] ) ) {
 				$postype = get_post_type( $_REQUEST['post_id'] );
 			}

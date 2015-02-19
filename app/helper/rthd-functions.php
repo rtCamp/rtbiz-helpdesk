@@ -656,25 +656,6 @@ function rthd_content_filter( $content ) {
 	return balanceTags( wpautop( wp_kses_post( balanceTags( make_clickable( $content ), true ) ) ), true );
 }
 
-function rthd_toggle_status( $postid ){
-    $post = get_post($postid);
-    $authorcap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
-    if (  current_user_can( $authorcap ) ) {
-        if( $post->post_status != 'hd-answered' ){
-            wp_update_post(array( 'ID'=>$postid ,'post_status'=>'hd-answered'));
-            return 'answered';
-        }
-    }
-    else{
-        if( $post->post_status != 'hd-unanswered' ){
-            wp_update_post(array( 'ID'=>$postid ,'post_status'=>'hd-unanswered'));
-            return 'unanswered';
-        }
-
-    }
-    return false;
-}
-
 
 /**
  * check for rt biz dependency and if it does not find any single dependency then it returns false
@@ -692,6 +673,12 @@ function rthd_check_plugin_dependecy() {
 			'name' => esc_html__( 'WordPress for Business.', RT_HD_TEXT_DOMAIN ),
 			'active' => class_exists( 'Rt_Biz' ),
 			'filename' => 'index.php',
+		),
+		'posts-to-posts' => array(
+			'project_type' => 'all',
+			'name' => esc_html__( 'Create many-to-many relationships between all types of posts.', RT_HD_TEXT_DOMAIN ),
+			'active' => class_exists( 'P2P_Autoload' ),
+			'filename' => 'posts-to-posts.php',
 		),
 	);
 
@@ -720,8 +707,15 @@ function rthd_install_plugin_ajax(){
 		if ( ! current_user_can( 'install_plugins' ) || ! current_user_can( 'activate_plugins' ) ) {
 			die( __( 'ERROR: You lack permissions to install and/or activate plugins.', RT_HD_TEXT_DOMAIN ) );
 		}
-		rthd_install_plugin( $_POST['plugin_slug'] );
+		$biz_installed = rthd_is_plugin_installed( 'rtbiz' ) ;
+		$p2p_installed = rthd_is_plugin_installed( 'posts-to-posts' ) ;
 
+		if( ! $p2p_installed ){
+			rthd_install_plugin('posts-to-posts');
+		}
+		if ( ! $biz_installed ){
+			rthd_install_plugin( 'rtbiz' );
+		}
 		echo 'true';
 		die();
 }
@@ -779,26 +773,52 @@ function rthd_plugin_check_enque_js() {
  * @since 0.1
  */
 function rthd_admin_notice_dependency_not_installed() {
-	if ( ! rthd_is_plugin_installed( 'rtbiz' ) ) { ?>
+	$biz_installed = rthd_is_plugin_installed( 'rtbiz' ) ;
+	$p2p_installed = rthd_is_plugin_installed( 'posts-to-posts' ) ;
+
+	if ( ! $biz_installed || ! $p2p_installed ) {
+		$msg = '';
+		if ( ! $biz_installed && ! $p2p_installed ){
+			$msg = 'rtBiz and Posts 2 Posts';
+		}
+		else if( ! $biz_installed ){
+			$msg = 'rtBiz';
+		}else if (! $p2p_installed ){
+			$msg = 'Posts 2 Posts';
+		}
+		?>
 		<div class="error rthd-plugin-not-installed-error">
 <?php			$nonce = wp_create_nonce( 'rthd_install_plugin_rtbiz' ); ?>
 
 			<p><b><?php _e( 'rtBiz Helpdesk:' ) ?></b> <?php _e( 'Click' ) ?> <a href="#"
-			                                                                     onclick="install_rthd_plugin('rtbiz','rthd_install_plugin','<?php echo $nonce ?>')">here</a> <?php _e( 'to install rtBiz.', RT_HD_TEXT_DOMAIN ) ?>
-			</p>
-		</div>
-	<?php } else {
-		if ( rthd_is_plugin_installed( 'rtbiz' ) && ! rthd_is_plugin_active( 'rtbiz' ) ) {
-			$path  = rthd_get_path_for_plugin( 'rtbiz' );
-			$nonce = wp_create_nonce( 'rthd_activate_plugin_' . $path );
-		?>
-		<div class="error rthd-plugin-not-installed-error">
-			<p><b><?php _e( 'rtBiz Helpdesk:' ) ?></b> <?php _e( 'Click' ) ?> <a href="#"
-			                                                                     onclick="activate_rthd_plugin('<?php echo $path ?>','rthd_activate_plugin','<?php echo $nonce; ?>')">here</a> <?php _e( 'to activate rtBiz.', RT_HD_TEXT_DOMAIN ) ?>
+			                                                                     onclick="install_rthd_plugin('<?php echo $msg ?>','rthd_install_plugin','<?php echo $nonce ?>')">here</a> <?php _e( 'to install '. $msg . '.', RT_HD_TEXT_DOMAIN ) ?>
 			</p>
 		</div>
 	<?php }
-	}
+		$rtbiz_active = rthd_is_plugin_active( 'rtbiz' );
+		$p2p_active = rthd_is_plugin_active( 'posts-to-posts' );
+		if ( ( $biz_installed && ! $rtbiz_active ) || ( $p2p_installed && ! $p2p_active ) ) {
+			$msg  = '';
+			if ( ( $biz_installed && ! $rtbiz_active ) && ( $p2p_installed && ! $p2p_active ) ) {
+				$msg = 'rtBiz and Posts 2 Posts';
+			}
+			else if ( $biz_installed && ! $rtbiz_active ){
+				$msg = 'rtBiz';
+			}
+			else if ( $p2p_installed && ! $p2p_active ){
+				$msg = 'Posts 2 Posts';
+			}
+
+			$path  = rthd_get_path_for_plugin( 'rtbiz' );
+			$nonce = wp_create_nonce( 'rthd_activate_plugin_' . $path );
+		?>
+		<div class="error rthd-plugin-not-active-error">
+			<p><b><?php _e( 'rtBiz Helpdesk:' ) ?></b> <?php _e( 'Click' ) ?> <a href="#"
+			                                                                     onclick="activate_rthd_plugin('<?php echo $msg ?>','rthd_activate_plugin','<?php echo $nonce; ?>')">here</a> <?php _e( 'to activate '.$msg.'.', RT_HD_TEXT_DOMAIN ) ?>
+			</p>
+		</div>
+	<?php }
+
 }
 
 function rthd_get_path_for_plugin( $slug ) {
@@ -837,13 +857,23 @@ function rthd_activate_plugin_ajax() {
 	if ( empty( $_POST['path'] ) ) {
 		die( __( 'ERROR: No slug was passed to the AJAX callback.', RT_HD_TEXT_DOMAIN ) );
 	}
-	check_ajax_referer( 'rthd_activate_plugin_' . $_POST['path'] );
+	$rtbizpath = rthd_get_path_for_plugin('rtbiz');
+	check_ajax_referer( 'rthd_activate_plugin_' . $rtbizpath  );
 
 	if ( ! current_user_can( 'activate_plugins' ) ) {
 		die( __( 'ERROR: You lack permissions to activate plugins.', RT_HD_TEXT_DOMAIN ) );
 	}
+	$rtbiz_active = rthd_is_plugin_active( 'rtbiz' );
+	$p2p_active = rthd_is_plugin_active( 'posts-to-posts' );
+	if ( ! $p2p_active ){
+		$p2ppath = rthd_get_path_for_plugin('posts-to-posts');
+		rthd_activate_plugin( $p2ppath  );
+	}
 
-	rthd_activate_plugin( $_POST['path'] );
+	if ( ! $rtbiz_active ){
+		rthd_activate_plugin( $rtbizpath );
+	}
+
 
 	echo 'true';
 	die();
@@ -952,4 +982,160 @@ function rthd_update_ticket_updated_by_user( $post_id, $user_id ){
 
 function rthd_replace_followup_placeholder( $body , $name ){
 	return str_replace( '{comment_author}',$name, $body );
+}
+
+function rthd_is_mailbox_configured(){
+	$system_emails = rt_get_mpdule_mailbox_emails( RT_HD_TEXT_DOMAIN );
+	if ( ! empty( $system_emails ) ){
+		return true;
+	}
+	return false;
+}
+
+function rthd_is_mailbox_email( $email ){
+	if ( empty( $email ) ){
+		return false;
+	}
+	$system_emails = rt_get_mpdule_mailbox_emails( RT_HD_TEXT_DOMAIN );
+	if ( in_array( $email, $system_emails ) ){
+		return true;
+	}
+	return false;
+}
+
+/**
+ * Email login credentials to a newly-registered user for rtHelpdesk system.
+ *
+ * A new user registration notification is also sent to admin email.
+ *
+ * @param int    $user_id        User ID.
+ * @param string $plaintext_pass Optional. The user's plaintext password. Default empty.
+ */
+function rthd_wp_new_user_notification($user_id, $plaintext_pass = '') {
+	global $wpdb, $wp_hasher;
+	
+	$user = get_userdata( $user_id );
+	
+	// The blogname option is escaped with esc_html on the way into the database in sanitize_option
+	// we want to reverse this for the plain text arena of emails.
+	$blogname = wp_specialchars_decode(get_option('blogname'), ENT_QUOTES);
+
+	$message  = sprintf(__('New user registration on your site %s:'), $blogname) . "\r\n\r\n";
+	$message .= sprintf(__('Username: %s'), $user->user_login) . "\r\n\r\n";
+	$message .= sprintf(__('E-mail: %s'), $user->user_email) . "\r\n";
+
+	@wp_mail(get_option('admin_email'), sprintf(__('[%s] New User Registration'), $blogname), $message);
+
+	if ( empty($plaintext_pass) )
+		return;
+	
+	$settings = rthd_get_redux_settings();
+	$module_label = $settings['rthd_menu_label'];
+	
+	// Generate something random for a password reset key.
+	$key = wp_generate_password( 20, false );
+	
+	if ( empty( $wp_hasher ) ) {
+		require_once ABSPATH . WPINC . '/class-phpass.php';
+		$wp_hasher = new PasswordHash( 8, true );
+	}
+	$hashed = $wp_hasher->HashPassword( $key );
+	$wpdb->update( $wpdb->users, array( 'user_activation_key' => $hashed ), array( 'user_login' => $user->user_login ) );
+	
+	$reset_pass_link = network_site_url("wp-login.php?action=rp&key=$key&login=" . rawurlencode( $user->user_login ), 'login');
+	
+	$message  = __( 'Howdy,' ) . "\r\n\r\n";
+	$message .= sprintf( __( 'A new account on %s has been created for you.' ), $module_label ) . "\r\n\r\n";
+	$message .= sprintf( __( 'Your username is: %s' ), $user->user_login ) . "\r\n";
+	$message .= sprintf( __( "Please visit following link to activate the account." . "\r\n" . "%s" ), $reset_pass_link) . "\r\n\r\n";
+	$message .= __( 'Thanks.' ) . "\r\n" . __( 'Admin.' );
+
+	wp_mail($user->user_email, sprintf(__('Your New %s Account'), $module_label), $message);
+}
+
+function rthd_get_blacklist_emails(){
+	$redux = rthd_get_redux_settings();
+	$blacklist = array();
+	if ( isset( $redux['rthd_blacklist_emails_textarea'] ) && ! empty( $redux['rthd_blacklist_emails_textarea'] ) ){
+		$blacklist = explode( "\n", $redux['rthd_blacklist_emails_textarea'] );
+	}
+	return $blacklist;
+}
+
+/**
+ * Update rtHelpdesk settings.
+ * @param string    $option_name        Setting option name.
+ * @param string    $option_value       Setting option value.
+ */
+ function rthd_set_redux_settings( $option_name, $option_value ) {
+	global $rt_hd_redux_framework_Helpdesk_Config;
+
+	$rt_hd_redux_framework_Helpdesk_Config->ReduxFramework->set( $option_name, $option_value );
+}
+
+/**
+ * Get taxonomy diff.
+ */
+function rthd_get_taxonomy_diff( $post_id, $tax_slug ) {
+	
+	$post_terms = wp_get_post_terms( $post_id, $tax_slug );
+	$postterms  = array_filter( $_POST['tax_input'][ $tax_slug ] );
+	$termids    = wp_list_pluck( $post_terms, 'term_id' );
+	$diff       = array_diff( $postterms, $termids );
+	$diff2      = array_diff( $termids, $postterms );
+	$diff_tax1  = array();
+	$diff_tax2  = array();
+	foreach ( $diff as $tax_id ) {
+		$tmp          = get_term_by( 'id', $tax_id, $tax_slug );
+		$diff_tax1[] = $tmp->name;
+	}
+	
+	foreach ( $diff2 as $tax_id ) {
+		$tmp          = get_term_by( 'id', $tax_id, $tax_slug );
+		$diff_tax2[] = $tmp->name;
+	}
+	
+	
+	
+	$diff = rthd_text_diff( implode( ', ', $diff_tax2 ), implode( ', ', $diff_tax1 ) );
+	
+	return $diff;
+}
+
+/**
+ * Check whether current user has contact connection to the ticket.
+ */
+function rthd_is_ticket_contact_connection( $post_id ) {
+	$flag = false;
+	
+	$current_user = get_user_by( 'id', get_current_user_id() );
+	$ticket_contacts = rt_biz_get_post_for_contact_connection( $post_id, Rt_HD_Module::$post_type );
+	
+	foreach ( $ticket_contacts as $ticket_contact ) {
+		
+		$contact_email = rt_biz_get_entity_meta( $ticket_contact->ID, 'contact_primary_email', true );
+		
+		if( $current_user->user_email == $contact_email ) {
+			$flag = true;
+		}
+	}
+	
+	return $flag;
+}
+
+/**
+ * Check whether current user is subscribe to the ticket.
+ */
+function rthd_is_ticket_subscriber( $post_id ) {
+	$flag = false;
+
+	$current_user = get_user_by( 'id', get_current_user_id() );
+	
+	$ticket_subscribers = get_post_meta( $post_id, '_rtbiz_hd_subscribe_to', true );
+	
+	if( in_array( get_current_user_id(), $ticket_subscribers ) ) {
+		$flag = true;
+	}
+
+	return $flag;
 }

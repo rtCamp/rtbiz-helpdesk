@@ -356,6 +356,9 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 					}
 				}
 				foreach ( $module_menu as $p_key => $menu_item ) {
+					if ( $menu_item[2] == 'edit-tags.php?taxonomy='.RT_Departments::$slug.'&amp;post_type='.Rt_HD_Module::$post_type ){
+						continue;
+					}
 					if ( $menu_item[2] != Redux_Framework_Helpdesk_Config::$page_slug ) {
 						$menu_item[0] = '--- ' . $menu_item[0];
 					}

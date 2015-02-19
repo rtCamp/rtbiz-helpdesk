@@ -198,7 +198,7 @@ li.toplevel_page_hd-dashboard a:active {
 
 #mail_folder_container li.has_children ul {
 	width: 33.33%;
-	float: left;
+	display: inline-block;
 }
 
 #mail_folder_container li.folder_title {
@@ -207,4 +207,23 @@ li.toplevel_page_hd-dashboard a:active {
 
 #mail_folder_container li.folder_item {
 
+}
+
+/* Large Screens min-width 1025px */
+@media only screen and (min-width: 1025px) {
+	#mail_folder_container li.has_children ul {
+		width: 33.33%;
+	}
+}
+/* Medium Screens max-width 1024px */
+@media only screen and (max-width: 1024px) {
+	#mail_folder_container li.has_children ul {
+		width: 50%;
+	}
+}
+/* Small Screens max-width 640px, mobile-only styles */
+@media only screen and (max-width: 640px) {
+	#mail_folder_container li.has_children ul {
+		width: 100%;
+	}
 }

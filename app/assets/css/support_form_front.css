@@ -13,7 +13,7 @@ reference: http://purecss.io/forms/
 	margin-bottom: 20px;
 }
 
-.rthd_support_from div{
+.rthd_support_from>div{
 	margin: 15px;
 }
 
@@ -21,6 +21,22 @@ reference: http://purecss.io/forms/
 	width: 100%;
 }
 
+.rthd_support_from>div#editor_container input{
+	width: auto;
+}
+
 .rthd_support_from div input[type="submit"]{
 	width: auto;
+}
+
+.wp-editor-container {
+	background: #fff;
+	border: 1px solid #e5e5e5;
+	-webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.04);
+	box-shadow: 0 1px 1px rgba(0,0,0,0.04);
+}
+#clear-attachemntlist {
+	display: none;
+	text-decoration: underline;
+	border: none;
 }

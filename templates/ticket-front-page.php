@@ -189,7 +189,26 @@ $user_edit_content = current_user_can( $cap );
 
 
 				<?php }
-
+				
+				/* Display reference link if any */
+				$ref_links = get_post_meta( $post->ID, '_rtbiz_hd_external_file' );
+				if( ! empty( $ref_links ) ) {
+				?>
+					<div class="rt-hd-ticket-info">
+						<h2 class="rt-hd-ticket-info-header"><?php _e( 'Reference Link' ); ?></h2>
+					</div>
+					<div class="rt-hd-ticket-info">
+						<ul>
+							<?php foreach ( $ref_links as $ref_link ) {
+								$ref_link = (array) json_decode( $ref_link );
+							?>
+								<li><a target="_blank" href="<?php echo $ref_link['link']; ?>"><?php echo $ref_link['title']; ?></a></li>
+							<?php } ?>
+						</ul>
+					</div>
+				<?php 
+				}
+				
 				if ( current_user_can( $cap ) ) {
 
 					// Products
@@ -242,6 +261,37 @@ $user_edit_content = current_user_can( $cap );
 
 					// Order History
 					do_action( 'rtbiz_hd_user_purchase_history', $post->ID );
+				}
+				
+				// Watch/Unwatch ticket feature.
+				$watch_unwatch_label = $watch_unwatch_value = '';
+				
+				if ( current_user_can( $cap ) ) { // For staff/subscriber
+					if ( rthd_is_ticket_subscriber( $post->ID ) ) {
+						$watch_unwatch_label = 'Unwatch';
+						$watch_unwatch_value = 'unwatch';
+					}
+					else {
+						$watch_unwatch_label = 'Watch';
+						$watch_unwatch_value = 'watch';
+					}
+				}
+				/*else { // For other contacts.
+					if ( rthd_is_ticket_contact_connection( $post->ID ) ) {
+						$watch_unwatch_label = 'Unwatch';
+						$watch_unwatch_value = 'unwatch';
+					}
+					else {
+						$watch_unwatch_label = 'Watch';
+						$watch_unwatch_value = 'watch';
+					}
+				}*/
+				if( ! empty( $watch_unwatch_label ) ) { ?>
+					<div class="rt-hd-ticket-info rt-hd-ticket-history">
+						<input type="button" id="rthd-ticket-watch-unwatch" data-value="<?php echo $watch_unwatch_value; ?>" value="<?php echo $watch_unwatch_label; ?>" />
+						<img id="watch-unwatch-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
+					</div>
+				<?php
 				}
 			}
 

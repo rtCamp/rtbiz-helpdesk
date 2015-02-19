@@ -23,7 +23,15 @@ global $current_user;
 					list += '<li>' + input.files[x].name + '</li>';
 				}
 			}
+			if( input.files.length > 0 ) { 
+				$("#clear-attachemntlist").show();	
+			}
 			$("#fileList").html(list);
+		});
+		$("#clear-attachemntlist").click(function() {
+			$("#attachemntlist").val('');
+			$("#fileList").html('');
+			$("#clear-attachemntlist").hide();
 		});
 	});
 	</script>
@@ -45,27 +53,33 @@ wp_editor( '', $editor_id, $settings );
 
 <!--	<textarea id="followupcontent" class="followup-content" name="followupcontent" placeholder="Add new followup"></textarea>-->
 	<div id="private-comment">
-		<span class="rthd-visibility"> Visibility: </span>
-		<select name="private_comment" id="add-private-comment" >
-			<option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ) ?> </option>
-			<option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ) ?> </option>
-			<?php
-			$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
-			$staffonly  = current_user_can( $cap );
+		<p>
+			<label class="rthd-visibility"> Visibility: </label>
+			&nbsp;
+			<select name="private_comment" id="add-private-comment" >
+				<option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ) ?> </option>
+				<option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ) ?> </option>
+				<?php
+					$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
+					$staffonly  = current_user_can( $cap );
 
-			if( $staffonly ){ ?>
-				<option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_STAFF ) ?> </option>
-			<?php }
-			?>
-		</select>
+					if( $staffonly ){ ?>
+					<option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_STAFF ) ?> </option>
+				<?php }
+				?>
+			</select>
+		</p>
 		<?php if (current_user_can(rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' )) && $post->post_status != 'hd-answered' ){ ?>
-			<div> <label for="rthd_keep_status"><input id="rthd_keep_status" type="checkbox" name="rthd_keep_status" text="check keep status unanswered" /><?php _e('Keep unanswered'); ?></label></div>
+			<p> 
+				<label for="rthd_keep_status">
+					<input id="rthd_keep_status" type="checkbox" name="rthd_keep_status" text="check keep status unanswered" />&nbsp;
+					<?php _e('Keep unanswered'); ?></label></p>
         <?php } ?>
-
 	</div>
 
 	<div>
 		<input id="attachemntlist" name="attachemntlist[]" type="file" multiple />
+		<a id="clear-attachemntlist" href="javascript:;">Clear All</a>
 		<ul id="fileList">
 		</ul>
 		<span class="followup-note"><b>Note:</b> Attachments will be uploaded when the form is submitted by clicking <i>Add Followup</i> button.</span>

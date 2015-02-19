@@ -37,10 +37,17 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		public function __construct() {
 			$this->screen_id = '';
 			$this->hook();
-			
+
 			add_action( 'wp_ajax_update_rt_hd_welcome_panel', array( $this, 'update_rt_hd_welcome_panel' ) );
-			
+			add_action( 'rtbiz_welcome_panel_addon_link', array( $this, 'add_helpdesk_link' ) );
+
+			add_action( 'wp_ajax_rthd_setup_support_page', array( $this, 'rthd_setup_support_page_callback' ) );
+
 			$this->setup_defaults();
+		}
+
+		public function add_helpdesk_link(){
+			?><a id="rtbiz-customize-helpdesk" class="button button-primary button-hero" href="<?php echo admin_url( 'admin.php?page=rthd-' . Rt_HD_Module::$post_type . '-dashboard' ); ?>"><?php _e( 'Helpdesk' ); ?></a><?php
 		}
 
 		/**
@@ -51,7 +58,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		public function hook() {
 			add_action( 'admin_menu', array( $this, 'register_dashboard' ), 1 );
 		}
-		
+
 		/**
 		 * Setup default value for dashboard.
 		 */
@@ -78,10 +85,10 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			/* Add callbacks for this screen only */
 			add_action( 'load-' . $this->screen_id, array( $this, 'page_actions' ), 9 );
 			add_action( 'admin_footer-' . $this->screen_id, array( $this, 'footer_scripts' ) );
-			
+
 			/* Add Welcome panel on rt helpdesk dashboard. */
 			add_action( 'rt_hd_welcome_panel', array( $this, 'rt_hd_welcome_panel' ) );
-			
+
 			/* Setup js for rtHelpdesk dashboard */
 			add_action( 'rthd_after_dashboard', array( $this, 'print_dashboard_js' ) );
 
@@ -177,18 +184,15 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 				'top_clients',
 			), $rt_hd_dashboard->screen_id, 'column4' );
 
-			$settings = biz_get_redux_settings();
-			if ( isset( $settings['offering_plugin'] ) && 'none' != $settings['offering_plugin'] ) {
-				add_meta_box( 'rthd-tickets-by-product', __( 'Tickets by Offerings', RT_HD_TEXT_DOMAIN ), array(
-					$this,
-					'tickets_by_products',
-				), $rt_hd_dashboard->screen_id, 'column5' );
+			add_meta_box( 'rthd-tickets-by-product', __( 'Tickets by Offerings', RT_HD_TEXT_DOMAIN ), array(
+				$this,
+				'tickets_by_products',
+			), $rt_hd_dashboard->screen_id, 'column5' );
 
-				add_meta_box( 'rthd-customer-by-product-tickets', __( 'Ticket Conversion from Sales', RT_HD_TEXT_DOMAIN ), array(
-					$this,
-					'tickets_by_product_purchase',
-				), $rt_hd_dashboard->screen_id, 'column6' );
-			}
+			add_meta_box( 'rthd-customer-by-product-tickets', __( 'Ticket Conversion from Sales', RT_HD_TEXT_DOMAIN ), array(
+				$this,
+				'tickets_by_product_purchase',
+			), $rt_hd_dashboard->screen_id, 'column6' );
 			$relations = $rt_hd_attributes_relationship_model->get_relations_by_post_type( Rt_HD_Module::$post_type );
 			foreach ( $relations as $r ) {
 				$attr = $rt_hd_attributes_model->get_attribute( $r->attr_id );
@@ -299,7 +303,10 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			$rows        = array();
 			$post_type   = Rt_HD_Module::$post_type;
 			$total       = 0;
-
+			if ( empty( $terms ) ){
+				echo 'No offerings found.';
+				return;
+			}
 			if ( ! $terms instanceof WP_Error ) {
 				foreach ( $terms as $t ) {
 					$posts = new WP_Query( array(
@@ -692,25 +699,25 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		function tickets_table_set_option( $status, $option, $value ) {
 			return $value;
 		}
-		
+
 		/**
 		 * Update rtHelpdesk welcome panel
 		 */
 		function update_rt_hd_welcome_panel() {
-		
+
 			check_ajax_referer( 'rthd-welcome-panel-nonce', 'rthdwelcomepanelnonce' );
-		
+
 			$author_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
-		
+
 			if ( ! current_user_can( $author_cap ) ) {
 				wp_die( -1 );
 			}
-		
+
 			update_user_meta( get_current_user_id(), 'show_rt_hd_welcome_panel', empty( $_POST['visible'] ) ? 0 : 1 );
-		
+
 			wp_die( 1 );
 		}
-		
+
 		/**
 		 * Check welcome panel for logged in user.
 		 */
@@ -720,16 +727,16 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 				update_user_meta( get_current_user_id(), 'show_rt_hd_welcome_panel', $welcome_checked );
 			}
 		}
-		
+
 		/**
 		 * Display welcome widget on rtHelpdesk dashboard.
 		 */
 		function rt_hd_welcome_panel() {
 			global $rt_hd_attributes;
-			
+
 			$settings = rthd_get_redux_settings();
 			$welcome_label = $settings['rthd_menu_label'];
-			
+
 			$admin_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' );
 			$editor_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
 		?>
@@ -740,7 +747,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 					<div class="welcome-panel-column">
 						<?php if ( current_user_can( $admin_cap ) ): ?>
 							<h4><?php _e( 'Get Started' ); ?></h4>
-							<a id="rt-hd-customize-biz" class="button button-primary button-hero" href="<?php echo admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&page=' . Redux_Framework_Helpdesk_Config::$page_slug ); ?>"><?php _e( 'Customize Your Helpdesk' ); ?></a>
+							<a id="rt-hd-customize-biz" class="button button-primary button-hero" href="<?php echo admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&page=' . Redux_Framework_Helpdesk_Config::$page_slug ); ?>"><?php _e( 'Helpdesk Settings' ); ?></a>
 						<?php endif; ?>
 					</div>
 					<div class="welcome-panel-column">
@@ -749,6 +756,18 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 							<?php if ( current_user_can( $editor_cap ) ) { ?>
 								<li><?php printf( '<a id="rtiz-add-ticket" href="%s" class="welcome-icon welcome-admin-users">' . __( 'Add new Ticket' ) . '</a>', admin_url( 'post-new.php?post_type=' . Rt_HD_Module::$post_type ) ); ?></li>
 								<li><?php printf( '<a href="%s" class="welcome-icon welcome-networking">' . __( 'Setup Attributes' ) . '</a>', admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&page=' . $rt_hd_attributes->attributes_page_slug ) ); ?></li>
+								<div id="rthd-support-page">
+								<?php if ( isset( $settings['rthd_support_page'] ) && ! empty( $settings['rthd_support_page'] ) && get_post( $settings['rthd_support_page'] ) ) : ?>
+									<li>
+										<a id="rthd-view-support-page" class="welcome-icon welcome-view-site" target="_blank" href="<?php echo get_page_link( $settings['rthd_support_page'] ); ?>"><?php _e( 'View Support Page' ); ?></a>
+									</li>
+								<?php else: ?>
+									<li>
+										<a id="rthd-new-support-page" class="welcome-icon welcome-add-page" href="javascript:;"><?php _e( 'Setup Support Page' ); ?></a>
+										<img id="rthd-support-spinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
+									</li>
+								<?php endif; ?>
+							</div>
 							<?php } ?>
 						</ul>
 					</div>
@@ -765,9 +784,9 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 					</div>
 				</div>
 			</div>
-		<?php 
+		<?php
 		}
-		
+
 		/**
 		 * Add js for hide/show welcome panel in rtHelpdesk dashboard.
 		 */
@@ -812,9 +831,64 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 						rthd_updateWelcomePanel( this.checked ? 1 : 0 );
 					} );
 
+					$(document).on('click', '#rthd-new-support-page', function() {
+						var requestArray = {};
+
+						requestArray.page_action = 'add';
+						requestArray.action = 'rthd_setup_support_page';
+						jQuery('#rthd-support-spinner').show();
+						jQuery.ajax( {
+							url: ajaxurl,
+							dataType: 'json',
+							type: 'post',
+							data: requestArray,
+							success: function ( response ) {
+								if (response.status) {
+									jQuery('#rthd-support-page').html(response.html);
+								}
+							},
+							error: function(){
+								jQuery('#rthd-support-spinner').hide();
+								alert( 'Something goes wrong. Please try again.' );
+							}
+						});
+					} );
+
 					$('#screen-options-wrap #adv-settings .metabox-prefs' ).append("<label for='rthd_welcome_panel-hide'><input type='checkbox' id='rthd_welcome_panel-hide' value='rthd-welcome-panel' <?php echo checked( (bool) $welcome_checked, true, false ); ?> /><?php _e( 'Welcome', RT_HD_TEXT_DOMAIN ); ?></label>");
 				} );
 			</script>
 		<?php }
+
+		/**
+		 * Create page for support form if it is not set from settings page.
+		 */
+		function rthd_setup_support_page_callback() {
+
+			$settings = rthd_get_redux_settings();
+
+			$response = array();
+			$response['status'] = false;
+
+			if ( isset( $_POST['page_action'] ) && 'add' == $_POST['page_action'] ) {
+				$support_page = array(
+					'post_type'		=> 'page',
+					'post_title'    => 'Support',
+					'post_content'  => '[rt_hd_support_form]',
+					'post_status'   => 'publish',
+					'post_author'   => get_current_user_id(),
+				);
+				$support_page_id = wp_insert_post( $support_page );
+
+				if( $support_page_id ) {
+					/* Set support page option. */
+					rthd_set_redux_settings( 'rthd_support_page', $support_page_id );
+					$response['status'] = true;
+					$response['html'] = '<li><a id="rthd-view-support-page" class="welcome-icon welcome-view-site" target="_blank" href="'.get_page_link( $support_page_id ).'">'. __( 'View Support Page' ) .'</a></li>';
+				}
+			}
+
+			echo json_encode( $response );
+			die();
+		}
 	}
 }

@@ -109,10 +109,10 @@ if ( ! class_exists( 'Rt_HD_Attributes' ) ) {
 				//					break;
 				case 'dropdown':
 				case 'rating-stars':
-					if ( ! isset( $newTicket[ $attr->attribute_name ] ) ) {
-						$newTicket[ $attr->attribute_name ] = array();
+					if ( ! isset( $newTicket[ 'rt_' . $attr->attribute_name ] ) ) {
+						$newTicket[ 'rt_' . $attr->attribute_name ] = array();
 					}
-					$newVals = $newTicket[ $attr->attribute_name ];
+					$newVals = $newTicket[ 'rt_' . $attr->attribute_name ];
 					$newVals = array_unique( $newVals );
 
 					$get_post_terms = wp_get_post_terms( $post_id, rtbiz_post_type_name( $attr->attribute_name ) );

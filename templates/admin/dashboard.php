@@ -8,16 +8,17 @@
 
 global $rt_hd_dashboard;
 $author_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
-
+$settings = rthd_get_redux_settings();
+$welcome_label = $settings['rthd_menu_label'];
 ?>
 <div class="wrap">
 
 	<?php screen_icon(); ?>
 
-	<h2><?php _e( 'Helpdesk Dashboard' ); ?></h2>
-	
+	<h2><?php printf( __( '%s Dashboard' ), $welcome_label ); ?></h2>
+
 	<?php
-	if ( current_user_can( $author_cap ) ) { 
+	if ( current_user_can( $author_cap ) ) {
 		$classes = 'welcome-panel';
 
 		$option = get_user_meta( get_current_user_id(), 'show_rt_hd_welcome_panel', true );

@@ -4,7 +4,7 @@
  * Plugin Name: rtBiz Helpdesk
  * Plugin URI: http://rtcamp.com/
  * Description: Helpdesk System for handle & track User request for Help
- * Version: 1.3
+ * Version: 1.0
  * Author: rtCamp
  * Author URI: http://rtcamp.com
  * License: GPL
@@ -18,7 +18,7 @@ if ( ! defined( 'RT_HD_VERSION' ) ) {
 	 *
 	 * @since 0.1
 	 */
-	define( 'RT_HD_VERSION', '1.3' );
+	define( 'RT_HD_VERSION', '1.0' );
 }
 if ( ! defined( 'RT_HD_TEXT_DOMAIN' ) ) {
 	/**
@@ -27,6 +27,14 @@ if ( ! defined( 'RT_HD_TEXT_DOMAIN' ) ) {
 	 * @since 0.1
 	 */
 	define( 'RT_HD_TEXT_DOMAIN', 'rtbiz-helpdesk' );
+}
+if ( ! defined( 'RT_HD_BASE_NAME' ) ) {
+	/**
+	 * Defines RT_HD_PATH if it does not exits.
+	 *
+	 * @since 0.1
+	 */
+	define( 'RT_HD_BASE_NAME', plugin_basename( __FILE__ ) );
 }
 if ( ! defined( 'RT_HD_PATH' ) ) {
 	/**
@@ -109,6 +117,24 @@ if ( ! defined( 'RT_HD_PATH_TEMPLATES' ) ) {
 	define( 'RT_HD_PATH_TEMPLATES', plugin_dir_path( __FILE__ ) . 'templates/' );
 }
 
+if ( ! defined( 'EDD_RT_HELPDESK_STORE_URL' ) ) {
+	/**
+	 * Defines helpdesk store url
+	 *
+	 * @since 0.1
+	 */
+	define( 'EDD_RT_HELPDESK_STORE_URL', 'https://rtcamp.com/' );
+}
+
+if ( ! defined( 'EDD_RT_HELPDESK_ITEM_NAME' ) ){
+	/**
+	 * define helpdesk item slug
+	 *
+	 * @since 0.1
+	 */
+	define( 'EDD_RT_HELPDESK_ITEM_NAME', 'Helpdesk' );
+}
+
 include_once RT_HD_PATH_HELPER . 'rthd-functions.php';
 
 /**
@@ -136,6 +162,9 @@ function rt_hd_include() {
 	$rthd_reports_autoload       = new RT_WP_Autoload( RT_HD_PATH_LIB . 'rtreports/' );
 
 }
+
+include_once( RT_HD_PATH_VENDOR . 'edd-license/class-rt-hs-edd-license.php' );
+new Rt_HD_Edd_License();
 
 /**
  * Main function that initiate rt-helpdesk plugin

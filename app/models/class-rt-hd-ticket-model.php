@@ -88,5 +88,13 @@ if ( ! class_exists( 'Rt_HD_Ticket_Model' ) ) {
 		function delete_ticket( $where ) {
 			return parent::delete( $where );
 		}
+
+		function update_ticket_status( $status, $postid ){
+			return $this->update_ticket( array( 'post_status' => $status ), array( 'post_id' => $postid ) );
+		}
+
+		function update_ticket_assignee( $assignee, $postid ){
+			return $this->update_ticket( array( 'assignee' => $assignee ), array( 'post_id' => $postid ) );
+		}
 	}
 }

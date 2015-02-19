@@ -147,12 +147,15 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				$default_assignee = strval( 1 );
 			}
 
-			$system_emails = rt_get_all_system_emails( array( 'module' => RT_HD_TEXT_DOMAIN, ) );
+			$system_emails = rt_get_mpdule_mailbox_emails( RT_HD_TEXT_DOMAIN );
+
 			$mailbox_options = array();
 			foreach( $system_emails as $email ) {
+
 				$mailbox_options[ $email ] = $email;
 			}
-
+			$is_mailbox_configured = ( ! empty( $system_emails ) );
+			$acl_page_link = '<a href="' . admin_url( 'admin.php?page=' . Rt_Biz::$access_control_slug ) . '">Access Control</a> page.';
 			// ACTUAL DECLARATION OF SECTIONS
 			$general_fields = array(
 				array(
@@ -169,8 +172,8 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					'type'     => 'media',
 					'url'      => true,
 					'title'    => __( 'Logo' ),
-					'desc'     => __( 'This logo will be used for all the Menu, Submenu, Post Types Menu Icons in Helpdesk.' ),
-					'subtitle' => __( 'Upload any logo using the WordPress native uploader, preferrably with the size of 16x16.' ),
+					'subtitle' => __( 'Logo to be used for all Menu, Submenu, Post Types Menu Icons in Helpdesk.' ),
+					'desc'     => __( 'Upload any logo using the WordPress native uploader, preferably with the size of 16x16' ),
 					'default'  => array(
 						'url' => RT_HD_URL . 'app/assets/img/hd-16X16.png',
 					),
@@ -181,23 +184,23 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					'options'  => $users_options,
 					'default'  => $default_assignee,
 					'title'    => __( 'Default Assignee' ),
-					'desc'     => __( 'Default User for Helpdesk ticket Assignee' ),
-					'subtitle' => __( 'Select User for Support ticket Assign' ),
+					'desc'     => __( 'Default assign will be rtbiz contact which have helpdesk access. You can change helpdesk access form rtBiz ' ) . $acl_page_link,
+					'subtitle' => __( 'Select user for HelpDesk ticket Assignee' ),
 				),
 				array(
 					'id'       => 'rthd_support_page',
 					'type'     => 'select',
 					'data'     => 'pages',
 					'title'    => __( 'Support Page' ),
-					'desc'     => __( 'This page will be used to create new support requests from front-end. Add [rt_hd_support_form] Shortcode in page-content. Rest will be taken care by HelpDesk.' ),
+					'desc'     => __( 'Add <strong>[rt_hd_support_form]</strong> shortcode to add support from to a page and select this page in the drop down. This page will then be used to handle new support requests from front-end.' ),
 					'subtitle' => __( 'Select Page for Product Support' ),
 				),
 				array(
 					'id'       => 'rthd_enable_ticket_unique_hash',
 					'type'     => 'switch',
 					'title'    => __( 'Enable Unique Hash URLs for Tickets' ),
-					'subtitle' => __( 'This will enable/disable Unique Hash URLs for Tickets.' ),
-					'desc'     => __( 'If enabled, this will generate a unique Hash URL for all the tickets through which tickets can be accessed in the front end. This unique URLs will be sent in all emails of Helpdesk. Tickets can be accessed from the default WordPress permalinks as well. Please flush the permalinks after enabling this option.' ),
+					'subtitle' => __( 'Please flush the permalinks after enabling this option.' ),
+					'desc'     => __( 'If enabled, this will generate a unique Hash URL for all the tickets through which tickets can be accessed in the front end. This unique URLs will be sent in all emails of Helpdesk. Tickets can be accessed from the default WordPress permalinks as well.' ),
 					'default'  => false,
 					'on'       => __( 'Enable' ),
 					'off'      => __( 'Disable' ),
@@ -216,80 +219,91 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				$redirect_url = admin_url( 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&page=rthd-settings' );
 				update_option( 'rthd_googleapi_redirecturl', $redirect_url );
 			}
+			$email_fields = array();
+
+			array_push( $email_fields, array(
+				'id'      => 'rt_hd_Mailboxes_setup',
+				'type'    => 'callback',
+				'title'   => 'Mailboxes Setup',
+				'subtitle' => __( 'Helpdesk Configured Mailbox(s)' ),
+				'desc'    => 'Following mailboxes have been configured for Helpdesk. Emails from these mailboxes will be parsed and Helpdesk will use them to create new ticket / add new followup accordingly. You can configure these mailboxes from <a href="'.add_query_arg( 'page', RT_BIZ_Configuration::$page_slug, admin_url( 'admin.php' ) ).'"rtBiz</a>',
+				'callback' => 'rthd_mailbox_setup_view',
+			) );
+
+			array_push( $email_fields, array(
+					'id'       => 'rthd_outgoing_email_from_name',
+					'title'    => __( 'Outgoing Emails\' FROM Name' ),
+					'subtitle' => __( 'Outgoing System Name used for all Helpdesk Communication' ),
+					'desc'     => sprintf( '%s.', __( 'System Name to be used for outbound emails. This Name will be used as FROM: name < email address > for all outgoing emails' ) ),
+					'type'     => 'text',
+					'default'  => get_bloginfo(),
+				) );
+
+			if ( $is_mailbox_configured ){
+				array_push( $email_fields, array(
+					'id'       => 'rthd_outgoing_email_mailbox',
+					'title'    => __( 'Outgoing Emails\' Mailbox' ),
+					'subtitle' => __( 'Mailbox to be used to send outgoing emails/notifications.' ),
+					'desc'     => sprintf( '%s.', __( 'Choose any one email from the configured mailboxes.' ) ),
+					'type'     => 'select',
+					'options'  => $mailbox_options,
+				) );
+			}
+			else {
+				array_push( $email_fields, array(
+					'id'       => 'rthd_outgoing_email_from_address',
+					'title'    => __( 'Outgoing Emails\' FROM Address' ),
+					'subtitle' => __( 'Outgoing System Email used for all Helpdesk Communication' ),
+					'desc'     => sprintf( '%s <a href="%s">%s</a>. %s.', __( 'WordPress by default sends email using (mostly postfix) FROM/TO value set to Admin Email taken from' ), admin_url( 'options-general.php' ), __( 'here' ), __( 'System Email Address to be used for outbound emails. This Address will be used as FROM: name < email address > for all outgoing emails' ) ),
+					'type'     => 'text',
+					'default'  => get_option( 'admin_email' ),
+					'validate' => 'email',
+				) );
+			}
+				array_push( $email_fields,
+				array(
+					'id'         => 'rthd_notification_emails',
+					'title'      => __( 'Notification Emails' ),
+					'subtitle'   => __( 'Email addresses to be notified on events' ),
+					'desc'       => __( 'These email addresses will be notified of the events that occurs in HelpDesk Systems. This is a global list. All the subscribers also will be notified along with this list.' ),
+					'type'       => 'multi_text',
+					'validate'   => 'email',
+					'multi'      => true,
+					'show_empty' => false,
+				),
+				array(
+					'id'         => 'rthd_blacklist_emails_textarea',
+					'title'      => __( 'Blacklist Emails' ),
+					'subtitle'   => __( 'Email addresses to be blacklisted from creating tickets / follow-ups.' ),
+					'desc'       => __( 'All mails coming from these addresses will be blocked by Helpdesk. It also accept arguments like @example.com, @example.*, Keep each email in new line.' ),
+					'type'       => 'textarea',
+					'multi'      => true,
+					'show_empty' => false,
+				),
+				array(
+					'id'       => 'rthd_notification_events',
+					'title'    => __( 'Notification Events' ),
+					'subtitle' => __( 'Events to be notified to users' ),
+					'desc'     => __( 'These events will be notified by Notification Emails.' ),
+					'type'     => 'checkbox',
+					'options' => array(
+						'new_ticket_created'      => __( 'When a New Ticket is created.' ),
+						'new_comment_added'       => __( 'When a New follow up is added to a Ticket.' ),
+						'followup_edited'         => __( 'When a follow up is edited' ),
+						'followup_deleted'        => __( 'When a follow up is deleted' ),
+						'status_metadata_changed' => __( 'When any status or metadata changed for a Ticket.' ),
+						'new_ticket_reassigned'   => __( 'When ticket reassigned' ),
+						'ticket_subscribed'       => __( 'When ticket subscribed' ),
+						'ticket_unsubscribed'     => __( 'When ticket unsubscribed' ),
+					),
+				)
+			);
 
 			$this->sections[] = array(
 				'icon'        => 'el-icon-envelope',
 				'title'       => __( 'Mail Setup' ),
 				'permissions' => $admin_cap,
-				'fields'      => array(
-					array(
-						'id'       => 'rthd_outgoing_email_delivery',
-						'title'    => __( 'Outgoing Emails\' Delivery' ),
-						'subtitle' => __( 'This is how the emails will be sent from the Helpdesk system.' ),
-						'desc'     => __( '' ),
-						'type'     => 'radio',
-						'options'  => array(
-							'wp_mail'         => __( 'WordPress wp_mail Function' ),
-							'user_mail_login' => __( 'User\'s own Mail Login - (Google OAuth / SMTP Login etc. as per configuration.)' ),
-						),
-						'default'  => 'wp_mail',
-					),
-					array(
-						'id'       => 'rthd_outgoing_email_from_name',
-						'title'    => __( 'Outgoing Emails\' FROM Name' ),
-						'subtitle' => __( 'Outgoing System Name used for all Helpdesk Communication' ),
-						'desc'     => sprintf( '%s.', __( 'System Name to be used for outbound emails. This Name will be used as FROM: name < email address > for all outgoing emails' ) ),
-						'type'     => 'text',
-						'default'  => get_bloginfo(),
-					),
-					array(
-						'id'       => 'rthd_outgoing_email_from_address',
-						'title'    => __( 'Outgoing Emails\' FROM Address' ),
-						'subtitle' => __( 'Outgoing System Email used for all Helpdesk Communication' ),
-						'desc'     => sprintf( '%s <a href="%s">%s</a>. %s.', __( 'WordPress by default sends email using (mostly postfix) FROM/TO value set to Admin Email taken from' ), admin_url( 'options-general.php' ), __( 'here' ), __( 'System Email Address to be used for outbound emails. This Address will be used as FROM: name < email address > for all outgoing emails' ) ),
-						'type'     => 'text',
-						'default'  => get_option( 'admin_email' ),
-						'validate' => 'email',
-						'required' => array( 'rthd_outgoing_email_delivery', '=', 'wp_mail' ),
-					),
-					array(
-						'id'       => 'rthd_outgoing_email_mailbox',
-						'title'    => __( 'Outgoing Emails\' Mailbox' ),
-						'subtitle' => __( 'The mailbox to be used in order to send outgoing emails/notifications.' ),
-						'desc'     => sprintf( '%s <a href="%s">%s</a>.', __( 'Choose the one email from the configured mailboxes. If there\'s no item found then please configure mailbox from' ), add_query_arg( 'page', RT_BIZ_Configuration::$page_slug, admin_url( 'admin.php' ) ), __( 'rtBiz' ) ),
-						'type'     => 'select',
-						'options'  => $mailbox_options,
-						'required' => array( 'rthd_outgoing_email_delivery', '=', 'user_mail_login' ),
-					),
-					array(
-						'id'         => 'rthd_notification_emails',
-						'title'      => __( 'Notification Emails' ),
-						'subtitle'   => __( 'Email addresses to be notified on events' ),
-						'desc'       => __( 'These email addresses will be notified of the events that occurs in HelpDesk Systems. This is a global list. All the subscribers also will be notified along with this list.' ),
-						'type'       => 'multi_text',
-						'validate'   => 'email',
-						'multi'      => true,
-					    'show_empty' => false,
-					),
-					array(
-						'id'       => 'rthd_notification_events',
-						'title'    => __( 'Notification Events' ),
-						'subtitle' => __( 'Events to be notified to users' ),
-						'desc'     => __( 'These events will be notified to the Notification Emails whenever they occur.' ),
-						'type'     => 'checkbox',
-						'options' => array(
-							'new_ticket_created'      => __( 'Whenever a New Ticket is created.' ),
-							'new_comment_added'       => __( 'Whenever a New follow up is added to a Ticket.' ),
-							'followup_edited'         => __( 'Whenever a follow up is edited' ),
-							'followup_deleted'        => __( 'Whenever a follow up is deleted' ),
-							'status_metadata_changed' => __( 'Whenever any status or metadata changed for a Ticket.' ),
-							'new_ticket_assigned'     => __( 'Whenever new ticket assigned' ),
-							'new_ticket_reassigned'   => __( 'Whenever new ticket reassigned' ),
-							'ticket_subscribed'       => __( 'Whenever new ticket subscribed' ),
-							'ticket_unsubscribed'     => __( 'Whenever new ticket unsubscribed' ),
-						),
-					),
-				),
+				'fields'      => $email_fields,
 			);
 
 			$this->sections[] = array(
@@ -302,70 +316,63 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'id'       => 'rthd_new_ticket_email_title',
 						'type'     => 'text',
 						'title'    => __( 'New ticket is created' ),
-						'subtitle' => __( 'This is the title when a new ticket is created' ),
+						'subtitle' => __( 'Title when a new ticket is created' ),
 						'default'  => '{ticket_title}',
 					),
 					array(
 						'id'       => 'rthd_update_ticket_email_title',
 						'type'     => 'text',
 						'title'    => __( 'Ticket is updated' ),
-						'subtitle' => __( 'This is the title when a ticket is updated' ),
-						'default'  => '{ticket_title}',
-					),
-					array(
-						'id'       => 'rthd_ticket_assign_email_title',
-						'type'     => 'text',
-						'title'    => __( 'New ticket is assigned' ),
-						'subtitle' => __( 'This is the title when new ticket is assigned to a user' ),
+						'subtitle' => __( 'Title when a ticket is updated' ),
 						'default'  => '{ticket_title}',
 					),
 					array(
 						'id'       => 'rthd_ticket_reassign_email_title',
 						'type'     => 'text',
 						'title'    => __( 'Ticket is reassigned' ),
-						'subtitle' => __( 'This is the title when an existing ticket is reassigned to another user' ),
+						'subtitle' => __( 'Title when an existing ticket is reassigned to another user' ),
 						'default'  => '{ticket_title}',
 					),
 					array(
 						'id'       => 'rthd_new_followup_email_title',
 						'type'     => 'text',
 						'title'    => __( 'New follow up is added' ),
-						'subtitle' => __( 'This is the title when a new follow up is added' ),
+						'subtitle' => __( 'Title when a new follow up is added' ),
 						'default'  => '{ticket_title}',
 					),
 					array(
 						'id'       => 'rthd_update_followup_email_title',
 						'type'     => 'text',
 						'title'    => __( 'Follow up is updated' ),
-						'subtitle' => __( 'This is the title when an exisitng follow up is updated' ),
+						'subtitle' => __( 'Title when an existing follow up is updated' ),
 						'default'  => '{ticket_title}',
 					),
 					array(
 						'id'       => 'rthd_delete_followup_email_title',
 						'type'     => 'text',
 						'title'    => __( 'Follow up is deleted' ),
-						'subtitle' => __( 'This is the title when a follow up is deleted' ),
+						'subtitle' => __( 'Title when a follow up is deleted' ),
 						'default'  => '{ticket_title}',
 					),
 					array(
 						'id'       => 'rthd_ticket_subscribe_email_title',
 						'type'     => 'text',
 						'title'    => __( 'User subscribes to ticket' ),
-						'subtitle' => __( 'This is the title when a user subscribes to a ticket' ),
+						'subtitle' => __( 'Title when a user subscribes to a ticket' ),
 						'default'  => '{ticket_title}',
 					),
 					array(
 						'id'       => 'rthd_ticket_unsubscribe_email_title',
 						'type'     => 'text',
 						'title'    => __( 'User unsubscribes to ticket' ),
-						'subtitle' => __( 'This is the title when a user unsubscribes to a ticket' ),
+						'subtitle' => __( 'Title when a user unsubscribes to a ticket' ),
 						'default'  => '{ticket_title}',
 					),
 					array(
 						'id'       => 'rthd_enable_signature',
 						'type'     => 'switch',
 						'title'    => __( 'Enable email Signature' ),
-						'subtitle' => __( 'This will enable/disable signature for all email send via rtCamp Helpdesk.' ),
+						'subtitle' => __( 'To enable/disable signature for all email send via rtCamp Helpdesk.' ),
 						'default'  => true,
 						'on'       => __( 'Enable' ),
 						'off'      => __( 'Disable' ),
@@ -381,7 +388,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'type'         => 'textarea',
 						'title'        => __( 'Email Signature' ),
 						'subtitle'     => __( 'Add here Email Signature' ),
-						'desc'         => esc_attr( 'You can add email signature here that will be send with every email send with the Idea plugin, Allowed tags are <a> <br> <em> <strong>.' ),
+						'desc'         => esc_attr( 'You can add email signature here that will be send with every email send with the Helpdesk plugin, Allowed tags are <a> <br> <em> <strong>.' ),
 						'validate'     => 'html_custom',
 						'default'      => esc_attr( ' -- Sent via rtBiz Helpdesk Plugin' ),
 						'allowed_html' => array(
@@ -397,6 +404,34 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				)
 			);
 
+			$this->sections[]   = array(
+				'title'       => __( 'Gravity Importer' ),
+				'icon'        => 'el-icon-list-alt',
+				'permissions' => $admin_cap,
+				//'subsection'  => true,
+				'fields'      => array(
+					array(
+						'id'      => 'rthd_ticket_import_view',
+						'type'    => 'raw',
+						'content' => rthd_gravity_importer_view(),
+					),
+				),
+			);
+
+			$this->sections[]   = array(
+				'title'       => __( 'Importer Mapper' ),
+				'icon'        => 'el-icon-list-alt',
+				'permissions' => $admin_cap,
+				'subsection'  => true,
+				'fields'      => array(
+					array(
+						'id'      => 'rthd_ticket_import_view',
+						'type'    => 'raw',
+						'content' => rt_biz_gravity_importer_mapper_view(),
+					),
+				),
+			);
+
 			// Only initiates in case of settings page is getting displayed. Not otherwise
 			if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] == self::$page_slug ) {
 				ob_start();
@@ -408,8 +443,8 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			$this->sections[]   = array(
 				'title'       => __( 'Import Logs' ),
 				'icon'        => 'el-icon-list-alt',
-				'permissions' => $editor_cap,
-				//'subsection'  => true,
+				'permissions' => $admin_cap,
+				'subsection'  => true,
 				'fields'      => array(
 					array(
 						'id'      => 'rthd_ticket_import_logs',
@@ -420,10 +455,26 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			);
 
 			$this->sections[] = array(
+				'icon'        => 'el-icon-key',
+				'title'       => __( 'License' ),
+				'permissions' => $admin_cap,
+				'fields'      => array(
+					array(
+						'id'      => 'rt_hd_activiation',
+						'type'    => 'callback',
+						'title'        => __( 'Plugin Activation' ),
+						'subtitle'     => __( 'Enter License Key and Activate plugin' ),
+						'callback' => 'rthd_activation_view',
+					)
+				),
+			);
+
+			$this->sections[] = array(
 				'title'   => __( 'Miscellaneous' ),
 				'heading' => __( 'Import / Export Settings' ),
 				'desc'    => __( 'Import and Export your settings from file, text or URL.' ),
 				'icon'    => 'el-icon-refresh',
+				'permissions' => $admin_cap,
 				'fields'  => array(
 					array(
 						'id'         => 'rthd_settings_import_export',
@@ -446,7 +497,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 		public function set_arguments() {
 
 			//$theme = wp_get_theme(); // For use with some settings. Not necessary.
-			$author_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
+			$editor_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
 			$this->args = array(
 				// TYPICAL -> Change these values as you need/desire
 				'opt_name'           => self::$hd_opt,
@@ -483,7 +534,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				// Order where the menu appears in the admin area. If there is any conflict, something will not show. Warning.
 				'page_parent'        => 'edit.php?post_type=' . esc_attr( Rt_HD_Module::$post_type ),
 				// For a full list of options, visit: http://codex.wordpress.org/Function_Reference/add_submenu_page#Parameters
-				'page_permissions'   => $author_cap,
+				'page_permissions'   => $editor_cap,
 				// Permissions needed to access the options panel.
 				//'menu_icon' => '', // Specify a custom URL to an icon
 				//'last_tab' => '', // Force your panel to always open to a specific tab (by id)
@@ -560,4 +611,18 @@ function rthd_get_redux_post_settings( $post ) {
 function rthd_ticket_import_logs() {
 	global $rt_hd_logs;
 	$rt_hd_logs->ui();
+}
+
+function rthd_mailbox_setup_view(){
+	$module_key = rt_biz_sanitize_module_key( RT_HD_TEXT_DOMAIN );
+	rt_biz_mailbox_setup_view( $module_key );
+}
+
+function rthd_gravity_importer_view(){
+	$module_key = rt_biz_sanitize_module_key( RT_HD_TEXT_DOMAIN );
+	return rt_biz_gravity_importer_view( $module_key );
+}
+
+function rthd_activation_view(){
+	do_action( 'rthelpdesk_addon_license_details' );
 }

@@ -72,8 +72,8 @@ ul#chat-UI {
 
 .self .messages, .other .messages, .rt-hd-ticket-front-title{
 	-ms-word-break:break-all;
-  	word-break:break-all;
-  	word-break:break-word;
+	word-wrap: break-word;
+	word-break: break-word;
   	-webkit-hyphens:auto;
   	-moz-hyphens:auto;
   	hyphens:auto;
@@ -112,7 +112,11 @@ ul#chat-UI {
 
 #private-comment{
 	display: inline-block;
-	font-size: 14px;
+	/*font-size: 14px;*/
+	margin-top: 1.5em;
+}
+#private-comment p {
+	margin-bottom: 1em;
 }
 
 .add-savefollowup {
@@ -177,8 +181,8 @@ ul#chat-UI {
 	margin-left: 2%;
 	position: relative;
 	-ms-word-break:break-all;
-  	word-break:break-all;
-  	word-break:break-word;
+	word-wrap: break-word;
+	word-break: break-word;
   	-webkit-hyphens:auto;
   	-moz-hyphens:auto;
   	hyphens:auto;
@@ -191,8 +195,8 @@ ul#chat-UI {
 
 .rthd-ticket-description {
 	-ms-word-break:break-all;
-  	word-break:break-all;
-  	word-break:break-word;
+	word-wrap: break-word;
+	word-break: break-word;
   	-webkit-hyphens:auto;
   	-moz-hyphens:auto;
   	hyphens:auto;
@@ -390,4 +394,11 @@ li.load-more-spinner-li {
 	border: 1px solid #e5e5e5;
 	-webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.04);
 	box-shadow: 0 1px 1px rgba(0,0,0,0.04);
+}
+.edit-action-button {
+	float: right;
+}
+#clear-attachemntlist {
+	display: none;
+	text-decoration: underline;
 }
