@@ -275,7 +275,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					'id'         => 'rthd_blacklist_emails_textarea',
 					'title'      => __( 'Blacklist Emails' ),
 					'subtitle'   => __( 'Email addresses to be blacklisted from creating tickets / follow-ups.' ),
-					'desc'       => __( 'All mails coming from these addresses will be blocked by Helpdesk. It also accept arguments like @example.com, @example.*' ),
+					'desc'       => __( 'All mails coming from these addresses will be blocked by Helpdesk. It also accept arguments like @example.com, @example.*, Keep each email in new line.' ),
 					'type'       => 'textarea',
 					'multi'      => true,
 					'show_empty' => false,
