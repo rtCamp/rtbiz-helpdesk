@@ -207,8 +207,8 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$bccemails = array_merge( $bccemails, $subscriber );
 
 			$contacts = array();
-			if ( $comment_privacy == Rt_HD_Import_Operation::$FOLLOWUP_STAFF){
-				$contacts  = $this->get_contacts($comment->comment_post_ID );
+			if ( $comment_privacy != Rt_HD_Import_Operation::$FOLLOWUP_STAFF ){
+				$contacts  = $this->get_contacts( $comment->comment_post_ID );
 			}
 
 			$bccemails = $this->exclude_author( $bccemails, $comment->comment_author_email );
@@ -487,7 +487,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 					$htmlbody .= '<hr style="color: #DCEAF5;" /><div>' . rthd_content_filter( $body ) . '</div>';
 				}
 				$htmlbody = rthd_get_general_body_template( $htmlbody );
-				$this->insert_new_send_email( $subject, $title, $htmlbody, array(), array(), $groupEmail , $uploaded, $post_id );
+				$this->insert_new_send_email( $subject, $title, $htmlbody, $groupEmail, array(), array() , $uploaded, $post_id );
 			}
 
 			// Assignee [ To ] Notification
@@ -517,7 +517,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				if ( isset( $body ) && !empty( $body ) ){
 					$htmlbody .= '<hr style="color: #DCEAF5;" /><div>' . rthd_content_filter( $body ) . '</div>';
 				}
-				$this->insert_new_send_email( $subject, $title, $htmlbody, array(), array(), $assigneEmail , $uploaded, $post_id );
+				$this->insert_new_send_email( $subject, $title, $htmlbody, $subscriberEmail, array(), array() , $uploaded, $post_id );
 			}
 
 		}
@@ -638,7 +638,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 
 				$htmlbody = 'You are no longer responsible for this ticket. ';
 				$htmlbody = rthd_get_general_body_template( $htmlbody );
-				$this->insert_new_send_email( $subject, $title, $htmlbody, $oldassigneEmail, array(), array(), $uploaded, $post_id, 'post' );
+				$this->insert_new_send_email( $subject, $title, $htmlbody, $oldassigneEmail, array(), array(), array(), $post_id, 'post' );
 			}
 
 			// new assignee [ To ] mail Notification
@@ -646,7 +646,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				$htmlbody = 'A ticket is reassigned to you.';
 				$htmlbody = rthd_get_general_body_template( $htmlbody );
 
-				$this->insert_new_send_email( $subject, $title, $htmlbody, $newassigneEmail, array(), array(), $uploaded, $post_id, 'post' );
+				$this->insert_new_send_email( $subject, $title, $htmlbody, $newassigneEmail, array(), array(), array(), $post_id, 'post' );
 			}
 
 			// group [ BCC ] mail Notification
@@ -751,7 +751,6 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 					$userSub = get_user_by( 'id', intval( $emailsubscriber ) );
 					if ( ! empty( $userSub ) ) {
 						$bccemails[ ]  = array( 'email' => $userSub->user_email );
-						$sendEmailFlag = true;
 					}
 				}
 			}
