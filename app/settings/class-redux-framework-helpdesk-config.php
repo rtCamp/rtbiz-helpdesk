@@ -292,7 +292,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'followup_edited'         => __( 'When a follow up is edited' ),
 						'followup_deleted'        => __( 'When a follow up is deleted' ),
 						'status_metadata_changed' => __( 'When any status or metadata changed for a Ticket.' ),
-						'new_ticket_assigned'     => __( 'When new ticket assigned' ),
 						'new_ticket_reassigned'   => __( 'When new ticket reassigned' ),
 						'ticket_subscribed'       => __( 'When new ticket subscribed' ),
 						'ticket_unsubscribed'     => __( 'When new ticket unsubscribed' ),
@@ -325,13 +324,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'type'     => 'text',
 						'title'    => __( 'Ticket is updated' ),
 						'subtitle' => __( 'Title when a ticket is updated' ),
-						'default'  => '{ticket_title}',
-					),
-					array(
-						'id'       => 'rthd_ticket_assign_email_title',
-						'type'     => 'text',
-						'title'    => __( 'New ticket is assigned' ),
-						'subtitle' => __( 'Title when new ticket is assigned to a user' ),
 						'default'  => '{ticket_title}',
 					),
 					array(
