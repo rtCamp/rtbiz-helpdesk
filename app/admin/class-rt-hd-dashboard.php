@@ -184,18 +184,15 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 				'top_clients',
 			), $rt_hd_dashboard->screen_id, 'column4' );
 
-			$settings = biz_get_redux_settings();
-			if ( isset( $settings['offering_plugin'] ) && 'none' != $settings['offering_plugin'] ) {
-				add_meta_box( 'rthd-tickets-by-product', __( 'Tickets by Offerings', RT_HD_TEXT_DOMAIN ), array(
-					$this,
-					'tickets_by_products',
-				), $rt_hd_dashboard->screen_id, 'column5' );
+			add_meta_box( 'rthd-tickets-by-product', __( 'Tickets by Offerings', RT_HD_TEXT_DOMAIN ), array(
+				$this,
+				'tickets_by_products',
+			), $rt_hd_dashboard->screen_id, 'column5' );
 
-				add_meta_box( 'rthd-customer-by-product-tickets', __( 'Ticket Conversion from Sales', RT_HD_TEXT_DOMAIN ), array(
-					$this,
-					'tickets_by_product_purchase',
-				), $rt_hd_dashboard->screen_id, 'column6' );
-			}
+			add_meta_box( 'rthd-customer-by-product-tickets', __( 'Ticket Conversion from Sales', RT_HD_TEXT_DOMAIN ), array(
+				$this,
+				'tickets_by_product_purchase',
+			), $rt_hd_dashboard->screen_id, 'column6' );
 			$relations = $rt_hd_attributes_relationship_model->get_relations_by_post_type( Rt_HD_Module::$post_type );
 			foreach ( $relations as $r ) {
 				$attr = $rt_hd_attributes_model->get_attribute( $r->attr_id );
@@ -306,7 +303,10 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			$rows        = array();
 			$post_type   = Rt_HD_Module::$post_type;
 			$total       = 0;
-
+			if ( empty( $terms ) ){
+				echo 'No offerings found.';
+				return;
+			}
 			if ( ! $terms instanceof WP_Error ) {
 				foreach ( $terms as $t ) {
 					$posts = new WP_Query( array(
