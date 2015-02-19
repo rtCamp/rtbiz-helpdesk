@@ -455,7 +455,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$subject     = rthd_create_new_ticket_title( 'rthd_new_ticket_email_title',$post_id );
 
 			// Ticket creator [ To ] Notification
-			if ( ! empty( $creatorEmail ) ) {
+			if ( ! empty( $ticket_creator ) ) {
 				$htmlbody = 'Thank you for opening a new support ticket. We will look into your request and respond as soon as possible.<br/>';
 				if ( isset( $body ) && !empty( $body ) ){
 					$htmlbody .= '<hr style="color: #DCEAF5;" /><div>' . rthd_content_filter( $body ) . '</div>';
@@ -466,7 +466,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			}
 
 			// Conatcts [ TO ] Notification
-			if ( ! empty( $otherContactEmail ) ){
+			if ( ! empty( $ContactEmail ) ){
 				$htmlbody = 'A new support ticket created by <strong>' . $ticket_created_by->display_name.'</strong>. You have been subscribed to this ticket.<br/>';
 				if ( isset( $body ) && !empty( $body ) ){
 					$htmlbody .= '<hr style="color: #DCEAF5;" /><div>' . rthd_content_filter( $body ) . '</div>';
