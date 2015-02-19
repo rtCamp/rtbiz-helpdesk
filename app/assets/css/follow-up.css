@@ -112,7 +112,11 @@ ul#chat-UI {
 
 #private-comment{
 	display: inline-block;
-	font-size: 14px;
+	/*font-size: 14px;*/
+	margin-top: 1.5em;
+}
+#private-comment p {
+	margin-bottom: 1em;
 }
 
 .add-savefollowup {
