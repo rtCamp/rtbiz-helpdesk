@@ -189,12 +189,12 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 
 			$followup_creator = array();
 			$followup_creator[] = array( 'email' => $comment->comment_author_email, 'name' => $comment->comment_author );
+			$bccemails = array();
 
 			$assignee_email = array();
 			$assignee_email[] = $this->get_assigne_email( $comment->comment_post_ID );
-			$assignee_email = $this->exclude_author( $assignee_email, $comment->comment_author_email );
+			$bccemails = array_merge( $bccemails, $assignee_email );
 
-			$bccemails = array();
 			if ( $notificationFlag ) {
 				if ( isset( $redux['rthd_notification_emails'] ) ) {
 					foreach ( $redux['rthd_notification_emails'] as $email ) {
@@ -206,9 +206,9 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$subscriber = $this->get_subscriber( $comment->comment_post_ID );
 			$bccemails = array_merge( $bccemails, $subscriber );
 
+			$contacts = array();
 			if ( $comment_privacy == Rt_HD_Import_Operation::$FOLLOWUP_STAFF){
 				$contacts  = $this->get_contacts($comment->comment_post_ID );
-				$bccemails = array_merge( $bccemails, $contacts );
 			}
 
 			$bccemails = $this->exclude_author( $bccemails, $comment->comment_author_email );
@@ -234,9 +234,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 
 			//sending email to ticket assignee [ To ] | staff [ BCC ] | contact [ BCC ] | globel list [ BCC ]
 			$toBody = rthd_replace_followup_placeholder( $body, $comment->comment_author );
-			$bccemails[] = $this->get_assigne_email( $comment->comment_post_ID );
-			$bccemails = $this->exclude_author( $bccemails, $comment->comment_author_email );
-			$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $toBody ), $assignee_email , array(), $bccemails, $uploaded, $comment->comment_ID , 'comment', true );
+			$this->insert_new_send_email( $subject, $title, rthd_get_general_body_template( $toBody ), $contacts , array(), $bccemails, $uploaded, $comment->comment_ID , 'comment', true );
 		}
 
 
@@ -310,8 +308,8 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				$private_update = true;
 			}
 
-			$followup_creator = array();
-			$followup_creator[] = array( 'email' => $comment->comment_author_email, 'name' => $comment->comment_author );
+			$followup_updater = array();
+			$followup_updater[] = array( 'email' => $comment->comment_author_email, 'name' => $comment->comment_author );
 
 			$assignee_email = array();
 			$assignee_email[] = $this->get_assigne_email( $comment->comment_post_ID );
@@ -329,12 +327,6 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$bccemails = array_merge( $bccemails, $subscriber );
 
 			$bccemails = $this->exclude_author( $bccemails, $comment->comment_author_email );
-
-			if ( $new_privacy == Rt_HD_Import_Operation::$FOLLOWUP_STAFF){
-				$contacts  = $this->get_contacts($comment->comment_post_ID );
-				$contacts = $this->exclude_author($contacts, $comment->comment_author_email);
-				$bccemails = array_merge( $bccemails, $contacts );
-			}
 
 			if ( $private_update ){
 				$body = '<div><br /> A <strong>private</strong> followup has been edited by <strong>{comment_author}</strong>. Please go to ticket to view content.</div>';
@@ -364,7 +356,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			// sending email to followup author [ To ]
 			if ( user_can( $user, rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' ) ) ) {
 				$bodyto = rthd_replace_followup_placeholder($body, 'you');
-				$this->insert_new_send_email($subject, $title, rthd_get_general_body_template($bodyto), $followup_creator, array(), array(), array(), $comment->comment_ID, 'comment', true);
+				$this->insert_new_send_email($subject, $title, rthd_get_general_body_template($bodyto), $followup_updater, array(), array(), array(), $comment->comment_ID, 'comment', true);
 			}
 
 			//sending emial to ticket assignee [ To ] | staff [ BCC ] | contact [ BCC ] | globel list [ BCC ]
