@@ -1250,6 +1250,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				//$commentdata['comment_date_gmt'] = current_time( 'mysql', 1 );
 			}
 
+			$uploaded = array();
 			if ( $_FILES ) {
 				$attachment = $_FILES['attachemntlist'];
 				foreach ( $attachment['name'] as $key => $value ) {
