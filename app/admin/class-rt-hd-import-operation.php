@@ -1248,7 +1248,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$commenttime = $d->format( 'Y-m-d H:i:s' );
 				//$commentdata['comment_date_gmt'] = $d->format( 'Y-m-d H:i:s' );
 			} else {
-				$commenttime     = current_time( 'mysql' );
+				$commenttime     = current_time( 'mysql', 1 );
 				//$commentdata['comment_date_gmt'] = current_time( 'mysql', 1 );
 			}
 
