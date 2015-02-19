@@ -517,6 +517,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				if ( isset( $body ) && !empty( $body ) ){
 					$htmlbody .= '<hr style="color: #DCEAF5;" /><div>' . rthd_content_filter( $body ) . '</div>';
 				}
+				$htmlbody = rthd_get_general_body_template( $htmlbody );
 				$this->insert_new_send_email( $subject, $title, $htmlbody, $subscriberEmail, array(), array() , $uploaded, $post_id );
 			}
 
