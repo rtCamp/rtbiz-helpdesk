@@ -1264,7 +1264,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 							'error'    => $attachment['error'][ $key ],
 							'size'     => $attachment['size'][ $key ],
 						);
-						$uploaded[] = self::insert_attachment( $file );
+						$uploaded[] = Rt_HD_Offering_Support::insert_attachment( $file );
 					}
 				}
 			}

@@ -7,7 +7,7 @@ rtBiz Helpdesk - Keep your customers happy & gay !
 **Tags:** [helpdesk](http://wordpress.org/plugins/tags/helpdesk), [support](http://wordpress.org/plugins/tags/support), [products](http://wordpress.org/plugins/tags/products), [tickets](http://wordpress.org/plugins/tags/tickets), [followups](http://wordpress.org/plugins/tags/followups), [customers](http://wordpress.org/plugins/tags/customers), [e-commerce](http://wordpress.org/plugins/tags/e-commerce)  
 **Requires at least:** 4.1  
 **Tested up to:** 4.1  
-**Stable tag:** 1.3  
+**Stable tag:** 1.0  
 **License:** [GPLv2 or later](http://www.gnu.org/licenses/gpl-2.0.html)  
 **Donate Link:** http://rtcamp.com/donate  
 
@@ -58,7 +58,13 @@ Please refer to the documentation.
 
 ## Changelog ##
 
-### 1.3 ###
+### 1.0 ###
+* Ticket / followup creation via mail parsing and gravity form
 * Helpdesk Module for rtBiz
+* Block list email added
+* Watch / unwatch tickets
+* Mail notification refactoring
+* Follow up visibility
+* My tickets
 
 
