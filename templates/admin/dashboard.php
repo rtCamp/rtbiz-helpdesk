@@ -30,7 +30,7 @@ $welcome_label = $settings['rthd_menu_label'];
 	?>
 
 		<div id="rthd-welcome-panel" class="<?php echo esc_attr( $classes ); ?>">
-			<img class="rthd-banner-dashboard" src="http://placehold.it/1150x240&text=rtBiz+Helpdesk">
+<!--			<img class="rthd-banner-dashboard" src="http://placehold.it/1150x240&text=rtBiz+Helpdesk">-->
 			<?php wp_nonce_field( 'rthd-welcome-panel-nonce', 'rthdwelcomepanelnonce', false ); ?>
 			<a class="welcome-panel-close" href="<?php echo esc_url( admin_url( 'admin.php?page=' . $rt_hd_dashboard->screen_id . '&rthdwelcome=0' ) ); ?>"><?php _e( 'Dismiss' ); ?></a>
 			<?php
