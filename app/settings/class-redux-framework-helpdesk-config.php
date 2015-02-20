@@ -404,6 +404,41 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				)
 			);
 
+			$this->sections[] = array(
+				'icon'        => 'el-icon-magic',
+				'title'       => __( 'Miscellaneous Feature' ),
+				'permissions' => $admin_cap,
+				'fields'      => array(
+					array(
+						'id'       => 'rthd_enable_auto_assign',
+						'type'     => 'switch',
+						'title'    => __( 'Enable auto assign' ),
+						'subtitle' => __( 'To enable/disable auto assign feature' ),
+						'default'  => true,
+						'on'       => __( 'Enable' ),
+						'off'      => __( 'Disable' ),
+					),
+					array(
+						'id'       => 'section-auto-assign',
+						'type'     => 'section',
+						'indent'   => true, // Indent all options below until the next 'section' option is set.
+						'required' => array( 'rthd_enable_auto_assign', '=', 1 ),
+					),
+					array(
+						'id'       => 'rthd_auto_assign_events',
+						'title'    => __( 'Event for auto assign' ),
+						'subtitle' => __( '' ),
+						'desc'     => __( '' ),
+						'default'  => 'on_first_followup',
+						'type'     => 'radio',
+						'options' => array(
+							'on_first_followup'	=> __( 'On first followup added by staff.' ),
+							'on_every_followup' => __( 'On every followup added by staff.' ),
+						),
+					),
+				),
+			);
+
 			$this->sections[]   = array(
 				'title'       => __( 'Gravity Importer' ),
 				'icon'        => 'el-icon-list-alt',
