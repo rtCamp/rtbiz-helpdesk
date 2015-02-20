@@ -210,7 +210,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			if ( $comment_privacy != Rt_HD_Import_Operation::$FOLLOWUP_STAFF ){
 				$contacts  = $this->get_contacts( $comment->comment_post_ID );
 			}
-
+			$contacts = $this->exclude_author( $contacts, $comment->comment_author_email );
 			$bccemails = $this->exclude_author( $bccemails, $comment->comment_author_email );
 
 
