@@ -1818,7 +1818,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				}
 
 				$response['status']= true;
-				$response['label']= 'Unwatch';
+				$response['label']= 'Unsubscribe';
 				$response['value']= 'unwatch';
 			}
 			else if( 'unwatch' == $watch_unwatch ) {
@@ -1844,7 +1844,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				}
 
 				$response['status']= true;
-				$response['label']= 'Watch';
+				$response['label']= 'Subscribe';
 				$response['value']= 'watch';
 			}
 

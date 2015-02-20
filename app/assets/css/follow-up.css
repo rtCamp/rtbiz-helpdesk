@@ -112,15 +112,16 @@ ul#chat-UI {
 
 #private-comment{
 	display: inline-block;
-	/*font-size: 14px;*/
+}
+#rthd-followup-form {
 	margin-top: 1.5em;
 }
-#private-comment p {
+#rthd-followup-form > div {
 	margin-bottom: 1em;
 }
-
-.add-savefollowup {
+#rthd-followup-form #rthd-followup-action {
 	float: right;
+	margin-bottom: 0;
 }
 
 .add-followup-attachment {
@@ -401,4 +402,7 @@ li.load-more-spinner-li {
 #clear-attachemntlist {
 	display: none;
 	text-decoration: none;
+}
+#fileList {
+	margin-bottom: 1em;
 }

@@ -285,8 +285,10 @@ jQuery( document ).ready( function ( $ ) {
 		             jQuery('#chat-UI' ).append(newcomment);
 		             rthd_tinymce_set_content( 'followupcontent', '' );
 		             jQuery('#add-private-comment' ).val(10);
-		             var control = jQuery('#attachemntlist' );
-		             control.replaceWith( control = control.clone( true ) );
+		             $("#attachemntlist").val('');
+	 				 $("#fileList").html('');
+	 				 $("#clear-attachemntlist").hide();
+	 				
                      if (data.ticket_status=='answered'){
                          if(jQuery('#rthd_keep_status')){
                              jQuery('#rthd_keep_status').parent().hide();

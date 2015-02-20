@@ -540,13 +540,13 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 				)
 			);
 
-			if ( $count_user_tickets->post_count > 0 ) {
+			//if ( $count_user_tickets->post_count > 0 ) {
 				if ( isset( $_GET['assigned'] ) && ( $_GET['assigned'] == $current_user_id ) )
 					$class = ' class="current"';
 				else
 					$class = '';
 				$views['my-tickets'] = "<a href='edit.php?post_type=".Rt_HD_Module::$post_type."&assigned=$current_user_id&post_status=assigned'$class>" . sprintf( _nx( 'My Tickets <span class="count">(%s)</span>', 'My Tickets <span class="count">(%s)</span>', $count_user_tickets->post_count, RT_HD_TEXT_DOMAIN ), number_format_i18n( $count_user_tickets->post_count ) ) . '</a>';
-			}
+			//}
 
 			return $views;
 		}

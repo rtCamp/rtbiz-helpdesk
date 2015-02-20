@@ -52,8 +52,8 @@ wp_editor( '', $editor_id, $settings );
 ?>
 
 <!--	<textarea id="followupcontent" class="followup-content" name="followupcontent" placeholder="Add new followup"></textarea>-->
-	<div id="private-comment">
-		<p>
+	<div id="rthd-followup-form">
+		<div id="private-comment">
 			<label class="rthd-visibility"> Visibility: </label>
 			&nbsp;
 			<select name="private_comment" id="add-private-comment" >
@@ -68,25 +68,25 @@ wp_editor( '', $editor_id, $settings );
 				<?php }
 				?>
 			</select>
-		</p>
+		</div>
+		<div id="rthd-followup-action">
+			<button class="add-savefollowup btn-primary btn" id="savefollwoup" type="button">Add followup</button>
+			<img id='hdspinner' class="helpdeskspinner" src="<?php echo admin_url().'images/spinner.gif'; ?>">
+		</div>
 		<?php if (current_user_can(rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' )) && $post->post_status != 'hd-answered' ){ ?>
-			<p> 
+			<div> 
 				<label for="rthd_keep_status">
 					<input id="rthd_keep_status" type="checkbox" name="rthd_keep_status" text="check keep status unanswered" />&nbsp;
-					<?php _e('Keep unanswered'); ?></label></p>
+					<?php _e('Keep unanswered'); ?></label></div>
         <?php } ?>
+        <div>
+			<input id="attachemntlist" name="attachemntlist[]" type="file" multiple />
+			<ul id="fileList">
+			</ul>
+			<a id="clear-attachemntlist" href="javascript:;">Clear All</a>
+			<span class="followup-note"><b>Note:</b> Attachments will be uploaded when the form is submitted by clicking <i>Add Followup</i> button.</span>
+		</div>
 	</div>
-
-	<div>
-		<input id="attachemntlist" name="attachemntlist[]" type="file" multiple />
-		<ul id="fileList">
-		</ul>
-		<a id="clear-attachemntlist" href="javascript:;">Clear All</a>
-		<span class="followup-note"><b>Note:</b> Attachments will be uploaded when the form is submitted by clicking <i>Add Followup</i> button.</span>
-		<button class="add-savefollowup btn-primary btn" id="savefollwoup" type="button">Add followup</button>
-	</div>
-
-	<div class="rthd-clearfix"></div>
-	<img id='hdspinner' class="helpdeskspinner" src="<?php echo admin_url().'images/spinner.gif'; ?>">
+	
 	<div class="rthd-clearfix"></div>
 </div>
