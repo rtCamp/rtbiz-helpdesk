@@ -163,7 +163,7 @@ function rt_hd_include() {
 
 }
 
-include_once( RT_HD_PATH_VENDOR . 'edd-license/class-rt-hs-edd-license.php' );
+include_once( RT_HD_PATH_VENDOR . 'edd-license/class-rt-hd-edd-license.php' );
 new Rt_HD_Edd_License();
 
 /**
