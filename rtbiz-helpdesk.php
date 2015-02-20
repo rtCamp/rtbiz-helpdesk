@@ -177,6 +177,7 @@ function rt_hd_init() {
 
 	global $rt_wp_hd;
 	$rt_wp_hd = new RT_WP_Helpdesk();
+	add_action( 'admin_init', 'rthd_welcome_to_helpdesk' );
 }
 add_action( 'rt_biz_init', 'rt_hd_init', 1 );
 
@@ -188,8 +189,31 @@ add_action( 'rt_biz_init', 'rt_hd_init', 1 );
  */
 add_action( 'init', 'rthd_check_plugin_dependecy' );
 
-
+register_activation_hook( __FILE__, 'plugin_activation_redirect' );
 register_activation_hook( __FILE__, 'init_call_rtbiz_hd_flush_rewrite_rules' );
 function init_call_rtbiz_hd_flush_rewrite_rules(){
 	add_option( 'rthd_flush_rewrite_rules', 'true' );
+}
+
+function rthd_welcome_to_helpdesk(){
+	// Bail if no activation redirect
+	if ( ! get_transient( '_rthd_activation_redirect' ) ) {
+		return;
+	}
+
+	// Delete the redirect transient
+	delete_transient( '_rthd_activation_redirect' );
+
+	// Bail if activating from network, or bulk
+	if ( is_network_admin() || isset( $_GET['activate-multi'] ) ) {
+		return;
+	}
+
+	wp_safe_redirect( admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&page=rthd-'.Rt_HD_Module::$post_type.'-dashboard' ) );
+	exit;
+}
+
+function plugin_activation_redirect() {
+	// Add the transient to redirect
+	set_transient( '_rthd_activation_redirect', true, 30 );
 }
