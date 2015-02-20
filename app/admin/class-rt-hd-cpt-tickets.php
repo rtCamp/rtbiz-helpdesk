@@ -49,6 +49,9 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 
 			// Add custom view name `My Tickets`
 			add_filter( 'views_edit-rtbiz_hd_ticket', array( &$this, 'display_custom_views' ) );
+			
+			// Add custom filters.
+			add_action( 'restrict_manage_posts', array( &$this, 'display_custom_filters' ) );
 		}
 
 		/**
@@ -440,6 +443,14 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 					) );
 
 				}
+				
+				if ( isset( $_GET['ticket_status'] ) ) {
+					$query->set( 'post_status', $_GET['ticket_status'] );
+				}
+				
+				if ( isset( $_GET['ticket_assigned'] ) ) {
+					$query->set( 'author', $_GET['ticket_assigned'] );
+				}
 			}
 
 		}
@@ -549,6 +560,48 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 			//}
 
 			return $views;
+		}
+		
+		public function display_custom_filters() {
+			global $typenow, $rt_hd_module;
+			
+			if ( $typenow == Rt_HD_Module::$post_type ) {
+				
+				// Filter: Ticket status
+				echo '<label class="screen-reader-text" for="ticket_status">' . __( 'Filter by status' ) . '</label>';
+				
+				$statuses = $rt_hd_module->get_custom_statuses();
+				
+				echo '<select id="ticket_status" class="postform" name="ticket_status">';
+				echo '<option value="0">Select Status</option>';
+				
+				foreach ( $statuses as $status ) {
+					if( isset( $_GET['ticket_status'] ) && $status['slug'] == $_GET['ticket_status'] ) {
+						echo '<option value="'.$status['slug'].'" selected="selected">'.$status['name'].'</option>';
+					} else { 
+						echo '<option value="'.$status['slug'].'">'.$status['name'].'</option>';
+					}
+				}
+				echo '</select>';
+				
+				// Filter: Ticket Assignee
+				echo '<label class="screen-reader-text" for="ticket_assigned">' . __( 'Filter by assignee' ) . '</label>';
+				
+				$ticket_authors = Rt_HD_Utils::get_hd_rtcamp_user();
+				
+				echo '<select id="ticket_assigned" class="postform" name="ticket_assigned">';
+				echo '<option value="0">Select Assignee</option>';
+				
+				foreach ( $ticket_authors as $author ) {
+					if( isset( $_GET['ticket_assigned'] ) && $author->ID == $_GET['ticket_assigned'] ) {
+						echo '<option value="'.$author->ID.'" selected="selected">'.$author->display_name.'</option>';
+					} else {
+						echo '<option value="'.$author->ID.'">'.$author->display_name.'</option>';
+					}
+				}
+				
+				echo '</select>';
+			}
 		}
 	}
 }
