@@ -214,6 +214,19 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				'fields'      => $general_fields,
 			);
 
+			if (  ! current_user_can( $admin_cap ) ){
+				$this->sections[] = array(
+					'icon'        => 'el-icon-cogs',
+					'title'       => __( 'Note' ),
+					'permissions' => $editor_cap,
+					'fields'      => array( array (
+						'id'      => 'rt_hd_no_access',
+						'type'    => 'raw',
+						'content'   => rthd_no_access_redux(),
+					) )
+					);
+			}
+
 			$redirect_url = get_option( 'rthd_googleapi_redirecturl' );
 			if ( ! $redirect_url ) {
 				$redirect_url = admin_url( 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&page=rthd-settings' );
@@ -625,4 +638,8 @@ function rthd_gravity_importer_view(){
 
 function rthd_activation_view(){
 	do_action( 'rthelpdesk_addon_license_details' );
+}
+
+function rthd_no_access_redux(){
+	return '<p class="description">Currently there are no settings available for you.</p>';
 }
