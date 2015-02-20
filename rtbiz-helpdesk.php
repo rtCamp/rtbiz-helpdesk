@@ -132,7 +132,7 @@ if ( ! defined( 'EDD_RT_HELPDESK_ITEM_NAME' ) ){
 	 *
 	 * @since 0.1
 	 */
-	define( 'EDD_RT_HELPDESK_ITEM_NAME', 'Helpdesk' );
+	define( 'EDD_RT_HELPDESK_ITEM_NAME', 'rtBiz Helpdesk' );
 }
 
 include_once RT_HD_PATH_HELPER . 'rthd-functions.php';
