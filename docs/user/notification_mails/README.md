@@ -1,12 +1,6 @@
-# Notification Emails
+# Notification Mails
 
-** Legend **
-1. Creator: The user/client/customer who has created a support request from the Support Form or via mail.
-2. Group: The emails that are present in the Group notificaiton mails.
-3. Default Assignee: Default Assignee of a ticket
-4. Subscriber
-5. Contact
-
+Current mail system
 
    | Activity | Creator | Group | Default Assignee | Subscriber | Contact
 ---|----------|---------|-------|----------|------------|--------
