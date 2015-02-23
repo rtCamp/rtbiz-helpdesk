@@ -4,7 +4,7 @@ Donate Link:       http://rtcamp.com/donate
 Tags:              helpdesk, support, products, tickets, followups, customers, e-commerce
 Requires at least: 4.1
 Tested up to:      4.1
-Stable tag:        1.3
+Stable tag:        1.0
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -58,5 +58,11 @@ Please refer to the documentation.
 
 == Changelog ==
 
-= 1.3 =
+= 1.0 =
+* Ticket / followup creation via mail parsing and gravity form
 * Helpdesk Module for rtBiz
+* Block list email added
+* Watch / unwatch tickets
+* Mail notification refactoring
+* Follow up visibility
+* My tickets

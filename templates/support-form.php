@@ -11,7 +11,15 @@ jQuery(document).ready(function ($) {
 				list += '<li>' + input.files[x].name + '</li>';
 			}
 		}
+		if( input.files.length > 0 ) { 
+			$("#clear-attachemntlist").show();	
+		}
 		$("#fileList").html(list);
+	});
+	$("#clear-attachemntlist").click(function() {
+		$("#filesToUpload").val('');
+		$("#fileList").html('');
+		$("#clear-attachemntlist").hide();
 	});
 });
 </script>
@@ -66,6 +74,7 @@ jQuery(document).ready(function ($) {
 		<input type="file" id="filesToUpload" name="attachment[]" multiple="multiple"/>
 		<ul id="fileList">
 		</ul>
+		<a id="clear-attachemntlist" href="javascript:;">Clear All</a>
 	</div>
 
 	<div>

@@ -14,6 +14,8 @@ $post_type       = get_post_type( $post );
 $labels          = $rt_hd_module->labels;
 $post_id         = $post->ID;
 $user_edit       = false;
+$assignee_info	 = array();
+$current_user	 = get_user_by( 'id', get_current_user_id() );
 
 $cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
 $user_edit_content = current_user_can( $cap );
@@ -96,6 +98,7 @@ $user_edit_content = current_user_can( $cap );
 								foreach ( $rtcamp_users as $author ) {
 									if ( $author->ID == $post->post_author ) {
 										$selected = ' selected="selected"';
+										$assignee_info = $author;
 									} else {
 										$selected = ' ';
 									}
@@ -143,6 +146,38 @@ $user_edit_content = current_user_can( $cap );
 					<span class="rthd_attr_border rthd_view_mode"> <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . " ago by " . $commentlink; ?></span>
 				</div>
 			<?php }
+			
+			// Watch/Unwatch ticket feature.
+			$watch_unwatch_label = $watch_unwatch_value = '';
+			
+			if ( current_user_can( $cap ) && $assignee_info->user_email != $current_user->user_email ) { // For staff/subscriber
+				if ( rthd_is_ticket_subscriber( $post->ID ) ) {
+					$watch_unwatch_label = 'Unsubscribe';
+					$watch_unwatch_value = 'unwatch';
+				}
+				else {
+					$watch_unwatch_label = 'Subscribe';
+					$watch_unwatch_value = 'watch';
+				}
+			}
+			/*else { // For other contacts.
+			 if ( rthd_is_ticket_contact_connection( $post->ID ) ) {
+			$watch_unwatch_label = 'Unwatch';
+			$watch_unwatch_value = 'unwatch';
+			}
+			else {
+			$watch_unwatch_label = 'Watch';
+			$watch_unwatch_value = 'watch';
+			}
+			}*/
+			if( ! empty( $watch_unwatch_label ) ) { ?>
+				<div class="rt-hd-ticket-info rt-hd-ticket-history">
+					<span title="<?php _e( 'Get notification' ); ?>"><strong><?php _e( 'Get notification' ); ?>:</strong></span>
+					<input type="button" class="btn btn-primary button button-primary" id="rthd-ticket-watch-unwatch" data-value="<?php echo $watch_unwatch_value; ?>" value="<?php echo $watch_unwatch_label; ?>" />
+					<img id="watch-unwatch-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
+				</div>
+			<?php
+			}
 
 			if ( isset( $post->ID ) ) {
 				$attachments = get_children( array( 'post_parent' => $post->ID, 'post_type' => 'attachment', ) );
@@ -261,37 +296,6 @@ $user_edit_content = current_user_can( $cap );
 
 					// Order History
 					do_action( 'rtbiz_hd_user_purchase_history', $post->ID );
-				}
-				
-				// Watch/Unwatch ticket feature.
-				$watch_unwatch_label = $watch_unwatch_value = '';
-				
-				if ( current_user_can( $cap ) ) {
-					if ( rthd_is_ticket_subscriber( $post->ID ) ) {
-						$watch_unwatch_label = 'Unwatch';
-						$watch_unwatch_value = 'unwatch';
-					}
-					else {
-						$watch_unwatch_label = 'Watch';
-						$watch_unwatch_value = 'watch';
-					}
-				}
-				else {
-					if ( rthd_is_ticket_contact_connection( $post->ID ) ) {
-						$watch_unwatch_label = 'Unwatch';
-						$watch_unwatch_value = 'unwatch';
-					}
-					else {
-						$watch_unwatch_label = 'Watch';
-						$watch_unwatch_value = 'watch';
-					}
-				}
-				if( ! empty( $watch_unwatch_label ) ) { ?>
-					<div class="rt-hd-ticket-info rt-hd-ticket-history">
-						<input type="button" id="rthd-ticket-watch-unwatch" data-value="<?php echo $watch_unwatch_value; ?>" value="<?php echo $watch_unwatch_label; ?>" />
-						<img id="watch-unwatch-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
-					</div>
-				<?php
 				}
 			}
 

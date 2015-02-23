@@ -3,8 +3,8 @@
 /**
  * Plugin Name: rtBiz Helpdesk
  * Plugin URI: http://rtcamp.com/
- * Description: Helpdesk System for handle & track User request for Help
- * Version: 1.3
+ * Description: A WordPress based Helpdesk system with mail sync features, web based ticket UI and many custom settings. Easy to use for admin, staff and customers.
+ * Version: 1.0
  * Author: rtCamp
  * Author URI: http://rtcamp.com
  * License: GPL
@@ -18,7 +18,7 @@ if ( ! defined( 'RT_HD_VERSION' ) ) {
 	 *
 	 * @since 0.1
 	 */
-	define( 'RT_HD_VERSION', '1.3' );
+	define( 'RT_HD_VERSION', '1.0' );
 }
 if ( ! defined( 'RT_HD_TEXT_DOMAIN' ) ) {
 	/**
@@ -123,7 +123,7 @@ if ( ! defined( 'EDD_RT_HELPDESK_STORE_URL' ) ) {
 	 *
 	 * @since 0.1
 	 */
-	define( 'EDD_RT_HELPDESK_STORE_URL', 'http://rtbiz.rtcamp.net/' );
+	define( 'EDD_RT_HELPDESK_STORE_URL', 'https://rtcamp.com/' );
 }
 
 if ( ! defined( 'EDD_RT_HELPDESK_ITEM_NAME' ) ){
@@ -132,7 +132,7 @@ if ( ! defined( 'EDD_RT_HELPDESK_ITEM_NAME' ) ){
 	 *
 	 * @since 0.1
 	 */
-	define( 'EDD_RT_HELPDESK_ITEM_NAME', 'Helpdesk' );
+	define( 'EDD_RT_HELPDESK_ITEM_NAME', 'rtBiz Helpdesk' );
 }
 
 include_once RT_HD_PATH_HELPER . 'rthd-functions.php';
@@ -163,7 +163,7 @@ function rt_hd_include() {
 
 }
 
-include_once( RT_HD_PATH_VENDOR . 'edd-license/class-rt-hs-edd-license.php' );
+include_once( RT_HD_PATH_VENDOR . 'edd-license/class-rt-hd-edd-license.php' );
 new Rt_HD_Edd_License();
 
 /**
@@ -177,6 +177,7 @@ function rt_hd_init() {
 
 	global $rt_wp_hd;
 	$rt_wp_hd = new RT_WP_Helpdesk();
+	add_action( 'admin_init', 'rthd_welcome_to_helpdesk' );
 }
 add_action( 'rt_biz_init', 'rt_hd_init', 1 );
 
@@ -188,8 +189,31 @@ add_action( 'rt_biz_init', 'rt_hd_init', 1 );
  */
 add_action( 'init', 'rthd_check_plugin_dependecy' );
 
-
+register_activation_hook( __FILE__, 'plugin_activation_redirect' );
 register_activation_hook( __FILE__, 'init_call_rtbiz_hd_flush_rewrite_rules' );
 function init_call_rtbiz_hd_flush_rewrite_rules(){
 	add_option( 'rthd_flush_rewrite_rules', 'true' );
+}
+
+function rthd_welcome_to_helpdesk(){
+	// Bail if no activation redirect
+	if ( ! get_transient( '_rthd_activation_redirect' ) ) {
+		return;
+	}
+
+	// Delete the redirect transient
+	delete_transient( '_rthd_activation_redirect' );
+
+	// Bail if activating from network, or bulk
+	if ( is_network_admin() || isset( $_GET['activate-multi'] ) ) {
+		return;
+	}
+
+	wp_safe_redirect( admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&page=rthd-'.Rt_HD_Module::$post_type.'-dashboard' ) );
+	exit;
+}
+
+function plugin_activation_redirect() {
+	// Add the transient to redirect
+	set_transient( '_rthd_activation_redirect', true, 30 );
 }

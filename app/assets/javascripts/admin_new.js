@@ -401,8 +401,9 @@ jQuery(function () {
 					                     jQuery('#chat-UI' ).append(newcomment);
 					                     rthdAdmin.rthd_tinymce_set_content( 'followupcontent', '' );
 					                     jQuery('#add-private-comment' ).val(10);
-					                     var control = jQuery('#attachemntlist' );
-					                     control.replaceWith( control = control.clone( true ) );
+					                     jQuery("#attachemntlist").val('');
+					                     jQuery("#fileList").html('');
+					                     jQuery("#clear-attachemntlist").hide();
                                          if (data.ticket_status=='answered'){
                                              if(jQuery('#rthd_keep_status')){
                                                  jQuery('#rthd_keep_status').parent().hide();

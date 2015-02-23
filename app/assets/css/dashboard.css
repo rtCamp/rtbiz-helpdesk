@@ -22,10 +22,16 @@
 	color: #c00;
 }
 #rthd-new-support-page {
-	display: inline-block;	
+	display: inline-block;
 }
 #rthd-welcome-panel #rthd-support-spinner {
   	display: none;
   	vertical-align: middle;
   	margin-left: 5px;
+}
+
+.rthd-banner-dashboard{
+	margin-top: 25px;
+	left: -10px;
+	position: relative;
 }

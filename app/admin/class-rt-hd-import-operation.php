@@ -105,8 +105,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 								array(
 									'ticket_id'   => $post_id,
 									'type'        => 'post_status',
-									'old_value'   => $oldpost->post_status,
-									'new_value'   => $_POST['ticket_status'],
+									'old_value'   => $old_status,
+									'new_value'   => $new_status,
 									'update_time' => current_time( 'mysql' ),
 									'updated_by'  => get_current_user_id(),
 								) );
@@ -299,7 +299,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				//$rt_hd_email_notification->notification_new_ticket_assigned( $post_id, $settings['rthd_default_user'], $labels['name'], $allemail, $uploaded, $email_parse = ! empty( $originalBody ) );
 			}
 
-			$rt_hd_email_notification->notification_new_ticket_created( $post_id,$labels['name'], $body, $allemail, $uploaded );
+			$rt_hd_email_notification->notification_new_ticket_created( $post_id,$labels['name'], $body, $uploaded );
 
 			return $post_id;
 		}
@@ -482,10 +482,10 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 			//Exclude mailbox email form all emails
 			$contactEmail = array();
-			if( !empty( $allemail ) && is_array( $allemail ) ){
-				foreach( $allemail as $email  ){
+			if( !empty( $allemails ) && is_array( $allemails ) ){
+				foreach( $allemails as $email  ){
 					if ( ! rthd_is_mailbox_email( $email['address'] ) ){ //check mail is exist in mailbox or not
-						$contactEmail = $email;
+						$contactEmail[] = $email;
 					}
 				}
 			}
@@ -837,16 +837,18 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$commentDate    = gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) + ( get_option( 'gmt_offset' ) * 3600 ) ) );
 			$commentDateGmt = gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) ) );
 			global $signature;
+			$this->add_contacts_to_post( $allemails, $comment_post_ID );
 			$comment_content_old = $comment_content;
 			$comment_content     = str_replace( $signature, '', $comment_content );
 			$comment_author_ip = preg_replace( '/[^0-9a-fA-F:., ]/', '', $_SERVER['REMOTE_ADDR'] );
 			$comment_author_ip = empty( $comment_author_ip ) ? ' ' : $comment_author_ip;
 			$comment_agent = substr( $_SERVER['HTTP_USER_AGENT'], 0, 254 );
 			$comment_agent = empty( $comment_agent ) ? ' ' : $comment_author;
+			$user = get_user_by( 'email', $comment_author_email );
 
 			$data                = array(
 				'comment_post_ID'      => $comment_post_ID,
-				'comment_author'       => $comment_author,
+				'comment_author'       => $user->display_name,
 				'comment_author_email' => $comment_author_email,
 				'comment_author_url'   => 'http://',
 				'comment_content'      => $comment_content,
@@ -945,7 +947,6 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 			$this->add_attachment_to_post( $uploaded, $comment_post_ID, $comment_id );
 
-			$this->add_contacts_to_post( $allemails, $comment_post_ID );
 
 			global $threadPostId;
 			if ( ! isset( $threadPostId ) ) {
@@ -1231,6 +1232,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$comment_content = rthd_content_filter( $_POST['followup_content'] );
 
 			$user = wp_get_current_user();
+			$userid = $comment_author = $comment_author_email = '';
+
 			if ( $user->exists() ) {
 				$userid              = $user->ID;
 				$comment_author       = esc_sql( $user->display_name );
@@ -1245,10 +1248,11 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$commenttime = $d->format( 'Y-m-d H:i:s' );
 				//$commentdata['comment_date_gmt'] = $d->format( 'Y-m-d H:i:s' );
 			} else {
-				$commenttime     = current_time( 'mysql' );
+				$commenttime     = current_time( 'mysql', 1 );
 				//$commentdata['comment_date_gmt'] = current_time( 'mysql', 1 );
 			}
 
+			$uploaded = array();
 			if ( $_FILES ) {
 				$attachment = $_FILES['attachemntlist'];
 				foreach ( $attachment['name'] as $key => $value ) {
@@ -1260,7 +1264,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 							'error'    => $attachment['error'][ $key ],
 							'size'     => $attachment['size'][ $key ],
 						);
-						$uploaded[] = self::insert_attachment( $file );
+						$uploaded[] = Rt_HD_Offering_Support::insert_attachment( $file );
 					}
 				}
 			}
@@ -1753,12 +1757,13 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$post_id = $_POST['post_id'];
 			$old_post = get_post( $post_id );
 			$new_assignee = $_POST['post_author'];
-
+			global $rt_hd_ticket_index_model;
 			if ( $old_post->post_author != $new_assignee ) {
 				if ( $post_id ){
 					$ticket = array( 'ID' => $post_id,
 							'post_author' => $new_assignee,);
 					wp_update_post( $ticket );
+					$rt_hd_ticket_index_model->update_ticket_assignee( $new_assignee, $post_id );
 				}
 
 				$response['status']= true;
@@ -1769,8 +1774,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 				global $rt_hd_email_notification;
 
-				$rt_hd_email_notification->notification_new_ticket_assigned( $post_id, $new_assignee, $labels['name'] );
-				$rt_hd_email_notification->notification_new_ticket_reassigned( $post_id, $old_post->post_author, $new_assignee, $labels['name'], array() );
+				$rt_hd_email_notification->notification_new_ticket_reassigned( $post_id, $old_post->post_author, $new_assignee, $labels['name'] );
 			}
 			echo json_encode($response);
 			die();
@@ -1814,7 +1818,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				}
 
 				$response['status']= true;
-				$response['label']= 'Unwatch';
+				$response['label']= 'Unsubscribe';
 				$response['value']= 'unwatch';
 			}
 			else if( 'unwatch' == $watch_unwatch ) {
@@ -1840,7 +1844,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				}
 
 				$response['status']= true;
-				$response['label']= 'Watch';
+				$response['label']= 'Subscribe';
 				$response['value']= 'watch';
 			}
 

@@ -147,7 +147,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				$default_assignee = strval( 1 );
 			}
 
-			$system_emails = rt_get_mpdule_mailbox_emails( RT_HD_TEXT_DOMAIN );
+			$system_emails = rt_get_module_mailbox_emails( RT_HD_TEXT_DOMAIN );
 
 			$mailbox_options = array();
 			foreach( $system_emails as $email ) {
@@ -214,6 +214,19 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				'fields'      => $general_fields,
 			);
 
+			if (  ! current_user_can( $admin_cap ) ){
+				$this->sections[] = array(
+					'icon'        => 'el-icon-cogs',
+					'title'       => __( 'Note' ),
+					'permissions' => $editor_cap,
+					'fields'      => array( array (
+						'id'      => 'rt_hd_no_access',
+						'type'    => 'raw',
+						'content'   => rthd_no_access_redux(),
+					) )
+					);
+			}
+
 			$redirect_url = get_option( 'rthd_googleapi_redirecturl' );
 			if ( ! $redirect_url ) {
 				$redirect_url = admin_url( 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&page=rthd-settings' );
@@ -275,7 +288,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					'id'         => 'rthd_blacklist_emails_textarea',
 					'title'      => __( 'Blacklist Emails' ),
 					'subtitle'   => __( 'Email addresses to be blacklisted from creating tickets / follow-ups.' ),
-					'desc'       => __( 'All mails coming from these addresses will be blocked by Helpdesk. It also accept arguments like @example.com, @example.*' ),
+					'desc'       => __( 'All mails coming from these addresses will be blocked by Helpdesk. It also accept arguments like @example.com, @example.*, Keep each email in new line.' ),
 					'type'       => 'textarea',
 					'multi'      => true,
 					'show_empty' => false,
@@ -292,10 +305,9 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'followup_edited'         => __( 'When a follow up is edited' ),
 						'followup_deleted'        => __( 'When a follow up is deleted' ),
 						'status_metadata_changed' => __( 'When any status or metadata changed for a Ticket.' ),
-						'new_ticket_assigned'     => __( 'When new ticket assigned' ),
-						'new_ticket_reassigned'   => __( 'When new ticket reassigned' ),
-						'ticket_subscribed'       => __( 'When new ticket subscribed' ),
-						'ticket_unsubscribed'     => __( 'When new ticket unsubscribed' ),
+						'new_ticket_reassigned'   => __( 'When ticket reassigned' ),
+						'ticket_subscribed'       => __( 'When ticket subscribed' ),
+						'ticket_unsubscribed'     => __( 'When ticket unsubscribed' ),
 					),
 				)
 			);
@@ -325,13 +337,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'type'     => 'text',
 						'title'    => __( 'Ticket is updated' ),
 						'subtitle' => __( 'Title when a ticket is updated' ),
-						'default'  => '{ticket_title}',
-					),
-					array(
-						'id'       => 'rthd_ticket_assign_email_title',
-						'type'     => 'text',
-						'title'    => __( 'New ticket is assigned' ),
-						'subtitle' => __( 'Title when new ticket is assigned to a user' ),
 						'default'  => '{ticket_title}',
 					),
 					array(
@@ -633,4 +638,8 @@ function rthd_gravity_importer_view(){
 
 function rthd_activation_view(){
 	do_action( 'rthelpdesk_addon_license_details' );
+}
+
+function rthd_no_access_redux(){
+	return '<p class="description">Currently there are no settings available for you.</p>';
 }

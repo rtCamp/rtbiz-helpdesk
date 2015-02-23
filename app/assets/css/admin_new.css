@@ -176,3 +176,10 @@ img.tips {
 	padding-top: 10px !important;
 }
 
+.rthd_log span{
+	margin: 0 !important;
+	padding: 0 !important;
+}
+.rthd-generate-log-button{
+	margin-top: 10px !important;
+}

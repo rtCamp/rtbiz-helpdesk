@@ -24,24 +24,13 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 		 * @since 0.1
 		 */
 		public function __construct() {
-			add_action( 'save_post', array( $this, 'ticket_email_bulk_edit' ), 10, 3 );
+			add_action( 'transition_post_status', array( $this, 'ticket_status_changed' ), 10, 3 );
 		}
 
-		function ticket_email_bulk_edit( $post_id, $post, $update ){
-			if ( Rt_HD_Module::$post_type != $post->post_type ) {
-				return;
-			}
-			if ( wp_is_post_revision( $post_id ) ){
-				return;
-			}
-			if ( ! $update ){
-				return;
-			}
-
-
-
+		function ticket_status_changed( $new_status, $old_status, $post ){
+			global $rt_hd_ticket_index_model;
+			$rt_hd_ticket_index_model->update_ticket_status( $new_status, $post->ID );
 		}
-
 		/**
 		 * Create/Update Default ticket Fields
 		 *

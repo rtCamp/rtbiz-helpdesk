@@ -656,25 +656,6 @@ function rthd_content_filter( $content ) {
 	return balanceTags( wpautop( wp_kses_post( balanceTags( make_clickable( $content ), true ) ) ), true );
 }
 
-function rthd_toggle_status( $postid ){
-    $post = get_post($postid);
-    $authorcap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
-    if (  current_user_can( $authorcap ) ) {
-        if( $post->post_status != 'hd-answered' ){
-            wp_update_post(array( 'ID'=>$postid ,'post_status'=>'hd-answered'));
-            return 'answered';
-        }
-    }
-    else{
-        if( $post->post_status != 'hd-unanswered' ){
-            wp_update_post(array( 'ID'=>$postid ,'post_status'=>'hd-unanswered'));
-            return 'unanswered';
-        }
-
-    }
-    return false;
-}
-
 
 /**
  * check for rt biz dependency and if it does not find any single dependency then it returns false
@@ -1004,7 +985,7 @@ function rthd_replace_followup_placeholder( $body , $name ){
 }
 
 function rthd_is_mailbox_configured(){
-	$system_emails = rt_get_mpdule_mailbox_emails( RT_HD_TEXT_DOMAIN );
+	$system_emails = rt_get_module_mailbox_emails( RT_HD_TEXT_DOMAIN );
 	if ( ! empty( $system_emails ) ){
 		return true;
 	}
@@ -1015,7 +996,7 @@ function rthd_is_mailbox_email( $email ){
 	if ( empty( $email ) ){
 		return false;
 	}
-	$system_emails = rt_get_mpdule_mailbox_emails( RT_HD_TEXT_DOMAIN );
+	$system_emails = rt_get_module_mailbox_emails( RT_HD_TEXT_DOMAIN );
 	if ( in_array( $email, $system_emails ) ){
 		return true;
 	}
@@ -1032,9 +1013,9 @@ function rthd_is_mailbox_email( $email ){
  */
 function rthd_wp_new_user_notification($user_id, $plaintext_pass = '') {
 	global $wpdb, $wp_hasher;
-	
+
 	$user = get_userdata( $user_id );
-	
+
 	// The blogname option is escaped with esc_html on the way into the database in sanitize_option
 	// we want to reverse this for the plain text arena of emails.
 	$blogname = wp_specialchars_decode(get_option('blogname'), ENT_QUOTES);
@@ -1047,22 +1028,22 @@ function rthd_wp_new_user_notification($user_id, $plaintext_pass = '') {
 
 	if ( empty($plaintext_pass) )
 		return;
-	
+
 	$settings = rthd_get_redux_settings();
 	$module_label = $settings['rthd_menu_label'];
-	
+
 	// Generate something random for a password reset key.
 	$key = wp_generate_password( 20, false );
-	
+
 	if ( empty( $wp_hasher ) ) {
 		require_once ABSPATH . WPINC . '/class-phpass.php';
 		$wp_hasher = new PasswordHash( 8, true );
 	}
 	$hashed = $wp_hasher->HashPassword( $key );
 	$wpdb->update( $wpdb->users, array( 'user_activation_key' => $hashed ), array( 'user_login' => $user->user_login ) );
-	
+
 	$reset_pass_link = network_site_url("wp-login.php?action=rp&key=$key&login=" . rawurlencode( $user->user_login ), 'login');
-	
+
 	$message  = __( 'Howdy,' ) . "\r\n\r\n";
 	$message .= sprintf( __( 'A new account on %s has been created for you.' ), $module_label ) . "\r\n\r\n";
 	$message .= sprintf( __( 'Your username is: %s' ), $user->user_login ) . "\r\n";
@@ -1096,7 +1077,7 @@ function rthd_get_blacklist_emails(){
  * Get taxonomy diff.
  */
 function rthd_get_taxonomy_diff( $post_id, $tax_slug ) {
-	
+
 	$post_terms = wp_get_post_terms( $post_id, $tax_slug );
 	$postterms  = array_filter( $_POST['tax_input'][ $tax_slug ] );
 	$termids    = wp_list_pluck( $post_terms, 'term_id' );
@@ -1108,16 +1089,16 @@ function rthd_get_taxonomy_diff( $post_id, $tax_slug ) {
 		$tmp          = get_term_by( 'id', $tax_id, $tax_slug );
 		$diff_tax1[] = $tmp->name;
 	}
-	
+
 	foreach ( $diff2 as $tax_id ) {
 		$tmp          = get_term_by( 'id', $tax_id, $tax_slug );
 		$diff_tax2[] = $tmp->name;
 	}
-	
-	
-	
+
+
+
 	$diff = rthd_text_diff( implode( ', ', $diff_tax2 ), implode( ', ', $diff_tax1 ) );
-	
+
 	return $diff;
 }
 
@@ -1126,19 +1107,19 @@ function rthd_get_taxonomy_diff( $post_id, $tax_slug ) {
  */
 function rthd_is_ticket_contact_connection( $post_id ) {
 	$flag = false;
-	
+
 	$current_user = get_user_by( 'id', get_current_user_id() );
 	$ticket_contacts = rt_biz_get_post_for_contact_connection( $post_id, Rt_HD_Module::$post_type );
-	
+
 	foreach ( $ticket_contacts as $ticket_contact ) {
-		
+
 		$contact_email = rt_biz_get_entity_meta( $ticket_contact->ID, 'contact_primary_email', true );
-		
+
 		if( $current_user->user_email == $contact_email ) {
 			$flag = true;
 		}
 	}
-	
+
 	return $flag;
 }
 
@@ -1149,9 +1130,9 @@ function rthd_is_ticket_subscriber( $post_id ) {
 	$flag = false;
 
 	$current_user = get_user_by( 'id', get_current_user_id() );
-	
+
 	$ticket_subscribers = get_post_meta( $post_id, '_rtbiz_hd_subscribe_to', true );
-	
+
 	if( in_array( get_current_user_id(), $ticket_subscribers ) ) {
 		$flag = true;
 	}
