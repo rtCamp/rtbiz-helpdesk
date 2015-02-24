@@ -1064,12 +1064,13 @@ function rthd_get_blacklist_emails(){
 
 /**
  * Update rtHelpdesk settings.
+ * This function used after p2p_init hook with priority more than 30 before that ReduxFramework will be empty
+ *
  * @param string    $option_name        Setting option name.
  * @param string    $option_value       Setting option value.
  */
  function rthd_set_redux_settings( $option_name, $option_value ) {
 	global $rt_hd_redux_framework_Helpdesk_Config;
-
 	$rt_hd_redux_framework_Helpdesk_Config->ReduxFramework->set( $option_name, $option_value );
 }
 
@@ -1144,14 +1145,11 @@ function rthd_is_ticket_subscriber( $post_id ) {
  * Display settings for setup weekdays and hours operation for day shift.
  */
 function rthd_auto_respond_dayshift_view() {
-
-	$weekdays = array( 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday' );
-
-	$time_list = '';
-	for( $i = 0; $i < 24; $i++ ) {
-		$time_list .= '<option value="'.$i.'">' . date( "H:i", strtotime( $i . ":00" ) ) . '</option>'. "\n" ;
-	}
-?>
+	$redux = rthd_get_redux_settings();
+	$shifttime = array();
+	$shifttime['start'] = isset( $redux['rthd_dayshift_time_start']) ? $redux['rthd_dayshift_time_start'] : null;
+	$shifttime['end'] = isset( $redux['rthd_dayshift_time_end']) ? $redux['rthd_dayshift_time_end'] : null;
+	$weekdays = array( 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday' ); ?>
 	<table id="rthd-respond">
 		<tbody>
 			<?php foreach ( $weekdays as $key => $weekday ) : ?>
@@ -1160,14 +1158,20 @@ function rthd_auto_respond_dayshift_view() {
 						<label><?php echo $weekday; ?></label>
 					</td>
 					<td>
-						<select class="rthd-dayshift-time-start" name="rthd_dayshift_time_start[ <?php echo $key; ?> ]">
-							<option value="">Select Time</option>
-							<?php echo $time_list; ?>
+						<select class="rthd-dayshift-time-start" name="redux_helpdesk_settings[rthd_dayshift_time_start][<?php echo $key; ?>]">
+							<option value="-1">Select Time</option>
+							<?php for( $i = 0; $i < 24; $i++ ) {
+								$selected = $shifttime['start'][ $key ] == $i ? 'selected' : '';
+								echo '<option value="'.$i.'" ' . $selected . '>' . date( "H:i", strtotime( $i . ":00" ) ) . '</option>'. "\n" ;
+							} ?>
 						</select>
 						&nbsp;&nbsp;To&nbsp;&nbsp;
-						<select class="rthd-dayshift-time-end" name="rthd_dayshift_time__end[ <?php echo $key; ?> ]">
-							<option value="">Select Time</option>';
-							<?php echo $time_list; ?>
+						<select class="rthd-dayshift-time-end" name="redux_helpdesk_settings[rthd_dayshift_time_end][<?php echo $key; ?>]" data-value="<?php echo $shifttime['end'][ $key ]; ?>">
+							<option value="-1">Select Time</option>
+							<?php for( $i = 0; $i < 24; $i++ ) {
+								$selected = $shifttime['end'][ $key ] == $i ? 'selected' : '';
+								echo '<option value="'.$i.'" ' . $selected . '>' . date( "H:i", strtotime( $i . ":00" ) ) . '</option>'. "\n" ;
+							} ?>
 						</select>
 					</td>
 				</tr>
@@ -1186,7 +1190,7 @@ function rthd_auto_respond_dayshift_view() {
 				var starting_val = $tr_parent.find( '.rthd-dayshift-time-start' ).val();
 				var ending_val = $tr_parent.find( '.rthd-dayshift-time-end' ).val();
 
-				if( starting_val != '' && ending_val != '' && parseInt( ending_val ) <= parseInt( starting_val ) ) {
+				if( starting_val != -1 && ending_val != -1 && parseInt( ending_val ) <= parseInt( starting_val ) ) {
 					jQuery( $tr_parent ).next('.rthd-dayshift-error').show().find( '.error' ).html( 'Please select `Ending` time greater than `Starting` time or `Starting time less than `Ending` time.' );
 					return false;
 				}
@@ -1208,16 +1212,16 @@ function rthd_auto_respond_dayshift_view() {
 					var starting_val = jQuery( '.rthd-dayshift-time-start' ).eq( i ).val();
 					var ending_val = jQuery( '.rthd-dayshift-time-end' ).eq( i ).val();
 
-					if( starting_val != '' && ending_val != '' ) {
+					if( starting_val != -1 && ending_val != -1 ) {
 						if( jQuery( '.rthd-time-end' ).eq( i ).change() == false ) {
 							flag = false;
 						}
 					}
-					else if( starting_val != '' && ending_val == '' ) {
+					else if( starting_val != -1 && ending_val == -1 ) {
 						jQuery( '.rthd-dayshift-time-end' ).eq( i ).parent().parent().next('.rthd-dayshift-error').show().find( '.error' ).html( 'Please select `Ending` time.' );
 						flag = false;
 					}
-					else if( starting_val == '' && ending_val != '' ) {
+					else if( starting_val == -1 && ending_val != -1 ) {
 						jQuery( '.rthd-dayshift-time-start' ).eq( i ).parent().parent().next('.rthd-dayshift-error').show().find( '.error' ).html( 'Please select `Starting` time.' );
 						flag = false;
 					}
@@ -1239,20 +1243,14 @@ function rthd_auto_respond_dayshift_view() {
  * Display settings for setup weekdays and hours operation for night shift.
  */
 function rthd_auto_respond_daynightshift_view() {
+	$redux = rthd_get_redux_settings();
+	$shifttime = array();
+	$shifttime['am_start'] = isset( $redux['rthd_daynight_am_time_start']) ? $redux['rthd_daynight_am_time_start'] : null;
+	$shifttime['am_end'] = isset( $redux['rthd_daynight_am_time_end']) ? $redux['rthd_daynight_am_time_end'] : null;
+	$shifttime['pm_start'] = isset( $redux['rthd_daynight_pm_time_start']) ? $redux['rthd_daynight_pm_time_start'] : null;
+	$shifttime['pm_end'] = isset( $redux['rthd_daynight_pm_time_end']) ? $redux['rthd_daynight_pm_time_end'] : null;
 
-	$weekdays = array( 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday' );
-
-	$am_time_list = $pm_time_list = '';
-	for( $i = 0; $i < 11; $i++ ) {
-		$am_time_list .= '<option value="'.$i.'">' . date( "H:i", strtotime( $i . ":00" ) ) . '</option>'. "\n" ;
-	}
-	$am_time_list .= '<option value="11:59">' . date( "H:i", strtotime( "11:59" ) ) . '</option>'. "\n" ;
-
-	for( $i = 12; $i < 23; $i++ ) {
-		$pm_time_list .= '<option value="'.$i.'">' . date( "H:i", strtotime( $i . ":00" ) ) . '</option>'. "\n" ;
-	}
-	$pm_time_list .= '<option value="23:59">' . date( "H:i", strtotime( "23:59" ) ) . '</option>'. "\n" ;
-	?>
+	$weekdays = array( 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday' ); ?>
 	<table id="rthd-respond">
 		<tbody>
 			<tr>
@@ -1266,25 +1264,37 @@ function rthd_auto_respond_daynightshift_view() {
 						<label><?php echo $weekday; ?></label>
 					</td>
 					<td>
-						<select class="rthd-daynigt-am-time-start" name="rthd_daynight_am_time_start[ <?php echo $key; ?> ]">
-							<option value="">Select Time</option>
-							<?php echo $am_time_list; ?>
+						<select class="rthd-daynigt-am-time-start" name="redux_helpdesk_settings[rthd_daynight_am_time_start][<?php echo $key; ?>]">
+							<option value="-1">Select Time</option>
+							<?php for( $i = 0; $i < 11; $i++ ) {
+								$selected = $shifttime['am_start'][ $key ] == $i ? 'selected' : '';
+								echo '<option value="'.$i.'" ' . $selected . '>' . date( "H:i", strtotime( $i . ":00" ) ) . '</option>'. "\n" ;
+							} ?>
 						</select>
 						&nbsp;To&nbsp;
-						<select class="rthd-daynigt-am-time-end" name="rthd_daynight_am_time_end[ <?php echo $key; ?> ]">
-							<option value="">Select Time</option>';
-							<?php echo $am_time_list; ?>
+						<select class="rthd-daynigt-am-time-end" name="redux_helpdesk_settings[rthd_daynight_am_time_end][<?php echo $key; ?>]">
+							<option value="-1">Select Time</option>';
+							<?php for( $i = 0; $i < 11; $i++ ) {
+								$selected = $shifttime['am_end'][ $key ] == $i ? 'selected' : '';
+								echo '<option value="'.$i.'" ' . $selected . '>' . date( "H:i", strtotime( $i . ":00" ) ) . '</option>'. "\n" ;
+							} ?>
 						</select>
 					</td>
 					<td>
-						<select class="rthd-daynigt-pm-time-start" name="rthd_daynight_pm_time_start[ <?php echo $key; ?> ]">
-							<option value="">Select Time</option>
-							<?php echo $pm_time_list; ?>
+						<select class="rthd-daynigt-pm-time-start" name="redux_helpdesk_settings[rthd_daynight_pm_time_start][<?php echo $key; ?>]">
+							<option value="-1">Select Time</option>
+							<?php for( $i = 12; $i < 23; $i++ ) {
+								$selected = $shifttime['pm_start'][ $key ] == $i ? 'selected' : '';
+								echo '<option value="'.$i.'" ' . $selected . '>' . date( "H:i", strtotime( $i . ":00" ) ) . '</option>'. "\n" ;
+							} ?>
 						</select>
 						&nbsp;To&nbsp;
-						<select class="rthd-daynigt-pm-time-end" name="rthd_daynight_pm_time_end[ <?php echo $key; ?> ]">
-							<option value="">Select Time</option>';
-							<?php echo $pm_time_list; ?>
+						<select class="rthd-daynigt-pm-time-end" name="redux_helpdesk_settings[rthd_daynight_pm_time_end][<?php echo $key; ?>]">
+							<option value="-1">Select Time</option>';
+							<?php for( $i = 12; $i < 23; $i++ ) {
+								$selected = $shifttime['pm_end'][ $key ] == $i ? 'selected' : '';
+								echo '<option value="'.$i.'" ' . $selected . '>' . date( "H:i", strtotime( $i . ":00" ) ) . '</option>'. "\n" ;
+							} ?>
 						</select>
 					</td>
 				</tr>

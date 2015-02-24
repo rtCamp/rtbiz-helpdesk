@@ -31,7 +31,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			if ( ! class_exists( 'ReduxFramework' ) ) {
 				return;
 			}
-			// hook priority 25 because rtBiz email model is on after_theme 20 and we can not get 'rt_get_all_system_emails' before that
+			// hook priority 25 because rtBiz email model is on after_theme 20 and we can not get 'rt_get_all_system_emails' before that because of acl needs p2p
 			add_action( 'p2p_init', array( $this, 'init_settings' ), 30 );
 		}
 
@@ -565,7 +565,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'title'   => __( 'Configure Weekdays for nightshift' ),
 						'subtitle' => __( 'Add hours of operation' ),
 						'desc'    => '',
-						'callback' => 'rthd_auto_respond_nightshift_view',
+						'callback' => 'rthd_auto_respond_daynightshift_view',
 					),
 					array(
 							'id'     => 'section-auto-respond-nightshift-end',
