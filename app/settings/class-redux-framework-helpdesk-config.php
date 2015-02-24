@@ -419,7 +419,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'off'      => __( 'Disable' ),
 					),
 					array(
-						'id'       => 'auto-assign-section-start',
+						'id'       => 'section-auto-assign-start',
 						'type'     => 'section',
 						'indent'   => true, // Indent all options below until the next 'section' option is set.
 						'required' => array( 'rthd_enable_auto_assign', '=', 1 ),
@@ -437,16 +437,85 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						),
 					),
 					array(
-						'id'     => 'auto-assign-section-end',
+						'id'     => 'section-auto-assign-end',
 						'type'   => 'section',
 						'indent' => false,
+					),
+
+					array(
+						'id'       => 'rthd_enable_notification_acl',
+						'type'     => 'switch',
+						'title'    => __( 'Enable Notification ACL' ),
+						'subtitle' => __( 'To enable/disable Notification ACL' ),
+						'default'  => true,
+						'on'       => __( 'Enable' ),
+						'off'      => __( 'Disable' ),
+					),
+					array(
+						'id'       => 'section-notification_acl-start',
+						'type'     => 'section',
+						'indent'   => true, // Indent all options below until the next 'section' option is set.
+						'required' => array( 'rthd_enable_notification_acl', '=', 1 ),
+					),
+					array(
+						'id'       => 'rthd_notification_acl_client_events',
+						'title'    => __( 'Notification Event for Client [ Contact ] ' ),
+						'subtitle' => __( '' ),
+						'desc'     => __( '' ),
+						'default'  => 'on_first_followup',
+						'type'     => 'radio',
+						'options' => array(
+							'new_ticket_created_client_mail'	=> __( ' When a New Ticket is created.' ),
+							'new_followup_created_client_mail'	=> __( 'When a New follow up is added to a Ticket.' ),
+						),
+					),
+					array(
+						'id'       => 'rthd_notification_acl_assignee_events',
+						'title'    => __( 'Notification Event for Assignee' ),
+						'subtitle' => __( '' ),
+						'desc'     => __( '' ),
+						'default'  => 'on_first_followup',
+						'type'     => 'radio',
+						'options' => array(
+							'new_ticket_created_client_mail'	=> __( ' When a New Ticket is created.' ),
+							'new_followup_created_client_mail'	=> __( 'When a New follow up is added to a Ticket.' ),
+						),
+					),
+					array(
+						'id'       => 'rthd_notification_acl_staff_events',
+						'title'    => __( 'Notification Event for Staff [ Subscriber ]' ),
+						'subtitle' => __( '' ),
+						'desc'     => __( '' ),
+						'default'  => 'on_first_followup',
+						'type'     => 'radio',
+						'options' => array(
+							'new_ticket_created_client_mail'	=> __( ' When a New Ticket is created.' ),
+							'new_followup_created_client_mail'	=> __( 'When a New follow up is added to a Ticket.' ),
+						),
+					),
+					array(
+						'id'       => 'rthd_notification_acl_group_events',
+						'title'    => __( 'Notification Event for Group [ Global ]' ),
+						'subtitle' => __( '' ),
+						'desc'     => __( '' ),
+						'default'  => 'on_first_followup',
+						'type'     => 'radio',
+						'options' => array(
+							'new_ticket_created_client_mail'	=> __( ' When a New Ticket is created.' ),
+							'new_followup_created_client_mail'	=> __( 'When a New follow up is added to a Ticket.' ),
+						),
+					),
+					array(
+						'id'       => 'section-notification_acl-start',
+						'type'     => 'section',
+						'indent'   => false, // Indent all options below until the next 'section' option is set.
 					),
 					array(
 						'id'       => 'rthd_enable_auto_respond',
 						'type'     => 'switch',
 						'title'    => __( 'Enable auto respond' ),
 						'subtitle' => __( 'To enable/disable auto respond feature' ),
-						'default'  => true,
+						'default'  => false,
 						'on'       => __( 'Enable' ),
 						'off'      => __( 'Disable' ),
 					),
@@ -459,17 +528,17 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					array(
 						'id'       => 'rthd_enable_auto_respond_mode',
 						'type'     => 'switch',
-						'title'    => __( 'Enable night shift' ),
-						'subtitle' => __( 'To enable/disable night shift' ),
-						'default'  => false,
-						'on'       => __( 'Enable' ),
-						'off'      => __( 'Disable' ),
+						'title'    => __( 'Select working shift' ),
+						'subtitle' => __( 'Day shift / Day-Night Shift' ),
+						'default'  => true,
+						'on'       => __( 'Day Shift' ),
+						'off'      => __( 'Day-Night Shift' ),
 					),
 					array(
 						'id'       => 'section-auto-respond-dayshift-start',
 						'type'     => 'section',
 						'indent'   => true, //Indent all options below until the next 'section' option is set.
-						'required' => array( 'rthd_enable_auto_respond_mode', '=', 0 ),
+						'required' => array( array( 'rthd_enable_auto_respond_mode', '=', 1 ), array( 'rthd_enable_auto_respond', '=', 1 ) ),
 					),
 					array(
 						'id'      => 'rthd_auto_respond_dayshift_time',
@@ -488,7 +557,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'id'       => 'section-auto-respond-nightshift-start',
 						'type'     => 'section',
 						'indent'   => true, //Indent all options below until the next 'section' option is set.
-						'required' => array( 'rthd_enable_auto_respond_mode', '=', 1 ),
+						'required' => array( array( 'rthd_enable_auto_respond_mode', '=', 0 ), array( 'rthd_enable_auto_respond', '=', 1 ) ),
 					),
 					array(
 						'id'      => 'rthd_auto_respond_nightshift_time',
@@ -509,6 +578,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 							'title'    => __( 'Auto respond message' ),
 							'subtitle' => __( 'Add auto respond message here' ),
 							'default'  => '',
+							'required' => array( 'rthd_enable_auto_respond', '=', 1 ),
 					),
 					array(
 						'id'     => 'section-auto-respond-end',
