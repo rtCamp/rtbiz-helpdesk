@@ -419,7 +419,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'off'      => __( 'Disable' ),
 					),
 					array(
-						'id'       => 'section-auto-assign',
+						'id'       => 'auto-assign-section-start',
 						'type'     => 'section',
 						'indent'   => true, // Indent all options below until the next 'section' option is set.
 						'required' => array( 'rthd_enable_auto_assign', '=', 1 ),
@@ -435,6 +435,85 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 							'on_first_followup'	=> __( 'On first followup added by staff.' ),
 							'on_every_followup' => __( 'On every followup added by staff.' ),
 						),
+					),
+					array(
+						'id'     => 'auto-assign-section-end',
+						'type'   => 'section',
+						'indent' => false,
+					),
+					array(
+						'id'       => 'rthd_enable_auto_respond',
+						'type'     => 'switch',
+						'title'    => __( 'Enable auto respond' ),
+						'subtitle' => __( 'To enable/disable auto respond feature' ),
+						'default'  => true,
+						'on'       => __( 'Enable' ),
+						'off'      => __( 'Disable' ),
+					),
+					array(
+						'id'       => 'section-auto-respond-start',
+						'type'     => 'section',
+						'indent'   => true, // Indent all options below until the next 'section' option is set.
+						'required' => array( 'rthd_enable_auto_respond', '=', 1 ),
+					),
+					array(
+						'id'       => 'rthd_enable_auto_respond_mode',
+						'type'     => 'switch',
+						'title'    => __( 'Enable night shift' ),
+						'subtitle' => __( 'To enable/disable night shift' ),
+						'default'  => false,
+						'on'       => __( 'Enable' ),
+						'off'      => __( 'Disable' ),
+					),
+					array(
+						'id'       => 'section-auto-respond-dayshift-start',
+						'type'     => 'section',
+						'indent'   => true, //Indent all options below until the next 'section' option is set.
+						'required' => array( 'rthd_enable_auto_respond_mode', '=', 0 ),
+					),
+					array(
+						'id'      => 'rthd_auto_respond_dayshift_time',
+						'type'    => 'callback',
+						'title'   => __( 'Configure Weekdays for dayshift' ),
+						'subtitle' => __( 'Add hours of operation' ),
+						'desc'    => '',
+						'callback' => 'rthd_auto_respond_dayshift_view',
+					),
+					array(
+						'id'     => 'section-auto-respond-dayshift-end',
+						'type'   => 'section',
+						'indent' => false,
+					),
+					array(
+						'id'       => 'section-auto-respond-nightshift-start',
+						'type'     => 'section',
+						'indent'   => true, //Indent all options below until the next 'section' option is set.
+						'required' => array( 'rthd_enable_auto_respond_mode', '=', 1 ),
+					),
+					array(
+						'id'      => 'rthd_auto_respond_nightshift_time',
+						'type'    => 'callback',
+						'title'   => __( 'Configure Weekdays for nightshift' ),
+						'subtitle' => __( 'Add hours of operation' ),
+						'desc'    => '',
+						'callback' => 'rthd_auto_respond_nightshift_view',
+					),
+					array(
+							'id'     => 'section-auto-respond-nightshift-end',
+							'type'   => 'section',
+							'indent' => false,
+					),
+					array(
+							'id'       => 'rthd_auto_respond_message',
+							'type'     => 'textarea',
+							'title'    => __( 'Auto respond message' ),
+							'subtitle' => __( 'Add auto respond message here' ),
+							'default'  => '',
+					),
+					array(
+						'id'     => 'section-auto-respond-end',
+						'type'   => 'section',
+						'indent' => false,
 					),
 				),
 			);

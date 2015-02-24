@@ -1139,3 +1139,219 @@ function rthd_is_ticket_subscriber( $post_id ) {
 
 	return $flag;
 }
+
+/**
+ * Display settings for setup weekdays and hours operation for day shift.
+ */
+function rthd_auto_respond_dayshift_view() {
+
+	$weekdays = array( 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday' );
+
+	$time_list = '';
+	for( $i = 0; $i < 24; $i++ ) {
+		$time_list .= '<option value="'.$i.'">' . date( "H:i", strtotime( $i . ":00" ) ) . '</option>'. "\n" ;
+	}
+?>
+	<table id="rthd-respond">
+		<tbody>
+			<?php foreach ( $weekdays as $weekday ) : ?>
+				<tr class="rthd-dayshift-info">
+					<td>
+						<label><?php echo $weekday; ?></label>
+					</td>
+					<td>
+						<select class="rthd-time-start" name="rthd_time_start[ <?php echo strtolower( $weekday ); ?> ]">
+							<option value="">Select Time</option>
+							<?php echo $time_list; ?>
+						</select>
+						&nbsp;&nbsp;To&nbsp;&nbsp;
+						<select class="rthd-time-end" name="rthd_time_end[ <?php echo strtolower( $weekday ); ?> ]">
+							<option value="">Select Time</option>';		
+							<?php echo $time_list; ?>
+						</select>
+					</td>
+				</tr>
+				<tr class="rthd-dayshift-error">
+					<td>&nbsp</td>
+					<td class="error"></td>
+				</tr>
+			<?php endforeach; ?>
+		</tbody>
+	</table>
+
+	<script type="text/javascript">
+		jQuery( document ).ready( function() {
+
+			function time_valiation( $tr_parent ) {
+				var starting_val = $tr_parent.find( '.rthd-time-start' ).val();
+				var ending_val = $tr_parent.find( '.rthd-time-end' ).val();
+				
+				if( starting_val != '' && ending_val != '' && parseInt( ending_val ) <= parseInt( starting_val ) ) {
+					jQuery( $tr_parent ).next('.rthd-dayshift-error').show().find( '.error' ).html( 'Please select `Ending` time greater than `Starting` time or `Starting time less than `Ending` time.' );
+					return false;
+				}
+				else {
+					jQuery( $tr_parent ).next('.rthd-dayshift-error').hide();
+					return true;
+				}	
+			}
+			jQuery( '.rthd-time-end' ).change( function() {
+				time_valiation( jQuery( this ).parent().parent() );
+			});
+			jQuery( '.rthd-time-start' ).change( function() {
+				time_valiation( jQuery( this ).parent().parent() );
+			});
+			jQuery( '#redux-form-wrapper' ).submit( function() {
+				var flag = true;
+				
+				for( var i = 0; i < 7; i++ ) {
+					var starting_val = jQuery( '.rthd-time-start' ).eq( i ).val();
+					var ending_val = jQuery( '.rthd-time-end' ).eq( i ).val();
+					
+					if( starting_val != '' && ending_val != '' ) {
+						if( jQuery( '.rthd-time-end' ).eq( i ).change() == false ) {
+							flag = false;
+						}
+					}
+					else if( starting_val != '' && ending_val == '' ) {
+						jQuery( '.rthd-time-end' ).eq( i ).parent().parent().next('.rthd-dayshift-error').show().find( '.error' ).html( 'Please select `Ending` time.' );
+						flag = false;
+					}
+					else if( starting_val == '' && ending_val != '' ) {
+						jQuery( '.rthd-time-start' ).eq( i ).parent().parent().next('.rthd-dayshift-error').show().find( '.error' ).html( 'Please select `Starting` time.' );
+						flag = false;
+					}
+				}
+
+				if( ! flag ) {
+					return false;
+				}
+				else {
+					return true;
+				}
+			});
+		});
+	</script>
+<?php
+}
+
+/**
+ * Display settings for setup weekdays and hours operation for night shift.
+ */
+function rthd_auto_respond_nightshift_view() {
+
+	$weekdays = array( 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday' );
+
+	$am_time_list = $pm_time_list = '';
+	for( $i = 0; $i < 11; $i++ ) {
+		$am_time_list .= '<option value="'.$i.'">' . date( "H:i", strtotime( $i . ":00" ) ) . '</option>'. "\n" ;
+	}
+	$am_time_list .= '<option value="11:59">' . date( "H:i", strtotime( "11:59" ) ) . '</option>'. "\n" ;
+
+	for( $i = 12; $i < 23; $i++ ) {
+		$pm_time_list .= '<option value="'.$i.'">' . date( "H:i", strtotime( $i . ":00" ) ) . '</option>'. "\n" ;
+	}
+	$pm_time_list .= '<option value="23:59">' . date( "H:i", strtotime( "23:59" ) ) . '</option>'. "\n" ;
+	?>
+	<table id="rthd-respond">
+		<tbody>
+			<tr>
+				<th>&nbsp;</th>
+				<th>AM</th>
+				<th>PM</th>
+			</tr>
+			<?php foreach ( $weekdays as $weekday ) : ?>
+				<tr class="rthd-nightshift-info">
+					<td>
+						<label><?php echo $weekday; ?></label>
+					</td>
+					<td>
+						<select class="rthd-am-time-start" name="rthd_am_time_start[ <?php echo strtolower( $weekday ); ?> ]">
+							<option value="">Select Time</option>
+							<?php echo $am_time_list; ?>
+						</select>
+						&nbsp;To&nbsp;
+						<select class="rthd-am-time-end" name="rthd_am_time_end[ <?php echo strtolower( $weekday ); ?> ]">
+							<option value="">Select Time</option>';		
+							<?php echo $am_time_list; ?>
+						</select>
+					</td>
+					<td>
+						<select class="rthd-pm-time-start" name="rthd_pm_time_start[ <?php echo strtolower( $weekday ); ?> ]">
+							<option value="">Select Time</option>
+							<?php echo $pm_time_list; ?>
+						</select>
+						&nbsp;To&nbsp;
+						<select class="rthd-pm-time-end" name="rthd_pm_time_end[ <?php echo strtolower( $weekday ); ?> ]">
+							<option value="">Select Time</option>';		
+							<?php echo $pm_time_list; ?>
+						</select>
+					</td>
+				</tr>
+				<tr class="rthd-nightshift-error">
+					<td>&nbsp</td>
+					<td class="am-time-error"></td>
+					<td class="pm-time-error"></td>
+				</tr>
+			<?php endforeach; ?>
+		</tbody>
+	</table>
+
+	<script type="text/javascript">
+		/*jQuery( document ).ready( function() {
+
+			function time_valiation( $tr_parent ) {
+				var starting_val = $tr_parent.find( '.weekday_time_from' ).val();
+				var ending_val = $tr_parent.find( '.weekday_time_to' ).val();
+				console.log(starting_val);
+				console.log(ending_val);
+				
+					if( starting_val != '' && ending_val != '' && parseInt( ending_val ) <= parseInt( starting_val ) ) {
+						jQuery( $tr_parent ).next('tr').show().find( 'td:last' ).html( 'Please select `Ending` time greater than `Starting` time or `Starting time less than `Ending` time.' );
+						return false;
+					}
+					else {
+						jQuery( $tr_parent ).next('tr').hide();
+						return true;
+					}	
+				
+			}
+			jQuery( '.weekday_time_to' ).change( function() {
+				time_valiation( jQuery( this ).parent().parent() );
+			});
+			jQuery( '.weekday_time_from' ).change( function() {
+				time_valiation( jQuery( this ).parent().parent() );
+			});
+			jQuery( '#redux-form-wrapper' ).submit( function() {
+				var flag = true;
+				
+				for( var i = 0; i < 7; i++ ) {
+					var from_val = jQuery( '.weekday_time_from' ).eq( i ).val();
+					var to_val = jQuery( '.weekday_time_to' ).eq( i ).val();
+					
+					if( from_val != '' && to_val != '' ) {
+						if( jQuery( '.weekday_time_from' ).eq( i ).change == false ) {
+							flag = false;
+						}
+					}
+					else if( from_val != '' && to_val == '' ) {
+						jQuery( '.weekday_time_to' ).eq( i ).parent().parent().next('tr').show().find( 'td:last' ).html( 'Please select `Ending` time.' );
+						flag = false;
+					}
+					else if( from_val == '' && to_val != '' ) {
+						jQuery( '.weekday_time_to' ).eq( i ).parent().parent().next('tr').show().find( 'td:last' ).html( 'Please select `Starting` time.' );
+						flag = false;
+					}
+				}
+
+				if( ! flag ) {
+					return false;
+				}
+				else {
+					return true;
+				}
+			});
+		});*/
+	</script>
+<?php
+}
