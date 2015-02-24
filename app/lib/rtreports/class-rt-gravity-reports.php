@@ -563,7 +563,7 @@ if ( !class_exists( 'Rt_Gravity_Reports' ) ) {
 							$user = get_user_by('id', $lead['created_by']);
 
 							$counts[] = array(
-								'label' => __( ( isset( $user->display_name ) ? $user->display_name : 'Annonymous' ).' - '.$date->format( 'j M Y' ) ),
+								'label' => __( ( isset( $user->display_name ) ? $user->display_name : 'Anonymous' ).' - '.$date->format( 'j M Y' ) ),
 								'count' => $temp,
 							);
 							$temp = array();

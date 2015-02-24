@@ -23,7 +23,7 @@ $user_edit_content = current_user_can( $cap ) || ( get_current_user_id() == $pos
 if ( ! empty( $post->post_content ) ) {
 
 	$created_by = get_user_by( 'id', get_post_meta( $post->ID, '_rtbiz_hd_created_by', true ) );
-	$authorname = 'Annonymous';
+	$authorname = 'Anonymous';
 	$authoremail = '';
 	if ( ! empty( $created_by ) ) {
 		$authorname = $created_by->display_name;
