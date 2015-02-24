@@ -59,6 +59,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 			$this->get_custom_statuses();
 			$this->get_custom_menu_order();
 			add_action( 'init', array( $this, 'init_hd' ) );
+			add_action( 'p2p_init', array( $this, 'create_connection' ) );
 			$this->hooks();
 		}
 
@@ -136,6 +137,19 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 			);
 
 			return $this->custom_menu_order;
+		}
+
+		/**
+		 * create ticket to ticket connection
+		 */
+		function create_connection(){
+			p2p_register_connection_type( array(
+				'name' => self::$post_type . '_to_' . self::$post_type,
+				'from' => self::$post_type,
+				'to' => self::$post_type,
+				'reciprocal' => true,
+				'title' => 'Related ' . $this->labels['name'],
+			) );
 		}
 
 		/**
