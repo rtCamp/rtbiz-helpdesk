@@ -10,15 +10,14 @@ The ticket workflow is as follows:
 5. At any point if customer replies to 'Solved' ticket the status changes to 'Unanswered'.
 6. Staff can keep a ticket Unanswered while replying by checking 'keep unanwered' option.
 
-
 Please see the flowchart below to understand the ticket workflow better:
 
-https://cloud.githubusercontent.com/assets/9676513/6328106/d0e9fccc-bb89-11e4-8354-4c406f07a98f.jpg
+![Workflow](https://cloud.githubusercontent.com/assets/9676513/6328106/d0e9fccc-bb89-11e4-8354-4c406f07a98f.jpg)
 
-##### Manual update options for staff
+#### Manual update options for staff
 Apart from the auto-change features, all staff members have an option to edit the status either form the ticket Web UI or from the WordPress Dashboard.
 
-https://cloud.githubusercontent.com/assets/9676513/6328362/aef5e3f8-bb8c-11e4-95d1-530590906656.png
+![Manual Update](https://cloud.githubusercontent.com/assets/9676513/6328362/aef5e3f8-bb8c-11e4-95d1-530590906656.png)
 
 #### Bulk Update
 
