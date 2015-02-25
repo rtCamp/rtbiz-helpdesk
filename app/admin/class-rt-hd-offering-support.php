@@ -48,7 +48,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 			// shortcode for get support form
 			add_shortcode( 'rt_hd_support_form', array( $this, 'rt_hd_support_form_callback' ) );
 			add_shortcode( 'rt_hd_tickets', array( $this, 'rt_hd_tickets_callback' ) );
-			
+
 			// Add product information in ticket meta.
 			add_action( 'rt_hd_add_ticket_offering_info', array( &$this, 'rt_hd_add_ticket_offering_info_callback' ) );
 
@@ -249,6 +249,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 			ob_start();
 			$this->check_active_plugin();
 			wp_enqueue_style( 'support-form-style', RT_HD_URL . 'app/assets/css/support_form_front.css', false, RT_HD_VERSION, 'all' );
+			wp_enqueue_script( 'rthd-support-form', RT_HD_URL . 'app/assets/javascripts/rt_support_form.js', array( 'jquery' ), RT_HD_VERSION, true );
 			$offering_option = '';
 			$order_email    = '';
 
@@ -324,7 +325,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 				return false;
 			}
 
-			if ( empty( $_POST['post'] ) || empty( $_POST['post']['title'] ) || empty( $_POST['post']['email'] ) ) {
+			if ( empty( $_POST['post'] ) || empty( $_POST['post']['title'] ) || empty( $_POST['post']['email'][0] ) ) {
 				echo '<div id="info" class="error">Please fill all the details.</div>';
 				return false;
 			}
@@ -356,6 +357,17 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 					}
 				}
 			}
+			if ( rt_hd_check_email_blacklisted( $data['email'][0] ) ){
+				echo '<div id="info" class="error">You have been blocked from the system.</div>';
+				return false;
+			}
+			$allemails  = array();
+			foreach( array_filter( $data['email'] ) as $email ){
+				$allemails[] = array( 'address' => $email );
+			}
+			$emails_array = rthd_filter_emails( $allemails );
+			$subscriber = $emails_array['subscriber'];
+			$allemail = $emails_array['allemail'];
 
 			$uploaded = array_filter( $uploaded );
 
@@ -364,9 +376,9 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 				$offeringstr,
 				stripslashes($data['description']),
 				'now',
-				array( array( 'address' => $data['email'], 'name' => '' ) ),
+				$allemail,
 				$uploaded,
-				$data['email']
+				$data['email'][0],'','','',$subscriber
 			);
 
 			return $rt_hd_tickets_id;
@@ -551,27 +563,27 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 			</table>
 		<?php
 		}
-		
+
 		/**
 		 * Add product information in ticket meta data.
 		 * @param int $rt_hd_ticket_id
 		 */
 		function rt_hd_add_ticket_offering_info_callback( $rt_hd_tickets_id ) {
-			
+
 			$data = $_POST['post'];
-			
+
 			if ( isset( $data['product_id'] ) ) {
 				$term = get_term_by( 'id', $data['product_id'], Rt_Offerings::$offering_slug );
 				if ( $term ) {
 					wp_set_post_terms( $rt_hd_tickets_id, array( $term->term_id ), Rt_Offerings::$offering_slug );
 				}
 			}
-			
+
 			if ( isset( $data['order_id'] ) && $data['order_type'] ) {
 				//Store Order ID
 				update_post_meta( $rt_hd_tickets_id, 'rtbiz_hd_order_id', esc_attr( $data['order_id'] ) );
 				update_post_meta( $rt_hd_tickets_id, 'rtbiz_hd_order_type', esc_attr( $data['order_type'] ) );
-			
+
 				$link = '';
 				if ( 'woocommerce' === $data['order_type'] ) {
 					$link = add_query_arg( 'post', $_REQUEST['order_id'], admin_url( 'post.php?action=edit' ) );

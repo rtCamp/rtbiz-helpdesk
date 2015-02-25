@@ -11,8 +11,8 @@ jQuery(document).ready(function ($) {
 				list += '<li>' + input.files[x].name + '</li>';
 			}
 		}
-		if( input.files.length > 0 ) { 
-			$("#clear-attachemntlist").show();	
+		if( input.files.length > 0 ) {
+			$("#clear-attachemntlist").show();
 		}
 		$("#fileList").html(list);
 	});
@@ -56,7 +56,17 @@ jQuery(document).ready(function ($) {
 		$email = $current_user->user_email;
 	} ?>
 	<div>
-		<input id="email" placeholder="Email" type="email" name="post[email]" value="<?php echo sanitize_email( $email ) ?>" required />
+		<div class="rthd-email-group">
+			<input class="rthd_email" placeholder="Email" type="email" name="post[email][]" value="<?php echo sanitize_email( $email ) ?>" required />
+			<button type="button" class="rt-hd-add-more-email">+</button>
+		</div>
+	</div>
+
+	<div class="rthd-hide-form-div">
+		<div>
+		<input class="rthd_email" placeholder="CC" type="email" name="post[email][]ss"/>
+		<button type="button" class="rt-hd-remove-textbox">-</button>
+		</div>
 	</div>
 
 	<div id="editor_container">

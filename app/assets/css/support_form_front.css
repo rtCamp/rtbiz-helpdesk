@@ -29,6 +29,26 @@ reference: http://purecss.io/forms/
 	width: auto;
 }
 
+.rthd-email-group{
+	width: 100%;
+}
+
+.rthd_support_from div input.rthd_email{
+	width: 89%;
+}
+
+button.rt-hd-add-more-email{
+	width: 10%;
+}
+
+.rthd-hide-form-div{
+	display: none;
+}
+
+.rthd-email-group div{
+	margin-top: 5px;
+}
+
 .wp-editor-container {
 	background: #fff;
 	border: 1px solid #e5e5e5;

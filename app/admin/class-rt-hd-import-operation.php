@@ -457,9 +457,12 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 * @param string $inreplyto
 		 * @param string $references
 		 *
-		 * @param string $from_email
+		 * @param string $mailbox_email
+		 * @param string $originalBody
 		 *
 		 * @return bool
+		 * @internal param string $from_email
+		 *
 		 * @internal param $allemail
 		 * @internal param array $subscriber
 		 *
@@ -478,10 +481,9 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$messageid = '',
 			$inreplyto = '',
 			$references = '',
-			$from_email = '',
+			$mailbox_email = '',
 			$originalBody = ''
 		) {
-			$redux = rthd_get_redux_settings();
 
 			//Exclude mailbox email form all emails
 			$contactEmail = array();
@@ -493,39 +495,12 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				}
 			}
 			$allemails = $contactEmail;
-
-			$black_list_emails = rthd_get_blacklist_emails();
-			if ( ! empty( $black_list_emails ) ){
-				foreach ( $black_list_emails as $email ){
-					if ( preg_match( '/'.str_replace('*','\/*',$email).'/', $fromemail['address'] ) ){
-						return false;
-					}
-				}
+			if ( rt_hd_check_email_blacklisted( $fromemail['address'] ) ){
+				return false;
 			}
-
-			//subscriber diff
-			$rtCampUser = Rt_HD_Utils::get_hd_rtcamp_user();
-			$hdUser     = array();
-			foreach ( $rtCampUser as $rUser ) {
-				$hdUser[ $rUser->user_email ] = $rUser->ID;
-			}
-			$subscriber = array();
-			$allemail = array();
-			foreach ( $allemails as $mail ) {
-				if ( ! array_key_exists( $mail['address'], $hdUser ) ) {
-					if ( ! empty( $black_list_emails ) ){
-						foreach ( $black_list_emails as $email ){
-							if ( ! preg_match( '/'.str_replace('*','\/*',$email).'/',  $mail['address'] ) ){
-								$allemail[]= $mail;
-							}
-						}
-					}else{
-						$allemail[]= $mail;
-					}
-				} else {
-					$subscriber[]= $hdUser[$mail['address']];
-				}
-			}
+			$emailsarrays = rthd_filter_emails( $allemails );
+			$subscriber = $emailsarrays['subscriber'];
+			$allemail = $emailsarrays['allemail'];
 
 			global $rt_hd_contacts;
 
