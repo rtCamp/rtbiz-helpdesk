@@ -32,15 +32,19 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 	class Rt_HD_Import_Operation {
 
 		/**
+		 * @var int
+		 * Helpdesk comment types
+		 */
+		public static $FOLLOWUP_BOT = 5;
+		public static $FOLLOWUP_PUBLIC = 10;
+		public static $FOLLOWUP_SENSITIVE = 20;
+		public static $FOLLOWUP_STAFF = 30;
+
+		/**
 		 * set hooks
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		public static $FOLLOWUP_PUBLIC = 10;
-		public static $FOLLOWUP_SENSITIVE = 20;
-		public static $FOLLOWUP_STAFF = 30;
-		public static $FOLLOWUP_BOT = 40;
-
 		public function __construct() {
 			$this->hooks();
 		}
