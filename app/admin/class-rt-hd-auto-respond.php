@@ -43,9 +43,10 @@ if ( ! class_exists( 'Rt_HD_Auto_Respond' ) ) {
             $placeholder_list = array();
 
             if ( $isEnableAutoRespond ){
-
                 $d               = new DateTime( $post_date );
-                $timeStamp      = $d->getTimestamp();
+                $UTC             = new DateTimeZone( 'UTC' );
+                $d->setTimezone( $UTC );
+                $timeStamp      = intval( $d->getTimestamp() ) + ( get_option( 'gmt_offset' ) * 3600 );
                 $day = date( 'N', $timeStamp ) - 1; // date returns 1 for monday & 7 for  sunday
                 $hour = date( 'H', $timeStamp );
                 if ( $isDayShift ){
