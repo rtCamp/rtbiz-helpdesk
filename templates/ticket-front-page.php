@@ -104,13 +104,13 @@ $user_edit_content = current_user_can( $cap );
 									}
 									echo '<option value="' . esc_attr( $author->ID ) . '"' . esc_attr( $selected ) . '>' . esc_attr( $author->display_name ) . '</option>';
 								}
-							} 
+							}
 						?>
 					</select>
 					<img id="assignee-change-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 				</div>
-			<?php 
-				}	
+			<?php
+				}
 			?>
 			<div class="rt-hd-ticket-info">
 				<span title="Create Date"><strong>Created: </strong></span>
@@ -146,10 +146,10 @@ $user_edit_content = current_user_can( $cap );
 					<span class="rthd_attr_border rthd_view_mode"> <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . " ago by " . $commentlink; ?></span>
 				</div>
 			<?php }
-			
+
 			// Watch/Unwatch ticket feature.
 			$watch_unwatch_label = $watch_unwatch_value = '';
-			
+
 			if ( current_user_can( $cap ) && $assignee_info->user_email != $current_user->user_email ) { // For staff/subscriber
 				if ( rthd_is_ticket_subscriber( $post->ID ) ) {
 					$watch_unwatch_label = 'Unsubscribe';
@@ -224,7 +224,7 @@ $user_edit_content = current_user_can( $cap );
 
 
 				<?php }
-				
+
 				/* Display reference link if any */
 				$ref_links = get_post_meta( $post->ID, '_rtbiz_hd_external_file' );
 				if( ! empty( $ref_links ) ) {
@@ -241,9 +241,9 @@ $user_edit_content = current_user_can( $cap );
 							<?php } ?>
 						</ul>
 					</div>
-				<?php 
+				<?php
 				}
-				
+
 				if ( current_user_can( $cap ) ) {
 
 					// Products
@@ -319,6 +319,25 @@ $user_edit_content = current_user_can( $cap );
 				</ul>
 			</div>
 			<?php } ?>
+
+			<?php
+			$connected_tickets = new WP_Query( array(
+				                            'connected_type' => Rt_HD_Module::$post_type.'_to_'.Rt_HD_Module::$post_type,
+				                            'connected_items' => $post->ID,
+				                            'nopaging' => true,
+			                            ) );
+			if ( $connected_tickets->posts ){ ?>
+			<div class="rt-hd-ticket-info">
+				<h2 class="rt-hd-ticket-info-header"><?php echo __( 'Related Tickets' ); ?></h2>
+			</div>
+			<div class="rt-hd-ticket-info rt-hd-related-ticket">
+				<ul>
+					<?php foreach ( $connected_tickets->posts as $p ) { ?>
+						<li><a href="<?php echo get_post_permalink( $p->ID ); ?>" ><?php echo '[#' . $p->ID. '] ' . esc_attr( strlen( balanceTags( $p->post_title ) ) > 15 ? substr( balanceTags( $p->post_title ), 0, 15 ) . '...' : balanceTags( $p->post_title ) ) ?>  </a><?php echo rthd_status_markup( $p->post_status ); ?></li>
+					<?php } ?>
+				</ul>
+			</div>
+				<?php } ?>
 		</div>
 	</div>
 <?php
