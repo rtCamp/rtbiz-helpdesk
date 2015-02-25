@@ -991,7 +991,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			}
 
 			// fololowup crated by client then hook will called
-			if ( !empty( $comment_author_email )  && $rt_hd_email_notification->is_internal_user( $comment_author_email ) ) {
+			if ( !empty( $comment_author_email )  && ! $rt_hd_email_notification->is_internal_user( $comment_author_email ) ) {
 				do_action('rt_hd_auto_respond', $comment_post_ID, $commenttime);
 			}
 			return $comment_id;
