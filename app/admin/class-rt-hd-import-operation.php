@@ -39,6 +39,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		public static $FOLLOWUP_PUBLIC = 10;
 		public static $FOLLOWUP_SENSITIVE = 20;
 		public static $FOLLOWUP_STAFF = 30;
+		public static $FOLLOWUP_BOT = 40;
 
 		public function __construct() {
 			$this->hooks();
@@ -300,6 +301,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			}
 
 			$rt_hd_email_notification->notification_new_ticket_created( $post_id,$labels['name'], $body, $uploaded );
+
+			do_action( 'rt_hd_auto_respond', $post_id, $post_date );
 
 			return $post_id;
 		}
@@ -844,7 +847,10 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$comment_author_ip = empty( $comment_author_ip ) ? ' ' : $comment_author_ip;
 			$comment_agent = substr( $_SERVER['HTTP_USER_AGENT'], 0, 254 );
 			$comment_agent = empty( $comment_agent ) ? ' ' : $comment_author;
-			$user = get_user_by( 'email', $comment_author_email );
+			$user = '';
+			if ( ! empty( $comment_author_email ) ){
+				$user = get_user_by( 'email', $comment_author_email );
+			}
 
 			/* auto assign flag set */
 			global $rt_hd_email_notification;
@@ -865,7 +871,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 			$data                = array(
 				'comment_post_ID'      => $comment_post_ID,
-				'comment_author'       => $user->display_name,
+				'comment_author'       => is_object( $user ) ? $user->display_name : $comment_author,
 				'comment_author_email' => $comment_author_email,
 				'comment_author_url'   => 'http://',
 				'comment_content'      => $comment_content,
@@ -979,6 +985,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				global $rt_hd_email_notification;
 				$rt_hd_email_notification->notification_new_followup_added( get_comment( $comment_id ), $comment_type, $uploaded );
 			}
+
+			do_action( 'rt_hd_auto_respond', $comment_post_ID, $commenttime );
 
 			return $comment_id;
 		}
@@ -1331,6 +1339,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			foreach ( $rtCampUser as $rUser ) {
 				$hdUser[ $rUser->user_email ] = $rUser->ID;
 			}
+
+			// add followup creator into contact or subscribers
 			if ( ! array_key_exists( $comment_author_email, $hdUser ) ) {
 				if ( ! empty( $black_list_emails ) ){
 					foreach ( $black_list_emails as $email ){

@@ -496,6 +496,14 @@ function rthd_get_email_signature_settings(){
 	return '';
 }
 
+function rthd_get_auto_respond_message(){
+	$redux = rthd_get_redux_settings();
+	if ( isset( $redux['rthd_enable_auto_respond'] ) && 1 == $redux['rthd_enable_auto_respond'] && isset( $redux['rthd_auto_respond_message'] ) ) {
+		return $redux['rthd_auto_respond_message'];
+	}
+	return '';
+}
+
 
 function rthd_generate_email_title( $post_id, $title ) {
 	$prefix = '[' . ucfirst( Rt_HD_Module::$name ) . ' #' . $post_id . ']';

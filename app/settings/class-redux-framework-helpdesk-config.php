@@ -573,13 +573,25 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 							'indent' => false,
 					),
 					array(
-							'id'       => 'rthd_auto_respond_message',
-							'type'     => 'textarea',
-							'title'    => __( 'Auto respond message' ),
-							'subtitle' => __( 'Add auto respond message here' ),
-							'default'  => '',
-							'required' => array( 'rthd_enable_auto_respond', '=', 1 ),
+						'id'           => 'rthd_auto_respond_message',
+						'type'         => 'textarea',
+						'title'        => __( 'Auto respond message' ),
+						'subtitle'     => __( 'Add here auto respond message' ),
+						'desc'         => esc_attr( 'You can add email message here that will be send into followup when your team are offline, Allowed tags are <a> <br> <em> <strong>. ' ) . 'Use <b>{NextStartingHour}</b> to get next working hours like <b>`Today after 10 pm` or `Monday after 9 AM`</b>',
+						'validate'     => 'html_custom',
+						'default'      => esc_attr( '' ),
+						'required' => array( 'rthd_enable_auto_respond', '=', 1 ),
+						'allowed_html' => array(
+							'a'      => array(
+								'href'  => array(),
+								'title' => array()
+							),
+							'br'     => array(),
+							'em'     => array(),
+							'strong' => array()
+						),
 					),
+
 					array(
 						'id'     => 'section-auto-respond-end',
 						'type'   => 'section',
