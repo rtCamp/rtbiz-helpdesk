@@ -68,6 +68,38 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			add_action( 'wp_ajax_front_end_status_change', array( $this, 'front_end_status_change' ) );
 			add_action( 'wp_ajax_front_end_assignee_change', array( $this, 'front_end_assignee_change' ) );
 			add_action( 'wp_ajax_front_end_ticket_watch_unwatch', array( $this, 'front_end_ticket_watch_unwatch' ) );
+			add_action( 'wp_ajax_rt_hd_add_subscriber_email', array( $this, 'rt_hd_add_subscriber_email' ) );
+		}
+
+		function rt_hd_add_subscriber_email(){
+			$response = array();
+			$response['status'] = false;
+			if ( ! empty( $_POST['post_id'] ) && ! empty( $_POST['email'] ) ){
+				$user = get_user_by('email',$_POST['email']);
+				if ( $user ){
+					if ( user_can( $user, rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' ) ) ) { // add user to subscriber
+						$ticket_subscribers = get_post_meta( $_POST['post_id'], '_rtbiz_hd_subscribe_to', true );
+						if ( ! in_array( $user->ID, $ticket_subscribers ) ){
+							$ticket_subscribers[] = $user->ID;
+							update_post_meta( $_POST['post_id'], '_rtbiz_hd_subscribe_to', $ticket_subscribers );
+							$response['status'] = true;
+						} else{
+							$response['msg'] = 'Already subscribed.';
+						}
+					} else{ // add user to p2p connection
+						$user_contact_info = rt_biz_get_contact_by_email( $_POST['email'] );
+						rt_biz_connect_post_to_contact( Rt_HD_Module::$post_type, $_POST['post_id'], $user_contact_info );
+						$response['status'] = true;
+					}
+				} else{ // create user and then add to p2p
+					$this->add_contacts_to_post( array( array( 'address'=>$_POST['email'] ) ), $_POST['post_id'] );
+					$response['status'] = true;
+				}
+			} else {
+				$response['msg'] = 'Something went wrong.';
+			}
+			echo json_encode($response);
+			die();
 		}
 
 		function ticket_bulk_edit() {

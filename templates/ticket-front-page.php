@@ -177,8 +177,19 @@ $user_edit_content = current_user_can( $cap );
 					<img id="watch-unwatch-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 				</div>
 			<?php
-			}
+			}?>
+			<div class='rt-hd-ticket-info'>
+				<h2 class="rt-hd-ticket-info-header"><?php echo __( 'Add other contact' ); ?></h2>
+			</div>
+			<div class="rt-hd-ticket-info rt-hd-related-ticket">
+					<input type="email" placeholder="email" id="rthd-subscribe-email">
+				<button type="button" class='rthd-subscribe-email-submit'>Add</button>
+				<span style="display: none;" class="rthd-subscribe-validation" ></span>
+				<img id="rthd-subscribe-email-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 
+			</div>
+
+			<?php
 			if ( isset( $post->ID ) ) {
 				$attachments = get_children( array( 'post_parent' => $post->ID, 'post_type' => 'attachment', ) );
 
@@ -326,7 +337,7 @@ $user_edit_content = current_user_can( $cap );
 				                            'connected_items' => $post->ID,
 				                            'nopaging' => true,
 			                            ) );
-			if ( $connected_tickets->posts ){ ?>
+			if ( $connected_tickets->have_posts() ){ ?>
 			<div class="rt-hd-ticket-info">
 				<h2 class="rt-hd-ticket-info-header"><?php echo __( 'Related Tickets' ); ?></h2>
 			</div>

@@ -77,6 +77,43 @@ jQuery( document ).ready( function ( $ ) {
 		jQuery('#new-followup-form' ).show();
 		jQuery(document).scrollTop( ( jQuery('.ticketcontent').offset().top ) - 50 );
 	});
+	function validateEmail( email ) {
+		var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+		return re.test( email );
+	}
+	jQuery('.rthd-subscribe-email-submit' ).click( function ( ) {
+		jQuery('.rthd-subscribe-validation' ).hide();
+		jQuery('#rthd-subscribe-email-spinner' ).show();
+		var email = jQuery('#rthd-subscribe-email' ).val();
+		if ( ! validateEmail(email)){
+			jQuery('.rthd-subscribe-validation' ).show();
+			jQuery('.rthd-subscribe-validation' ).html('Invalid Email');
+		}
+		var requestArray = new Object();
+		requestArray['action'] = 'rt_hd_add_subscriber_email';
+		requestArray['email'] = email;
+		requestArray['post_id']= jQuery('#post-id' ).val();
+		jQuery.ajax( {
+			             url: ajaxurl,
+			             type: 'POST',
+			             dataType: 'json',
+			             data: requestArray,
+			             success: function ( data ) {
+								if ( data.status ){
+									jQuery('.rthd-subscribe-validation' ).text('Success!');
+								}
+				                else{
+									if ( data.msg.length > 0 ){
+										jQuery('.rthd-subscribe-validation' ).show();
+										jQuery('.rthd-subscribe-validation' ).html(data.msg);
+									} else{
+										jQuery('.rthd-subscribe-validation' ).html('Something went wrong!');
+									}
+								}
+				                jQuery('#rthd-subscribe-email-spinner' ).hide();
+			             }
+		});
+	});
 
 	jQuery('#edit-ticket-content-click' ).click(function(){
 		jQuery('#edit-ticket-data' ).slideToggle('slow');
@@ -288,7 +325,7 @@ jQuery( document ).ready( function ( $ ) {
 		             $("#attachemntlist").val('');
 	 				 $("#fileList").html('');
 	 				 $("#clear-attachemntlist").hide();
-	 				
+
                      if (data.ticket_status=='answered'){
                          if(jQuery('#rthd_keep_status')){
                              jQuery('#rthd_keep_status').parent().hide();
