@@ -79,7 +79,7 @@ if ( ! class_exists( 'Rt_HD_Auto_Respond' ) ) {
                             $comment_author_email = '';
                             $commenttime = current_time( 'mysql', 1 );
 
-                            $rt_hd_import_operation->insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, array(), array(), array(), '', '', '', array(), '', '40', 0, true );
+                            $rt_hd_import_operation->insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, array(), array(), array(), '', '', '', array(), '', Rt_HD_Import_Operation::$FOLLOWUP_BOT, 0, true );
 
                         }
                     }
@@ -122,7 +122,7 @@ if ( ! class_exists( 'Rt_HD_Auto_Respond' ) ) {
                             $comment_author_email = '';
                             $commenttime = current_time( 'mysql', 1 );
 
-                            $rt_hd_import_operation->insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, array(), array(), array(), '', '', '', array(), '', '40', 0, true );
+                            $rt_hd_import_operation->insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, array(), array(), array(), '', '', '', array(), '', Rt_HD_Import_Operation::$FOLLOWUP_BOT, 0, true );
                         }
                     }
                 }
