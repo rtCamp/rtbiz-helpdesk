@@ -43,12 +43,13 @@ if ( ! class_exists( 'Rt_HD_Auto_Respond' ) ) {
             $placeholder_list = array();
 
             if ( $isEnableAutoRespond ){
-                $d             = new DateTime( $post_date );
-                $timeStamp     = $d->getTimestamp();
+
+                $d               = new DateTime( $post_date );
+                $UTC             = new DateTimeZone( 'UTC' );
+                $d->setTimezone( $UTC );
+                $timeStamp      = $d->getTimestamp();
                 $day = date( 'N', $timeStamp ) - 1; // date returns 1 for monday & 7 for  sunday
                 $hour = date( 'H', $timeStamp );
-                $hour =
-                $nextday = -1;
                 if ( $isDayShift ){
                     $shifttime = array();
                     $shifttime['start'] = isset( $redux['rthd_dayshift_time_start']) ? $redux['rthd_dayshift_time_start'] : array( 0 => -1 , 1 => -1, 2 => -1, 3 => -1, 4 => -1, 5 => -1, 6 => -1 );
@@ -56,7 +57,7 @@ if ( ! class_exists( 'Rt_HD_Auto_Respond' ) ) {
                     if ( ! empty( $shifttime['start'] ) ){
 
                         // if [ time not empty and off time ] or [ time is empty ]
-                        if ( ( -1 != $shifttime['start'][ $day ] && -1 != $shifttime['end'][ $day ] && ( $hour < $shifttime['start'][ $day ] || $hour >= $shifttime['end'][ $day ] ) ) || ( -1 == $shifttime['start'][ $day ] && -1 == $shifttime['end'][ $day ] ) ){
+                        if ( ( -1 != $shifttime['start'][ $day ] && -1 != $shifttime['end'][ $day ] && ( $hour < $shifttime['start'][ $day ] || $hour > $shifttime['end'][ $day ] ) ) || ( -1 == $shifttime['start'][ $day ] && -1 == $shifttime['end'][ $day ] ) ){
                             // Get next Working hours
                             $nextday = $this->next_day( $day + 1, $shifttime, $isDayShift );
                             //get next staring time
@@ -92,9 +93,7 @@ if ( ! class_exists( 'Rt_HD_Auto_Respond' ) ) {
                     if ( ! empty( $shifttime ) ){
 
                         // if [ time not empty and off time ] or [ time is empty ]
-                        if ( ( ( -1 != $shifttime['am_start'][ $day ] && -1 != $shifttime['am_end'][ $day ] && -1 != $shifttime['pm_start'][ $day ] && -1 != $shifttime['pm_end'][ $day ] ) && ( ( $hour < $shifttime['am_start'][ $day ] || $hour >= $shifttime['am_end'][ $day ] ) && ( $hour < $shifttime['pm_start'][ $day ] || $hour >= $shifttime['pm_end'][ $day ] ) ) ) || ( -1 == $shifttime['am_start'][ $day ] && -1 == $shifttime['am_end'][ $day ] && -1 == $shifttime['pm_start'][ $day ] && -1 == $shifttime['pm_end'][ $day ] ) ){
-                            print_r( 'followup added' );
-
+                        if ( ( ( -1 != $shifttime['am_start'][ $day ] && -1 != $shifttime['am_end'][ $day ] && -1 != $shifttime['pm_start'][ $day ] && -1 != $shifttime['pm_end'][ $day ] ) && ( ( $hour < $shifttime['am_start'][ $day ] || $hour > $shifttime['am_end'][ $day ] ) && ( $hour < $shifttime['pm_start'][ $day ] || $hour > $shifttime['pm_end'][ $day ] ) ) ) || ( -1 == $shifttime['am_start'][ $day ] && -1 == $shifttime['am_end'][ $day ] && -1 == $shifttime['pm_start'][ $day ] && -1 == $shifttime['pm_end'][ $day ] ) ){
                             // Get next Working hours
                             $nextday = ( $hour <= 12 ) ? $day : ( $day + 1 ) ;
                             $nextday = $this->next_day( $nextday, $shifttime, $isDayShift );
