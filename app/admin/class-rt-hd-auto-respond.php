@@ -45,8 +45,6 @@ if ( ! class_exists( 'Rt_HD_Auto_Respond' ) ) {
             if ( $isEnableAutoRespond ){
 
                 $d               = new DateTime( $post_date );
-                $UTC             = new DateTimeZone( 'UTC' );
-                $d->setTimezone( $UTC );
                 $timeStamp      = $d->getTimestamp();
                 $day = date( 'N', $timeStamp ) - 1; // date returns 1 for monday & 7 for  sunday
                 $hour = date( 'H', $timeStamp );
