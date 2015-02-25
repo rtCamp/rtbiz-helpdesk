@@ -275,16 +275,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			}
 				array_push( $email_fields,
 				array(
-					'id'         => 'rthd_notification_emails',
-					'title'      => __( 'Notification Emails' ),
-					'subtitle'   => __( 'Email addresses to be notified on events' ),
-					'desc'       => __( 'These email addresses will be notified of the events that occurs in HelpDesk Systems. This is a global list. All the subscribers also will be notified along with this list.' ),
-					'type'       => 'multi_text',
-					'validate'   => 'email',
-					'multi'      => true,
-					'show_empty' => false,
-				),
-				array(
 					'id'         => 'rthd_blacklist_emails_textarea',
 					'title'      => __( 'Blacklist Emails' ),
 					'subtitle'   => __( 'Email addresses to be blacklisted from creating tickets / follow-ups.' ),
@@ -321,10 +311,118 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 
 			$this->sections[] = array(
 				'icon'        => 'el-icon-edit',
-				'title'       => __( 'Customize Notification Emails ' ),
-				'desc'     => __( 'You can use {ticket_title} as a placeholder.<p><b>Suggestion:</b> Use same title for all mail types to let users have all emails in single thread.</p>' ),
+				'title'       => __( 'Notification Emails ' ),
 				'permissions' => $admin_cap,
 				'fields'      => array(
+					array(
+						'id'         => 'rthd_notification_emails',
+						'title'      => __( 'Notification Emails' ),
+						'subtitle'   => __( 'Email addresses to be notified on events' ),
+						'desc'       => __( 'These email addresses will be notified of the events that occurs in HelpDesk Systems. This is a global list. All the subscribers also will be notified along with this list.' ),
+						'type'       => 'multi_text',
+						'validate'   => 'email',
+						'multi'      => true,
+						'show_empty' => false,
+					),
+					array(
+						'id'       => 'rthd_enable_notification_acl',
+						'type'     => 'switch',
+						'title'    => __( 'Enable Notification ACL' ),
+						'subtitle' => __( 'To enable/disable Notification ACL' ),
+						'default'  => true,
+						'on'       => __( 'Enable' ),
+						'off'      => __( 'Disable' ),
+					),
+					array(
+						'id'       => 'section-notification_acl-start',
+						'type'     => 'section',
+						'indent'   => true, // Indent all options below until the next 'section' option is set.
+						'required' => array( 'rthd_enable_notification_acl', '=', 1 ),
+					),
+					array(
+						'id'       => 'rthd_notification_acl_client_events',
+						'title'    => __( 'Notification Event for Client [ Contact ] ' ),
+						'type'     => 'checkbox',
+						'default'	   => array( 'new_ticket_created_client_mail' => '1', 'new_followup_created_client_mail' => '1' ),
+						'options' => array(
+							'new_ticket_created_client_mail'	=> __( 'When a customer creates a ticket via the web form or email' ),
+							'new_followup_created_client_mail'	=> __( 'When a new follow up is added to a ticket' ),
+							'new_followup_updated_by_staff_client_mail'	=> __( 'When any follow-up is edited by staff' ),
+							'new_customer_accoutn_created_client_mail'	=> __( 'When a customer creates a ticket for the first time and an account is created automatically for them' ),
+							'ticket_solved_client_mail'	=> __( 'When a ticket status is changed to solved' ),
+						),
+					),
+					array(
+						'id'       => 'rthd_notification_acl_assignee_events',
+						'title'    => __( 'Notification Event for Assignee' ),
+						'type'     => 'checkbox',
+						'default'	   => array( 'new_ticket_created_assignee_mail' => '1',
+							'new_followup_created_assignee_mail' => '1',
+							'new_followup_updated_assignee_mail' => '1',
+							'ticket_reassigned_assignee_mail' => '1',
+							'new_staff_only_followup_created_assignee_mail' => '1',
+							'ticket_updated_assignee_mail' => '1',
+						),
+						'options' => array(
+							'new_ticket_created_assignee_mail'	=> __( 'When a customer creates a ticket via the web form or email' ),
+							'new_followup_created_assignee_mail'	=> __( 'When a New follow up is added to a ticket' ),
+							'new_followup_updated_assignee_mail'	=> __( 'When a follow-up is edited by staff/customer' ),
+							'ticket_reassigned_assignee_mail'	=> __( 'When a ticket is reassigned' ),
+							'new_staff_only_followup_created_assignee_mail'	=> __( 'When a staff-only follow-up is added/edited on a ticket' ),
+							'ticket_updated_assignee_mail'	=> __( 'When any status or metadata changed for a ticket' ),
+							'new_subscriber_added_assignee_mail'	=> __( 'When a staff member subscribes to a ticket' ),
+							'subscriber_removed_assignee_mail'	=> __( 'When a subscriber is removed from a ticket' ),
+						),
+					),
+					array(
+						'id'       => 'rthd_notification_acl_staff_events',
+						'title'    => __( 'Notification Event for Staff [ Subscriber ]' ),
+						'type'     => 'checkbox',
+						'default'	   => array( 'new_followup_created_staff_mail' => '1',),
+						'options' => array(
+							'new_followup_created_staff_mail'	=> __( 'When a New follow up is added to a ticket' ),
+							'new_followup_updated_staff_mail'	=> __( 'When a follow up is edited' ),
+							'new_followup_deleted_staff_mail'	=> __( 'When a follow up is deleted' ),
+							'ticket_updated_staff_mail'	=> __( 'When any status or metadata changed for a ticket' ),
+							'ticket_reassigned_staff_mail'	=> __( 'When ticket is re-assigned' ),
+						),
+					),
+					array(
+						'id'       => 'rthd_notification_acl_group_events',
+						'title'    => __( 'Notification Event for Group [ Global ]' ),
+						'type'     => 'checkbox',
+						'default'	   => array( 'new_ticket_created_group_mail' => '1',
+							'new_followup_created_group_mail' => '1',
+							'new_followup_updated_group_mail' => '1',
+							'ticket_reassigned_group_mail' => '1',
+							'new_staff_only_followup_created_group_mail' => '1',
+							'ticket_updated_group_mail' => '1',
+						),
+						'options' => array(
+							'new_ticket_created_group_mail'	=> __( 'When a customer creates a ticket via the web form or email' ),
+							'new_followup_created_group_mail'	=> __( 'When a New follow up is added to a ticket' ),
+							'new_followup_updated_group_mail'	=> __( 'When a follow-up is edited by staff/customer' ),
+							'ticket_reassigned_group_mail'	=> __( 'When a ticket is reassigned' ),
+							'new_staff_only_followup_created_group_mail'	=> __( 'When a staff-only follow-up is added/edited on a ticket' ),
+							'ticket_updated_group_mail'	=> __( 'When any status or metadata changed for a ticket' ),
+							'new_subscriber_added_group_mail'	=> __( 'When a staff member subscribes to a ticket' ),
+							'subscriber_removed_group_mail'	=> __( 'When a subscriber is removed from a ticket' ),
+						),
+					),
+					array(
+						'id'       => 'section-notification_acl-start',
+						'type'     => 'section',
+						'indent'   => false, // Indent all options below until the next 'section' option is set.
+					),
+
+					array(
+						'id'       => 'section-notification_email-customize-start',
+						'type'     => 'section',
+						'subtitle'     => __( 'You can use {ticket_title} as a placeholder.<p><b>Suggestion:</b> Use same title for all mail types to let users have all emails in single thread.</p>' ),
+						'title'       => __( 'Customize Notification Emails ' ),
+						'indent'   => true, // Indent all options below until the next 'section' option is set.
+					),
+
 					array(
 						'id'       => 'rthd_new_ticket_email_title',
 						'type'     => 'text',
@@ -414,6 +512,11 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 							'strong' => array()
 						),
 					),
+					array(
+						'id'       => 'section-notification_email-customize-end',
+						'type'     => 'section',
+						'indent'   => false, // Indent all options below until the next 'section' option is set.
+					),
 				)
 			);
 
@@ -455,74 +558,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'indent' => false,
 					),
 
-					array(
-						'id'       => 'rthd_enable_notification_acl',
-						'type'     => 'switch',
-						'title'    => __( 'Enable Notification ACL' ),
-						'subtitle' => __( 'To enable/disable Notification ACL' ),
-						'default'  => false,
-						'on'       => __( 'Enable' ),
-						'off'      => __( 'Disable' ),
-					),
-					array(
-						'id'       => 'section-notification_acl-start',
-						'type'     => 'section',
-						'indent'   => true, // Indent all options below until the next 'section' option is set.
-						'required' => array( 'rthd_enable_notification_acl', '=', 1 ),
-					),
-					array(
-						'id'       => 'rthd_notification_acl_client_events',
-						'title'    => __( 'Notification Event for Client [ Contact ] ' ),
-						'subtitle' => __( '' ),
-						'desc'     => __( '' ),
-						'default'  => 'on_first_followup',
-						'type'     => 'radio',
-						'options' => array(
-							'new_ticket_created_client_mail'	=> __( ' When a New Ticket is created.' ),
-							'new_followup_created_client_mail'	=> __( 'When a New follow up is added to a Ticket.' ),
-						),
-					),
-					array(
-						'id'       => 'rthd_notification_acl_assignee_events',
-						'title'    => __( 'Notification Event for Assignee' ),
-						'subtitle' => __( '' ),
-						'desc'     => __( '' ),
-						'default'  => 'on_first_followup',
-						'type'     => 'radio',
-						'options' => array(
-							'new_ticket_created_client_mail'	=> __( ' When a New Ticket is created.' ),
-							'new_followup_created_client_mail'	=> __( 'When a New follow up is added to a Ticket.' ),
-						),
-					),
-					array(
-						'id'       => 'rthd_notification_acl_staff_events',
-						'title'    => __( 'Notification Event for Staff [ Subscriber ]' ),
-						'subtitle' => __( '' ),
-						'desc'     => __( '' ),
-						'default'  => 'on_first_followup',
-						'type'     => 'radio',
-						'options' => array(
-							'new_ticket_created_client_mail'	=> __( ' When a New Ticket is created.' ),
-							'new_followup_created_client_mail'	=> __( 'When a New follow up is added to a Ticket.' ),
-						),
-					),
-					array(
-						'id'       => 'rthd_notification_acl_group_events',
-						'title'    => __( 'Notification Event for Group [ Global ]' ),
-						'subtitle' => __( '' ),
-						'desc'     => __( '' ),
-						'default'  => 'on_first_followup',
-						'type'     => 'radio',
-						'options' => array(
-							'new_ticket_created_client_mail'	=> __( ' When a New Ticket is created.' ),
-							'new_followup_created_client_mail'	=> __( 'When a New follow up is added to a Ticket.' ),
-						),
-					),
-					array(
-						'id'       => 'section-notification_acl-start',
-						'type'     => 'section',
-						'indent'   => false, // Indent all options below until the next 'section' option is set.
-					),
 					array(
 						'id'       => 'rthd_enable_auto_respond',
 						'type'     => 'switch',
