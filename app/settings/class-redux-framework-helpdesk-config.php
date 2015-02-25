@@ -31,7 +31,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			if ( ! class_exists( 'ReduxFramework' ) ) {
 				return;
 			}
-			// hook priority 25 because rtBiz email model is on after_theme 20 and we can not get 'rt_get_all_system_emails' before that
+			// hook priority 25 because rtBiz email model is on after_theme 20 and we can not get 'rt_get_all_system_emails' before that because of acl needs p2p
 			add_action( 'p2p_init', array( $this, 'init_settings' ), 30 );
 		}
 
@@ -415,6 +415,202 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						),
 					),
 				)
+			);
+
+			$this->sections[] = array(
+				'icon'        => 'el-icon-magic',
+				'title'       => __( 'Miscellaneous Feature' ),
+				'permissions' => $admin_cap,
+				'fields'      => array(
+					array(
+						'id'       => 'rthd_enable_auto_assign',
+						'type'     => 'switch',
+						'title'    => __( 'Enable auto assign' ),
+						'subtitle' => __( 'To enable/disable auto assign feature' ),
+						'default'  => true,
+						'on'       => __( 'Enable' ),
+						'off'      => __( 'Disable' ),
+					),
+					array(
+						'id'       => 'section-auto-assign-start',
+						'type'     => 'section',
+						'indent'   => true, // Indent all options below until the next 'section' option is set.
+						'required' => array( 'rthd_enable_auto_assign', '=', 1 ),
+					),
+					array(
+						'id'       => 'rthd_auto_assign_events',
+						'title'    => __( 'Event for auto assign' ),
+						'subtitle' => __( '' ),
+						'desc'     => __( '' ),
+						'default'  => 'on_first_followup',
+						'type'     => 'radio',
+						'options' => array(
+							'on_first_followup'	=> __( 'On first followup added by staff.' ),
+							'on_every_followup' => __( 'On every followup added by staff.' ),
+						),
+					),
+					array(
+						'id'     => 'section-auto-assign-end',
+						'type'   => 'section',
+						'indent' => false,
+					),
+
+					array(
+						'id'       => 'rthd_enable_notification_acl',
+						'type'     => 'switch',
+						'title'    => __( 'Enable Notification ACL' ),
+						'subtitle' => __( 'To enable/disable Notification ACL' ),
+						'default'  => true,
+						'on'       => __( 'Enable' ),
+						'off'      => __( 'Disable' ),
+					),
+					array(
+						'id'       => 'section-notification_acl-start',
+						'type'     => 'section',
+						'indent'   => true, // Indent all options below until the next 'section' option is set.
+						'required' => array( 'rthd_enable_notification_acl', '=', 1 ),
+					),
+					array(
+						'id'       => 'rthd_notification_acl_client_events',
+						'title'    => __( 'Notification Event for Client [ Contact ] ' ),
+						'subtitle' => __( '' ),
+						'desc'     => __( '' ),
+						'default'  => 'on_first_followup',
+						'type'     => 'radio',
+						'options' => array(
+							'new_ticket_created_client_mail'	=> __( ' When a New Ticket is created.' ),
+							'new_followup_created_client_mail'	=> __( 'When a New follow up is added to a Ticket.' ),
+						),
+					),
+					array(
+						'id'       => 'rthd_notification_acl_assignee_events',
+						'title'    => __( 'Notification Event for Assignee' ),
+						'subtitle' => __( '' ),
+						'desc'     => __( '' ),
+						'default'  => 'on_first_followup',
+						'type'     => 'radio',
+						'options' => array(
+							'new_ticket_created_client_mail'	=> __( ' When a New Ticket is created.' ),
+							'new_followup_created_client_mail'	=> __( 'When a New follow up is added to a Ticket.' ),
+						),
+					),
+					array(
+						'id'       => 'rthd_notification_acl_staff_events',
+						'title'    => __( 'Notification Event for Staff [ Subscriber ]' ),
+						'subtitle' => __( '' ),
+						'desc'     => __( '' ),
+						'default'  => 'on_first_followup',
+						'type'     => 'radio',
+						'options' => array(
+							'new_ticket_created_client_mail'	=> __( ' When a New Ticket is created.' ),
+							'new_followup_created_client_mail'	=> __( 'When a New follow up is added to a Ticket.' ),
+						),
+					),
+					array(
+						'id'       => 'rthd_notification_acl_group_events',
+						'title'    => __( 'Notification Event for Group [ Global ]' ),
+						'subtitle' => __( '' ),
+						'desc'     => __( '' ),
+						'default'  => 'on_first_followup',
+						'type'     => 'radio',
+						'options' => array(
+							'new_ticket_created_client_mail'	=> __( ' When a New Ticket is created.' ),
+							'new_followup_created_client_mail'	=> __( 'When a New follow up is added to a Ticket.' ),
+						),
+					),
+					array(
+						'id'       => 'section-notification_acl-start',
+						'type'     => 'section',
+						'indent'   => false, // Indent all options below until the next 'section' option is set.
+					),
+					array(
+						'id'       => 'rthd_enable_auto_respond',
+						'type'     => 'switch',
+						'title'    => __( 'Enable auto respond' ),
+						'subtitle' => __( 'To enable/disable auto respond feature' ),
+						'default'  => false,
+						'on'       => __( 'Enable' ),
+						'off'      => __( 'Disable' ),
+					),
+					array(
+						'id'       => 'section-auto-respond-start',
+						'type'     => 'section',
+						'indent'   => true, // Indent all options below until the next 'section' option is set.
+						'required' => array( 'rthd_enable_auto_respond', '=', 1 ),
+					),
+					array(
+						'id'       => 'rthd_enable_auto_respond_mode',
+						'type'     => 'switch',
+						'title'    => __( 'Select working shift' ),
+						'subtitle' => __( 'Day shift / Day-Night Shift' ),
+						'default'  => true,
+						'on'       => __( 'Day Shift' ),
+						'off'      => __( 'Day-Night Shift' ),
+					),
+					array(
+						'id'       => 'section-auto-respond-dayshift-start',
+						'type'     => 'section',
+						'indent'   => true, //Indent all options below until the next 'section' option is set.
+						'required' => array( array( 'rthd_enable_auto_respond_mode', '=', 1 ), array( 'rthd_enable_auto_respond', '=', 1 ) ),
+					),
+					array(
+						'id'      => 'rthd_auto_respond_dayshift_time',
+						'type'    => 'callback',
+						'title'   => __( 'Configure Weekdays for dayshift' ),
+						'subtitle' => __( 'Add hours of operation' ),
+						'desc'    => '',
+						'callback' => 'rthd_auto_respond_dayshift_view',
+					),
+					array(
+						'id'     => 'section-auto-respond-dayshift-end',
+						'type'   => 'section',
+						'indent' => false,
+					),
+					array(
+						'id'       => 'section-auto-respond-nightshift-start',
+						'type'     => 'section',
+						'indent'   => true, //Indent all options below until the next 'section' option is set.
+						'required' => array( array( 'rthd_enable_auto_respond_mode', '=', 0 ), array( 'rthd_enable_auto_respond', '=', 1 ) ),
+					),
+					array(
+						'id'      => 'rthd_auto_respond_nightshift_time',
+						'type'    => 'callback',
+						'title'   => __( 'Configure Weekdays for nightshift' ),
+						'subtitle' => __( 'Add hours of operation' ),
+						'desc'    => '',
+						'callback' => 'rthd_auto_respond_daynightshift_view',
+					),
+					array(
+							'id'     => 'section-auto-respond-nightshift-end',
+							'type'   => 'section',
+							'indent' => false,
+					),
+					array(
+						'id'           => 'rthd_auto_respond_message',
+						'type'         => 'textarea',
+						'title'        => __( 'Auto respond message' ),
+						'subtitle'     => __( 'Add here auto respond message' ),
+						'desc'         => esc_attr( 'You can add email message here that will be send into followup when your team are offline, Allowed tags are <a> <br> <em> <strong>. ' ) . 'Use <b>{NextStartingHour}</b> to get next working hours like <b>`Today after 10 pm` or `Monday after 9 AM`</b>',
+						'validate'     => 'html_custom',
+						'default'      => esc_attr( '' ),
+						'required' => array( 'rthd_enable_auto_respond', '=', 1 ),
+						'allowed_html' => array(
+							'a'      => array(
+								'href'  => array(),
+								'title' => array()
+							),
+							'br'     => array(),
+							'em'     => array(),
+							'strong' => array()
+						),
+					),
+
+					array(
+						'id'     => 'section-auto-respond-end',
+						'type'   => 'section',
+						'indent' => false,
+					),
+				),
 			);
 
 			$this->sections[]   = array(

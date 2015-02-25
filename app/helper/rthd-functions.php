@@ -496,6 +496,14 @@ function rthd_get_email_signature_settings(){
 	return '';
 }
 
+function rthd_get_auto_respond_message(){
+	$redux = rthd_get_redux_settings();
+	if ( isset( $redux['rthd_enable_auto_respond'] ) && 1 == $redux['rthd_enable_auto_respond'] && isset( $redux['rthd_auto_respond_message'] ) ) {
+		return $redux['rthd_auto_respond_message'];
+	}
+	return '';
+}
+
 
 function rthd_generate_email_title( $post_id, $title ) {
 	$prefix = '[' . ucfirst( Rt_HD_Module::$name ) . ' #' . $post_id . ']';
@@ -1064,12 +1072,13 @@ function rthd_get_blacklist_emails(){
 
 /**
  * Update rtHelpdesk settings.
+ * This function used after p2p_init hook with priority more than 30 before that ReduxFramework will be empty
+ *
  * @param string    $option_name        Setting option name.
  * @param string    $option_value       Setting option value.
  */
  function rthd_set_redux_settings( $option_name, $option_value ) {
 	global $rt_hd_redux_framework_Helpdesk_Config;
-
 	$rt_hd_redux_framework_Helpdesk_Config->ReduxFramework->set( $option_name, $option_value );
 }
 
@@ -1138,4 +1147,20 @@ function rthd_is_ticket_subscriber( $post_id ) {
 	}
 
 	return $flag;
+}
+
+/**
+ * Display settings for setup weekdays and hours operation for day shift.
+ */
+function rthd_auto_respond_dayshift_view() {
+	global $rt_hd_auto_respond;
+	return $rt_hd_auto_respond->setting_dayshift_ui();
+}
+
+/**
+ * Display settings for setup weekdays and hours operation for night shift.
+ */
+function rthd_auto_respond_daynightshift_view() {
+	global $rt_hd_auto_respond;
+	return $rt_hd_auto_respond->setting_daynightshift_ui();
 }

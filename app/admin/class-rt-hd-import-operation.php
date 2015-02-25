@@ -39,6 +39,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		public static $FOLLOWUP_PUBLIC = 10;
 		public static $FOLLOWUP_SENSITIVE = 20;
 		public static $FOLLOWUP_STAFF = 30;
+		public static $FOLLOWUP_BOT = 40;
 
 		public function __construct() {
 			$this->hooks();
@@ -300,6 +301,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			}
 
 			$rt_hd_email_notification->notification_new_ticket_created( $post_id,$labels['name'], $body, $uploaded );
+
+			do_action( 'rt_hd_auto_respond', $post_id, $post_date );
 
 			return $post_id;
 		}
@@ -844,11 +847,31 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$comment_author_ip = empty( $comment_author_ip ) ? ' ' : $comment_author_ip;
 			$comment_agent = substr( $_SERVER['HTTP_USER_AGENT'], 0, 254 );
 			$comment_agent = empty( $comment_agent ) ? ' ' : $comment_author;
-			$user = get_user_by( 'email', $comment_author_email );
+			$user = '';
+			if ( ! empty( $comment_author_email ) ){
+				$user = get_user_by( 'email', $comment_author_email );
+			}
+
+			/* auto assign flag set */
+			global $rt_hd_email_notification;
+			$redux = rthd_get_redux_settings();
+			$autoAssingeFlag = ( isset( $redux['rthd_enable_auto_assign']) && $redux['rthd_enable_auto_assign'] == 1 ) ;
+			$autoAssignEvent = ( isset( $redux['rthd_auto_assign_events'] ) ) ? $redux['rthd_auto_assign_events'] : '' ;
+			$isFirstStaffComment = false;
+			//check auto assign feature enable and followup created by staff
+			if ( $autoAssingeFlag && $rt_hd_email_notification->is_internal_user( $comment_author_email ) ){
+				if ( 'on_first_followup' == $autoAssignEvent ){
+					$Comment = $this->get_first_staff_followup( $comment_post_ID );
+					$Comment = array_filter($Comment);
+					if ( empty( $Comment ) ) {
+						$isFirstStaffComment = true;
+					}
+				}
+			}
 
 			$data                = array(
 				'comment_post_ID'      => $comment_post_ID,
-				'comment_author'       => $user->display_name,
+				'comment_author'       => is_object( $user ) ? $user->display_name : $comment_author,
 				'comment_author_email' => $comment_author_email,
 				'comment_author_url'   => 'http://',
 				'comment_content'      => $comment_content,
@@ -906,7 +929,6 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			/* System Notification -- Followup Added to the ticket */
 
 			/* Toggle Ticket Status */
-			global $rt_hd_email_notification;
 			$post = get_post( $comment_post_ID );
 
 			if ( $rt_hd_email_notification->is_internal_user( $comment_author_email ) ) {
@@ -945,6 +967,16 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			}
 			update_post_meta( $comment_post_ID, '_rtbiz_hd_subscribe_to', $subscriber );
 
+			/* assignee toogle code */
+			//check auto assign feature enable and followup created by staff
+			if ( $autoAssingeFlag && $rt_hd_email_notification->is_internal_user( $comment_author_email ) ){
+				//check on 'on_first_followup' selected and its first staff followup || select 'on_every_followup'
+				if ( ( 'on_first_followup' == $autoAssignEvent && $isFirstStaffComment ) || 'on_every_followup' == $autoAssignEvent ){
+					wp_update_post( array( 'ID'=>$comment_post_ID ,'post_author'=>$userid ) );
+				}
+			}
+			/* end assignee toogle code */
+
 			$this->add_attachment_to_post( $uploaded, $comment_post_ID, $comment_id );
 
 
@@ -954,7 +986,34 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$rt_hd_email_notification->notification_new_followup_added( get_comment( $comment_id ), $comment_type, $uploaded );
 			}
 
+			do_action( 'rt_hd_auto_respond', $comment_post_ID, $commenttime );
+
 			return $comment_id;
+		}
+
+		/**
+		 * get first staff comment if not exist return false
+		 *
+		 * @param $comment_post_ID	:
+		 *
+		 * @return array
+		 */
+		function get_first_staff_followup( $comment_post_ID ){
+
+			$staff = get_post_meta( $comment_post_ID, '_rtbiz_hd_subscribe_to', true );;
+			$post_author_id = get_post_field( 'post_author', $comment_post_ID );
+			if ( is_numeric( $post_author_id ) ){
+				$staff = array_merge( $staff, array(  $post_author_id ) );
+			}
+			$args = array(
+				'author__in' => $staff,
+				'post_id' => $comment_post_ID,
+				'orderby' => 'comment_date_gmt',
+				'order' => 'ASC',
+				'number' => '1',
+			);
+			$comments = get_comments( $args );
+			return $comments;
 		}
 
 		/**
@@ -1280,6 +1339,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			foreach ( $rtCampUser as $rUser ) {
 				$hdUser[ $rUser->user_email ] = $rUser->ID;
 			}
+
+			// add followup creator into contact or subscribers
 			if ( ! array_key_exists( $comment_author_email, $hdUser ) ) {
 				if ( ! empty( $black_list_emails ) ){
 					foreach ( $black_list_emails as $email ){
