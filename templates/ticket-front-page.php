@@ -179,7 +179,7 @@ $user_edit_content = current_user_can( $cap );
 			<?php
 			}?>
 			<div class='rt-hd-ticket-info'>
-				<h2 class="rt-hd-ticket-info-header"><?php echo __( 'Add other contact' ); ?></h2>
+				<h2 class="rt-hd-ticket-info-header"><?php echo __( 'Add people' ); ?></h2>
 			</div>
 			<div class="rt-hd-ticket-info rt-hd-related-ticket">
 					<input type="email" placeholder="email" id="rthd-subscribe-email">
@@ -351,6 +351,7 @@ $user_edit_content = current_user_can( $cap );
 				<?php } ?>
 		</div>
 	</div>
+<!--<a href="#" class="rthd-scroll-up">scroll up </a>-->
 <?php
 do_action( 'rthd_ticket_front_page_before_footer' );
 get_footer();

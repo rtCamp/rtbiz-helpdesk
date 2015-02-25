@@ -34,17 +34,33 @@ reference: http://purecss.io/forms/
 }
 
 .rthd_support_from div input.rthd_email{
-	width: 89%;
+	width: 100%;
 }
 
-button.rt-hd-add-more-email{
-	width: 10%;
+/*button.rt-hd-add-more-email{
+	width: 19%;
+}*/
+.rt-hd-remove-textbox,.rt-hd-add-more-email {
+	text-decoration: none !important;
+	position: absolute;
+	top: 8px;
+	right: 15px;
+	border-bottom: none !important;
 }
-
+.rt-hd-remove-textbox{
+	position: absolute;
+}
 .rthd-hide-form-div{
 	display: none;
 }
 
+.rthd-email-group div{
+	position: relative;
+}
+
+.rthd-email-group div a{
+	color: #777;
+}
 .rthd-email-group div{
 	margin-top: 5px;
 }

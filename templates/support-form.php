@@ -57,15 +57,17 @@ jQuery(document).ready(function ($) {
 	} ?>
 	<div>
 		<div class="rthd-email-group">
+			<div>
 			<input class="rthd_email" placeholder="Email" type="email" name="post[email][]" value="<?php echo sanitize_email( $email ) ?>" required />
-			<button type="button" class="rt-hd-add-more-email">+</button>
+			<a href="#" class="rt-hd-add-more-email">CC</a>
+			</div>
 		</div>
 	</div>
 
 	<div class="rthd-hide-form-div">
 		<div>
-		<input class="rthd_email" placeholder="CC" type="email" name="post[email][]ss"/>
-		<button type="button" class="rt-hd-remove-textbox">-</button>
+		<input class="rthd_email" placeholder="CC" type="email" name="post[email][]"/>
+		<a href="#" class="rt-hd-remove-textbox">x</a>
 		</div>
 	</div>
 
