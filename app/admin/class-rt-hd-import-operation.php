@@ -72,6 +72,38 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			add_action( 'wp_ajax_front_end_status_change', array( $this, 'front_end_status_change' ) );
 			add_action( 'wp_ajax_front_end_assignee_change', array( $this, 'front_end_assignee_change' ) );
 			add_action( 'wp_ajax_front_end_ticket_watch_unwatch', array( $this, 'front_end_ticket_watch_unwatch' ) );
+			add_action( 'wp_ajax_rt_hd_add_subscriber_email', array( $this, 'rt_hd_add_subscriber_email' ) );
+		}
+
+		function rt_hd_add_subscriber_email(){
+			$response = array();
+			$response['status'] = false;
+			if ( ! empty( $_POST['post_id'] ) && ! empty( $_POST['email'] ) ){
+				$user = get_user_by('email',$_POST['email']);
+				if ( $user ){
+					if ( user_can( $user, rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' ) ) ) { // add user to subscriber
+						$ticket_subscribers = get_post_meta( $_POST['post_id'], '_rtbiz_hd_subscribe_to', true );
+						if ( ! in_array( $user->ID, $ticket_subscribers ) ){
+							$ticket_subscribers[] = $user->ID;
+							update_post_meta( $_POST['post_id'], '_rtbiz_hd_subscribe_to', $ticket_subscribers );
+							$response['status'] = true;
+						} else{
+							$response['msg'] = 'Already subscribed.';
+						}
+					} else{ // add user to p2p connection
+						$user_contact_info = rt_biz_get_contact_by_email( $_POST['email'] );
+						rt_biz_connect_post_to_contact( Rt_HD_Module::$post_type, $_POST['post_id'], $user_contact_info );
+						$response['status'] = true;
+					}
+				} else{ // create user and then add to p2p
+					$this->add_contacts_to_post( array( array( 'address'=>$_POST['email'] ) ), $_POST['post_id'] );
+					$response['status'] = true;
+				}
+			} else {
+				$response['msg'] = 'Something went wrong.';
+			}
+			echo json_encode($response);
+			die();
 		}
 
 		function ticket_bulk_edit() {
@@ -461,9 +493,12 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 * @param string $inreplyto
 		 * @param string $references
 		 *
-		 * @param string $from_email
+		 * @param string $mailbox_email
+		 * @param string $originalBody
 		 *
 		 * @return bool
+		 * @internal param string $from_email
+		 *
 		 * @internal param $allemail
 		 * @internal param array $subscriber
 		 *
@@ -482,10 +517,9 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$messageid = '',
 			$inreplyto = '',
 			$references = '',
-			$from_email = '',
+			$mailbox_email = '',
 			$originalBody = ''
 		) {
-			$redux = rthd_get_redux_settings();
 
 			//Exclude mailbox email form all emails
 			$contactEmail = array();
@@ -497,39 +531,12 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				}
 			}
 			$allemails = $contactEmail;
-
-			$black_list_emails = rthd_get_blacklist_emails();
-			if ( ! empty( $black_list_emails ) ){
-				foreach ( $black_list_emails as $email ){
-					if ( preg_match( '/'.str_replace('*','\/*',$email).'/', $fromemail['address'] ) ){
-						return false;
-					}
-				}
+			if ( rt_hd_check_email_blacklisted( $fromemail['address'] ) ){
+				return false;
 			}
-
-			//subscriber diff
-			$rtCampUser = Rt_HD_Utils::get_hd_rtcamp_user();
-			$hdUser     = array();
-			foreach ( $rtCampUser as $rUser ) {
-				$hdUser[ $rUser->user_email ] = $rUser->ID;
-			}
-			$subscriber = array();
-			$allemail = array();
-			foreach ( $allemails as $mail ) {
-				if ( ! array_key_exists( $mail['address'], $hdUser ) ) {
-					if ( ! empty( $black_list_emails ) ){
-						foreach ( $black_list_emails as $email ){
-							if ( ! preg_match( '/'.str_replace('*','\/*',$email).'/',  $mail['address'] ) ){
-								$allemail[]= $mail;
-							}
-						}
-					}else{
-						$allemail[]= $mail;
-					}
-				} else {
-					$subscriber[]= $hdUser[$mail['address']];
-				}
-			}
+			$emailsarrays = rthd_filter_emails( $allemails );
+			$subscriber = $emailsarrays['subscriber'];
+			$allemail = $emailsarrays['allemail'];
 
 			global $rt_hd_contacts;
 

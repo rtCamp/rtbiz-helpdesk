@@ -344,12 +344,12 @@ li.load-more-spinner-li {
 	padding: 10px 0;
 }
 
-.rt-hd-ticket-history ul li{
+.rt-hd-related-ticket ul li, .rt-hd-ticket-history ul li{
 	padding: 5px;
 	margin: 5px 0px;
 }
 
-.rt-hd-ticket-history ul li mark{
+.rt-hd-related-ticket ul li mark, .rt-hd-ticket-history ul li mark{
 	float: right;
 }
 .followup-note {
