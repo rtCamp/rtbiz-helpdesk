@@ -101,6 +101,7 @@ jQuery( document ).ready( function ( $ ) {
 		if ( ! validateEmail(email)){
 			jQuery('.rthd-subscribe-validation' ).show();
 			jQuery('.rthd-subscribe-validation' ).html('Invalid Email');
+			jQuery('#rthd-subscribe-email-spinner' ).hide();
 			return ;
 		}
 		var requestArray = new Object();
@@ -334,6 +335,15 @@ jQuery( document ).ready( function ( $ ) {
 		             var newcomment=data.comment_content;
 		             //console.log(newcomment);
 		             jQuery('#chat-UI' ).append(newcomment);
+		             // below code is for front end side bar
+		             jQuery('#rthd-assignee-list' ).val(data.assign_value);
+		             if( jQuery('#rthd-status-list' ).length ){
+			             jQuery('#rthd-status-list' ).val(data.post_status);
+		             } else if (jQuery('#rthd-status-visiable' ).length ){
+			             jQuery('#rthd-status-visiable' ).html(data.post_status);
+		             }
+		             jQuery('.rt-hd-ticket-last-reply' ).html(data.last_reply);
+		             // front end code end
 		             rthd_tinymce_set_content( 'followupcontent', '' );
 		             jQuery('#add-private-comment' ).val(10);
 		             $("#attachemntlist").val('');

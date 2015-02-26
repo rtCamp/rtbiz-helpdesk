@@ -143,7 +143,7 @@ $user_edit_content = current_user_can( $cap );
 				}
 				?>
 
-				<div class="rt-hd-ticket-info">
+				<div class="rt-hd-ticket-info rt-hd-ticket-last-reply">
 					<span title="Status"><strong>Last reply: </strong></span>
 					<span class="rthd_attr_border rthd_view_mode"> <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . " ago by " . $commentlink; ?></span>
 				</div>
