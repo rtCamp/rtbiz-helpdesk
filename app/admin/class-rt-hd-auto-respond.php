@@ -134,7 +134,7 @@ if ( ! class_exists( 'Rt_HD_Auto_Respond' ) ) {
          */
         function next_day( $day, $shifttime, $isDayShift ){
             if ( $day < 0 || $day > 7 ){
-                return $day;
+                return false;
             }
             if ( $day > 6 ){
                 $day = 0;
@@ -143,13 +143,13 @@ if ( ! class_exists( 'Rt_HD_Auto_Respond' ) ) {
             // next day office time set or not
             if ( $isDayShift ){
                 if ( ! empty( $shifttime ) ){
-                    if ( empty( $shifttime['start'][ $day ] ) || empty( $shifttime['end'][ $day ] ) ){
+                    if ( -1 == $shifttime['start'][ $day ] || -1 ==  $shifttime['end'][ $day ] ){
                         return $this->next_day( $day + 1, $shifttime, $isDayShift  );
                     }
                 }
-            }else{
+            } else {
                 if ( ! empty( $shifttime ) ){
-                    if ( empty( $shifttime['am_start'][ $day ] ) && empty( $shifttime['am_end'][ $day ] ) && empty( $shifttime['pm_start'][ $day ] ) && empty( $shifttime['pm_end'][ $day ] ) ) {
+                    if ( ( -1 == $shifttime['am_start'][ $day ] || -1 == $shifttime['am_end'][ $day ] ) && ( -1 == $shifttime['pm_start'][ $day ] || -1 == $shifttime['pm_end'][ $day ] ) ) {
                         return $this->next_day( $day + 1, $shifttime, $isDayShift  );
                     }
                 }
