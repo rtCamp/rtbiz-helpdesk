@@ -449,7 +449,6 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		 * @param $body
 		 * @param $uploaded
 		 */
-		//ticket_created_notification
 		public function notification_new_ticket_created( $post_id, $post_type, $body = '', $uploaded = array() ) {
 			$ticket_creator = $ContactEmail = $groupEmail = $assigneEmail = $subscriberEmail = array();
 
