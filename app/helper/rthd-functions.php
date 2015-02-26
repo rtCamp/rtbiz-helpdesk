@@ -525,6 +525,7 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 		case Rt_HD_Import_Operation::$FOLLOWUP_BOT:
 			$display_private_comment_flag = true;
 			$is_comment_private = true;
+			$private_text = 'Bot';
 			$user_edit = false;
 			break;
 		case Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC:
