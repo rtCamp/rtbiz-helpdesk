@@ -11,6 +11,19 @@ rthd_user_edit = rthd_user_edit[0];
 var file_frame_ticket;
 jQuery( document ).ready( function ( $ ) {
 
+	jQuery('.rthd-scroll-up' ).click(function (e){
+		e.preventDefault();
+		$('html, body').animate({ scrollTop: 0 }, 'slow');
+	});
+
+	jQuery(window).scroll(function () {
+		if (jQuery(this).scrollTop() > 500) {
+			jQuery('.rthd-scroll-up').fadeIn();
+		} else {
+			jQuery('.rthd-scroll-up').fadeOut();
+		}
+	});
+
 	function rthd_tinymce_set_content( id, text ) {
 		if( typeof tinymce != "undefined" ) {
 			var editor = tinymce.get( id );

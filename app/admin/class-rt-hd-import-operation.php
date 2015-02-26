@@ -76,6 +76,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		}
 
 		function rt_hd_add_subscriber_email(){
+			global $rt_hd_email_notification;
 			$response = array();
 			$response['status'] = false;
 			if ( ! empty( $_POST['post_id'] ) && ! empty( $_POST['email'] ) ){
@@ -86,6 +87,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 						if ( ! in_array( $user->ID, $ticket_subscribers ) ){
 							$ticket_subscribers[] = $user->ID;
 							update_post_meta( $_POST['post_id'], '_rtbiz_hd_subscribe_to', $ticket_subscribers );
+							$rt_hd_email_notification->notification_ticket_subscribed( $_POST['post_id'], Rt_HD_Module::$post_type, array( 'email' => $user->user_email, 'name' => $user->display_name ) );
 							$response['status'] = true;
 						} else{
 							$response['msg'] = 'Already subscribed.';
@@ -1886,7 +1888,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					$rt_hd_email_notification->notification_ticket_subscribed($post_id, $post_type, $subscriber_info );
 				}
 				else {
-					// Add user to tiket contact list.
+					// Add user to ticket contact list.
 					$user_contact_info = rt_biz_get_contact_by_email( $current_user->user_email );
 
 					rt_biz_connect_post_to_contact( $post_type, $post_id, $user_contact_info );

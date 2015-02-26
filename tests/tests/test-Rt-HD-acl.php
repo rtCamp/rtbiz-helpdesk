@@ -24,6 +24,7 @@ class test_Rt_HD_ACL extends RT_WP_TestCase {
 	 */
 	function  test_register_rt_hd_module() {
 		$tmp = $this->rthdAcl->register_rt_hd_module( array() );
+		$settings               = rthd_get_redux_settings();
 
 		$this->assertEquals(
 			array(
@@ -37,4 +38,3 @@ class test_Rt_HD_ACL extends RT_WP_TestCase {
 			), $tmp['rtbiz-helpdesk'] );
 	}
 }
- 

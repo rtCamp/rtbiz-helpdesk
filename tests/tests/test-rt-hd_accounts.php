@@ -30,11 +30,9 @@ class test_Rt_HD_Accounts extends PHPUnit_Framework_TestCase {
 	function  test_accounts_columns() {
 		global $rt_company;
 		$exp_output = array(
-			'country' => 'Country',
 			'rtbiz_hd_ticket' => 'Ticket',
 		);
 		$this->assertEquals( $exp_output, $this->rthdaccounts->accounts_columns( array(), $rt_company ) );
 	}
 
 }
- 
