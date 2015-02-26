@@ -107,6 +107,8 @@ $user_edit_content = current_user_can( $cap );
 							}
 						?>
 					</select>
+					<input type="hidden" class="rthd-current-user-id" value="<?php echo get_current_user_id(); ?>" />
+					<button type="button" class="btn button rt-hd-assign-me">Assign to me</button>
 					<img id="assignee-change-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 				</div>
 			<?php
@@ -183,7 +185,7 @@ $user_edit_content = current_user_can( $cap );
 			</div>
 			<div class="rt-hd-ticket-info rt-hd-related-ticket">
 					<input type="email" placeholder="email" id="rthd-subscribe-email">
-				<button type="button" class='rthd-subscribe-email-submit'>Add</button>
+				<button type="button" class='rthd-subscribe-email-submit button btn'>Add</button>
 				<span style="display: none;" class="rthd-subscribe-validation" ></span>
 				<img id="rthd-subscribe-email-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 

@@ -433,27 +433,35 @@ jQuery( document ).ready( function ( $ ) {
 	});
 
 	jQuery( '#rthd-assignee-list' ).change(function (e){
+		assgine_request( jQuery('#rthd-assignee-list' ).val() );
+	});
+
+	function assgine_request( userid ){
 		var requestArray = new Object();
 		requestArray['post_id'] =  jQuery('#post-id' ).val();
-		requestArray['post_author'] =  jQuery('#rthd-assignee-list' ).val();
+		requestArray['post_author'] =  userid;
 		requestArray["action"] = "front_end_assignee_change";
 		jQuery('#assignee-change-spinner' ).show();
 		jQuery.ajax( {
-             url: ajaxurl,
-             dataType: "json",
-             type: 'post',
-             data: requestArray,
-             success: function ( data ) {
-	             if (data.status) {
-		            //jQuery( '#rthd-status-visiable' ).html( data.stauts_markup );
-	             }
-	             jQuery('#assignee-change-spinner' ).hide();
-             },
-             error: function(){
-	             jQuery('#assignee-change-spinner' ).hide();
-	             return false;
-             }
-         });
+			             url: ajaxurl,
+			             dataType: "json",
+			             type: 'post',
+			             data: requestArray,
+			             success: function ( data ) {
+				             if (data.status) {
+					             //jQuery( '#rthd-status-visiable' ).html( data.stauts_markup );
+				             }
+				             jQuery('#assignee-change-spinner' ).hide();
+			             },
+			             error: function(){
+				             jQuery('#assignee-change-spinner' ).hide();
+				             return false;
+			             }
+		             });
+	}
+
+	jQuery('.rt-hd-assign-me' ).click(function (e){
+		assgine_request( jQuery('.rthd-current-user-id' ).val() );
 	});
 
 	jQuery( '#rthd-ticket-watch-unwatch' ).click(function (e){
