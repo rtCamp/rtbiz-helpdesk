@@ -94,30 +94,40 @@ if ( ! class_exists( 'Rt_HD_Auto_Respond' ) ) {
                     if ( ! empty( $shifttime ) ){
 
                         // if [ time not empty and off time ] or [ time is empty ]
-                        if ( ( ( -1 != $shifttime['am_start'][ $day ] && -1 != $shifttime['am_end'][ $day ] && -1 != $shifttime['pm_start'][ $day ] && -1 != $shifttime['pm_end'][ $day ] ) && ( ( $hour < $shifttime['am_start'][ $day ] || $hour > $shifttime['am_end'][ $day ] ) && ( $hour < $shifttime['pm_start'][ $day ] || $hour > $shifttime['pm_end'][ $day ] ) ) ) || ( -1 == $shifttime['am_start'][ $day ] && -1 == $shifttime['am_end'][ $day ] && -1 == $shifttime['pm_start'][ $day ] && -1 == $shifttime['pm_end'][ $day ] ) ){
+                        if ( ( ( -1 != $shifttime['am_start'][ $day ] && -1 != $shifttime['am_end'][ $day ] && -1 != $shifttime['pm_start'][ $day ] && -1 != $shifttime['pm_end'][ $day ] ) && ( ( $hour < $shifttime['am_start'][ $day ] || $hour > $shifttime['am_end'][ $day ] ) && ( $hour < $shifttime['pm_start'][ $day ] || $hour > $shifttime['pm_end'][ $day ] ) ) ) || // all time are not empty
+                             ( -1 == $shifttime['am_start'][ $day ] && -1 == $shifttime['am_end'][ $day ] && -1 == $shifttime['pm_start'][ $day ] && -1 == $shifttime['pm_end'][ $day ] ) || // all time are emtpty
+                             ( ( -1 != $shifttime['am_start'][ $day ] && -1 != $shifttime['am_end'][ $day ] && -1 == $shifttime['pm_start'][ $day ] && -1 == $shifttime['pm_end'][ $day ]  ) && ( $hour < $shifttime['am_start'][ $day ] || $hour > $shifttime['am_end'][ $day ] ) ) || // am time is not empty but pm  is time empty
+                             ( ( -1 == $shifttime['am_start'][ $day ] && -1 == $shifttime['am_end'][ $day ] && -1 != $shifttime['pm_start'][ $day ] && -1 != $shifttime['pm_end'][ $day ]  ) && ( $hour < $shifttime['pm_start'][ $day ] || $hour > $shifttime['pm_end'][ $day ] ) ) // am time is empty but pm time is not empty
+                           ){
                             // Get next Working hours
-                            $nextday = ( $hour <= 12 ) ? $day : ( $day + 1 ) ;
-                            $nextday = $this->next_day( $nextday, $shifttime, $isDayShift );
+                            $nextday = ($hour <= 12) ? $day : ($day + 1);
+                            $nextday = $this->next_day($nextday, $shifttime, $isDayShift);
                             //get next staring time
-                            if ( $hour >= 12 ) {
-                                $NextStatingTime = $shifttime['am_start'][ $nextday ];
-                            }else{
-                                $NextStatingTime = $shifttime['pm_start'][ $nextday ];
+
+                            if ( -1 != $shifttime['am_start'][$nextday] ) {
+                                $NextStatingTime = $shifttime['am_start'][$nextday];
+                            } else {
+                                $NextStatingTime = $shifttime['pm_start'][$nextday];
                             }
+
+                            if ( $NextStatingTime < $hour ){
+                                $NextStatingTime = $shifttime['pm_start'][$nextday];
+                            }
+
                             // check nextday is same day or not
-                            if ( ( $nextday == $day && $NextStatingTime < $hour ) || $nextday != $day ){
-                                $nextday = $weekdays[ $nextday ] . ' after ';
+                            if (($nextday == $day && $NextStatingTime < $hour) || $nextday != $day) {
+                                $nextday = $weekdays[$nextday] . ' after ';
                             } else {
                                 $nextday = 'Today after ';
                             }
-                            $nextday .= ( $NextStatingTime > 12 ) ? ( $NextStatingTime- 12 ) . ' PM' : $NextStatingTime . ' AM';
+                            $nextday .= ($NextStatingTime > 12) ? ($NextStatingTime - 12) . ' PM' : $NextStatingTime . ' AM';
                             $placeholder_list['NextStartingHour'] = $nextday;
 
-                            foreach ( $placeholder_list as $key => $value ){
-                                $comment_content = str_replace( '{' . $key . '}', $value, $comment_content );
+                            foreach ($placeholder_list as $key => $value) {
+                                $comment_content = str_replace('{' . $key . '}', $value, $comment_content);
                             }
 
-                            $rt_hd_import_operation->insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, array(), array(), array(), '', '', '', array(), '', Rt_HD_Import_Operation::$FOLLOWUP_BOT, 0, true );
+                            $rt_hd_import_operation->insert_post_comment($comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, array(), array(), array(), '', '', '', array(), '', Rt_HD_Import_Operation::$FOLLOWUP_BOT, 0, true);
                         }
                     }
                 }
