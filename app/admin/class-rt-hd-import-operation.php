@@ -1043,7 +1043,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 */
 		public function check_duplicate_comment( $comment_post_ID, $comment_date, $comment_content, $comment_content_old ) {
 			global $wpdb;
-			$sql    = "select * from $wpdb->comments where  comment_post_id=%d  and comment_date between subtime(%s,'00:10:00') and addtime(%s,'00:10:00')";
+			//todo : 00:00:00 replace with 00:10:00 before live the chanages
+			$sql    = "select * from $wpdb->comments where  comment_post_id=%d  and comment_date between subtime(%s,'00:00:00') and addtime(%s,'00:00:00')";
 			$sql    = $wpdb->prepare( $sql, $comment_post_ID, $comment_date, $comment_date );
 			$result = $wpdb->get_results( $sql );
 			global $signature;
