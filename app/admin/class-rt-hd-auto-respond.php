@@ -46,9 +46,16 @@ if ( ! class_exists( 'Rt_HD_Auto_Respond' ) ) {
                 $d               = new DateTime( $post_date );
                 $UTC             = new DateTimeZone( 'UTC' );
                 $d->setTimezone( $UTC );
+                $commenttime    = gmdate( 'Y-m-d H:i:s', $d->getTimestamp() );
                 $timeStamp      = intval( $d->getTimestamp() ) + ( get_option( 'gmt_offset' ) * 3600 );
                 $day = date( 'N', $timeStamp ) - 1; // date returns 1 for monday & 7 for  sunday
                 $hour = date( 'H', $timeStamp );
+
+                $userid = get_post_field( 'post_author', $comment_post_ID ); //post author
+                $comment_author = 'Helpdesk Bot';
+                $comment_author_email = '';
+                $comment_content = rthd_get_auto_respond_message();
+
                 if ( $isDayShift ){
                     $shifttime = array();
                     $shifttime['start'] = isset( $redux['rthd_dayshift_time_start']) ? $redux['rthd_dayshift_time_start'] : array( 0 => -1 , 1 => -1, 2 => -1, 3 => -1, 4 => -1, 5 => -1, 6 => -1 );
@@ -70,14 +77,9 @@ if ( ! class_exists( 'Rt_HD_Auto_Respond' ) ) {
                             $nextday .= ( $NextStatingTime > 12 ) ? ( $NextStatingTime- 12 ) . ' PM' : $NextStatingTime . ' AM';
                             $placeholder_list['NextStartingHour'] = $nextday;
 
-                            $userid = get_post_field( 'post_author', $comment_post_ID ); //post author
-                            $comment_content = rthd_get_auto_respond_message();
                             foreach ( $placeholder_list as $key => $value ){
                                 $comment_content = str_replace( '{' . $key . '}', $value, $comment_content );
                             }
-                            $comment_author = 'Helpdesk Bot';
-                            $comment_author_email = '';
-                            $commenttime = current_time( 'mysql', 1 );
 
                             $rt_hd_import_operation->insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, array(), array(), array(), '', '', '', array(), '', Rt_HD_Import_Operation::$FOLLOWUP_BOT, 0, true );
 
@@ -111,14 +113,9 @@ if ( ! class_exists( 'Rt_HD_Auto_Respond' ) ) {
                             $nextday .= ( $NextStatingTime > 12 ) ? ( $NextStatingTime- 12 ) . ' PM' : $NextStatingTime . ' AM';
                             $placeholder_list['NextStartingHour'] = $nextday;
 
-                            $userid = get_post_field( 'post_author', $comment_post_ID ); //post author
-                            $comment_content = rthd_get_auto_respond_message();
                             foreach ( $placeholder_list as $key => $value ){
                                 $comment_content = str_replace( '{' . $key . '}', $value, $comment_content );
                             }
-                            $comment_author = 'Helpdesk Bot';
-                            $comment_author_email = '';
-                            $commenttime = current_time( 'mysql', 1 );
 
                             $rt_hd_import_operation->insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, array(), array(), array(), '', '', '', array(), '', Rt_HD_Import_Operation::$FOLLOWUP_BOT, 0, true );
                         }
