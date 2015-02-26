@@ -1404,6 +1404,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			}
 			$user_edit = current_user_can( $cap ) || ( get_current_user_id() == $userid );
 			$returnArray['comment_content'] = rthd_render_comment( get_comment( $comment_ID ), $user_edit, $comment_render_type, false );
+//			$returnArray['assgin_value'] =
 			echo json_encode( $returnArray );
 			ob_end_flush();
 			die( 0 );

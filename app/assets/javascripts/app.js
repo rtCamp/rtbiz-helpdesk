@@ -101,6 +101,7 @@ jQuery( document ).ready( function ( $ ) {
 		if ( ! validateEmail(email)){
 			jQuery('.rthd-subscribe-validation' ).show();
 			jQuery('.rthd-subscribe-validation' ).html('Invalid Email');
+			return ;
 		}
 		var requestArray = new Object();
 		requestArray['action'] = 'rt_hd_add_subscriber_email';
