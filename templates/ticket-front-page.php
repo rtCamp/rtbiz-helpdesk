@@ -107,8 +107,12 @@ $user_edit_content = current_user_can( $cap );
 							}
 						?>
 					</select>
-					<input type="hidden" class="rthd-current-user-id" value="<?php echo get_current_user_id(); ?>" />
-					<button type="button" class="btn button rt-hd-assign-me">Assign to me</button>
+					<?php
+					if ( $post->post_author != get_current_user_id() ){ ?>
+						<input type="hidden" class="rthd-current-user-id" value="<?php echo get_current_user_id(); ?>" />
+						<button type="button" class="btn button rt-hd-assign-me"><?php _e( 'Assign to me' ); ?></button>
+					<?php }
+					?>
 					<img id="assignee-change-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 				</div>
 			<?php
