@@ -208,16 +208,16 @@ li.toplevel_page_hd-dashboard a:active {
 #mail_folder_container li.folder_item {
 
 }
-#rthd-respond tr td {
+#rthd-response tr td {
   	padding: 6px;
 }
-#rthd-respond tr th {
+#rthd-response tr th {
 	text-align: center;
 }
-#rthd-respond .rthd-dayshift-error {
+#rthd-response .rthd-dayshift-error {
 	display: none;
 }
-#rthd-respond td.error {
+#rthd-response td.error {
 	color: #cd0a0a;
 }
 /* Large Screens min-width 1025px */

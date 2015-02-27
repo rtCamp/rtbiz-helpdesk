@@ -564,22 +564,22 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					),
 
 					array(
-						'id'       => 'rthd_enable_auto_respond',
+						'id'       => 'rthd_enable_auto_response',
 						'type'     => 'switch',
-						'title'    => __( 'Enable auto respond' ),
-						'subtitle' => __( 'To enable/disable auto respond feature' ),
+						'title'    => __( 'Enable auto response' ),
+						'subtitle' => __( 'To enable/disable auto response feature' ),
 						'default'  => false,
 						'on'       => __( 'Enable' ),
 						'off'      => __( 'Disable' ),
 					),
 					array(
-						'id'       => 'section-auto-respond-start',
+						'id'       => 'section-auto-response-start',
 						'type'     => 'section',
 						'indent'   => true, // Indent all options below until the next 'section' option is set.
-						'required' => array( 'rthd_enable_auto_respond', '=', 1 ),
+						'required' => array( 'rthd_enable_auto_response', '=', 1 ),
 					),
 					array(
-						'id'       => 'rthd_enable_auto_respond_mode',
+						'id'       => 'rthd_enable_auto_response_mode',
 						'type'     => 'switch',
 						'title'    => __( 'Select working shift' ),
 						'subtitle' => __( 'Day shift / Day-Night Shift' ),
@@ -588,52 +588,52 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'off'      => __( 'Day-Night Shift' ),
 					),
 					array(
-						'id'       => 'section-auto-respond-dayshift-start',
+						'id'       => 'section-auto-response-dayshift-start',
 						'type'     => 'section',
 						'indent'   => true, //Indent all options below until the next 'section' option is set.
-						'required' => array( array( 'rthd_enable_auto_respond_mode', '=', 1 ), array( 'rthd_enable_auto_respond', '=', 1 ) ),
+						'required' => array( array( 'rthd_enable_auto_response_mode', '=', 1 ), array( 'rthd_enable_auto_response', '=', 1 ) ),
 					),
 					array(
-						'id'      => 'rthd_auto_respond_dayshift_time',
+						'id'      => 'rthd_auto_response_dayshift_time',
 						'type'    => 'callback',
 						'title'   => __( 'Configure Weekdays for dayshift' ),
 						'subtitle' => __( 'Add hours of operation' ),
 						'desc'    => '',
-						'callback' => 'rthd_auto_respond_dayshift_view',
+						'callback' => 'rthd_auto_response_dayshift_view',
 					),
 					array(
-						'id'     => 'section-auto-respond-dayshift-end',
+						'id'     => 'section-auto-response-dayshift-end',
 						'type'   => 'section',
 						'indent' => false,
 					),
 					array(
-						'id'       => 'section-auto-respond-nightshift-start',
+						'id'       => 'section-auto-response-nightshift-start',
 						'type'     => 'section',
 						'indent'   => true, //Indent all options below until the next 'section' option is set.
-						'required' => array( array( 'rthd_enable_auto_respond_mode', '=', 0 ), array( 'rthd_enable_auto_respond', '=', 1 ) ),
+						'required' => array( array( 'rthd_enable_auto_response_mode', '=', 0 ), array( 'rthd_enable_auto_response', '=', 1 ) ),
 					),
 					array(
-						'id'      => 'rthd_auto_respond_nightshift_time',
+						'id'      => 'rthd_auto_response_nightshift_time',
 						'type'    => 'callback',
 						'title'   => __( 'Configure Weekdays for nightshift' ),
 						'subtitle' => __( 'Add hours of operation' ),
 						'desc'    => '',
-						'callback' => 'rthd_auto_respond_daynightshift_view',
+						'callback' => 'rthd_auto_response_daynightshift_view',
 					),
 					array(
-							'id'     => 'section-auto-respond-nightshift-end',
+							'id'     => 'section-auto-response-nightshift-end',
 							'type'   => 'section',
 							'indent' => false,
 					),
 					array(
-						'id'           => 'rthd_auto_respond_message',
+						'id'           => 'rthd_auto_response_message',
 						'type'         => 'textarea',
-						'title'        => __( 'Auto respond message' ),
-						'subtitle'     => __( 'Add here auto respond message' ),
+						'title'        => __( 'Auto response message' ),
+						'subtitle'     => __( 'Add here auto response message' ),
 						'desc'         => esc_attr( 'You can add email message here that will be send into followup when your team are offline, Allowed tags are <a> <br> <em> <strong>. ' ) . 'Use <b>{NextStartingHour}</b> to get next working hours like <b>`Today after 10 pm` or `Monday after 9 AM`</b>',
 						'validate'     => 'html_custom',
 						'default'      => esc_attr( '' ),
-						'required' => array( 'rthd_enable_auto_respond', '=', 1 ),
+						'required' => array( 'rthd_enable_auto_response', '=', 1 ),
 						'allowed_html' => array(
 							'a'      => array(
 								'href'  => array(),
@@ -646,7 +646,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					),
 
 					array(
-						'id'     => 'section-auto-respond-end',
+						'id'     => 'section-auto-response-end',
 						'type'   => 'section',
 						'indent' => false,
 					),

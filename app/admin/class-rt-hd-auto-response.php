@@ -6,11 +6,11 @@
  * Time: 4:13 PM
  */
 
-if ( ! class_exists( 'Rt_HD_Auto_Respond' ) ) {
+if ( ! class_exists( 'Rt_HD_Auto_Response' ) ) {
     /**
-     * Class Rt_HD_Auto_Respond
+     * Class Rt_HD_Auto_Response
      */
-    class Rt_HD_Auto_Respond {
+    class Rt_HD_Auto_Response {
 
         /**
          * Constructor
@@ -25,24 +25,24 @@ if ( ! class_exists( 'Rt_HD_Auto_Respond' ) ) {
          * @since rt-Helpdesk 1.1
          */
         function hooks() {
-            add_action( 'rt_hd_auto_respond', array( $this, 'auto_respond' ), 10, 2 );
+            add_action( 'rt_hd_auto_response', array( $this, 'auto_response' ), 10, 2 );
         }
 
         /**
-         * auto respond functionality : add auto followup when ticket or followup created
+         * auto response functionality : add auto followup when ticket or followup created
          *
          * @param $comment_post_ID
          * @param $post_date
          */
-        function  auto_respond( $comment_post_ID, $post_date ){
+        function  auto_response( $comment_post_ID, $post_date ){
             global $rt_hd_import_operation;
             $redux = rthd_get_redux_settings();
-            $isEnableAutoRespond = ( isset( $redux['rthd_enable_auto_respond']) && $redux['rthd_enable_auto_respond'] == 1 ) ;
-            $isDayShift = ( isset( $redux['rthd_enable_auto_respond_mode']) && $redux['rthd_enable_auto_respond_mode'] == 1 ) ;
+            $isEnableAutoResponse = ( isset( $redux['rthd_enable_auto_response']) && $redux['rthd_enable_auto_response'] == 1 ) ;
+            $isDayShift = ( isset( $redux['rthd_enable_auto_response_mode']) && $redux['rthd_enable_auto_response_mode'] == 1 ) ;
             $weekdays = array( 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday' );
             $placeholder_list = array();
 
-            if ( $isEnableAutoRespond ){
+            if ( $isEnableAutoResponse ){
                 $d               = new DateTime( $post_date );
                 $UTC             = new DateTimeZone( 'UTC' );
                 $d->setTimezone( $UTC );
@@ -54,7 +54,7 @@ if ( ! class_exists( 'Rt_HD_Auto_Respond' ) ) {
                 $userid = get_post_field( 'post_author', $comment_post_ID ); //post author
                 $comment_author = 'Helpdesk Bot';
                 $comment_author_email = '';
-                $comment_content = rthd_get_auto_respond_message();
+                $comment_content = rthd_get_auto_response_message();
 
                 if ( $isDayShift ){
                     $shifttime = array();
@@ -177,7 +177,7 @@ if ( ! class_exists( 'Rt_HD_Auto_Respond' ) ) {
             $shifttime['start'] = isset( $redux['rthd_dayshift_time_start']) ? $redux['rthd_dayshift_time_start'] : array( 0 => -1 , 1 => -1, 2 => -1, 3 => -1, 4 => -1, 5 => -1, 6 => -1 );
             $shifttime['end'] = isset( $redux['rthd_dayshift_time_end']) ? $redux['rthd_dayshift_time_end'] : array( 0 => -1 , 1 => -1, 2 => -1, 3 => -1, 4 => -1, 5 => -1, 6 => -1 );
             $weekdays = array( 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday' ); ?>
-            <table id="rthd-respond">
+            <table id="rthd-response">
                 <tbody>
                 <?php foreach ( $weekdays as $key => $weekday ) : ?>
                     <tr class="rthd-dayshift-info">
@@ -278,7 +278,7 @@ if ( ! class_exists( 'Rt_HD_Auto_Respond' ) ) {
             $shifttime['pm_end'] = isset( $redux['rthd_daynight_pm_time_end']) ? $redux['rthd_daynight_pm_time_end'] : array( 0 => -1 , 1 => -1, 2 => -1, 3 => -1, 4 => -1, 5 => -1, 6 => -1 );
 
             $weekdays = array( 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday' ); ?>
-            <table id="rthd-respond">
+            <table id="rthd-response">
                 <tbody>
                 <tr>
                     <th>&nbsp;</th>

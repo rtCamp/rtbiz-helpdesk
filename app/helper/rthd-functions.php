@@ -496,10 +496,10 @@ function rthd_get_email_signature_settings(){
 	return '';
 }
 
-function rthd_get_auto_respond_message(){
+function rthd_get_auto_response_message(){
 	$redux = rthd_get_redux_settings();
-	if ( isset( $redux['rthd_enable_auto_respond'] ) && 1 == $redux['rthd_enable_auto_respond'] && isset( $redux['rthd_auto_respond_message'] ) ) {
-		return $redux['rthd_auto_respond_message'];
+	if ( isset( $redux['rthd_enable_auto_response'] ) && 1 == $redux['rthd_enable_auto_response'] && isset( $redux['rthd_auto_response_message'] ) ) {
+		return $redux['rthd_auto_response_message'];
 	}
 	return '';
 }
@@ -1160,17 +1160,17 @@ function rthd_is_ticket_subscriber( $post_id ) {
 /**
  * Display settings for setup weekdays and hours operation for day shift.
  */
-function rthd_auto_respond_dayshift_view() {
-	global $rt_hd_auto_respond;
-	return $rt_hd_auto_respond->setting_dayshift_ui();
+function rthd_auto_response_dayshift_view() {
+	global $rt_hd_auto_response;
+	return $rt_hd_auto_response->setting_dayshift_ui();
 }
 
 /**
  * Display settings for setup weekdays and hours operation for night shift.
  */
-function rthd_auto_respond_daynightshift_view() {
-	global $rt_hd_auto_respond;
-	return $rt_hd_auto_respond->setting_daynightshift_ui();
+function rthd_auto_response_daynightshift_view() {
+	global $rt_hd_auto_response;
+	return $rt_hd_auto_response->setting_daynightshift_ui();
 }
 
 function rthd_filter_emails( $allemails ){
