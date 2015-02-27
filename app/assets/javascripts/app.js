@@ -115,6 +115,7 @@ jQuery( document ).ready( function ( $ ) {
 			             data: requestArray,
 			             success: function ( data ) {
 								if ( data.status ){
+									jQuery('.rthd-subscribe-validation' ).show();
 									jQuery('.rthd-subscribe-validation' ).text('Success!');
 								}
 				                else{
