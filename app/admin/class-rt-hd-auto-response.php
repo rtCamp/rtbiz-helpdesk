@@ -335,60 +335,71 @@ if ( ! class_exists( 'Rt_HD_Auto_Response' ) ) {
             </table>
 
             <script type="text/javascript">
-                /*jQuery( document ).ready( function() {
+                jQuery(document).ready(function () {
 
-                 function time_valiation( $tr_parent ) {
-                 var starting_val = $tr_parent.find( '.weekday_time_from' ).val();
-                 var ending_val = $tr_parent.find( '.weekday_time_to' ).val();
-                 console.log(starting_val);
-                 console.log(ending_val);
+                    function time_valiation($tr_parent) {
+                        var starting_am_val = $tr_parent.find('.rthd-daynigt-am-time-start').val();
+                        var ending_am_val = $tr_parent.find('.rthd-daynigt-am-time-end').val();
+                        var starting_pm_val = $tr_parent.find('.rthd-daynigt-pm-time-start').val();
+                        var ending_pm_val = $tr_parent.find('.rthd-daynigt-pm-time-end').val();
 
-                 if( starting_val != '' && ending_val != '' && parseInt( ending_val ) <= parseInt( starting_val ) ) {
-                 jQuery( $tr_parent ).next('tr').show().find( 'td:last' ).html( 'Please select `Ending` time greater than `Starting` time or `Starting time less than `Ending` time.' );
-                 return false;
-                 }
-                 else {
-                 jQuery( $tr_parent ).next('tr').hide();
-                 return true;
-                 }
+                        if ( starting_am_val == -1 && ending_am_val == -1 ){
+                            jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.am-time-error').html('');
+                        } else {
+                            if ( starting_am_val == -1 || ending_am_val == -1 ){
+                                jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.am-time-error').html('Please select `Starting` or `Ending` For AM');
+                                return false;
+                            }else if( parseInt( ending_am_val ) <= parseInt( starting_am_val ) ){
+                                jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.am-time-error').html('Starting Time should be less then ending time');
+                                return false;
+                            }else {
+                                jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.am-time-error').html('');
+                            }
 
-                 }
-                 jQuery( '.weekday_time_to' ).change( function() {
-                 time_valiation( jQuery( this ).parent().parent() );
-                 });
-                 jQuery( '.weekday_time_from' ).change( function() {
-                 time_valiation( jQuery( this ).parent().parent() );
-                 });
-                 jQuery( '#redux-form-wrapper' ).submit( function() {
-                 var flag = true;
+                        }
 
-                 for( var i = 0; i < 7; i++ ) {
-                 var from_val = jQuery( '.weekday_time_from' ).eq( i ).val();
-                 var to_val = jQuery( '.weekday_time_to' ).eq( i ).val();
+                        if ( starting_pm_val == -1 && ending_pm_val == -1 ){
+                            jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.am-time-error').html('');
+                        }else{
+                            if ( starting_pm_val == -1 || ending_pm_val == -1 ){
+                                jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.pm-time-error').html('Please select `Starting` or `Ending` For PM');
+                                return false;
+                            }else if( parseInt( ending_pm_val ) <= parseInt( starting_pm_val )  ){
+                                jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.am-time-error').html('Starting Time should be less then ending time');
+                                return false;
+                            }else{
+                                jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.am-time-error').html('');
+                            }
+                        }
+                    }
 
-                 if( from_val != '' && to_val != '' ) {
-                 if( jQuery( '.weekday_time_from' ).eq( i ).change == false ) {
-                 flag = false;
-                 }
-                 }
-                 else if( from_val != '' && to_val == '' ) {
-                 jQuery( '.weekday_time_to' ).eq( i ).parent().parent().next('tr').show().find( 'td:last' ).html( 'Please select `Ending` time.' );
-                 flag = false;
-                 }
-                 else if( from_val == '' && to_val != '' ) {
-                 jQuery( '.weekday_time_to' ).eq( i ).parent().parent().next('tr').show().find( 'td:last' ).html( 'Please select `Starting` time.' );
-                 flag = false;
-                 }
-                 }
+                    jQuery('.rthd-daynigt-am-time-start').change(function () {
+                        time_valiation(jQuery(this).parent().parent());
+                    });
+                    jQuery('.rthd-daynigt-am-time-end').change(function () {
+                        time_valiation(jQuery(this).parent().parent());
+                    });
+                    jQuery('.rthd-daynigt-pm-time-start').change(function () {
+                        time_valiation(jQuery(this).parent().parent());
+                    });
+                    jQuery('.rthd-daynigt-pm-time-end').change(function () {
+                        time_valiation(jQuery(this).parent().parent());
+                    });
+                    jQuery('#redux-form-wrapper').submit(function () {
+                        var flag = true;
 
-                 if( ! flag ) {
-                 return false;
-                 }
-                 else {
-                 return true;
-                 }
-                 });
-                 });*/
+                        for (var i = 0; i < 7; i++) {
+                            if ( ! time_valiation( jQuery('.rthd-daynigt-am-time-start').eq(i).parent().parent() ) ){
+                                flag = false;
+                            }
+
+                            if ( ! time_valiation( jQuery('.rthd-daynigt-pm-time-start').eq(i).parent().parent() ) ){
+                                flag = false;
+                            }
+                        }
+                        return flag;
+                    });
+                });
             </script>
         <?php
         }
