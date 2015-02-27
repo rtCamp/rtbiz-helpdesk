@@ -100,7 +100,7 @@ if ( ! class_exists( 'Rt_HD_Auto_Respond' ) ) {
                              ( ( -1 == $shifttime['am_start'][ $day ] && -1 == $shifttime['am_end'][ $day ] && -1 != $shifttime['pm_start'][ $day ] && -1 != $shifttime['pm_end'][ $day ]  ) && ( $hour < $shifttime['pm_start'][ $day ] || $hour > $shifttime['pm_end'][ $day ] ) ) // am time is empty but pm time is not empty
                            ){
                             // Get next Working hours
-                            $nextday = ($hour <= 12) ? $day : ($day + 1);
+                            $nextday = ($hour < 12) ? $day : ($day + 1);
                             $nextday = $this->next_day($nextday, $shifttime, $isDayShift);
                             //get next staring time
 
