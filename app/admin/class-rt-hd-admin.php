@@ -109,7 +109,7 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 			}
 
 			wp_enqueue_script( 'rthd_setting_js', RT_HD_URL . 'app/assets/javascripts/rt-custom-status.js', RT_HD_VERSION, true );
-			add_action( 'admin_enqueue_scripts', array( $this, 'localize_scripts' ) );
+			$this->localize_scripts();
 		}
 
 		/**
