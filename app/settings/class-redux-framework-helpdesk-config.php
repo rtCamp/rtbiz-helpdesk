@@ -191,8 +191,8 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					'id'       => 'rthd_support_page',
 					'type'     => 'select',
 					'data'     => 'pages',
-					'title'    => __( 'Support Page' ),
-					'desc'     => __( 'Add <strong>[rt_hd_support_form]</strong> shortcode to add support from to a page and select this page in the drop down. This page will then be used to handle new support requests from front-end.' ),
+					'title'    => __( 'Support Form' ),
+					'desc'     => __( 'Add <strong>[rt_hd_support_form]</strong> shortcode to add support form to a page and select this page in the drop down. This page will then be used to handle new support requests from front-end.' ),
 					'subtitle' => __( 'Select Page for Product Support' ),
 				),
 				array(
