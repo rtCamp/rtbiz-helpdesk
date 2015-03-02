@@ -454,7 +454,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 				'chart_type'  => 'line',
 				'data_source' => $data_source,
 				'dom_element' => 'rthd_hd_line_daily_tickets',
-				'options'     => array( 'title' => __( 'Daily Tickets', RT_HD_TEXT_DOMAIN ), ),
+				'options'     => array( 'title' => __( 'Daily Tickets', RT_HD_TEXT_DOMAIN ), 'vAxisMin' => 0 ),
 			);
 
 			?>
