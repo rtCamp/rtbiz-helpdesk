@@ -342,35 +342,41 @@ if ( ! class_exists( 'Rt_HD_Auto_Response' ) ) {
                         var ending_am_val = $tr_parent.find('.rthd-daynigt-am-time-end').val();
                         var starting_pm_val = $tr_parent.find('.rthd-daynigt-pm-time-start').val();
                         var ending_pm_val = $tr_parent.find('.rthd-daynigt-pm-time-end').val();
-
+                        var flag = true;
                         if ( starting_am_val == -1 && ending_am_val == -1 ){
                             jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.am-time-error').html('');
                         } else {
                             if ( starting_am_val == -1 || ending_am_val == -1 ){
+                                console.log("1");
                                 jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.am-time-error').html('Please select `Starting` or `Ending` For AM');
-                                return false;
-                            }else if( parseInt( ending_am_val ) <= parseInt( starting_am_val ) ){
+                                flag = false;
+                            } else if( parseInt( ending_am_val ) <= parseInt( starting_am_val ) ){
+                                console.log("2");
                                 jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.am-time-error').html('Starting Time should be less then ending time');
-                                return false;
+                                flag = false;
                             }else {
+                                console.log("3");
                                 jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.am-time-error').html('');
                             }
-
                         }
 
                         if ( starting_pm_val == -1 && ending_pm_val == -1 ){
                             jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.am-time-error').html('');
                         }else{
                             if ( starting_pm_val == -1 || ending_pm_val == -1 ){
+                                console.log("4");
                                 jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.pm-time-error').html('Please select `Starting` or `Ending` For PM');
-                                return false;
+                                flag = false;
                             }else if( parseInt( ending_pm_val ) <= parseInt( starting_pm_val )  ){
-                                jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.am-time-error').html('Starting Time should be less then ending time');
-                                return false;
+                                console.log("5");
+                                jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.pm-time-error').html('Starting Time should be less then ending time');
+                                flag = false;
                             }else{
-                                jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.am-time-error').html('');
+                                console.log("6");
+                                jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.pm-time-error').html('');
                             }
                         }
+                        return flag;
                     }
 
                     jQuery('.rthd-daynigt-am-time-start').change(function () {
