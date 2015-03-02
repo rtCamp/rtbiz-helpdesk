@@ -548,8 +548,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					array(
 						'id'       => 'rthd_auto_assign_events',
 						'title'    => __( 'Event for auto assign' ),
-						'subtitle' => __( '' ),
-						'desc'     => __( '' ),
 						'default'  => 'on_first_followup',
 						'type'     => 'radio',
 						'options' => array(
