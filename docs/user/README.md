@@ -10,7 +10,8 @@ The manual covers the step-by-step guide to set up thus Helpdesk plugin; introdu
 
 #### Are their any prerequisites before reading this manual?
 Yes. Since rtBiz Helpdesk is based on the rtBiz Plugin for contacts and Access control related operations so a quick read of that can help you to set up better.
-</br>You can read about rtBiz here **[LINK]**
+
+You can read about rtBiz here **[LINK]**
 
 #### What level of Wordpress knowldege is needed to work with this manual?
 Only moderate level of WordPress knowledge is needed. The manual aims to be as simple as possible.

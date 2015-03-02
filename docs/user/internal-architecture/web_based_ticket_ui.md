@@ -1,9 +1,14 @@
 # Web Based Ticket UI
 
     Screesnhots with Numbered areas
-'*' indicates the feature is visible only the staff and not the customer. 
 
-#### A. Ticket Content Area
+
+ ####  A. Ticket Content Area
+ ***
+
+'*' indicates the feature is visible only the staff and not the customer.
+
+
 
 1. Ticket Title - A combination of the unique ID genearted for each ticket and the request subject set by the ticket author.
 
@@ -51,5 +56,5 @@
 21. Add Follow-up Button - Button to add the follow-up to the ticket.
 
 ### Ticket Visibility for a Customer
-For a customer not all the features listed above will be visible.
+For a customer not all the features listed above will be visible. The
 
