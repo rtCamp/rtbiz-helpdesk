@@ -1,13 +1,13 @@
 # Web Based Ticket UI
 
-    Screesnhots with Numbered areas
+Below is the screenshot of how a ticket looks on the front end.
+
+![Ticket UI](https://cloud.githubusercontent.com/assets/9676513/6439931/1e39f724-c0fe-11e4-8279-52f04a7ac460.jpg)
 
 
  ####  A. Ticket Content Area
- ***
 
 '*' indicates the feature is visible only the staff and not the customer.
-
 
 
 1. Ticket Title - A combination of the unique ID genearted for each ticket and the request subject set by the ticket author.
@@ -46,6 +46,7 @@
 
 17. Ticket History - List of all the tickets that the customer has created in the Helpdesk. Order status is mentioned alngside the ticket title.
 #### D. Ticket Reply Area
+![Ticket reply area](https://cloud.githubusercontent.com/assets/9676513/6439933/217fb41e-c0fe-11e4-9401-42173fc20745.jpg)
 
 18. WYSIWYG editor - Used by customer and staff to format their reply content. Real handly when staff wants to share code snippets.
 
@@ -55,6 +56,10 @@
 
 21. Add Follow-up Button - Button to add the follow-up to the ticket.
 
-### Ticket Visibility for a Customer
-For a customer not all the features listed above will be visible. The
+22. Keep Unanswered* - This option appears for staff to keep a ticket Unanswered, post reply.
 
+
+### Ticket Visibility for a Customer
+For a customer not all the features listed above will be visible. The items marked with asterisk are not visible to customers.
+
+These marked featured are meant for the staff memebers, enabling them to get all the customer information at one place. This will reduce their number of visits to WordPress dashboard.

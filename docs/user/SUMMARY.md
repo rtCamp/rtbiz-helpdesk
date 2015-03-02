@@ -1,7 +1,7 @@
 # Summary
 
 * [Introduction](README.md)
-   * [Gloassary](gloassary.md)
+   * [Glossary](gloassary.md)
 * [Installation](entity/index.md)
 * [Settings ](mailbox/index.md)
    * [General](mailbox/general.md)
@@ -18,6 +18,7 @@
    * [Ticket Creation ](internal-architecture/ticket_creation.md)
    * [Ticket Workflow](internal-architecture/ticket_workflow.md)
    * [Web Based Ticket UI](internal-architecture/web_based_ticket_ui.md)
+   * [Ticket Admin UI](internal-architecture/ticket_admin_ui.md)
 * [Staff and Roles](contribute/index.md)
 * [Notification Mails ](notification_mails/README.md)
 * [Reports](reports/README.md)

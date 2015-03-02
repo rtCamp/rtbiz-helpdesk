@@ -1,4 +1,4 @@
-# Gloassary
+# Glossary
 
 
 Below are the terms that will be used across this manaul.
@@ -41,7 +41,7 @@ Below are the terms that will be used across this manaul.
 
 17. ** Support Page ** - A page with support form setup using the hdeldesk short code. This form by customer to send support queries.
 
-18. ** Notification templates ** - Prdefined text to be used in notifications mails. 
+18. ** Notification templates ** - Prdefined text to be used in notifications mails.
 
 
 
