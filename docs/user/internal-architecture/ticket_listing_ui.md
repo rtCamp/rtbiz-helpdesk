@@ -32,12 +32,18 @@ Here is a screenshot of a sample ticket listing.
 13. Select Columns - The list columns are user-specific. This means a user can select the columns by  checking the boxes in the screenoptions. ** [Screenshot] **
 
 ### B. Sorting and Filters
-1. All
+1. All -
+
 2. Status filters
+
 3. My tickets
+
 4. Filter by Date
+
 5. Filter by Status
+
 6. Filter by Assignee
+
 7. Filter by Product
 
 ### C. Ticket Editing
@@ -46,7 +52,10 @@ Here is a screenshot of a sample ticket listing.
 2. Bulk edit - Use this to bulk edit more than one ticket in one go. ** [Screenshot] **
 
 ### D. View Options
+
 1. List View
+
 2. See Ticket Content in List View
+
 3. Pagination
 

@@ -1,9 +1,9 @@
 # Ticket Admin UI
-The ticket backend of ticket follows WordPress posts' native behaviour and UI. 'Ticket' is basically a CPT.
+The ticket backend of ticket follows WordPress posts' native behaviour and UI. 'Ticket' is basically a custom post type.
 
 1. Ticket Title - A combination of the unique ID genearted for each ticket and the request subject set by the ticket author.
 
-2. Ticket Permalink
+2. Ticket Permalink -
 
 3. Ticket Content
 
