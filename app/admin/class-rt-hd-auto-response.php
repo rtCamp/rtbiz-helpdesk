@@ -114,7 +114,7 @@ if ( ! class_exists( 'Rt_HD_Auto_Response' ) ) {
                                 $NextStatingTime = $shifttime['pm_start'][$nextday];
                             }
 
-                            if ( $NextStatingTime < $hour ){
+                            if ( $NextStatingTime < $hour && $nextday == $day ){
                                 $NextStatingTime = $shifttime['pm_start'][$nextday];
                             }
 
