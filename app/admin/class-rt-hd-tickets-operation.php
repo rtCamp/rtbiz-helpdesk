@@ -25,6 +25,28 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 		 */
 		public function __construct() {
 			add_action( 'transition_post_status', array( $this, 'ticket_status_changed' ), 10, 3 );
+			add_action( 'rt_hd_before_send_notification', array( $this,'rt_hd_before_send_notification'),10 );
+			add_action( 'rt_hd_process_' . Rt_HD_Module::$post_type . '_meta', array( $this,'rt_hd_before_send_notification'),20 );
+		}
+
+		/**
+		 * @param $postid
+		 * @param $post
+		 */
+		function rt_hd_before_send_notification( $postid, $post ){
+			if ( isset( $_POST['tax_input'] ) && isset( $_POST['tax_input'][ Rt_Offerings::$offering_slug ] ) ) {
+				$terms = wp_get_post_terms( $postid, Rt_Offerings::$offering_slug );
+				$default_assignee = null;
+				if ( ! empty( $terms ) && count( $terms ) == 1 ){
+					$default_assignee = get_offering_meta( 'default_assignee', $terms[0]->term_id );
+				}else{
+					$settings = rthd_get_redux_settings();
+					$default_assignee = $settings['rthd_default_user'];
+				}
+				if( $post->post_author != $default_assignee ){
+					wp_update_post( array( 'post_author' => $default_assignee ) );
+				}
+			}
 		}
 
 		function ticket_status_changed( $new_status, $old_status, $post ){

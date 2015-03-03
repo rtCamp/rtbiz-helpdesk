@@ -1213,8 +1213,39 @@ function rt_hd_check_email_blacklisted( $testemail ){
 	return false;
 }
 
+/**
+ * get mailbox reading is enable or disable
+ * @return bool
+ */
 function rthd_is_enable_mailbox_reading(){
 	$redux = rthd_get_redux_settings();
 	$flag = ( isset( $redux['rthd_enable_mailbox_reading']) && $redux['rthd_enable_mailbox_reading'] == 1 );
 	return $flag;
+}
+
+/**
+ * get meta value for offering
+ * @param $key
+ * @param string $term_id
+ * @return bool|mixed
+ */
+function get_offering_meta( $key, $term_id = '' ){
+
+	if ( empty( $term_id ) && isset( $_GET['tag_ID'] ) ){
+		$term_id = $_GET['tag_ID'];
+	}
+
+	if ( empty( $term_id ) ) {
+		return false;
+	}
+
+	$term_meta = Rt_Lib_Taxonomy_Metadata\get_term_meta( $term_id, Rt_Offerings::$offering_slug   . '-meta', true );
+	if ( ! empty( $term_meta ) ) {
+		if ( ! empty( $key ) ) {
+			return isset( $term_meta[ $key ] ) ? $term_meta[ $key ] : false;
+		} else {
+			return $term_meta;
+		}
+	}
+	return false;
 }
