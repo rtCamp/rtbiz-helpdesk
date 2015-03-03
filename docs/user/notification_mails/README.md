@@ -1,20 +1,22 @@
 # Notification Mails
 
-Current mail system
+Notification mails are sent by Helpdesk system to various stakeholders in the Helpdesk system. These mails are sent on various triggers.
 
-   | Activity | Creator | Group | Default Assignee | Subscriber | Contact
+Each entry in the matrix below suggests whether a mail is sent to an entity (column) on an action (row).
+
+  | Event | Ticket Author / Customer | Notification Group | Ticket Assignee | Subscriber | Contact (CCd by customer)
 ---|----------|---------|-------|----------|------------|--------
  1 | Ticket Created | Yes | Yes | Yes | Yes | Yes
- 2 | Edit Ticket content by *Assignee / Staff / Subscriber* | No | Yes | Yes | Yes | No
- 3 | Ticket re-assigned  | No | No | No | No | No
- 4 | Subscriber added | No | Yes | No | Yes | No
- 5 | Subscriber removed | No | Yes | Yes | No | No
+ 2 | Edit Ticket content by *Assignee / Staff / Subscriber* | **No** | Yes | Yes | Yes | No
+ 3 | **Ticket re-assigned ** | No | No | No | No | No
+ 4 | Subscriber added | No | Yes | ** No ** | Yes | No
+ 5 | Subscriber removed | No | Yes | Yes | **No** | No
  6 | Followup added by *Creator / Contact* | Yes | Yes | Yes | Yes | Yes
  7 | Followup added by *Staff / Subscriber / Assignee* | Yes | Yes | Yes | Yes | Yes
- 8 | Followup edited by *Staff / Assignee / Subscriber* | No** | Yes | Yes | Yes | No
- 9 | Edit followup by *Creator / Contact* | No** | Yes | Yes | Yes | No
-10 | Edit Sensitive Followup by *Staff / Assignee / Subscriber* | Yes | Yes | Yes | Yes | Yes
-10 | Edit Sensitive Followup by *Creator / Contact* | Yes | Yes | Yes | Yes | Yes
-11 | Edit Staff Only Followup by *Staff / Assignee / Subscriber* | Yes** | Yes | Yes | Yes | No
+ 8 | Followup edited by *Staff / Assignee / Subscriber* | **No** | Yes | Yes | Yes | No
+ 9 | Edit followup by *Creator / Contact* | ** No** | Yes | Yes | Yes | No
+10 | ** Edit Sensitive Followup by *Staff / Assignee / Subscriber* ** | Yes | Yes | Yes | Yes | Yes
+11 | Edit Sensitive Followup by *Creator / Contact* | Yes | Yes | Yes | Yes | Yes
+12 | Edit Staff Only Followup by *Staff / Assignee / Subscriber* | **Yes** | Yes | Yes | Yes | No
 11 | Delete followup by *Creator / Contact* | No | Yes | Yes | Yes | No
 12 | Delete followup by *Staff / Assignee / Subscriber* | No | Yes | Yes | Yes | No
