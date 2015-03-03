@@ -1,6 +1,6 @@
 # Notification Mails
 
-Notification mails are sent by Helpdesk system to various stakeholders in the Helpdesk system. These mails are sent on various triggers.
+Notification mails are sent by Helpdesk system to various stakeholders in the Helpdesk system. These mails are sent for various events.
 
 Each entry in the matrix below suggests whether a mail is sent to an entity (column) on an action (row).
 
@@ -10,7 +10,7 @@ Each entry in the matrix below suggests whether a mail is sent to an entity (col
 ---|----------|---------|-------|----------|------------|--------
  1 | Ticket Created | Yes | Yes | Yes | Yes | Yes
  2 | Edit Ticket content by *Assignee / Staff / Subscriber* | **No** | Yes | Yes | Yes | No
- 3 | **Ticket re-assigned ** | No | No | No | No | No
+ 3 | **Ticket re-assigned ** | No | Yes | Yes | Yes | No
  4 | Subscriber added | No | Yes | ** No ** | Yes | No
  5 | Subscriber removed | No | Yes | Yes | **No** | No
  6 | Followup added by * Customer / Contact* | Yes | Yes | Yes | Yes | Yes
