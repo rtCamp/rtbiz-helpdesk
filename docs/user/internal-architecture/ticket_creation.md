@@ -1,9 +1,11 @@
+
 # How a Ticket is created in Helpdesk?
 
 Based on the settings, a new ticket will be created:
 1. When a user sends a mail to designated (set up) mail box (See section 2.2),
 
 2. When a user submits a support web form (See section 2.1)
+
 3. When a user submit an entry to a synced Gravity form (See section 2.5)
 
 #### Ticket Assignee

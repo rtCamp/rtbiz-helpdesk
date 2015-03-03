@@ -60,6 +60,7 @@ Below is the screenshot of how a ticket looks on the front end.
 
 
 ### Ticket Visibility for a Customer
+
 For a customer not all the features listed above will be visible. The items marked with asterisk are not visible to customers.
 
 These marked featured are meant for the staff memebers, enabling them to get all the customer information at one place. This will reduce their number of visits to WordPress dashboard.

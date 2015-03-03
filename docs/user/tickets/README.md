@@ -1,3 +1,3 @@
 # Tickets
 
-Tickets (CPT) is the basics entity around which Helpdesk is system is setup. 
+Tickets (CPT) is the basics entity around which Helpdesk is system is setup.

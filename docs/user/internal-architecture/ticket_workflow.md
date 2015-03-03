@@ -13,7 +13,7 @@ The ticket workflow is as follows:
 
 5. At any point if customer replies to 'Solved' ticket the status changes to 'Unanswered'.
 
-6. Staff can keep a ticket Unanswered while replying by checking 'keep unanwered' option.
+6. Staff can keep a ticket 'Unanswered' while replying by checking 'keep unanswered' option.
 
 Please see the flowchart below to understand the ticket workflow better:
 

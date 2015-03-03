@@ -12,13 +12,13 @@ The ticket backend of ticket follows WordPress posts' native behaviour and UI. '
 
 4. Offerings - The offering/product for which customer has created a ticket.
 
-5. **Department -**
+5. **Department - **
 
 6. Related Ticket - Option for staff to connect two tickets. Auto-suggestions can help staff to find a related ticket easily. Auto-suggestions works for ticket ID, ticket title and ticket content.
 
 7. Connected Contacts - Option for staff to add contacts who are related to a ticket. For example: staff can add contacts who are from same company who might want to get updates for a ticket.
 
-8. ** Connected Companies -**
+8. ** Connected Companies - **
 
 9. Subscriber - Lists the staff members who have either added themselves to a ticket or by assignee of a ticket. Staff also have a front end option to add subcribers.
 
@@ -40,7 +40,8 @@ The ticket backend of ticket follows WordPress posts' native behaviour and UI. '
 
 
 ### Ticket Information
-    [Screenshot]
+
+** [Screenshot]**
 
 1. Assigned to - The staff member to whom the ticket is assigned.
 
