@@ -20,7 +20,6 @@
    * [Ticket Web UI](internal-architecture/web_based_ticket_ui.md)
    * [Ticket Admin UI](internal-architecture/ticket_admin_ui.md)
    * [Ticket Listing UI](internal-architecture/ticket_listing_ui.md)
-   * [test](tickets/test.md)
 * [Notification Mails ](notification_mails/README.md)
 * [Reports](reports/README.md)
 * [Staff and Roles ](staff_and_roles/README.md)

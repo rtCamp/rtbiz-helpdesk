@@ -2,5 +2,5 @@
 
 Backend reporting
 Filters
-Click on links
+Click on links for filtering
 Dashboard Widgets

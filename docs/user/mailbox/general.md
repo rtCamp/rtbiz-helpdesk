@@ -1,7 +1,7 @@
 # General
 
 Setting and desc
-Blacklist 
+Blacklist
 
 
 

@@ -32,7 +32,7 @@ Here is a screenshot of a sample ticket listing.
 13. Select Columns - The list columns are user-specific. This means a user can select the columns by  checking the boxes in the screenoptions. ** [Screenshot] **
 
 ### B. Sorting and Filters
-1. All - 
+1. All -
 
 2. Status filters
 

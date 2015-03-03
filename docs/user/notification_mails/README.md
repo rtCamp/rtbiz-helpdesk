@@ -19,6 +19,6 @@ Each entry in the matrix below suggests whether a mail is sent to an entity (col
  9 | Edit followup by *Customer / Contact* | ** No** | Yes | Yes | Yes | No
 10 | ** Edit Sensitive Followup by *Staff / Assignee / Subscriber* ** | Yes | Yes | Yes | Yes | Yes
 11 | Edit Sensitive Followup by *Creator / Contact* | Yes | Yes | Yes | Yes | Yes
-12 | Edit Staff Only Followup by *Staff / Assignee / Subscriber* | **Yes** | Yes | Yes | Yes | No
+12 | Edit Staff Only Followup by *Staff / Assignee / Subscriber* | No | Yes | Yes | Yes | No
 11 | Delete followup by *Creator / Contact* | No | Yes | Yes | Yes | No
 12 | Delete followup by *Staff / Assignee / Subscriber* | No | Yes | Yes | Yes | No
