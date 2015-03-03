@@ -247,8 +247,8 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				array_push($email_fields, array(
 					'id' => 'rthd_enable_mailbox_reading',
 					'type' => 'switch',
-					'title' => __('Enable Mailbox reading'),
-					'subtitle' => __('To enable/disable Mailbox reading'),
+					'title' => __('Enable Mailbox Reading'),
+					'subtitle' => __('To enable/disable Mailbox Reading'),
 					'default' => true,
 					'on' => __('Enable'),
 					'off' => __('Disable'),
