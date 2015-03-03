@@ -62,6 +62,123 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 
 			// User Purchase History on Ticket Page
 			add_action( 'rtbiz_hd_user_purchase_history', array( $this, 'user_purchase_history' ) );
+
+			add_action( Rt_Offerings::$offering_slug . '_add_form_fields', array( $this, 'offering_add_custom_field' ), 10, 2 );
+			add_action( Rt_Offerings::$offering_slug. '_edit_form', array( $this, 'offering_add_custom_field' ), 10, 2 );
+
+			add_action( 'create_term', array( $this, 'save_offerings' ), 10, 2 );
+			add_action( 'edit_term', array( $this, 'save_offerings' ), 10, 2 );
+
+			add_action( 'manage_' . Rt_Offerings::$offering_slug . '_custom_column', array( $this, 'manage_offering_column_body' ), 10, 3 );
+			add_filter( 'manage_edit-' . Rt_Offerings::$offering_slug . '_columns', array( $this, 'manage_offering_column_header' ) );
+		}
+
+		function manage_offering_column_header( $columns ) {
+			unset($columns['slug'] );
+			$columns['default_assignee']         = __( 'Helpdesk default assignee', RT_HD_TEXT_DOMAIN );
+			return $columns;
+		}
+
+		/**
+		 * UI for group List View custom Columns for offerings
+		 *
+		 * @param type $display
+		 * @param type $column
+		 * @param type $term_id
+		 *
+		 * @return type
+		 */
+		function manage_offering_column_body( $display, $column, $term_id ) {
+			switch ( $column ) {
+				case 'default_assignee':
+					$default_assignee = get_offering_meta( 'default_assignee', $term_id );
+					if ( ! empty( $default_assignee ) ){
+						$user = get_user_by( 'id', $default_assignee );
+						echo esc_html( $user->display_name );
+					} else{
+						echo '-';
+					}
+			}
+			return;
+		}
+
+		function save_offerings( $term_id ){
+			if ( isset( $_POST[ Rt_Offerings::$offering_slug  ] ) ) {
+				$prev_value = Rt_Lib_Taxonomy_Metadata\get_term_meta( $term_id, Rt_Offerings::$offering_slug  . '-meta', true );
+				$meta_value = (array) $_POST[ Rt_Offerings::$offering_slug ];
+				Rt_Lib_Taxonomy_Metadata\update_term_meta( $term_id, Rt_Offerings::$offering_slug  . '-meta', $meta_value, $prev_value );
+				if ( isset( $_POST['_wp_original_http_referer'] ) ) {
+					wp_safe_redirect( $_POST['_wp_original_http_referer'] );
+					exit();
+				}
+			}
+		}
+
+		function is_edit_offerings( $page = false ) {
+			global $pagenow;
+			if ( ( ! $page || 'edit' === $page ) && 'edit-tags.php' === $pagenow && isset( $_GET['action'] ) && 'edit' === $_GET['action'] && isset( $_GET['taxonomy'] ) && $_GET['taxonomy'] === Rt_Offerings::$offering_slug ) {
+				return true;
+			}
+			if ( ( ! $page || 'all' === $page ) && 'edit-tags.php' === $pagenow && isset( $_GET['taxonomy'] ) && $_GET['taxonomy'] === Rt_Offerings::$offering_slug && ( ! isset( $_GET['action'] ) || 'edit' !== $_GET['action'] ) ) {
+				return true;
+			}
+			return false;
+		}
+
+		function offering_add_custom_field( $tag, $group = '' ){
+			$users         = Rt_HD_Utils::get_hd_rtcamp_user();
+			if ( $this->is_edit_offerings( 'edit' ) ) {
+				?>
+				<h3><?php _e( 'Helpdesk default assignee', RT_HD_TEXT_DOMAIN ); ?></h3>
+
+				<table class="form-table">
+					<tbody>
+					<tr class="form-field">
+						<th scope="row" valign="top"><label
+								for="<?php echo esc_attr( Rt_Offerings::$offering_slug ); ?>[default_assignee]"><?php _e( 'Helpdesk Default Assignee', RT_HD_TEXT_DOMAIN ); ?></label></th>
+						<td>
+							<select name="<?php echo esc_attr( Rt_Offerings::$offering_slug ); ?>[default_assignee]" id="<?php echo esc_attr( Rt_Offerings::$offering_slug ); ?>[default_assignee]" >
+								<?php
+								$selected_userid = get_offering_meta('default_assignee');
+								if ( empty( $selected_userid ) ){
+									echo '<option disabled selected> -- select an assignee -- </option>';
+								}
+								else{
+									echo '<option > -- select an assignee -- </option>';
+								}
+								foreach ( $users as $user ) {
+									if ( $user->ID == $selected_userid ){
+										$selected = 'selected';
+									} else{
+										$selected = '';
+									}
+									echo '<option value="' . $user->ID . '" '.$selected.'>' . $user->display_name . '</option>';
+								}
+								?>
+							</select>
+
+							<p class="description"><?php _e( 'All new support request for this offering will be assigned to selected user.', RT_HD_TEXT_DOMAIN ); ?></p>
+						</td>
+					</tr>
+					</tbody>
+				</table> <?php
+			} else { ?>
+
+				<div class="form-field">
+					<p>
+						<label for="<?php echo esc_attr( Rt_Offerings::$offering_slug ); ?>[default_assignee]"><?php _e( 'Helpdesk Default Assignee', RT_HD_TEXT_DOMAIN ); ?></label>
+						<select name="<?php echo esc_attr( Rt_Offerings::$offering_slug ); ?>[default_assignee]" id="<?php echo esc_attr( Rt_Offerings::$offering_slug ); ?>[default_assignee]" >
+							<option disabled selected > -- select an assignee -- </option>
+							<?php
+								foreach ( $users as $user ) {
+									echo '<option value="' . $user->ID . '">' . $user->display_name . '</option>';
+								}
+							?>
+						</select>
+					</p>
+					<p class="description"><?php _e( 'All new support request for this offering will be assigned to selected user.', RT_HD_TEXT_DOMAIN ); ?></p>
+				</div>
+			<?php }
 		}
 
 		function get_emails_of_customer(){

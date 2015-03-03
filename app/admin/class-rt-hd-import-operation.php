@@ -321,6 +321,9 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 			// Call action to add product info into ticket meta data.
 			do_action( 'rt_hd_add_ticket_offering_info', $post_id );
+			// Call action to change default assignee accoding to offerings
+
+			do_action( 'rt_hd_before_send_notification', $post_id, get_post( $post_id ));
 
 			//send Notification
 			global $bulkimport, $gravity_auto_import, $rt_hd_email_notification, $helpdesk_import_ticket_id;
