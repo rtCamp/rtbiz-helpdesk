@@ -235,13 +235,25 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			$email_fields = array();
 
 			array_push( $email_fields, array(
-				'id'      => 'rt_hd_Mailboxes_setup',
+				'id'      => 'rthd_Mailboxes_setup',
 				'type'    => 'callback',
 				'title'   => 'Mailboxes Setup',
 				'subtitle' => __( 'Helpdesk Configured Mailbox(s)' ),
 				'desc'    => 'Following mailboxes have been configured for Helpdesk. Emails from these mailboxes will be parsed and Helpdesk will use them to create new ticket / add new followup accordingly. You can configure these mailboxes from <a href="'.add_query_arg( 'page', RT_BIZ_Configuration::$page_slug, admin_url( 'admin.php' ) ).'"rtBiz</a>',
 				'callback' => 'rthd_mailbox_setup_view',
 			) );
+
+			if ( $is_mailbox_configured ) {
+				array_push($email_fields, array(
+					'id' => 'rthd_enable_mailbox_reading',
+					'type' => 'switch',
+					'title' => __('Enable Mailbox reading'),
+					'subtitle' => __('To enable/disable Mailbox reading'),
+					'default' => true,
+					'on' => __('Enable'),
+					'off' => __('Disable'),
+				));
+			}
 
 			array_push( $email_fields, array(
 					'id'       => 'rthd_outgoing_email_from_name',

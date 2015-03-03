@@ -1212,3 +1212,9 @@ function rt_hd_check_email_blacklisted( $testemail ){
 	}
 	return false;
 }
+
+function rthd_is_enable_mailbox_reading(){
+	$redux = rthd_get_redux_settings();
+	$flag = ( isset( $redux['rthd_enable_mailbox_reading']) && $redux['rthd_enable_mailbox_reading'] == 1 );
+	return $flag;
+}

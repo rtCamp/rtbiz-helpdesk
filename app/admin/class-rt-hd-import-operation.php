@@ -523,6 +523,11 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$originalBody = ''
 		) {
 
+			// check mailbox reading enable or not
+			if ( ! empty( $mailbox_email ) &&  rthd_is_enable_mailbox_reading()){
+				return false;
+			}
+
 			//Exclude mailbox email form all emails
 			$contactEmail = array();
 			if( !empty( $allemails ) && is_array( $allemails ) ){
