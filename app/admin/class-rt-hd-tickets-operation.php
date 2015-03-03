@@ -33,7 +33,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 		 * @param $postid
 		 * @param $post
 		 */
-		function rt_hd_before_send_notification( $postid, $post ){
+		function rt_hd_before_send_notification( $postid, $post = null ){
 			if ( empty( $post ) ){
 				$post = get_post( $postid );
 			}
