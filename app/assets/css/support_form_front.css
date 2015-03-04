@@ -46,6 +46,9 @@ reference: http://purecss.io/forms/
 	right: 15px;
 	border-bottom: none !important;
 }
+.rt-hd-add-more-email{
+	text-decoration: underline;
+}
 .rt-hd-remove-textbox{
 	position: absolute;
 }
