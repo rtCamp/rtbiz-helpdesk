@@ -5,20 +5,25 @@
 
 
 ##### 1. Menu Label
-Text field for adding label. This label will be used for the menu label for Helpdesk
+Text field for adding label. This label will be used for in the Helpdesk menu.
 
 ##### 2. Logo
-Upload any logo using the WordPress native uploader, preferably with the size of 16x16. This logo is used for all menu, submenu, post types icons in Helpdesk.
 
-The default logo is at http://rtbiz.rtcamp.net/wp-content/plugins/rtbiz-helpdesk/app/assets/img/hd-16X16.png
+i. Logo is used for all menu, submenu, post types icons in Helpdesk.
+
+ii. Upload any logo using the WordPress uploader, preferably of size of 16x16.
+
+iii. The default logo is at present at [Your Site Name]/wp-content/plugins/rtbiz-helpdesk/app/assets/img/hd-16X16.png
 
 ##### 3. Default Assignee
 
 i. The default assignee is the staff memeber to whom all the newly created tickets are assigned to.
 
-ii. By default the WordPress admin is selected as the assignee.
+ii. By default, the WordPress admin is selected as the assignee.
 
 iii. The dropdown is populated with all the Staff members who belongs to department that has access to helpdesk. Select the desired Staff member.
+
+![assignee_dropdown](https://cloud.githubusercontent.com/assets/9676513/6483474/a3a8ba5e-c297-11e4-8ebe-6a1b8cfbae97.png)
 
 iv. A department can be given accesss to Helpdesk from rtBiz access control settings.
 
@@ -58,10 +63,6 @@ iv. Tickets can be accessed from the default WordPress permalinks as well.
 ** Note: **
 
 Please flush the permalinks after enabling this option.
-
-Setting and desc
-
-Blacklist
 
 
 

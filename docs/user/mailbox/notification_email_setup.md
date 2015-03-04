@@ -1,8 +1,8 @@
 # Notification Email Setup
 
-Screenshots
+Screesnhots
 Coming soon features
-Shortcodes
+Shorcodes
 
 ##### Notification Emails
 

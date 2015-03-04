@@ -1,8 +1,9 @@
 # Mail Setup
 
-Screenshots
+**[Screenshots]**
 
 ##### 1. Mail Set Up
+
 Mail Setup basics
 Inbox selection mandatory
 Multiple mail box
