@@ -59,7 +59,7 @@ jQuery(document).ready(function ($) {
 		<div class="rthd-email-group">
 			<div>
 			<input class="rthd_email" placeholder="Email" type="email" name="post[email][]" value="<?php echo sanitize_email( $email ) ?>" required />
-			<a href="#" class="rt-hd-add-more-email">CC</a>
+			<a href="#" class="rt-hd-add-more-email">Add CC</a>
 			</div>
 		</div>
 	</div>

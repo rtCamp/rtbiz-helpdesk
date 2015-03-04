@@ -41,7 +41,6 @@ reference: http://purecss.io/forms/
 	width: 19%;
 }*/
 .rt-hd-remove-textbox,.rt-hd-add-more-email {
-	text-decoration: none !important;
 	position: absolute;
 	top: 8px;
 	right: 15px;
