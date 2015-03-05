@@ -172,7 +172,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 						$lastreplyby = sprintf( __( '<span class="created-by tips" data-tip="%s">%s </span>', RT_HD_PATH_ADMIN ), $comment->comment_date, human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ). __( ' ago' ) );
 						if ( $user_info ) {
 							add_filter('get_avatar', array( $this, 'add_gravatar_class' ));
-							printf( "<div style='text-align: center; display: block;'>%s By %s %s</div>", get_avatar( $user_info->user_email, 25 ), $user_info->display_name, $lastreplyby );
+							printf( "<div style='text-align: center; display: block;'>%s %s <br /> %s</div>", get_avatar( $user_info->user_email, 25 ), $user_info->display_name, $lastreplyby );
 							remove_filter('get_avatar', array( $this, 'add_gravatar_class' ));
 						}
 					} else {
@@ -279,7 +279,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 					$replyby = sprintf( __( '<span class="created-by tips" data-tip="%s">%s </span>', RT_HD_PATH_ADMIN ), get_the_date( 'd-m-Y H:i' ), $datediff );
 					if ( $user_info ) {
 						add_filter('get_avatar', array( $this, 'add_gravatar_class' ));
-						printf( "<div style='text-align: center; display: block;'><a href='%s'>%s</a> By <a href='%s'>%s</a> %s</div>", $url, get_avatar( $user_info->user_email, 25 ), $url, $user_info->display_name, $replyby );
+						printf( "<div style='text-align: center; display: block;'><a href='%s'>%s %s</a><br/> %s</div>", $url, get_avatar( $user_info->user_email, 25 ), $user_info->display_name, $replyby );
 						remove_filter('get_avatar', array( $this, 'add_gravatar_class' ));
 					}
 					break;
