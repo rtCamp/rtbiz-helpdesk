@@ -176,11 +176,11 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 							remove_filter('get_avatar', array( $this, 'add_gravatar_class' ));
 						}
 					} else {
-						echo '<div style="text-align: center;">'.__( 'No reply', RT_HD_TEXT_DOMAIN );
+						echo '<div style="text-align: center;">'.__( 'No reply', RT_HD_TEXT_DOMAIN ).'</div>';
 					}
 					break;
 
-				case 'rthd_ticket_status' :
+				case 'rthd_ticket_status':
 					$post_status_list = $rt_hd_module->get_custom_statuses();
 					$post_status = $post->post_status;
 					$style = 'padding: 5px; border: 1px solid black; border-radius: 5px;';
