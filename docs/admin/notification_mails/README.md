@@ -1,6 +1,6 @@
 # Notification Mails
 
-Notification mails are sent by Helpdesk system to various stakeholders in the Helpdesk system. These mails are sent for various events.
+Notification mails are sent by Helpdesk system to stakeholders in the Helpdesk system. These mails are sent for various events.
 
 Each entry in the matrix below suggests whether a mail is sent to an entity (column) on an action (row).
 
