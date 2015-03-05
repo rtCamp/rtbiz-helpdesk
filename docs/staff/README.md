@@ -1,4 +1,4 @@
-# rtBiz Helpdesk Developer Guide
+# rtBiz Helpdesk Staff Guide
 
 #### What is this Helpdesk all about?
 rtBiz Helpdesk is WordPress based support system, build to manage your customers' queries. Build with perspective of 'users-first', Helpdesk will deliver the ease for managing tickets.
@@ -25,4 +25,4 @@ This manual is divided into various topics and sub-topics. All these topics are 
 
 #### How to get information that might be missing in this manual?
 
-Please reach your site admin for any Helpdesk queris.
+Please reach your site admin for any Helpdesk queries. 

@@ -15,7 +15,7 @@ Below are the terms that will be used across this manaul.
 
 5. **Follow-up/Reply -** A comment added by staff or customer to a ticket. This comment can have attachement of various file types.
 
-6. ** Roles ** - Collection of access rights to various managerail or ticket based permissions. Like Admin, Staff (default)
+6. ** Roles ** - Collection of access rights to various managerial or ticket based permissions. Like Admin, Staff (default)
 
 6. **Staff -** The support team that is part of organisation which has setup Helpdesk for its customers.
 
@@ -39,7 +39,9 @@ Below are the terms that will be used across this manaul.
 
 16. ** Hash URL ** - A unique link generated for each ticket.
 
-17. ** Support Page ** - A page with support form setup using the hdeldesk short code. This form by customer to send support queries.
+18. ** Support Form ** - The form used by customers to send support queries.
+
+17. ** Support Page ** - A page with support form setup using the hdeldesk short code.
 
 18. ** Notification templates ** - Prdefined text to be used in notifications mails.
 
