@@ -73,8 +73,8 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 
 			$columns['cb']                         = '<input type="checkbox" />';
 			$columns['rthd_ticket_title']          = __( 'Ticket', RT_HD_TEXT_DOMAIN );
-			$columns['rthd_ticket_assignee']     = __( 'Ticket assignee', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_status']         = '<span class="status_head tips" data-tip="' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '">' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '</span>';
+			$columns['rthd_ticket_assignee']     = __( 'Ticket assign to', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_created_by']     = __( 'Created By', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_followup']       = __( '#Replies', RT_HD_TEXT_DOMAIN );
 //            $columns['rthd_ticket_updated_by']     = __( 'Updated By', RT_HD_TEXT_DOMAIN );
@@ -167,9 +167,16 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 					$comment = get_comments(array('post_id'=>$post->ID,'number' => 1));
 					if ( ! empty( $comment ) ) {
 						$comment = $comment[0];
-						echo ''.esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) )) ." ago by ". $comment->comment_author ;
+//						echo ''.esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) )) ." ago by ". $comment->comment_author ;
+						$user_info = get_user_by( 'id', $comment->user_id );
+						$lastreplyby = sprintf( __( '<span class="created-by tips" data-tip="%s">%s </span>', RT_HD_PATH_ADMIN ), $comment->comment_date, human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ). __( ' ago' ) );
+						if ( $user_info ) {
+							add_filter('get_avatar', array( $this, 'add_gravatar_class' ));
+							printf( "<div style='text-align: center; display: block;'>%s By %s %s</div>", get_avatar( $user_info->user_email, 25 ), $user_info->display_name, $lastreplyby );
+							remove_filter('get_avatar', array( $this, 'add_gravatar_class' ));
+						}
 					} else {
-						_e( 'No replies', RT_HD_TEXT_DOMAIN );
+						echo '<div style="text-align: center;">'.__( 'No reply', RT_HD_TEXT_DOMAIN );
 					}
 					break;
 
@@ -269,13 +276,12 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 								'created_by' => $user_id,
 							), 'edit.php' ) );
 
-					printf( __( '<span class="created-by tips" data-tip="%s">%s', RT_HD_PATH_ADMIN ), get_the_date( 'd-m-Y H:i' ), $datediff );
+					$replyby = sprintf( __( '<span class="created-by tips" data-tip="%s">%s </span>', RT_HD_PATH_ADMIN ), get_the_date( 'd-m-Y H:i' ), $datediff );
 					if ( $user_info ) {
 						add_filter('get_avatar', array( $this, 'add_gravatar_class' ));
-						printf( " by <a href='%s' style='text-align: center; display: block;'>%s%s</a> ", $url, get_avatar( $user_info->user_email, 25 ), $user_info->display_name );
+						printf( "<div style='text-align: center; display: block;'><a href='%s'>%s</a> By <a href='%s'>%s</a> %s</div>", $url, get_avatar( $user_info->user_email, 25 ), $url, $user_info->display_name, $replyby );
 						remove_filter('get_avatar', array( $this, 'add_gravatar_class' ));
 					}
-					printf( '</span>' );
 					break;
 
 				/*case 'rthd_ticket_updated_by':
