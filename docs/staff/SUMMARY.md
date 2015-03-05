@@ -1,6 +1,7 @@
 # Summary
 
 * [Introduction](README.md)
+	* [Glossary](gloassary.md)
 * [Tickets](tickets/README.md)
    * [Ticket Status](tickets/ticket_status.md)
    * [Ticket Creation ](tickets/ticket_creation.md)
