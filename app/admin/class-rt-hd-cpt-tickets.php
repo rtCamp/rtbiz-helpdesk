@@ -49,7 +49,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 
 			// Add custom view name `My Tickets`
 			add_filter( 'views_edit-rtbiz_hd_ticket', array( &$this, 'display_custom_views' ) );
-			
+
 			// Add custom filters.
 			add_action( 'restrict_manage_posts', array( &$this, 'display_custom_filters' ) );
 		}
@@ -73,10 +73,11 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 
 			$columns['cb']                         = '<input type="checkbox" />';
 			$columns['rthd_ticket_title']          = __( 'Ticket', RT_HD_TEXT_DOMAIN );
+			$columns['rthd_ticket_assignee']     = __( 'Ticket assignee', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_status']         = '<span class="status_head tips" data-tip="' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '">' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '</span>';
 			$columns['rthd_ticket_created_by']     = __( 'Created By', RT_HD_TEXT_DOMAIN );
-			$columns['rthd_ticket_followup']       = __( 'Comments', RT_HD_TEXT_DOMAIN );
-            $columns['rthd_ticket_updated_by']     = __( 'Updated By', RT_HD_TEXT_DOMAIN );
+			$columns['rthd_ticket_followup']       = __( '#Replies', RT_HD_TEXT_DOMAIN );
+//            $columns['rthd_ticket_updated_by']     = __( 'Updated By', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_last_reply_by']     = __( 'Last Reply By', RT_HD_TEXT_DOMAIN );
 
 			$columns = array_merge( $columns, $cols );
@@ -118,6 +119,10 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 
 			return $out;
 		}
+		function add_gravatar_class( $class ){
+			$class = str_replace("class='avatar", "class='avatar rthd-avatar-img", $class);
+			return $class;
+		}
 
 		/**
 		 * Edit Content of List view Columns
@@ -135,7 +140,25 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 
 			switch ( $column ) {
 
-                case 'rthd_ticket_followup' :
+				case 'rthd_ticket_assignee':
+					$user_id   = $post->post_author;
+					$user_info = get_userdata( $user_id );
+					$query_var = array(
+						'post_type'  => Rt_HD_Module::$post_type,
+						'assigned' => $user_id,
+					);
+					$url = esc_url( add_query_arg( $query_var, 'edit.php' ) );
+					if ( $user_info ) {
+//						printf( "<a href='%s'>%s</a>", $url, $user_info->display_name );
+						add_filter('get_avatar', array( $this, 'add_gravatar_class' ));
+						printf( " <a href='%s' style='text-align: center;display: block;'>%s%s ", $url, get_avatar( $user_info->user_email, 25 ), $user_info->display_name );
+						remove_filter('get_avatar', array( $this, 'add_gravatar_class' ));
+					} else {
+						_e( 'No assignee', RT_HD_TEXT_DOMAIN );
+					}
+					break;
+
+				case 'rthd_ticket_followup' :
                     $comment = get_comments(array('post_id'=>$post->ID,'number' => 1));
                     echo '<span class="post-com-count-wrapper"><a class="post-com-count"><span class="comment-count">'.( $post->comment_count).'</span></a></span>';
                     break;
@@ -146,7 +169,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 						$comment = $comment[0];
 						echo ''.esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) )) ." ago by ". $comment->comment_author ;
 					} else {
-						echo '-';
+						_e( 'No replies', RT_HD_TEXT_DOMAIN );
 					}
 					break;
 
@@ -193,9 +216,9 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 
 					$url = esc_url( add_query_arg( $query_var, 'edit.php' ) );
 
-					if ( $user_info ) {
-						printf( " Assigned to <a href='%s'>%s</a>", $url, $user_info->display_name );
-					}
+//					if ( $user_info ) {
+//						printf( " Assigned to <a href='%s'>%s</a>", $url, $user_info->display_name );
+//					}
 
 					$actions = array();
 					if ( $can_edit_post && 'trash' != $post->post_status ) {
@@ -248,12 +271,14 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 
 					printf( __( '<span class="created-by tips" data-tip="%s">%s', RT_HD_PATH_ADMIN ), get_the_date( 'd-m-Y H:i' ), $datediff );
 					if ( $user_info ) {
-						printf( " by <a href='%s'>%s</a>", $url, $user_info->display_name );
+						add_filter('get_avatar', array( $this, 'add_gravatar_class' ));
+						printf( " by <a href='%s' style='text-align: center; display: block;'>%s%s</a> ", $url, get_avatar( $user_info->user_email, 25 ), $user_info->display_name );
+						remove_filter('get_avatar', array( $this, 'add_gravatar_class' ));
 					}
 					printf( '</span>' );
 					break;
 
-				case 'rthd_ticket_updated_by':
+				/*case 'rthd_ticket_updated_by':
 
 					$date     = new DateTime( get_the_modified_date( 'Y-m-d H:i:s' ) );
 					$datediff = human_time_diff( $date->format( 'U' ), current_time( 'timestamp' ) ) . __( ' ago' );
@@ -272,7 +297,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 						printf( ' by <a href="%s">%s</a>', $url, $user_info->display_name );
 					}
 					printf( '</span>' );
-					break;
+					break;*/
 			}
 		}
 
@@ -443,11 +468,11 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 					) );
 
 				}
-				
+
 				if ( isset( $_GET['ticket_status'] ) ) {
 					$query->set( 'post_status', $_GET['ticket_status'] );
 				}
-				
+
 				if ( isset( $_GET['ticket_assigned'] ) ) {
 					$query->set( 'author', $_GET['ticket_assigned'] );
 				}
@@ -561,40 +586,40 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 
 			return $views;
 		}
-		
+
 		/**
 		 * Display custom filters to filter out tickets.
 		 */
 		public function display_custom_filters() {
 			global $typenow, $rt_hd_module, $rtbiz_offerings;
-			
+
 			if ( $typenow == Rt_HD_Module::$post_type ) {
-				
+
 				// Filter by status
 				echo '<label class="screen-reader-text" for="ticket_status">' . __( 'Filter by status' ) . '</label>';
-				
+
 				$statuses = $rt_hd_module->get_custom_statuses();
-				
+
 				echo '<select id="ticket_status" class="postform" name="ticket_status">';
 				echo '<option value="0">Select Status</option>';
-				
+
 				foreach ( $statuses as $status ) {
 					if( isset( $_GET['ticket_status'] ) && $status['slug'] == $_GET['ticket_status'] ) {
 						echo '<option value="'.$status['slug'].'" selected="selected">'.$status['name'].'</option>';
-					} else { 
+					} else {
 						echo '<option value="'.$status['slug'].'">'.$status['name'].'</option>';
 					}
 				}
 				echo '</select>';
-				
+
 				// Filter by assignee
 				echo '<label class="screen-reader-text" for="ticket_assigned">' . __( 'Filter by assignee' ) . '</label>';
-				
+
 				$ticket_authors = Rt_HD_Utils::get_hd_rtcamp_user();
-				
+
 				echo '<select id="ticket_assigned" class="postform" name="ticket_assigned">';
 				echo '<option value="0">Select Assignee</option>';
-				
+
 				foreach ( $ticket_authors as $author ) {
 					if( isset( $_GET['ticket_assigned'] ) && $author->ID == $_GET['ticket_assigned'] ) {
 						echo '<option value="'.$author->ID.'" selected="selected">'.$author->display_name.'</option>';
@@ -602,21 +627,21 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 						echo '<option value="'.$author->ID.'">'.$author->display_name.'</option>';
 					}
 				}
-				
+
 				echo '</select>';
-				
+
 				// Filter by offering
 				$products = array();
 				if ( isset( $rtbiz_offerings ) ) {
 					$products = get_terms( Rt_Offerings::$offering_slug, array( 'hide_empty' => 0 ) );
 				}
-				
+
 				if( ! empty( $products ) ) {
 					echo '<label class="screen-reader-text" for="rt_offering">' . __( 'Filter by offering' ) . '</label>';
-					
+
 					echo '<select id="rt_offering" class="postform" name="rt-offering">';
 					echo '<option value="0">Select Product</option>';
-					
+
 					foreach ( $products as $product ) {
 						if( isset( $_GET['rt-offering'] ) && $product->slug == $_GET['rt-offering'] ) {
 							echo '<option value="'.$product->slug.'" selected="selected">'.$product->name.'</option>';
@@ -624,7 +649,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 							echo '<option value="'.$product->slug.'">'.$product->name.'</option>';
 						}
 					}
-					
+
 					echo '</select>';
 				}
 			}
