@@ -8,7 +8,7 @@ Below are the terms that will be used across this manual.
 
 4. **Ticket Status -** The nature of a ticket during its lifetime.
 
-3. **Ticket Author-** Any user/customer on whose request/mail ticket is created.
+3. **Ticket Author-** Any user/customer on whose request/mail ticket is created. In this manual the terms - Ticket Auhtor, customer - are used interchangeably.
 
 4. ** Ticket Page - ** The web interface for a ticket.
 

@@ -33,7 +33,7 @@ Below is the screenshot of how a ticket looks on the front end.
 
 11. Created by - Time stamp when ticket was created. This is appended by the customer name who has creted the ticket.
 
-12. Last reply -  Time stamp when ticket was created. This is appended by the staff/customer name who has creted the ticket.
+12. Last reply -  Time stamp when last reply was added to the ticket. This is appended by the staff/customer name who has added the reply.
 
 13. Subscribe* - Option for a staff member to get updates for the communication on the ticket. The assignee of a ticket by default is a subscriber to that ticket.
 
