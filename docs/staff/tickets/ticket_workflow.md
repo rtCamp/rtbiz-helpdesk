@@ -20,7 +20,7 @@ Please see the flowchart below to understand the ticket workflow better:
 ![Workflow](https://cloud.githubusercontent.com/assets/9676513/6328106/d0e9fccc-bb89-11e4-8354-4c406f07a98f.jpg)
 
 #### Manual update options for staff
-Apart from the auto-change features, all staff members have an option to edit the status either form the ticket Web UI or from the WordPress Dashboard.
+Apart from the auto-change features, staff can update the status either form the ticket Web UI or from the WordPress Dashboard.
 
 ![Manual Update](https://cloud.githubusercontent.com/assets/9676513/6328362/aef5e3f8-bb8c-11e4-95d1-530590906656.png)
 

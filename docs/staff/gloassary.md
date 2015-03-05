@@ -1,7 +1,6 @@
 # Glossary
 
-
-Below are the terms that will be used across this manaul.
+Below are the terms that will be used across this manual.
 
 1. **Ticket -** Any request that comes into Helpdesk is converted into a ticket and stored for further action.
 
@@ -19,7 +18,7 @@ Below are the terms that will be used across this manaul.
 
 6. **Staff -** The support team that is part of organisation which has setup Helpdesk for its customers.
 
-7. **Subscriber -** Someone who only wants to get notifications about the follow-ups added to a ticket.
+7. **Subscriber -** Staff member who only wants to get notifications about the follow-ups added to a ticket.
 
 8. **Assignee -** The helpdesk staff to whom the ticket has been assigned.
 
