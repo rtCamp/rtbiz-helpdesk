@@ -21,7 +21,7 @@
    * [Ticket Admin UI](tickets/ticket_admin_ui.md)
    * [Ticket Listing UI](tickets/ticket_listing_ui.md)
 * [Notification Mails ](notification_mails/README.md)
-   * [Mail Template](notification_mails/mail_template)
+   * [Mail Template](notification_mails/mail_template.md)
 * [Reports](reports/README.md)
 * [Staff and Roles ](staff_and_roles/README.md)
 
