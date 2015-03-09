@@ -230,7 +230,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			} else {
 				$body = 'New Followup Added by <strong>{comment_author}</strong>';
 				if ( ! empty( $comment->comment_content ) ){
-					$body .= '<hr style="color: #DCEAF5;" /><div>' . rthd_content_filter( $comment->comment_content ) . '</div>';
+					$body .= '<hr style="color: #DCEAF5;" /><div style="display: inline-block">' . rthd_content_filter( $comment->comment_content ) . '</div>';
 				}
 			}
 			$subject = rthd_create_new_ticket_title( 'rthd_new_followup_email_title', $comment->comment_post_ID );
@@ -293,7 +293,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 
 			$body  = 'A Follwup is deleted by <Strong>{comment_author}</Strong>';
 			if ( ! ( isset( $comment->comment_type ) && ! empty( $comment->comment_type ) && intval( $comment->comment_type ) && $comment->comment_type > Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC  ) ) {
-				$body .= '<hr style="color: #DCEAF5;" /><div>' . rthd_content_filter( $comment->comment_content ) . '</div>';
+				$body .= '<hr style="color: #DCEAF5;" /><div  style="display: inline-block">' . rthd_content_filter( $comment->comment_content ) . '</div>';
 			}
 
 			$subject = rthd_create_new_ticket_title( 'rthd_delete_followup_email_title', $comment->comment_post_ID );
@@ -380,7 +380,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 					$body .= '<br/><b>Followup Content : </b><hr style="color: #DCEAF5;" />' . $diff_followup_content;
 				}
 				else{
-					$body .= '<br/><b>Followup Content : </b><hr style="color: #DCEAF5;" />' . rthd_content_filter( $comment->comment_content );
+					$body .= '<br/><b>Followup Content : </b><hr style="color: #DCEAF5;" /><div  style="display: inline-block">' . rthd_content_filter( $comment->comment_content ) . '</div>';
 				}
 			}
 			global $rt_hd_module;
