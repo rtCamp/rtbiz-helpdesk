@@ -1,6 +1,6 @@
 # Gravity Importer
 
-**[Gravity Form Importer Settings]**
+**Gravity Form Importer Settings**
 
 To import existing forms values and use [rt_hd_support_form] shortcode in pages , see section 2.1
 Administrators can import customized forms made using popular plugins like [Gravity Forms](http://gravityforms.com) .
