@@ -35,7 +35,7 @@ Case 2 -
 
 Case 3 -
 
-1. WordPress admin of the site. 
+1. WordPress admin of the site.
 
 #### Users who can only see Helpdesk tickets
 
