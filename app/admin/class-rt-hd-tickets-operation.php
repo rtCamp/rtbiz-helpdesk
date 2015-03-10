@@ -47,7 +47,10 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 					$default_assignee = $settings['rthd_default_user'];
 				}
 				if ( $post->post_author != $default_assignee ){
+					global $rt_hd_cpt_tickets;
+					remove_action( 'save_post', array( $rt_hd_cpt_tickets, 'save_meta_boxes' ), 1, 2 );
 					wp_update_post( array( 'ID'=> $postid, 'post_author' => $default_assignee ) );
+					add_action( 'save_post', array( $rt_hd_cpt_tickets, 'save_meta_boxes' ), 1, 2 );
 				}
 			}
 		}
