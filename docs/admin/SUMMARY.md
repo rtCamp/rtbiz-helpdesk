@@ -3,7 +3,7 @@
 * [Introduction](README.md)
    * [Glossary](gloassary.md)
 * [Installation](installation.md)
-* [Dashboard](dashboard/README)
+* [Dashboard](dashboard.md)
 * [Settings ](mailbox/index.md)
    * [General](mailbox/general.md)
    * [Mail Setup](mailbox/mail_setup.md)
