@@ -1,6 +1,6 @@
 # Advanced Settings
 
-Coming soon!!
+**Coming soon!!**
 
 Enable auto assign
 

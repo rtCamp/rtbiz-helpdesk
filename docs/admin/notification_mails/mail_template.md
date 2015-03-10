@@ -1,8 +1,8 @@
 # Mail Templates
 
-#### Emails to Customer
+#### Emails to Customer :
 
-##### When a New Ticket is created.
+##### When a New Ticket is created
 
 ![acknowledgement_ticket_created](https://cloud.githubusercontent.com/assets/8191145/6556298/8dbfe5ba-c692-11e4-81a6-fcebe986a059.png)
 
