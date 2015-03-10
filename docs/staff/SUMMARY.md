@@ -12,4 +12,5 @@
    * [Ticket Listing UI](tickets/ticket_listing_ui.md)
 * [Notification Emails](notification_emails.md)
 * [Reports](reports.md)
+* [FAQ](faq/README)
 
