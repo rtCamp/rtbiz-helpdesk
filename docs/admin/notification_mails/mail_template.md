@@ -1,6 +1,6 @@
 # Mail Templates
 
-#### Emails to Client
+#### Emails to Customer
 
 ##### When a New Ticket is created.
 
@@ -11,10 +11,18 @@
 ![followup_to _client](https://cloud.githubusercontent.com/assets/8191145/6557747/64170b20-c69d-11e4-97e6-8fc88bbfbf91.png)
 
 
-#####When a follow up is edited
+#####When a follow up is edited by Staff
+
+![followup_edited](https://cloud.githubusercontent.com/assets/8191145/6571760/be397aae-c731-11e4-8f78-72920586229a.png)
 
 
-#####When a follow up is deleted
+#####When a follow up is deleted by staff
+
+![followup_deleted](https://cloud.githubusercontent.com/assets/8191145/6571919/97832638-c733-11e4-9dff-fb4258e42f4e.png)
 
 
-##### When a ticket is reassigned to another staff member
+** To ADD**
+
+** When a customer creates a ticket for the first time and an account is created automatically for them**(Not getting this mail for new customer currently)
+
+
