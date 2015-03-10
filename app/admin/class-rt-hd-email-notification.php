@@ -291,7 +291,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				$ContactEmail = $this->exclude_author( $ContactEmail, $comment->comment_author_email );
 			}
 
-			$body  = 'A Follwup is deleted by <Strong>{comment_author}</Strong>';
+			$body  = 'A Followup is deleted by <Strong>{comment_author}</Strong>';
 			if ( ! ( isset( $comment->comment_type ) && ! empty( $comment->comment_type ) && intval( $comment->comment_type ) && $comment->comment_type > Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC  ) ) {
 				$body .= '<hr style="color: #DCEAF5;" /><div  style="display: inline-block">' . rthd_content_filter( $comment->comment_content ) . '</div>';
 			}
