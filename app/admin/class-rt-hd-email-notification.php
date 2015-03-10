@@ -366,7 +366,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			if ( $private_update ){
 				$body = '<div><br /> A <strong>private</strong> followup has been edited by <strong>{comment_author}</strong>. Please go to ticket to view content.</div>';
 			} else {
-				$body          = '<div> A Follwup Updated by <strong>{comment_author}.</strong></div>';
+				$body          = '<div> A Followup Updated by <strong>{comment_author}.</strong></div>';
 				$body         .= '<br/><div> The changes are as follows: </div><br/>';
 			}
 			$diff_visibility = rthd_text_diff( rthd_get_comment_type( $old_privacy ), rthd_get_comment_type( $new_privacy ) );
