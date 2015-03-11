@@ -20,10 +20,6 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		/**
 		 * @var string
 		 */
-		public $email_key = 'contact_primary_email';
-		/**
-		 * @var string
-		 */
 		public $user_id = 'contact_user_id';
 
 		public function __construct() {
@@ -125,9 +121,9 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 				$contact_id = rt_biz_add_contact( $title );
 				$contact    = get_post( $contact_id );
 			}
-			$contactmeta = rt_biz_get_entity_meta( $contact->ID, $this->email_key, true );
+			$contactmeta = rt_biz_get_entity_meta( $contact->ID, Rt_Contact::$primary_email_key, true );
 			if ( ! $contactmeta ) {
-				rt_biz_add_entity_meta( $contact->ID, $this->email_key, $email, true );
+				rt_biz_add_entity_meta( $contact->ID, Rt_Contact::$primary_email_key, $email, true );
 				global $transaction_id;
 				if ( isset( $transaction_id ) && $transaction_id > 0 ) {
 					add_post_meta( $contact->ID, '_transaction_id', $transaction_id, true );
@@ -232,7 +228,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 			$contacts = rt_biz_get_company_to_contact_connection( $_POST['query'] );
 			$result   = array();
 			foreach ( $contacts as $contact ) {
-				$email    = rt_biz_get_entity_meta( $contact->ID, $this->email_key, true );
+				$email    = rt_biz_get_entity_meta( $contact->ID, Rt_Contact::$primary_email_key, true );
 				$result[] = array(
 					'label'   => $contact->post_title,
 					'id'      => $contact->ID,

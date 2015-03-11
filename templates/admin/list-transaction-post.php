@@ -93,7 +93,7 @@ foreach ( $example_data as $rslt ) {
 		foreach ( $post_terms as $pterm ) {
 			$contact = get_post( $pterm );
 			$url     = add_query_arg( $contact_name, $contact->ID, $base_url );
-			$email   = rt_biz_get_entity_meta( $contact->ID, $rt_hd_contacts->email_key, true );
+			$email   = rt_biz_get_entity_meta( $contact->ID, Rt_Contact::$primary_email_key, true );
 			echo esc_attr( $sep ) . "<a target='_blank' href='" . esc_url( $url ) . "'>" . get_avatar( $email, 24 ) . esc_attr( $contact->post_title ). '</a>';
 			$sep = ',';
 		}
@@ -110,7 +110,7 @@ foreach ( $example_data as $rslt ) {
 		foreach ( $post_terms as $pterm ) {
 			$account = get_post( $pterm );
 			$url     = add_query_arg( $account_name, $account->ID, $base_url );
-			$email   = rt_biz_get_entity_meta( $account->ID, $rt_hd_accounts->email_key, true );
+			$email   = rt_biz_get_entity_meta( $account->ID, Rt_Contact::$primary_email_key, true );
 			echo esc_attr( $sep ) . "<a target='_blank' href='" . esc_url( $url ) . "'>" . get_avatar( $email, 24 ) . esc_html( $account->post_title ). '</a>';
 			$sep = ',';
 		}

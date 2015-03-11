@@ -27,13 +27,6 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 	class Rt_HD_Accounts {
 
 		/**
-		 * @var string email key name
-		 *
-		 * @since 0.1
-		 */
-		public $email_key = 'account_primary_email';
-
-		/**
 		 * set hooks & ajax function
 		 *
 		 * @since 0.1
