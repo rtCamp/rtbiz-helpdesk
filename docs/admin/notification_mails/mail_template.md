@@ -21,8 +21,8 @@
 ![followup_deleted](https://cloud.githubusercontent.com/assets/8191145/6571919/97832638-c733-11e4-9dff-fb4258e42f4e.png)
 
 
-** To ADD**
+** When a customer creates a ticket for the first time and an account is created automatically for them**
 
-** When a customer creates a ticket for the first time and an account is created automatically for them**(Not getting this mail for new customer currently)
 
+![new_account_created](https://cloud.githubusercontent.com/assets/8191145/6592068/b542a8e0-c7ee-11e4-8f3c-464af5b88b21.png)
 
