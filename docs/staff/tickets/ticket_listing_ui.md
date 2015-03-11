@@ -6,7 +6,7 @@ The listing is populated based on the access roles for the staff member. For exa
 
 Here is a screenshot of a sample ticket listing.
 
-** [Screesnhot with numbered areas and A B C marked]**
+** [Screenshot with numbered areas and A B C marked]**
 
 ![ticket_listings](https://cloud.githubusercontent.com/assets/9676513/6466123/77f6e04a-c1eb-11e4-87da-8f4667f82156.png)
 
