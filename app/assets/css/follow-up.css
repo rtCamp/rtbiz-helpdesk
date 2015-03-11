@@ -388,6 +388,7 @@ li.load-more-spinner-li {
 
 #savefollwoup, #submit-ajax, #rthd-add-followup-attachment {
 	border-radius: 3px;
+	cursor: pointer;
 }
 
 .wp-editor-container {
