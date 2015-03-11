@@ -11,18 +11,18 @@ This manual is prepared for the Helpdesk staff/support team members.
 
 The manual covers the step-by-step guide to use helpdesk; introduction of all the entities like ticket, statuses; introduction to reporting features; and other related aspects.
 
-#### Are their any prerequisites before reading this manual?
+#### Are there any prerequisites before reading this manual?
 
 No. This manual covers everything that you need to know about this tool.
 
 #### What level of Wordpress knowldege is needed to work with this manual?
 
-Since Helpdesk is based on WordPress so a basic level of WordPress knowledge is recommended.Though the manual aims to be as simple as possible and covers all aspecsts required.
+Since Helpdesk is based on WordPress so a basic level of WordPress knowledge is recommended.Though the manual aims to be as simple as possible and covers all aspects required.
 
 #### How to use this manual?
 
-This manual is divided into various topics and sub-topics. All these topics are listed on the left-pane. You have to find the related topic and click on to to read more about it.
+This manual is divided into various topics and sub-topics. All these topics are listed on the left-pane. You have to find the related topic and click on it to read more about it.
 
 #### How to get information that might be missing in this manual?
 
-Please reach your site admin for any Helpdesk queries. 
+Please reach your site admin for any Helpdesk queries.

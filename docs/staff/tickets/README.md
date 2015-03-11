@@ -1,3 +1,3 @@
 # Tickets
 
-Tickets is the basics entity around which Helpdesk is system is setup. All client queries submitted to Helpdesk and are
+Ticket is the basic entity around which the Helpdesk system is setup.

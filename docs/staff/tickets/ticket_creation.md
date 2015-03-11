@@ -16,5 +16,5 @@ All the newly created tickets will have the default asssignee as configured in t
 All the tickets will have 'Unanswered' as the default status. More details about the ticket workflow in next section.
 
 #### Notifications on Creation
-When a new ticket is created, the notifications are sent based on the settings by admin. 
+When a new ticket is created, the notifications are sent based on the settings by admin.
 

@@ -71,7 +71,7 @@ The #4 - #7 can be used together to apply multiple filters to the tickets.
 
 1. Edit ticket - Option you can click to access the backend of a ticket.
 
-2. Bulk edit - Use this to bulk edit more than one ticket at once. 
+2. Bulk edit - Use this to bulk edit more than one ticket at once.
 
 ** [Screenshot] **
 

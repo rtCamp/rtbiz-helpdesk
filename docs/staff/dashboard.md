@@ -12,7 +12,7 @@ This reports are presented in form of widgets, which can be activated or deactiv
 
 #### 2. Tickets
 
-Click on this tab will redirect you to the ticket listing section.
+Clicking on this tab will redirect you to the ticket listing section.
 
 To know more about tickets, visit chapter #2.
 
@@ -23,7 +23,7 @@ To know more about ticket listing UI, visit chapter #2.6
 
 #### 3. Add Ticket
 
-Click on this tab will redirect you to interface to add new ticket.
+Clicking on this tab will redirect you to the interface to add new ticket.
 
 To know more about adding tickets, visit chapter #2.5.
 

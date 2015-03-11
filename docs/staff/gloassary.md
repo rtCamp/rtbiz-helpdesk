@@ -34,15 +34,15 @@ Below are the terms that will be used across this manual.
 
 14. ** Comment Type ** - Comment assigned with some specific visibility.
 
-15. ** Blacklist Email ** - Any email address which has been barred by Adminitrator from creating any ticket.
+15. ** Blacklist Email ** - Any email address which has been barred by Administrator from creating any ticket.
 
 16. ** Hash URL ** - A unique link generated for each ticket.
 
 18. ** Support Form ** - The form used by customers to send support queries.
 
-17. ** Support Page ** - A page with support form setup using the hdeldesk short code.
+17. ** Support Page ** - A page with support form setup using the helpdesk short code.
 
-18. ** Notification templates ** - Prdefined text to be used in notifications mails.
+18. ** Notification templates ** - Predefined text to be used in notifications mails.
 
 
 

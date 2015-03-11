@@ -7,10 +7,10 @@ Below is the screenshot of how a ticket looks on the front end.
 
  ####  A. Ticket Content Area
 
-'*' indicates the feature is visible only the staff and not the customer.
+'*' indicates the feature is visible only to the staff and not the customer.
 
 
-1. Ticket Title - A combination of the unique ID genearted for each ticket and the request subject set by the ticket author.
+1. Ticket Title - A combination of the unique ID generated for each ticket and the request subject set by the ticket author.
 
 2. Ticket Author -  The contact name, which can be a email address if profile does not have a name associated.
 
