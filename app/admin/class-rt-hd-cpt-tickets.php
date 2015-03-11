@@ -571,7 +571,9 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 		 */
 		public function display_custom_views( $views ) {
 
-			$current_user_id = get_current_user_id();
+            $temp_view = array();
+            $editor_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
+            $current_user_id = get_current_user_id();
 
 			$count_user_tickets = new WP_Query(
 				array(
@@ -582,14 +584,16 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 				)
 			);
 
-			//if ( $count_user_tickets->post_count > 0 ) {
-				if ( isset( $_GET['assigned'] ) && ( $_GET['assigned'] == $current_user_id ) )
+            //For Author WordPress provide mine link to view display current user post so added My ticket link only for admin/editor
+            if ( current_user_can( $editor_cap ) ) {
+
+                if ( isset( $_GET['author'] ) && ( $_GET['author'] == $current_user_id ) )
 					$class = ' class="current"';
 				else
 					$class = '';
-				$views['my-tickets'] = "<a href='edit.php?post_type=".Rt_HD_Module::$post_type."&assigned=$current_user_id&post_status=assigned'$class>" . sprintf( _nx( 'My Tickets <span class="count">(%s)</span>', 'My Tickets <span class="count">(%s)</span>', $count_user_tickets->post_count, RT_HD_TEXT_DOMAIN ), number_format_i18n( $count_user_tickets->post_count ) ) . '</a>';
-			//}
-
+                $temp_view['mine'] = "<a href='edit.php?post_type=".Rt_HD_Module::$post_type."&author=$current_user_id' $class>" . sprintf( _nx( 'Mine <span class="count">(%s)</span>', 'Mine <span class="count">(%s)</span>', $count_user_tickets->post_count, RT_HD_TEXT_DOMAIN ), number_format_i18n( $count_user_tickets->post_count ) ) . '</a>';
+			}
+            $views = array_merge( $temp_view, $views );
 			return $views;
 		}
 
