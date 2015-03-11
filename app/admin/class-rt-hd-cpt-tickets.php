@@ -160,7 +160,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 
 				case 'rthd_ticket_followup' :
                     $comment = get_comments(array('post_id'=>$post->ID,'number' => 1));
-                    echo '<span class="post-com-count-wrapper"><a class="post-com-count"><span class="comment-count">'.( $post->comment_count).'</span></a></span>';
+                    echo '<span class="post-com-count-wrapper"><a class="post-com-count" style="cursor: default;"><span class="comment-count">'.( $post->comment_count).'</span></a></span>';
                     break;
 
 				case 'rthd_ticket_last_reply_by' :
