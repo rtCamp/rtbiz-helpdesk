@@ -37,7 +37,8 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 			if ( empty( $post ) ){
 				$post = get_post( $postid );
 			}
-			if ( ( isset( $_POST['tax_input'] ) && isset( $_POST['tax_input'][ Rt_Offerings::$offering_slug ] )) || isset( $_POST['post']['product_id'] ) ) {
+            //  ( offering selecting form backend  ) || offering selected form support form
+			if ( ( isset( $_POST['tax_input'] ) && isset( $_POST['tax_input'][ Rt_Offerings::$offering_slug ] ) && ! empty( $_POST['tax_input'][ Rt_Offerings::$offering_slug ][0] ) ) || isset( $_POST['post']['product_id'] ) ) {
 				$terms = wp_get_post_terms( $postid, Rt_Offerings::$offering_slug );
 				$default_assignee = null;
 				$settings = rthd_get_redux_settings();
