@@ -45,6 +45,9 @@ jQuery(function () {
 	        rthdAdmin.initLoadAll();
 	        rthdAdmin.initEditContent();
 	        rthdAdmin.initAutoResponseSettings();
+
+            rthdAdmin.initBlacklistConfirmationOrRemove();
+            rthdAdmin.initAddContactBlacklist();
         },
 
 	    initEditContent: function(){
@@ -719,7 +722,84 @@ jQuery(function () {
 				}
 			}
 			return flag;
-		}
+		},
+        initBlacklistConfirmationOrRemove: function(){
+            jQuery( document ).on('click', '#rthd_ticket_contacts_blacklist', function (e) {
+                e.preventDefault();
+                var action = jQuery(this).data('action');
+                var requestArray = new Object();
+                requestArray['post_id']= jQuery('#post-id' ).val();
+
+                if ( action == 'remove_blacklisted' ){
+                    requestArray['action']= 'rthd_remove_blacklisted_contact';
+                    jQuery.ajax( {
+                        url: ajaxurl,
+                        type: 'POST',
+                        dataType: 'json',
+                        data: requestArray,
+                        success: function ( data ) {
+                            if(data.status) {
+                                jQuery('#contacts-blacklist-container').html('').hide();
+                                jQuery('#contacts-blacklist-action').html( data.addBlacklist_ui).show();
+                            }
+                        },
+                        error: function ( xhr, textStatus, errorThrown ) {
+                            jQuery('#contacts-blacklist-container').html( "Some error with ajax request!!" ).show();
+                        }
+                    });
+                }else if( action == 'blacklisted_confirmation' ){
+                    requestArray['action']= 'rthd_show_blacklisted_confirmation';
+                    jQuery.ajax( {
+                        url: ajaxurl,
+                        type: 'POST',
+                        dataType: 'json',
+                        data: requestArray,
+                        success: function ( data ) {
+                            if(data.status) {
+                                jQuery('#contacts-blacklist-container').html( data.confirmation_ui).show();
+                                jQuery('#contacts-blacklist-action').hide();
+                            }
+                        },
+                        error: function ( xhr, textStatus, errorThrown ) {
+                            jQuery('#contacts-blacklist-container').html( "Some error with ajax request!!" ).show();
+                        }
+                    });
+                }
+            });
+        },
+        initAddContactBlacklist: function(){
+            jQuery( document ).on('click', '#rthd_ticket_contacts_blacklist_yes', function (e) {
+                e.preventDefault();
+                var action = jQuery(this).data('action');
+                var requestArray = new Object();
+                requestArray['post_id']= jQuery('#post-id' ).val();
+                if ( action == 'blacklisted_contact' ){
+                    requestArray['action']= 'rthd_add_blacklisted_contact';
+                }
+
+                jQuery.ajax( {
+                    url: ajaxurl,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: requestArray,
+                    success: function ( data ) {
+                        if(data.status) {
+                            jQuery('.confirmation-container').hide();
+                            jQuery('#contacts-blacklist-action').html( data.remove_ui).show();
+                        }
+                    },
+                    error: function ( xhr, textStatus, errorThrown ) {
+                        jQuery('#contacts-blacklist-container').html( "Some error with ajax request!!" ).show();
+                    }
+                });
+
+            });
+            jQuery( document ).on('click','#rthd_ticket_contacts_blacklist_no', function (e) {
+                e.preventDefault();
+                jQuery('#contacts-blacklist-container').html('').hide();
+                jQuery('#contacts-blacklist-action').show();
+            });
+        }
     }
     rthdAdmin.init();
 });

@@ -97,6 +97,9 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			$rt_hd_offering_support = new Rt_HD_Offering_Support();
 			global $Rt_Hd_Help;
 			$Rt_Hd_Help = new Rt_Hd_Help();
+
+            // For ajax request register with WordPress
+            $temp_meta_box_contact_blacklist = new RT_Meta_Box_Ticket_Contacts_Blacklist();
 		}
 
 		/**
