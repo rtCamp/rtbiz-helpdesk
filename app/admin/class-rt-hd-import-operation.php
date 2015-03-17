@@ -991,8 +991,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			/* assignee toogle code */
 			//check auto assign feature enable and followup created by staff
 			if ( $autoAssingeFlag && $rt_hd_email_notification->is_internal_user( $comment_author_email ) ){
-				//check on 'on_first_followup' selected and its first staff followup || select 'on_every_followup'
-				if ( ( 'on_first_followup' == $autoAssignEvent && $isFirstStaffComment ) || 'on_every_followup' == $autoAssignEvent ){
+				//check on 'on_first_followup' selected and its first staff followup || select 'on_any_followup'
+				if ( ( 'on_first_followup' == $autoAssignEvent && $isFirstStaffComment ) || 'on_any_followup' == $autoAssignEvent ){
 					wp_update_post( array( 'ID'=>$comment_post_ID ,'post_author'=>$userid ) );
 				}
 			}

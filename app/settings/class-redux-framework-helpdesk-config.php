@@ -198,7 +198,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				array(
 					'id'       => 'rthd_enable_ticket_unique_hash',
 					'type'     => 'switch',
-					'title'    => __( 'Enable Unique Hash URLs for Tickets' ),
+					'title'    => __( 'Unique Hash URLs for Tickets' ),
 					'subtitle' => __( 'Please flush the permalinks after enabling this option.' ),
 					'desc'     => __( 'If enabled, this will generate a unique Hash URL for all the tickets through which tickets can be accessed in the front end. This unique URLs will be sent in all emails of Helpdesk. Tickets can be accessed from the default WordPress permalinks as well.' ),
 					'default'  => false,
@@ -247,7 +247,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				array_push($email_fields, array(
 					'id' => 'rthd_enable_mailbox_reading',
 					'type' => 'switch',
-					'title' => __('Enable Mailbox Reading'),
+					'title' => __('Mailbox Reading'),
 					'subtitle' => __('To enable/disable Mailbox Reading'),
 					'default' => true,
 					'on' => __('Enable'),
@@ -323,7 +323,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					array(
 						'id'       => 'rthd_enable_notification_acl',
 						'type'     => 'switch',
-						'title'    => __( 'Enable Notification ACL' ),
+						'title'    => __( 'Notification ACL' ),
 						'subtitle' => __( 'To enable/disable Notification ACL' ),
 						'default'  => true,
 						'on'       => __( 'Enable' ),
@@ -499,7 +499,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					array(
 						'id'       => 'rthd_enable_signature',
 						'type'     => 'switch',
-						'title'    => __( 'Enable email Signature' ),
+						'title'    => __( 'Email Signature' ),
 						'subtitle' => __( 'To enable/disable signature for all email send via rtCamp Helpdesk.' ),
 						'default'  => true,
 						'on'       => __( 'Enable' ),
@@ -545,8 +545,8 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					array(
 						'id'       => 'rthd_enable_auto_assign',
 						'type'     => 'switch',
-						'title'    => __( 'Enable auto assign' ),
-						'subtitle' => __( 'To enable/disable auto assign feature' ),
+						'title'    => __( 'Auto Assign Tickets' ),
+						'subtitle' => __( 'To auto assign a ticket to staff on reply' ),
 						'default'  => false,
 						'on'       => __( 'Enable' ),
 						'off'      => __( 'Disable' ),
@@ -559,12 +559,12 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					),
 					array(
 						'id'       => 'rthd_auto_assign_events',
-						'title'    => __( 'Event for auto assign' ),
+						'title'    => __( 'Event For Auto assign' ),
 						'default'  => 'on_first_followup',
 						'type'     => 'radio',
 						'options' => array(
-							'on_first_followup'	=> __( 'On first followup added by staff.' ),
-							'on_every_followup' => __( 'On every followup added by staff.' ),
+							'on_first_followup'	=> __( 'When first follow-up is added to a ticket by any staff member.' ),
+							'on_any_followup' => __( 'When any follow-up is added to a ticket by any staff member.' ),
 						),
 					),
 					array(
@@ -576,7 +576,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					array(
 						'id'       => 'rthd_enable_auto_response',
 						'type'     => 'switch',
-						'title'    => __( 'Enable auto response' ),
+						'title'    => __( 'Auto Response' ),
 						'subtitle' => __( 'To enable/disable auto response feature' ),
 						'default'  => false,
 						'on'       => __( 'Enable' ),
