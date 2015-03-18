@@ -452,6 +452,11 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 				return false;
 			}
 
+			if ( rt_hd_check_email_blacklisted( $_POST['post']['email'][0] ) ){
+				echo '<div id="info" class="error">You have been blocked from the system.</div>';
+				return false;
+			}
+
 			$data = $_POST['post'];
 			$data['description'] = $_POST['post_description'];
 			$offeringstr = $data['title'];
@@ -474,10 +479,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 					}
 				}
 			}
-			if ( rt_hd_check_email_blacklisted( $data['email'][0] ) ){
-				echo '<div id="info" class="error">You have been blocked from the system.</div>';
-				return false;
-			}
+
 			$allemails  = array();
 			foreach( array_filter( $data['email'] ) as $email ){
 				$allemails[] = array( 'address' => $email );
