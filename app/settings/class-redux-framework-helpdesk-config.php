@@ -156,7 +156,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			}
 			$is_mailbox_configured = ( ! empty( $system_emails ) );
 			$acl_page_link = '<a href="' . admin_url( 'admin.php?page=' . Rt_Biz::$access_control_slug ) . '">Access Control</a> page.';
-			$offerings_page_link = '<br/>' . __( ' To select dedicated assignee for an offering, visit the ' ) .'<a href="' . admin_url( 'edit-tags.php?taxonomy=' . Rt_Biz::$access_control_slug ) . '">offerings page</a> page.';
+			$offerings_page_link = ' ' . __( ' To select dedicated assignee for an offering, visit the ' ) .'<a href="' . admin_url( 'edit-tags.php?taxonomy=' . Rt_Offerings::$offering_slug . '&post_type=' . Rt_HD_Module::$post_type ) . '">offerings page</a>.';
 			// ACTUAL DECLARATION OF SECTIONS
 			$general_fields = array(
 				array(
