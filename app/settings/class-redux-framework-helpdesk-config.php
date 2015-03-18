@@ -156,6 +156,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			}
 			$is_mailbox_configured = ( ! empty( $system_emails ) );
 			$acl_page_link = '<a href="' . admin_url( 'admin.php?page=' . Rt_Biz::$access_control_slug ) . '">Access Control</a> page.';
+			$offerings_page_link = '<br/>' . __( ' To select dedicated assignee for an offering, visit the ' ) .'<a href="' . admin_url( 'edit-tags.php?taxonomy=' . Rt_Biz::$access_control_slug ) . '">offerings page</a> page.';
 			// ACTUAL DECLARATION OF SECTIONS
 			$general_fields = array(
 				array(
@@ -184,7 +185,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					'options'  => $users_options,
 					'default'  => $default_assignee,
 					'title'    => __( 'Default Assignee' ),
-					'desc'     => __( 'Default assign will be rtbiz contact which have helpdesk access. You can change helpdesk access form rtBiz ' ) . $acl_page_link,
+					'desc'     => __( 'Default assign will be rtbiz contact which have helpdesk access. You can change helpdesk access form rtBiz' ) . $acl_page_link . $offerings_page_link,
 					'subtitle' => __( 'Select user for HelpDesk ticket Assignee' ),
 				),
 				array(
