@@ -461,6 +461,12 @@ jQuery( document ).ready( function ( $ ) {
 			             data: requestArray,
 			             success: function ( data ) {
 				             if (data.status) {
+					             if ( jQuery('.rthd-current-user-id' ).val() == userid ){
+						             jQuery('.rt-hd-assign-me' ).hide();
+						             jQuery('#rthd-assignee-list' ).val( userid );
+					             } else {
+						             jQuery('.rt-hd-assign-me' ).show();
+					             }
 					             //jQuery( '#rthd-status-visiable' ).html( data.stauts_markup );
 				             }
 				             jQuery('#assignee-change-spinner' ).hide();

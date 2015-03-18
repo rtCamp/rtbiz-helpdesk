@@ -133,6 +133,11 @@ img.tips {
 	text-decoration: none;
 }
 
+/* If cross mark on backend of created by and subscriber should only come in case of on hover use this style there are some glitch that need to fix */
+/*.contact-list:hover .delete_row,.rthd-info-meta-created-by-li:hover .delete_row {
+	display: block;
+}*/
+
 #divSubscriberList .delete_row {
 	margin-left: -15px;
 	margin-top: -10px;
@@ -187,4 +192,24 @@ img.tips {
 	border-radius: 100%;
 	display: block;
 	margin: 0 auto;
+}
+
+.rthd-info-meta-created-by{
+	text-align: center;
+	display: block;
+}
+
+.rthd-info-meta-created-by img{
+	border-radius: 100%;
+	display: block;
+	margin: 0 auto;
+}
+
+.rthd-info-meta-created-by-li{
+	text-align: center;
+	display: inline-block;
+}
+
+li.rthd-info-meta-created-by-li img{
+	border-radius: 100%;
 }

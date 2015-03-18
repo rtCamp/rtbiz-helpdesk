@@ -154,7 +154,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 						printf( " <a href='%s' style='text-align: center;display: block;'>%s%s ", $url, get_avatar( $user_info->user_email, 25 ), $user_info->display_name );
 						remove_filter('get_avatar', array( $this, 'add_gravatar_class' ));
 					} else {
-						_e( 'No assignee', RT_HD_TEXT_DOMAIN );
+						echo '<div style="text-align: center;">'.__( 'No assignee', RT_HD_TEXT_DOMAIN ).'</div>';
 					}
 					break;
 

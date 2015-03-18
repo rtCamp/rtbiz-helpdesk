@@ -108,11 +108,12 @@ $user_edit_content = current_user_can( $cap );
 						?>
 					</select>
 					<?php
-					if ( $post->post_author != get_current_user_id() ){ ?>
+					$assign_tome_style = '';
+					if ( $post->post_author == get_current_user_id() ) {
+						$assign_tome_style = 'display:none;';
+					}?>
 						<input type="hidden" class="rthd-current-user-id" value="<?php echo get_current_user_id(); ?>" />
-						<button type="button" class="btn button rt-hd-assign-me"><?php _e( 'Assign to me' ); ?></button>
-					<?php }
-					?>
+						<a style="<?php echo $assign_tome_style; ?>" href="#" class="rt-hd-assign-me"><?php _e( 'Assign me' ); ?></a>
 					<img id="assignee-change-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 				</div>
 			<?php
