@@ -1075,7 +1075,7 @@ function rthd_get_blacklist_emails(){
 	if ( isset( $redux['rthd_blacklist_emails_textarea'] ) && ! empty( $redux['rthd_blacklist_emails_textarea'] ) ){
 		$blacklist = explode( "\n", $redux['rthd_blacklist_emails_textarea'] );
 	}
-	return $blacklist;
+	return array_filter( $blacklist );
 }
 
 /**
@@ -1205,7 +1205,11 @@ function rt_hd_check_email_blacklisted( $testemail ){
 	$black_list_emails = rthd_get_blacklist_emails();
 	if ( ! empty( $black_list_emails ) ){
 		foreach ( $black_list_emails as $email ){
-			if ( preg_match( '/'.str_replace('*','\/*',$email).'/', $testemail ) ){
+			$matching_string = str_replace( '*', '\/*', preg_replace('/\s+/', '', $email ) );
+			if ( empty( $matching_string )){
+				continue;
+			}
+			if ( preg_match( '/'.php_strip_whitespace($matching_string).'/', $testemail ) ){
 				return true;
 			}
 		}
