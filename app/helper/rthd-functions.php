@@ -1209,7 +1209,7 @@ function rt_hd_check_email_blacklisted( $testemail ){
 			if ( empty( $matching_string )){
 				continue;
 			}
-			if ( preg_match( '/'.php_strip_whitespace($matching_string).'/', $testemail ) ){
+			if ( preg_match( '/'.$matching_string.'/', $testemail ) ){
 				return true;
 			}
 		}
