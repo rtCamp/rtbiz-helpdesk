@@ -602,7 +602,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 		 * Display custom filters to filter out tickets.
 		 */
 		public function display_custom_filters() {
-			global $typenow, $rt_hd_module, $rtbiz_offerings;
+			global $typenow, $rt_hd_module, $rtbiz_offerings, $rt_hd_rt_attributes;
 
 			if ( $typenow == Rt_HD_Module::$post_type ) {
 
@@ -663,6 +663,30 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 
 					echo '</select>';
 				}
+				$attrs     = rthd_get_all_attributes();
+				foreach ( $attrs as $attr ){
+					if ( ! empty( $attr->attribute_store_as ) && 'taxonomy' == $attr->attribute_store_as ){
+						$attr_tax =  $rt_hd_rt_attributes->get_taxonomy_name( $attr->attribute_name );
+						$attr_terms = get_terms( $attr_tax, array( 'hide_empty' => false ) );
+						if ( ! empty( $attr_terms ) ) {
+							echo '<label class="screen-reader-text" for="'.$attr_tax.'">' . __( 'Filter by offering' ) . '</label>';
+
+							echo '<select id="'.$attr->attribute_name .'" class="postform" name="'.$attr_tax.'">';
+							echo '<option value="0">Select ' . $attr->attribute_label . '</option>';
+
+							foreach ( $attr_terms as $terms ){
+								if( isset( $_GET[$attr_tax] ) && $terms->slug == $_GET[$attr_tax] ) {
+									echo '<option value="'.$terms->slug.'" selected="selected">'.$terms->name.'</option>';
+								} else {
+									echo '<option value="'.$terms->slug.'">'.$terms->name.'</option>';
+								}
+							}
+							echo '</select>';
+						}
+
+					}
+				}
+
 			}
 		}
 	}
