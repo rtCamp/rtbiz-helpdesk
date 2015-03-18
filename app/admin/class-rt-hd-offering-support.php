@@ -333,7 +333,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 
 
 		function check_active_plugin(){
-			$settings = rtbiz_get_redux_settings();
+			$settings = rt_biz_get_redux_settings();
 
 			$activePlugin = $settings['offering_plugin'];
 			if ( is_plugin_active( 'woocommerce/woocommerce.php' ) && 'woocommerce' === $activePlugin ) {
