@@ -527,7 +527,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 		static function insert_attachment( $file_handler ) {
 			global $rt_hd_admin;
 			// check to make sure its a successful upload
-			if ( ! empty( $_FILES[ $file_handler ]['error'] ) && $_FILES[ $file_handler ]['error'] !== UPLOAD_ERR_OK ) {
+			if ( $file_handler['error'] !== UPLOAD_ERR_OK ) {
 				__return_empty_array();
 			}
 
