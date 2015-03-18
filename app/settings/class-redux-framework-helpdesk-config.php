@@ -185,7 +185,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					'options'  => $users_options,
 					'default'  => $default_assignee,
 					'title'    => __( 'Default Assignee' ),
-					'desc'     => __( 'Default assign will be rtbiz contact which have helpdesk access. You can change helpdesk access form rtBiz' ) . $acl_page_link . $offerings_page_link,
+					'desc'     => __( 'Default assignee will be rtbiz contact with helpdesk access. You can change helpdesk access from rtBiz ') .$acl_page_link . $offerings_page_link,
 					'subtitle' => __( 'Select user for HelpDesk ticket Assignee' ),
 				),
 				array(
