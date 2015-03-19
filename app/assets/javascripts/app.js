@@ -479,6 +479,7 @@ jQuery( document ).ready( function ( $ ) {
 	}
 
 	jQuery('.rt-hd-assign-me' ).click(function (e){
+		e.preventDefault();
 		assgine_request( jQuery('.rthd-current-user-id' ).val() );
 	});
 
