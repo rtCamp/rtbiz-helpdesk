@@ -60,7 +60,26 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 			$this->get_custom_menu_order();
 			add_action( 'init', array( $this, 'init_hd' ) );
 			add_action( 'p2p_init', array( $this, 'create_connection' ) );
+			add_filter( 'bulk_post_updated_messages', array( $this, 'bulk_ticket_update_messages' ), 10, 2);
 			$this->hooks();
+		}
+
+		/**
+		 * Filter the bulk action updated messages for ticket.
+		 * @param $bulk_messages
+		 * @param $bulk_counts
+		 *
+		 * @return $bulk_messages
+		 */
+		function bulk_ticket_update_messages( $bulk_messages, $bulk_counts ){
+			$bulk_messages[self::$post_type] = array(
+				'updated'   => _n( '%s ticket updated.', '%s tickets updated.', $bulk_counts['updated'] ),
+				'locked'    => _n( '%s ticket not updated, somebody is editing it.', '%s tickets not updated, somebody is editing them.', $bulk_counts['locked'] ),
+				'deleted'   => _n( '%s ticket permanently deleted.', '%s tickets permanently deleted.', $bulk_counts['deleted'] ),
+				'trashed'   => _n( '%s ticket moved to the Trash.', '%s tickets moved to the Trash.', $bulk_counts['trashed'] ),
+				'untrashed' => _n( '%s ticket restored from the Trash.', '%s tickets restored from the Trash.', $bulk_counts['untrashed'] ),
+			);
+			return $bulk_messages;
 		}
 
 		/**
