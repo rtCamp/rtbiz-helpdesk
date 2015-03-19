@@ -65,7 +65,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 			$this->hooks();
 		}
 
-		function post_updated_messages( $messages ){
+		function ticket_updated_messages( $messages ){
 			//			$post             = get_post();
 			//			$post_type        = get_post_type( $post );
 			//			$post_type_object = get_post_type_object( $post_type );
