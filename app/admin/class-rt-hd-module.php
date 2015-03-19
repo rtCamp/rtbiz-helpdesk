@@ -61,7 +61,44 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 			add_action( 'init', array( $this, 'init_hd' ) );
 			add_action( 'p2p_init', array( $this, 'create_connection' ) );
 			add_filter( 'bulk_post_updated_messages', array( $this, 'bulk_ticket_update_messages' ), 10, 2);
+			add_filter( 'post_updated_messages', array( $this, 'ticket_updated_messages' ), 10, 2 );
 			$this->hooks();
+		}
+
+		function post_updated_messages( $messages ){
+			//			$post             = get_post();
+			//			$post_type        = get_post_type( $post );
+			//			$post_type_object = get_post_type_object( $post_type );
+
+			$messages[ self::$post_type ] = array(
+				0  => '', // Unused. Messages start at index 1.
+				1  => __( 'Ticket updated.', RT_HD_TEXT_DOMAIN ),
+				2  => __( 'Custom field updated.', RT_HD_TEXT_DOMAIN ),
+				3  => __( 'Custom field deleted.', RT_HD_TEXT_DOMAIN ),
+				4  => __( 'Ticket updated.', RT_HD_TEXT_DOMAIN ),
+				/* translators: %s: date and time of the revision */
+				5  => isset( $_GET['revision'] ) ? sprintf( __( 'Ticket restored to revision from %s', RT_HD_TEXT_DOMAIN ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
+				6  => __( 'Ticket published.', RT_HD_TEXT_DOMAIN ),
+				7  => __( 'Ticket saved.', RT_HD_TEXT_DOMAIN ),
+				8  => __( 'Ticket submitted.', RT_HD_TEXT_DOMAIN ),
+				10 => __( 'Ticket draft updated.', RT_HD_TEXT_DOMAIN )
+			);
+
+			/*if ( $post_type_object->publicly_queryable ) {
+				$permalink = get_permalink( $post->ID );
+
+				$view_link = sprintf( ' <a href="%s">%s</a>', esc_url( $permalink ), __( 'View Ticket', RT_HD_TEXT_DOMAIN ) );
+				$messages[ $post_type ][1] .= $view_link;
+				$messages[ $post_type ][6] .= $view_link;
+				$messages[ $post_type ][9] .= $view_link;
+
+				$preview_permalink = add_query_arg( 'preview', 'true', $permalink );
+				$preview_link = sprintf( ' <a target="_blank" href="%s">%s</a>', esc_url( $preview_permalink ), __( 'Preview Ticket', RT_HD_TEXT_DOMAIN ) );
+				$messages[ $post_type ][8]  .= $preview_link;
+				$messages[ $post_type ][10] .= $preview_link;
+			}*/
+
+			return $messages;
 		}
 
 		/**

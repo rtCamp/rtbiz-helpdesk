@@ -14,24 +14,24 @@ jQuery( '#bulk_edit' ).live( 'click', function($) {
 
 	// get the post status
 	var $status = $bulk_row.find('.inline-edit-status').find('select').val();
-	
+
 	// get all taxonomy values along with taxonomy slug.
 	var tax_input = {};
-	
+
 	$bulk_row.find( 'ul.cat-checklist' ).each( function() {
-		
+
 		var tax_ids = [];
 		var tax_class = jQuery( this ).attr( 'class' ).split( ' ' )[1].replace('-checklist', '');
-		
+
 		jQuery( this ).find( 'input[type="checkbox"]' ).each( function() {
-			
+
 			if( jQuery( this ).is( ':checked' ) ) {
 				tax_ids.push( jQuery( this ).val() );
 			}
 		});
 		tax_input[ tax_class ] = tax_ids;
 	});
-	
+
 	// save the data
 	jQuery.ajax({
        url: ajaxurl, // this is a variable that WordPress has already defined for us
@@ -39,7 +39,7 @@ jQuery( '#bulk_edit' ).live( 'click', function($) {
        async: false,
        cache: false,
        data: {
-	       action: 'ticket_bulk_edit', // this is the name of our WP AJAX function that we'll set up next
+	       action: 'ticket_bulk_edit', // this is the action of our WP AJAX
 	       post_ids: $post_ids, // and these are the 3 parameters we're passing to our function
 	       ticket_status: $status,
 	       tax_input: tax_input,
