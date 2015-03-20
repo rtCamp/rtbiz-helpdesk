@@ -1,10 +1,18 @@
-# Advanced Settings
+# Miscellaneous Feature
 
-**Coming soon!!**
+##### 1. Enable auto assign
 
-Enable auto assign
+![auto_assign_feature](https://cloud.githubusercontent.com/assets/8191145/6750093/e7fb5ba8-cf1c-11e4-82f0-fbc42cf01115.png)
 
-![enable_autoassign](https://cloud.githubusercontent.com/assets/8191145/6554956/0c899b0e-c687-11e4-90ae-230b6c18f4a3.png)
+###### i. When first followup is added to a ticket by any staff member
+
+If this option is selected then the ticket will be assigned to the staff member who adds the **first** followup to the client's ticket
+
+###### ii. When first followup is added to a ticket by any staff member
+
+If this option is selected then the ticket will automatically be assigned to any staff member who answer the ticket.
+
+##Coming soon!!##
 
 Enable auto response
 
