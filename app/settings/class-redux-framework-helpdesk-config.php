@@ -348,8 +348,8 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 							'new_followup_created_mail'	=> __( 'When a new follow-up is added to a ticket' ),
 							'new_followup_updated_mail'	=> __( 'When any follow-up is edited by staff' ),
 							'new_followup_deleted_mail'	=> __( 'When a follow-up is deleted by staff/customer' ),
-							'new_customer_accoutn_created_mail'	=> __( 'When a customer creates a ticket for the first time and an account is created automatically for them' ),
-							'ticket_solved_mail'	=> __( 'When a ticket status is changed to solved' ),
+							//'new_customer_accoutn_created_mail'	=> __( 'When a customer creates a ticket for the first time and an account is created automatically for them' ),
+							//'ticket_solved_mail'	=> __( 'When a ticket status is changed to solved' ),
 						),
 					),
 					array(
@@ -574,7 +574,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'indent' => false,
 					),
 
-					array(
+					/* array(
 						'id'       => 'rthd_enable_auto_response',
 						'type'     => 'switch',
 						'title'    => __( 'Auto Response' ),
@@ -660,7 +660,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'id'     => 'section-auto-response-end',
 						'type'   => 'section',
 						'indent' => false,
-					),
+					),*/
 				),
 			);
 
