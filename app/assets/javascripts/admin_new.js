@@ -44,7 +44,7 @@ jQuery(function () {
 	        //rthdAdmin.initLoadMore();
 	        rthdAdmin.initLoadAll();
 	        rthdAdmin.initEditContent();
-	        rthdAdmin.initAutoResponseSettings();
+	        //rthdAdmin.initAutoResponseSettings();
 
             rthdAdmin.initBlacklistConfirmationOrRemove();
             rthdAdmin.initAddContactBlacklist();
