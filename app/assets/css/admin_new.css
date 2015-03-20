@@ -84,6 +84,22 @@ img.tips {
 	width: 0
 }
 
+.rthd_ticket_followup{
+    text-align: center;
+}
+
+.rthd_ticket_followup .post-com-count:after{
+    margin-left: 45%;
+}
+
+.rthd_ticket_followup .post-com-count:hover span{
+    background-color : #888;
+}
+
+.rthd_ticket_followup .post-com-count:hover:after{
+    border-top-color: #888;
+}
+
 #rt-hd-ticket-data .inside {
 	padding: 0;
 }

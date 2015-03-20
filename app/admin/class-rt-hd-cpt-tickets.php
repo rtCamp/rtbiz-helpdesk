@@ -76,7 +76,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 			$columns['rthd_ticket_status']         = '<span class="status_head tips" data-tip="' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '">' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '</span>';
 			$columns['rthd_ticket_assignee']     = __( 'Assigned To', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_created_by']     = __( 'Ticket Author', RT_HD_TEXT_DOMAIN );
-			$columns['rthd_ticket_followup']       = __( '#Replies', RT_HD_TEXT_DOMAIN );
+			$columns['rthd_ticket_followup']       = __( 'Replies Count', RT_HD_TEXT_DOMAIN );
 //            $columns['rthd_ticket_updated_by']     = __( 'Updated By', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_last_reply_by']     = __( 'Last Reply By', RT_HD_TEXT_DOMAIN );
 
