@@ -93,11 +93,11 @@ img.tips {
 }
 
 .rthd_ticket_followup .post-com-count:hover span{
-    background-color : #888;
+    background-color : #BBB;
 }
 
 .rthd_ticket_followup .post-com-count:hover:after{
-    border-top-color: #888;
+    border-top-color: #BBB;
 }
 
 #rt-hd-ticket-data .inside {
