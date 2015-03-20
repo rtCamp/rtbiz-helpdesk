@@ -348,7 +348,6 @@ jQuery( document ).ready( function ( $ ) {
 		             rthd_tinymce_set_content( 'followupcontent', '' );
 		             jQuery('#add-private-comment' ).val(10);
 		             $("#attachemntlist").val('');
-	 				 $("#fileList").html('');
 	 				 $("#clear-attachemntlist").hide();
 
                      if (data.ticket_status=='answered'){
