@@ -10,20 +10,20 @@ The Helpdesk dashboard is collection of widgets.
 
 1. Welcome Widget -  The welcome widgets consists of quick links that helps you get started with Helpdesk. The links are to settings, new ticket page, attributes.
 
-2. Daily Tickets -
+2. Daily Tickets
 
-3. Ticket By Offerings -
+3. Ticket By Offerings
 
-4. Team Load -
+4. Team Load
 
-5. Top Clients -
+5. Top Clients
 
 6. Top Accounts
 
-7. Ticket conversion from sales -
+7. Ticket conversion from sales
 
 ## Helpdesk Menu
-1. 
+1.
 
 The dashboard present you a quick reports of the tickets in the helpdesk system.
 
