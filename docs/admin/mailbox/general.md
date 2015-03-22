@@ -1,7 +1,7 @@
 # General Settings
 
 
-![general_settings_tab](https://cloud.githubusercontent.com/assets/9676513/6480450/d4fe93b2-c279-11e4-969c-ae6e0112625a.png)
+![general_settings_tab](https://cloud.githubusercontent.com/assets/8191145/6751860/19317bbe-cf2f-11e4-8c86-af030c7ff1bb.png)
 
 
 ##### 1. Menu Label
@@ -17,7 +17,7 @@ iii. The default logo is at present at [Your Site Name]/wp-content/plugins/rtbiz
 
 ##### 3. Default Assignee
 
-i. The default assignee is the staff memeber to whom all the newly created tickets are assigned to.
+i. The default assignee is the staff member to whom all the newly created tickets are assigned to.
 
 ii. By default, the WordPress admin is selected as the assignee.
 
@@ -25,7 +25,12 @@ iii. The dropdown is populated with all the Staff members who belongs to departm
 
 ![assignee_dropdown](https://cloud.githubusercontent.com/assets/9676513/6483474/a3a8ba5e-c297-11e4-8ebe-6a1b8cfbae97.png)
 
-iv. A department can be given accesss to Helpdesk from rtBiz access control settings.
+iv. A department can be given access to Helpdesk from rtBiz access control settings.
+
+v. There is a provision to add different Default assignees for different offerings (products or services) via rtBiz Offerings.
+
+![add_assignee_via_offerings](https://cloud.githubusercontent.com/assets/8191145/6752439/89218252-cf34-11e4-9673-0ffe0403c49a.png)
+
 
 ##### 4. Support Form
 

@@ -4,7 +4,7 @@ Donate Link:       http://rtcamp.com/donate
 Tags:              helpdesk, support, products, tickets, followups, customers, e-commerce
 Requires at least: 4.1
 Tested up to:      4.1
-Stable tag:        1.0
+Stable tag:        1.1
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,6 +57,20 @@ Please refer to the documentation.
 1. Dashboard
 
 == Changelog ==
+
+= 1.1 =
+* Reporting filters added
+* Auto-assign feature added
+* Notification email settings added
+* Inline image parse support added
+* 'Add People to ticket' feature added for customers
+* Enable/Disable mailbox reading feature added
+* Assign me feature for front-end added
+* Blacklist contact feature added
+* Related ticket feature added
+* Ticket list UI updated
+* Offering wise default assignee setting added
+* Bug fixes
 
 = 1.0 =
 * Ticket / followup creation via mail parsing and gravity form

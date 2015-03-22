@@ -116,7 +116,8 @@ jQuery( document ).ready( function ( $ ) {
 			             success: function ( data ) {
 								if ( data.status ){
 									jQuery('.rthd-subscribe-validation' ).show();
-									jQuery('.rthd-subscribe-validation' ).text('Success!');
+									jQuery('.rthd-subscribe-validation' ).text('Added Successfully!');
+									jQuery('#rthd-subscribe-email' ).val('');
 								}
 				                else{
 									if ( data.msg.length > 0 ){

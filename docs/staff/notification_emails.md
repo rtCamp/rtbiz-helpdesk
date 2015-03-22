@@ -54,8 +54,10 @@ Screenshots of emails that you will receive for the events mentioned in the sect
 
 
  * When any status or metadata changed for a ticket
- **[Screenshot]**
-** Not comingright now**
+
+![statuschange](https://cloud.githubusercontent.com/assets/8191145/6749812/da77c91a-cf19-11e4-9b02-ca4fadf5c6d6.png)
+
+
 
  * When a staff member subscribes to a ticket
 

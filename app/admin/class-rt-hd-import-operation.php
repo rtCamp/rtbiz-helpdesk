@@ -87,7 +87,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 						if ( ! in_array( $user->ID, $ticket_subscribers ) ){
 							$ticket_subscribers[] = $user->ID;
 							update_post_meta( $_POST['post_id'], '_rtbiz_hd_subscribe_to', $ticket_subscribers );
-							$rt_hd_email_notification->notification_ticket_subscribed( $_POST['post_id'], Rt_HD_Module::$post_type, array( 'email' => $user->user_email, 'name' => $user->display_name ) );
+							$rt_hd_email_notification->notification_ticket_subscribed( $_POST['post_id'], Rt_HD_Module::$post_type, array( array( 'email' => $user->user_email, 'name' => $user->display_name ) ) );
 							$response['status'] = true;
 						} else{
 							$response['msg'] = 'Already subscribed.';
