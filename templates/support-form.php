@@ -1,29 +1,3 @@
-<script type="text/javascript">
-jQuery(document).ready(function ($) {
-	//print list of selected file
-	$("#filesToUpload").change(function () {
-		var input = document.getElementById('filesToUpload');
-		var list = '';
-		// If attachemnt are more then one then it display.
-		if( input.files.length > 1 ) {
-			for (var x = 0; x < input.files.length; x++) {
-				//add to list
-				list += '<li>' + input.files[x].name + '</li>';
-			}
-		}
-		if( input.files.length > 0 ) {
-			$("#clear-attachemntlist").show();
-		}
-		$("#fileList").html(list);
-	});
-	$("#clear-attachemntlist").click(function() {
-		$("#filesToUpload").val('');
-		$("#fileList").html('');
-		$("#clear-attachemntlist").hide();
-	});
-});
-</script>
-
 <div class="rthd-support-title"><?php _e( 'Get Support', 'RT_HD_TEXT_DOMAIN' ); ?></div>
 <form method="post" class="pure-form rthd_support_from" enctype="multipart/form-data">
 
@@ -83,10 +57,7 @@ jQuery(document).ready(function ($) {
 	</div>
 
 	<div>
-		<input type="file" id="filesToUpload" name="attachment[]" multiple="multiple"/>
-		<ul id="fileList">
-		</ul>
-		<a id="clear-attachemntlist" href="javascript:;">Clear All</a>
+		<input type="file" id="filesToUpload" class="multi" name="attachment[]" multiple="multiple"/>
 	</div>
 
 	<div>

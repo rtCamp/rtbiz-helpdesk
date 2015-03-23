@@ -78,3 +78,8 @@ reference: http://purecss.io/forms/
 	border: none;
 	text-decoration: none;
 }
+
+
+.MultiFile-remove{
+	color: #9B0000;
+}

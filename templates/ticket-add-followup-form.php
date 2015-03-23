@@ -9,33 +9,6 @@
 global $current_user;
 ?>
 <div id="new-followup-form">
-
-	<script type="text/javascript">
-	jQuery(document).ready(function ($) {
-		//print list of selected file
-		$("#attachemntlist").change(function () {
-			var input = document.getElementById('attachemntlist');
-			var list = '';
-			// If attachemnt are more then one then it display.
-			if( input.files.length > 1 ) {
-				for (var x = 0; x < input.files.length; x++) {
-					//add to list
-					list += '<li>' + input.files[x].name + '</li>';
-				}
-			}
-			if( input.files.length > 0 ) { 
-				$("#clear-attachemntlist").css("display", "block");	
-			}
-			$("#fileList").html(list);
-		});
-		$("#clear-attachemntlist").click(function() {
-			$("#attachemntlist").val('');
-			$("#fileList").html('');
-			$("#clear-attachemntlist").hide();
-		});
-	});
-	</script>
-
 	<input type="hidden" id='ticket_unique_id' name="followup_ticket_unique_id" value="<?php echo esc_attr( $ticket_unique_id ); ?>" />
 	<input type="hidden" id="followup_post_type" name="post_type" value="<?php echo Rt_HD_Module::$post_type ?>" />
 	<input type="hidden" id="followuptype" name="followuptype" value="" />
@@ -74,19 +47,16 @@ wp_editor( '', $editor_id, $settings );
 			<img id='hdspinner' class="helpdeskspinner" src="<?php echo admin_url().'images/spinner.gif'; ?>">
 		</div>
 		<?php if (current_user_can(rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' )) && $post->post_status != 'hd-answered' ){ ?>
-			<div> 
+			<div>
 				<label for="rthd_keep_status">
 					<input id="rthd_keep_status" type="checkbox" name="rthd_keep_status" text="check keep status unanswered" />&nbsp;
 					<?php _e('Keep unanswered'); ?></label></div>
         <?php } ?>
         <div>
-			<input id="attachemntlist" name="attachemntlist[]" type="file" multiple />
-			<ul id="fileList">
-			</ul>
-			<a id="clear-attachemntlist" href="javascript:;">Clear All</a>
+			<input id="attachemntlist" name="attachemntlist[]" class="multi" type="file" multiple />
 			<span class="followup-note"><b>Note:</b> Attachments will be uploaded when the form is submitted by clicking <i>Add Followup</i> button.</span>
 		</div>
 	</div>
-	
+
 	<div class="rthd-clearfix"></div>
 </div>
