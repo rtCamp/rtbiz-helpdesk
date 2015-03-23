@@ -584,7 +584,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'indent' => false,
 					),
 
-					/* array(
+					array(
 						'id'       => 'rthd_enable_auto_response',
 						'type'     => 'switch',
 						'title'    => __( 'Auto Response' ),
@@ -607,6 +607,11 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'default'  => true,
 						'on'       => __( 'Day Shift' ),
 						'off'      => __( 'Day-Night Shift' ),
+					),
+					array(
+						'id'       => 'rthd_autoresponse_weekend',
+						'type'     => 'checkbox',
+						'title'    => __( 'Weekends Only' ),
 					),
 					array(
 						'id'       => 'section-auto-response-dayshift-start',
@@ -670,7 +675,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'id'     => 'section-auto-response-end',
 						'type'   => 'section',
 						'indent' => false,
-					),*/
+					),
 				),
 			);
 
