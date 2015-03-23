@@ -663,7 +663,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 
 					echo '</select>';
 				}
-				$attrs     = rthd_get_all_attributes();
+				$attrs     = rthd_get_attributes( Rt_HD_Module::$post_type );
 				foreach ( $attrs as $attr ){
 					if ( ! empty( $attr->attribute_store_as ) && 'taxonomy' == $attr->attribute_store_as ){
 						$attr_tax =  $rt_hd_rt_attributes->get_taxonomy_name( $attr->attribute_name );

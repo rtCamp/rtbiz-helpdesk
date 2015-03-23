@@ -550,7 +550,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 
 			$this->sections[] = array(
 				'icon'        => 'el-icon-magic',
-				'title'       => __( 'Miscellaneous Feature' ),
+				'title'       => __( 'Advance Settings' ),
 				'permissions' => $admin_cap,
 				'fields'      => array(
 					array(
