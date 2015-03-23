@@ -53,9 +53,9 @@ iii. Refresh the settings area. The newly created support page will be populated
 ![select_support_form](https://cloud.githubusercontent.com/assets/9676513/6480262/f5026802-c277-11e4-81e1-62145daf208e.png)
 
 
-[**Add form info ** ]
+iv) The support form looks similar to the image below
 
-
+![support_form](https://cloud.githubusercontent.com/assets/8191145/6779592/a8187b42-d183-11e4-9cfd-807f3d16bbd2.png)
 
 
 
