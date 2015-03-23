@@ -56,6 +56,14 @@
 		?>
 	</div>
 
+<?php //is ticket have adult content
+
+if ( rthd_get_redux_adult_filter() ) { ?>
+	<div>
+		<input type="checkbox" name="post[adult_ticket]" value="1" />
+		<span class="description"><?php _e( 'Adult Content', RT_HD_TEXT_DOMAIN ); ?></span>
+	</div>
+<?php } ?>
 	<div>
 		<input type="file" id="filesToUpload" class="multi" name="attachment[]" multiple="multiple"/>
 	</div>

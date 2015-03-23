@@ -692,6 +692,17 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 
 			$data = $_POST['post'];
 
+			// adult filter
+			if ( rthd_get_redux_adult_filter() ) {
+				$adultval = '';
+				if ( isset( $data[ 'adult_ticket' ] ) ) {
+					$adultval = 'yes';
+				} else {
+					$adultval = 'no';
+				}
+				rthd_save_adult_ticket_meta( $rt_hd_tickets_id, $adultval );
+			}
+
 			if ( isset( $data['product_id'] ) ) {
 				$term = get_term_by( 'id', $data['product_id'], Rt_Offerings::$offering_slug );
 				if ( $term ) {
