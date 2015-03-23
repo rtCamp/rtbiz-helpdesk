@@ -665,25 +665,6 @@ jQuery(function () {
 					}
 					return flag;
 				});
-
-                //auto response feature Weekend only
-                jQuery( document ).on( 'click', '#redux_helpdesk_settings_rthd_autoresponse_weekend', function (e) {
-                    if(this.checked) {
-                        if ( jQuery( '.rthd-dayshift-info.weekday' ) ){
-                            jQuery( '.rthd-dayshift-info.weekday' ).find( 'select' ).attr( 'disabled', true );
-                        }
-                        if ( jQuery( '.rthd-daynightshift-info.weekday' ) ){
-                            jQuery( '.rthd-daynightshift-info.weekday' ).find( 'select' ).attr( 'disabled', true );
-                        }
-                    }else{
-                        if ( jQuery( '.rthd-dayshift-info.weekday' ) ){
-                            jQuery( '.rthd-dayshift-info.weekday' ).find( 'select' ).attr( 'disabled', false );
-                        }
-                        if ( jQuery( '.rthd-daynightshift-info.weekday' ) ){
-                            jQuery( '.rthd-daynightshift-info.weekday' ).find( 'select' ).attr( 'disabled', false );
-                        }
-                    }
-                } );
 			}
 		},
 		initDayValidation: function ( $tr_parent ) {

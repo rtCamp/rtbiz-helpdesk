@@ -609,11 +609,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'off'      => __( 'Day-Night Shift' ),
 					),
 					array(
-						'id'       => 'rthd_autoresponse_weekend',
-						'type'     => 'checkbox',
-						'title'    => __( 'Weekends Only' ),
-					),
-					array(
 						'id'       => 'section-auto-response-dayshift-start',
 						'type'     => 'section',
 						'indent'   => true, //Indent all options below until the next 'section' option is set.
@@ -650,6 +645,15 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 							'id'     => 'section-auto-response-nightshift-end',
 							'type'   => 'section',
 							'indent' => false,
+					),
+					array(
+						'id'       => 'rthd_autoresponse_weekend',
+						'type'     => 'switch',
+						'title'    => __( 'Do you want to send mail on Weekend only?' ),
+						'default'  => false,
+						'on'       => __( 'Yes' ),
+						'off'      => __( 'No' ),
+						'required' => array( 'rthd_enable_auto_response', '=', 1 ),
 					),
 					array(
 						'id'           => 'rthd_auto_response_message',
