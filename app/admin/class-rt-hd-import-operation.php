@@ -609,6 +609,11 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$dndEmails = array();
 
 			if ( $postid && get_post( $postid ) != null ) { // if post id found from title or mail meta & mail is Re: or Fwd:
+				if ( ! rthd_get_reply_via_email() ){
+					error_log( 'Mail Parse Status : ' . var_export( false, true ) . " Reply via email | false \n\r" );
+					return false;
+				}
+
 				if ( $forwardFlag ) {
 					$this->process_forward_email_data( $title, $body, $mailtime, $allemail, $mailBodyText, $dndEmails );
 				}
@@ -640,6 +645,10 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				}
 				//if given post title exits then it will be add as comment other wise as post
 				if ( $existPostId ) {
+					if ( ! rthd_get_reply_via_email() ){
+						error_log( 'Mail Parse Status : ' . var_export( false, true ) . " Reply via email | false \n\r" );
+						return false;
+					}
 					$success_flag = $this->insert_post_comment( $existPostId, $userid, $body, $fromemail['name'], $fromemail['address'], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $subscriber, $originalBody );
 					error_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
 
@@ -677,6 +686,10 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					}
 					return $success_flag;
 				} else {
+					if ( ! rthd_get_reply_via_email() ){
+						error_log( 'Mail Parse Status : ' . var_export( false, true ) . " Reply via email | false \n\r" );
+						return false;
+					}
 					$success_flag = $this->insert_post_comment( $existPostId, $userid, $body, $fromemail['name'], $fromemail['address'], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $subscriber, $originalBody );
 					error_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
 

@@ -1253,3 +1253,13 @@ function get_offering_meta( $key, $term_id = '' ){
 	}
 	return false;
 }
+
+
+/**
+ * Returns boolean of setting for reply via email is unable or not
+ * @return bool
+ */
+function rthd_get_reply_via_email(){
+	$redux = rthd_get_redux_settings();
+	return ( isset( $redux['rthd_reply_via_email']) && $redux['rthd_reply_via_email'] == 1 );
+}

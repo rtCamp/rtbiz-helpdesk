@@ -254,6 +254,16 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					'on' => __('Enable'),
 					'off' => __('Disable'),
 				));
+
+				array_push($email_fields, array(
+					'id' => 'rthd_reply_via_email',
+					'type' => 'switch',
+					'title' => __('Reply Via Email'),
+					'subtitle' => __('To enable/disable Reply Via Email'),
+					'default' => true,
+					'on' => __('Enable'),
+					'off' => __('Disable'),
+				));
 			}
 
 			array_push( $email_fields, array(
