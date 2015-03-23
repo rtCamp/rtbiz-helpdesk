@@ -10,7 +10,7 @@ If this option is selected then the ticket will be assigned to the staff member 
 
 ###### ii. When first followup is added to a ticket by any staff member
 
-If this option is selected then the ticket will automatically be assigned to any staff member who answer the ticket.
+If this option is selected then the ticket will automatically be assigned to any staff member who answers the ticket.
 
 ##Coming soon!!##
 

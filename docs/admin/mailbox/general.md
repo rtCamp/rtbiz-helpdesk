@@ -55,6 +55,10 @@ iii. Refresh the settings area. The newly created support page will be populated
 
 [**Add form info ** ]
 
+
+
+
+
 ##### 5. Enable Unique Hash URLs for Tickets
 
 i. Enable this option to generate unique Hash URL for new tickets.

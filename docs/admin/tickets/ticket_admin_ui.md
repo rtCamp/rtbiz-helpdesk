@@ -2,8 +2,8 @@
 
 The ticket backend of ticket follows WordPress posts' native behaviour and UI. 'Ticket' is basically a custom post type.
 
-    [Screenshot]
 
+![ticket_backend](https://cloud.githubusercontent.com/assets/8191145/6778554/980b70ec-d179-11e4-939a-8ac71655796f.png)
 1. Ticket Title - A combination of the unique ID genearted for each ticket and the request subject set by the ticket author.
 
 2. Ticket Permalink -
@@ -41,7 +41,7 @@ The ticket backend of ticket follows WordPress posts' native behaviour and UI. '
 
 ### Ticket Information
 
-** [Screenshot]**
+
 
 1. Assigned to - The staff member to whom the ticket is assigned.
 
