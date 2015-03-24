@@ -382,9 +382,12 @@ jQuery(function () {
 		        formData.append("followuptype", jQuery('#followuptype').val());
 		        formData.append("follwoup-time", jQuery('#follwoup-time').val());
 		        formData.append("followup_content", rthdAdmin.rthd_tinymce_get_content( 'followupcontent' ) );
-		        var files = jQuery('#attachemntlist')[0];
-		        jQuery.each(jQuery("#attachemntlist")[0].files, function(i, file) {
-			        formData.append('attachemntlist['+i+']', file);
+		        var increment = 0;
+		        jQuery('#rthd-followup-form input[type="file"]' ).each(function(i,allfiles){
+			        jQuery.each(allfiles.files, function(j, file) {
+				        formData.append('attachemntlist['+increment+']', file);
+				        increment++;
+			        });
 		        });
 		        if(jQuery('#rthd_keep_status')){
 			        formData.append("rthd_keep_status", jQuery('#rthd_keep_status').is(':checked'));
@@ -405,9 +408,8 @@ jQuery(function () {
 					                     jQuery('#chat-UI' ).append(newcomment);
 					                     rthdAdmin.rthd_tinymce_set_content( 'followupcontent', '' );
 					                     jQuery('#add-private-comment' ).val(10);
-					                     jQuery("#attachemntlist").val('');
-					                     jQuery("#clear-attachemntlist").hide();
-                                         if (data.ticket_status=='answered'){
+					                     jQuery('#rthd-followup-form input[type="file"]').MultiFile('reset');
+					                     if (data.ticket_status=='answered'){
                                              if(jQuery('#rthd_keep_status')){
                                                  jQuery('#rthd_keep_status').parent().hide();
                                              }
