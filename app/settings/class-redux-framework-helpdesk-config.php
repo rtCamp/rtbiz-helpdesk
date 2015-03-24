@@ -273,6 +273,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					'default' => true,
 					'on' => __('Enable'),
 					'off' => __('Disable'),
+					'required' => array( 'rthd_enable_mailbox_reading', '=', 1 ),
 				));
 			}
 
