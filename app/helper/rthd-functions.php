@@ -1347,7 +1347,6 @@ function rthd_get_tickets( $key, $value ){
 		if ( is_object( $value ) ){
 			$value = $value->ID;
 		}
-		var_dump( $value );
 		$args['meta_query'] = array(
 			array(
 				'key' => 'rtbiz_hd_order_id',
