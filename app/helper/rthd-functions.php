@@ -1290,3 +1290,111 @@ function rthd_get_reply_via_email(){
 	$redux = rthd_get_redux_settings();
 	return ( isset( $redux['rthd_reply_via_email']) && $redux['rthd_reply_via_email'] == 1 );
 }
+
+/**
+ * Get tickets
+ *
+ * @param $key : created_by, assignee, subscribe, order
+ * @param $value
+ *
+ * @return bool
+ */
+function rthd_get_tickets( $key, $value ){
+
+	$key_array = array( 'created_by', 'assignee', 'subscribe', 'order' );
+
+	if ( ! in_array( $key, $key_array ) ){
+		return false;
+	}
+
+	$args    = array(
+		'post_type'   => Rt_HD_Module::$post_type,
+		'post_status' => 'any',
+		'nopaging'    => true,
+	);
+
+	if ( 'created_by' == $key ){
+		$value= rthd_convert_into_userid( $value );
+		$args['meta_query'] = array(
+			array(
+				'key' => '_rtbiz_hd_created_by',
+				'value' => $value,
+			),
+		);
+	} elseif ( 'assignee' == $key ){
+		$value= rthd_convert_into_userid( $value );
+		$args['author'] = $value;
+	} elseif ( 'subscribe' == $key ){
+		// check given user is staff or contact
+		if ( rt_biz_is_our_employee( $value ) ){
+			$value= rthd_convert_into_userid( $value );
+			$args['meta_query'] = array(
+				array(
+					'key' => '_rtbiz_hd_subscribe_to',
+					'value' => ':' . $value . ',',
+					'compare' => 'LIKE',
+				),
+			);
+		} else {
+			$value= rthd_convert_into_useremail( $value );
+			$person = rt_biz_get_contact_by_email( $value );
+			if ( isset( $person ) && ! empty( $person ) ) {
+				$args['connected_items'] = $person[0]->ID;
+				$args['connected_type']  = Rt_HD_Module::$post_type . '_to_' . rtbiz_post_type_name( 'contact' );
+			}
+		}
+	} elseif ( 'order' == $key ){
+		if ( is_object( $value ) ){
+			$value = $value->ID;
+		}
+		var_dump( $value );
+		$args['meta_query'] = array(
+			array(
+				'key' => 'rtbiz_hd_order_id',
+				'value' => $value,
+			),
+		);
+	}
+	if ( ! empty( $args) ){
+		return get_posts( $args );
+	}
+	return false;
+}
+
+/**
+ * To convert useremail or user object to userid
+ *
+ * @param $value : Should be object [ Post type ] object or email
+ *
+ * @return mixed
+ */
+function rthd_convert_into_userid( $value ){
+	if ( ! is_numeric( $value ) ){
+		if ( is_string( $value ) ){
+			$value = get_user_by( 'email', $value );
+			$value = $value->ID;
+		} elseif ( ! is_object( $value ) ){
+			$value = $value->ID;
+		}
+	}
+	return $value;
+}
+
+/**
+ * To convert userid or user object to user email
+ *
+ * @param $value it shoud be userid or user object
+ *
+ * @return mixed
+ */
+function rthd_convert_into_useremail( $value ){
+	if ( ! is_string( $value ) ){
+		if ( is_numeric( $value ) ){
+			$value = get_user_by( 'id', $value );
+			$value = $value->email;
+		} elseif ( ! is_object( $value ) ){
+			$value = $value->email;
+		}
+	}
+	return $value;
+}
