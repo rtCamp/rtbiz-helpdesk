@@ -1,4 +1,4 @@
-##
+
 # rtBiz Helpdesk Admin Manual
 
 Setup a highly customized Helpdesk for your customers right into your WordPress dashboard. Aimed to streamline your support with a smart and robust ticket management, seamless email reply features, reports and team management - rtBiz Helpdesk is your new Happiness manager.
