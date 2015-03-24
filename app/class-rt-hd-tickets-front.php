@@ -155,7 +155,14 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 			if ( empty( $post ) || $wrong_unique_id ) {
 				$wp_query->is_404 = true;
 				$wp_query->set_404();
-				return get_404_template();
+				$message = sprintf( '%s ', __( "Sorry! Your requested ticket didn't Found." ) );
+				global $rthd_messages;
+				$rthd_messages[] = array( 'type' => 'error', 'message' => $message, 'displayed' => 'no' );
+				global $rthd_front_page_title;
+				$rthd_front_page_title = __( 'Helpdesk' );
+				return rthd_locate_template( 'ticket-error-page.php' );
+
+				//return get_404_template();
 			}
 
 			$rtbiz_helpdesk_template = true;

@@ -85,7 +85,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 
 			//Setting
 
-			global $rt_hd_redux_framework_Helpdesk_Config, $rt_hd_import_operation, $rt_hd_offering_support;
+			global $rt_hd_redux_framework_Helpdesk_Config, $rt_hd_import_operation, $rt_hd_offering_support, $rt_hd_short_code;
 
 			$rt_hd_redux_framework_Helpdesk_Config = new Redux_Framework_Helpdesk_Config();
 			$rt_hd_import_operation                = new Rt_HD_Import_Operation();
@@ -95,6 +95,8 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			$rt_hd_logs                  = new Rt_HD_Logs();
 
 			$rt_hd_offering_support = new Rt_HD_Offering_Support();
+			$rt_hd_short_code = new RT_HD_Short_Code();
+
 			global $Rt_Hd_Help;
 			$Rt_Hd_Help = new Rt_Hd_Help();
 
