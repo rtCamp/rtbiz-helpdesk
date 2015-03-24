@@ -32,9 +32,9 @@ Below is the screenshot of how a ticket looks on the front end.
 
  Assign me - Another staff members can assign a ticket to themselves by clicking on the Assign Me option
 
-11. Created by - Time stamp when ticket was created. This is appended by the customer name who has creted the ticket.
+11. Created by - Time stamp when ticket was created. This is appended by the customer name who has created the ticket.
 
-12. Last reply -  Time stamp when ticket was created. This is appended by the staff/customer name who has creted the ticket.
+12. Last reply -  Time stamp when ticket was created. This is appended by the staff/customer name who has created the ticket.
 
 13. Subscribe* - Option for a staff member to get updates for the communication on the ticket. The assignee of a ticket by default is a subscriber to that ticket.
 14. Add People - Ticket Author , Subscriber and staff members can add people to the ticket. If the people added have no prior access to the Helpdesk system, they will be added as Contacts, if the persons added are staff members, then they will show as subscribers to that ticket. Details will be shown at Ticket Admin UI.

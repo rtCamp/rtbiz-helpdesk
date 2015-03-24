@@ -31,7 +31,7 @@ v. There is a provision to add different Default assignees for different offerin
 
 ![add_assignee_via_offerings](https://cloud.githubusercontent.com/assets/8191145/6752439/89218252-cf34-11e4-9673-0ffe0403c49a.png)
 
-
+![offerings](http://git.rtcamp.com/uploads/rtbiz/rtbiz-helpdesk/ffec50611e/offerings.png)
 ##### 4. Support Form
 
 Setup Helpdesk support form using shortcode and configure as per steps below.
