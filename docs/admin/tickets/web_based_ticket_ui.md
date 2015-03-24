@@ -4,6 +4,8 @@ Below is the screenshot of how a ticket looks on the front end.
 
 ![Ticket UI](https://cloud.githubusercontent.com/assets/9676513/6439931/1e39f724-c0fe-11e4-8279-52f04a7ac460.jpg)
 
+**New UI **
+![ticket_ui_new](https://cloud.githubusercontent.com/assets/8191145/6777859/ac49b416-d173-11e4-9681-edfaa483bad2.png)
 
  ####  A. Ticket Content Area
 
@@ -31,6 +33,8 @@ Below is the screenshot of how a ticket looks on the front end.
 
 10. Assigned To* - The staff member to whom the ticket is assigned.
 
+Assign me - Another staff members who open the tickets can assign that ticket to themselves
+
 11. Created by - Time stamp when ticket was created. This is appended by the customer name who has creted the ticket.
 
 12. Last reply -  Time stamp when ticket was created. This is appended by the staff/customer name who has creted the ticket.
@@ -45,6 +49,9 @@ Below is the screenshot of how a ticket looks on the front end.
 16. Purchase History* - List of products, which a customer has either bought or has the order still under process. Order status is metnioned alongside the products name.
 
 17. Ticket History - List of all the tickets that the customer has created in the Helpdesk. Order status is mentioned alngside the ticket title.
+
+18. Add People - Ticket Author , Subscriber and staff members can add people to the ticket. If they have no prior access to the Helpdesk system, they will be added as Contacts, if a staff member is added, then they will show as subscribers to that ticket. Details will be shown at Ticket Admin UI
+
 #### D. Ticket Reply Area
 ![Ticket reply area](https://cloud.githubusercontent.com/assets/9676513/6439933/217fb41e-c0fe-11e4-9401-42173fc20745.jpg)
 

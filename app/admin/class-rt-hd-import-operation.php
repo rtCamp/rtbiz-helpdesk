@@ -94,8 +94,15 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 						}
 					} else{ // add user to p2p connection
 						$user_contact_info = rt_biz_get_contact_by_email( $_POST['email'] );
-						rt_biz_connect_post_to_contact( Rt_HD_Module::$post_type, $_POST['post_id'], $user_contact_info );
-						$response['status'] = true;
+						$user_contact_info = $user_contact_info[0];
+						if ( ! p2p_connection_exists(  Rt_HD_Module::$post_type . '_to_' . rt_biz_get_contact_post_type(), array( 'from' => $_POST['post_id'], 'to' => $user_contact_info->ID ) ) ) {
+							rt_biz_connect_post_to_contact( Rt_HD_Module::$post_type, $_POST[ 'post_id' ], $user_contact_info );
+							$response[ 'status' ] = true;
+						}
+						else {
+							$response[ 'status' ] = false;
+							$response['msg'] = 'Already subscribed.';
+						}
 					}
 				} else{ // create user and then add to p2p
 					$this->add_contacts_to_post( array( array( 'address'=>$_POST['email'] ) ), $_POST['post_id'] );
@@ -602,6 +609,11 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$dndEmails = array();
 
 			if ( $postid && get_post( $postid ) != null ) { // if post id found from title or mail meta & mail is Re: or Fwd:
+				if ( ! rthd_get_reply_via_email() ){
+					error_log( 'Mail Parse Status : ' . var_export( false, true ) . " Reply via email | false \n\r" );
+					return false;
+				}
+
 				if ( $forwardFlag ) {
 					$this->process_forward_email_data( $title, $body, $mailtime, $allemail, $mailBodyText, $dndEmails );
 				}
@@ -633,6 +645,10 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				}
 				//if given post title exits then it will be add as comment other wise as post
 				if ( $existPostId ) {
+					if ( ! rthd_get_reply_via_email() ){
+						error_log( 'Mail Parse Status : ' . var_export( false, true ) . " Reply via email | false \n\r" );
+						return false;
+					}
 					$success_flag = $this->insert_post_comment( $existPostId, $userid, $body, $fromemail['name'], $fromemail['address'], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $subscriber, $originalBody );
 					error_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
 
@@ -670,6 +686,10 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					}
 					return $success_flag;
 				} else {
+					if ( ! rthd_get_reply_via_email() ){
+						error_log( 'Mail Parse Status : ' . var_export( false, true ) . " Reply via email | false \n\r" );
+						return false;
+					}
 					$success_flag = $this->insert_post_comment( $existPostId, $userid, $body, $fromemail['name'], $fromemail['address'], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $subscriber, $originalBody );
 					error_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
 

@@ -206,6 +206,16 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					'on'       => __( 'Enable' ),
 					'off'      => __( 'Disable' ),
 				),
+				array(
+					'id'       => 'rthd_enable_ticket_adult_content',
+					'type'     => 'switch',
+					'title'    => __( 'Enable Ticket Adult Filter' ),
+					'subtitle' => __( 'This will enable/disable Adult filter for Tickets.' ),
+					'desc'     => __( 'If enabled, this will show option in Wordpress user for show adult contents by default it will be off, customer can mark ticket to be adult or not, and it can manually turn on of in ticket information box, if it is on and user preference in on then only adult ticket will be shown else it will be invisible.' ),
+					'default'  => false,
+					'on'       => __( 'Enable' ),
+					'off'      => __( 'Disable' ),
+				),
 			);
 
 			$this->sections[] = array(
@@ -250,6 +260,16 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					'type' => 'switch',
 					'title' => __('Mailbox Reading'),
 					'subtitle' => __('To enable/disable Mailbox Reading'),
+					'default' => true,
+					'on' => __('Enable'),
+					'off' => __('Disable'),
+				));
+
+				array_push($email_fields, array(
+					'id' => 'rthd_reply_via_email',
+					'type' => 'switch',
+					'title' => __('Reply Via Email'),
+					'subtitle' => __('To enable/disable Reply Via Email'),
 					'default' => true,
 					'on' => __('Enable'),
 					'off' => __('Disable'),
@@ -574,7 +594,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'indent' => false,
 					),
 
-					/* array(
+					array(
 						'id'       => 'rthd_enable_auto_response',
 						'type'     => 'switch',
 						'title'    => __( 'Auto Response' ),
@@ -637,6 +657,15 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 							'indent' => false,
 					),
 					array(
+						'id'       => 'rthd_autoresponse_weekend',
+						'type'     => 'switch',
+						'title'    => __( 'Do you want to send mail on Weekend only?' ),
+						'default'  => false,
+						'on'       => __( 'Yes' ),
+						'off'      => __( 'No' ),
+						'required' => array( 'rthd_enable_auto_response', '=', 1 ),
+					),
+					array(
 						'id'           => 'rthd_auto_response_message',
 						'type'         => 'textarea',
 						'title'        => __( 'Auto response message' ),
@@ -660,7 +689,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'id'     => 'section-auto-response-end',
 						'type'   => 'section',
 						'indent' => false,
-					),*/
+					),
 				),
 			);
 

@@ -479,6 +479,33 @@ function rthd_get_user_notification_preference( $user_id ) {
 	return $pref;
 }
 
+//adult filter redux setting
+function rthd_get_redux_adult_filter(){
+	$settings = rthd_get_redux_settings();
+	if ( ! empty( $settings['rthd_enable_ticket_adult_content'] ) ) {
+		return true;
+	}
+	return false;
+}
+
+//adult content preference
+function rthd_get_user_adult_preference( $user_id ) {
+	$pref = get_user_meta( $user_id, 'rthd_adult_pref', true );
+	if ( empty( $pref ) ) {
+		update_user_meta( $user_id, 'rthd_adult_pref', 'no' );
+		$pref = 'no';
+	}
+	return $pref;
+}
+
+function rthd_save_adult_ticket_meta( $post_id, $pref ){
+	update_post_meta( $post_id, 'rthd_ticket_adult_content', $pref );
+}
+
+function rthd_get_adult_ticket_meta( $post_id ){
+	return get_post_meta( $post_id, 'rthd_ticket_adult_content', true );
+}
+
 function rthd_create_new_ticket_title( $key, $post_id ){
 	$redux = rthd_get_redux_settings();
 	if ( isset( $redux[ $key ] ) ) {
@@ -1252,4 +1279,14 @@ function get_offering_meta( $key, $term_id = '' ){
 		}
 	}
 	return false;
+}
+
+
+/**
+ * Returns boolean of setting for reply via email is unable or not
+ * @return bool
+ */
+function rthd_get_reply_via_email(){
+	$redux = rthd_get_redux_settings();
+	return ( isset( $redux['rthd_reply_via_email']) && $redux['rthd_reply_via_email'] == 1 );
 }

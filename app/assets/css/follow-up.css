@@ -404,9 +404,6 @@ li.load-more-spinner-li {
 	display: none;
 	text-decoration: none;
 }
-#fileList {
-	margin-bottom: 1em;
-}
 .rthd-scroll-up {
 	position: fixed;
 	bottom: 100px;
@@ -418,6 +415,10 @@ li.load-more-spinner-li {
 
 h1.rt-hd-ticket-front-title{
 	margin-top: 0;
+}
+
+.MultiFile-remove{
+	color: #9B0000;
 }
 
 #rthd-subscribe-email{

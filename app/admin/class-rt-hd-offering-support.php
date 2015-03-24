@@ -367,6 +367,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 			$this->check_active_plugin();
 			wp_enqueue_style( 'support-form-style', RT_HD_URL . 'app/assets/css/support_form_front.css', false, RT_HD_VERSION, 'all' );
 			wp_enqueue_script( 'rthd-support-form', RT_HD_URL . 'app/assets/javascripts/rt_support_form.js', array( 'jquery' ), RT_HD_VERSION, true );
+			wp_enqueue_script( 'jquery-file-uploader', RT_HD_URL . 'app/assets/javascripts/jquery.MultiFile.js', array( 'jquery' ), RT_HD_VERSION, true );
 			$offering_option = '';
 			$order_email    = '';
 
@@ -690,6 +691,17 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 		function rt_hd_add_ticket_offering_info_callback( $rt_hd_tickets_id ) {
 
 			$data = $_POST['post'];
+
+			// adult filter
+			if ( rthd_get_redux_adult_filter() ) {
+				$adultval = '';
+				if ( isset( $data[ 'adult_ticket' ] ) ) {
+					$adultval = 'yes';
+				} else {
+					$adultval = 'no';
+				}
+				rthd_save_adult_ticket_meta( $rt_hd_tickets_id, $adultval );
+			}
 
 			if ( isset( $data['product_id'] ) ) {
 				$term = get_term_by( 'id', $data['product_id'], Rt_Offerings::$offering_slug );

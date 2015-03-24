@@ -61,7 +61,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				$afterHTML = '';
 			}
 			$reply_txt = '';
-			if ( $reply_above_line && rthd_is_enable_mailbox_reading() ){
+			if ( $reply_above_line && rthd_is_enable_mailbox_reading() && rthd_get_reply_via_email() ){
 				$reply_txt = '<div style="color:#777">'.htmlentities('[!-------REPLY ABOVE THIS LINE-------!]').'</div><br /> ';
 			}
 
