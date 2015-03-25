@@ -2,7 +2,8 @@
  ### jQuery Multiple File Selection Plugin v2.2.0 - 2015-03-23 ###
  * Home: http://www.fyneworks.com/jquery/multifile/
  * Code: http://code.google.com/p/jquery-multifile-plugin/
- *
+ * edited by spock for helpdesk
+ * do not update directly search for rthd-clear-all-files and keep all changes
  * Licensed under http://en.wikipedia.org/wiki/MIT_License
  ###
  */
@@ -575,7 +576,11 @@ if (window.jQuery)(function ($) {
 					      //# Trigger Event! afterFileAppend
 					      MultiFile.trigger('afterFileAppend', slave, MultiFile, files);
 					      //# End Event!
-
+					      if (MultiFile.files <= 0){
+						      $('.rthd-clear-all-files' ).hide();
+					      } else {
+						      $('.rthd-clear-all-files' ).show();
+					      }
 					      //# Trigger Event! onFileChange
 					      MultiFile.trigger('FileChange', slave, MultiFile, MultiFile.files);
 					      //# End Event!
@@ -897,21 +902,6 @@ if (window.jQuery)(function ($) {
 		$("input[type=file].multi").MultiFile();
 	});
 
-
-	$(document).on("click",'a[href="#filesToUpload"], input[type="file"]', function() {
-		var increment = 0;
-		$('input[type="file"]' ).each(function(i,allfiles){
-			$.each(allfiles.files, function(j, file) {
-				increment++;
-			});
-		});
-		console.log(increment);
-		if (increment==0){
-			$('.rthd-clear-all-files' ).hide();
-		} else {
-			$('.rthd-clear-all-files' ).show();
-		}
-	});
 
 	$(document ).on('click','.rthd-clear-all-files', function(e) {
 		e.preventDefault();
