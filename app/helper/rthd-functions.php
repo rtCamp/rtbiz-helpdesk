@@ -499,11 +499,11 @@ function rthd_get_user_adult_preference( $user_id ) {
 }
 
 function rthd_save_adult_ticket_meta( $post_id, $pref ){
-	update_post_meta( $post_id, 'rthd_ticket_adult_content', $pref );
+	update_post_meta( $post_id, '_rthd_ticket_adult_content', $pref );
 }
 
 function rthd_get_adult_ticket_meta( $post_id ){
-	return get_post_meta( $post_id, 'rthd_ticket_adult_content', true );
+	return get_post_meta( $post_id, '_rthd_ticket_adult_content', true );
 }
 
 function rthd_create_new_ticket_title( $key, $post_id ){

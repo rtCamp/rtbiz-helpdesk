@@ -368,11 +368,11 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 					$qv['meta_query'] = array(
 						'relation' => 'OR',
 						array(
-							'key'     => 'rthd_ticket_adult_content',
+							'key'     => '_rthd_ticket_adult_content',
 							'compare' => 'NOT EXISTS',
 						),
 						array(
-							'key'     => 'rthd_ticket_adult_content',
+							'key'     => '_rthd_ticket_adult_content',
 							'value'   => 'yes',
 							'compare' => '!='
 						),
