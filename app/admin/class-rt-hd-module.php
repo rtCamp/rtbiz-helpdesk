@@ -347,7 +347,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 			add_action( 'rt_attributes_relations_deleted', array( $this, 'update_ticket_table' ), 10, 1 );
 
 			add_action( 'wp_before_admin_bar_render', array( $this, 'ticket_chnage_action_publish_update' ), 11 );
-			if ( rthd_get_redux_adult_filter() ) {
+			if ( rthd_get_redux_adult_filter() && isset( $_GET['post_type'] ) && $_GET['post_type'] == self::$post_type ) {
 				add_action( 'parse_query', array( $this, 'adult_post_filter' ) );
 			}
 		}
@@ -359,13 +359,13 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 		 */
 		function adult_post_filter( $query ){
 
-			if ( is_admin() && $query->query['post_type']== self::$post_type ) {
+			if ( is_admin() && $query->query['post_type'] == self::$post_type && strpos($_SERVER[ 'REQUEST_URI' ], '/wp-admin/edit.php') !== false ) {
 				$qv = &$query->query_vars;
 
 				$current_user = get_current_user_id();
 				$pref = rthd_get_user_adult_preference( $current_user );
 				if ( 'no' == $pref ){
-					$qv['meta_query'] = array(
+					$meta_q = array(
 						'relation' => 'OR',
 						array(
 							'key'     => '_rthd_ticket_adult_content',
@@ -377,6 +377,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 							'compare' => '!='
 						),
 					);
+					$qv['meta_query'] = array_merge( $qv['meta_query'], $meta_q );
 				}
 			}
 		}
