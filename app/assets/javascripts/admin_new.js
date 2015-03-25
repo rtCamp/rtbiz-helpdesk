@@ -677,10 +677,10 @@ jQuery(function () {
 			if ( starting_val == -1 && ending_val == -1 ){
 				jQuery( $tr_parent ).next('.rthd-dayshift-error').show().find( '.error' ).html( '' );
 			} else {
-				if ( starting_am_val == -1 || ending_am_val == -1 ){
+				if ( starting_val == -1 || ending_val == -1 ){
 					jQuery( $tr_parent ).next('.rthd-dayshift-error').show().find( '.error' ).html( 'Please select `Starting` or `Ending` For AM' );
 					flag = false;
-				} else if( parseInt( ending_am_val ) < parseInt( starting_am_val ) ){
+				} else if( parseInt( ending_val ) < parseInt( starting_val ) ){
 					jQuery( $tr_parent ).next('.rthd-dayshift-error').show().find( '.error' ).html( 'Starting Time should be less then ending time' );
 					flag = false;
 				} else{
