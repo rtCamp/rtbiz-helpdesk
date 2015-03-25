@@ -1215,10 +1215,7 @@ function rthd_filter_emails( $allemails ){
 			if ( ! empty( $black_list_emails ) ){
 				foreach ( $black_list_emails as $email ){
 					$matching_string = str_replace( '*', '\/*', preg_replace('/\s+/', '', $email ) );
-					if ( empty( $matching_string ) ){
-						continue;
-					}
-					if ( ! preg_match( '/'.str_replace('*','\/*',$email).'/',  $mail['address'] ) ){
+					if ( ! preg_match( '/'.str_replace('*','\/*',$email).'/',  $mail['address'] ) || empty( $matching_string ) ){
 						$allemail[]= $mail;
 					}
 				}
