@@ -214,10 +214,10 @@ li.toplevel_page_hd-dashboard a:active {
 #rthd-response tr th {
 	text-align: center;
 }
-#rthd-response .rthd-dayshift-error {
+#rthd-response .rthd-dayshift-error, #rthd-response .rthd-daynightshift-error {
 	display: none;
 }
-#rthd-response td.error {
+#rthd-response td.error, #rthd-response td.am-time-error, #rthd-response td.pm-time-error,  {
 	color: #cd0a0a;
 }
 /* Large Screens min-width 1025px */
