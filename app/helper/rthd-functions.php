@@ -1203,7 +1203,6 @@ function rthd_auto_response_daynightshift_view() {
 function rthd_filter_emails( $allemails ){
 	//subscriber diff
 	$rtCampUser         = Rt_HD_Utils::get_hd_rtcamp_user();
-	$black_list_emails  = rthd_get_blacklist_emails();
 	$hdUser             = array();
 	foreach ( $rtCampUser as $rUser ) {
 		$hdUser[ $rUser->user_email ] = $rUser->ID;
@@ -1212,14 +1211,7 @@ function rthd_filter_emails( $allemails ){
 	$allemail = array();
 	foreach ( $allemails as $mail ) {
 		if ( ! array_key_exists( $mail['address'], $hdUser ) ) {
-			if ( ! empty( $black_list_emails ) ){
-				foreach ( $black_list_emails as $email ){
-					$matching_string = str_replace( '*', '\/*', preg_replace('/\s+/', '', $email ) );
-					if ( ! preg_match( '/'.str_replace('*','\/*',$email).'/',  $mail['address'] ) || empty( $matching_string ) ){
-						$allemail[]= $mail;
-					}
-				}
-			}else{
+			if ( ! rt_hd_check_email_blacklisted( $mail['address'] ) ){
 				$allemail[]= $mail;
 			}
 		} else {
