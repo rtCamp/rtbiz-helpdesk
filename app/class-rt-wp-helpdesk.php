@@ -178,6 +178,10 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			wp_enqueue_script( 'jquery-ui-dialog' );
 			wp_enqueue_script( 'jquery-file-uploader', RT_HD_URL . 'app/assets/javascripts/jquery.MultiFile.js', array( 'jquery' ), RT_HD_VERSION, true );
 
+			//fancybox
+			wp_enqueue_script( 'jquery-fancybox', RT_HD_URL . 'app/assets/javascripts/lightbox/jquery.fancybox.pack.js', array( 'jquery' ), RT_HD_VERSION, true );
+			wp_enqueue_style( 'jquery-fancybox', RT_HD_URL . 'app/assets/css/jquery.fancybox.css', array(), RT_HD_VERSION, 'all' );
+
 			wp_enqueue_style( 'rthd-followup-css', RT_HD_URL . 'app/assets/css/follow-up.css', array(), RT_HD_VERSION, 'all' );
 			wp_enqueue_media();
 

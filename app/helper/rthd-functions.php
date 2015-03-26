@@ -657,11 +657,8 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 							$fileName   = $file_array[ count( $file_array ) - 1 ];
 							?>
 							<li>
-								<a href="<?php echo $a; ?>" title="<?php echo $fileName; ?>"> <img height="20px"
-								                                                                   width="20px"
-								                                                                   src="<?php echo RT_HD_URL . "app/assets/file-type/" . $extn . ".png"; ?>"/>
-									<span><?php echo( ( strlen( $fileName ) ) > 12 ? substr( $fileName, 0, 12 ) . '...' : $fileName ); ?></span>
-								</a>
+								<?php $attachment = rthd_get_attachmet_by_url( $a, $comment->comment_post_ID );
+								rt_hd_get_attchment_link_with_fancybox( $attachment, $comment->comment_ID ); ?>
 							</li>
 						<?php } ?>
 					</ul>
@@ -1389,4 +1386,39 @@ function rthd_convert_into_useremail( $value ){
 		}
 	}
 	return $value;
+}
+
+/*
+ * get attachment id from attachment url
+ *
+ * Need to remove that function after attachment migration for comment
+ * migration task : store attachment id instead of attachment url comment meta
+ */
+function rthd_get_attachmet_by_url($image_url, $post_id) {
+	global $wpdb;
+	$attachment = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts WHERE guid='%s'  and post_parent=%d limit 1;", $image_url, $post_id ));
+	return $attachment[0] ;
+}
+
+/*
+ * get attachment link with facybox
+ */
+function rt_hd_get_attchment_link_with_fancybox( $attachment, $post_id = '' ){
+	$attachment_url = wp_get_attachment_url( $attachment->ID );
+	$original_url = $attachment_url;
+	$extn = rt_biz_get_attchment_extension( $attachment->guid );
+	$class = 'rthd_attachment fancybox';
+	if ( rt_bix_is_google_doc_supported_type( $attachment->post_mime_type, $extn ) ){
+		$attachment_url = rt_biz_google_doc_viewer_url( $attachment_url );
+		$class .= ' fancybox.iframe';
+	}?>
+	<a class="<?php echo $class; ?>" rel="rthd_attachment_<?php echo !empty( $post_id ) ? $post_id : $attachment->post_parent; ?>"
+	   data-downloadlink="<?php echo esc_url( $original_url ); ?>"
+	   title="<?php echo balanceTags( $attachment->post_title ); ?>"
+	   href="<?php echo esc_url( $attachment_url ); ?>"> <img
+			height="20px" width="20px"
+			src="<?php echo esc_url( RT_HD_URL . 'app/assets/file-type/' . $extn . '.png' ); ?>"/>
+				<span title="<?php echo balanceTags( $attachment->post_title ); ?>"> 	<?php echo esc_attr( strlen( balanceTags( $attachment->post_title ) ) > 40 ? substr( balanceTags( $attachment->post_title ), 0, 40 ) . '...' : balanceTags( $attachment->post_title ) ); ?> </span>
+	</a>
+	<?php
 }

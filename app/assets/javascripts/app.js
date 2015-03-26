@@ -11,6 +11,20 @@ rthd_user_edit = rthd_user_edit[0];
 var file_frame_ticket;
 jQuery( document ).ready( function ( $ ) {
 
+    jQuery(".fancybox").fancybox({
+        afterLoad: function() {
+            this.title = '<a href="' + jQuery(this.element).data("downloadlink") + '">Download</a> ' + this.title;
+        },
+        //iframe : {
+        //    preload: false
+        //},
+        helpers : {
+            title: {
+                type: 'inside'
+            }
+        }
+    });
+
 	jQuery('.rthd-scroll-up' ).click(function (e){
 		e.preventDefault();
 		$('html, body').animate({ scrollTop: 0 }, 'slow');
