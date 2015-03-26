@@ -35,12 +35,63 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			add_action( 'p2p_init', array( $this, 'init_settings' ), 30 );
 		}
 
+		/**
+		 *  If add-on plugin is not available the use default templates
+		 */
+		public function rthd_email_template_defaults(){
+			$redux = rthd_get_redux_settings();
+
+			if ( ! rt_biz_is_email_template_setting_on() ){
+				//Ticket default title
+				$redux['rthd_new_ticket_email_title'] = '{ticket_title}';
+				$redux['rthd_new_ticket_email_title_contacts'] = '{ticket_title}';
+				$redux['rthd_new_ticket_email_title_group'] = '{ticket_title}';
+				$redux['rthd_new_ticket_email_title_assignee'] = '{ticket_title}';
+				$redux['rthd_new_ticket_email_title_subscriber'] = '{ticket_title}';
+				$redux['rthd_update_ticket_email_title'] = '{ticket_title}';
+				$redux['rthd_ticket_reassign_email_title'] = '{ticket_title}';
+				$redux['rthd_ticket_reassign_email_title_old_assignee'] = '{ticket_title}';
+				$redux['rthd_new_followup_email_title'] = '{ticket_title}';
+				$redux['rthd_new_followup_email_title_private'] = '{ticket_title}';
+				$redux['rthd_update_followup_email_title'] = '{ticket_title}';
+				$redux['rthd_update_followup_email_title_private'] = '{ticket_title}';
+				$redux['rthd_delete_followup_email_title'] = '{ticket_title}';
+				$redux['rthd_delete_followup_email_title_private'] = '{ticket_title}';
+				$redux['rthd_ticket_subscribe_email_title'] = '{ticket_title}';
+				$redux['rthd_ticket_unsubscribe_email_title'] = '{ticket_title}';
+
+
+				// Ticket template default body
+				$redux['rthd_email_template_followup_add'] = 'New Followup Added by <strong>{followup_author}</strong><hr style="color: #DCEAF5;" /><div style="display: inline-block">{followup_content}</div>';
+				$redux['rthd_email_template_followup_add_private'] = '<br /> A private followup has been added by <strong>{followup_author}</strong>. Please go to ticket to view content.';
+				$redux['rthd_email_template_followup_deleted_private'] = 'A Followup is deleted by <Strong>{followup_deleted_by}</Strong>';
+				$redux['rthd_email_template_followup_deleted'] = 'A Followup is deleted by <Strong>{followup_deleted_by}</Strong><hr style="color: #DCEAF5;" /><div  style="display: inline-block">{followup_content}</div>';
+				$redux['rthd_email_template_followup_updated_private'] = '<div><br /> A <strong>private</strong> followup has been edited by <strong>{followup_updated_by}</strong>. Please go to ticket to view content.</div> {visibility_diff}';
+				$redux['rthd_email_template_followup_updated'] = '<div> A Followup Updated by <strong>{followup_updated_by}.</strong></div> <br/><div> The changes are as follows: </div><br/> {visibility_diff} {followup_diff}';
+				$redux['rthd_email_template_new_ticket_created_author'] = 'Thank you for opening a new support ticket. We will look into your request and respond as soon as possible.<br/>{ticket_body}';
+				$redux['rthd_email_template_new_ticket_created_contacts'] = 'A new support ticket created by <strong> {ticket_author} </strong>. You have been subscribed to this ticket.<br/>{ticket_body}';
+				$redux['rthd_email_template_new_ticket_created_group_notification'] = 'A new support ticket created by <strong> {ticket_author} </strong>. <br/>Ticket Assigned to <strong>{ticket_assignee}</strong>{ticket_offerings} {ticket_body}';
+				$redux['rthd_email_template_new_ticket_created_assignee'] = 'A new support ticket created by <strong> {ticket_author} </strong> is assigned to you. <br/></strong>{ticket_offerings} {ticket_body}';
+				$redux['rthd_email_template_new_ticket_created_subscriber'] = 'A new support ticket created by <strong>{ticket_author}</strong>. You have been subscribed to this ticket. <br/>Ticket Assigned to <strong>{ticket_assignee}</strong>{ticket_offerings} {ticket_body}';
+				$redux['rthd_email_template_ticket_subscribed'] = '{ticket_subscribers} have been subscribed to this ticket';
+				$redux['rthd_email_template_ticket_unsubscribed'] = '{ticket_unsubscribers} have been un-subscribed to this ticket';
+				$redux['rthd_email_template_ticket_reassigned_old_assignee'] = 'You are no longer responsible for this ticket.';
+				$redux['rthd_email_template_ticket_reassigned_new_assignee'] = 'A ticket is reassigned to {new_ticket_assignee}.';
+				$redux['rthd_email_template_ticket_updated'] = '<br /> Ticket updated by : <strong>{ticket_updated_by}</strong><br/>. {ticket_diference}';
+
+			}
+
+			update_option( self::$hd_opt , $redux );
+			$GLOBALS['redux_helpdesk_settings'] = $redux;
+		}
 
 
 
 		public function init_settings() {
 			// Set the default arguments
 			$this->set_arguments();
+
+			$this->rthd_email_template_defaults();
 
 			// Set a few help tabs so you can see how it's done
 			//			$this->set_helptabs();
@@ -327,6 +378,9 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				'fields'      => $email_fields,
 			);
 
+			if ( rt_biz_is_email_template_setting_on() ) {
+				$this->sections = apply_filters( 'rthd_email_templates_settings', $this->sections );
+			}
 			$this->sections[] = array(
 				'icon'        => 'el-icon-edit',
 				'title'       => __( 'Notification Emails ' ),
@@ -462,7 +516,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'indent'   => true, // Indent all options below until the next 'section' option is set.
 					),
 
-					array(
+				/*	array(
 						'id'       => 'rthd_new_ticket_email_title',
 						'type'     => 'text',
 						'title'    => __( 'New ticket is created' ),
@@ -517,7 +571,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'title'    => __( 'User unsubscribes to ticket' ),
 						'subtitle' => __( 'Title when a user unsubscribes to a ticket' ),
 						'default'  => '{ticket_title}',
-					),
+					),*/
 					array(
 						'id'       => 'rthd_enable_signature',
 						'type'     => 'switch',

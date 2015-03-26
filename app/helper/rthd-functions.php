@@ -1015,16 +1015,24 @@ function rthd_get_attachment_url_from_followups( $postid ){
 }
 
 function rthd_get_general_body_template( $body ){
-	$date = strtotime( current_time( 'mysql', 1 ) );
-	return '<div style="border: 1px solid #DFE9f2;padding: 20px;background: #f1f6fa;">' . rthd_content_filter( $body ) . '<br/><div style="float: right;color: gray;">' . date( 'l M d, Y H:i e', $date ) . '</div></div>';
+	ob_start();
+	rthd_get_template( 'email-template.php', array( 'body' => $body ) );
+	return ob_get_clean();
 }
 
 function rthd_update_ticket_updated_by_user( $post_id, $user_id ){
 	update_post_meta( $post_id, '_rtbiz_hd_updated_by',$user_id );
 }
 
-function rthd_replace_followup_placeholder( $body , $name ){
-	return str_replace( '{comment_author}',$name, $body );
+/**
+ * @param $str
+ * @param $placeholder
+ * @param $replacewith
+ *
+ * @return mixed
+ */
+function rthd_replace_placeholder( $str, $placeholder, $replacewith ){
+	return str_replace( $placeholder, $replacewith, $str );
 }
 
 function rthd_is_mailbox_configured(){
@@ -1389,4 +1397,17 @@ function rthd_convert_into_useremail( $value ){
 		}
 	}
 	return $value;
+}
+
+function rthd_is_email_template_addon_active(){
+	if ( is_plugin_active( 'rtbiz-email-template/rtbiz-email-template.php' ) ){
+		return true;
+	}
+	return false;
+}
+
+
+function rthd_get_email_template_body( $key ){
+	$redux = rthd_get_redux_settings();
+	return $redux[$key];
 }
