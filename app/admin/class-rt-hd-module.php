@@ -377,7 +377,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 							'compare' => '!='
 						),
 					);
-					$qv['meta_query'] = array_merge( $qv['meta_query'], $meta_q );
+					$qv['meta_query'] = array_merge( empty( $qv['meta_query'] ) ? array() : $qv['meta_query'], $meta_q );
 				}
 			}
 		}
