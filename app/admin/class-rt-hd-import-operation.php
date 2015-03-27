@@ -202,19 +202,10 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				                'ID'           => $_POST['post_id'],
 				                'post_content' => rthd_content_filter( $_POST['body'] ),
 			                ) );
-			$subject = rthd_create_new_ticket_title( 'rthd_update_ticket_email_title', $_POST['post_id'] );
 			$body = "Ticket content updated : ". rthd_content_filter( $_POST['body'] );
-			$flag = false;
-			$redux = rthd_get_redux_settings();
-			if ( 1 != $redux['rthd_notification_events']['status_metadata_changed'] ){
-				$flag = false;
-			}
-			else{
-				$flag = true;
-			}
 			global $rt_hd_module, $rt_hd_email_notification;
 			$labels = $rt_hd_module->labels;
-			$rt_hd_email_notification->notification_ticket_updated( $_POST['post_id'], $body, $labels['name'], array() );
+			$rt_hd_email_notification->notification_ticket_updated( $_POST['post_id'], $labels['name'], $body, array() );
 			$result['status'] = true;
 			echo json_encode( $result );
 			die();
