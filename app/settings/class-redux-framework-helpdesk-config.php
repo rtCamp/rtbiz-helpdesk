@@ -480,67 +480,10 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					array(
 						'id'       => 'section-notification_email-customize-start',
 						'type'     => 'section',
-						'subtitle'     => __( 'You can use {ticket_title} as a placeholder.<p><b>Suggestion:</b> Use same title for all mail types to let users have all emails in single thread.</p>' ),
 						'title'       => __( 'Customize Notification Emails ' ),
 						'indent'   => true, // Indent all options below until the next 'section' option is set.
 					),
 
-				/*	array(
-						'id'       => 'rthd_new_ticket_email_title',
-						'type'     => 'text',
-						'title'    => __( 'New ticket is created' ),
-						'subtitle' => __( 'Title when a new ticket is created' ),
-						'default'  => '{ticket_title}',
-					),
-					array(
-						'id'       => 'rthd_update_ticket_email_title',
-						'type'     => 'text',
-						'title'    => __( 'Ticket is updated' ),
-						'subtitle' => __( 'Title when a ticket is updated' ),
-						'default'  => '{ticket_title}',
-					),
-					array(
-						'id'       => 'rthd_ticket_reassign_email_title',
-						'type'     => 'text',
-						'title'    => __( 'Ticket is reassigned' ),
-						'subtitle' => __( 'Title when an existing ticket is reassigned to another user' ),
-						'default'  => '{ticket_title}',
-					),
-					array(
-						'id'       => 'rthd_new_followup_email_title',
-						'type'     => 'text',
-						'title'    => __( 'New follow up is added' ),
-						'subtitle' => __( 'Title when a new follow up is added' ),
-						'default'  => '{ticket_title}',
-					),
-					array(
-						'id'       => 'rthd_update_followup_email_title',
-						'type'     => 'text',
-						'title'    => __( 'Follow up is updated' ),
-						'subtitle' => __( 'Title when an existing follow up is updated' ),
-						'default'  => '{ticket_title}',
-					),
-					array(
-						'id'       => 'rthd_delete_followup_email_title',
-						'type'     => 'text',
-						'title'    => __( 'Follow up is deleted' ),
-						'subtitle' => __( 'Title when a follow up is deleted' ),
-						'default'  => '{ticket_title}',
-					),
-					array(
-						'id'       => 'rthd_ticket_subscribe_email_title',
-						'type'     => 'text',
-						'title'    => __( 'User subscribes to ticket' ),
-						'subtitle' => __( 'Title when a user subscribes to a ticket' ),
-						'default'  => '{ticket_title}',
-					),
-					array(
-						'id'       => 'rthd_ticket_unsubscribe_email_title',
-						'type'     => 'text',
-						'title'    => __( 'User unsubscribes to ticket' ),
-						'subtitle' => __( 'Title when a user unsubscribes to a ticket' ),
-						'default'  => '{ticket_title}',
-					),*/
 					array(
 						'id'       => 'rthd_enable_signature',
 						'type'     => 'switch',
