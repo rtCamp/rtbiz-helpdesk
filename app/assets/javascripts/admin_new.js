@@ -768,7 +768,7 @@ jQuery(document).ready(function() {
                 jQuery( $tr_parent ).next('.rthd-daynightshift-error').hide();
                 if ( jQuery('#rthd_autoresponse_weekend').val() == 0  ) { // if Weekend only off then che check weektime enter or not
                     for (var i = 0; i < 7; i++) {
-                        $tr_parent = jQuery('.rthd-daynigt-am-time-start').eq(i).parent().parent();
+                        $tr_parent = jQuery('.rthd-daynight-am-time-start').eq(i).parent().parent();
                         var starting_am_val = $tr_parent.find('.rthd-daynight-am-time-start').val();
                         var ending_am_val = $tr_parent.find('.rthd-daynight-am-time-end').val();
                         var starting_pm_val = $tr_parent.find('.rthd-daynight-pm-time-start').val();
