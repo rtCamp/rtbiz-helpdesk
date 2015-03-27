@@ -15,9 +15,9 @@ jQuery( document ).ready( function ( $ ) {
         afterLoad: function() {
             this.title = '<a href="' + jQuery(this.element).data("downloadlink") + '">Download</a> ' + this.title;
         },
-        //iframe : {
-        //    preload: false
-        //},
+        iframe : {
+            preload: false
+        },
         helpers : {
             title: {
                 type: 'inside'
