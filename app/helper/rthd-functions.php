@@ -492,8 +492,11 @@ function rthd_get_redux_adult_filter(){
 function rthd_get_user_adult_preference( $user_id ) {
 	$pref = get_user_meta( $user_id, 'rthd_adult_pref', true );
 	if ( empty( $pref ) ) {
-		update_user_meta( $user_id, 'rthd_adult_pref', 'no' );
 		$pref = 'no';
+		if ( user_can( $user_id, 'administrator' ) ){
+			$pref = 'yes';
+		}
+		update_user_meta( $user_id, 'rthd_adult_pref', $pref );
 	}
 	return $pref;
 }
