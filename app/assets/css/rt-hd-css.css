@@ -81,8 +81,10 @@
 }
 
 .myerror {
-	background-color: #ffebe8;
-	border-color: #c00;
+    background-color: #FFEBE8;
+    border-left: 5px #C00 solid;
+    padding: 5px 10px;
+    font-weight: bold;
 }
 
 .importloading {
@@ -214,12 +216,7 @@ li.toplevel_page_hd-dashboard a:active {
 #rthd-response tr th {
 	text-align: center;
 }
-#rthd-response .rthd-dayshift-error, #rthd-response .rthd-daynightshift-error {
-	display: none;
-}
-#rthd-response td.error, #rthd-response td.am-time-error, #rthd-response td.pm-time-error,  {
-	color: #cd0a0a;
-}
+
 /* Large Screens min-width 1025px */
 @media only screen and (min-width: 1025px) {
 	#mail_folder_container li.has_children ul {

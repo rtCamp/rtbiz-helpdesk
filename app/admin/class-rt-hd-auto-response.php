@@ -191,6 +191,7 @@ if ( ! class_exists( 'Rt_HD_Auto_Response' ) ) {
             $shifttime = array();
 	        $shifttime['start'] = isset( $redux['rthd_dayshift_time_start']) ? $redux['rthd_dayshift_time_start'] : array( 0 => -1 , 1 => -1, 2 => -1, 3 => -1, 4 => -1, 5 => -1, 6 => -1 );
             $shifttime['end'] = isset( $redux['rthd_dayshift_time_end']) ? $redux['rthd_dayshift_time_end'] : array( 0 => -1 , 1 => -1, 2 => -1, 3 => -1, 4 => -1, 5 => -1, 6 => -1 ); ?>
+	        <span id="rthd-response-day-error" class="myerror rthd-hide-row"></span>
 	        <table id="rthd-response">
                 <tbody>
                 <?php foreach ( $this->weekdays as $key => $weekday ) :
@@ -217,7 +218,7 @@ if ( ! class_exists( 'Rt_HD_Auto_Response' ) ) {
                             </select>
                         </td>
                     </tr>
-                    <tr class="rthd-dayshift-error">
+	                <tr class="rthd-dayshift-error rthd-hide-row">
                         <td>&nbsp</td>
                         <td class="error"></td>
                     </tr>
@@ -237,7 +238,8 @@ if ( ! class_exists( 'Rt_HD_Auto_Response' ) ) {
             $shifttime['am_end'] = isset( $redux['rthd_daynight_am_time_end']) ? $redux['rthd_daynight_am_time_end'] : array( 0 => -1 , 1 => -1, 2 => -1, 3 => -1, 4 => -1, 5 => -1, 6 => -1 );
             $shifttime['pm_start'] = isset( $redux['rthd_daynight_pm_time_start']) ? $redux['rthd_daynight_pm_time_start'] : array( 0 => -1 , 1 => -1, 2 => -1, 3 => -1, 4 => -1, 5 => -1, 6 => -1 );
             $shifttime['pm_end'] = isset( $redux['rthd_daynight_pm_time_end']) ? $redux['rthd_daynight_pm_time_end'] : array( 0 => -1 , 1 => -1, 2 => -1, 3 => -1, 4 => -1, 5 => -1, 6 => -1 ); ?>
-            <table id="rthd-response">
+	        <span id="rthd-response-daynight-error" class="myerror rthd-hide-row"></span>
+	        <table id="rthd-response">
                 <tbody>
                 <tr>
                     <th>&nbsp;</th>
@@ -251,7 +253,7 @@ if ( ! class_exists( 'Rt_HD_Auto_Response' ) ) {
                             <label><?php echo $weekday; ?></label>
                         </td>
                         <td>
-                            <select class="rthd-daynigt-am-time-start" name="redux_helpdesk_settings[rthd_daynight_am_time_start][<?php echo $key; ?>]">
+                            <select class="rthd-daynight-am-time-start" name="redux_helpdesk_settings[rthd_daynight_am_time_start][<?php echo $key; ?>]">
                                 <option value="-1">Select Time</option>
                                 <?php for( $i = 0; $i <= 11; $i++ ) {
                                     $selected = ( ! empty( $shifttime['am_start'][ $key ] ) && $shifttime['am_start'][ $key ] == $i ) ? 'selected' : '';
@@ -259,7 +261,7 @@ if ( ! class_exists( 'Rt_HD_Auto_Response' ) ) {
                                 } ?>
                             </select>
                             &nbsp;To&nbsp;
-                            <select class="rthd-daynigt-am-time-end" name="redux_helpdesk_settings[rthd_daynight_am_time_end][<?php echo $key; ?>]">
+                            <select class="rthd-daynight-am-time-end" name="redux_helpdesk_settings[rthd_daynight_am_time_end][<?php echo $key; ?>]">
                                 <option value="-1">Select Time</option>';
                                 <?php for( $i = 0; $i <= 11; $i++ ) {
                                     $selected = ( ! empty( $shifttime['am_end'][ $key ] ) && $shifttime['am_end'][ $key ] == $i ) ? 'selected' : '';
@@ -268,7 +270,7 @@ if ( ! class_exists( 'Rt_HD_Auto_Response' ) ) {
                             </select>
                         </td>
                         <td>
-                            <select class="rthd-daynigt-pm-time-start" name="redux_helpdesk_settings[rthd_daynight_pm_time_start][<?php echo $key; ?>]">
+                            <select class="rthd-daynight-pm-time-start" name="redux_helpdesk_settings[rthd_daynight_pm_time_start][<?php echo $key; ?>]">
                                 <option value="-1">Select Time</option>
                                 <?php for( $i = 12; $i <= 23; $i++ ) {
                                     $selected = ( ! empty( $shifttime['pm_start'][ $key ] ) && $shifttime['pm_start'][ $key ] == $i ) ? 'selected' : '';
@@ -276,7 +278,7 @@ if ( ! class_exists( 'Rt_HD_Auto_Response' ) ) {
                                 } ?>
                             </select>
                             &nbsp;To&nbsp;
-                            <select class="rthd-daynigt-pm-time-end" name="redux_helpdesk_settings[rthd_daynight_pm_time_end][<?php echo $key; ?>]">
+                            <select class="rthd-daynight-pm-time-end" name="redux_helpdesk_settings[rthd_daynight_pm_time_end][<?php echo $key; ?>]">
                                 <option value="-1">Select Time</option>';
                                 <?php for( $i = 12; $i <= 23; $i++ ) {
                                     $selected = ( ! empty( $shifttime['pm_end'][ $key ] ) && $shifttime['pm_end'][ $key ] == $i ) ? 'selected' : '';
@@ -285,7 +287,7 @@ if ( ! class_exists( 'Rt_HD_Auto_Response' ) ) {
                             </select>
                         </td>
                     </tr>
-                    <tr class="rthd-daynightshift-error">
+                    <tr class="rthd-daynightshift-error rthd-hide-row">
                         <td>&nbsp</td>
                         <td class="am-time-error"></td>
                         <td class="pm-time-error"></td>

@@ -1,7 +1,8 @@
 /**
  * Created by sai on 6/9/14.
  */
-jQuery(function () {
+jQuery(document).ready(function() {
+
     var file_frame_ticket;
     var rthdAdmin = {
 
@@ -627,118 +628,160 @@ jQuery(function () {
 				jQuery( '.rthd-dayshift-time-start' ).change( function() {
 					rthdAdmin.initDayValidation( jQuery( this ).parent().parent() );
 				});
-				jQuery( '#redux-form-wrapper' ).submit( function() {
-					var flag = true;
-					if ( jQuery('#rthd_enable_auto_response_mode').val() == 1  ) {
-						for( var i = 0; i < 7; i++ ) {
-							if (!rthdAdmin.initDayNightValidation(jQuery('.rthd-dayshift-time-start').eq(i).parent().parent())) {
-								flag = false;
-							}
-						}
-					}
-					return flag;
-				});
 
 				//day/night shift
-				jQuery('.rthd-daynigt-am-time-start').change(function () {
+				jQuery('.rthd-daynight-am-time-start').change(function () {
 					rthdAdmin.initDayNightValidation(jQuery(this).parent().parent());
 				});
-				jQuery('.rthd-daynigt-am-time-end').change(function () {
+				jQuery('.rthd-daynight-am-time-end').change(function () {
 					rthdAdmin.initDayNightValidation(jQuery(this).parent().parent());
 				});
-				jQuery('.rthd-daynigt-pm-time-start').change(function () {
+				jQuery('.rthd-daynight-pm-time-start').change(function () {
 					rthdAdmin.initDayNightValidation(jQuery(this).parent().parent());
 				});
-				jQuery('.rthd-daynigt-pm-time-end').change(function () {
+				jQuery('.rthd-daynight-pm-time-end').change(function () {
 					rthdAdmin.initDayNightValidation(jQuery(this).parent().parent());
 				});
-				jQuery('#redux-form-wrapper').submit(function () {
-					var flag = true;
-					if ( jQuery('#rthd_enable_auto_response_mode').val() == 0  ) {
-						for (var i = 0; i < 7; i++) {
-							if (!rthdAdmin.initDayNightValidation(jQuery('.rthd-daynigt-am-time-start').eq(i).parent().parent())) {
-								flag = false;
-							}
 
-							if (!rthdAdmin.initDayNightValidation(jQuery('.rthd-daynigt-pm-time-start').eq(i).parent().parent())) {
-								flag = false;
-							}
-						}
-					}
-					return flag;
-				});
+                jQuery( '.redux-action_bar input' ).on('click',function( e ) {
+                    if ( jQuery( this ).attr( 'name' ) == 'redux_save' ){
+                        var flag = true;
+
+                        if (jQuery('#rthd_enable_auto_response_mode').val() == 1) {
+                            for (var i = 0; i < 7; i++) {
+                                var tr_parent = jQuery('.rthd-dayshift-time-start').eq(i).parent().parent();
+                                if (!rthdAdmin.initDayValidation(tr_parent)) {
+                                    flag = false;
+                                }
+                            }
+                        }
+
+                        if ( jQuery('#rthd_enable_auto_response_mode').val() == 0  ) {
+                            for (var i = 0; i < 7; i++) {
+                                var tr_parent = jQuery('.rthd-daynight-am-time-start').eq(i).parent().parent();
+                                if (!rthdAdmin.initDayNightValidation( tr_parent )) {
+                                    flag = false;
+                                }
+                            }
+                        }
+
+                        if ( ! flag ){
+                            redux.args.ajax_save = false;
+                            e.preventDefault();
+                        }
+                        return flag;
+                    }
+                });
 			}
 		},
 		initDayValidation: function ( $tr_parent ) {
 			var starting_val = $tr_parent.find( '.rthd-dayshift-time-start' ).val();
 			var ending_val = $tr_parent.find( '.rthd-dayshift-time-end' ).val();
 			var flag = true;
+			var allflag = true;
 
 			if ( starting_val == -1 && ending_val == -1 ){
-				jQuery( $tr_parent ).next('.rthd-dayshift-error').show().find( '.error' ).html( '' );
+				jQuery( $tr_parent ).next('.rthd-dayshift-error').show().find( '.error' ).removeClass('myerror').html( '' );
 			} else {
 				if ( starting_val == -1 || ending_val == -1 ){
-					jQuery( $tr_parent ).next('.rthd-dayshift-error').show().find( '.error' ).html( 'Please select `Starting` or `Ending` For AM' );
+                    if ( starting_val == -1 ){
+                        jQuery( $tr_parent ).next('.rthd-dayshift-error').show().find( '.error').addClass('myerror').html('Please select `Start` time');
+                    }else{
+                        jQuery( $tr_parent ).next('.rthd-dayshift-error').show().find( '.error').addClass('myerror').html('Please select `End` time');
+                    }
 					flag = false;
 				} else if( parseInt( ending_val ) < parseInt( starting_val ) ){
-					jQuery( $tr_parent ).next('.rthd-dayshift-error').show().find( '.error' ).html( 'Starting Time should be less then ending time' );
+					jQuery( $tr_parent ).next('.rthd-dayshift-error').show().find( '.error' ).addClass('myerror').html( 'Starting Time should be less then ending time' );
 					flag = false;
 				} else{
-					jQuery( $tr_parent ).next('.rthd-dayshift-error').show().find( '.error' ).html( '' );
+					jQuery( $tr_parent ).next('.rthd-dayshift-error').show().find( '.error').removeClass('myerror').html( '' );
 				}
 			}
 
             if ( flag ){
                 jQuery( $tr_parent ).next('.rthd-dayshift-error').hide();
+                if ( jQuery('#rthd_autoresponse_weekend').val() == 0  ) { // if Weekend only off then che check weektime enter or not
+                    for (var i = 0; i < 7; i++) {
+                        var starting_val = $tr_parent.find('.rthd-dayshift-time-start').val();
+                        var ending_val = $tr_parent.find('.rthd-dayshift-time-end').val();
+                        if (starting_val != -1 || ending_val != -1) {
+                            allflag = false;
+                        }
+                        if ( allflag ){
+                            jQuery('#rthd-response-day-error').show().html('please select working time');
+                            flag = false;
+                        }
+                    }
+                }
+            }else{
+                jQuery('#rthd-response-day-error').hide().html('');
             }
 
             return flag;
 		},
 		initDayNightValidation: function ( $tr_parent ) {
-			var starting_am_val = $tr_parent.find('.rthd-daynigt-am-time-start').val();
-			var ending_am_val = $tr_parent.find('.rthd-daynigt-am-time-end').val();
-			var starting_pm_val = $tr_parent.find('.rthd-daynigt-pm-time-start').val();
-			var ending_pm_val = $tr_parent.find('.rthd-daynigt-pm-time-end').val();
-
-            console.log( starting_am_val );
-            console.log( ending_am_val );
-            console.log( starting_pm_val );
-            console.log( ending_pm_val );
-
-
-            console.log( starting_am_val == -1 || ending_am_val == -1 );
-
+			var starting_am_val = $tr_parent.find('.rthd-daynight-am-time-start').val();
+			var ending_am_val = $tr_parent.find('.rthd-daynight-am-time-end').val();
+			var starting_pm_val = $tr_parent.find('.rthd-daynight-pm-time-start').val();
+			var ending_pm_val = $tr_parent.find('.rthd-daynight-pm-time-end').val();
 			var flag = true;
+            var allflag = true;
+
 			if ( starting_am_val == -1 && ending_am_val == -1 ){
-				jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.am-time-error').html('');
+				jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.am-time-error').removeClass('myerror').html('');
 			} else {
 				if ( starting_am_val == -1 || ending_am_val == -1 ){
-					jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.am-time-error').html('Please select `Starting` or `Ending` For AM');
+                    if ( starting_am_val == -1 ){
+                        jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.am-time-error').addClass('myerror').html('Please select `Start` time');
+                    }else{
+                        jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.am-time-error').addClass('myerror').html('Please select `End` time');
+                    }
 					flag = false;
 				} else if( parseInt( ending_am_val ) < parseInt( starting_am_val ) ){
-					jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.am-time-error').html('Starting Time should be less then ending time');
+					jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.am-time-error').addClass('myerror').html('Starting Time should be less then ending time');
 					flag = false;
 				}else {
-					jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.am-time-error').html('');
+					jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.am-time-error').removeClass('myerror').html('');
 				}
 			}
 
 			if ( starting_pm_val == -1 && ending_pm_val == -1 ){
-				jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.pm-time-error').html('');
+				jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.pm-time-error').removeClass('myerror').html('');
 			}else{
 				if ( starting_pm_val == -1 || ending_pm_val == -1 ){
-					jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.pm-time-error').html('Please select `Starting` or `Ending` For PM');
+                    if ( starting_pm_val == -1 ){
+                        jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.pm-time-error').addClass('myerror').html('Please select `Start` time');
+                    }else{
+                        jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.pm-time-error').addClass('myerror').html('Please select `End` time');
+                    }
 					flag = false;
 				}else if( parseInt( ending_pm_val ) < parseInt( starting_pm_val )  ){
-					jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.pm-time-error').html('Starting Time should be less then ending time');
+					jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.pm-time-error').addClass('myerror').html('Starting Time should be less then ending time');
 					flag = false;
 				}else{
-					jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.pm-time-error').html('');
+					jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.pm-time-error').removeClass('myerror')('myerror').html('');
 				}
 			}
 
             if ( flag ){
-                jQuery( $tr_parent ).next('.rthd-dayshift-error').hide();
+                jQuery( $tr_parent ).next('.rthd-daynightshift-error').hide();
+                if ( jQuery('#rthd_autoresponse_weekend').val() == 0  ) { // if Weekend only off then che check weektime enter or not
+                    for (var i = 0; i < 7; i++) {
+                        var starting_am_val = $tr_parent.find('.rthd-daynight-am-time-start').val();
+                        var ending_am_val = $tr_parent.find('.rthd-daynight-am-time-end').val();
+                        var starting_pm_val = $tr_parent.find('.rthd-daynight-pm-time-start').val();
+                        var ending_pm_val = $tr_parent.find('.rthd-daynight-pm-time-end').val();
+                        if ( starting_am_val != -1 || ending_am_val != -1 || starting_pm_val != -1 || ending_pm_val != -1 ) {
+                            allflag = false;
+                        }
+                        if ( allflag ){
+                            jQuery('#rthd-response-daynight-error').show().html('please select working time');
+                            flag = false;
+                        }
+                    }
+                }
+            }else{
+                jQuery('#rthd-response-daynight-error').hide().html('');
             }
 
 			return flag;
