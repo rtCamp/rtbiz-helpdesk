@@ -536,9 +536,24 @@ function rthd_get_auto_response_message(){
 
 
 function rthd_generate_email_title( $post_id, $title ) {
-	$prefix = '[' . ucfirst( Rt_HD_Module::$name ) . ' #' . $post_id . ']';
-	$title = $prefix.' '.$title;
+	$redux = rthd_get_redux_settings();
+	$title = str_replace( '{module_name}', isset( $redux['rthd_menu_label'] ) ? $redux['rthd_menu_label'] : Rt_HD_Module::$name  , $title );
+	$title = str_replace( '{ticket_id}', $post_id, $title );
 	$title = str_replace( '{ticket_title}',get_the_title( $post_id ), $title );
+
+	if ( strpos( $title, '{offerings_name}' ) !== false ) {
+		global $rtbiz_offerings;
+		$offering = '';
+		$products = array();
+		if ( ! empty( $rtbiz_offerings ) ) {
+			$products = wp_get_post_terms( $post_id, Rt_Offerings::$offering_slug );
+		}
+		if ( ! $products instanceof WP_Error && ! empty( $products ) ) {
+			$offering_names = wp_list_pluck( $products, 'name' );
+			$offering = implode( ' ', $offering_names );
+		}
+		$title = str_replace( '{offerings_name}', $offering, $title );
+	}
 	return $title;
 }
 
@@ -1014,17 +1029,25 @@ function rthd_get_attachment_url_from_followups( $postid ){
 	return $attach_cmt;
 }
 
-function rthd_get_general_body_template( $body ){
-	$date = strtotime( current_time( 'mysql', 1 ) );
-	return '<div style="border: 1px solid #DFE9f2;padding: 20px;background: #f1f6fa;">' . rthd_content_filter( $body ) . '<br/><div style="float: right;color: gray;">' . date( 'l M d, Y H:i e', $date ) . '</div></div>';
+function rthd_get_general_body_template( $body, $title, $replyflag = false ){
+	ob_start();
+	rthd_get_template( 'email-template.php', array( 'body' => $body, 'title' => $title ,'replyflag' => $replyflag) );
+	return ob_get_clean();
 }
 
 function rthd_update_ticket_updated_by_user( $post_id, $user_id ){
 	update_post_meta( $post_id, '_rtbiz_hd_updated_by',$user_id );
 }
 
-function rthd_replace_followup_placeholder( $body , $name ){
-	return str_replace( '{comment_author}',$name, $body );
+/**
+ * @param $str
+ * @param $placeholder
+ * @param $replacewith
+ *
+ * @return mixed
+ */
+function rthd_replace_placeholder( $str, $placeholder, $replacewith ){
+	return str_replace( $placeholder, $replacewith, $str );
 }
 
 function rthd_is_mailbox_configured(){
@@ -1424,4 +1447,67 @@ function rt_hd_get_attchment_link_with_fancybox( $attachment, $post_id = '' ){
 				<span title="<?php echo balanceTags( $attachment->post_title ); ?>"> 	<?php echo esc_attr( strlen( balanceTags( $attachment->post_title ) ) > 40 ? substr( balanceTags( $attachment->post_title ), 0, 40 ) . '...' : balanceTags( $attachment->post_title ) ); ?> </span>
 	</a>
 	<?php
+}
+
+function rthd_is_email_template_addon_active(){
+	if ( is_plugin_active( 'rtbiz-email-template/rtbiz-email-template.php' ) ){
+		return true;
+	}
+	return false;
+}
+
+
+function rthd_get_email_template_body( $key ){
+	$redux = rthd_get_redux_settings();
+	return $redux[$key];
+}
+
+
+function rthd_get_default_email_template( $key = '' , $all = false ){
+	$redux = array();
+
+	//Ticket default title
+	$redux['rthd_new_ticket_email_title'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_new_ticket_email_title_contacts'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_new_ticket_email_title_group'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_new_ticket_email_title_assignee'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_new_ticket_email_title_subscriber'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_update_ticket_email_title'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_ticket_reassign_email_title'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_ticket_reassign_email_title_old_assignee'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_new_followup_email_title'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_new_followup_email_title_private'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_update_followup_email_title'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_update_followup_email_title_private'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_delete_followup_email_title'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_delete_followup_email_title_private'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_ticket_subscribe_email_title'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_ticket_unsubscribe_email_title'] = '[{module_name} #{ticket_id}] {ticket_title}';
+
+
+	// Ticket template default body
+	$redux['rthd_email_template_followup_add'] = 'New Followup Added by <strong>{followup_author}</strong><hr style="color: #DCEAF5;" /><div style="display: inline-block">{followup_content}</div>';
+	$redux['rthd_email_template_followup_add_private'] = '<br /> A private followup has been added by <strong>{followup_author}</strong>. Please go to ticket to view content.';
+	$redux['rthd_email_template_followup_deleted_private'] = 'A Followup is deleted by <Strong>{followup_deleted_by}</Strong>';
+	$redux['rthd_email_template_followup_deleted'] = 'A Followup is deleted by <Strong>{followup_deleted_by}</Strong><hr style="color: #DCEAF5;" /><div  style="display: inline-block">{followup_content}</div>';
+	$redux['rthd_email_template_followup_updated_private'] = '<div><br /> A <strong>private</strong> followup has been edited by <strong>{followup_updated_by}</strong>. Please go to ticket to view content.</div> {visibility_diff}';
+	$redux['rthd_email_template_followup_updated'] = '<div> A Followup Updated by <strong>{followup_updated_by}.</strong></div> <br/><div> The changes are as follows: </div><br/> {visibility_diff} {followup_diff}';
+	$redux['rthd_email_template_new_ticket_created_author'] = 'Thank you for opening a new support ticket. We will look into your request and respond as soon as possible.<br/>{ticket_body}';
+	$redux['rthd_email_template_new_ticket_created_contacts'] = 'A new support ticket created by <strong> {ticket_author} </strong>. You have been subscribed to this ticket.<br/>{ticket_body}';
+	$redux['rthd_email_template_new_ticket_created_group_notification'] = 'A new support ticket created by <strong> {ticket_author} </strong>. <br/>Ticket Assigned to <strong>{ticket_assignee}</strong>{ticket_offerings} {ticket_body}';
+	$redux['rthd_email_template_new_ticket_created_assignee'] = 'A new support ticket created by <strong> {ticket_author} </strong> is assigned to you. <br/></strong>{ticket_offerings} {ticket_body}';
+	$redux['rthd_email_template_new_ticket_created_subscriber'] = 'A new support ticket created by <strong>{ticket_author}</strong>. You have been subscribed to this ticket. <br/>Ticket Assigned to <strong>{ticket_assignee}</strong>{ticket_offerings} {ticket_body}';
+	$redux['rthd_email_template_ticket_subscribed'] = '{ticket_subscribers} have been subscribed to this ticket';
+	$redux['rthd_email_template_ticket_unsubscribed'] = '{ticket_unsubscribers} have been un-subscribed to this ticket';
+	$redux['rthd_email_template_ticket_reassigned_old_assignee'] = 'You are no longer responsible for this ticket.';
+	$redux['rthd_email_template_ticket_reassigned_new_assignee'] = 'A ticket is reassigned to {new_ticket_assignee}.';
+	$redux['rthd_email_template_ticket_updated'] = '<br /> Ticket updated by : <strong>{ticket_updated_by}</strong><br/>. {ticket_diference}';
+
+	if ( ! empty( $key ) && isset( $redux[ $key ] ) ){
+		return $redux[ $key ];
+	}
+	if ( $all ){
+		return $redux;
+	}
+	return false;
 }
