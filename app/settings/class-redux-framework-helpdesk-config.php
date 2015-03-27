@@ -41,7 +41,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 		public function rthd_email_template_defaults(){
 			$redux = rthd_get_redux_settings();
 
-			if ( ! rt_biz_is_email_template_setting_on() ){
+			if ( ! rt_biz_is_email_template_setting_on( Rt_HD_Module::$post_type ) ){
 
 				$templates = rthd_get_default_email_template( '', true );
 				foreach ( $templates as $key => $val ) {
@@ -347,7 +347,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				'fields'      => $email_fields,
 			);
 
-			if ( rt_biz_is_email_template_setting_on() ) {
+			if ( rt_biz_is_email_template_setting_on( Rt_HD_Module::$post_type ) ) {
 				$this->sections = apply_filters( 'rthd_email_templates_settings', $this->sections );
 			}
 			$this->sections[] = array(

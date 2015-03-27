@@ -1029,9 +1029,9 @@ function rthd_get_attachment_url_from_followups( $postid ){
 	return $attach_cmt;
 }
 
-function rthd_get_general_body_template( $body ){
+function rthd_get_general_body_template( $body, $title, $replyflag = false ){
 	ob_start();
-	rthd_get_template( 'email-template.php', array( 'body' => $body ) );
+	rthd_get_template( 'email-template.php', array( 'body' => $body, 'title' => $title ,'replyflag' => $replyflag) );
 	return ob_get_clean();
 }
 
