@@ -19,13 +19,14 @@ i) The WYSIWYG editor is used by customer and staff to format their reply conten
 
 ii) Reply visibility - Used to determine visibility of a follow-up. 'Sensitive' type can be used by customer if he wants to send confidnetial information like server info.
 
-iii) Upload Files - Used by customer and staff to add files to their follow-ups.
+iii) Keep Unanswered - This option appears for staff to keep a ticket Unanswered, post reply.
 
-iv)  Add Follow-up Button - Button to add the follow-up to the ticket.
+iv)  Upload Files - Used by customer and staff to add files to their follow-ups.
 
-v)  Keep Unanswered - This option appears for staff to keep a ticket Unanswered, post reply.
+v) Add Follow-up Button - Button to add the follow-up to the ticket.
 
-![Followup](http://git.rtcamp.com/uploads/rtbiz/rtbiz-helpdesk/6155fd57b8/Followup.png)
+![wysiwyg](http://git.rtcamp.com/uploads/rtbiz/rtbiz-helpdesk/aed10361cc/wysiwyg.png)
+
 5.Ticket Information -
 
 
