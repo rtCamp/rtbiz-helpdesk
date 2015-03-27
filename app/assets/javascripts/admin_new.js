@@ -702,15 +702,16 @@ jQuery(document).ready(function() {
                 jQuery( $tr_parent ).next('.rthd-dayshift-error').hide();
                 if ( jQuery('#rthd_autoresponse_weekend').val() == 0  ) { // if Weekend only off then che check weektime enter or not
                     for (var i = 0; i < 7; i++) {
+                        $tr_parent = jQuery('.rthd-dayshift-time-start').eq(i).parent().parent();
                         var starting_val = $tr_parent.find('.rthd-dayshift-time-start').val();
                         var ending_val = $tr_parent.find('.rthd-dayshift-time-end').val();
                         if (starting_val != -1 || ending_val != -1) {
                             allflag = false;
                         }
-                        if ( allflag ){
-                            jQuery('#rthd-response-day-error').show().html('please select working time');
-                            flag = false;
-                        }
+                    }
+                    if ( allflag ){
+                        jQuery('#rthd-response-day-error').show().html('please select working time');
+                        flag = false;
                     }
                 }
             }else{
@@ -767,6 +768,7 @@ jQuery(document).ready(function() {
                 jQuery( $tr_parent ).next('.rthd-daynightshift-error').hide();
                 if ( jQuery('#rthd_autoresponse_weekend').val() == 0  ) { // if Weekend only off then che check weektime enter or not
                     for (var i = 0; i < 7; i++) {
+                        $tr_parent = jQuery('.rthd-daynight-am-time-start').eq(i).parent().parent();
                         var starting_am_val = $tr_parent.find('.rthd-daynight-am-time-start').val();
                         var ending_am_val = $tr_parent.find('.rthd-daynight-am-time-end').val();
                         var starting_pm_val = $tr_parent.find('.rthd-daynight-pm-time-start').val();
@@ -774,10 +776,10 @@ jQuery(document).ready(function() {
                         if ( starting_am_val != -1 || ending_am_val != -1 || starting_pm_val != -1 || ending_pm_val != -1 ) {
                             allflag = false;
                         }
-                        if ( allflag ){
-                            jQuery('#rthd-response-daynight-error').show().html('please select working time');
-                            flag = false;
-                        }
+                    }
+                    if ( allflag ){
+                        jQuery('#rthd-response-daynight-error').show().html('please select working time');
+                        flag = false;
                     }
                 }
             }else{
