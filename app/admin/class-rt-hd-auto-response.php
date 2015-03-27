@@ -125,12 +125,12 @@ if ( ! class_exists( 'Rt_HD_Auto_Response' ) ) {
                                 $NextStatingTime = $shifttime['pm_start'][$nextday];
                             }
 
-                            if ( $hour > 12  && $NextStatingTime > $hour && $nextday == $day ){
+                            if ( $hour >= 12  && $NextStatingTime > $hour && $nextday == $day ){
                                 $NextStatingTime = $shifttime['pm_start'][$nextday];
                             }
 
                             // check nextday is same day or not
-                            if (($nextday == $day && $NextStatingTime < $hour) || $nextday != $day) {
+                            if ( $nextday == $day ) {
                                 $nextday = $this->weekdays[$nextday] . ' after ';
                             } else {
                                 $nextday = 'Today after ';
