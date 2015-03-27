@@ -202,17 +202,10 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				                'ID'           => $_POST['post_id'],
 				                'post_content' => rthd_content_filter( $_POST['body'] ),
 			                ) );
-			$subject = rthd_create_new_ticket_title( 'rthd_update_ticket_email_title', $_POST['post_id'] );
 			$body = "Ticket content updated : ". rthd_content_filter( $_POST['body'] );
-			$flag = false;
-			$redux = rthd_get_redux_settings();
-			if ( 1 != $redux['rthd_notification_events']['status_metadata_changed'] ){
-				$flag = false;
-			}
-			else{
-				$flag = true;
-			}
-			$this->notify_subscriber_via_email( $_POST['post_id'], $subject, rthd_get_general_body_template( $body ), array(), $_POST['post_id'], $flag, false );
+			global $rt_hd_module, $rt_hd_email_notification;
+			$labels = $rt_hd_module->labels;
+			$rt_hd_email_notification->notification_ticket_updated( $_POST['post_id'], $labels['name'], $body, array() );
 			$result['status'] = true;
 			echo json_encode( $result );
 			die();
@@ -1214,7 +1207,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			}
 
 			global $rt_hd_email_notification;
-			return $rt_hd_email_notification->insert_new_send_email( $subject, '', rthd_get_general_body_template( $mailbody ), $toEmail, $ccEmail, $bccEmail, $attachment, $comment_id, 'comment' );
+			return $rt_hd_email_notification->insert_new_send_email( $subject, rthd_get_general_body_template( $mailbody, '', true ), $toEmail, $ccEmail, $bccEmail, $attachment, $comment_id, 'comment' );
 		}
 
 		/**
@@ -1604,78 +1597,6 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				return true;
 			} else {
 				return false;
-			}
-		}
-
-		/**
-		 * notify subscriber via email
-		 *
-		 * @param       $post_id
-		 * @param       $subject
-		 * @param       $body
-		 * @param array $attachment
-		 * @param       $comment_id
-		 * @param       $notificationFlag
-		 * @param       $contactFlag
-		 *
-		 * @param bool  $subscriberFlag
-		 *
-		 * @internal param $title
-		 * @since rt-Helpdesk 0.1
-		 */
-		function notify_subscriber_via_email( $post_id, $subject, $body, $attachment = array(), $comment_id, $notificationFlag, $contactFlag, $subscriberFlag = true, $assigneeFlag = true ) {
-			$bccemails     = array();
-			$sendEmailFlag = false;
-			if ( $subscriberFlag ) {
-				$oldSubscriberArr = get_post_meta( $post_id, '_rtbiz_hd_subscribe_to', true );
-				if ( $oldSubscriberArr && is_array( $oldSubscriberArr ) && ! empty( $oldSubscriberArr ) ) {
-					foreach ( $oldSubscriberArr as $emailsubscriber ) {
-						$userSub = get_user_by( 'id', intval( $emailsubscriber ) );
-						if ( ! empty( $userSub ) ) {
-							$bccemails[ ]  = array( 'email' => $userSub->user_email, 'name' => $userSub->display_name );
-							$sendEmailFlag = true;
-						}
-					}
-				}
-			}
-			global $redux_helpdesk_settings, $rt_hd_email_notification;
-
-			if ( $contactFlag ) {
-				$tocontact      = array();
-				$contacts = rt_biz_get_post_for_contact_connection( $post_id, Rt_HD_Module::$post_type );
-				foreach ( $contacts as $contact ) {
-					$emails = get_post_meta( $contact->ID, Rt_Entity::$meta_key_prefix.Rt_Contact::$primary_email_key );
-					foreach ( $emails as $email ) {
-						array_push( $tocontact, array( 'email' => $email ) );
-					}
-				}
-				global $rt_hd_module;
-				$labels = $rt_hd_module->labels;
-
-				$title     = $rt_hd_email_notification->get_email_title( $post_id, $labels['name'] );
-				$rt_hd_email_notification->insert_new_send_email( $subject, $title, $body, $tocontact, array(), array(), $attachment, $comment_id, 'comment', true );
-			}
-
-			//			$cc = array();
-			if ( $notificationFlag ) {
-				if ( isset( $redux_helpdesk_settings['rthd_notification_emails'] ) ) {
-					foreach ( $redux_helpdesk_settings['rthd_notification_emails'] as $email ) {
-						array_push( $bccemails, array( 'email' => $email ) );
-						$sendEmailFlag = true;
-					}
-				}
-			}
-			if ( $assigneeFlag ){
-				$post_author_id = get_post_field( 'post_author', $post_id );
-				$userSub     = get_user_by( 'id', intval( $post_author_id ) );
-				$to[] = array( 'email' => $userSub->user_email, 'name' => $userSub->display_name );
-				$sendEmailFlag = true;
-			}
-			if ( $sendEmailFlag ){
-				global $rt_hd_module;
-				$labels = $rt_hd_module->labels;
-				$title = $rt_hd_email_notification->get_email_title( $post_id, $labels['name'] );
-				$rt_hd_email_notification->insert_new_send_email( $subject, $title, $body, $to, array(), $bccemails, $attachment, $comment_id, 'comment', true );
 			}
 		}
 

@@ -35,12 +35,29 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			add_action( 'p2p_init', array( $this, 'init_settings' ), 30 );
 		}
 
+		/**
+		 *  If add-on plugin is not available the use default templates
+		 */
+		public function rthd_email_template_defaults(){
+			$redux = rthd_get_redux_settings();
+			// check if plugin is active and setting in rtbiz for helpdesk email template is on.
+			if ( ! rt_biz_is_email_template_setting_on( Rt_HD_Module::$post_type ) ){
+				$templates = rthd_get_default_email_template( '', true );
+				foreach ( $templates as $key => $val ) {
+					$redux[ $key ] = $val;
+				}
+				update_option( self::$hd_opt , $redux );
+				$GLOBALS['redux_helpdesk_settings'] = $redux;
+			}
+		}
 
 
 
 		public function init_settings() {
 			// Set the default arguments
 			$this->set_arguments();
+
+			$this->rthd_email_template_defaults();
 
 			// Set a few help tabs so you can see how it's done
 			//			$this->set_helptabs();
@@ -317,6 +334,9 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				'fields'      => $email_fields,
 			);
 
+			if ( rt_biz_is_email_template_setting_on( Rt_HD_Module::$post_type ) ) {
+				$this->sections = apply_filters( 'rthd_email_templates_settings', $this->sections );
+			}
 			$this->sections[] = array(
 				'icon'        => 'el-icon-edit',
 				'title'       => __( 'Notification Emails ' ),
@@ -447,67 +467,10 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					array(
 						'id'       => 'section-notification_email-customize-start',
 						'type'     => 'section',
-						'subtitle'     => __( 'You can use {ticket_title} as a placeholder.<p><b>Suggestion:</b> Use same title for all mail types to let users have all emails in single thread.</p>' ),
 						'title'       => __( 'Customize Notification Emails ' ),
 						'indent'   => true, // Indent all options below until the next 'section' option is set.
 					),
 
-					array(
-						'id'       => 'rthd_new_ticket_email_title',
-						'type'     => 'text',
-						'title'    => __( 'New ticket is created' ),
-						'subtitle' => __( 'Title when a new ticket is created' ),
-						'default'  => '{ticket_title}',
-					),
-					array(
-						'id'       => 'rthd_update_ticket_email_title',
-						'type'     => 'text',
-						'title'    => __( 'Ticket is updated' ),
-						'subtitle' => __( 'Title when a ticket is updated' ),
-						'default'  => '{ticket_title}',
-					),
-					array(
-						'id'       => 'rthd_ticket_reassign_email_title',
-						'type'     => 'text',
-						'title'    => __( 'Ticket is reassigned' ),
-						'subtitle' => __( 'Title when an existing ticket is reassigned to another user' ),
-						'default'  => '{ticket_title}',
-					),
-					array(
-						'id'       => 'rthd_new_followup_email_title',
-						'type'     => 'text',
-						'title'    => __( 'New follow up is added' ),
-						'subtitle' => __( 'Title when a new follow up is added' ),
-						'default'  => '{ticket_title}',
-					),
-					array(
-						'id'       => 'rthd_update_followup_email_title',
-						'type'     => 'text',
-						'title'    => __( 'Follow up is updated' ),
-						'subtitle' => __( 'Title when an existing follow up is updated' ),
-						'default'  => '{ticket_title}',
-					),
-					array(
-						'id'       => 'rthd_delete_followup_email_title',
-						'type'     => 'text',
-						'title'    => __( 'Follow up is deleted' ),
-						'subtitle' => __( 'Title when a follow up is deleted' ),
-						'default'  => '{ticket_title}',
-					),
-					array(
-						'id'       => 'rthd_ticket_subscribe_email_title',
-						'type'     => 'text',
-						'title'    => __( 'User subscribes to ticket' ),
-						'subtitle' => __( 'Title when a user subscribes to a ticket' ),
-						'default'  => '{ticket_title}',
-					),
-					array(
-						'id'       => 'rthd_ticket_unsubscribe_email_title',
-						'type'     => 'text',
-						'title'    => __( 'User unsubscribes to ticket' ),
-						'subtitle' => __( 'Title when a user unsubscribes to a ticket' ),
-						'default'  => '{ticket_title}',
-					),
 					array(
 						'id'       => 'rthd_enable_signature',
 						'type'     => 'switch',
@@ -551,7 +514,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 
 			$this->sections[] = array(
 				'icon'        => 'el-icon-magic',
-				'title'       => __( 'Advance Settings' ),
+				'title'       => __( 'Advanced Settings' ),
 				'permissions' => $admin_cap,
 				'fields'      => array(
 					array(
