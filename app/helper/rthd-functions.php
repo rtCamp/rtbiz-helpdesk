@@ -533,9 +533,24 @@ function rthd_get_auto_response_message(){
 
 
 function rthd_generate_email_title( $post_id, $title ) {
-	$prefix = '[' . ucfirst( Rt_HD_Module::$name ) . ' #' . $post_id . ']';
-	$title = $prefix.' '.$title;
+	$redux = rthd_get_redux_settings();
+	$title = str_replace( '{module_name}', isset( $redux['rthd_menu_label'] ) ? $redux['rthd_menu_label'] : Rt_HD_Module::$name  , $title );
+	$title = str_replace( '{ticket_id}', $post_id, $title );
 	$title = str_replace( '{ticket_title}',get_the_title( $post_id ), $title );
+
+	if ( strpos( $title, '{offerings_name}' ) !== false ) {
+		global $rtbiz_offerings;
+		$offering = '';
+		$products = array();
+		if ( ! empty( $rtbiz_offerings ) ) {
+			$products = wp_get_post_terms( $post_id, Rt_Offerings::$offering_slug );
+		}
+		if ( ! $products instanceof WP_Error && ! empty( $products ) ) {
+			$offering_names = wp_list_pluck( $products, 'name' );
+			$offering = implode( ' ', $offering_names );
+		}
+		$title = str_replace( '{offerings_name}', $offering, $title );
+	}
 	return $title;
 }
 
@@ -1417,22 +1432,22 @@ function rthd_get_default_email_template( $key = '' , $all = false ){
 	$redux = array();
 
 	//Ticket default title
-	$redux['rthd_new_ticket_email_title'] = '{ticket_title}';
-	$redux['rthd_new_ticket_email_title_contacts'] = '{ticket_title}';
-	$redux['rthd_new_ticket_email_title_group'] = '{ticket_title}';
-	$redux['rthd_new_ticket_email_title_assignee'] = '{ticket_title}';
-	$redux['rthd_new_ticket_email_title_subscriber'] = '{ticket_title}';
-	$redux['rthd_update_ticket_email_title'] = '{ticket_title}';
-	$redux['rthd_ticket_reassign_email_title'] = '{ticket_title}';
-	$redux['rthd_ticket_reassign_email_title_old_assignee'] = '{ticket_title}';
-	$redux['rthd_new_followup_email_title'] = '{ticket_title}';
-	$redux['rthd_new_followup_email_title_private'] = '{ticket_title}';
-	$redux['rthd_update_followup_email_title'] = '{ticket_title}';
-	$redux['rthd_update_followup_email_title_private'] = '{ticket_title}';
-	$redux['rthd_delete_followup_email_title'] = '{ticket_title}';
-	$redux['rthd_delete_followup_email_title_private'] = '{ticket_title}';
-	$redux['rthd_ticket_subscribe_email_title'] = '{ticket_title}';
-	$redux['rthd_ticket_unsubscribe_email_title'] = '{ticket_title}';
+	$redux['rthd_new_ticket_email_title'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_new_ticket_email_title_contacts'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_new_ticket_email_title_group'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_new_ticket_email_title_assignee'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_new_ticket_email_title_subscriber'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_update_ticket_email_title'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_ticket_reassign_email_title'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_ticket_reassign_email_title_old_assignee'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_new_followup_email_title'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_new_followup_email_title_private'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_update_followup_email_title'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_update_followup_email_title_private'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_delete_followup_email_title'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_delete_followup_email_title_private'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_ticket_subscribe_email_title'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_ticket_unsubscribe_email_title'] = '[{module_name} #{ticket_id}] {ticket_title}';
 
 
 	// Ticket template default body
