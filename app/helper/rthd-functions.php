@@ -1030,8 +1030,9 @@ function rthd_get_attachment_url_from_followups( $postid ){
 }
 
 function rthd_get_general_body_template( $body, $title, $replyflag = false ){
+	$mail_template = apply_filters( 'rthd_email_template', 'email-template.php' );
 	ob_start();
-	rthd_get_template( 'email-template.php', array( 'body' => $body, 'title' => $title ,'replyflag' => $replyflag) );
+	rthd_get_template( $mail_template, array( 'body' => $body, 'title' => $title ,'replyflag' => $replyflag) );
 	return ob_get_clean();
 }
 
