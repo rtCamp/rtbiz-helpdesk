@@ -221,11 +221,11 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$body = rthd_replace_placeholder( $body, '{followup_content}', rthd_content_filter( $comment->comment_content ) );
 			// sending email to followup author [ To ]
 			$toBody = rthd_replace_placeholder( $body,'{followup_author}', 'you' );
-			$this->insert_new_send_email( $subject, rthd_get_general_body_template( $toBody, $title, true ), $followup_creator, array(), array(), $uploaded, $comment->comment_ID , 'followup' );
+			$this->insert_new_send_email( $subject, rthd_get_general_body_template( $toBody, $title, true ), $followup_creator, array(), array(), $uploaded, $comment->comment_ID , 'comment' );
 
 			//sending email to ticket assignee [ To ] | staff [ BCC ] | contact [ BCC ] | globel list [ BCC ]
 			$toBody = rthd_replace_placeholder( $body,'{followup_author}', $comment->comment_author );
-			$this->insert_new_send_email( $subject, rthd_get_general_body_template( $toBody, $title, true ), $ContactEmail , array(), $bccemails, $uploaded, $comment->comment_ID , 'followup' );
+			$this->insert_new_send_email( $subject, rthd_get_general_body_template( $toBody, $title, true ), $ContactEmail , array(), $bccemails, $uploaded, $comment->comment_ID , 'comment' );
 		}
 
 
