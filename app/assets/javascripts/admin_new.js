@@ -667,7 +667,6 @@ jQuery(document).ready(function() {
                         }
 
                         if ( ! flag ){
-                            redux.args.ajax_save = false;
                             jqXHR.abort();
                             jQuery( '.redux-action_bar input' ).removeAttr( 'disabled' );
                             jQuery( document.getElementById( 'redux_ajax_overlay' ) ).fadeOut( 'fast' );
@@ -679,36 +678,6 @@ jQuery(document).ready(function() {
                     }
                 });
 
-
-                /*jQuery( '.redux-action_bar input' ).on('click',function( e ) {
-                    if ( jQuery( this ).attr( 'name' ) == 'redux_save' ){
-                        var flag = true;
-
-                        if (jQuery('#rthd_enable_auto_response_mode').val() == 1) {
-                            for (var i = 0; i < 7; i++) {
-                                var tr_parent = jQuery('.rthd-dayshift-time-start').eq(i).parent().parent();
-                                if (!rthdAdmin.initDayValidation(tr_parent)) {
-                                    flag = false;
-                                }
-                            }
-                        }
-
-                        if ( jQuery('#rthd_enable_auto_response_mode').val() == 0  ) {
-                            for (var i = 0; i < 7; i++) {
-                                var tr_parent = jQuery('.rthd-daynight-am-time-start').eq(i).parent().parent();
-                                if (!rthdAdmin.initDayNightValidation( tr_parent )) {
-                                    flag = false;
-                                }
-                            }
-                        }
-
-                        if ( ! flag ){
-                            redux.args.ajax_save = false;
-                            e.preventDefault();
-                        }
-                        return flag;
-                    }
-                });*/
 			}
 		},
 		initDayValidation: function ( $tr_parent ) {
