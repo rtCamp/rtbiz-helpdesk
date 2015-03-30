@@ -1,10 +1,10 @@
 === rtBiz Helpdesk ===
-Contributors:      rtcamp, rahul286, desaiuditd
+Contributors:      rtcamp, rahul286, desaiuditd, dipesh.kakadiya ,utkarshpatel
 Donate Link:       http://rtcamp.com/donate
 Tags:              helpdesk, support, products, tickets, followups, customers, e-commerce
 Requires at least: 4.1
 Tested up to:      4.1
-Stable tag:        1.1
+Stable tag:        1.2
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,6 +57,14 @@ Please refer to the documentation.
 1. Dashboard
 
 == Changelog ==
+
+= 1.2 =
+* Auto-responder feature added
+* Lightbox for ticket attachments added.
+* Adult content filter added.
+* Setting to enable/disable reply-via-email added.
+* Help Manual Updates
+* Bug fixes.
 
 = 1.1 =
 * Reporting filters added
