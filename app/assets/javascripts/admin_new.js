@@ -643,7 +643,44 @@ jQuery(document).ready(function() {
 					rthdAdmin.initDayNightValidation(jQuery(this).parent().parent());
 				});
 
-                jQuery( '.redux-action_bar input' ).on('click',function( e ) {
+                jQuery.ajaxPrefilter(function( options, originalOptions, jqXHR ) {
+                    var action = JSON.stringify( options.data );
+                    if ( action.indexOf('action=redux_helpdesk_settings_ajax_save&') !== -1 ){
+                        var flag = true;
+
+                        if (jQuery('#rthd_enable_auto_response_mode').val() == 1) {
+                            for (var i = 0; i < 7; i++) {
+                                var tr_parent = jQuery('.rthd-dayshift-time-start').eq(i).parent().parent();
+                                if (!rthdAdmin.initDayValidation(tr_parent)) {
+                                    flag = false;
+                                }
+                            }
+                        }
+
+                        if ( jQuery('#rthd_enable_auto_response_mode').val() == 0  ) {
+                            for (var i = 0; i < 7; i++) {
+                                var tr_parent = jQuery('.rthd-daynight-am-time-start').eq(i).parent().parent();
+                                if (!rthdAdmin.initDayNightValidation( tr_parent )) {
+                                    flag = false;
+                                }
+                            }
+                        }
+
+                        if ( ! flag ){
+                            redux.args.ajax_save = false;
+                            jqXHR.abort();
+                            jQuery( '.redux-action_bar input' ).removeAttr( 'disabled' );
+                            jQuery( document.getElementById( 'redux_ajax_overlay' ) ).fadeOut( 'fast' );
+                            jQuery( '.redux-action_bar .spinner' ).fadeOut( 'fast' );
+                            alert("cancel");
+                            return ;
+                        }
+                        return flag;
+                    }
+                });
+
+
+                /*jQuery( '.redux-action_bar input' ).on('click',function( e ) {
                     if ( jQuery( this ).attr( 'name' ) == 'redux_save' ){
                         var flag = true;
 
@@ -671,7 +708,7 @@ jQuery(document).ready(function() {
                         }
                         return flag;
                     }
-                });
+                });*/
 			}
 		},
 		initDayValidation: function ( $tr_parent ) {
@@ -760,7 +797,7 @@ jQuery(document).ready(function() {
 					jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.pm-time-error').addClass('myerror').html('Starting Time should be less then ending time');
 					flag = false;
 				}else{
-					jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.pm-time-error').removeClass('myerror')('myerror').html('');
+					jQuery( $tr_parent ).next('.rthd-daynightshift-error').show().find( '.pm-time-error').removeClass('myerror').html('');
 				}
 			}
 
@@ -780,6 +817,8 @@ jQuery(document).ready(function() {
                     if ( allflag ){
                         jQuery('#rthd-response-daynight-error').show().html('please select working time');
                         flag = false;
+                    }else{
+
                     }
                 }
             }else{
