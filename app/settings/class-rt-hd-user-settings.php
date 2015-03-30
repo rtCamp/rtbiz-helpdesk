@@ -26,8 +26,64 @@ if ( ! class_exists( 'Rt_HD_User_Settings' ) ) {
 			add_action( 'show_user_profile', array( $this, 'add_rthd_notification_events_field' ) );
 			add_action( 'edit_user_profile', array( $this, 'add_rthd_notification_events_field' ) );
 
+			if ( rthd_get_redux_adult_filter() ) {
+				add_action( 'show_user_profile', array( $this, 'add_rthd_adult_filter' ) );
+				add_action( 'edit_user_profile', array( $this, 'add_rthd_adult_filter' ) );
+				add_action( 'personal_options_update', array( $this, 'save_rthd_adult_filter' ) );
+				add_action( 'edit_user_profile_update', array( $this, 'save_rthd_adult_filter' ) );
+			}
 			add_action( 'personal_options_update', array( $this, 'save_rthd_notification_events_field' ) );
 			add_action( 'edit_user_profile_update', array( $this, 'save_rthd_notification_events_field' ) );
+		}
+
+		/**
+		 * Show setting for adult filter
+		 * @param $user
+		 */
+		public function add_rthd_adult_filter( $user ){
+			$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
+
+			if ( ! current_user_can( $cap ) ){
+				return;
+			}
+			if ( current_user_can( $cap, $user->ID ) ) {
+				?>
+				<table class="form-table">
+					<tbody>
+					<tr>
+						<?php
+						?>
+						<th><label for="rthd_adult_preference"><?php _e( 'Helpdesk Content Preference', RT_HD_TEXT_DOMAIN ); ?></label></th>
+						<td>
+							<label for="rthd_adult_pref">
+								<input name="rthd_adult_pref" type="checkbox" id="rthd_adult_pref" value="1"
+									<?php
+									$user_pref = rthd_get_user_adult_preference( $user->ID );
+									if ( 'yes' == $user_pref ){
+										echo 'checked="checked"';
+									}
+									?>
+									/>
+								<span class="description"><?php _e( 'Show Adult Content', RT_HD_TEXT_DOMAIN ); ?></span>
+							</label>
+						</td>
+					</tr>
+					</tbody>
+				</table>
+			<?php
+			}
+		}
+
+		public function save_rthd_adult_filter( $user_id ){
+			if ( isset( $_POST['rthd_adult_pref'] ) ){
+				$_POST['rthd_adult_pref'] = 'yes';
+			} else {
+				$_POST['rthd_adult_pref'] = 'no';
+			}
+			$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
+			if ( current_user_can( $cap, $user_id ) ) {
+				update_user_meta( $user_id, 'rthd_adult_pref', sanitize_text_field( $_POST['rthd_adult_pref'] ) );
+			}
 		}
 
 		/**

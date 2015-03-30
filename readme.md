@@ -3,11 +3,11 @@
 
 rtBiz Helpdesk - Keep your customers happy & gay !
 
-**Contributors:** [rtcamp](http://profiles.wordpress.org/rtcamp), [rahul286](http://profiles.wordpress.org/rahul286), [desaiuditd](http://profiles.wordpress.org/desaiuditd)  
+**Contributors:** [rtcamp](http://profiles.wordpress.org/rtcamp), [rahul286](http://profiles.wordpress.org/rahul286), [desaiuditd](http://profiles.wordpress.org/desaiuditd), [dipesh.kakadiya](http://profiles.wordpress.org/dipesh.kakadiya), [utkarshpatel](http://profiles.wordpress.org/utkarshpatel)  
 **Tags:** [helpdesk](http://wordpress.org/plugins/tags/helpdesk), [support](http://wordpress.org/plugins/tags/support), [products](http://wordpress.org/plugins/tags/products), [tickets](http://wordpress.org/plugins/tags/tickets), [followups](http://wordpress.org/plugins/tags/followups), [customers](http://wordpress.org/plugins/tags/customers), [e-commerce](http://wordpress.org/plugins/tags/e-commerce)  
 **Requires at least:** 4.1  
 **Tested up to:** 4.1  
-**Stable tag:** 1.1  
+**Stable tag:** 1.2  
 **License:** [GPLv2 or later](http://www.gnu.org/licenses/gpl-2.0.html)  
 **Donate Link:** http://rtcamp.com/donate  
 
@@ -57,6 +57,14 @@ Please refer to the documentation.
 
 
 ## Changelog ##
+
+### 1.2 ###
+* Auto-responder feature added
+* Lightbox for ticket attachments added.
+* Adult content filter added.
+* Setting to enable/disable reply-via-email added.
+* Help Manual Updates
+* Bug fixes.
 
 ### 1.1 ###
 * Reporting filters added

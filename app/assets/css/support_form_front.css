@@ -21,6 +21,10 @@ reference: http://purecss.io/forms/
 	width: 100%;
 }
 
+.rthd_support_from div input[type="checkbox"]{
+	width: auto;
+}
+
 .rthd_support_from>div#editor_container input{
 	width: auto;
 }
@@ -78,3 +82,9 @@ reference: http://purecss.io/forms/
 	border: none;
 	text-decoration: none;
 }
+
+
+.MultiFile-remove{
+	color: #9B0000;
+}
+

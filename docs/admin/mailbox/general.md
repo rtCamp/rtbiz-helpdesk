@@ -31,7 +31,7 @@ v. There is a provision to add different Default assignees for different offerin
 
 ![add_assignee_via_offerings](https://cloud.githubusercontent.com/assets/8191145/6752439/89218252-cf34-11e4-9673-0ffe0403c49a.png)
 
-
+![offerings](http://git.rtcamp.com/uploads/rtbiz/rtbiz-helpdesk/ffec50611e/offerings.png)
 ##### 4. Support Form
 
 Setup Helpdesk support form using shortcode and configure as per steps below.
@@ -53,7 +53,12 @@ iii. Refresh the settings area. The newly created support page will be populated
 ![select_support_form](https://cloud.githubusercontent.com/assets/9676513/6480262/f5026802-c277-11e4-81e1-62145daf208e.png)
 
 
-[**Add form info ** ]
+iv) The support form looks similar to the image below
+
+![support_form](https://cloud.githubusercontent.com/assets/8191145/6779592/a8187b42-d183-11e4-9cfd-807f3d16bbd2.png)
+
+
+
 
 ##### 5. Enable Unique Hash URLs for Tickets
 

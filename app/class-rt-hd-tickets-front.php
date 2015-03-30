@@ -127,6 +127,18 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 				return $template;
 			}
 
+			if ( ! is_user_logged_in() ) {
+				$redirect_url = ( ( is_ssl() ) ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+				$login_url = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( $redirect_url ) );
+				$message = sprintf( '%s <a href="%s">%s</a> %s', __( 'You are not logged in. Please login' ), $login_url, __( 'here' ), __( 'to view this ticket.' ) );
+				global $rthd_messages;
+				$rthd_messages[] = array( 'type' => 'error', 'message' => $message, 'displayed' => 'no' );
+				global $rthd_front_page_title;
+				$rthd_front_page_title = __( 'Helpdesk' );
+
+				return rthd_locate_template( 'ticket-error-page.php' );
+			}
+
 			if ( rthd_is_unique_hash_enabled() && ! empty( $_REQUEST['rthd_unique_id'] ) ) {
 				$args = array(
 					'meta_key'    => '_rtbiz_hd_unique_id',
@@ -155,25 +167,20 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 			if ( empty( $post ) || $wrong_unique_id ) {
 				$wp_query->is_404 = true;
 				$wp_query->set_404();
-				return get_404_template();
+				$message = sprintf( '%s ', __( "Sorry! Your requested ticket wasn't found." ) );
+				global $rthd_messages;
+				$rthd_messages[] = array( 'type' => 'error', 'message' => $message, 'displayed' => 'no' );
+				global $rthd_front_page_title;
+				$rthd_front_page_title = __( 'Helpdesk' );
+				return rthd_locate_template( 'ticket-404-page.php' );
+
+				//return get_404_template();
 			}
 
 			$rtbiz_helpdesk_template = true;
 
 			// Restrict SEO META tags for Helpdesk Ticket Page.
 			$this->restrict_seo_on_helpdesk();
-
-			if ( ! is_user_logged_in() ) {
-				$redirect_url = ( ( is_ssl() ) ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-				$login_url = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( $redirect_url ) );
-				$message = sprintf( '%s <a href="%s">%s</a> %s', __( 'You are not logged in. Please login' ), $login_url, __( 'here' ), __( 'to view this ticket.' ) );
-				global $rthd_messages;
-				$rthd_messages[] = array( 'type' => 'error', 'message' => $message, 'displayed' => 'no' );
-				global $rthd_front_page_title;
-				$rthd_front_page_title = __( 'Helpdesk' );
-
-				return rthd_locate_template( 'ticket-error-page.php' );
-			}
 
 			return rthd_locate_template( 'ticket-front-page.php' );
 		}

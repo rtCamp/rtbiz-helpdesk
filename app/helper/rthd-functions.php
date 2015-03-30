@@ -479,6 +479,36 @@ function rthd_get_user_notification_preference( $user_id ) {
 	return $pref;
 }
 
+//adult filter redux setting
+function rthd_get_redux_adult_filter(){
+	$settings = rthd_get_redux_settings();
+	if ( ! empty( $settings['rthd_enable_ticket_adult_content'] ) ) {
+		return true;
+	}
+	return false;
+}
+
+//adult content preference
+function rthd_get_user_adult_preference( $user_id ) {
+	$pref = get_user_meta( $user_id, 'rthd_adult_pref', true );
+	if ( empty( $pref ) ) {
+		$pref = 'no';
+		if ( user_can( $user_id, 'administrator' ) ){
+			$pref = 'yes';
+		}
+		update_user_meta( $user_id, 'rthd_adult_pref', $pref );
+	}
+	return $pref;
+}
+
+function rthd_save_adult_ticket_meta( $post_id, $pref ){
+	update_post_meta( $post_id, '_rthd_ticket_adult_content', $pref );
+}
+
+function rthd_get_adult_ticket_meta( $post_id ){
+	return get_post_meta( $post_id, '_rthd_ticket_adult_content', true );
+}
+
 function rthd_create_new_ticket_title( $key, $post_id ){
 	$redux = rthd_get_redux_settings();
 	if ( isset( $redux[ $key ] ) ) {
@@ -506,9 +536,24 @@ function rthd_get_auto_response_message(){
 
 
 function rthd_generate_email_title( $post_id, $title ) {
-	$prefix = '[' . ucfirst( Rt_HD_Module::$name ) . ' #' . $post_id . ']';
-	$title = $prefix.' '.$title;
+	$redux = rthd_get_redux_settings();
+	$title = str_replace( '{module_name}', isset( $redux['rthd_menu_label'] ) ? $redux['rthd_menu_label'] : Rt_HD_Module::$name  , $title );
+	$title = str_replace( '{ticket_id}', $post_id, $title );
 	$title = str_replace( '{ticket_title}',get_the_title( $post_id ), $title );
+
+	if ( strpos( $title, '{offerings_name}' ) !== false ) {
+		global $rtbiz_offerings;
+		$offering = '';
+		$products = array();
+		if ( ! empty( $rtbiz_offerings ) ) {
+			$products = wp_get_post_terms( $post_id, Rt_Offerings::$offering_slug );
+		}
+		if ( ! $products instanceof WP_Error && ! empty( $products ) ) {
+			$offering_names = wp_list_pluck( $products, 'name' );
+			$offering = implode( ' ', $offering_names );
+		}
+		$title = str_replace( '{offerings_name}', $offering, $title );
+	}
 	return $title;
 }
 
@@ -630,11 +675,8 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 							$fileName   = $file_array[ count( $file_array ) - 1 ];
 							?>
 							<li>
-								<a href="<?php echo $a; ?>" title="<?php echo $fileName; ?>"> <img height="20px"
-								                                                                   width="20px"
-								                                                                   src="<?php echo RT_HD_URL . "app/assets/file-type/" . $extn . ".png"; ?>"/>
-									<span><?php echo( ( strlen( $fileName ) ) > 12 ? substr( $fileName, 0, 12 ) . '...' : $fileName ); ?></span>
-								</a>
+								<?php $attachment = rthd_get_attachmet_by_url( $a, $comment->comment_post_ID );
+								rt_hd_get_attchment_link_with_fancybox( $attachment, $comment->comment_ID ); ?>
 							</li>
 						<?php } ?>
 					</ul>
@@ -987,17 +1029,26 @@ function rthd_get_attachment_url_from_followups( $postid ){
 	return $attach_cmt;
 }
 
-function rthd_get_general_body_template( $body ){
-	$date = strtotime( current_time( 'mysql', 1 ) );
-	return '<div style="border: 1px solid #DFE9f2;padding: 20px;background: #f1f6fa;">' . rthd_content_filter( $body ) . '<br/><div style="float: right;color: gray;">' . date( 'l M d, Y H:i e', $date ) . '</div></div>';
+function rthd_get_general_body_template( $body, $title, $replyflag = false ){
+	$mail_template = apply_filters( 'rthd_email_template', 'email-template.php' );
+	ob_start();
+	rthd_get_template( $mail_template, array( 'body' => $body, 'title' => $title ,'replyflag' => $replyflag) );
+	return ob_get_clean();
 }
 
 function rthd_update_ticket_updated_by_user( $post_id, $user_id ){
 	update_post_meta( $post_id, '_rtbiz_hd_updated_by',$user_id );
 }
 
-function rthd_replace_followup_placeholder( $body , $name ){
-	return str_replace( '{comment_author}',$name, $body );
+/**
+ * @param $str
+ * @param $placeholder
+ * @param $replacewith
+ *
+ * @return mixed
+ */
+function rthd_replace_placeholder( $str, $placeholder, $replacewith ){
+	return str_replace( $placeholder, $replacewith, $str );
 }
 
 function rthd_is_mailbox_configured(){
@@ -1176,7 +1227,6 @@ function rthd_auto_response_daynightshift_view() {
 function rthd_filter_emails( $allemails ){
 	//subscriber diff
 	$rtCampUser         = Rt_HD_Utils::get_hd_rtcamp_user();
-	$black_list_emails  = rthd_get_blacklist_emails();
 	$hdUser             = array();
 	foreach ( $rtCampUser as $rUser ) {
 		$hdUser[ $rUser->user_email ] = $rUser->ID;
@@ -1185,13 +1235,7 @@ function rthd_filter_emails( $allemails ){
 	$allemail = array();
 	foreach ( $allemails as $mail ) {
 		if ( ! array_key_exists( $mail['address'], $hdUser ) ) {
-			if ( ! empty( $black_list_emails ) ){
-				foreach ( $black_list_emails as $email ){
-					if ( ! preg_match( '/'.str_replace('*','\/*',$email).'/',  $mail['address'] ) ){
-						$allemail[]= $mail;
-					}
-				}
-			}else{
+			if ( ! rt_hd_check_email_blacklisted( $mail['address'] ) ){
 				$allemail[]= $mail;
 			}
 		} else {
@@ -1250,6 +1294,229 @@ function get_offering_meta( $key, $term_id = '' ){
 		} else {
 			return $term_meta;
 		}
+	}
+	return false;
+}
+
+
+/**
+ * Returns boolean of setting for reply via email is unable or not
+ * @return bool
+ */
+function rthd_get_reply_via_email(){
+	$redux = rthd_get_redux_settings();
+	return ( isset( $redux['rthd_reply_via_email']) && $redux['rthd_reply_via_email'] == 1 );
+}
+
+/**
+ * Get tickets
+ *
+ * @param $key : created_by, assignee, subscribe, order
+ * @param $value
+ *
+ * @return bool
+ */
+function rthd_get_tickets( $key, $value ){
+
+	$key_array = array( 'created_by', 'assignee', 'subscribe', 'order' );
+
+	if ( ! in_array( $key, $key_array ) ){
+		return false;
+	}
+
+	$args    = array(
+		'post_type'   => Rt_HD_Module::$post_type,
+		'post_status' => 'any',
+		'nopaging'    => true,
+	);
+
+	if ( 'created_by' == $key ){
+		$value= rthd_convert_into_userid( $value );
+		$args['meta_query'] = array(
+			array(
+				'key' => '_rtbiz_hd_created_by',
+				'value' => $value,
+			),
+		);
+	} elseif ( 'assignee' == $key ){
+		$value= rthd_convert_into_userid( $value );
+		$args['author'] = $value;
+	} elseif ( 'subscribe' == $key ){
+		// check given user is staff or contact
+		if ( rt_biz_is_our_employee( $value ) ){
+			$value= rthd_convert_into_userid( $value );
+			$args['meta_query'] = array(
+				array(
+					'key' => '_rtbiz_hd_subscribe_to',
+					'value' => ':' . $value . ',',
+					'compare' => 'LIKE',
+				),
+			);
+		} else {
+			$value= rthd_convert_into_useremail( $value );
+			$person = rt_biz_get_contact_by_email( $value );
+			if ( isset( $person ) && ! empty( $person ) ) {
+				$args['connected_items'] = $person[0]->ID;
+				$args['connected_type']  = Rt_HD_Module::$post_type . '_to_' . rtbiz_post_type_name( 'contact' );
+			}
+		}
+	} elseif ( 'order' == $key ){
+		if ( is_object( $value ) ){
+			$value = $value->ID;
+		}
+		$args['meta_query'] = array(
+			array(
+				'key' => 'rtbiz_hd_order_id',
+				'value' => $value,
+			),
+		);
+	}
+	if ( ! empty( $args) ){
+		return get_posts( $args );
+	}
+	return false;
+}
+
+/**
+ * To convert useremail or user object to userid
+ *
+ * @param $value : Should be object [ Post type ] object or email
+ *
+ * @return mixed
+ */
+function rthd_convert_into_userid( $value ){
+	if ( ! is_numeric( $value ) ){
+		if ( is_string( $value ) ){
+			$value = get_user_by( 'email', $value );
+			$value = $value->ID;
+		} elseif ( ! is_object( $value ) ){
+			$value = $value->ID;
+		}
+	}
+	return $value;
+}
+
+/**
+ * To convert userid or user object to user email
+ *
+ * @param $value it shoud be userid or user object
+ *
+ * @return mixed
+ */
+function rthd_convert_into_useremail( $value ){
+	if ( ! is_string( $value ) ){
+		if ( is_numeric( $value ) ){
+			$value = get_user_by( 'id', $value );
+			$value = $value->email;
+		} elseif ( ! is_object( $value ) ){
+			$value = $value->email;
+		}
+	}
+	return $value;
+}
+
+/*
+ * get attachment id from attachment url
+ *
+ * Need to remove that function after attachment migration for comment
+ * migration task : store attachment id instead of attachment url comment meta
+ */
+function rthd_get_attachmet_by_url($image_url, $post_id) {
+	global $wpdb;
+	$attachment = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts WHERE guid='%s'  and post_parent=%d limit 1;", $image_url, $post_id ));
+	return $attachment[0] ;
+}
+
+/*
+ * get attachment link with facybox
+ */
+function rt_hd_get_attchment_link_with_fancybox( $attachment, $post_id = '' ){
+	$attachment_url = wp_get_attachment_url( $attachment->ID );
+	$original_url = $attachment_url;
+	$extn = rt_biz_get_attchment_extension( $attachment->guid );
+	$class = 'rthd_attachment fancybox';
+	if ( rt_bix_is_google_doc_supported_type( $attachment->post_mime_type, $extn ) ){
+		$attachment_url = rt_biz_google_doc_viewer_url( $attachment_url );
+		$class .= ' fancybox.iframe';
+	}?>
+	<a class="<?php echo $class; ?>" rel="rthd_attachment_<?php echo !empty( $post_id ) ? $post_id : $attachment->post_parent; ?>"
+	   data-downloadlink="<?php echo esc_url( $original_url ); ?>"
+	   title="<?php echo balanceTags( $attachment->post_title ); ?>"
+	   href="<?php echo esc_url( $attachment_url ); ?>"> <img
+			height="20px" width="20px"
+			src="<?php echo esc_url( RT_HD_URL . 'app/assets/file-type/' . $extn . '.png' ); ?>"/>
+				<span title="<?php echo balanceTags( $attachment->post_title ); ?>"> 	<?php echo esc_attr( strlen( balanceTags( $attachment->post_title ) ) > 40 ? substr( balanceTags( $attachment->post_title ), 0, 40 ) . '...' : balanceTags( $attachment->post_title ) ); ?> </span>
+	</a>
+	<?php
+}
+
+/**
+ * Get helpdesk email template from redux if plugin is not active / on (from rtbiz) then use default email templates
+ * @param $key
+ *
+ * @return mixed
+ */
+function rthd_get_email_template_body( $key ){
+	if (  rt_biz_is_email_template_addon_active() && rt_biz_is_email_template_on( Rt_HD_Module::$post_type ) ){
+		$redux = rthd_get_redux_settings();
+		return $redux[$key];
+	}
+	return rthd_get_default_email_template( $key );
+}
+
+
+/**
+ * Helpdesk default templates
+ * @param string $key
+ * @param bool   $all
+ *
+ * @return array|bool
+ */
+function rthd_get_default_email_template( $key = '' , $all = false ){
+	$redux = array();
+
+	//Ticket default title
+	$redux['rthd_new_ticket_email_title'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_new_ticket_email_title_contacts'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_new_ticket_email_title_group'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_new_ticket_email_title_assignee'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_new_ticket_email_title_subscriber'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_update_ticket_email_title'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_ticket_reassign_email_title'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_ticket_reassign_email_title_old_assignee'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_new_followup_email_title'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_new_followup_email_title_private'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_update_followup_email_title'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_update_followup_email_title_private'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_delete_followup_email_title'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_delete_followup_email_title_private'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_ticket_subscribe_email_title'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_ticket_unsubscribe_email_title'] = '[{module_name} #{ticket_id}] {ticket_title}';
+
+
+	// Ticket template default body
+	$redux['rthd_email_template_followup_add'] = 'New Followup Added by <strong>{followup_author}</strong><hr style="color: #DCEAF5;" /><div style="display: inline-block">{followup_content}</div>';
+	$redux['rthd_email_template_followup_add_private'] = '<br /> A private followup has been added by <strong>{followup_author}</strong>. Please go to ticket to view content.';
+	$redux['rthd_email_template_followup_deleted_private'] = 'A Followup is deleted by <Strong>{followup_deleted_by}</Strong>';
+	$redux['rthd_email_template_followup_deleted'] = 'A Followup is deleted by <Strong>{followup_deleted_by}</Strong><hr style="color: #DCEAF5;" /><div  style="display: inline-block">{followup_content}</div>';
+	$redux['rthd_email_template_followup_updated_private'] = '<div><br /> A <strong>private</strong> followup has been edited by <strong>{followup_updated_by}</strong>. Please go to ticket to view content.</div> {visibility_diff}';
+	$redux['rthd_email_template_followup_updated'] = '<div> A Followup Updated by <strong>{followup_updated_by}.</strong></div> <br/><div> The changes are as follows: </div><br/> {visibility_diff} {followup_diff}';
+	$redux['rthd_email_template_new_ticket_created_author'] = 'Thank you for opening a new support ticket. We will look into your request and respond as soon as possible.<br/>{ticket_body}';
+	$redux['rthd_email_template_new_ticket_created_contacts'] = 'A new support ticket created by <strong> {ticket_author} </strong>. You have been subscribed to this ticket.<br/>{ticket_body}';
+	$redux['rthd_email_template_new_ticket_created_group_notification'] = 'A new support ticket created by <strong> {ticket_author} </strong>. <br/>Ticket Assigned to <strong>{ticket_assignee}</strong>{ticket_offerings} {ticket_body}';
+	$redux['rthd_email_template_new_ticket_created_assignee'] = 'A new support ticket created by <strong> {ticket_author} </strong> is assigned to you. <br/></strong>{ticket_offerings} {ticket_body}';
+	$redux['rthd_email_template_new_ticket_created_subscriber'] = 'A new support ticket created by <strong>{ticket_author}</strong>. You have been subscribed to this ticket. <br/>Ticket Assigned to <strong>{ticket_assignee}</strong>{ticket_offerings} {ticket_body}';
+	$redux['rthd_email_template_ticket_subscribed'] = '{ticket_subscribers} have been subscribed to this ticket';
+	$redux['rthd_email_template_ticket_unsubscribed'] = '{ticket_unsubscribers} have been un-subscribed to this ticket';
+	$redux['rthd_email_template_ticket_reassigned_old_assignee'] = 'You are no longer responsible for this ticket.';
+	$redux['rthd_email_template_ticket_reassigned_new_assignee'] = 'A ticket is reassigned to {new_ticket_assignee}.';
+	$redux['rthd_email_template_ticket_updated'] = '<br /> Ticket updated by : <strong>{ticket_updated_by}</strong><br/>. {ticket_diference}';
+
+	if ( ! empty( $key ) && isset( $redux[ $key ] ) ){
+		return $redux[ $key ];
+	}
+	if ( $all ){
+		return $redux;
 	}
 	return false;
 }

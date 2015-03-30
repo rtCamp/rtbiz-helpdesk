@@ -12,8 +12,6 @@ iv.**Global list members** :  Members who will be notified of the events that oc
 
 Also they can customize the Email Signatures and titles for various events.
 
-Coming soon features
-Shortcodes
 
 ##### Notification Emails
 

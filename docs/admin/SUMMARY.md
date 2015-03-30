@@ -8,7 +8,7 @@
    * [General](mailbox/general.md)
    * [Mail Setup](mailbox/mail_setup.md)
    * [Notification Email Setup](mailbox/notification_email_setup.md)
-   * [Miscellaneous  Feature](mailbox/advanced_settings.md)
+   * [Advanced Settings](mailbox/advanced_settings.md)
    * [Gravity Importer](mailbox/gravity_importer.md)
        * [Importer Mapper](mailbox/importer_mapper.md)
        * [Import Logs](mailbox/import_logs.md)

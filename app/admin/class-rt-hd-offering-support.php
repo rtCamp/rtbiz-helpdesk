@@ -22,6 +22,26 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 	class Rt_HD_Offering_Support {
 
 		/**
+		 * @var Flag for WooCommerce active or not
+		 */
+		var $isWoocommerceActive = false;
+
+		/**
+		 * @var Flag for EDD active or not
+		 */
+		var $iseddActive = false;
+
+		/**
+		 * @var Store product post type of active Plugin if plugin is not activate it is false
+		 */
+		var $activePostType = false;
+
+		/**
+		 * @var store order post type of active plugin if plugin is not activate it is false
+		 */
+		var $order_post_type = false;
+
+		/**
 		 * construct
 		 *
 		 * @since 0.1
@@ -29,9 +49,6 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 		function __construct() {
 			$this->hooks();
 		}
-
-		var $isWoocommerceActive, $iseddActive, $activePostType, $order_post_type;
-
 
 		/**
 		 * Hook
@@ -44,10 +61,6 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 			add_filter( 'woocommerce_my_account_my_orders_actions', array( $this, 'wocommerce_actions_link' ), 10, 2 );
 			add_action( 'edd_download_history_header_end', array( $this, 'edd_action_link_header' ) );
 			add_action( 'edd_download_history_row_end', array( $this, 'edd_support_link' ), 10, 2 );
-
-			// shortcode for get support form
-			add_shortcode( 'rt_hd_support_form', array( $this, 'rt_hd_support_form_callback' ) );
-			add_shortcode( 'rt_hd_tickets', array( $this, 'rt_hd_tickets_callback' ) );
 
 			// Add product information in ticket meta.
 			add_action( 'rt_hd_add_ticket_offering_info', array( &$this, 'rt_hd_add_ticket_offering_info_callback' ) );
@@ -73,6 +86,12 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 			add_filter( 'manage_edit-' . Rt_Offerings::$offering_slug . '_columns', array( $this, 'manage_offering_column_header' ) );
 		}
 
+		/*
+		 * Add column hadding on offering list page
+		 * @param $columns
+		 *
+		 * @return mixed
+		 */
 		function manage_offering_column_header( $columns ) {
 			unset($columns['slug'] );
 			$columns['default_assignee']         = __( 'Helpdesk default assignee', RT_HD_TEXT_DOMAIN );
@@ -102,6 +121,10 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 			return;
 		}
 
+		/*
+		 * Save Default assignee for offering
+		 * @param $term_id
+		 */
 		function save_offerings( $term_id ){
 			if ( isset( $_POST[ Rt_Offerings::$offering_slug  ] ) ) {
 				$prev_value = Rt_Lib_Taxonomy_Metadata\get_term_meta( $term_id, Rt_Offerings::$offering_slug  . '-meta', true );
@@ -114,6 +137,12 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 			}
 		}
 
+		/*
+		 * To check user current page is offering page or not
+		 * @param bool $page
+		 *
+		 * @return bool
+		 */
 		function is_edit_offerings( $page = false ) {
 			global $pagenow;
 			if ( ( ! $page || 'edit' === $page ) && 'edit-tags.php' === $pagenow && isset( $_GET['action'] ) && 'edit' === $_GET['action'] && isset( $_GET['taxonomy'] ) && $_GET['taxonomy'] === Rt_Offerings::$offering_slug ) {
@@ -125,6 +154,11 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 			return false;
 		}
 
+		/*
+		 * Add custom field for default assignee on offering page
+		 * @param $tag
+		 * @param string $group
+		 */
 		function offering_add_custom_field( $tag, $group = '' ){
 			$users         = Rt_HD_Utils::get_hd_rtcamp_user();
 			if ( $this->is_edit_offerings( 'edit' ) ) {
@@ -181,6 +215,10 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 			<?php }
 		}
 
+		/*
+		 *  Get list of customer Who purchase a product
+		 * @return array
+		 */
 		function get_emails_of_customer(){
 			$this->check_active_plugin();
 			if ( $this->isWoocommerceActive ) {
@@ -214,6 +252,10 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 			return $emails;
 		}
 
+		/*
+		 * get a user purchase history
+		 * @param $ticket_id
+		 */
 		function user_purchase_history( $ticket_id ) {
 			$created_by_id = get_post_meta( $ticket_id, '_rtbiz_hd_created_by', true );
 			if ( !empty( $created_by_id ) ) {
@@ -262,22 +304,31 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 			}
 		}
 
+		/*
+		 * Display ticket history on order page
+		 */
 		function order_support_history( $post ) {
 			add_meta_box( 'rtbiz-helpdesk-support-info', __( 'Support History' ), array( $this, 'support_info' ), 'shop_order', 'side' );
 			add_action( 'edd_view_order_details_main_after', array( $this, 'edd_support_info' ), 700 );
 		}
 
+		/*
+		 * Display ticket history on WooCommerce order page
+		 */
 		function support_info( $post ) {
-			echo balanceTags( do_shortcode( '[rt_hd_tickets order=' . $post->ID . ']' ) );
+			echo balanceTags( do_shortcode( '[rt_hd_tickets orderid=' . $post->ID . ']' ) );
 		}
 
+		/*
+		 * Display ticket history on edd order page
+		 */
 		function edd_support_info( $order_id ) {
 			?>
 			<div class="postbox-container">
 				<div id="normal-sortables" class="meta-box-sortables ui-sortable">
 					<div class="postbox">
 						<h3 class="hndle"><?php _e( 'Support History' ); ?></h3>
-						<div class="inside" style="margin: 0; padding: 0;">
+						<div class="inside">
 							<?php $this->support_info( get_post( $order_id ) ); ?>
 						</div>
 					</div>
@@ -286,6 +337,9 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 			<?php
 		}
 
+		/*
+		 * add support link
+		 */
 		function edd_action_link_header() {
 			global $redux_helpdesk_settings;
 			if ( isset( $redux_helpdesk_settings['rthd_support_page'] ) && ! empty( $redux_helpdesk_settings['rthd_support_page'] ) ) {
@@ -295,6 +349,9 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 			}
 		}
 
+		/*
+		 * add support link with product id
+		 */
 		function edd_support_link( $payment_id, $download_id ) {
 			global $redux_helpdesk_settings;
 			if ( isset( $redux_helpdesk_settings['rthd_support_page'] ) && ! empty( $redux_helpdesk_settings['rthd_support_page'] ) ) {
@@ -331,7 +388,9 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 			return $actions;
 		}
 
-
+		/*
+		 *
+		 */
 		function check_active_plugin(){
 			$settings = rt_biz_get_redux_settings();
 
@@ -354,82 +413,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 			}
 		}
 
-
-		/**
-		 * Short code callback for Display Support Form
-		 *
-		 * @since 0.1
-		 *
-		 * [rt_hd_support_form]
-		 */
-		function rt_hd_support_form_callback( $attr ) {
-			ob_start();
-			$this->check_active_plugin();
-			wp_enqueue_style( 'support-form-style', RT_HD_URL . 'app/assets/css/support_form_front.css', false, RT_HD_VERSION, 'all' );
-			wp_enqueue_script( 'rthd-support-form', RT_HD_URL . 'app/assets/javascripts/rt_support_form.js', array( 'jquery' ), RT_HD_VERSION, true );
-			$offering_option = '';
-			$order_email    = '';
-
-			$post_id = $this->save_support_form();
-			if ( ! empty( $post_id ) && is_int( $post_id ) ) { ?>
-				<div id="info" class="success">Your support request has been submitted. We will get back to you for your query soon.</div>
-			<?php }
-
-			global $rtbiz_offerings;
-			$terms = array();
-			if ( isset( $rtbiz_offerings ) ) {
-				$terms = get_terms( Rt_Offerings::$offering_slug, array( 'hide_empty' => 0 ) );
-			}
-			$offering_exists = false;
-			$wrong_user_flag = false;
-			foreach ( $terms as $tm ) {
-				$term_offering_id = '';
-				$loggedin_id = get_current_user_id();
-				if ( isset( $_REQUEST['order_id'] ) && $this->order_post_type == get_post_type( $_REQUEST['order_id'] ) ) {
-					if ( $this->isWoocommerceActive ) {
-						$order = new WC_Order( $_REQUEST['order_id'] );
-						if ( $loggedin_id = $order->get_user_id() ) {
-							if ( ! empty( $order ) ) {
-								$items            = $order->get_items();
-								$product_ids      = wp_list_pluck( $items, 'product_id' );
-								$term_offering_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $tm->term_id, Rt_Offerings::$term_meta_key, true );
-								if ( ! in_array( $term_offering_id, $product_ids ) ) {
-									continue;
-								}
-							}
-						} else {
-							$wrong_user_flag = true;
-						}
-					} else if ( $this->iseddActive ) {
-						$payment = get_post( $_REQUEST['order_id'] );
-						if ( $loggedin_id == $payment->post_author ) {
-							if ( ! empty( $payment ) ) {
-								$items            = edd_get_payment_meta_downloads( $payment->ID );
-								$product_ids      = wp_list_pluck( $items, 'id' );
-								$term_offering_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $tm->term_id, Rt_Offerings::$term_meta_key, true );
-								if ( ! in_array( $term_offering_id, $product_ids ) ) {
-									continue;
-								}
-							}
-						} else {
-							$wrong_user_flag = true;
-						}
-					}
-				}
-				$offering_option .= '<option value="' . $tm->term_id . '" ' . ( ( ! empty( $_REQUEST['product_id'] ) && $term_offering_id == $_REQUEST['product_id'] ) ? 'selected="selected"' : '' ) . '> '.$tm->name.'</option>';
-				$offering_exists = true;
-			}
-
-			if ( $wrong_user_flag ){
-				echo '<span> You have not placed this order, Please login from account that placed this order. </span>';
-			}
-			else {
-				rthd_get_template( 'support-form.php', array( 'product_exists' => $offering_exists, 'product_option' => $offering_option ) );
-			}
-			return apply_filters( 'rt_hd_support_form_shorcode', ob_get_clean(), $attr );
-		}
-
-		/**
+		/*
 		 * Save new support ticket for wooCommerce
 		 *
 		 * @since 0.1
@@ -509,10 +493,8 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 		 * @since 0.1
 		 */
 		function woo_my_tickets_my_account() {
-
 			global $current_user;
-
-			echo balanceTags( do_shortcode( '[rt_hd_tickets email=' . $current_user->user_email . ']' ) );
+			echo balanceTags( do_shortcode( '[rt_hd_tickets userid = ' . $current_user->ID . ']' ) );
 		}
 
 
@@ -551,138 +533,6 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 			return $file;
 		}
 
-
-		/**
-		 * wooCommerce View list all ticket
-		 * Default All ticket | Ticket by UserID | Ticket by User Email
-		 *
-		 * @since 0.1
-		 *
-		 * @param $atts
-		 */
-		function rt_hd_tickets_callback( $atts ) {
-			global $rt_hd_module;
-			$labels        = $rt_hd_module->labels;
-			$arg_shortcode = shortcode_atts(
-				array(
-					'email' => '',
-					'user'  => '',
-					'order' => '',
-					'show_support_form_link' => 'no',
-				), $atts );
-
-			$args    = array(
-				'post_type'   => Rt_HD_Module::$post_type,
-				'post_status' => 'any',
-				'nopaging'    => true,
-			);
-			$tickets = array();
-			if ( ! empty( $arg_shortcode['email'] ) || ! empty( $arg_shortcode['user'] ) ) {
-
-				if ( ! empty( $arg_shortcode['email'] ) ) {
-
-					if ( $arg_shortcode['email'] == '{{logged_in_user}}' ) {
-						global $current_user;
-						if ( isset( $current_user->user_email ) && ! empty( $current_user->user_email ) ) {
-							$person = rt_biz_get_contact_by_email( $current_user->user_email );
-						} else {
-							$person = '';
-						}
-					} else {
-						$person = rt_biz_get_contact_by_email( $arg_shortcode['email'] );
-					}
-					if ( isset( $person ) && ! empty( $person ) ) {
-						$args['connected_items'] = $person[0]->ID;
-						$args['connected_type']  = Rt_HD_Module::$post_type . '_to_' . rtbiz_post_type_name( 'contact' );
-						$tickets                 = get_posts( $args );
-					}
-				}
-
-				if ( ! empty( $arg_shortcode['user'] ) ) {
-					$args['author'] = $arg_shortcode['user'];
-					$tickets        = get_posts( $args );
-				}
-			} else if ( ! empty( $arg_shortcode['order'] ) ) {
-				$args['meta_query'] = array(
-					array(
-						'key' => 'rtbiz_hd_order_id',
-						'value' => $arg_shortcode['order'],
-					),
-				);
-				$tickets = get_posts( $args );
-			} else {
-				$tickets = get_posts( $args );
-			} ?>
-
-			<h2><?php _e( 'Tickets', RT_HD_TEXT_DOMAIN ); ?></h2>
-
-			<?php
-			printf( _n( 'One Ticket Found.', '%d Tickets Found.', count( $tickets ), 'my-RT_HD_TEXT_DOMAIN-domain' ), count( $tickets ) );
-			if ( 'yes' == $arg_shortcode['show_support_form_link'] ) {
-				global $redux_helpdesk_settings;
-				if ( isset( $redux_helpdesk_settings['rthd_support_page'] ) && ! empty( $redux_helpdesk_settings['rthd_support_page'] ) ) {
-					$page    = get_post( $redux_helpdesk_settings['rthd_support_page'] );
-					?>
-					<a href="<?php echo "/{$page->post_name}"; ?>"><?php _e( '(Get Support)', RT_HD_TEXT_DOMAIN ) ?></a>
-				<?php
-				}
-			}?>
-			<table class="shop_table my_account_orders">
-				<tr>
-					<th>Ticket ID</th>
-					<th>Title</th>
-					<th>Last Updated</th>
-					<th>Status</th>
-					<th></th>
-				</tr>
-			<?php if ( ! empty( $tickets ) ) {
-				foreach ( $tickets as $ticket ) {
-						$date = new DateTime( $ticket->post_modified );
-						$link = ( is_admin() ) ? get_edit_post_link( $ticket->ID ) : esc_url( ( rthd_is_unique_hash_enabled() ) ? rthd_get_unique_hash_url( $ticket->ID ) : get_post_permalink( $ticket->ID ) );
-						?>
-						<tr>
-							<td> #<?php echo esc_attr( $ticket->ID ) ?> </td>
-							<td><?php echo $ticket->post_title; ?></td>
-							<td> <?php echo esc_attr( human_time_diff( $date->format( 'U' ), current_time( 'timestamp' ) ) ) . esc_attr( __( ' ago' ) ) ?> </td>
-							<td>
-							<?php
-								$style = 'padding: 5px; border: 1px solid black; border-radius: 5px;';
-								$flag = false;
-								$post_statuses = $rt_hd_module->get_custom_statuses();
-								foreach ( $post_statuses as $status ) {
-									if ( $status['slug'] == $ticket->post_status ) {
-										$ticket->post_status = $status['name'];
-										if ( ! empty( $status['style'] ) ) {
-											$style = $status['style'];
-										}
-										$flag = true;
-										break;
-									}
-								}
-								if ( ! $flag ) {
-									$ticket->post_status = ucfirst( $ticket->post_status );
-								}
-								if( ! empty( $ticket->post_status ) ) {
-									printf( '<mark style="%s" class="%s tips" data-tip="%s">%s</mark>', $style, $ticket->post_status, $ticket->post_status, $ticket->post_status );
-								}
-							?>
-							</td>
-							<td><a class="button support" target="_blank"
-							       href="<?php echo $link; ?>"><?php _e( 'Link' ); ?></a>
-							</td>
-						</tr>
-					<?php
-					}
-			} else {
-					?>
-					<tr>
-						<td colspan="5">No Tickets Found !</td>
-					</tr>
-				<?php } ?>
-			</table>
-		<?php
-		}
-
 		/**
 		 * Add product information in ticket meta data.
 		 * @param int $rt_hd_ticket_id
@@ -690,6 +540,17 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 		function rt_hd_add_ticket_offering_info_callback( $rt_hd_tickets_id ) {
 
 			$data = $_POST['post'];
+
+			// adult filter
+			if ( rthd_get_redux_adult_filter() ) {
+				$adultval = '';
+				if ( isset( $data[ 'adult_ticket' ] ) ) {
+					$adultval = 'yes';
+				} else {
+					$adultval = 'no';
+				}
+				rthd_save_adult_ticket_meta( $rt_hd_tickets_id, $adultval );
+			}
 
 			if ( isset( $data['product_id'] ) ) {
 				$term = get_term_by( 'id', $data['product_id'], Rt_Offerings::$offering_slug );

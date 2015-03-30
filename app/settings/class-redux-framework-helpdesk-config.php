@@ -35,12 +35,10 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			add_action( 'p2p_init', array( $this, 'init_settings' ), 30 );
 		}
 
-
-
-
 		public function init_settings() {
 			// Set the default arguments
 			$this->set_arguments();
+
 
 			// Set a few help tabs so you can see how it's done
 			//			$this->set_helptabs();
@@ -256,6 +254,17 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					'on' => __('Enable'),
 					'off' => __('Disable'),
 				));
+
+				array_push($email_fields, array(
+					'id' => 'rthd_reply_via_email',
+					'type' => 'switch',
+					'title' => __('Reply Via Email'),
+					'subtitle' => __('To enable/disable Reply Via Email'),
+					'default' => true,
+					'on' => __('Enable'),
+					'off' => __('Disable'),
+					'required' => array( 'rthd_enable_mailbox_reading', '=', 1 ),
+				));
 			}
 
 			array_push( $email_fields, array(
@@ -308,6 +317,9 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				'fields'      => $email_fields,
 			);
 
+			if ( rt_biz_is_email_template_addon_active() && rt_biz_is_email_template_on( Rt_HD_Module::$post_type ) ) {
+				$this->sections = apply_filters( 'rthd_email_templates_settings', $this->sections );
+			}
 			$this->sections[] = array(
 				'icon'        => 'el-icon-edit',
 				'title'       => __( 'Notification Emails ' ),
@@ -438,67 +450,10 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					array(
 						'id'       => 'section-notification_email-customize-start',
 						'type'     => 'section',
-						'subtitle'     => __( 'You can use {ticket_title} as a placeholder.<p><b>Suggestion:</b> Use same title for all mail types to let users have all emails in single thread.</p>' ),
 						'title'       => __( 'Customize Notification Emails ' ),
 						'indent'   => true, // Indent all options below until the next 'section' option is set.
 					),
 
-					array(
-						'id'       => 'rthd_new_ticket_email_title',
-						'type'     => 'text',
-						'title'    => __( 'New ticket is created' ),
-						'subtitle' => __( 'Title when a new ticket is created' ),
-						'default'  => '{ticket_title}',
-					),
-					array(
-						'id'       => 'rthd_update_ticket_email_title',
-						'type'     => 'text',
-						'title'    => __( 'Ticket is updated' ),
-						'subtitle' => __( 'Title when a ticket is updated' ),
-						'default'  => '{ticket_title}',
-					),
-					array(
-						'id'       => 'rthd_ticket_reassign_email_title',
-						'type'     => 'text',
-						'title'    => __( 'Ticket is reassigned' ),
-						'subtitle' => __( 'Title when an existing ticket is reassigned to another user' ),
-						'default'  => '{ticket_title}',
-					),
-					array(
-						'id'       => 'rthd_new_followup_email_title',
-						'type'     => 'text',
-						'title'    => __( 'New follow up is added' ),
-						'subtitle' => __( 'Title when a new follow up is added' ),
-						'default'  => '{ticket_title}',
-					),
-					array(
-						'id'       => 'rthd_update_followup_email_title',
-						'type'     => 'text',
-						'title'    => __( 'Follow up is updated' ),
-						'subtitle' => __( 'Title when an existing follow up is updated' ),
-						'default'  => '{ticket_title}',
-					),
-					array(
-						'id'       => 'rthd_delete_followup_email_title',
-						'type'     => 'text',
-						'title'    => __( 'Follow up is deleted' ),
-						'subtitle' => __( 'Title when a follow up is deleted' ),
-						'default'  => '{ticket_title}',
-					),
-					array(
-						'id'       => 'rthd_ticket_subscribe_email_title',
-						'type'     => 'text',
-						'title'    => __( 'User subscribes to ticket' ),
-						'subtitle' => __( 'Title when a user subscribes to a ticket' ),
-						'default'  => '{ticket_title}',
-					),
-					array(
-						'id'       => 'rthd_ticket_unsubscribe_email_title',
-						'type'     => 'text',
-						'title'    => __( 'User unsubscribes to ticket' ),
-						'subtitle' => __( 'Title when a user unsubscribes to a ticket' ),
-						'default'  => '{ticket_title}',
-					),
 					array(
 						'id'       => 'rthd_enable_signature',
 						'type'     => 'switch',
@@ -542,7 +497,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 
 			$this->sections[] = array(
 				'icon'        => 'el-icon-magic',
-				'title'       => __( 'Advance Settings' ),
+				'title'       => __( 'Advanced Settings' ),
 				'permissions' => $admin_cap,
 				'fields'      => array(
 					array(
@@ -576,7 +531,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'indent' => false,
 					),
 
-					/* array(
+					array(
 						'id'       => 'rthd_enable_auto_response',
 						'type'     => 'switch',
 						'title'    => __( 'Auto Response' ),
@@ -639,10 +594,18 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 							'indent' => false,
 					),
 					array(
+						'id'       => 'rthd_autoresponse_weekend',
+						'type'     => 'switch',
+						'title'    => __( 'Auto-respond on weekends only.' ),
+						'default'  => false,
+						'on'       => __( 'Yes' ),
+						'off'      => __( 'No' ),
+						'required' => array( 'rthd_enable_auto_response', '=', 1 ),
+					),
+					array(
 						'id'           => 'rthd_auto_response_message',
 						'type'         => 'textarea',
 						'title'        => __( 'Auto response message' ),
-						'subtitle'     => __( 'Add here auto response message' ),
 						'desc'         => esc_attr( 'You can add email message here that will be send into followup when your team are offline, Allowed tags are <a> <br> <em> <strong>. ' ) . 'Use <b>{NextStartingHour}</b> to get next working hours like <b>`Today after 10 pm` or `Monday after 9 AM`</b>',
 						'validate'     => 'html_custom',
 						'default'      => esc_attr( '' ),
@@ -662,7 +625,16 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'id'     => 'section-auto-response-end',
 						'type'   => 'section',
 						'indent' => false,
-					),*/
+					),
+					array(
+						'id'       => 'rthd_enable_ticket_adult_content',
+						'type'     => 'switch',
+						'title'    => __( 'Adult Content Filter' ),
+						'desc'     => __( 'For customer, a form feature to mark adult content will be enabled. For staff, profile level setting to filter the adult content will be enabled.' ),
+						'default'  => false,
+						'on'       => __( 'Enable' ),
+						'off'      => __( 'Disable' ),
+					),
 				),
 			);
 

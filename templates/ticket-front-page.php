@@ -220,14 +220,7 @@ $user_edit_content = current_user_can( $cap );
 								?>
 								<li class="attachment-item"
 								     data-attachment-id="<?php echo esc_attr( $attachment->ID ); ?>">
-									<a class="rthd_attachment"
-									   title="<?php echo balanceTags( $attachment->post_title ); ?>" target="_blank"
-									   href="<?php echo esc_url( $attachment_url ); ?>"> <img
-											height="20px" width="20px"
-											src="<?php echo esc_url( RT_HD_URL . 'app/assets/file-type/' . $extn . '.png' ); ?>"/>
-										<span
-											title="<?php echo balanceTags( $attachment->post_title ); ?>"> 	<?php echo esc_attr( strlen( balanceTags( $attachment->post_title ) ) > 40 ? substr( balanceTags( $attachment->post_title ), 0, 40 ) . '...' : balanceTags( $attachment->post_title ) ); ?> </span>
-									</a>
+									<?php rt_hd_get_attchment_link_with_fancybox( $attachment ); ?>
 									<?php if ( $user_edit ) { ?>
 										<a href="#" class="rthd_delete_attachment right">x</a>
 									<?php } ?>
