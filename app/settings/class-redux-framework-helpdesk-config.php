@@ -41,7 +41,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 		public function rthd_email_template_defaults(){
 			$redux = rthd_get_redux_settings();
 			// check if plugin is active and setting in rtbiz for helpdesk email template is on.
-			if ( rt_biz_is_email_template_addon_active() && ! rt_biz_is_email_template_on( Rt_HD_Module::$post_type ) ){
+			if ( ! rt_biz_is_email_template_addon_active() || ! rt_biz_is_email_template_on( Rt_HD_Module::$post_type ) ){
 				$templates = rthd_get_default_email_template( '', true );
 				foreach ( $templates as $key => $val ) {
 					$redux[ $key ] = $val;
