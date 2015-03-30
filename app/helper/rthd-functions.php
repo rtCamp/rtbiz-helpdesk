@@ -1449,20 +1449,25 @@ function rt_hd_get_attchment_link_with_fancybox( $attachment, $post_id = '' ){
 	<?php
 }
 
-function rthd_is_email_template_addon_active(){
-	if ( is_plugin_active( 'rtbiz-email-template/rtbiz-email-template.php' ) ){
-		return true;
-	}
-	return false;
-}
-
-
+/**
+ * Get helpdesk email template from redux
+ * @param $key
+ *
+ * @return mixed
+ */
 function rthd_get_email_template_body( $key ){
 	$redux = rthd_get_redux_settings();
 	return $redux[$key];
 }
 
 
+/**
+ * Helpdesk default templates
+ * @param string $key
+ * @param bool   $all
+ *
+ * @return array|bool
+ */
 function rthd_get_default_email_template( $key = '' , $all = false ){
 	$redux = array();
 
