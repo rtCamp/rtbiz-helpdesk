@@ -1450,14 +1450,17 @@ function rt_hd_get_attchment_link_with_fancybox( $attachment, $post_id = '' ){
 }
 
 /**
- * Get helpdesk email template from redux
+ * Get helpdesk email template from redux if plugin is not active / on (from rtbiz) then use default email templates
  * @param $key
  *
  * @return mixed
  */
 function rthd_get_email_template_body( $key ){
-	$redux = rthd_get_redux_settings();
-	return $redux[$key];
+	if (  rt_biz_is_email_template_addon_active() && rt_biz_is_email_template_on( Rt_HD_Module::$post_type ) ){
+		$redux = rthd_get_redux_settings();
+		return $redux[$key];
+	}
+	return rthd_get_default_email_template( $key );
 }
 
 

@@ -35,29 +35,10 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			add_action( 'p2p_init', array( $this, 'init_settings' ), 30 );
 		}
 
-		/**
-		 *  If add-on plugin is not available the use default templates
-		 */
-		public function rthd_email_template_defaults(){
-			$redux = rthd_get_redux_settings();
-			// check if plugin is active and setting in rtbiz for helpdesk email template is on.
-			if ( ! rt_biz_is_email_template_addon_active() || ! rt_biz_is_email_template_on( Rt_HD_Module::$post_type ) ){
-				$templates = rthd_get_default_email_template( '', true );
-				foreach ( $templates as $key => $val ) {
-					$redux[ $key ] = $val;
-				}
-				update_option( self::$hd_opt , $redux );
-				$GLOBALS['redux_helpdesk_settings'] = $redux;
-			}
-		}
-
-
-
 		public function init_settings() {
 			// Set the default arguments
 			$this->set_arguments();
 
-			$this->rthd_email_template_defaults();
 
 			// Set a few help tabs so you can see how it's done
 			//			$this->set_helptabs();

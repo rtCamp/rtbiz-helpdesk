@@ -725,7 +725,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			// old assignee [ To ] mail Notification
 			if ( ! empty( $oldassigneEmail ) && $notificationFlagAssignee ){
 				$subject = rthd_create_new_ticket_title( 'rthd_ticket_reassign_email_title_old_assignee', $post_id );
-				$htmlbody = 'You are no longer responsible for this ticket. ';
+				$htmlbody =  apply_filters( 'rthd_email_template_ticket_reassigned_old_assignee', rthd_get_email_template_body( 'rthd_email_template_ticket_reassigned_old_assignee' ) );
 				$htmlbody = rthd_get_general_body_template( $htmlbody, $title );
 				$this->insert_new_send_email( $subject, $htmlbody, $oldassigneEmail, array(), array(), array(), $post_id, 'post' );
 			}
