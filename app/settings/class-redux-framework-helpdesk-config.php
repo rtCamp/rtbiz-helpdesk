@@ -613,7 +613,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					array(
 						'id'       => 'rthd_autoresponse_weekend',
 						'type'     => 'switch',
-						'title'    => __( 'Do you want to send mail on Weekend only?' ),
+						'title'    => __( 'Auto-respond on weekends only.' ),
 						'default'  => false,
 						'on'       => __( 'Yes' ),
 						'off'      => __( 'No' ),
@@ -623,7 +623,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'id'           => 'rthd_auto_response_message',
 						'type'         => 'textarea',
 						'title'        => __( 'Auto response message' ),
-						'subtitle'     => __( 'Add here auto response message' ),
 						'desc'         => esc_attr( 'You can add email message here that will be send into followup when your team are offline, Allowed tags are <a> <br> <em> <strong>. ' ) . 'Use <b>{NextStartingHour}</b> to get next working hours like <b>`Today after 10 pm` or `Monday after 9 AM`</b>',
 						'validate'     => 'html_custom',
 						'default'      => esc_attr( '' ),
