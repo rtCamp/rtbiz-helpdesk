@@ -671,7 +671,6 @@ jQuery(document).ready(function() {
                             jQuery( '.redux-action_bar input' ).removeAttr( 'disabled' );
                             jQuery( document.getElementById( 'redux_ajax_overlay' ) ).fadeOut( 'fast' );
                             jQuery( '.redux-action_bar .spinner' ).fadeOut( 'fast' );
-                            alert("cancel");
                             return ;
                         }
                         return flag;
