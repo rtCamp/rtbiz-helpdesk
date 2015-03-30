@@ -112,7 +112,7 @@ if ( ! class_exists( 'Rt_HD_Auto_Response' ) ) {
                            ){
                             // Get next Working hours
                             $nextday = ( $day + 1 );
-                            if (   $hour > $shifttime['am_start'][ $day ] && $hour <  $shifttime['pm_end'][ $day ] ){
+                            if (   $hour < $shifttime['am_start'][ $day ] || ( $hour > $shifttime['am_end'][ $day ] && $hour < $shifttime['pm_start'][ $day ] )  ){
                                 $nextday = $day;
                             }
 
