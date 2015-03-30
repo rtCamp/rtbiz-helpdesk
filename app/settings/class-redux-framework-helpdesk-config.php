@@ -46,7 +46,9 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			//			$this->set_helptabs();
 
 			// Create the sections and fields
-			$this->set_sections();
+			if ( !empty($_GET['page']) && ! empty( $_GET['post_type'] ) &&  $_GET['page'] === self::$page_slug && $_GET['post_type'] === Rt_HD_Module::$post_type ) {
+				$this->set_sections();
+			}
 
 			if ( ! isset( $this->args['opt_name'] ) ) { // No errors please
 				return;
