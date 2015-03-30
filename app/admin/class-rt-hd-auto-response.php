@@ -130,7 +130,7 @@ if ( ! class_exists( 'Rt_HD_Auto_Response' ) ) {
                             }
 
                             // check nextday is same day or not
-                            if ( $nextday == $day ) {
+                            if ( $nextday != $day ) {
                                 $nextday = $this->weekdays[$nextday] . ' after ';
                             } else {
                                 $nextday = 'Today after ';
