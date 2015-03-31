@@ -602,7 +602,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$subject     = rthd_create_new_ticket_title( 'rthd_ticket_subscribe_email_title', $post_id );
 			//rthd_email_template_ticket_subscribed
 			$htmlbody_subscriber =  apply_filters( 'rthd_email_template_ticket_subscribed', rthd_get_email_template_body('rthd_email_template_ticket_subscribed' ) );
-			$htmlbody = rthd_replace_placeholder( $htmlbody_subscriber,'{ticket_subscribers}', 'You' );
+			$htmlbody = rthd_replace_placeholder( $htmlbody_subscriber,'{ticket_subscribers}', 'You have ' );
 			$htmlbody = rthd_get_general_body_template( $htmlbody, $title );
 			$this->insert_new_send_email( $subject, $htmlbody, $newSubscriberList, array(), array(), array(), $post_id, 'post' );
 
