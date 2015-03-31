@@ -612,7 +612,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				$subscribers .= ' ' . $user['name']. ' ('.$user['email'].'),' ;
 			}
 			$subscribers = trim( $subscribers, ' ' );
-			$subscribers .= ( count( $newSubscriberList ) >= 2 ) ? ' are ' : ' is ' ;
+			$subscribers .= ( count( $newSubscriberList ) >= 2 ) ? ' have ' : ' has ' ;
 			$htmlbody = rthd_replace_placeholder( $htmlbody_subscriber,'{ticket_subscribers}', $subscribers );
 			$htmlbody = rthd_get_general_body_template( $htmlbody, $title );
 
@@ -663,7 +663,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			}
 			$htmlbody = trim( $htmlbody, ',' );
 			$htmlbody = trim( $htmlbody, ' ' );
-			$htmlbody .= ( count( $oldSubscriberList ) >= 2 ) ? ' are have' : ' is has' ;
+			$htmlbody .= ( count( $oldSubscriberList ) >= 2 ) ? ' have' : '  has' ;
 
 			$htmlbody_unsubscriber =  apply_filters( 'rthd_email_template_ticket_unsubscribed', rthd_get_email_template_body( 'rthd_email_template_ticket_unsubscribed' ) );
 			$htmlbody = rthd_replace_placeholder( $htmlbody_unsubscriber,'{ticket_unsubscribers}', $htmlbody );

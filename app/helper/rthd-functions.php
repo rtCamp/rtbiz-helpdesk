@@ -1487,7 +1487,7 @@ function rthd_get_default_email_template( $key = '' , $all = false ){
 	$redux['rthd_email_template_new_ticket_created_group_notification'] = 'A new support ticket created by <strong> {ticket_author} </strong>. <br/>Ticket Assigned to <strong>{ticket_assignee}</strong>{ticket_offerings} {ticket_body}';
 	$redux['rthd_email_template_new_ticket_created_assignee'] = 'A new support ticket created by <strong> {ticket_author} </strong> is assigned to you. <br/></strong>{ticket_offerings} {ticket_body}';
 	$redux['rthd_email_template_new_ticket_created_subscriber'] = 'A new support ticket created by <strong>{ticket_author}</strong>. You have been subscribed to this ticket. <br/>Ticket Assigned to <strong>{ticket_assignee}</strong>{ticket_offerings} {ticket_body}';
-	$redux['rthd_email_template_ticket_subscribed'] = '{ticket_subscribers} have been subscribed to this ticket';
+	$redux['rthd_email_template_ticket_subscribed'] = '{ticket_subscribers} been subscribed to this ticket';
 	$redux['rthd_email_template_ticket_unsubscribed'] = '{ticket_unsubscribers} been un-subscribed from this ticket';
 	$redux['rthd_email_template_ticket_reassigned_old_assignee'] = 'You are no longer responsible for this ticket.';
 	$redux['rthd_email_template_ticket_reassigned_new_assignee'] = 'A ticket is reassigned to {new_ticket_assignee}.';
