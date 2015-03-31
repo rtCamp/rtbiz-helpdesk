@@ -510,12 +510,13 @@ function rthd_get_adult_ticket_meta( $post_id ){
 }
 
 function rthd_create_new_ticket_title( $key, $post_id ){
-	$redux = rthd_get_redux_settings();
-	if ( isset( $redux[ $key ] ) ) {
-		return rthd_generate_email_title( $post_id, $redux[ $key ] );
+	if (  rt_biz_is_email_template_addon_active() && rt_biz_is_email_template_on( Rt_HD_Module::$post_type ) ){
+		$redux = rthd_get_redux_settings();
+		$value = $redux[ $key ];
+	} else {
+		$value = rthd_get_default_email_template( $key );
 	}
-	$prefix = '[' . ucfirst( Rt_HD_Module::$name ) . ' #' . $post_id . ']';
-	return $prefix;
+	return rthd_generate_email_title( $post_id, $value );
 }
 
 function rthd_get_email_signature_settings(){
