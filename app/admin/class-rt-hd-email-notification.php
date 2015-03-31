@@ -614,7 +614,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$subscribers = trim( $htmlbody, ',' );
 			$subscribers = trim( $subscribers, ' ' );
 			$subscribers .= ( count( $newSubscriberList ) >= 2 ) ? ' are ' : ' is ' ;
-			$htmlbody = $htmlbody_subscriber. rthd_replace_placeholder( $htmlbody_subscriber,'{ticket_subscribers}', $subscribers );
+			$htmlbody = rthd_replace_placeholder( $htmlbody_subscriber,'{ticket_subscribers}', $subscribers );
 			$htmlbody = rthd_get_general_body_template( $htmlbody, $title );
 
 			$this->insert_new_send_email( $subject, $htmlbody, $assigneEmail, array(), $bccemails, array(), $post_id, 'post' );
