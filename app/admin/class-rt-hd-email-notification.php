@@ -666,7 +666,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$htmlbody .= ( count( $oldSubscriberList ) >= 2 ) ? ' are ' : ' is ' ;
 
 			$htmlbody_unsubscriber =  apply_filters( 'rthd_email_template_ticket_unsubscribed', rthd_get_email_template_body( 'rthd_email_template_ticket_unsubscribed' ) );
-			$htmlbody = rthd_replace_placeholder( $htmlbody_unsubscriber,'{ticket_subscribers}', $htmlbody );
+			$htmlbody = rthd_replace_placeholder( $htmlbody_unsubscriber,'{ticket_unsubscribers}', $htmlbody );
 			$htmlbody = rthd_get_general_body_template( $htmlbody, $title );
 
 			$this->insert_new_send_email( $subject, $htmlbody, $assigneEmail, array(), $bccemails, array(), $post_id, 'post' );
