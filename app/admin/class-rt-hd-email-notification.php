@@ -500,7 +500,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 
 				$htmlbody =  apply_filters( 'rthd_email_template_new_ticket_created_group_notification', rthd_get_email_template_body('rthd_email_template_new_ticket_created_group_notification' ) );
 				$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_author}', $ticket_created_by->display_name );
-				$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_assignee}', $ticket_created_by->display_name );
+				$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_assignee}', $assigne_user->display_name );
 
 				// Add product info into mail body.
 				if( ! empty( $arrProducts ) ) {
@@ -544,7 +544,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				$subject     = rthd_create_new_ticket_title( 'rthd_new_ticket_email_title_subscriber',$post_id );
 				$htmlbody =  apply_filters( 'rthd_email_template_new_ticket_created_subscriber', rthd_get_email_template_body('rthd_email_template_new_ticket_created_subscriber' ) );
 				$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_author}', $ticket_created_by->display_name );
-				$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_assignee}', $ticket_created_by->display_name );
+				$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_assignee}', $assigne_user->display_name );
 
 				// Add product info into mail body.
 				if( ! empty( $arrProducts ) ) {
