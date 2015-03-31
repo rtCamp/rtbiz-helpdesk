@@ -1051,25 +1051,6 @@ function rthd_replace_placeholder( $str, $placeholder, $replacewith ){
 	return str_replace( $placeholder, $replacewith, $str );
 }
 
-function rthd_is_mailbox_configured(){
-	$system_emails = rt_get_module_mailbox_emails( RT_HD_TEXT_DOMAIN );
-	if ( ! empty( $system_emails ) ){
-		return true;
-	}
-	return false;
-}
-
-function rthd_is_mailbox_email( $email ){
-	if ( empty( $email ) ){
-		return false;
-	}
-	$system_emails = rt_get_module_mailbox_emails( RT_HD_TEXT_DOMAIN );
-	if ( in_array( $email, $system_emails ) ){
-		return true;
-	}
-	return false;
-}
-
 /**
  * Email login credentials to a newly-registered user for rtHelpdesk system.
  *

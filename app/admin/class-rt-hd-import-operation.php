@@ -535,7 +535,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$contactEmail = array();
 			if( !empty( $allemails ) && is_array( $allemails ) ){
 				foreach( $allemails as $email  ){
-					if ( ! rthd_is_mailbox_email( $email['address'] ) ){ //check mail is exist in mailbox or not
+					if ( ! rtmb_get_module_mailbox_email( $email['address'], RT_HD_TEXT_DOMAIN ) ){ //check mail is exist in mailbox or not
 						$contactEmail[] = $email;
 					}
 				}

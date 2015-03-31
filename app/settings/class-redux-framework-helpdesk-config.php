@@ -147,14 +147,13 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				$default_assignee = strval( 1 );
 			}
 
-			$system_emails = rt_get_module_mailbox_emails( RT_HD_TEXT_DOMAIN );
+			$system_emails = rtmb_get_module_mailbox_emails( RT_HD_TEXT_DOMAIN );
 
 			$mailbox_options = array();
 			foreach( $system_emails as $email ) {
 
 				$mailbox_options[ $email ] = $email;
 			}
-			$is_mailbox_configured = ( ! empty( $system_emails ) );
 			$acl_page_link = '<a href="' . admin_url( 'admin.php?page=' . Rt_Biz::$access_control_slug ) . '">Access Control</a> page.';
 			$offerings_page_link = ' ' . __( ' To select dedicated assignee for an offering, visit the ' ) .'<a href="' . admin_url( 'edit-tags.php?taxonomy=' . Rt_Offerings::$offering_slug . '&post_type=' . Rt_HD_Module::$post_type ) . '">offerings page</a>.';
 			// ACTUAL DECLARATION OF SECTIONS
@@ -244,7 +243,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				'callback' => 'rthd_mailbox_setup_view',
 			) );
 
-			if ( $is_mailbox_configured ) {
+			if ( ! empty( $system_emails ) ) {
 				array_push($email_fields, array(
 					'id' => 'rthd_enable_mailbox_reading',
 					'type' => 'switch',
@@ -265,18 +264,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					'off' => __('Disable'),
 					'required' => array( 'rthd_enable_mailbox_reading', '=', 1 ),
 				));
-			}
 
-			array_push( $email_fields, array(
-					'id'       => 'rthd_outgoing_email_from_name',
-					'title'    => __( 'Outgoing Emails\' FROM Name' ),
-					'subtitle' => __( 'Outgoing System Name used for all Helpdesk Communication' ),
-					'desc'     => sprintf( '%s.', __( 'System Name to be used for outbound emails. This Name will be used as FROM: name < email address > for all outgoing emails' ) ),
-					'type'     => 'text',
-					'default'  => get_bloginfo(),
-				) );
-
-			if ( $is_mailbox_configured ){
 				array_push( $email_fields, array(
 					'id'       => 'rthd_outgoing_email_mailbox',
 					'title'    => __( 'Outgoing Emails\' Mailbox' ),
@@ -285,10 +273,11 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					'type'     => 'select',
 					'options'  => $mailbox_options,
 				) );
-			}
-			else {
+
+			} else {
+
 				array_push( $email_fields, array(
-					'id'       => 'rthd_outgoing_email_from_address',
+					'id'       => 'rthd_outgoing_email_mailbox',
 					'title'    => __( 'Outgoing Emails\' FROM Address' ),
 					'subtitle' => __( 'Outgoing System Email used for all Helpdesk Communication' ),
 					'desc'     => sprintf( '%s <a href="%s">%s</a>. %s.', __( 'WordPress by default sends email using (mostly postfix) FROM/TO value set to Admin Email taken from' ), admin_url( 'options-general.php' ), __( 'here' ), __( 'System Email Address to be used for outbound emails. This Address will be used as FROM: name < email address > for all outgoing emails' ) ),
@@ -296,7 +285,17 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					'default'  => get_option( 'admin_email' ),
 					'validate' => 'email',
 				) );
+
 			}
+
+			array_push( $email_fields, array(
+				'id'       => 'rthd_outgoing_email_from_name',
+				'title'    => __( 'Outgoing Emails\' FROM Name' ),
+				'subtitle' => __( 'Outgoing System Name used for all Helpdesk Communication' ),
+				'desc'     => sprintf( '%s.', __( 'System Name to be used for outbound emails. This Name will be used as FROM: name < email address > for all outgoing emails' ) ),
+				'type'     => 'text',
+				'default'  => get_bloginfo(),
+			) );
 
 			array_push( $email_fields,
 				array(

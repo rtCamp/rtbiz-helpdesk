@@ -60,7 +60,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$args = array(
 				'user_id'       => $user_id,
 				'fromname'      => $settings['rthd_outgoing_email_from_name'],
-				'fromemail'     => ( rthd_is_mailbox_configured() ) ?  $settings['rthd_outgoing_email_mailbox'] : $settings['rthd_outgoing_email_from_address'],
+				'fromemail'     => $settings['rthd_outgoing_email_mailbox'],
 				'toemail'       => serialize( $toemail ),
 				'ccemail'       => serialize( $ccemail ),
 				'bccemail'      => serialize( $bccemail ),
@@ -70,15 +70,16 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				'refrence_id'   => $refrence_id,
 				'refrence_type' => $refrence_type,
 			);
-			if ( $this->is_wp_email( ) ) {
+			if ( rtmb_get_module_mailbox_email( $settings['rthd_outgoing_email_mailbox'], RT_HD_TEXT_DOMAIN ) != false ) {
+				// send from mailbox
+				return $rt_outbound_model->add_outbound_mail( $args );
+			} else {
 				$id = $rt_outbound_model->add_outbound_mail( $args );
 				$sendflag = $this->send_wp_email( $args );
 				if ( $sendflag ){
 					$rt_outbound_model->update_outbound_mail( array( 'sent' => 'yes' ), array( 'id' => $id ) );
 				}
 				return $sendflag;
-			} else {
-				return $rt_outbound_model->add_outbound_mail( $args );
 			}
 		}
 
@@ -147,16 +148,6 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			remove_filter( 'wp_mail_from', 'rthd_my_mail_from' );
 			return $emailsendflag;
 		}
-
-		/**
-		 * check if user have selected wp_mail for sending email
-		 * @return bool
-		 */
-		public function is_wp_email() {
-			$flag = rthd_is_mailbox_configured();
-			return ( ! $flag );
-		}
-
 
 		/**
 		 * @param $comment Object
