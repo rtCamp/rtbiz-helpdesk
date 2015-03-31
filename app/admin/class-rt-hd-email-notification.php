@@ -611,7 +611,6 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			foreach ( $newSubscriberList as $user ){
 				$subscribers .= ' ' . $user['name']. ' ('.$user['email'].'),' ;
 			}
-			$subscribers = trim( $htmlbody, ',' );
 			$subscribers = trim( $subscribers, ' ' );
 			$subscribers .= ( count( $newSubscriberList ) >= 2 ) ? ' are ' : ' is ' ;
 			$htmlbody = rthd_replace_placeholder( $htmlbody_subscriber,'{ticket_subscribers}', $subscribers );
