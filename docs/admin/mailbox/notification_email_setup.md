@@ -13,7 +13,7 @@ iv.**Global list members** :  Members who will be notified of the events that oc
 Also they can customize the Email Signatures and titles for various events.
 
 
-##### Notification Emails
+#### Notification Emails
 
 Admin can set up a global list of users who will be notified of the events occuring in the system.
 
@@ -22,7 +22,7 @@ Global list emails could be added and removed as shown below
 ![global_list_members](https://cloud.githubusercontent.com/assets/8191145/6503071/8034d496-c34f-11e4-8297-71812dd76896.png)
 
 
-##### Enable Notification ACL
+#### Enable Notification ACL
 
  When Notification ACL is enabled, different users of the Helpdesk will receive emails in the occurence of events marked in the settings.
 
@@ -56,22 +56,22 @@ These are the notification settings used for global list users
 
 
 
-##### Customize Notification Emails
+#### Customize Notification Emails
 
 Admins can customize the notification emails as per their requirements.
 
 ![customize_notification_emails](https://cloud.githubusercontent.com/assets/8191145/6504947/e53edaae-c362-11e4-96a4-7360b626cbac.png)
 
-###### A demo email by Ticket Creator
+##### A demo email by Ticket Creator
 
 ![demo_email](https://cloud.githubusercontent.com/assets/8191145/6505193/87c7e354-c365-11e4-88d4-4ea6ff2df40d.png)
 
-###### A custom title example
+##### A custom title example
 
 ![check_the_custom_title](https://cloud.githubusercontent.com/assets/8191145/6505195/8803c36a-c365-11e4-9511-cdf9c56f71c1.png)
 
 
-##### Enable email Signature
+#### Enable email Signature
 
 A custom email signature can be added here which will be added in every email sent with the Helpdesk plugin.
 

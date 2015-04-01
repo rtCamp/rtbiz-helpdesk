@@ -500,7 +500,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 
 				$htmlbody =  apply_filters( 'rthd_email_template_new_ticket_created_group_notification', rthd_get_email_template_body('rthd_email_template_new_ticket_created_group_notification' ) );
 				$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_author}', $ticket_created_by->display_name );
-				$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_assignee}', $ticket_created_by->display_name );
+				$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_assignee}', $assigne_user->display_name );
 
 				// Add product info into mail body.
 				if( ! empty( $arrProducts ) ) {
@@ -544,7 +544,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				$subject     = rthd_create_new_ticket_title( 'rthd_new_ticket_email_title_subscriber',$post_id );
 				$htmlbody =  apply_filters( 'rthd_email_template_new_ticket_created_subscriber', rthd_get_email_template_body('rthd_email_template_new_ticket_created_subscriber' ) );
 				$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_author}', $ticket_created_by->display_name );
-				$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_assignee}', $ticket_created_by->display_name );
+				$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_assignee}', $assigne_user->display_name );
 
 				// Add product info into mail body.
 				if( ! empty( $arrProducts ) ) {
@@ -602,7 +602,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$subject     = rthd_create_new_ticket_title( 'rthd_ticket_subscribe_email_title', $post_id );
 			//rthd_email_template_ticket_subscribed
 			$htmlbody_subscriber =  apply_filters( 'rthd_email_template_ticket_subscribed', rthd_get_email_template_body('rthd_email_template_ticket_subscribed' ) );
-			$htmlbody = rthd_replace_placeholder( $htmlbody_subscriber,'{ticket_subscribers}', 'You' );
+			$htmlbody = rthd_replace_placeholder( $htmlbody_subscriber,'{ticket_subscribers}', 'You have ' );
 			$htmlbody = rthd_get_general_body_template( $htmlbody, $title );
 			$this->insert_new_send_email( $subject, $htmlbody, $newSubscriberList, array(), array(), array(), $post_id, 'post' );
 
@@ -611,10 +611,9 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			foreach ( $newSubscriberList as $user ){
 				$subscribers .= ' ' . $user['name']. ' ('.$user['email'].'),' ;
 			}
-			$subscribers = trim( $htmlbody, ',' );
 			$subscribers = trim( $subscribers, ' ' );
-			$subscribers .= ( count( $newSubscriberList ) >= 2 ) ? ' are ' : ' is ' ;
-			$htmlbody = $htmlbody_subscriber. rthd_replace_placeholder( $htmlbody_subscriber,'{ticket_subscribers}', $subscribers );
+			$subscribers .= ( count( $newSubscriberList ) >= 2 ) ? ' have ' : ' has ' ;
+			$htmlbody = rthd_replace_placeholder( $htmlbody_subscriber,'{ticket_subscribers}', $subscribers );
 			$htmlbody = rthd_get_general_body_template( $htmlbody, $title );
 
 			$this->insert_new_send_email( $subject, $htmlbody, $assigneEmail, array(), $bccemails, array(), $post_id, 'post' );
@@ -664,10 +663,10 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			}
 			$htmlbody = trim( $htmlbody, ',' );
 			$htmlbody = trim( $htmlbody, ' ' );
-			$htmlbody .= ( count( $oldSubscriberList ) >= 2 ) ? ' are ' : ' is ' ;
+			$htmlbody .= ( count( $oldSubscriberList ) >= 2 ) ? ' have' : '  has' ;
 
 			$htmlbody_unsubscriber =  apply_filters( 'rthd_email_template_ticket_unsubscribed', rthd_get_email_template_body( 'rthd_email_template_ticket_unsubscribed' ) );
-			$htmlbody = rthd_replace_placeholder( $htmlbody_unsubscriber,'{ticket_subscribers}', $htmlbody );
+			$htmlbody = rthd_replace_placeholder( $htmlbody_unsubscriber,'{ticket_unsubscribers}', $htmlbody );
 			$htmlbody = rthd_get_general_body_template( $htmlbody, $title );
 
 			$this->insert_new_send_email( $subject, $htmlbody, $assigneEmail, array(), $bccemails, array(), $post_id, 'post' );

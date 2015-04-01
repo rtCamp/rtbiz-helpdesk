@@ -510,12 +510,13 @@ function rthd_get_adult_ticket_meta( $post_id ){
 }
 
 function rthd_create_new_ticket_title( $key, $post_id ){
-	$redux = rthd_get_redux_settings();
-	if ( isset( $redux[ $key ] ) ) {
-		return rthd_generate_email_title( $post_id, $redux[ $key ] );
+	if (  rt_biz_is_email_template_addon_active() && rt_biz_is_email_template_on( Rt_HD_Module::$post_type ) ){
+		$redux = rthd_get_redux_settings();
+		$value = $redux[ $key ];
+	} else {
+		$value = rthd_get_default_email_template( $key );
 	}
-	$prefix = '[' . ucfirst( Rt_HD_Module::$name ) . ' #' . $post_id . ']';
-	return $prefix;
+	return rthd_generate_email_title( $post_id, $value );
 }
 
 function rthd_get_email_signature_settings(){
@@ -1497,8 +1498,8 @@ function rthd_get_default_email_template( $key = '' , $all = false ){
 	$redux['rthd_email_template_new_ticket_created_group_notification'] = 'A new support ticket created by <strong> {ticket_author} </strong>. <br/>Ticket Assigned to <strong>{ticket_assignee}</strong>{ticket_offerings} {ticket_body}';
 	$redux['rthd_email_template_new_ticket_created_assignee'] = 'A new support ticket created by <strong> {ticket_author} </strong> is assigned to you. <br/></strong>{ticket_offerings} {ticket_body}';
 	$redux['rthd_email_template_new_ticket_created_subscriber'] = 'A new support ticket created by <strong>{ticket_author}</strong>. You have been subscribed to this ticket. <br/>Ticket Assigned to <strong>{ticket_assignee}</strong>{ticket_offerings} {ticket_body}';
-	$redux['rthd_email_template_ticket_subscribed'] = '{ticket_subscribers} have been subscribed to this ticket';
-	$redux['rthd_email_template_ticket_unsubscribed'] = '{ticket_unsubscribers} have been un-subscribed to this ticket';
+	$redux['rthd_email_template_ticket_subscribed'] = '{ticket_subscribers} been subscribed to this ticket';
+	$redux['rthd_email_template_ticket_unsubscribed'] = '{ticket_unsubscribers} been un-subscribed from this ticket';
 	$redux['rthd_email_template_ticket_reassigned_old_assignee'] = 'You are no longer responsible for this ticket.';
 	$redux['rthd_email_template_ticket_reassigned_new_assignee'] = 'A ticket is reassigned to {new_ticket_assignee}.';
 	$redux['rthd_email_template_ticket_updated'] = '<br /> Ticket updated by : <strong>{ticket_updated_by}</strong><br/>. {ticket_diference}';
