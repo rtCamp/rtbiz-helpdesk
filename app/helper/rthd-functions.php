@@ -1445,7 +1445,7 @@ function rthd_get_attachmet_by_url( $image_url, $post_id ) {
 function rt_hd_get_attchment_link_with_fancybox( $attachment, $post_id = '' ){
 	$attachment_url = wp_get_attachment_url( $attachment->ID );
 	$original_url = $attachment_url;
-	$extn = rt_biz_get_attchment_extension( $attachment->guid );
+	$extn = rt_biz_get_attchment_extension( $attachment_url );
 	$class = 'rthd_attachment fancybox';
 	if ( rt_bix_is_google_doc_supported_type( $attachment->post_mime_type, $extn ) ){
 		$attachment_url = rt_biz_google_doc_viewer_url( $attachment_url );
