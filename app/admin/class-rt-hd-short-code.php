@@ -129,7 +129,7 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 			$author_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
 			$tickets = array();
 			if ( ! empty( $arg_shortcode['userid'] ) ) {
-				if ( rt_biz_is_our_employee( $arg_shortcode['userid'] ) ){
+				if ( rthd_is_our_employee( $arg_shortcode['userid'], RT_HD_TEXT_DOMAIN ) ){
 					$tickets = rthd_get_tickets( 'assignee', $arg_shortcode['userid'] );
 				}else{
 					$tickets = rthd_get_tickets( 'created_by', $arg_shortcode['userid'] );
