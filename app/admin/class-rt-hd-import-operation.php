@@ -392,7 +392,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 							'post_excerpt'   => '',
 							'post_parent'    => $post_id,
 							'post_mime_type' => $this->get_mime_type_from_extn( $upload['extn'] ),
-							'guid'           => $upload['url'],
+							//'guid'           => $upload['url'],
 						);
 						add_filter( 'upload_dir', array( $rt_hd_admin, 'custom_upload_dir' ) );//added hook for add addon specific folder for attachment
 						$attach_id  = wp_insert_attachment( $attachment );
@@ -400,11 +400,12 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 						add_post_meta( $attach_id, '_wp_attached_file', $upload['file'] );
 						add_post_meta( $post_id, '_rtbiz_hd_attachment_hash', md5_file( $upload['file'] ) );
+						// if hash is not same do not store url to comment meta as we do not store duplicate attachments
+						if ( $comment_id > 0 ) {
+							add_comment_meta( $comment_id, 'attachment', wp_get_attachment_url( $attach_id ) );
+						}
 					}
 
-					if ( $comment_id > 0 ) {
-						add_comment_meta( $comment_id, 'attachment', $upload['url'] );
-					}
 				}
 			}
 		}

@@ -1413,10 +1413,31 @@ function rthd_convert_into_useremail( $value ){
  * Need to remove that function after attachment migration for comment
  * migration task : store attachment id instead of attachment url comment meta
  */
-function rthd_get_attachmet_by_url($image_url, $post_id) {
+function rthd_get_attachmet_by_url( $image_url, $post_id ) {
 	global $wpdb;
-	$attachment = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts WHERE guid='%s'  and post_parent=%d limit 1;", $image_url, $post_id ));
-	return $attachment[0] ;
+	$attachment_id = false;
+
+	// If there is no url, return.
+	if ( '' == $image_url )
+		return;
+
+	// Get the upload directory paths
+	$upload_dir_paths = wp_upload_dir();
+
+	// Make sure the upload path base directory exists in the attachment URL, to verify that we're working with a media library image
+	if ( false !== strpos( $image_url, $upload_dir_paths['baseurl'] ) ) {
+
+		// If this is the URL of an auto-generated thumbnail, get the URL of the original image
+		$image_url = preg_replace( '/-\d+x\d+(?=\.(jpg|jpeg|png|gif)$)/i', '', $image_url );
+
+		// Remove the upload path base directory from the attachment URL
+		$image_url = str_replace( $upload_dir_paths['baseurl'] . '/', '', $image_url );
+
+		// Finally, run a custom database query to get the attachment ID from the modified attachment URL
+		$attachment_id = $wpdb->get_var( $wpdb->prepare( "SELECT wposts.ID FROM $wpdb->posts wposts, $wpdb->postmeta wpostmeta WHERE wposts.ID = wpostmeta.post_id AND wpostmeta.meta_key = '_wp_attached_file' AND wpostmeta.meta_value LIKE '%s' AND wposts.post_type = 'attachment'", '%'.$image_url ) );
+	}
+
+	return get_post($attachment_id);
 }
 
 /*
