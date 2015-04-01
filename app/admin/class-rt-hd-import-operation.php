@@ -402,7 +402,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 						add_post_meta( $post_id, '_rtbiz_hd_attachment_hash', md5_file( $upload['file'] ) );
 						// if hash is not same do not store url to comment meta as we do not store duplicate attachments
 						if ( $comment_id > 0 ) {
-							add_comment_meta( $comment_id, 'attachment', wp_get_attachment_url( $attach_id ) );
+							add_comment_meta( $comment_id, 'attachment', $attach_id );
 						}
 					}
 
@@ -1120,6 +1120,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 * @param $comment_id
 		 *
 		 * @since rt-Helpdesk 0.1
+		 * @return bool
 		 */
 		public function mail_new_comment_data( $comment_id ) {
 			if ( ! $this->check_setting_for_new_followup_email( ) ) {
@@ -1128,7 +1129,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			if ( isset( $_REQUEST['commentSendAttachment'] ) && $_REQUEST['commentSendAttachment'] != '' ) {
 				$arrAttache = explode( ',', $_REQUEST['commentSendAttachment'] );
 				foreach ( $arrAttache as $strAttach ) {
-					add_comment_meta( $comment_id, 'attachment', wp_get_attachment_url( intval( $strAttach ) ) );
+					add_comment_meta( $comment_id, 'attachment', intval( $strAttach ) );
 				}
 			}
 			$this->mail_comment_data( $comment_id, array(), '', array() );

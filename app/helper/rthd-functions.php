@@ -1434,7 +1434,11 @@ function rthd_get_attachmet_by_url( $image_url, $post_id ) {
 		$image_url = str_replace( $upload_dir_paths['baseurl'] . '/', '', $image_url );
 
 		// Finally, run a custom database query to get the attachment ID from the modified attachment URL
-		$attachment_id = $wpdb->get_var( $wpdb->prepare( "SELECT wposts.ID FROM $wpdb->posts wposts, $wpdb->postmeta wpostmeta WHERE wposts.ID = wpostmeta.post_id AND wpostmeta.meta_key = '_wp_attached_file' AND wpostmeta.meta_value LIKE '%s' AND wposts.post_type = 'attachment'", '%'.$image_url ) );
+		$attachment_id = $wpdb->get_var( $wpdb->prepare( "SELECT wposts.ID FROM $wpdb->posts wposts, $wpdb->postmeta wpostmeta WHERE wposts.ID = wpostmeta.post_id AND wposts.post_parent = '%d'  AND wpostmeta.meta_key = '_wp_attached_file' AND wpostmeta.meta_value LIKE '%s' AND wposts.post_type = 'attachment'", $post_id ,'%'.$image_url ) );
+		if ( empty( $attachment_id ) ){
+			error_log("\n\n".var_export($image_url,true). ">>>> IMAGE URL \n", 3, "Migration-log.log");
+			error_log(var_export(sprintf( "SELECT wposts.ID FROM $wpdb->posts wposts, $wpdb->postmeta wpostmeta WHERE wposts.ID = wpostmeta.post_id AND wposts.post_parent = '%d'  AND wpostmeta.meta_key = '_wp_attached_file' AND wpostmeta.meta_value LIKE '%s' AND wposts.post_type = 'attachment'", $post_id ,'%'.$image_url ),true). ">>>> SQL \n", 3, "Migration-log.log");
+		}
 	}
 
 	return get_post($attachment_id);

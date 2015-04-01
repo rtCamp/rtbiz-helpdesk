@@ -49,7 +49,7 @@ if ( ! class_exists( 'RT_Meta_Box_Attachment' ) ) {
 				<?php
 			foreach ( $attachments as $attachment ) {
 				$attachment_url = wp_get_attachment_url( $attachment->ID );
-				if ( in_array( $attachment_url, $attach_cmt ) ) {
+				if ( in_array( $attachment->ID , $attach_cmt ) ) {
 					continue;
 				}
 				$extn_array = explode( '.', $attachment->guid );
