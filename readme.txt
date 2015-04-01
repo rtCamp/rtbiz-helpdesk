@@ -4,7 +4,7 @@ Donate Link:       http://rtcamp.com/donate
 Tags:              helpdesk, support, products, tickets, followups, customers, e-commerce
 Requires at least: 4.1
 Tested up to:      4.1
-Stable tag:        1.2
+Stable tag:        1.2.1
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,6 +57,9 @@ Please refer to the documentation.
 1. Dashboard
 
 == Changelog ==
+
+= 1.2.1 =
+* Bug Fixes
 
 = 1.2 =
 * Auto-responder feature added
