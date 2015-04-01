@@ -1450,6 +1450,8 @@ function rt_hd_get_attchment_link_with_fancybox( $attachment, $post_id = '' ){
 	if ( rt_bix_is_google_doc_supported_type( $attachment->post_mime_type, $extn ) ){
 		$attachment_url = rt_biz_google_doc_viewer_url( $attachment_url );
 		$class .= ' fancybox.iframe';
+	}elseif( rthd_is_fancybox_supported_type( $extn ) ){
+		$class .= ' fancybox.iframe';
 	}?>
 	<a class="<?php echo $class; ?>" rel="rthd_attachment_<?php echo !empty( $post_id ) ? $post_id : $attachment->post_parent; ?>"
 	   data-downloadlink="<?php echo esc_url( $original_url ); ?>"
@@ -1460,6 +1462,19 @@ function rt_hd_get_attchment_link_with_fancybox( $attachment, $post_id = '' ){
 				<span title="<?php echo balanceTags( $attachment->post_title ); ?>"> 	<?php echo esc_attr( strlen( balanceTags( $attachment->post_title ) ) > 40 ? substr( balanceTags( $attachment->post_title ), 0, 40 ) . '...' : balanceTags( $attachment->post_title ) ); ?> </span>
 	</a>
 	<?php
+}
+
+/**
+ * check givent extension is support by facncy box for iframe
+ * @param string $extation
+ *
+ * @return bool
+ */
+function rthd_is_fancybox_supported_type( $extation = '' ){
+	$extation_arr = array(
+		'mp4','mp3',
+	);
+	return in_array( $extation, $extation_arr );
 }
 
 /**
