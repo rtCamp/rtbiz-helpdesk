@@ -668,15 +668,10 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 				$comment_attechment = array_unique( $comment_attechment );
 				if ( ! empty( $comment_attechment ) ) { ?>
 					<ul class="comment_attechment">
-						<?php foreach ( $comment_attechment as $a ) {
-							$extn_array = explode( '.', $a );
-							$extn       = $extn_array[ count( $extn_array ) - 1 ];
-
-							$file_array = explode( '/', $a );
-							$fileName   = $file_array[ count( $file_array ) - 1 ];
-							?>
+						<?php foreach ( $comment_attechment as $a ) { ?>
 							<li>
-								<?php $attachment = rthd_get_attachmet_by_url( $a, $comment->comment_post_ID );
+								<?php
+								$attachment = get_post( $a );
 								rt_hd_get_attchment_link_with_fancybox( $attachment, $comment->comment_ID ); ?>
 							</li>
 						<?php } ?>
