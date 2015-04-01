@@ -1291,6 +1291,16 @@ function rthd_get_reply_via_email(){
 }
 
 /**
+ * get user is employee or not for helpdesk
+ * @param $userid
+ *
+ * @return mixed
+ */
+function rthd_is_our_employee( $userid ){
+	return rt_biz_is_our_employee( $userid, RT_HD_TEXT_DOMAIN );
+}
+
+/**
  * Get tickets
  *
  * @param $key : created_by, assignee, subscribe, order
@@ -1325,7 +1335,7 @@ function rthd_get_tickets( $key, $value ){
 		$args['author'] = $value;
 	} elseif ( 'subscribe' == $key ){
 		// check given user is staff or contact
-		if ( rt_biz_is_our_employee( $value ) ){
+		if ( rthd_is_our_employee( $value, RT_HD_TEXT_DOMAIN ) ){
 			$value= rthd_convert_into_userid( $value );
 			$args['meta_query'] = array(
 				array(
