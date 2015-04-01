@@ -206,8 +206,7 @@ $user_edit_content = current_user_can( $cap );
 					$tmphtml= '<div class="rt-hd-ticket-info"><h2 class="rt-hd-ticket-info-header">'. __( 'Attachments' ) .'</h2></div><div class="rt-hd-ticket-info"><ul id="attachment-files">';
 							?>
 							<?php foreach ( $attachments as $attachment ) {
-								$attachment_url = wp_get_attachment_url( $attachment->ID );
-								if ( in_array($attachment_url,$attach_cmt)){
+								if ( in_array($attachment->ID ,$attach_cmt)){
 									continue;
 								}
 								?>

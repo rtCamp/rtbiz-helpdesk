@@ -668,15 +668,10 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 				$comment_attechment = array_unique( $comment_attechment );
 				if ( ! empty( $comment_attechment ) ) { ?>
 					<ul class="comment_attechment">
-						<?php foreach ( $comment_attechment as $a ) {
-							$extn_array = explode( '.', $a );
-							$extn       = $extn_array[ count( $extn_array ) - 1 ];
-
-							$file_array = explode( '/', $a );
-							$fileName   = $file_array[ count( $file_array ) - 1 ];
-							?>
+						<?php foreach ( $comment_attechment as $a ) { ?>
 							<li>
-								<?php $attachment = rthd_get_attachmet_by_url( $a, $comment->comment_post_ID );
+								<?php
+								$attachment = get_post( $a );
 								rt_hd_get_attchment_link_with_fancybox( $attachment, $comment->comment_ID ); ?>
 							</li>
 						<?php } ?>
@@ -1413,10 +1408,35 @@ function rthd_convert_into_useremail( $value ){
  * Need to remove that function after attachment migration for comment
  * migration task : store attachment id instead of attachment url comment meta
  */
-function rthd_get_attachmet_by_url($image_url, $post_id) {
+function rthd_get_attachmet_by_url( $image_url, $post_id ) {
 	global $wpdb;
-	$attachment = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->posts WHERE guid='%s'  and post_parent=%d limit 1;", $image_url, $post_id ));
-	return $attachment[0] ;
+	$attachment_id = false;
+
+	// If there is no url, return.
+	if ( '' == $image_url )
+		return;
+
+	// Get the upload directory paths
+	$upload_dir_paths = wp_upload_dir();
+
+	// Make sure the upload path base directory exists in the attachment URL, to verify that we're working with a media library image
+	if ( false !== strpos( $image_url, $upload_dir_paths['baseurl'] ) ) {
+
+		// If this is the URL of an auto-generated thumbnail, get the URL of the original image
+		$image_url = preg_replace( '/-\d+x\d+(?=\.(jpg|jpeg|png|gif)$)/i', '', $image_url );
+
+		// Remove the upload path base directory from the attachment URL
+		$image_url = str_replace( $upload_dir_paths['baseurl'] . '/', '', $image_url );
+
+		// Finally, run a custom database query to get the attachment ID from the modified attachment URL
+		$attachment_id = $wpdb->get_var( $wpdb->prepare( "SELECT wposts.ID FROM $wpdb->posts wposts, $wpdb->postmeta wpostmeta WHERE wposts.ID = wpostmeta.post_id AND wposts.post_parent = '%d'  AND wpostmeta.meta_key = '_wp_attached_file' AND wpostmeta.meta_value LIKE '%s' AND wposts.post_type = 'attachment'", $post_id ,'%'.$image_url ) );
+		if ( empty( $attachment_id ) ){
+			error_log("\n\n".var_export($image_url,true). ">>>> IMAGE URL \n", 3, "Migration-log.log");
+			error_log(var_export(sprintf( "SELECT wposts.ID FROM $wpdb->posts wposts, $wpdb->postmeta wpostmeta WHERE wposts.ID = wpostmeta.post_id AND wposts.post_parent = '%d'  AND wpostmeta.meta_key = '_wp_attached_file' AND wpostmeta.meta_value LIKE '%s' AND wposts.post_type = 'attachment'", $post_id ,'%'.$image_url ),true). ">>>> SQL \n", 3, "Migration-log.log");
+		}
+	}
+
+	return get_post($attachment_id);
 }
 
 /*
@@ -1425,10 +1445,12 @@ function rthd_get_attachmet_by_url($image_url, $post_id) {
 function rt_hd_get_attchment_link_with_fancybox( $attachment, $post_id = '' ){
 	$attachment_url = wp_get_attachment_url( $attachment->ID );
 	$original_url = $attachment_url;
-	$extn = rt_biz_get_attchment_extension( $attachment->guid );
+	$extn = rt_biz_get_attchment_extension( $attachment_url );
 	$class = 'rthd_attachment fancybox';
 	if ( rt_bix_is_google_doc_supported_type( $attachment->post_mime_type, $extn ) ){
 		$attachment_url = rt_biz_google_doc_viewer_url( $attachment_url );
+		$class .= ' fancybox.iframe';
+	}elseif( rthd_is_fancybox_supported_type( $extn ) ){
 		$class .= ' fancybox.iframe';
 	}?>
 	<a class="<?php echo $class; ?>" rel="rthd_attachment_<?php echo !empty( $post_id ) ? $post_id : $attachment->post_parent; ?>"
@@ -1440,6 +1462,19 @@ function rt_hd_get_attchment_link_with_fancybox( $attachment, $post_id = '' ){
 				<span title="<?php echo balanceTags( $attachment->post_title ); ?>"> 	<?php echo esc_attr( strlen( balanceTags( $attachment->post_title ) ) > 40 ? substr( balanceTags( $attachment->post_title ), 0, 40 ) . '...' : balanceTags( $attachment->post_title ) ); ?> </span>
 	</a>
 	<?php
+}
+
+/**
+ * check givent extension is support by facncy box for iframe
+ * @param string $extation
+ *
+ * @return bool
+ */
+function rthd_is_fancybox_supported_type( $extation = '' ){
+	$extation_arr = array(
+		'mp4','mp3',
+	);
+	return in_array( $extation, $extation_arr );
 }
 
 /**
