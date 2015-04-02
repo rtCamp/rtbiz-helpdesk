@@ -73,6 +73,23 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			add_action( 'wp_ajax_front_end_assignee_change', array( $this, 'front_end_assignee_change' ) );
 			add_action( 'wp_ajax_front_end_ticket_watch_unwatch', array( $this, 'front_end_ticket_watch_unwatch' ) );
 			add_action( 'wp_ajax_rt_hd_add_subscriber_email', array( $this, 'rt_hd_add_subscriber_email' ) );
+			add_action( 'wp_ajax_rthd_quick_download', array( $this, 'rthd_quick_download' ) );
+			add_action( 'wp_ajax_nopriv_rthd_quick_download', array( $this, 'rthd_quick_download' ) );
+
+		}
+
+		function rthd_quick_download(){
+			if ( ! empty( $_POST['url'] ) ) {
+				$file = $_POST['url'] ;
+				header( 'Content-Type: octet-stream' );
+				header( 'Content-Disposition: attachment; filename="' . basename( $file ) . '"' );
+				header( 'Expires: 0' );
+				header( 'Cache-Control: must-revalidate, post-check=0, pre-check=0' );
+				header( 'Pragma: public' );
+				header( 'Content-Length: ' . filesize( $file ) );
+				readfile( $file );
+				die();
+			}
 		}
 
 		function rt_hd_add_subscriber_email(){
