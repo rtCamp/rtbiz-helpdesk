@@ -13,7 +13,7 @@ jQuery( document ).ready( function ( $ ) {
 
     jQuery(".fancybox").fancybox({
         afterLoad: function() {
-            this.title = '<a href="' + jQuery(this.element).data("downloadlink") + '">Download</a> ' + this.title;
+            this.title = '<a class="rthd_quick_download" href="' + jQuery(this.element).data("downloadlink") + '" download>Download</a> ' + this.title;
         },
         iframe : {
             preload: false
