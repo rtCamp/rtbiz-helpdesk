@@ -127,6 +127,9 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 				return $template;
 			}
 
+			// Restrict SEO META tags for Helpdesk Ticket Page.
+			$this->restrict_seo_on_helpdesk();
+
 			if ( ! is_user_logged_in() ) {
 				$redirect_url = ( ( is_ssl() ) ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 				$login_url = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( $redirect_url ) );
@@ -178,10 +181,6 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 			}
 
 			$rtbiz_helpdesk_template = true;
-
-			// Restrict SEO META tags for Helpdesk Ticket Page.
-			$this->restrict_seo_on_helpdesk();
-
 			return rthd_locate_template( 'ticket-front-page.php' );
 		}
 		
