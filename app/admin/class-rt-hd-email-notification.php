@@ -17,6 +17,27 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 	 */
 	class RT_HD_Email_Notification {
 
+		function __construct() {
+			add_filter( 'rthd_filter_adult_emails', array( $this, 'rthd_filter_adult_emails' ), 10, 2 );
+		}
+
+		function rthd_filter_adult_emails( $emails, $postid ){
+			if ( rthd_get_redux_adult_filter() && rthd_get_adult_ticket_meta( $postid ) != 'no' ){
+				$new = array();
+				foreach ( $emails as $email ){
+					if ( ! empty ( $email )  ){
+						$user = get_user_by( 'email', $email[ 'email' ] ) ;
+						if ( ! $user instanceof WP_Error && ! empty( $user ) && rthd_get_user_adult_preference( $user->ID ) == 'no' ) {
+							continue;
+						}
+						$new[] = $email;
+					}
+				}
+				return $new;
+			}
+			return $emails;
+		}
+
 
 		/**
 		 * @param int $post_id to get link of post
@@ -190,10 +211,12 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			}
 
 			$bccemails = $this->exclude_author( $bccemails, $comment->comment_author_email );
+			$bccemails  = apply_filters( 'rthd_filter_adult_emails', $bccemails, $comment->comment_post_ID );
 
 			if ( $notificationFlagClient ){
 				$ContactEmail  = $this->get_contacts( $comment->comment_post_ID );
 				$ContactEmail = $this->exclude_author( $ContactEmail, $comment->comment_author_email );
+				$ContactEmail  = apply_filters( 'rthd_filter_adult_emails', $ContactEmail, $comment->comment_post_ID );
 			}
 
 			if ( isset( $comment_privacy ) && ! empty( $comment_privacy ) && intval( $comment_privacy ) && $comment_privacy > Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC  ){
@@ -257,10 +280,12 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			}
 
 			$bccemails = $this->exclude_author( $bccemails, $comment->comment_author_email );
+			$bccemails = apply_filters( 'rthd_filter_adult_emails', $bccemails , $comment->comment_post_ID );
 
 			if ( $notificationFlagClient ){
 				$ContactEmail  = $this->get_contacts( $comment->comment_post_ID );
 				$ContactEmail = $this->exclude_author( $ContactEmail, $comment->comment_author_email );
+				$ContactEmail = apply_filters( 'rthd_filter_adult_emails', $ContactEmail , $comment->comment_post_ID );
 			}
 
 			if ( ! ( isset( $comment->comment_type ) && ! empty( $comment->comment_type ) && intval( $comment->comment_type ) && $comment->comment_type > Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC  ) ) {
@@ -332,10 +357,12 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			}
 
 			$bccemails = $this->exclude_author( $bccemails, $comment->comment_author_email );
+			$bccemails = apply_filters( 'rthd_filter_adult_emails', $bccemails , $comment->comment_post_ID );
 
 			if ( $notificationFlagClient ){
 				$ContactEmail  = $this->get_contacts( $comment->comment_post_ID );
 				$ContactEmail = $this->exclude_author( $ContactEmail, $comment->comment_author_email );
+				$ContactEmail = apply_filters( 'rthd_filter_adult_emails', $ContactEmail, $comment->comment_post_ID );
 			}
 
 			if ( $private_update ){
@@ -444,6 +471,8 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 
 			$assigneEmail[] = $this->get_assigne_email( $post_id );
 			$assigneEmail = $this->exclude_author( $assigneEmail, $ticket_created_by->user_email );
+			$assigneEmail = apply_filters( 'rthd_filter_adult_emails', $assigneEmail, $post_id );
+
 
 			if ( $notificationFlagGroup && isset( $redux['rthd_notification_emails'] ) ) {
 				foreach ( $redux['rthd_notification_emails'] as $email ) {
@@ -451,19 +480,22 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				}
 			}
 			$groupEmail = $this->exclude_author( $groupEmail, $ticket_created_by->user_email );
+			$groupEmail = apply_filters( 'rthd_filter_adult_emails', $groupEmail, $post_id );
 
 			$subscriberEmail = $this->get_subscriber( $post_id );
 			$subscriberEmail = $this->exclude_author( $subscriberEmail, $ticket_created_by->user_email );
+			$subscriberEmail = apply_filters( 'rthd_filter_adult_emails', $subscriberEmail, $post_id );
 
 			$ContactEmail  = $this->get_contacts( $post_id );
 			$ContactEmail = $this->exclude_author( $ContactEmail, $ticket_created_by->user_email );
+			$ContactEmail = apply_filters( 'rthd_filter_adult_emails', $ContactEmail, $post_id );
 
 			$produc_list = wp_get_object_terms( $post_id, Rt_Offerings::$offering_slug );
 			$arrProducts = array_unique( wp_list_pluck( $produc_list, 'name' ) );
 			$arrProducts = implode( ', ', $arrProducts );
 
 			$title = $this->get_email_title( $post_id, $post_type );
-			$subject     = rthd_create_new_ticket_title( 'rthd_new_ticket_email_title',$post_id );
+			$subject     = rthd_create_new_ticket_title( 'rthd_new_ticket_email_title', $post_id );
 
 			// Ticket creator [ To ] Notification
 			if ( ! empty( $ticket_creator ) && $notificationFlagClient ) {
@@ -481,7 +513,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 
 			// Conatcts [ TO ] Notification
 			if ( ! empty( $ContactEmail ) && $notificationFlagClient ){
-				$subject     = rthd_create_new_ticket_title( 'rthd_new_ticket_email_title_contacts',$post_id );
+				$subject     = rthd_create_new_ticket_title( 'rthd_new_ticket_email_title_contacts', $post_id );
 
 				$htmlbody =  apply_filters( 'rthd_email_template_new_ticket_created_contacts', rthd_get_email_template_body('rthd_email_template_new_ticket_created_contacts' ) );
 				$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_author}', $ticket_created_by->display_name );
@@ -496,7 +528,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 
 			// Group [ BCC ] Notification
 			if ( ! empty( $groupEmail ) && $notificationFlagGroup ){
-				$subject     = rthd_create_new_ticket_title( 'rthd_new_ticket_email_title_group',$post_id );
+				$subject     = rthd_create_new_ticket_title( 'rthd_new_ticket_email_title_group', $post_id );
 
 				$htmlbody =  apply_filters( 'rthd_email_template_new_ticket_created_group_notification', rthd_get_email_template_body('rthd_email_template_new_ticket_created_group_notification' ) );
 				$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_author}', $ticket_created_by->display_name );
@@ -519,7 +551,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 
 			// Assignee [ To ] Notification
 			if ( ! empty( $assigneEmail ) && $notificationFlagAssignee ){
-				$subject     = rthd_create_new_ticket_title( 'rthd_new_ticket_email_title_assignee',$post_id );
+				$subject     = rthd_create_new_ticket_title( 'rthd_new_ticket_email_title_assignee', $post_id );
 				$htmlbody =  apply_filters( 'rthd_email_template_new_ticket_created_assignee', rthd_get_email_template_body('rthd_email_template_new_ticket_created_assignee' ) );
 				$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_author}', $ticket_created_by->display_name );
 
@@ -541,7 +573,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			// Subscrible [ BCC ] Notification
 			if ( ! empty( $subscriberEmail ) && $notificationFlagSsubscriber ){
 				// A new support ticket is created by [CREATOR CONTACT NAME]. You have been subscribed to this ticket.
-				$subject     = rthd_create_new_ticket_title( 'rthd_new_ticket_email_title_subscriber',$post_id );
+				$subject     = rthd_create_new_ticket_title( 'rthd_new_ticket_email_title_subscriber', $post_id );
 				$htmlbody =  apply_filters( 'rthd_email_template_new_ticket_created_subscriber', rthd_get_email_template_body('rthd_email_template_new_ticket_created_subscriber' ) );
 				$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_author}', $ticket_created_by->display_name );
 				$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_assignee}', $assigne_user->display_name );
@@ -595,6 +627,8 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			foreach ( $newSubscriberList as $user ){
 				$bccemails = $this->exclude_author( $bccemails, $user['email'] );
 				$assigneEmail = $this->exclude_author( $assigneEmail, $user['email'] );
+				$bccemails = apply_filters( 'rthd_filter_adult_emails', $bccemails, $post_id );
+				$assigneEmail = apply_filters( 'rthd_filter_adult_emails', $assigneEmail, $post_id );
 			}
 
 			// New subscriber added Notification to subscriber
@@ -651,6 +685,9 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			foreach ( $oldSubscriberList as $user ){
 				$bccemails = $this->exclude_author( $bccemails, $user['email'] );
 				$assigneEmail = $this->exclude_author( $assigneEmail, $user['email'] );
+				$bccemails = apply_filters( 'rthd_filter_adult_emails', $bccemails, $post_id );
+				$assigneEmail = apply_filters( 'rthd_filter_adult_emails', $assigneEmail, $post_id );
+
 			}
 
 			//subscriber removed Notification
@@ -758,6 +795,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			if ( $notificationFlagAssignee ){
 				$assigneEmail[] = $this->get_assigne_email( $post_id );
 				$assigneEmail = $this->exclude_author( $assigneEmail, $ticket_update_by->user_email );
+				$assigneEmail = apply_filters( 'rthd_filter_adult_emails', $assigneEmail, $post_id );
 			}
 
 			if ( $notificationFlagGroup && isset( $redux['rthd_notification_emails'] ) ) {
@@ -772,6 +810,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				$bccemails = array_merge($bccemails, $subscriberEmail);
 			}
 			$bccemails = $this->exclude_author( $bccemails, $ticket_update_by->user_email );
+			$bccemails = apply_filters( 'rthd_filter_adult_emails', $bccemails, $post_id );
 
 			$subject = rthd_create_new_ticket_title( 'rthd_update_ticket_email_title', $post_id );
 			$title = $this->get_email_title( $post_id, $post_type );
