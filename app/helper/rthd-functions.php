@@ -1524,13 +1524,13 @@ function rthd_get_default_email_template( $key = '' , $all = false ){
 	// Ticket template default body
 	$redux['rthd_email_template_followup_add'] = 'New Followup Added by <strong>{followup_author}</strong><hr style="color: #DCEAF5;" /><div style="display: inline-block">{followup_content}</div>';
 	$redux['rthd_email_template_followup_add_private'] = '<br /> A private followup has been added by <strong>{followup_author}</strong>. Please go to ticket to view content.';
-	$redux['rthd_email_template_followup_deleted_private'] = 'A Followup is deleted by <Strong>{followup_deleted_by}</Strong>';
+	$redux['rthd_email_template_followup_deleted_private'] = 'A Private followup is deleted by <Strong>{followup_deleted_by}</Strong>';
 	$redux['rthd_email_template_followup_deleted'] = 'A Followup is deleted by <Strong>{followup_deleted_by}</Strong><hr style="color: #DCEAF5;" /><div  style="display: inline-block">{followup_content}</div>';
 	$redux['rthd_email_template_followup_updated_private'] = '<div><br /> A <strong>private</strong> followup has been edited by <strong>{followup_updated_by}</strong>. Please go to ticket to view content.</div> {visibility_diff}';
 	$redux['rthd_email_template_followup_updated'] = '<div> A Followup Updated by <strong>{followup_updated_by}.</strong></div> <br/><div> The changes are as follows: </div><br/> {visibility_diff} {followup_diff}';
 	$redux['rthd_email_template_new_ticket_created_author'] = 'Thank you for opening a new support ticket. We will look into your request and respond as soon as possible.<br/>{ticket_body}';
 	$redux['rthd_email_template_new_ticket_created_contacts'] = 'A new support ticket created by <strong> {ticket_author} </strong>. You have been subscribed to this ticket.<br/>{ticket_body}';
-	$redux['rthd_email_template_new_ticket_created_group_notification'] = 'A new support ticket created by <strong> {ticket_author} </strong>. <br/>Ticket Assigned to <strong>{ticket_assignee}</strong>{ticket_offerings} {ticket_body}';
+	$redux['rthd_email_template_new_ticket_created_group_notification'] = 'A new support ticket created by <strong> {ticket_author} </strong>. <br/>Ticket Assigned to <strong>{ticket_assignee}</strong> <br/>{ticket_offerings} <br/>{ticket_body}';
 	$redux['rthd_email_template_new_ticket_created_assignee'] = 'A new support ticket created by <strong> {ticket_author} </strong> is assigned to you. <br/></strong>{ticket_offerings} {ticket_body}';
 	$redux['rthd_email_template_new_ticket_created_subscriber'] = 'A new support ticket created by <strong>{ticket_author}</strong>. You have been subscribed to this ticket. <br/>Ticket Assigned to <strong>{ticket_assignee}</strong>{ticket_offerings} {ticket_body}';
 	$redux['rthd_email_template_ticket_subscribed'] = '{ticket_subscribers} been subscribed to this ticket';
