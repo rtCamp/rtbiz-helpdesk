@@ -140,7 +140,6 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 				}
 			}
 
-			$editor_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
 			$tickets = array();
 			if ( ! empty( $arg_shortcode['userid'] ) ) {
 				if ( rthd_is_our_employee( $arg_shortcode['userid'], RT_HD_TEXT_DOMAIN ) ){
@@ -207,7 +206,7 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 							</td>
 							<td>
 
-								<?php if ( $editor_cap ){ ?>
+								<?php if ( current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' ) ) ){ ?>
 									<a class="button support" target="_blank"
 									   href="<?php echo get_edit_post_link( $ticket->ID ); ?>"><?php _e( 'Edit' ); ?></a>
 
