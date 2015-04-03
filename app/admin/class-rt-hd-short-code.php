@@ -116,6 +116,7 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 			$arg_shortcode = shortcode_atts(
 				array(
 					'userid' => '',
+					'email' => '',
 					'orderid' => '',
 					'show_support_form_link' => 'no',
 				), $atts );
@@ -126,7 +127,17 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 				'nopaging'    => true,
 			);
 
-			$author_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
+			if ( ! empty( $arg_shortcode['email'] ) && empty( $arg_shortcode['userid'] ) ) {
+				if ( $arg_shortcode['email'] == '{{logged_in_user}}' ) {
+					global $current_user;
+					$arg_shortcode['userid'] = $current_user;
+				}else{
+					$person = rt_biz_get_contact_by_email( $arg_shortcode['email'] );
+					$arg_shortcode['userid'] = rt_biz_get_wp_user_for_contact( $person->ID );
+				}
+			}
+
+			$editor_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
 			$tickets = array();
 			if ( ! empty( $arg_shortcode['userid'] ) ) {
 				if ( rthd_is_our_employee( $arg_shortcode['userid'], RT_HD_TEXT_DOMAIN ) ){
@@ -193,7 +204,7 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 							</td>
 							<td>
 
-								<?php if ( $author_cap ){ ?>
+								<?php if ( $editor_cap ){ ?>
 									<a class="button support" target="_blank"
 									   href="<?php echo get_edit_post_link( $ticket->ID ); ?>"><?php _e( 'Edit' ); ?></a>
 
