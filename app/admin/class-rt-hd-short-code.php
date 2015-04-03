@@ -135,6 +135,9 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 					$person = rt_biz_get_contact_by_email( $arg_shortcode['email'] );
 					$arg_shortcode['userid'] = rt_biz_get_wp_user_for_contact( $person->ID );
 				}
+				if ( is_object( $arg_shortcode['userid'] ) ){
+					$arg_shortcode['userid'] = $arg_shortcode['userid'] ->ID;
+				}
 			}
 
 			$editor_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
