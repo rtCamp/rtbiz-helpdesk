@@ -127,9 +127,10 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 				'nopaging'    => true,
 			);
 
+			global $current_user;
+
 			if ( ! empty( $arg_shortcode['email'] ) && empty( $arg_shortcode['userid'] ) ) {
 				if ( $arg_shortcode['email'] == '{{logged_in_user}}' ) {
-					global $current_user;
 					$arg_shortcode['userid'] = $current_user;
 				}else{
 					$person = rt_biz_get_contact_by_email( $arg_shortcode['email'] );
@@ -206,7 +207,7 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 							</td>
 							<td>
 
-								<?php if ( current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' ) ) ){ ?>
+								<?php if ( current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' ) ) || $ticket->post_author == $current_user->ID ){ ?>
 									<a class="button support" target="_blank"
 									   href="<?php echo get_edit_post_link( $ticket->ID ); ?>"><?php _e( 'Edit' ); ?></a>
 
