@@ -78,6 +78,9 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			add_action( 'wp_ajax_rthd_upload_attachment', array( $this, 'rthd_upload_attachment' ) );
 		}
 
+		/**
+		 * For create attachment
+		 */
 		function rthd_upload_attachment(){
 			global $rt_hd_admin;
 			$attachment_ids = array();
@@ -122,24 +125,9 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			}
 		}
 
-
-//		function rthd_upload_attachment(){
-//			$rthd_ticket = $this->get_ticket_from_ticket_unique_id( $_POST['followup_ticket_unique_id'] );
-//			$comment_post_ID = $rthd_ticket->ID;
-//			$uploaded = array();
-//			$attachment_ids = array();
-//			$status = false;
-//			if ( $_FILES ) {
-//				$attachment = $_FILES['file'];
-//				$uploaded[] = Rt_HD_Offering_Support::insert_attachment( $attachment );
-//				$attachment_ids = $this->add_attachment_to_post( array_filter( $uploaded ), $comment_post_ID );
-//				$attachment_ids = $attachment_ids['ids'];
-//				$status = true;
-//			}
-//			echo json_encode( array( 'status' => $status, 'attach_ids' => $attachment_ids ) );
-//			die();
-//		}
-
+		/**
+		 * For quick download link
+		 */
 		function rthd_quick_download(){
 			if ( ! empty( $_POST['url'] ) ) {
 				$file = $_POST['url'] ;
@@ -154,6 +142,9 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			}
 		}
 
+		/**
+		 *
+		 */
 		function rt_hd_add_subscriber_email(){
 			global $rt_hd_email_notification;
 			$response = array();
