@@ -53,8 +53,12 @@ wp_editor( '', $editor_id, $settings );
 					<?php _e('Keep unanswered'); ?></label></div>
         <?php } ?>
         <div>
-			<input id="attachemntlist" name="attachemntlist[]" class="multi" type="file" multiple />
-			<span class="followup-note"><b>Note:</b> Attachments will be uploaded when the form is submitted by clicking <i>Add Followup</i> button.</span>
+			<!--			<input id="attachemntlist" name="attachemntlist[]" type="file" multiple />-->
+	        <div id="attachment-container">
+		        <input type="button" class="btn button" id="attachemntlist" value="Attach Files">
+	        </div>
+	        <div id="followup-filelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
+	        <span class="followup-note"><b>Note:</b> Attachments will be uploaded when the form is submitted by clicking <i>Add Followup</i> button.</span>
 		</div>
 	</div>
 

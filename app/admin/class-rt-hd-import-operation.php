@@ -75,7 +75,60 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			add_action( 'wp_ajax_rt_hd_add_subscriber_email', array( $this, 'rt_hd_add_subscriber_email' ) );
 			add_action( 'wp_ajax_rthd_quick_download', array( $this, 'rthd_quick_download' ) );
 			add_action( 'wp_ajax_nopriv_rthd_quick_download', array( $this, 'rthd_quick_download' ) );
+			add_action( 'wp_ajax_nopriv_rthd_upload_attachment', array( $this, 'rthd_upload_attachment' ) );
+			add_action( 'wp_ajax_rthd_upload_attachment', array( $this, 'rthd_upload_attachment' ) );
 
+			add_action( 'wp_ajax_nopriv_rthd_upload_attachment_support', array( $this, 'rthd_upload_attachment_support' ) );
+			add_action( 'wp_ajax_rthd_upload_attachment_support', array( $this, 'rthd_upload_attachment_support' ) );
+		}
+
+		function rthd_upload_attachment_support(){
+			if ( $_FILES ) {
+				$attachment_ids = array();
+				global $rt_hd_admin;
+				$attachment = $_FILES['file'];
+				$uploaded[] = Rt_HD_Offering_Support::insert_attachment( $attachment );
+				foreach ( $uploaded as $upload ) {
+					$attachment = array(
+						'post_title'     => $upload[ 'filename' ],
+						'image_alt'      => $upload[ 'filename' ],
+						'post_content'   => '',
+						'post_excerpt'   => '',
+						'post_mime_type' => $this->get_mime_type_from_extn( $upload[ 'extn' ] ),
+						'guid'           => $upload[ 'url' ],
+					);
+					add_filter( 'upload_dir', array(
+						$rt_hd_admin,
+						'custom_upload_dir'
+					) );//added hook for add addon specific folder for attachment
+					$attach_id = wp_insert_attachment( $attachment );
+					remove_filter( 'upload_dir', array(
+						$rt_hd_admin,
+						'custom_upload_dir'
+					) ); //remove hook for add addon specific folder for attachment
+					$attachment_ids[ ] = $attach_id;
+					add_post_meta( $attach_id, '_wp_attached_file', $upload[ 'file' ] );
+				}
+				echo json_encode( array( 'status' => true, 'attach_ids' => $attachment_ids ) );
+				die();
+			}
+		}
+
+
+		function rthd_upload_attachment(){
+			$rthd_ticket = $this->get_ticket_from_ticket_unique_id( $_POST['followup_ticket_unique_id'] );
+			$comment_post_ID = $rthd_ticket->ID;
+			$uploaded = array();
+			$attachment_ids = array();
+			$status = false;
+			if ( $_FILES ) {
+				$attachment = $_FILES['file'];
+				$uploaded[] = Rt_HD_Offering_Support::insert_attachment( $attachment );
+				$attachment_ids = $this->add_attachment_to_post( array_filter( $uploaded ), $comment_post_ID );
+				$status = true;
+			}
+			echo json_encode( array( 'status' => $status, 'attach_ids' => $attachment_ids ) );
+			die();
 		}
 
 		function rthd_quick_download(){
@@ -395,6 +448,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 */
 		function add_attachment_to_post( $uploaded, $post_id, $comment_id = 0 ) {
 			global $rt_hd_admin;
+			$attachment_ids = array();
 			if ( isset( $uploaded ) && is_array( $uploaded ) ) {
 
 				foreach ( $uploaded as $upload ) {
@@ -409,12 +463,12 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 							'post_excerpt'   => '',
 							'post_parent'    => $post_id,
 							'post_mime_type' => $this->get_mime_type_from_extn( $upload['extn'] ),
-							//'guid'           => $upload['url'],
+							'guid'           => $upload['url'],
 						);
 						add_filter( 'upload_dir', array( $rt_hd_admin, 'custom_upload_dir' ) );//added hook for add addon specific folder for attachment
 						$attach_id  = wp_insert_attachment( $attachment );
 						remove_filter( 'upload_dir', array( $rt_hd_admin, 'custom_upload_dir' ) );//remove hook for add addon specific folder for attachment
-
+						$attachment_ids[] = $attach_id;
 						add_post_meta( $attach_id, '_wp_attached_file', $upload['file'] );
 						add_post_meta( $post_id, '_rtbiz_hd_attachment_hash', md5_file( $upload['file'] ) );
 						// if hash is not same do not store url to comment meta as we do not store duplicate attachments
@@ -425,6 +479,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 				}
 			}
+			return $attachment_ids;
 		}
 
 		/**
@@ -1422,8 +1477,13 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 			$comment_ID = $this->insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, $uploaded, $allemail, $dndEmails, '', '', '', $subscriber, '', $comment_type, $comment_parent, $keep_status);
 
+			if ( ! empty( $_POST['followup_attachments'] ) ){
+				$followup_attachment = explode( ',', $_POST['followup_attachments'] );
+				foreach ( $followup_attachment  as $attach_id  ){
+					add_comment_meta( $comment_ID, 'attachment', $attach_id );
+				}
+			}
 			$returnArray['status'] = true;
-
 			$returnArray['comment_count'] = get_comments(
 				array(
 					'order'     => 'DESC',

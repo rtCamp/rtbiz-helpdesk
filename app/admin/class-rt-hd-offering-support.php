@@ -483,7 +483,15 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 				$uploaded,
 				$data['email'][0],'','','',$subscriber
 			);
-
+			if ( ! empty( $_POST['rthd_support_attach_ids'] ) ){
+				$followup_attachment = explode( ',', $_POST['rthd_support_attach_ids'] );
+				foreach ( $followup_attachment  as $attach_id  ){
+					$attach  = get_post( $attach_id );
+					$attach->post_parent = $rt_hd_tickets_id;
+					wp_insert_attachment( $attach );
+					add_post_meta( $rt_hd_tickets_id, '_rtbiz_hd_attachment_hash', md5_file( get_attached_file( $attach_id ) ) );
+				}
+			}
 			return $rt_hd_tickets_id;
 		}
 

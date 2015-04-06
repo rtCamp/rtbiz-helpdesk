@@ -21,7 +21,7 @@ reference: http://purecss.io/forms/
 	width: 100%;
 }
 
-.rthd_support_from div input[type="checkbox"]{
+.rthd_support_from div input[type="checkbox"], #attachemntlist{
 	width: auto;
 }
 
