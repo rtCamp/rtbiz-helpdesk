@@ -63,7 +63,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		 * Setup default value for dashboard.
 		 */
 		function setup_defaults() {
-			if ( ! empty( $_REQUEST['page'] ) && $_REQUEST['page'] = 'rthd-' . Rt_HD_Module::$post_type . '-dashboard' && ! metadata_exists( 'user', get_current_user_id(), 'show_rt_hd_welcome_panel' ) ) {
+			if ( ! empty( $_REQUEST['page'] ) && $_REQUEST['page'] == 'rthd-' . Rt_HD_Module::$post_type . '-dashboard' && ! metadata_exists( 'user', get_current_user_id(), 'show_rt_hd_welcome_panel' ) ) {
 				update_user_meta( get_current_user_id(), 'show_rt_hd_welcome_panel', 1 );
 			}
 		}
