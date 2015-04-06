@@ -364,6 +364,7 @@ jQuery( document ).ready( function ( $ ) {
 
 	         UploadComplete: function(){
 	             document.getElementById('followup-filelist').innerHTML = '';
+		         console.log('upload complete');
 	             sendFollowup();
 	         },
 
