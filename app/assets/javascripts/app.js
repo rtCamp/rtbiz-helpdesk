@@ -337,8 +337,10 @@ jQuery( document ).ready( function ( $ ) {
 	             document.getElementById('followup-filelist').innerHTML = '';
 
 	             document.getElementById('savefollwoup').onclick = function() {
-	                 uploader.start();
-	                 return false;
+		             if (followupValidate()){
+			             uploader.start();
+			             return false;
+		             }
 	             };
 	         },
 
@@ -384,12 +386,9 @@ jQuery( document ).ready( function ( $ ) {
 		uploader.removeFile(jQuery(this ).parent().attr("id"));
 	});
 
-function sendFollowup() {
-	var flagspinner = false;
+function followupValidate(){
 	jQuery( '#hdspinner' ).show();
 	//jQuery(this).attr('disabled','disabled');
-	var followuptype = jQuery( "#followup-type" ).val();
-
 	if ( ! jQuery( "#ticket_unique_id" ).val() ) {
 		alert( 'Please publish ticket before adding followup! :( ' );
 		jQuery( '#hdspinner' ).hide();
@@ -402,6 +401,11 @@ function sendFollowup() {
 		//jQuery(this).removeAttr('disabled');
 		return false;
 	}
+	return true;
+}
+
+function sendFollowup() {
+	var followuptype = jQuery( "#followup-type" ).val();
 	var formData = new FormData();
 	formData.append( "private_comment", jQuery( '#add-private-comment' ).val() );
 	formData.append( "followup_ticket_unique_id", jQuery( '#ticket_unique_id' ).val() );
@@ -452,9 +456,7 @@ function sendFollowup() {
 			             } else {
 				             alert( data.message );
 			             }
-			             if ( ! flagspinner ) {
-				             jQuery( '#hdspinner' ).hide();
-			             }
+			             jQuery( '#hdspinner' ).hide();
 			             jQuery( '#savefollwoup' ).removeAttr( 'disabled' );
 		             }
 	             } );
