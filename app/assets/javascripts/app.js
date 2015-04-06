@@ -13,7 +13,6 @@ jQuery( document ).ready( function ( $ ) {
 
 	// File direct download dynamic form and calling ajax wordpress url for downloading file
 	jQuery(document ).on("click", '.rthd_quick_download', function(e){
-		e.preventDefault();
 		var newForm = jQuery('<form>', {
 			'action': ajaxurl,
 			'target': '_top',
