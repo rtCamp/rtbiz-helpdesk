@@ -304,15 +304,16 @@ jQuery( document ).ready( function ( $ ) {
 	});
 	$ticket_unique_id = jQuery( '#ticket_unique_id' ).val();
 	var uploadedfiles= [];
-
+	var new_followup_html;
+	var uploadfiles_html =[];
 	var uploader = new plupload.Uploader({
 	     // General settings
          runtimes : 'html5,flash,silverlight,html4',
 	     browse_button : 'attachemntlist', // you can pass in id...
 	     url : ajaxurl,
          multipart : true,
-         multipart_params : {'action': 'rthd_upload_attachment', 'followup_ticket_unique_id' : $ticket_unique_id  },
-         container: document.getElementById('attachment-container'), // ... or DOM Element itself
+         multipart_params : {'action': 'rthd_upload_attachment', 'followup_ticket_unique_id' : $ticket_unique_id },
+         container: document.getElementById( 'attachment-container' ), // ... or DOM Element itself
 
 	     // Resize images on client-side if we can
 	     //resize : { width : 320, height : 240, quality : 90 },
@@ -335,10 +336,9 @@ jQuery( document ).ready( function ( $ ) {
 	     init: {
 	         PostInit: function() {
 	             document.getElementById('followup-filelist').innerHTML = '';
-
+		         uploadfiles_html = [];
 	             document.getElementById('savefollwoup').onclick = function() {
-		             if (followupValidate()){
-			             uploader.start();
+		             if (sendFollowup( false )){
 			             return false;
 		             }
 	             };
@@ -367,7 +367,19 @@ jQuery( document ).ready( function ( $ ) {
 	         UploadComplete: function(){
 	             document.getElementById('followup-filelist').innerHTML = '';
 		         console.log('upload complete');
-	             sendFollowup();
+	             //sendFollowup();
+		         jQuery( '#chat-UI' ).append( new_followup_html );
+		         var attachmentUL = jQuery('#chat-UI li:last-child div.messages .comment_attechment' )
+		         var add_attachment_html = jQuery('#chat-UI li:last-child div.messages' );
+		         if ( ! attachmentUL.length){
+			         attachmentUL = add_attachment_html.append('<ul class="comment_attechment"> </ul>' ).find('ul');
+		         }
+		         for (var i = 0; i < uploadfiles_html.length; i++) {
+			         attachmentUL.append(uploadfiles_html[i]);
+		         }
+		         uploadedfiles= [];
+		         new_followup_html = '';
+		         uploadfiles_html =[];
 	         },
 
 	         FileUploaded: function(up, file, info) {
@@ -375,6 +387,7 @@ jQuery( document ).ready( function ( $ ) {
 	            var response = jQuery.parseJSON(info.response);
 	            if ( response.status ){
 	                uploadedfiles = uploadedfiles.concat(response.attach_ids);
+		            uploadfiles_html.push(response.response_html);
 	            }
 	         }
 	     }
@@ -404,7 +417,10 @@ function followupValidate(){
 	return true;
 }
 
-function sendFollowup() {
+function sendFollowup( force ) {
+	if ( ! followupValidate() ) {
+		return false;
+	}
 	var followuptype = jQuery( "#followup-type" ).val();
 	var formData = new FormData();
 	formData.append( "private_comment", jQuery( '#add-private-comment' ).val() );
@@ -415,6 +431,10 @@ function sendFollowup() {
 	formData.append( "follwoup-time", jQuery( '#follwoup-time' ).val() );
 	formData.append( "followup_content", rthd_tinymce_get_content( 'followupcontent' ) );
 	formData.append( "followup_attachments", uploadedfiles );
+
+	if ( force ){
+		formData.append('followup_duplicate_force', true);
+	}
 
 	if ( jQuery( '#rthd_keep_status' ) ) {
 		formData.append( "rthd_keep_status", jQuery( '#rthd_keep_status' ).is( ':checked' ) );
@@ -429,8 +449,13 @@ function sendFollowup() {
 		             processData: false, //async: false, // no more page freezing
 		             success: function ( data ) {
 			             if ( data.status ) {
-				             var newcomment = data.comment_content;
-				             jQuery( '#chat-UI' ).append( newcomment );
+				             new_followup_html = data.comment_content;
+				             uploader.settings.multipart_params['followup_id'] = data.comment_id;
+				             uploader.start();
+				             lastcommentid = data.comment_id;
+				             //var newcomment = data.comment_content;
+				             //jQuery( '#chat-UI' ).append( newcomment );
+
 				             // below code is for front end side bar
 				             jQuery( '#rthd-assignee-list' ).val( data.assign_value );
 				             if ( jQuery( '#rthd-status-list' ).length ) {
@@ -453,11 +478,19 @@ function sendFollowup() {
 						             jQuery( '#rthd_keep_status' ).prop( "checked", false );
 					             }
 				             }
+				             jQuery( '#hdspinner' ).hide();
+				             jQuery( '#savefollwoup' ).removeAttr( 'disabled' );
 			             } else {
-				             alert( data.message );
+				             var r = confirm(data.message+' Do you want to force add ? ');
+				             if (r == true) {
+					             sendFollowup(true);
+				             } else {
+					             jQuery( '#hdspinner' ).hide();
+					             jQuery( '#savefollwoup' ).removeAttr( 'disabled' );
+				             }
 			             }
-			             jQuery( '#hdspinner' ).hide();
-			             jQuery( '#savefollwoup' ).removeAttr( 'disabled' );
+			             //jQuery( '#hdspinner' ).hide();
+			             //jQuery( '#savefollwoup' ).removeAttr( 'disabled' );
 		             }
 	             } );
 }

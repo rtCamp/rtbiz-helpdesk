@@ -1401,7 +1401,8 @@ function rthd_convert_into_useremail( $value ){
 /*
  * get attachment link with facybox
  */
-function rt_hd_get_attchment_link_with_fancybox( $attachment, $post_id = '' ){
+function rt_hd_get_attchment_link_with_fancybox( $attachment, $post_id = '', $echo = true ){
+	ob_start();
 	$attachment_url = wp_get_attachment_url( $attachment->ID );
 	$original_url = $attachment_url;
 	$extn = rt_biz_get_attchment_extension( $attachment_url );
@@ -1421,6 +1422,12 @@ function rt_hd_get_attchment_link_with_fancybox( $attachment, $post_id = '' ){
 				<span title="<?php echo balanceTags( $attachment->post_title ); ?>"> 	<?php echo esc_attr( strlen( balanceTags( $attachment->post_title ) ) > 40 ? substr( balanceTags( $attachment->post_title ), 0, 40 ) . '...' : balanceTags( $attachment->post_title ) ); ?> </span>
 	</a>
 	<?php
+	$attachment_html = ob_get_clean();
+	if ( $echo ) {
+		echo $attachment_html ;
+	} else {
+		return $attachment_html ;
+	}
 }
 
 /**

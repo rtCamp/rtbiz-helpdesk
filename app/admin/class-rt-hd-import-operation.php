@@ -84,6 +84,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		function rthd_upload_attachment(){
 			global $rt_hd_admin;
 			$attachment_ids = array();
+			$response = array();
 
 			if ( $_FILES ) {
 
@@ -118,9 +119,17 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 						) ); //remove hook for add addon specific folder for attachment
 						$attachment_ids[ ] = $attach_id;
 						add_post_meta( $attach_id, '_wp_attached_file', $upload[ 'file' ] );
+						if ( ! empty( $_POST['followup_id'] ) && ! empty( $_POST['followup_ticket_unique_id'] ) ){
+							add_post_meta( $comment_post_ID, '_wp_attached_file', $comment_post_ID );
+							add_comment_meta( $_POST['followup_id'], 'attachment', $attach_id );
+							$attachment = get_post($attach_id );
+							$response['response_html'] = '<li>'.rt_hd_get_attchment_link_with_fancybox( $attachment, $comment_post_ID, false ).'</li>';
+						}
 					}
 				}
-				echo json_encode( array( 'status' => true, 'attach_ids' => $attachment_ids ) );
+				$response['status'] = true;
+				$response['attach_ids'] = $attachment_ids;
+				echo json_encode( $response );
 				die();
 			}
 		}
@@ -371,7 +380,11 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$this->add_contacts_to_post( $allemail, $post_id );
 
 			$uploaded = $this->add_attachment_to_post( $uploaded, $post_id );
-			$uploaded = $uploaded['files'];
+			if ( ! empty($uploaded['files'] ) ){
+				$uploaded = $uploaded['files'];
+			} else {
+				$uploaded = array();
+			}
 
 
 			update_post_meta( $post_id, '_rtbiz_hd_email', $senderEmail );
@@ -962,7 +975,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		public function insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, $uploaded, $allemails = array(), $dndEmails, $messageid = '', $inreplyto = '', $references = '', $subscriber = array(), $originalBody = '', $comment_type = '10', $comment_parent = 0, $keep_status = false ) {
+		public function insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, $uploaded, $allemails = array(), $dndEmails, $messageid = '', $inreplyto = '', $references = '', $subscriber = array(), $originalBody = '', $comment_type = '10', $comment_parent = 0, $keep_status = false, $force_skip_duplicate_check = false ) {
 
 			$post_type       = get_post_type( $comment_post_ID );
 			$ticketModel     = new Rt_HD_Ticket_Model();
@@ -1020,19 +1033,20 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			if ( $this->check_duplicate_from_message_id( $messageid ) ) {
 				return false;
 			}
-			$checkDupli = $this->check_duplicate_comment( $comment_post_ID, $commentDate, $comment_content, $comment_content_old );
-			if ( false !== $checkDupli ) {
-				if ( '' != $messageid ) {
-					add_comment_meta( $checkDupli, '_messageid', $messageid );
+			if ( ! $force_skip_duplicate_check ) {
+				$checkDupli = $this->check_duplicate_comment( $comment_post_ID, $commentDate, $comment_content, $comment_content_old );
+				if ( false !== $checkDupli ) {
+					if ( '' != $messageid ) {
+						add_comment_meta( $checkDupli, '_messageid', $messageid );
+					}
+					if ( '' != $inreplyto ) {
+						add_comment_meta( $checkDupli, '_inreplyto', $inreplyto );
+					}
+					if ( '' != $references ) {
+						add_comment_meta( $checkDupli, '_references', $references );
+					}
+					return false;
 				}
-				if ( '' != $inreplyto ) {
-					add_comment_meta( $checkDupli, '_inreplyto', $inreplyto );
-				}
-				if ( '' != $references ) {
-					add_comment_meta( $checkDupli, '_references', $references );
-				}
-
-				return false;
 			}
 
 			$comment_id = wp_insert_comment( $data );
@@ -1105,7 +1119,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			if ( $autoAssingeFlag && $rt_hd_email_notification->is_internal_user( $comment_author_email ) ){
 				//check on 'on_first_followup' selected and its first staff followup || select 'on_any_followup'
 				if ( ( 'on_first_followup' == $autoAssignEvent && $isFirstStaffComment ) || 'on_any_followup' == $autoAssignEvent ){
-					wp_update_post( array( 'ID'=>$comment_post_ID ,'post_author'=>$userid ) );
+					wp_update_post( array( 'ID' => $comment_post_ID ,'post_author' => $userid ) );
 				}
 			}
 			/* end assignee toogle code */
@@ -1485,7 +1499,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 						if ( ! preg_match( '/'.str_replace('*','\/*',$email).'/',  $comment_author_email ) ){
 							$allemail[]= array( 'address' => $comment_author_email, 'name' => $comment_author, 'key' => 'to', );
 						}else{
-							$returnArray['message'] = 'ERROR: You are blacklisted fot this system';
+							$returnArray['message'] = 'ERROR: You are blacklisted for this system';
 							echo json_encode( $returnArray );
 							die( 0 );
 						}
@@ -1502,7 +1516,11 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$keep_status = true;
 			}
 			$uploaded = explode( ',', $_POST['followup_attachments'] );
-			$comment_ID = $this->insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, array_filter( $uploaded ), $allemail, $dndEmails, '', '', '', $subscriber, '', $comment_type, $comment_parent, $keep_status);
+			$force_duplicate = false;
+			if ( ! empty( $_POST['followup_duplicate_force'] ) ){
+				$force_duplicate = true;
+			}
+			$comment_ID = $this->insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, array_filter( $uploaded ), $allemail, $dndEmails, '', '', '', $subscriber, '', $comment_type, $comment_parent, $keep_status, $force_duplicate);
 
 			if ( empty( $comment_ID ) ){
 				$returnArray['status'] = false;
