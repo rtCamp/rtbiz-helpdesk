@@ -11,29 +11,9 @@ rthd_user_edit = rthd_user_edit[0];
 var file_frame_ticket;
 jQuery( document ).ready( function ( $ ) {
 
-	// File direct download dynamic form and calling ajax wordpress url for downloading file
-	jQuery(document ).on("click", '.rthd_quick_download', function(e){
-		var newForm = jQuery('<form>', {
-			'action': ajaxurl,
-			'target': '_top',
-			'method' : 'POST'
-		}).append(jQuery('<input>', {
-			'name': 'action',
-			'value': 'rthd_quick_download',
-			'type': 'hidden'
-		}));
-		download_url  = jQuery(this ).attr('href');
-		newForm.append(jQuery('<input>', {
-			'name': 'url',
-			'value': download_url,
-			'type': 'hidden'
-		}));
-		newForm.submit();
-	});
-
     jQuery(".fancybox").fancybox({
         afterLoad: function() {
-            this.title = '<a class="rthd_quick_download" href="' + jQuery(this.element).data("downloadlink") + '">Download</a> ' + this.title;
+            this.title = '<a class="rthd_quick_download" download="' + jQuery(this.element).data("downloadlink") + '" href="' + jQuery(this.element).data("downloadlink") + '">Download</a> ' + this.title;
         },
         iframe : {
             preload: false
