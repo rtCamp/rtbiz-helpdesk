@@ -1507,9 +1507,12 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$uploaded = explode( ',', $_POST['followup_attachments'] );
 			$comment_ID = $this->insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, array_filter( $uploaded ), $allemail, $dndEmails, '', '', '', $subscriber, '', $comment_type, $comment_parent, $keep_status);
 
-			if ( $comment_ID ){
+			if ( empty( $comment_ID ) ){
 				$returnArray['status'] = false;
 				$returnArray['message'] = 'Duplicate followup!';
+				echo json_encode( $returnArray );
+				ob_end_flush();
+				die( 0 );
 			}
 			$returnArray['status'] = true;
 			$returnArray['comment_count'] = get_comments(
