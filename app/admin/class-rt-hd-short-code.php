@@ -40,7 +40,8 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 			$rt_hd_offering_support->check_active_plugin();
 			wp_enqueue_style( 'support-form-style', RT_HD_URL . 'app/assets/css/support_form_front.css', false, RT_HD_VERSION, 'all' );
 			wp_enqueue_script( 'rthd-support-form', RT_HD_URL . 'app/assets/javascripts/rt_support_form.js', array( 'jquery' ), RT_HD_VERSION, true );
-			wp_enqueue_script( 'jquery-file-uploader', RT_HD_URL . 'app/assets/javascripts/jquery.MultiFile.js', array( 'jquery' ), RT_HD_VERSION, true );
+			wp_enqueue_script( 'jquery-file-uploader', RT_HD_URL . 'app/assets/javascripts/plupupload/plupload.full.min.js', array( 'jquery' ), RT_HD_VERSION, true );
+			wp_enqueue_script( 'support-form-js', RT_HD_URL . 'app/assets/javascripts/rt-support-form.js', array( 'jquery' ), RT_HD_VERSION, true );
 			$offering_option = '';
 			$order_email    = '';
 
