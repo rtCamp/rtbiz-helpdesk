@@ -50,7 +50,7 @@ ii. Customer can mark a ticket to be adult or not via  support form. By default 
 ![ac](http://git.rtcamp.com/uploads/rtbiz/rtbiz-helpdesk/78523d4141/ac.png)
 
 iii. Adult ticket will be displayed to only those users who have adult content allowed in their profile.
-Staff members have the option to to allow or disallow tickets with adult content in their profile section. 
+Staff members have the option to to allow or disallow tickets with adult content in their profile section.
 
 ![helpdesk_adultcontent_preference](http://git.rtcamp.com/uploads/rtbiz/rtbiz-helpdesk/f7deaddd04/helpdesk_adultcontent_preference.png)
 

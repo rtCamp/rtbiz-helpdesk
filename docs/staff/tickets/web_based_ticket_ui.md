@@ -2,15 +2,14 @@
 
 Below is the screenshot of how a ticket looks on the front end.
 
-![Ticket UI](https://cloud.githubusercontent.com/assets/9676513/6439931/1e39f724-c0fe-11e4-8279-52f04a7ac460.jpg)
 
-
+![Ticket_Ui_New](http://git.rtcamp.com/uploads/rtbiz/rtbiz-helpdesk/f012f71970/Ticket_Ui_New.png)
  ####  A. Ticket Content Area
 
 '*' indicates the feature is visible only to the staff and not the customer.
 
 
-1. Ticket Title - A combination of the unique ID generated for each ticket and the request subject set by the ticket author.
+1. Ticket Title - A combination of the unique ID genearted for each ticket and the request subject set by the ticket author.
 
 2. Ticket Author -  The contact name, which can be a email address if profile does not have a name associated.
 
@@ -31,32 +30,36 @@ Below is the screenshot of how a ticket looks on the front end.
 
 10. Assigned To* - The staff member to whom the ticket is assigned.
 
-11. Created by - Time stamp when ticket was created. This is appended by the customer name who has creted the ticket.
+ Assign me - Another staff members can assign a ticket to themselves by clicking on the Assign Me option
 
-12. Last reply -  Time stamp when last reply was added to the ticket. This is appended by the staff/customer name who has added the reply.
+11. Created by - Time stamp when ticket was created. This is appended by the customer name who has created the ticket.
+
+12. Last reply -  Time stamp when ticket was created. This is appended by the staff/customer name who has created the ticket.
 
 13. Subscribe* - Option for a staff member to get updates for the communication on the ticket. The assignee of a ticket by default is a subscriber to that ticket.
-
-14. Ticket Products* - The offering/product for which customer has created a ticket.
+14. Add People - Ticket Author , Subscriber and staff members can add people to the ticket. If the people added have no prior access to the Helpdesk system, they will be added as Contacts, if the persons added are staff members, then they will show as subscribers to that ticket. Details will be shown at Ticket Admin UI.
 
 15. Attachment - List of all the attachements that have been added to the replies, either by customer of staff.
+
+16. Ticket Products* - The offering/product for which customer has created a ticket.
 #### C. Customer meta
 
-16. Purchase History* - List of products, which a customer has either bought or has the order still under process. Order status is metnioned alongside the products name.
+17. Purchase History* - List of products, which a customer has either bought or has the order still under process. Order status is metnioned alongside the products name.
 
-17. Ticket History - List of all the tickets that the customer has created in the Helpdesk. Order status is mentioned alngside the ticket title.
+18. Ticket History - List of all the tickets that the customer has created in the Helpdesk. Order status is mentioned alngside the ticket title.
 #### D. Ticket Reply Area
-![Ticket reply area](https://cloud.githubusercontent.com/assets/9676513/6439933/217fb41e-c0fe-11e4-9401-42173fc20745.jpg)
+![ticket_reply_area](http://git.rtcamp.com/uploads/rtbiz/rtbiz-helpdesk/a1639e83d0/ticket_reply_area.png)
 
-18. WYSIWYG editor - Used by customer and staff to format their reply content. Real handly when staff wants to share code snippets.
+19. WYSIWYG editor - Used by customer and staff to format their reply content. Real handly when staff wants to share code snippets.
 
-19. Reply visibility - Used to determine visibility of a follow-up. 'Sensitive' type can be used by customer if he wants to send confidnetial information like server info.
+20. Reply visibility - Used to determine visibility of a follow-up. 'Sensitive' type can be used by customer if he wants to send confidnetial information like server info.
 
-20. Upload Files - Useb by customer and staff to add files to their follow-ups.
+21. Keep Unanswered* - This option appears for staff to keep a ticket Unanswered, post reply.
 
-21. Add Follow-up Button - Button to add the follow-up to the ticket.
+22. Upload Files - Used by customer and staff to add files to their follow-ups.
 
-22. Keep Unanswered* - This option appears for staff to keep a ticket Unanswered, post reply.
+23. Add Follow-up Button - Button to add the follow-up to the ticket.
+
 
 
 ### Ticket Visibility for a Customer
