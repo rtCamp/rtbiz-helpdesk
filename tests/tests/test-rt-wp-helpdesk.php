@@ -34,7 +34,6 @@ class test_RT_WP_Help_desk extends RT_WP_TestCase {
 
 
 		$this->assertTrue( class_exists( 'Rt_Form' ), 'Class Rt_Form does not exist' );
-		$this->assertTrue( class_exists( 'Rt_Helpdesk_Taxonomy_Metadata\Taxonomy_Metadata' ), 'Class Rt_Helpdesk_Taxonomy_Metadata\Taxonomy_Metadata does not exist' );
 
 		$this->assertTrue( class_exists( 'Rt_HD_Attributes' ), 'Class Rt_HD_Attributes does not exist' );
 		$this->assertTrue( class_exists( 'Rt_HD_Module' ), 'Class Rt_HD_Module does not exist' );

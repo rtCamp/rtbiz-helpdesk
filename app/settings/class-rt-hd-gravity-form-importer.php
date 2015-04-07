@@ -65,6 +65,12 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 		 */
 		function init_importer( $field_array ) {
 			global $rt_hd_attributes_relationship_model;
+
+			//check current page is helpdesk setting page
+			if ( empty( $_REQUEST['rtbiz_hd_ticket'] ) || $_REQUEST['rtbiz_hd_ticket'] != Rt_HD_Module::$post_type || empty( $_REQUEST['page'] ) || $_REQUEST['page'] != Redux_Framework_Helpdesk_Config::$page_slug ){
+				return $field_array;
+			}
+
 			$ticket_field = array(
 				'title'        => array(
 					'display_name' => 'Title',
