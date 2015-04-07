@@ -120,9 +120,9 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 						$attachment_ids[ ] = $attach_id;
 						add_post_meta( $attach_id, '_wp_attached_file', $upload[ 'file' ] );
 						if ( ! empty( $_POST['followup_id'] ) && ! empty( $_POST['followup_ticket_unique_id'] ) ){
-							add_post_meta( $comment_post_ID, '_wp_attached_file', $comment_post_ID );
+							add_post_meta( $comment_post_ID, '_rtbiz_hd_attachment_hash', md5_file( $upload[ 'file' ] ) );
 							add_comment_meta( $_POST['followup_id'], 'attachment', $attach_id );
-							$attachment = get_post($attach_id );
+							$attachment = get_post( $attach_id );
 							$response['response_html'] = '<li>'.rt_hd_get_attchment_link_with_fancybox( $attachment, $comment_post_ID, false ).'</li>';
 						}
 					}
