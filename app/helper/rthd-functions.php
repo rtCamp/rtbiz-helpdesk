@@ -470,11 +470,19 @@ function rthd_my_mail_from( $email ) {
 }
 
 // user notification preference
-function rthd_get_user_notification_preference( $user_id ) {
-	$pref = get_user_meta( $user_id, 'rthd_notification_pref', true );
+function rthd_get_user_notification_preference( $user_id, $email = '' ) {
+	if ( empty( $email ) ){
+		$user = get_user_by('id',$user_id);
+		$email = $user->user_email;
+	}
+	$post = rt_biz_get_contact_by_email($email);
+	if ( ! empty( $post[0] ) ) {
+		$pref = Rt_Entity::get_meta( $post[ 0 ]->ID, 'rthd_receive_notification', true );
+	}
+
+	//	$pref = get_user_meta( $user_id, 'rthd_notification_pref', true );
 	if ( empty( $pref ) ) {
-		update_user_meta( $user_id, 'rthd_notification_pref', 'yes' );
-		$pref = 'yes';
+		$pref = 'no';
 	}
 	return $pref;
 }
@@ -489,10 +497,20 @@ function rthd_get_redux_adult_filter(){
 }
 
 //adult content preference
-function rthd_get_user_adult_preference( $user_id ) {
-	$pref = get_user_meta( $user_id, 'rthd_adult_pref', true );
+function rthd_get_user_adult_preference( $user_id, $email = '' ) {
+	if ( empty( $email ) ){
+		$user = get_user_by( 'id', $user_id );
+		$email = $user->user_email;
+	}
+	$post = rt_biz_get_contact_by_email( $email );
+
+	if ( ! empty( $post[0] ) ){
+		$pref = Rt_Entity::get_meta( $post[0]->ID, 'rthd_contact_adult_filter', true);
+	}
+	//  Old adult pref meta key
+	//	$pref = get_user_meta( $user_id, 'rthd_adult_pref', true );
 	if ( empty( $pref ) ) {
-		$pref = 'yes';
+		$pref = 'no';
 	}
 	return $pref;
 }

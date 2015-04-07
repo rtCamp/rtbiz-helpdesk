@@ -23,17 +23,18 @@ if ( ! class_exists( 'Rt_HD_User_Settings' ) ) {
 	class Rt_HD_User_Settings {
 
 		public function __construct() {
-			add_action( 'show_user_profile', array( $this, 'add_rthd_notification_events_field' ) );
-			add_action( 'edit_user_profile', array( $this, 'add_rthd_notification_events_field' ) );
-
-			if ( rthd_get_redux_adult_filter() ) {
-				add_action( 'show_user_profile', array( $this, 'add_rthd_adult_filter' ) );
-				add_action( 'edit_user_profile', array( $this, 'add_rthd_adult_filter' ) );
-				add_action( 'personal_options_update', array( $this, 'save_rthd_adult_filter' ) );
-				add_action( 'edit_user_profile_update', array( $this, 'save_rthd_adult_filter' ) );
-			}
-			add_action( 'personal_options_update', array( $this, 'save_rthd_notification_events_field' ) );
-			add_action( 'edit_user_profile_update', array( $this, 'save_rthd_notification_events_field' ) );
+			// After moving all setting to rtbiz we might not need this class.
+			//			add_action( 'show_user_profile', array( $this, 'add_rthd_notification_events_field' ) );
+			//			add_action( 'edit_user_profile', array( $this, 'add_rthd_notification_events_field' ) );
+			//
+			//			if ( rthd_get_redux_adult_filter() ) {
+			//				add_action( 'show_user_profile', array( $this, 'add_rthd_adult_filter' ) );
+			//				add_action( 'edit_user_profile', array( $this, 'add_rthd_adult_filter' ) );
+			//				add_action( 'personal_options_update', array( $this, 'save_rthd_adult_filter' ) );
+			//				add_action( 'edit_user_profile_update', array( $this, 'save_rthd_adult_filter' ) );
+			//			}
+			//			add_action( 'personal_options_update', array( $this, 'save_rthd_notification_events_field' ) );
+			//			add_action( 'edit_user_profile_update', array( $this, 'save_rthd_notification_events_field' ) );
 		}
 
 		/**

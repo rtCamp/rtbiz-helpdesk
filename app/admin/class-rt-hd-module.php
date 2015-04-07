@@ -364,7 +364,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 
 				$current_user = get_current_user_id();
 				$pref = rthd_get_user_adult_preference( $current_user );
-				if ( 'no' == $pref ){
+				if ( 'yes' == $pref ){
 					$meta_q = array(
 						'relation' => 'OR',
 						array(

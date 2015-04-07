@@ -27,7 +27,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				foreach ( $emails as $email ){
 					if ( ! empty ( $email )  ){
 						$user = get_user_by( 'email', $email[ 'email' ] ) ;
-						if ( ! $user instanceof WP_Error && ! empty( $user ) && rthd_get_user_adult_preference( $user->ID ) == 'no' ) {
+						if ( ! $user instanceof WP_Error && ! empty( $user ) && rthd_get_user_adult_preference( $user->ID ) == 'yes' ) {
 							continue;
 						}
 						$new[] = $email;
@@ -111,7 +111,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				$user = get_user_by( 'email', $email_id );
 				if ( false != $user && ! $user instanceof WP_Error ) {
 					$user_pref = rthd_get_user_notification_preference( $user->ID );
-					if (  'yes' != $user_pref ) { // if sets no
+					if (  'yes' == $user_pref ) { // if user don't want to notify itself
 						unset( $emails[ array_search( $email_id, $email_ids ) ] ); // Remove from the list who does not want.
 					}
 				}
