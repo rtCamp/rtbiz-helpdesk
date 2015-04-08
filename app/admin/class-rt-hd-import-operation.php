@@ -76,60 +76,59 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			add_action( 'wp_ajax_nopriv_rthd_quick_download', array( $this, 'rthd_quick_download' ) );
 			add_action( 'wp_ajax_nopriv_rthd_upload_attachment', array( $this, 'rthd_upload_attachment' ) );
 			add_action( 'wp_ajax_rthd_upload_attachment', array( $this, 'rthd_upload_attachment' ) );
+			add_action( 'wp_ajax_rthd_check_duplicate_followup', array( $this, 'rthd_check_duplicate_followup' ) );
+			add_action( 'wp_ajax_nopriv_rthd_check_duplicate_followup', array( $this, 'rthd_check_duplicate_followup' ) );
+		}
+
+		/**
+		 *  Check followup duplicate
+		 */
+		function rthd_check_duplicate_followup(){
+			$return_data= array( 'status' => false );
+			if ( ! empty( $_POST['followup_content'] ) && ! empty( $_POST['followup_ticket_unique_id'] ) ){
+				global $signature;
+				$rthd_ticket = $this->get_ticket_from_ticket_unique_id( $_POST['followup_ticket_unique_id'] );
+				$comment_post_ID = $rthd_ticket->ID;
+				$commenttime     = current_time( 'mysql', 1 );
+				$d               = new DateTime( $commenttime );
+				$UTC             = new DateTimeZone( 'UTC' );
+				$d->setTimezone( $UTC );
+				$timeStamp      = $d->getTimestamp();
+				$commentDate    = gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) + ( get_option( 'gmt_offset' ) * 3600 ) ) );
+				$comment_content_old =  $_POST['followup_content'];
+				$comment_content     = str_replace( $signature, '', $_POST['followup_content'] );
+				$checkDupli = $this->check_duplicate_comment( $comment_post_ID, $commentDate, $comment_content, $comment_content_old );
+				if ( false !== $checkDupli ) {
+					$return_data['isDuplicate']= true;
+				} else {
+					$return_data['isDuplicate']= false;
+				}
+				$return_data['status']= true;
+			}
+			echo json_encode( $return_data );
+			die();
 		}
 
 		/**
 		 * For create attachment
 		 */
 		function rthd_upload_attachment(){
-			global $rt_hd_admin;
-			$attachment_ids = array();
 			$response = array();
-
 			if ( $_FILES ) {
-
 				$comment_post_ID = '';
 				if ( ! empty( $_POST['followup_ticket_unique_id'] ) ){
 					$rthd_ticket = $this->get_ticket_from_ticket_unique_id( $_POST['followup_ticket_unique_id'] );
 					$comment_post_ID = $rthd_ticket->ID;
-					$post_attachment_hashes = get_post_meta( $comment_post_ID, '_rtbiz_hd_attachment_hash' );
 				}
-
 				$attachment = $_FILES['file'];
 				$uploaded[] = Rt_HD_Offering_Support::insert_attachment( $attachment );
-				foreach ( $uploaded as $upload ) {
-					if ( empty( $post_attachment_hashes ) || ! in_array( md5_file( $upload['file'] ), $post_attachment_hashes ) ) {
-						$attachment = array(
-							'post_title'     => $upload[ 'filename' ],
-							'image_alt'      => $upload[ 'filename' ],
-							'post_content'   => '',
-							'post_excerpt'   => '',
-							'post_mime_type' => $this->get_mime_type_from_extn( $upload[ 'extn' ] ),
-							'guid'           => $upload[ 'url' ],
-							'post_parent'    => $comment_post_ID,
-						);
-						add_filter( 'upload_dir', array(
-							$rt_hd_admin,
-							'custom_upload_dir'
-						) );//added hook for add addon specific folder for attachment
-						$attach_id = wp_insert_attachment( $attachment );
-						remove_filter( 'upload_dir', array(
-							$rt_hd_admin,
-							'custom_upload_dir'
-						) ); //remove hook for add addon specific folder for attachment
-						$attachment_ids[ ] = $attach_id;
-						add_post_meta( $attach_id, '_wp_attached_file', $upload[ 'file' ] );
-						add_post_meta( $attach_id, '_file_hash', md5_file( $upload[ 'file' ] ) );
-						if ( ! empty( $_POST['followup_id'] ) && ! empty( $_POST['followup_ticket_unique_id'] ) ){
-							add_post_meta( $comment_post_ID, '_rtbiz_hd_attachment_hash', md5_file( $upload[ 'file' ] ) );
-							add_comment_meta( $_POST['followup_id'], 'attachment', $attach_id );
-							$attachment = get_post( $attach_id );
-							$response['response_html'] = '<li>'.rt_hd_get_attchment_link_with_fancybox( $attachment, $comment_post_ID, false ).'</li>';
-						}
-					}
+				$attachments = $this->add_attachment_to_post( $uploaded, $comment_post_ID );
+				if ( ! empty( $attachments['ids'] ) ){
+					$response['attach_ids'] = $attachments['ids'];
+				} else {
+					$response['attach_ids'] = array();
 				}
 				$response['status'] = true;
-				$response['attach_ids'] = $attachment_ids;
 				echo json_encode( $response );
 				die();
 			}
@@ -464,37 +463,43 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 *
 		 * @return array
 		 */
-		function add_attachment_to_post( $uploaded, $post_id, $comment_id = 0 ) {
+		function add_attachment_to_post( $uploaded, $post_id = '', $comment_id = 0 ) {
 			global $rt_hd_admin;
 			$return = array();
 			if ( isset( $uploaded ) ) {
 
 				foreach ( $uploaded as $upload ) {
 
-					$post_attachment_hashes = get_post_meta( $post_id, '_rtbiz_hd_attachment_hash' );
+					//Postid is null when support page requested
+					$post_attachment_hashes = '';
+					if ( ! empty( $post_id ) ){
+						$post_attachment_hashes = get_post_meta( $post_id, '_rtbiz_hd_attachment_hash' );
+					}
+
 					$file_location = null;
 					if ( !is_array( $upload ) ){
 						$file_location = get_attached_file( $upload );
 					} else {
 						$file_location = $upload['file'];
 					}
-					if ( empty( $post_attachment_hashes ) || ! in_array( md5_file( $file_location ), $post_attachment_hashes ) ) {
 
-						//$uploaded["filename"]
-						if ( !is_array( $upload ) ){
+					if ( empty( $post_attachment_hashes ) || ! in_array( md5_file( $file_location ), $post_attachment_hashes ) ) {
+						if ( ! is_array( $upload ) ){
 							$attachment = get_post( $upload );
-							if ( $attachment->post_parent != $post_id ){
+							if ( ! empty( $post_id ) && $attachment->post_parent != $post_id ){
 								$attachment->post_parent = $post_id;
 								wp_update_post( $attachment );
+								add_post_meta( $post_id, '_rtbiz_hd_attachment_hash', md5_file( $file_location ) );
 							}
 							$attach_id = $upload;
 						} else {
+
 							$attachment = array(
 								'post_title'     => $upload[ 'filename' ],
 								'image_alt'      => $upload[ 'filename' ],
 								'post_content'   => '',
 								'post_excerpt'   => '',
-								'post_parent'    => $post_id,
+								'post_parent'    => ! empty( $post_id ) ? $post_id : '',
 								'post_mime_type' => $this->get_mime_type_from_extn( $upload[ 'extn' ] ),
 								'guid'           => $upload[ 'url' ],
 							);
@@ -508,12 +513,33 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 								'custom_upload_dir'
 							) );//remove hook for add addon specific folder for attachment
 							add_post_meta( $attach_id, '_wp_attached_file', $file_location );
-							add_post_meta( $attach_id, '_file_hash', md5_file( $upload[ 'file' ] ) );
+							add_post_meta( $attach_id, '_rthd_file_hash', md5_file( $upload[ 'file' ] ) );
+							if ( ! empty( $post_id ) ){
+								add_post_meta( $post_id, '_rtbiz_hd_attachment_hash', md5_file( $file_location ) );
+							}
 						}
-						$return['ids'][] = $attach_id;
-						$return['files'][] = array( 'file'=> $file_location );
-						add_post_meta( $post_id, '_rtbiz_hd_attachment_hash', md5_file( $file_location ) );
-						// if hash is not same do not store url to comment meta as we do not store duplicate attachments
+					} else {
+						if ( !is_array( $upload ) ){
+							$attach_id = $upload;
+						}else{
+							$attach = get_posts( array(
+								                     'post_type' => 'attachment',
+								                     'post_status' => 'any',
+								                     'posts_per_page' => -1,
+								                     'post_parent' => $post_id,
+								                     'meta_key'     => '_rthd_file_hash',
+								                     'meta_value'   => md5_file( $file_location ),
+							                     ));
+							if ( ! empty( $attach ) && ! empty( $attach[0] ) ){
+								$attach = $attach[0];
+								$attach_id = $attach->ID;
+							}
+						}
+					}
+
+					if ( ! empty( $attach_id ) ) {
+						$return['ids'][]   = $attach_id;
+						$return['files'][] = array( 'file' => $file_location );
 						if ( $comment_id > 0 ) {
 							add_comment_meta( $comment_id, 'attachment', $attach_id );
 						}
@@ -1127,8 +1153,11 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			/* end assignee toogle code */
 
 			$uploaded = $this->add_attachment_to_post( $uploaded, $comment_post_ID, $comment_id );
+
 			if ( ! empty( $uploaded['files'] ) ){
 				$uploaded = $uploaded['files'];
+			} else {
+				$uploaded = array();
 			}
 
 			global $threadPostId;
@@ -1464,26 +1493,6 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$commenttime     = current_time( 'mysql', 1 );
 				//$commentdata['comment_date_gmt'] = current_time( 'mysql', 1 );
 			}
-
-		/*	$uploaded = array();
-			if ( $_FILES ) {
-				$attachment = $_FILES['attachemntlist'];
-				foreach ( $attachment['name'] as $key => $value ) {
-					if ( $attachment['name'][ $key ] ) {
-						$file = array(
-							'name'     => $attachment['name'][ $key ],
-							'type'     => $attachment['type'][ $key ],
-							'tmp_name' => $attachment['tmp_name'][ $key ],
-							'error'    => $attachment['error'][ $key ],
-							'size'     => $attachment['size'][ $key ],
-						);
-						$uploaded[] = Rt_HD_Offering_Support::insert_attachment( $file );
-					}
-				}
-			}*/
-
-//			$uploaded = array_filter( $uploaded );
-
 			$allemail = array();
 			$dndEmails = array();
 			$subscriber = array();
@@ -1683,7 +1692,11 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					}
 				}
 				$uploaded = $this->add_attachment_to_post( $uploaded, $comment_post_ID, $_POST['comment_id'] );
-				$uploaded = $uploaded['files'];
+				if ( ! empty( $uploaded['files'] ) ){
+					$uploaded = $uploaded['files'];
+				} else {
+					$uploaded = array();
+				}
 			}
 
 			$rt_hd_email_notification->notification_followup_updated( $comment, get_current_user_id(),$old_privacy, $comment_privacy, $oldCommentBody, $commentdata[ 'comment_content' ] );
