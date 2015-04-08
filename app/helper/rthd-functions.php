@@ -1506,22 +1506,22 @@ function rthd_get_default_email_template( $key = '' , $all = false ){
 
 
 	// Ticket template default body
-	$redux['rthd_email_template_followup_add'] = 'New Followup Added by <strong>{followup_author}</strong><hr style="color: #DCEAF5;" /><div style="display: inline-block">{followup_content}</div>';
-	$redux['rthd_email_template_followup_add_private'] = '<br /> A private followup has been added by <strong>{followup_author}</strong>. Please go to ticket to view content.';
-	$redux['rthd_email_template_followup_deleted_private'] = 'A Private followup is deleted by <Strong>{followup_deleted_by}</Strong>';
-	$redux['rthd_email_template_followup_deleted'] = 'A Followup is deleted by <Strong>{followup_deleted_by}</Strong><hr style="color: #DCEAF5;" /><div  style="display: inline-block">{followup_content}</div>';
-	$redux['rthd_email_template_followup_updated_private'] = '<div><br /> A <strong>private</strong> followup has been edited by <strong>{followup_updated_by}</strong>. Please go to ticket to view content.</div> {visibility_diff}';
-	$redux['rthd_email_template_followup_updated'] = '<div> A Followup Updated by <strong>{followup_updated_by}.</strong></div> <br/><div> The changes are as follows: </div><br/> {visibility_diff} {followup_diff}';
-	$redux['rthd_email_template_new_ticket_created_author'] = 'Thank you for opening a new support ticket. We will look into your request and respond as soon as possible.<br/>{ticket_body}';
-	$redux['rthd_email_template_new_ticket_created_contacts'] = 'A new support ticket created by <strong> {ticket_author} </strong>. You have been subscribed to this ticket.<br/>{ticket_body}';
-	$redux['rthd_email_template_new_ticket_created_group_notification'] = 'A new support ticket created by <strong> {ticket_author} </strong>. <br/>Ticket Assigned to <strong>{ticket_assignee}</strong> <br/>{ticket_offerings} {ticket_body}';
-	$redux['rthd_email_template_new_ticket_created_assignee'] = 'A new support ticket created by <strong> {ticket_author} </strong> is assigned to you. <br/></strong>{ticket_offerings} {ticket_body}';
-	$redux['rthd_email_template_new_ticket_created_subscriber'] = 'A new support ticket created by <strong>{ticket_author}</strong>. You have been subscribed to this ticket. <br/>Ticket Assigned to <strong>{ticket_assignee}</strong>{ticket_offerings} {ticket_body}';
-	$redux['rthd_email_template_ticket_subscribed'] = '{ticket_subscribers} been subscribed to this ticket';
-	$redux['rthd_email_template_ticket_unsubscribed'] = '{ticket_unsubscribers} been un-subscribed from this ticket';
-	$redux['rthd_email_template_ticket_reassigned_old_assignee'] = 'You are no longer responsible for this ticket.';
-	$redux['rthd_email_template_ticket_reassigned_new_assignee'] = 'A ticket is reassigned to {new_ticket_assignee}.';
-	$redux['rthd_email_template_ticket_updated'] = '<br /> Ticket updated by : <strong>{ticket_updated_by}</strong><br/>. {ticket_diference}';
+	$redux['rthd_email_template_followup_add'] = '<div>New Followup Added by <strong>{followup_author}</strong></div><hr style="color: #DCEAF5;" /><div style="display: inline-block;">{followup_content}</div>';
+	$redux['rthd_email_template_followup_add_private'] = '<div>A private followup has been added by <strong>{followup_author}</strong>. Please go to ticket to view content. </div>';
+	$redux['rthd_email_template_followup_deleted_private'] = '<div>A Private followup is deleted by <Strong>{followup_deleted_by}</Strong></div>';
+	$redux['rthd_email_template_followup_deleted'] = '<div>A Followup is deleted by <Strong>{followup_deleted_by}</Strong></div><hr style="color: #DCEAF5;" /><div  style="display: inline-block;">{followup_content}</div>';
+	$redux['rthd_email_template_followup_updated_private'] = '<div>A <strong>private</strong> followup has been edited by <strong>{followup_updated_by}</strong>. Please go to ticket to view content.</div> <div style="display: inline-block;">{visibility_diff}</div>';
+	$redux['rthd_email_template_followup_updated'] = '<div>A Followup Updated by <strong>{followup_updated_by}.</strong></div><div> The changes are as follows: </div><div style="display: inline-block;">{visibility_diff}</div> <div style="display: inline-block;">{followup_diff}</div>';
+	$redux['rthd_email_template_new_ticket_created_author'] = '<div>Thank you for opening a new support ticket. We will look into your request and respond as soon as possible.</div> <div style="display: inline-block;">{ticket_body}</div>';
+	$redux['rthd_email_template_new_ticket_created_contacts'] = '<div>A new support ticket created by <strong> {ticket_author} </strong>. You have been subscribed to this ticket.</div><div style="display: inline-block;">{ticket_body}</div>';
+	$redux['rthd_email_template_new_ticket_created_group_notification'] = '<div>A new support ticket created by <strong> {ticket_author} </strong>. </div> <div>Ticket Assigned to <strong>{ticket_assignee}</strong> </div><div>{ticket_offerings}</div> <div style="display: inline-block;">{ticket_body}</div>';
+	$redux['rthd_email_template_new_ticket_created_assignee'] = '<div>A new support ticket created by <strong> {ticket_author} </strong> is assigned to you. </strong></div><div>{ticket_offerings}</div> <div style="display: inline-block;" >{ticket_body} </div>';
+	$redux['rthd_email_template_new_ticket_created_subscriber'] = '<div>A new support ticket created by <strong>{ticket_author}</strong>. You have been subscribed to this ticket. </div><div>Ticket Assigned to <strong>{ticket_assignee}</strong></div><div>{ticket_offerings}</div><div style="display: inline-block;">{ticket_body}</div> ';
+	$redux['rthd_email_template_ticket_subscribed'] = '<div>{ticket_subscribers} been subscribed to this ticket</div>';
+	$redux['rthd_email_template_ticket_unsubscribed'] = '<div>{ticket_unsubscribers} been un-subscribed from this ticket</div>';
+	$redux['rthd_email_template_ticket_reassigned_old_assignee'] = '<div>You are no longer responsible for this ticket.</div>';
+	$redux['rthd_email_template_ticket_reassigned_new_assignee'] = '<div>A ticket is reassigned to {new_ticket_assignee}.</div>';
+	$redux['rthd_email_template_ticket_updated'] = '<div>Ticket updated by : <strong>{ticket_updated_by}</strong>.</div><div style="display: inline-block;;">{ticket_diference}</div>';
 
 	if ( ! empty( $key ) && isset( $redux[ $key ] ) ){
 		return $redux[ $key ];

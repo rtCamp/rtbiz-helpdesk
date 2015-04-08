@@ -119,6 +119,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 						) ); //remove hook for add addon specific folder for attachment
 						$attachment_ids[ ] = $attach_id;
 						add_post_meta( $attach_id, '_wp_attached_file', $upload[ 'file' ] );
+						add_post_meta( $attach_id, '_file_hash', md5_file( $upload[ 'file' ] ) );
 						if ( ! empty( $_POST['followup_id'] ) && ! empty( $_POST['followup_ticket_unique_id'] ) ){
 							add_post_meta( $comment_post_ID, '_rtbiz_hd_attachment_hash', md5_file( $upload[ 'file' ] ) );
 							add_comment_meta( $_POST['followup_id'], 'attachment', $attach_id );
@@ -507,6 +508,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 								'custom_upload_dir'
 							) );//remove hook for add addon specific folder for attachment
 							add_post_meta( $attach_id, '_wp_attached_file', $file_location );
+							add_post_meta( $attach_id, '_file_hash', md5_file( $upload[ 'file' ] ) );
 						}
 						$return['ids'][] = $attach_id;
 						$return['files'][] = array( 'file'=> $file_location );

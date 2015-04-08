@@ -569,6 +569,8 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 		 * Display custom views along with CPT status
 		 *
 		 * @param $views
+		 *
+		 * @return array
 		 */
 		public function display_custom_views( $views ) {
 
