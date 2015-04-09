@@ -57,7 +57,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 		 */
 		function init_globals() {
 
-			global  $rt_hd_mail_acl_model, $rt_hd_ticket_history_model, $rthd_form, $rt_hd_reports, $rt_hd_attributes, $rt_hd_dashboard, $rt_hd_module, $rt_hd_cpt_tickets, $rt_hd_acl, $rt_hd_accounts, $rt_hd_contacts, $rt_hd_tickets_operation, $rt_hd_email_notification, $rt_hd_gravity_form_importer, $rt_hd_user_settings, $rt_hd_logs, $rt_hd_auto_response, $rt_hd_ticket_index_model;
+			global  $rt_hd_mail_acl_model, $rt_hd_ticket_history_model, $rthd_form, $rt_hd_reports, $rt_hd_attributes, $rt_hd_dashboard, $rt_hd_module, $rt_hd_cpt_tickets, $rt_hd_acl, $rt_hd_accounts, $rt_hd_contacts, $rt_hd_tickets_operation, $rt_hd_email_notification, $rt_hd_gravity_form_importer, $rt_hd_logs, $rt_hd_auto_response, $rt_hd_ticket_index_model;
 
 			//Model class init
 			$rt_hd_mail_acl_model               = new Rt_HD_Mail_ACL_Model();
@@ -89,7 +89,6 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			$rt_hd_import_operation                = new Rt_HD_Import_Operation();
 
 			$rt_hd_gravity_form_importer = new Rt_HD_Gravity_Form_Importer();
-			$rt_hd_user_settings         = new Rt_HD_User_Settings();
 			$rt_hd_logs                  = new Rt_HD_Logs();
 
 			$rt_hd_offering_support = new Rt_HD_Offering_Support();
