@@ -1088,7 +1088,7 @@ function rthd_wp_new_user_notification($user_id, $plaintext_pass = '') {
 		return;
 
 	$settings = rthd_get_redux_settings();
-	$module_label = $settings['rthd_menu_label'];
+	$module_label = ! empty( $settings['rthd_menu_label'] ) ?  $settings['rthd_menu_label']: 'Helpdesk' ;
 
 	// Generate something random for a password reset key.
 	$key = wp_generate_password( 20, false );
