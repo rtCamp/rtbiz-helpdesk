@@ -98,7 +98,7 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 				}
 			}
 
-			if( isset( $_GET['page'] ) && $_GET['page'] == 'rthd-rtbiz_hd_ticket-dashboard')
+			if( isset( $_GET['page'] ) && $_GET['page'] == 'rthd-' . Rt_HD_Module::$post_type . '-dashboard' )
 				wp_enqueue_style( 'rthd_dashboard_css', RT_HD_URL . 'app/assets/css/dashboard.css', array(), RT_HD_VERSION );
 
 			if ( ! wp_script_is( 'jquery-ui-progressbar' ) ) {

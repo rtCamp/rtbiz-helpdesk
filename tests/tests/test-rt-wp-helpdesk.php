@@ -34,7 +34,6 @@ class test_RT_WP_Help_desk extends RT_WP_TestCase {
 
 
 		$this->assertTrue( class_exists( 'Rt_Form' ), 'Class Rt_Form does not exist' );
-		$this->assertTrue( class_exists( 'Rt_Helpdesk_Taxonomy_Metadata\Taxonomy_Metadata' ), 'Class Rt_Helpdesk_Taxonomy_Metadata\Taxonomy_Metadata does not exist' );
 
 		$this->assertTrue( class_exists( 'Rt_HD_Attributes' ), 'Class Rt_HD_Attributes does not exist' );
 		$this->assertTrue( class_exists( 'Rt_HD_Module' ), 'Class Rt_HD_Module does not exist' );
@@ -53,7 +52,6 @@ class test_RT_WP_Help_desk extends RT_WP_TestCase {
 		$this->assertTrue( class_exists( 'Rt_HD_Import_Operation' ), 'Class Rt_HD_Import_Operation does not exist' );
 
 		$this->assertTrue( class_exists( 'Rt_HD_Gravity_Form_Importer' ), 'Class Rt_HD_Gravity_Form_Importer does not exist' );
-		$this->assertTrue( class_exists( 'Rt_HD_User_Settings' ), 'Class Rt_HD_User_Settings does not exist' );
 		$this->assertTrue( class_exists( 'Rt_HD_Logs' ), 'Class Rt_HD_Logs does not exist' );
 
 		$this->assertTrue( class_exists( 'Rt_HD_Offering_Support' ), 'Class Rt_HD_Offering_Support does not exist' );
@@ -85,4 +83,3 @@ class test_RT_WP_Help_desk extends RT_WP_TestCase {
 		$this->assertTrue( rthd_check_plugin_dependecy(), 'rtbiz depend function not exist' );
 	}
 }
- 

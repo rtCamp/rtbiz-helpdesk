@@ -41,7 +41,34 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 
 			add_action( 'wp_ajax_rthd_get_account_contacts', array( $this, 'get_account_contacts_ajax' ) );
 			add_action( 'wp_ajax_rthd_add_contact', array( $this, 'add_new_contact_ajax' ) );
+			add_filter( 'rt_biz_contact_meta_fields', array( $this, 'rthd_add_setting_to_rtbiz_user' ), 10, 1 );
+
 		}
+
+		function rthd_add_setting_to_rtbiz_user( $fields ){
+			if ( rthd_get_redux_adult_filter() ) {
+				$fields[ ] = array(
+					'key'         => 'rthd_contact_adult_filter',
+					'text'        => __( 'Don\'t show Adult content' ),
+					'label'       => __( 'Helpdesk Content Preference' ),
+					'type'        => 'checkbox',
+					'name'        => 'contact_meta[rthd_contact_adult_filter]',
+					'id'          => 'rthd_contact_adult_filter',
+					'category'    => 'Helpdesk',
+				);
+			};
+			$fields[] = array(
+				'key' => 'rthd_receive_notification',
+				'text' => __( 'Turn Off Event Notification' ),
+				'label' => __( 'Helpdesk Notification Preference' ),
+				'type' => 'checkbox',
+				'name' => 'contact_meta[rthd_receive_notification]',
+				'id' => 'rthd_receive_notification',
+				'category' => 'Helpdesk',
+			);
+			return $fields;
+		}
+
 
 		/**
 		 * Create custom column 'Tickets' for Contacts taxonomy

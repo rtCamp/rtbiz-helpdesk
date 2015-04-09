@@ -25,7 +25,6 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 	 * Class Rt_HD_Tickets
 	 * HD : Help Desk
 	 * This class is for tickets related functions
-	 * todo:what this function does ?
 	 *
 	 * @since rt-Helpdesk 0.1
 	 */
@@ -73,8 +72,88 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			add_action( 'wp_ajax_front_end_assignee_change', array( $this, 'front_end_assignee_change' ) );
 			add_action( 'wp_ajax_front_end_ticket_watch_unwatch', array( $this, 'front_end_ticket_watch_unwatch' ) );
 			add_action( 'wp_ajax_rt_hd_add_subscriber_email', array( $this, 'rt_hd_add_subscriber_email' ) );
+			add_action( 'wp_ajax_rthd_quick_download', array( $this, 'rthd_quick_download' ) );
+			add_action( 'wp_ajax_nopriv_rthd_quick_download', array( $this, 'rthd_quick_download' ) );
+			add_action( 'wp_ajax_nopriv_rthd_upload_attachment', array( $this, 'rthd_upload_attachment' ) );
+			add_action( 'wp_ajax_rthd_upload_attachment', array( $this, 'rthd_upload_attachment' ) );
+			add_action( 'wp_ajax_rthd_check_duplicate_followup', array( $this, 'rthd_check_duplicate_followup' ) );
+			add_action( 'wp_ajax_nopriv_rthd_check_duplicate_followup', array( $this, 'rthd_check_duplicate_followup' ) );
 		}
 
+		/**
+		 *  Check followup duplicate
+		 */
+		function rthd_check_duplicate_followup(){
+			$return_data= array( 'status' => false );
+			if ( ! empty( $_POST['followup_content'] ) && ! empty( $_POST['followup_ticket_unique_id'] ) ){
+				global $signature;
+				$rthd_ticket = $this->get_ticket_from_ticket_unique_id( $_POST['followup_ticket_unique_id'] );
+				$comment_post_ID = $rthd_ticket->ID;
+				$commenttime     = current_time( 'mysql', 1 );
+				$d               = new DateTime( $commenttime );
+				$UTC             = new DateTimeZone( 'UTC' );
+				$d->setTimezone( $UTC );
+				$timeStamp      = $d->getTimestamp();
+				$commentDate    = gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) + ( get_option( 'gmt_offset' ) * 3600 ) ) );
+				$comment_content_old =  $_POST['followup_content'];
+				$comment_content     = str_replace( $signature, '', $_POST['followup_content'] );
+				$checkDupli = $this->check_duplicate_comment( $comment_post_ID, $commentDate, $comment_content, $comment_content_old );
+				if ( false !== $checkDupli ) {
+					$return_data['isDuplicate']= true;
+				} else {
+					$return_data['isDuplicate']= false;
+				}
+				$return_data['status']= true;
+			}
+			echo json_encode( $return_data );
+			die();
+		}
+
+		/**
+		 * For create attachment
+		 */
+		function rthd_upload_attachment(){
+			$response = array();
+			if ( $_FILES ) {
+				$comment_post_ID = '';
+				if ( ! empty( $_POST['followup_ticket_unique_id'] ) ){
+					$rthd_ticket = $this->get_ticket_from_ticket_unique_id( $_POST['followup_ticket_unique_id'] );
+					$comment_post_ID = $rthd_ticket->ID;
+				}
+				$attachment = $_FILES['file'];
+				$uploaded[] = Rt_HD_Offering_Support::insert_attachment( $attachment );
+				$attachments = $this->add_attachment_to_post( $uploaded, $comment_post_ID );
+				if ( ! empty( $attachments['ids'] ) ){
+					$response['attach_ids'] = $attachments['ids'];
+				} else {
+					$response['attach_ids'] = array();
+				}
+				$response['status'] = true;
+				echo json_encode( $response );
+				die();
+			}
+		}
+
+		/**
+		 * For quick download link
+		 */
+		function rthd_quick_download(){
+			if ( ! empty( $_POST['url'] ) ) {
+				$file = $_POST['url'] ;
+				header( 'Content-Type: octet-stream' );
+				header( 'Content-Disposition: attachment; filename="' . basename( $file ) . '"' );
+				header( 'Expires: 0' );
+				header( 'Cache-Control: must-revalidate, post-check=0, pre-check=0' );
+				header( 'Pragma: public' );
+				header( 'Content-Length: ' . filesize( $file ) );
+				readfile( $file );
+				die();
+			}
+		}
+
+		/**
+		 *
+		 */
 		function rt_hd_add_subscriber_email(){
 			global $rt_hd_email_notification;
 			$response = array();
@@ -300,7 +379,13 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 			$this->add_contacts_to_post( $allemail, $post_id );
 
-			$this->add_attachment_to_post( $uploaded, $post_id );
+			$uploaded = $this->add_attachment_to_post( $uploaded, $post_id );
+			if ( ! empty($uploaded['files'] ) ){
+				$uploaded = $uploaded['files'];
+			} else {
+				$uploaded = array();
+			}
+
 
 			update_post_meta( $post_id, '_rtbiz_hd_email', $senderEmail );
 			update_post_meta( $post_id, '_rtbiz_hd_email', $senderEmail );
@@ -375,39 +460,93 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 * @param      $uploaded
 		 * @param      $post_id
 		 * @param int  $comment_id
+		 *
+		 * @return array
 		 */
-		function add_attachment_to_post( $uploaded, $post_id, $comment_id = 0 ) {
+		function add_attachment_to_post( $uploaded, $post_id = '', $comment_id = 0 ) {
 			global $rt_hd_admin;
-			if ( isset( $uploaded ) && is_array( $uploaded ) ) {
+			$return = array();
+			if ( isset( $uploaded ) ) {
 
 				foreach ( $uploaded as $upload ) {
 
-					$post_attachment_hashes = get_post_meta( $post_id, '_rtbiz_hd_attachment_hash' );
-					if ( empty( $post_attachment_hashes ) || ! in_array( md5_file( $upload['file'] ), $post_attachment_hashes ) ) {
-						//$uploaded["filename"]
-						$attachment = array(
-							'post_title'     => $upload['filename'],
-							'image_alt'      => $upload['filename'],
-							'post_content'   => '',
-							'post_excerpt'   => '',
-							'post_parent'    => $post_id,
-							'post_mime_type' => $this->get_mime_type_from_extn( $upload['extn'] ),
-							//'guid'           => $upload['url'],
-						);
-						add_filter( 'upload_dir', array( $rt_hd_admin, 'custom_upload_dir' ) );//added hook for add addon specific folder for attachment
-						$attach_id  = wp_insert_attachment( $attachment );
-						remove_filter( 'upload_dir', array( $rt_hd_admin, 'custom_upload_dir' ) );//remove hook for add addon specific folder for attachment
+					//Postid is null when support page requested
+					$post_attachment_hashes = '';
+					if ( ! empty( $post_id ) ){
+						$post_attachment_hashes = get_post_meta( $post_id, '_rtbiz_hd_attachment_hash' );
+					}
 
-						add_post_meta( $attach_id, '_wp_attached_file', $upload['file'] );
-						add_post_meta( $post_id, '_rtbiz_hd_attachment_hash', md5_file( $upload['file'] ) );
-						// if hash is not same do not store url to comment meta as we do not store duplicate attachments
+					$file_location = null;
+					if ( !is_array( $upload ) ){
+						$file_location = get_attached_file( $upload );
+					} else {
+						$file_location = $upload['file'];
+					}
+
+					if ( empty( $post_attachment_hashes ) || ! in_array( md5_file( $file_location ), $post_attachment_hashes ) ) {
+						if ( ! is_array( $upload ) ){
+							$attachment = get_post( $upload );
+							if ( ! empty( $post_id ) && $attachment->post_parent != $post_id ){
+								$attachment->post_parent = $post_id;
+								wp_update_post( $attachment );
+								add_post_meta( $post_id, '_rtbiz_hd_attachment_hash', md5_file( $file_location ) );
+							}
+							$attach_id = $upload;
+						} else {
+
+							$attachment = array(
+								'post_title'     => $upload[ 'filename' ],
+								'image_alt'      => $upload[ 'filename' ],
+								'post_content'   => '',
+								'post_excerpt'   => '',
+								'post_parent'    => ! empty( $post_id ) ? $post_id : '',
+								'post_mime_type' => $this->get_mime_type_from_extn( $upload[ 'extn' ] ),
+								'guid'           => $upload[ 'url' ],
+							);
+							add_filter( 'upload_dir', array(
+								$rt_hd_admin,
+								'custom_upload_dir'
+							) );//added hook for add addon specific folder for attachment
+							$attach_id = wp_insert_attachment( $attachment );
+							remove_filter( 'upload_dir', array(
+								$rt_hd_admin,
+								'custom_upload_dir'
+							) );//remove hook for add addon specific folder for attachment
+							add_post_meta( $attach_id, '_wp_attached_file', $file_location );
+							add_post_meta( $attach_id, '_rthd_file_hash', md5_file( $upload[ 'file' ] ) );
+							if ( ! empty( $post_id ) ){
+								add_post_meta( $post_id, '_rtbiz_hd_attachment_hash', md5_file( $file_location ) );
+							}
+						}
+					} else {
+						if ( !is_array( $upload ) ){
+							$attach_id = $upload;
+						}else{
+							$attach = get_posts( array(
+								                     'post_type' => 'attachment',
+								                     'post_status' => 'any',
+								                     'posts_per_page' => -1,
+								                     'post_parent' => $post_id,
+								                     'meta_key'     => '_rthd_file_hash',
+								                     'meta_value'   => md5_file( $file_location ),
+							                     ));
+							if ( ! empty( $attach ) && ! empty( $attach[0] ) ){
+								$attach = $attach[0];
+								$attach_id = $attach->ID;
+							}
+						}
+					}
+
+					if ( ! empty( $attach_id ) ) {
+						$return['ids'][]   = $attach_id;
+						$return['files'][] = array( 'file' => $file_location );
 						if ( $comment_id > 0 ) {
 							add_comment_meta( $comment_id, 'attachment', $attach_id );
 						}
 					}
-
 				}
 			}
+			return $return;
 		}
 
 		/**
@@ -864,7 +1003,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		public function insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, $uploaded, $allemails = array(), $dndEmails, $messageid = '', $inreplyto = '', $references = '', $subscriber = array(), $originalBody = '', $comment_type = '10', $comment_parent = 0, $keep_status = false ) {
+		public function insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, $uploaded, $allemails = array(), $dndEmails, $messageid = '', $inreplyto = '', $references = '', $subscriber = array(), $originalBody = '', $comment_type = '10', $comment_parent = 0, $keep_status = false, $force_skip_duplicate_check = false ) {
 
 			$post_type       = get_post_type( $comment_post_ID );
 			$ticketModel     = new Rt_HD_Ticket_Model();
@@ -922,19 +1061,20 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			if ( $this->check_duplicate_from_message_id( $messageid ) ) {
 				return false;
 			}
-			$checkDupli = $this->check_duplicate_comment( $comment_post_ID, $commentDate, $comment_content, $comment_content_old );
-			if ( false !== $checkDupli ) {
-				if ( '' != $messageid ) {
-					add_comment_meta( $checkDupli, '_messageid', $messageid );
+			if ( ! $force_skip_duplicate_check ) {
+				$checkDupli = $this->check_duplicate_comment( $comment_post_ID, $commentDate, $comment_content, $comment_content_old );
+				if ( false !== $checkDupli ) {
+					if ( '' != $messageid ) {
+						add_comment_meta( $checkDupli, '_messageid', $messageid );
+					}
+					if ( '' != $inreplyto ) {
+						add_comment_meta( $checkDupli, '_inreplyto', $inreplyto );
+					}
+					if ( '' != $references ) {
+						add_comment_meta( $checkDupli, '_references', $references );
+					}
+					return false;
 				}
-				if ( '' != $inreplyto ) {
-					add_comment_meta( $checkDupli, '_inreplyto', $inreplyto );
-				}
-				if ( '' != $references ) {
-					add_comment_meta( $checkDupli, '_references', $references );
-				}
-
-				return false;
 			}
 
 			$comment_id = wp_insert_comment( $data );
@@ -1007,13 +1147,18 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			if ( $autoAssingeFlag && $rt_hd_email_notification->is_internal_user( $comment_author_email ) ){
 				//check on 'on_first_followup' selected and its first staff followup || select 'on_any_followup'
 				if ( ( 'on_first_followup' == $autoAssignEvent && $isFirstStaffComment ) || 'on_any_followup' == $autoAssignEvent ){
-					wp_update_post( array( 'ID'=>$comment_post_ID ,'post_author'=>$userid ) );
+					wp_update_post( array( 'ID' => $comment_post_ID ,'post_author' => $userid ) );
 				}
 			}
 			/* end assignee toogle code */
 
-			$this->add_attachment_to_post( $uploaded, $comment_post_ID, $comment_id );
+			$uploaded = $this->add_attachment_to_post( $uploaded, $comment_post_ID, $comment_id );
 
+			if ( ! empty( $uploaded['files'] ) ){
+				$uploaded = $uploaded['files'];
+			} else {
+				$uploaded = array();
+			}
 
 			global $threadPostId;
 			if ( ! isset( $threadPostId ) ) {
@@ -1067,8 +1212,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 */
 		public function check_duplicate_comment( $comment_post_ID, $comment_date, $comment_content, $comment_content_old ) {
 			global $wpdb;
-			//todo : 00:00:00 replace with 00:10:00 before live the chanages
-			$sql    = "select * from $wpdb->comments where  comment_post_id=%d  and comment_date between subtime(%s,'00:00:00') and addtime(%s,'00:00:00')";
+			$sql    = "select * from $wpdb->comments where  comment_post_id=%d  and comment_date between subtime(%s,'00:10:00') and addtime(%s,'00:10:00')";
 			$sql    = $wpdb->prepare( $sql, $comment_post_ID, $comment_date, $comment_date );
 			$result = $wpdb->get_results( $sql );
 			global $signature;
@@ -1349,26 +1493,6 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$commenttime     = current_time( 'mysql', 1 );
 				//$commentdata['comment_date_gmt'] = current_time( 'mysql', 1 );
 			}
-
-			$uploaded = array();
-			if ( $_FILES ) {
-				$attachment = $_FILES['attachemntlist'];
-				foreach ( $attachment['name'] as $key => $value ) {
-					if ( $attachment['name'][ $key ] ) {
-						$file = array(
-							'name'     => $attachment['name'][ $key ],
-							'type'     => $attachment['type'][ $key ],
-							'tmp_name' => $attachment['tmp_name'][ $key ],
-							'error'    => $attachment['error'][ $key ],
-							'size'     => $attachment['size'][ $key ],
-						);
-						$uploaded[] = Rt_HD_Offering_Support::insert_attachment( $file );
-					}
-				}
-			}
-
-			$uploaded = array_filter( $uploaded );
-
 			$allemail = array();
 			$dndEmails = array();
 			$subscriber = array();
@@ -1386,7 +1510,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 						if ( ! preg_match( '/'.str_replace('*','\/*',$email).'/',  $comment_author_email ) ){
 							$allemail[]= array( 'address' => $comment_author_email, 'name' => $comment_author, 'key' => 'to', );
 						}else{
-							$returnArray['message'] = 'ERROR: You are blacklisted fot this system';
+							$returnArray['message'] = 'ERROR: You are blacklisted for this system';
 							echo json_encode( $returnArray );
 							die( 0 );
 						}
@@ -1402,42 +1526,51 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			if ( isset($_POST['rthd_keep_status']) && !empty($_POST['rthd_keep_status']) && $_POST['rthd_keep_status'] == 'true'){
 				$keep_status = true;
 			}
+			$uploaded = explode( ',', $_POST['followup_attachments'] );
+			$force_duplicate = false;
+			if ( ! empty( $_POST['followup_duplicate_force'] ) ){
+				$force_duplicate = true;
+			}
+			$comment_ID = $this->insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, array_filter( $uploaded ), $allemail, $dndEmails, '', '', '', $subscriber, '', $comment_type, $comment_parent, $keep_status, $force_duplicate);
 
-			$comment_ID = $this->insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, $uploaded, $allemail, $dndEmails, '', '', '', $subscriber, '', $comment_type, $comment_parent, $keep_status);
+			if ( empty( $comment_ID ) ){
+				$returnArray['status'] = false;
+				$returnArray['message'] = 'Duplicate followup!';
+			} else {
+				$returnArray['status'] = true;
+				$returnArray['comment_count'] = get_comments(
+					array(
+						'order'     => 'DESC',
+						'post_id'   => $comment_post_ID,
+						'post_type' => $rthd_ticket->post_type,
+						'count'     => true,
+					) );
 
-			$returnArray['status'] = true;
-
-			$returnArray['comment_count'] = get_comments(
-				array(
-					'order'     => 'DESC',
-					'post_id'   => $comment_post_ID,
-					'post_type' => $rthd_ticket->post_type,
-					'count'     => true,
-				) );
-
-			$returnArray['comment_id'] = $comment_ID;
-			$returnArray['private']       = $comment_type;
-			$comment_user  = get_user_by( 'id', $userid );
-			$comment_render_type = 'left';
-			$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
-			if ( ! empty( $comment_user ) ) {
-				if ( $comment_user->has_cap( $cap ) ) {
-					$comment_render_type = 'right';
+				$returnArray['comment_id'] = $comment_ID;
+				$returnArray['private']       = $comment_type;
+				$comment_user  = get_user_by( 'id', $userid );
+				$comment_render_type = 'left';
+				$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
+				if ( ! empty( $comment_user ) ) {
+					if ( $comment_user->has_cap( $cap ) ) {
+						$comment_render_type = 'right';
+					}
 				}
+				$user_edit = current_user_can( $cap ) || ( get_current_user_id() == $userid );
+				$comment = get_comment( $comment_ID );
+				$returnArray['comment_content'] = rthd_render_comment( $comment, $user_edit, $comment_render_type, false );
+				$returnArray['assign_value'] = get_post_field( 'post_author', $comment_post_ID, 'raw' );
+				if ( current_user_can( $cap ) ){
+					$commentlink = '<a href="'.rthd_biz_user_profile_link($comment->comment_author_email).'" >'.$comment->comment_author.'</a>';
+					$returnArray['post_status'] = get_post_field( 'post_status', $comment_post_ID, 'raw' );
+				}
+				else {
+					$commentlink = $comment->comment_author;
+					$returnArray['post_status'] = rthd_status_markup( get_post_field( 'post_status', $comment_post_ID, 'raw' ) );
+				}
+				$returnArray['last_reply'] ='<span title="Status"><strong>Last reply: </strong></span> <span class="rthd_attr_border rthd_view_mode"> '.esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . ' ago by ' . $commentlink .'</span>';
+
 			}
-			$user_edit = current_user_can( $cap ) || ( get_current_user_id() == $userid );
-			$comment = get_comment( $comment_ID );
-			$returnArray['comment_content'] = rthd_render_comment( $comment, $user_edit, $comment_render_type, false );
-			$returnArray['assign_value'] = get_post_field( 'post_author', $comment_post_ID, 'raw' );
-			if ( current_user_can( $cap ) ){
-				$commentlink = '<a href="'.rthd_biz_user_profile_link($comment->comment_author_email).'" >'.$comment->comment_author.'</a>';
-				$returnArray['post_status'] = get_post_field( 'post_status', $comment_post_ID, 'raw' );
-			}
-			else {
-				$commentlink = $comment->comment_author;
-				$returnArray['post_status'] = rthd_status_markup( get_post_field( 'post_status', $comment_post_ID, 'raw' ) );
-			}
-			$returnArray['last_reply'] ='<span title="Status"><strong>Last reply: </strong></span> <span class="rthd_attr_border rthd_view_mode"> '.esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . ' ago by ' . $commentlink .'</span>';
 			echo json_encode( $returnArray );
 			ob_end_flush();
 			die( 0 );
@@ -1558,7 +1691,12 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 						);
 					}
 				}
-				$this->add_attachment_to_post( $uploaded, $comment_post_ID, $_POST['comment_id'] );
+				$uploaded = $this->add_attachment_to_post( $uploaded, $comment_post_ID, $_POST['comment_id'] );
+				if ( ! empty( $uploaded['files'] ) ){
+					$uploaded = $uploaded['files'];
+				} else {
+					$uploaded = array();
+				}
 			}
 
 			$rt_hd_email_notification->notification_followup_updated( $comment, get_current_user_id(),$old_privacy, $comment_privacy, $oldCommentBody, $commentdata[ 'comment_content' ] );

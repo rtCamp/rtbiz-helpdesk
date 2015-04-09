@@ -470,11 +470,19 @@ function rthd_my_mail_from( $email ) {
 }
 
 // user notification preference
-function rthd_get_user_notification_preference( $user_id ) {
-	$pref = get_user_meta( $user_id, 'rthd_notification_pref', true );
+function rthd_get_user_notification_preference( $user_id, $email = '' ) {
+	if ( empty( $email ) ){
+		$user = get_user_by('id',$user_id);
+		$email = $user->user_email;
+	}
+	$post = rt_biz_get_contact_by_email($email);
+	if ( ! empty( $post[0] ) ) {
+		$pref = Rt_Entity::get_meta( $post[ 0 ]->ID, 'rthd_receive_notification', true );
+	}
+
+	//	$pref = get_user_meta( $user_id, 'rthd_notification_pref', true );
 	if ( empty( $pref ) ) {
-		update_user_meta( $user_id, 'rthd_notification_pref', 'yes' );
-		$pref = 'yes';
+		$pref = 'no';
 	}
 	return $pref;
 }
@@ -489,14 +497,20 @@ function rthd_get_redux_adult_filter(){
 }
 
 //adult content preference
-function rthd_get_user_adult_preference( $user_id ) {
-	$pref = get_user_meta( $user_id, 'rthd_adult_pref', true );
+function rthd_get_user_adult_preference( $user_id, $email = '' ) {
+	if ( empty( $email ) ){
+		$user = get_user_by( 'id', $user_id );
+		$email = $user->user_email;
+	}
+	$post = rt_biz_get_contact_by_email( $email );
+
+	if ( ! empty( $post[0] ) ){
+		$pref = Rt_Entity::get_meta( $post[0]->ID, 'rthd_contact_adult_filter', true);
+	}
+	//  Old adult pref meta key
+	//	$pref = get_user_meta( $user_id, 'rthd_adult_pref', true );
 	if ( empty( $pref ) ) {
 		$pref = 'no';
-		if ( user_can( $user_id, 'administrator' ) ){
-			$pref = 'yes';
-		}
-		update_user_meta( $user_id, 'rthd_adult_pref', $pref );
 	}
 	return $pref;
 }
@@ -1403,46 +1417,10 @@ function rthd_convert_into_useremail( $value ){
 }
 
 /*
- * get attachment id from attachment url
- *
- * Need to remove that function after attachment migration for comment
- * migration task : store attachment id instead of attachment url comment meta
- */
-function rthd_get_attachmet_by_url( $image_url, $post_id ) {
-	global $wpdb;
-	$attachment_id = false;
-
-	// If there is no url, return.
-	if ( '' == $image_url )
-		return;
-
-	// Get the upload directory paths
-	$upload_dir_paths = wp_upload_dir();
-
-	// Make sure the upload path base directory exists in the attachment URL, to verify that we're working with a media library image
-	if ( false !== strpos( $image_url, $upload_dir_paths['baseurl'] ) ) {
-
-		// If this is the URL of an auto-generated thumbnail, get the URL of the original image
-		$image_url = preg_replace( '/-\d+x\d+(?=\.(jpg|jpeg|png|gif)$)/i', '', $image_url );
-
-		// Remove the upload path base directory from the attachment URL
-		$image_url = str_replace( $upload_dir_paths['baseurl'] . '/', '', $image_url );
-
-		// Finally, run a custom database query to get the attachment ID from the modified attachment URL
-		$attachment_id = $wpdb->get_var( $wpdb->prepare( "SELECT wposts.ID FROM $wpdb->posts wposts, $wpdb->postmeta wpostmeta WHERE wposts.ID = wpostmeta.post_id AND wposts.post_parent = '%d'  AND wpostmeta.meta_key = '_wp_attached_file' AND wpostmeta.meta_value LIKE '%s' AND wposts.post_type = 'attachment'", $post_id ,'%'.$image_url ) );
-		if ( empty( $attachment_id ) ){
-			error_log("\n\n".var_export($image_url,true). ">>>> IMAGE URL \n", 3, "Migration-log.log");
-			error_log(var_export(sprintf( "SELECT wposts.ID FROM $wpdb->posts wposts, $wpdb->postmeta wpostmeta WHERE wposts.ID = wpostmeta.post_id AND wposts.post_parent = '%d'  AND wpostmeta.meta_key = '_wp_attached_file' AND wpostmeta.meta_value LIKE '%s' AND wposts.post_type = 'attachment'", $post_id ,'%'.$image_url ),true). ">>>> SQL \n", 3, "Migration-log.log");
-		}
-	}
-
-	return get_post($attachment_id);
-}
-
-/*
  * get attachment link with facybox
  */
-function rt_hd_get_attchment_link_with_fancybox( $attachment, $post_id = '' ){
+function rt_hd_get_attchment_link_with_fancybox( $attachment, $post_id = '', $echo = true ){
+	ob_start();
 	$attachment_url = wp_get_attachment_url( $attachment->ID );
 	$original_url = $attachment_url;
 	$extn = rt_biz_get_attchment_extension( $attachment_url );
@@ -1462,6 +1440,12 @@ function rt_hd_get_attchment_link_with_fancybox( $attachment, $post_id = '' ){
 				<span title="<?php echo balanceTags( $attachment->post_title ); ?>"> 	<?php echo esc_attr( strlen( balanceTags( $attachment->post_title ) ) > 40 ? substr( balanceTags( $attachment->post_title ), 0, 40 ) . '...' : balanceTags( $attachment->post_title ) ); ?> </span>
 	</a>
 	<?php
+	$attachment_html = ob_get_clean();
+	if ( $echo ) {
+		echo $attachment_html ;
+	} else {
+		return $attachment_html ;
+	}
 }
 
 /**
@@ -1522,22 +1506,22 @@ function rthd_get_default_email_template( $key = '' , $all = false ){
 
 
 	// Ticket template default body
-	$redux['rthd_email_template_followup_add'] = 'New Followup Added by <strong>{followup_author}</strong><hr style="color: #DCEAF5;" /><div style="display: inline-block">{followup_content}</div>';
-	$redux['rthd_email_template_followup_add_private'] = '<br /> A private followup has been added by <strong>{followup_author}</strong>. Please go to ticket to view content.';
-	$redux['rthd_email_template_followup_deleted_private'] = 'A Followup is deleted by <Strong>{followup_deleted_by}</Strong>';
-	$redux['rthd_email_template_followup_deleted'] = 'A Followup is deleted by <Strong>{followup_deleted_by}</Strong><hr style="color: #DCEAF5;" /><div  style="display: inline-block">{followup_content}</div>';
-	$redux['rthd_email_template_followup_updated_private'] = '<div><br /> A <strong>private</strong> followup has been edited by <strong>{followup_updated_by}</strong>. Please go to ticket to view content.</div> {visibility_diff}';
-	$redux['rthd_email_template_followup_updated'] = '<div> A Followup Updated by <strong>{followup_updated_by}.</strong></div> <br/><div> The changes are as follows: </div><br/> {visibility_diff} {followup_diff}';
-	$redux['rthd_email_template_new_ticket_created_author'] = 'Thank you for opening a new support ticket. We will look into your request and respond as soon as possible.<br/>{ticket_body}';
-	$redux['rthd_email_template_new_ticket_created_contacts'] = 'A new support ticket created by <strong> {ticket_author} </strong>. You have been subscribed to this ticket.<br/>{ticket_body}';
-	$redux['rthd_email_template_new_ticket_created_group_notification'] = 'A new support ticket created by <strong> {ticket_author} </strong>. <br/>Ticket Assigned to <strong>{ticket_assignee}</strong>{ticket_offerings} {ticket_body}';
-	$redux['rthd_email_template_new_ticket_created_assignee'] = 'A new support ticket created by <strong> {ticket_author} </strong> is assigned to you. <br/></strong>{ticket_offerings} {ticket_body}';
-	$redux['rthd_email_template_new_ticket_created_subscriber'] = 'A new support ticket created by <strong>{ticket_author}</strong>. You have been subscribed to this ticket. <br/>Ticket Assigned to <strong>{ticket_assignee}</strong>{ticket_offerings} {ticket_body}';
-	$redux['rthd_email_template_ticket_subscribed'] = '{ticket_subscribers} been subscribed to this ticket';
-	$redux['rthd_email_template_ticket_unsubscribed'] = '{ticket_unsubscribers} been un-subscribed from this ticket';
-	$redux['rthd_email_template_ticket_reassigned_old_assignee'] = 'You are no longer responsible for this ticket.';
-	$redux['rthd_email_template_ticket_reassigned_new_assignee'] = 'A ticket is reassigned to {new_ticket_assignee}.';
-	$redux['rthd_email_template_ticket_updated'] = '<br /> Ticket updated by : <strong>{ticket_updated_by}</strong><br/>. {ticket_diference}';
+	$redux['rthd_email_template_followup_add'] = '<div>New Followup Added by <strong>{followup_author}</strong></div><hr style="color: #DCEAF5;" /><div style="display: inline-block;">{followup_content}</div>';
+	$redux['rthd_email_template_followup_add_private'] = '<div>A private followup has been added by <strong>{followup_author}</strong>. Please go to ticket to view content. </div>';
+	$redux['rthd_email_template_followup_deleted_private'] = '<div>A Private followup is deleted by <Strong>{followup_deleted_by}</Strong></div>';
+	$redux['rthd_email_template_followup_deleted'] = '<div>A Followup is deleted by <Strong>{followup_deleted_by}</Strong></div><hr style="color: #DCEAF5;" /><div  style="display: inline-block;">{followup_content}</div>';
+	$redux['rthd_email_template_followup_updated_private'] = '<div>A <strong>private</strong> followup has been edited by <strong>{followup_updated_by}</strong>. Please go to ticket to view content.</div> <div style="display: inline-block;">{visibility_diff}</div>';
+	$redux['rthd_email_template_followup_updated'] = '<div>A Followup Updated by <strong>{followup_updated_by}.</strong></div><div> The changes are as follows: </div><div style="display: inline-block;">{visibility_diff}</div> <div style="display: inline-block;">{followup_diff}</div>';
+	$redux['rthd_email_template_new_ticket_created_author'] = '<div>Thank you for opening a new support ticket. We will look into your request and respond as soon as possible.</div> <div style="display: inline-block;">{ticket_body}</div>';
+	$redux['rthd_email_template_new_ticket_created_contacts'] = '<div>A new support ticket created by <strong> {ticket_author} </strong>. You have been subscribed to this ticket.</div><div style="display: inline-block;">{ticket_body}</div>';
+	$redux['rthd_email_template_new_ticket_created_group_notification'] = '<div>A new support ticket created by <strong> {ticket_author} </strong>. </div> <div>Ticket Assigned to <strong>{ticket_assignee}</strong> </div><div>{ticket_offerings}</div> <div style="display: inline-block;">{ticket_body}</div>';
+	$redux['rthd_email_template_new_ticket_created_assignee'] = '<div>A new support ticket created by <strong> {ticket_author} </strong> is assigned to you. </strong></div><div>{ticket_offerings}</div> <div style="display: inline-block;" >{ticket_body} </div>';
+	$redux['rthd_email_template_new_ticket_created_subscriber'] = '<div>A new support ticket created by <strong>{ticket_author}</strong>. You have been subscribed to this ticket. </div><div>Ticket Assigned to <strong>{ticket_assignee}</strong></div><div>{ticket_offerings}</div><div style="display: inline-block;">{ticket_body}</div> ';
+	$redux['rthd_email_template_ticket_subscribed'] = '<div>{ticket_subscribers} been subscribed to this ticket</div>';
+	$redux['rthd_email_template_ticket_unsubscribed'] = '<div>{ticket_unsubscribers} been un-subscribed from this ticket</div>';
+	$redux['rthd_email_template_ticket_reassigned_old_assignee'] = '<div>You are no longer responsible for this ticket.</div>';
+	$redux['rthd_email_template_ticket_reassigned_new_assignee'] = '<div>A ticket is reassigned to {new_ticket_assignee}.</div>';
+	$redux['rthd_email_template_ticket_updated'] = '<div>Ticket updated by : <strong>{ticket_updated_by}</strong>.</div><div style="display: inline-block;;">{ticket_diference}</div>';
 
 	if ( ! empty( $key ) && isset( $redux[ $key ] ) ){
 		return $redux[ $key ];

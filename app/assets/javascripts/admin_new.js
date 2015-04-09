@@ -357,41 +357,165 @@ jQuery(document).ready(function() {
 	    },
         initAddNewFollowUp : function(){
 
-	        jQuery( "#savefollwoup" ).click( function () {
-		        var flagspinner = false;
-		        jQuery('#hdspinner' ).show();
-		        jQuery(this).attr('disabled','disabled');
-		        var followuptype = jQuery( "#followup-type" ).val();
+	        $ticket_unique_id = jQuery( '#ticket_unique_id' ).val();
+	        var uploadedfiles= [];
+	        var force_add_duplicate = false;
+	        var uploader = new plupload.Uploader({
+                 // General settings
+                 runtimes : 'html5,flash,silverlight,html4',
+                 browse_button : 'attachemntlist', // you can pass in id...
+                 url : ajaxurl,
+                 multipart : true,
+                 multipart_params : {'action': 'rthd_upload_attachment', 'followup_ticket_unique_id' : $ticket_unique_id },
+                 container: document.getElementById( 'attachment-container' ), // ... or DOM Element itself
 
-		        if ( ! jQuery( "#ticket_unique_id" ).val()) {
-			        alert('Please publish ticket before adding followup! :( ');
+                 // Resize images on client-side if we can
+                 //resize : { width : 320, height : 240, quality : 90 },
+
+                 filters : {
+                     max_file_size : '10mb'
+
+                     // Specify what files to browse for
+                     //mime_types: [
+                     //    {title : "Image files", extensions : "jpg,gif,png"},
+                     //    {title : "Zip files", extensions : "zip"}
+                     //]
+                 },
+
+                 flash_swf_url : 'Moxie.swf',
+                 silverlight_xap_url : 'Moxie.xap',
+
+                 // PreInit events, bound before the internal events
+
+                 init: {
+                     PostInit: function() {
+                         document.getElementById('followup-filelist').innerHTML = '';
+                         document.getElementById('savefollwoup').onclick = function() {
+                             if ( followupValidate() ) {
+                                 if ( uploader.files.length ) {
+                                     checkDuplicateFollowup();
+                                 } else {
+                                     uploader.start();
+                                 }
+                             }
+                         };
+                     },
+
+                     FilesAdded: function(up, files) {
+                         plupload.each(files, function(file) {
+                             document.getElementById('followup-filelist').innerHTML += '<div id="' + file.id + '"><a href="#" class="followup-attach-remove"> x </a> ' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
+                         });
+                     },
+
+                     FilesRemoved: function(up, files) {
+                         plupload.each(files, function(file) {
+                             jQuery('#'+file.id ).remove();
+                         });
+                     },
+
+                     UploadProgress: function(up, file) {
+                         document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+                     },
+
+                     Error: function(up, err) {
+                         document.getElementById('console').innerHTML += "\nError #" + err.code + ": " + err.message;
+                     },
+
+                     UploadComplete: function(){
+                         document.getElementById('followup-filelist').innerHTML = '';
+                         sendFollowup(force_add_duplicate);
+                         force_add_duplicate = false;
+                         uploadedfiles=[];
+                     },
+
+                     FileUploaded: function(up, file, info) {
+                         // Called when file has finished uploading
+                         var response = jQuery.parseJSON(info.response);
+                         if ( response.status ){
+                             uploadedfiles = uploadedfiles.concat(response.attach_ids);
+                         }
+                     }
+                 }
+             });
+	        uploader.init();
+
+	        jQuery(document).on('click','.followup-attach-remove', function( e ){
+		        e.preventDefault();
+		        uploader.removeFile(jQuery(this ).parent().attr("id"));
+	        });
+
+	        function followupValidate(){
+		        jQuery( '#hdspinner' ).show();
+		        //jQuery(this).attr('disabled','disabled');
+		        if ( ! jQuery( "#ticket_unique_id" ).val() ) {
+			        alert( 'Please publish ticket before adding followup! :( ' );
 			        jQuery( '#hdspinner' ).hide();
-			        jQuery(this).removeAttr('disabled');
+			        //jQuery(this).removeAttr('disabled');
 			        return false;
-		        };
+		        }
 		        if ( ! rthdAdmin.rthd_tinymce_get_content( 'followupcontent' ) ) {
 			        alert( "Please input followup." );
 			        jQuery( '#hdspinner' ).hide();
-			        jQuery(this).removeAttr('disabled');
+			        //jQuery(this).removeAttr('disabled');
 			        return false;
 		        }
+		        return true;
+	        }
+
+
+	        function checkDuplicateFollowup(){
 		        var formData = new FormData();
-		        formData.append("private_comment", jQuery('#add-private-comment').val());
-		        formData.append("followup_ticket_unique_id", jQuery('#ticket_unique_id').val());
-		        formData.append("post_type", jQuery('#followup_post_type').val());
-		        formData.append("action", 'rthd_add_new_followup_front');
-		        formData.append("followuptype", jQuery('#followuptype').val());
-		        formData.append("follwoup-time", jQuery('#follwoup-time').val());
-		        formData.append("followup_content", rthdAdmin.rthd_tinymce_get_content( 'followupcontent' ) );
-		        var increment = 0;
-		        jQuery('#rthd-followup-form input[type="file"]' ).each(function(i,allfiles){
-			        jQuery.each(allfiles.files, function(j, file) {
-				        formData.append('attachemntlist['+increment+']', file);
-				        increment++;
-			        });
-		        });
-		        if(jQuery('#rthd_keep_status')){
-			        formData.append("rthd_keep_status", jQuery('#rthd_keep_status').is(':checked'));
+		        formData.append( "followup_content", rthdAdmin.rthd_tinymce_get_content( 'followupcontent' ) );
+		        formData.append( "action", 'rthd_check_duplicate_followup' );
+		        formData.append( "followup_ticket_unique_id", jQuery( '#ticket_unique_id' ).val() );
+		        jQuery.ajax( {
+			                     url: ajaxurl,
+			                     dataType: "json",
+			                     type: 'POST',
+			                     data: formData,
+			                     cache: false,
+			                     contentType: false,
+			                     processData: false, //async: false, // no more page freezing
+			                     success: function ( data ) {
+				                     if ( data.status ) {
+					                     if ( data.isDuplicate ) {
+						                     var r = confirm( 'Duplicate followup! Do you still want to add it ? ' );
+						                     if ( r == true ) {
+							                     force_add_duplicate  = true;
+							                     uploader.start();
+						                     } else {
+							                     jQuery( '#hdspinner' ).hide();
+							                     jQuery( '#savefollwoup' ).removeAttr( 'disabled' );
+						                     }
+					                     } else {
+						                     uploader.start();
+					                     }
+				                     } else{
+					                     alert("something is wrong!");
+				                     }
+			                     }
+		                     });
+	        }
+
+
+	        function sendFollowup( force ){
+		        var followuptype = jQuery( "#followup-type" ).val();
+		        var formData = new FormData();
+		        formData.append( "private_comment", jQuery( '#add-private-comment' ).val() );
+		        formData.append( "followup_ticket_unique_id", jQuery( '#ticket_unique_id' ).val() );
+		        formData.append( "post_type", jQuery( '#followup_post_type' ).val() );
+		        formData.append( "action", 'rthd_add_new_followup_front' );
+		        formData.append( "followuptype", jQuery( '#followuptype' ).val() );
+		        formData.append( "follwoup-time", jQuery( '#follwoup-time' ).val() );
+		        formData.append( "followup_content", rthdAdmin.rthd_tinymce_get_content( 'followupcontent' ) );
+		        formData.append( "followup_attachments", uploadedfiles );
+
+		        if ( force ){
+			        formData.append('followup_duplicate_force', true);
+		        }
+
+		        if ( jQuery( '#rthd_keep_status' ) ) {
+			        formData.append( "rthd_keep_status", jQuery( '#rthd_keep_status' ).is( ':checked' ) );
 		        }
 		        jQuery.ajax( {
 			                     url: ajaxurl,
@@ -404,31 +528,34 @@ jQuery(document).ready(function() {
 			                     //async: false, // no more page freezing
 			                     success: function ( data ) {
 				                     if ( data.status ) {
-					                     var newcomment=data.comment_content;
+					                     jQuery( '#chat-UI' ).append( data.comment_content );
 					                     //console.log(newcomment);
-					                     jQuery('#chat-UI' ).append(newcomment);
-					                     rthdAdmin.rthd_tinymce_set_content( 'followupcontent', '' );
-					                     jQuery('#add-private-comment' ).val(10);
-					                     jQuery('#rthd-followup-form input[type="file"]').MultiFile('reset');
-					                     if (data.ticket_status=='answered'){
-                                             if(jQuery('#rthd_keep_status')){
-                                                 jQuery('#rthd_keep_status').parent().hide();
-                                             }
-                                         } else {
-	                                         if ( jQuery('#rthd_keep_status' ).length > 0 ) {
-		                                         jQuery('#rthd_keep_status' ).prop("checked",false);
-	                                         }
-                                         }
-				                     } else {
-					                     alert( data.message );
-				                     }
-				                     if (! flagspinner) {
+					                    rthdAdmin.rthd_tinymce_set_content( 'followupcontent', '' );
+					                     jQuery( '#add-private-comment' ).val( 10 );
+					                     uploadedfiles = [];
+					                     if ( data.ticket_status == 'answered' ) {
+						                     if ( jQuery( '#rthd_keep_status' ) ) {
+							                     jQuery( '#rthd_keep_status' ).parent().hide();
+						                     }
+					                     } else {
+						                     if ( jQuery( '#rthd_keep_status' ).length > 0 ) {
+							                     jQuery( '#rthd_keep_status' ).prop( "checked", false );
+						                     }
+					                     }
 					                     jQuery( '#hdspinner' ).hide();
+					                     jQuery( '#savefollwoup' ).removeAttr( 'disabled' );
+				                     } else {
+					                     var r = confirm( data.message + ' Do you still want to add it ?' );
+					                     if ( r == true ) {
+						                     sendFollowup( true );
+					                     } else {
+						                     jQuery( '#hdspinner' ).hide();
+						                     jQuery( '#savefollwoup' ).removeAttr( 'disabled' );
+					                     }
 				                     }
-				                     jQuery('#savefollwoup').removeAttr('disabled');
 			                     }
 		                     } );
-	        } );
+	        }
         },
         initToolTop: function () {
             jQuery(".tips, .help_tip").tipTip({

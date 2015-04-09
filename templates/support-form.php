@@ -65,12 +65,19 @@ if ( rthd_get_redux_adult_filter() ) { ?>
 	</div>
 <?php } ?>
 	<div>
-		<input type="file" id="filesToUpload" class="multi" name="attachment[]" multiple="multiple"/>
+<!--		--><?php //wp_nonce_field( 'rthd_support_add_nonce_for_security_thats_all', 'rthd_support_nonce' ); ?>
+
+		<!--		<input type="file" id="filesToUpload" name="attachment[]" multiple="multiple"/>-->
+		<div id="attachment-container">
+			<input type="button" class="btn button" id="attachemntlist" value="Attach Files">
+		</div>
+		<div id="support-filelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
+		<input type="hidden" name="rthd_support_attach_ids" id="rthd_support_attach_ids" >
 	</div>
 
 	<div>
 		<input type="hidden" name="rthd_support_form_submit" value="1" />
-                <input class="btn btn-primary" type="submit" value="Submit" />
+                <input class="btn btn-primary" id="sumit-support-form" type="submit" value="Submit" />
 	</div>
 
 </form>

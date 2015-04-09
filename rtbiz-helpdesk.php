@@ -148,7 +148,6 @@ function rt_hd_include() {
 	include_once RT_HD_PATH_VENDOR . 'excel_reader2.php';
 	include_once RT_HD_PATH_VENDOR . 'parsecsv.lib.php';
 	include_once RT_HD_PATH_VENDOR . 'simplexlsx.php';
-	include_once RT_HD_PATH_VENDOR . 'taxonomy-metadata.php';
 
 
 	global $rthd_app_autoload, $rthd_admin_autoload, $rthd_admin_metabox_autoload, $rthd_models_autoload, $rthd_helper_autoload, $rthd_settings_autoload, $rthd_form_autoload, $rthd_reports_autoload;

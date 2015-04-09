@@ -13,10 +13,11 @@ $date = strtotime( current_time( 'mysql', 1 ) );
 <head> <title></title></head>
 <body>
 <?php
-echo $title;
 if ( $replyflag && rthd_is_enable_mailbox_reading() && rthd_get_reply_via_email() ){
 	echo '<div style="color:#777">'.htmlentities('[!-------REPLY ABOVE THIS LINE-------!]').'</div><br /> ';
 }
+
+echo $title;
 $beforeHTML = apply_filters( 'rthd_before_email_body', $body );
 $afterHTML = apply_filters( 'rthd_after_email_body', $body );
 
