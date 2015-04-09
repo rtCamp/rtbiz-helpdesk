@@ -33,14 +33,14 @@ echo $beforeHTML;
 
 <div style="border: 1px solid #DFE9f2;padding: 20px;background: #f1f6fa;">
 	<?php echo rthd_content_filter( $body ) ;?>
-	<br/>
 	<div style="float: right;color: gray;">
 		<?php echo date( 'l M d, Y H:i e', $date ); ?>
 	</div>
+	<div style="display:block;height:0;clear:both;visibility:hidden;"></div>
 </div>
 <?php echo $afterHTML;
 $signature = rthd_get_email_signature_settings();
-echo  '<br/>' . ( ( ! empty( $signature ) ) ? '<div style="color:#666;">' . wpautop( $signature ) . '</div>' : '' ) . '<br/>'
+echo  ( ( ! empty( $signature ) ) ? '<div style="color:#666;">' . wpautop( $signature ) . '</div>' : '' ) . '<br/>'
 ?>
 </body>
 </html>
