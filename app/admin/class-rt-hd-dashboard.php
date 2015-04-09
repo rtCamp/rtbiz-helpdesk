@@ -96,7 +96,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			add_action( 'rthd_after_dashboard', array( $this, 'render_google_charts' ) );
 
 			/* Metaboxes for dashboard widgets */
-			add_action( 'add_meta_boxes', array( $this, 'add_dashboard_widgets' ) );
+			add_action( 'rtbiz_helpdesk_dashboard_add_meta_boxes', array( $this, 'add_dashboard_widgets' ) );
 
 			add_filter( 'set-screen-option', array( $this, 'tickets_table_set_option' ), 10, 3 );
 		}
@@ -121,7 +121,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		function page_actions() {
 			if ( isset( $_REQUEST['page'] ) && 'rthd-' . Rt_HD_Module::$post_type . '-dashboard' === $_REQUEST['page'] ) {
 				do_action( 'add_meta_boxes_' . $this->screen_id, null );
-				do_action( 'add_meta_boxes', $this->screen_id, null );
+				do_action( 'rthd_dashboard_add_meta_boxes', $this->screen_id, null );
 
 				/* Enqueue WordPress' script for handling the metaboxes */
 				wp_enqueue_script( 'postbox' );
