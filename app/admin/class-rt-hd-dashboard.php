@@ -204,54 +204,30 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 
 		function tickets_by_product_purchase( $obj, $args ){
 
-			global $rt_hd_offering_support;
-			$data_source = array();
-			$email_not_unique = $rt_hd_offering_support->get_emails_of_customer();
-			if ( empty( $email_not_unique ) ){
+			global $rt_hd_offering_support, $wpdb;
+
+			$customers_userid = $rt_hd_offering_support->get_customers_userid();
+
+			if ( empty( $customers_userid ) ){
 				echo 'No customers found who have created any ticket.';
 				return;
 			}
-			$emails      = array_unique( $email_not_unique );
-			$post_type   = Rt_HD_Module::$post_type;
+			$customers_userid      = array_unique( $customers_userid );
+			$totalcustomers = count( $customers_userid );
+
+			$customers_userid = implode( ',', $customers_userid );
+			$query = $wpdb->prepare( "SELECT count( distinct( meta_value ) ) FROM $wpdb->posts INNER JOIN  $wpdb->postmeta ON post_id = ID  WHERE post_status <> 'trash' and post_type = %s and meta_key = '_rtbiz_hd_created_by' and meta_value in ( " . $customers_userid . " )", Rt_HD_Module::$post_type );
+			$customers_userid = $wpdb->get_col( $query );
+			$custWithicket = 0;
+			if ( ! empty( $customers_userid ) ){
+				$custWithicket = ( int )$customers_userid[0];
+			}
 			$cols        = array( __( 'Purchase', RT_BIZ_TEXT_DOMAIN ), __( 'Count', RT_BIZ_TEXT_DOMAIN ) );
 			$rows        = array();
-			$ids         = array();
-			foreach ( $emails as $email ){
-				$user = get_user_by( 'email', $email );
-				$ids[] = $user->ID;
-			}
-			$query = array(
-				'post_type' => $post_type,
-				'post_status' => 'any',
-				'nopaging' => true,
-				'meta_key' => '_rtbiz_hd_created_by',
-				'orderby' => 'meta_value',
-				'meta_query' => array(
-					array(
-						'key' => '_rtbiz_hd_created_by',
-						'value' => $ids,
-						'compare' => 'IN',
-					),
-				),
-			);
-			$posts = new WP_Query( $query );
-			$count_email = array();
-			if ( ! $posts->have_posts() ){
-				echo 'No customers found who have created any ticket.';
-				return;
-			}
-			foreach ( $posts->posts as $post ){
-				$user_id_meta = get_post_meta( $post->ID,'_rtbiz_hd_created_by', true );
-				if ( isset( $count_email[ $user_id_meta ] ) ) {
-					$count_email[ $user_id_meta ] += 1;
-				}
-				else {
-					$count_email[ $user_id_meta ] = 1;
-				}
-			}
-			$count = count( $count_email );
-			$rows[] = array( __( 'Customer who created Tickets' ), $count );
-			$rows[] = array( __( 'Customers have not created any Tickets' ), count( $emails ) - $count );
+			$rows[] = array( __( 'Customer who created Tickets' ), $custWithicket );
+			$rows[] = array( __( 'Customers have not created any Tickets' ), $totalcustomers - $custWithicket );
+
+			$data_source = array();
 			$data_source['cols'] = $cols;
 			$data_source['rows'] = $rows;
 			$this->charts[] = array(
