@@ -78,6 +78,23 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			add_action( 'wp_ajax_rthd_upload_attachment', array( $this, 'rthd_upload_attachment' ) );
 			add_action( 'wp_ajax_rthd_check_duplicate_followup', array( $this, 'rthd_check_duplicate_followup' ) );
 			add_action( 'wp_ajax_nopriv_rthd_check_duplicate_followup', array( $this, 'rthd_check_duplicate_followup' ) );
+			add_action( 'wp_ajax_front_end_offering_change', array( $this, 'front_end_offering_change' ) );
+
+		}
+
+		/**
+		 * Ajax call for changing offering of the post.
+		 */
+		function front_end_offering_change(){
+			$flag = false;
+			if ( ! empty( $_POST['offering_id'] ) && ! empty( $_POST['post_id'] ) ){
+				$return = wp_set_object_terms($_POST['post_id'], array( intval( $_POST['offering_id'] ) ), Rt_Offerings::$offering_slug, false );
+				if ( !$return instanceof WP_Error && ! empty( $return )){
+					$flag = true;
+				}
+			}
+			echo json_encode( array( 'status' => $flag ) );
+			die();
 		}
 
 		/**

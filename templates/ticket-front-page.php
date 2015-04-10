@@ -260,21 +260,34 @@ $user_edit_content = current_user_can( $cap );
 					global $rtbiz_offerings;
 					$products = array();
 					if ( ! empty( $rtbiz_offerings ) ) {
-						$products = wp_get_post_terms( $post->ID, Rt_Offerings::$offering_slug );
+						$products = get_terms( Rt_Offerings::$offering_slug );
+						$ticket_offering = wp_get_post_terms( $post->ID, Rt_Offerings::$offering_slug );
 					}
-					$base_url = add_query_arg( array( 'post_type' => $post->post_type ), admin_url( 'edit.php' ) );
 					if ( ! $products instanceof WP_Error && ! empty( $products ) ) { ?>
 						<div class="rt-hd-ticket-info">
-							<h2 class="rt-hd-ticket-info-header"><?php _e( 'Ticket Products' ); ?></h2>
-						</div>
-						<div class="rt-hd-ticket-info">
-							<ul>
+							<span>
+								<strong>
+									<?php _e( 'Ticket Offering:' ); ?>
+								</strong>
+							</span>
+							<select id="rthd-offering-list" ndame="rt-hd-offering">
 								<?php foreach ( $products as $p ) {
-									$url = add_query_arg( 'product_id', $p->term_id, $base_url );
+									if ( ! empty( $ticket_offering ) && $ticket_offering[0]->term_id == $p->term_id ){
+										$selected = ' selected="selected" ';
+									} else {
+										$selected = ' ';
+									}
 									?>
-									<li><a href="<?php echo $url; ?>"><?php echo $p->name; ?></a></li>
-								<?php } ?>
-							</ul>
+									<?php
+									echo '<option value="' . esc_attr( $p->term_id ) . '"' . esc_attr( $selected ) . '>' . esc_attr( $p->name ) . '</option>';
+									?>
+								<?php }
+								if ( empty( $ticket_offering ) ){
+									echo '<option value="0" selected="selected" >-Select Offering-</option>';
+								}
+								?>
+								</select>
+							<img id="offering-change-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 						</div>
 					<?php }
 

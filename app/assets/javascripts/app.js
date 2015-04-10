@@ -584,6 +584,37 @@ function sendFollowup( force ) {
 		assgine_request( jQuery('#rthd-assignee-list' ).val() );
 	});
 
+	jQuery( '#rthd-offering-list' ).change(function (e){
+		if (jQuery('#rthd-offering-list' ).val() == 0){
+			return false;
+		}
+		change_offerings( jQuery('#rthd-offering-list' ).val() );
+	});
+
+	function change_offerings( term_id ){
+		var requestArray = new Object();
+		requestArray['post_id'] =  jQuery('#post-id' ).val();
+		requestArray['offering_id'] =  term_id;
+		requestArray["action"] = "front_end_offering_change";
+		jQuery('#offering-change-spinner' ).show();
+		jQuery.ajax( {
+			             url: ajaxurl,
+			             dataType: "json",
+			             type: 'post',
+			             data: requestArray,
+			             success: function ( data ) {
+				             if ( data.status ) {
+					             jQuery('#rthd-assignee-list' ).val( term_id );
+				             }
+				             jQuery('#offering-change-spinner' ).hide();
+			             },
+			             error: function(){
+				             jQuery('#offering-change-spinner' ).hide();
+				             return false;
+			             }
+		             });
+	}
+
 	function assgine_request( userid ){
 		var requestArray = new Object();
 		requestArray['post_id'] =  jQuery('#post-id' ).val();
