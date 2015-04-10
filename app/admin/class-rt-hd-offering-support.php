@@ -219,12 +219,13 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 		 *  Get list of customer Who purchase a product
 		 * @return array
 		 */
-		function get_emails_of_customer(){
+		function get_customers_userid(){
 			$this->check_active_plugin();
 			if ( $this->isWoocommerceActive ) {
 				//
 				$payments = get_posts( array(
 					                       'numberposts' => -1,
+					                       'post_type'   => $this->order_post_type,
 					                       'meta_key'    => '_billing_email',
 					                       'order'       => 'ASC',
 					                       'post_status' => 'wc-completed',
@@ -242,10 +243,10 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 			if ( ! empty( $payments ) ){
 				foreach ( $payments as $payment ){
 					if ( $this->isWoocommerceActive ) {
-						$emails[] =get_post_meta( $payment->ID, '_billing_email', true );
+						$emails[] =get_post_meta( $payment->ID, '_customer_user', true );
 					}
 					else if( $this->iseddActive ){
-						$emails[] =get_post_meta( $payment->ID, '_edd_payment_user_email', true );
+						$emails[] =get_post_meta( $payment->ID, '_edd_payment_user_id', true );
 					}
 				}
 			}
