@@ -119,6 +119,7 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 					'email' => '',
 					'orderid' => '',
 					'show_support_form_link' => 'no',
+					'fav' => false
 				), $atts );
 
 			$args    = array(
@@ -126,6 +127,9 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 				'post_status' => 'any',
 				'nopaging'    => true,
 			);
+			if ( ! empty( $arg_shortcode['fav'] ) ){
+
+			}
 
 			global $current_user;
 
@@ -143,19 +147,28 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 
 			$tickets = array();
 			if ( ! empty( $arg_shortcode['userid'] ) ) {
-				if ( rthd_is_our_employee( $arg_shortcode['userid'], RT_HD_TEXT_DOMAIN ) ){
+				if ( ! empty( $arg_shortcode['fav'] ) ) {
+					$tickets = rthd_get_tickets( 'favourite', $arg_shortcode['userid'] );
+				}
+				elseif ( rthd_is_our_employee( $arg_shortcode['userid'], RT_HD_TEXT_DOMAIN ) ){
 					$tickets = rthd_get_tickets( 'assignee', $arg_shortcode['userid'] );
-				}else{
+				}
+				else {
 					$tickets = rthd_get_tickets( 'created_by', $arg_shortcode['userid'] );
 				}
 			} elseif ( ! empty( $arg_shortcode['orderid'] ) ) {
 				$tickets = rthd_get_tickets( 'order', $arg_shortcode['orderid'] );
 			}
 			?>
-
-			<h2><?php _e( 'Your Tickets', RT_HD_TEXT_DOMAIN ); ?></h2>
-
 			<?php
+			if ( ! empty( $arg_shortcode['fav'] ) ) { ?>
+				<h2><?php _e( 'Favourite Tickets', RT_HD_TEXT_DOMAIN ); ?></h2>
+				<?php
+			} else {
+				?>
+				<h2><?php _e( 'Your Tickets', RT_HD_TEXT_DOMAIN ); ?></h2>
+			<?php
+			}
 			printf( _n( 'One Ticket Found.', '%d Tickets Found.', count( $tickets ), 'my-RT_HD_TEXT_DOMAIN-domain' ), count( $tickets ) );
 			if ( 'yes' == $arg_shortcode['show_support_form_link'] ) {
 				global $redux_helpdesk_settings;

@@ -515,6 +515,23 @@ function rthd_get_user_adult_preference( $user_id, $email = '' ) {
 	return $pref;
 }
 
+function rthd_add_user_fav_ticket( $userid, $postid ){
+	add_user_meta( $userid, '_rthd_fav_tickets', $postid);
+}
+
+function rthd_get_user_fav_ticket( $userid ){
+	$result = get_user_meta( $userid, '_rthd_fav_tickets' );
+	if ( ! empty( $result ) ){
+		$result = array_filter( $result );
+		$result = array_unique( $result );
+	}
+	return $result;
+}
+
+function rthd_delete_user_fav_ticket( $user_id, $postid ){
+	delete_user_meta( $user_id, '_rthd_fav_tickets', $postid );
+}
+
 function rthd_save_adult_ticket_meta( $post_id, $pref ){
 	update_post_meta( $post_id, '_rthd_ticket_adult_content', $pref );
 }
@@ -1319,7 +1336,7 @@ function rthd_is_our_employee( $userid ){
  */
 function rthd_get_tickets( $key, $value ){
 
-	$key_array = array( 'created_by', 'assignee', 'subscribe', 'order' );
+	$key_array = array( 'created_by', 'assignee', 'subscribe', 'order', 'favourite' );
 
 	if ( ! in_array( $key, $key_array ) ){
 		return false;
@@ -1371,6 +1388,8 @@ function rthd_get_tickets( $key, $value ){
 				'value' => $value,
 			),
 		);
+	} elseif ( 'favourite' == $key ){
+		$args['post__in'] = rthd_get_user_fav_ticket( $value );
 	}
 	if ( ! empty( $args) ){
 		return get_posts( $args );

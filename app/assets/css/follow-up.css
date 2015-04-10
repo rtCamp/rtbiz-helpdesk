@@ -372,10 +372,10 @@ li.load-more-spinner-li {
 #rthd-status-visiable{
 	display: inline-block;
 }
-#ticket-information-edit-ticket-link {
-	right: 0;
-	position: absolute;
-}
+/*#ticket-information-edit-ticket-link {*/
+	/*right: 0;*/
+	/*position: absolute;*/
+/*}*/
 
 .rt-hd-ticket-info-header {
 	display: inline;
@@ -438,4 +438,12 @@ h1.rt-hd-ticket-front-title{
 #followup-filelist .followup-attach-remove:hover{
 	text-decoration: none;
 	color: #FFF;
+}
+
+.rt-hd-front-icons{
+	display: inline-block;
+	float: right;
+}
+.rt-hd-front-icons:after{
+	clear: both;
 }

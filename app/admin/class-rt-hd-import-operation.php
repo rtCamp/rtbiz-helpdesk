@@ -79,7 +79,30 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			add_action( 'wp_ajax_rthd_check_duplicate_followup', array( $this, 'rthd_check_duplicate_followup' ) );
 			add_action( 'wp_ajax_nopriv_rthd_check_duplicate_followup', array( $this, 'rthd_check_duplicate_followup' ) );
 			add_action( 'wp_ajax_front_end_offering_change', array( $this, 'front_end_offering_change' ) );
+			add_action( 'wp_ajax_rthd_fav_ticket', array( $this, 'favourite_tickets' ) );
 
+		}
+
+		/**
+		 * Ajax call back of favorite ticket
+		 */
+		function favourite_tickets(){
+			$status = false;
+			if ( ! empty( $_POST['nonce'] )
+			     && ! empty( $_POST['post_id'] )
+			     && get_post_type($_POST['post_id']) == Rt_HD_Module::$post_type
+				 && wp_verify_nonce( $_POST['nonce'], 'heythisisrthd_ticket_fav_'.$_POST['post_id'] )
+			){
+				$favs = rthd_get_user_fav_ticket( get_current_user_id() );
+				if ( in_array( $_POST['post_id'], $favs )){
+					rthd_delete_user_fav_ticket( get_current_user_id(), $_POST['post_id'] );
+				} else {
+					rthd_add_user_fav_ticket( get_current_user_id(),$_POST['post_id'] );
+				}
+				$status = true;
+			}
+			echo json_encode( array( 'status' => $status ) );
+			die();
 		}
 
 		/**

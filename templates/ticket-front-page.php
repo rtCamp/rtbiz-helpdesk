@@ -58,9 +58,20 @@ $user_edit_content = current_user_can( $cap );
 			<div class="rt-hd-ticket-info">
 				<h2 class="rt-hd-ticket-info-header"><i class="foundicon-idea"></i> <?php _e( esc_attr( ucfirst( $labels[ 'name' ] ) ) . ' Information' ); ?>
 				</h2>
-		<?php if ( current_user_can( $cap ) ){ ?>
-		<a id='ticket-information-edit-ticket-link' href="<?php echo get_edit_post_link( $post->ID )  ?>">Edit <?php _e( esc_attr( ucfirst( $labels[ 'name' ] ) ) ); ?></a>
+				<div class="rt-hd-front-icons">
+					<a id="ticket-add-fav" href="#" title="<?php _e('Favorite ticket') ?>"><?php
+						if ( in_array( $post->ID , rthd_get_user_fav_ticket( get_current_user_id() ) ) ){
+							echo '<span class="dashicons dashicons-star-filled"></span>';
+ 						} else {
+							echo '<span class="dashicons dashicons-star-empty"></span>';
+						}
+						?></a>
+					<?php wp_nonce_field( 'heythisisrthd_ticket_fav_'.$post->ID, 'rthd_fav_tickets_nonce' ); ?>
+					<?php if ( current_user_can( $cap ) ){ ?>
+		<a id='ticket-information-edit-ticket-link' href="<?php echo get_edit_post_link( $post->ID )  ?>" title="<?php _e( 'Edit '.esc_attr( ucfirst( $labels[ 'name' ] ) ) ); ?>"> <span class="dashicons dashicons-edit"></span></a>
 		<?php } ?>
+
+				</div>
 			</div>
 
 			<div class="rt-hd-ticket-info">
@@ -290,7 +301,6 @@ $user_edit_content = current_user_can( $cap );
 							<img id="offering-change-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 						</div>
 					<?php }
-
 					// Attributes
 					global $rt_hd_attributes_relationship_model;
 					$relations = $rt_hd_attributes_relationship_model->get_relations_by_post_type( Rt_HD_Module::$post_type );

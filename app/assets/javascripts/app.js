@@ -580,6 +580,32 @@ function sendFollowup( force ) {
 		             });
 	});
 
+	jQuery('#ticket-add-fav' ).click( function ( e ) {
+		e.preventDefault();
+		var requestArray = new Object();
+		requestArray['action'] = "rthd_fav_ticket";
+		//jQuery('#offering-change-spinner' ).show();
+		requestArray['nonce'] = jQuery('#rthd_fav_tickets_nonce' ).val();
+		requestArray['post_id'] =  jQuery('#post-id' ).val();
+
+		jQuery.ajax( {
+			             url: ajaxurl,
+			             dataType: "json",
+			             type: 'post',
+			             data: requestArray,
+			             success: function ( data ) {
+				             if ( data.status ) {
+					             jQuery('#ticket-add-fav span' ).toggleClass('dashicons-star-empty dashicons-star-filled');
+				             }
+				             //jQuery('#offering-change-spinner' ).hide();
+			             },
+			             error: function(){
+				             //jQuery('#offering-change-spinner' ).hide();
+				             return false;
+			             }
+		             });
+	});
+
 	jQuery( '#rthd-assignee-list' ).change(function (e){
 		assgine_request( jQuery('#rthd-assignee-list' ).val() );
 	});

@@ -515,9 +515,10 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 		 * @since 0.1
 		 *
 		 * @param $file_handler
-		 * @param $post_id
 		 *
-		 * @return int| WP_Error
+		 * @return int|WP_Error
+		 * @internal param $post_id
+		 *
 		 */
 		static function insert_attachment( $file_handler ) {
 			global $rt_hd_admin;
