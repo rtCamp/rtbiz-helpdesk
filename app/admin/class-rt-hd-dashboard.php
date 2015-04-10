@@ -96,7 +96,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			add_action( 'rthd_after_dashboard', array( $this, 'render_google_charts' ) );
 
 			/* Metaboxes for dashboard widgets */
-			add_action( 'rtbiz_helpdesk_dashboard_add_meta_boxes', array( $this, 'add_dashboard_widgets' ) );
+			add_action( 'rthd_dashboard_add_meta_boxes', array( $this, 'add_dashboard_widgets' ) );
 
 			add_filter( 'set-screen-option', array( $this, 'tickets_table_set_option' ), 10, 3 );
 		}
