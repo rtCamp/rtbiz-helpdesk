@@ -59,7 +59,36 @@ $user_edit_content = current_user_can( $cap );
 				<h2 class="rt-hd-ticket-info-header"><i class="foundicon-idea"></i> <?php _e( esc_attr( ucfirst( $labels[ 'name' ] ) ) . ' Information' ); ?>
 				</h2>
 				<div class="rt-hd-front-icons">
-					<a id="ticket-add-fav" href="#" title="<?php _e('Favorite ticket') ?>"><?php
+					<?php if ( current_user_can( $cap ) ){ ?>
+						<a id='ticket-information-edit-ticket-link' href="<?php echo get_edit_post_link( $post->ID )  ?>" title="<?php _e( 'Edit '.esc_attr( ucfirst( $labels[ 'name' ] ) ) ); ?>"> <span class="dashicons dashicons-edit"></span></a>
+					<?php } ?>
+
+
+					<?php
+					// Watch/Unwatch ticket feature.
+					$watch_unwatch_label = $watch_unwatch_value = '';
+					if ( current_user_can( $cap ) && $assignee_info->user_email != $current_user->user_email ) { // For staff/subscriber
+						if ( rthd_is_ticket_subscriber( $post->ID ) ) {
+							$watch_unwatch_label = 'Unsubscribe';
+							$watch_unwatch_value = 'unwatch';
+						}
+						else {
+							$watch_unwatch_label = 'Subscribe';
+							$watch_unwatch_value = 'watch';
+						}
+					}
+					if( ! empty( $watch_unwatch_label ) ) { ?>
+					<a id="rthd-ticket-watch-unwatch" href="#" data-value="<?php echo $watch_unwatch_value; ?>" title="<?php _e( $watch_unwatch_label ) ?>">
+						<?php
+						if ($watch_unwatch_value == 'watch'){
+							echo '<span class="dashicons dashicons-email-alt"></span>';
+						} else{
+							echo '<span class="dashicons dashicons-email"></span>';
+						}
+						?>
+						<?php
+						}?>
+						<a id="ticket-add-fav" href="#" title="<?php _e('Favorite ticket') ?>"><?php
 						if ( in_array( $post->ID , rthd_get_user_fav_ticket( get_current_user_id() ) ) ){
 							echo '<span class="dashicons dashicons-star-filled"></span>';
  						} else {
@@ -67,9 +96,7 @@ $user_edit_content = current_user_can( $cap );
 						}
 						?></a>
 					<?php wp_nonce_field( 'heythisisrthd_ticket_fav_'.$post->ID, 'rthd_fav_tickets_nonce' ); ?>
-					<?php if ( current_user_can( $cap ) ){ ?>
-		<a id='ticket-information-edit-ticket-link' href="<?php echo get_edit_post_link( $post->ID )  ?>" title="<?php _e( 'Edit '.esc_attr( ucfirst( $labels[ 'name' ] ) ) ); ?>"> <span class="dashicons dashicons-edit"></span></a>
-		<?php } ?>
+
 
 				</div>
 			</div>
@@ -163,39 +190,7 @@ $user_edit_content = current_user_can( $cap );
 					<span title="Status"><strong>Last reply: </strong></span>
 					<span class="rthd_attr_border rthd_view_mode"> <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . " ago by " . $commentlink; ?></span>
 				</div>
-			<?php }
-
-			// Watch/Unwatch ticket feature.
-			$watch_unwatch_label = $watch_unwatch_value = '';
-
-			if ( current_user_can( $cap ) && $assignee_info->user_email != $current_user->user_email ) { // For staff/subscriber
-				if ( rthd_is_ticket_subscriber( $post->ID ) ) {
-					$watch_unwatch_label = 'Unsubscribe';
-					$watch_unwatch_value = 'unwatch';
-				}
-				else {
-					$watch_unwatch_label = 'Subscribe';
-					$watch_unwatch_value = 'watch';
-				}
-			}
-			/*else { // For other contacts.
-			 if ( rthd_is_ticket_contact_connection( $post->ID ) ) {
-			$watch_unwatch_label = 'Unwatch';
-			$watch_unwatch_value = 'unwatch';
-			}
-			else {
-			$watch_unwatch_label = 'Watch';
-			$watch_unwatch_value = 'watch';
-			}
-			}*/
-			if( ! empty( $watch_unwatch_label ) ) { ?>
-				<div class="rt-hd-ticket-info rt-hd-ticket-history">
-					<span title="<?php _e( 'Get notification' ); ?>"><strong><?php _e( 'Get notification' ); ?>:</strong></span>
-					<input type="button" class="btn btn-primary button button-primary" id="rthd-ticket-watch-unwatch" data-value="<?php echo $watch_unwatch_value; ?>" value="<?php echo $watch_unwatch_label; ?>" />
-					<img id="watch-unwatch-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
-				</div>
-			<?php
-			}?>
+			<?php } ?>
 			<div class='rt-hd-ticket-info'>
 				<h2 class="rt-hd-ticket-info-header"><?php echo __( 'Add people' ); ?></h2>
 			</div>

@@ -677,11 +677,12 @@ function sendFollowup( force ) {
 	});
 
 	jQuery( '#rthd-ticket-watch-unwatch' ).click(function (e){
+		e.preventDefault();
 		var requestArray = new Object();
 		requestArray['post_id'] =  jQuery('#post-id' ).val();
 		requestArray['watch_unwatch'] =  jQuery(this).attr('data-value');
 		requestArray["action"] = "front_end_ticket_watch_unwatch";
-		jQuery('#watch-unwatch-spinner' ).show();
+		//jQuery('#watch-unwatch-spinner' ).show();
 		jQuery.ajax( {
              url: ajaxurl,
              dataType: "json",
@@ -689,13 +690,15 @@ function sendFollowup( force ) {
              data: requestArray,
              success: function ( data ) {
             	 if (data.status) {
-		            jQuery('#rthd-ticket-watch-unwatch').val( data.label );
-		            jQuery('#rthd-ticket-watch-unwatch').attr('data-value', data.value);
+		            //jQuery('#rthd-ticket-watch-unwatch').val( data.label );
+		             jQuery('#rthd-ticket-watch-unwatch span' ).toggleClass('dashicons-email dashicons-email-alt');
+		             jQuery('#rthd-ticket-watch-unwatch').attr('data-value', data.value);
+		             jQuery('#rthd-ticket-watch-unwatch').attr('title', data.label );
 		         }
-	             jQuery('#watch-unwatch-spinner' ).hide();
+				//jQuery('#watch-unwatch-spinner' ).hide();
              },
              error: function(){
-            	 jQuery('#watch-unwatch-spinner' ).hide();
+				 //jQuery('#watch-unwatch-spinner' ).hide();
 	             return false;
              }
          });
