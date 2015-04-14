@@ -158,7 +158,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 					if ( ( empty( $current_contact ) || ( ! in_array( $current_contact->ID, $contact_ids ) && ! in_array( $user->user_email, $contact_emails ) ) ) && $creator != $user->ID ){
 						$redirect_url = ( ( is_ssl() ) ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 						$login_url = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( $redirect_url ) );
-						$message = sprintf( '%s ', __( 'You have not enough access!' ) );
+						$message = sprintf( '%s ', __( 'You do not have sufficient permissions to access this ticket.' ) );
 						global $rthd_messages;
 						$rthd_messages[] = array( 'type' => 'error', 'message' => $message, 'displayed' => 'no' );
 						global $rthd_front_page_title;
