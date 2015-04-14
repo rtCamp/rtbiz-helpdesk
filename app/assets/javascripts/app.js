@@ -131,7 +131,16 @@ jQuery( document ).ready( function ( $ ) {
 								if ( data.status ){
 									jQuery('.rthd-subscribe-validation' ).show();
 									jQuery('.rthd-subscribe-validation' ).text('Added Successfully!');
+									jQuery('.rthd-subscribe-validation' ).hide(2000);
 									jQuery('#rthd-subscribe-email' ).val('');
+									if ( ! data.has_replied ){
+										var htmlappend=  '<a title="'+data.display_name+'" class="rthd-last-reply-by" href="'+data.edit_link+'">'+data.avatar+' </a>';
+										if (data.is_contact){
+											jQuery('.rthd-contact-avatar-no-reply' ).append( htmlappend );
+										} else {
+											jQuery('.rthd-subscriber-avatar-no-reply' ).append( htmlappend );
+										}
+									}
 								}
 				                else{
 									if ( data.msg.length > 0 ){
@@ -140,6 +149,7 @@ jQuery( document ).ready( function ( $ ) {
 									} else{
 										jQuery('.rthd-subscribe-validation' ).html('Something went wrong!');
 									}
+									jQuery('.rthd-subscribe-validation' ).hide(2000);
 								}
 				                jQuery('#rthd-subscribe-email-spinner' ).hide();
 			             }
@@ -703,7 +713,16 @@ function sendFollowup( force ) {
              }
          });
 	});
+	jQuery('.rthd-collapse-click' ).click(function( e ){
+		e.preventDefault();
+		jQuery(this ).closest('.rt-hd-ticket-info').next().slideToggle();
+		jQuery('span',this).toggleClass('dashicons-arrow-up-alt2 dashicons-arrow-down-alt2');
+	});
+
+
 } );
+
+
 
 /*(function($) {
 	"use strict";

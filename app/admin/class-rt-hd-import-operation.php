@@ -192,12 +192,13 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		}
 
 		/**
-		 *
+		 * ajax call for add subscriber or contact
 		 */
 		function rt_hd_add_subscriber_email(){
 			global $rt_hd_email_notification;
 			$response = array();
 			$response['status'] = false;
+			$response['is_contact'] = false;
 			if ( ! empty( $_POST['post_id'] ) && ! empty( $_POST['email'] ) ){
 				$user = get_user_by('email',$_POST['email']);
 				if ( $user ){
@@ -217,6 +218,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 						if ( ! p2p_connection_exists(  Rt_HD_Module::$post_type . '_to_' . rt_biz_get_contact_post_type(), array( 'from' => $_POST['post_id'], 'to' => $user_contact_info->ID ) ) ) {
 							rt_biz_connect_post_to_contact( Rt_HD_Module::$post_type, $_POST[ 'post_id' ], $user_contact_info );
 							$response[ 'status' ] = true;
+							$response['is_contact'] = true;
 						}
 						else {
 							$response[ 'status' ] = false;
@@ -226,11 +228,34 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				} else{ // create user and then add to p2p
 					$this->add_contacts_to_post( array( array( 'address'=>$_POST['email'] ) ), $_POST['post_id'] );
 					$response['status'] = true;
+					$response['is_contact'] = true;
 				}
 			} else {
 				$response['msg'] = 'Something went wrong.';
 			}
-			echo json_encode($response);
+			$can = current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' ) );
+			if ( $response['is_contact'] || ( $can && $response['status'] == true ) ){
+				$user = get_user_by('email', $_POST['email']);
+				$response['avatar'] = get_avatar(  $_POST['email'], 30 );
+				if ( ! empty( $user ) ){
+					$response['display_name'] = $user->display_name;
+				} else {
+					$response['display_name'] = $_POST['email'];
+				}
+				global $wpdb;
+				$count_names = $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(comment_author_email) from '.$wpdb->comments.' where comment_post_ID= %d AND comment_author_email = %s AND comment_type= %d', $_POST['post_id'], $_POST['email'], self::$FOLLOWUP_PUBLIC ));
+				if ( empty( $count_names )){
+					$response['has_replied'] = false;
+				} else {
+					$response['has_replied'] = true;
+				}
+				if ( $can ){
+					$response['edit_link'] = rthd_biz_user_profile_link( $user->user_email, 30 );
+				} else {
+					$response['edit_link'] = '#';
+				}
+			}
+			echo json_encode( $response );
 			die();
 		}
 

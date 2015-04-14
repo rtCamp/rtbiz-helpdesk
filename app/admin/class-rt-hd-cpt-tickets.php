@@ -483,6 +483,11 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 				if ( isset( $_GET['ticket_assigned'] ) ) {
 					$query->set( 'author', $_GET['ticket_assigned'] );
 				}
+
+				if ( isset( $_GET['favorite'] ) ){
+					$fav_ticket = rthd_get_user_fav_ticket( get_current_user_id() );
+					$query->set( 'post__in', $fav_ticket );
+				}
 			}
 
 		}
@@ -595,6 +600,15 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 				else
 					$class = '';
                 $temp_view['mine'] = "<a href='edit.php?post_type=".Rt_HD_Module::$post_type."&author=$current_user_id' $class>" . sprintf( _nx( 'Mine <span class="count">(%s)</span>', 'Mine <span class="count">(%s)</span>', $count_user_tickets->post_count, RT_HD_TEXT_DOMAIN ), number_format_i18n( $count_user_tickets->post_count ) ) . '</a>';
+			}
+
+			$fav_ticket = rthd_get_user_fav_ticket( $current_user_id );
+			if ( ! empty( $fav_ticket ) ){
+				if ( isset( $_GET['favorite'] ) )
+					$class = ' class="current"';
+				else
+					$class = '';
+				$temp_view['favorite_ticket'] = "<a href='edit.php?post_type=".Rt_HD_Module::$post_type."&favorite=true' $class>" . sprintf( _nx( 'Favorite <span class="count">(%s)</span>', 'Favorites <span class="count">(%s)</span>', count( $fav_ticket ), RT_HD_TEXT_DOMAIN ), number_format_i18n( count( $fav_ticket )) ) . '</a>';
 			}
             $views = array_merge( $temp_view, $views );
 			return $views;

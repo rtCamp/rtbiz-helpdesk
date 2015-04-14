@@ -39,7 +39,79 @@ $user_edit_content = current_user_can( $cap );
 		<input type="hidden" id='ticket_unique_id' value="<?php echo esc_attr( $ticket_unique_id ); ?>"/>
 
 			<div>
-				<h1 class="rt-hd-ticket-front-title"><?php echo esc_attr( ( isset( $post->ID ) ) ? '[#' . $post_id . '] ' . $post->post_title : '' ); ?></h1>
+				<h2 class="rt-hd-ticket-front-title"><?php echo esc_attr( ( isset( $post->ID ) ) ? '[#' . $post_id . '] ' . $post->post_title : '' ); ?></h2>
+				<div class="rthd-ticket-user-activity">
+					<?php
+					$create_by_time =  esc_attr( human_time_diff( strtotime( $createdate ), current_time( 'timestamp' ) ) ) . ' ago';
+					$created_by = get_user_by( 'id', get_post_meta( $post->ID, '_rtbiz_hd_created_by', true ) );
+					if ( ! empty( $created_by ) ) {
+							echo ' <a class="rthd-ticket-created-by" title="Created by '.$created_by->display_name.' '.$create_by_time.'" href="'.( current_user_can( $cap ) ? rthd_biz_user_profile_link( $created_by->user_email ) :'#').'">' . get_avatar( $created_by->user_email, '30' ).'</a>';
+					}
+
+					global $wpdb, $rt_hd_email_notification;
+					$emails = $wpdb->get_results('SELECT distinct(comment_author_email) from '.$wpdb->comments.' where comment_post_ID= '.$post->ID.' AND comment_type='.Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC );
+          $comment = get_comments( array( 'post_id' => $post->ID, 'number' => 1 ) );
+          $emails = wp_list_pluck($emails,'comment_author_email' );
+					$other_contacts = $rt_hd_email_notification->get_contacts( $post->ID );
+          $subscriber  = array();
+          if ( current_user_can( $cap ) ){
+            $subscriber = $rt_hd_email_notification->get_subscriber( $post->ID );
+            $subscriber = wp_list_pluck( $subscriber , 'email' );
+            $subscriber = array_diff( $subscriber , $emails );
+          }
+					$other_contacts = wp_list_pluck( $other_contacts, 'email' );
+                     $other_contacts = array_diff( $other_contacts, $emails);
+					if ( ! empty( $comment ) ) {
+            $comment = $comment[ 0 ];
+            $search = array_search( $comment->comment_author_email ,$emails );
+            if ( $search !== false){
+              unset($emails[$search]);
+            }
+            echo "<div class='rthd-contact-avatar-no-reply'>";
+            foreach( $other_contacts as $email ){
+              $user = get_user_by('email',$email);
+              $display_name = $email;
+              if ( ! empty( $user ) ){
+                $display_name = $user->display_name;
+              }
+              echo '<a title= "'.$display_name.'" class="rthd-last-reply-by rthd-contact-avatar-no-reply"  href="'.(current_user_can( $cap ) ? rthd_biz_user_profile_link( $email ) :'#').'">'.get_avatar(  $email , '30' ).' </a>';
+            }
+            echo "</div>";
+
+            if ( current_user_can( $cap ) ){
+              echo '<div class="rthd-subscriber-avatar-no-reply">';
+              foreach( $subscriber as $email ){
+                $user = get_user_by( 'email',$email );
+                $display_name = $email;
+                if ( ! empty( $user ) ){
+                  $display_name = $user->display_name;
+                }
+                echo '<a title= "'.$display_name.'" class="rthd-last-reply-by rthd-contact-avatar-no-reply"  href="'.(current_user_can( $cap ) ? rthd_biz_user_profile_link( $email ) :'#').'">'.get_avatar(  $email , '30' ).' </a>';
+              }
+              echo "</div>";
+            }
+            foreach( $emails as $email ){
+                $user = get_user_by('email',$email);
+                $display_name = $email;
+                if ( ! empty( $user ) ){
+                  $display_name = $user->display_name;
+                }
+                echo '<a title= "'.$display_name.'" class="rthd-last-reply-by"  href="'.(current_user_can( $cap ) ? rthd_biz_user_profile_link( $email ) :'#').'">'.get_avatar(  $email , '30' ).' </a>';
+              }
+						echo '<a class="rthd-last-reply-by" title="last reply by '.$comment->comment_author.' '.esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ).' ago " href="'.(current_user_can( $cap ) ? rthd_biz_user_profile_link( $comment->comment_author_email ) :'#').'">'.get_avatar(  $comment->comment_author_email , '30' ).' </a>' ?>
+					<?php } ?>
+
+          <div class="rthd-add-people-button">
+            <a href="#" id="rthd-add-contact"><span class="dashicons dashicons-plus-alt rthd-add-contact-icon"></span></a>
+            <div class="rthd-add-people-box">
+                <input type="email" placeholder="enter email here" id="rthd-subscribe-email">
+                <button type="button" class='rthd-subscribe-email-submit button btn'>Add</button>
+                <span style="display: none;" class="rthd-subscribe-validation" ></span>
+                <img id="rthd-subscribe-email-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
+            </div>
+          </div>
+				</div>
+                <div class="rthd-clearfix"></div>
 			</div>
 
 			<?php if ( isset( $post->ID ) ) { ?>
@@ -54,83 +126,86 @@ $user_edit_content = current_user_can( $cap );
 			<?php } ?>
 		</div>
 		<div id="rthd-sidebar" class="rthd_sticky_div">
-
+     <div class="rt-hd-sidebar-box">
 			<div class="rt-hd-ticket-info">
-				<h2 class="rt-hd-ticket-info-header"><i class="foundicon-idea"></i> <?php _e( esc_attr( ucfirst( $labels[ 'name' ] ) ) . ' Information' ); ?>
-				</h2>
-				<div class="rt-hd-front-icons">
+				<h3 class="rt-hd-ticket-info-header"><?php _e( esc_attr( ucfirst( $labels[ 'name' ] ) ) . ' Information' ); ?>
+				</h3>
+				<div class="rthd-front-icons">
 					<?php if ( current_user_can( $cap ) ){ ?>
 						<a id='ticket-information-edit-ticket-link' href="<?php echo get_edit_post_link( $post->ID )  ?>" title="<?php _e( 'Edit '.esc_attr( ucfirst( $labels[ 'name' ] ) ) ); ?>"> <span class="dashicons dashicons-edit"></span></a>
 					<?php } ?>
 
+          <?php
+          // Watch/Unwatch ticket feature.
+          $watch_unwatch_label = $watch_unwatch_value = '';
+          if ( current_user_can( $cap ) ) { // For staff/subscriber
+            if ( rthd_is_ticket_subscriber( $post->ID ) ) {
+              $watch_unwatch_label = 'Unsubscribe';
+              $watch_unwatch_value = 'unwatch';
+            }
+            else {
+              $watch_unwatch_label = 'Subscribe';
+              $watch_unwatch_value = 'watch';
+            }
+          }
+          if( ! empty( $watch_unwatch_label ) ) { ?>
+          <a id="rthd-ticket-watch-unwatch" href="#" data-value="<?php echo $watch_unwatch_value; ?>" title="<?php _e( $watch_unwatch_label ) ?>">
+            <?php
+            if ($watch_unwatch_value == 'watch'){
+              echo '<span class="dashicons dashicons-email-alt"></span>';
+            } else{
+              echo '<span class="dashicons dashicons-email"></span>';
+            }
+            ?>
+            <?php
+            }?>
+            <a id="ticket-add-fav" href="#" title="<?php _e('Favorite ticket') ?>"><?php
+              if ( in_array( $post->ID , rthd_get_user_fav_ticket( get_current_user_id() ) ) ){
+                echo '<span class="dashicons dashicons-star-filled"></span>';
+              } else {
+                echo '<span class="dashicons dashicons-star-empty"></span>';
+              }
+              ?></a>
+            <?php wp_nonce_field( 'heythisisrthd_ticket_fav_'.$post->ID, 'rthd_fav_tickets_nonce' ); ?>
 
-					<?php
-					// Watch/Unwatch ticket feature.
-					$watch_unwatch_label = $watch_unwatch_value = '';
-					if ( current_user_can( $cap ) && $assignee_info->user_email != $current_user->user_email ) { // For staff/subscriber
-						if ( rthd_is_ticket_subscriber( $post->ID ) ) {
-							$watch_unwatch_label = 'Unsubscribe';
-							$watch_unwatch_value = 'unwatch';
-						}
-						else {
-							$watch_unwatch_label = 'Subscribe';
-							$watch_unwatch_value = 'watch';
-						}
-					}
-					if( ! empty( $watch_unwatch_label ) ) { ?>
-					<a id="rthd-ticket-watch-unwatch" href="#" data-value="<?php echo $watch_unwatch_value; ?>" title="<?php _e( $watch_unwatch_label ) ?>">
-						<?php
-						if ($watch_unwatch_value == 'watch'){
-							echo '<span class="dashicons dashicons-email-alt"></span>';
-						} else{
-							echo '<span class="dashicons dashicons-email"></span>';
-						}
-						?>
-						<?php
-						}?>
-						<a id="ticket-add-fav" href="#" title="<?php _e('Favorite ticket') ?>"><?php
-						if ( in_array( $post->ID , rthd_get_user_fav_ticket( get_current_user_id() ) ) ){
-							echo '<span class="dashicons dashicons-star-filled"></span>';
- 						} else {
-							echo '<span class="dashicons dashicons-star-empty"></span>';
-						}
-						?></a>
-					<?php wp_nonce_field( 'heythisisrthd_ticket_fav_'.$post->ID, 'rthd_fav_tickets_nonce' ); ?>
-
-
-				</div>
-			</div>
-
-			<div class="rt-hd-ticket-info">
-				<span title="Status"><strong>Status: </strong></span>
-				<?php
-					if ( current_user_can( $cap ) ){
-					?>
-						<select id="rthd-status-list" name="rt-hd-status" class="">
-							<?php $post_statuses = $rt_hd_module->get_custom_statuses();
-							foreach ( $post_statuses as $status ) {
-								$selected = ( $status[ 'slug' ] == $post->post_status ) ? 'selected' : '';?>
-								<option value="<?php echo esc_attr( $status[ 'slug' ] ); ?>" <?php echo esc_attr( $selected ); ?> ><?php echo esc_html( $status[ 'name' ] ); ?></option>
-							<?php } ?>
-						</select> <img id="status-change-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" /><?php
-					}
-				else if ( isset( $post->ID ) ) {
-					$pstatus = $post->post_status;
-					echo '<div id="rthd-status-visiable" >' . rthd_status_markup( $pstatus ) . '</div>';
-				}
-				?>
+			</div> <div class="rthd-clearfix"></div>
+      </div>
+			<div class="rt-hd-ticket-sub-row">
+        <div class="rthd-ticket-sidebar-sub-title">
+			<span>Status: </span></div>
+				<div class="rthd-ticket-sidebar-sub-result">
+          <?php
+            if ( current_user_can( $cap ) ){
+            ?>
+              <select id="rthd-status-list" class="rthd-ticket-dropdown" name="rt-hd-status" class="">
+                <?php $post_statuses = $rt_hd_module->get_custom_statuses();
+                foreach ( $post_statuses as $status ) {
+                  $selected = ( $status[ 'slug' ] == $post->post_status ) ? 'selected' : '';?>
+                  <option value="<?php echo esc_attr( $status[ 'slug' ] ); ?>" <?php echo esc_attr( $selected ); ?> ><?php echo esc_html( $status[ 'name' ] ); ?></option>
+                <?php } ?>
+              </select> <img id="status-change-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" /><?php
+            }
+          else if ( isset( $post->ID ) ) {
+            $pstatus = $post->post_status;
+            echo '<div id="rthd-status-visiable" >' . rthd_status_markup( $pstatus ) . '</div>';
+          }
+          ?>
+        </div>
 			</div>
 			<?php
 				if ( current_user_can( $cap ) ) {
 					$rtcamp_users = Rt_HD_Utils::get_hd_rtcamp_user();
 			?>
-				<div class="rt-hd-ticket-info">
-					<span title="<?php _e( 'Assigned To', RT_HD_TEXT_DOMAIN ); ?>">
-						<strong>
-							<?php _e( 'Assigned To', RT_HD_TEXT_DOMAIN ); ?>:
-						</strong>
-					</span>
-					<select id="rthd-assignee-list" name="rt-hd-assignee">
+				<div class="rt-hd-ticket-sub-row">
+          <div class="rthd-ticket-sidebar-sub-title">
+
+          <span>
+							<?php _e( 'Assigned', RT_HD_TEXT_DOMAIN ); ?>:
+						</span>
+            </div>
+          <div class="rthd-ticket-sidebar-sub-result">
+
+          <select id="rthd-assignee-list" class="rthd-ticket-dropdown" name="rt-hd-assignee">
 						<?php
 							if ( ! empty( $rtcamp_users ) ) {
 								foreach ( $rtcamp_users as $author ) {
@@ -153,55 +228,43 @@ $user_edit_content = current_user_can( $cap );
 						<input type="hidden" class="rthd-current-user-id" value="<?php echo get_current_user_id(); ?>" />
 						<a style="<?php echo $assign_tome_style; ?>" href="#" class="rt-hd-assign-me"><?php _e( 'Assign me' ); ?></a>
 					<img id="assignee-change-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
+            </div>
 				</div>
 			<?php
 				}
-			?>
-			<div class="rt-hd-ticket-info">
-				<span title="Create Date"><strong>Created: </strong></span>
-				<span title="<?php echo esc_attr( $createdate )?>">
-			<?php
-			echo esc_attr( human_time_diff( strtotime( $createdate ), current_time( 'timestamp' ) ) ) . ' ago';
-			$created_by = get_user_by( 'id', get_post_meta( $post->ID, '_rtbiz_hd_created_by', true ) );
-			if ( ! empty( $created_by ) ) {
-				if ( current_user_can( $cap ) ){
-					echo ' by <a href="'.rthd_biz_user_profile_link($created_by->user_email).'">' . $created_by->display_name.'</a>';
-				} else {
-					echo ' by ' . $created_by->display_name;
-				}
-			}
-			?>
-				</span>
-			</div>
-			<?php
-			$comment = get_comments( array( 'post_id' => $post->ID, 'number' => 1 ) );
-
-			if ( ! empty( $comment ) ) {
-				$comment = $comment[ 0 ];
-				if ( current_user_can( $cap ) ){
-					$commentlink = '<a href="'.rthd_biz_user_profile_link($comment->comment_author_email).'" >'.$comment->comment_author.'</a>';
-				}
-				else {
-					$commentlink = $comment->comment_author;
-				}
-				?>
-
-				<div class="rt-hd-ticket-info rt-hd-ticket-last-reply">
-					<span title="Status"><strong>Last reply: </strong></span>
-					<span class="rthd_attr_border rthd_view_mode"> <?php echo esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . " ago by " . $commentlink; ?></span>
-				</div>
-			<?php } ?>
-			<div class='rt-hd-ticket-info'>
-				<h2 class="rt-hd-ticket-info-header"><?php echo __( 'Add people' ); ?></h2>
-			</div>
-			<div class="rt-hd-ticket-info rt-hd-related-ticket">
-					<input type="email" placeholder="email" id="rthd-subscribe-email">
-				<button type="button" class='rthd-subscribe-email-submit button btn'>Add</button>
-				<span style="display: none;" class="rthd-subscribe-validation" ></span>
-				<img id="rthd-subscribe-email-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
-
-			</div>
-
+       // Products
+       global $rtbiz_offerings;
+       $products = array();
+       if ( ! empty( $rtbiz_offerings ) ) {
+       $products = get_terms( Rt_Offerings::$offering_slug );
+       $ticket_offering = wp_get_post_terms( $post->ID, Rt_Offerings::$offering_slug );
+       }
+       if ( ! $products instanceof WP_Error && ! empty( $products ) ) { ?>
+	       <div class="rt-hd-ticket-sub-row">
+	             <div class="rthd-ticket-sidebar-sub-title">
+								<span>
+	                  <?php _e( 'Offering:' ); ?>
+								</span>
+	             </div>
+		       <div class="rthd-ticket-sidebar-sub-result">
+			       <select id="rthd-offering-list" class="rthd-ticket-dropdown" name="rt-hd-offering">
+				       <?php foreach ( $products as $p ) {
+					       if ( ! empty( $ticket_offering ) && $ticket_offering[0]->term_id == $p->term_id ){
+						       $selected = ' selected="selected" ';
+					       } else {
+						       $selected = ' ';
+					       }
+			               echo '<option value="' . esc_attr( $p->term_id ) . '"' . esc_attr( $selected ) . '>' . esc_attr( $p->name ) . '</option>';
+			            }
+			           if ( empty( $ticket_offering ) ){
+			              echo '<option value="0" selected="selected" >-Select Offering-</option>';
+			           } ?>
+	                </select>
+			        <img id="offering-change-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
+	           </div>
+	       </div>
+       <?php } ?>
+		</div>
 			<?php
 			if ( isset( $post->ID ) ) {
 				$attachments = get_children( array( 'post_parent' => $post->ID, 'post_type' => 'attachment', ) );
@@ -209,7 +272,7 @@ $user_edit_content = current_user_can( $cap );
 				if ( ! empty( $attachments ) ) {
 					$attach_cmt = rthd_get_attachment_url_from_followups( $post->ID );
 					$attachFlag  = true;
-					$tmphtml= '<div class="rt-hd-ticket-info"><h2 class="rt-hd-ticket-info-header">'. __( 'Attachments' ) .'</h2></div><div class="rt-hd-ticket-info"><ul id="attachment-files">';
+					$tmphtml= '<div class="rt-hd-sidebar-box"><div class="rt-hd-ticket-info"><h3 class="rt-hd-ticket-info-header">'. __( 'Attachments' ) .'</h3> <div class="rthd-collapse-icon"><a class="rthd-collapse-click" href="#"><span class="dashicons dashicons-arrow-up-alt2"></span></a></div><div class="rthd-clearfix"></div></div><div class="rt-hd-ticket-sub-row"><ul id="attachment-files">';
 							?>
 							<?php foreach ( $attachments as $attachment ) {
 								if ( in_array($attachment->ID ,$attach_cmt)){
@@ -234,7 +297,7 @@ $user_edit_content = current_user_can( $cap );
 								</li>
 							<?php }
 					if ( ! $attachFlag ){
-						echo '</ul> </div>';
+						echo '</ul> </div> </div>';
 					}
 					?>
 
@@ -245,57 +308,27 @@ $user_edit_content = current_user_can( $cap );
 				$ref_links = get_post_meta( $post->ID, '_rtbiz_hd_external_file' );
 				if( ! empty( $ref_links ) ) {
 				?>
-					<div class="rt-hd-ticket-info">
-						<h2 class="rt-hd-ticket-info-header"><?php _e( 'Reference Link' ); ?></h2>
-					</div>
-					<div class="rt-hd-ticket-info">
-						<ul>
-							<?php foreach ( $ref_links as $ref_link ) {
-								$ref_link = (array) json_decode( $ref_link );
-							?>
-								<li><a target="_blank" href="<?php echo $ref_link['link']; ?>"><?php echo $ref_link['title']; ?></a></li>
-							<?php } ?>
-						</ul>
-					</div>
+          <div class="rt-hd-sidebar-box">
+            <div class="rt-hd-ticket-info">
+              <h3 class="rt-hd-ticket-info-header"><?php _e( 'Reference Link' ); ?></h3>
+              <div class="rthd-collapse-icon"><a class='rthd-collapse-click' href="#"><span class="dashicons dashicons-arrow-up-alt2"></span></a></div>
+              <div class="rthd-clearfix"></div>
+            </div>
+            <div class="rt-hd-ticket-sub-row">
+              <ul>
+                <?php foreach ( $ref_links as $ref_link ) {
+                  $ref_link = (array) json_decode( $ref_link );
+                ?>
+                  <li><a target="_blank" href="<?php echo $ref_link['link']; ?>"><?php echo $ref_link['title']; ?></a></li>
+                <?php } ?>
+              </ul>
+            </div>
+          </div>
 				<?php
 				}
 
 				if ( current_user_can( $cap ) ) {
 
-					// Products
-					global $rtbiz_offerings;
-					$products = array();
-					if ( ! empty( $rtbiz_offerings ) ) {
-						$products = get_terms( Rt_Offerings::$offering_slug );
-						$ticket_offering = wp_get_post_terms( $post->ID, Rt_Offerings::$offering_slug );
-					}
-					if ( ! $products instanceof WP_Error && ! empty( $products ) ) { ?>
-						<div class="rt-hd-ticket-info">
-							<span>
-								<strong>
-									<?php _e( 'Ticket Offering:' ); ?>
-								</strong>
-							</span>
-							<select id="rthd-offering-list" ndame="rt-hd-offering">
-								<?php foreach ( $products as $p ) {
-									if ( ! empty( $ticket_offering ) && $ticket_offering[0]->term_id == $p->term_id ){
-										$selected = ' selected="selected" ';
-									} else {
-										$selected = ' ';
-									}
-									?>
-									<?php
-									echo '<option value="' . esc_attr( $p->term_id ) . '"' . esc_attr( $selected ) . '>' . esc_attr( $p->name ) . '</option>';
-									?>
-								<?php }
-								if ( empty( $ticket_offering ) ){
-									echo '<option value="0" selected="selected" >-Select Offering-</option>';
-								}
-								?>
-								</select>
-							<img id="offering-change-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
-						</div>
-					<?php }
 					// Attributes
 					global $rt_hd_attributes_relationship_model;
 					$relations = $rt_hd_attributes_relationship_model->get_relations_by_post_type( Rt_HD_Module::$post_type );
@@ -307,16 +340,20 @@ $user_edit_content = current_user_can( $cap );
 
 							if ( ! $terms instanceof WP_Error && ! empty( $terms ) ) {
 								?>
+                <div class="rt-hd-sidebar-box">
 								<div class="rt-hd-ticket-info">
-									<h2 class="rt-hd-ticket-info-header"><?php echo $attr->attribute_label; ?></h2>
+									<h3 class="rt-hd-ticket-info-header"><?php echo $attr->attribute_label; ?></h3>
+                  <div class="rthd-collapse-icon"><a class='rthd-collapse-click' href="#"><span class="dashicons dashicons-arrow-up-alt2"></span></a></div>
+                  <div class="rthd-clearfix"></div>
 								</div>
-								<div class="rt-hd-ticket-info">
+								<div class="rt-hd-ticket-sub-row">
 									<ul>
 										<?php foreach ( $terms as $t ) { ?>
 											<li><?php echo $t->name; ?></li>
 										<?php } ?>
 									</ul>
 								</div>
+                </div>
 							<?php
 							}
 						}
@@ -336,16 +373,21 @@ $user_edit_content = current_user_can( $cap );
 			), ));
 			if ( $otherposts ) {
 			?>
-			<div class="rt-hd-ticket-info">
-				<h2 class="rt-hd-ticket-info-header"><?php echo __( 'Ticket History' ); ?></h2>
-			</div>
-			<div class="rt-hd-ticket-info rt-hd-ticket-history">
-				<ul>
-					<?php foreach ( $otherposts as $p ) { ?>
-						<li><a href="<?php echo get_post_permalink( $p->ID ); ?>" ><?php echo '[#' . $p->ID. '] ' . esc_attr( strlen( balanceTags( $p->post_title ) ) > 15 ? substr( balanceTags( $p->post_title ), 0, 15 ) . '...' : balanceTags( $p->post_title ) ) ?>  </a><?php echo rthd_status_markup( $p->post_status ); ?></li>
-					<?php } ?>
-				</ul>
-			</div>
+      <div class="rt-hd-sidebar-box">
+        <div class="rt-hd-ticket-info">
+          <h3 class="rt-hd-ticket-info-header"><?php echo __( 'Ticket History' ); ?></h3>
+          <div class="rthd-collapse-icon"><a class='rthd-collapse-click' href="#"><span class="dashicons dashicons-arrow-up-alt2"></span></a></div>
+          <div class="rthd-clearfix"></div>
+
+        </div>
+        <div class="rt-hd-ticket-sub-row rt-hd-ticket-history">
+          <ul>
+            <?php foreach ( $otherposts as $p ) { ?>
+              <li><a href="<?php echo get_post_permalink( $p->ID ); ?>" ><?php echo '[#' . $p->ID. '] ' . esc_attr( strlen( balanceTags( $p->post_title ) ) > 15 ? substr( balanceTags( $p->post_title ), 0, 15 ) . '...' : balanceTags( $p->post_title ) ) ?>  </a><?php echo rthd_status_markup( $p->post_status ); ?></li>
+            <?php } ?>
+          </ul>
+        </div>
+      </div>
 			<?php } ?>
 
 			<?php
@@ -355,16 +397,20 @@ $user_edit_content = current_user_can( $cap );
 				                            'nopaging' => true,
 			                            ) );
 			if ( $connected_tickets->have_posts() ){ ?>
-			<div class="rt-hd-ticket-info">
-				<h2 class="rt-hd-ticket-info-header"><?php echo __( 'Related Tickets' ); ?></h2>
-			</div>
-			<div class="rt-hd-ticket-info rt-hd-related-ticket">
-				<ul>
-					<?php foreach ( $connected_tickets->posts as $p ) { ?>
-						<li><a href="<?php echo get_post_permalink( $p->ID ); ?>" ><?php echo '[#' . $p->ID. '] ' . esc_attr( strlen( balanceTags( $p->post_title ) ) > 15 ? substr( balanceTags( $p->post_title ), 0, 15 ) . '...' : balanceTags( $p->post_title ) ) ?>  </a><?php echo rthd_status_markup( $p->post_status ); ?></li>
-					<?php } ?>
-				</ul>
-			</div>
+        <div class="rt-hd-sidebar-box">
+          <div class="rt-hd-ticket-info">
+            <h3 class="rt-hd-ticket-info-header"><?php echo __( 'Related Tickets' ); ?></h3>
+            <div class="rthd-collapse-icon"><a class='rthd-collapse-click' href="#"><span class="dashicons dashicons-arrow-up-alt2"></span></a></div>
+            <div class="rthd-clearfix"></div>
+          </div>
+          <div class="rt-hd-ticket-sub-row rt-hd-related-ticket">
+            <ul>
+              <?php foreach ( $connected_tickets->posts as $p ) { ?>
+                <li><a href="<?php echo get_post_permalink( $p->ID ); ?>" ><?php echo '[#' . $p->ID. '] ' . esc_attr( strlen( balanceTags( $p->post_title ) ) > 15 ? substr( balanceTags( $p->post_title ), 0, 15 ) . '...' : balanceTags( $p->post_title ) ) ?>  </a><?php echo rthd_status_markup( $p->post_status ); ?></li>
+              <?php } ?>
+            </ul>
+          </div>
+        </div>
 				<?php } ?>
 		</div>
 	</div>
