@@ -142,6 +142,30 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 				return rthd_locate_template( 'ticket-error-page.php' );
 			}
 
+			if ( ! empty( $post ) ){
+				if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' ) ) ) {
+					$contacts = rt_biz_get_post_for_contact_connection( $post->ID, Rt_HD_Module::$post_type );
+					$contact_ids = wp_list_pluck($contacts,'ID');
+					$user = wp_get_current_user();
+					$current_contact = '';
+					if ( !empty( $user ) ){
+						$current_contact = rt_biz_get_contact_for_wp_user($user->ID);
+					}
+					$creator = get_post_meta( $post->ID, '_rtbiz_hd_created_by', true );
+					if ( ( empty( $current_contact ) || ! in_array( $current_contact->ID, $contact_ids ) ) && $creator != $user->ID ){
+						$redirect_url = ( ( is_ssl() ) ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+						$login_url = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( $redirect_url ) );
+						$message = sprintf( '%s ', __( 'You have not enough access!' ) );
+						global $rthd_messages;
+						$rthd_messages[] = array( 'type' => 'error', 'message' => $message, 'displayed' => 'no' );
+						global $rthd_front_page_title;
+						$rthd_front_page_title = __( 'Helpdesk' );
+						return rthd_locate_template( 'ticket-error-page.php' );
+					}
+
+				}
+			}
+
 			if ( rthd_is_unique_hash_enabled() && ! empty( $_REQUEST['rthd_unique_id'] ) ) {
 				$args = array(
 					'meta_key'    => '_rtbiz_hd_unique_id',
