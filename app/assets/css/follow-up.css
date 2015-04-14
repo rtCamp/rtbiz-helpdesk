@@ -476,7 +476,7 @@ h2.rt-hd-ticket-front-title{
 }
 
 .rthd-ticket-sidebar-sub-title{
-	width: 27%;
+	width: 28%;
 	vertical-align: top;
 }
 
@@ -556,4 +556,8 @@ ul#attachment-files {
 	list-style-type: none;
 	padding: 0;
 	margin: 0;
+}
+
+#rthd-subscribe-email{
+	width: 250px;
 }
