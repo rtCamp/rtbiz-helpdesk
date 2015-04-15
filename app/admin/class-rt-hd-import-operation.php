@@ -76,8 +76,10 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			add_action( 'wp_ajax_nopriv_rthd_quick_download', array( $this, 'rthd_quick_download' ) );
 			add_action( 'wp_ajax_nopriv_rthd_upload_attachment', array( $this, 'rthd_upload_attachment' ) );
 			add_action( 'wp_ajax_rthd_upload_attachment', array( $this, 'rthd_upload_attachment' ) );
-			add_action( 'wp_ajax_rthd_check_duplicate_followup', array( $this, 'rthd_check_duplicate_followup' ) );
-			add_action( 'wp_ajax_nopriv_rthd_check_duplicate_followup', array( $this, 'rthd_check_duplicate_followup' ) );
+
+			// commented ajax call for checking followup duplicate and all other code
+			//			add_action( 'wp_ajax_rthd_check_duplicate_followup', array( $this, 'rthd_check_duplicate_followup' ) );
+			//			add_action( 'wp_ajax_nopriv_rthd_check_duplicate_followup', array( $this, 'rthd_check_duplicate_followup' ) );
 			add_action( 'wp_ajax_front_end_offering_change', array( $this, 'front_end_offering_change' ) );
 			add_action( 'wp_ajax_rthd_fav_ticket', array( $this, 'favourite_tickets' ) );
 
@@ -1026,8 +1028,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$d->setTimezone( $UTC );
 				$timeStamp = $d->getTimestamp();
 				$postDate  = gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) + ( get_option( 'gmt_offset' ) * 3600 ) ) );
-				$sql       = "select * from $wpdb->comments where  comment_post_id=%d  and comment_date between subtime(%s,'00:10:00') and addtime(%s,'00:10:00')";
-				$query .= " AND post_date between subtime(%s,'00:10:00') and addtime(%s,'00:10:00')";
+				//				$sql       = "select * from $wpdb->comments where  comment_post_id=%d  and comment_date between subtime(%s,'00:10:00') and addtime(%s,'00:10:00')";
+				//				$query .= " AND post_date between subtime(%s,'00:10:00') and addtime(%s,'00:10:00')";
 				$args[] = $postDate;
 				$args[] = $postDate;
 			}
@@ -1047,28 +1049,30 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		/**
 		 * Add comment to post
 		 *
-		 * @param 			$comment_post_ID
-		 * @param 			$userid
-		 * @param 			$comment_content
-		 * @param 			$comment_author
-		 * @param 			$comment_author_email
-		 * @param 			$commenttime
-		 * @param 			$uploaded
-		 * @param array 	$allemails : All contact
-		 * @param 			$dndEmails
-		 * @param string 	$messageid
-		 * @param string 	$inreplyto
-		 * @param string 	$references
-		 * @param array 	$subscriber : All staff
-		 * @param string 	$originalBody
-		 * @param string 	$comment_type
-		 * @param int 		$comment_parent
+		 * @param            $comment_post_ID
+		 * @param            $userid
+		 * @param            $comment_content
+		 * @param            $comment_author
+		 * @param            $comment_author_email
+		 * @param            $commenttime
+		 * @param            $uploaded
+		 * @param array      $allemails : All contact
+		 * @param            $dndEmails
+		 * @param string     $messageid
+		 * @param string     $inreplyto
+		 * @param string     $references
+		 * @param array      $subscriber : All staff
+		 * @param string     $originalBody
+		 * @param string     $comment_type
+		 * @param int        $comment_parent
+		 *
+		 * @param bool       $keep_status
+		 * @param bool       $force_skip_duplicate_check
 		 *
 		 * @return bool
-		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		public function insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, $uploaded, $allemails = array(), $dndEmails, $messageid = '', $inreplyto = '', $references = '', $subscriber = array(), $originalBody = '', $comment_type = '10', $comment_parent = 0, $keep_status = false, $force_skip_duplicate_check = false ) {
+		public function insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, $uploaded, $allemails = array(), $dndEmails, $messageid = '', $inreplyto = '', $references = '', $subscriber = array(), $originalBody = '', $comment_type = '10', $comment_parent = 0, $keep_status = false, $force_skip_duplicate_check = true ) {
 
 			$post_type       = get_post_type( $comment_post_ID );
 			$ticketModel     = new Rt_HD_Ticket_Model();
@@ -1592,15 +1596,15 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$keep_status = true;
 			}
 			$uploaded = explode( ',', $_POST['followup_attachments'] );
-			$force_duplicate = false;
-			if ( ! empty( $_POST['followup_duplicate_force'] ) ){
+//			$force_duplicate = false;
+//			if ( ! empty( $_POST['followup_duplicate_force'] ) ){
 				$force_duplicate = true;
-			}
+//			}
 			$comment_ID = $this->insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, array_filter( $uploaded ), $allemail, $dndEmails, '', '', '', $subscriber, '', $comment_type, $comment_parent, $keep_status, $force_duplicate);
 
 			if ( empty( $comment_ID ) ){
 				$returnArray['status'] = false;
-				$returnArray['message'] = 'Duplicate followup!';
+				$returnArray['message'] = 'Something went wrong please contact admin.';
 			} else {
 				$returnArray['status'] = true;
 				$returnArray['comment_count'] = get_comments(

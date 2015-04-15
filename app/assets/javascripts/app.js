@@ -343,11 +343,11 @@ jQuery( document ).ready( function ( $ ) {
 	             document.getElementById('followup-filelist').innerHTML = '';
 	             document.getElementById('savefollwoup').onclick = function() {
 		             if ( followupValidate() ) {
-			             if ( uploader.files.length ) {
-				             checkDuplicateFollowup();
-			             } else {
+			             //if ( uploader.files.length ) {
+				             //checkDuplicateFollowup();
+			             //} else {
 				             uploader.start();
-			             }
+			             //}
 		             }
 	             };
 	         },
@@ -459,9 +459,9 @@ function sendFollowup( force ) {
 	formData.append( "followup_content", rthd_tinymce_get_content( 'followupcontent' ) );
 	formData.append( "followup_attachments", uploadedfiles );
 
-	if ( force ){
-		formData.append('followup_duplicate_force', true);
-	}
+	//if ( force ){
+	//	formData.append('followup_duplicate_force', true);
+	//}
 
 	if ( jQuery( '#rthd_keep_status' ) ) {
 		formData.append( "rthd_keep_status", jQuery( '#rthd_keep_status' ).is( ':checked' ) );
@@ -502,13 +502,14 @@ function sendFollowup( force ) {
 				             jQuery( '#hdspinner' ).hide();
 				             jQuery( '#savefollwoup' ).removeAttr( 'disabled' );
 			             } else {
-				             var r = confirm( data.message + ' Do you still want to add it ?' );
-				             if (r == true) {
-					             sendFollowup( true );
-				             } else {
-					             jQuery( '#hdspinner' ).hide();
-					             jQuery( '#savefollwoup' ).removeAttr( 'disabled' );
-				             }
+				             //var r = confirm( data.message + ' Do you still want to add it ?' );
+				             //if (r == true) {
+					          //   sendFollowup( true );
+				             //} else {
+				             console.log(data.message );
+				             jQuery( '#hdspinner' ).hide();
+				             jQuery( '#savefollwoup' ).removeAttr( 'disabled' );
+				             //}
 			             }
 			             //jQuery( '#hdspinner' ).hide();
 			             //jQuery( '#savefollwoup' ).removeAttr( 'disabled' );
