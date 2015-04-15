@@ -28,15 +28,15 @@ global $rthd_messages;
 						}
 					?>
 				</div>
-				<div class="rthd-my-ticket">
-					<?php
-					global $current_user;
-					echo balanceTags( do_shortcode( '[rt_hd_tickets userid = ' . $current_user->ID . ']' ) ); ?>
-				</div>
 				<div class="rthd-fav-ticket">
 					<?php
 					global $current_user;
 					echo balanceTags( do_shortcode( '[rt_hd_tickets userid = ' . $current_user->ID . ' fav= true]' ) ); ?>
+				</div>
+				<div class="rthd-my-ticket">
+					<?php
+					global $current_user;
+					echo balanceTags( do_shortcode( '[rt_hd_tickets userid = ' . $current_user->ID . ']' ) ); ?>
 				</div>
 			</div>
 		</section>
