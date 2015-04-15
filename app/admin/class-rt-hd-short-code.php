@@ -127,9 +127,7 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 				'post_status' => 'any',
 				'nopaging'    => true,
 			);
-			if ( ! empty( $arg_shortcode['fav'] ) ){
 
-			}
 
 			global $current_user;
 
