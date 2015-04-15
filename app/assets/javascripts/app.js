@@ -719,6 +719,17 @@ function sendFollowup( force ) {
 		jQuery('span',this).toggleClass('dashicons-arrow-up-alt2 dashicons-arrow-down-alt2');
 	});
 
+	jQuery('#rthd-add-contact' ).click( function ( e ) {
+		e.preventDefault();
+		console.log('logg');
+		//jQuery('.rthd-add-people-box' ).toggleClass('rthd-show-add-people-box');
+		if(jQuery('.rthd-add-people-box' ).is(':visible')){
+			jQuery('.rthd-add-people-box' ).hide();
+		} else {
+			jQuery('.rthd-add-people-box' ).show();
+		}
+	});
+
 
 } );
 

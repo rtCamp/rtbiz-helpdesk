@@ -102,7 +102,7 @@ $user_edit_content = current_user_can( $cap );
 					<?php } ?>
 
           <div class="rthd-add-people-button">
-            <a href="#" id="rthd-add-contact"><span class="dashicons dashicons-plus-alt rthd-add-contact-icon"></span></a>
+            <a href="#" id="rthd-add-contact" title="Add people to this ticket"><span class="dashicons dashicons-plus-alt rthd-add-contact-icon"></span></a>
             <div class="rthd-add-people-box">
                 <input type="email" placeholder="enter email here" id="rthd-subscribe-email">
                 <button type="button" class='rthd-subscribe-email-submit button btn'>Add</button>
@@ -172,7 +172,7 @@ $user_edit_content = current_user_can( $cap );
       </div>
 			<div class="rt-hd-ticket-sub-row">
         <div class="rthd-ticket-sidebar-sub-title">
-			<span>Status: </span></div>
+			<span>Status</span></div>
 				<div class="rthd-ticket-sidebar-sub-result">
           <?php
             if ( current_user_can( $cap ) ){
@@ -200,7 +200,7 @@ $user_edit_content = current_user_can( $cap );
           <div class="rthd-ticket-sidebar-sub-title">
 
           <span>
-							<?php _e( 'Assigned', RT_HD_TEXT_DOMAIN ); ?>:
+							<?php _e( 'Assignee', RT_HD_TEXT_DOMAIN ); ?>
 						</span>
             </div>
           <div class="rthd-ticket-sidebar-sub-result">
@@ -243,7 +243,7 @@ $user_edit_content = current_user_can( $cap );
 	       <div class="rt-hd-ticket-sub-row">
 	             <div class="rthd-ticket-sidebar-sub-title">
 								<span>
-	                  <?php _e( 'Offering:' ); ?>
+	                  <?php _e( 'Offering' ); ?>
 								</span>
 	             </div>
 		       <div class="rthd-ticket-sidebar-sub-result">

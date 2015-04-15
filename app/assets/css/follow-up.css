@@ -458,6 +458,7 @@ h2.rt-hd-ticket-front-title{
 }
 .rthd-ticket-user-activity a{
 	margin-left: 3px;
+	text-decoration: none;
 }
 
 .rthd-contact-avatar-no-reply a img,.rthd-subscriber-avatar-no-reply a img{
@@ -477,7 +478,6 @@ h2.rt-hd-ticket-front-title{
 
 .rthd-ticket-sidebar-sub-title{
 	width: 28%;
-	vertical-align: top;
 }
 
 .rthd-ticket-sidebar-sub-result{
@@ -492,9 +492,14 @@ h2.rt-hd-ticket-front-title{
 .rthd-add-people-button{
 	position: relative;
 	display: inline-block;
+	float: right;
 }
 
-.rthd-add-people-button:hover .rthd-add-people-box {
+/*.rthd-add-people-button:hover .rthd-add-people-box {*/
+	/*display: block;*/
+/*}*/
+
+.rthd-add-people-button.rthd-show-add-people-box{
 	display: block;
 }
 
@@ -504,7 +509,7 @@ h2.rt-hd-ticket-front-title{
 	z-index: 999;
 	display: none;
 	padding: 10px;
-	margin: 0;
+	margin-left: -225px;
 }
 
 .rthd-add-people-button a:hover {
@@ -560,4 +565,9 @@ ul#attachment-files {
 
 #rthd-subscribe-email{
 	width: 250px;
+	float: right;
+}
+
+.rthd-subscribe-email-submit{
+	float: right;
 }
