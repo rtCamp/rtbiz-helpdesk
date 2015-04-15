@@ -58,7 +58,7 @@ wp_editor( '', $editor_id, $settings );
 		        <input type="button" class="btn button" id="attachemntlist" value="Attach Files">
 	        </div>
 	        <div id="followup-filelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
-	        <span class="followup-note"><b>Note:</b> Attachments will be uploaded when the form is submitted by clicking <i>Add Followup</i> button.</span>
+<!--	        <span class="followup-note"><b>Note:</b> Attachments will be uploaded when the form is submitted by clicking <i>Add Followup</i> button.</span>-->
 		</div>
 	</div>
 

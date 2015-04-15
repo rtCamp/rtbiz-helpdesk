@@ -124,7 +124,7 @@ if ( ! class_exists( 'RT_Meta_Box_Subscribers ' ) ) {
 			<script>
 				var arr_subscriber_user =<?php echo json_encode( $arrSubscriberUser ); ?>;
 			</script>
-			<input type="text" placeholder="Type Subscribers Name to select" id="subscriber_user_ac"/>
+			<input type="text" placeholder="Type Staff Name to select" id="subscriber_user_ac"/>
 			<ul id="divSubscriberList" class="">
 				<?php echo balanceTags( $subScribetHTML ); ?>
 			</ul>
