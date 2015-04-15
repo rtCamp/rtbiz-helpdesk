@@ -144,12 +144,27 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 
 			if ( ! empty( $post ) ){
 				global $rt_hd_email_notification;
-				if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' ) ) ) {
+				$user = wp_get_current_user();
+				if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' ) ) && current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' ) )  ) {
+					$subscriber = get_post_meta( $post->ID, '_rtbiz_hd_subscribe_to', true );
+					$post_author_id = get_post_field( 'post_author', $post->ID );
+					if ( ! in_array( $user->ID, $subscriber ) && ! in_array( $user->user_email, $subscriber )  && $user->ID != $post_author_id ){
+						$redirect_url = ( ( is_ssl() ) ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+						$login_url = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( $redirect_url ) );
+						$message = sprintf( '%s ', __( 'You do not have sufficient permissions to access this ticket.' ) );
+						global $rthd_messages;
+						$rthd_messages[] = array( 'type' => 'error', 'message' => $message, 'displayed' => 'no' );
+						global $rthd_front_page_title;
+						$rthd_front_page_title = __( 'Helpdesk' );
+						return rthd_locate_template( 'ticket-error-page.php' );
+					}
+
+				}else if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' ) ) ) {
 					$contacts = rt_biz_get_post_for_contact_connection( $post->ID, Rt_HD_Module::$post_type );
 					$other_contacts = $rt_hd_email_notification->get_contacts( $post->ID );
 					$contact_ids = wp_list_pluck($contacts,'ID');
 					$contact_emails = wp_list_pluck( $other_contacts, 'email' );
-					$user = wp_get_current_user();
+
 					$current_contact = '';
 					if ( !empty( $user ) ){
 						$current_contact = rt_biz_get_contact_for_wp_user($user->ID);
