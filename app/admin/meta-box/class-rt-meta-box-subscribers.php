@@ -119,8 +119,8 @@ if ( ! class_exists( 'RT_Meta_Box_Subscribers ' ) ) {
 			}?>
 
 			<div class="">
-			<span class="prefix"
-			      title="<?php _e( 'Subscribers', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Subscribers', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
+			<!--<span class="prefix"
+			      title="<?php /*_e( 'staff', RT_HD_TEXT_DOMAIN ); */?>"><label><strong><?php /*_e( 'Subscribers', RT_HD_TEXT_DOMAIN ); */?></strong></label></span>-->
 			<script>
 				var arr_subscriber_user =<?php echo json_encode( $arrSubscriberUser ); ?>;
 			</script>
