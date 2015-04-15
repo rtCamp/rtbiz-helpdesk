@@ -113,12 +113,12 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 								 <?php echo get_avatar( $created_by->user_email, 25 ); ?>
 								<a href="##deleteContactUser" class="delete_row">×</a><br>
 								<a class="rthd-info-meta-created-by heading" target="_blank" href="<?php echo rthd_biz_user_profile_link( $created_by->user_email );?>"><?php echo $created_by->display_name; ?></a>
-								<input type="hidden" name="post[rthd_created_by]" value="<?php echo $created_by->ID; ?>" /></div>
+								<input type="hidden" name="post[rthd_created_by]" value="<?php echo $created_by->ID; ?>" />
 							</li>
 
 						</ul>
 					<?php } ?>
-
+				</div>
 				<script>
 					jQuery(document ).ready(function($) {
 						if ( jQuery( ".user-autocomplete" ).length > 0 ) {

@@ -136,9 +136,9 @@ jQuery( document ).ready( function ( $ ) {
 									if ( ! data.has_replied ){
 										var htmlappend=  '<a title="'+data.display_name+'" class="rthd-last-reply-by" href="'+data.edit_link+'">'+data.avatar+' </a>';
 										if (data.is_contact){
-											jQuery('.rthd-contact-avatar-no-reply' ).append( htmlappend );
+											jQuery('.rthd-contact-avatar-no-reply-div' ).append( htmlappend );
 										} else {
-											jQuery('.rthd-subscriber-avatar-no-reply' ).append( htmlappend );
+											jQuery('.rthd-subscriber-avatar-no-reply-div' ).append( htmlappend );
 										}
 									}
 								}
@@ -722,8 +722,6 @@ function sendFollowup( force ) {
 
 	jQuery('#rthd-add-contact' ).click( function ( e ) {
 		e.preventDefault();
-		console.log('logg');
-		//jQuery('.rthd-add-people-box' ).toggleClass('rthd-show-add-people-box');
 		if(jQuery('.rthd-add-people-box' ).is(':visible')){
 			jQuery('.rthd-add-people-box' ).hide();
 		} else {

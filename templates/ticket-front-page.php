@@ -67,7 +67,7 @@ $user_edit_content = current_user_can( $cap );
 			            if ( $search !== false){
 			              unset($emails[$search]);
 			            }
-			            echo "<div class='rthd-contact-avatar-no-reply'>";
+			            echo "<div class='rthd-contact-avatar-no-reply-div'>";
 			            foreach( $other_contacts as $email ){
 			              $user = get_user_by('email',$email);
 			              $display_name = $email;
@@ -79,7 +79,7 @@ $user_edit_content = current_user_can( $cap );
 			            echo "</div>";
 
 			            if ( current_user_can( $cap ) ){
-			              echo '<div class="rthd-subscriber-avatar-no-reply">';
+			              echo '<div class="rthd-subscriber-avatar-no-reply-div">';
 			              foreach( $subscriber as $email ){
 			                $user = get_user_by( 'email',$email );
 			                $display_name = $email;
@@ -104,7 +104,7 @@ $user_edit_content = current_user_can( $cap );
           <div class="rthd-add-people-button">
             <a href="#" id="rthd-add-contact" title="Add people to this ticket"><span class="dashicons dashicons-plus-alt rthd-add-contact-icon"></span></a>
             <div class="rthd-add-people-box">
-                <input type="email" placeholder="enter email here" id="rthd-subscribe-email">
+                <input type="email" placeholder="Enter email to add people" id="rthd-subscribe-email">
                 <button type="button" class='rthd-subscribe-email-submit button btn'>Add</button>
                 <span style="display: none;" class="rthd-subscribe-validation" ></span>
                 <img id="rthd-subscribe-email-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />

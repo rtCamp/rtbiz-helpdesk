@@ -191,7 +191,7 @@ ul#chat-UI {
 
 .rthd-container {
 	margin: 10px;
-	overflow: auto;
+	/*overflow: auto;*/
 }
 
 .rthd-ticket-description {
@@ -464,8 +464,14 @@ h2.rt-hd-ticket-front-title{
 .rthd-contact-avatar-no-reply a img,.rthd-subscriber-avatar-no-reply a img{
 	opacity: 0.65;
 }
-.rthd-contact-avatar-no-reply, .rthd-subscriber-avatar-no-reply{
+.rthd-contact-avatar-no-reply,.rthd-contact-avatar-no-reply-div, .rthd-subscriber-avatar-no-reply{
 	display: inline;
+}
+.rthd-contact-avatar-no-reply-div,.rthd-subscriber-avatar-no-reply-div{
+	/*margin-left: 3px;*/
+	display: inline;
+	margin: 0;
+	padding: 0;
 }
 
 .rt-hd-ticket-sub-row{
@@ -533,7 +539,7 @@ h2.rt-hd-ticket-front-title{
 }
 
 .rthd-collapse-icon a{
-	margin-right: 20px;
+	margin-right: 10px;
 }
 
 .rthd-front-icons a:hover,.rthd-collapse-click:hover{
