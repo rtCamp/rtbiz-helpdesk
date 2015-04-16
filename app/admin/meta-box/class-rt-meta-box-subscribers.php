@@ -71,10 +71,13 @@ if ( ! class_exists( 'RT_Meta_Box_Subscribers ' ) ) {
 			$arrSubscriberUser   = array();
 			$subScribetHTML      = '';
 			if ( ! empty( $results ) ) {
+
 				foreach ( $results as $author ) {
 
 					$subscriber_flag = true;
-
+					if ( $post->post_author == $author->ID ){
+						continue;
+					}
 					foreach ( $arrSubscriberUser as $s ) {
 						if ( $s['id'] == $author->ID ) {
 							$subscriber_flag = false;
