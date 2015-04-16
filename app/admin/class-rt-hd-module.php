@@ -62,6 +62,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 			add_action( 'p2p_init', array( $this, 'create_connection' ) );
 			add_filter( 'bulk_post_updated_messages', array( $this, 'bulk_ticket_update_messages' ), 10, 2);
 			add_filter( 'post_updated_messages', array( $this, 'ticket_updated_messages' ), 10, 2 );
+
 			$this->hooks();
 		}
 
@@ -206,6 +207,17 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				'reciprocal' => true,
 				'title' => 'Related ' . $this->labels['name'],
 			) );
+			add_filter( 'p2p_connectable_args', array( $this, 'show_other_contacts_only' ), 10, 3 );
+
+		}
+
+		function show_other_contacts_only( $args, $ctype, $post_id  ){
+			global $wpdb, $rt_biz_acl_model;
+			if ( $ctype->name == self::$post_type.'_to_'.rt_biz_get_contact_post_type() ) {
+				$result  =$wpdb->get_col("SELECT p2p_from FROM ".$wpdb->prefix."p2p WHERE p2p_type = '".rt_biz_get_contact_post_type()."_to_user' AND p2p_to in (SELECT DISTINCT(userid) FROM ".$rt_biz_acl_model->table_name." where module = '".RT_HD_TEXT_DOMAIN."' and permission != 0 )");
+				$args['p2p:exclude'] = array_merge($args['p2p:exclude'], $result );
+			}
+			return $args;
 		}
 
 		/**
