@@ -1389,7 +1389,13 @@ function rthd_get_tickets( $key, $value ){
 			),
 		);
 	} elseif ( 'favourite' == $key ){
-		$args['post__in'] = rthd_get_user_fav_ticket( $value );
+		$fav = rthd_get_user_fav_ticket( $value );
+		// if there is no fav tickets post__in query will not work so return empty array
+		if ( empty( $fav ) ){
+			return array();
+		} else{
+			$args['post__in'] = $fav;
+		}
 	}
 	if ( ! empty( $args) ){
 		return get_posts( $args );
