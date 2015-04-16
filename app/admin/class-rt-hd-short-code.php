@@ -159,6 +159,7 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 			}
 			?>
 			<?php
+			ob_start();
 			if ( ! empty( $arg_shortcode['fav'] ) ) { ?>
 				<h2><?php _e( 'Favourite Tickets', RT_HD_TEXT_DOMAIN ); ?></h2>
 				<?php
@@ -237,6 +238,8 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 				<?php } ?>
 			</table>
 		<?php
+			$html_content = ob_get_clean();
+			return $html_content;
 		}
 
 	}
