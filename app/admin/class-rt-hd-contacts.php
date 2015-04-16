@@ -139,29 +139,28 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		 */
 		public function insert_new_contact( $email, $title ) {
 
+			global $transaction_id;
 			$contact = rt_biz_get_contact_by_email( $email );
 			if ( ! $contact ) {
 				if ( trim( $title ) == '' ) {
 					$title = $email;
 				}
-
 				$contact_id = rt_biz_add_contact( $title );
 				$contact    = get_post( $contact_id );
-			}
-			$contactmeta = rt_biz_get_entity_meta( $contact->ID, Rt_Contact::$primary_email_key, true );
-			if ( ! $contactmeta ) {
-				rt_biz_add_entity_meta( $contact->ID, Rt_Contact::$primary_email_key, $email, true );
-				global $transaction_id;
+				$userid = $this->get_user_from_email( $email );
+
+				if ( ! empty( $userid ) ) {
+					rt_biz_add_entity_meta( $contact->ID, $this->user_id, $userid );
+				}
+
+				rt_biz_connect_contact_to_user( $contact->ID, $userid );
+
 				if ( isset( $transaction_id ) && $transaction_id > 0 ) {
 					add_post_meta( $contact->ID, '_transaction_id', $transaction_id, true );
 				}
-				$userid = $this->get_user_from_email( $email );
-				if ( 1 != $userid ) {
-					rt_biz_add_entity_meta( $contact->ID, $this->user_id, $userid );
-				}
 			}
-
 			return $contact;
+
 		}
 
 		/**
