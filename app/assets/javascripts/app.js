@@ -141,6 +141,8 @@ jQuery( document ).ready( function ( $ ) {
 											jQuery('.rthd-subscriber-avatar-no-reply-div' ).append( htmlappend );
 										}
 									}
+									// hide box when person is added
+									jQuery('.rthd-add-people-box' ).hide();
 								}
 				                else{
 									if ( data.msg.length > 0 ){
