@@ -244,31 +244,39 @@ $user_edit_content = current_user_can( $cap );
        $products = get_terms( Rt_Offerings::$offering_slug );
        $ticket_offering = wp_get_post_terms( $post->ID, Rt_Offerings::$offering_slug );
        }
-       if ( ! $products instanceof WP_Error && ! empty( $products ) ) { ?>
-	       <div class="rt-hd-ticket-sub-row">
-	             <div class="rthd-ticket-sidebar-sub-title">
+       if ( ! $products instanceof WP_Error && ! empty( $products ) ) {
+	       if ( ! empty( $ticket_offering ) || current_user_can( $cap ) ) {
+		       ?>
+		       <div class="rt-hd-ticket-sub-row">
+			       <div class="rthd-ticket-sidebar-sub-title">
 								<span>
 	                  <?php _e( 'Offering' ); ?>
 								</span>
-	             </div>
-		       <div class="rthd-ticket-sidebar-sub-result">
-			       <select id="rthd-offering-list" class="rthd-ticket-dropdown" name="rt-hd-offering">
-				       <?php foreach ( $products as $p ) {
-					       if ( ! empty( $ticket_offering ) && $ticket_offering[0]->term_id == $p->term_id ){
-						       $selected = ' selected="selected" ';
-					       } else {
-						       $selected = ' ';
-					       }
-			               echo '<option value="' . esc_attr( $p->term_id ) . '"' . esc_attr( $selected ) . '>' . esc_attr( $p->name ) . '</option>';
-			            }
-			           if ( empty( $ticket_offering ) ){
-			              echo '<option value="0" selected="selected" >-Select Offering-</option>';
-			           } ?>
-	                </select>
-			        <img id="offering-change-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
-	           </div>
-	       </div>
-       <?php } ?>
+			       </div>
+			       <div class="rthd-ticket-sidebar-sub-result">
+				       <?php if ( current_user_can( $cap ) ) { ?>
+					       <select id="rthd-offering-list" class="rthd-ticket-dropdown" name="rt-hd-offering">
+						       <?php foreach ( $products as $p ) {
+							       if ( ! empty( $ticket_offering ) && $ticket_offering[ 0 ]->term_id == $p->term_id ) {
+								       $selected = ' selected="selected" ';
+							       } else {
+								       $selected = ' ';
+							       }
+							       echo '<option value="' . esc_attr( $p->term_id ) . '"' . esc_attr( $selected ) . '>' . esc_attr( $p->name ) . '</option>';
+						       }
+						       if ( empty( $ticket_offering ) ) {
+							       echo '<option value="0" selected="selected" >-Select Offering-</option>';
+						       } ?>
+					       </select>
+					       <img id="offering-change-spinner" class="helpdeskspinner"
+					            src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
+				       <?php } else {
+					       echo '<span>'.$ticket_offering[ 0 ]->name.'</span>';
+				       } ?>
+			       </div>
+		       </div>
+	       <?php }
+       }?>
 		</div>
 			<?php
 			if ( isset( $post->ID ) ) {
@@ -396,27 +404,33 @@ $user_edit_content = current_user_can( $cap );
 			<?php } ?>
 
 			<?php
-			$connected_tickets = new WP_Query( array(
-				                            'connected_type' => Rt_HD_Module::$post_type.'_to_'.Rt_HD_Module::$post_type,
-				                            'connected_items' => $post->ID,
-				                            'nopaging' => true,
-			                            ) );
-			if ( $connected_tickets->have_posts() ){ ?>
-        <div class="rt-hd-sidebar-box">
-          <div class="rt-hd-ticket-info">
-            <h3 class="rt-hd-ticket-info-header"><?php echo __( 'Related Tickets' ); ?></h3>
-            <div class="rthd-collapse-icon"><a class='rthd-collapse-click' href="#"><span class="dashicons dashicons-arrow-up-alt2"></span></a></div>
-            <div class="rthd-clearfix"></div>
-          </div>
-          <div class="rt-hd-ticket-sub-row rt-hd-related-ticket">
-            <ul>
-              <?php foreach ( $connected_tickets->posts as $p ) { ?>
-                <li><a href="<?php echo get_post_permalink( $p->ID ); ?>" ><?php echo '[#' . $p->ID. '] ' . esc_attr( strlen( balanceTags( $p->post_title ) ) > 15 ? substr( balanceTags( $p->post_title ), 0, 15 ) . '...' : balanceTags( $p->post_title ) ) ?>  </a><?php echo rthd_status_markup( $p->post_status ); ?></li>
-              <?php } ?>
-            </ul>
-          </div>
-        </div>
-				<?php } ?>
+			if ( current_user_can( $cap ) ) {
+				$connected_tickets = new WP_Query( array(
+					                                   'connected_type'  => Rt_HD_Module::$post_type . '_to_' . Rt_HD_Module::$post_type,
+					                                   'connected_items' => $post->ID,
+					                                   'nopaging'        => true,
+				                                   ) );
+				if ( $connected_tickets->have_posts() ) { ?>
+					<div class="rt-hd-sidebar-box">
+						<div class="rt-hd-ticket-info">
+							<h3 class="rt-hd-ticket-info-header"><?php echo __( 'Related Tickets' ); ?></h3>
+
+							<div class="rthd-collapse-icon"><a class='rthd-collapse-click' href="#"><span
+										class="dashicons dashicons-arrow-up-alt2"></span></a></div>
+							<div class="rthd-clearfix"></div>
+						</div>
+						<div class="rt-hd-ticket-sub-row rt-hd-related-ticket">
+							<ul>
+								<?php foreach ( $connected_tickets->posts as $p ) { ?>
+									<li>
+										<a href="<?php echo get_post_permalink( $p->ID ); ?>"><?php echo '[#' . $p->ID . '] ' . esc_attr( strlen( balanceTags( $p->post_title ) ) > 15 ? substr( balanceTags( $p->post_title ), 0, 15 ) . '...' : balanceTags( $p->post_title ) ) ?>  </a><?php echo rthd_status_markup( $p->post_status ); ?>
+									</li>
+								<?php } ?>
+							</ul>
+						</div>
+					</div>
+				<?php }
+			}?>
 		</div>
 	</div>
 <a href="#" class="rthd-scroll-up"></a>

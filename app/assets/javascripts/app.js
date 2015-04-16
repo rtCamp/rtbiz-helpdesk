@@ -641,7 +641,7 @@ function sendFollowup( force ) {
 			             data: requestArray,
 			             success: function ( data ) {
 				             if ( data.status ) {
-					             jQuery('#rthd-assignee-list' ).val( term_id );
+					             jQuery('#rthd-offering-list' ).val( term_id );
 				             }
 				             jQuery('#offering-change-spinner' ).hide();
 			             },
