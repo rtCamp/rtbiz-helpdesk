@@ -207,10 +207,18 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				'reciprocal' => true,
 				'title' => 'Related ' . $this->labels['name'],
 			) );
-			add_filter( 'p2p_connectable_args', array( $this, 'show_other_contacts_only' ), 10, 3 );
+
 
 		}
 
+		/**
+		 * @param $args
+		 * @param $ctype
+		 * @param $post_id
+		 *
+		 * p2p hook for hiding staff member from connected contacts meta box
+		 * @return mixed
+		 */
 		function show_other_contacts_only( $args, $ctype, $post_id  ){
 			global $wpdb, $rt_biz_acl_model;
 			if ( $ctype->name == self::$post_type.'_to_'.rt_biz_get_contact_post_type() ) {
@@ -349,6 +357,9 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 		 */
 		function hooks() {
 			add_filter( 'custom_menu_order', array( $this, 'custom_pages_order' ) );
+
+			// p2p hook for removing staff member from connected contacts metabox
+			add_filter( 'p2p_connectable_args', array( $this, 'show_other_contacts_only' ), 10, 3 );
 
 			add_action( 'rt_attributes_relations_added', array( $this, 'create_database_table' ) );
 			add_action( 'rt_attributes_relations_updated', array( $this, 'create_database_table' ) );
