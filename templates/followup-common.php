@@ -56,7 +56,7 @@ if ( ! empty( $post->post_content ) ) {
 		                   if ( ! empty( $data ) ) {
 			                   $href =  get_post_permalink( $post->ID ). '?show_original=true';
 			                   ?>
-			                   <a href="<?php echo $href; ?>" class="show-original-email"> Show original email</a> |
+			                   <a href="<?php echo $href; ?>" class="show-original-email" target="_blank"> Show original email</a> |
 		                   <?php }
 	                   }?>
 	                    <?php echo '<a class="followup-hash-url" id="ticket_description'.'" href="#ticket_description" >'. esc_attr( human_time_diff( strtotime( $post->post_date), current_time( 'timestamp' ) ) ) . ' ago</a>';?>

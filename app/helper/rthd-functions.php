@@ -669,7 +669,7 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 	                if ( ! empty( $data ) ) {
 		                $href =  get_post_permalink( $comment->comment_post_ID ). '?show_original=true&comment-id='.$comment->comment_ID ;
 		                ?>
-		                <a href="<?php echo $href;?>" class="show-original-email"> Show original email</a> |
+		                <a href="<?php echo $href;?>" class="show-original-email" target="_blank"> Show original email</a> |
                 <?php }
                 }
                 if ( $is_comment_private == true ){
