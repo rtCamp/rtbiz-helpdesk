@@ -130,9 +130,8 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$arrayCC   = unserialize( $args['ccemail'] );
 			$arrayTo   = unserialize( $args['toemail'] );
 			$attachments = unserialize( $args['attachement'] );
-			$blog_title = get_bloginfo();
-			$headers[] = 'From: ' . ( ( ! empty( $args['fromname'] ) ) ? $args['fromname'] : $blog_title ) . ' <' . $args['fromemail'] . '>';
-			add_filter( 'wp_mail_from', 'rthd_my_mail_from' );
+			$sendename = ( ! empty( $args['fromname'] ) ) ? $args['fromname'] : get_bloginfo();
+			$headers = 'From: "' . $sendename . '" <' . $args['fromemail'] . '>';
 			$emailsendflag = true;
 			if ( ! empty( $arrayBCC ) ) {
 				foreach ( $arrayBCC as $temail ) {
@@ -166,7 +165,6 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 					}
 				}
 			}
-			remove_filter( 'wp_mail_from', 'rthd_my_mail_from' );
 			return $emailsendflag;
 		}
 
