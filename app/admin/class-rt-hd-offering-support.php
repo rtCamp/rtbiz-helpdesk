@@ -282,25 +282,24 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 					$order_post_status = edd_get_payment_statuses();
 				}
 				if ( ! empty( $payments ) ) {
-					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_header_wrapper_start', '<div class="rt-hd-ticket-info">' );
-					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_heading', '<h2 class="rt-hd-ticket-info-header">' . __( 'Purchase History' ) . '</h2>' );
+					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_header_wrapper_start','<div class="rt-hd-sidebar-box"> <div class="rt-hd-ticket-info">' );
+					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_heading', '<h3 class="rt-hd-ticket-info-header">' . __( 'Purchase History' ) . '</h3><div class="rthd-collapse-icon"><a class="rthd-collapse-click" href="#"><span class="dashicons dashicons-arrow-up-alt2"></span></a></div><div class="rthd-clearfix"></div>' );
 					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_header_wrapper_end', '</div>' );
-					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_wrapper_start', '<div class="rt-hd-ticket-info">' );
+					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_wrapper_start', '<div class="rt-hd-ticket-sub-row">' );
 					echo '<ul>';
-					foreach ($payments as $key => $payment ) {
+					foreach ( $payments as $key => $payment ) {
 						$link = '';
 						if( $this->iseddActive ){
 							$status = $order_post_status[$payment->post_status];
 							$link =admin_url( "edit.php?post_type=download&page=edd-payment-history&view=view-order-details&id={$payment->ID}" ) ;
 						} else if( $this->isWoocommerceActive ) {
-							$status = wc_get_order_status_name($payment->post_status);
-//							$status = $status." " .sprintf( '<mark class="%s tips" data-tip="%s">%s</mark>', sanitize_title( $payment->post_status ), wc_get_order_status_name( $payment->post_status ), wc_get_order_status_name( $payment->post_status ) );
+							$status = wc_get_order_status_name( $payment->post_status );
 							$link = get_edit_post_link( $payment->ID );
 						}
 						echo '<li><a href="' . $link . '">' . sprintf( __( 'Order #%d', RT_HD_TEXT_DOMAIN ), $payment->ID ) . '</a> <div class="rthd_order_status">'. $status .'</div></li>';
 					}
 					echo '</ul>';
-					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_wrapper_end', '</div>' );
+					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_wrapper_end', '</div></div>' );
 				}
 			}
 		}
