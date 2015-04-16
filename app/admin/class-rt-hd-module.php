@@ -214,15 +214,20 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 		/**
 		 * @param $args
 		 * @param $ctype
-		 * @param $post_id
+		 * @param $post
 		 *
-		 * p2p hook for hiding staff member from connected contacts meta box
 		 * @return mixed
+		 * p2p hook for hiding staff member and creator from connected contacts meta box
 		 */
-		function show_other_contacts_only( $args, $ctype, $post_id  ){
+		function show_other_contacts_only( $args, $ctype, $post  ){
 			global $wpdb, $rt_biz_acl_model;
 			if ( $ctype->name == self::$post_type.'_to_'.rt_biz_get_contact_post_type() ) {
 				$result  =$wpdb->get_col("SELECT p2p_from FROM ".$wpdb->prefix."p2p WHERE p2p_type = '".rt_biz_get_contact_post_type()."_to_user' AND p2p_to in (SELECT DISTINCT(userid) FROM ".$rt_biz_acl_model->table_name." where module = '".RT_HD_TEXT_DOMAIN."' and permission != 0 )");
+				$creator = get_post_meta( $post->ID, '_rtbiz_hd_created_by', true );
+				$contact = rt_biz_get_contact_for_wp_user($creator);
+				if ( ! empty( $contact ) ){
+					$args['p2p:exclude'][]=$contact[0]->ID;
+				}
 				$args['p2p:exclude'] = array_merge($args['p2p:exclude'], $result );
 			}
 			return $args;
