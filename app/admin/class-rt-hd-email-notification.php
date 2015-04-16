@@ -81,7 +81,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$args = array(
 				'user_id'       => $user_id,
 				'fromname'      => $settings['rthd_outgoing_email_from_name'],
-				'fromemail'     => $settings['rthd_outgoing_email_mailbox'],
+				'fromemail'     => empty( $settings['rthd_outgoing_email_mailbox'] ) ? get_option( 'admin_email' ) : $settings['rthd_outgoing_email_mailbox'],
 				'toemail'       => serialize( $toemail ),
 				'ccemail'       => serialize( $ccemail ),
 				'bccemail'      => serialize( $bccemail ),
