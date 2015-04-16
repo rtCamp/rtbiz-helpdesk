@@ -62,44 +62,50 @@ $user_edit_content = current_user_can( $cap );
 					$other_contacts = wp_list_pluck( $other_contacts, 'email' );
 	                $other_contacts = array_diff( $other_contacts, $emails);
 					if ( ! empty( $comment ) ) {
-			            $comment = $comment[ 0 ];
-			            $search = array_search( $comment->comment_author_email ,$emails );
-			            if ( $search !== false){
-			              unset($emails[$search]);
-			            }
-			            echo "<div class='rthd-contact-avatar-no-reply-div'>";
-			            foreach( $other_contacts as $email ){
-			              $user = get_user_by('email',$email);
-			              $display_name = $email;
-			              if ( ! empty( $user ) ){
-			                $display_name = $user->display_name;
-			              }
-			              echo '<a title= "'.$display_name.'" class="rthd-last-reply-by rthd-contact-avatar-no-reply"  href="'.(current_user_can( $cap ) ? rthd_biz_user_profile_link( $email ) :'#').'">'.get_avatar(  $email , '30' ).' </a>';
-			            }
-			            echo "</div>";
+						$comment = $comment[ 0 ];
+						$search  = array_search( $comment->comment_author_email, $emails );
+						if ( $search !== false ) {
+							unset( $emails[ $search ] );
+						}
+					}
+					echo "<div class='rthd-contact-avatar-no-reply-div'>";
+					// contact group
+		            foreach( $other_contacts as $email ){
+		              $user = get_user_by('email',$email);
+		              $display_name = $email;
+		              if ( ! empty( $user ) ){
+		                $display_name = $user->display_name;
+		              }
+		              echo '<a title= "'.$display_name.'" class="rthd-last-reply-by rthd-contact-avatar-no-reply"  href="'.(current_user_can( $cap ) ? rthd_biz_user_profile_link( $email ) :'#').'">'.get_avatar(  $email , '30' ).' </a>';
+		            }
+		            echo "</div>";
 
-			            if ( current_user_can( $cap ) ){
-			              echo '<div class="rthd-subscriber-avatar-no-reply-div">';
-			              foreach( $subscriber as $email ){
-			                $user = get_user_by( 'email',$email );
-			                $display_name = $email;
-			                if ( ! empty( $user ) ){
-			                  $display_name = $user->display_name;
-			                }
-			                echo '<a title= "'.$display_name.'" class="rthd-last-reply-by rthd-contact-avatar-no-reply"  href="'.(current_user_can( $cap ) ? rthd_biz_user_profile_link( $email ) :'#').'">'.get_avatar(  $email , '30' ).' </a>';
-			              }
-			              echo "</div>";
-			            }
-			            foreach( $emails as $email ){
-			                $user = get_user_by('email',$email);
-			                $display_name = $email;
-			                if ( ! empty( $user ) ){
-			                  $display_name = $user->display_name;
-			                }
-			                echo '<a title= "'.$display_name.'" class="rthd-last-reply-by"  href="'.(current_user_can( $cap ) ? rthd_biz_user_profile_link( $email ) :'#').'">'.get_avatar(  $email , '30' ).' </a>';
-			              }
-									echo '<a class="rthd-last-reply-by" title="last reply by '.$comment->comment_author.' '.esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ).' ago " href="'.(current_user_can( $cap ) ? rthd_biz_user_profile_link( $comment->comment_author_email ) :'#').'">'.get_avatar(  $comment->comment_author_email , '30' ).' </a>' ?>
-					<?php } ?>
+		            if ( current_user_can( $cap ) ){
+		              echo '<div class="rthd-subscriber-avatar-no-reply-div">';
+			            // Subscriber
+			            foreach( $subscriber as $email ){
+		                $user = get_user_by( 'email',$email );
+		                $display_name = $email;
+		                if ( ! empty( $user ) ){
+		                  $display_name = $user->display_name;
+		                }
+		                echo '<a title= "'.$display_name.'" class="rthd-last-reply-by rthd-contact-avatar-no-reply"  href="'.(current_user_can( $cap ) ? rthd_biz_user_profile_link( $email ) :'#').'">'.get_avatar(  $email , '30' ).' </a>';
+		              }
+		              echo "</div>";
+		            }
+					// Other comments authors
+		            foreach( $emails as $email ){
+		                $user = get_user_by('email',$email);
+		                $display_name = $email;
+		                if ( ! empty( $user ) ){
+		                  $display_name = $user->display_name;
+		                }
+		                echo '<a title= "'.$display_name.'" class="rthd-last-reply-by"  href="'.(current_user_can( $cap ) ? rthd_biz_user_profile_link( $email ) :'#').'">'.get_avatar(  $email , '30' ).' </a>';
+		              }
+					// Last reply author
+					if ( ! empty( $comment ) ) {
+						echo '<a class="rthd-last-reply-by" title="last reply by '.$comment->comment_author.' '.esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ).' ago " href="'.(current_user_can( $cap ) ? rthd_biz_user_profile_link( $comment->comment_author_email ) :'#').'">'.get_avatar(  $comment->comment_author_email , '30' ).' </a>' ?>
+				<?php } ?>
 
           <div class="rthd-add-people-button">
             <a href="#" id="rthd-add-contact" title="Add people to this ticket"><span class="dashicons dashicons-plus-alt rthd-add-contact-icon"></span></a>
@@ -198,10 +204,9 @@ $user_edit_content = current_user_can( $cap );
 			?>
 				<div class="rt-hd-ticket-sub-row">
           <div class="rthd-ticket-sidebar-sub-title">
-
-          <span>
-							<?php _e( 'Assignee', RT_HD_TEXT_DOMAIN ); ?>
-						</span>
+	          <span>
+					<?php _e( 'Assignee', RT_HD_TEXT_DOMAIN ); ?>
+	          </span>
             </div>
           <div class="rthd-ticket-sidebar-sub-result">
 

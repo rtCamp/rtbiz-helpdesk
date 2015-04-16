@@ -461,7 +461,7 @@ h2.rt-hd-ticket-front-title{
 	text-decoration: none;
 }
 
-.rthd-contact-avatar-no-reply a img,.rthd-subscriber-avatar-no-reply a img{
+.rthd-contact-avatar-no-reply-div a img,.rthd-subscriber-avatar-no-reply-div a img{
 	opacity: 0.65;
 }
 .rthd-contact-avatar-no-reply,.rthd-contact-avatar-no-reply-div, .rthd-subscriber-avatar-no-reply{
