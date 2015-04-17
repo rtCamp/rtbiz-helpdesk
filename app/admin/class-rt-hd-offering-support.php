@@ -401,7 +401,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 				$this->order_post_type = 'shop_order';
 			} else if ( is_plugin_active( 'easy-digital-downloads/easy-digital-downloads.php' ) && 'edd' === $activePlugin ) {
 				$this->iseddActive = true;
-				$this->isWoocommerceActive  = false;
+				$this->iseddActive  = false;
 				$this->activePostType = 'download';
 				$this->order_post_type = 'edd_payment';
 			} else {
@@ -424,13 +424,12 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 			if ( empty( $_POST['rthd_support_form_submit'] ) ) {
 				return false;
 			}
-
-			if ( empty( $_POST['post'] ) || empty( $_POST['post']['title'] ) || empty( $_POST['post']['email'][0] ) ) {
+			if ( empty( $_POST['post'] ) || empty( $_POST['post_description'] )|| empty( $_POST['post']['title'] ) || empty( $_POST['post']['email'][0] ) ) {
 				echo '<div id="info" class="error">Please fill all the details.</div>';
 				return false;
 			}
 
-			if ( ( $this->isWoocommerceActive || $this->isWoocommerceActive ) && empty( $_POST['post']['product_id'] ) ) {
+			if ( ( $this->isWoocommerceActive || $this->iseddActive ) && ( isset( $_POST['post']['product_id'] ) && empty( $_POST['post']['product_id'] ) ) ) {
 				echo '<div id="info" class="error">Please select a product to let us know more about your query.</div>';
 				return false;
 			}
@@ -442,6 +441,8 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 
 			$data = $_POST['post'];
 			$data['description'] = $_POST['post_description'];
+			$_POST['post'] = null;
+			$_POST['post_description'] = null;
 			$offeringstr = $data['title'];
 
 			/*$uploaded = array();
