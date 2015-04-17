@@ -47,7 +47,7 @@ if ( ! empty( $post->post_content ) ) {
 	                }
 	                ?>
                     <span title="<?php echo esc_attr( $authoremail ); ?>"><?php echo ( $autherLink ); ?> </span>
-                    <time title="<?php echo esc_attr( $post->post_date); ?>" datetime="<?php echo esc_attr( $post->post_date); ?>">
+                    <time title="<?php echo esc_attr( mysql2date( get_option( 'date_format' ), $post->post_date ) . ' at '.mysql2date( get_option('time_format') , $post->post_date, true )); ?>" datetime="<?php echo esc_attr( $post->post_date); ?>">
 	                   <?php if ( $user_edit_content ) {
 		                   ?>
 		                   <a href="#" class="edit-ticket-link">Edit</a> |
