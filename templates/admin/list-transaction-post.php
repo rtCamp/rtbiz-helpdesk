@@ -37,7 +37,7 @@ if ( isset( $example_data[0] ) ) {
 				author
 			</th>
 			<th>
-				Create Date
+				Create On
 			</th>
 			<th>
 				Contacts

@@ -36,7 +36,7 @@ ii)  Status -  Based on the state of the ticket the ticket status can be 'Answer
 
 iii) Created By - Customer who created the ticket.
 
-iv)  Create Date - Timestamp when the ticket was created.
+iv)  Create On - Timestamp when the ticket was created.
 
 v)  Modify date - Timestamp when the ticket was last modified.
 

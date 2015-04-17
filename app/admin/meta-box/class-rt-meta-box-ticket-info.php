@@ -166,8 +166,8 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 
 			<div class="row_group">
 				<span class="prefix"
-				      title="<?php _e( 'Create Date', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Create Date', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
-				<input class="datetimepicker moment-from-now" type="text" placeholder="Select Create Date"
+				      title="<?php _e( 'Create On', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Create On', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
+				<input class="datetimepicker moment-from-now" type="text" placeholder="Select Create On"
 				       value="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>"
 				       title="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>"> <input
 					name="post[post_date]" type="hidden"
