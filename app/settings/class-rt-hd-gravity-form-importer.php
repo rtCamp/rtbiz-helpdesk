@@ -95,7 +95,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 					'key_list'     => 'arr_ticketmeta_key',
 				),
 				'creationdate' => array(
-					'display_name' => 'Create On',
+					'display_name' => 'Created On',
 					'slug'         => 'creationdate',
 					'required'     => false,
 					'multiple'     => false,

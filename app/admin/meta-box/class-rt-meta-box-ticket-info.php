@@ -103,7 +103,7 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 
 			<div class="row_group">
 				<span class="prefix" title="<?php _e( 'Created By', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Created By', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
-				<input type="text" name="created_by" class="user-autocomplete" placeholder="Search for User" />
+<!--				<input type="text" name="created_by" class="user-autocomplete" placeholder="Search for User" />-->
 				<div id="selected_user">
 				<?php
 					$created_by = get_user_by( 'id', get_post_meta( $post->ID, '_rtbiz_hd_created_by', true ) );
@@ -111,7 +111,7 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 						<ul>
 							<li class="rthd-info-meta-created-by-li">
 								 <?php echo get_avatar( $created_by->user_email, 25 ); ?>
-								<a href="##deleteContactUser" class="delete_row">×</a><br>
+<!--								<a href="#deleteContactUser" class="delete_row">×</a><br>-->
 								<a class="rthd-info-meta-created-by heading" target="_blank" href="<?php echo rthd_biz_user_profile_link( $created_by->user_email );?>"><?php echo $created_by->display_name; ?></a>
 								<input type="hidden" name="post[rthd_created_by]" value="<?php echo $created_by->ID; ?>" />
 							</li>
@@ -119,7 +119,7 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 						</ul>
 					<?php } ?>
 				</div>
-				<script>
+<!--				<script>
 					jQuery(document ).ready(function($) {
 						if ( jQuery( ".user-autocomplete" ).length > 0 ) {
 							jQuery( ".user-autocomplete" ).autocomplete( {
@@ -161,13 +161,13 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 
 					});
 				</script>
-
+-->
 			</div>
 
 			<div class="row_group">
 				<span class="prefix"
-				      title="<?php _e( 'Create On', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Create On', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
-				<input class="datetimepicker moment-from-now" type="text" placeholder="Select Create On"
+				      title="<?php _e( 'Created On', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Created On', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
+				<input class="datetimepicker moment-from-now" type="text" placeholder="Select Created On"
 				       value="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>"
 				       title="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>"> <input
 					name="post[post_date]" type="hidden"
