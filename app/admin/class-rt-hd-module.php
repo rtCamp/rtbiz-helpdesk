@@ -237,8 +237,12 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 						'fields' => 'ID',
 				        'role'   => 'administrator',
 				          ));
-				if ( ! empty( $admins ) ){
-					$exclude = array_merge($exclude, $admins );
+				foreach ( $admins as $admin ){
+					// get contact and add it in exclude list
+					$contact = rt_biz_get_contact_for_wp_user( $admin );
+					if ( ! empty( $contact ) ){
+						$exclude[]=$contact[0]->ID;
+					}
 				}
 				$exclude = array_filter($exclude);
 				$exclude = array_unique( $exclude );
