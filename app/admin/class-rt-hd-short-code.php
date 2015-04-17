@@ -52,7 +52,9 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 			global $rtbiz_offerings;
 			$terms = array();
 			if ( isset( $rtbiz_offerings ) ) {
+				add_filter( 'get_terms', array( $rtbiz_offerings, 'offering_filter' ), 10, 3 );
 				$terms = get_terms( Rt_Offerings::$offering_slug, array( 'hide_empty' => 0 ) );
+				remove_filter( 'get_terms', array( $rtbiz_offerings, 'offering_filter' ), 10, 3 );
 			}
 			$offering_exists = false;
 			$wrong_user_flag = false;
