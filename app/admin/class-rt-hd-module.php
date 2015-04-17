@@ -205,7 +205,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				'from' => self::$post_type,
 				'to' => self::$post_type,
 				'reciprocal' => true,
-				'title' => 'Related ' . $this->labels['name'],
+				'title' => 'Related ' . $this->labels['all_items'],
 			) );
 
 

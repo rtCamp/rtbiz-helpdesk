@@ -176,7 +176,7 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 
 			<div class="row_group">
 				<span class="prefix"
-				      title="<?php _e( 'Modify Date', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Modify Date', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
+				      title="<?php _e( 'Last Modified On', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Last Modified On', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
 				<input class="moment-from-now" type="text" placeholder="Modified on Date"
 				       value="<?php echo esc_attr( $modifydate ); ?>" title="<?php echo esc_attr( $modifydate ); ?>"
 				       readonly="readonly">

@@ -83,7 +83,7 @@ Please refer to the documentation.
 * Enable/Disable mailbox reading feature added
 * Assign me feature for front-end added
 * Blacklist contact feature added
-* Related ticket feature added
+* Related Tickets feature added
 * Ticket list UI updated
 * Offering wise default assignee setting added
 * Bug fixes

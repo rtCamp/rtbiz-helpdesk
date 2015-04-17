@@ -38,7 +38,7 @@ iii) Created By - Customer who created the ticket.
 
 iv)  Created On - Timestamp when the ticket was created.
 
-v)  Modify date - Timestamp when the ticket was last modified.
+v)  Last Modified On - Timestamp when the ticket was last modified.
 
 
 ![Ticket_info](http://git.rtcamp.com/uploads/rtbiz/rtbiz-helpdesk/5654444b75/Ticket_info.png)
@@ -52,9 +52,9 @@ v)  Modify date - Timestamp when the ticket was last modified.
 
 ![departments](http://git.rtcamp.com/uploads/rtbiz/rtbiz-helpdesk/a3cade9239/departments.png)
 
-8.Related Ticket - Option for staff to connect two tickets. Auto-suggestions can help staff to find a related ticket easily. Auto-suggestions works for ticket ID, ticket title and ticket content.
+8.Related Tickets - Option for staff to connect two tickets. Auto-suggestions can help staff to find a Related Tickets easily. Auto-suggestions works for ticket ID, ticket title and ticket content.
 
-![Related Ticket](http://git.rtcamp.com/uploads/rtbiz/rtbiz-helpdesk/3db9751fae/Related_Ticket.png)
+![Related Tickets](http://git.rtcamp.com/uploads/rtbiz/rtbiz-helpdesk/3db9751fae/Related_Ticket.png)
 
 9.Connected Contacts - Option for staff to add contacts who are related to a ticket. For example: staff can add contacts who are from same company who might want to get updates for a ticket. Can search for existing contacts and can add a new contact from here.
 

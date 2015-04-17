@@ -102,7 +102,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 					'type'         => 'date',
 				),
 				'modifydate'   => array(
-					'display_name' => 'Last Modify Date',
+					'display_name' => 'Last Modified On',
 					'slug'         => 'modifydate',
 					'required'     => false,
 					'multiple'     => false,
