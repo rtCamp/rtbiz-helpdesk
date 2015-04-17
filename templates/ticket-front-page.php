@@ -317,13 +317,13 @@ $user_edit_content = current_user_can( $cap );
 
 				<?php }
 
-				/* Display reference link if any */
+				/* Display reference links if any */
 				$ref_links = get_post_meta( $post->ID, '_rtbiz_hd_external_file' );
 				if( ! empty( $ref_links ) ) {
 				?>
           <div class="rt-hd-sidebar-box">
             <div class="rt-hd-ticket-info">
-              <h3 class="rt-hd-ticket-info-header"><?php _e( 'Reference Link' ); ?></h3>
+              <h3 class="rt-hd-ticket-info-header"><?php _e( 'Reference Links' ); ?></h3>
               <div class="rthd-collapse-icon"><a class='rthd-collapse-click' href="#"><span class="dashicons dashicons-arrow-up-alt2"></span></a></div>
               <div class="rthd-clearfix"></div>
             </div>
