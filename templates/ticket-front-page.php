@@ -36,37 +36,59 @@ $user_edit_content = current_user_can( $cap );
 
 	?>
 	<div id="rthd-ticket">
-		<input type="hidden" id='ticket_unique_id' value="<?php echo esc_attr( $ticket_unique_id ); ?>"/>
-
 			<div>
 				<h2 class="rt-hd-ticket-front-title"><?php echo esc_attr( ( isset( $post->ID ) ) ? '[#' . $post_id . '] ' . $post->post_title : '' ); ?></h2>
 				<div class="rthd-ticket-user-activity">
 					<?php
 					$create_by_time =  esc_attr( human_time_diff( strtotime( $createdate ), current_time( 'timestamp' ) ) ) . ' ago';
+					$created_by_user_id = get_post_meta( $post->ID, '_rtbiz_hd_created_by', true );
 					$created_by = get_user_by( 'id', get_post_meta( $post->ID, '_rtbiz_hd_created_by', true ) );
 					if ( ! empty( $created_by ) ) {
 							echo ' <a class="rthd-ticket-created-by" title="Created by '.$created_by->display_name.' '.$create_by_time.'" href="'.( current_user_can( $cap ) ? rthd_biz_user_profile_link( $created_by->user_email ) :'#').'">' . get_avatar( $created_by->user_email, '30' ).'</a>';
 					}
 
 					global $wpdb, $rt_hd_email_notification;
+
+					// get all followup author ( aka followup email list ) to display their avatar
 					$emails = $wpdb->get_results('SELECT distinct(comment_author_email) from '.$wpdb->comments.' where comment_post_ID= '.$post->ID.' AND comment_type='.Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC );
+					$emails = wp_list_pluck($emails,'comment_author_email' );
+
+					// get last comment for getting date and time of last reply by
 					$comment = get_comments( array( 'post_id' => $post->ID, 'number' => 1 ) );
-			        $emails = wp_list_pluck($emails,'comment_author_email' );
+
+					// get connected contacts email address
 					$other_contacts = $rt_hd_email_notification->get_contacts( $post->ID );
 					$subscriber  = array();
+
+					// show subscriber to only authorized users
 					if ( current_user_can( $cap ) ){
-			            $subscriber = $rt_hd_email_notification->get_subscriber( $post->ID );
+
+		                $subscriber = $rt_hd_email_notification->get_subscriber( $post->ID );
 			            $subscriber = wp_list_pluck( $subscriber , 'email' );
+			            // remove subscriber from followup email list
 			            $subscriber = array_diff( $subscriber , $emails );
+
+						// remove ticket creator from subscriber list if present ( in case of staff member created ticket )
+						$subscriber = array_diff( $subscriber, array( $created_by->user_email ) );
+
 					}
+
 					$other_contacts = wp_list_pluck( $other_contacts, 'email' );
-	                $other_contacts = array_diff( $other_contacts, $emails);
+
+					// remove user who have added followup and are also in connected contacts list
+	                $other_contacts = array_diff( $other_contacts, $emails );
+
+					// remove user ticket creator
+					$other_contacts = array_diff( $other_contacts, array( $created_by->user_email ) );
+
 					if ( ! empty( $comment ) ) {
 						$comment = $comment[ 0 ];
-						$search  = array_search( $comment->comment_author_email, $emails );
-						if ( $search !== false ) {
-							unset( $emails[ $search ] );
-						}
+						// remove last reply from all comments
+						$emails = array_diff( $emails, $comment->comment_author_email );
+						//						$search  = array_search( $comment->comment_author_email, $emails );
+						//						if ( $search !== false ) {
+						//							unset( $emails[ $search ] );
+						//						}
 					}
 					echo "<div class='rthd-contact-avatar-no-reply-div'>";
 					// contact group
@@ -316,29 +338,6 @@ $user_edit_content = current_user_can( $cap );
 
 
 				<?php }
-
-				/* Display reference links if any */
-				$ref_links = get_post_meta( $post->ID, '_rtbiz_hd_external_file' );
-				if( ! empty( $ref_links ) ) {
-				?>
-          <div class="rt-hd-sidebar-box">
-            <div class="rt-hd-ticket-info">
-              <h3 class="rt-hd-ticket-info-header"><?php _e( 'Reference Links' ); ?></h3>
-              <div class="rthd-collapse-icon"><a class='rthd-collapse-click' href="#"><span class="dashicons dashicons-arrow-up-alt2"></span></a></div>
-              <div class="rthd-clearfix"></div>
-            </div>
-            <div class="rt-hd-ticket-sub-row">
-              <ul>
-                <?php foreach ( $ref_links as $ref_link ) {
-                  $ref_link = (array) json_decode( $ref_link );
-                ?>
-                  <li><a target="_blank" href="<?php echo $ref_link['link']; ?>"><?php echo $ref_link['title']; ?></a></li>
-                <?php } ?>
-              </ul>
-            </div>
-          </div>
-				<?php
-				}
 
 				if ( current_user_can( $cap ) ) {
 

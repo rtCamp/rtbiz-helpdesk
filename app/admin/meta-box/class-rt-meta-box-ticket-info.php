@@ -167,11 +167,13 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 			<div class="row_group">
 				<span class="prefix"
 				      title="<?php _e( 'Created On', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Created On', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
-				<input class="datetimepicker moment-from-now" type="text" placeholder="Select Created On"
+<!--				<input class="datetimepicker moment-from-now" type="text" placeholder="Select Created On"-->
+				<input class="moment-from-now" type="text" placeholder="Select Created On"
 				       value="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>"
-				       title="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>"> <input
-					name="post[post_date]" type="hidden"
-					value="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>"/>
+				       title="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>" readonly="readonly">
+<!--				<input-->
+<!--					name="post[post_date]" type="hidden"-->
+<!--					value="--><?php //echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?><!--"/>-->
 			</div>
 
 			<div class="row_group">

@@ -457,7 +457,9 @@ h2.rt-hd-ticket-front-title{
 	border-radius: 100%;
 }
 .rthd-ticket-user-activity a{
-	margin-left: 3px;
+	display: inline-block;
+	margin: 6px;
+	/*margin-left: 3px;*/
 	text-decoration: none;
 }
 
