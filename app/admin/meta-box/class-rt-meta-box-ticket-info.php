@@ -55,8 +55,8 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 			</style>
             <input type="hidden" name="rthd_check_matabox" value="true">
 			<div class="row_group">
-                    <span class="prefix" title="<?php _e( 'Assigned To', RT_HD_TEXT_DOMAIN ); ?>"><label
-						for="post[post_author]"><strong><?php _e( 'Assigned To' ); ?></strong></label></span> <select
+                    <span class="prefix" title="<?php _e( 'Assignee', RT_HD_TEXT_DOMAIN ); ?>"><label
+						for="post[post_author]"><strong><?php _e( 'Assignee' ); ?></strong></label></span> <select
 					name="post[post_author]"><?php
 			if ( ! empty( $rtcamp_users ) ) {
 				foreach ( $rtcamp_users as $author ) {

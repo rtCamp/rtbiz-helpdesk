@@ -294,7 +294,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 
 			<tr>
 				<td>
-					Assigned To
+					Assignee
 				</td>
 				<td>
 			<?php

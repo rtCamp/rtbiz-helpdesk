@@ -102,7 +102,7 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 
 			$diff = rthd_text_diff( ( ( ! empty( $oldUser->display_name ) ) ? $oldUser->display_name : '-NA-' ), ( ( ! empty( $newUser->display_name ) ) ? $newUser->display_name : '-NA-' ) );
 			if ( $diff ) {
-				$emailHTML .= '<tr><th style="padding: .5em;border: 0;"> Assigned To</th><td>' . $diff . '</td><td></td></tr>';
+				$emailHTML .= '<tr><th style="padding: .5em;border: 0;"> Assignee</th><td>' . $diff . '</td><td></td></tr>';
 			}
 
 			//Content

@@ -221,8 +221,7 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 
 								<?php if ( current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' ) ) || $ticket->post_author == $current_user->ID ){ ?>
 									<a class="button support" target="_blank"
-									   href="<?php echo get_edit_post_link( $ticket->ID ); ?>"><?php _e( 'Edit' ); ?></a>
-
+									   href="<?php echo get_edit_post_link( $ticket->ID ); ?>"><?php _e( 'Edit' ); ?></a> |
 								<?php } ?>
 								<a class="button support" target="_blank"
 								   href="<?php echo esc_url( ( rthd_is_unique_hash_enabled() ) ? rthd_get_unique_hash_url( $ticket->ID ) : get_post_permalink( $ticket->ID ) ); ?>"><?php _e( 'View' ); ?></a>

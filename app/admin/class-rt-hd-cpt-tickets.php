@@ -52,6 +52,18 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 
 			// Add custom filters.
 			add_action( 'restrict_manage_posts', array( &$this, 'display_custom_filters' ) );
+
+			add_action( 'edit_form_top',array( $this, 'append_ticket_id_to_title' ), 1 , 10 );
+		}
+
+		/**
+		 * @param $post
+		 * Add ticket id on edit ticket
+		 */
+		function append_ticket_id_to_title( $post ){
+			if ( ! empty( $post ) && $post->post_type == Rt_HD_Module::$post_type ) {
+				echo '<h2>[#' . $post->ID . '] </h2>';
+			}
 		}
 
 		/**
@@ -74,7 +86,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 			$columns['cb']                         = '<input type="checkbox" />';
 			$columns['rthd_ticket_title']          = __( 'Ticket', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_status']         = '<span class="status_head tips" data-tip="' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '">' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '</span>';
-			$columns['rthd_ticket_assignee']     = __( 'Assigned To', RT_HD_TEXT_DOMAIN );
+			$columns['rthd_ticket_assignee']     = __( 'Assignee', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_created_by']     = __( 'Ticket Author', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_followup']       = __( 'Reply Count', RT_HD_TEXT_DOMAIN );
 //            $columns['rthd_ticket_updated_by']     = __( 'Updated By', RT_HD_TEXT_DOMAIN );
