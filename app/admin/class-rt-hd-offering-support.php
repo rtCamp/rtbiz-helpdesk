@@ -82,18 +82,17 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 			add_action( 'create_term', array( $this, 'save_offerings' ), 10, 2 );
 			add_action( 'edit_term', array( $this, 'save_offerings' ), 10, 2 );
 
-			add_action( 'manage_' . Rt_Offerings::$offering_slug . '_custom_column', array( $this, 'manage_offering_column_body' ), 10, 3 );
-			add_filter( 'manage_edit-' . Rt_Offerings::$offering_slug . '_columns', array( $this, 'manage_offering_column_header' ) );
+			add_action( 'rt_biz_offering_column_content', array( $this, 'manage_offering_column_body' ), 10, 3 );
+			add_filter( 'rt_biz_offerings_columns', array( $this, 'manage_offering_column_header' ) );
 		}
 
 		/*
-		 * Add column hadding on offering list page
+		 * Add column heading on offering list page
 		 * @param $columns
 		 *
 		 * @return mixed
 		 */
 		function manage_offering_column_header( $columns ) {
-			unset($columns['slug'] );
 			$columns['default_assignee']         = __( 'Helpdesk default assignee', RT_HD_TEXT_DOMAIN );
 			return $columns;
 		}
@@ -107,18 +106,18 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 		 *
 		 * @return type
 		 */
-		function manage_offering_column_body( $display, $column, $term_id ) {
+		function manage_offering_column_body( $content, $column, $term_id ) {
 			switch ( $column ) {
 				case 'default_assignee':
 					$default_assignee = get_offering_meta( 'default_assignee', $term_id );
 					if ( ! empty( $default_assignee ) ){
 						$user = get_user_by( 'id', $default_assignee );
-						echo esc_html( $user->display_name );
+						$content = esc_html( $user->display_name );
 					} else{
 						echo '-';
 					}
 			}
-			return;
+			return $content;
 		}
 
 		/*
