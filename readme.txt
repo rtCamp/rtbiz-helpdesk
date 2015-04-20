@@ -59,10 +59,12 @@ Please refer to the documentation.
 == Changelog ==
 = 1.2.3 =
 * Favourite tickets feature added
-* Security issue fixed
-* UX changes
-* Ticket frontend UI change
-* Bux fixes
+* UI changes
+* Bug fixes
+* Label updates
+* 2012 theme compatibility added
+* edd draft issue fixed
+* ID based related ticket search feature added.
 
 = 1.2.2 =
 * UI improved
