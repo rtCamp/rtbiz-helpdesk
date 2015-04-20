@@ -218,9 +218,11 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 		 *
 		 * @return mixed
 		 * p2p hook for hiding staff member and creator from connected contacts meta box
+		 * p2p hook for making id serachable in related ticket box
 		 */
-		function show_other_contacts_only( $args, $ctype, $post  ){
+		function p2p_hook_for_rthd_post_filter( $args, $ctype, $post  ){
 			global $wpdb, $rt_biz_acl_model;
+			// hide staff member and creator of ticket from connected contacts
 			if ( $ctype->name == self::$post_type.'_to_'.rt_biz_get_contact_post_type() ) {
 				$exclude = array();
 				// ACL
@@ -248,7 +250,33 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				$exclude = array_unique( $exclude );
 				$args['p2p:exclude'] = array_merge($args['p2p:exclude'], $exclude);
 			}
+			// related ticket - ticket id searchable
+			elseif ( $ctype->name == self::$post_type.'_to_'.self::$post_type ){
+				// check if search string is number
+				if ( ! empty($args['p2p:search']) && is_numeric($args['p2p:search']) ){
+					// if it is number then search it in post ID
+					$args['post__in'] = array( $args['p2p:search'] );
+					$args['p2p:search'] = '';
+				}
+			}
 			return $args;
+		}
+
+
+		/**
+		 * @param $title
+		 * @param $post
+		 * @param $ctype
+		 *
+		 * @return string
+		 *
+		 * Related tickets - p2p - Append post id in post title
+		 */
+		function p2p_hook_for_changing_post_title( $title, $post, $ctype ){
+			if ( $ctype->name == self::$post_type.'_to_'.self::$post_type ){
+				$title = '[#'.$post->ID.'] '.$title;
+			}
+			return $title;
 		}
 
 		/**
@@ -382,7 +410,10 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 			add_filter( 'custom_menu_order', array( $this, 'custom_pages_order' ) );
 
 			// p2p hook for removing staff member from connected contacts metabox
-			add_filter( 'p2p_connectable_args', array( $this, 'show_other_contacts_only' ), 10, 3 );
+			// p2p hook for searching ticket id in related ticket
+			add_filter( 'p2p_connectable_args', array( $this, 'p2p_hook_for_rthd_post_filter' ), 10, 3 );
+			add_filter( 'p2p_candidate_title', array( $this, 'p2p_hook_for_changing_post_title' ), 10, 3 );
+			add_filter( 'p2p_connected_title', array( $this, 'p2p_hook_for_changing_post_title' ), 10, 3 );
 
 			add_action( 'rt_attributes_relations_added', array( $this, 'create_database_table' ) );
 			add_action( 'rt_attributes_relations_updated', array( $this, 'create_database_table' ) );
