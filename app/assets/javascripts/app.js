@@ -367,7 +367,7 @@ jQuery( document ).ready( function ( $ ) {
 	         },
 
 	         UploadProgress: function(up, file) {
-	             document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<progress max="100" value="'+file.percent +'">' + file.percent + "%</progress>";
+	             document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + '% </span><progress max="100" value="'+file.percent +'"></progress>';
 	         },
 
 	         Error: function(up, err) {
