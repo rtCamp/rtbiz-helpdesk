@@ -367,7 +367,7 @@ jQuery( document ).ready( function ( $ ) {
 	         },
 
 	         UploadProgress: function(up, file) {
-	             document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+	             document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<progress max="100" value="'+file.percent +'">' + file.percent + "%</progress>";
 	         },
 
 	         Error: function(up, err) {
@@ -487,7 +487,7 @@ function sendFollowup( force ) {
 				             } else if ( jQuery( '#rthd-status-visiable' ).length ) {
 					             jQuery( '#rthd-status-visiable' ).html( data.post_status );
 				             }
-				             jQuery( '.rt-hd-ticket-last-reply' ).html( data.last_reply );
+				             jQuery( '.rt-hd-ticket-last-reply-value' ).html( data.last_reply );
 				             // front end code end
 				             rthd_tinymce_set_content( 'followupcontent', '' );
 				             jQuery( '#add-private-comment' ).val( 10 );

@@ -1637,7 +1637,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					$commentlink = $comment->comment_author;
 					$returnArray['post_status'] = rthd_status_markup( get_post_field( 'post_status', $comment_post_ID, 'raw' ) );
 				}
-				$returnArray['last_reply'] ='<span title="Status"><strong>Last reply: </strong></span> <span class="rthd_attr_border rthd_view_mode"> '.esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . ' ago by ' . $commentlink .'</span>';
+				$returnArray['last_reply'] =esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . ' ago by ' . $commentlink;
 
 			}
 			echo json_encode( $returnArray );
