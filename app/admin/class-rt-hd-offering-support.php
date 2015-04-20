@@ -116,6 +116,21 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 					} else{
 						echo '-';
 					}
+					break;
+				case 'product_detail':
+					$product_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $term_id, self::$term_product_id_meta_key, true );
+					$product_plugin = Rt_Lib_Taxonomy_Metadata\get_term_meta( $term_id, self::$term_product_from_meta_key, true );
+					if ( ! empty( $_GET['debug'] ) ){
+						var_dump( $product_id );
+						var_dump( $product_plugin );
+					}
+					if ( ! empty( $product_id ) || ! empty( $product_plugin ) ){
+						$content = '<span>' . strtoupper( $product_plugin ) . '</span> :- ';
+						$content .= '<a class="post-edit-link" href="' . edit_post_link( $product_id ) . '">#' . $product_id . '</a>';
+					} else {
+						echo '-';
+					}
+					break;
 			}
 			return $content;
 		}
