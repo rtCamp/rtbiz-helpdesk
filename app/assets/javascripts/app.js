@@ -131,7 +131,7 @@ jQuery( document ).ready( function ( $ ) {
 								if ( data.status ){
 									jQuery('.rthd-subscribe-validation' ).show();
 									jQuery('.rthd-subscribe-validation' ).text('Added Successfully!');
-									jQuery('.rthd-subscribe-validation' ).hide(2000);
+									jQuery('.rthd-subscribe-validation' ).hide(5000);
 									jQuery('#rthd-subscribe-email' ).val('');
 									if ( ! data.has_replied ){
 										var htmlappend=  '<a title="'+data.display_name+'" class="rthd-last-reply-by" href="'+data.edit_link+'">'+data.avatar+' </a>';
@@ -151,7 +151,7 @@ jQuery( document ).ready( function ( $ ) {
 									} else{
 										jQuery('.rthd-subscribe-validation' ).html('Something went wrong!');
 									}
-									jQuery('.rthd-subscribe-validation' ).hide(2000);
+									jQuery('.rthd-subscribe-validation' ).hide(5000);
 								}
 				                jQuery('#rthd-subscribe-email-spinner' ).hide();
 			             }
