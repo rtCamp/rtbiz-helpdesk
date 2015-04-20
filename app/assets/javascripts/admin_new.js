@@ -392,11 +392,11 @@ jQuery(document).ready(function() {
                          document.getElementById('followup-filelist').innerHTML = '';
                          document.getElementById('savefollwoup').onclick = function() {
                              if ( followupValidate() ) {
-                                 if ( uploader.files.length ) {
-                                     checkDuplicateFollowup();
-                                 } else {
+                                 //if ( uploader.files.length ) {
+                                 //    checkDuplicateFollowup();
+                                 //} else {
                                      uploader.start();
-                                 }
+                                 //}
                              }
                          };
                      },
@@ -462,42 +462,6 @@ jQuery(document).ready(function() {
 		        return true;
 	        }
 
-
-	        function checkDuplicateFollowup(){
-		        var formData = new FormData();
-		        formData.append( "followup_content", rthdAdmin.rthd_tinymce_get_content( 'followupcontent' ) );
-		        formData.append( "action", 'rthd_check_duplicate_followup' );
-		        formData.append( "followup_ticket_unique_id", jQuery( '#ticket_unique_id' ).val() );
-		        jQuery.ajax( {
-			                     url: ajaxurl,
-			                     dataType: "json",
-			                     type: 'POST',
-			                     data: formData,
-			                     cache: false,
-			                     contentType: false,
-			                     processData: false, //async: false, // no more page freezing
-			                     success: function ( data ) {
-				                     if ( data.status ) {
-					                     if ( data.isDuplicate ) {
-						                     var r = confirm( 'Duplicate followup! Do you still want to add it ? ' );
-						                     if ( r == true ) {
-							                     force_add_duplicate  = true;
-							                     uploader.start();
-						                     } else {
-							                     jQuery( '#hdspinner' ).hide();
-							                     jQuery( '#savefollwoup' ).removeAttr( 'disabled' );
-						                     }
-					                     } else {
-						                     uploader.start();
-					                     }
-				                     } else{
-					                     alert("something is wrong!");
-				                     }
-			                     }
-		                     });
-	        }
-
-
 	        function sendFollowup( force ){
 		        var followuptype = jQuery( "#followup-type" ).val();
 		        var formData = new FormData();
@@ -510,9 +474,9 @@ jQuery(document).ready(function() {
 		        formData.append( "followup_content", rthdAdmin.rthd_tinymce_get_content( 'followupcontent' ) );
 		        formData.append( "followup_attachments", uploadedfiles );
 
-		        if ( force ){
-			        formData.append('followup_duplicate_force', true);
-		        }
+		        //if ( force ){
+			     //   formData.append('followup_duplicate_force', true);
+		        //}
 
 		        if ( jQuery( '#rthd_keep_status' ) ) {
 			        formData.append( "rthd_keep_status", jQuery( '#rthd_keep_status' ).is( ':checked' ) );
@@ -545,13 +509,9 @@ jQuery(document).ready(function() {
 					                     jQuery( '#hdspinner' ).hide();
 					                     jQuery( '#savefollwoup' ).removeAttr( 'disabled' );
 				                     } else {
-					                     var r = confirm( data.message + ' Do you still want to add it ?' );
-					                     if ( r == true ) {
-						                     sendFollowup( true );
-					                     } else {
-						                     jQuery( '#hdspinner' ).hide();
-						                     jQuery( '#savefollwoup' ).removeAttr( 'disabled' );
-					                     }
+					                     console.log(data.message );
+					                     jQuery( '#hdspinner' ).hide();
+					                     jQuery( '#savefollwoup' ).removeAttr( 'disabled' );
 				                     }
 			                     }
 		                     } );
