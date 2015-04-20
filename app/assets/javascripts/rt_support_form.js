@@ -109,6 +109,7 @@ jQuery(document).ready(function (){
 					                                     // Called when file has finished uploading
 					                                     var response = jQuery.parseJSON(info.response);
 					                                     if ( response.status ){
+						                                     jQuery('#'+file.id+' b').replaceWith('<span class="dashicons dashicons-yes rthd-ticket-file-uploaded"></span>');
 						                                     uploadedfiles = uploadedfiles.concat(response.attach_ids);
 					                                     }
 				                                     }

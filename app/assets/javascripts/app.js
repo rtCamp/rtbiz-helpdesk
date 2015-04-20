@@ -385,7 +385,8 @@ jQuery( document ).ready( function ( $ ) {
 	             // Called when file has finished uploading
 	            var response = jQuery.parseJSON(info.response);
 	            if ( response.status ){
-	                uploadedfiles = uploadedfiles.concat(response.attach_ids);
+		            jQuery('#'+file.id+' b').replaceWith('<span class="dashicons dashicons-yes rthd-followup-file-uploaded"></span>');
+		            uploadedfiles = uploadedfiles.concat(response.attach_ids);
 	            }
 	         }
 	     }
