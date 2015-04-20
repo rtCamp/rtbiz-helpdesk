@@ -724,10 +724,20 @@ function sendFollowup( force ) {
 
 	jQuery('#rthd-add-contact' ).click( function ( e ) {
 		e.preventDefault();
+		e.stopPropagation();
+		toggle_add_people_box();
+	});
+	function toggle_add_people_box(){
 		if(jQuery('.rthd-add-people-box' ).is(':visible')){
 			jQuery('.rthd-add-people-box' ).hide();
 		} else {
 			jQuery('.rthd-add-people-box' ).show();
+		}
+	}
+
+	jQuery('body' ).click(function ( e ) {
+		if(jQuery('.rthd-add-people-box' ).is(':visible')){
+			jQuery('.rthd-add-people-box' ).hide();
 		}
 	});
 

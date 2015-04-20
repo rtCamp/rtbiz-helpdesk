@@ -13,6 +13,19 @@ jQuery(document).ready(function (){
 		jQuery(this ).parent().remove();
 	});
 
+
+	function rthd_tinymce_get_content_support( id ) {
+		if( typeof tinymce != "undefined" ) {
+			var editor = tinymce.get( id );
+			if( editor && editor instanceof tinymce.Editor ) {
+				return editor.getContent();
+			} else {
+				return jQuery( '#'+id ).val();
+			}
+		}
+		return '';
+	}
+
 	/**
 	 * Created by spock on 3/4/15.
 	 */
@@ -54,7 +67,7 @@ jQuery(document).ready(function (){
 					                                     document.getElementById('sumit-support-form').onclick = function(e) {
 						                                     e.preventDefault();
 						                                     uploader.start();
-						                                     return false;
+						                                     //return false;
 					                                     };
 				                                     },
 
@@ -81,7 +94,15 @@ jQuery(document).ready(function (){
 				                                     UploadComplete: function(){
 					                                     jQuery('#support-form-filelist').html('');
 					                                     jQuery('#rthd_support_attach_ids' ).val(uploadedfiles);
-					                                     jQuery('.rthd_support_from' ).submit();
+					                                     if ( ! rthd_tinymce_get_content_support( 'post_description' )){
+						                                     alert('Please enter Description');
+					                                     } else {
+						                                     jQuery( '.rthd_support_from' ).submit(); //function ( e ) {
+							                                     //if ( ! jQuery( ".rthd_support_from" ).valid() ) {
+								                                  //   e.preventDefault();
+							                                     //}
+						                                     //} );
+					                                     }
 				                                     },
 
 				                                     FileUploaded: function(up, file, info) {
@@ -90,7 +111,6 @@ jQuery(document).ready(function (){
 					                                     if ( response.status ){
 						                                     uploadedfiles = uploadedfiles.concat(response.attach_ids);
 					                                     }
-					                                     console.log(response);
 				                                     }
 			                                     }
 		                                     });
@@ -101,5 +121,6 @@ jQuery(document).ready(function (){
 			uploader.removeFile(jQuery(this ).parent().attr("id"));
 		});
 	});
+
 
 });
