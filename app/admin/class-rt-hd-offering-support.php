@@ -438,6 +438,9 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 				echo '<div id="info" class="error">You have been blocked from the system.</div>';
 				return false;
 			}
+			// remove ticket creator from client email list
+			$creator = $_POST['post']['email'][0];
+			unset($_POST['post']['email'][0]);
 
 			$data = $_POST['post'];
 			$data['description'] = $_POST['post_description'];
@@ -483,7 +486,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 				'now',
 				$allemail,
 				$uploaded,
-				$data['email'][0],'','','',$subscriber
+				$creator,'','','',$subscriber
 			);
 			/*if ( ! empty( $_POST['rthd_support_attach_ids'] ) ){
 				$followup_attachment = explode( ',', $_POST['rthd_support_attach_ids'] );
