@@ -571,7 +571,7 @@ function rthd_generate_email_title( $post_id, $title ) {
 	$redux = rthd_get_redux_settings();
 	$title = str_replace( '{module_name}', isset( $redux['rthd_menu_label'] ) ? $redux['rthd_menu_label'] : Rt_HD_Module::$name  , $title );
 	$title = str_replace( '{ticket_id}', $post_id, $title );
-	$title = str_replace( '{ticket_title}',get_the_title( $post_id ), $title );
+	$title = str_replace( '{ticket_title}',html_entity_decode( get_the_title( $post_id ), ENT_COMPAT, 'UTF-8' ), $title );
 
 	if ( strpos( $title, '{offerings_name}' ) !== false ) {
 		global $rtbiz_offerings;
