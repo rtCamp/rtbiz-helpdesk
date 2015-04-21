@@ -484,11 +484,11 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 					$temp[] = intval( $count );
 				}
 				$user = get_user_by( 'id', $user );
-				$url  = add_query_arg(
+				$url  = esc_url ( add_query_arg(
 					array(
 						'post_type' => Rt_HD_Module::$post_type,
 						'assigned'  => $user->ID,
-					), admin_url( 'edit.php' ) );
+					), admin_url( 'edit.php' ) ) );
 				if ( ! empty( $user ) ) {
 					array_unshift( $temp, '<a href="' . $url . '">' . $user->display_name . '</a>' );
 				}
@@ -532,11 +532,11 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 
 			$rows = array();
 			foreach ( $results as $item ) {
-				$url    = add_query_arg(
+				$url    = esc_url( add_query_arg(
 					array(
 						'post_type'  => Rt_HD_Module::$post_type,
 						'account_id' => $item->account_id,
-					), admin_url( 'edit.php' ) );
+					), admin_url( 'edit.php' ) ) );
 				$rows[] = array(
 					'<a href="' . $url . '">' . $item->account_name . '</a>',
 					intval( $item->account_tickets ),
@@ -581,11 +581,11 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 
 			$rows = array();
 			foreach ( $results as $item ) {
-				$url    = add_query_arg(
+				$url    = esc_url( add_query_arg(
 					array(
 						'post_type'  => Rt_HD_Module::$post_type,
 						'contact_id' => $item->contact_id,
-					), admin_url( 'edit.php' ) );
+					), admin_url( 'edit.php' ) ) );
 				$rows[] = array(
 					'<a href="' . $url . '">' . $item->contact_name . '</a>',
 					intval( $item->contact_tickets ),

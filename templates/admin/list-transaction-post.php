@@ -66,12 +66,12 @@ foreach ( $example_data as $rslt ) {
 		</td>
 		<td>
 			<?php
-			$url = add_query_arg(
+			$url = esc_url( add_query_arg(
 				array(
 					'post_type' => $rslt->post_type,
 					'page'      => 'rthd-all-' . $rslt->post_type,
-				), admin_url( 'edit.php' ) );
-			$url = add_query_arg( 'assignee', $rslt->user_id, $url );
+				), admin_url( 'edit.php' ) ) );
+			$url = esc_url( add_query_arg( 'assignee', $rslt->user_id, $url ) );
 			?>
 			<a target="_blank" href="<?php echo esc_url( $url ); ?>"><?php echo esc_html( $rslt->uname ); ?></a>
 		</td>
@@ -84,15 +84,15 @@ foreach ( $example_data as $rslt ) {
 			$contact_name = rt_biz_get_contact_post_type();
 
 			$sep      = '';
-			$base_url = add_query_arg(
+			$base_url = esc_url( add_query_arg(
 				array(
 					'post_type' => $rslt->post_type,
 					'page'      => 'rthd-all-' . $rslt->post_type,
-				), admin_url( 'edit.php' ) );
+				), admin_url( 'edit.php' ) ) );
 	if ( $post_terms ) {
 		foreach ( $post_terms as $pterm ) {
 			$contact = get_post( $pterm );
-			$url     = add_query_arg( $contact_name, $contact->ID, $base_url );
+			$url     = esc_url( add_query_arg( $contact_name, $contact->ID, $base_url ) );
 			$email   = rt_biz_get_entity_meta( $contact->ID, Rt_Contact::$primary_email_key, true );
 			echo esc_attr( $sep ) . "<a target='_blank' href='" . esc_url( $url ) . "'>" . get_avatar( $email, 24 ) . esc_attr( $contact->post_title ). '</a>';
 			$sep = ',';
@@ -109,7 +109,7 @@ foreach ( $example_data as $rslt ) {
 	if ( $post_terms ) {
 		foreach ( $post_terms as $pterm ) {
 			$account = get_post( $pterm );
-			$url     = add_query_arg( $account_name, $account->ID, $base_url );
+			$url     = esc_url( add_query_arg( $account_name, $account->ID, $base_url ) );
 			$email   = rt_biz_get_entity_meta( $account->ID, Rt_Contact::$primary_email_key, true );
 			echo esc_attr( $sep ) . "<a target='_blank' href='" . esc_url( $url ) . "'>" . get_avatar( $email, 24 ) . esc_html( $account->post_title ). '</a>';
 			$sep = ',';

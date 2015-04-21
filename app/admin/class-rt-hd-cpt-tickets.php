@@ -260,7 +260,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 							if ( $can_edit_post ) {
 								$preview_link = set_url_scheme( get_permalink( $post->ID ) );
 								/** This filter is documented in wp-admin/includes/meta-boxes.php */
-								$preview_link = apply_filters( 'preview_post_link', add_query_arg( 'preview', 'true', $preview_link ), $post );
+								$preview_link = apply_filters( 'preview_post_link', esc_url( add_query_arg( 'preview', 'true', $preview_link ) ), $post );
 								$actions['view'] = '<a href="' . esc_url( $preview_link ) . '" title="' . esc_attr( sprintf( __( 'Preview &#8220;%s&#8221;' ), $post->post_title ) ) . '" rel="permalink">' . __( 'Preview' ) . '</a>';
 							}
 						} elseif ( 'trash' != $post->post_status ) {
@@ -398,7 +398,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 			do_action( 'rt_hd_process_' . $post->post_type . '_meta', $post_id, $post );;
 			if ( 'trash' == $post->post_status ) {
 
-				$url = add_query_arg( array( 'post_type' => Rt_HD_Module::$post_type ), admin_url( 'edit.php' ) );
+				$url = esc_url_raw( add_query_arg( array( 'post_type' => Rt_HD_Module::$post_type ), admin_url( 'edit.php' ) ) );
 				wp_safe_redirect( $url );
 				die();
 			}

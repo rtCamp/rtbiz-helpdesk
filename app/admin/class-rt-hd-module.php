@@ -93,7 +93,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				$messages[ $post_type ][6] .= $view_link;
 				$messages[ $post_type ][9] .= $view_link;
 
-				$preview_permalink = add_query_arg( 'preview', 'true', $permalink );
+				$preview_permalink = esc_url( add_query_arg( 'preview', 'true', $permalink ) );
 				$preview_link = sprintf( ' <a target="_blank" href="%s">%s</a>', esc_url( $preview_permalink ), __( 'Preview Ticket', RT_HD_TEXT_DOMAIN ) );
 				$messages[ $post_type ][8]  .= $preview_link;
 				$messages[ $post_type ][10] .= $preview_link;

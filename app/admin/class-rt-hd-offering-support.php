@@ -590,7 +590,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 				} else if ( 'edd' === $data['order_type'] ) {
 					$link = add_query_arg( 'id', $_REQUEST['order_id'], admin_url( 'edit.php?post_type=download&page=edd-payment-history&view=view-order-details' ) );
 				}
-				update_post_meta( $rt_hd_tickets_id, 'rtbiz_hd_order_link', $link );
+				update_post_meta( $rt_hd_tickets_id, 'rtbiz_hd_order_link', esc_url( $link ) );
 			}
 		}
 	}
