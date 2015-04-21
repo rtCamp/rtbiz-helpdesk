@@ -116,6 +116,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 					} else{
 						echo '-';
 					}
+					break;
 			}
 			return $content;
 		}
