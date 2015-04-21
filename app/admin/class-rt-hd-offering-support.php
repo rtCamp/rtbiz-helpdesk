@@ -100,7 +100,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 		/**
 		 * UI for group List View custom Columns for offerings
 		 *
-		 * @param type $display
+		 * @param      $content
 		 * @param type $column
 		 * @param type $term_id
 		 *

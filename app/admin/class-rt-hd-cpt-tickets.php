@@ -342,7 +342,18 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 //			add_meta_box( 'rt-hd-external-link', __( 'Reference Links', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_External_Link::ui', Rt_HD_Module::$post_type, 'side', 'default' );
 			add_meta_box( 'rt-hd-ticket-follow-up',  __( 'Follow Up', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Ticket_Comments::ui',  Rt_HD_Module::$post_type,  'normal', 'default' );
 			add_meta_box( 'rt-hd-ticket-contacts-blacklist',  __( 'Blacklist Contacts', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Ticket_Contacts_Blacklist::ui',  Rt_HD_Module::$post_type,  'side', 'default' );
+			add_meta_box( 'rt-hd-ticket-order-history',  __( 'Purchase History', RT_HD_TEXT_DOMAIN ), array( $this, 'order_history'),  Rt_HD_Module::$post_type,  'side', 'default' );
+		}
 
+		/**
+		 * @param $post
+		 * add meta box for showing purchase history history
+		 */
+		function order_history( $post ){
+			add_filter('rtbiz_hd_ticket_purchase_history_header_wrapper_start', '__return_empty_string', 10, 1 );
+			add_filter('rtbiz_hd_ticket_purchase_history_heading', '__return_empty_string', 10, 1 );
+			add_filter('rtbiz_hd_ticket_purchase_history_header_wrapper_end', '__return_empty_string', 10, 1 );
+			do_action( 'rtbiz_hd_user_purchase_history', $post->ID );
 		}
 
 		/**
