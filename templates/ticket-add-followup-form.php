@@ -54,7 +54,7 @@ wp_editor( '', $editor_id, $settings );
         <?php } ?>
         <div>
 			<!--			<input id="attachemntlist" name="attachemntlist[]" type="file" multiple />-->
-	        <div id="attachment-container">
+	        <div id="rthd-attachment-container">
 		        <input type="button" class="btn button" id="attachemntlist" value="Attach Files">
 	        </div>
 	        <div id="followup-filelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>

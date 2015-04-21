@@ -320,7 +320,7 @@ jQuery( document ).ready( function ( $ ) {
 	     url : ajaxurl,
          multipart : true,
          multipart_params : {'action': 'rthd_upload_attachment', 'followup_ticket_unique_id' : $ticket_unique_id },
-         container: document.getElementById( 'attachment-container' ), // ... or DOM Element itself
+         container: document.getElementById( 'rthd-attachment-container' ), // ... or DOM Element itself
 
 	     // Resize images on client-side if we can
 	     //resize : { width : 320, height : 240, quality : 90 },
