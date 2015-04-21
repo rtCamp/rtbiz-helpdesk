@@ -282,7 +282,8 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 					$order_post_status = edd_get_payment_statuses();
 				}
 				if ( ! empty( $payments ) ) {
-					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_header_wrapper_start','<div class="rt-hd-sidebar-box"> <div class="rt-hd-ticket-info">' );
+					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_box_wrapper_start','<div class="rt-hd-sidebar-box">' );
+					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_header_wrapper_start','<div class="rt-hd-ticket-info">' );
 					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_heading', '<h3 class="rt-hd-ticket-info-header">' . __( 'Purchase History' ) . '</h3><div class="rthd-collapse-icon"><a class="rthd-collapse-click" href="#"><span class="dashicons dashicons-arrow-up-alt2"></span></a></div><div class="rthd-clearfix"></div>' );
 					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_header_wrapper_end', '</div>' );
 					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_wrapper_start', '<div class="rt-hd-ticket-sub-row">' );
@@ -299,7 +300,8 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 						echo '<li><a href="' . $link . '">' . sprintf( __( 'Order #%d', RT_HD_TEXT_DOMAIN ), $payment->ID ) . '</a> <div class="rthd_order_status">'. $status .'</div></li>';
 					}
 					echo '</ul>';
-					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_wrapper_end', '</div></div>' );
+					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_wrapper_end', '</div>' );
+					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_box_wrapper_end', '</div>' );
 				}
 			}
 		}

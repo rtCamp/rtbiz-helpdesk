@@ -350,9 +350,11 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 		 * add meta box for showing purchase history history
 		 */
 		function order_history( $post ){
+			add_filter('rtbiz_hd_ticket_purchase_history_box_wrapper_start', '__return_empty_string', 10, 1 );
 			add_filter('rtbiz_hd_ticket_purchase_history_header_wrapper_start', '__return_empty_string', 10, 1 );
 			add_filter('rtbiz_hd_ticket_purchase_history_heading', '__return_empty_string', 10, 1 );
 			add_filter('rtbiz_hd_ticket_purchase_history_header_wrapper_end', '__return_empty_string', 10, 1 );
+			add_filter('rtbiz_hd_ticket_purchase_history_box_wrapper_end', '__return_empty_string', 10, 1 );
 			do_action( 'rtbiz_hd_user_purchase_history', $post->ID );
 		}
 
