@@ -18,9 +18,7 @@ global $current_user;
 	<input id="edit-comment-id" name="comment_id" type="hidden" />
 <?php
 $editor_id = 'followupcontent';
-$settings = array( 'media_buttons' => false, 'editor_class' => 'followupcontent',  'tinymce' => array(
-	'height' => 150,
-));
+$settings = array( 'textarea_rows' => 5, 'media_buttons' => false, 'editor_class' => 'followupcontent',);
 wp_editor( '', $editor_id, $settings );
 ?>
 
