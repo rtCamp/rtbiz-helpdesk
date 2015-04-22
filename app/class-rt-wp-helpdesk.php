@@ -81,6 +81,10 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			$rt_hd_email_notification = new RT_HD_Email_Notification();
 			$rt_hd_auto_response 	  = new Rt_HD_Auto_Response();
 
+			// setup wizard need to check condition for setup
+			global $rt_hd_setup_wizard;
+			$rt_hd_setup_wizard = new Rt_HD_setup_wizard();
+
 			//Setting
 
 			global $rt_hd_redux_framework_Helpdesk_Config, $rt_hd_import_operation, $rt_hd_offering_support, $rt_hd_short_code;

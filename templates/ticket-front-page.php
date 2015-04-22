@@ -84,7 +84,9 @@ $user_edit_content = current_user_can( $cap );
 					if ( ! empty( $comment ) ) {
 						$comment = $comment[ 0 ];
 						// remove last reply from all comments
-						$emails = array_diff( $emails, $comment->comment_author_email );
+						if ( ! empty( $emails ) ){
+							$emails = array_diff( $emails, array( $comment->comment_author_email ) );
+						}
 						//						$search  = array_search( $comment->comment_author_email, $emails );
 						//						if ( $search !== false ) {
 						//							unset( $emails[ $search ] );
@@ -116,14 +118,16 @@ $user_edit_content = current_user_can( $cap );
 		              echo "</div>";
 		            }
 					// Other comments authors
-		            foreach( $emails as $email ){
-		                $user = get_user_by('email',$email);
-		                $display_name = $email;
-		                if ( ! empty( $user ) ){
-		                  $display_name = $user->display_name;
-		                }
-		                echo '<a title= "'.$display_name.'" class="rthd-last-reply-by"  href="'.(current_user_can( $cap ) ? rthd_biz_user_profile_link( $email ) :'#').'">'.get_avatar(  $email , '30' ).' </a>';
-		              }
+					if ( ! empty( $emails ) ) {
+						foreach ( $emails as $email ) {
+							$user         = get_user_by( 'email', $email );
+							$display_name = $email;
+							if ( ! empty( $user ) ) {
+								$display_name = $user->display_name;
+							}
+							echo '<a title= "' . $display_name . '" class="rthd-last-reply-by"  href="' . ( current_user_can( $cap ) ? rthd_biz_user_profile_link( $email ) : '#' ) . '">' . get_avatar( $email, '30' ) . ' </a>';
+						}
+					}
 					// Last reply author
 					if ( ! empty( $comment ) ) {
 						echo '<a class="rthd-last-reply-by" title="last reply by '.$comment->comment_author.' '.esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ).' ago " href="'.(current_user_can( $cap ) ? rthd_biz_user_profile_link( $comment->comment_author_email ) :'#').'">'.get_avatar(  $comment->comment_author_email , '30' ).' </a>' ?>

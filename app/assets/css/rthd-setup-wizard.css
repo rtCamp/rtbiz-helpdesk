@@ -1,0 +1,30 @@
+.wizard{
+	padding: 20px 10px;
+	width: auto;
+}
+
+
+.wizard > .steps > ul > li::after{
+	content: " ";
+	display: inline-block;
+	position: relative;
+	height: 5px;
+	width: 100%;
+	top: -45px;
+	z-index: -1;
+	background: #eee;
+	left: 10px;
+}
+
+.wizard > .steps > ul > li.done:after{
+	background: #9dc8e2;
+}
+
+.wizard > .steps > ul li:first-child::after{
+	left: 10px;
+}
+
+.wizard > .steps > ul li:last-child::after{
+	right: 10px;
+	width: 50%;
+}

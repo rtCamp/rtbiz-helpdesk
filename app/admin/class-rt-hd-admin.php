@@ -44,9 +44,15 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 		 * Register CSS and JS
 		 * @since rt-Helpdesk 0.1
 		 */
-		function load_styles_scripts() {
-			global $post, $pagenow, $wp_scripts;
+		function load_styles_scripts( $hook ) {
+			global $post, $pagenow, $wp_scripts, $rt_hd_setup_wizard ;
 
+			if ( $rt_hd_setup_wizard->screen_id == $hook ){
+				wp_enqueue_script( 'jquery-step', RT_HD_URL . 'app/assets/javascripts/jquery.steps.min.js', array( 'jquery' ), RT_HD_VERSION, true );
+				wp_enqueue_script( 'rthd-setup-wizard', RT_HD_URL . 'app/assets/javascripts/rthd-setup-wizard.js', array( 'jquery' ), RT_HD_VERSION, true );
+				wp_enqueue_style( 'jquery-step', RT_HD_URL . 'app/assets/css/jquery.steps.css', array(), RT_HD_VERSION, 'all' );
+				wp_enqueue_style( 'rthd-setup-wizard', RT_HD_URL . 'app/assets/css/rthd-setup-wizard.css', array(), RT_HD_VERSION, 'all' );
+			}
 			$rthd_post_type = '';
 			if( isset( $_GET['post'] ) )
 				$rthd_post_type = get_post_type( $_GET['post'] );
