@@ -840,29 +840,32 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		 */
 		function rthd_setup_support_page_callback() {
 
-			$settings = rthd_get_redux_settings();
-
 			$response = array();
 			$response['status'] = false;
-
+			$page_name= 'Support';
+			if ( !empty($_POST['new_page'])){
+				$page_name = $_POST['new_page'];
+			}
 			if ( isset( $_POST['page_action'] ) && 'add' == $_POST['page_action'] ) {
 				$support_page = array(
 					'post_type'		=> 'page',
-					'post_title'    => 'Support',
+					'post_title'    => $page_name,
 					'post_content'  => '[rt_hd_support_form]',
 					'post_status'   => 'publish',
 					'post_author'   => get_current_user_id(),
 				);
 				$support_page_id = wp_insert_post( $support_page );
-
-				if( $support_page_id ) {
-					/* Set support page option. */
-					rthd_set_redux_settings( 'rthd_support_page', $support_page_id );
-					$response['status'] = true;
-					$response['html'] = '<li><a id="rthd-view-support-page" class="welcome-icon welcome-view-site" target="_blank" href="'.get_page_link( $support_page_id ).'">'. __( 'View Support Page' ) .'</a></li>';
-				}
+			} else if ( ! empty( $_POST['old_page'] ) ){
+				$support_page = get_post($_POST['old_page']);
+				$support_page->post_content.= ' [rt_hd_support_form]';
+				$support_page_id = wp_update_post($support_page);
 			}
-
+			if( ! empty( $support_page_id ) && ! $support_page_id instanceof WP_Error  ) {
+				/* Set support page option. */
+				rthd_set_redux_settings( 'rthd_support_page', $support_page_id );
+				$response['status'] = true;
+				$response['html'] = '<li><a id="rthd-view-support-page" class="welcome-icon welcome-view-site" target="_blank" href="'.get_page_link( $support_page_id ).'">'. __( 'View Support Page' ) .'</a></li>';
+			}
 			echo json_encode( $response );
 			die();
 		}

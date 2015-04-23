@@ -64,6 +64,9 @@
 		$settings = array( 'media_buttons' => false, 'editor_class' => 'post_description',  'tinymce' => array(
 			'height' => 150,
 		));
+		if ( empty( $_POST['post_description'] ) ) {
+			$_POST['post_description']= '';
+		}
 		wp_editor( $_POST['post_description'], $editor_id, $settings );
 		?>
 	</div>

@@ -129,7 +129,7 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 									 dataType: "json",
 									 type: 'post',
 									 data: {
-									     action: 'seach_user_from_name',
+									     action: 'search_user_from_name',
 									     maxRows: 10,
 									     query: request.term
 									 },

@@ -173,7 +173,7 @@
 
 .wizard > .content > .body ul
 {
-	list-style: disc !important;
+	/*list-style: disc !important;*/
 }
 
 .wizard > .content > .body ul > li
@@ -190,7 +190,7 @@
 
 .wizard > .content > .body input
 {
-	display: block;
+	/*display: block;*/
 	border: 1px solid #ccc;
 }
 
@@ -208,7 +208,7 @@
 
 .wizard > .content > .body label
 {
-	display: inline-block;
+	/*display: inline-block;*/
 	margin-bottom: 0.5em;
 }
 

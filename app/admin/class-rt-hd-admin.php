@@ -52,6 +52,12 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 				wp_enqueue_script( 'rthd-setup-wizard', RT_HD_URL . 'app/assets/javascripts/rthd-setup-wizard.js', array( 'jquery' ), RT_HD_VERSION, true );
 				wp_enqueue_style( 'jquery-step', RT_HD_URL . 'app/assets/css/jquery.steps.css', array(), RT_HD_VERSION, 'all' );
 				wp_enqueue_style( 'rthd-setup-wizard', RT_HD_URL . 'app/assets/css/rthd-setup-wizard.css', array(), RT_HD_VERSION, 'all' );
+				if ( ! wp_script_is( 'jquery-ui-autocomplete' ) ) {
+					wp_enqueue_script( 'jquery-ui-autocomplete', '', array(
+						'jquery-ui-widget',
+						'jquery-ui-position',
+					), '1.9.2' );
+				}
 			}
 			$rthd_post_type = '';
 			if( isset( $_GET['post'] ) )

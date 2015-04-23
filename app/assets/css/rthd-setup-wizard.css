@@ -28,3 +28,66 @@
 	right: 10px;
 	width: 50%;
 }
+
+/*.rthd-setup-value-container,.rthd-setup-list-users{
+	display: inline-block;
+}
+
+.rthd_wizard_container{
+	width: 50%;
+	display: inline-block;
+}
+
+.rthd-setup-list-users-ul{
+	text-decoration: none;
+}*/
+
+.rthd-setup-ul-text-decoration{
+	text-decoration: none;
+	list-style: none;
+}
+
+.rthd_selected_user{
+	float: right;
+	width: 50%;
+}
+
+.rthd-setup-user-title{
+	text-align: center;
+	display: block;
+}
+
+.rthd-setup-list-users .delete_row{
+	margin-left: -15px;
+	margin-top: -10px;
+}
+
+.rthd-setup-list-users li{
+	display: inline-block !important;
+	text-align: center;
+	margin-right: 10px;
+}
+
+.rthd-setup-wizard-text {
+	border: 1px solid #ccc;
+	width: 400px;
+	border-radius: 10px;
+	font-size: 24px;
+}
+
+.rthd_wizard_container{
+	padding: 5px 0;
+}
+
+.rthd-setup-wizard-row{
+	margin-bottom: 10px;
+}
+
+.rthd-setup-wizard-row label{
+	display: inline-block;
+	width: 15%;
+}
+
+.rthd-setup-description{
+	font-size: 15px;
+}

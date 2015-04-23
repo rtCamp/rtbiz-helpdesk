@@ -404,7 +404,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 				$this->order_post_type = 'shop_order';
 			} else if ( is_plugin_active( 'easy-digital-downloads/easy-digital-downloads.php' ) && 'edd' === $activePlugin ) {
 				$this->iseddActive = true;
-				$this->iseddActive  = false;
+				$this->isWoocommerceActive  = false;
 				$this->activePostType = 'download';
 				$this->order_post_type = 'edd_payment';
 			} else {

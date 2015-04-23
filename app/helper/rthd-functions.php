@@ -1555,3 +1555,103 @@ function rthd_get_default_email_template( $key = '' , $all = false ){
 	}
 	return false;
 }
+
+
+/**
+ * Search user who don't have helpdesk access
+ *
+ * @param      $query
+ * @param bool $domain_search
+ * @param bool $count
+ *
+ * @return mixed
+ */
+function rthd_search_non_helpdesk_users( $query, $domain_search = false,$count = false ){
+	global $wpdb;
+	$helpdesk_users = rthd_get_helpdesk_user_ids();
+	$q = '';
+	if ( ! empty( $helpdesk_users ) ){
+		$q = 'AND ID not IN ('. implode( ',',$helpdesk_users ) .')';
+	}
+	if ( $count ){
+		if ( $domain_search ){
+			return $wpdb->get_var( "SELECT COUNT(ID) FROM $wpdb->users WHERE (user_email like '%{$query}')".$q );
+		} else {
+			return $wpdb->get_var( "SELECT COUNT(ID) FROM $wpdb->users WHERE (user_email like '%{$query}%' or display_name like '%{$query}%' or user_nicename like '%{$query}%')".$q );
+		}
+	} else {
+		if ( $domain_search ){
+			return $wpdb->get_results( "SELECT ID,display_name,user_email FROM $wpdb->users WHERE (user_email like '%{$query}')".$q );
+		} else {
+			return $wpdb->get_results( "SELECT ID,display_name,user_email FROM $wpdb->users WHERE (user_email like '%{$query}%' or display_name like '%{$query}%' or user_nicename like '%{$query}%')".$q );
+		}
+	}
+}
+
+
+/**
+ * @return array
+ * get Helpdesk user ids
+ */
+function rthd_get_helpdesk_user_ids(){
+	global $wpdb, $rt_biz_acl_model;
+	$admins = get_users( array( 'role'=>'Administrator','fields' =>'ID' ) );
+	$result  =$wpdb->get_col("SELECT DISTINCT(userid) FROM ".$rt_biz_acl_model->table_name." where module = '".RT_HD_TEXT_DOMAIN."' and permission != 0 ");
+	return array_merge($admins, $result );
+}
+
+
+/**
+ * @param      $user
+ * @param      $access_role
+ * Give user access of helpdesk and create rtbiz user if not exist and set user to support group
+ * @param int  $team_term_id
+ *
+ * @return bool
+ *
+ */
+function rthd_give_user_access( $user, $access_role, $team_term_id = 0 ){
+	global $rt_biz_acl_model,$rt_contact;
+
+	if ( ! is_object( $user )){
+		$user = get_userdata( $user );
+	}
+	// get rtbiz user and set term to that user
+
+	$contact_ID = $rt_contact->export_biz_contact($user->ID);
+	if ( ! empty( $team_term_id ) ){
+		wp_set_post_terms( $contact_ID, array( $team_term_id ),RT_Departments::$slug );
+	}
+	// add new group level permission
+	$data = array(
+		'userid'     => $user->ID,
+		'module'     => RT_HD_TEXT_DOMAIN,
+		'groupid'    => $team_term_id,
+		'permission' => $access_role,
+	);
+	$rt_biz_acl_model->add_acl( $data );
+	return true;
+}
+
+/**
+ * get helpdesk default support team
+ * used in importer
+ * @return mixed|void
+ */
+function rthd_get_default_support_team(){
+	$isSyncOpt = get_option( 'rthd_default_support_team' );
+	if ( empty( $isSyncOpt ) ) {
+		if ( ! term_exists( 'Support', 'rthd-support' ) ) {
+			$term = wp_insert_term( 'Support', // the term
+			                        RT_Departments::$slug, // the taxonomy
+			                        array(
+				                        'slug' => 'rthd-support',
+			                        ) );
+		}
+		if ( ! empty( $term ) ) {
+			update_option( 'rthd_default_support_team', $term[ 'term_id' ] );
+			$isSyncOpt = $term[ 'term_id' ];
+		}
+	}
+	return $isSyncOpt;
+}
