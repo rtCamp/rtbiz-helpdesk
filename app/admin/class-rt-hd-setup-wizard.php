@@ -193,7 +193,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				<br/>
 				<label></label>
 				<input id="rthd-import-domain-users" type="button" value="Add users" />
-				<span id='rthd-domain-import-message' style=""> Found<?php echo sprintf( _n( '%s user', '%s users', $count_domain_users, RT_HD_TEXT_DOMAIN ), $count_domain_users );?></span>
+				<span id='rthd-domain-import-message' style=""> Found <?php echo sprintf( _n( '%s user', '%s users', $count_domain_users, RT_HD_TEXT_DOMAIN ), $count_domain_users );?></span>
 				<?php wp_nonce_field( get_current_user_id().'import-user-domain', 'import_domain' );?>
 			</div>
 
