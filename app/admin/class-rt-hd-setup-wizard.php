@@ -109,11 +109,11 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			?>
 <!--			<p class="description"> --><?php //_e( 'In case of default assignee not found on offering ticket will be assigned to default assignee.', RT_BIZ_TEXT_DOMAIN ); ?><!-- </p>-->
 
-			<div class="rthd-setup-wizard-row">
-				<label class="rthd-offering-default-assignee" for="rthd_offering-default"> <strong><?php _e( 'Select default assignee for all products', RT_BIZ_TEXT_DOMAIN ); ?> </strong></label>
+			<!--<div class="rthd-setup-wizard-row">
+				<label class="rthd-offering-default-assignee" for="rthd_offering-default"> <strong><?php /*_e( 'Select default assignee for all products', RT_BIZ_TEXT_DOMAIN ); */?> </strong></label>
 				<select id="rthd_offering-default">
 					<?php
-					// if needed to set default assignee that already have assigned
+/*					// if needed to set default assignee that already have assigned
 					//							$selected_userid = get_offering_meta( 'default_assignee', $tm->term_id );
 					if ( empty( $current ) ){
 						echo '<option disabled selected> -- select an assignee -- </option>';
@@ -129,9 +129,9 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 						}
 						echo '<option value="' . $user->ID . '" '.$selected.'>' . $user->display_name . '</option>';
 					}
-					?>
+					*/?>
 				</select>
-			</div>
+			</div>-->
 
 			<p class="description"> <?php _e( 'Select an assignee for the products we synced in previous setup.', RT_BIZ_TEXT_DOMAIN ); ?> </p>
 
@@ -141,7 +141,6 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				foreach ( $terms as $tm ) { ?>
 					<li>
 						<label for="rthd_offering<?php echo $tm->term_id ?>"> <?php echo $tm->name ?></label>
-						<label for="rthd_offering<?php echo $tm->term_id ?>" ><?php _e( 'Select member', RT_BIZ_TEXT_DOMAIN ); ?></label>
 						<select class="rthd-setup-assignee" data="<?php echo $tm->term_id ?>" id="rthd_offering<?php echo $tm->term_id ?>" >
 							<?php
 							// if needed to set default assignee that already have assigned
