@@ -1690,8 +1690,8 @@ function rthd_ticket_import_logs() {
 }
 
 function rthd_mailbox_setup_view(){
-	global $rt_hd_MailBox;
-	$rt_hd_MailBox->render_mailbox_setting_page();
+	global $rt_MailBox;
+	$rt_MailBox->render_mailbox_setting_page( rt_biz_sanitize_module_key( RT_HD_TEXT_DOMAIN ) );
 
 }
 
