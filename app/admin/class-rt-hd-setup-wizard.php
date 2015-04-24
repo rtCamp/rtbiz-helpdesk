@@ -75,7 +75,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				<fieldset> Default assignee content</fieldset>
 
 				<h1><?php _e( 'Mailbox Setup' ); ?></h1>
-				<fieldset> Mailbox content</fieldset>
+				<fieldset> <?php rthd_mailbox_setup_view(); ?></fieldset>
 
 				<h1><?php _e( 'Finish' ); ?></h1>
 				<fieldset> YEY! you're good to go. </fieldset>

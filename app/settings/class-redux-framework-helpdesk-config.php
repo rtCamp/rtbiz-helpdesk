@@ -831,35 +831,3 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 
 }
 
-function rthd_get_redux_post_settings( $post ) {
-	// NOTE : Make modifications for what value to return.
-	if ( ! isset( $GLOBALS['redux_helpdesk_settings'] ) ) {
-		$GLOBALS['redux_helpdesk_settings'] = get_option( 'redux_helpdesk_settings', array() );
-	}
-	$data = wp_parse_args( get_post_meta( $post->ID, 'redux_helpdesk_settings', true ), $GLOBALS['redux_helpdesk_settings'] );
-
-	return $GLOBALS['redux_helpdesk_settings'];
-}
-
-function rthd_ticket_import_logs() {
-	global $rt_hd_logs;
-	$rt_hd_logs->ui();
-}
-
-function rthd_mailbox_setup_view(){
-	$module_key = rt_biz_sanitize_module_key( RT_HD_TEXT_DOMAIN );
-	rt_biz_mailbox_setup_view( $module_key );
-}
-
-function rthd_gravity_importer_view(){
-	$module_key = rt_biz_sanitize_module_key( RT_HD_TEXT_DOMAIN );
-	return rt_biz_gravity_importer_view( $module_key );
-}
-
-function rthd_activation_view(){
-	do_action( 'rthelpdesk_addon_license_details' );
-}
-
-function rthd_no_access_redux(){
-	return '<p class="description">Currently there are no settings available for you.</p>';
-}
