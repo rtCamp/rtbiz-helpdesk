@@ -360,7 +360,7 @@ jQuery(document).ready(function() {
 	        $ticket_unique_id = jQuery( '#ticket_unique_id' ).val();
 	        var uploadedfiles= [];
 	        var force_add_duplicate = false;
-	        if ( typeof plupload.Uploader === 'function' ) {
+	        if ( typeof plupload != 'undefined' ) {
 		        var uploader = new plupload.Uploader( {
 			                                              // General settings
 			                                              runtimes: 'html5,flash,silverlight,html4',
