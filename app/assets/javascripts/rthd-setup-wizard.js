@@ -149,6 +149,11 @@ jQuery(document).ready(function($) {
 					}
 		       }
 		    });
+
+		    jQuery('.rthd-wizard-skip' ).on('click', function ( e ) {
+			    skip_step = true;
+			    jQuery('.wizard').steps('next');
+		    })
 	    },
 	    support_page:  function(){
 			var requestArray = new Object();
@@ -266,7 +271,11 @@ jQuery(document).ready(function($) {
 	    },
 	    connect_store : function(){
 		    var requestArray = new Object();
-		    requestArray['store'] = jQuery("input:radio[name=rthd-wizard-store]:checked" ).val();
+		    var selected = [];
+		    jQuery("input:checkbox[name=rthd-wizard-store]:checked" ).each(function() {
+			    selected.push($(this).val());
+		    });
+		    requestArray['store'] = selected ;
 		    requestArray['action'] = 'rthd_offering_sync';
 		    jQuery('.rthd-store-process' ).show();
 		    $.ajax( {

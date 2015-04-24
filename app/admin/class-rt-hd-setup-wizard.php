@@ -95,22 +95,29 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			$eddactive = is_plugin_active( 'easy-digital-downloads/easy-digital-downloads.php' ) ;
 			$wooactive = is_plugin_active( 'woocommerce/woocommerce.php' ) ;
 			if ( $wooactive || $eddactive ){
-				$active_plugins = (( $wooactive && $eddactive  )?'Woocommerce and EDD':($wooactive)?'Woocommerce':'EDD');
+				if( $wooactive && $eddactive ){
+					$active_plugins = 'WooCommerce and EDD';
+				} else if ( $wooactive){
+					$active_plugins = 'WooCommerce';
+				}
+				else {
+					$active_plugins = 'EDD';
+				}
 				echo '<p class="description rthd-setup-description"> Looks like you have '.$active_plugins. ' Active. Helpdesk have selected '.$active_plugins.' for you, You can change that if you want to.</p>';
 			}
 			?>
 			<div class="rthd-setup-wizard-row">
-				<input id="option" type="radio" name="rthd-wizard-store" value="woocommerce" <?php echo $wooactive?'checked':'';?> >
-				<label for="option">Woocommerce</label>
+				<input id="option" type="checkbox" name="rthd-wizard-store" value="woocommerce" <?php echo $wooactive?'checked':'';?> >
+				<label for="option">WooCommerce</label>
 			</div>
 			<div class="rthd-setup-wizard-row">
-				<input id="option" type="radio" name="rthd-wizard-store" value="edd" <?php echo $eddactive?'checked':'';?> >
+				<input id="option" type="checkbox" name="rthd-wizard-store" value="edd" <?php echo $eddactive?'checked':'';?> >
 				<label for="option">EDD</label>
 			</div>
-			<div class="rthd-setup-wizard-row">
-				<input id="option" type="radio" name="rthd-wizard-store" value="none" <?php echo (!$eddactive&&!$wooactive)?'checked':'';?> >
-				<label for="option">none</label>
-			</div>
+<!--			<div class="rthd-setup-wizard-row">-->
+<!--				<input id="option" type="checkbox" name="rthd-wizard-store" value="none" --><?php //echo (!$eddactive&&!$wooactive)?'checked':'';?><!-- >-->
+<!--				<label for="option">none</label>-->
+<!--			</div>-->
 			<div class="rthd-store-process" style="display: none;">
 				<span>Connecting store and importing existing products</span>
 				<img id="rthd-support-page-spinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
@@ -145,6 +152,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			<span>Setting up support page</span>
 			<img id="rthd-support-page-spinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 			</div>
+			<button class="rthd-wizard-skip"  type="button">Skip</button>
 		<?php
 		}
 
@@ -339,14 +347,20 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 		}
 
 
-		function offering_sync(){
-			$arrReturn = array( 'status' => false );
-			if ( ! empty( $_POST['store']) && in_array($_POST['store'], array('none', 'woocommerce', 'edd') ) ){
-				rt_biz_set_redux_setting('offering_plugin',$_POST['store']);
-				global $rtbiz_offerings;
-				$rtbiz_offerings->bulk_insert_offerings($_POST['store']);
-				$arrReturn[ 'status' ] = true;
+		function offering_sync() {
+			$arrReturn       = array( 'status' => false );
+			$offering        = array();
+			$defaultoffering = array( 'woocommerce' => 0, 'edd' => 0 );
+			if ( ! empty( $_POST[ 'store' ] ) ) {
+				foreach ( $_POST[ 'store' ] as $store ) {
+					$offering[ $store ] = '1';
+				}
 			}
+			$offering = array_merge( $defaultoffering, $offering );
+			rt_biz_set_redux_setting( 'offering_plugin', $offering );
+			global $rtbiz_offerings;
+			$rtbiz_offerings->bulk_insert_offerings( $offering );
+			$arrReturn[ 'status' ] = true;
 			header( 'Content-Type: application/json' );
 			echo json_encode( $arrReturn );
 			die( 0 );
