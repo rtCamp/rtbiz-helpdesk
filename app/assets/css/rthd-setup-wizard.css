@@ -91,3 +91,7 @@
 .rthd-setup-description{
 	font-size: 15px;
 }
+
+.rthd-setup-wizard-row label.rthd-offering-default-assignee{
+	width: 25%;
+}

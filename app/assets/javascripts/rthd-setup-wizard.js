@@ -10,6 +10,7 @@ jQuery(document).ready(function($) {
             rthdSetup.setup_wizard();
 	        rthdSetup.search_users();
 	        rthdSetup.add_user_single();
+	        rthdSetup.assingee_page();
 
         },
         setup_wizard: function(){
@@ -36,6 +37,12 @@ jQuery(document).ready(function($) {
 		                //save support form
 		                rthdSetup.support_page();
 		                return false;
+	                }
+					// save assingee
+	                if( currentIndex == 3){
+		                rthdSetup.save_assignee();
+		                return false;
+
 	                }
                     return true;
                 },
@@ -310,6 +317,38 @@ jQuery(document).ready(function($) {
 				            }
 			            }
 		            } );
+	    },
+	    save_assignee: function(){
+		    jQuery('.rthd-assignee-process' ).show();
+		    var requestArray =[];
+		    jQuery('.rthd-setup-assignee').each(function(){
+			    var temp = new Object();
+			    temp['term_ID']=jQuery(this).attr('data');
+			    temp['user_ID']=jQuery(this).val();
+			    requestArray.push(temp);
+		    });
+		    $.ajax( {
+			            url: ajaxurl,
+			            dataType: "json",
+			            type: 'post',
+			            data:{
+				            action: 'rthd_setup_wizard_assignee_save',
+				            assignee: requestArray,
+				            default_assignee: jQuery('#rthd_offering-default' ).val()
+			            },
+			            success: function( data ) {
+				            if (data.status){
+					            jQuery('.rthd-assignee-process' ).show();
+					            skip_step = true;
+					            jQuery('.wizard').steps('next');
+				            }
+			            }
+		            } );
+	    },
+	    assingee_page: function () {
+		    jQuery('#rthd_offering-default' ).on('change', function ( e ) {
+			    jQuery('.rthd-setup-assignee' ).val(jQuery(this ).val());
+		    })
 	    }
 
 };

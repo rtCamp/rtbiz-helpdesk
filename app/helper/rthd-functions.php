@@ -1307,6 +1307,24 @@ function get_offering_meta( $key, $term_id = '' ){
 
 
 /**
+ * @param $key
+ * @param $value
+ * @param $term_id
+ * update offering meta
+ * @return bool
+ */
+function update_offering_meta ( $key, $value, $term_id ){
+	if ( empty( $term_id ) ) {
+		return false;
+	}
+	$old_value = Rt_Lib_Taxonomy_Metadata\get_term_meta( $term_id, Rt_Offerings::$offering_slug . '-meta', true );
+	$new_value = $old_value;
+	$new_value[ $key ] = $value;
+	Rt_Lib_Taxonomy_Metadata\update_term_meta( $term_id, Rt_Offerings::$offering_slug  . '-meta', $new_value, $old_value );
+}
+
+
+/**
  * Returns boolean of setting for reply via email is unable or not
  * @return bool
  */

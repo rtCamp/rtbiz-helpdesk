@@ -35,6 +35,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			add_action( 'wp_ajax_rthd_domain_search_and_import', array( $this, 'domain_search_and_import' ) );
 			add_action( 'wp_ajax_rthd_import_all_users', array( $this, 'import_all_users' ) );
 			add_action( 'wp_ajax_rthd_offering_sync', array( $this, 'offering_sync' ) );
+			add_action( 'wp_ajax_rthd_setup_wizard_assignee_save', array( $this, 'assignee_save' ) );
 		}
 
 		/**
@@ -71,8 +72,8 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 
 				</fieldset>
 
-				<h1><?php _e( 'Default Assignee' ); ?></h1>
-				<fieldset> Default assignee content</fieldset>
+				<h1><?php _e( 'Set Assignee' ); ?></h1>
+				<fieldset> <?php $this->default_assignee(); ?></fieldset>
 
 				<h1><?php _e( 'Mailbox Setup' ); ?></h1>
 				<fieldset>
@@ -89,6 +90,90 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 
 			<?php
 		}
+
+		function default_assignee(){
+			$current = get_current_user_id();
+			?>
+			<h3><?php _e( 'Select Ticket Assignee', RT_BIZ_TEXT_DOMAIN ); ?></h3>
+		<?php
+			// get product list
+			$terms = array();
+			global $rtbiz_offerings;
+			if ( isset( $rtbiz_offerings ) ) {
+				add_filter( 'get_terms', array( $rtbiz_offerings, 'offering_filter' ), 10, 3 );
+				$terms = get_terms( Rt_Offerings::$offering_slug, array( 'hide_empty' => 0 ) );
+				remove_filter( 'get_terms', array( $rtbiz_offerings, 'offering_filter' ), 10, 3 );
+			}
+
+			$users  = Rt_HD_Utils::get_hd_rtcamp_user();
+			?>
+<!--			<p class="description"> --><?php //_e( 'In case of default assignee not found on offering ticket will be assigned to default assignee.', RT_BIZ_TEXT_DOMAIN ); ?><!-- </p>-->
+
+			<div class="rthd-setup-wizard-row">
+				<label class="rthd-offering-default-assignee" for="rthd_offering-default"> <strong><?php _e( 'Select default assignee for all products', RT_BIZ_TEXT_DOMAIN ); ?> </strong></label>
+				<select id="rthd_offering-default">
+					<?php
+					// if needed to set default assignee that already have assigned
+					//							$selected_userid = get_offering_meta( 'default_assignee', $tm->term_id );
+					if ( empty( $current ) ){
+						echo '<option disabled selected> -- select an assignee -- </option>';
+					}
+					else{
+						echo '<option > -- select an assignee -- </option>';
+					}
+					foreach ( $users as $user ) {
+						if ( $user->ID == $current ){
+							$selected = 'selected';
+						} else{
+							$selected = '';
+						}
+						echo '<option value="' . $user->ID . '" '.$selected.'>' . $user->display_name . '</option>';
+					}
+					?>
+				</select>
+			</div>
+
+			<p class="description"> <?php _e( 'Select an assignee for the products we synced in previous setup.', RT_BIZ_TEXT_DOMAIN ); ?> </p>
+
+			<div class="rthd-setup-wizard-row">
+				<ul>
+				<?php
+				foreach ( $terms as $tm ) { ?>
+					<li>
+						<label for="rthd_offering<?php echo $tm->term_id ?>"> <?php echo $tm->name ?></label>
+						<label for="rthd_offering<?php echo $tm->term_id ?>" ><?php _e( 'Select member', RT_BIZ_TEXT_DOMAIN ); ?></label>
+						<select class="rthd-setup-assignee" data="<?php echo $tm->term_id ?>" id="rthd_offering<?php echo $tm->term_id ?>" >
+							<?php
+							// if needed to set default assignee that already have assigned
+							//							$selected_userid = get_offering_meta( 'default_assignee', $tm->term_id );
+							if ( empty( $current ) ){
+								echo '<option disabled selected> -- select an assignee -- </option>';
+							}
+							else{
+								echo '<option > -- select an assignee -- </option>';
+							}
+							foreach ( $users as $user ) {
+								if ( $user->ID == $current ){
+									$selected = 'selected';
+								} else{
+									$selected = '';
+								}
+								echo '<option value="' . $user->ID . '" '.$selected.'>' . $user->display_name . '</option>';
+							}
+							?>
+						</select>
+					</li>
+					<?php
+				}
+				?>
+				</ul>
+			</div>
+			<div class="rthd-assignee-process" style="display: none;">
+				<span>Setting up default assignee for offerings</span>
+				<img src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
+			</div>
+			<?php
+			}
 
 		function connect_store_ui(){
 			?>
@@ -371,6 +456,25 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			global $rtbiz_offerings;
 			$rtbiz_offerings->bulk_insert_offerings( $offering );
 			$arrReturn[ 'status' ] = true;
+			header( 'Content-Type: application/json' );
+			echo json_encode( $arrReturn );
+			die( 0 );
+		}
+
+		function assignee_save(){
+			$arrReturn       = array( 'status' => false );
+			if ( ! empty( $_POST['assignee'] ) ){
+				foreach ( $_POST['assignee'] as $assingee ){
+					update_offering_meta( 'default_assignee', $assingee['user_ID'], $assingee['term_ID'] );
+				}
+				$arrReturn[ 'status' ] = true;
+			}
+			//default_assignee
+			if ( ! empty( $_POST['default_assignee'] ) && is_numeric( $_POST['default_assignee'] ) ){
+				rthd_set_redux_settings('rthd_default_user',$_POST['default_assignee'] );
+				$arrReturn[ 'status' ] = true;
+			}
+
 			header( 'Content-Type: application/json' );
 			echo json_encode( $arrReturn );
 			die( 0 );
