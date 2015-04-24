@@ -165,7 +165,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			global $rthd_form;
 			?>
 			<h3>There are 3 ways you can add users to your team. If you forget somebody now, you can add them later. </h3>
-			<div class="rthd_wizard_container">
+			<div class="rthd_wizard_container rthd-setup-wizard-row">
 				<div class="rthd-setup-value-container">
 					<label for="rthd-user-autocomplete"> 1. Search and add users </label>
 					<input id="rthd-user-autocomplete" type="text" placeholder="Search by name or email" class="rthd-user-autocomplete rthd-setup-wizard-text " />
@@ -176,33 +176,35 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 
 				</div>
 			</div>
-			<div class="rthd_wizard_container rthd_selected_user">
+			<div class="rthd_wizard_container rthd_selected_user ">
 				<ul class="rthd-setup-ul-text-decoration rthd-setup-list-users">
 
 				</ul>
 			</div>
 
-			<div class="rthd_wizard_container">
+			<div class="rthd_wizard_container rthd-setup-wizard-row">
 				<?php
 					$domain_name =  preg_replace('/^www\./','',$_SERVER['SERVER_NAME']);
 
 					$count_domain_users = rthd_search_non_helpdesk_users( '@'.$domain_name, true, true );
 				?>
-				<label for="rthd-add-user-domain"> 2. Add all users from my domain: </label>
+				<label for="rthd-add-user-domain"> 2. Add all users from my domain</label>
 				<input id="rthd-add-user-domain" class="rthd-setup-wizard-text" type="text" value="<?php echo '@'.$domain_name; ?>" placeholder="@gmail.com" />
+				<br/>
+				<label></label>
 				<input id="rthd-import-domain-users" type="button" value="Add users" />
-				<span id='rthd-domain-import-message' style=""> Total <?php echo sprintf( _n( '%s user', '%s users', $count_domain_users, RT_HD_TEXT_DOMAIN ), $count_domain_users );?> found!</span>
+				<span id='rthd-domain-import-message' style=""> Found<?php echo sprintf( _n( '%s user', '%s users', $count_domain_users, RT_HD_TEXT_DOMAIN ), $count_domain_users );?></span>
 				<?php wp_nonce_field( get_current_user_id().'import-user-domain', 'import_domain' );?>
 			</div>
 
-			<div class="rthd_wizard_container">
+			<div class="rthd_wizard_container rthd-setup-wizard-row">
 				<form>
 					<?php
 					$helpdesk_users = rthd_get_helpdesk_user_ids();
 					$count = count_users();
 					$remain_wp_users = $count['total_users']-count( $helpdesk_users);
 					?>
-				<label for="rthd-add-all-users"> 3. Add all users (use with caution)</label>
+				<label> 3. Add all users</label>
 				<input id="rthd-add-all-users" type="button" value="add all users" />
 					<span> Found <?php echo sprintf( _n( '%s user', '%s users', $remain_wp_users, RT_HD_TEXT_DOMAIN ), $remain_wp_users ); ?></span>
 				<?php wp_nonce_field( get_current_user_id().'import-all-users', 'import_all_users' );?>
@@ -319,7 +321,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 
 		function import_all_users(){
 			$arrReturn = array( 'status' => false );
-			$LIMIT = 2;
+			$LIMIT = 2; //todo : change this to 100 or more
 			if ( ! empty($_POST['import']) && ! empty( $_POST['nonce'] ) && wp_verify_nonce( $_POST['nonce'], get_current_user_id().'import-all-users' )){
 				global $wpdb;
 				$helpdesk_users = rthd_get_helpdesk_user_ids();
