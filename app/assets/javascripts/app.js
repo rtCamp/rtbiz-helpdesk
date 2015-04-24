@@ -313,85 +313,90 @@ jQuery( document ).ready( function ( $ ) {
 	$ticket_unique_id = jQuery( '#ticket_unique_id' ).val();
 	var uploadedfiles= [];
 	var force_add_duplicate = false;
-	var uploader = new plupload.Uploader({
-	     // General settings
-         runtimes : 'html5,flash,silverlight,html4',
-	     browse_button : 'attachemntlist', // you can pass in id...
-	     url : ajaxurl,
-         multipart : true,
-         multipart_params : {'action': 'rthd_upload_attachment', 'followup_ticket_unique_id' : $ticket_unique_id },
-         container: document.getElementById( 'rthd-attachment-container' ), // ... or DOM Element itself
+	if ( typeof plupload.Uploader === 'function' ) {
+		var uploader = new plupload.Uploader( {
+			                                      // General settings
+			                                      runtimes: 'html5,flash,silverlight,html4',
+			                                      browse_button: 'attachemntlist', // you can pass in id...
+			                                      url: ajaxurl,
+			                                      multipart: true,
+			                                      multipart_params: {
+				                                      'action': 'rthd_upload_attachment',
+				                                      'followup_ticket_unique_id': $ticket_unique_id
+			                                      },
+			                                      container: document.getElementById( 'rthd-attachment-container' ), // ... or DOM Element itself
 
-	     // Resize images on client-side if we can
-	     //resize : { width : 320, height : 240, quality : 90 },
+			                                      // Resize images on client-side if we can
+			                                      //resize : { width : 320, height : 240, quality : 90 },
 
-	     filters : {
-	         max_file_size : '10mb'
+			                                      filters: {
+				                                      max_file_size: '10mb'
 
-	         // Specify what files to browse for
-	         //mime_types: [
-	         //    {title : "Image files", extensions : "jpg,gif,png"},
-	         //    {title : "Zip files", extensions : "zip"}
-	         //]
-	     },
+				                                      // Specify what files to browse for
+				                                      //mime_types: [
+				                                      //    {title : "Image files", extensions : "jpg,gif,png"},
+				                                      //    {title : "Zip files", extensions : "zip"}
+				                                      //]
+			                                      },
 
-	     flash_swf_url : 'Moxie.swf',
-	     silverlight_xap_url : 'Moxie.xap',
+			                                      flash_swf_url: 'Moxie.swf',
+			                                      silverlight_xap_url: 'Moxie.xap',
 
-	     // PreInit events, bound before the internal events
+			                                      // PreInit events, bound before the internal events
 
-	     init: {
-	         PostInit: function() {
-	             document.getElementById('followup-filelist').innerHTML = '';
-	             document.getElementById('savefollwoup').onclick = function() {
-		             if ( followupValidate() ) {
-			             //if ( uploader.files.length ) {
-				             //checkDuplicateFollowup();
-			             //} else {
-				             uploader.start();
-			             //}
-		             }
-	             };
-	         },
+			                                      init: {
+				                                      PostInit: function () {
+					                                      document.getElementById( 'followup-filelist' ).innerHTML = '';
+					                                      document.getElementById( 'savefollwoup' ).onclick = function () {
+						                                      if ( followupValidate() ) {
+							                                      //if ( uploader.files.length ) {
+							                                      //checkDuplicateFollowup();
+							                                      //} else {
+							                                      uploader.start();
+							                                      //}
+						                                      }
+					                                      };
+				                                      },
 
-	         FilesAdded: function(up, files) {
-	             plupload.each(files, function(file) {
-	                 document.getElementById('followup-filelist').innerHTML += '<div id="' + file.id + '"><a href="#" class="followup-attach-remove"> x </a> ' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b></div>';
-	             });
-	         },
+				                                      FilesAdded: function ( up, files ) {
+					                                      plupload.each( files, function ( file ) {
+						                                      document.getElementById( 'followup-filelist' ).innerHTML += '<div id="' + file.id + '"><a href="#" class="followup-attach-remove"> x </a> ' + file.name + ' (' + plupload.formatSize( file.size ) + ') <b></b></div>';
+					                                      } );
+				                                      },
 
-	         FilesRemoved: function(up, files) {
-	             plupload.each(files, function(file) {
-	                 jQuery('#'+file.id ).remove();
-	             });
-	         },
+				                                      FilesRemoved: function ( up, files ) {
+					                                      plupload.each( files, function ( file ) {
+						                                      jQuery( '#' + file.id ).remove();
+					                                      } );
+				                                      },
 
-	         UploadProgress: function(up, file) {
-	             document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + '% </span><progress max="100" value="'+file.percent +'"></progress>';
-	         },
+				                                      UploadProgress: function ( up, file ) {
+					                                      document.getElementById( file.id ).getElementsByTagName( 'b' )[0].innerHTML = '<span>' + file.percent + '% </span><progress max="100" value="' + file.percent + '"></progress>';
+				                                      },
 
-	         Error: function(up, err) {
-	             document.getElementById('console').innerHTML += "\nError #" + err.code + ": " + err.message;
-	         },
+				                                      Error: function ( up, err ) {
+					                                      document.getElementById( 'console' ).innerHTML += "\nError #" + err.code + ": " + err.message;
+				                                      },
 
-	         UploadComplete: function(){
-	             document.getElementById('followup-filelist').innerHTML = '';
-	             sendFollowup(force_add_duplicate);
-		         force_add_duplicate = false;
-		         uploadedfiles=[];
-	         },
+				                                      UploadComplete: function () {
+					                                      document.getElementById( 'followup-filelist' ).innerHTML = '';
+					                                      sendFollowup( force_add_duplicate );
+					                                      force_add_duplicate = false;
+					                                      uploadedfiles = [];
+				                                      },
 
-	         FileUploaded: function(up, file, info) {
-	             // Called when file has finished uploading
-	            var response = jQuery.parseJSON(info.response);
-	            if ( response.status ){
-		            jQuery('#'+file.id+' b').replaceWith('<span class="dashicons dashicons-yes rthd-followup-file-uploaded"></span>');
-		            uploadedfiles = uploadedfiles.concat(response.attach_ids);
-	            }
-	         }
-	     }
-    });
-	uploader.init();
+				                                      FileUploaded: function ( up, file, info ) {
+					                                      // Called when file has finished uploading
+					                                      var response = jQuery.parseJSON( info.response );
+					                                      if ( response.status ) {
+						                                      jQuery( '#' + file.id + ' b' ).replaceWith( '<span class="dashicons dashicons-yes rthd-followup-file-uploaded"></span>' );
+						                                      uploadedfiles = uploadedfiles.concat( response.attach_ids );
+					                                      }
+				                                      }
+			                                      }
+		                                      } );
+		uploader.init();
+	}
 
 	jQuery(document).on('click','.followup-attach-remove', function( e ){
 		e.preventDefault();
