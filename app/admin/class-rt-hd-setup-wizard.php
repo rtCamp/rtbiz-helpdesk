@@ -344,7 +344,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			if ( ! empty( $_POST['store']) && in_array($_POST['store'], array('none', 'woocommerce', 'edd') ) ){
 				rt_biz_set_redux_setting('offering_plugin',$_POST['store']);
 				global $rtbiz_offerings;
-				$rtbiz_offerings->bulk_insert_offerings();
+				$rtbiz_offerings->bulk_insert_offerings($_POST['store']);
 				$arrReturn[ 'status' ] = true;
 			}
 			header( 'Content-Type: application/json' );
