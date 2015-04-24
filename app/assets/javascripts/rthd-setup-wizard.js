@@ -259,6 +259,13 @@ jQuery(document).ready(function($) {
 			            type: 'post',
 			            data:requestArray,
 			            success: function( data ) {
+				            if ( jQuery('.rthd-warning' ).is(':visible')){
+					            jQuery('.rthd-warning' ).html( '' );
+					            jQuery('.rthd-warning' ).hide();
+				            }
+				            if (jQuery('.rthd-importer-add-contact' ).is(':visible')){
+				            jQuery('.rthd-importer-add-contact' ).hide();
+				            }
 				            rthdSetup.add_contact_to_list(data.id,data.label, data.imghtml, data.editlink );
 			            }
 		            } );
