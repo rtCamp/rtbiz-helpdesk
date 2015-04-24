@@ -141,9 +141,9 @@ jQuery(document).ready(function($) {
 
 		    jQuery('#rthd-setup-wizard-support-page' ).on('change', function ( e ) {
 			    val = jQuery(this ).val();
-			   if ( val == -1){
+			   if ( val == -1 ){
 				   jQuery('.rthd-setup-wizard-support-page-new-div' ).show();
-			   } else{
+			   } else {
 					if (jQuery('.rthd-setup-wizard-support-page-new-div' ).is(":visible")){
 						jQuery('.rthd-setup-wizard-support-page-new-div' ).hide();
 					}
@@ -163,7 +163,16 @@ jQuery(document).ready(function($) {
 				requestArray['page_action'] = 'add';
 
 			} else {
-				requestArray['old_page'] = jQuery('#rthd-setup-wizard-support-page' ).val();
+				val = jQuery('#rthd-setup-wizard-support-page' ).val();
+				if ( val == 0 ) {
+					var strconfirm = confirm('Do you want to skip this step ?');
+					if ( strconfirm == true){
+						skip_step = true;
+						jQuery('.wizard').steps('next');
+						return false;
+					}
+				}
+				requestArray['old_page'] = val;
 			}
 			requestArray['import']= true;
 			jQuery('.rthd-support-process' ).show();
@@ -187,6 +196,7 @@ jQuery(document).ready(function($) {
 		    requestArray['action'] ='rthd_import_all_users';
 		    requestArray['nonce']= jQuery('#import_all_users' ).val();
 		    requestArray['import']= true;
+		    jQuery('#rthd-import-all-spinner' ).show();
 		    $.ajax( {
 			            url: ajaxurl,
 			            dataType: "json",
@@ -206,7 +216,7 @@ jQuery(document).ready(function($) {
 						            jQuery('#rthd-setup-import-all-count' ).val(remain);
 						            rthdSetup.import_all_users();
 					            } else {
-
+						            jQuery('#rthd-import-all-spinner' ).hide();
 					            }
 				            }
 			            }
@@ -214,6 +224,7 @@ jQuery(document).ready(function($) {
 	    },
 	    import_domain_users: function ( get_count ) {
 		    var requestArray = new Object();
+		    jQuery('#rthd-domain-import-spinner' ).show();
 		    requestArray['action'] ='rthd_domain_search_and_import';
 		    requestArray['count'] =get_count;
 		    requestArray['domain_query'] = jQuery('#rthd-add-user-domain' ).val();
@@ -227,24 +238,25 @@ jQuery(document).ready(function($) {
 			            success: function( data ) {
 				            if ( data.status ){
 					            if ( data.hasOwnProperty('count') ){
-						            jQuery('#rthd-domain-import-message' ).html('Total '+data.count+' Users found!');
+						            jQuery('#rthd-domain-import-message' ).html('Found '+data.count+' users');
 					            } else {
 						            $.each(data.imported_users, function ( i, user ) {
 							            rthdSetup.add_contact_to_list( user.id, user.label, user.imghtml, user.editlink );
 						            });
 						            if ( data.imported_all){
-							            jQuery('#rthd-domain-import-message' ).html('Imported '+(data.imported_users.size())+' Users !');
+							            jQuery('#rthd-domain-import-message' ).html('Imported '+( data.imported_users.length )+' Users!');
 						            } else {
-							            jQuery( '#rthd-domain-import-message' ).html( 'Could not import '+ ( data.not_imported_users.size() ) );
+							            jQuery( '#rthd-domain-import-message' ).html( 'Could not import '+ ( data.not_imported_users.length ) );
 						            }
 					            }
 					            jQuery('#rthd-domain-import-message' ).show();
 				            }
+				            jQuery('#rthd-domain-import-spinner' ).hide();
 			            }
 		            } );
 	    },
 	    give_user_helpdesk_access: function ( email, id ) {
-
+			jQuery('#rthd-autocomplete-page-spinner' ).show();
 		    var requestArray = new Object();
 		    if (email != false){
 			    requestArray['email'] = email;
@@ -267,6 +279,7 @@ jQuery(document).ready(function($) {
 				            jQuery('.rthd-importer-add-contact' ).hide();
 				            }
 				            rthdSetup.add_contact_to_list(data.id,data.label, data.imghtml, data.editlink );
+				            jQuery('#rthd-autocomplete-page-spinner' ).hide();
 			            }
 		            } );
 	    },

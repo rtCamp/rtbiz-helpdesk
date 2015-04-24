@@ -126,7 +126,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				<span>Connecting store and importing existing products</span>
 				<img id="rthd-support-page-spinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 			</div>
-			<button class="rthd-wizard-skip" type="button">Skip</button>
+<!--			<button class="rthd-wizard-skip" type="button">Skip</button>-->
 
 		<?php
 		}
@@ -157,7 +157,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			<span>Setting up support page</span>
 			<img id="rthd-support-page-spinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 			</div>
-			<button class="rthd-wizard-skip" type="button">Skip</button>
+<!--			<button class="rthd-wizard-skip" type="button">Skip</button>-->
 		<?php
 		}
 
@@ -169,7 +169,8 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				<div class="rthd-setup-value-container">
 					<label for="rthd-user-autocomplete"> 1. Search and add users </label>
 					<input id="rthd-user-autocomplete" type="text" placeholder="Search by name or email" class="rthd-user-autocomplete rthd-setup-wizard-text " />
-				<br/>
+					<img id="rthd-autocomplete-page-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
+					<br/>
 					<span class="rthd-warning" style="display: none;"></span>
 					<input type="button" class='rthd-importer-add-contact' value="Add" style="display: none;" />
 					<input type="hidden" id="rthd-new-user-email" />
@@ -193,6 +194,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				<br/>
 				<label></label>
 				<input id="rthd-import-domain-users" type="button" value="Add users" />
+				<img id="rthd-domain-import-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 				<span id='rthd-domain-import-message' style=""> Found <?php echo sprintf( _n( '%s user', '%s users', $count_domain_users, RT_HD_TEXT_DOMAIN ), $count_domain_users );?></span>
 				<?php wp_nonce_field( get_current_user_id().'import-user-domain', 'import_domain' );?>
 			</div>
@@ -206,6 +208,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 					?>
 				<label> 3. Add all users</label>
 				<input id="rthd-add-all-users" type="button" value="add all users" />
+					<img id="rthd-import-all-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 					<span> Found <?php echo sprintf( _n( '%s user', '%s users', $remain_wp_users, RT_HD_TEXT_DOMAIN ), $remain_wp_users ); ?></span>
 				<?php wp_nonce_field( get_current_user_id().'import-all-users', 'import_all_users' );?>
 				<input type="hidden" id="rthd-setup-import-all-count" value="<?php echo $remain_wp_users; ?>" />
