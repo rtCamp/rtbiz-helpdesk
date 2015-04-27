@@ -5,13 +5,13 @@ jQuery(document).ready(function($) {
 
     var wizard;
 	var skip_step = false;
+    var next_page_skip = false;
     var rthdSetup = {
         init: function () {
             rthdSetup.setup_wizard();
 	        rthdSetup.search_users();
 	        rthdSetup.add_user_single();
 	        rthdSetup.assingee_page();
-	        rthdSetup.mailbox_page();
 
         },
         setup_wizard: function(){
@@ -28,6 +28,7 @@ jQuery(document).ready(function($) {
 		                skip_step = false;
 		                return true;
 	                }
+
 	                if (currentIndex == 1){
 		                // save offering selection and sync offerings
 		                rthdSetup.connect_store();
@@ -56,6 +57,9 @@ jQuery(document).ready(function($) {
                 },
                 onStepChanged: function (event, currentIndex, priorIndex)
                 {
+
+                    rthdSetup.custom_page_action( currentIndex );
+
                     //alert("on step changed moved to "+currentIndex+" from "+ priorIndex);
                     return true;
                 },
@@ -358,8 +362,17 @@ jQuery(document).ready(function($) {
 			    jQuery('.rthd-setup-assignee' ).val(jQuery(this ).val());
 		    })
 	    },
-        mailbox_page: function(){
-            if( jQuery('#rtmailbox-action').val() == 'rtmailbox_connect_imap' ){
+        custom_page_action: function( currentIndex ){
+            if ( currentIndex == 3 && jQuery('.rthd-setup-assignee').length == 0 ){
+                jQuery('div.actions a[href="#next"]').hide();
+                setTimeout(function(){
+                    jQuery('div.actions a[href="#next"]').show();
+                    skip_step = true;
+                    jQuery('.wizard').steps('next');
+                    return true;
+                }, 2000);
+            }
+            if( jQuery('#rtmailbox-action').val() == 'rtmailbox_connect_imap' && currentIndex == 4 ){
                 jQuery('div.actions a[href="#next"]').text("Connect");
                 jQuery('#rtmailbox-connect').hide();
             }

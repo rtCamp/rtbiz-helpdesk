@@ -94,8 +94,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 		function default_assignee(){
 			$current = get_current_user_id();
 			?>
-			<h3><?php _e( 'Select Ticket Assignee', RT_BIZ_TEXT_DOMAIN ); ?></h3>
-		<?php
+			<h3><?php _e( 'Select Ticket Assignee', RT_BIZ_TEXT_DOMAIN ); ?></h3> <?php
 			// get product list
 			$terms = array();
 			global $rtbiz_offerings;
@@ -104,75 +103,51 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				$terms = get_terms( Rt_Offerings::$offering_slug, array( 'hide_empty' => 0 ) );
 				remove_filter( 'get_terms', array( $rtbiz_offerings, 'offering_filter' ), 10, 3 );
 			}
-
 			$users  = Rt_HD_Utils::get_hd_rtcamp_user();
-			?>
-<!--			<p class="description"> --><?php //_e( 'In case of default assignee not found on offering ticket will be assigned to default assignee.', RT_BIZ_TEXT_DOMAIN ); ?><!-- </p>-->
+            if ( ! empty( $terms ) ) {
+                ?>
+                <p class="description"> <?php _e('Select an assignee for the products we synced in previous setup.', RT_BIZ_TEXT_DOMAIN); ?> </p>
 
-			<!--<div class="rthd-setup-wizard-row">
-				<label class="rthd-offering-default-assignee" for="rthd_offering-default"> <strong><?php /*_e( 'Select default assignee for all products', RT_BIZ_TEXT_DOMAIN ); */?> </strong></label>
-				<select id="rthd_offering-default">
-					<?php
-/*					// if needed to set default assignee that already have assigned
-					//							$selected_userid = get_offering_meta( 'default_assignee', $tm->term_id );
-					if ( empty( $current ) ){
-						echo '<option disabled selected> -- select an assignee -- </option>';
-					}
-					else{
-						echo '<option > -- select an assignee -- </option>';
-					}
-					foreach ( $users as $user ) {
-						if ( $user->ID == $current ){
-							$selected = 'selected';
-						} else{
-							$selected = '';
-						}
-						echo '<option value="' . $user->ID . '" '.$selected.'>' . $user->display_name . '</option>';
-					}
-					*/?>
-				</select>
-			</div>-->
-
-			<p class="description"> <?php _e( 'Select an assignee for the products we synced in previous setup.', RT_BIZ_TEXT_DOMAIN ); ?> </p>
-
-			<div class="rthd-setup-wizard-row">
-				<ul>
-				<?php
-				foreach ( $terms as $tm ) { ?>
-					<li>
-						<label for="rthd_offering<?php echo $tm->term_id ?>"> <?php echo $tm->name ?></label>
-						<select class="rthd-setup-assignee" data="<?php echo $tm->term_id ?>" id="rthd_offering<?php echo $tm->term_id ?>" >
-							<?php
-							// if needed to set default assignee that already have assigned
-							//							$selected_userid = get_offering_meta( 'default_assignee', $tm->term_id );
-							if ( empty( $current ) ){
-								echo '<option disabled selected> -- select an assignee -- </option>';
-							}
-							else{
-								echo '<option > -- select an assignee -- </option>';
-							}
-							foreach ( $users as $user ) {
-								if ( $user->ID == $current ){
-									$selected = 'selected';
-								} else{
-									$selected = '';
-								}
-								echo '<option value="' . $user->ID . '" '.$selected.'>' . $user->display_name . '</option>';
-							}
-							?>
-						</select>
-					</li>
-					<?php
-				}
-				?>
-				</ul>
-			</div>
-			<div class="rthd-assignee-process" style="display: none;">
-				<span>Setting up default assignee for offerings</span>
-				<img src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
-			</div>
-			<?php
-			}
+                <div class="rthd-setup-wizard-row">
+                    <ul>
+                        <?php
+                        foreach ($terms as $tm) { ?>
+                            <li>
+                                <label for="rthd_offering<?php echo $tm->term_id ?>"> <?php echo $tm->name ?></label>
+                                <select class="rthd-setup-assignee" data="<?php echo $tm->term_id ?>"
+                                        id="rthd_offering<?php echo $tm->term_id ?>">
+                                    <?php
+                                    // if needed to set default assignee that already have assigned
+                                    //							$selected_userid = get_offering_meta( 'default_assignee', $tm->term_id );
+                                    if (empty($current)) {
+                                        echo '<option disabled selected> -- select an assignee -- </option>';
+                                    } else {
+                                        echo '<option > -- select an assignee -- </option>';
+                                    }
+                                    foreach ($users as $user) {
+                                        if ($user->ID == $current) {
+                                            $selected = 'selected';
+                                        } else {
+                                            $selected = '';
+                                        }
+                                        echo '<option value="' . $user->ID . '" ' . $selected . '>' . $user->display_name . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </li>
+                        <?php
+                        }
+                        ?>
+                    </ul>
+                </div>
+                <div class="rthd-assignee-process" style="display: none;">
+                    <span>Setting up default assignee for offerings</span>
+                    <img src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
+                </div> <?php
+            }else{ ?>
+                <p class="description"> <?php _e('No product found! you will be auto redirect to next step within second.', RT_BIZ_TEXT_DOMAIN); ?> </p>
+            <?php }
+        }
 
 		function connect_store_ui(){
 			?>
