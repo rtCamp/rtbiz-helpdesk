@@ -11,6 +11,7 @@ jQuery(document).ready(function($) {
 	        rthdSetup.search_users();
 	        rthdSetup.add_user_single();
 	        rthdSetup.assingee_page();
+	        rthdSetup.mailbox_page();
 
         },
         setup_wizard: function(){
@@ -38,12 +39,19 @@ jQuery(document).ready(function($) {
 		                rthdSetup.support_page();
 		                return false;
 	                }
-					// save assingee
+                    // save assingee
 	                if( currentIndex == 3){
 		                rthdSetup.save_assignee();
 		                return false;
 
 	                }
+
+                    //save mailbox
+                    if( currentIndex == 4){
+                        rthdSetup.save_mailbox_folder();
+                        return false;
+
+                    }
                     return true;
                 },
                 onStepChanged: function (event, currentIndex, priorIndex)
@@ -183,7 +191,7 @@ jQuery(document).ready(function($) {
 			}
 			requestArray['import']= true;
 			jQuery('.rthd-support-process' ).show();
-			$.ajax( {
+            jQuery.ajax( {
 				        url: ajaxurl,
 				        dataType: "json",
 				        type: 'post',
@@ -204,7 +212,7 @@ jQuery(document).ready(function($) {
 		    requestArray['nonce']= jQuery('#import_all_users' ).val();
 		    requestArray['import']= true;
 		    jQuery('#rthd-import-all-spinner' ).show();
-		    $.ajax( {
+            jQuery.ajax( {
 			            url: ajaxurl,
 			            dataType: "json",
 			            type: 'post',
@@ -237,7 +245,7 @@ jQuery(document).ready(function($) {
 		    requestArray['domain_query'] = jQuery('#rthd-add-user-domain' ).val();
 		    requestArray['nonce']= jQuery('#import_domain' ).val();
 
-		    $.ajax( {
+            jQuery.ajax( {
 			            url: ajaxurl,
 			            dataType: "json",
 			            type: 'post',
@@ -272,7 +280,7 @@ jQuery(document).ready(function($) {
 			    requestArray['ID'] = id;
 		    }
 		    requestArray['action'] = 'rthd_creater_rtbiz_and_give_access_helpdesk';
-		    $.ajax( {
+            jQuery.ajax( {
 			            url: ajaxurl,
 			            dataType: "json",
 			            type: 'post',
@@ -305,7 +313,7 @@ jQuery(document).ready(function($) {
 		    requestArray['store'] = selected ;
 		    requestArray['action'] = 'rthd_offering_sync';
 		    jQuery('.rthd-store-process' ).show();
-		    $.ajax( {
+            jQuery.ajax( {
 			            url: ajaxurl,
 			            dataType: "json",
 			            type: 'post',
@@ -327,7 +335,7 @@ jQuery(document).ready(function($) {
 			    temp['user_ID']=jQuery(this).val();
 			    requestArray.push(temp);
 		    });
-		    $.ajax( {
+            jQuery.ajax( {
 			            url: ajaxurl,
 			            dataType: "json",
 			            type: 'post',
@@ -349,7 +357,66 @@ jQuery(document).ready(function($) {
 		    jQuery('#rthd_offering-default' ).on('change', function ( e ) {
 			    jQuery('.rthd-setup-assignee' ).val(jQuery(this ).val());
 		    })
-	    }
+	    },
+        mailbox_page: function(){
+            if( jQuery('#rtmailbox-action').val() == 'rtmailbox_connect_imap' ){
+                jQuery('div.actions a[href="#next"]').text("Connect");
+                jQuery('#rtmailbox-connect').hide();
+            }
+        },
+        save_mailbox_folder: function(){
+            if( jQuery('#rtmailbox-action').val() == 'rtmailbox_connect_imap' ){
+                var requestArray = {};
+                requestArray.data =  jQuery( '#rtmailbox-wrap input' ).serialize();
+                requestArray.action = 'rtmailbox_imap_connect';
+                jQuery.ajax({
+                    url: ajaxurl,
+                    dataType: 'json',
+                    type: 'post',
+                    data: requestArray,
+                    beforeSend: function(){
+                    },
+                    success: function(data) {
+                        if (data.status) {
+                            jQuery( '#rtmailbox-wrap' ).html( data.html);
+                        }else{
+                            alert( data.error );
+                        }
+                        jQuery('div.actions a[href="#next"]').text("Next");
+                        jQuery('#rtmailbox-save').hide();
+                    },
+                    error: function(){
+                        alert( 'Something goes wrong. Please try again.' );
+                    }
+                });
+
+            }else if( jQuery('#rtmailbox-action').val() == 'rtmailbox_folder_update' ){
+                var requestArray = {};
+                requestArray.data =  jQuery( '#rtmailbox-wrap input' ).serialize();
+                requestArray.action = 'rtmailbox_folder_update';
+
+                jQuery.ajax({
+                    url: ajaxurl,
+                    dataType: 'json',
+                    type: 'post',
+                    data: requestArray,
+                    beforeSend: function(){
+                        //alert('before send');
+                    },
+                    success: function(data) {
+                        if (data.status) {
+                            skip_step = true;
+                            jQuery('.wizard').steps('next');
+                        }else{
+                            alert( data.error );
+                        }
+                    },
+                    error: function(){
+                        alert( 'Something goes wrong. Please try again.' );
+                    }
+                });
+            }
+        }
 
 };
     rthdSetup.init();
