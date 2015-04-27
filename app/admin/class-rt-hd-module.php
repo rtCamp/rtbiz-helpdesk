@@ -186,12 +186,21 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 			global $rt_hd_attributes;
 			$this->custom_menu_order = array(
 				'rthd-' . self::$post_type . '-dashboard',
-				'rthd-all-' . self::$post_type,
-				'edit_rtbiz_hd_tickets',
-				'edit_rtbiz_hd_tickets',
-				'rthd-add-' . self::$post_type,
-				$rt_hd_attributes->attributes_page_slug,
+                'edit.php?post_type=' . self::$post_type,
+                'post-new.php?post_type=' . self::$post_type,
+                'edit-tags.php?taxonomy=' . Rt_Offerings::$offering_slug . '&amp;post_type=' . self::$post_type,
+                'rthd-setup-wizard',
+                $rt_hd_attributes->attributes_page_slug,
+                Redux_Framework_Helpdesk_Config::$page_slug,
+                'edit.php?post_type=' . rt_biz_get_contact_post_type(),
+                'edit-tags.php?taxonomy=' . Rt_Contact::$user_category_taxonomy . '&post_type=' . self::$post_type,
+                'edit.php?post_type=' . rt_biz_get_company_post_type(),
+                'edit-tags.php?taxonomy=' . RT_Departments::$slug . '&post_type=' . self::$post_type,
 			);
+
+            if ( ! empty( Rt_Biz::$access_control_slug ) ) {
+               $this->custom_menu_order[] = Rt_Biz::$access_control_slug;
+            }
 
 			return $this->custom_menu_order;
 		}
@@ -516,39 +525,32 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 		 * @return mixed
 		 */
 		function custom_pages_order( $menu_order ) {
-			global $submenu;
-			global $menu;
-			if ( isset( $submenu[ 'edit.php?post_type=' . self::$post_type ] ) && ! empty( $submenu[ 'edit.php?post_type=' . self::$post_type ] ) ) {
-				$module_menu = $submenu[ 'edit.php?post_type=' . self::$post_type ];
-				unset( $submenu[ 'edit.php?post_type=' . self::$post_type ] );
-				//unset($module_menu[5]);
-				//unset($module_menu[10]);
-				$new_index = 5;
-				foreach ( $this->custom_menu_order as $item ) {
-					foreach ( $module_menu as $p_key => $menu_item ) {
-						$out = array_filter( $menu_item, function( $in ) { return true !== $in; } );
-						if ( in_array( $item, $out ) ) {
-							$submenu[ 'edit.php?post_type=' . self::$post_type ][ $new_index ] = $menu_item;
-							unset( $module_menu[ $p_key ] );
-							$new_index += 5;
-							break;
-						}
-					}
-				}
-				foreach ( $module_menu as $p_key => $menu_item ) {
-					if ( $menu_item[2] == 'edit-tags.php?taxonomy='.RT_Departments::$slug.'&amp;post_type='.Rt_HD_Module::$post_type ){
-						continue;
-					}
-					if ( $menu_item[2] != Redux_Framework_Helpdesk_Config::$page_slug ) {
-						$menu_item[0] = '--- ' . $menu_item[0];
-					}
-					$submenu[ 'edit.php?post_type=' . self::$post_type ][ $new_index ] = $menu_item;
-					unset( $module_menu[ $p_key ] );
-					$new_index += 5;
-				}
-			}
+            global $submenu;
+            global $menu;
+            if ( isset( $submenu[ 'edit.php?post_type=' . self::$post_type ] ) && ! empty( $submenu[ 'edit.php?post_type=' . self::$post_type ] ) ) {
+                $module_menu = $submenu[ 'edit.php?post_type=' . self::$post_type ];
+                unset( $submenu[ 'edit.php?post_type=' . self::$post_type ] );
+                $submenu[ 'edit.php?post_type=' . self::$post_type ] = array();
+                $new_index = 5;
+                foreach ( $this->custom_menu_order as $item ) {
+                    foreach ( $module_menu as $p_key => $menu_item ) {
+                        $out = array_filter( $menu_item, function( $in ) { return true !== $in; } );
+                        if ( in_array( $item, $out) ) {
+                            $submenu[ 'edit.php?post_type=' . self::$post_type ][ $new_index ] = $menu_item;
+                            unset( $module_menu[ $p_key ] );
+                            $new_index += 5;
+                            break;
+                        }
+                    }
+                }
+                foreach ( $module_menu as $p_key => $menu_item ) {
+                    $submenu[ 'edit.php?post_type=' . self::$post_type ][ $new_index ] = $menu_item;
+                    unset( $module_menu[ $p_key ] );
+                    $new_index += 5;
+                }
+            }
 
-			return $menu_order;
+            return $menu_order;
 		}
 	}
 }
