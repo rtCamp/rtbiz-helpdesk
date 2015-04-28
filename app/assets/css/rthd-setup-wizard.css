@@ -29,6 +29,10 @@
 	width: 50%;
 }
 
+#wizard .rtmailbox-row > label{
+    width: 15%;
+}
+
 /*.rthd-setup-value-container,.rthd-setup-list-users{
 	display: inline-block;
 }

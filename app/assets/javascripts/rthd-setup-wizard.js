@@ -31,20 +31,17 @@ jQuery(document).ready(function($) {
 
 	                if (currentIndex == 1){
 		                // save offering selection and sync offerings
-		                rthdSetup.connect_store();
-		                return false;
+		                return rthdSetup.connect_store();
 	                }
 	                // active this after screen is fixed
 	                if ( currentIndex == 0 ){
 		                //save support form
-		                rthdSetup.support_page();
-		                return false;
+		                return rthdSetup.support_page();
 	                }
                     // save assingee
 	                if( currentIndex == 3){
 		                rthdSetup.save_assignee();
 		                return false;
-
 	                }
 
                     //save mailbox
@@ -177,38 +174,41 @@ jQuery(document).ready(function($) {
 	    support_page:  function(){
 			var requestArray = new Object();
 			requestArray['action'] = 'rthd_setup_support_page';
-			if (jQuery('.rthd-setup-wizard-support-page-new-div' ).is(":visible")){
-				requestArray['new_page'] = jQuery('#rthd-setup-wizard-support-page-new' ).val();
-				requestArray['page_action'] = 'add';
+            val = jQuery('#rthd-setup-wizard-support-page' ).val();
 
-			} else {
-				val = jQuery('#rthd-setup-wizard-support-page' ).val();
-				if ( val == 0 ) {
-					var strconfirm = confirm('Do you want to skip this step ?');
-					if ( strconfirm == true){
-						skip_step = true;
-						jQuery('.wizard').steps('next');
-						return false;
-					}
-				}
-				requestArray['old_page'] = val;
-			}
-			requestArray['import']= true;
-			jQuery('.rthd-support-process' ).show();
-            jQuery.ajax( {
-				        url: ajaxurl,
-				        dataType: "json",
-				        type: 'post',
-				        data:requestArray,
-				        success: function( data ) {
-					        if (data.status){
-						        jQuery('.rthd-support-process' ).hide();
-						        skip_step = true;
-						        jQuery('.wizard').steps('next');
-					        }
-				        }
-			        });
+            if ( val == 0 ) {
+                var strconfirm = confirm('Do you want to skip this step ?');
+                if ( strconfirm == true){
+                    return true;
+                }else{
+                    jQuery('.rthd-support-process' ).hide();
+                    return false;
+                }
 
+            } else if( val == -1 ){
+                if (jQuery('.rthd-setup-wizard-support-page-new-div' ).is(":visible")){
+                    requestArray['new_page'] = jQuery('#rthd-setup-wizard-support-page-new' ).val();
+                    requestArray['page_action'] = 'add';
+                }
+            } else {
+                requestArray['old_page'] = val;
+            }
+            if ( val !== 0 ) {
+                jQuery('.rthd-support-process' ).show();
+                jQuery.ajax( {
+                    url: ajaxurl,
+                    dataType: "json",
+                    type: 'post',
+                    data:requestArray,
+                    success: function( data ) {
+                        if (data.status){
+                            jQuery('.rthd-support-process' ).hide();
+                            skip_step = true;
+                            jQuery('.wizard').steps('next');
+                        }
+                    }
+                });
+            }
 		},
 	    import_all_users: function(){
 		    var requestArray = new Object();
@@ -309,26 +309,30 @@ jQuery(document).ready(function($) {
 		    }
 	    },
 	    connect_store : function(){
-		    var requestArray = new Object();
 		    var selected = [];
 		    jQuery("input:checkbox[name=rthd-wizard-store]:checked" ).each(function() {
 			    selected.push($(this).val());
 		    });
-		    requestArray['store'] = selected ;
-		    requestArray['action'] = 'rthd_offering_sync';
-		    jQuery('.rthd-store-process' ).show();
-            jQuery.ajax( {
-			            url: ajaxurl,
-			            dataType: "json",
-			            type: 'post',
-			            data:requestArray,
-			            success: function( data ) {
-				            if (data.status){
-					            skip_step=true;
-					            jQuery('.wizard').steps('next');
-				            }
-			            }
-		            } );
+            if ( selected.length > 0 ){
+                var requestArray = new Object();
+                requestArray['store'] = selected ;
+                requestArray['action'] = 'rthd_offering_sync';
+                jQuery('.rthd-store-process' ).show();
+                jQuery.ajax( {
+                    url: ajaxurl,
+                    dataType: "json",
+                    type: 'post',
+                    data:requestArray,
+                    success: function( data ) {
+                        if (data.status){
+                            skip_step=true;
+                            jQuery('.wizard').steps('next');
+                        }
+                    }
+                } );
+            }else{
+                return true;
+            }
 	    },
 	    save_assignee: function(){
 		    jQuery('.rthd-assignee-process' ).show();

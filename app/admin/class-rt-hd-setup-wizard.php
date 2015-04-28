@@ -58,32 +58,39 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 		 */
 		function setup_wizard_ui( $post_type ){
 			?>
-			<div id="wizard">
+			<div class="wrap" id="wizard">
 
 				<h1><?php _e( 'Support Page' ); ?></h1>
-				<fieldset> <?php $this->support_page_ui(); ?></fieldset>
+				<fieldset>
+					<?php $this->support_page_ui(); ?>
+				</fieldset>
 
 				<h1><?php _e( 'Connect Store' ); ?></h1>
-				<fieldset><?php $this->connect_store_ui() ?></fieldset>
+				<fieldset style="display: none">
+					<?php $this->connect_store_ui() ?>
+				</fieldset>
 
 				<h1><?php _e( 'Setup Your Team' ); ?></h1>
-				<fieldset>
+				<fieldset style="display: none">
 					<?php $this->setup_team(); ?>
-
 				</fieldset>
 
 				<h1><?php _e( 'Set Assignee' ); ?></h1>
-				<fieldset> <?php $this->default_assignee(); ?></fieldset>
+				<fieldset style="display: none">
+					<?php $this->default_assignee(); ?>
+				</fieldset>
 
 				<h1><?php _e( 'Mailbox Setup' ); ?></h1>
-				<fieldset>
+				<fieldset style="display: none">
 					<h3><?php _e( 'MailBox Setup', RT_BIZ_TEXT_DOMAIN ); ?></h3>
 					<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
 					<?php rthd_mailbox_setup_view(); ?>
 				</fieldset>
 
 				<h1><?php _e( 'Finish' ); ?></h1>
-				<fieldset> YEY! you're good to go. </fieldset>
+				<fieldset style="display: none">
+					YEY! you're good to go.
+				</fieldset>
 
 			</div>
 

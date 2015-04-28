@@ -855,10 +855,14 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 					'post_author'   => get_current_user_id(),
 				);
 				$support_page_id = wp_insert_post( $support_page );
+				$response['status'] = true;
 			} else if ( ! empty( $_POST['old_page'] ) ){
 				$support_page = get_post($_POST['old_page']);
-				$support_page->post_content.= ' [rt_hd_support_form]';
-				$support_page_id = wp_update_post($support_page);
+				if (strpos($support_page->post_content,'[rt_hd_support_form]') == false) {
+					$support_page->post_content.= ' [rt_hd_support_form]';
+					$support_page_id = wp_update_post($support_page);
+				}
+				$response['status'] = true;
 			}
 			if( ! empty( $support_page_id ) && ! $support_page_id instanceof WP_Error  ) {
 				/* Set support page option. */
