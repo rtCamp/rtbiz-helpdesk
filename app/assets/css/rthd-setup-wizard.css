@@ -86,7 +86,7 @@
 
 .rthd-setup-wizard-controls, ul.rthd-setup-ul-text-decoration.rthd-setup-list-users{
 	width: 50%;
-	padding: 10px 0 10px 10px;
+	padding: 10px;
 	margin-bottom: 0;
 }
 
@@ -108,12 +108,6 @@
 
 p.description.rthd-setup-description{
 	margin: 10px 0;
-}
-
-#wizard #rtmailbox-page{
-    width: 50%;
-    padding: 10px;
-    margin: 0;
 }
 
 #wizard .rtmailbox-row > label{
