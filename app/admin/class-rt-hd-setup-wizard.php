@@ -37,6 +37,8 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			add_action( 'wp_ajax_rthd_offering_sync', array( $this, 'offering_sync' ) );
 			add_action( 'wp_ajax_rthd_setup_wizard_assignee_save', array( $this, 'assignee_save' ) );
 			add_action( 'wp_ajax_rthd_get_default_assignee_ui', array( $this, 'default_assignee' ) );
+			add_action( 'wp_ajax_rthd_outboud_mail_setup_ui', array( $this, 'rthd_outboud_mail_setup_ui' ) );
+			add_action( 'wp_ajax_rthd_outound_setup_wizard', array( $this, 'rthd_outound_setup_wizard_callback' ) );
 		}
 
 		/**
@@ -85,8 +87,8 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 
 				<h1><?php _e( 'Mailbox Setup' ); ?></h1>
 				<fieldset style="display: none">
-					<h3><?php _e( 'MailBox Setup', RT_BIZ_TEXT_DOMAIN ); ?></h3>
-					<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+					<h3><?php _e( 'Incoming MailBox Setup', RT_BIZ_TEXT_DOMAIN ); ?></h3>
+					<p class="description">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
 					<?php rthd_mailbox_setup_view(); ?>
 				</fieldset>
 
@@ -100,6 +102,76 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 
 			<?php
 		}
+
+		/**
+		 * outbound mailbox ui
+		 */
+		function rthd_outboud_mail_setup_ui() {
+			$system_emails = rtmb_get_module_mailbox_emails( RT_HD_TEXT_DOMAIN );
+			ob_start();
+			?>
+			<h3><?php _e( 'Outgoing MailBox Setup', RT_BIZ_TEXT_DOMAIN ); ?></h3>
+			<p class="description">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
+				Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a
+				galley of type and scrambled it to make a type specimen book. It has survived not only five centuries,
+				but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+			<div id="rthd_outgoing_mailbox_setup_container">
+				<input type="hidden" id="rthd_outound_sub-action" name="rthd_outound_sub-action" value="rthd_outound_setup_wizard">
+				<?php wp_nonce_field( 'rthd_outound_setup_wizard' );?>
+				<div class="rthd-setup-wizard-row">
+					<label for="rthd_outgoing_email_from_name"> <?php _e( 'Outgoing Emails\' FROM Name' ); ?></label>
+					<input type="text" id="rthd_outgoing_email_from_name" name="rthd_outgoing_email_from_name" value="<?php echo get_bloginfo(); ?>" />
+				</div>
+				<div class="rthd-setup-wizard-row">
+					<label for="rthd_outgoing_email_mailbox"> <?php _e( 'Outgoing Emails\' Mailbox' ); ?></label>
+					<select id="rthd_outgoing_email_mailbox" name="rthd_outgoing_email_mailbox">
+						<?php foreach ( $system_emails as $email ) { ?>
+							<option value="<?php echo $email; ?>"><?php echo $email; ?></option>
+						<?php } ?>
+					</select>
+				</div>
+			</div>
+			<?php
+			$comment_html = ob_get_clean();
+			header( 'Content-Type: application/json' );
+			echo json_encode( array( 'status' => true, 'html' => $comment_html ) );
+			die( 0 );
+		}
+
+		/**
+		 * save outbound mailbox
+		 */
+		function rthd_outound_setup_wizard_callback(){
+			$result           = array();
+			$result['status'] = false;
+
+			$obj_data = array();
+			parse_str( $_POST['data'], $obj_data );
+
+			if ( ! wp_verify_nonce( $obj_data['_wpnonce'], 'rthd_outound_setup_wizard' ) ) {
+				$result['error'] = 'Security check false';
+				echo json_encode( $result );
+				die();
+			}
+
+			if ( empty( $obj_data['rthd_outgoing_email_from_name'] ) || empty( $obj_data['rthd_outgoing_email_mailbox'] ) ) {
+				$result['error'] = 'Error: Required mailbox field missing';
+				echo json_encode( $result );
+				die();
+			}
+
+			if ( !empty( $obj_data['rthd_outgoing_email_from_name'] ) ){
+				rthd_set_redux_settings( 'rthd_outgoing_email_from_name',$obj_data['rthd_outgoing_email_from_name'] );
+			}
+
+			if ( !empty( $obj_data['rthd_outgoing_email_mailbox'] ) ){
+				rthd_set_redux_settings( 'rthd_outgoing_email_mailbox',$obj_data['rthd_outgoing_email_mailbox'] );
+			}
+			$result['status'] = true;
+			echo json_encode( $result );
+			die( 0 );
+		}
+
 
 		/**
 		 * default assignee ui ajax call
