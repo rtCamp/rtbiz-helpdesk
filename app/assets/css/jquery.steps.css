@@ -180,6 +180,10 @@
 	border: 1px solid #ccc;
 }
 
+.wizard > .content > .body input[type="text"], input#rtmailbox-password, input#rtmailbox-email{
+	width: 40%;
+}
+
 .wizard > .content > .body input[type="checkbox"]
 {
 	display: inline-block;
