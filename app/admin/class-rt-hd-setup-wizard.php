@@ -329,9 +329,10 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			global $rthd_form;
 			?>
 
-
+			<div>
 			<div class="rthd-setup-wizard-controls rthd-setup-team-wizard-controls">
-				<h3>There are 3 ways you can add users to your team. If you forget somebody now, you can add them later. </h3>
+				<h3>Setup Your Team</h3>
+				<p class="description">There are 3 ways you can add users to your team. If you forget somebody now, you can add them later. </p>
 				<div class="rthd_wizard_container rthd-setup-wizard-row">
 
 					<div class="rthd-setup-value-container">
@@ -386,6 +387,8 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				<ul class="rthd-setup-ul-text-decoration rthd-setup-list-users">
 
 				</ul>
+			</div>
+				<div class="clearfix"></div>
 			</div>
 			<div class="rthd-team-setup-loading" style="display: none;">
 				<span>Loading next page</span>

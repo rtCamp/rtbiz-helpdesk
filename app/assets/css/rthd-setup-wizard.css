@@ -78,6 +78,10 @@
 	display: inline-block;
 	width: 15%;
 }
+
+/*.rthd-setup-wizard-row input{*/
+	/*width: 2em;*/
+/*}*/
 .rthd-setup-wizard-row {
 	background: beige;
 	padding: 5px;
