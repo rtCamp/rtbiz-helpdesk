@@ -79,7 +79,7 @@
 
 .rthd-setup-wizard-controls{
 	background: beige;
-	width: 575px;
+	width: 50%;
 	padding: 10px 0 10px 10px;
 	margin-bottom: 0;
 }
@@ -101,7 +101,9 @@
 }
 
 #wizard #rtmailbox-page{
-    width: 575px;
+    width: 50%;
+    padding: 10px 0 10px 10px;
+    margin-bottom: 0;
 }
 
 #wizard .rtmailbox-row > label{

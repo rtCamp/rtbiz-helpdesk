@@ -62,10 +62,10 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 			global $post, $pagenow, $wp_scripts, $rt_hd_setup_wizard ;
 
 			if ( $rt_hd_setup_wizard->screen_id == $hook ){
-				wp_enqueue_script( 'jquery-step', RT_HD_URL . 'app/assets/javascripts/jquery.steps.min.js', array( 'jquery' ), RT_HD_VERSION, true );
-				wp_enqueue_script( 'rthd-setup-wizard', RT_HD_URL . 'app/assets/javascripts/rthd-setup-wizard.js', array( 'jquery' ), RT_HD_VERSION, true );
-				wp_enqueue_style( 'jquery-step', RT_HD_URL . 'app/assets/css/jquery.steps.css', array(), RT_HD_VERSION, 'all' );
-				wp_enqueue_style( 'rthd-setup-wizard', RT_HD_URL . 'app/assets/css/rthd-setup-wizard.css', array(), RT_HD_VERSION, 'all' );
+				wp_enqueue_script( 'jquery-step', RT_HD_URL . 'app/assets/javascripts/jquery.steps.min.js', array( 'jquery' ), array(), true );
+				wp_enqueue_script( 'rthd-setup-wizard', RT_HD_URL . 'app/assets/javascripts/rthd-setup-wizard.js', array( 'jquery' ), array(), true );
+				wp_enqueue_style( 'jquery-step', RT_HD_URL . 'app/assets/css/jquery.steps.css', array(), array(), 'all' );
+				wp_enqueue_style( 'rthd-setup-wizard', RT_HD_URL . 'app/assets/css/rthd-setup-wizard.css', array(), array(), 'all' );
 				if ( ! wp_script_is( 'jquery-ui-autocomplete' ) ) {
 					wp_enqueue_script( 'jquery-ui-autocomplete', '', array(
 						'jquery-ui-widget',
