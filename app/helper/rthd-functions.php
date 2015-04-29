@@ -791,14 +791,17 @@ function rthd_install_dependency(){
 	$p2p_installed = rthd_is_plugin_installed( 'posts-to-posts' ) ;
 	$string = '';
 	if ( ! $biz_installed || ! $p2p_installed ) {
-		$string .= ' installed and activated ';
+		$string .= 'installed and activated ';
 		if (  ! $biz_installed ){
 			rthd_install_plugin( 'rtbiz' );
-			$string .= 'rtBiz ';
+			$string .= '<strong> rtBiz </strong> plugin';
 		}
 		if ( ! $p2p_installed ){
 			rthd_install_plugin( 'posts-to-posts' );
-			$string .= 'posts to posts ';
+			$string .= '<strong> posts to posts </strong> plugin';
+		}
+		if ( ! $p2p_installed && ! $biz_installed ){
+			$string = 'installed and activated <strong> rtBiz </strong> plugin and <strong> posts to posts </strong> plugin';
 		}
 	}
 	else {
@@ -808,12 +811,17 @@ function rthd_install_dependency(){
 		if ( ! $p2p_active ){
 			$p2ppath = rthd_get_path_for_plugin( 'posts-to-posts' );
 			rthd_activate_plugin( $p2ppath );
-			$string .= 'posts to posts ';
+			$string .= '<strong> posts to posts </strong> plugin';
 		}
 		if ( ! $rtbiz_active ){
 			$rtbizpath = rthd_get_path_for_plugin( 'rtbiz' );
 			rthd_activate_plugin( $rtbizpath );
-			$string .= 'rtBiz ';
+			$string .= '<strong> rtBiz </strong> plugin';
+		}
+		if ( ! $rtbiz_active && ! $p2p_active ){
+			if ( ! $p2p_installed && ! $biz_installed ){
+				$string = 'activated <strong> rtBiz </strong> plugin and <strong> posts to posts </strong> plugin';
+			}
 		}
 	}
 	update_option( 'rtbiz_helpdesk_dependency_installed', $string );
@@ -825,12 +833,12 @@ function rthd_admin_notice_dependency_installed(){
 	if ( ! empty( $string ) ){ ?>
 		<div class="updated">
 			<p>
-			Helpdesk require posts to posts and rtBiz so Helpdesk have <strong><?php echo $string ;?></strong>
+				rtBiz Helpdesk has also <strong><?php echo $string ;?></strong>
+				<a class="welcome-panel-close" style="float: right" href="<?php echo  admin_url( 'edit.php?post_type=rtbiz_hd_ticket&page=rthd-setup-wizard?close_notice=true' ); ?>">Dismiss</a>
 			</p>
 		</div>
 <?php
 	}
-	delete_option('rtbiz_helpdesk_dependency_installed');
 }
 
 function rthd_install_plugin_ajax(){

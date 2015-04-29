@@ -39,6 +39,12 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			add_action( 'wp_ajax_rthd_get_default_assignee_ui', array( $this, 'default_assignee' ) );
 			add_action( 'wp_ajax_rthd_outboud_mail_setup_ui', array( $this, 'rthd_outboud_mail_setup_ui' ) );
 			add_action( 'wp_ajax_rthd_outound_setup_wizard', array( $this, 'rthd_outound_setup_wizard_callback' ) );
+			if ( ! empty( $_REQUEST['close_notice'] ) ){
+				delete_option( 'rtbiz_helpdesk_dependency_installed' );
+			}
+			if ( ! empty( $_REQUEST['finish-wizard'] ) ){
+				update_option( 'rtbiz_helpdesk_setup_wizard_option', 'true' );
+			}
 			if ( ! empty( $_REQUEST['page'] ) && $_REQUEST['page'] == 'rthd-setup-wizard' ){
 				add_action( 'admin_notices', 'rthd_admin_notice_dependency_installed' );
 			}
@@ -49,13 +55,14 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 		 */
 		function register_setup_wizard(){
 
-			$admin_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' );
-
-
-			$this->screen_id = add_submenu_page( 'edit.php?post_type=' . esc_html( Rt_HD_Module::$post_type ), __( 'Setup Wizard', RT_HD_TEXT_DOMAIN ), __( 'Setup Wizard', RT_HD_TEXT_DOMAIN ), $admin_cap, 'rthd-setup-wizard', array(
-				$this,
-				'setup_wizard_ui',
-			) );
+			$option = get_option( 'rtbiz_helpdesk_setup_wizard_option' );
+			if ( empty( $option )) {
+				$admin_cap       = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' );
+				$this->screen_id = add_submenu_page( 'edit.php?post_type=' . esc_html( Rt_HD_Module::$post_type ), __( 'Setup Wizard', RT_HD_TEXT_DOMAIN ), __( 'Setup Wizard', RT_HD_TEXT_DOMAIN ), $admin_cap, 'rthd-setup-wizard', array(
+					$this,
+					'setup_wizard_ui',
+				) );
+			}
 		}
 
 		/**
@@ -97,9 +104,11 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 					</div>
 				</fieldset>
 
-				<h1><?php _e( '' ); ?></h1>
+				<h1><?php _e( 'Finish' ); ?></h1>
 				<fieldset style="display: none">
+					<div class="rthd-setup-wizard-controls">
 					Yay!! Your Helpdesk is ready.  Click on finish to get started.
+					</div>
 				</fieldset>
 
 			</div>
@@ -310,13 +319,14 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				} ?>
 				<option value="-1"><?php _e('-Create New Page-',RT_BIZ_TEXT_DOMAIN); ?></option>
 			</select>
+					<div class="rthd-setup-wizard-row rthd-setup-wizard-support-page-new-div" style="display: none;">
+						<label for="rthd-setup-wizard-support-page-new"><?php _e('Create New Page',RT_BIZ_TEXT_DOMAIN); ?></label>
+						<input type="text" id="rthd-setup-wizard-support-page-new" name="rthd-setup-wizard-support-page-new-value" />
+					</div>
 
 			</div>
 			</div>
-		<div class="rthd-setup-wizard-row rthd-setup-wizard-support-page-new-div" style="display: none;">
-			<label for="rthd-setup-wizard-support-page-new"><?php _e('Create New Page',RT_BIZ_TEXT_DOMAIN); ?></label>
-			<input type="text" id="rthd-setup-wizard-support-page-new" name="rthd-setup-wizard-support-page-new-value" />
-		</div>
+
 			<div class="rthd-support-process" style="display: none;">
 			<span>Setting up support page</span>
 			<img id="rthd-support-page-spinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
