@@ -31,6 +31,7 @@ jQuery(document).ready(function($) {
 
 	                if (currentIndex == 1){
 		                // save offering selection and sync offerings
+		                skip_step = false;
 		                return rthdSetup.connect_store();
 	                }
 	                // active this after screen is fixed
@@ -39,10 +40,16 @@ jQuery(document).ready(function($) {
 		                return rthdSetup.support_page();
 	                }
                     // save assingee
-	                if( currentIndex == 3){
+	                if ( currentIndex == 3){
 		                rthdSetup.save_assignee();
 		                return false;
 	                }
+	                // get assignee UI
+	                if ( currentIndex == 2 ){
+		                rthdSetup.get_assingee_ui();
+		                return false;
+	                }
+
                     return true;
                 },
                 onStepChanged: function (event, currentIndex, priorIndex)
@@ -326,6 +333,26 @@ jQuery(document).ready(function($) {
             }else{
                 return true;
             }
+	    },
+	    get_assingee_ui:function(){
+		    jQuery('.rthd-team-setup-loading' ).show();
+
+		    jQuery.ajax( {
+			                 url: ajaxurl,
+			                 dataType: "json",
+			                 type: 'post',
+			                 data:{
+				                 action: 'rthd_get_default_assignee_ui'
+			                 },
+			                 success: function( data ) {
+				                 if (data.status){
+					                 jQuery('#rthd-setup-set-assignee-ui' ).html(data.html);
+					                 jQuery('.rthd-team-setup-loading' ).hide();
+					                 skip_step = true;
+					                 jQuery('.wizard').steps('next');
+				                 }
+			                 }
+		                 } );
 	    },
 	    save_assignee: function(){
 		    jQuery('.rthd-assignee-process' ).show();

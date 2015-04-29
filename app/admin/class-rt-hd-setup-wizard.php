@@ -36,6 +36,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			add_action( 'wp_ajax_rthd_import_all_users', array( $this, 'import_all_users' ) );
 			add_action( 'wp_ajax_rthd_offering_sync', array( $this, 'offering_sync' ) );
 			add_action( 'wp_ajax_rthd_setup_wizard_assignee_save', array( $this, 'assignee_save' ) );
+			add_action( 'wp_ajax_rthd_get_default_assignee_ui', array( $this, 'default_assignee' ) );
 		}
 
 		/**
@@ -77,7 +78,9 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 
 				<h1><?php _e( 'Set Assignee' ); ?></h1>
 				<fieldset style="display: none">
-					<?php $this->default_assignee(); ?>
+					<div id="rthd-setup-set-assignee-ui">
+
+					</div>
 				</fieldset>
 
 				<h1><?php _e( 'Mailbox Setup' ); ?></h1>
@@ -99,6 +102,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 		}
 
 		function default_assignee(){
+			ob_start();
 			$current = get_current_user_id();
 			?>
 			<h3><?php _e( 'Select Ticket Assignee', RT_BIZ_TEXT_DOMAIN ); ?></h3> <?php
@@ -152,9 +156,13 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
                     <img src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
                 </div> <?php
             }else{ ?>
-                <p class="description"> <?php _e('No product found! you will be auto redirect to next step within second.', RT_BIZ_TEXT_DOMAIN); ?> </p>
+                <p class="description"> <?php _e(' No product found! you will be auto redirect to next step within second.', RT_BIZ_TEXT_DOMAIN); ?> </p>
             <?php }
-        }
+			$comment_html = ob_get_clean();
+			header( 'Content-Type: application/json' );
+			echo json_encode( array( 'status' => true, 'html'=> $comment_html ) );
+			die( 0 );
+		}
 
 		function connect_store_ui(){
 			?>
@@ -280,6 +288,11 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				<input type="hidden" id="rthd-setup-import-all-count" value="<?php echo $remain_wp_users; ?>" />
 				<progress id="rthd-setup-import-users-progress" max="<?php echo $remain_wp_users; ?>" value="0" style="display: none;"></progress>
 				</form>
+			</div>
+
+			<div class="rthd-team-setup-loading" style="display: none;">
+				<span>Loading next page</span>
+				<img id="rthd-support-page-spinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 			</div>
 		<?php
 		}
