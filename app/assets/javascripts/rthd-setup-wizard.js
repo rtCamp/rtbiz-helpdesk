@@ -45,11 +45,11 @@ jQuery(document).ready(function($) {
 	                }
 
                     //save mailbox
-                    if( currentIndex == 4){
-                        rthdSetup.save_mailbox_folder();
-                        return false;
-
-                    }
+                    //if( currentIndex == 4){
+                    //    rthdSetup.save_mailbox_folder();
+                    //    return false;
+                    //
+                    //}
                     return true;
                 },
                 onStepChanged: function (event, currentIndex, priorIndex)
@@ -376,10 +376,9 @@ jQuery(document).ready(function($) {
                     return true;
                 }, 2000);
             }
-            if( jQuery('#rtmailbox-action').val() == 'rtmailbox_connect_imap' && currentIndex == 4 ){
-                jQuery('div.actions a[href="#next"]').text("Connect");
-                jQuery('#rtmailbox-connect').hide();
-            }
+            //if( jQuery('#rtmailbox-action').val() == 'rtmailbox_connect_imap' && currentIndex == 4 ){
+            //    jQuery('div.actions a[href="#next"]').text("Skip");
+            //}
         },
         save_mailbox_folder: function(){
             if( jQuery('#rtmailbox-action').val() == 'rtmailbox_connect_imap' ){
