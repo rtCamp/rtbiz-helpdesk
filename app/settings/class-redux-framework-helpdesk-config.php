@@ -542,7 +542,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					array(
 						'id'      => 'rthd_auto_response_dayshift_time',
 						'type'    => 'callback',
-						'title'   => __( 'Configure Weekdays for dayshift' ),
+						'title'   => __( 'Configure working time for dayshift' ),
 						'subtitle' => __( 'Add hours of operation' ),
 						'desc'    => '',
 						'callback' => 'rthd_auto_response_dayshift_view',
@@ -561,7 +561,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					array(
 						'id'      => 'rthd_auto_response_nightshift_time',
 						'type'    => 'callback',
-						'title'   => __( 'Configure Weekdays for nightshift' ),
+						'title'   => __( 'Configure working time for nightshift' ),
 						'subtitle' => __( 'Add hours of operation' ),
 						'desc'    => '',
 						'callback' => 'rthd_auto_response_daynightshift_view',
