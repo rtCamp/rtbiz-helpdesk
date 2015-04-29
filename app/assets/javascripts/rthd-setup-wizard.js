@@ -43,13 +43,6 @@ jQuery(document).ready(function($) {
 		                rthdSetup.save_assignee();
 		                return false;
 	                }
-
-                    //save mailbox
-                    //if( currentIndex == 4){
-                    //    rthdSetup.save_mailbox_folder();
-                    //    return false;
-                    //
-                    //}
                     return true;
                 },
                 onStepChanged: function (event, currentIndex, priorIndex)
@@ -376,64 +369,7 @@ jQuery(document).ready(function($) {
                     return true;
                 }, 2000);
             }
-            //if( jQuery('#rtmailbox-action').val() == 'rtmailbox_connect_imap' && currentIndex == 4 ){
-            //    jQuery('div.actions a[href="#next"]').text("Skip");
-            //}
-        },
-        save_mailbox_folder: function(){
-            if( jQuery('#rtmailbox-action').val() == 'rtmailbox_connect_imap' ){
-                var requestArray = {};
-                requestArray.data =  jQuery( '#rtmailbox-wrap input' ).serialize();
-                requestArray.action = 'rtmailbox_imap_connect';
-                jQuery.ajax({
-                    url: ajaxurl,
-                    dataType: 'json',
-                    type: 'post',
-                    data: requestArray,
-                    beforeSend: function(){
-                    },
-                    success: function(data) {
-                        if (data.status) {
-                            jQuery( '#rtmailbox-wrap' ).html( data.html);
-                        }else{
-                            alert( data.error );
-                        }
-                        jQuery('div.actions a[href="#next"]').text("Next");
-                        jQuery('#rtmailbox-save').hide();
-                    },
-                    error: function(){
-                        alert( 'Something goes wrong. Please try again.' );
-                    }
-                });
-
-            }else if( jQuery('#rtmailbox-action').val() == 'rtmailbox_folder_update' ){
-                var requestArray = {};
-                requestArray.data =  jQuery( '#rtmailbox-wrap input' ).serialize();
-                requestArray.action = 'rtmailbox_folder_update';
-
-                jQuery.ajax({
-                    url: ajaxurl,
-                    dataType: 'json',
-                    type: 'post',
-                    data: requestArray,
-                    beforeSend: function(){
-                        //alert('before send');
-                    },
-                    success: function(data) {
-                        if (data.status) {
-                            skip_step = true;
-                            jQuery('.wizard').steps('next');
-                        }else{
-                            alert( data.error );
-                        }
-                    },
-                    error: function(){
-                        alert( 'Something goes wrong. Please try again.' );
-                    }
-                });
-            }
         }
-
 };
     rthdSetup.init();
 });
