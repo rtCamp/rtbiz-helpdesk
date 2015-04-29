@@ -184,6 +184,10 @@
 	width: 40%;
 }
 
+select#rthd-setup-wizard-support-page,select.rthd-setup-assignee{
+	width: 40%;
+}
+
 .wizard > .content > .body input[type="checkbox"]
 {
 	display: inline-block;
