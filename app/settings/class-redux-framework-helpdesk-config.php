@@ -168,17 +168,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					'placeholder' => __( 'rtBiz Helpdesk, Support, etc.' ),
 				),
 				array(
-					'id'       => 'rthd_logo_url',
-					'type'     => 'media',
-					'url'      => true,
-					'title'    => __( 'Logo' ),
-					'subtitle' => __( 'Logo to be used for all Menu, Submenu, Post Types Menu Icons in Helpdesk.' ),
-					'desc'     => __( 'Upload any logo using the WordPress native uploader, preferably with the size of 16x16' ),
-					'default'  => array(
-						'url' => RT_HD_URL . 'app/assets/img/hd-16X16.png',
-					),
-				),
-				array(
 					'id'       => 'rthd_default_user',
 					'type'     => 'select',
 					'options'  => $users_options,

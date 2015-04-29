@@ -319,7 +319,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 		 */
 		function register_custom_post( $menu_position ) {
 			$settings = rthd_get_redux_settings();
-
+			$logo = apply_filters('rthd_helpdesk_logo', 'dashicons-businessman');
 			$args = array(
 				'labels'             => $this->labels,
 				'public'             => true,
@@ -330,7 +330,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				    'with_front' => false,
 				),
 				'show_ui'            => true, // Show the UI in admin panel
-				'menu_icon'          => isset( $settings['rthd_logo_url'] ) ? $settings['rthd_logo_url']['url'] : RT_HD_URL . 'app/assets/img/hd-16X16.png' ,
+				'menu_icon'          => $logo,
 				'menu_position'      => $menu_position,
 				'supports'           => array( 'title', 'editor', 'comments', 'custom-fields', 'revisions' ),
 				'capability_type'    => self::$post_type,
