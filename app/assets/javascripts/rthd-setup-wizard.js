@@ -307,7 +307,7 @@ jQuery(document).ready(function ($) {
         add_contact_to_list: function (id, label, imghtml, editlink) {
             if (jQuery("#imported-user-auth-" + id).length < 1) {
                 //jQuery(".rthd-setup-list-users").append("<li id='imported-user-auth-" + id + "' class='contact-list' >" + imghtml + "<a href='#removeUser' class='delete_row'>×</a><br/><a class='rthd-setup-user-title heading' target='_blank' href='" + editlink + "'>" + label + "</a><input type='hidden' class='rthd-import-selected-users' name='import_users[]' value='" + id + "' /></li>")
-                jQuery(".rthd-setup-list-users").append("<li id='imported-user-auth-" + id + "' class='contact-list' >" + imghtml + "<br/><a class='rthd-setup-user-title heading' target='_blank' href='" + editlink + "'>" + label + "</a><input type='hidden' class='rthd-import-selected-users' name='import_users[]' value='" + id + "' /></li>")
+                jQuery(".rthd-setup-list-users").append("<li id='imported-user-auth-" + id + "' class='contact-list' >" + imghtml + "<a class='rthd-setup-user-title heading' target='_blank' href='" + editlink + "'>" + label + "</a><input type='hidden' class='rthd-import-selected-users' name='import_users[]' value='" + id + "' /></li>")
             }
         },
         connect_store: function () {
