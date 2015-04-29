@@ -23,20 +23,24 @@
 	width: 50%;
 }
 
-#wizard .rtmailbox-row > label{
-    width: 15%;
-}
-
 .rthd-setup-ul-text-decoration{
 	text-decoration: none;
 	list-style: none;
 }
 
-.rthd_selected_user{
-	float: right;
-	width: 50%;
-	height: 180px;
-	overflow: scroll;
+.rthd_selected_user {
+    float: right;
+    width: 50%;
+}
+
+.rthd_selected_user>h4{
+    margin: 0px 0px 10px 0px;
+}
+
+.rthd_selected_user>div{
+    border: 1px #ccc solid;
+    overflow-y: scroll;
+    height: 150px;
 }
 
 .rthd-setup-list-users .delete_row{
@@ -94,4 +98,12 @@
 
 .rthd-setup-wizard-row label.rthd-offering-default-assignee{
 	width: 25%;
+}
+
+#wizard #rtmailbox-page{
+    width: 575px;
+}
+
+#wizard .rtmailbox-row > label{
+    width: 25%;
 }
