@@ -180,7 +180,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			ob_start();
 			$current = get_current_user_id();
 			?>
-			<h3><?php _e( 'Select Ticket Assignee', RT_BIZ_TEXT_DOMAIN ); ?></h3> <?php
+	 <?php
 			// get product list
 			$terms = array();
 			global $rtbiz_offerings;
@@ -192,8 +192,10 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			$users  = Rt_HD_Utils::get_hd_rtcamp_user();
             if ( ! empty( $terms ) ) {
                 ?>
-                <p class="description"> <?php _e('Select an assignee for the products we synced in previous setup.', RT_BIZ_TEXT_DOMAIN); ?> </p>
 	            <div class="rthd-setup-wizard-controls">
+
+		            <h3><?php _e( 'Select Ticket Assignee', RT_BIZ_TEXT_DOMAIN ); ?></h3>
+		            <p class="description"> <?php _e('Select an assignee for the products we synced in previous setup.', RT_BIZ_TEXT_DOMAIN); ?> </p>
 
                 <div class="rthd-setup-wizard-row">
                     <ul>
@@ -246,25 +248,26 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 		 */
 		function connect_store_ui(){
 			?>
-			<h3><?php _e( 'Connect your store with helpdesk', RT_BIZ_TEXT_DOMAIN ); ?></h3>
-			<?php
-			global $rt_hd_offering_support;
-			$rt_hd_offering_support->check_active_plugin();
-			$eddactive = is_plugin_active( 'easy-digital-downloads/easy-digital-downloads.php' ) ;
-			$wooactive = is_plugin_active( 'woocommerce/woocommerce.php' ) ;
-			if ( $wooactive || $eddactive ){
-				if( $wooactive && $eddactive ){
-					$active_plugins = 'WooCommerce and EDD';
-				} else if ( $wooactive){
-					$active_plugins = 'WooCommerce';
-				}
-				else {
-					$active_plugins = 'EDD';
-				}
-				echo '<p class="description rthd-setup-description"> Looks like you have '.$active_plugins. ' Active. Helpdesk have selected '.$active_plugins.' for you, You can change that if you want to.</p>';
-			}
-			?>
+
 			<div class="rthd-setup-wizard-controls">
+				<h3><?php _e( 'Connect your store with helpdesk', RT_BIZ_TEXT_DOMAIN ); ?></h3>
+				<?php
+				global $rt_hd_offering_support;
+				$rt_hd_offering_support->check_active_plugin();
+				$eddactive = is_plugin_active( 'easy-digital-downloads/easy-digital-downloads.php' ) ;
+				$wooactive = is_plugin_active( 'woocommerce/woocommerce.php' ) ;
+				if ( $wooactive || $eddactive ){
+					if( $wooactive && $eddactive ){
+						$active_plugins = 'WooCommerce and EDD';
+					} else if ( $wooactive){
+						$active_plugins = 'WooCommerce';
+					}
+					else {
+						$active_plugins = 'EDD';
+					}
+					echo '<p class="description rthd-setup-description"> Looks like you have '.$active_plugins. ' Active. Helpdesk have selected '.$active_plugins.' for you, You can change that if you want to.</p>';
+				}
+				?>
 				<div class="rthd-setup-wizard-row">
 					<input id="rthd-wizard-store-wc" class="" type="checkbox" name="rthd-wizard-store" value="woocommerce" <?php echo $wooactive?'checked':'';?> >
 					<label for="rthd-wizard-store-wc">WooCommerce</label>
@@ -274,15 +277,10 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 					<label for="rthd-wizard-store-edd">EDD</label>
 				</div>
 			</div>
-<!--			<div class="rthd-setup-wizard-row">-->
-<!--				<input id="option" type="checkbox" name="rthd-wizard-store" value="none" --><?php //echo (!$eddactive&&!$wooactive)?'checked':'';?><!-- >-->
-<!--				<label for="option">none</label>-->
-<!--			</div>-->
 			<div class="rthd-store-process" style="display: none;">
 				<span>Connecting store and importing existing products</span>
 				<img id="rthd-support-page-spinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 			</div>
-<!--			<button class="rthd-wizard-skip" type="button">Skip</button>-->
 
 		<?php
 		}
@@ -293,9 +291,9 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 		function support_page_ui(){
 			$pages = get_pages();
 			?>
-			<h3>Support Page </h3>
 			<div class="rthd-setup-wizard-controls">
-			<div class="rthd-setup-wizard-row">
+				<h3>Support Page </h3>
+				<div class="rthd-setup-wizard-row">
 			<label for="rthd-setup-wizard-support-page"><?php _e('Select Support Page ',RT_BIZ_TEXT_DOMAIN); ?></label>
 			<select id="rthd-setup-wizard-support-page">
 				<option value="0" selected><?php _e('--Select Page--',RT_BIZ_TEXT_DOMAIN); ?></option>
@@ -328,7 +326,6 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 		function setup_team(){
 			global $rthd_form;
 			?>
-			<h3>There are 3 ways you can add users to your team. If you forget somebody now, you can add them later. </h3>
 
 			<div class="rthd_wizard_container rthd_selected_user " style="display: none;">
 				<ul class="rthd-setup-ul-text-decoration rthd-setup-list-users">
@@ -336,6 +333,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				</ul>
 			</div>
 			<div class="rthd-setup-wizard-controls">
+				<h3>There are 3 ways you can add users to your team. If you forget somebody now, you can add them later. </h3>
 				<div class="rthd_wizard_container rthd-setup-wizard-row">
 
 					<div class="rthd-setup-value-container">
