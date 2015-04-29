@@ -751,11 +751,10 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 					<div class="welcome-panel-column welcome-panel-last">
 						<h4><?php _e( 'More Actions' ); ?></h4>
 						<ul>
+							<li><?php printf( '<a href="%s" target="_blank" class="welcome-icon welcome-learn-more">' . __( 'Learn more about getting started' ) . '</a>', 'https://github.com/rtCamp/docs.rtcamp.com/tree/master/rtbiz/helpdesk' ); ?></li>
 							<?php if ( current_user_can( $editor_cap ) ) { ?>
 								<li><?php printf( '<a href="%s" class="welcome-icon welcome-universal-access-alt">' . __( 'Add new Department' ) . '</a>', admin_url( 'edit-tags.php?taxonomy=' . RT_Departments::$slug . '&post_type=' . Rt_HD_Module::$post_type ) ); ?></li>
 							<?php } ?>
-
-							<li><?php printf( '<a href="%s" class="welcome-icon welcome-learn-more">' . __( 'Learn more about getting started' ) . '</a>', 'https://rtcamp.com/rtbiz/docs/' ); ?></li>
 						</ul>
 					</div>
 				</div>
