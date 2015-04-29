@@ -6,6 +6,7 @@ jQuery(document).ready(function ($) {
     var wizard;
     var skip_step = false;
     var next_page_skip = false;
+	var imported_users = 0;
     var rthdSetup = {
         init: function () {
             rthdSetup.setup_wizard();
@@ -217,6 +218,7 @@ jQuery(document).ready(function ($) {
 		    requestArray['nonce']= jQuery('#import_all_users' ).val();
 		    requestArray['import']= true;
 		    jQuery('#rthd-import-all-spinner' ).show();
+		    jQuery('#rthd-all-import-message' ).html('');
             jQuery.ajax( {
 			            url: ajaxurl,
 			            dataType: "json",
@@ -226,18 +228,26 @@ jQuery(document).ready(function ($) {
 				            if ( data.status ){
 					            var remain = jQuery('#rthd-setup-import-all-count' ).val();
 					            remain  =  parseInt(remain) - parseInt(data.imported_count);
+					            imported_users += parseInt(data.imported_count);
 					            var progressbar = jQuery('#rthd-setup-import-users-progress' ).val();
 					            progressbar =  parseInt(progressbar) + parseInt(data.imported_count);
 					            jQuery('#rthd-setup-import-users-progress' ).val(progressbar);
-					            $.each(data.imported_users, function ( i, user ) {
-						            rthdSetup.add_contact_to_list( user.id, user.label, user.imghtml, user.editlink );
-					            });
+					            if (data.hasOwnProperty('imported_users')) {
+						            $.each( data.imported_users, function ( i, user ) {
+							            rthdSetup.add_contact_to_list( user.id, user.label, user.imghtml, user.editlink );
+						            } );
+					            }
 					            if ( parseInt(remain) > 0 ){
 						            jQuery('#rthd-setup-import-all-count' ).val(remain);
 						            rthdSetup.import_all_users();
 					            } else {
 						            jQuery('#rthd-import-all-spinner' ).hide();
 						            jQuery('#rthd-setup-import-users-progress' ).hide();
+						            if (imported_users == 0){
+							            jQuery('#rthd-all-import-message' ).html('Users already added!');
+						            } else {
+							            jQuery('#rthd-all-import-message' ).html(imported_users+' users added!');
+						            }
 					            }
 				            }
 			            }
@@ -261,13 +271,22 @@ jQuery(document).ready(function ($) {
                         if (data.hasOwnProperty('count')) {
                             jQuery('#rthd-domain-import-message').html('Found ' + data.count + ' users');
                         } else {
-                            $.each(data.imported_users, function (i, user) {
-                                rthdSetup.add_contact_to_list(user.id, user.label, user.imghtml, user.editlink);
-                            });
+	                        if(data.hasOwnProperty('imported_users')) {
+		                        $.each( data.imported_users, function ( i, user ) {
+			                        rthdSetup.add_contact_to_list( user.id, user.label, user.imghtml, user.editlink );
+		                        } );
+	                        }
                             if (data.imported_all) {
-                                jQuery('#rthd-domain-import-message').html('Imported ' + ( data.imported_users.length ) + ' Users!');
+	                            if (data.hasOwnProperty('imported_users')){
+		                            jQuery('#rthd-domain-import-message').html('Imported ' + ( data.imported_users.length ) + ' Users!');
+	                            }
+	                            else{
+		                            jQuery('#rthd-domain-import-message').html('No Users to Add!');
+	                            }
                             } else {
-                                jQuery('#rthd-domain-import-message').html('Could not import ' + ( data.not_imported_users.length ));
+	                            if (data.hasOwnProperty('not_imported_users')) {
+		                            jQuery( '#rthd-domain-import-message' ).html( 'Could not import ' + ( data.not_imported_users.length ) );
+	                            }
                             }
                         }
                         jQuery('#rthd-domain-import-message').show();

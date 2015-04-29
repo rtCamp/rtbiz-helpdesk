@@ -344,7 +344,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 						<img id="rthd-autocomplete-page-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 						<br/>
 						<span class="rthd-warning" style="display: none;"></span>
-						<input type="button" class='button button-primary rthd-importer-add-contact' value="Add" style="display: none;" />
+						<input type="button" class='button rthd-importer-add-contact' value="Add" style="display: none;" />
 						<input type="hidden" id="rthd-new-user-email" />
 
 					</div>
@@ -360,7 +360,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				<br/>
 				<label></label>
 				<span id='rthd-domain-import-message' style=""> Found <?php echo sprintf( _n( '%s user', '%s users', $count_domain_users, RT_HD_TEXT_DOMAIN ), $count_domain_users );?></span>
-				<input id="rthd-import-domain-users" class="button button-primary" type="button" value="Add Users" />
+				<input id="rthd-import-domain-users" class="button" type="button" value="Add Users" />
 				<img id="rthd-domain-import-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 				<?php wp_nonce_field( get_current_user_id().'import-user-domain', 'import_domain' );?>
 			</div>
@@ -373,11 +373,12 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 					$remain_wp_users = $count['total_users']-count( $helpdesk_users);
 					?>
 				<label> 3. Add all WordPress <?php echo sprintf( _n( '(%s) user', '(%s) users', $remain_wp_users, RT_HD_TEXT_DOMAIN ), $remain_wp_users ); ?></label>
-				<input id="rthd-add-all-users" class="button button-primary" type="button" value="Add Users" />
+				<input id="rthd-add-all-users" class="button" type="button" value="Add Users" />
 					<img id="rthd-import-all-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 				<?php wp_nonce_field( get_current_user_id().'import-all-users', 'import_all_users' );?>
 				<input type="hidden" id="rthd-setup-import-all-count" value="<?php echo $remain_wp_users; ?>" />
 				<progress id="rthd-setup-import-users-progress" max="<?php echo $remain_wp_users; ?>" value="0" style="display: none;"></progress>
+				<span id='rthd-all-import-message'> </span>
 				</form>
 			</div>
 			</div>

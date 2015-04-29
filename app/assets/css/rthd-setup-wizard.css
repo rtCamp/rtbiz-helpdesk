@@ -60,6 +60,10 @@
 	margin-bottom: 10px;
 }
 
+.rthd-setup-wizard-row:last-child{
+	margin-bottom: 0;
+}
+
 .rthd-setup-wizard-row label{
 	display: inline-block;
 	width: 15%;
@@ -72,6 +76,8 @@
 .rthd-setup-wizard-controls{
 	background: beige;
 	width: 50%;
+	padding: 10px 0 10px 10px;
+	margin-bottom: 0;
 }
 
 .rthd-setup-wizard-controls .rthd-setup-wizard-row label{
