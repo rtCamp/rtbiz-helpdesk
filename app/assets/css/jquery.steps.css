@@ -184,7 +184,7 @@
 	width: 40%;
 }
 
-select#rthd-setup-wizard-support-page,select.rthd-setup-assignee{
+.wizard > .content > .body select,select#rthd-setup-wizard-support-page,select.rthd-setup-assignee{
 	width: 40%;
 }
 

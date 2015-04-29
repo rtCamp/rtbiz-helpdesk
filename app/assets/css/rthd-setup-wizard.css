@@ -96,13 +96,18 @@
 	padding: 10px 0 10px 10px;
 	margin-bottom: 0;
 }
+.rthd-setup-wizard-controls.rthd-setup-team-wizard-controls{
+	min-height: 300px;
+}
 
 .rthd-setup-wizard-controls .rthd-setup-wizard-row label{
 	width: 38%;
 }
 
 .rthd_wizard_container.rthd_selected_user{
-	background: #DCDCDC;
+	background: rgb(240, 240, 216);
+	min-height: 300px;
+	padding: 10px 0 10px 10px;
 }
 
 .rthd-setup-description{
