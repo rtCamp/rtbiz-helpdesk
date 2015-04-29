@@ -185,12 +185,12 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			}
 			?>
 			<div class="rthd-setup-wizard-row">
-				<input id="option" type="checkbox" name="rthd-wizard-store" value="woocommerce" <?php echo $wooactive?'checked':'';?> >
-				<label for="option">WooCommerce</label>
+				<input id="rthd-wizard-store-wc" class="" type="checkbox" name="rthd-wizard-store" value="woocommerce" <?php echo $wooactive?'checked':'';?> >
+				<label for="rthd-wizard-store-wc">WooCommerce</label>
 			</div>
 			<div class="rthd-setup-wizard-row">
-				<input id="option" type="checkbox" name="rthd-wizard-store" value="edd" <?php echo $eddactive?'checked':'';?> >
-				<label for="option">EDD</label>
+				<input id="rthd-wizard-store-edd" type="checkbox" name="rthd-wizard-store" value="edd" <?php echo $eddactive?'checked':'';?> >
+				<label for="rthd-wizard-store-edd">EDD</label>
 			</div>
 <!--			<div class="rthd-setup-wizard-row">-->
 <!--				<input id="option" type="checkbox" name="rthd-wizard-store" value="none" --><?php //echo (!$eddactive&&!$wooactive)?'checked':'';?><!-- >-->
