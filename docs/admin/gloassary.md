@@ -25,24 +25,23 @@ Below are the terms that will be used across this manual.
 
 9.  ** Administrator - ** The user who has setup Helpdesk and/or who has been assigned Admin rights to the Helpdesk module.
 
-9. **Client/Customer -** A person who has bought a product from an organisation.
+9. **Client/Customer -** Someone who has bought a product from the organisation.
 
-10. **Offering/Product -** Any product/service that organisation is sellling.
+10. **Offering/Product -** Any product/service that organisation is selling.
 
-12. ** Notifications ** - Email alerts sent to staff and ticket authors on various actions on a ticket.
+12. ** Notifications ** - Email alerts sent to staff and customers on various actions on a ticket.
 
 13. ** Reports ** - Analytical data on tickets based on filters selected.
 
 14. ** Comment Type ** - Comment assigned with some specific visibility.
 
-15. ** Blacklist Email ** - Any email address which has been barred by Administrator from creating any ticket.
+15. ** Blacklist Email ** - Any email address that has been barred by Administrator from creating any ticket.
 
 16. ** Hash URL ** - A unique link generated for each ticket.
 
 17. ** Support Page ** - A page with support form setup using the helpdesk short code. This form is used by the customer to send support queries.
 
 18. ** Notification templates ** - Predefined text to be used in notifications mails.
-
 
 
 

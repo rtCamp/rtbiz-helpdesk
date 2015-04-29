@@ -20,10 +20,7 @@ Please follow these simple steps to install rtBiz Helpdesk plugin.
 
 3. Activate it through the ‘Plugins’ section.
 
-4. The plugin will ask you to install rtBiz & Posts to Posts plugins. Please install & activate them.
-
-5. Now you should be able to see ‘rtBiz’ & ‘Helpdesk’ tabs on your WordPress site.
-
+4. Run the installation wizard and complete the setup.
 
 
 ### Theme Compatibility

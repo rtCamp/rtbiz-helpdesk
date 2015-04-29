@@ -6,8 +6,8 @@ Setup a highly customized Helpdesk for your customers right into your WordPress 
 #### Who can use this manual?
 This manual is primarily for the Helpdesk admin/owner.
 
-#### What does it includes?
-The manual covers the step-by-step guide to set up thus Helpdesk plugin; introduction of all the entities like ticket, statuses; introduction to reporting features; and other related aspects.
+#### What this manual includes?
+The manual covers the step-by-step guide to set up this Helpdesk plugin; introduction of all the entities like ticket, statuses; introduction to reporting features; and other related aspects.
 
 #### Are their any prerequisites before reading this manual?
 Yes. Since rtBiz Helpdesk is based on the rtBiz Plugin for contacts and Access control related operations so a quick read of that can help you to set up better.
