@@ -69,7 +69,7 @@ jQuery(document).ready(function ($) {
                     return true;
                 },
                 onFinished: function (event, currentIndex) {
-                    //alert("Submitted!");
+                    window.location.replace( hdDashboardUrl );
                 }
             });
         },
