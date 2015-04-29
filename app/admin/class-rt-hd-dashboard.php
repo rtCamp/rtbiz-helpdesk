@@ -711,7 +711,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			global $rt_hd_attributes;
 
 			$settings = rthd_get_redux_settings();
-			$welcome_label = $settings['rthd_menu_label'];
+			$welcome_label = 'Helpdesk';
 
 			$admin_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' );
 			$editor_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );

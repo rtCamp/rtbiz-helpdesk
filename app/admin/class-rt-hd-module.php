@@ -132,7 +132,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 			$this->labels = array(
 				'name'          => __( 'Ticket', RT_HD_TEXT_DOMAIN ),
 				'singular_name' => __( 'Ticket', RT_HD_TEXT_DOMAIN ),
-				'menu_name'     => isset( $settings['rthd_menu_label'] ) ? $settings['rthd_menu_label'] : 'Helpdesk',
+				'menu_name'     => 'Helpdesk',
 				'all_items'     => __( 'Tickets', RT_HD_TEXT_DOMAIN ),
 				'add_new'       => __( 'Add Ticket', RT_HD_TEXT_DOMAIN ),
 				'add_new_item'  => __( 'Add Ticket', RT_HD_TEXT_DOMAIN ),

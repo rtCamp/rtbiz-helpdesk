@@ -28,7 +28,7 @@ class test_Rt_HD_ACL extends RT_WP_TestCase {
 
 		$this->assertEquals(
 			array(
-				'label'      => isset( $settings['rthd_menu_label'] ) ? $settings['rthd_menu_label'] : 'Helpdesk',
+				'label'      => 'Helpdesk',
 				'post_types' => array( Rt_HD_Module::$post_type ),
 				'department_support' => array( Rt_HD_Module::$post_type ),
 				'offering_support' => array( Rt_HD_Module::$post_type ),

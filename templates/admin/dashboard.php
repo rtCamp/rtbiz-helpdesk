@@ -9,7 +9,7 @@
 global $rt_hd_dashboard;
 $author_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
 $settings = rthd_get_redux_settings();
-$welcome_label = $settings['rthd_menu_label'];
+$welcome_label = 'Helpdesk';
 ?>
 <div class="wrap">
 

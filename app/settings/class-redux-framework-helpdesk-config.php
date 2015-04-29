@@ -159,15 +159,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			// ACTUAL DECLARATION OF SECTIONS
 			$general_fields = array(
 				array(
-					'id'          => 'rthd_menu_label',
-					'type'        => 'text',
-					'title'       => __( 'Menu Label' ),
-					'subtitle'    => __( 'Menu Label Identity for the Plugin.' ),
-					'desc'        => __( 'This label will be used for the Menu Item label for Helpdesk' ),
-					'default'     => __( 'Helpdesk' ),
-					'placeholder' => __( 'rtBiz Helpdesk, Support, etc.' ),
-				),
-				array(
 					'id'       => 'rthd_default_user',
 					'type'     => 'select',
 					'options'  => $users_options,

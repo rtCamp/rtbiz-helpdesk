@@ -569,7 +569,7 @@ function rthd_get_auto_response_message(){
 
 function rthd_generate_email_title( $post_id, $title ) {
 	$redux = rthd_get_redux_settings();
-	$title = str_replace( '{module_name}', isset( $redux['rthd_menu_label'] ) ? $redux['rthd_menu_label'] : Rt_HD_Module::$name  , $title );
+	$title = str_replace( '{module_name}', Rt_HD_Module::$name  , $title );
 	$title = str_replace( '{ticket_id}', $post_id, $title );
 	$title = str_replace( '{ticket_title}',html_entity_decode( get_the_title( $post_id ), ENT_COMPAT, 'UTF-8' ), $title );
 
@@ -1104,7 +1104,7 @@ function rthd_wp_new_user_notification($user_id, $plaintext_pass = '') {
 		return;
 
 	$settings = rthd_get_redux_settings();
-	$module_label = ! empty( $settings['rthd_menu_label'] ) ?  $settings['rthd_menu_label']: 'Helpdesk' ;
+	$module_label = 'Helpdesk' ;
 
 	// Generate something random for a password reset key.
 	$key = wp_generate_password( 20, false );
