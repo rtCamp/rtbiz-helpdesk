@@ -776,10 +776,61 @@ function rthd_check_plugin_dependecy() {
 		add_action( 'admin_enqueue_scripts', 'rthd_plugin_check_enque_js' );
 		add_action( 'wp_ajax_rthd_activate_plugin', 'rthd_activate_plugin_ajax' );
 		add_action( 'wp_ajax_rthd_install_plugin', 'rthd_install_plugin_ajax' );
-		add_action( 'admin_notices', 'rthd_admin_notice_dependency_not_installed' );
+//		add_action( 'admin_notices', 'rthd_admin_notice_dependency_not_installed' );
+		add_action( 'admin_init', 'rthd_install_dependency' );
 	}
 
 	return $flag;
+}
+
+/**
+ * install depedency
+ */
+function rthd_install_dependency(){
+	$biz_installed = rthd_is_plugin_installed( 'rtbiz' ) ;
+	$p2p_installed = rthd_is_plugin_installed( 'posts-to-posts' ) ;
+	$string = '';
+	if ( ! $biz_installed || ! $p2p_installed ) {
+		$string .= ' installed and activated ';
+		if (  ! $biz_installed ){
+			rthd_install_plugin( 'rtbiz' );
+			$string .= 'rtBiz ';
+		}
+		if ( ! $p2p_installed ){
+			rthd_install_plugin( 'posts-to-posts' );
+			$string .= 'posts to posts ';
+		}
+	}
+	else {
+		$string = ' activated ';
+		$rtbiz_active = rthd_is_plugin_active( 'rtbiz' );
+		$p2p_active = rthd_is_plugin_active( 'posts-to-posts' );
+		if ( ! $p2p_active ){
+			$p2ppath = rthd_get_path_for_plugin( 'posts-to-posts' );
+			rthd_activate_plugin( $p2ppath );
+			$string .= 'posts to posts ';
+		}
+		if ( ! $rtbiz_active ){
+			$rtbizpath = rthd_get_path_for_plugin( 'rtbiz' );
+			rthd_activate_plugin( $rtbizpath );
+			$string .= 'rtBiz ';
+		}
+	}
+	update_option( 'rtbiz_helpdesk_dependency_installed', $string );
+	wp_safe_redirect( admin_url( 'edit.php?post_type=rtbiz_hd_ticket&page=rthd-setup-wizard' ) );
+}
+
+function rthd_admin_notice_dependency_installed(){
+	$string = get_option( 'rtbiz_helpdesk_dependency_installed' );
+	if ( ! empty( $string ) ){ ?>
+		<div class="updated">
+			<p>
+			Helpdesk require posts to posts and rtBiz so Helpdesk have <strong><?php echo $string ;?></strong>
+			</p>
+		</div>
+<?php
+	}
+	delete_option('rtbiz_helpdesk_dependency_installed');
 }
 
 function rthd_install_plugin_ajax(){

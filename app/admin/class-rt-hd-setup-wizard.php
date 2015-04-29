@@ -39,6 +39,9 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			add_action( 'wp_ajax_rthd_get_default_assignee_ui', array( $this, 'default_assignee' ) );
 			add_action( 'wp_ajax_rthd_outboud_mail_setup_ui', array( $this, 'rthd_outboud_mail_setup_ui' ) );
 			add_action( 'wp_ajax_rthd_outound_setup_wizard', array( $this, 'rthd_outound_setup_wizard_callback' ) );
+			if ( ! empty( $_REQUEST['page'] ) && $_REQUEST['page'] == 'rthd-setup-wizard' ){
+				add_action( 'admin_notices', 'rthd_admin_notice_dependency_installed' );
+			}
 		}
 
 		/**
