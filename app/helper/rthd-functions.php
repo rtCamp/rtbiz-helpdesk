@@ -830,8 +830,8 @@ function rthd_install_plugin( $plugin_slug ){
 	$install_result = $upgrader->install( $api->download_link );
 
 	if ( ! $install_result || is_wp_error( $install_result ) ) {
-		// $install_result can be false if the file system isn't writeable.
-		$error_message = __( 'Please ensure the file system is writeable', RT_HD_TEXT_DOMAIN );
+		// $install_result can be false if the file system isn't writable.
+		$error_message = __( 'Please ensure the file system is writable', RT_HD_TEXT_DOMAIN );
 
 		if ( is_wp_error( $install_result ) ) {
 			$error_message = $install_result->get_error_message();

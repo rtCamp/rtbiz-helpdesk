@@ -207,7 +207,7 @@ function rthd_welcome_to_helpdesk(){
 		return;
 	}
 
-	wp_safe_redirect( admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&page=rthd-'.Rt_HD_Module::$post_type.'-dashboard' ) );
+	wp_safe_redirect( admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&page=rthd-setup-wizard' ) );
 	exit;
 }
 
