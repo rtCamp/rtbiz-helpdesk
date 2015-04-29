@@ -109,7 +109,7 @@
 .wizard > .steps .disabled a:active
 {
 	background: #eee;
-	color: #aaa;
+	color: #555;
 	cursor: default;
 }
 
@@ -260,7 +260,7 @@
 .wizard > .actions .disabled a:active
 {
 	background: #eee;
-	color: #aaa;
+	color: #555;
 }
 
 .wizard > .loading
