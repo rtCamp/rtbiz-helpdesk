@@ -193,6 +193,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
             if ( ! empty( $terms ) ) {
                 ?>
                 <p class="description"> <?php _e('Select an assignee for the products we synced in previous setup.', RT_BIZ_TEXT_DOMAIN); ?> </p>
+	            <div class="rthd-setup-wizard-controls">
 
                 <div class="rthd-setup-wizard-row">
                     <ul>
@@ -226,6 +227,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
                         ?>
                     </ul>
                 </div>
+	            </div>
                 <div class="rthd-assignee-process" style="display: none;">
                     <span>Setting up default assignee for offerings</span>
                     <img src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
@@ -262,13 +264,15 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				echo '<p class="description rthd-setup-description"> Looks like you have '.$active_plugins. ' Active. Helpdesk have selected '.$active_plugins.' for you, You can change that if you want to.</p>';
 			}
 			?>
-			<div class="rthd-setup-wizard-row">
-				<input id="rthd-wizard-store-wc" class="" type="checkbox" name="rthd-wizard-store" value="woocommerce" <?php echo $wooactive?'checked':'';?> >
-				<label for="rthd-wizard-store-wc">WooCommerce</label>
-			</div>
-			<div class="rthd-setup-wizard-row">
-				<input id="rthd-wizard-store-edd" type="checkbox" name="rthd-wizard-store" value="edd" <?php echo $eddactive?'checked':'';?> >
-				<label for="rthd-wizard-store-edd">EDD</label>
+			<div class="rthd-setup-wizard-controls">
+				<div class="rthd-setup-wizard-row">
+					<input id="rthd-wizard-store-wc" class="" type="checkbox" name="rthd-wizard-store" value="woocommerce" <?php echo $wooactive?'checked':'';?> >
+					<label for="rthd-wizard-store-wc">WooCommerce</label>
+				</div>
+				<div class="rthd-setup-wizard-row">
+					<input id="rthd-wizard-store-edd" type="checkbox" name="rthd-wizard-store" value="edd" <?php echo $eddactive?'checked':'';?> >
+					<label for="rthd-wizard-store-edd">EDD</label>
+				</div>
 			</div>
 <!--			<div class="rthd-setup-wizard-row">-->
 <!--				<input id="option" type="checkbox" name="rthd-wizard-store" value="none" --><?php //echo (!$eddactive&&!$wooactive)?'checked':'';?><!-- >-->
@@ -290,6 +294,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			$pages = get_pages();
 			?>
 			<h3>Support Page </h3>
+			<div class="rthd-setup-wizard-controls">
 			<div class="rthd-setup-wizard-row">
 			<label for="rthd-setup-wizard-support-page"><?php _e('Select Support Page ',RT_BIZ_TEXT_DOMAIN); ?></label>
 			<select id="rthd-setup-wizard-support-page">
@@ -303,6 +308,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				<option value="-1"><?php _e('-Create New Page-',RT_BIZ_TEXT_DOMAIN); ?></option>
 			</select>
 
+			</div>
 			</div>
 		<div class="rthd-setup-wizard-row rthd-setup-wizard-support-page-new-div" style="display: none;">
 			<label for="rthd-setup-wizard-support-page-new"><?php _e('Create New Page',RT_BIZ_TEXT_DOMAIN); ?></label>
@@ -324,12 +330,12 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			?>
 			<h3>There are 3 ways you can add users to your team. If you forget somebody now, you can add them later. </h3>
 
-			<div class="rthd_wizard_container rthd_selected_user ">
+			<div class="rthd_wizard_container rthd_selected_user " style="display: none;">
 				<ul class="rthd-setup-ul-text-decoration rthd-setup-list-users">
 
 				</ul>
 			</div>
-			<div class="rthd-setup-team-wizard-controls">
+			<div class="rthd-setup-wizard-controls">
 				<div class="rthd_wizard_container rthd-setup-wizard-row">
 
 					<div class="rthd-setup-value-container">
@@ -338,7 +344,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 						<img id="rthd-autocomplete-page-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 						<br/>
 						<span class="rthd-warning" style="display: none;"></span>
-						<input type="button" class='rthd-importer-add-contact' value="Add" style="display: none;" />
+						<input type="button" class='button button-primary rthd-importer-add-contact' value="Add" style="display: none;" />
 						<input type="hidden" id="rthd-new-user-email" />
 
 					</div>
@@ -349,13 +355,13 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 
 					$count_domain_users = rthd_search_non_helpdesk_users( '@'.$domain_name, true, true );
 				?>
-				<label for="rthd-add-user-domain"> 2. Add all users from my domain</label>
+				<label for="rthd-add-user-domain"> 2. Add all users from domain</label>
 				<input id="rthd-add-user-domain" class="rthd-setup-wizard-text" type="text" value="<?php echo '@'.$domain_name; ?>" placeholder="@gmail.com" />
 				<br/>
 				<label></label>
-				<input id="rthd-import-domain-users" type="button" value="Add users" />
-				<img id="rthd-domain-import-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 				<span id='rthd-domain-import-message' style=""> Found <?php echo sprintf( _n( '%s user', '%s users', $count_domain_users, RT_HD_TEXT_DOMAIN ), $count_domain_users );?></span>
+				<input id="rthd-import-domain-users" class="button button-primary" type="button" value="Add Users" />
+				<img id="rthd-domain-import-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 				<?php wp_nonce_field( get_current_user_id().'import-user-domain', 'import_domain' );?>
 			</div>
 
@@ -367,7 +373,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 					$remain_wp_users = $count['total_users']-count( $helpdesk_users);
 					?>
 				<label> 3. Add all WordPress <?php echo sprintf( _n( '(%s) user', '(%s) users', $remain_wp_users, RT_HD_TEXT_DOMAIN ), $remain_wp_users ); ?></label>
-				<input id="rthd-add-all-users" type="button" value="add all users" />
+				<input id="rthd-add-all-users" class="button button-primary" type="button" value="Add Users" />
 					<img id="rthd-import-all-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 				<?php wp_nonce_field( get_current_user_id().'import-all-users', 'import_all_users' );?>
 				<input type="hidden" id="rthd-setup-import-all-count" value="<?php echo $remain_wp_users; ?>" />

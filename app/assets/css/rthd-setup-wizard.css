@@ -11,7 +11,7 @@
 }
 
 .wizard > .steps > ul > li.done:after{
-	background: #9dc8e2;
+	background: #caeaaa;
 }
 
 .wizard > .steps > ul li:first-child::after{
@@ -64,13 +64,22 @@
 	display: inline-block;
 	width: 15%;
 }
+.rthd-setup-wizard-row {
+	background: beige;
+	padding: 5px;
+}
 
-.rthd-setup-team-wizard-controls{
+.rthd-setup-wizard-controls{
+	background: beige;
 	width: 50%;
 }
 
-.rthd-setup-team-wizard-controls .rthd-setup-wizard-row label{
+.rthd-setup-wizard-controls .rthd-setup-wizard-row label{
 	width: 38%;
+}
+
+.rthd_wizard_container.rthd_selected_user{
+	background: #DCDCDC;
 }
 
 .rthd-setup-description{
