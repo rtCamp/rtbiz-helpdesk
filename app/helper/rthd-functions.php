@@ -1614,8 +1614,9 @@ function rthd_search_non_helpdesk_users( $query, $domain_search = false,$count =
 function rthd_get_helpdesk_user_ids(){
 	global $wpdb, $rt_biz_acl_model;
 	$admins = get_users( array( 'role'=>'Administrator','fields' =>'ID' ) );
-	$result  =$wpdb->get_col("SELECT DISTINCT(userid) FROM ".$rt_biz_acl_model->table_name." where module = '".RT_HD_TEXT_DOMAIN."' and permission != 0 ");
-	return array_merge($admins, $result );
+//	$result  =$wpdb->get_col("SELECT DISTINCT(acl.userid) FROM ".$rt_biz_acl_model->table_name." acl where acl.module = '".RT_HD_TEXT_DOMAIN."' and acl.permission != 0 ");
+	$result  =$wpdb->get_col("SELECT DISTINCT(acl.userid) FROM ".$rt_biz_acl_model->table_name." as acl INNER JOIN ".$wpdb->prefix."p2p as p2p on ( acl.userid = p2p.p2p_to ) INNER JOIN ".$wpdb->posts." as posts on (p2p.p2p_from = posts.ID )  where acl.module =  '".RT_HD_TEXT_DOMAIN."' and acl.permission != 0 and p2p.p2p_type = '".rt_biz_get_contact_post_type()."_to_user' and posts.post_status= 'publish' and posts.post_type= '".rt_biz_get_contact_post_type()."' ");
+	return array_merge( $admins, $result );
 }
 
 
