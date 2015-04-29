@@ -739,7 +739,9 @@ jQuery(document).ready(function() {
                     var action = JSON.stringify( options.data );
                     if ( action.indexOf('action=redux_helpdesk_settings_ajax_save&') !== -1 ){
                         var flag = true;
-
+                        if ( jQuery('#rthd_enable_auto_response').val() == 0 ) {
+                            return true
+                        }
                         if (jQuery('#rthd_enable_auto_response_mode').val() == 1) {
                             for (var i = 0; i < 7; i++) {
                                 var tr_parent = jQuery('.rthd-dayshift-time-start').eq(i).parent().parent();
