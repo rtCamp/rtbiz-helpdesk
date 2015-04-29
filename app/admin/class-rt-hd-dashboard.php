@@ -730,20 +730,20 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 						<h4><?php _e( 'Next Steps' ); ?></h4>
 						<ul>
 							<?php if ( current_user_can( $editor_cap ) ) { ?>
+								<div id="rthd-support-page">
+									<?php if ( isset( $settings['rthd_support_page'] ) && ! empty( $settings['rthd_support_page'] ) && get_post( $settings['rthd_support_page'] ) ) : ?>
+										<li>
+											<a id="rthd-view-support-page" class="welcome-icon welcome-view-site" target="_blank" href="<?php echo get_page_link( $settings['rthd_support_page'] ); ?>"><?php _e( 'View Support Page' ); ?></a>
+										</li>
+									<?php else: ?>
+										<li>
+											<a id="rthd-new-support-page" class="welcome-icon welcome-add-page" href="javascript:;"><?php _e( 'Setup Support Page' ); ?></a>
+											<img id="rthd-support-spinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
+										</li>
+									<?php endif; ?>
+								</div>
 								<li><?php printf( '<a id="rtiz-add-ticket" href="%s" class="welcome-icon welcome-admin-users">' . __( 'Add new Ticket' ) . '</a>', admin_url( 'post-new.php?post_type=' . Rt_HD_Module::$post_type ) ); ?></li>
 								<li><?php printf( '<a href="%s" class="welcome-icon welcome-networking">' . __( 'Setup Attributes' ) . '</a>', admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&page=' . $rt_hd_attributes->attributes_page_slug ) ); ?></li>
-								<div id="rthd-support-page">
-								<?php if ( isset( $settings['rthd_support_page'] ) && ! empty( $settings['rthd_support_page'] ) && get_post( $settings['rthd_support_page'] ) ) : ?>
-									<li>
-										<a id="rthd-view-support-page" class="welcome-icon welcome-view-site" target="_blank" href="<?php echo get_page_link( $settings['rthd_support_page'] ); ?>"><?php _e( 'View Support Page' ); ?></a>
-									</li>
-								<?php else: ?>
-									<li>
-										<a id="rthd-new-support-page" class="welcome-icon welcome-add-page" href="javascript:;"><?php _e( 'Setup Support Page' ); ?></a>
-										<img id="rthd-support-spinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
-									</li>
-								<?php endif; ?>
-							</div>
 							<?php } ?>
 						</ul>
 					</div>
