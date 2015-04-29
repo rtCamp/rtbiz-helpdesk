@@ -279,7 +279,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 					<label for="rthd-wizard-store-edd">EDD</label>
 				</div>
 			</div>
-			<div class="rthd-store-process" style="display: none;">
+			<div class="rthd-store-process" style="display: none; float: left;">
 				<span>Connecting store and importing existing products</span>
 				<img id="rthd-support-page-spinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 			</div>
@@ -329,12 +329,8 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			global $rthd_form;
 			?>
 
-			<div class="rthd_wizard_container rthd_selected_user " style="display: none;">
-				<ul class="rthd-setup-ul-text-decoration rthd-setup-list-users">
 
-				</ul>
-			</div>
-			<div class="rthd-setup-wizard-controls">
+			<div class="rthd-setup-wizard-controls rthd-setup-team-wizard-controls">
 				<h3>There are 3 ways you can add users to your team. If you forget somebody now, you can add them later. </h3>
 				<div class="rthd_wizard_container rthd-setup-wizard-row">
 
@@ -359,10 +355,13 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				<input id="rthd-add-user-domain" class="rthd-setup-wizard-text" type="text" value="<?php echo '@'.$domain_name; ?>" placeholder="@gmail.com" />
 				<br/>
 				<label></label>
+				<div class="rthd-domain-action">
 				<span id='rthd-domain-import-message' style=""> Found <?php echo sprintf( _n( '%s user', '%s users', $count_domain_users, RT_HD_TEXT_DOMAIN ), $count_domain_users );?></span>
 				<input id="rthd-import-domain-users" class="button" type="button" value="Add Users" />
 				<img id="rthd-domain-import-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 				<?php wp_nonce_field( get_current_user_id().'import-user-domain', 'import_domain' );?>
+				</div>
+
 			</div>
 
 			<div class="rthd_wizard_container rthd-setup-wizard-row">
@@ -381,6 +380,12 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				<span id='rthd-all-import-message'> </span>
 				</form>
 			</div>
+			</div>
+
+			<div class="rthd_wizard_container rthd_selected_user " style="display: none;">
+				<ul class="rthd-setup-ul-text-decoration rthd-setup-list-users">
+
+				</ul>
 			</div>
 			<div class="rthd-team-setup-loading" style="display: none;">
 				<span>Loading next page</span>

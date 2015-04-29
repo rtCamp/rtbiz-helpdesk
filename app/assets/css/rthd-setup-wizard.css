@@ -29,10 +29,14 @@
 }
 
 .rthd_selected_user{
-	float: right;
-	width: 46%;
-	height: 254px;
+	float: left;
+	width: auto;
+	height: 264px;
 	overflow-y: scroll;
+}
+
+.rthd-setup-team-wizard-controls{
+	float: left;
 }
 
 .rthd_selected_user>h4{
@@ -85,8 +89,7 @@
 }
 
 .rthd-setup-wizard-controls, ul.rthd-setup-ul-text-decoration.rthd-setup-list-users{
-	width: 50%;
-	padding: 10px 0px 10px 10px;
+	padding: 10px 0 10px 10px;
 	margin-bottom: 0;
 }
 
@@ -117,3 +120,15 @@ p.description.rthd-setup-description{
 #wizard .rtmailbox-row > label{
     width: 25%;
 }
+
+#rthd-domain-import-message{
+	vertical-align: -webkit-baseline-middle;
+	vertical-align: middle;
+}
+
+.rthd-domain-action{
+	display: inline-block;
+	padding: 5px;
+}
+
+
