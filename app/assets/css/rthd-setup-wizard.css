@@ -110,6 +110,10 @@ p.description.rthd-setup-description{
 	margin: 10px 0;
 }
 
+#wizard #rtmailbox-page{
+    margin: 0;
+}
+
 #wizard .rtmailbox-row > label{
     width: 25%;
 }
