@@ -236,6 +236,7 @@ jQuery(document).ready(function($) {
 						            rthdSetup.import_all_users();
 					            } else {
 						            jQuery('#rthd-import-all-spinner' ).hide();
+						            jQuery('#rthd-setup-import-users-progress' ).hide();
 					            }
 				            }
 			            }

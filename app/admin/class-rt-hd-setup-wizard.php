@@ -101,6 +101,9 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			<?php
 		}
 
+		/**
+		 * default assignee ui ajax call
+		 */
 		function default_assignee(){
 			ob_start();
 			$current = get_current_user_id();
@@ -164,6 +167,9 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			die( 0 );
 		}
 
+		/**
+		 * connect store UI
+		 */
 		function connect_store_ui(){
 			?>
 			<h3><?php _e( 'Connect your store with helpdesk', RT_BIZ_TEXT_DOMAIN ); ?></h3>
@@ -205,6 +211,9 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 		<?php
 		}
 
+		/**
+		 * Support page ui
+		 */
 		function support_page_ui(){
 			$pages = get_pages();
 			?>
@@ -235,6 +244,9 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 		<?php
 		}
 
+		/**
+		 * setup team UI
+		 */
 		function setup_team(){
 			global $rthd_form;
 			?>
@@ -370,6 +382,9 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 		}
 
 
+		/**
+		 * ajax call for getting domain search and import
+		 */
 		function domain_search_and_import(){
 			$arrReturn = array( 'status' => false );
 			if ( ! empty( $_POST['count'] ) && ! empty( $_POST['domain_query'] ) && ! empty( $_POST['nonce'] ) && wp_verify_nonce( $_POST['nonce'], get_current_user_id().'import-user-domain' )){
@@ -401,9 +416,12 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 		}
 
 
+		/**
+		 * import all users ajax call
+		 */
 		function import_all_users(){
 			$arrReturn = array( 'status' => false );
-			$LIMIT = 2; //todo : change this to 100 or more
+			$LIMIT = 50;
 			if ( ! empty($_POST['import']) && ! empty( $_POST['nonce'] ) && wp_verify_nonce( $_POST['nonce'], get_current_user_id().'import-all-users' )){
 				global $wpdb;
 				$helpdesk_users = rthd_get_helpdesk_user_ids();
@@ -436,6 +454,9 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 		}
 
 
+		/**
+		 *  Offering save ajax call
+		 */
 		function offering_sync() {
 			$arrReturn       = array( 'status' => false );
 			$offering        = array();
@@ -455,6 +476,9 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			die( 0 );
 		}
 
+		/**
+		 *  Assignee save ajax call
+		 */
 		function assignee_save(){
 			$arrReturn       = array( 'status' => false );
 			if ( ! empty( $_POST['assignee'] ) ){
