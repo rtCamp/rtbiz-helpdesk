@@ -1,9 +1,3 @@
-.wizard{
-	/*padding: 20px 10px;
-	width: auto;*/
-}
-
-
 .wizard > .steps > ul > li::after{
 	content: " ";
 	display: inline-block;
@@ -33,19 +27,6 @@
     width: 15%;
 }
 
-/*.rthd-setup-value-container,.rthd-setup-list-users{
-	display: inline-block;
-}
-
-.rthd_wizard_container{
-	width: 50%;
-	display: inline-block;
-}
-
-.rthd-setup-list-users-ul{
-	text-decoration: none;
-}*/
-
 .rthd-setup-ul-text-decoration{
 	text-decoration: none;
 	list-style: none;
@@ -54,11 +35,8 @@
 .rthd_selected_user{
 	float: right;
 	width: 50%;
-}
-
-.rthd-setup-user-title{
-	text-align: center;
-	display: block;
+	height: 180px;
+	overflow: scroll;
 }
 
 .rthd-setup-list-users .delete_row{
@@ -67,20 +45,15 @@
 }
 
 .rthd-setup-list-users li{
-	display: inline-block !important;
-	text-align: center;
 	margin-right: 10px;
 }
 
-.rthd-setup-wizard-text {
-	/*border: 1px solid #ccc;*/
-	/*width: 400px;*/
-	/*border-radius: 10px;*/
-	/*font-size: 24px;*/
-}
 
 .rthd_wizard_container{
 	padding: 5px 0;
+}
+.rthd-setup-user-title{
+	margin-left: 5px;
 }
 
 .rthd-setup-wizard-row{
@@ -90,6 +63,14 @@
 .rthd-setup-wizard-row label{
 	display: inline-block;
 	width: 15%;
+}
+
+.rthd-setup-team-wizard-controls{
+	width: 50%;
+}
+
+.rthd-setup-team-wizard-controls .rthd-setup-wizard-row label{
+	width: 38%;
 }
 
 .rthd-setup-description{
