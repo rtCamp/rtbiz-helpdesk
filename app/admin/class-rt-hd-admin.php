@@ -156,6 +156,7 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 			} else {
 				wp_localize_script( 'rthd-admin-js', 'rthd_user_edit', array( '' ) );
 			}
+			wp_localize_script( 'rthd-setup-wizard', 'adminurl', admin_url() );
 		}
 
 		/**

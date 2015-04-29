@@ -412,8 +412,8 @@ jQuery(document).ready(function ($) {
                     success: function (data) {
                         if (data.status) {
                             jQuery('#wizard-p-4').html(data.html);
-                            jQuery('div.actions li#rthd_spinner').remove();
                         }
+                        jQuery('div.actions li#rthd_spinner').remove();
                     }
                 });
             } else if( jQuery('#rthd_outound_sub-action').val() === 'rthd_outound_setup_wizard' ) {
@@ -431,8 +431,8 @@ jQuery(document).ready(function ($) {
                             jQuery('#wizard-p-4').html(data.html);
                             skip_step = true;
                             jQuery('.wizard').steps('next');
-                            jQuery('div.actions li#rthd_spinner').remove();v
                         }
+                        jQuery('div.actions li#rthd_spinner').remove();
                     }
                 });
             } else {
