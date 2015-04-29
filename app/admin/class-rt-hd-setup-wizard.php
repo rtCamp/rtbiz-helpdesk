@@ -89,14 +89,14 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				<fieldset style="display: none">
 					<div class="rthd-setup-wizard-controls">
 						<h3><?php _e( 'Incoming MailBox Setup', RT_BIZ_TEXT_DOMAIN ); ?></h3>
-						<p class="description">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</p>
+						<p class="description">Connect the mailbox from which you would like to auto-create ticket from incoming e-mails.  Click on next if you want to do that later.</p>
 						<?php rthd_mailbox_setup_view(); ?>
 					</div>
 				</fieldset>
 
-				<h1><?php _e( 'Finish' ); ?></h1>
+				<h1><?php _e( '' ); ?></h1>
 				<fieldset style="display: none">
-					YEY! you're good to go.
+					Yay!! Your Helpdesk is ready.  Click on finish to get started.
 				</fieldset>
 
 			</div>
@@ -113,9 +113,8 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			ob_start();
 			?>
 			<div class="rthd-setup-wizard-controls">
-				<h3><?php _e( 'Outgoing MailBox Setup', RT_BIZ_TEXT_DOMAIN ); ?></h3>
-				<p class="description">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-					Ipsum has been the industry's standard dummy text ever since the 1500s.</p>
+				<h3><?php _e( 'Outgoing Mail Setup ', RT_BIZ_TEXT_DOMAIN ); ?></h3>
+				<p class="description">Configure settings for the mailbox from where you will like to send Helpdesk e-mails to customers and staff.</p>
 				<div id="rthd_outgoing_mailbox_setup_container">
 					<input type="hidden" id="rthd_outound_sub-action" name="rthd_outound_sub-action" value="rthd_outound_setup_wizard">
 					<?php wp_nonce_field( 'rthd_outound_setup_wizard' );?>
@@ -252,7 +251,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			?>
 
 			<div class="rthd-setup-wizard-controls">
-				<h3><?php _e( 'Connect your store with helpdesk', RT_BIZ_TEXT_DOMAIN ); ?></h3>
+				<h3><?php _e( 'Connect Your Store', RT_BIZ_TEXT_DOMAIN ); ?></h3>
 				<?php
 				global $rt_hd_offering_support;
 				$rt_hd_offering_support->check_active_plugin();
@@ -295,6 +294,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			?>
 			<div class="rthd-setup-wizard-controls">
 				<h3>Support Page </h3>
+				<p class="description">Create a support page where your customers can submit tickets.</p>
 				<div class="rthd-setup-wizard-row">
 			<label for="rthd-setup-wizard-support-page"><?php _e('Select Support Page ',RT_BIZ_TEXT_DOMAIN); ?></label>
 			<select id="rthd-setup-wizard-support-page">
