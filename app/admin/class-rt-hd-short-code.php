@@ -44,63 +44,73 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 			$offering_option = '';
 			$order_email    = '';
 
-			$post_id = $rt_hd_offering_support->save_support_form();
-			if ( ! empty( $post_id ) && is_int( $post_id ) ) { ?>
-				<div id="info" class="success">Your support request has been submitted. We will get back to you for your query soon.</div>
-			<?php }
+			if ( is_user_logged_in() ) {
+				$post_id = $rt_hd_offering_support->save_support_form();
+				if ( ! empty( $post_id ) && is_int( $post_id ) ) { ?>
+					<div id="info" class="success">Your support request has been submitted. We will get back to you for
+						your query soon.
+					</div>
+				<?php }
 
-			global $rtbiz_offerings;
-			$terms = array();
-			if ( isset( $rtbiz_offerings ) ) {
-				add_filter( 'get_terms', array( $rtbiz_offerings, 'offering_filter' ), 10, 3 );
-				$terms = get_terms( Rt_Offerings::$offering_slug, array( 'hide_empty' => 0 ) );
-				remove_filter( 'get_terms', array( $rtbiz_offerings, 'offering_filter' ), 10, 3 );
-			}
-			$offering_exists = false;
-			$wrong_user_flag = false;
-			foreach ( $terms as $tm ) {
-				$term_offering_id = '';
-				$loggedin_id = get_current_user_id();
-				if ( isset( $_REQUEST['order_id'] ) && $rt_hd_offering_support->order_post_type == get_post_type( $_REQUEST['order_id'] ) ) {
-					if ( $rt_hd_offering_support->isWoocommerceActive ) {
-						$order = new WC_Order( $_REQUEST['order_id'] );
-						if ( $loggedin_id = $order->get_user_id() ) {
-							if ( ! empty( $order ) ) {
-								$items            = $order->get_items();
-								$product_ids      = wp_list_pluck( $items, 'product_id' );
-								$term_offering_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $tm->term_id, Rt_Offerings::$term_meta_key, true );
-								if ( ! in_array( $term_offering_id, $product_ids ) ) {
-									continue;
+				global $rtbiz_offerings;
+				$terms = array();
+				if ( isset( $rtbiz_offerings ) ) {
+					add_filter( 'get_terms', array( $rtbiz_offerings, 'offering_filter' ), 10, 3 );
+					$terms = get_terms( Rt_Offerings::$offering_slug, array( 'hide_empty' => 0 ) );
+					remove_filter( 'get_terms', array( $rtbiz_offerings, 'offering_filter' ), 10, 3 );
+				}
+				$offering_exists = false;
+				$wrong_user_flag = false;
+				foreach ( $terms as $tm ) {
+					$term_offering_id = '';
+					$loggedin_id      = get_current_user_id();
+					if ( isset( $_REQUEST[ 'order_id' ] ) && $rt_hd_offering_support->order_post_type == get_post_type( $_REQUEST[ 'order_id' ] ) ) {
+						if ( $rt_hd_offering_support->isWoocommerceActive ) {
+							$order = new WC_Order( $_REQUEST[ 'order_id' ] );
+							if ( $loggedin_id = $order->get_user_id() ) {
+								if ( ! empty( $order ) ) {
+									$items            = $order->get_items();
+									$product_ids      = wp_list_pluck( $items, 'product_id' );
+									$term_offering_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $tm->term_id, Rt_Offerings::$term_meta_key, true );
+									if ( ! in_array( $term_offering_id, $product_ids ) ) {
+										continue;
+									}
 								}
+							} else {
+								$wrong_user_flag = true;
 							}
-						} else {
-							$wrong_user_flag = true;
-						}
-					} else if ( $rt_hd_offering_support->iseddActive ) {
-						$payment = get_post( $_REQUEST['order_id'] );
-						if ( $loggedin_id == $payment->post_author ) {
-							if ( ! empty( $payment ) ) {
-								$items            = edd_get_payment_meta_downloads( $payment->ID );
-								$product_ids      = wp_list_pluck( $items, 'id' );
-								$term_offering_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $tm->term_id, Rt_Offerings::$term_meta_key, true );
-								if ( ! in_array( $term_offering_id, $product_ids ) ) {
-									continue;
+						} else if ( $rt_hd_offering_support->iseddActive ) {
+							$payment = get_post( $_REQUEST[ 'order_id' ] );
+							if ( $loggedin_id == $payment->post_author ) {
+								if ( ! empty( $payment ) ) {
+									$items            = edd_get_payment_meta_downloads( $payment->ID );
+									$product_ids      = wp_list_pluck( $items, 'id' );
+									$term_offering_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $tm->term_id, Rt_Offerings::$term_meta_key, true );
+									if ( ! in_array( $term_offering_id, $product_ids ) ) {
+										continue;
+									}
 								}
+							} else {
+								$wrong_user_flag = true;
 							}
-						} else {
-							$wrong_user_flag = true;
 						}
 					}
+					$offering_option .= '<option value="' . $tm->term_id . '" ' . ( ( ! empty( $_REQUEST[ 'product_id' ] ) && $term_offering_id == $_REQUEST[ 'product_id' ] ) ? 'selected="selected"' : '' ) . '> ' . $tm->name . '</option>';
+					$offering_exists = true;
 				}
-				$offering_option .= '<option value="' . $tm->term_id . '" ' . ( ( ! empty( $_REQUEST['product_id'] ) && $term_offering_id == $_REQUEST['product_id'] ) ? 'selected="selected"' : '' ) . '> '.$tm->name.'</option>';
-				$offering_exists = true;
-			}
 
-			if ( $wrong_user_flag ){
-				echo '<span> You have not placed this order, Please login from account that placed this order. </span>';
-			}
-			else {
-				rthd_get_template( 'support-form.php', array( 'product_exists' => $offering_exists, 'product_option' => $offering_option ) );
+				if ( $wrong_user_flag ) {
+					echo '<span> You have not placed this order, Please login from account that placed this order. </span>';
+				} else {
+					rthd_get_template( 'support-form.php', array(
+						'product_exists' => $offering_exists,
+						'product_option' => $offering_option
+					) );
+				}
+			} else{ ?>
+				<div id="info" class="error">You're not logged in. Please login first to create support ticket.
+				</div>
+				<?php
 			}
 			return apply_filters( 'rt_hd_support_form_shorcode', ob_get_clean(), $attr );
 		}
@@ -111,6 +121,8 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 		 * @since 0.1
 		 *
 		 * @param $atts
+		 *
+		 * @return string
 		 */
 		function rt_hd_tickets_callback( $atts ) {
 			global $rt_hd_module, $current_user;

@@ -392,7 +392,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 		}
 
 		/*
-		 *
+		 * check which plugins are active
 		 */
 		function check_active_plugin(){
 
@@ -441,6 +441,11 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 				echo '<div id="info" class="error">You have been blocked from the system.</div>';
 				return false;
 			}
+
+			if ( ! is_email( $_POST['post']['email'][0] ) ){
+				echo '<div id="info" class="error">Please enter valid email id.</div>';
+				return false;
+			}
 			// remove ticket creator from client email list
 			$creator = $_POST['post']['email'][0];
 			unset($_POST['post']['email'][0]);
@@ -471,8 +476,10 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 			}*/
 
 			$allemails  = array();
-			foreach( array_filter( $data['email'] ) as $email ){
-				$allemails[] = array( 'address' => $email );
+			foreach ( array_filter( $data['email'] ) as $email ){
+				if ( is_email( $email ) ){
+					$allemails[] = array( 'address' => $email );
+				}
 			}
 			$emails_array = rthd_filter_emails( $allemails );
 			$subscriber = $emails_array['subscriber'];

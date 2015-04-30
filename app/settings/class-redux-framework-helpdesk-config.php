@@ -616,7 +616,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				),
 			);
 
-			$this->sections[]   = array(
+	/*		$this->sections[]   = array(
 				'title'       => __( 'Gravity Importer' ),
 				'icon'        => 'el-icon-list-alt',
 				'permissions' => $admin_cap,
@@ -628,9 +628,9 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'content' => rthd_gravity_importer_view(),
 					),
 				),
-			);
+			);*/
 
-			$this->sections[]   = array(
+/*			$this->sections[]   = array(
 				'title'       => __( 'Importer Mapper' ),
 				'icon'        => 'el-icon-list-alt',
 				'permissions' => $admin_cap,
@@ -642,7 +642,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'content' => rt_biz_gravity_importer_mapper_view(),
 					),
 				),
-			);
+			);*/
 
 			// Only initiates in case of settings page is getting displayed. Not otherwise
 			if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] == self::$page_slug ) {
