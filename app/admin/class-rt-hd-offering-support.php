@@ -452,28 +452,6 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 
 			$data = $_POST['post'];
 			$data['description'] = $_POST['post_description'];
-			$_POST['post'] = null;
-			$_POST['post_description'] = null;
-			$offeringstr = $data['title'];
-
-			/*$uploaded = array();
-
-			// Created attachment
-			if ( $_FILES ) {
-				$attachment = $_FILES['attachment'];
-				foreach ( $attachment['name'] as $key => $value ) {
-					if ( $attachment['name'][ $key ] ) {
-						$file = array(
-							'name'     => $attachment['name'][ $key ],
-							'type'     => $attachment['type'][ $key ],
-							'tmp_name' => $attachment['tmp_name'][ $key ],
-							'error'    => $attachment['error'][ $key ],
-							'size'     => $attachment['size'][ $key ],
-						);
-						$uploaded[] = self::insert_attachment( $file );
-					}
-				}
-			}*/
 
 			$allemails  = array();
 			foreach ( array_filter( $data['email'] ) as $email ){
@@ -491,22 +469,17 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 
 			//Ticket created
 			$rt_hd_tickets_id = $rt_hd_import_operation->insert_new_ticket(
-				$offeringstr,
+				$data['title'],
 				stripslashes($data['description']),
 				'now',
 				$allemail,
 				$uploaded,
 				$creator,'','','',$subscriber
 			);
-			/*if ( ! empty( $_POST['rthd_support_attach_ids'] ) ){
-				$followup_attachment = explode( ',', $_POST['rthd_support_attach_ids'] );
-				foreach ( $followup_attachment  as $attach_id  ){
-					$attach  = get_post( $attach_id );
-					$attach->post_parent = $rt_hd_tickets_id;
-					wp_insert_attachment( $attach );
-					add_post_meta( $rt_hd_tickets_id, '_rtbiz_hd_attachment_hash', md5_file( get_attached_file( $attach_id ) ) );
-				}
-			}*/
+
+			$_POST['post'] = null;
+			$_POST['post_description'] = null;
+
 			return $rt_hd_tickets_id;
 		}
 
