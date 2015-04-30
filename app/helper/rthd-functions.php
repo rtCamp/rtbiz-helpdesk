@@ -789,52 +789,69 @@ function rthd_check_plugin_dependecy() {
 function rthd_install_dependency(){
 	$biz_installed = rthd_is_plugin_installed( 'rtbiz' ) ;
 	$p2p_installed = rthd_is_plugin_installed( 'posts-to-posts' ) ;
+	$isRtbizActionDone = false;
+	$isPtopActionDone = false;
 	$string = '';
+
 	if ( ! $biz_installed || ! $p2p_installed ) {
-		$string .= 'installed and activated ';
 		if (  ! $biz_installed ){
 			rthd_install_plugin( 'rtbiz' );
-			$string .= '<strong> rtBiz </strong> plugin';
+			$isRtbizActionDone = true;
+			$string = '<strong>rtBiz</strong> so Helpdesk have installed and activated <strong>rtBiz</strong>';
 		}
 		if ( ! $p2p_installed ){
 			rthd_install_plugin( 'posts-to-posts' );
-			$string .= '<strong> posts to posts </strong> plugin';
+			$isPtopActionDone = true;
+			$string = '<strong>posts to posts</strong> so Helpdesk have installed and activated <strong>posts to posts</strong>';
 		}
-		if ( ! $p2p_installed && ! $biz_installed ){
-			$string = 'installed and activated <strong> rtBiz </strong> plugin and <strong> posts to posts </strong> plugin';
+		if ( $isRtbizActionDone && $isPtopActionDone ){
+			$string = '<strong>rtBiz</strong> and <strong>posts to posts</strong> so Helpdesk have installed and activated <strong>rtBiz</strong> and <strong>posts to posts</strong>';
 		}
 	}
-	else {
-		$string = ' activated ';
-		$rtbiz_active = rthd_is_plugin_active( 'rtbiz' );
-		$p2p_active = rthd_is_plugin_active( 'posts-to-posts' );
+
+	$rtbiz_active = rthd_is_plugin_active( 'rtbiz' );
+	$p2p_active = rthd_is_plugin_active( 'posts-to-posts' );
+	if ( ! $rtbiz_active || ! $p2p_active ) {
 		if ( ! $p2p_active ){
 			$p2ppath = rthd_get_path_for_plugin( 'posts-to-posts' );
 			rthd_activate_plugin( $p2ppath );
-			$string .= '<strong> posts to posts </strong> plugin';
+			$isRtbizActionDone = true;
+			$string = '<strong>posts to posts</strong> so Helpdesk have activated <strong>posts to posts</strong>';
 		}
 		if ( ! $rtbiz_active ){
 			$rtbizpath = rthd_get_path_for_plugin( 'rtbiz' );
 			rthd_activate_plugin( $rtbizpath );
-			$string .= '<strong> rtBiz </strong> plugin';
+			$isPtopActionDone = true;
+			$string = '<strong>rtBiz</strong> so Helpdesk have activated <strong>rtBiz</strong>';
 		}
-		if ( ! $rtbiz_active && ! $p2p_active ){
-			if ( ! $p2p_installed && ! $biz_installed ){
-				$string = 'activated <strong> rtBiz </strong> plugin and <strong> posts to posts </strong> plugin';
-			}
+		if ( $isRtbizActionDone && $isPtopActionDone ){
+			$string = '<strong>rtBiz</strong> and <strong>posts to posts</strong> so Helpdesk have activated <strong>rtBiz</strong> and <strong>posts to posts</strong>';
 		}
 	}
-	update_option( 'rtbiz_helpdesk_dependency_installed', $string );
-	wp_safe_redirect( admin_url( 'edit.php?post_type=rtbiz_hd_ticket&page=rthd-setup-wizard' ) );
+
+	if ( !empty( $string ) ){
+		$string = 'Helpdesk require ' . $string;
+		update_option( 'rtbiz_helpdesk_dependency_installed', $string );
+	}
+
+	if ( rthd_check_wizard_completed() ) {
+		wp_safe_redirect( admin_url( 'edit.php?post_type=rtbiz_hd_ticket&page=rthd-rtbiz_hd_ticket-dashboard' ) );
+	} else {
+		wp_safe_redirect( admin_url( 'edit.php?post_type=rtbiz_hd_ticket&page=rthd-setup-wizard' ) );
+	}
 }
 
 function rthd_admin_notice_dependency_installed(){
-		?><div class="updated">
+	$string = get_option( 'rtbiz_helpdesk_dependency_installed' );
+	if ( ! empty( $string ) ){ ?>
+		<div class="updated">
 			<p>
-				<?php _e( 'Helpdesk require posts to posts and rtBiz so Helpdesk have installed and activated rtBiz posts to posts', RT_HD_TEXT_DOMAIN ); ?>
-				<a class="welcome-panel-close" style="float: right" href="<?php echo  admin_url( 'edit.php?post_type=rtbiz_hd_ticket&page=rthd-setup-wizard&close_notice=true' ); ?>"><?php _e( 'Dismiss', RT_HD_TEXT_DOMAIN ); ?></a>
+				<?php echo $string ;?>
+				<a class="welcome-panel-close" style="float: right" href="<?php echo  admin_url( 'edit.php?post_type=rtbiz_hd_ticket&page=rthd-setup-wizard?close_notice=true' ); ?>">Dismiss</a>
 			</p>
-		</div><?php
+		</div>
+	<?php
+	}
 }
 
 function rthd_install_plugin_ajax(){

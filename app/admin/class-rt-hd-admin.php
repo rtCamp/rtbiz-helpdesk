@@ -44,8 +44,7 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 
         function add_people_menu(){
 	        global $rt_access_control;
-	        $option = get_option( 'rtbiz_helpdesk_setup_wizard_option' );
-	        if ( ! empty( $option ) && 'true' == $option ) {
+	        if ( rthd_check_wizard_completed() ) {
 		        add_submenu_page( 'edit.php?post_type=' . esc_html( Rt_HD_Module::$post_type ), __( 'People' ), __( 'People' ), rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' ), 'edit.php?post_type=' . rt_biz_get_contact_post_type() );
 		        add_submenu_page( 'edit.php?post_type=' . esc_html( Rt_HD_Module::$post_type ), __( 'Companies' ), __( '--- Companies' ), rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' ), 'edit.php?post_type=' . rt_biz_get_company_post_type() );
 		        add_submenu_page( 'edit.php?post_type=' . esc_html( Rt_HD_Module::$post_type ), __( 'Access Control' ), __( '--- Access Control' ), rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' ), Rt_Biz::$access_control_slug, array(

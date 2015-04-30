@@ -75,9 +75,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		 */
 		function register_dashboard() {
 
-			$option = get_option( 'rtbiz_helpdesk_setup_wizard_option' );
-
-			if ( ! empty( $option ) && 'true' == $option ) {
+			if ( rthd_check_wizard_completed() ) {
 
 				$author_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
 

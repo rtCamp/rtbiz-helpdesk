@@ -527,7 +527,6 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 		function custom_pages_order( $menu_order ) {
             global $submenu;
             global $menu;
-			$option = get_option( 'rtbiz_helpdesk_setup_wizard_option' );
 
 			unset( $submenu[ Rt_Biz::$dashboard_slug ] );
 			foreach( $menu as $key => $menu_item ){
@@ -542,7 +541,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
                 $submenu[ 'edit.php?post_type=' . self::$post_type ] = array();
                 $new_index = 5;
                 foreach ( $this->custom_menu_order as $item ) {
-	                if ( ( ! empty( $option ) && 'true' == $option ) || ( ( empty( $option ) || 'false' == $option ) && 'rthd-setup-wizard' == $item ) ) {
+	                if ( rthd_check_wizard_completed() || ( ! rthd_check_wizard_completed() && 'rthd-setup-wizard' == $item ) ) {
 		                foreach ( $module_menu as $p_key => $menu_item ) {
 			                $out = array_filter( $menu_item, function ( $in ) {
 				                return true !== $in;
@@ -557,7 +556,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 	                }
                 }
                 foreach ( $module_menu as $p_key => $menu_item ) {
-	                if ( ( ! empty( $option ) && 'true' == $option ) || ( ( empty( $option ) || 'false' == $option ) && in_array( 'rthd-setup-wizard', $menu_item ) ) ) {
+	                if ( rthd_check_wizard_completed() || ( ! rthd_check_wizard_completed() && in_array( 'rthd-setup-wizard', $menu_item ) ) ) {
 		                $submenu[ 'edit.php?post_type=' . self::$post_type ][ $new_index ] = $menu_item;
 		                unset( $module_menu[ $p_key ] );
 		                $new_index += 5;
