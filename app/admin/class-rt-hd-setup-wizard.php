@@ -40,6 +40,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			add_action( 'wp_ajax_rthd_outboud_mail_setup_ui', array( $this, 'rthd_outboud_mail_setup_ui' ) );
 			add_action( 'wp_ajax_rthd_outound_setup_wizard', array( $this, 'rthd_outound_setup_wizard_callback' ) );
 //			add_action( 'wp_ajax_rthd_remove_user', array( $this, 'rthd_remove_user' ) );
+			add_action( 'wp_ajax_rthd_search_domain', array( $this, 'rthd_search_domain' ) );
 
 			if ( ! empty( $_REQUEST['close_notice'] ) ){
 				delete_option( 'rtbiz_helpdesk_dependency_installed' );
@@ -342,7 +343,6 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 		 * setup team UI
 		 */
 		function setup_team(){
-			global $wpdb;
 			?>
 
 			<div>
@@ -367,13 +367,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 					$domain_name =  preg_replace('/^www\./','',$_SERVER['SERVER_NAME']);
 
 					$count_domain_users = rthd_search_non_helpdesk_users( '@'.$domain_name, true, true );
-					$domains = $wpdb->get_col("SELECT DISTINCT( SUBSTRING_INDEX(user_email,'@',-1)) FROM $wpdb->users");
-					$domains = array_filter( $domains );
-
 				?>
-				<script>
-					var arr_domain_names =<?php echo json_encode( $domains ); ?>;
-				</script>
 				<label for="rthd-add-user-domain"> 2. Add all users from domain</label>
 				<input id="rthd-add-user-domain" class="rthd-setup-wizard-text" type="text" value="<?php echo '@'.$domain_name; ?>" placeholder="@gmail.com" />
 				<br/>
@@ -613,6 +607,23 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 //			if ( ! empty( $_POST['userid'] ) ){
 
 //			}
+		}
+
+		function rthd_search_domain(){
+			global $wpdb;
+			$arrReturn = array();
+			if ( ! empty( $_POST['query'] ) ) {
+				$prefix = '@';
+				if (substr( $_POST['query'] , 0, strlen($prefix)) == $prefix) {
+					$_POST['query']  = substr( $_POST['query'] , strlen($prefix));
+				}
+				$domains = $wpdb->get_col( "SELECT DISTINCT( SUBSTRING_INDEX(user_email,'@',-1)) FROM $wpdb->users where user_email like '%@".$_POST['query']."%'" );
+				$domains = array_filter( $domains );
+				$arrReturn = $domains;
+			}
+			header( 'Content-Type: application/json' );
+			echo json_encode( $arrReturn );
+			die( 0 );
 		}
 
 	}

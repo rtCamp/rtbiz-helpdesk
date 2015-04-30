@@ -145,11 +145,27 @@ jQuery(document).ready(function ($) {
             }
 
 	        if ( jQuery('#rthd-add-user-domain' ).length > 0 ) {
-		        var array = $.map(arr_domain_names, function(value, index) {
-			        return ['@'+value];
-		        });
 		        jQuery( '#rthd-add-user-domain' ).autocomplete( {
-			        source:array,
+                    source: function (request, response) {
+                        $.ajax( {
+                                    url: ajaxurl,
+                                    dataType: "json",
+                                    type: 'post',
+                                    data: {
+                                        action: 'rthd_search_domain',
+                                        maxRows: 10,
+                                        query: request.term
+                                    },
+                                    success: function ( data ) {
+	                                    response($.map(data, function (item) {
+		                                    return {
+			                                  name: '@'+item,
+		                                      value: '@'+item
+		                                    }
+	                                    }));
+                                    }
+                                });
+                    },
                     select: function( event, ui ) {
 	                    jQuery( '#rthd-add-user-domain' ).val(ui.item.value);
 	                    rthdSetup.import_domain_users(true);
