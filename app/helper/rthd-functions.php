@@ -1747,6 +1747,18 @@ function rthd_get_default_support_team(){
 	return $isSyncOpt;
 }
 
+/**
+ * check wizard completed
+ * @return bool
+ */
+function rthd_check_wizard_completed(){
+	$option = get_option( 'rtbiz_helpdesk_setup_wizard_option' );
+	if ( ! empty( $option ) && 'true' == $option ) {
+		return true;
+	}
+	return false;
+}
+
 function rthd_get_redux_post_settings( $post ) {
 	// NOTE : Make modifications for what value to return.
 	if ( ! isset( $GLOBALS['redux_helpdesk_settings'] ) ) {
