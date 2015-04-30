@@ -98,7 +98,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				<h1><?php _e( 'Mailbox Setup' ); ?></h1>
 				<fieldset style="display: none">
 					<div class="rthd-setup-wizard-controls">
-						<h3><?php _e( 'Incoming MailBox Setup', RT_BIZ_TEXT_DOMAIN ); ?></h3>
+						<h3 class="rthd-setup-wizard-title"><?php _e( 'Incoming MailBox Setup', RT_BIZ_TEXT_DOMAIN ); ?></h3>
 						<p class="description">Connect the mailbox from which you would like to auto-create ticket from incoming e-mails.  Click on next if you want to do that later.</p>
 						<?php rthd_mailbox_setup_view(); ?>
 					</div>
@@ -125,7 +125,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			ob_start();
 			?>
 			<div class="rthd-setup-wizard-controls">
-				<h3><?php _e( 'Outgoing Mail Setup ', RT_BIZ_TEXT_DOMAIN ); ?></h3>
+				<h3 class="rthd-setup-wizard-title"><?php _e( 'Outgoing Mail Setup ', RT_BIZ_TEXT_DOMAIN ); ?></h3>
 				<p class="description">Configure settings for the mailbox from where you will like to send Helpdesk e-mails to customers and staff.</p>
 				<div id="rthd_outgoing_mailbox_setup_container">
 					<input type="hidden" id="rthd_outound_sub-action" name="rthd_outound_sub-action" value="rthd_outound_setup_wizard">
@@ -207,7 +207,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
                 ?>
 	            <div class="rthd-setup-wizard-controls">
 
-		            <h3><?php _e( 'Select Ticket Assignee', RT_BIZ_TEXT_DOMAIN ); ?></h3>
+		            <h3 class="rthd-setup-wizard-title"><?php _e( 'Select Ticket Assignee', RT_BIZ_TEXT_DOMAIN ); ?></h3>
 		            <p class="description"> <?php _e('Select an assignee for the products we synced in previous setup.', RT_BIZ_TEXT_DOMAIN); ?> </p>
 
                 <div class="rthd-setup-wizard-row">
@@ -263,7 +263,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			?>
 
 			<div class="rthd-setup-wizard-controls">
-				<h3><?php _e( 'Connect Your Store', RT_BIZ_TEXT_DOMAIN ); ?></h3>
+				<h3 class="rthd-setup-wizard-title"><?php _e( 'Connect Your Store', RT_BIZ_TEXT_DOMAIN ); ?></h3>
 				<?php
 				global $rt_hd_offering_support;
 				$rt_hd_offering_support->check_active_plugin();
@@ -305,7 +305,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			$pages = get_pages();
 			?>
 			<div class="rthd-setup-wizard-controls">
-				<h3>Support Page </h3>
+				<h3 class="rthd-setup-wizard-title">Support Page </h3>
 				<p class="description">Create a support page where your customers can submit tickets.</p>
 				<div class="rthd-setup-wizard-row">
 			<label for="rthd-setup-wizard-support-page"><?php _e('Select Support Page ',RT_BIZ_TEXT_DOMAIN); ?></label>
@@ -345,7 +345,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 
 			<div>
 			<div class="rthd-setup-wizard-controls rthd-setup-team-wizard-controls">
-				<h3>Setup Your Team</h3>
+				<h3 class="rthd-setup-wizard-title">Setup Your Team</h3>
 				<p class="description">There are 3 ways you can add users to your team. If you forget somebody now, you can add them later. </p>
 				<div class="rthd_wizard_container rthd-setup-wizard-row">
 
