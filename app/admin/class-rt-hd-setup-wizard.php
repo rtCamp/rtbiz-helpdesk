@@ -388,7 +388,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			<div>
 			<div class="rthd-setup-wizard-controls rthd-setup-team-wizard-controls">
 				<h3 class="rthd-setup-wizard-title">Setup Your Team</h3>
-				<p class="description">There are 3 ways you can add users to your team. If you forget somebody now, you can add them later. </p>
+				<p class="description"><?php _e( "There are 3 ways you can add users to your ‘Support' team. If you forget somebody now, you can add them later. You (admin) are already part of this team.", RT_HD_TEXT_DOMAIN ) ?></p>
 				<div class="rthd_wizard_container rthd-setup-wizard-row">
 
 					<div class="rthd-setup-value-container">
