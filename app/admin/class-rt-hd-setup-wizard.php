@@ -335,7 +335,6 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			<span>Setting up support page</span>
 			<img id="rthd-support-page-spinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 			</div>
-<!--			<button class="rthd-wizard-skip" type="button">Skip</button>-->
 		<?php
 		}
 
@@ -550,6 +549,9 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				}
 				$arrReturn['imported_count'] = count($users_to_import) ;
 				$arrReturn[ 'status' ] = true;
+				$helpdesk_users = rthd_get_helpdesk_user_ids();
+				$count = count_users();
+				$arrReturn['remain_import'] = $count['total_users']-count( $helpdesk_users);
 			}
 
 			header( 'Content-Type: application/json' );

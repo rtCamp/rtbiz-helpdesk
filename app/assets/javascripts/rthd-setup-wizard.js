@@ -210,11 +210,6 @@ jQuery(document).ready(function ($) {
                     }
                 }
             });
-
-            jQuery('.rthd-wizard-skip').on('click', function (e) {
-                skip_step = true;
-                jQuery('.wizard').steps('next');
-            })
         },
         support_page: function () {
             var requestArray = new Object();
@@ -280,7 +275,7 @@ jQuery(document).ready(function ($) {
 							            rthdSetup.add_contact_to_list( user.id, user.label, user.imghtml, user.editlink );
 						            } );
 					            }
-					            if ( parseInt(remain) > 0 ){
+					            if ( data.remain_import > 0 ){
 						            jQuery('#rthd-setup-import-all-count' ).val(remain);
 						            rthdSetup.import_all_users();
 					            } else {
