@@ -91,7 +91,7 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 							<li><?php _e( 'Editor - can manage all tickets but has no access to settings.', RT_HD_TEXT_DOMAIN ) ?></li>
 							<li><?php _e( 'Author - can only manage tickets assigned to himself/herself.', RT_HD_TEXT_DOMAIN ) ?></li>
 							<li><?php _e( 'No Role - has no access to ticket backend but has read-only acces the web interface of the ticket.', RT_HD_TEXT_DOMAIN ) ?></li>
-							<li><?php _e( 'Group Access - has same access as his/her team has.' ); ?>', RT_HD_TEXT_DOMAIN ) ?></li>
+							<li><?php _e( 'Group Access - has same access as his/her team has.', RT_HD_TEXT_DOMAIN ) ?></li>
 						</ul>
 					</p> <?php
 					break;
