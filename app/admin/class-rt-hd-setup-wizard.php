@@ -58,14 +58,14 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 		 */
 		function register_setup_wizard(){
 
-			$option = get_option( 'rtbiz_helpdesk_setup_wizard_option' );
-			if ( empty( $option ) || 'false' == $option ) {
+//			$option = get_option( 'rtbiz_helpdesk_setup_wizard_option' );
+//			if ( empty( $option ) || 'false' == $option ) {
 				$admin_cap       = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' );
 				$this->screen_id = add_submenu_page( 'edit.php?post_type=' . esc_html( Rt_HD_Module::$post_type ), __( 'Setup Wizard', RT_HD_TEXT_DOMAIN ), __( 'Setup Wizard', RT_HD_TEXT_DOMAIN ), $admin_cap, 'rthd-setup-wizard', array(
 					$this,
 					'setup_wizard_ui',
 				) );
-			}
+//			}
 		}
 
 		/**
@@ -247,10 +247,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
                         ?>
                     </ul>
                 </div>
-                <div class="rthd-assignee-process" style="display: none;">
-                    <span>Setting up default assignee for offerings</span>
-                    <img src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
-                </div> <?php
+             <?php
             } else { ?>
 		            <p class="description"> <?php _e(' Select default assignee for all products.', RT_BIZ_TEXT_DOMAIN); ?> </p>
 
@@ -278,6 +275,10 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 		            </select>
 		            </div>
             <?php } ?>
+			</div>
+			<div class="rthd-assignee-process" style="display: none;">
+				<span>Setting up default assignee for offerings</span>
+				<img src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
 			</div>
 			<?php
 			$comment_html = ob_get_clean();
