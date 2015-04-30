@@ -151,6 +151,7 @@ jQuery(document).ready(function ($) {
 		        jQuery( '#rthd-add-user-domain' ).autocomplete( {
 			        source:array,
                     select: function( event, ui ) {
+	                    jQuery( '#rthd-add-user-domain' ).val(ui.item.value);
 	                    rthdSetup.import_domain_users(true);
                     }
                 } );
