@@ -155,7 +155,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				$mailbox_options[ $email ] = $email;
 			}
 			$acl_page_link = '<a href="' . admin_url( 'admin.php?page=' . Rt_Biz::$access_control_slug ) . '">Access Control</a> page.';
-			$offerings_page_link = ' ' . __( ' To select dedicated assignee for an offering, visit the ' ) .'<a href="' . admin_url( 'edit-tags.php?taxonomy=' . Rt_Offerings::$offering_slug . '&post_type=' . Rt_HD_Module::$post_type ) . '">offerings page</a>.';
+			$offerings_page_link = ' ' . __( 'To select dedicated assignee for an offering, visit the ' ) .'<a href="' . admin_url( 'edit-tags.php?taxonomy=' . Rt_Offerings::$offering_slug . '&post_type=' . Rt_HD_Module::$post_type ) . '">offerings page</a>.';
 			// ACTUAL DECLARATION OF SECTIONS
 			$general_fields = array(
 				array(
@@ -164,14 +164,14 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					'options'  => $users_options,
 					'default'  => $default_assignee,
 					'title'    => __( 'Default Assignee' ),
-					'desc'     => __( 'Default assignee will be rtbiz contact with helpdesk access. You can change helpdesk access from rtBiz ') .$acl_page_link . $offerings_page_link,
+					'desc'     => $offerings_page_link,
 					'subtitle' => __( 'Select user for HelpDesk ticket Assignee' ),
 				),
 				array(
 					'id'       => 'rthd_support_page',
 					'type'     => 'select',
 					'data'     => 'pages',
-					'title'    => __( 'Support Form' ),
+					'title'    => __( 'Support page' ),
 					'desc'     => __( 'Add <strong>[rt_hd_support_form]</strong> shortcode to add support form to a page and select this page in the drop down. This page will then be used to handle new support requests from front-end.' ),
 					'subtitle' => __( 'Select Page for Product Support' ),
 				),
