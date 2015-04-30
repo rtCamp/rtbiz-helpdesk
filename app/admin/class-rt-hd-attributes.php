@@ -56,9 +56,10 @@ if ( ! class_exists( 'Rt_HD_Attributes' ) ) {
 				'delete_terms' => $editor_cap,
 				'assign_terms' => $editor_cap,
 			);
-
-			$rt_hd_rt_attributes->add_attributes_page( $this->attributes_page_slug, 'edit.php?post_type=' . Rt_HD_Module::$post_type, Rt_HD_Module::$post_type, $admin_cap, $terms_caps, $render_type = true, $storage_type = true, $orderby = true );
-
+			$option = get_option( 'rtbiz_helpdesk_setup_wizard_option' );
+			if ( ! empty( $option ) && 'true' == $option ) {
+				$rt_hd_rt_attributes->add_attributes_page( $this->attributes_page_slug, 'edit.php?post_type=' . Rt_HD_Module::$post_type, Rt_HD_Module::$post_type, $admin_cap, $terms_caps, $render_type = true, $storage_type = true, $orderby = true );
+			}
 		}
 
 		/**

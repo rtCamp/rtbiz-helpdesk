@@ -755,7 +755,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				// Page slug used to denote the panel
 				'save_defaults'      => true,
 				// On load save the defaults to DB before user clicks save or not
-				'default_show'       => true,
+				'default_show'       => false,
 				// If true, shows the default value next to each field that is not the default value.
 				'default_mark'       => '',
 				// What to print by the field's title if the value shown is default. Suggested: *

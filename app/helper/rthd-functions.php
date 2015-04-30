@@ -829,16 +829,12 @@ function rthd_install_dependency(){
 }
 
 function rthd_admin_notice_dependency_installed(){
-	$string = get_option( 'rtbiz_helpdesk_dependency_installed' );
-	if ( ! empty( $string ) ){ ?>
-		<div class="updated">
+		?><div class="updated">
 			<p>
-				rtBiz Helpdesk has also <strong><?php echo $string ;?></strong>
-				<a class="welcome-panel-close" style="float: right" href="<?php echo  admin_url( 'edit.php?post_type=rtbiz_hd_ticket&page=rthd-setup-wizard?close_notice=true' ); ?>">Dismiss</a>
+				<?php _e( 'Helpdesk require posts to posts and rtBiz so Helpdesk have installed and activated rtBiz posts to posts', RT_HD_TEXT_DOMAIN ); ?>
+				<a class="welcome-panel-close" style="float: right" href="<?php echo  admin_url( 'edit.php?post_type=rtbiz_hd_ticket&page=rthd-setup-wizard?close_notice=true' ); ?>"><?php _e( 'Dismiss', RT_HD_TEXT_DOMAIN ); ?></a>
 			</p>
-		</div>
-<?php
-	}
+		</div><?php
 }
 
 function rthd_install_plugin_ajax(){

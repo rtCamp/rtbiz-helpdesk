@@ -75,16 +75,21 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		 */
 		function register_dashboard() {
 
-			$author_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
+			$option = get_option( 'rtbiz_helpdesk_setup_wizard_option' );
 
-			$this->screen_id = add_submenu_page( 'edit.php?post_type=' . esc_html( Rt_HD_Module::$post_type ), __( 'Dashboard', RT_HD_TEXT_DOMAIN ), __( 'Dashboard', RT_HD_TEXT_DOMAIN ), $author_cap, 'rthd-' . esc_html( Rt_HD_Module::$post_type ) . '-dashboard', array(
-				$this,
-				'dashboard_ui',
-			) );
+			if ( ! empty( $option ) && 'true' == $option ) {
 
-			/* Add callbacks for this screen only */
-			add_action( 'load-' . $this->screen_id, array( $this, 'page_actions' ), 9 );
-			add_action( 'admin_footer-' . $this->screen_id, array( $this, 'footer_scripts' ) );
+				$author_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
+
+				$this->screen_id = add_submenu_page( 'edit.php?post_type=' . esc_html( Rt_HD_Module::$post_type ), __( 'Dashboard', RT_HD_TEXT_DOMAIN ), __( 'Dashboard', RT_HD_TEXT_DOMAIN ), $author_cap, 'rthd-' . esc_html( Rt_HD_Module::$post_type ) . '-dashboard', array(
+					$this,
+					'dashboard_ui',
+				) );
+
+				/* Add callbacks for this screen only */
+				add_action( 'load-' . $this->screen_id, array( $this, 'page_actions' ), 9 );
+				add_action( 'admin_footer-' . $this->screen_id, array( $this, 'footer_scripts' ) );
+			}
 
 			/* Add Welcome panel on rt helpdesk dashboard. */
 			add_action( 'rt_hd_welcome_panel', array( $this, 'rt_hd_welcome_panel' ) );
@@ -99,6 +104,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			add_action( 'rthd_dashboard_add_meta_boxes', array( $this, 'add_dashboard_widgets' ) );
 
 			add_filter( 'set-screen-option', array( $this, 'tickets_table_set_option' ), 10, 3 );
+
 		}
 
 		/**
