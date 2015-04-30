@@ -235,7 +235,7 @@
 
 .wizard > .actions > ul > li:first-child
 {
-    margin-left: 0;
+	margin: 0 1em;
 }
 
 .wizard > .actions > ul > li

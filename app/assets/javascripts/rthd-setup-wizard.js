@@ -13,8 +13,15 @@ jQuery(document).ready(function ($) {
             rthdSetup.search_users();
             rthdSetup.add_user_single();
             rthdSetup.assingee_page();
+	        rthdSetup.setup_start();
 
         },
+	    setup_start: function () {
+		  jQuery(document ).on('click','#rthd-setup-start', function ( e ) {
+			jQuery(this ).parent('div' ).hide();
+			jQuery('#wizard' ).show();
+		  });
+	    },
         setup_wizard: function () {
             wizard = jQuery("#wizard").steps({
                 headerTag: "h1",
@@ -462,7 +469,8 @@ jQuery(document).ready(function ($) {
         },
         outbound_mail_setu: function(){
             if ( jQuery('#mailbox-list>.rtmailbox-row').length > 0 ){
-                jQuery('div.actions a[href="#next"]').parent().after('<li id="rthd_spinner"><img src="' + adminurl + 'images/spinner.gif"/></li>')
+	            jQuery('.rthd-mailbox-setup-process' ).show();
+                //jQuery('div.actions a[href="#next"]').parent().after('<li id="rthd_spinner"><img src="' + adminurl + 'images/spinner.gif"/></li>')
                 jQuery.ajax({
                     url: ajaxurl,
                     dataType: "json",
@@ -474,12 +482,14 @@ jQuery(document).ready(function ($) {
                         if (data.status) {
                             jQuery('#wizard-p-4').html(data.html);
                         }
-                        jQuery('div.actions li#rthd_spinner').remove();
+                        //jQuery('div.actions li#rthd_spinner').remove();
+	                    jQuery('.rthd-outbound-setup-process' ).hide();
                     }
                 });
             } else if( jQuery('#rthd_outound_sub-action').val() === 'rthd_outound_setup_wizard' ) {
-                jQuery('div.actions a[href="#next"]').parent().after('<li id="rthd_spinner"><img src="' + adminurl + 'images/spinner.gif"/></li>')
-                jQuery.ajax({
+                //jQuery('div.actions a[href="#next"]').parent().after('<li id="rthd_spinner"><img src="' + adminurl + 'images/spinner.gif"/></li>')
+	            jQuery('.rthd-outbound-setup-process' ).show();
+	            jQuery.ajax({
                     url: ajaxurl,
                     dataType: "json",
                     type: 'post',
@@ -493,7 +503,8 @@ jQuery(document).ready(function ($) {
                             skip_step = true;
                             jQuery('.wizard').steps('next');
                         }
-                        jQuery('div.actions li#rthd_spinner').remove();
+                        //jQuery('div.actions li#rthd_spinner').remove();
+	                    jQuery('.rthd-outbound-setup-process' ).show();
                     }
                 });
             } else {

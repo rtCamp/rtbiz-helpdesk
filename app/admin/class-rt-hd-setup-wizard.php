@@ -72,7 +72,13 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 		 */
 		function setup_wizard_ui( $post_type ){
 			?>
-			<div class="wrap" id="wizard">
+			<div>
+				<h1><?php _e( 'rtBiz Helpdesk Setup', RT_BIZ_TEXT_DOMAIN ); ?></h1>
+				<p><?php _e( 'Thank you for choosing this plugin. Click "Begin Setup" to configure your Helpdesk.', RT_BIZ_TEXT_DOMAIN ); ?></p>
+				<input type="button" id="rthd-setup-start" class="button button-primary" value="Begin Setup" style="right: 52.5%; position: absolute; font-weight: bold;"/>
+			</div>
+
+			<div class="wrap" id="wizard" style="display: none;" >
 
 				<h1><?php _e( 'Support Page' ); ?></h1>
 				<fieldset>
@@ -102,6 +108,10 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 						<h3 class="rthd-setup-wizard-title"><?php _e( 'Incoming MailBox Setup', RT_BIZ_TEXT_DOMAIN ); ?></h3>
 						<p class="description">Connect the mailbox from which you would like to auto-create ticket from incoming e-mails.  Click on next if you want to do that later.</p>
 						<?php rthd_mailbox_setup_view(); ?>
+					</div>
+					<div class="rthd-mailbox-setup-process" style="display: none;">
+						<span>Loading outbound emails</span>
+						<img src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
 					</div>
 				</fieldset>
 
@@ -144,6 +154,10 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 						</select>
 					</div>
 				</div>
+			</div>
+			<div class="rthd-outbound-setup-process" style="display: none;">
+				<span>Setting up outbound mails</span>
+				<img src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
 			</div>
 			<?php
 			$comment_html = ob_get_clean();
@@ -247,7 +261,6 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
                 </div>
              <?php
             } else { ?>
-		            <p class="description"> <?php _e(' Select default assignee for all products.', RT_BIZ_TEXT_DOMAIN); ?> </p>
 
 	            <div class="rthd-setup-wizard-row">
 		            <label class="rthd-offering-default-assignee" for="rthd_offering-default"> <strong><?php _e( 'Default Assignee', RT_BIZ_TEXT_DOMAIN ); ?> </strong></label>
@@ -300,14 +313,16 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				$wooactive = is_plugin_active( 'woocommerce/woocommerce.php' ) ;
 				if ( $wooactive || $eddactive ){
 					if( $wooactive && $eddactive ){
-						$active_plugins = 'WooCommerce and EDD';
+						$active_plugins = 'WooCommerce and EDD plugins';
 					} else if ( $wooactive){
-						$active_plugins = 'WooCommerce';
+						$active_plugins = 'WooCommerce plugin';
 					}
 					else {
-						$active_plugins = 'EDD';
+						$active_plugins = 'EDD plugin';
 					}
-					echo '<p class="description"> Looks like you have '.$active_plugins. ' Active. Helpdesk have selected '.$active_plugins.' for you, You can change that if you want to.</p>';
+					echo '<p class="description"> Looks like you have '.$active_plugins. ' Active. Helpdesk has selected it for you, You can uncheck that if you want to.</p>';
+				} else{
+					echo '<p class="description"> Looks like none of the following plugins is installed right now. Anyways you can select the plugin you wish to install in future. Helpdesk will automatically sync products when that happens.</p>';
 				}
 				?>
 				<div class="rthd-setup-wizard-row">
@@ -316,7 +331,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				</div>
 				<div class="rthd-setup-wizard-row">
 					<input id="rthd-wizard-store-edd" type="checkbox" name="rthd-wizard-store" value="edd" <?php echo $eddactive?'checked':'';?> >
-					<label for="rthd-wizard-store-edd">EDD</label>
+					<label for="rthd-wizard-store-edd">Easy Digital Downloads</label>
 				</div>
 			</div>
 			<div class="rthd-store-process" style="display: none; float: left;">
