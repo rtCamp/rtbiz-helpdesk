@@ -847,7 +847,7 @@ function rthd_admin_notice_dependency_installed(){
 		<div class="updated">
 			<p>
 				<?php echo $string ;?>
-				<a class="welcome-panel-close" style="float: right" href="<?php echo  admin_url( 'edit.php?post_type=rtbiz_hd_ticket&page=rthd-setup-wizard?close_notice=true' ); ?>">Dismiss</a>
+				<a class="welcome-panel-close" style="float: right" href="<?php echo  admin_url( 'edit.php?post_type=rtbiz_hd_ticket&page=rthd-setup-wizard&close_notice=true' ); ?>">Dismiss</a>
 			</p>
 		</div>
 	<?php
