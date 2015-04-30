@@ -39,6 +39,8 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			add_action( 'wp_ajax_rthd_get_default_assignee_ui', array( $this, 'default_assignee' ) );
 			add_action( 'wp_ajax_rthd_outboud_mail_setup_ui', array( $this, 'rthd_outboud_mail_setup_ui' ) );
 			add_action( 'wp_ajax_rthd_outound_setup_wizard', array( $this, 'rthd_outound_setup_wizard_callback' ) );
+//			add_action( 'wp_ajax_rthd_remove_user', array( $this, 'rthd_remove_user' ) );
+
 			if ( ! empty( $_REQUEST['close_notice'] ) ){
 				delete_option( 'rtbiz_helpdesk_dependency_installed' );
 			}
@@ -278,7 +280,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 					else {
 						$active_plugins = 'EDD';
 					}
-					echo '<p class="description rthd-setup-description"> Looks like you have '.$active_plugins. ' Active. Helpdesk have selected '.$active_plugins.' for you, You can change that if you want to.</p>';
+					echo '<p class="description"> Looks like you have '.$active_plugins. ' Active. Helpdesk have selected '.$active_plugins.' for you, You can change that if you want to.</p>';
 				}
 				?>
 				<div class="rthd-setup-wizard-row">
@@ -306,7 +308,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			?>
 			<div class="rthd-setup-wizard-controls">
 				<h3 class="rthd-setup-wizard-title">Support Page </h3>
-				<p class="description">Create a support page where your customers can submit tickets.</p>
+				<p class="description ">Create a support page where your customers can submit tickets.</p>
 				<div class="rthd-setup-wizard-row">
 			<label for="rthd-setup-wizard-support-page"><?php _e('Select Support Page ',RT_BIZ_TEXT_DOMAIN); ?></label>
 			<select id="rthd-setup-wizard-support-page">
@@ -340,7 +342,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 		 * setup team UI
 		 */
 		function setup_team(){
-			global $rthd_form;
+			global $wpdb;
 			?>
 
 			<div>
@@ -365,7 +367,13 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 					$domain_name =  preg_replace('/^www\./','',$_SERVER['SERVER_NAME']);
 
 					$count_domain_users = rthd_search_non_helpdesk_users( '@'.$domain_name, true, true );
+					$domains = $wpdb->get_col("SELECT DISTINCT( SUBSTRING_INDEX(user_email,'@',-1)) FROM $wpdb->users");
+					$domains = array_filter( $domains );
+
 				?>
+				<script>
+					var arr_domain_names =<?php echo json_encode( $domains ); ?>;
+				</script>
 				<label for="rthd-add-user-domain"> 2. Add all users from domain</label>
 				<input id="rthd-add-user-domain" class="rthd-setup-wizard-text" type="text" value="<?php echo '@'.$domain_name; ?>" placeholder="@gmail.com" />
 				<br/>
@@ -598,6 +606,13 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			header( 'Content-Type: application/json' );
 			echo json_encode( $arrReturn );
 			die( 0 );
+		}
+
+		function rthd_remove_user(){
+			$arrReturn       = array( 'status' => false );
+//			if ( ! empty( $_POST['userid'] ) ){
+
+//			}
 		}
 
 	}

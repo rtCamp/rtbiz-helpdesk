@@ -74,7 +74,7 @@ jQuery(document).ready(function ($) {
             });
         },
         search_users: function () {
-            if (jQuery(".rthd-user-autocomplete").length > 0) {
+            if ( jQuery(".rthd-user-autocomplete").length > 0 ) {
                 jQuery(".rthd-user-autocomplete").autocomplete({
                     source: function (request, response) {
                         $.ajax({
@@ -126,10 +126,36 @@ jQuery(document).ready(function ($) {
                     return $('<li></li>').data('ui-autocomplete-item', item).append('<a>' + item.imghtml + '&nbsp;' + item.label + '</a>').appendTo(ul);
                 };
 
-                jQuery(document).on("click", "a[href=#removeUser]", function () {
-                    jQuery(this).parent().remove();
-                });
+              /*  jQuery(document).on("click", "a[href=#removeUser]", function () {
+	                var requestArray = new Object();
+	                requestArray['action'] = 'rthd_remove_user';
+	                requestArray['userid'] = jQuery(this ).next('.rthd-import-selected-users').val();
+	                jQuery.ajax({
+		                            url: ajaxurl,
+		                            dataType: "json",
+		                            type: 'post',
+		                            data: requestArray,
+		                            success: function (data) {
+			                            if (data.status) {
+				                            jQuery(this).parent().remove();
+			                            }
+		                            }
+	                            });
+                });*/
             }
+
+	        if ( jQuery('#rthd-add-user-domain' ).length > 0 ) {
+		        var array = $.map(arr_domain_names, function(value, index) {
+			        return ['@'+value];
+		        });
+		        jQuery( '#rthd-add-user-domain' ).autocomplete( {
+			        source:array,
+                    select: function( event, ui ) {
+	                    rthdSetup.import_domain_users(true);
+                    }
+                } );
+	        }
+
         },
         add_user_single: function () {
             jQuery('.rthd-importer-add-contact').click(function () {
@@ -329,7 +355,8 @@ jQuery(document).ready(function ($) {
 	        }
             if (jQuery("#imported-user-auth-" + id).length < 1) {
                 //jQuery(".rthd-setup-list-users").append("<li id='imported-user-auth-" + id + "' class='contact-list' >" + imghtml + "<a href='#removeUser' class='delete_row'>×</a><br/><a class='rthd-setup-user-title heading' target='_blank' href='" + editlink + "'>" + label + "</a><input type='hidden' class='rthd-import-selected-users' name='import_users[]' value='" + id + "' /></li>")
-                jQuery(".rthd-setup-list-users").append("<li id='imported-user-auth-" + id + "' class='contact-list' >" + imghtml + "<a class='rthd-setup-user-title heading' target='_blank' href='" + editlink + "'>" + label + "</a><input type='hidden' class='rthd-import-selected-users' name='import_users[]' value='" + id + "' /></li>")
+                //jQuery(".rthd-setup-list-users").append("<li id='imported-user-auth-" + id + "' class='contact-list' >" + imghtml + "<a class='rthd-setup-user-title heading' target='_blank' href='" + editlink + "'>" + label + "</a> <a href='#removeUser' class='delete_row'>×</a> <input type='hidden' class='rthd-import-selected-users' name='import_users[]' value='" + id + "' /></li>")
+                jQuery(".rthd-setup-list-users").append("<li id='imported-user-auth-" + id + "' class='contact-list' >" + imghtml + "<a class='rthd-setup-user-title heading' target='_blank' href='" + editlink + "'>" + label + "</a> <input type='hidden' class='rthd-import-selected-users' name='import_users[]' value='" + id + "' /></li>")
             }
         },
         connect_store: function () {

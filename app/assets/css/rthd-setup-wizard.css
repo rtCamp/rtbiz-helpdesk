@@ -50,7 +50,6 @@
 }
 
 .rthd-setup-list-users .delete_row{
-	margin-left: -15px;
 	margin-top: -10px;
 }
 
@@ -67,7 +66,7 @@
 }
 
 .rthd-setup-wizard-row{
-	margin-top: 10px;
+	margin-top: 5px;
 }
 
 .rthd-setup-wizard-title{
@@ -83,9 +82,6 @@
 	width: 15%;
 }
 
-/*.rthd-setup-wizard-row input{*/
-	/*width: 2em;*/
-/*}*/
 .rthd-setup-wizard-row {
 	background: beige;
 	padding: 5px;
@@ -97,7 +93,7 @@
 }
 
 .rthd-setup-wizard-controls, ul.rthd-setup-ul-text-decoration.rthd-setup-list-users{
-	padding: 10px 0 10px 10px;
+	padding: 10px;
 	margin-bottom: 0;
 }
 .rthd-setup-wizard-controls.rthd-setup-team-wizard-controls{
@@ -122,8 +118,8 @@
 	width: 25%;
 }
 
-p.description.rthd-setup-description{
-	margin: 10px 0;
+p.description{
+	margin: 5px 0;
 }
 
 #wizard #rtmailbox-page{
