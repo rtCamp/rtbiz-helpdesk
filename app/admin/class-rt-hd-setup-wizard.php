@@ -39,7 +39,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			add_action( 'wp_ajax_rthd_get_default_assignee_ui', array( $this, 'default_assignee' ) );
 			add_action( 'wp_ajax_rthd_outboud_mail_setup_ui', array( $this, 'rthd_outboud_mail_setup_ui' ) );
 			add_action( 'wp_ajax_rthd_outound_setup_wizard', array( $this, 'rthd_outound_setup_wizard_callback' ) );
-//			add_action( 'wp_ajax_rthd_remove_user', array( $this, 'rthd_remove_user' ) );
+			add_action( 'wp_ajax_rthd_remove_user', array( $this, 'rthd_remove_user' ) );
 			add_action( 'wp_ajax_rthd_search_domain', array( $this, 'rthd_search_domain' ) );
 
 			if ( ! empty( $_REQUEST['close_notice'] ) ){
@@ -646,10 +646,15 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 		}
 
 		function rthd_remove_user(){
-			$arrReturn       = array( 'status' => false );
-//			if ( ! empty( $_POST['userid'] ) ){
-
-//			}
+			$arrReturn = array( 'status' => false );
+			if ( ! empty( $_POST['userid'] ) ){
+				global $rt_biz_acl_model;
+				$rt_biz_acl_model->remove_acl(array('module'=>RT_HD_TEXT_DOMAIN, 'userid' => $_POST['userid'] ));
+				$arrReturn[ 'status' ] = true;
+			}
+			header( 'Content-Type: application/json' );
+			echo json_encode( $arrReturn );
+			die( 0 );
 		}
 
 		function rthd_search_domain(){
