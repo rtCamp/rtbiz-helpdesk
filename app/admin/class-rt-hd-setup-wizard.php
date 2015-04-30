@@ -319,12 +319,13 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				} ?>
 				<option value="-1"><?php _e('- Create New Page -',RT_BIZ_TEXT_DOMAIN); ?></option>
 			</select>
-					<div class="rthd-setup-wizard-row rthd-setup-wizard-support-page-new-div" style="display: none;">
-						<label for="rthd-setup-wizard-support-page-new"><?php _e('Create New Page',RT_BIZ_TEXT_DOMAIN); ?></label>
-						<input type="text" id="rthd-setup-wizard-support-page-new" name="rthd-setup-wizard-support-page-new-value" />
-					</div>
 
 			</div>
+				<div class="rthd-setup-wizard-row rthd-setup-wizard-support-page-new-div" style="display: none;">
+					<label for="rthd-setup-wizard-support-page-new"><?php _e('Create New Page',RT_BIZ_TEXT_DOMAIN); ?></label>
+					<input type="text" id="rthd-setup-wizard-support-page-new" name="rthd-setup-wizard-support-page-new-value" />
+				</div>
+
 			</div>
 
 			<div class="rthd-support-process" style="display: none;">
