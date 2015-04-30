@@ -651,6 +651,11 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				global $rt_biz_acl_model;
 				$rt_biz_acl_model->remove_acl(array('module'=>RT_HD_TEXT_DOMAIN, 'userid' => $_POST['userid'] ));
 				$arrReturn[ 'status' ] = true;
+				$contact  = rt_biz_get_contact_for_wp_user( $_POST['userid'] );
+				$support_team = get_option( 'rthd_default_support_team' );
+				if ( ! empty( $support_team ) && ! empty( $contact[0] ) ){
+					wp_remove_object_terms($contact[0]->ID,array($support_team),RT_Departments::$slug );
+				}
 			}
 			header( 'Content-Type: application/json' );
 			echo json_encode( $arrReturn );
