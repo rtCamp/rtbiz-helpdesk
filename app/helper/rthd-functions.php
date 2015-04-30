@@ -797,15 +797,15 @@ function rthd_install_dependency(){
 		if (  ! $biz_installed ){
 			rthd_install_plugin( 'rtbiz' );
 			$isRtbizActionDone = true;
-			$string = '<strong>rtBiz</strong> so Helpdesk have installed and activated <strong>rtBiz</strong>';
+			$string = 'installed and activated <strong>rtBiz</strong> plugin.';
 		}
 		if ( ! $p2p_installed ){
 			rthd_install_plugin( 'posts-to-posts' );
 			$isPtopActionDone = true;
-			$string = '<strong>posts to posts</strong> so Helpdesk have installed and activated <strong>posts to posts</strong>';
+			$string = 'installed and activated <strong>posts to posts</strong> plugin.';
 		}
 		if ( $isRtbizActionDone && $isPtopActionDone ){
-			$string = '<strong>rtBiz</strong> and <strong>posts to posts</strong> so Helpdesk have installed and activated <strong>rtBiz</strong> and <strong>posts to posts</strong>';
+			$string = 'installed and activated <strong>rtBiz</strong> plugin and <strong>posts to posts</strong> plugin.';
 		}
 	}
 
@@ -816,21 +816,21 @@ function rthd_install_dependency(){
 			$p2ppath = rthd_get_path_for_plugin( 'posts-to-posts' );
 			rthd_activate_plugin( $p2ppath );
 			$isRtbizActionDone = true;
-			$string = '<strong>posts to posts</strong> so Helpdesk have activated <strong>posts to posts</strong>';
+			$string = 'activated <strong>posts to posts</strong> plugin.';
 		}
 		if ( ! $rtbiz_active ){
 			$rtbizpath = rthd_get_path_for_plugin( 'rtbiz' );
 			rthd_activate_plugin( $rtbizpath );
 			$isPtopActionDone = true;
-			$string = '<strong>rtBiz</strong> so Helpdesk have activated <strong>rtBiz</strong>';
+			$string = 'activated <strong>rtBiz</strong> plugin.';
 		}
 		if ( $isRtbizActionDone && $isPtopActionDone ){
-			$string = '<strong>rtBiz</strong> and <strong>posts to posts</strong> so Helpdesk have activated <strong>rtBiz</strong> and <strong>posts to posts</strong>';
+			$string = 'activated <strong>rtBiz</strong> plugin and <strong>posts to posts</strong> plugin.';
 		}
 	}
 
 	if ( !empty( $string ) ){
-		$string = 'Helpdesk require ' . $string;
+		$string = 'rtBiz Helpdesk has also  ' . $string;
 		update_option( 'rtbiz_helpdesk_dependency_installed', $string );
 	}
 
