@@ -310,14 +310,14 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				<div class="rthd-setup-wizard-row">
 			<label for="rthd-setup-wizard-support-page"><?php _e('Select Support Page ',RT_BIZ_TEXT_DOMAIN); ?></label>
 			<select id="rthd-setup-wizard-support-page">
-				<option value="0" selected><?php _e('--Select Page--',RT_BIZ_TEXT_DOMAIN); ?></option>
+				<option value="0" selected><?php _e('-- Select Page --',RT_BIZ_TEXT_DOMAIN); ?></option>
 				<?php
 				if ( ! empty( $pages ) ){
 					foreach($pages as $page) {
 						echo '<option value="'.$page->ID.'">'.$page->post_title.'</option>';
 					}
 				} ?>
-				<option value="-1"><?php _e('-Create New Page-',RT_BIZ_TEXT_DOMAIN); ?></option>
+				<option value="-1"><?php _e('- Create New Page -',RT_BIZ_TEXT_DOMAIN); ?></option>
 			</select>
 					<div class="rthd-setup-wizard-row rthd-setup-wizard-support-page-new-div" style="display: none;">
 						<label for="rthd-setup-wizard-support-page-new"><?php _e('Create New Page',RT_BIZ_TEXT_DOMAIN); ?></label>
