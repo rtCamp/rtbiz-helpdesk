@@ -1732,16 +1732,16 @@ function rthd_give_user_access( $user, $access_role, $team_term_id = 0 ){
 function rthd_get_default_support_team(){
 	$isSyncOpt = get_option( 'rthd_default_support_team' );
 	if ( empty( $isSyncOpt ) ) {
-		if ( ! term_exists( 'Support', 'rthd-support' ) ) {
-			$term = wp_insert_term( 'Support', // the term
-			                        RT_Departments::$slug, // the taxonomy
-			                        array(
-				                        'slug' => 'rthd-support',
-			                        ) );
-		}
+		$term = wp_insert_term( 'Support', // the term
+			                        RT_Departments::$slug // the taxonomy
+			                      );
 		if ( ! empty( $term ) ) {
+			$module_permissions = get_site_option( 'rt_biz_module_permissions' );
+			$module_permissions[RT_HD_TEXT_DOMAIN][$term[ 'term_id' ]] = Rt_Access_Control::$permissions['author']['value'];
+			update_site_option( 'rt_biz_module_permissions', $module_permissions );
 			update_option( 'rthd_default_support_team', $term[ 'term_id' ] );
 			$isSyncOpt = $term[ 'term_id' ];
+
 		}
 	}
 	return $isSyncOpt;
