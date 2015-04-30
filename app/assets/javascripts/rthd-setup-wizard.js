@@ -450,7 +450,7 @@ jQuery(document).ready(function ($) {
             })
         },
         custom_page_action: function (currentIndex) {
-            if (currentIndex == 3 && jQuery('.rthd-setup-assignee').length == 0) {
+           /* if (currentIndex == 3 && jQuery('.rthd-setup-assignee').length == 0) {
                 jQuery('div.actions a[href="#next"]').hide();
                 setTimeout(function () {
                     jQuery('div.actions a[href="#next"]').show();
@@ -458,7 +458,7 @@ jQuery(document).ready(function ($) {
                     jQuery('.wizard').steps('next');
                     return true;
                 }, 2000);
-            }
+            }*/
         },
         outbound_mail_setu: function(){
             if ( jQuery('#mailbox-list>.rtmailbox-row').length > 0 ){

@@ -206,11 +206,13 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				remove_filter( 'get_terms', array( $rtbiz_offerings, 'offering_filter' ), 10, 3 );
 			}
 			$users  = Rt_HD_Utils::get_hd_rtcamp_user();
+			?>
+			<div class="rthd-setup-wizard-controls">
+
+			<h3 class="rthd-setup-wizard-title"><?php _e( 'Select Ticket Assignee', RT_BIZ_TEXT_DOMAIN ); ?></h3>
+			<?php
             if ( ! empty( $terms ) ) {
                 ?>
-	            <div class="rthd-setup-wizard-controls">
-
-		            <h3 class="rthd-setup-wizard-title"><?php _e( 'Select Ticket Assignee', RT_BIZ_TEXT_DOMAIN ); ?></h3>
 		            <p class="description"> <?php _e('Select an assignee for the products we synced in previous setup.', RT_BIZ_TEXT_DOMAIN); ?> </p>
 
                 <div class="rthd-setup-wizard-row">
@@ -245,14 +247,39 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
                         ?>
                     </ul>
                 </div>
-	            </div>
                 <div class="rthd-assignee-process" style="display: none;">
                     <span>Setting up default assignee for offerings</span>
                     <img src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
                 </div> <?php
-            }else{ ?>
-                <p class="description"> <?php _e(' No product found! you will be auto redirect to next step within second.', RT_BIZ_TEXT_DOMAIN); ?> </p>
-            <?php }
+            } else { ?>
+		            <p class="description"> <?php _e(' Select default assignee for all products.', RT_BIZ_TEXT_DOMAIN); ?> </p>
+
+	            <div class="rthd-setup-wizard-row">
+		            <label class="rthd-offering-default-assignee" for="rthd_offering-default"> <strong><?php _e( 'Default Assignee', RT_BIZ_TEXT_DOMAIN ); ?> </strong></label>
+		            <select id="rthd_offering-default">
+			            <?php
+			            // if needed to set default assignee that already have assigned
+			            //							$selected_userid = get_offering_meta( 'default_assignee', $tm->term_id );
+			            if ( empty( $current ) ){
+				            echo '<option disabled selected> -- select an assignee -- </option>';
+			            }
+			            else{
+				            echo '<option > -- select an assignee -- </option>';
+			            }
+			            foreach ( $users as $user ) {
+				            if ( $user->ID == $current ){
+					            $selected = 'selected';
+				            } else{
+					            $selected = '';
+				            }
+				            echo '<option value="' . $user->ID . '" '.$selected.'>' . $user->display_name . '</option>';
+			            }
+			            ?>
+		            </select>
+		            </div>
+            <?php } ?>
+			</div>
+			<?php
 			$comment_html = ob_get_clean();
 			header( 'Content-Type: application/json' );
 			echo json_encode( array( 'status' => true, 'html'=> $comment_html ) );

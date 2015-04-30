@@ -77,6 +77,10 @@
 	/*margin-bottom: 0;*/
 /*}*/
 
+#mailbox-list img.avatar.avatar-30.photo{
+	border-radius: 100%;
+}
+
 .rthd-setup-wizard-row label{
 	display: inline-block;
 	width: 15%;
