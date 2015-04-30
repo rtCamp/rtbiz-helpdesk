@@ -36,12 +36,16 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 			add_filter( 'pre_insert_term', array( $this, 'remove_wocommerce_actions' ), 10, 2 );
 
             add_action( 'admin_menu', array( $this, 'add_people_menu' ), 1 );
+			add_filter( 'current_screen', array( $this, 'rthd_acl_page_help' ) );
 
 			//upload folder change
 			add_filter( 'wp_handle_upload_prefilter', array( $this, 'handle_upload_prefilter' ) );
 			add_filter( 'wp_handle_upload', array( $this, 'handle_upload' ) );
 		}
 
+		/**
+		 * rtbiz page menu "people"
+		 */
         function add_people_menu(){
 	        global $rt_access_control;
 	        if ( rthd_check_wizard_completed() ) {
@@ -57,6 +61,42 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 		        add_submenu_page( 'edit.php?post_type=' . esc_html( Rt_HD_Module::$post_type ), __( 'Teams' ), __( '--- Teams' ), rt_biz_get_access_role_cap( RT_BIZ_TEXT_DOMAIN, 'editor' ), 'edit-tags.php?taxonomy=' . RT_Departments::$slug . '&post_type=' . Rt_HD_Module::$post_type );
 	        }
         }
+
+		/**
+		 * add help tab is acl page
+		 */
+		function  rthd_acl_page_help( ){
+			global $rt_biz_help;
+			if ( $_GET['post_type'] == Rt_HD_Module::$post_type && $_GET['page'] ==  Rt_Biz::$access_control_slug ){
+				get_current_screen()->add_help_tab( array(
+					'id' => 'hd_acl_overview',
+					'title' => 'Overview',
+					'callback' => array( $this, 'tab_content' ),
+				) );
+			}
+		}
+
+		/**
+		 * add helptab contain on acl page
+		 *
+		 * @param $screen
+		 * @param $tab
+		 */
+		function tab_content( $screen, $tab ){
+			switch ( $tab['id'] ) {
+				case 'hd_acl_overview': ?>
+					<p>
+						<ul>
+							<li><?php _e( 'Admin - can manage all tickets and has full access to settings.', RT_HD_TEXT_DOMAIN ) ?></li>
+							<li><?php _e( 'Editor - can manage all tickets but has no access to settings.', RT_HD_TEXT_DOMAIN ) ?></li>
+							<li><?php _e( 'Author - can only manage tickets assigned to himself/herself.', RT_HD_TEXT_DOMAIN ) ?></li>
+							<li><?php _e( 'No Role - has no access to ticket backend but has read-only acces the web interface of the ticket.', RT_HD_TEXT_DOMAIN ) ?></li>
+							<li><?php _e( 'Group Access - has same access as his/her team has.' ); ?>', RT_HD_TEXT_DOMAIN ) ?></li>
+						</ul>
+					</p> <?php
+					break;
+			}
+		}
 
 		/**
 		 * Register CSS and JS
