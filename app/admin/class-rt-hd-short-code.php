@@ -175,11 +175,11 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 			<?php
 			ob_start();
 			if ( ! empty( $arg_shortcode['fav'] ) ) { ?>
-				<h2><?php _e( 'Favourite Tickets', RT_HD_TEXT_DOMAIN ); ?></h2>
+				<h2 class="rthd-ticket-list-title"><?php _e( 'Favourite Tickets', RT_HD_TEXT_DOMAIN ); ?></h2>
 				<?php
 			} else {
 				?>
-				<h2><?php _e( 'Your Tickets', RT_HD_TEXT_DOMAIN ); ?></h2>
+				<h2 class="rthd-ticket-list-title"><?php _e( 'Your Tickets', RT_HD_TEXT_DOMAIN ); ?></h2>
 			<?php
 			}
 			echo '<div class="rthd-ticket-list">';

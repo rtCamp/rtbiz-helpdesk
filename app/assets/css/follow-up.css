@@ -589,6 +589,10 @@ ul#attachment-files {
 .rthd-ticket-list{
 	margin: 10px 0;
 }
+
+h2.rthd-ticket-list-title{
+	margin-top: 20px;
+}
 /*#rthd-subscribe-email{*/
 	/*width: 250px;*/
 	/*float: right;*/
