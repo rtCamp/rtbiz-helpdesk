@@ -41,6 +41,9 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 		function rthd_offering_setting( $setting ){
 			$redux = rthd_get_redux_settings();
 			if ( ! empty( $redux['offering_plugin'] ) ) {
+				if ( empty( $redux['offering_plugin'] ) ){
+					$redux['offering_plugin'] = array();
+				}
 				$setting = $redux['offering_plugin'];
 			}
 			return $setting;
