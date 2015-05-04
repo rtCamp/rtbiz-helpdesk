@@ -290,9 +290,9 @@ jQuery(document).ready(function ($) {
 						            jQuery('#rthd-import-all-spinner' ).hide();
 						            jQuery('#rthd-setup-import-users-progress' ).hide();
 						            if (imported_users == 0){
-							            jQuery('#rthd-all-import-message' ).html('Users already added!');
+							            jQuery('#rthd-all-import-message' ).html('Users already added');
 						            } else {
-							            jQuery('#rthd-all-import-message' ).html(imported_users+' users added!');
+							            jQuery('#rthd-all-import-message' ).html(imported_users+' users added');
 						            }
 					            }
 				            }
@@ -324,10 +324,10 @@ jQuery(document).ready(function ($) {
 	                        }
                             if (data.imported_all) {
 	                            if (data.hasOwnProperty('imported_users')){
-		                            jQuery('#rthd-domain-import-message').html('Imported ' + ( data.imported_users.length ) + ' Users!');
+		                            jQuery('#rthd-domain-import-message').html('Imported ' + ( data.imported_users.length ) + ' Users');
 	                            }
 	                            else{
-		                            jQuery('#rthd-domain-import-message').html('No Users to Add!');
+		                            jQuery('#rthd-domain-import-message').html('No Users to Add');
 	                            }
                             } else {
 	                            if (data.hasOwnProperty('not_imported_users')) {
