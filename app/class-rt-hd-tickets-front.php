@@ -212,7 +212,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 			if ( empty( $post ) || $wrong_unique_id ) {
 				$wp_query->is_404 = true;
 				$wp_query->set_404();
-				$message = sprintf( '%s ', __( "Sorry! Your requested ticket wasn't found." ) );
+				$message = sprintf( '%s ', __( "<div style='margin-left: 0;'>Sorry! Your requested ticket wasn't found." ) );
 				global $rthd_messages;
 				$rthd_messages[] = array( 'type' => 'error', 'message' => $message, 'displayed' => 'no' );
 				global $rthd_front_page_title;
