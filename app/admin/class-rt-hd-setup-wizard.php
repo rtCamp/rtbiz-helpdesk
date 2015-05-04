@@ -107,7 +107,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 						<p class="description">Connect the mailbox from which you would like to auto-create ticket from incoming e-mails.  Click on next if you want to do that later.</p>
 						<?php rthd_mailbox_setup_view(); ?>
 					</div>
-					<div class="rthd-mailbox-setup-process" style="display: none;">
+					<div class="rthd-mailbox-setup-process rthd-wizard-process" style="display: none;">
 						<span>Loading outbound emails</span>
 						<img src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
 					</div>
@@ -153,7 +153,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 					</div>
 				</div>
 			</div>
-			<div class="rthd-outbound-setup-process" style="display: none;">
+			<div class="rthd-outbound-setup-process rthd-wizard-process" style="display: none;">
 				<span>Setting up outbound mails</span>
 				<img src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
 			</div>
@@ -285,7 +285,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 		            </div>
             <?php } ?>
 			</div>
-			<div class="rthd-assignee-process" style="display: none;">
+			<div class="rthd-assignee-process rthd-wizard-process" style="display: none;">
 				<span>Setting up default assignee for offerings</span>
 				<img src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
 			</div>
@@ -332,7 +332,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 					<label for="rthd-wizard-store-edd">Easy Digital Downloads</label>
 				</div>
 			</div>
-			<div class="rthd-store-process" style="display: none; float: left;">
+			<div class="rthd-store-process rthd-wizard-process" style="display: none; float: left;">
 				<span>Connecting store and importing existing products</span>
 				<img id="rthd-support-page-spinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 			</div>
@@ -370,7 +370,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 
 			</div>
 
-			<div class="rthd-support-process" style="display: none;">
+			<div class="rthd-support-process rthd-wizard-process" style="display: none;">
 			<span>Setting up support page</span>
 			<img id="rthd-support-page-spinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 			</div>
