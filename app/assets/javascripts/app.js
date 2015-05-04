@@ -130,9 +130,13 @@ jQuery( document ).ready( function ( $ ) {
 			             success: function ( data ) {
 								if ( data.status ){
 									jQuery('.rthd-subscribe-validation' ).show();
-									jQuery('.rthd-subscribe-validation' ).text('Added Successfully!');
+									jQuery('.rthd-subscribe-validation' ).text('Added Successfully');
 									jQuery('.rthd-subscribe-validation' ).hide(5000);
 									jQuery('#rthd-subscribe-email' ).val('');
+									//show participants lable
+									if ( ! jQuery('.rthd-participants').is(":visible") ){
+										jQuery('.rthd-participants' ).show();
+									}
 									if ( ! data.has_replied ){
 										var htmlappend=  '<a title="'+data.display_name+'" class="rthd-last-reply-by" href="'+data.edit_link+'">'+data.avatar+' </a>';
 										if (data.is_contact){
@@ -149,7 +153,7 @@ jQuery( document ).ready( function ( $ ) {
 										jQuery('.rthd-subscribe-validation' ).show();
 										jQuery('.rthd-subscribe-validation' ).html(data.msg);
 									} else{
-										jQuery('.rthd-subscribe-validation' ).html('Something went wrong!');
+										jQuery('.rthd-subscribe-validation' ).html('Something went wrong');
 									}
 									jQuery('.rthd-subscribe-validation' ).hide(5000);
 								}

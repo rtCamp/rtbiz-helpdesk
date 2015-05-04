@@ -448,6 +448,10 @@ h2.rt-hd-ticket-front-title{
 
 .rthd-front-icons, .rthd-ticket-user-activity, .rthd-collapse-icon{
 	display: inline-block;
+	/*float: right;*/
+}
+
+.rthd-collapse-icon,.rthd-front-icons{
 	float: right;
 }
 .rthd-front-icons:after,.rthd-ticket-user-activity:after{
@@ -460,10 +464,11 @@ h2.rt-hd-ticket-front-title{
 
 .rthd-ticket-user-activity a img, .rthd-ticket-user-activity a input{
 	border-radius: 100%;
+	vertical-align: middle;
 }
 .rthd-ticket-user-activity a{
 	display: inline-block;
-	margin: 6px;
+	margin: 2px;
 	/*margin-left: 3px;*/
 	text-decoration: none;
 }

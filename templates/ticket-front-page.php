@@ -44,7 +44,7 @@ $user_edit_content = current_user_can( $cap );
 					$created_by_user_id = get_post_meta( $post->ID, '_rtbiz_hd_created_by', true );
 					$created_by = get_user_by( 'id', get_post_meta( $post->ID, '_rtbiz_hd_created_by', true ) );
 					if ( ! empty( $created_by ) ) {
-							echo ' <a class="rthd-ticket-created-by" title="Created by '.$created_by->display_name.' '.$create_by_time.'" href="'.( current_user_can( $cap ) ? rthd_biz_user_profile_link( $created_by->user_email ) :'#').'">' . get_avatar( $created_by->user_email, '30' ).'</a>';
+							echo '<label><strong>Created '.$create_by_time.' by </strong></label> <a class="rthd-ticket-created-by" title="'.$created_by->display_name.'" href="'.( current_user_can( $cap ) ? rthd_biz_user_profile_link( $created_by->user_email ) :'#').'">' . get_avatar( $created_by->user_email, '30' ).'</a>';
 					}
 
 					global $wpdb, $rt_hd_email_notification;
@@ -87,10 +87,12 @@ $user_edit_content = current_user_can( $cap );
 						if ( ! empty( $emails ) ){
 							$emails = array_diff( $emails, array( $comment->comment_author_email ) );
 						}
-						//						$search  = array_search( $comment->comment_author_email, $emails );
-						//						if ( $search !== false ) {
-						//							unset( $emails[ $search ] );
-						//						}
+					}
+
+					if ( ! empty( $emails ) || ! empty( $subscriber ) || ! empty( $comment ) || ! empty( $other_contacts )){
+						echo '<label class="rthd-participants">&#124;<strong> Participants </strong></label>';
+					} else {
+						echo '<label class="rthd-participants" style="display: none">&#124;<strong> Participants </strong></label>';
 					}
 					echo "<div class='rthd-contact-avatar-no-reply-div'>";
 					// contact group
@@ -435,6 +437,7 @@ $user_edit_content = current_user_can( $cap );
 				<?php }
 			}?>
 		</div>
+		<div class="rthd-clearfix"></div>
 	</div>
 <a href="#" class="rthd-scroll-up"></a>
 <?php
