@@ -187,7 +187,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'woocommerce' => __( 'WooCommerce' ),
 						'edd' => __( 'Easy Digital Download' ),
 					),
-					'default'  => 'none',
+					'default'  => '',
 				),
 				array(
 					'id'       => 'rthd_default_user',
