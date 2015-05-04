@@ -195,12 +195,12 @@ function init_call_rtbiz_hd_flush_rewrite_rules(){
 
 function rthd_welcome_to_helpdesk(){
 	// Bail if no activation redirect
-	if ( ! get_transient( '_rthd_activation_redirect' ) ) {
+	if ( ! get_option( '_rthd_activation_redirect' ) ) {
 		return;
 	}
 
 	// Delete the redirect transient
-	delete_transient( '_rthd_activation_redirect' );
+	delete_option( '_rthd_activation_redirect' );
 
 	// Bail if activating from network, or bulk
 	if ( is_network_admin() || isset( $_GET['activate-multi'] ) ) {
@@ -217,5 +217,5 @@ function rthd_welcome_to_helpdesk(){
 
 function plugin_activation_redirect() {
 	// Add the transient to redirect
-	set_transient( '_rthd_activation_redirect', true, 30 );
+	add_option( '_rthd_activation_redirect', true );
 }
