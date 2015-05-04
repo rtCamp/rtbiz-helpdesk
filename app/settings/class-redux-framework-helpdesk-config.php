@@ -312,6 +312,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'validate'   => 'email',
 						'multi'      => true,
 						'show_empty' => false,
+						'add_text'   => 'Add Emails'
 					),
 					array(
 						'id'       => 'rthd_enable_notification_acl',
