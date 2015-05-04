@@ -1759,6 +1759,17 @@ function rthd_check_wizard_completed(){
 	return false;
 }
 
+/**
+ * store helpdesk setting manually
+ * @param $key
+ * @param $val
+ */
+function rthd_set_redux_setting( $key, $val ){
+	global $rt_hd_redux_framework_Helpdesk_Config;
+	$rt_hd_redux_framework_Helpdesk_Config->ReduxFramework->set( $key, $val );
+	$GLOBALS[ Redux_Framework_Helpdesk_Config::$hd_opt ] = get_option( Redux_Framework_Helpdesk_Config::$hd_opt, array() );
+}
+
 function rthd_get_redux_post_settings( $post ) {
 	// NOTE : Make modifications for what value to return.
 	if ( ! isset( $GLOBALS['redux_helpdesk_settings'] ) ) {
