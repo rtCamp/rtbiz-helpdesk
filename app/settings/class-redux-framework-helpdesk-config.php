@@ -33,6 +33,17 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			}
 			// hook priority 25 because rtBiz email model is on after_theme 20 and we can not get 'rt_get_all_system_emails' before that because of acl needs p2p
 			add_action( 'p2p_init', array( $this, 'init_settings' ), 30 );
+
+			add_filter( 'rtbiz_offering_setting', array( $this, 'rthd_offering_setting' ) );
+
+		}
+
+		function rthd_offering_setting( $setting ){
+			$redux = rthd_get_redux_settings();
+			if ( ! empty( $redux['offering_plugin'] ) ) {
+				$setting = $redux['offering_plugin'];
+			}
+			return $setting;
 		}
 
 		public function init_settings() {
@@ -159,6 +170,27 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			// ACTUAL DECLARATION OF SECTIONS
 			$general_fields = array(
 				array(
+					'id'       => 'rthd_support_page',
+					'type'     => 'select',
+					'data'     => 'pages',
+					'title'    => __( 'Support page' ),
+					'desc'     => __( 'Add <strong>[rt_hd_support_form]</strong> shortcode to add support form to a page and select this page in the drop down. This page will then be used to handle new support requests from front-end.' ),
+					'subtitle' => __( 'Select Page for Product Support' ),
+				),
+				array(
+					'id'       => 'offering_plugin',
+					'title'    => __( 'Offering Sync Option' ),
+					'subtitle' => __( 'Select the plugin you want to use for offering sync.' ),
+					'desc'     => __( 'The option you choose here will define which existing products needs to be taken from either WooCommerce or Easy Digital Downloads and synchronize them with the terms of this special attribute taxonomy Offerings. So that rtBiz / any other plugin can assign these products to any custom post types that are registered with this taxonomy.' ),
+					'type'     => 'checkbox',
+					'options'  => array(
+						//						'none'         => __( 'None' ),
+						'woocommerce' => __( 'WooCommerce' ),
+						'edd' => __( 'Easy Digital Download' ),
+					),
+					'default'  => 'none',
+				),
+				array(
 					'id'       => 'rthd_default_user',
 					'type'     => 'select',
 					'options'  => $users_options,
@@ -166,14 +198,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					'title'    => __( 'Default Assignee' ),
 					'desc'     => $offerings_page_link,
 					'subtitle' => __( 'Select user for HelpDesk ticket Assignee' ),
-				),
-				array(
-					'id'       => 'rthd_support_page',
-					'type'     => 'select',
-					'data'     => 'pages',
-					'title'    => __( 'Support page' ),
-					'desc'     => __( 'Add <strong>[rt_hd_support_form]</strong> shortcode to add support form to a page and select this page in the drop down. This page will then be used to handle new support requests from front-end.' ),
-					'subtitle' => __( 'Select Page for Product Support' ),
 				),
 				array(
 					'id'       => 'rthd_enable_ticket_unique_hash',
