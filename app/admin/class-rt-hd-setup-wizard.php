@@ -48,9 +48,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			if ( ! empty( $_REQUEST['finish-wizard'] ) ){
 				update_option( 'rtbiz_helpdesk_setup_wizard_option', 'true' );
 			}
-			if ( ! empty( $_REQUEST['page'] ) && $_REQUEST['page'] == 'rthd-setup-wizard' ){
-				add_action( 'admin_notices', 'rthd_admin_notice_dependency_installed' );
-			}
+			add_action( 'admin_notices', 'rthd_admin_notice_dependency_installed' );
 		}
 
 		/**
@@ -322,7 +320,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 					}
 					echo '<p class="description"> Looks like you have '.$active_plugins. ' Active. Helpdesk has selected it for you, You can uncheck that if you want to.</p>';
 				} else{
-					echo '<p class="description"> Looks like none of the following plugins is installed right now. Anyways you can select the plugin you wish to install in future. Helpdesk will automatically sync products when that happens.</p>';
+					echo '<p class="description"> Looks like none of the following plugins are installed right now. Anyways you can select the plugin you wish to install in future. Helpdesk will automatically sync products when that happens.</p>';
 				}
 				?>
 				<div class="rthd-setup-wizard-row">

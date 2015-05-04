@@ -362,7 +362,7 @@ li.load-more-spinner-li {
 }
 
 #rthd-status-list, #rthd-assignee-list, #edit-private {
-	width: auto;
+	width: 100%;
 }
 
 #rthd-change-status{
