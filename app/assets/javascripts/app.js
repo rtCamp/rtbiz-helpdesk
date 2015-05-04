@@ -741,12 +741,19 @@ function sendFollowup( force ) {
 		}
 	}
 
-	jQuery('body' ).click(function ( e ) {
-		if(jQuery('.rthd-add-people-box' ).is(':visible')){
-			jQuery('.rthd-add-people-box' ).hide();
-		}
-	});
 
+	jQuery(document).mouseup(function (e){
+        var container = $(".rthd-add-people-box");
+
+        if ( ! container.is(e.target) // if the target of the click isn't the container...
+            && container.has(e.target).length === 0) // ... nor a descendant of the container
+        {
+            if(jQuery('.rthd-add-people-box' ).is(':visible')){
+                //console.log('hiding');
+                jQuery('.rthd-add-people-box' ).hide();
+            }
+        }
+    });
 
 } );
 

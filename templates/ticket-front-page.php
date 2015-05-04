@@ -134,7 +134,7 @@ $user_edit_content = current_user_can( $cap );
 				<?php } ?>
 
           <div class="rthd-add-people-button">
-<!--            <a href="#" id="rthd-add-contact" title="Add people to this ticket"><span class="dashicons dashicons-plus-alt rthd-add-contact-icon"></span></a>-->
+            <a href="#" id="rthd-add-contact" title="Add people to this ticket"><span class="dashicons dashicons-plus-alt rthd-add-contact-icon"></span></a>
             <div class="rthd-add-people-box">
                 <input type="email" placeholder="Enter email to add people" id="rthd-subscribe-email">
                 <button type="button" class='rthd-subscribe-email-submit button btn'>Add</button>
