@@ -169,7 +169,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				$mailbox_options[ $email ] = $email;
 			}
 			$acl_page_link = '<a href="' . admin_url( 'admin.php?page=' . Rt_Biz::$access_control_slug ) . '">Access Control</a> page.';
-			$offerings_page_link = ' ' . __( 'To select dedicated assignee for an offering, visit the ' ) .'<a href="' . admin_url( 'edit-tags.php?taxonomy=' . Rt_Offerings::$offering_slug . '&post_type=' . Rt_HD_Module::$post_type ) . '">offerings page</a>.';
+			$offerings_page_link = '<a href="' . admin_url( 'edit-tags.php?taxonomy=' . Rt_Offerings::$offering_slug . '&post_type=' . Rt_HD_Module::$post_type ) . '">offerings</a>';
 			// ACTUAL DECLARATION OF SECTIONS
 			$general_fields = array(
 				array(
@@ -183,8 +183,8 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				array(
 					'id'       => 'offering_plugin',
 					'title'    => __( 'Connected Store' ),
-					'subtitle' => __( 'Select the plugin you want to use for offering sync.' ),
-					'desc'     => __( 'Selected plugins automatically sync current as well as future product.' ),
+					'subtitle' => __( 'Select the plugin you want to connect Helpdesk with ' ),
+					'desc'     => __( 'All the existing and future products/offerings will be imported for the selected plugin. You can also create custom products from ' ) . $offerings_page_link . __( ' section.' ),
 					'type'     => 'checkbox',
 					'options'  => array(
 						'woocommerce' => __( 'WooCommerce' ),
@@ -198,7 +198,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					'options'  => $users_options,
 					'default'  => $default_assignee,
 					'title'    => __( 'Default Assignee' ),
-					'desc'     => $offerings_page_link,
+					'desc'     => __( 'To select dedicated assignee for an offering, visit the ' ) . $offerings_page_link . __( ' section.' ),
 					'subtitle' => __( 'Select user for HelpDesk ticket Assignee' ),
 				),
 				array(
