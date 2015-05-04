@@ -453,8 +453,6 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$uploaded = array();
 			}
 
-
-			update_post_meta( $post_id, '_rtbiz_hd_email', $senderEmail );
 			update_post_meta( $post_id, '_rtbiz_hd_email', $senderEmail );
 
 			global $transaction_id;
@@ -628,38 +626,33 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			global $rt_hd_contacts;
 			$postterms = array();
 			foreach ( $allemail as $email ) {
-				$term = rt_biz_get_contact_by_email( $email['address'] );
-				if ( ! empty( $term ) ) {
-					foreach ( $term as $tm ) {
-						$postterms[] = $tm->ID;
+				$contacts = rt_biz_get_contact_by_email( $email );
+				if ( ! empty( $contacts ) ) {
+					foreach( $contacts as $contact ){
+						$postterms[] = $contact->ID;
 					}
-				} else {
-					$term        = $rt_hd_contacts->insert_new_contact( $email['address'], ( isset( $email['name'] ) ) ? $email['name'] : $email['address'] );
-					$postterms[] = $term->ID;
+				}else{
+					$contact        = $rt_hd_contacts->insert_new_contact( $email['address'], ( isset( $email['name'] ) ) ? $email['name'] : $email['address'] );
+					$postterms[] = $contact->ID;
 				}
-
-				$postterms = array_unique( $postterms );
-
-				if ( ! empty( $postterms ) ) {
-
-					$post_type = get_post_type( $post_id );
-					foreach ( $postterms as $term ) {
-						rt_biz_connect_post_to_contact( $post_type, $post_id, $term );
-					}
-
-					// Update Index
-					$ticketModel = new Rt_HD_Ticket_Model();
-					$where       = array( 'post_id' => $post_id );
-					$attr_name   = rt_biz_get_contact_post_type();
-					$data        = array(
-						$attr_name        => implode( ',', $postterms ),
-						'date_update'     => current_time( 'mysql' ),
-						'date_update_gmt' => gmdate( 'Y-m-d H:i:s' ),
-						'user_updated_by' => get_current_user_id(),
-					);
-					$ticketModel->update_ticket( $data, $where );
-					// System Notification -- Contact added
+			}
+			if ( ! empty( $postterms ) ) {
+				$post_type = get_post_type( $post_id );
+				foreach ( $postterms as $term ) {
+					rt_biz_connect_post_to_contact( $post_type, $post_id, $term );
 				}
+				// Update Index
+				$ticketModel = new Rt_HD_Ticket_Model();
+				$where       = array( 'post_id' => $post_id );
+				$attr_name   = rt_biz_get_contact_post_type();
+				$data        = array(
+					$attr_name        => implode( ',', $postterms ),
+					'date_update'     => current_time( 'mysql' ),
+					'date_update_gmt' => gmdate( 'Y-m-d H:i:s' ),
+					'user_updated_by' => get_current_user_id(),
+				);
+				$ticketModel->update_ticket( $data, $where );
+				// System Notification -- Contact added
 			}
 		}
 

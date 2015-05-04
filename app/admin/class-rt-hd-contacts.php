@@ -145,7 +145,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 				if ( trim( $title ) == '' ) {
 					$title = $email;
 				}
-				$contact_id = rt_biz_add_contact( $title );
+				$contact_id = rt_biz_add_contact( $title, '',  $email );
 				$contact    = get_post( $contact_id );
 				$userid = $this->get_user_from_email( $email );
 
@@ -158,9 +158,10 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 				if ( isset( $transaction_id ) && $transaction_id > 0 ) {
 					add_post_meta( $contact->ID, '_transaction_id', $transaction_id, true );
 				}
+			}else{
+
 			}
 			return $contact;
-
 		}
 
 		/**
