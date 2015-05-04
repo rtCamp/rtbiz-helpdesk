@@ -158,8 +158,6 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 				if ( isset( $transaction_id ) && $transaction_id > 0 ) {
 					add_post_meta( $contact->ID, '_transaction_id', $transaction_id, true );
 				}
-			}else{
-
 			}
 			return $contact;
 		}

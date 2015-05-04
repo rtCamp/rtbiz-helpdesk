@@ -636,6 +636,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					$postterms[] = $contact->ID;
 				}
 			}
+			$postterms = array_unique( $postterms );
 			if ( ! empty( $postterms ) ) {
 				$post_type = get_post_type( $post_id );
 				foreach ( $postterms as $term ) {
