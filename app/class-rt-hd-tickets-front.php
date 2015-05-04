@@ -41,7 +41,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 
 			add_filter( 'template_include', array( $this, 'template_include' ), 1, 1 );
 			add_filter( 'wp_title', array( $this, 'change_title' ), 9999, 1 );
-			
+
 			add_action( 'rthd_ticket_front_page_after_header', array( $this, 'set_rthd_ticket_post_data' ) );
 		}
 
@@ -156,7 +156,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 						$rthd_messages[] = array( 'type' => 'error', 'message' => $message, 'displayed' => 'no' );
 						global $rthd_front_page_title;
 						$rthd_front_page_title = __( 'Helpdesk' );
-						return rthd_locate_template( 'ticket-error-page.php' );
+						return rthd_locate_template( 'ticket-404-page.php' );
 					}
 
 				}else if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' ) ) ) {
@@ -178,7 +178,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 						$rthd_messages[] = array( 'type' => 'error', 'message' => $message, 'displayed' => 'no' );
 						global $rthd_front_page_title;
 						$rthd_front_page_title = __( 'Helpdesk' );
-						return rthd_locate_template( 'ticket-error-page.php' );
+						return rthd_locate_template( 'ticket-404-page.php' );
 					}
 
 				}
@@ -225,13 +225,13 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 			$rtbiz_helpdesk_template = true;
 			return rthd_locate_template( 'ticket-front-page.php' );
 		}
-		
+
 		/**
 		 * Set rthd ticket data.
 		 */
 		function set_rthd_ticket_post_data() {
 			global $post;
-		
+
 			if ( rthd_is_unique_hash_enabled() && ! empty( $_REQUEST['rthd_unique_id'] ) ) {
 				$args = array(
 						'meta_key'    => '_rtbiz_hd_unique_id',
@@ -239,7 +239,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 						'post_status' => 'any',
 						'post_type'   => Rt_HD_Module::$post_type,
 				);
-		
+
 				$ticketpost = get_posts( $args );
 				if ( ! empty( $ticketpost ) ) {
 					$ticket = $ticketpost[0];
