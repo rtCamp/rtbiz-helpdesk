@@ -182,7 +182,7 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 				<h2><?php _e( 'Your Tickets', RT_HD_TEXT_DOMAIN ); ?></h2>
 			<?php
 			}
-			printf( _n( 'One Ticket Found.', '%d Tickets Found.', count( $tickets ), 'my-RT_HD_TEXT_DOMAIN-domain' ), count( $tickets ) );
+			printf( _n( 'One Ticket Found', '%d Tickets Found', count( $tickets ), 'my-RT_HD_TEXT_DOMAIN-domain' ), count( $tickets ) );
 			if ( 'yes' == $arg_shortcode['show_support_form_link'] ) {
 				global $redux_helpdesk_settings;
 				if ( isset( $redux_helpdesk_settings['rthd_support_page'] ) && ! empty( $redux_helpdesk_settings['rthd_support_page'] ) ) {
@@ -192,15 +192,17 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 				<?php
 				}
 			}?>
-			<table class="shop_table my_account_orders">
-				<tr>
-					<th>Ticket ID</th>
-					<th>Title</th>
-					<th>Last Updated</th>
-					<th>Status</th>
-					<th>Links</th>
-				</tr>
-				<?php if ( ! empty( $tickets ) ) {
+			<?php if ( ! empty( $tickets ) ) {
+				?>
+				<table class="shop_table my_account_orders">
+					<tr>
+						<th>Ticket ID</th>
+						<th>Title</th>
+						<th>Last Updated</th>
+						<th>Status</th>
+						<th>Links</th>
+					</tr>
+					<?php
 					foreach ( $tickets as $ticket ) {
 						$date = new DateTime( $ticket->post_modified );
 						?>
@@ -210,14 +212,14 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 							<td> <?php echo esc_attr( human_time_diff( $date->format( 'U' ), current_time( 'timestamp' ) ) ) . esc_attr( __( ' ago' ) ) ?> </td>
 							<td>
 								<?php
-								$style = 'padding: 5px; border: 1px solid black; border-radius: 5px;';
-								$flag = false;
+								$style         = 'padding: 5px; border: 1px solid black; border-radius: 5px;';
+								$flag          = false;
 								$post_statuses = $rt_hd_module->get_custom_statuses();
 								foreach ( $post_statuses as $status ) {
-									if ( $status['slug'] == $ticket->post_status ) {
-										$ticket->post_status = $status['name'];
-										if ( ! empty( $status['style'] ) ) {
-											$style = $status['style'];
+									if ( $status[ 'slug' ] == $ticket->post_status ) {
+										$ticket->post_status = $status[ 'name' ];
+										if ( ! empty( $status[ 'style' ] ) ) {
+											$style = $status[ 'style' ];
 										}
 										$flag = true;
 										break;
@@ -226,14 +228,14 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 								if ( ! $flag ) {
 									$ticket->post_status = ucfirst( $ticket->post_status );
 								}
-								if( ! empty( $ticket->post_status ) ) {
+								if ( ! empty( $ticket->post_status ) ) {
 									printf( '<mark style="%s" class="%s tips" data-tip="%s">%s</mark>', $style, $ticket->post_status, $ticket->post_status, $ticket->post_status );
 								}
 								?>
 							</td>
 							<td>
 
-								<?php if ( current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' ) ) || $ticket->post_author == $current_user->ID ){ ?>
+								<?php if ( current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' ) ) || $ticket->post_author == $current_user->ID ) { ?>
 									<a class="button support" target="_blank"
 									   href="<?php echo get_edit_post_link( $ticket->ID ); ?>"><?php _e( 'Edit' ); ?></a> |
 								<?php } ?>
@@ -242,15 +244,10 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 							</td>
 						</tr>
 					<?php
-					}
-				} else {
-					?>
-					<tr>
-						<td colspan="5">No Tickets Found !</td>
-					</tr>
-				<?php } ?>
-			</table>
-		<?php
+					} ?>
+				</table>
+			<?php
+			}
 			$html_content = ob_get_clean();
 			return $html_content;
 		}
