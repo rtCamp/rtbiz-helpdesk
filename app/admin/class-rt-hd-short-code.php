@@ -182,6 +182,7 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 				<h2><?php _e( 'Your Tickets', RT_HD_TEXT_DOMAIN ); ?></h2>
 			<?php
 			}
+			echo '<div class="rthd-ticket-list">';
 			printf( _n( 'One Ticket Found', '%d Tickets Found', count( $tickets ), 'my-RT_HD_TEXT_DOMAIN-domain' ), count( $tickets ) );
 			if ( 'yes' == $arg_shortcode['show_support_form_link'] ) {
 				global $redux_helpdesk_settings;
@@ -191,8 +192,9 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 					<a href="<?php echo "/{$page->post_name}"; ?>"><?php _e( '(Get Support)', RT_HD_TEXT_DOMAIN ) ?></a>
 				<?php
 				}
-			}?>
-			<?php if ( ! empty( $tickets ) ) {
+			}
+			echo '</div>';
+			if ( ! empty( $tickets ) ) {
 				?>
 				<table class="shop_table my_account_orders">
 					<tr>

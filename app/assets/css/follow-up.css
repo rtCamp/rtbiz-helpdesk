@@ -585,6 +585,10 @@ ul#attachment-files {
 #rthd-offering-list{
 	width: 100%;
 }
+
+.rthd-ticket-list{
+	margin: 10px 0;
+}
 /*#rthd-subscribe-email{*/
 	/*width: 250px;*/
 	/*float: right;*/
