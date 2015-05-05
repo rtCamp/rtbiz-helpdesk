@@ -58,7 +58,7 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 
 		        /*$contact_groups_label = apply_filters( 'rtbiz_contact_groups_menu_item_label', __( 'Contact Groups' ) );
 		        add_submenu_page( 'edit.php?post_type=' . esc_html( Rt_HD_Module::$post_type ), $contact_groups_label, '--- ' . $contact_groups_label, rt_biz_get_access_role_cap( RT_BIZ_TEXT_DOMAIN, 'editor' ), 'edit-tags.php?taxonomy=' . Rt_Contact::$user_category_taxonomy . '&post_type=' . Rt_HD_Module::$post_type );*/
-		        add_submenu_page( 'edit.php?post_type=' . esc_html( Rt_HD_Module::$post_type ), __( 'Teams' ), __( 'Teams' ), rt_biz_get_access_role_cap( RT_BIZ_TEXT_DOMAIN, 'editor' ), 'edit-tags.php?taxonomy=' . RT_Departments::$slug . '&post_type=' . Rt_HD_Module::$post_type );
+		        /*add_submenu_page( 'edit.php?post_type=' . esc_html( Rt_HD_Module::$post_type ), __( 'Teams' ), __( 'Teams' ), rt_biz_get_access_role_cap( RT_BIZ_TEXT_DOMAIN, 'editor' ), 'edit-tags.php?taxonomy=' . RT_Departments::$slug . '&post_type=' . Rt_HD_Module::$post_type );*/
 	        }
         }
 

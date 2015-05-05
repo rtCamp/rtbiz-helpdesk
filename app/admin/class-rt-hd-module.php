@@ -190,7 +190,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
                 'post-new.php?post_type=' . self::$post_type,
 				'edit.php?post_type=' . rt_biz_get_contact_post_type(),
                 'edit-tags.php?taxonomy=' . Rt_Offerings::$offering_slug . '&amp;post_type=' . self::$post_type,
-				'edit-tags.php?taxonomy=' . RT_Departments::$slug . '&post_type=' . self::$post_type,
+				'edit-tags.php?taxonomy=' . RT_Departments::$slug . '&amp;post_type=' . self::$post_type,
                 $rt_hd_attributes->attributes_page_slug,
                 Redux_Framework_Helpdesk_Config::$page_slug,
 				'rthd-setup-wizard',
