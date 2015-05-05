@@ -283,7 +283,6 @@ $user_edit_content = current_user_can( $cap );
 
 
 	     </div>
-	     </div>
 
 		     <?php
        // Products
