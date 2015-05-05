@@ -64,7 +64,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 //			}
 		}
 
-		function set_assignee_ui(){
+		function set_assignee_ui() {
 			?>
 			<div id="rthd-setup-set-assignee-ui">
 
@@ -72,34 +72,38 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			<?php
 		}
 
-
-		function mail_box_ui(){ ?>
+		function mail_box_ui() {
+			?>
 			<div class="rthd-setup-wizard-controls">
-							<h3 class="rthd-setup-wizard-title"><?php _e( 'Incoming MailBox Setup', RT_BIZ_TEXT_DOMAIN ); ?></h3>
-							<p class="description">Connect the mailbox from which you would like to auto-create ticket from incoming e-mails.  Click on next if you want to do that later.</p>
-							<?php rthd_mailbox_setup_view(); ?>
-						</div>
-						<div class="rthd-mailbox-setup-process rthd-wizard-process" style="display: none;">
-							<span>Loading outbound emails</span>
-							<img src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
-						</div> <?php
+				<h3 class="rthd-setup-wizard-title"><?php _e( 'Incoming MailBox Setup', RT_BIZ_TEXT_DOMAIN ); ?></h3>
+				<p class="description">Connect the mailbox from which you would like to auto-create ticket from incoming e-mails.  Click on next if you want to do that later.</p>
+				<?php rthd_mailbox_setup_view(); ?>
+			</div>
+			<div class="rthd-mailbox-setup-process rthd-wizard-process" style="display: none;">
+				<span>Loading outbound emails</span>
+				<img src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
+			</div> <?php
 		}
 
-		function set_role_ui(){ ?>
+		function set_role_ui() {
+			?>
 			<div class="rthd-setup-wizard-controls rthd-ACL-change">
 				Yay!! Your Helpdesk is ready.  Click on finish to get started.
 			</div>
 			<?php
 		}
 
-
-		function generate_wizard($wizard){
+		// Generate Markup
+		function generate_wizard( $wizard ) {
 			if ( ! empty( $wizard ) ) {
-				?> <div id="wizard"> <?php
-				foreach ( $wizard as $key => $val){ ?>
-					<h3><?php _e( $key ); ?></h3>
-					<fieldset> <?php call_user_func($val); ?></fieldset> <?php
-				} ?>
+				?>
+				<div id="wizard">
+
+					<?php foreach ( $wizard as $key => $val ) { ?>
+						<h3 class="rtb-step-title"><?php _e( $key ); ?></h3>
+						<fieldset> <?php call_user_func( $val ); ?></fieldset>
+					<?php } ?>
+
 				</div> <?php
 			}
 		}
@@ -133,13 +137,13 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				<?php
 				// title and function to call for content
 				$wizard = array(
-					'Support Page'=> array( $this,'support_page_ui' ),
-					'Connect Store' => array( $this,'connect_store_ui' ),
-					'Setup Your Team' => array( $this,'setup_team' ),
-					'Set Assignee' => array( $this,'set_assignee_ui' ),
-					'Mailbox Setup' => array( $this,'mail_box_ui' ),
-					'Set Roles' => array( $this,'set_role_ui' ),
-					);
+					'Support Page' => array( $this, 'support_page_ui' ),
+					'Connect Store' => array( $this, 'connect_store_ui' ),
+					'Setup Your Team' => array( $this, 'setup_team' ),
+					'Set Assignee' => array( $this, 'set_assignee_ui' ),
+					'Mailbox Setup' => array( $this, 'mail_box_ui' ),
+					'Set Roles' => array( $this, 'set_role_ui' ),
+				);
 				$this->generate_wizard( $wizard );
 				?>
 			</div>
