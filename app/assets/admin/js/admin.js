@@ -35,7 +35,6 @@ jQuery( document ).ready( function () {
 			rthdAdmin.initSubscriberSearch();
 			rthdAdmin.initAddNewFollowUp();
 			rthdAdmin.initEditFollowUp();
-			//rthdAdmin.initLoadMore();
 			rthdAdmin.initLoadAll();
 			rthdAdmin.initEditContent();
 			rthdAdmin.initAutoResponseSettings();
