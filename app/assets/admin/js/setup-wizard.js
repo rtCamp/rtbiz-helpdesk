@@ -26,7 +26,7 @@ jQuery( document ).ready( function ( $ ) {
 		},
 		setup_wizard: function () {
 			wizard = jQuery( "#wizard" ).steps( {
-				headerTag: "h1",
+				headerTag: "h3",
 				bodyTag: "fieldset",
 				transitionEffect: "slideLeft",
 				forceMoveForward: true,
