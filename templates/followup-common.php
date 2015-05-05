@@ -59,7 +59,7 @@ if ( ! empty( $post->post_content ) ) {
 			                   <a href="<?php echo $href; ?>" class="show-original-email" target="_blank"> Show original email</a> |
 		                   <?php }
 	                   }?>
-	                    <?php echo '<a class="followup-hash-url" id="ticket_description'.'" href="#ticket_description" >'. esc_attr( human_time_diff( strtotime( $post->post_date), current_time( 'timestamp' ) ) ) . ' ago</a>';?>
+	                    <?php echo '<a class="followup-hash-url" id="ticket_description'.'" href="#ticket_description" >'. __('Created ') .esc_attr( human_time_diff( strtotime( $post->post_date), current_time( 'timestamp' ) ) ) . ' ago</a>';?>
                     </time>
             </div>
 				<div class="rthd-comment-content" data-content="<?php echo ( isset( $post->ID ) ? esc_attr( $post->post_content ): '' );?>">

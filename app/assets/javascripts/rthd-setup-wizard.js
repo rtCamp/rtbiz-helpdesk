@@ -32,7 +32,7 @@ jQuery(document).ready(function ($) {
                 forceMoveForward: true,
                 //enableAllSteps: true,
                 onStepChanging: function (event, currentIndex, newIndex) {
-                    alert("moving to "+newIndex+" from "+ currentIndex);
+                    //alert("moving to "+newIndex+" from "+ currentIndex);
                     if (skip_step) {
                         skip_step = false;
                         return true;

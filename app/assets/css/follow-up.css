@@ -509,9 +509,9 @@ h2.rt-hd-ticket-front-title{
 }
 
 .rthd-add-people-button{
-	position: relative;
+	position: absolute;
 	display: inline-block;
-	float: right;
+	/*float: right;*/
 }
 
 /*.rthd-add-people-button:hover .rthd-add-people-box {*/

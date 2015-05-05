@@ -38,113 +38,7 @@ $user_edit_content = current_user_can( $cap );
 	<div id="rthd-ticket">
 			<div>
 				<h2 class="rt-hd-ticket-front-title"><?php echo esc_attr( ( isset( $post->ID ) ) ? '[#' . $post_id . '] ' . $post->post_title : '' ); ?></h2>
-				<div class="rthd-ticket-user-activity">
-					<?php
-					$create_by_time =  esc_attr( human_time_diff( strtotime( $createdate ), current_time( 'timestamp' ) ) ) . ' ago';
-					$created_by_user_id = get_post_meta( $post->ID, '_rtbiz_hd_created_by', true );
-					$created_by = get_user_by( 'id', get_post_meta( $post->ID, '_rtbiz_hd_created_by', true ) );
-					if ( ! empty( $created_by ) ) {
-							echo '<label><strong>Created '.$create_by_time.' by </strong></label> <a class="rthd-ticket-created-by" title="'.$created_by->display_name.'" href="'.( current_user_can( $cap ) ? rthd_biz_user_profile_link( $created_by->user_email ) :'#').'">' . get_avatar( $created_by->user_email, '30' ).'</a>';
-					}
 
-					global $wpdb, $rt_hd_email_notification;
-
-					// get all followup author ( aka followup email list ) to display their avatar
-					$emails = $wpdb->get_results('SELECT distinct(comment_author_email) from '.$wpdb->comments.' where comment_post_ID= '.$post->ID.' AND comment_type='.Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC );
-					$emails = wp_list_pluck($emails,'comment_author_email' );
-
-					// get last comment for getting date and time of last reply by
-					$comment = get_comments( array( 'post_id' => $post->ID, 'number' => 1 ) );
-
-					// get connected contacts email address
-					$other_contacts = $rt_hd_email_notification->get_contacts( $post->ID );
-					$subscriber  = array();
-
-					// show subscriber to only authorized users
-					if ( current_user_can( $cap ) ){
-
-		                $subscriber = $rt_hd_email_notification->get_subscriber( $post->ID );
-			            $subscriber = wp_list_pluck( $subscriber , 'email' );
-			            // remove subscriber from followup email list
-			            $subscriber = array_diff( $subscriber , $emails );
-
-						// remove ticket creator from subscriber list if present ( in case of staff member created ticket )
-						$subscriber = array_diff( $subscriber, array( $created_by->user_email ) );
-
-					}
-
-					$other_contacts = wp_list_pluck( $other_contacts, 'email' );
-
-					// remove user who have added followup and are also in connected contacts list
-	                $other_contacts = array_diff( $other_contacts, $emails );
-
-					// remove user ticket creator
-					$other_contacts = array_diff( $other_contacts, array( $created_by->user_email ) );
-
-					if ( ! empty( $comment ) ) {
-						$comment = $comment[ 0 ];
-						// remove last reply from all comments
-						if ( ! empty( $emails ) ){
-							$emails = array_diff( $emails, array( $comment->comment_author_email ) );
-						}
-					}
-
-					if ( ! empty( $emails ) || ! empty( $subscriber ) || ! empty( $comment ) || ! empty( $other_contacts )){
-						echo '<label class="rthd-participants">&#124;<strong> Participants </strong></label>';
-					} else {
-						echo '<label class="rthd-participants" style="display: none">&#124;<strong> Participants </strong></label>';
-					}
-					echo "<div class='rthd-contact-avatar-no-reply-div'>";
-					// contact group
-		            foreach( $other_contacts as $email ){
-		              $user = get_user_by('email',$email);
-		              $display_name = $email;
-		              if ( ! empty( $user ) ){
-		                $display_name = $user->display_name;
-		              }
-		              echo '<a title= "'.$display_name.'" class="rthd-last-reply-by rthd-contact-avatar-no-reply"  href="'.(current_user_can( $cap ) ? rthd_biz_user_profile_link( $email ) :'#').'">'.get_avatar(  $email , '30' ).' </a>';
-		            }
-		            echo "</div>";
-
-		            if ( current_user_can( $cap ) ){
-		              echo '<div class="rthd-subscriber-avatar-no-reply-div">';
-			            // Subscriber
-			            foreach( $subscriber as $email ){
-		                $user = get_user_by( 'email',$email );
-		                $display_name = $email;
-		                if ( ! empty( $user ) ){
-		                  $display_name = $user->display_name;
-		                }
-		                echo '<a title= "'.$display_name.'" class="rthd-last-reply-by rthd-contact-avatar-no-reply"  href="'.(current_user_can( $cap ) ? rthd_biz_user_profile_link( $email ) :'#').'">'.get_avatar(  $email , '30' ).' </a>';
-		              }
-		              echo "</div>";
-		            }
-					// Other comments authors
-					if ( ! empty( $emails ) ) {
-						foreach ( $emails as $email ) {
-							$user         = get_user_by( 'email', $email );
-							$display_name = $email;
-							if ( ! empty( $user ) ) {
-								$display_name = $user->display_name;
-							}
-							echo '<a title= "' . $display_name . '" class="rthd-last-reply-by"  href="' . ( current_user_can( $cap ) ? rthd_biz_user_profile_link( $email ) : '#' ) . '">' . get_avatar( $email, '30' ) . ' </a>';
-						}
-					}
-					// Last reply author
-					if ( ! empty( $comment ) ) {
-						echo '<a class="rthd-last-reply-by" title="last reply by '.$comment->comment_author.' '.esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ).' ago " href="'.(current_user_can( $cap ) ? rthd_biz_user_profile_link( $comment->comment_author_email ) :'#').'">'.get_avatar(  $comment->comment_author_email , '30' ).' </a>' ?>
-				<?php } ?>
-
-          <div class="rthd-add-people-button">
-            <a href="#" id="rthd-add-contact" title="Add people to this ticket"><span class="dashicons dashicons-plus-alt rthd-add-contact-icon"></span></a>
-            <div class="rthd-add-people-box">
-                <input type="email" placeholder="Enter email to add people" id="rthd-subscribe-email">
-                <button type="button" class='rthd-subscribe-email-submit button btn'>Add</button>
-                <span style="display: none;" class="rthd-subscribe-validation" ></span>
-                <img id="rthd-subscribe-email-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
-            </div>
-          </div>
-				</div>
                 <div class="rthd-clearfix"></div>
 			</div>
 
@@ -230,7 +124,7 @@ $user_edit_content = current_user_can( $cap );
 				if ( current_user_can( $cap ) ) {
 					$rtcamp_users = Rt_HD_Utils::get_hd_rtcamp_user();
 			?>
-				<div class="rt-hd-ticket-sub-row">
+		<div class="rt-hd-ticket-sub-row">
           <div class="rthd-ticket-sidebar-sub-title">
 	          <span>
 					<?php _e( 'Assignee', RT_HD_TEXT_DOMAIN ); ?>
@@ -265,6 +159,133 @@ $user_edit_content = current_user_can( $cap );
 				</div>
 			<?php
 				}
+			// Participants
+					$create_by_time =  esc_attr( human_time_diff( strtotime( $createdate ), current_time( 'timestamp' ) ) ) . ' ago';
+					$created_by_user_id = get_post_meta( $post->ID, '_rtbiz_hd_created_by', true );
+					$created_by = get_user_by( 'id', get_post_meta( $post->ID, '_rtbiz_hd_created_by', true ) );
+
+					global $wpdb, $rt_hd_email_notification;
+
+					// get all followup author ( aka followup email list ) to display their avatar
+					$emails = $wpdb->get_results('SELECT distinct(comment_author_email) from '.$wpdb->comments.' where comment_post_ID= '.$post->ID.' AND comment_type='.Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC );
+					$emails = wp_list_pluck($emails,'comment_author_email' );
+
+					// get last comment for getting date and time of last reply by
+					$comment = get_comments( array( 'post_id' => $post->ID, 'number' => 1 ) );
+
+					// get connected contacts email address
+					$other_contacts = $rt_hd_email_notification->get_contacts( $post->ID );
+					$subscriber  = array();
+
+					// show subscriber to only authorized users
+					if ( current_user_can( $cap ) ){
+
+						$subscriber = $rt_hd_email_notification->get_subscriber( $post->ID );
+						$subscriber = wp_list_pluck( $subscriber , 'email' );
+						// remove subscriber from followup email list
+						$subscriber = array_diff( $subscriber , $emails );
+
+						// remove ticket creator from subscriber list if present ( in case of staff member created ticket )
+						$subscriber = array_diff( $subscriber, array( $created_by->user_email ) );
+
+					}
+
+					$other_contacts = wp_list_pluck( $other_contacts, 'email' );
+
+					// remove user who have added followup and are also in connected contacts list
+	                $other_contacts = array_diff( $other_contacts, $emails );
+
+					// remove user ticket creator
+					$other_contacts = array_diff( $other_contacts, array( $created_by->user_email ) );
+
+					if ( ! empty( $comment ) ) {
+						$comment = $comment[ 0 ];
+						// remove last reply from all comments
+						if ( ! empty( $emails ) ){
+							$emails = array_diff( $emails, array( $comment->comment_author_email ) );
+						}
+					}
+				?>
+
+
+	     <div class="rt-hd-ticket-sub-row" style="">
+		     <div class="rthd-ticket-sidebar-sub-title">
+	          <span>
+					<?php
+//						if ( ! empty( $emails ) || ! empty( $subscriber ) || ! empty( $comment ) || ! empty( $other_contacts )){
+							echo '<span class="rthd-participants">Participants</span>';
+//						} else {
+//							echo '<span class="rthd-participants" style="display: none">Participants</span>';
+//						}
+						?>
+	          </span>
+		     </div>
+		     <div class="rthd-ticket-sidebar-sub-result rthd-ticket-user-activity">
+				<?php
+			     echo "<div class='rthd-contact-avatar-no-reply-div'>";
+				     // contact group
+				     foreach( $other_contacts as $email ){
+
+					     $user = get_user_by('email',$email);
+					     $display_name = $email;
+
+					     if ( ! empty( $user ) ){
+
+					       $display_name = $user->display_name;
+
+					     }
+
+					     echo '<a title= "'.$display_name.'" class="rthd-last-reply-by rthd-contact-avatar-no-reply"  href="'.(current_user_can( $cap ) ? rthd_biz_user_profile_link( $email ) :'#').'">'.get_avatar(  $email , '30' ).' </a>';
+
+				     }
+				     echo "</div>";
+
+			     if ( current_user_can( $cap ) ){
+			     echo '<div class="rthd-subscriber-avatar-no-reply-div">';
+				     // Subscriber
+				     foreach( $subscriber as $email ){
+				     $user = get_user_by( 'email',$email );
+				     $display_name = $email;
+				     if ( ! empty( $user ) ){
+				     $display_name = $user->display_name;
+				     }
+				     echo '<a title= "'.$display_name.'" class="rthd-last-reply-by rthd-contact-avatar-no-reply"  href="'.(current_user_can( $cap ) ? rthd_biz_user_profile_link( $email ) :'#').'">'.get_avatar(  $email , '30' ).' </a>';
+				     }
+				     echo "</div>";
+			     }
+			     // Other comments authors
+			     if ( ! empty( $emails ) ) {
+			     foreach ( $emails as $email ) {
+			     $user         = get_user_by( 'email', $email );
+			     $display_name = $email;
+			     if ( ! empty( $user ) ) {
+			     $display_name = $user->display_name;
+			     }
+			     echo '<a title= "' . $display_name . '" class="rthd-last-reply-by"  href="' . ( current_user_can( $cap ) ? rthd_biz_user_profile_link( $email ) : '#' ) . '">' . get_avatar( $email, '30' ) . ' </a>';
+			     }
+			     }
+			     // Last reply author
+			     if ( ! empty( $comment ) ) {
+			     echo '<a class="rthd-last-reply-by" title="last reply by '.$comment->comment_author.' '.esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ).' ago " href="'.(current_user_can( $cap ) ? rthd_biz_user_profile_link( $comment->comment_author_email ) :'#').'">'.get_avatar(  $comment->comment_author_email , '30' ).' </a>' ?>
+			     <?php } ?>
+
+			     <div class="rthd-add-people-button">
+				     <a href="#" id="rthd-add-contact" title="Add people to this ticket"><span class="dashicons dashicons-plus-alt rthd-add-contact-icon"></span></a>
+				     <div class="rthd-add-people-box">
+					     <input type="email" placeholder="Enter email to add people" id="rthd-subscribe-email">
+					     <button type="button" class='rthd-subscribe-email-submit button btn'>Add</button>
+					     <span style="display: none;" class="rthd-subscribe-validation" ></span>
+					     <img id="rthd-subscribe-email-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
+				     </div>
+			     </div>
+		     </div>
+
+
+
+	     </div>
+	     </div>
+
+		     <?php
        // Products
        global $rtbiz_offerings;
        $products = array();
