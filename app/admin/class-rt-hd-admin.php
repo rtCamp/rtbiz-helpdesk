@@ -108,25 +108,14 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 		function load_styles_scripts( $hook ) {
 			global $post, $pagenow, $wp_scripts, $rt_hd_setup_wizard;
 
-			if ( $rt_hd_setup_wizard->screen_id == $hook ) {
-				wp_enqueue_script( 'jquery-step', RT_HD_URL . 'app/assets/javascripts/jquery.steps.min.js', array( 'jquery' ), time(), true );
-				wp_enqueue_script( 'rthd-setup-wizard', RT_HD_URL . 'app/assets/javascripts/rthd-setup-wizard.js', array( 'jquery' ), time(), true );
-				wp_enqueue_style( 'jquery-step', RT_HD_URL . 'app/assets/css/jquery.steps.css', array(), time(), 'all' );
-				wp_enqueue_style( 'rthd-setup-wizard', RT_HD_URL . 'app/assets/css/rthd-setup-wizard.css', array(), time(), 'all' );
-				if ( ! wp_script_is( 'jquery-ui-autocomplete' ) ) {
-					wp_enqueue_script( 'jquery-ui-autocomplete', '', array(
-						'jquery-ui-widget',
-						'jquery-ui-position',
-					), '1.9.2' );
-				}
+			$rthd_post_type = '';
+
+			if ( isset( $_GET[ 'post' ] ) ) {
+				$rthd_post_type = get_post_type( $_GET[ 'post' ] );
+			} elseif ( isset( $_GET[ 'post_type' ] ) && ( $pagenow == 'post-new.php' || $pagenow == 'edit.php' ) ) {
+				$rthd_post_type = $_GET[ 'post_type' ];
 			}
 
-			$rthd_post_type = '';
-			if ( isset( $_GET[ 'post' ] ) ) {
-				$rthd_post_type = get_post_type( $_GET['post'] );
-			} elseif ( isset( $_GET[ 'post_type' ] ) && ( $pagenow == 'post-new.php' || $pagenow == 'edit.php' ) ) {
-				$rthd_post_type = $_GET['post_type'];
-			}
 			if ( in_array( $pagenow, array( 'edit.php', 'post.php', 'post-new.php' ) ) && $rthd_post_type == Rt_HD_Module::$post_type ) {
 
 				if ( isset( $post->post_type ) && $post->post_type == Rt_HD_Module::$post_type ) {
@@ -134,27 +123,18 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 					wp_enqueue_script( 'jquery-ui-timepicker-addon', RT_HD_URL . 'app/assets/javascripts/jquery-ui-timepicker-addon.js', array(
 						'jquery-ui-datepicker',
 						'jquery-ui-slider',
-					), RT_HD_VERSION, true );
+							), RT_HD_VERSION, true );
 
-					if ( ! wp_script_is( 'jquery-ui-datepicker' ) ) {
-						wp_enqueue_script( 'jquery-ui-datepicker' );
-					}
-
-					if ( ! wp_script_is( 'jquery-ui-autocomplete' ) ) {
-						wp_enqueue_script( 'jquery-ui-autocomplete', '', array(
-							'jquery-ui-widget',
-							'jquery-ui-position',
-						), '1.9.2' );
-					}
-
-					wp_enqueue_script( 'moment-js', RT_HD_URL . 'app/assets/javascripts/moment.js', array( 'jquery' ), RT_HD_VERSION, true );
+					wp_enqueue_script( 'jquery-ui-datepicker' );
+					wp_enqueue_script( 'jquery-ui-autocomplete', '', array(
+						'jquery-ui-widget',
+						'jquery-ui-position',
+							), '1.9.2' );
 				}
 
 				wp_enqueue_media();
-
 				wp_enqueue_style( 'rthd-admin-css', RT_HD_URL . 'app/assets/admin/css/admin.css', array(), RT_HD_VERSION );
 				wp_enqueue_script( 'rthd-admin-js', RT_HD_URL . 'app/assets/admin/js/admin-min.js', array( 'jquery' ), time(), true );
-
 			}
 
 			$this->localize_scripts();

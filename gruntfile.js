@@ -38,6 +38,7 @@ module.exports = function ( grunt ) {
 			},
 			backend: {
 				src: [
+					'app/assets/admin/js/vendors/moment.js',
 					'app/assets/admin/js/admin.js'
 				],
 				dest: 'app/assets/admin/js/admin-min.js'
