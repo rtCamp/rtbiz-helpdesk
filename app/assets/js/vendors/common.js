@@ -36,9 +36,11 @@ jQuery( document ).ready( function () {
 		},
 
 		initAddNewFollowUp : function(){
+
 			$ticket_unique_id = jQuery( '#ticket_unique_id' ).val();
 			var uploadedfiles= [];
 			var force_add_duplicate = false;
+			// pluploader init
 			if ( typeof plupload != 'undefined' ) {
 				var uploader = new plupload.Uploader( {
 					                                      // General settings
@@ -123,11 +125,13 @@ jQuery( document ).ready( function () {
 				uploader.init();
 			}
 
+			// on click of attachment remove tell plupoloader to remove attachment from it's object
 			jQuery(document).on('click','.followup-attach-remove', function( e ){
 				e.preventDefault();
 				uploader.removeFile(jQuery(this ).parent().attr("id"));
 			});
 
+			// validate followup settings
 			function followupValidate(){
 				jQuery( '#hdspinner' ).show();
 				//jQuery(this).attr('disabled','disabled');
@@ -146,6 +150,7 @@ jQuery( document ).ready( function () {
 				return true;
 			}
 
+			// send followup ajax
 			function sendFollowup( force ){
 				var followuptype = jQuery( "#followup-type" ).val();
 				var formData = new FormData();
@@ -217,6 +222,7 @@ jQuery( document ).ready( function () {
 
 		initEditFollowUp: function () {
 			var commentid;
+			//ajax call to remove followup
 			jQuery("#delfollowup" ).click(function() {
 				var r = confirm( "Are you sure you want to remove this Followup?" );
 				if ( r != true ) {
@@ -254,12 +260,16 @@ jQuery( document ).ready( function () {
 				             } );
 
 			});
+
+			// close edit followup
 			jQuery(document).on('click', '.close-edit-followup', function (e){
 				e.preventDefault();
 				jQuery('#dialog-form' ).slideToggle('slow');
 				jQuery('#new-followup-form' ).show();
 				jQuery(document).scrollTop( ( jQuery('#comment-'+commentid ).offset().top ) );
 			});
+
+			// show ui to edit or delete followup on click of edit link
 			jQuery( document ).on('click', '.editfollowuplink',function(e){
 				e.preventDefault();
 				var select =jQuery(this ).parents();
@@ -278,6 +288,7 @@ jQuery( document ).ready( function () {
 
 			} );
 
+			// edit followup ajax call
 			jQuery("#editfollowup" ).click(function(){
 				var requestArray = new Object();
 				var content =  rthd_common.rthd_tinymce_get_content( 'editedfollowupcontent' );
@@ -331,6 +342,7 @@ jQuery( document ).ready( function () {
 		},
 
 		initLoadAll: function(){
+			// if there are more than 3 followup show load followp button
 			jQuery('#followup-load-more, .load-more-block' ).click(function (e){
 				e.preventDefault();
 				var requestArray = new Object();
@@ -368,6 +380,8 @@ jQuery( document ).ready( function () {
 		},
 
 		initEditContent: function(){
+
+			// edit ticket content
 			jQuery('.edit-ticket-link' ).click(function(e){
 				e.preventDefault();
 				jQuery('#edit-ticket-data' ).slideToggle('slow');
@@ -381,6 +395,8 @@ jQuery( document ).ready( function () {
 				jQuery(document).scrollTop( ( jQuery('#edit-ticket-data').offset().top ) - 50 );
 				rthd_common.rthd_tinymce_set_content( 'editedticketcontent', jQuery(this).closest('.ticketcontent').find('.rthd-comment-content' ).data('content') );
 			});
+
+			// close tinyMCE editor and send user back to ticket content
 			jQuery('.close-edit-content' ).click(function(e){
 				e.preventDefault();
 				jQuery('#edit-ticket-data' ).slideToggle('slow');
@@ -388,6 +404,7 @@ jQuery( document ).ready( function () {
 				jQuery(document).scrollTop( ( jQuery('.ticketcontent').offset().top ) - 50 );
 			});
 
+			// ajax request to change ticket content
 			jQuery('#edit-ticket-content-click' ).click(function(){
 				jQuery('#edit-ticket-data' ).slideToggle('slow');
 				jQuery('#new-followup-form' ).hide();
