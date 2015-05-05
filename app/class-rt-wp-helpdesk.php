@@ -153,47 +153,17 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 				return;
 			}
 
-			wp_enqueue_script( 'jquery-ui-timepicker-addon', RT_HD_URL . 'app/assets/javascripts/jquery-ui-timepicker-addon.js', array(
-				'jquery-ui-datepicker',
-				'jquery-ui-slider',
-			), RT_HD_VERSION, true );
-
 			wp_enqueue_script( 'sticky-kit', RT_HD_URL . 'app/assets/javascripts/stickyfloat.js', array( 'jquery' ), RT_HD_VERSION, true );
 			wp_enqueue_script( 'rthd-app-js', RT_HD_URL . 'app/assets/javascripts/app.js', array( 'jquery' ), RT_HD_VERSION, true );
-			wp_enqueue_script( 'rthd-app-loadmore', RT_HD_URL . 'app/assets/javascripts/jquery.ba-throttle-debounce.js', array( 'jquery' ), RT_HD_VERSION, true );
 
-			wp_enqueue_script( 'moment-js', RT_HD_URL . 'app/assets/javascripts/moment.js', array( 'jquery' ), RT_HD_VERSION, true );
-
-			if ( ! wp_script_is( 'jquery-ui-datepicker' ) ) {
-				wp_enqueue_scrispt( 'jquery-ui-datepicker' );
-			}
-
-			if ( ! wp_script_is( 'jquery-ui-autocomplete' ) ) {
-				wp_enqueue_script( 'jquery-ui-autocomplete', '', array(
-					'jquery-ui-widget',
-					'jquery-ui-position',
-				), '1.9.2', true );
-			}
-
-			wp_enqueue_script( 'jquery-form', array( 'jquery' ), false, true );
-			wp_enqueue_script( 'jquery-ui-dialog' );
-			wp_enqueue_script( 'jquery-file-uploader', RT_HD_URL . 'app/assets/javascripts/plupupload/plupload.full.min.js', array( 'jquery' ), RT_HD_VERSION, true );
+			wp_enqueue_script( 'jquery-file-uploader', RT_HD_URL . 'app/assets/js/vendors/plupupload/plupload.full.min.js', array( 'jquery' ), RT_HD_VERSION, true );
 
 			//fancybox
-			wp_enqueue_script( 'jquery-fancybox', RT_HD_URL . 'app/assets/javascripts/lightbox/jquery.fancybox.pack.js', array( 'jquery' ), RT_HD_VERSION, true );
+			wp_enqueue_script( 'jquery-fancybox', RT_HD_URL . 'app/assets/js/vendors/lightbox/jquery.fancybox.pack.js', array( 'jquery' ), RT_HD_VERSION, true );
 			wp_enqueue_style( 'jquery-fancybox', RT_HD_URL . 'app/assets/css/jquery.fancybox.css', array(), RT_HD_VERSION, 'all' );
 
 			wp_enqueue_style( 'rthd-followup-css', RT_HD_URL . 'app/assets/css/follow-up.css', array(), RT_HD_VERSION, 'all' );
-			wp_enqueue_media();
 
-			global $wp_scripts;
-			$ui = $wp_scripts->query( 'jquery-ui-core' );
-			// tell WordPress to load the Smoothness theme from Google CDN
-			$protocol = is_ssl() ? 'https' : 'http';
-			$url      = "$protocol://ajax.googleapis.com/ajax/libs/jqueryui/" . $ui->ver . '/themes/smoothness/jquery-ui.css';
-			if ( ! wp_style_is( 'jquery-ui-smoothness' ) ) {
-				wp_enqueue_style( 'jquery-ui-smoothness', $url, array(), RT_HD_VERSION, 'all' );
-			}
 			$this->localize_scripts();
 		}
 		/**

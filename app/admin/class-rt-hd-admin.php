@@ -117,17 +117,15 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 					wp_enqueue_script( 'jquery-ui-autocomplete', '', array(
 						'jquery-ui-widget',
 						'jquery-ui-position',
-							), '1.9.2' );
+					), '1.9.2' );
 				}
 			}
-			$rthd_post_type = '';
-			if ( isset( $_GET[ 'post' ] ) )
-				$rthd_post_type = get_post_type( $_GET[ 'post' ] );
-			else if ( isset( $_GET[ 'post_type' ] ) && ( $pagenow == 'post-new.php' || $pagenow == 'edit.php' ) )
-				$rthd_post_type = $_GET[ 'post_type' ];
 
-			if ( $pagenow == 'edit.php' && isset( $post->post_type ) && $post->post_type == Rt_HD_Module::$post_type ) {
-				wp_enqueue_script( 'rthd-bulk-edit', RT_HD_URL . 'app/assets/javascripts/rt_admin_bulk_edit.js', array( 'jquery' ), RT_HD_VERSION, true );
+			$rthd_post_type = '';
+			if ( isset( $_GET[ 'post' ] ) ) {
+				$rthd_post_type = get_post_type( $_GET['post'] );
+			} elseif ( isset( $_GET[ 'post_type' ] ) && ( $pagenow == 'post-new.php' || $pagenow == 'edit.php' ) ) {
+				$rthd_post_type = $_GET['post_type'];
 			}
 
 			if ( in_array( $pagenow, array( 'edit.php', 'post.php', 'post-new.php' ) ) && $rthd_post_type == Rt_HD_Module::$post_type ) {
@@ -137,7 +135,7 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 					wp_enqueue_script( 'jquery-ui-timepicker-addon', RT_HD_URL . 'app/assets/javascripts/jquery-ui-timepicker-addon.js', array(
 						'jquery-ui-datepicker',
 						'jquery-ui-slider',
-							), RT_HD_VERSION, true );
+					), RT_HD_VERSION, true );
 
 					if ( ! wp_script_is( 'jquery-ui-datepicker' ) ) {
 						wp_enqueue_script( 'jquery-ui-datepicker' );
@@ -147,7 +145,7 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 						wp_enqueue_script( 'jquery-ui-autocomplete', '', array(
 							'jquery-ui-widget',
 							'jquery-ui-position',
-								), '1.9.2' );
+						), '1.9.2' );
 					}
 
 					wp_enqueue_script( 'moment-js', RT_HD_URL . 'app/assets/javascripts/moment.js', array( 'jquery' ), RT_HD_VERSION, true );
@@ -156,19 +154,6 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 				wp_enqueue_style( 'rthd-admin-css', RT_HD_URL . 'app/assets/admin/css/admin.css', array(), RT_HD_VERSION );
 				wp_enqueue_script( 'rthd-admin-js', RT_HD_URL . 'app/assets/admin/js/admin-min.js', array( 'jquery' ), time(), true );
 
-				global $wp_scripts;
-				$ui = $wp_scripts->query( 'jquery-ui-core' );
-
-				// tell WordPress to load the Smoothness theme from Google CDN
-				$protocol = is_ssl() ? 'https' : 'http';
-				$url = "$protocol://ajax.googleapis.com/ajax/libs/jqueryui/" . $ui->ver . '/themes/smoothness/jquery-ui.css';
-			}
-
-			if ( ! wp_script_is( 'jquery-ui-progressbar' ) ) {
-				wp_enqueue_script( 'jquery-ui-progressbar', '', array(
-					'jquery-ui-widget',
-					'jquery-ui-position',
-						), '1.9.2' );
 			}
 
 			$this->localize_scripts();
