@@ -19,9 +19,9 @@ jQuery( document ).ready( function ( $ ) {
 
 		},
 		setup_start: function () {
-			jQuery( document ).on( 'click', '#rthd-setup-start', function ( e ) {
-				jQuery( this ).parent( 'div' ).hide();
-				jQuery( '#wizard' ).show();
+			$( document ).on( 'click', '#rthd-setup-start', function () {
+				$( '.rtb-setup-header' ).remove();
+				$( '#wizard' ).show();
 			} );
 		},
 		setup_wizard: function () {
