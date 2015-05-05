@@ -176,7 +176,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			add_meta_box( 'rthd-team-load', __( 'WorkLoad', RT_HD_TEXT_DOMAIN ), array(
 				$this,
 				'team_load',
-			), $rt_hd_dashboard->screen_id, 'column3' );
+			), $rt_hd_dashboard->screen_id, 'column1' );
 			/* Top Accounts */
 			/*add_meta_box( 'rthd-top-accounts', __( 'Top Accounts', RT_HD_TEXT_DOMAIN ), array(
 				$this,
@@ -186,17 +186,17 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			add_meta_box( 'rthd-top-clients', __( 'Top Clients', RT_HD_TEXT_DOMAIN ), array(
 				$this,
 				'top_clients',
-			), $rt_hd_dashboard->screen_id, 'column4' );
+			), $rt_hd_dashboard->screen_id, 'column2' );
 
 			add_meta_box( 'rthd-tickets-by-product', __( 'Tickets by Offerings', RT_HD_TEXT_DOMAIN ), array(
 				$this,
 				'tickets_by_products',
-			), $rt_hd_dashboard->screen_id, 'column5' );
+			), $rt_hd_dashboard->screen_id, 'column1' );
 
 			add_meta_box( 'rthd-customer-by-product-tickets', __( 'Ticket Conversion from Sales', RT_HD_TEXT_DOMAIN ), array(
 				$this,
 				'tickets_by_product_purchase',
-			), $rt_hd_dashboard->screen_id, 'column6' );
+			), $rt_hd_dashboard->screen_id, 'column2' );
 			$relations = $rt_hd_attributes_relationship_model->get_relations_by_post_type( Rt_HD_Module::$post_type );
 			foreach ( $relations as $r ) {
 				$attr = $rt_hd_attributes_model->get_attribute( $r->attr_id );
@@ -213,7 +213,11 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			$customers_userid = $rt_hd_offering_support->get_customers_userid();
 
 			if ( empty( $customers_userid ) ){
-				echo 'No customers found who have created any ticket.';
+				if( ! class_exists( 'WooCommerce' )  && ! class_exists( 'Easy_Digital_Downloads' ) ){
+					echo 'This reports will generated with EDD & Wocommerce plugin.';
+				}else{
+					echo 'No customers found who have created any ticket.';
+				}
 				return;
 			}
 			$customers_userid      = array_unique( $customers_userid );
@@ -284,11 +288,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			$post_type   = Rt_HD_Module::$post_type;
 			$total       = 0;
 			if ( empty( $terms ) ){
-				if( ! class_exists( 'WooCommerce' )  && ! class_exists( 'Easy_Digital_Downloads' ) ){
-					echo 'This reports will generated with EDD & Wocommerce plugin.';
-				}else{
-					echo 'No Offering [ product / Docwnloads ] found';
-				}
+				echo 'No Offering [ product / Docwnloads ] found';
 				return;
 			}
 			if ( ! $terms instanceof WP_Error ) {
