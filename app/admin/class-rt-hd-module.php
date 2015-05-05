@@ -189,6 +189,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
                 'edit.php?post_type=' . self::$post_type,
                 'post-new.php?post_type=' . self::$post_type,
 				'edit.php?post_type=' . rt_biz_get_contact_post_type(),
+				'edit.php?post_type=' . rt_biz_get_contact_post_type() . '&rt_contact_group=staff',
                 'edit-tags.php?taxonomy=' . Rt_Offerings::$offering_slug . '&amp;post_type=' . self::$post_type,
 				'edit-tags.php?taxonomy=' . RT_Departments::$slug . '&amp;post_type=' . self::$post_type,
                 $rt_hd_attributes->attributes_page_slug,
