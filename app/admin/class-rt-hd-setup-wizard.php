@@ -143,7 +143,40 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			global $wpdb, $rt_biz_acl_model;
 			$result = $wpdb->get_results( "SELECT acl.userid, acl.permission FROM " . $rt_biz_acl_model->table_name . " as acl INNER JOIN " . $wpdb->prefix . "p2p as p2p on ( acl.userid = p2p.p2p_to ) INNER JOIN " . $wpdb->posts . " as posts on (p2p.p2p_from = posts.ID )  where acl.module =  '" . RT_HD_TEXT_DOMAIN . "' and acl.permission != 0 and p2p.p2p_type = '" . rt_biz_get_contact_post_type() . "_to_user' and posts.post_status= 'publish' and posts.post_type= '" . rt_biz_get_contact_post_type() . "' and acl.groupid = 0 " );
 			ob_start();
-			?>
+			if (!empty($result)) {
+				?>
+				<h3 class="rthd-setup-wizard-title"><?php _e( 'Set Roles', RT_BIZ_TEXT_DOMAIN ); ?></h3>
+
+				<table class="shop_table my_account_orders">
+					<tr>
+						<th>User</th>
+						<th>Admin</th>
+						<th>Editor</th>
+						<th>Author</th>
+						<th></th>
+					</tr>
+					<?php
+					foreach ( $result as $row ) {
+						$user = get_userdata( $row->userid );
+						?>
+						<tr id="ACL_<?php echo $user->ID;?>">
+							<td><?php echo $user->display_name ?></td>
+							<td><input type="radio" class="rt-hd-setup-acl" data-id="<?php echo $user->ID;?>"
+							           name="ACL_<?php echo $user->ID;?>"
+							           value="<?php echo Rt_Access_Control::$permissions[ 'admin' ][ 'value' ];?>" <?php echo ( $row->permission == Rt_Access_Control::$permissions[ 'admin' ][ 'value' ] ) ? 'checked' : ''; ?> />
+							</td>
+							<td><input type="radio" class="rt-hd-setup-acl" data-id="<?php echo $user->ID;?>"
+							           name="ACL_<?php echo $user->ID;?>"
+							           value="<?php echo Rt_Access_Control::$permissions[ 'editor' ][ 'value' ];?>" <?php echo ( $row->permission == Rt_Access_Control::$permissions[ 'editor' ][ 'value' ] ) ? 'checked' : ''; ?> />
+							</td>
+							<td><input type="radio" class="rt-hd-setup-acl" data-id="<?php echo $user->ID;?>"
+							           name="ACL_<?php echo $user->ID;?>"
+							           value="<?php echo Rt_Access_Control::$permissions[ 'author' ][ 'value' ];?>" <?php echo ( $row->permission == Rt_Access_Control::$permissions[ 'author' ][ 'value' ] ) ? 'checked' : ''; ?> />
+							</td>
+							<td><img class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
+							</td>
+						</tr> <?php
+					}
 
 			<table class="shop_table my_account_orders">
 				<tr>
@@ -169,7 +202,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			</table>
 			<?php
 			header( 'Content-Type: application/json' );
-			echo json_encode( array( 'status' => true, 'html' => ob_get_clean() ) );
+			echo json_encode( array( 'status' => $status, 'html' => ob_get_clean() ) );
 			die( 0 );
 		}
 
