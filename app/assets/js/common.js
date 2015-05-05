@@ -123,6 +123,8 @@ jQuery( document ).ready( function () {
 					                                      }
 				                                      } );
 				uploader.init();
+			} else {
+				console.log("not defined :/");
 			}
 
 			// on click of attachment remove tell plupoloader to remove attachment from it's object

@@ -33,7 +33,7 @@ module.exports = function ( grunt ) {
 			frontend: {
 				src: [
 					'app/assets/js/common.js',
-					'app/assets/js/app.js',
+					'app/assets/js/app.js'
 				],
 				dest: 'app/assets/js/main.js'
 			},
