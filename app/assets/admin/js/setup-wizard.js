@@ -29,6 +29,7 @@ jQuery( document ).ready( function ( $ ) {
 				headerTag: "h3",
 				bodyTag: "fieldset",
 				transitionEffect: "slideLeft",
+                titleTemplate: '#title#',
 				forceMoveForward: true,
 				//enableAllSteps: true,
 				onStepChanging: function ( event, currentIndex, newIndex ) {

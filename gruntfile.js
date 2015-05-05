@@ -40,7 +40,7 @@ module.exports = function ( grunt ) {
 			backend: {
 				src: [
 					'app/assets/admin/js/vendors/moment.js',
-					'app/assets/admin/js/vendors/jquery.steps.min.js',
+					'app/assets/admin/js/vendors/jquery.steps.js',
 					'app/assets/admin/js/setup-wizard.js',
 					'app/assets/js/common.js',
 					'app/assets/admin/js/admin.js'
