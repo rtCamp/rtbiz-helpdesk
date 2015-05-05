@@ -127,7 +127,6 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 			} elseif ( isset( $_GET[ 'post_type' ] ) && ( $pagenow == 'post-new.php' || $pagenow == 'edit.php' ) ) {
 				$rthd_post_type = $_GET['post_type'];
 			}
-
 			if ( in_array( $pagenow, array( 'edit.php', 'post.php', 'post-new.php' ) ) && $rthd_post_type == Rt_HD_Module::$post_type ) {
 
 				if ( isset( $post->post_type ) && $post->post_type == Rt_HD_Module::$post_type ) {
@@ -150,6 +149,8 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 
 					wp_enqueue_script( 'moment-js', RT_HD_URL . 'app/assets/javascripts/moment.js', array( 'jquery' ), RT_HD_VERSION, true );
 				}
+
+				wp_enqueue_media();
 
 				wp_enqueue_style( 'rthd-admin-css', RT_HD_URL . 'app/assets/admin/css/admin.css', array(), RT_HD_VERSION );
 				wp_enqueue_script( 'rthd-admin-js', RT_HD_URL . 'app/assets/admin/js/admin-min.js', array( 'jquery' ), time(), true );
