@@ -188,14 +188,15 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				'rthd-' . self::$post_type . '-dashboard',
                 'edit.php?post_type=' . self::$post_type,
                 'post-new.php?post_type=' . self::$post_type,
+				'edit.php?post_type=' . rt_biz_get_contact_post_type(),
                 'edit-tags.php?taxonomy=' . Rt_Offerings::$offering_slug . '&amp;post_type=' . self::$post_type,
-                'rthd-setup-wizard',
+				'edit-tags.php?taxonomy=' . RT_Departments::$slug . '&post_type=' . self::$post_type,
                 $rt_hd_attributes->attributes_page_slug,
                 Redux_Framework_Helpdesk_Config::$page_slug,
-                'edit.php?post_type=' . rt_biz_get_contact_post_type(),
-                'edit-tags.php?taxonomy=' . Rt_Contact::$user_category_taxonomy . '&post_type=' . self::$post_type,
-                'edit.php?post_type=' . rt_biz_get_company_post_type(),
-                'edit-tags.php?taxonomy=' . RT_Departments::$slug . '&post_type=' . self::$post_type,
+				'rthd-setup-wizard',
+                /*'edit-tags.php?taxonomy=' . Rt_Contact::$user_category_taxonomy . '&post_type=' . self::$post_type,
+                'edit.php?post_type=' . rt_biz_get_company_post_type(),*/
+
 			);
 
             if ( ! empty( Rt_Biz::$access_control_slug ) ) {
@@ -303,7 +304,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 
 			rt_biz_register_contact_connection( self::$post_type, $this->labels['name'] );
 
-			rt_biz_register_company_connection( self::$post_type, $this->labels['name'] );
+			//rt_biz_register_company_connection( self::$post_type, $this->labels['name'] );
 
 			$this->db_ticket_table_update();
 		}

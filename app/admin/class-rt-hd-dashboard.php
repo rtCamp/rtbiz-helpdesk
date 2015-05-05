@@ -173,15 +173,15 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 				'daily_tickets',
 			), $rt_hd_dashboard->screen_id, 'column2' );
 			/* Load by Team (Matrix/Table) */
-			add_meta_box( 'rthd-team-load', __( 'Team Load', RT_HD_TEXT_DOMAIN ), array(
+			add_meta_box( 'rthd-team-load', __( 'WorkLoad', RT_HD_TEXT_DOMAIN ), array(
 				$this,
 				'team_load',
 			), $rt_hd_dashboard->screen_id, 'column3' );
 			/* Top Accounts */
-			add_meta_box( 'rthd-top-accounts', __( 'Top Accounts', RT_HD_TEXT_DOMAIN ), array(
+			/*add_meta_box( 'rthd-top-accounts', __( 'Top Accounts', RT_HD_TEXT_DOMAIN ), array(
 				$this,
 				'top_accounts',
-			), $rt_hd_dashboard->screen_id, 'column4' );
+			), $rt_hd_dashboard->screen_id, 'column4' );*/
 			/* Top Clients */
 			add_meta_box( 'rthd-top-clients', __( 'Top Clients', RT_HD_TEXT_DOMAIN ), array(
 				$this,
@@ -284,7 +284,11 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			$post_type   = Rt_HD_Module::$post_type;
 			$total       = 0;
 			if ( empty( $terms ) ){
-				echo 'No offerings found.';
+				if( ! class_exists( 'WooCommerce' )  && ! class_exists( 'Easy_Digital_Downloads' ) ){
+					echo 'This reports will generated with EDD & Wocommerce plugin.';
+				}else{
+					echo 'No Offering [ product / Docwnloads ] found';
+				}
 				return;
 			}
 			if ( ! $terms instanceof WP_Error ) {
@@ -737,7 +741,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 								<div id="rthd-support-page">
 									<?php if ( isset( $settings['rthd_support_page'] ) && ! empty( $settings['rthd_support_page'] ) && get_post( $settings['rthd_support_page'] ) ) : ?>
 										<li>
-											<a id="rthd-view-support-page" class="welcome-icon welcome-view-site" target="_blank" href="<?php echo get_page_link( $settings['rthd_support_page'] ); ?>"><?php _e( 'View Support Page' ); ?></a>
+											<a id="rthd-view-support-page" class="welcome-icon welcome-view-site" target="_blank" href="<?php echo get_page_link( $settings['rthd_support_page'] ); ?>"><?php _e( 'Add Support Ticket' ); ?></a>
 										</li>
 									<?php else: ?>
 										<li>
@@ -746,7 +750,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 										</li>
 									<?php endif; ?>
 								</div>
-								<li><?php printf( '<a id="rtiz-add-ticket" href="%s" class="welcome-icon welcome-admin-users">' . __( 'Add new Ticket' ) . '</a>', admin_url( 'post-new.php?post_type=' . Rt_HD_Module::$post_type ) ); ?></li>
+								<!--<li><?php /*printf( '<a id="rtiz-add-ticket" href="%s" class="welcome-icon welcome-admin-users">' . __( 'Add new Ticket' ) . '</a>', admin_url( 'post-new.php?post_type=' . Rt_HD_Module::$post_type ) ); */?></li>-->
 								<li><?php printf( '<a href="%s" class="welcome-icon welcome-networking">' . __( 'Setup Attributes' ) . '</a>', admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&page=' . $rt_hd_attributes->attributes_page_slug ) ); ?></li>
 							<?php } ?>
 						</ul>
