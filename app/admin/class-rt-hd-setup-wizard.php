@@ -148,6 +148,37 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				<h3 class="rthd-setup-wizard-title"><?php _e( 'Set Roles', RT_BIZ_TEXT_DOMAIN ); ?></h3>
 
 				<table class="shop_table my_account_orders">
+				<tr>
+					<th>User</th>
+					<th>Admin</th>
+					<th>Editor</th>
+					<th>Author</th>
+					<th></th>
+				</tr>
+				<?php
+				foreach ( $result as $row ) {
+					$user = get_userdata( $row->userid );
+					?>
+					<tr id="ACL_<?php echo $user->ID; ?>">
+						<td><?php echo $user->display_name ?></td>
+						<td><input type="radio" class="rt-hd-setup-acl" data-id="<?php echo $user->ID; ?>"
+						           name="ACL_<?php echo $user->ID; ?>"
+						           value="<?php echo Rt_Access_Control::$permissions[ 'admin' ][ 'value' ]; ?>" <?php echo ( $row->permission == Rt_Access_Control::$permissions[ 'admin' ][ 'value' ] ) ? 'checked' : ''; ?> />
+						</td>
+						<td><input type="radio" class="rt-hd-setup-acl" data-id="<?php echo $user->ID; ?>"
+						           name="ACL_<?php echo $user->ID; ?>"
+						           value="<?php echo Rt_Access_Control::$permissions[ 'editor' ][ 'value' ]; ?>" <?php echo ( $row->permission == Rt_Access_Control::$permissions[ 'editor' ][ 'value' ] ) ? 'checked' : ''; ?> />
+						</td>
+						<td><input type="radio" class="rt-hd-setup-acl" data-id="<?php echo $user->ID; ?>"
+						           name="ACL_<?php echo $user->ID; ?>"
+						           value="<?php echo Rt_Access_Control::$permissions[ 'author' ][ 'value' ]; ?>" <?php echo ( $row->permission == Rt_Access_Control::$permissions[ 'author' ][ 'value' ] ) ? 'checked' : ''; ?> />
+						</td>
+						<td><img class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
+						</td>
+					</tr> <?php }
+				?>
+
+				<table class="shop_table my_account_orders">
 					<tr>
 						<th>User</th>
 						<th>Admin</th>
@@ -162,49 +193,32 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 						<tr id="ACL_<?php echo $user->ID; ?>">
 							<td><?php echo $user->display_name ?></td>
 							<td><input type="radio" class="rt-hd-setup-acl" data-id="<?php echo $user->ID; ?>"
-									   name="ACL_<?php echo $user->ID; ?>"
-									   value="<?php echo Rt_Access_Control::$permissions[ 'admin' ][ 'value' ]; ?>" <?php echo ( $row->permission == Rt_Access_Control::$permissions[ 'admin' ][ 'value' ] ) ? 'checked' : ''; ?> />
+							           name="ACL_<?php echo $user->ID; ?>"
+							           value="<?php echo Rt_Access_Control::$permissions[ 'admin' ][ 'value' ]; ?>" <?php echo ( $row->permission == Rt_Access_Control::$permissions[ 'admin' ][ 'value' ] ) ? 'checked' : ''; ?> />
 							</td>
 							<td><input type="radio" class="rt-hd-setup-acl" data-id="<?php echo $user->ID; ?>"
-									   name="ACL_<?php echo $user->ID; ?>"
-									   value="<?php echo Rt_Access_Control::$permissions[ 'editor' ][ 'value' ]; ?>" <?php echo ( $row->permission == Rt_Access_Control::$permissions[ 'editor' ][ 'value' ] ) ? 'checked' : ''; ?> />
+							           name="ACL_<?php echo $user->ID; ?>"
+							           value="<?php echo Rt_Access_Control::$permissions[ 'editor' ][ 'value' ]; ?>" <?php echo ( $row->permission == Rt_Access_Control::$permissions[ 'editor' ][ 'value' ] ) ? 'checked' : ''; ?> />
 							</td>
 							<td><input type="radio" class="rt-hd-setup-acl" data-id="<?php echo $user->ID; ?>"
-									   name="ACL_<?php echo $user->ID; ?>"
-									   value="<?php echo Rt_Access_Control::$permissions[ 'author' ][ 'value' ]; ?>" <?php echo ( $row->permission == Rt_Access_Control::$permissions[ 'author' ][ 'value' ] ) ? 'checked' : ''; ?> />
+							           name="ACL_<?php echo $user->ID; ?>"
+							           value="<?php echo Rt_Access_Control::$permissions[ 'author' ][ 'value' ]; ?>" <?php echo ( $row->permission == Rt_Access_Control::$permissions[ 'author' ][ 'value' ] ) ? 'checked' : ''; ?> />
 							</td>
 							<td><img class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
 							</td>
-						</tr> <?php }
+						</tr> <?php
+					}
 					?>
-
-					<table class="shop_table my_account_orders">
-						<tr>
-							<th>User</th>
-							<th>Admin</th>
-							<th>Editor</th>
-							<th>Author</th>
-							<th></th>
-						</tr>
-						<?php
-						foreach ( $result as $row ) {
-							$user = get_userdata( $row->userid );
-							?>
-							<tr id="ACL_<?php echo $user->ID; ?>">
-								<td><?php echo $user->display_name ?></td>
-								<td><input type="radio" class="rt-hd-setup-acl" data-id="<?php echo $user->ID; ?>" name="ACL_<?php echo $user->ID; ?>" value="<?php echo Rt_Access_Control::$permissions[ 'admin' ][ 'value' ]; ?>" <?php echo ( $row->permission == Rt_Access_Control::$permissions[ 'admin' ][ 'value' ] ) ? 'checked' : ''; ?> /></td>
-								<td><input type="radio" class="rt-hd-setup-acl" data-id="<?php echo $user->ID; ?>"  name="ACL_<?php echo $user->ID; ?>" value="<?php echo Rt_Access_Control::$permissions[ 'editor' ][ 'value' ]; ?>" <?php echo ( $row->permission == Rt_Access_Control::$permissions[ 'editor' ][ 'value' ] ) ? 'checked' : ''; ?> /></td>
-								<td><input type="radio" class="rt-hd-setup-acl" data-id="<?php echo $user->ID; ?>"  name="ACL_<?php echo $user->ID; ?>" value="<?php echo Rt_Access_Control::$permissions[ 'author' ][ 'value' ]; ?>" <?php echo ( $row->permission == Rt_Access_Control::$permissions[ 'author' ][ 'value' ] ) ? 'checked' : ''; ?> /></td>
-								<td><img class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/></td>
-							</tr> <?php
-						}
-						?>
-					</table>
-					<?php
-					header( 'Content-Type: application/json' );
-					echo json_encode( array( 'status' => $status, 'html' => ob_get_clean() ) );
-					die( 0 );
-				}
+				</table>
+			<?php
+				$status = true;
+			} else {
+				$status = true;
+			}
+			header( 'Content-Type: application/json' );
+			echo json_encode( array( 'status' => $status, 'html' => ob_get_clean() ) );
+			die( 0 );
+		}
 
 				/**
 				 * outbound mailbox ui
@@ -792,5 +806,3 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			}
 
 		}
-
-	}

@@ -106,7 +106,7 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		function load_styles_scripts( $hook ) {
-			global $post, $pagenow, $wp_scripts, $rt_hd_setup_wizard;
+			global $post, $pagenow, $rt_hd_setup_wizard;
 
 			$rthd_post_type = '';
 
@@ -126,10 +126,12 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 							), RT_HD_VERSION, true );
 
 					wp_enqueue_script( 'jquery-ui-datepicker' );
+				}
+				if ( $rt_hd_setup_wizard->screen_id == $hook || ( isset( $post->post_type ) && $post->post_type == Rt_HD_Module::$post_type ) ){
 					wp_enqueue_script( 'jquery-ui-autocomplete', '', array(
 						'jquery-ui-widget',
 						'jquery-ui-position',
-							), '1.9.2' );
+					), '1.9.2' );
 				}
 
 				wp_enqueue_media();
