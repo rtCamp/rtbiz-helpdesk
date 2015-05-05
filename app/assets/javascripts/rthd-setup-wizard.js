@@ -14,6 +14,8 @@ jQuery(document).ready(function ($) {
             rthdSetup.add_user_single();
             rthdSetup.assingee_page();
 	        rthdSetup.setup_start();
+	        rthdSetup.acl_save();
+	        rthdSetup.get_acl_view();
 
         },
 	    setup_start: function () {
@@ -30,7 +32,7 @@ jQuery(document).ready(function ($) {
                 forceMoveForward: true,
                 //enableAllSteps: true,
                 onStepChanging: function (event, currentIndex, newIndex) {
-                    //alert("moving to "+newIndex+" from "+ currentIndex);
+                    alert("moving to "+newIndex+" from "+ currentIndex);
                     if (skip_step) {
                         skip_step = false;
                         return true;
@@ -59,10 +61,13 @@ jQuery(document).ready(function ($) {
 
                     //
                     if (currentIndex == 4) {
-                        return rthdSetup.outbound_mail_setu();
+	                    rthdSetup.get_acl_view();
+	                    return rthdSetup.outbound_mail_setu();
                     }
 
-                    return true;
+	                //if (currentIndex == 4) {
+	                //}
+	                return true;
                 },
                 onStepChanged: function (event, currentIndex, priorIndex) {
 
@@ -133,7 +138,8 @@ jQuery(document).ready(function ($) {
                     return $('<li></li>').data('ui-autocomplete-item', item).append('<a>' + item.imghtml + '&nbsp;' + item.label + '</a>').appendTo(ul);
                 };
 
-              jQuery(document).on("click", "a[href=#removeUser]", function () {
+              jQuery(document).on("click", "a[href=#removeUser]", function (e) {
+	                e.preventDefault();
 	                that= this;
 	                var requestArray = new Object();
 	                requestArray['action'] = 'rthd_remove_user';
@@ -167,8 +173,8 @@ jQuery(document).ready(function ($) {
                                     success: function ( data ) {
 	                                    response($.map(data, function (item) {
 		                                    return {
-			                                  name: '@'+item,
-		                                      value: '@'+item
+			                                  name: item,
+		                                      value: item
 		                                    }
 	                                    }));
                                     }
@@ -224,7 +230,7 @@ jQuery(document).ready(function ($) {
             requestArray['action'] = 'rthd_setup_support_page';
             val = jQuery('#rthd-setup-wizard-support-page').val();
 
-            if (val == 0) {
+            if ( val == 0 || (jQuery('#rthd-setup-wizard-support-page-new').val().length===0 && !jQuery('#rthd-setup-wizard-support-page-new').val().trim())) {
                 var strconfirm = confirm('Do you want to skip this step ?');
                 if (strconfirm == true) {
                     return true;
@@ -290,9 +296,9 @@ jQuery(document).ready(function ($) {
 						            jQuery('#rthd-import-all-spinner' ).hide();
 						            jQuery('#rthd-setup-import-users-progress' ).hide();
 						            if (imported_users == 0){
-							            jQuery('#rthd-all-import-message' ).html('Users already added');
+							            jQuery('#rthd-all-import-message' ).html('No Users Found');
 						            } else {
-							            jQuery('#rthd-all-import-message' ).html(imported_users+' users added');
+							            jQuery('#rthd-all-import-message' ).html(imported_users+' Users Added');
 						            }
 					            }
 				            }
@@ -315,7 +321,7 @@ jQuery(document).ready(function ($) {
                 success: function (data) {
                     if (data.status) {
                         if (data.hasOwnProperty('count')) {
-                            jQuery('#rthd-domain-import-message').html('Found ' + data.count + ' users');
+                            jQuery('#rthd-domain-import-message').html('Found ' + data.count + ' Users');
                         } else {
 	                        if(data.hasOwnProperty('imported_users')) {
 		                        $.each( data.imported_users, function ( i, user ) {
@@ -516,7 +522,47 @@ jQuery(document).ready(function ($) {
                     return false;
                 }
             }
-        }
+        },
+	    acl_save: function () {
+			jQuery(document ).on('change','input.rt-hd-setup-acl:radio', function ( e ) {
+				var userid = jQuery(this).data('id');
+				var spinner = jQuery('#ACL_'+userid+' td:last .helpdeskspinner' );
+				spinner.show();
+				jQuery.ajax({
+					            url: ajaxurl,
+					            dataType: "json",
+					            type: 'post',
+					            data: {
+						            action: 'rthd_change_ACL',
+						            permission: jQuery(this).val(),
+						            userid: userid
+					            },
+					            success: function (data) {
+						            spinner.hide();
+						            if ( data.status ) {
+						                console.log('Success!');
+					                } else{
+							            e.preventDefault();
+						            }
+					            }
+				            });
+			});
+	    },
+	    get_acl_view: function(){
+		    jQuery.ajax({
+	                url: ajaxurl,
+	                dataType: "json",
+	                type: 'post',
+	                data: {
+		                action: 'rthd_get_ACL'
+	                },
+	                success: function (data) {
+		                if ( data.status ) {
+							jQuery('.rthd-ACL-change' ).html(data.html);
+		                }
+	                }
+                });
+	    }
     };
     rthdSetup.init();
 });

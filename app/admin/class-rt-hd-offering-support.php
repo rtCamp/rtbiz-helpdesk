@@ -163,7 +163,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 			$users         = Rt_HD_Utils::get_hd_rtcamp_user();
 			if ( $this->is_edit_offerings( 'edit' ) ) {
 				?>
-				<h3><?php _e( 'Helpdesk default assignee', RT_HD_TEXT_DOMAIN ); ?></h3>
+				<h3><?php _e( 'Helpdesk Settings', RT_HD_TEXT_DOMAIN ); ?></h3>
 
 				<table class="form-table">
 					<tbody>

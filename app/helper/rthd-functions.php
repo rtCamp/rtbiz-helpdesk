@@ -1095,8 +1095,8 @@ function rthd_status_markup( $pstatus ){
 
 function rthd_biz_user_profile_link( $email ){
 	$post = rt_biz_get_contact_by_email( $email );
-	if (!empty($post)){
-		return get_edit_post_link($post[0]->ID);
+	if ( ! empty( $post) ){
+		return get_edit_post_link( $post[0]->ID );
 	}
 	else {
 		return '#';
@@ -1665,13 +1665,13 @@ function rthd_search_non_helpdesk_users( $query, $domain_search = false,$count =
 	}
 	if ( $count ){
 		if ( $domain_search ){
-			return $wpdb->get_var( "SELECT COUNT(ID) FROM $wpdb->users WHERE (user_email like '%{$query}')".$q );
+			return $wpdb->get_var( "SELECT COUNT(ID) FROM $wpdb->users WHERE (user_email like '%@{$query}')".$q );
 		} else {
 			return $wpdb->get_var( "SELECT COUNT(ID) FROM $wpdb->users WHERE (user_email like '%{$query}%' or display_name like '%{$query}%' or user_nicename like '%{$query}%')".$q );
 		}
 	} else {
 		if ( $domain_search ){
-			return $wpdb->get_results( "SELECT ID,display_name,user_email FROM $wpdb->users WHERE (user_email like '%{$query}')".$q );
+			return $wpdb->get_results( "SELECT ID,display_name,user_email FROM $wpdb->users WHERE (user_email like '%@{$query}')".$q );
 		} else {
 			return $wpdb->get_results( "SELECT ID,display_name,user_email FROM $wpdb->users WHERE (user_email like '%{$query}%' or display_name like '%{$query}%' or user_nicename like '%{$query}%')".$q );
 		}
@@ -1721,6 +1721,15 @@ function rthd_give_user_access( $user, $access_role, $team_term_id = 0 ){
 		'permission' => $access_role,
 	);
 	$rt_biz_acl_model->add_acl( $data );
+	$contact = rt_biz_get_contact_for_wp_user( $user->ID );
+	if ( ! empty( $contact[0] ) && empty( $team_term_id ) ) {
+		$user_permissions = get_post_meta( $contact[0]->ID, 'rt_biz_profile_permissions', true );
+		$value =  array( RT_HD_TEXT_DOMAIN => Rt_Access_Control::$permissions['author']['value'] );
+		if ( ! empty( $user_permissions ) ){
+			$value = array_merge( $value, $user_permissions );
+		}
+		update_post_meta( $contact[0]->ID, 'rt_biz_profile_permissions', $value );
+	}
 	return true;
 }
 
@@ -1732,7 +1741,7 @@ function rthd_give_user_access( $user, $access_role, $team_term_id = 0 ){
 function rthd_get_default_support_team(){
 	$isSyncOpt = get_option( 'rthd_default_support_team' );
 	if ( empty( $isSyncOpt ) ) {
-		$term = wp_insert_term( 'Support', // the term
+		$term = wp_insert_term( 'General Support', // the term
 			                        RT_Departments::$slug // the taxonomy
 			                      );
 		if ( ! empty( $term ) ) {

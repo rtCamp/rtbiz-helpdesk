@@ -39,6 +39,8 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			add_action( 'wp_ajax_rthd_outound_setup_wizard', array( $this, 'rthd_outound_setup_wizard_callback' ) );
 			add_action( 'wp_ajax_rthd_remove_user', array( $this, 'rthd_remove_user' ) );
 			add_action( 'wp_ajax_rthd_search_domain', array( $this, 'rthd_search_domain' ) );
+			add_action( 'wp_ajax_rthd_change_ACL', array( $this, 'rthd_change_ACL' ) );
+			add_action( 'wp_ajax_rthd_get_ACL', array( $this, 'rthd_ACL' ) );
 
 			if ( ! empty( $_REQUEST[ 'close_notice' ] ) ) {
 				delete_option( 'rtbiz_helpdesk_dependency_installed' );
@@ -113,8 +115,8 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 
 				<h1><?php _e( 'Finish' ); ?></h1>
 				<fieldset style="display: none">
-					<div class="rthd-setup-wizard-controls">
-						Yay!! Your Helpdesk is ready.  Click on finish to get started.
+					<div class="rthd-setup-wizard-controls rthd-ACL-change">
+					Yay!! Your Helpdesk is ready.  Click on finish to get started.
 					</div>
 				</fieldset>
 
@@ -123,6 +125,44 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 
 			<?php
 		}
+
+
+		function rthd_ACL(){
+			global $wpdb, $rt_biz_acl_model;
+			$result  =$wpdb->get_results("SELECT acl.userid, acl.permission FROM ".$rt_biz_acl_model->table_name." as acl INNER JOIN ".$wpdb->prefix."p2p as p2p on ( acl.userid = p2p.p2p_to ) INNER JOIN ".$wpdb->posts." as posts on (p2p.p2p_from = posts.ID )  where acl.module =  '".RT_HD_TEXT_DOMAIN."' and acl.permission != 0 and p2p.p2p_type = '".rt_biz_get_contact_post_type()."_to_user' and posts.post_status= 'publish' and posts.post_type= '".rt_biz_get_contact_post_type()."' and acl.groupid = 0 ");
+			ob_start();
+			?>
+
+			<table class="shop_table my_account_orders">
+			<tr>
+				<th>User</th>
+				<th>Admin</th>
+				<th>Editor</th>
+				<th>Author</th>
+				<th></th>
+			</tr>
+			<?php
+			foreach ( $result as $row ){
+				$user = get_userdata( $row->userid );
+				?>
+				<tr id="ACL_<?php echo $user->ID;?>">
+					<td><?php echo $user->display_name ?></td>
+					<td><input type="radio" class="rt-hd-setup-acl" data-id="<?php echo $user->ID;?>" name="ACL_<?php echo $user->ID;?>" value="<?php echo Rt_Access_Control::$permissions['admin']['value'];?>" <?php echo ( $row->permission == Rt_Access_Control::$permissions['admin']['value'] )?'checked':''; ?> /></td>
+					<td><input type="radio" class="rt-hd-setup-acl" data-id="<?php echo $user->ID;?>"  name="ACL_<?php echo $user->ID;?>" value="<?php echo Rt_Access_Control::$permissions['editor']['value'];?>" <?php echo ( $row->permission == Rt_Access_Control::$permissions['editor']['value'] )?'checked':''; ?> /></td>
+					<td><input type="radio" class="rt-hd-setup-acl" data-id="<?php echo $user->ID;?>"  name="ACL_<?php echo $user->ID;?>" value="<?php echo Rt_Access_Control::$permissions['author']['value'];?>" <?php echo ( $row->permission == Rt_Access_Control::$permissions['author']['value'] )?'checked':''; ?> /></td>
+					<td><img class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/></td>
+				</tr> <?php
+			}
+
+			?>
+		</table>
+         <?php
+
+			header( 'Content-Type: application/json' );
+			echo json_encode( array( 'status' => true, 'html' => ob_get_clean() ) );
+			die( 0 );
+		}
+
 
 		/**
 		 * outbound mailbox ui
@@ -222,39 +262,40 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				?>
 					<p class="description"> <?php _e( 'Select an assignee for the products we synced in previous setup.', RT_BIZ_TEXT_DOMAIN ); ?> </p>
 
-					<div class="rthd-setup-wizard-row">
-						<ul>
-				<?php foreach ( $terms as $tm ) { ?>
-								<li>
-									<label for="rthd_offering<?php echo $tm->term_id ?>"> <?php echo $tm->name ?></label>
-									<select class="rthd-setup-assignee" data="<?php echo $tm->term_id ?>"
-											id="rthd_offering<?php echo $tm->term_id ?>">
-					<?php
-					// if needed to set default assignee that already have assigned
-					//							$selected_userid = get_offering_meta( 'default_assignee', $tm->term_id );
-					if ( empty( $current ) ) {
-						echo '<option disabled selected> -- select an assignee -- </option>';
-					} else {
-						echo '<option > -- select an assignee -- </option>';
-					}
-					foreach ( $users as $user ) {
-						if ( $user->ID == $current ) {
-							$selected = 'selected';
-						} else {
-							$selected = '';
-						}
-						echo '<option value="' . $user->ID . '" ' . $selected . '>' . $user->display_name . '</option>';
-					}
-					?>
-									</select>
-								</li>
-												<?php
-											}
-											?>
-						</ul>
-					</div>
-							<?php } else {
-							?>
+                <div class="rthd-setup-wizard-row">
+                    <ul>
+                        <?php
+                        foreach ($terms as $tm) { ?>
+                            <li>
+                                <label for="rthd_offering<?php echo $tm->term_id ?>"> <?php echo $tm->name ?></label>
+                                <select class="rthd-setup-assignee" data="<?php echo $tm->term_id ?>"
+                                        id="rthd_offering<?php echo $tm->term_id ?>">
+                                    <?php
+                                    // if needed to set default assignee that already have assigned
+                                    //							$selected_userid = get_offering_meta( 'default_assignee', $tm->term_id );
+//                                    if (empty($current)) {
+//                                        echo '<option disabled selected> -- select an assignee -- </option>';
+//                                    } else {
+//                                        echo '<option > -- select an assignee -- </option>';
+//                                    }
+                                    foreach ($users as $user) {
+                                        if ($user->ID == $current) {
+                                            $selected = 'selected';
+                                        } else {
+                                            $selected = '';
+                                        }
+                                        echo '<option value="' . $user->ID . '" ' . $selected . '>' . $user->display_name . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </li>
+                        <?php
+                        }
+                        ?>
+                    </ul>
+                </div>
+             <?php
+            } else { ?>
 
 					<div class="rthd-setup-wizard-row">
 						<label class="rthd-offering-default-assignee" for="rthd_offering-default"> <strong><?php _e( 'Default Assignee', RT_BIZ_TEXT_DOMAIN ); ?> </strong></label>
@@ -344,18 +385,17 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				<h3 class="rthd-setup-wizard-title">Support Page </h3>
 				<p class="description ">Create a support page where your customers can submit tickets.</p>
 				<div class="rthd-setup-wizard-row">
-					<label for="rthd-setup-wizard-support-page"><?php _e( 'Select Support Page ', RT_BIZ_TEXT_DOMAIN ); ?></label>
-					<select id="rthd-setup-wizard-support-page">
-						<option value="0" selected><?php _e( '-- Select Page --', RT_BIZ_TEXT_DOMAIN ); ?></option>
-			<?php
-			if ( ! empty( $pages ) ) {
-				foreach ( $pages as $page ) {
-					echo '<option value="' . $page->ID . '">' . $page->post_title . '</option>';
-				}
-			}
-			?>
-						<option value="-1"><?php _e( '- Create New Page -', RT_BIZ_TEXT_DOMAIN ); ?></option>
-					</select>
+			<label for="rthd-setup-wizard-support-page"><?php _e('Select Support Page ',RT_BIZ_TEXT_DOMAIN); ?></label>
+			<select id="rthd-setup-wizard-support-page">
+				<option value="-1"><?php _e('- Create New Page -',RT_BIZ_TEXT_DOMAIN); ?></option>
+				<option value="0" selected><?php _e('-- Select Page --',RT_BIZ_TEXT_DOMAIN); ?></option>
+				<?php
+				if ( ! empty( $pages ) ){
+					foreach($pages as $page) {
+						echo '<option value="'.$page->ID.'">'.$page->post_title.'</option>';
+					}
+				} ?>
+			</select>
 
 				</div>
 				<div class="rthd-setup-wizard-row rthd-setup-wizard-support-page-new-div" style="display: none;">
@@ -399,10 +439,10 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			<?php
 			$domain_name = preg_replace( '/^www\./', '', $_SERVER[ 'SERVER_NAME' ] );
 
-			$count_domain_users = rthd_search_non_helpdesk_users( '@' . $domain_name, true, true );
+			$count_domain_users = rthd_search_non_helpdesk_users( $domain_name, true, true );
 			?>
 						<label for="rthd-add-user-domain"> 2. Add all users from domain</label>
-						<input id="rthd-add-user-domain" class="rthd-setup-wizard-text" type="text" value="<?php echo '@' . $domain_name; ?>" placeholder="@gmail.com" />
+						<input id="rthd-add-user-domain" class="rthd-setup-wizard-text" type="text" value="<?php echo $domain_name; ?>" placeholder="gmail.com" />
 						<br/>
 						<label></label>
 						<div class="rthd-domain-action">
@@ -497,9 +537,18 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 //					global $rt_biz_acl_model,$rt_contact;
 					$wpuser = get_user_by( 'id', $_POST[ 'ID' ] );
 
-					$team_id = rthd_get_default_support_team();
+//					$team_id = rthd_get_default_support_team();
 
-					if ( rthd_give_user_access( $wpuser, Rt_Access_Control::$permissions[ 'author' ][ 'value' ], $team_id ) ) {
+					if ( rthd_give_user_access( $wpuser, Rt_Access_Control::$permissions['author']['value'], 0 )) {
+						/*$contact = rt_biz_get_contact_for_wp_user($wpuser->ID);
+						if ( ! empty( $contact[0] ) ) {
+							$user_permissions = get_post_meta( $contact[0]->ID, 'rt_biz_profile_permissions', true );
+							$value =  array( RT_HD_TEXT_DOMAIN => Rt_Access_Control::$permissions['author']['value'] );
+							if ( ! empty( $user_permissions ) ){
+								$value = array_merge( $value, $user_permissions );
+							}
+							update_post_meta( $contact[0]->ID, 'rt_biz_profile_permissions', $value );
+						}*/
 						// do something
 						$arrReturn[ 'status' ] = true;
 						$arrReturn = array_merge( $arrReturn, array(
@@ -525,16 +574,18 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				if ( $_POST[ 'count' ] === 'true' ) { // return counts of users
 					$arrReturn[ 'count' ] = rthd_search_non_helpdesk_users( $_POST[ 'domain_query' ], true, true );
 					$arrReturn[ 'status' ] = true;
-				} else {
-					$users_to_import = rthd_search_non_helpdesk_users( $_POST[ 'domain_query' ], false, false );
-					$team_id = rthd_get_default_support_team();
-					$arrReturn[ 'imported_all' ] = true;
-					foreach ( $users_to_import as $user ) {
-						if ( rthd_give_user_access( $user->ID, Rt_Access_Control::$permissions[ 'author' ][ 'value' ], $team_id ) ) {
-							$arrReturn[ 'imported_users' ][] = array( 'id' => $user->ID,
-								'label' => $user->display_name,
-								'imghtml' => get_avatar( $user->user_email, 25 ),
-								'editlink' => rt_biz_get_contact_edit_link( $user->user_email ) );
+				}
+				else {
+					$users_to_import  = rthd_search_non_helpdesk_users( $_POST[ 'domain_query' ], false, false );
+//					$team_id = rthd_get_default_support_team();
+					$team_id = 0;
+					$arrReturn['imported_all'] = true;
+					foreach ( $users_to_import as $user ){
+						if ( rthd_give_user_access( $user->ID, Rt_Access_Control::$permissions['author']['value'], $team_id ) ){
+							$arrReturn['imported_users'][] = array( 'id'       => $user->ID,
+							                                        'label'    => $user->display_name,
+							                                        'imghtml'  => get_avatar( $user->user_email, 25 ),
+							                                        'editlink' => rt_biz_get_contact_edit_link( $user->user_email ) );
 						} else {
 							$arrReturn[ 'not_imported_users' ][] = $user;
 							$arrReturn[ 'imported_all' ] = false;
@@ -561,9 +612,10 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				if ( ! empty( $helpdesk_users ) ) {
 					$q = ' WHERE ID not IN (' . implode( ',', $helpdesk_users ) . ') ';
 				}
-				$users_to_import = $wpdb->get_results( "SELECT ID,display_name,user_email FROM $wpdb->users" . $q . "LIMIT " . $LIMIT );
-				$arrReturn[ 'imported_all' ] = true;
-				$team_id = rthd_get_default_support_team();
+				$users_to_import =  $wpdb->get_results( "SELECT ID,display_name,user_email FROM $wpdb->users".$q."LIMIT ".$LIMIT );
+				$arrReturn['imported_all'] = true;
+//				$team_id = rthd_get_default_support_team();
+				$team_id = 0;
 
 				foreach ( $users_to_import as $user ) {
 					if ( rthd_give_user_access( $user->ID, Rt_Access_Control::$permissions[ 'author' ][ 'value' ], $team_id ) ) {
@@ -638,10 +690,17 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				global $rt_biz_acl_model;
 				$rt_biz_acl_model->remove_acl( array( 'module' => RT_HD_TEXT_DOMAIN, 'userid' => $_POST[ 'userid' ] ) );
 				$arrReturn[ 'status' ] = true;
-				$contact = rt_biz_get_contact_for_wp_user( $_POST[ 'userid' ] );
-				$support_team = get_option( 'rthd_default_support_team' );
-				if ( ! empty( $support_team ) && ! empty( $contact[ 0 ] ) ) {
-					wp_remove_object_terms( $contact[ 0 ]->ID, array( $support_team ), RT_Departments::$slug );
+				$contact  = rt_biz_get_contact_for_wp_user( $_POST['userid'] );
+//				$support_team = get_option( 'rthd_default_support_team' );
+//				if ( ! empty( $support_team ) && ! empty( $contact[0] ) ){
+//					wp_remove_object_terms($contact[0]->ID,array($support_team),RT_Departments::$slug );
+//				}
+				if ( ! empty( $contact[0] ) && empty( $team_term_id ) ) {
+					$user_permissions = get_post_meta( $contact[0]->ID, 'rt_biz_profile_permissions', true );
+					if ( ! empty( $user_permissions[ RT_HD_TEXT_DOMAIN ] ) ) {
+						$user_permissions[ RT_HD_TEXT_DOMAIN ] = 0;
+						update_post_meta( $contact[0]->ID, 'rt_biz_profile_permissions', true );
+					}
 				}
 			}
 			header( 'Content-Type: application/json' );
@@ -660,6 +719,29 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				$domains = $wpdb->get_col( "SELECT DISTINCT( SUBSTRING_INDEX(user_email,'@',-1)) FROM $wpdb->users where user_email like '%@" . $_POST[ 'query' ] . "%'" );
 				$domains = array_filter( $domains );
 				$arrReturn = $domains;
+			}
+			header( 'Content-Type: application/json' );
+			echo json_encode( $arrReturn );
+			die( 0 );
+		}
+
+		function rthd_change_ACL(){
+			global $rt_biz_acl_model;
+			$arrReturn = array( 'status' => false );
+			if ( ! empty( $_POST['permission'] ) && ! empty( $_POST['userid'] ) ) {
+				$rt_biz_acl_model->update_acl( array( 'permission' => $_POST['permission'] ), array( 'userid' =>$_POST['userid'], 'module' => RT_HD_TEXT_DOMAIN ) );
+
+				$contact = rt_biz_get_contact_for_wp_user( $_POST['userid'] );
+				// update contact meta as we store ACL values in contact meta as well
+				if ( ! empty( $contact[0] ) ) {
+					$user_permissions = get_post_meta( $contact[0]->ID, 'rt_biz_profile_permissions', true );
+					$value =  array( RT_HD_TEXT_DOMAIN => $_POST['permission'] );
+					if ( ! empty( $user_permissions ) ){
+						$value = array_merge( $user_permissions, $value );
+					}
+					update_post_meta( $contact[0]->ID, 'rt_biz_profile_permissions', $value );
+				}
+				$arrReturn[ 'status' ] = true;
 			}
 			header( 'Content-Type: application/json' );
 			echo json_encode( $arrReturn );
