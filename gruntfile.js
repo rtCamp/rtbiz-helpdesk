@@ -32,13 +32,17 @@ module.exports = function ( grunt ) {
 			},
 			frontend: {
 				src: [
-					'app/assets/js/vendors/magnific-popup.js',
+					'app/assets/js/common.js',
+					'app/assets/js/app.js',
 				],
 				dest: 'app/assets/js/main.js'
 			},
 			backend: {
 				src: [
 					'app/assets/admin/js/vendors/moment.js',
+					'app/assets/admin/js/vendors/jquery.steps.min.js',
+					'app/assets/admin/js/setup-wizard.js',
+					'app/assets/js/common.js',
 					'app/assets/admin/js/admin.js'
 				],
 				dest: 'app/assets/admin/js/admin-min.js'
