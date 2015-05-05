@@ -1,3 +1,39 @@
+jQuery(document).ready(function() {
+    if ( typeof rthd_menu !== 'undefined' && typeof rthd_url !== 'undefined' ) {
+        jQuery('#menu-posts').removeClass('wp-menu-open wp-has-current-submenu').addClass('wp-not-current-submenu');
+        jQuery('#menu-posts a.wp-has-submenu').removeClass('wp-has-current-submenu wp-menu-open menu-top');
+        jQuery('#menu-posts-'+rthd_menu).addClass('wp-has-current-submenu wp-menu-open menu-top menu-top-first').removeClass('wp-not-current-submenu');
+        jQuery('#menu-posts-'+rthd_menu+' a.wp-has-submenu').addClass('wp-has-current-submenu wp-menu-open menu-top');
+        jQuery('li.menu-icon-'+rthd_menu+' ul li').removeClass('current');
+        jQuery('li.menu-icon-'+rthd_menu+' ul li a').removeClass('current');
+        jQuery('li.menu-icon-'+rthd_menu+' ul li a').each(function(e) {
+            console.log( this.href )
+            console.log( rthd_url )
+            console.log( this.href === rthd_url )
+            if ( this.href === rthd_url ) {
+                jQuery(this).parent().addClass('current');
+                jQuery(this).addClass('current');
+            }
+        });
+        jQuery(window).resize();
+    }
+
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 var status_dropdown_visible = 1
 var attachmentSep = '';
 var attachmentString = '';
@@ -16,11 +52,13 @@ function admin_side_menu_patch() {
 	} );
 }
 
-jQuery( document ).ready( function ( $ ) {
+jQuery( document ).ready( function ( jQuery ) {
 
-	/**
+	*/
+/**
 	 * WordPress Menu Hack for Dashboard
-	 */
+	 *//*
+
 	if ( typeof rt_hd_top_menu != 'undefined' && typeof rt_hd_dashboard_url != 'undefined' ) {
 		$( '#' + rt_hd_top_menu + ' ul li' ).removeClass( 'current' );
 		$( '#' + rt_hd_top_menu + ' ul li a' ).removeClass( 'current' );
@@ -32,9 +70,11 @@ jQuery( document ).ready( function ( $ ) {
 		} );
 	}
 
-	/**
+	*/
+/**
 	 *    Studio Settings Page
-	 */
+	 *//*
+
 	if ( $( ".rtcamp-user-ac" ).length > 0 ) {
 		jQuery.each( arr_rtcamper, function ( ind, val ) {
 			$( "div[acl-user=" + val.id + "]" ).each( function () {
@@ -62,6 +102,7 @@ jQuery( document ).ready( function ( $ ) {
 		} );
 
 	}
+*/
 /*	$( ".remove-google-ac" ).click( function ( e ) {
 		var r = confirm( "Are you sure you want to remove this email A/C ?" );
 		if ( r == true ) {
@@ -70,12 +111,15 @@ jQuery( document ).ready( function ( $ ) {
 			e.preventDefault();
 			return false;
 		}
-	} );*/
+	} );*//*
 
 
-	/**
+
+	*/
+/**
 	 * Gravity Importer Handlebars
-	 */
+	 *//*
+
 		//	Handlebars.registerHelper('mapfieldnew', function(obj1, obj2) {
 		//        if (obj1.toLowerCase().indexOf(obj2.toLowerCase()) > -1) {
 		//            return new Handlebars.SafeString(
@@ -138,7 +182,8 @@ jQuery( document ).ready( function ( $ ) {
 
 
 	// Imap Servers
-	/*jQuery( document ).on( 'click', '.rthd-edit-server', function ( e ) {
+	*/
+/*jQuery( document ).on( 'click', '.rthd-edit-server', function ( e ) {
 		e.preventDefault();
 		server_id = jQuery( this ).data( 'server-id' );
 		jQuery( '#rthd_imap_server_' + server_id ).toggleClass( 'rthd-hide-row' ).toggleClass( 'rthd-show-row' );
@@ -156,9 +201,11 @@ jQuery( document ).ready( function ( $ ) {
 			jQuery( this ).parent().parent().remove();
 		}
 	} );
-*/
+*//*
+
 
 	// User Settings Page - Add Email
+*/
 /*	jQuery( document ).on( 'click', '#rthd_add_personal_email', function ( e ) {
 		e.preventDefault();
 		jQuery( '#rthd_email_acc_type_container' ).toggleClass( 'rthd-hide-row' ).toggleClass( 'rthd-show-row' );
@@ -185,7 +232,8 @@ jQuery( document ).ready( function ( $ ) {
 			jQuery( '#rthd_add_imap_acc_form input[type=email]' ).remove();
 			jQuery( '#rthd_add_imap_acc_form input[type=password]' ).remove();
 		}
-	} );*/
+	} );*//*
+
 
 } );
 
@@ -204,4 +252,4 @@ function isUrl( value ) {
 		return (true);
 	}
 	return (false);
-}
+}*/

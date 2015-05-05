@@ -51,7 +51,7 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 		function add_people_menu() {
 			global $rt_access_control;
 			if ( rthd_check_wizard_completed() ) {
-				add_submenu_page( 'edit.php?post_type=' . Rt_HD_Module::$post_type, __( 'Customer ' ), __( 'Customer' ), rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' ), 'edit.php?post_type=' . rt_biz_get_contact_post_type() );
+				add_submenu_page( 'edit.php?post_type=' . Rt_HD_Module::$post_type, __( 'Customer ' ), __( 'Customer' ), rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' ), 'edit.php?post_type=' . rt_biz_get_contact_post_type() . '&rt_contact_group=customer' );
 				add_submenu_page( 'edit.php?post_type=' . Rt_HD_Module::$post_type, __( 'Staff' ), __( 'Staff' ), rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' ), 'edit.php?post_type=' . rt_biz_get_contact_post_type() . '&rt_contact_group=staff' );
 				/* add_submenu_page( 'edit.php?post_type=' . esc_html( Rt_HD_Module::$post_type ), __( 'Companies' ), __( '--- Companies' ), rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' ), 'edit.php?post_type=' . rt_biz_get_company_post_type() );
 				  add_submenu_page( 'edit.php?post_type=' . esc_html( Rt_HD_Module::$post_type ), __( 'Access Control' ), __( '--- Access Control' ), rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' ), Rt_Biz::$access_control_slug, array(
@@ -137,7 +137,14 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 
 				wp_enqueue_media();
 				wp_enqueue_style( 'rthd-admin-css', RT_HD_URL . 'app/assets/admin/css/admin.css', array(), RT_HD_VERSION );
-				wp_enqueue_script( 'rthd-admin-js', RT_HD_URL . 'app/assets/admin/js/admin-min.js', array( 'jquery' ), time(), true );
+				wp_enqueue_script( 'rthd-admin-js', RT_HD_URL . 'app/assets/admin/js/admin.js', array( 'jquery' ), RT_HD_VERSION, true );
+
+			}
+
+			if ( isset( $rthd_post_type ) && in_array( $rthd_post_type, array( rt_biz_get_contact_post_type() ) ) )  {
+				wp_enqueue_script( 'rthd-menu-hack-js', RT_HD_URL . 'app/assets/javascripts/rt-custom-status.js', array( 'jquery' ), time(), true );
+				wp_localize_script( 'rthd-menu-hack-js', 'rthd_menu', Rt_HD_Module::$post_type );
+				wp_localize_script( 'rthd-menu-hack-js', 'rthd_url', admin_url( 'edit.php?post_type=' . rt_biz_get_contact_post_type() . '&rt_contact_group=' . $_GET['rt_contact_group'] ) );
 			}
 
 			$this->localize_scripts();
