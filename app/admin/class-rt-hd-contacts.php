@@ -89,6 +89,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 
 			global $rt_hd_module;
 			if ( in_array( Rt_HD_Module::$post_type, array_keys( $rt_entity->enabled_post_types ) ) ) {
+				$columns[ 'hd_role' ] = 'Role';
 				$columns[ Rt_HD_Module::$post_type ] = $rt_hd_module->labels['name'];
 			}
 
@@ -111,12 +112,51 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		 */
 		function manage_contacts_columns( $column, $post_id, $rt_entity ) {
 
-			global $rt_contact;
+			global $rt_contact, $rt_biz_acl_model;
 			if ( $rt_entity->post_type != $rt_contact->post_type ) {
 				return;
 			}
 
 			switch ( $column ) {
+				case 'hd_role':
+					$permission_role = '-';
+					$userid = rt_biz_get_wp_user_for_contact( $post_id );
+					if ( ! empty( $userid ) ){
+						$where = array(
+							'userid'     => $userid[0]->ID,
+							'module'     => RT_HD_TEXT_DOMAIN,
+						);
+						$user = $rt_biz_acl_model->get_acl( $where );
+						if ( empty( $user ) ) {
+							$permission_role = 0;
+							//check admin contact;
+							$contacts = array();
+							$module_user = get_users( array( 'fields' => 'ID', 'role' => 'administrator' ) );
+							$admin_contact = rt_biz_get_contact_for_wp_user( $module_user );
+							foreach( $admin_contact as $contact ){
+								$contacts[] = $contact->ID;
+							}
+							if ( in_array( $post_id, $contacts ) ) {
+								$permission_role = 30;
+							}
+						} else {
+							$permission_role = $user[0]->permission;
+						}
+						switch( $permission_role ){
+							case 10 :
+								$permission_role = 'Author'; break;
+							case 20 :
+								$permission_role = 'Editor'; break;
+							case 30 :
+								$permission_role = 'Admin'; break;
+							default:
+								$permission_role = '-'; break;
+						}
+					}
+
+
+					echo '<span>' . $permission_role . '</span>';
+					break;
 				default:
 					if ( in_array( Rt_HD_Module::$post_type, array_keys( $rt_entity->enabled_post_types ) ) && $column == Rt_HD_Module::$post_type ) {
 						$post_details = get_post( $post_id );

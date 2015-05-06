@@ -519,6 +519,11 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 					$fav_ticket = rthd_get_user_fav_ticket( get_current_user_id() );
 					$query->set( 'post__in', $fav_ticket );
 				}
+
+				$editor_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
+				if ( ! current_user_can( $editor_cap ) ){
+					$query->set( 'author', get_current_user_id() );
+				}
 			}
 
 		}
@@ -631,7 +636,9 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 				else
 					$class = '';
                 $temp_view['mine'] = "<a href='edit.php?post_type=".Rt_HD_Module::$post_type."&author=$current_user_id' $class>" . sprintf( _nx( 'Mine <span class="count">(%s)</span>', 'Mine <span class="count">(%s)</span>', $count_user_tickets->post_count, RT_HD_TEXT_DOMAIN ), number_format_i18n( $count_user_tickets->post_count ) ) . '</a>';
-			}
+			}else{
+	            unset( $views['all'] );
+            }
 
 			$fav_ticket = rthd_get_user_fav_ticket( $current_user_id );
 			if ( ! empty( $fav_ticket ) ){
