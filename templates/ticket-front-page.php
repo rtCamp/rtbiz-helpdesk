@@ -222,7 +222,10 @@ $user_edit_content = current_user_can( $cap );
 		     </div>
 		     <div class="rthd-ticket-sidebar-sub-result rthd-ticket-user-activity">
 				<?php
-			     echo "<div class='rthd-contact-avatar-no-reply-div'>";
+				if ( ! empty( $created_by ) ) {
+					echo ' <a class="rthd-ticket-created-by" title="Created by '.$created_by->display_name.' '.$create_by_time.'" href="'.( current_user_can( $cap ) ? rthd_biz_user_profile_link( $created_by->user_email ) :'#').'">' . get_avatar( $created_by->user_email, '30' ).'</a>';
+				}
+				echo "<div class='rthd-contact-avatar-no-reply-div'>";
 				     // contact group
 				     foreach( $other_contacts as $email ){
 
