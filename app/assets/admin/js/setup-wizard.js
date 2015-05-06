@@ -29,7 +29,7 @@ jQuery( document ).ready( function ( $ ) {
 				headerTag: "h3",
 				bodyTag: "fieldset",
 				transitionEffect: "slideLeft",
-                titleTemplate: '#title#',
+                //titleTemplate: '#title#',
 				forceMoveForward: true,
 				//enableAllSteps: true,
 				onStepChanging: function ( event, currentIndex, newIndex ) {
@@ -66,8 +66,6 @@ jQuery( document ).ready( function ( $ ) {
 						return rthdSetup.outbound_mail_setu();
 					}
 
-					//if (currentIndex == 4) {
-					//}
 					return true;
 				},
 				onStepChanged: function ( event, currentIndex, priorIndex ) {

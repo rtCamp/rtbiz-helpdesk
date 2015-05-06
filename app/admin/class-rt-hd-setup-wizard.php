@@ -100,7 +100,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				<div id="wizard">
 
 					<?php foreach ( $wizard as $key => $val ) { ?>
-						<h3 class="rtb-step-title"><?php _e( $key ); ?></h3>
+						<h3><?php _e( $key ); ?></h3>
 						<fieldset> <?php call_user_func( $val ); ?></fieldset>
 					<?php } ?>
 
