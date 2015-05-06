@@ -145,7 +145,9 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 			if ( isset( $rthd_post_type ) && in_array( $rthd_post_type, array( rt_biz_get_contact_post_type() ) ) )  {
 				wp_enqueue_script( 'rthd-menu-hack-js', RT_HD_URL . 'app/assets/javascripts/rt-custom-status.js', array( 'jquery' ), time(), true );
 				wp_localize_script( 'rthd-menu-hack-js', 'rthd_menu', Rt_HD_Module::$post_type );
-				wp_localize_script( 'rthd-menu-hack-js', 'rthd_url', admin_url( 'edit.php?post_type=' . rt_biz_get_contact_post_type() . '&rt_contact_group=' . $_GET['rt_contact_group'] ) );
+				if ( ! empty( $_GET['rt_contact_group'] ) ){
+					wp_localize_script( 'rthd-menu-hack-js', 'rthd_url', admin_url( 'edit.php?post_type=' . rt_biz_get_contact_post_type() . '&rt_contact_group=' . $_GET['rt_contact_group'] ) );
+				}
 			}
 
 			$this->localize_scripts();
@@ -169,8 +171,8 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 			} else {
 				wp_localize_script( 'rthd-admin-js', 'rthd_user_edit', array( '' ) );
 			}
-			wp_localize_script( 'rthd-setup-wizard', 'adminurl', admin_url() );
-			wp_localize_script( 'rthd-setup-wizard', 'hdDashboardUrl', admin_url( 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&page=rthd-' . Rt_HD_Module::$post_type . '-dashboard&finish-wizard=yes' ) );
+			wp_localize_script( 'rthd-admin-js', 'adminurl', admin_url() );
+			wp_localize_script( 'rthd-admin-js', 'hdDashboardUrl', admin_url( 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&page=rthd-' . Rt_HD_Module::$post_type . '-dashboard&finish-wizard=yes' ) );
 		}
 
 		/**

@@ -40,7 +40,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			add_action( 'wp_ajax_rthd_remove_user', array( $this, 'rthd_remove_user' ) );
 			add_action( 'wp_ajax_rthd_search_domain', array( $this, 'rthd_search_domain' ) );
 			add_action( 'wp_ajax_rthd_change_ACL', array( $this, 'rthd_change_ACL' ) );
-			add_action( 'wp_ajax_rthd_get_ACL', array( $this, 'rthd_ACL' ) );
+//			add_action( 'wp_ajax_rthd_get_ACL', array( $this, 'rthd_ACL' ) );
 			add_action( 'wp_ajax_rthd_add_new_offering', array( $this, 'rthd_add_new_offering' ) );
 
 			if ( ! empty( $_REQUEST[ 'close_notice' ] ) ) {
@@ -143,7 +143,8 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 					'Setup Your Team' => array( $this, 'setup_team' ),
 					'Set Assignee' => array( $this, 'set_assignee_ui' ),
 					'Mailbox Setup' => array( $this, 'mail_box_ui' ),
-					'Set Roles' => array( $this, 'set_role_ui' ),
+					'Finish' => array( $this, 'set_role_ui' ),
+//					'Set Roles' => array( $this, 'set_role_ui' ),
 				);
 				$this->generate_wizard( $wizard );
 				?>
@@ -523,9 +524,16 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				</div>
 
 				<div class="rthd_wizard_container rthd_selected_user " style="display: none;">
-					<ul class="rthd-setup-ul-text-decoration rthd-setup-list-users">
+					<table class="rthd-setup-ul-text-decoration rthd-setup-list-users">
+						<tr>
+							<th> User </th>
+							<th> Admin </th>
+							<th> Editor</th>
+							<th> Author</th>
+							<th> </th>
+						</tr>
 
-					</ul>
+					</table>
 				</div>
 				<div class="clearfix"></div>
 			</div>
@@ -748,7 +756,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 					$user_permissions = get_post_meta( $contact[ 0 ]->ID, 'rt_biz_profile_permissions', true );
 					if ( ! empty( $user_permissions[ RT_HD_TEXT_DOMAIN ] ) ) {
 						$user_permissions[ RT_HD_TEXT_DOMAIN ] = 0;
-						update_post_meta( $contact[ 0 ]->ID, 'rt_biz_profile_permissions', true );
+						update_post_meta( $contact[ 0 ]->ID, 'rt_biz_profile_permissions', $user_permissions );
 					}
 				}
 			}

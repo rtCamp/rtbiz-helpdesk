@@ -15,7 +15,6 @@ jQuery( document ).ready( function ( $ ) {
 			rthdSetup.assingee_page();
 			rthdSetup.setup_start();
 			rthdSetup.acl_save();
-			rthdSetup.get_acl_view();
 			rthdSetup.on_connected_store_change();
 
 		},
@@ -63,7 +62,7 @@ jQuery( document ).ready( function ( $ ) {
 
 					//
 					if ( currentIndex == 4 ) {
-						rthdSetup.get_acl_view();
+						//rthdSetup.get_acl_view();
 						return rthdSetup.outbound_mail_setu();
 					}
 
@@ -185,7 +184,7 @@ jQuery( document ).ready( function ( $ ) {
 						data: requestArray,
 						success: function ( data ) {
 							if ( data.status ) {
-								jQuery( that ).parent().remove();
+								jQuery( that ).parent().parent().remove();
 							}
 						}
 					} );
@@ -414,8 +413,9 @@ jQuery( document ).ready( function ( $ ) {
 			}
 			if ( jQuery( "#imported-user-auth-" + id ).length < 1 ) {
 				//jQuery(".rthd-setup-list-users").append("<li id='imported-user-auth-" + id + "' class='contact-list' >" + imghtml + "<a href='#removeUser' class='delete_row'>×</a><br/><a class='rthd-setup-user-title heading' target='_blank' href='" + editlink + "'>" + label + "</a><input type='hidden' class='rthd-import-selected-users' name='import_users[]' value='" + id + "' /></li>")
-				jQuery( ".rthd-setup-list-users" ).append( "<li id='imported-user-auth-" + id + "' class='contact-list' >" + imghtml + "<a class='rthd-setup-user-title heading' target='_blank' href='" + editlink + "'>" + label + "</a> <a href='#removeUser' class='delete_row'>×</a> <input type='hidden' class='rthd-import-selected-users' name='import_users[]' value='" + id + "' /></li>" )
 				//jQuery(".rthd-setup-list-users").append("<li id='imported-user-auth-" + id + "' class='contact-list' >" + imghtml + "<a class='rthd-setup-user-title heading' target='_blank' href='" + editlink + "'>" + label + "</a> <input type='hidden' class='rthd-import-selected-users' name='import_users[]' value='" + id + "' /></li>")
+				//jQuery( ".rthd-setup-list-users" ).append( "<li id='imported-user-auth-" + id + "' class='contact-list' >" + imghtml + "<a class='rthd-setup-user-title heading' target='_blank' href='" + editlink + "'>" + label + "</a> <a href='#removeUser' class='delete_row'>×</a> <input type='hidden' class='rthd-import-selected-users' name='import_users[]' value='" + id + "' /></li>" )
+				jQuery( ".rthd-setup-list-users" ).append( "<tr id='imported-user-auth-" + id + "' class='contact-list' > <td>" + imghtml + "<a class='rthd-setup-user-title heading' target='_blank' href='" + editlink + "'>" + label + "</a></td><td><input type='radio' class='rt-hd-setup-acl' data-id='" + id + "' name='ACL_" + id + "' value='30'></td><td><input type='radio' class='rt-hd-setup-acl' data-id='" + id + "' name='ACL_" + id + "' value='20'></td><td><input type='radio' class='rt-hd-setup-acl' data-id='" + id + "' name='ACL_" + id + "' value='10' checked></td><td><img class='helpdeskspinner' src='" + adminurl + "images/spinner.gif'/> <a href='#removeUser' class='delete_row'>×</a> <input type='hidden' class='rthd-import-selected-users' name='import_users[]' value='" + id + "' /></td></tr>" );
 			}
 		},
 		connect_store: function () {
@@ -575,7 +575,6 @@ jQuery( document ).ready( function ( $ ) {
 					success: function ( data ) {
 						spinner.hide();
 						if ( data.status ) {
-							console.log( 'Success!' );
 						} else {
 							e.preventDefault();
 						}
