@@ -16,6 +16,7 @@ jQuery( document ).ready( function ( $ ) {
 			rthdSetup.setup_start();
 			rthdSetup.acl_save();
 			rthdSetup.get_acl_view();
+			rthdSetup.on_connected_store_change();
 
 		},
 		setup_start: function () {
@@ -83,6 +84,40 @@ jQuery( document ).ready( function ( $ ) {
 					window.location.replace( hdDashboardUrl );
 				}
 			} );
+		},
+
+		on_connected_store_change: function () {
+			jQuery( document ).on('change','input:checkbox[name=rthd-wizard-store]', function ( e ) {
+				if ( jQuery(this ).val()=='custom' && jQuery( this ).is(':checked')){
+					jQuery('.rthd-wizard-store-custom-div' ).show();
+				}
+				if ( !jQuery( this ).is(':checked')){
+					jQuery('.rthd-wizard-store-custom-div' ).hide();
+				}
+			});
+
+			jQuery(document ).on('click','#rthd-setup-store-new-team-submit', function ( e ) {
+				console.log('inside');
+				var new_term = jQuery('#rthd-setup-store-new-team' ).val();
+				if ( new_term.length != 0 && !new_term.trim()){
+					return;
+				}
+				$.ajax( {
+				        url: ajaxurl,
+				        dataType: "json",
+				        type: 'post',
+				        data: {
+							action: 'rthd_add_new_offering',
+					        offering: new_term
+						},
+				        success: function ( data ) {
+							if ( data.status ){
+								jQuery('ul.rthd-setup-wizard-new-offering' ).append('<li> '+new_term+' </li>');
+								jQuery('#rthd-setup-store-new-team' ).val('');
+							}
+						}
+		        } );
+			});
 		},
 		search_users: function () {
 			if ( jQuery( ".rthd-user-autocomplete" ).length > 0 ) {
@@ -386,7 +421,9 @@ jQuery( document ).ready( function ( $ ) {
 		connect_store: function () {
 			var selected = [ ];
 			jQuery( "input:checkbox[name=rthd-wizard-store]:checked" ).each( function () {
-				selected.push( $( this ).val() );
+				if ( $( this ).val() != 'custom' ){
+					selected.push( $( this ).val() );
+				}
 			} );
 			if ( selected.length > 0 ) {
 				var requestArray = new Object();
