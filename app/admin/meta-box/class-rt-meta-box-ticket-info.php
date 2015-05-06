@@ -34,9 +34,7 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 
 			$create = new DateTime( $post->post_date );
 
-			$modify     = new DateTime( $post->post_modified );
 			$createdate = $create->format( 'M d, Y h:i A' );
-			$modifydate = $modify->format( 'M d, Y h:i A' );
 
 			$post_author = $post->post_author;
 
@@ -176,14 +174,23 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 <!--					value="--><?php //echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?><!--"/>-->
 			</div>
 
-			<div class="row_group">
-				<span class="prefix"
-				      title="<?php _e( 'Last Modified On', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Last Modified On', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
-				<input class="moment-from-now" type="text" placeholder="Modified on Date"
-				       value="<?php echo esc_attr( $modifydate ); ?>" title="<?php echo esc_attr( $modifydate ); ?>"
-				       readonly="readonly">
-			</div>
 			<?php
+			// Last reply on Field
+			$comment = get_comments( array( 'post_id' => $post->ID, 'number' => 1 ) );
+			if ( ! empty( $comment[0] ) ) {
+				$comment = $comment[0];
+				$modify     = new DateTime( $comment->comment_date );
+				$modifydate = $modify->format( 'M d, Y h:i A' ); ?>
+				<div class="row_group">
+				<span class="prefix"
+				      title="<?php _e( 'Last Reply On', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Last Reply On', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
+					<input class="moment-from-now" type="text" placeholder="Last Reply On Date"
+					       value="<?php echo esc_attr( $modifydate); ?>" title="<?php echo esc_attr( $modifydate ); ?>"
+					       readonly="readonly">
+				</div>
+			<?php
+			}
+
 			//adult content
 			if ( rthd_get_redux_adult_filter() ) {
 				$text = '';
