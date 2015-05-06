@@ -190,14 +190,13 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
                 'post-new.php?post_type=' . self::$post_type,
 				'edit.php?post_type=' . rt_biz_get_contact_post_type() . '&rt_contact_group=customer',
 				'edit.php?post_type=' . rt_biz_get_contact_post_type() . '&rt_contact_group=staff',
-                'edit-tags.php?taxonomy=' . Rt_Offerings::$offering_slug . '&amp;post_type=' . self::$post_type,
-				'edit-tags.php?taxonomy=' . RT_Departments::$slug . '&amp;post_type=' . self::$post_type,
+				'edit-tags.php?taxonomy=' . RT_Departments::$slug . '&post_type=' . self::$post_type,
+				'edit-tags.php?taxonomy=' . Rt_Offerings::$offering_slug . '&amp;post_type=' . self::$post_type,
                 $rt_hd_attributes->attributes_page_slug,
                 Redux_Framework_Helpdesk_Config::$page_slug,
 				'rthd-setup-wizard',
                 /*'edit-tags.php?taxonomy=' . Rt_Contact::$user_category_taxonomy . '&post_type=' . self::$post_type,
                 'edit.php?post_type=' . rt_biz_get_company_post_type(),*/
-
 			);
 
             if ( ! empty( Rt_Biz::$access_control_slug ) ) {
@@ -557,13 +556,13 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 		                }
 	                }
                 }
-                foreach ( $module_menu as $p_key => $menu_item ) {
+                /*foreach ( $module_menu as $p_key => $menu_item ) {
 	                if ( rthd_check_wizard_completed() || ( ! rthd_check_wizard_completed() && in_array( 'rthd-setup-wizard', $menu_item ) ) ) {
 		                $submenu[ 'edit.php?post_type=' . self::$post_type ][ $new_index ] = $menu_item;
 		                unset( $module_menu[ $p_key ] );
 		                $new_index += 5;
 	                }
-                }
+                }*/
             }
 
             return $menu_order;

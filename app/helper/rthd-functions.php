@@ -1725,7 +1725,8 @@ function rthd_give_user_access( $user, $access_role, $team_term_id = 0 ){
 	if ( ! empty( $contact[0] ) && empty( $team_term_id ) ) {
 		$user_permissions = get_post_meta( $contact[0]->ID, 'rt_biz_profile_permissions', true );
 		$value =  array( RT_HD_TEXT_DOMAIN => Rt_Access_Control::$permissions['author']['value'] );
-		if ( ! empty( $user_permissions ) ){
+		// check existing if exist merge with that
+		if ( ! empty( $user_permissions ) && is_array( $user_permissions ) ){
 			$value = array_merge( $value, $user_permissions );
 		}
 		update_post_meta( $contact[0]->ID, 'rt_biz_profile_permissions', $value );

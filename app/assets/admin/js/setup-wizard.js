@@ -14,7 +14,7 @@ jQuery( document ).ready( function ( $ ) {
 			rthdSetup.add_user_single();
 			rthdSetup.assingee_page();
 			rthdSetup.acl_save();
-			rthdSetup.get_acl_view();
+			rthdSetup.on_connected_store_change();
 
 		},
 		setup_wizard: function () {
@@ -56,7 +56,7 @@ jQuery( document ).ready( function ( $ ) {
 
 					//
 					if ( currentIndex == 4 ) {
-						rthdSetup.get_acl_view();
+						//rthdSetup.get_acl_view();
 						return rthdSetup.outbound_mail_setu();
 					}
 
@@ -77,6 +77,40 @@ jQuery( document ).ready( function ( $ ) {
 					window.location.replace( hdDashboardUrl );
 				}
 			} );
+		},
+
+		on_connected_store_change: function () {
+			jQuery( document ).on('change','input:checkbox[name=rthd-wizard-store]', function ( e ) {
+				if ( jQuery(this ).val()=='custom' && jQuery( this ).is(':checked')){
+					jQuery('.rthd-wizard-store-custom-div' ).show();
+				}
+				if ( !jQuery( this ).is(':checked')){
+					jQuery('.rthd-wizard-store-custom-div' ).hide();
+				}
+			});
+
+			jQuery(document ).on('click','#rthd-setup-store-new-team-submit', function ( e ) {
+				console.log('inside');
+				var new_term = jQuery('#rthd-setup-store-new-team' ).val();
+				if ( new_term.length != 0 && !new_term.trim()){
+					return;
+				}
+				$.ajax( {
+				        url: ajaxurl,
+				        dataType: "json",
+				        type: 'post',
+				        data: {
+							action: 'rthd_add_new_offering',
+					        offering: new_term
+						},
+				        success: function ( data ) {
+							if ( data.status ){
+								jQuery('ul.rthd-setup-wizard-new-offering' ).append('<li> '+new_term+' </li>');
+								jQuery('#rthd-setup-store-new-team' ).val('');
+							}
+						}
+		        } );
+			});
 		},
 		search_users: function () {
 			if ( jQuery( ".rthd-user-autocomplete" ).length > 0 ) {
@@ -144,7 +178,7 @@ jQuery( document ).ready( function ( $ ) {
 						data: requestArray,
 						success: function ( data ) {
 							if ( data.status ) {
-								jQuery( that ).parent().remove();
+								jQuery( that ).parent().parent().remove();
 							}
 						}
 					} );
@@ -222,8 +256,7 @@ jQuery( document ).ready( function ( $ ) {
 			var requestArray = new Object();
 			requestArray['action'] = 'rthd_setup_support_page';
 			val = jQuery( '#rthd-setup-wizard-support-page' ).val();
-
-			if ( val == 0 || ( jQuery( '#rthd-setup-wizard-support-page-new' ).val().length === 0 && ! jQuery( '#rthd-setup-wizard-support-page-new' ).val().trim() ) ) {
+			if ( val == 0 || ( val == -1 && jQuery( '#rthd-setup-wizard-support-page-new' ).val().length === 0 && ! jQuery( '#rthd-setup-wizard-support-page-new' ).val().trim() ) ) {
 				var strconfirm = confirm( 'Do you want to skip this step ?' );
 				if ( strconfirm == true ) {
 					return true;
@@ -374,14 +407,17 @@ jQuery( document ).ready( function ( $ ) {
 			}
 			if ( jQuery( "#imported-user-auth-" + id ).length < 1 ) {
 				//jQuery(".rthd-setup-list-users").append("<li id='imported-user-auth-" + id + "' class='contact-list' >" + imghtml + "<a href='#removeUser' class='delete_row'>×</a><br/><a class='rthd-setup-user-title heading' target='_blank' href='" + editlink + "'>" + label + "</a><input type='hidden' class='rthd-import-selected-users' name='import_users[]' value='" + id + "' /></li>")
-				jQuery( ".rthd-setup-list-users" ).append( "<li id='imported-user-auth-" + id + "' class='contact-list' >" + imghtml + "<a class='rthd-setup-user-title heading' target='_blank' href='" + editlink + "'>" + label + "</a> <a href='#removeUser' class='delete_row'>×</a> <input type='hidden' class='rthd-import-selected-users' name='import_users[]' value='" + id + "' /></li>" )
 				//jQuery(".rthd-setup-list-users").append("<li id='imported-user-auth-" + id + "' class='contact-list' >" + imghtml + "<a class='rthd-setup-user-title heading' target='_blank' href='" + editlink + "'>" + label + "</a> <input type='hidden' class='rthd-import-selected-users' name='import_users[]' value='" + id + "' /></li>")
+				//jQuery( ".rthd-setup-list-users" ).append( "<li id='imported-user-auth-" + id + "' class='contact-list' >" + imghtml + "<a class='rthd-setup-user-title heading' target='_blank' href='" + editlink + "'>" + label + "</a> <a href='#removeUser' class='delete_row'>×</a> <input type='hidden' class='rthd-import-selected-users' name='import_users[]' value='" + id + "' /></li>" )
+				jQuery( ".rthd-setup-list-users" ).append( "<tr id='imported-user-auth-" + id + "' class='contact-list' > <td>" + imghtml + "<a class='rthd-setup-user-title heading' target='_blank' href='" + editlink + "'>" + label + "</a></td><td><input type='radio' class='rt-hd-setup-acl' data-id='" + id + "' name='ACL_" + id + "' value='30'></td><td><input type='radio' class='rt-hd-setup-acl' data-id='" + id + "' name='ACL_" + id + "' value='20'></td><td><input type='radio' class='rt-hd-setup-acl' data-id='" + id + "' name='ACL_" + id + "' value='10' checked></td><td><img class='helpdeskspinner' src='" + adminurl + "images/spinner.gif'/> <a href='#removeUser' class='delete_row'>×</a> <input type='hidden' class='rthd-import-selected-users' name='import_users[]' value='" + id + "' /></td></tr>" );
 			}
 		},
 		connect_store: function () {
 			var selected = [ ];
 			jQuery( "input:checkbox[name=rthd-wizard-store]:checked" ).each( function () {
-				selected.push( $( this ).val() );
+				if ( $( this ).val() != 'custom' ){
+					selected.push( $( this ).val() );
+				}
 			} );
 			if ( selected.length > 0 ) {
 				var requestArray = new Object();
@@ -533,7 +569,6 @@ jQuery( document ).ready( function ( $ ) {
 					success: function ( data ) {
 						spinner.hide();
 						if ( data.status ) {
-							console.log( 'Success!' );
 						} else {
 							e.preventDefault();
 						}

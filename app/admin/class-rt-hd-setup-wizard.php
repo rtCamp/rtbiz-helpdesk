@@ -40,7 +40,8 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			add_action( 'wp_ajax_rthd_remove_user', array( $this, 'rthd_remove_user' ) );
 			add_action( 'wp_ajax_rthd_search_domain', array( $this, 'rthd_search_domain' ) );
 			add_action( 'wp_ajax_rthd_change_ACL', array( $this, 'rthd_change_ACL' ) );
-			add_action( 'wp_ajax_rthd_get_ACL', array( $this, 'rthd_ACL' ) );
+//			add_action( 'wp_ajax_rthd_get_ACL', array( $this, 'rthd_ACL' ) );
+			add_action( 'wp_ajax_rthd_add_new_offering', array( $this, 'rthd_add_new_offering' ) );
 
 			if ( ! empty( $_REQUEST[ 'close_notice' ] ) ) {
 				delete_option( 'rtbiz_helpdesk_dependency_installed' );
@@ -424,7 +425,21 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 					<input id="rthd-wizard-store-edd" type="checkbox" name="rthd-wizard-store" value="edd" <?php echo $eddactive ? 'checked' : ''; ?> >
 					<label for="rthd-wizard-store-edd">Easy Digital Downloads</label>
 				</div>
+
+				<div class="rthd-setup-wizard-row">
+					<input id="rthd-wizard-store-custom" type="checkbox" name="rthd-wizard-store" value="custom" >
+					<label for="rthd-wizard-store-custom">Custom</label>
+				</div>
+				<div class="rthd-setup-wizard-row rthd-wizard-store-custom-div" style="display:none;">
+					<label for="rthd-setup-store-new-team"><?php _e( 'Add New Offering', RT_BIZ_TEXT_DOMAIN ); ?></label>
+					<input type="text" id="rthd-setup-store-new-team" />
+					<input type="button" id="rthd-setup-store-new-team-submit" value="Add" />
+				</div>
+				<ul class="rthd-setup-wizard-new-offering">
+
+				</ul>
 			</div>
+
 			<div class="rthd-store-process rthd-wizard-process" style="display: none; float: left;">
 				<span>Connecting store and importing existing products</span>
 				<img id="rthd-support-page-spinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
@@ -532,9 +547,16 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				</div>
 
 				<div class="rthd_wizard_container rthd_selected_user " style="display: none;">
-					<ul class="rthd-setup-ul-text-decoration rthd-setup-list-users">
+					<table class="rthd-setup-ul-text-decoration rthd-setup-list-users">
+						<tr>
+							<th> User </th>
+							<th> Admin </th>
+							<th> Editor</th>
+							<th> Author</th>
+							<th> </th>
+						</tr>
 
-					</ul>
+					</table>
 				</div>
 				<div class="clearfix"></div>
 			</div>
@@ -757,7 +779,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 					$user_permissions = get_post_meta( $contact[ 0 ]->ID, 'rt_biz_profile_permissions', true );
 					if ( ! empty( $user_permissions[ RT_HD_TEXT_DOMAIN ] ) ) {
 						$user_permissions[ RT_HD_TEXT_DOMAIN ] = 0;
-						update_post_meta( $contact[ 0 ]->ID, 'rt_biz_profile_permissions', true );
+						update_post_meta( $contact[ 0 ]->ID, 'rt_biz_profile_permissions', $user_permissions );
 					}
 				}
 			}
@@ -800,6 +822,19 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 					update_post_meta( $contact[ 0 ]->ID, 'rt_biz_profile_permissions', $value );
 				}
 				$arrReturn[ 'status' ] = true;
+			}
+			header( 'Content-Type: application/json' );
+			echo json_encode( $arrReturn );
+			die( 0 );
+		}
+
+		function rthd_add_new_offering(){
+			$arrReturn = array( 'status' => false );
+			if ( ! empty( $_POST[ 'offering' ] ) ) {
+				$term = wp_insert_term( $_POST[ 'offering' ], Rt_Offerings::$offering_slug );
+				if ( ! $term instanceof WP_Error && ! empty( $term ) ) {
+					$arrReturn = array( 'status' => true );
+				}
 			}
 			header( 'Content-Type: application/json' );
 			echo json_encode( $arrReturn );

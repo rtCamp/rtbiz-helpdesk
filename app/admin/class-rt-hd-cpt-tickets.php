@@ -32,6 +32,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 			// CPT Edit/Add View
 			add_action( 'add_meta_boxes', array( $this, 'remove_meta_boxes' ), 10 );
 			add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ), 30 );
+			add_action('add_meta_boxes_' . Rt_HD_Module::$post_type , array( $this, 'metabox_rearrenge' ));
 			add_action( 'save_post', array( $this, 'save_meta_boxes' ), 1, 2 );
 
 			add_action( 'pre_post_update', 'RT_Ticket_Diff_Email::store_old_post_data', 1, 2 );
@@ -337,17 +338,40 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 		 */
 		public function add_meta_boxes() {
 			global $post;
-			add_meta_box( 'rt-hd-ticket-data', __( 'Ticket Information', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Ticket_Info::ui', Rt_HD_Module::$post_type, 'side', 'high' );
-			add_meta_box( 'rt-hd-subscriiber', __( 'Staff', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Subscribers::ui', Rt_HD_Module::$post_type, 'side', 'high' );
-			add_meta_box( 'rt-hd-attachment', __( 'Attachments', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Attachment::ui', Rt_HD_Module::$post_type, 'side', 'low' );
-//			add_meta_box( 'rt-hd-external-link', __( 'Reference Links', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_External_Link::ui', Rt_HD_Module::$post_type, 'side', 'default' );
 			if ( ! empty( $post ) && 'auto-draft' != $post->post_status ){
 				remove_post_type_support( Rt_HD_Module::$post_type, 'editor' );
 				add_meta_box( 'rt-hd-ticket-follow-up',  __( 'Follow Up', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Ticket_Comments::ui',  Rt_HD_Module::$post_type,  'normal', 'high' );
 			}
+
+			add_meta_box( 'rt-hd-ticket-data', __( 'Ticket Information', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Ticket_Info::ui', Rt_HD_Module::$post_type, 'side', 'default' );
+			add_meta_box( 'rt-hd-subscriiber', __( 'Participants (Staff)', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Subscribers::ui', Rt_HD_Module::$post_type, 'side', 'default' );
+			add_meta_box( 'rt-hd-ticket-order-history',  __( 'Purchase History', RT_HD_TEXT_DOMAIN ), array( $this, 'order_history'),  Rt_HD_Module::$post_type,  'side', 'default' );
 			add_meta_box( 'rt-hd-ticket-contacts-blacklist',  __( 'Blacklist Contacts', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Ticket_Contacts_Blacklist::ui',  Rt_HD_Module::$post_type,  'side', 'low' );
-			add_meta_box( 'rt-hd-ticket-order-history',  __( 'Purchase History', RT_HD_TEXT_DOMAIN ), array( $this, 'order_history'),  Rt_HD_Module::$post_type,  'side', 'core' );
+			add_meta_box( 'rt-hd-attachment', __( 'Attachments', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Attachment::ui', Rt_HD_Module::$post_type, 'side', 'low' );
+//			add_meta_box( 'rt-hd-external-link', __( 'Reference Links', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_External_Link::ui', Rt_HD_Module::$post_type, 'side', 'default' );
 		}
+
+		/**
+		 * up[date metabox order
+		 */
+		public function metabox_rearrenge(){
+			global $wp_meta_boxes;
+			$custom_order['submitdiv'] = $wp_meta_boxes[ Rt_HD_Module::$post_type ]['side']['core']['submitdiv'];
+			$custom_order['rt-hd-ticket-data'] = $wp_meta_boxes[ Rt_HD_Module::$post_type ]['side']['default']['rt-hd-ticket-data'];
+			$custom_order['rt-offeringdiv'] = $wp_meta_boxes[ Rt_HD_Module::$post_type ]['side']['core']['rt-offeringdiv'];
+			$custom_order['p2p-from-' . Rt_HD_Module::$post_type . '_to_' . rt_biz_get_contact_post_type() ] = $wp_meta_boxes[ Rt_HD_Module::$post_type ]['side']['default']['p2p-from-' . Rt_HD_Module::$post_type . '_to_' . rt_biz_get_contact_post_type() ];
+			$custom_order['rt-hd-subscriiber'] = $wp_meta_boxes[ Rt_HD_Module::$post_type ]['side']['default']['rt-hd-subscriiber'];
+			$custom_order['rt-hd-ticket-order-history'] = $wp_meta_boxes[ Rt_HD_Module::$post_type ]['side']['default']['rt-hd-ticket-order-history'];
+			$custom_order['p2p-any-' . Rt_HD_Module::$post_type . '_to_' . Rt_HD_Module::$post_type ] = $wp_meta_boxes[ Rt_HD_Module::$post_type ]['side']['default']['p2p-any-' . Rt_HD_Module::$post_type . '_to_' . Rt_HD_Module::$post_type ];
+			$custom_order['rt-departmentdiv'] = $wp_meta_boxes[ Rt_HD_Module::$post_type ]['side']['core']['rt-departmentdiv'];
+			$wp_meta_boxes[ Rt_HD_Module::$post_type ]['side']['core'] = $custom_order;
+			unset( $wp_meta_boxes[ Rt_HD_Module::$post_type ]['side']['default']['rt-hd-ticket-data'] );
+			unset( $wp_meta_boxes[ Rt_HD_Module::$post_type ]['side']['default']['p2p-from-' . Rt_HD_Module::$post_type . '_to_' . rt_biz_get_contact_post_type()] );
+			unset( $wp_meta_boxes[ Rt_HD_Module::$post_type ]['side']['default']['rt-hd-subscriiber'] );
+			unset( $wp_meta_boxes[ Rt_HD_Module::$post_type ]['side']['default']['rt-hd-ticket-order-history'] );
+			unset( $wp_meta_boxes[ Rt_HD_Module::$post_type ]['side']['default']['p2p-any-' . Rt_HD_Module::$post_type . '_to_' . Rt_HD_Module::$post_type ] );
+		}
+
 
 		/**
 		 * @param $post
@@ -519,6 +543,11 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 					$fav_ticket = rthd_get_user_fav_ticket( get_current_user_id() );
 					$query->set( 'post__in', $fav_ticket );
 				}
+
+				$editor_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
+				if ( ! current_user_can( $editor_cap ) ){
+					$query->set( 'author', get_current_user_id() );
+				}
 			}
 
 		}
@@ -631,7 +660,9 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 				else
 					$class = '';
                 $temp_view['mine'] = "<a href='edit.php?post_type=".Rt_HD_Module::$post_type."&author=$current_user_id' $class>" . sprintf( _nx( 'Mine <span class="count">(%s)</span>', 'Mine <span class="count">(%s)</span>', $count_user_tickets->post_count, RT_HD_TEXT_DOMAIN ), number_format_i18n( $count_user_tickets->post_count ) ) . '</a>';
-			}
+			}else{
+	            unset( $views['all'] );
+            }
 
 			$fav_ticket = rthd_get_user_fav_ticket( $current_user_id );
 			if ( ! empty( $fav_ticket ) ){
