@@ -215,7 +215,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 
 			if ( empty( $customers_userid ) ) {
 				if ( ! class_exists( 'WooCommerce' ) && ! class_exists( 'Easy_Digital_Downloads' ) ) {
-					echo 'This reports will generated with EDD & Wocommerce plugin.';
+					echo 'This reports will generated with EDD & WooCommerce plugin.';
 				} else {
 					echo 'No customers found who have created any ticket.';
 				}
@@ -289,7 +289,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			$post_type = Rt_HD_Module::$post_type;
 			$total = 0;
 			if ( empty( $terms ) ) {
-				echo 'No Offering [ product / Downloads ] found';
+				printf(  'No offerings [ products / downloads ] found. <a target="_blank" href="%s" >Add new offering</a>', admin_url( 'edit-tags.php?taxonomy=' . Rt_Offerings::$offering_slug . '&post_type=' . Rt_HD_Module::$post_type ) );
 				return;
 			}
 			if ( ! $terms instanceof WP_Error ) {
@@ -335,6 +335,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		 */
 		function tickets_by_status() {
 			global $rt_hd_module, $wpdb;
+			$settings = rthd_get_redux_settings();
 			$table_name = rthd_get_ticket_table_name();
 			$post_statuses = array();
 			foreach ( $rt_hd_module->statuses as $status ) {
@@ -370,7 +371,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			?>
 			<div id="rthd_hd_pie_tickets_by_status"></div>
 				<?php if( empty( $results ) ){
-					_e( 'No ticket found!' );
+					printf(  'No tickets found. <a target="_blank" href="%s" >Add new ticket</a>', get_page_link( $settings[ 'rthd_support_page' ] ) );
 				} ?>
 			<?php
 		}
@@ -441,6 +442,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			$this->charts[] = array(
 				'id' => 5,
 				'chart_type' => 'line',
+				'vAxisMin' => '0',
 				'data_source' => $data_source,
 				'dom_element' => 'rthd_hd_line_daily_tickets',
 				'options' => array( 'title' => __( 'Daily Tickets', RT_HD_TEXT_DOMAIN ), 'vAxisMin' => 0 ),
@@ -521,7 +523,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			?>
 			<div id="rthd_hd_table_team_load"></div>
 				<?php if( empty( $results ) ){
-					_e( 'No staff found! Please add staff for helpdesk from setting page.' );
+					_e( 'No staff / ticket found.' );
 				} ?>
 			<?php
 		}
@@ -622,7 +624,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			?>
 			<div id="rthd_hd_table_top_clients">
 				<?php if( empty( $results ) ){
-					_e( 'No Customer Found' );
+					_e( 'No customer found' );
 				} ?>
 			</div>
 			<?php
