@@ -338,7 +338,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 		public function add_meta_boxes() {
 			global $post;
 			add_meta_box( 'rt-hd-ticket-data', __( 'Ticket Information', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Ticket_Info::ui', Rt_HD_Module::$post_type, 'side', 'high' );
-			add_meta_box( 'rt-hd-subscriiber', __( 'Staff', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Subscribers::ui', Rt_HD_Module::$post_type, 'side', 'high' );
+			add_meta_box( 'rt-hd-subscriiber', __( 'Participants (Staff)', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Subscribers::ui', Rt_HD_Module::$post_type, 'side', 'high' );
 			add_meta_box( 'rt-hd-attachment', __( 'Attachments', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Attachment::ui', Rt_HD_Module::$post_type, 'side', 'low' );
 //			add_meta_box( 'rt-hd-external-link', __( 'Reference Links', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_External_Link::ui', Rt_HD_Module::$post_type, 'side', 'default' );
 			if ( ! empty( $post ) && 'auto-draft' != $post->post_status ){
