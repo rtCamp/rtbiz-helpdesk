@@ -175,10 +175,10 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 								<?php
 								$selected_userid = get_offering_meta('default_assignee');
 								if ( empty( $selected_userid ) ){
-									echo '<option disabled selected> -- select an assignee -- </option>';
+									echo '<option disabled selected value="0"> -- select an assignee -- </option>';
 								}
 								else{
-									echo '<option > -- select an assignee -- </option>';
+									echo '<option value="0"> -- select an assignee -- </option>';
 								}
 								foreach ( $users as $user ) {
 									if ( $user->ID == $selected_userid ){
