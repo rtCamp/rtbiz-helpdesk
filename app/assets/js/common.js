@@ -443,7 +443,7 @@ jQuery( document ).ready( function () {
 			});
 		}
 
-	}
+	};
 	rthd_common.init();
 
 });

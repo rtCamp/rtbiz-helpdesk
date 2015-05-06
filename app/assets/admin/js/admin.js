@@ -480,6 +480,6 @@ jQuery(document).ready(function() {
 				jQuery('#contacts-blacklist-action').show();
 			});
 		}
-	}
+	};
 	rthdAdmin.init();
 });
