@@ -1,0 +1,48 @@
+@media #{$large-up} {
+
+	.rtb-content-section {
+		float: left;
+		width: 78.2%;
+	}
+
+	.rtb-sidebar {
+		float: right;
+		width: 20%;
+
+		.postbox {
+			min-width: 0;
+		}
+	}
+}
+
+
+@media #{$medium-only} {
+
+
+
+}
+
+@media screen and (max-width: 1024px) {
+
+}
+
+@media #{$medium-up} {
+
+}
+
+@media screen and (min-width: 421px) and (max-width: 782px) {
+
+}
+
+@media #{$small-only} {
+
+
+}
+
+@media screen and (max-width: 481px) {
+
+}
+
+@media screen and (max-width: 420px) {
+
+}

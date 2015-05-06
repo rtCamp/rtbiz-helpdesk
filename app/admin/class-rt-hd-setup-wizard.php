@@ -117,35 +117,59 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			<div class="wrap">
 
 				<h2><?php _e( 'rtBiz Helpdesk Setup', RT_BIZ_TEXT_DOMAIN ); ?></h2>
-
-				<div class="rtb-setup-header">
-					<div class="updated notice notice-success is-dismissible below-h2" id="message">
-						<p><?php _e( 'Thank you for choosing this plugin. Click "Begin Setup" to configure your Helpdesk.', RT_BIZ_TEXT_DOMAIN ); ?></p>
-					</div>
-
-					<input type="button" id="rthd-setup-start" class="button button-primary" value="Begin Setup" />
+				<hr>
+				<div class="updated notice notice-success is-dismissible below-h2" id="message">
+					<p><?php _e( 'Thank you for choosing rtBiz', RT_BIZ_TEXT_DOMAIN ); ?></p>
 				</div>
 
-				<ol class="progtrckr" data-progtrckr-steps="5">
-					<li class="progtrckr-done">Order Processing</li>
-					<li class="progtrckr-done">Pre-Production</li>
-					<li class="progtrckr-todo">In Production</li>
-					<li class="progtrckr-todo">Shipped</li>
-					<li class="progtrckr-todo">Delivered</li>
-				</ol>
+				<div class="clearfix rtb-row-container">
+					<div class="rtb-content-section">
 
-				<?php
-				// title and function to call for content
-				$wizard = array(
-					'Support Page' => array( $this, 'support_page_ui' ),
-					'Connect Store' => array( $this, 'connect_store_ui' ),
-					'Setup Your Team' => array( $this, 'setup_team' ),
-					'Set Assignee' => array( $this, 'set_assignee_ui' ),
-					'Mailbox Setup' => array( $this, 'mail_box_ui' ),
-					'Set Roles' => array( $this, 'set_role_ui' ),
-				);
-				$this->generate_wizard( $wizard );
-				?>
+						<h3 class="rtb-option-title">Please follow given steps to configure your Helpdesk.</h3>
+
+						<?php
+						// title and function to call for content
+						$wizard = array(
+							'Support Page' => array( $this, 'support_page_ui' ),
+							'Connect Store' => array( $this, 'connect_store_ui' ),
+							'Setup Your Team' => array( $this, 'setup_team' ),
+							'Set Assignee' => array( $this, 'set_assignee_ui' ),
+							'Mailbox Setup' => array( $this, 'mail_box_ui' ),
+							'Set Roles' => array( $this, 'set_role_ui' ),
+						);
+						$this->generate_wizard( $wizard );
+						?>
+					</div>
+					<div class="metabox-holder bp-media-metabox-holder rtb-sidebar">
+						<div id="spread-the-word" class="postbox">
+							<h3 class="hndle"><span>Spread the Word</span></h3>
+							<div class="inside">
+								<div class="rtb-social-share" id="social">
+									<p><a title="Post to Twitter Now" target="_blank" class="button twitter" href="http://twitter.com/home/?status=I use @buddypressmedia http://rt.cx/rtmedia on http://localhost:8888/rtmedia-pro">Post to Twitter<span class="dashicons dashicons-twitter"></span></a></p>
+									<p><a title="Share on Facebook Now" target="_blank" class="button facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://rtcamp.com/rtmedia/">Share on Facebook<span class="dashicons dashicons-facebook"></span></a></p>
+									<p><a title="Rate rtMedia on Wordpress.org" target="_blank" class="button wordpress" href="http://wordpress.org/support/view/plugin-reviews/buddypress-media?rate=5#postform">Rate on Wordpress.org<span class="dashicons dashicons-wordpress"></span></a></p>
+									<p><a title="Subscribe to our Feeds" target="_blank" class="button rss" href="https://rtcamp.com/feed/">Subscribe to our Feeds<span class="dashicons dashicons-rss"></span></a></p>
+								</div>
+							</div>
+						</div>
+						<div id="branding" class="postbox">
+							<h3 class="hndle"><span>Subscribe</span></h3>
+							<div class="inside">
+								<form novalidate="" target="_blank" class="validate" name="mc-embedded-subscribe-form" id="mc-embedded-subscribe-form" method="post" action="http://rtcamp.us1.list-manage1.com/subscribe/post?u=85b65c9c71e2ba3fab8cb1950&amp;id=9e8ded4470">
+									<div class="mc-field-group">
+										<input type="email" id="mce-EMAIL" class="required email" placeholder="Email" name="EMAIL" value="sagar.jadhav@rtcamp.com">
+										<input type="checkbox" id="mce-group[1721]-1721-0" name="group[1721][1]" value="1" checked="checked" style="display:none;">
+										<input type="submit" class="button" id="mc-embedded-subscribe" name="subscribe" value="Subscribe">
+										<div class="clear" id="mce-responses">
+											<div style="display:none" id="mce-error-response" class="response"></div>
+											<div style="display:none" id="mce-success-response" class="response"></div>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 
 			<?php
@@ -417,7 +441,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			?>
 			<div class="rthd-setup-wizard-controls">
 				<h3 class="rthd-setup-wizard-title">Support Page </h3>
-				<p class="description ">Create a support page where your customers can submit tickets.</p>
+				<p class="description">Create a support page where your customers can submit tickets.</p>
 				<div class="rthd-setup-wizard-row">
 					<label for="rthd-setup-wizard-support-page"><?php _e( 'Select Support Page ', RT_BIZ_TEXT_DOMAIN ); ?></label>
 					<select id="rthd-setup-wizard-support-page">

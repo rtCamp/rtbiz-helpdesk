@@ -1,3 +1,10 @@
+// *** This line Import Compass. *** //
+@import "compass";
+
+@import 'variables';
 @import 'generic';
+@import 'layout';
 @import 'follow-up';
 @import 'steps';
+@import 'sidebar';
+@import 'responsive';

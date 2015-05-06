@@ -1,93 +1,113 @@
+.wizard {
+	ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
 
-ol.progtrckr {
-	margin: 0;
-	padding: 0;
-	list-style-type: none;
+	.content {
+		margin: 0.5em;
+		overflow: hidden;
+	}
+
+	.actions {
+		position: relative;
+		display: block;
+		width: 100%;
+	}
+
 }
 
-ol.progtrckr li {
-	display: inline-block;
-	text-align: center;
-	line-height: 3em;
-}
-
-ol.progtrckr[data-progtrckr-steps="2"] li { width: 49%; }
-ol.progtrckr[data-progtrckr-steps="3"] li { width: 33%; }
-ol.progtrckr[data-progtrckr-steps="4"] li { width: 24%; }
-ol.progtrckr[data-progtrckr-steps="5"] li { width: 19%; }
-ol.progtrckr[data-progtrckr-steps="6"] li { width: 16%; }
-ol.progtrckr[data-progtrckr-steps="7"] li { width: 14%; }
-ol.progtrckr[data-progtrckr-steps="8"] li { width: 12%; }
-ol.progtrckr[data-progtrckr-steps="9"] li { width: 11%; }
-
-ol.progtrckr li.progtrckr-done {
-	color: black;
-	border-bottom: 4px solid yellowgreen;
-}
-ol.progtrckr li.progtrckr-todo {
-	color: silver;
-	border-bottom: 4px solid silver;
-}
-
-ol.progtrckr li:after {
-	content: "\00a0\00a0";
-}
-ol.progtrckr li:before {
+.steps {
 	position: relative;
-	bottom: -2.5em;
-	float: left;
-	left: 50%;
-	line-height: 1em;
-}
-ol.progtrckr li.progtrckr-done:before {
-	content: "\2713";
-	color: white;
-	background-color: yellowgreen;
-	height: 1.2em;
-	width: 1.2em;
-	line-height: 1.2em;
-	border: none;
-	border-radius: 1.2em;
-}
-ol.progtrckr li.progtrckr-todo:before {
-	content: "\039F";
-	color: silver;
-	background-color: white;
-	font-size: 1.5em;
-	bottom: -1.6em;
-}
+	padding: 5px 0 0 0;
 
-/*
-    Common
-*/
+	li {
+		display: inline-block;
+		width: 18%; /* edited default 25% */
+	}
 
-.wizard,
-.tabcontrol
-{
-	display: block;
-	width: 100%;
-	overflow: hidden;
-}
+	a {
+		border-bottom: 4px solid silver;
+		cursor: default;
+		color: silver;
+		display: block;
+		margin: 0 1px;
+		padding: 0 0 12px;
+		position: relative;
+		text-align: center;
+		text-decoration: none;
 
-.wizard a,
-.tabcontrol a
-{
-	outline: 0;
-}
+		&:focus {
+			box-shadow: 0 0 0;
+		}
 
-.wizard ul,
-.tabcontrol ul
-{
-	list-style: none !important;
-	padding: 0;
-	margin: 0;
-}
+		&:after {
+			background-color: white;
+			border: 2px solid silver;
+			border-radius: 100%;
+			bottom: -10px;
+			color: white;
+			content: "";
+			height: 12px;
+			left: 0;
+			line-height: 14px;
+			margin: 0 auto;
+			position: absolute;
+			right: 0;
+			width: 12px;
+		}
+	}
 
-.wizard ul > li,
-.tabcontrol ul > li
-{
-	display: block;
-	padding: 0;
+	.disabled a {
+
+	}
+
+	.current a {
+		border-bottom-color: #8ed24b;
+		color: black;
+
+		&:after {
+			background-color: #8ed24b;
+			border: 0;
+			border-radius: 100%;
+			bottom: -10px;
+			color: white;
+			content: "✓";
+			height: 16px;
+			left: 0;
+			line-height: 16px;
+			margin: 0 auto;
+			position: absolute;
+			right: 0;
+			width: 16px;
+		}
+	}
+
+	.done a {
+		border-bottom-color: #8ed24b;
+		opacity: 0.6;
+
+		&:after {
+			background-color: #8ed24b;
+			border: 0;
+			border-radius: 100%;
+			bottom: -10px;
+			color: white;
+			content: "✓";
+			height: 16px;
+			left: 0;
+			line-height: 16px;
+			margin: 0 auto;
+			position: absolute;
+			right: 0;
+			width: 16px;
+		}
+	}
+
+	.error a {
+		border-bottom-color: #8ed24b;
+	}
 }
 
 /* Accessibility */
@@ -106,238 +126,9 @@ ol.progtrckr li.progtrckr-todo:before {
 }
 
 
-
 /*
     Wizard
 */
-
-.wizard > .steps
-{
-	position: relative;
-	display: block;
-	width: 100%;
-	padding: 5px 0 0 0;
-}
-
-.wizard.vertical > .steps
-{
-	display: inline;
-	float: left;
-	width: 30%;
-}
-
-.wizard > .steps .number
-{
-	font-size: 1.429em;
-}
-
-.wizard > .steps > ul > li
-{
-	width: 15%; /* edited default 25% */
-}
-
-.wizard > .steps > ul > li,
-.wizard > .actions > ul > li
-{
-	float: left;
-}
-
-.wizard.vertical > .steps > ul > li
-{
-	float: none;
-	width: 100%;
-}
-
-.wizard > .steps a,
-.wizard > .steps a:hover,
-.wizard > .steps a:active
-{
-	display: block;
-	width: auto;
-	margin: 0 0.5em 0.5em;
-	padding: 1em 1em;
-	text-decoration: none;
-
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
-}
-
-.wizard > .steps .disabled a,
-.wizard > .steps .disabled a:hover,
-.wizard > .steps .disabled a:active
-{
-	background: #ddd;
-	color: #555;
-	cursor: default;
-}
-
-.wizard > .steps .current a,
-.wizard > .steps .current a:hover,
-.wizard > .steps .current a:active
-{
-	background: #8ed24b;
-	color: #fff;
-	cursor: default;
-}
-
-.wizard > .steps .done a,
-.wizard > .steps .done a:hover,
-.wizard > .steps .done a:active
-{
-	background: #caeaaa;
-	color: #fff;
-}
-
-.wizard > .steps .error a,
-.wizard > .steps .error a:hover,
-.wizard > .steps .error a:active
-{
-	background: #8ed24b;
-	color: #fff;
-}
-
-.wizard > .content
-{
-	margin: 0.5em;
-	overflow: hidden;
-}
-
-.wizard.vertical > .content
-{
-	display: inline;
-	float: left;
-	margin: 0 2.5% 0.5em 2.5%;
-	width: 65%;
-}
-
-.wizard > .content > .body
-{
-	width: 95%;
-}
-
-.wizard > .content > .body ul
-{
-	/*list-style: disc !important;*/
-}
-
-.wizard > .content > .body ul > li
-{
-	display: list-item;
-}
-
-.wizard > .content > .body > iframe
-{
-	border: 0 none;
-	width: 100%;
-	height: 100%;
-}
-
-.wizard > .content > .body input
-{
-	/*display: block;*/
-	border: 1px solid #ccc;
-}
-
-.wizard > .content > .body input[type="text"], input#rtmailbox-password, input#rtmailbox-email{
-	width: 40%;
-}
-
-.wizard > .content > .body select,select#rthd-setup-wizard-support-page,select.rthd-setup-assignee{
-	width: 40%;
-}
-
-.wizard > .content > .body input[type="checkbox"]
-{
-	display: inline-block;
-}
-
-.wizard > .content > .body input.error
-{
-	background: rgb(251, 227, 228);
-	border: 1px solid #fbc2c4;
-	color: #8a1f11;
-}
-
-.wizard > .content > .body label
-{
-	/*display: inline-block;*/
-	margin-bottom: 0.5em;
-}
-
-.wizard > .content > .body label.error
-{
-	color: #8a1f11;
-	display: inline-block;
-	margin-left: 1.5em;
-}
-
-.wizard > .actions
-{
-	position: relative;
-	display: block;
-	width: 100%;
-}
-
-.wizard.vertical > .actions
-{
-	display: inline;
-	margin: 0 2.5%;
-	width: 95%;
-}
-
-.wizard > .actions > ul
-{
-	display: inline-block;
-    margin-left: 43.5%;
-}
-
-.wizard > .actions > ul > li:first-child
-{
-	margin: 0 1em;
-}
-
-.wizard > .actions > ul > li
-{
-	margin: 0 0.5em;
-}
-
-.wizard.vertical > .actions > ul > li
-{
-	margin: 0 0 0 1em;
-}
-
-.wizard > .actions a,
-.wizard > .actions a:hover,
-.wizard > .actions a:active
-{
-	background: #2184be;
-	color: #fff;
-	display: block;
-	padding: 0.5em 1em;
-	text-decoration: none;
-
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
-}
-
-.wizard > .actions .disabled a,
-.wizard > .actions .disabled a:hover,
-.wizard > .actions .disabled a:active
-{
-	background: #eee;
-	color: #555;
-}
-
-.wizard > .loading
-{
-}
-
-.wizard > .loading .spinner
-{
-}
-
 
 
 /*

@@ -13,24 +13,18 @@ jQuery( document ).ready( function ( $ ) {
 			rthdSetup.search_users();
 			rthdSetup.add_user_single();
 			rthdSetup.assingee_page();
-			rthdSetup.setup_start();
 			rthdSetup.acl_save();
 			rthdSetup.get_acl_view();
 
-		},
-		setup_start: function () {
-			$( document ).on( 'click', '#rthd-setup-start', function () {
-				$( '.rtb-setup-header' ).remove();
-				$( '#wizard' ).show();
-			} );
 		},
 		setup_wizard: function () {
 			wizard = jQuery( "#wizard" ).steps( {
 				headerTag: "h3",
 				bodyTag: "fieldset",
 				transitionEffect: "slideLeft",
-                //titleTemplate: '#title#',
+				//titleTemplate: '#title#',
 				forceMoveForward: true,
+				titleTemplate: "#title#",
 				//enableAllSteps: true,
 				onStepChanging: function ( event, currentIndex, newIndex ) {
 					//alert("moving to "+newIndex+" from "+ currentIndex);
