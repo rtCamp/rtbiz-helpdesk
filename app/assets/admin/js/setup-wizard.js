@@ -228,8 +228,7 @@ jQuery( document ).ready( function ( $ ) {
 			var requestArray = new Object();
 			requestArray['action'] = 'rthd_setup_support_page';
 			val = jQuery( '#rthd-setup-wizard-support-page' ).val();
-
-			if ( val == 0 || ( jQuery( '#rthd-setup-wizard-support-page-new' ).val().length === 0 && ! jQuery( '#rthd-setup-wizard-support-page-new' ).val().trim() ) ) {
+			if ( val == 0 || ( val == -1 && jQuery( '#rthd-setup-wizard-support-page-new' ).val().length === 0 && ! jQuery( '#rthd-setup-wizard-support-page-new' ).val().trim() ) ) {
 				var strconfirm = confirm( 'Do you want to skip this step ?' );
 				if ( strconfirm == true ) {
 					return true;
