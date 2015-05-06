@@ -169,28 +169,28 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				$mailbox_options[ $email ] = $email;
 			}
 			$acl_page_link = '<a href="' . admin_url( 'admin.php?page=' . Rt_Biz::$access_control_slug ) . '">Access Control</a> page.';
-			$offerings_page_link = '<a href="' . admin_url( 'edit-tags.php?taxonomy=' . Rt_Offerings::$offering_slug . '&post_type=' . Rt_HD_Module::$post_type ) . '">offerings</a>';
+			$offerings_page_link = ' ' . __( ' To select dedicated assignee for an offering, visit the ' ) .'<a href="' . admin_url( 'edit-tags.php?taxonomy=' . Rt_Offerings::$offering_slug . '&post_type=' . Rt_HD_Module::$post_type ) . '">offerings page</a>.';
 			// ACTUAL DECLARATION OF SECTIONS
 			$general_fields = array(
 				array(
-					'id'       => 'rthd_support_page',
-					'type'     => 'select',
-					'data'     => 'pages',
-					'title'    => __( 'Support Page' ),
-					'desc'     => __( 'Add <strong>[rt_hd_support_form]</strong> shortcode to add support form to a page and select this page in the drop down. This page will then be used to handle new support requests from front-end.' ),
-					'subtitle' => __( 'Select Page for Product Support' ),
+					'id'          => 'rthd_menu_label',
+					'type'        => 'text',
+					'title'       => __( 'Menu Label' ),
+					'subtitle'    => __( 'Menu Label Identity for the Plugin.' ),
+					'desc'        => __( 'This label will be used for the Menu Item label for Helpdesk' ),
+					'default'     => __( 'Helpdesk' ),
+					'placeholder' => __( 'rtBiz Helpdesk, Support, etc.' ),
 				),
 				array(
-					'id'       => 'offering_plugin',
-					'title'    => __( 'Connected Store' ),
-					'subtitle' => __( 'Select the plugin you want to connect Helpdesk with ' ),
-					'desc'     => __( 'All the existing and future products/offerings will be imported for the selected plugin. You can also create custom products from ' ) . $offerings_page_link . __( ' section.' ),
-					'type'     => 'checkbox',
-					'options'  => array(
-						'woocommerce' => __( 'WooCommerce' ),
-						'edd' => __( 'Easy Digital Download' ),
+					'id'       => 'rthd_logo_url',
+					'type'     => 'media',
+					'url'      => true,
+					'title'    => __( 'Logo' ),
+					'subtitle' => __( 'Logo to be used for all Menu, Submenu, Post Types Menu Icons in Helpdesk.' ),
+					'desc'     => __( 'Upload any logo using the WordPress native uploader, preferably with the size of 16x16' ),
+					'default'  => array(
+						'url' => RT_HD_URL . 'app/assets/img/hd-16X16.png',
 					),
-					'default'  => '',
 				),
 				array(
 					'id'       => 'rthd_default_user',
@@ -198,8 +198,16 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					'options'  => $users_options,
 					'default'  => $default_assignee,
 					'title'    => __( 'Default Assignee' ),
-					'desc'     => __( 'To select dedicated assignee for an offering, visit the ' ) . $offerings_page_link . __( ' section.' ),
+					'desc'     => __( 'Default assignee will be rtbiz contact with helpdesk access. You can change helpdesk access from rtBiz ') .$acl_page_link . $offerings_page_link,
 					'subtitle' => __( 'Select user for HelpDesk ticket Assignee' ),
+				),
+				array(
+					'id'       => 'rthd_support_page',
+					'type'     => 'select',
+					'data'     => 'pages',
+					'title'    => __( 'Support Form' ),
+					'desc'     => __( 'Add <strong>[rt_hd_support_form]</strong> shortcode to add support form to a page and select this page in the drop down. This page will then be used to handle new support requests from front-end.' ),
+					'subtitle' => __( 'Select Page for Product Support' ),
 				),
 				array(
 					'id'       => 'rthd_enable_ticket_unique_hash',
@@ -238,22 +246,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				$redirect_url = admin_url( 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&page=rthd-settings' );
 				update_option( 'rthd_googleapi_redirecturl', $redirect_url );
 			}
-
-			$this->sections[] = array(
-				'icon'        => 'el-icon-group',
-				'title'       => __( 'Setup Your Team' ),
-				'permissions' => $admin_cap,
-				'fields'      => array(
-					array(
-						'id'      => 'rthd_team_setup',
-						'type'    => 'raw',
-						'content' => rthd_get_setup_team_ui(),
-					),
-				),
-			);
-
-
-
 			$email_fields = array();
 
 			array_push( $email_fields, array(
@@ -261,6 +253,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				'type'    => 'callback',
 				'title'   => 'Mailboxes Setup',
 				'subtitle' => __( 'Helpdesk Configured Mailbox(s)' ),
+				'desc'    => 'Following mailboxes have been configured for Helpdesk. Emails from these mailboxes will be parsed and Helpdesk will use them to create new ticket / add new followup accordingly. You can configure these mailboxes from <a href="'.add_query_arg( 'page', RT_BIZ_Configuration::$page_slug, admin_url( 'admin.php' ) ).'"rtBiz</a>',
 				'callback' => 'rthd_mailbox_setup_view',
 			) );
 
@@ -354,7 +347,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'validate'   => 'email',
 						'multi'      => true,
 						'show_empty' => false,
-						'add_text'   => 'Add Emails'
 					),
 					array(
 						'id'       => 'rthd_enable_notification_acl',
@@ -585,7 +577,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					array(
 						'id'      => 'rthd_auto_response_dayshift_time',
 						'type'    => 'callback',
-						'title'   => __( 'Configure working time for dayshift' ),
+						'title'   => __( 'Configure Weekdays for dayshift' ),
 						'subtitle' => __( 'Add hours of operation' ),
 						'desc'    => '',
 						'callback' => 'rthd_auto_response_dayshift_view',
@@ -604,7 +596,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					array(
 						'id'      => 'rthd_auto_response_nightshift_time',
 						'type'    => 'callback',
-						'title'   => __( 'Configure working time for nightshift' ),
+						'title'   => __( 'Configure Weekdays for nightshift' ),
 						'subtitle' => __( 'Add hours of operation' ),
 						'desc'    => '',
 						'callback' => 'rthd_auto_response_daynightshift_view',
@@ -659,7 +651,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				),
 			);
 
-	/*		$this->sections[]   = array(
+			$this->sections[]   = array(
 				'title'       => __( 'Gravity Importer' ),
 				'icon'        => 'el-icon-list-alt',
 				'permissions' => $admin_cap,
@@ -671,9 +663,9 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'content' => rthd_gravity_importer_view(),
 					),
 				),
-			);*/
+			);
 
-/*			$this->sections[]   = array(
+			$this->sections[]   = array(
 				'title'       => __( 'Importer Mapper' ),
 				'icon'        => 'el-icon-list-alt',
 				'permissions' => $admin_cap,
@@ -685,7 +677,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'content' => rt_biz_gravity_importer_mapper_view(),
 					),
 				),
-			);*/
+			);
 
 			// Only initiates in case of settings page is getting displayed. Not otherwise
 			if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] == self::$page_slug ) {
@@ -798,7 +790,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				// Page slug used to denote the panel
 				'save_defaults'      => true,
 				// On load save the defaults to DB before user clicks save or not
-				'default_show'       => false,
+				'default_show'       => true,
 				// If true, shows the default value next to each field that is not the default value.
 				'default_mark'       => '',
 				// What to print by the field's title if the value shown is default. Suggested: *
@@ -853,3 +845,35 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 
 }
 
+function rthd_get_redux_post_settings( $post ) {
+	// NOTE : Make modifications for what value to return.
+	if ( ! isset( $GLOBALS['redux_helpdesk_settings'] ) ) {
+		$GLOBALS['redux_helpdesk_settings'] = get_option( 'redux_helpdesk_settings', array() );
+	}
+	$data = wp_parse_args( get_post_meta( $post->ID, 'redux_helpdesk_settings', true ), $GLOBALS['redux_helpdesk_settings'] );
+
+	return $GLOBALS['redux_helpdesk_settings'];
+}
+
+function rthd_ticket_import_logs() {
+	global $rt_hd_logs;
+	$rt_hd_logs->ui();
+}
+
+function rthd_mailbox_setup_view(){
+	$module_key = rt_biz_sanitize_module_key( RT_HD_TEXT_DOMAIN );
+	rt_biz_mailbox_setup_view( $module_key );
+}
+
+function rthd_gravity_importer_view(){
+	$module_key = rt_biz_sanitize_module_key( RT_HD_TEXT_DOMAIN );
+	return rt_biz_gravity_importer_view( $module_key );
+}
+
+function rthd_activation_view(){
+	do_action( 'rthelpdesk_addon_license_details' );
+}
+
+function rthd_no_access_redux(){
+	return '<p class="description">Currently there are no settings available for you.</p>';
+}
