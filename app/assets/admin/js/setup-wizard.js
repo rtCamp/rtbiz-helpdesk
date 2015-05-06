@@ -78,39 +78,38 @@ jQuery( document ).ready( function ( $ ) {
 				}
 			} );
 		},
-
 		on_connected_store_change: function () {
-			jQuery( document ).on('change','input:checkbox[name=rthd-wizard-store]', function ( e ) {
-				if ( jQuery(this ).val()=='custom' && jQuery( this ).is(':checked')){
-					jQuery('.rthd-wizard-store-custom-div' ).show();
+			jQuery( document ).on( 'change', 'input:checkbox[name=rthd-wizard-store]', function ( e ) {
+				if ( jQuery( this ).val() == 'custom' && jQuery( this ).is( ':checked' ) ) {
+					jQuery( '.rthd-wizard-store-custom-div' ).show();
 				}
-				if ( !jQuery( this ).is(':checked')){
-					jQuery('.rthd-wizard-store-custom-div' ).hide();
+				if ( ! jQuery( this ).is( ':checked' ) ) {
+					jQuery( '.rthd-wizard-store-custom-div' ).hide();
 				}
-			});
+			} );
 
-			jQuery(document ).on('click','#rthd-setup-store-new-team-submit', function ( e ) {
-				console.log('inside');
-				var new_term = jQuery('#rthd-setup-store-new-team' ).val();
-				if ( new_term.length != 0 && !new_term.trim()){
+			jQuery( document ).on( 'click', '#rthd-setup-store-new-team-submit', function ( e ) {
+				console.log( 'inside' );
+				var new_term = jQuery( '#rthd-setup-store-new-team' ).val();
+				if ( new_term.length != 0 && ! new_term.trim() ) {
 					return;
 				}
 				$.ajax( {
-				        url: ajaxurl,
-				        dataType: "json",
-				        type: 'post',
-				        data: {
-							action: 'rthd_add_new_offering',
-					        offering: new_term
-						},
-				        success: function ( data ) {
-							if ( data.status ){
-								jQuery('ul.rthd-setup-wizard-new-offering' ).append('<li> '+new_term+' </li>');
-								jQuery('#rthd-setup-store-new-team' ).val('');
-							}
+					url: ajaxurl,
+					dataType: "json",
+					type: 'post',
+					data: {
+						action: 'rthd_add_new_offering',
+						offering: new_term
+					},
+					success: function ( data ) {
+						if ( data.status ) {
+							jQuery( 'ul.rthd-setup-wizard-new-offering' ).append( '<li> ' + new_term + ' </li>' );
+							jQuery( '#rthd-setup-store-new-team' ).val( '' );
 						}
-		        } );
-			});
+					}
+				} );
+			} );
 		},
 		search_users: function () {
 			if ( jQuery( ".rthd-user-autocomplete" ).length > 0 ) {
@@ -256,7 +255,7 @@ jQuery( document ).ready( function ( $ ) {
 			var requestArray = new Object();
 			requestArray['action'] = 'rthd_setup_support_page';
 			val = jQuery( '#rthd-setup-wizard-support-page' ).val();
-			if ( val == 0 || ( val == -1 && jQuery( '#rthd-setup-wizard-support-page-new' ).val().length === 0 && ! jQuery( '#rthd-setup-wizard-support-page-new' ).val().trim() ) ) {
+			if ( val == 0 || ( val == - 1 && jQuery( '#rthd-setup-wizard-support-page-new' ).val().length === 0 && ! jQuery( '#rthd-setup-wizard-support-page-new' ).val().trim() ) ) {
 				var strconfirm = confirm( 'Do you want to skip this step ?' );
 				if ( strconfirm == true ) {
 					return true;
@@ -415,7 +414,7 @@ jQuery( document ).ready( function ( $ ) {
 		connect_store: function () {
 			var selected = [ ];
 			jQuery( "input:checkbox[name=rthd-wizard-store]:checked" ).each( function () {
-				if ( $( this ).val() != 'custom' ){
+				if ( $( this ).val() != 'custom' ) {
 					selected.push( $( this ).val() );
 				}
 			} );
