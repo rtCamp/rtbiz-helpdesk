@@ -15,7 +15,11 @@ jQuery( document ).ready( function ( $ ) {
 			rthdSetup.assingee_page();
 			rthdSetup.acl_save();
 			rthdSetup.on_connected_store_change();
+			rthdSetup.hide_notice();
 
+		},
+		hide_notice: function() {
+			setTimeout(function(){ jQuery(".rthd-hide-notice-setup-wizard").hide(); }, 10000 );
 		},
 		setup_wizard: function () {
 			wizard = jQuery( "#wizard" ).steps( {

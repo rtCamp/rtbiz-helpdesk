@@ -119,7 +119,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 
 				<h2><?php _e( 'rtBiz Helpdesk Setup', RT_BIZ_TEXT_DOMAIN ); ?></h2>
 				<hr>
-				<div class="updated notice notice-success is-dismissible below-h2" id="message">
+				<div class="updated notice notice-success is-dismissible below-h2 rthd-hide-notice-setup-wizard" id="message">
 					<p><?php _e( 'Thank you for choosing rtBiz', RT_BIZ_TEXT_DOMAIN ); ?></p>
 				</div>
 
