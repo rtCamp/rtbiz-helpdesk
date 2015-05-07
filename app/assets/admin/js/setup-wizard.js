@@ -23,7 +23,7 @@ jQuery( document ).ready( function ( $ ) {
 				bodyTag: "fieldset",
 				transitionEffect: 1,
 				forceMoveForward: true,
-				titleTemplate: "#title#",
+				//titleTemplate: "#title#",
 				//enableAllSteps: true,
 				onStepChanging: function ( event, currentIndex, newIndex ) {
 					//alert("moving to "+newIndex+" from "+ currentIndex);
