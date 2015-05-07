@@ -190,19 +190,22 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 						$user = $rt_biz_acl_model->get_acl( $where );
 						if ( empty( $user ) ) {
 							$permission_role = 0;
-							//check admin contact;
-							$contacts = array();
-							$module_user = get_users( array( 'fields' => 'ID', 'role' => 'administrator' ) );
-							$admin_contact = rt_biz_get_contact_for_wp_user( $module_user );
-							foreach( $admin_contact as $contact ){
-								$contacts[] = $contact->ID;
-							}
-							if ( in_array( $post_id, $contacts ) ) {
-								$permission_role = 30;
-							}
 						} else {
 							$permission_role = $user[0]->permission;
 						}
+
+						//check admin contact
+						$contacts = array();
+						$module_user = get_users( array( 'fields' => 'ID', 'role' => 'administrator' ) );
+						$admin_contact = rt_biz_get_contact_for_wp_user( $module_user );
+
+						foreach( $admin_contact as $contact ){
+							$contacts[] = $contact->ID;
+						}
+						if ( in_array( $post_id, $contacts ) ) {
+							$permission_role = 30;
+						}
+
 						switch( $permission_role ){
 							case 10 :
 								$permission_role = 'Author'; break;
