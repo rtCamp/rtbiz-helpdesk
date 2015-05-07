@@ -319,7 +319,7 @@ jQuery( document ).ready( function ( $ ) {
 						} else {
 							jQuery( '#rthd-import-all-spinner' ).hide();
 							jQuery( '#rthd-setup-import-users-progress' ).hide();
-							if ( imported_users == 0 ) {
+							if ( imported_users == 0 || !data.imported_count ) {
 								jQuery( '#rthd-all-import-message' ).html( 'No Users Found' );
 							} else {
 								jQuery( '#rthd-all-import-message' ).html( imported_users + ' Users Added' );
