@@ -36,6 +36,10 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 			add_filter( 'rt_entity_columns', array( $this, 'contacts_columns' ), 10, 2 );
 			add_action( 'rt_entity_manage_columns', array( $this, 'manage_contacts_columns' ), 10, 3 );
 
+			add_action('bulk_edit_custom_box', array( $this, 'contact_quick_action' ) , 10, 2);
+			add_action('quick_edit_custom_box', array( $this, 'contact_quick_action' ) , 10, 2);
+			add_action( 'save_post', array( $this, 'save_helpdesk_role' ), 10, 2 );
+
 			add_action( 'wp_ajax_rthd_search_contact', array( $this, 'contact_autocomplete_ajax' ) );
 			add_action( 'wp_ajax_rthd_get_term_meta', array( $this, 'get_taxonomy_meta_ajax' ) );
 
@@ -43,6 +47,63 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 			add_action( 'wp_ajax_rthd_add_contact', array( $this, 'add_new_contact_ajax' ) );
 			add_filter( 'rt_biz_contact_meta_fields', array( $this, 'rthd_add_setting_to_rtbiz_user' ), 10, 1 );
 
+		}
+
+		/**
+		 * bulk/Quick action ui added for helpdesk role
+		 * @param $col
+		 * @param $type
+		 */
+		function contact_quick_action( $col, $type ){
+			if( $type != rt_biz_get_contact_post_type() || 'hd_role' != $col ){
+				return;
+			}
+			$permissions = rt_biz_get_acl_permissions(); ?>
+			<fieldset id="rtbiz_contact_helpdesk_access" class="inline-edit-col-right">
+				<div class="inline-edit-col">
+					<label class="alignleft">
+						<span>Helpdesk Roled</span>
+						<input type="hidden" name="rtbiz_action" value="rtbiz_helpdesk_role_updated">
+						<select name="rt_biz_profile_permissions[rtbiz-helpdesk]">
+							<?php foreach ( $permissions as $pkey => $p ) { ?>
+								<option title="<?php echo $p['tooltip']; ?>" value="<?php echo $p['value']; ?>" ><?php echo $p['name']; ?></option>
+							<?php } ?>
+						</select>
+					</label>
+				</div>
+			</fieldset>
+		<?php
+		}
+
+		/**
+		 * update helpdesk role bulk action
+		 * @param $post_id
+		 * @param $post
+		 *
+		 * @return mixed
+		 */
+		function save_helpdesk_role( $post_id, $post ){
+			if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
+				return $post_id;
+
+			if ( isset( $post->post_type ) && $post->post_type != rt_biz_get_contact_post_type() )
+				return $post_id;
+
+			if ( 'rtbiz_helpdesk_role_updated' == $_REQUEST['rtbiz_action'] ){
+				global $rt_biz_acl_model;
+				$data = array(
+					'permission' => $_REQUEST['rt_biz_profile_permissions'][ RT_HD_TEXT_DOMAIN ],
+				);
+				$users = rt_biz_get_wp_user_for_contact( $_REQUEST['post'] );
+				foreach( $users as $user){
+					$where = array(
+						'userid'     => $user->ID,
+						'module'     => RT_HD_TEXT_DOMAIN,
+						'groupid'    => 0,
+					);
+					$rt_biz_acl_model->update_acl( $data, $where );
+				}
+			}
 		}
 
 		function rthd_add_setting_to_rtbiz_user( $fields ){
@@ -89,7 +150,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 
 			global $rt_hd_module;
 			if ( in_array( Rt_HD_Module::$post_type, array_keys( $rt_entity->enabled_post_types ) ) ) {
-				$columns[ 'hd_role' ] = 'Role';
+				$columns[ 'hd_role' ] = 'Helpdesk Role';
 				$columns[ Rt_HD_Module::$post_type ] = $rt_hd_module->labels['name'];
 			}
 
