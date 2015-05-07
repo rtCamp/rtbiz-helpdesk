@@ -143,7 +143,6 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 					</div>
 					<?php rthd_admin_sidebar(); ?>
 				</div>
-				<?php rthd_admin_sidebar(); ?>
 			</div>
 			<?php
 		}
