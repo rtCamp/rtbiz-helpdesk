@@ -129,12 +129,10 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 
 					wp_enqueue_script( 'jquery-ui-datepicker' );
 				}
-				if ( $rt_hd_setup_wizard->screen_id == $hook || ( isset( $post->post_type ) && $post->post_type == Rt_HD_Module::$post_type ) ){
-					wp_enqueue_script( 'jquery-ui-autocomplete', '', array(
-						'jquery-ui-widget',
-						'jquery-ui-position',
-					), '1.9.2' );
-				}
+				wp_enqueue_script( 'jquery-ui-autocomplete', '', array(
+					'jquery-ui-widget',
+					'jquery-ui-position',
+				), '1.9.2' );
 
 				wp_enqueue_media();
 				wp_enqueue_style( 'rthd-admin-css', RT_HD_URL . 'app/assets/admin/css/admin.css', array(), RT_HD_VERSION );
