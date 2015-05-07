@@ -238,6 +238,22 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				$redirect_url = admin_url( 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&page=rthd-settings' );
 				update_option( 'rthd_googleapi_redirecturl', $redirect_url );
 			}
+
+			$this->sections[] = array(
+				'icon'        => 'el-icon-envelope',
+				'title'       => __( 'Setup Your Team' ),
+				'permissions' => $admin_cap,
+				'fields'      => array(
+					array(
+						'id'      => 'rthd_team_setup',
+						'type'    => 'raw',
+						'content' => rthd_get_setup_team_ui(),
+					),
+				),
+			);
+
+
+
 			$email_fields = array();
 
 			array_push( $email_fields, array(

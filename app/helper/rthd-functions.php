@@ -1844,3 +1844,13 @@ function rthd_admin_sidebar() {
                         </form>';
 	do_action( 'rthd_after_default_admin_widgets' );
 }
+
+/**
+ * get contact of setup page
+ */
+function rthd_get_setup_team_ui(){
+	global $rt_hd_setup_wizard;
+	ob_start();
+	$rt_hd_setup_wizard -> setup_team( false );
+	return ob_get_clean();
+}
