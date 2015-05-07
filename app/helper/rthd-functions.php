@@ -1814,7 +1814,7 @@ function rthd_no_access_redux() {
 function rthd_admin_sidebar() {
 	do_action( 'rthd_before_default_admin_widgets' );
 	$current_user = wp_get_current_user();
-	$message = sprintf( __( 'I use @rtbizwp http://rt.cx/helpdesk on %s', RT_HD_TEXT_DOMAIN ), home_url() );
+	$message = sprintf( __( 'I use @rtbizwp on %s', RT_HD_TEXT_DOMAIN ), home_url() );
 	echo '<div class="metabox-holder bp-media-metabox-holder rthd-sidebar">
 						<div id="spread-the-word" class="postbox">
 							<h3 class="hndle"><span>Spread the Word</span></h3>
@@ -1841,7 +1841,9 @@ function rthd_admin_sidebar() {
                                     </div>
                                     <input type="submit" value="' . __( 'Subscribe', RT_HD_TEXT_DOMAIN ) . '" name="subscribe" id="mc-embedded-subscribe" class="button">
                             </div>
-                        </form>';
+                        </form>
+                        </div>
+                        </div>';
 	do_action( 'rthd_after_default_admin_widgets' );
 }
 

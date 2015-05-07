@@ -152,6 +152,7 @@ jQuery( document ).ready( function () {
 
 			// send followup ajax
 			function sendFollowup( force ){
+				jQuery('#savefollwoup' ).attr('disabled','disabled');
 				var followuptype = jQuery( "#followup-type" ).val();
 				var formData = new FormData();
 				var followup_type= jQuery("input[name='private_comment']:checked");
@@ -215,12 +216,11 @@ jQuery( document ).ready( function () {
 								             }
 							             }
 							             jQuery( '#hdspinner' ).hide();
-							             jQuery( '#savefollwoup' ).removeAttr( 'disabled' );
 						             } else {
 							             console.log(data.message );
 							             jQuery( '#hdspinner' ).hide();
-							             jQuery( '#savefollwoup' ).removeAttr( 'disabled' );
 						             }
+						             jQuery('#savefollwoup' ).removeAttr('disabled');
 					             }
 				             } );
 			}
