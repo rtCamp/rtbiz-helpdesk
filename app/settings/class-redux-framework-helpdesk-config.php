@@ -240,7 +240,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			}
 
 			$this->sections[] = array(
-				'icon'        => 'el-icon-envelope',
+				'icon'        => 'el-icon-group',
 				'title'       => __( 'Setup Your Team' ),
 				'permissions' => $admin_cap,
 				'fields'      => array(
