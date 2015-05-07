@@ -88,7 +88,6 @@ jQuery( document ).ready( function ( $ ) {
 			} );
 
 			jQuery( document ).on( 'click', '#rthd-setup-store-new-team-submit', function ( e ) {
-				console.log( 'inside' );
 				var new_term = jQuery( '#rthd-setup-store-new-team' ).val();
 				if ( new_term.length != 0 && ! new_term.trim() ) {
 					return;
