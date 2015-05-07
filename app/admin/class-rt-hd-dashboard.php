@@ -505,8 +505,8 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 						), admin_url( 'edit.php' ) ) );
 					if ( ! empty( $user ) ) {
 						array_unshift( $temp, '<a href="' . $url . '">' . $user->display_name . '</a>' );
+						$rows[] = $temp;
 					}
-					$rows[] = $temp;
 				}
 
 				$data_source['cols'] = $cols;
