@@ -598,6 +598,7 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 	$private_text = '';
 	$display_private_comment_flag = false;
 	$is_comment_private = false;
+	$is_staff_followup = false;
 	switch ( $comment->comment_type ) {
 		case Rt_HD_Import_Operation::$FOLLOWUP_BOT:
 			$display_private_comment_flag = true;
@@ -631,6 +632,8 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 			}
 			$private_text = 'Staff only';
 			$is_comment_private = true;
+			$is_staff_followup = true;
+
 			break;
 		default:
 			$display_private_comment_flag = true;
@@ -644,10 +647,10 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 	?>
 	<li class="<?php echo $side_class . ' ' . $editable_class . ' ' . ( ( $display_private_comment_flag ) ? '' : 'private-comment-item' ); ?>" id="comment-<?php echo esc_attr( $comment->comment_ID ); ?>">
 
-		<div class="avatar">
+		<div class="avatar followup_staff_only_arrow">
 			<?php echo get_avatar( $comment->comment_author_email, 48 ); ?>
 		</div>
-		<div class="messages <?php echo ( $display_private_comment_flag ) ? '' : 'private-comment-display'; ?>">
+		<div class="messages <?php echo $is_staff_followup?'followup_staffonly':'';?> <?php echo ( $display_private_comment_flag ) ? '' : 'private-comment-display'; ?>">
     <div class="followup-information">
 	    <?php
 	    if ( current_user_can( $cap ) ){
@@ -1812,4 +1815,48 @@ function rthd_activation_view(){
 
 function rthd_no_access_redux(){
 	return '<p class="description">Currently there are no settings available for you.</p>';
+}
+
+/**
+ * Sidebar for admin
+ *
+ * @access public
+ * @global type $bp_media
+ *
+ * @param       void
+ *
+ * @return void
+ */
+function rthd_admin_sidebar(){
+	do_action( 'rthd_before_default_admin_widgets' );
+	$current_user = wp_get_current_user();
+	$message          = sprintf( __( 'I use @rtbizwp http://rt.cx/helpdesk on %s', RT_HD_TEXT_DOMAIN ), home_url() );
+	echo '<div class="metabox-holder bp-media-metabox-holder rtb-sidebar">
+						<div id="spread-the-word" class="postbox">
+							<h3 class="hndle"><span>Spread the Word</span></h3>
+							<div class="inside">
+								<div class="rtb-social-share" id="social">
+											<p><a href="http://twitter.com/home/?status=' . $message . '" class="button" target= "_blank" title="' . __( 'Post to Twitter Now', RT_HD_TEXT_DOMAIN ) . '">' . __( 'Post to Twitter', RT_HD_TEXT_DOMAIN ) . '<span class="dashicons dashicons-twitter"></span></a></p>
+											<p><a href="https://www.facebook.com/sharer/sharer.php?u=http://rtcamp.com/helpdesk/" class="button" target="_blank" title="' . __( 'Share on Facebook Now', RT_HD_TEXT_DOMAIN ) . '">' . __( 'Share on Facebook', RT_HD_TEXT_DOMAIN ) . '<span class="dashicons dashicons-facebook"></span></a></p>
+											<p><a href="https://wordpress.org/support/view/plugin-reviews/rtbiz?rate=5#postform" class="button" target= "_blank" title="' . __( 'Rate rtBiz on Wordpress.org', RT_HD_TEXT_DOMAIN ) . '">' . __( 'Rate on Wordpress.org', RT_HD_TEXT_DOMAIN ) . '<span class="dashicons dashicons-wordpress"></span></a></p>
+											<p><a href="' . sprintf( '%s', 'https://rtcamp.com/feed/' ) . '"  title="' . __( 'Subscribe to our feeds', RT_HD_TEXT_DOMAIN ) . '" class="button" target="_blank" title="' . __( 'Subscribe to our Feeds', RT_HD_TEXT_DOMAIN ) . '">' . __( 'Subscribe to our Feeds', RT_HD_TEXT_DOMAIN ) . '<span class="dashicons dashicons-rss"></span></a></a></p>
+										</div>
+									</div>
+								</div>';
+
+	echo '	<div id="branding" class="postbox">
+							<h3 class="hndle"><span>Subscribe</span></h3>
+							<div class="inside">
+						<form action="http://rtcamp.us1.list-manage1.com/subscribe/post?u=85b65c9c71e2ba3fab8cb1950&amp;id=9e8ded4470" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+                            <div class="mc-field-group">
+                                    <input type="email" value="' . $current_user->user_email . '" name="EMAIL" placeholder="Email" class="required email" id="mce-EMAIL">
+                                    <input style="display:none;" type="checkbox" checked="checked" value="1" name="group[1721][1]" id="mce-group[1721]-1721-0">
+                                    <div id="mce-responses" class="clear">
+                                        <div class="response" id="mce-error-response" style="display:none"></div>
+                                        <div class="response" id="mce-success-response" style="display:none"></div>
+                                    </div>
+                                    <input type="submit" value="' . __( 'Subscribe', RT_HD_TEXT_DOMAIN ) . '" name="subscribe" id="mc-embedded-subscribe" class="button">
+                            </div>
+                        </form>';
+	do_action( 'rthd_after_default_admin_widgets' );
 }

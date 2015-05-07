@@ -141,39 +141,8 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 						$this->generate_wizard( $wizard );
 						?>
 					</div>
-					<div class="metabox-holder bp-media-metabox-holder rthd-sidebar">
-						<div id="spread-the-word" class="postbox">
-							<h3 class="hndle"><span>Spread the Word</span></h3>
-							<div class="inside">
-								<div class="rthd-social-share" id="social">
-									<p><a title="Post to Twitter Now" target="_blank" class="button twitter" href="http://twitter.com/home/?status=I use @buddypressmedia http://rt.cx/rtmedia on http://localhost:8888/rtmedia-pro">Post to Twitter<span class="dashicons dashicons-twitter"></span></a></p>
-									<p><a title="Share on Facebook Now" target="_blank" class="button facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://rtcamp.com/rtmedia/">Share on Facebook<span class="dashicons dashicons-facebook"></span></a></p>
-									<p><a title="Rate rtMedia on Wordpress.org" target="_blank" class="button wordpress" href="http://wordpress.org/support/view/plugin-reviews/buddypress-media?rate=5#postform">Rate on Wordpress.org<span class="dashicons dashicons-wordpress"></span></a></p>
-									<p><a title="Subscribe to our Feeds" target="_blank" class="button rss" href="https://rtcamp.com/feed/">Subscribe to our Feeds<span class="dashicons dashicons-rss"></span></a></p>
-								</div>
-							</div>
-						</div>
-						<div id="branding" class="postbox">
-							<h3 class="hndle"><span>Subscribe</span></h3>
-							<div class="inside">
-								<form novalidate="" target="_blank" class="validate" name="mc-embedded-subscribe-form" id="mc-embedded-subscribe-form" method="post" action="http://rtcamp.us1.list-manage1.com/subscribe/post?u=85b65c9c71e2ba3fab8cb1950&amp;id=9e8ded4470">
-									<div class="mc-field-group">
-										<input type="email" id="mce-EMAIL" class="required email" placeholder="Email" name="EMAIL" value="sagar.jadhav@rtcamp.com">
-										<input type="checkbox" id="mce-group[1721]-1721-0" name="group[1721][1]" value="1" checked="checked" style="display:none;">
-										<input type="submit" class="button" id="mc-embedded-subscribe" name="subscribe" value="Subscribe">
-										<div class="clear" id="mce-responses">
-											<div style="display:none" id="mce-error-response" class="response"></div>
-											<div style="display:none" id="mce-success-response" class="response"></div>
-										</div>
-									</div>
-								</form>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
 			<?php
+			rthd_admin_sidebar();
 		}
 
 		function rthd_ACL() {

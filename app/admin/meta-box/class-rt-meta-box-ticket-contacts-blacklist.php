@@ -90,17 +90,20 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Contacts_Blacklist' ) ) {
             $ticket_data = $_POST;
             $contacts = rt_biz_get_post_for_contact_connection( $ticket_data['post_id'], Rt_HD_Module::$post_type );
             ob_start(); ?>
+	        <div class="confirmation-container">
+		        <p>Are you sure to blacklist these contacts?</p>
+	        </div>
             <ui class="blacklist_contacts_list"><?php
                 foreach( $contacts as $contact ){
                     $email = get_post_meta( $contact->ID, Rt_Entity::$meta_key_prefix.Rt_Contact::$primary_email_key, true );?>
                     <li><?php echo $email; ?></li>
                 <?php } ?>
             </ui>
-            <div class="confirmation-container">
-                <p>Are you sure to blacklist above lised contact?</p>
-                <a href="#" data-action="blacklisted_contact"  data-postid="<?php echo $ticket_data['post_id']; ?>" class="button" id="rthd_ticket_contacts_blacklist_yes"><?php _e( 'Yes', RT_HD_TEXT_DOMAIN ); ?></a>
-                <a href="#" data-action="blacklisted_contact_no"  data-postid="<?php echo $ticket_data['post_id']; ?>" class="button" id="rthd_ticket_contacts_blacklist_no"><?php _e( 'No', RT_HD_TEXT_DOMAIN ); ?></a>
-            </div>
+	        <div class="confirmation-container">
+		        <a href="#" data-action="blacklisted_contact"  data-postid="<?php echo $ticket_data['post_id']; ?>" class="button" id="rthd_ticket_contacts_blacklist_yes"><?php _e( 'Yes', RT_HD_TEXT_DOMAIN ); ?></a>
+		        <a href="#" data-action="blacklisted_contact_no"  data-postid="<?php echo $ticket_data['post_id']; ?>" class="button" id="rthd_ticket_contacts_blacklist_no"><?php _e( 'No', RT_HD_TEXT_DOMAIN ); ?></a>
+	        </div>
+
             <?php $reponse['confirmation_ui'] = ob_get_clean();
             $reponse['status'] = true;
             echo json_encode( $reponse );
