@@ -51,9 +51,9 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 		function add_people_menu() {
 			global $rt_access_control;
 			if ( rthd_check_wizard_completed() ) {
-				add_submenu_page( 'edit.php?post_type=' . Rt_HD_Module::$post_type, __( 'Customer ' ), __( 'Customer' ), rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' ), 'edit.php?post_type=' . rt_biz_get_contact_post_type() . '&rt_contact_group=customer' );
-				add_submenu_page( 'edit.php?post_type=' . Rt_HD_Module::$post_type, __( 'Staff' ), __( 'Staff' ), rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' ), 'edit.php?post_type=' . rt_biz_get_contact_post_type() . '&rt_contact_group=staff' );
-				add_submenu_page( 'edit.php?post_type=' . esc_html( Rt_HD_Module::$post_type ), __( '---Teams' ), __( '---Teams' ), rt_biz_get_access_role_cap( RT_BIZ_TEXT_DOMAIN, 'editor' ), 'edit-tags.php?taxonomy=' . RT_Departments::$slug . '&post_type=' . Rt_HD_Module::$post_type );
+				add_submenu_page( 'edit.php?post_type=' . Rt_HD_Module::$post_type, __( 'Customer ' ), __( 'Customer' ), rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' ), esc_url( 'edit.php?post_type=' . rt_biz_get_contact_post_type() . '&rt_contact_group=customer' ) );
+				add_submenu_page( 'edit.php?post_type=' . Rt_HD_Module::$post_type, __( 'Staff' ), __( 'Staff' ), rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' ), esc_url( 'edit.php?post_type=' . rt_biz_get_contact_post_type() . '&rt_contact_group=staff' ) );
+				add_submenu_page( 'edit.php?post_type=' . esc_html( Rt_HD_Module::$post_type ), __( '---Teams' ), __( '---Teams' ), rt_biz_get_access_role_cap( RT_BIZ_TEXT_DOMAIN, 'editor' ), esc_url( 'edit-tags.php?taxonomy=' . RT_Departments::$slug . '&post_type=' . Rt_HD_Module::$post_type ) );
 				/* add_submenu_page( 'edit.php?post_type=' . esc_html( Rt_HD_Module::$post_type ), __( 'Companies' ), __( '--- Companies' ), rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' ), 'edit.php?post_type=' . rt_biz_get_company_post_type() );
 				  add_submenu_page( 'edit.php?post_type=' . esc_html( Rt_HD_Module::$post_type ), __( 'Access Control' ), __( '--- Access Control' ), rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' ), Rt_Biz::$access_control_slug, array(
 				  $rt_access_control,
