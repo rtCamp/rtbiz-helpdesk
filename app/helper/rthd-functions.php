@@ -1820,10 +1820,10 @@ function rthd_admin_sidebar() {
 							<h3 class="hndle"><span>Spread the Word</span></h3>
 							<div class="inside">
 								<div class="rthd-social-share" id="social">
-											<p><a href="http://twitter.com/home/?status=' . $message . '" class="button" target= "_blank" title="' . __( 'Post to Twitter Now', RT_HD_TEXT_DOMAIN ) . '">' . __( 'Post to Twitter', RT_HD_TEXT_DOMAIN ) . '<span class="dashicons dashicons-twitter"></span></a></p>
-											<p><a href="https://www.facebook.com/sharer/sharer.php?u=http://rtcamp.com/helpdesk/" class="button" target="_blank" title="' . __( 'Share on Facebook Now', RT_HD_TEXT_DOMAIN ) . '">' . __( 'Share on Facebook', RT_HD_TEXT_DOMAIN ) . '<span class="dashicons dashicons-facebook"></span></a></p>
-											<p><a href="https://wordpress.org/support/view/plugin-reviews/rtbiz?rate=5#postform" class="button" target= "_blank" title="' . __( 'Rate rtBiz on Wordpress.org', RT_HD_TEXT_DOMAIN ) . '">' . __( 'Rate on Wordpress.org', RT_HD_TEXT_DOMAIN ) . '<span class="dashicons dashicons-wordpress"></span></a></p>
-											<p><a href="' . sprintf( '%s', 'https://rtcamp.com/feed/' ) . '"  title="' . __( 'Subscribe to our feeds', RT_HD_TEXT_DOMAIN ) . '" class="button" target="_blank" title="' . __( 'Subscribe to our Feeds', RT_HD_TEXT_DOMAIN ) . '">' . __( 'Subscribe to our Feeds', RT_HD_TEXT_DOMAIN ) . '<span class="dashicons dashicons-rss"></span></a></a></p>
+											<p><a href="' . esc_url( 'http://twitter.com/home/?status=' . $message ) .  '" class="button" target= "_blank" title="' . __( 'Post to Twitter Now', RT_HD_TEXT_DOMAIN ) . '">' . __( 'Post to Twitter', RT_HD_TEXT_DOMAIN ) . '<span class="dashicons dashicons-twitter"></span></a></p>
+											<p><a href="' . esc_url( 'https://www.facebook.com/sharer/sharer.php?u=http://rtcamp.com/helpdesk/' ) .  '" class="button" target="_blank" title="' . __( 'Share on Facebook Now', RT_HD_TEXT_DOMAIN ) . '">' . __( 'Share on Facebook', RT_HD_TEXT_DOMAIN ) . '<span class="dashicons dashicons-facebook"></span></a></p>
+											<p><a href="' . esc_url( 'https://wordpress.org/support/view/plugin-reviews/rtbiz?rate=5#postform' ) .  '" class="button" target= "_blank" title="' . __( 'Rate rtBiz on Wordpress.org', RT_HD_TEXT_DOMAIN ) . '">' . __( 'Rate on Wordpress.org', RT_HD_TEXT_DOMAIN ) . '<span class="dashicons dashicons-wordpress"></span></a></p>
+											<p><a href="' . sprintf( '%s', 'https://rtcamp.com/feed/' ) . '"  class="button" target="_blank" title="' . __( 'Subscribe to our Feeds', RT_HD_TEXT_DOMAIN ) . '">' . __( 'Subscribe to our Feeds', RT_HD_TEXT_DOMAIN ) . '<span class="dashicons dashicons-rss"></span></a></p>
 										</div>
 									</div>
 								</div>';

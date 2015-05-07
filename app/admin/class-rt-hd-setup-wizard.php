@@ -82,7 +82,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			</div>
 			<div class="rthd-mailbox-setup-process rthd-wizard-process" style="display: none;">
 				<span>Loading outbound emails</span>
-				<img src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
+				<img class="helpdeskspinner" alt="load" src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
 			</div> <?php
 		}
 
