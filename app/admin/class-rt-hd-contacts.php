@@ -62,7 +62,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 			<fieldset id="rtbiz_contact_helpdesk_access" class="inline-edit-col-right">
 				<div class="inline-edit-col">
 					<label class="alignleft">
-						<span>Helpdesk Roled</span>
+						<span>Helpdesk Role</span>
 						<input type="hidden" name="rtbiz_action" value="rtbiz_helpdesk_role_updated">
 						<select name="rt_biz_profile_permissions[rtbiz-helpdesk]">
 							<?php foreach ( $permissions as $pkey => $p ) { ?>
