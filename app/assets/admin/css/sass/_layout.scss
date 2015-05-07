@@ -1,4 +1,4 @@
-.rtb-content-section {
+.rthd-content-section {
 	background-color: #fff;
 	border: 1px solid $border-dark;
 	@include box-shadow( 0 1px 1px rgba( $black, 0.04 ) );
@@ -11,21 +11,11 @@
 	padding: 20px;
 }
 
-.rtb-sidebar {
+.rthd-sidebar {
 
 	.postbox {
 		.hndle {
 			cursor: default;
 		}
 	}
-}
-
-.rtb-option-title {
-    border-bottom: 1px solid #eee;
-    font-size: 14px;
-    letter-spacing: 0.02rem;
-    margin-bottom: 14px;
-    margin-top: 0;
-    padding: 0 0 6px;
-    //text-transform: uppercase;
 }

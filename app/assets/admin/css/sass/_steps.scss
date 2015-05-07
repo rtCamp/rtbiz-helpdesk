@@ -1,4 +1,9 @@
 .wizard {
+
+	feildset {
+		display: none;
+	}
+
 	ul {
 		list-style: none;
 		padding: 0;
@@ -6,8 +11,7 @@
 	}
 
 	.content {
-		margin: 0.5em;
-		overflow: hidden;
+		margin-bottom: 20px;
 	}
 
 	.actions {
@@ -20,20 +24,26 @@
 
 .steps {
 	position: relative;
-	padding: 5px 0 0 0;
+	padding: 10px 0;
+
+	ul {
+		margin: 0 -4px;
+	}
 
 	li {
 		display: inline-block;
-		width: 18%; /* edited default 25% */
+		margin: 0;
+		width: 16%;
 	}
 
 	a {
-		border-bottom: 4px solid silver;
+		background: #ddd;
+		color: #555;
 		cursor: default;
-		color: silver;
+		border-radius: 3px;
 		display: block;
-		margin: 0 1px;
-		padding: 0 0 12px;
+		margin: 0 4px;
+		padding: 8px 0;
 		position: relative;
 		text-align: center;
 		text-decoration: none;
@@ -42,71 +52,28 @@
 			box-shadow: 0 0 0;
 		}
 
-		&:after {
-			background-color: white;
-			border: 2px solid silver;
-			border-radius: 100%;
-			bottom: -10px;
-			color: white;
-			content: "";
-			height: 12px;
-			left: 0;
-			line-height: 14px;
-			margin: 0 auto;
-			position: absolute;
-			right: 0;
-			width: 12px;
-		}
 	}
 
 	.disabled a {
-
+		background: #ddd;
+		color: #555;
+		cursor: default;
 	}
 
 	.current a {
-		border-bottom-color: #8ed24b;
-		color: black;
-
-		&:after {
-			background-color: #8ed24b;
-			border: 0;
-			border-radius: 100%;
-			bottom: -10px;
-			color: white;
-			content: "✓";
-			height: 16px;
-			left: 0;
-			line-height: 16px;
-			margin: 0 auto;
-			position: absolute;
-			right: 0;
-			width: 16px;
-		}
+		background: #7ad03a;
+		color: #fff;
+		cursor: default;
 	}
 
 	.done a {
-		border-bottom-color: #8ed24b;
-		opacity: 0.6;
-
-		&:after {
-			background-color: #8ed24b;
-			border: 0;
-			border-radius: 100%;
-			bottom: -10px;
-			color: white;
-			content: "✓";
-			height: 16px;
-			left: 0;
-			line-height: 16px;
-			margin: 0 auto;
-			position: absolute;
-			right: 0;
-			width: 16px;
-		}
+		background: rgba(#7ad03a, 0.5);
+		color: #fff;
 	}
 
 	.error a {
-		border-bottom-color: #8ed24b;
+		background: #7ad03a;
+		color: #fff;
 	}
 }
 

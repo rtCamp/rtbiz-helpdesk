@@ -1,0 +1,45 @@
+
+.rthd-option-title {
+    border-bottom: 1px solid #eee;
+    font-size: 15px;
+    letter-spacing: 0.02rem;
+    margin-bottom: 15px;
+    margin-top: 0;
+    padding: 0 0 6px;
+    //text-transform: uppercase;
+}
+
+.rthd-notice {
+    background-color: #fffaf0;
+    padding: 8px 10px;
+}
+
+.rthd_wizard_container {
+	overflow: hidden;
+	margin-bottom: 20px;
+
+	label {
+		float: left;
+		width: 25%;
+	}
+
+	input {
+		margin: 0;
+	}
+}
+
+.rthd-domain-action {
+	line-height: 30px;
+    padding: 10px 0 0 25%;
+	position: relative;
+
+	span {
+		display: inline-block;
+		margin-right: 5px;
+	}
+
+	img {
+		position: relative;
+		top: 4px;
+	}
+}

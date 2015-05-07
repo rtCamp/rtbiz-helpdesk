@@ -77,7 +77,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			?>
 			<div class="rthd-setup-wizard-controls">
 				<h3 class="rthd-setup-wizard-title"><?php _e( 'Incoming MailBox Setup', RT_BIZ_TEXT_DOMAIN ); ?></h3>
-				<p class="description">Connect the mailbox from which you would like to auto-create ticket from incoming e-mails.  Click on next if you want to do that later.</p>
+				<p class="rthd-notice">Connect the mailbox from which you would like to auto-create ticket from incoming e-mails.  Click on next if you want to do that later.</p>
 				<?php rthd_mailbox_setup_view(); ?>
 			</div>
 			<div class="rthd-mailbox-setup-process rthd-wizard-process" style="display: none;">
@@ -123,10 +123,10 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 					<p><?php _e( 'Thank you for choosing rtBiz', RT_BIZ_TEXT_DOMAIN ); ?></p>
 				</div>
 
-				<div class="clearfix rtb-row-container">
-					<div class="rtb-content-section">
+				<div class="clearfix rthd-row-container">
+					<div class="rthd-content-section">
 
-						<h3 class="rtb-option-title">Please follow given steps to configure your Helpdesk.</h3>
+						<h3 class="rthd-option-title">Please follow given steps to configure your Helpdesk.</h3>
 
 						<?php
 						// title and function to call for content
@@ -141,11 +141,11 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 						$this->generate_wizard( $wizard );
 						?>
 					</div>
-					<div class="metabox-holder bp-media-metabox-holder rtb-sidebar">
+					<div class="metabox-holder bp-media-metabox-holder rthd-sidebar">
 						<div id="spread-the-word" class="postbox">
 							<h3 class="hndle"><span>Spread the Word</span></h3>
 							<div class="inside">
-								<div class="rtb-social-share" id="social">
+								<div class="rthd-social-share" id="social">
 									<p><a title="Post to Twitter Now" target="_blank" class="button twitter" href="http://twitter.com/home/?status=I use @buddypressmedia http://rt.cx/rtmedia on http://localhost:8888/rtmedia-pro">Post to Twitter<span class="dashicons dashicons-twitter"></span></a></p>
 									<p><a title="Share on Facebook Now" target="_blank" class="button facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://rtcamp.com/rtmedia/">Share on Facebook<span class="dashicons dashicons-facebook"></span></a></p>
 									<p><a title="Rate rtMedia on Wordpress.org" target="_blank" class="button wordpress" href="http://wordpress.org/support/view/plugin-reviews/buddypress-media?rate=5#postform">Rate on Wordpress.org<span class="dashicons dashicons-wordpress"></span></a></p>
@@ -233,7 +233,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			?>
 			<div class="rthd-setup-wizard-controls">
 				<h3 class="rthd-setup-wizard-title"><?php _e( 'Outgoing Mail Setup ', RT_BIZ_TEXT_DOMAIN ); ?></h3>
-				<p class="description">Configure settings for the mailbox from where you will like to send Helpdesk e-mails to customers and staff.</p>
+				<p class="rthd-notice">Configure settings for the mailbox from where you will like to send Helpdesk e-mails to customers and staff.</p>
 				<div id="rthd_outgoing_mailbox_setup_container">
 					<input type="hidden" id="rthd_outound_sub-action" name="rthd_outound_sub-action" value="rthd_outound_setup_wizard">
 					<?php wp_nonce_field( 'rthd_outound_setup_wizard' ); ?>
@@ -320,7 +320,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				<?php
 				if ( ! empty( $terms ) ) {
 					?>
-					<p class="description"> <?php _e( 'Select an assignee for the products we synced in previous setup.', RT_BIZ_TEXT_DOMAIN ); ?> </p>
+					<p class="rthd-notice"> <?php _e( 'Select an assignee for the products we synced in previous setup.', RT_BIZ_TEXT_DOMAIN ); ?> </p>
 
 					<div class="rthd-setup-wizard-row">
 						<ul>
@@ -412,9 +412,9 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 					} else {
 						$active_plugins = 'EDD plugin';
 					}
-					echo '<p class="description"> Looks like you have ' . $active_plugins . ' Active. Helpdesk has selected it for you, You can uncheck that if you want to.</p>';
+					echo '<p class="rthd-notice"> Looks like you have ' . $active_plugins . ' Active. Helpdesk has selected it for you, You can uncheck that if you want to.</p>';
 				} else {
-					echo '<p class="description"> Looks like none of the following plugins are installed right now. Anyways you can select the plugin you wish to install in future. Helpdesk will automatically sync products when that happens.</p>';
+					echo '<p class="rthd-notice"> Looks like none of the following plugins are installed right now. Anyways you can select the plugin you wish to install in future. Helpdesk will automatically sync products when that happens.</p>';
 				}
 				?>
 				<div class="rthd-setup-wizard-row">
@@ -456,7 +456,8 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			?>
 			<div class="rthd-setup-wizard-controls">
 				<h3 class="rthd-setup-wizard-title">Support Page </h3>
-				<p class="description">Create a support page where your customers can submit tickets.</p>
+				<p class="rthd-notice">Create a support page where your customers can submit tickets.</p>
+
 				<div class="rthd-setup-wizard-row">
 					<label for="rthd-setup-wizard-support-page"><?php _e( 'Select Support Page ', RT_BIZ_TEXT_DOMAIN ); ?></label>
 					<select id="rthd-setup-wizard-support-page">
@@ -495,7 +496,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			<div>
 				<div class="rthd-setup-wizard-controls rthd-setup-team-wizard-controls">
 					<h3 class="rthd-setup-wizard-title">Setup Your Team</h3>
-					<p class="description"><?php _e( "There are 3 ways you can add users to your ‘Support' team. If you forget somebody now, you can add them later. You (admin) are already part of this team.", RT_HD_TEXT_DOMAIN ) ?></p>
+					<p class="rthd-notice"><?php _e( "There are 3 ways you can add users to your ‘Support' team. If you forget somebody now, you can add them later. You (admin) are already part of this team.", RT_HD_TEXT_DOMAIN ) ?></p>
 					<div class="rthd_wizard_container rthd-setup-wizard-row">
 
 						<div class="rthd-setup-value-container">
@@ -517,8 +518,6 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 						?>
 						<label for="rthd-add-user-domain"> 2. Add all users from domain</label>
 						<input id="rthd-add-user-domain" class="rthd-setup-wizard-text" type="text" value="<?php echo $domain_name; ?>" placeholder="gmail.com" />
-						<br/>
-						<label></label>
 						<div class="rthd-domain-action">
 							<span id='rthd-domain-import-message' style=""> Found <?php echo sprintf( _n( '%s user', '%s users', $count_domain_users, RT_HD_TEXT_DOMAIN ), $count_domain_users ); ?></span>
 							<input id="rthd-import-domain-users" class="button" type="button" value="Add Users" />
@@ -828,7 +827,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			die( 0 );
 		}
 
-		function rthd_add_new_offering(){
+		function rthd_add_new_offering() {
 			$arrReturn = array( 'status' => false );
 			if ( ! empty( $_POST[ 'offering' ] ) ) {
 				$term = wp_insert_term( $_POST[ 'offering' ], Rt_Offerings::$offering_slug );
