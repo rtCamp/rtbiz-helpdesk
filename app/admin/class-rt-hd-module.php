@@ -319,8 +319,9 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 		 * @return object|\WP_Error
 		 */
 		function register_custom_post( $menu_position ) {
-			$settings = rthd_get_redux_settings();
-			$logo = apply_filters('rthd_helpdesk_logo', 'dashicons-businessman');
+
+			$logo = apply_filters( 'rthd_helpdesk_logo', RT_HD_URL . 'app/assets/img/hd-16X16.png' );
+
 			$args = array(
 				'labels'             => $this->labels,
 				'public'             => true,
