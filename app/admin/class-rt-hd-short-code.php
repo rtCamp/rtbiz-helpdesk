@@ -68,7 +68,7 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 							if ( ! empty( $order ) ) {
 								$items            = $order->get_items();
 								$product_ids      = wp_list_pluck( $items, 'product_id' );
-								$term_offering_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $tm->term_id, Rt_Offerings::$term_meta_key, true );
+								$term_offering_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $tm->term_id, Rt_Offerings::$term_product_id_meta_key, true );
 								if ( ! in_array( $term_offering_id, $product_ids ) ) {
 									continue;
 								}
@@ -82,7 +82,7 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 							if ( ! empty( $payment ) ) {
 								$items            = edd_get_payment_meta_downloads( $payment->ID );
 								$product_ids      = wp_list_pluck( $items, 'id' );
-								$term_offering_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $tm->term_id, Rt_Offerings::$term_meta_key, true );
+								$term_offering_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $tm->term_id, Rt_Offerings::$term_product_id_meta_key, true );
 								if ( ! in_array( $term_offering_id, $product_ids ) ) {
 									continue;
 								}
