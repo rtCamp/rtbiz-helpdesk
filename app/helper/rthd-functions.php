@@ -1814,37 +1814,39 @@ function rthd_no_access_redux() {
 function rthd_admin_sidebar() {
 	do_action( 'rthd_before_default_admin_widgets' );
 	$current_user = wp_get_current_user();
-	$message = sprintf( __( 'I use @rtbizwp on %s', RT_HD_TEXT_DOMAIN ), home_url() );
-	echo '<div class="metabox-holder bp-media-metabox-holder rthd-sidebar">
-						<div id="spread-the-word" class="postbox">
-							<h3 class="hndle"><span>Spread the Word</span></h3>
-							<div class="inside">
-								<div class="rthd-social-share" id="social">
-											<p><a href="' . esc_url( 'http://twitter.com/home/?status=' . $message ) .  '" class="button" target= "_blank" title="' . __( 'Post to Twitter Now', RT_HD_TEXT_DOMAIN ) . '">' . __( 'Post to Twitter', RT_HD_TEXT_DOMAIN ) . '<span class="dashicons dashicons-twitter"></span></a></p>
-											<p><a href="' . esc_url( 'https://www.facebook.com/sharer/sharer.php?u=http://rtcamp.com/helpdesk/' ) .  '" class="button" target="_blank" title="' . __( 'Share on Facebook Now', RT_HD_TEXT_DOMAIN ) . '">' . __( 'Share on Facebook', RT_HD_TEXT_DOMAIN ) . '<span class="dashicons dashicons-facebook"></span></a></p>
-											<p><a href="' . esc_url( 'https://wordpress.org/support/view/plugin-reviews/rtbiz?rate=5#postform' ) .  '" class="button" target= "_blank" title="' . __( 'Rate rtBiz on Wordpress.org', RT_HD_TEXT_DOMAIN ) . '">' . __( 'Rate on Wordpress.org', RT_HD_TEXT_DOMAIN ) . '<span class="dashicons dashicons-wordpress"></span></a></p>
-											<p><a href="' . sprintf( '%s', 'https://rtcamp.com/feed/' ) . '"  class="button" target="_blank" title="' . __( 'Subscribe to our Feeds', RT_HD_TEXT_DOMAIN ) . '">' . __( 'Subscribe to our Feeds', RT_HD_TEXT_DOMAIN ) . '<span class="dashicons dashicons-rss"></span></a></p>
-										</div>
-									</div>
-								</div>';
+	$message = sprintf( __( 'I use @rtbizwp on %s', RT_HD_TEXT_DOMAIN ), home_url() ); ?>
 
-	echo '	<div id="branding" class="postbox">
-							<h3 class="hndle"><span>Subscribe</span></h3>
-							<div class="inside">
-						<form action="http://rtcamp.us1.list-manage1.com/subscribe/post?u=85b65c9c71e2ba3fab8cb1950&amp;id=9e8ded4470" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-                            <div class="mc-field-group">
-                                    <input type="email" value="' . $current_user->user_email . '" name="EMAIL" placeholder="Email" class="required email" id="mce-EMAIL">
-                                    <input style="display:none;" type="checkbox" checked="checked" value="1" name="group[1721][1]" id="mce-group[1721]-1721-0">
-                                    <div id="mce-responses" class="clear">
-                                        <div class="response" id="mce-error-response" style="display:none"></div>
-                                        <div class="response" id="mce-success-response" style="display:none"></div>
-                                    </div>
-                                    <input type="submit" value="' . __( 'Subscribe', RT_HD_TEXT_DOMAIN ) . '" name="subscribe" id="mc-embedded-subscribe" class="button">
-                            </div>
-                        </form>
-                        </div>
-                        </div>';
-	do_action( 'rthd_after_default_admin_widgets' );
+	<div class="metabox-holder bp-media-metabox-holder rthd-sidebar">
+		<div id="spread-the-word" class="postbox">
+			<h3 class="hndle"><span>Spread the Word</span></h3>
+			<div class="inside">
+				<div class="rthd-social-share" id="social">
+					<p><a href="<?php echo esc_url( 'http://twitter.com/home/?status=' . $message ) ?>" class="button" target= "_blank" title="<?php _e( 'Post to Twitter Now', RT_HD_TEXT_DOMAIN ) ?>"><?php _e( 'Post to Twitter', RT_HD_TEXT_DOMAIN ) ?><span class="dashicons dashicons-twitter"></span></a></p>
+					<p><a href="<?php echo esc_url( 'https://www.facebook.com/sharer/sharer.php?u=http://rtcamp.com/helpdesk/' ) ?>" class="button" target="_blank" title="<?php  _e( 'Share on Facebook Now', RT_HD_TEXT_DOMAIN ) ?>"><?php  _e( 'Share on Facebook', RT_HD_TEXT_DOMAIN ) ?><span class="dashicons dashicons-facebook"></span></a></p>
+					<p><a href="<?php echo esc_url( 'https://wordpress.org/support/view/plugin-reviews/rtbiz?rate=5#postform' ) ?>" class="button" target= "_blank" title="<?php _e( 'Rate rtBiz on Wordpress.org', RT_HD_TEXT_DOMAIN ) ?>"><?php _e( 'Rate on Wordpress.org', RT_HD_TEXT_DOMAIN ) ?><span class="dashicons dashicons-wordpress"></span></a></p>
+					<p><a href="<?php echo sprintf( '%s', 'https://rtcamp.com/feed/' ) ?>"  class="button" target="_blank" title="<?php _e( 'Subscribe to our Feeds', RT_HD_TEXT_DOMAIN )  ?>"><?php _e( 'Subscribe to our Feeds', RT_HD_TEXT_DOMAIN ) ?><span class="dashicons dashicons-rss"></span></a></p>
+				</div>
+			</div>
+		</div>
+
+		<div id="branding" class="postbox">
+			<h3 class="hndle"><span>Subscribe</span></h3>
+			<div class="inside">
+				<form action="<?php echo esc_url( 'http://rtcamp.us1.list-manage1.com/subscribe/post?u=85b65c9c71e2ba3fab8cb1950&amp;id=9e8ded4470' ); ?>" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+					<div class="mc-field-group">
+						<input type="email" value="<?php echo $current_user->user_email; ?>" name="EMAIL" placeholder="Email" class="required email" id="mce-EMAIL">
+						<input style="display:none;" type="checkbox" checked="checked" value="1" name="group[1721][1]" id="mce-group[1721]-1721-0">
+						<div id="mce-responses" class="clear">
+							<div class="response" id="mce-error-response" style="display:none"></div>
+							<div class="response" id="mce-success-response" style="display:none"></div>
+						</div>
+						<input type="submit" value="<?php _e( 'Subscribe', RT_HD_TEXT_DOMAIN ) ?>" name="subscribe" id="mc-embedded-subscribe" class="button">
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<?php do_action( 'rthd_after_default_admin_widgets' );
 }
 
 /**
