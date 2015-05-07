@@ -56,7 +56,6 @@
 }
 
 .rthd-setup-list-users {
-	padding-left: 24%;
 	text-align: center;
 
 	th {
@@ -90,14 +89,15 @@
 		float: none;
 		font-size: 14px;
 		font-weight: bold;
-		height: 15px;
-		line-height: 16px;
+		height: 14px;
+		line-height: 14px;
 		padding: 0;
 		position: relative;
 		text-align: center;
 		text-decoration: none;
+		top: -3px;
 		vertical-align: top;
-		width: 15px;
+		width: 14px;
 
 		&:focus,
 			&:hover {
@@ -107,10 +107,17 @@
 }
 
 .rthd-setup-user-title {
-	float: left;
+	display: block;
+    float: left;
+    overflow: hidden;
     position: relative;
+    text-align: left;
     text-decoration: none;
+    text-overflow: ellipsis;
     top: 5px;
+    white-space: nowrap;
+    width: 75%;
+    word-break: keep-all;
 }
 
 .rthd-wizard-process {
@@ -120,5 +127,37 @@
 	span {
 		float: left;
 		margin-right: 10px;
+	}
+}
+
+.rthd-setup-store-controls {
+	.rthd-setup-wizard-row label {
+		float: none;
+		width: auto;
+	}
+}
+
+#rthd-import-all-spinner {
+	position: relative;
+    top: 4px;
+}
+
+.rthd_selected_user {
+	background-color: #f9f9f9;
+    display: none;
+    float: left;
+    max-height: 260px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 50%;
+}
+
+.rthd-setup-team-settings {
+	.rthd-setup-wizard-row label {
+		width: 45%;
+	}
+
+	.rthd-domain-action {
+		padding-left: 45%;
 	}
 }
