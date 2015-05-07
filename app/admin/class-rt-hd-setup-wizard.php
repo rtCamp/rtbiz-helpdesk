@@ -404,9 +404,9 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 					<input type="text" id="rthd-setup-store-new-team" />
 					<input type="button" id="rthd-setup-store-new-team-submit" value="Add" />
 				</div>
-				<ul class="rthd-setup-wizard-new-offering">
+				<ol class="rthd-setup-wizard-new-offering">
 
-				</ul>
+				</ol>
 			</div>
 
 			<div class="rthd-store-process rthd-wizard-process" style="display: none; float: left;">
