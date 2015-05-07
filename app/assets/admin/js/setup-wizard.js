@@ -21,8 +21,7 @@ jQuery( document ).ready( function ( $ ) {
 			wizard = jQuery( "#wizard" ).steps( {
 				headerTag: "h3",
 				bodyTag: "fieldset",
-				transitionEffect: "slideLeft",
-				//titleTemplate: '#title#',
+				transitionEffect: 1,
 				forceMoveForward: true,
 				titleTemplate: "#title#",
 				//enableAllSteps: true,
