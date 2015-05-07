@@ -82,7 +82,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			</div>
 			<div class="rthd-mailbox-setup-process rthd-wizard-process" style="display: none;">
 				<span>Loading outbound emails</span>
-				<img class="helpdeskspinner" alt="load" src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
+				<img class="" alt="load" src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
 			</div> <?php
 		}
 
@@ -414,7 +414,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 
 			<div class="rthd-store-process rthd-wizard-process" style="display: none; float: left;">
 				<span>Connecting store and importing existing products</span>
-				<img class="helpdeskspinner" alt="load"  src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
+				<img class="" alt="load"  src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 			</div>
 
 			<?php
@@ -454,7 +454,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 
 			<div class="rthd-support-process rthd-wizard-process" style="display: none;">
 				<span>Setting up support page</span>
-				<img class="helpdeskspinner" alt="load" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
+				<img class="" alt="load" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 			</div>
 			<?php
 		}
@@ -535,7 +535,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			</div>
 			<div class="rthd-team-setup-loading" style="display: none;">
 				<span>Loading next page</span>
-				<img class="helpdeskspinner" alt="load" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
+				<img class="" alt="load" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 			</div>
 			<?php
 		}
