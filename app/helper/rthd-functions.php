@@ -598,6 +598,7 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 	$private_text = '';
 	$display_private_comment_flag = false;
 	$is_comment_private = false;
+	$is_staff_followup = false;
 	switch ( $comment->comment_type ) {
 		case Rt_HD_Import_Operation::$FOLLOWUP_BOT:
 			$display_private_comment_flag = true;
@@ -631,6 +632,8 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 			}
 			$private_text = 'Staff only';
 			$is_comment_private = true;
+			$is_staff_followup = true;
+
 			break;
 		default:
 			$display_private_comment_flag = true;
@@ -644,10 +647,10 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 	?>
 	<li class="<?php echo $side_class . ' ' . $editable_class . ' ' . ( ( $display_private_comment_flag ) ? '' : 'private-comment-item' ); ?>" id="comment-<?php echo esc_attr( $comment->comment_ID ); ?>">
 
-		<div class="avatar">
+		<div class="avatar followup_staff_only_arrow">
 			<?php echo get_avatar( $comment->comment_author_email, 48 ); ?>
 		</div>
-		<div class="messages <?php echo ( $display_private_comment_flag ) ? '' : 'private-comment-display'; ?>">
+		<div class="messages <?php echo $is_staff_followup?'followup_staffonly':'';?> <?php echo ( $display_private_comment_flag ) ? '' : 'private-comment-display'; ?>">
     <div class="followup-information">
 	    <?php
 	    if ( current_user_can( $cap ) ){

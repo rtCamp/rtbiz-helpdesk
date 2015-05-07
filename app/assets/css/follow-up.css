@@ -593,6 +593,14 @@ ul#attachment-files {
 h2.rthd-ticket-list-title{
 	margin-top: 20px;
 }
+
+.followup_staffonly{
+	background: beige;
+}
+
+.self .followup_staff_only_arrow:after, .other .followup_staff_only_arrow:after{
+	border-right-color: beige;
+}
 /*#rthd-subscribe-email{*/
 	/*width: 250px;*/
 	/*float: right;*/
