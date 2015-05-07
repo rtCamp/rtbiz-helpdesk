@@ -640,30 +640,30 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 	<li class="<?php echo $side_class . ' ' . $editable_class . ' ' . ( ( $display_private_comment_flag ) ? '' : 'private-comment-item' ); ?>" id="comment-<?php echo esc_attr( $comment->comment_ID ); ?>">
 
 		<div class="avatar followup_staff_only_arrow">
-	<?php echo get_avatar( $comment->comment_author_email, 48 ); ?>
+			<?php echo get_avatar( $comment->comment_author_email, 48 ); ?>
 		</div>
 		<div class="messages <?php echo $is_staff_followup ? 'followup_staffonly' : ''; ?> <?php echo ( $display_private_comment_flag ) ? '' : 'private-comment-display'; ?>">
 			<div class="followup-information">
-	<?php
-	if ( current_user_can( $cap ) ) {
-		$commentAuthorLink = '<a class="rthd-ticket-author-link" href="' . rthd_biz_user_profile_link( $comment->comment_author_email ) . '">' . $comment->comment_author . '</a>';
-	} else {
-		$commentAuthorLink = $comment->comment_author;
-	}
-	?>
+				<?php
+				if ( current_user_can( $cap ) ) {
+					$commentAuthorLink = '<a class="rthd-ticket-author-link" href="' . rthd_biz_user_profile_link( $comment->comment_author_email ) . '">' . $comment->comment_author . '</a>';
+				} else {
+					$commentAuthorLink = $comment->comment_author;
+				}
+				?>
 
 				<span title="<?php echo esc_attr( ( $comment->comment_author_email == '' ) ? $comment->comment_author_IP : $comment->comment_author_email  ); ?>"><?php echo ( ( $comment->comment_author == '' ) ? $comment->comment_author_email : $commentAuthorLink ); ?> </span>
-	            <time title="<?php echo esc_attr( mysql2date( get_option( 'date_format' ), $comment->comment_date ) . ' at ' . mysql2date( get_option( 'time_format' ), $comment->comment_date, true ) ); ?>" datetime="<?php echo esc_attr( $comment->comment_date ); ?>">
-				<?php if ( $user_edit ) {
-					?>
-						<a href="#" class="editfollowuplink">Edit</a> |
-					<?php
-					$data = get_comment_meta( $comment->comment_ID, 'rt_hd_original_email', true );
-					if ( ! empty( $data ) ) {
-						$href = get_post_permalink( $comment->comment_post_ID ) . '?show_original=true&comment-id=' . $comment->comment_ID;
+				<time title="<?php echo esc_attr( mysql2date( get_option( 'date_format' ), $comment->comment_date ) . ' at ' . mysql2date( get_option( 'time_format' ), $comment->comment_date, true ) ); ?>" datetime="<?php echo esc_attr( $comment->comment_date ); ?>">
+					<?php if ( $user_edit ) {
 						?>
-							<a href="<?php echo $href; ?>" class="show-original-email" target="_blank"> Show original email</a> |
+						<a href="#" class="editfollowuplink">Edit</a> |
 						<?php
+						$data = get_comment_meta( $comment->comment_ID, 'rt_hd_original_email', true );
+						if ( ! empty( $data ) ) {
+							$href = get_post_permalink( $comment->comment_post_ID ) . '?show_original=true&comment-id=' . $comment->comment_ID;
+							?>
+							<a href="<?php echo $href; ?>" class="show-original-email" target="_blank"> Show original email</a> |
+							<?php
 						}
 					}
 					if ( $is_comment_private == true ) {
@@ -672,41 +672,42 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 					?>
 					<?php echo '<a class="followup-hash-url" id="followup_' . $comment->comment_ID . '" href="#followup_' . $comment->comment_ID . '" >' . esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . ' ago </a>'; ?>
 
-	            </time>
+				</time>
 			</div>
 			<input id="followup-id" type="hidden" value="<?php echo esc_attr( $comment->comment_ID ); ?>">
 			<input id="is-private-comment" type="hidden" value="<?php echo esc_attr( $comment->comment_type ); ?>">
 			<div class="rthd-comment-content" data-content="<?php echo ( $display_private_comment_flag ) ? esc_attr( $comment->comment_content ) : ''; ?>">
-					<?php
-					if ( $display_private_comment_flag ) {
-						if ( isset( $comment->comment_content ) && $comment->comment_content != '' ) {
-							$comment->comment_content = rthd_content_filter( $comment->comment_content );
-						}
-						?>
+				<?php
+				if ( $display_private_comment_flag ) {
+					if ( isset( $comment->comment_content ) && $comment->comment_content != '' ) {
+						$comment->comment_content = rthd_content_filter( $comment->comment_content );
+					}
+					?>
 					<p><?php echo $comment->comment_content; ?></p>
 				<?php } else { ?>
 					<p><?php _e( 'This followup has been marked private.', RT_HD_TEXT_DOMAIN ); ?></p>
 				<?php } ?>
 			</div>
-				<?php
-				if ( $display_private_comment_flag ) {
-					$comment_attechment = get_comment_meta( $comment->comment_ID, "attachment" );
-					$comment_attechment = array_unique( $comment_attechment );
-					if ( ! empty( $comment_attechment ) ) {
-						?>
-					<ul class="comment_attechment">
-					<?php foreach ( $comment_attechment as $a ) { ?>
-							<li>
-						<?php
-						$attachment = get_post( $a );
-						rt_hd_get_attchment_link_with_fancybox( $attachment, $comment->comment_ID );
-						?>
-							</li>
-							<?php } ?>
-					</ul>
-						<?php }
-					}
+			<?php
+			if ( $display_private_comment_flag ) {
+				$comment_attechment = get_comment_meta( $comment->comment_ID, "attachment" );
+				$comment_attechment = array_unique( $comment_attechment );
+				if ( ! empty( $comment_attechment ) ) {
 					?>
+					<ul class="comment_attechment">
+						<?php foreach ( $comment_attechment as $a ) { ?>
+							<li>
+								<?php
+								$attachment = get_post( $a );
+								rt_hd_get_attchment_link_with_fancybox( $attachment, $comment->comment_ID );
+								?>
+							</li>
+						<?php } ?>
+					</ul>
+					<?php
+				}
+			}
+			?>
 
 
 		</div>
@@ -845,110 +846,110 @@ function rthd_admin_notice_dependency_installed() {
 		?>
 		<div class="updated">
 			<p>
-		<?php echo $string; ?>
+				<?php echo $string; ?>
 				<a class="welcome-panel-close" style="margin-left: 10px" href="<?php echo admin_url( 'edit.php?post_type=rtbiz_hd_ticket&page=rthd-setup-wizard&close_notice=true' ); ?>">Dismiss</a>
 			</p>
 		</div>
-				<?php
-			}
+		<?php
+	}
+}
+
+function rthd_install_plugin_ajax() {
+	if ( empty( $_POST[ 'plugin_slug' ] ) ) {
+		die( __( 'ERROR: No slug was passed to the AJAX callback.', RT_HD_TEXT_DOMAIN ) );
+	}
+	check_ajax_referer( 'rthd_install_plugin_rtbiz' );
+
+	if ( ! current_user_can( 'install_plugins' ) || ! current_user_can( 'activate_plugins' ) ) {
+		die( __( 'ERROR: You lack permissions to install and/or activate plugins.', RT_HD_TEXT_DOMAIN ) );
+	}
+	$biz_installed = rthd_is_plugin_installed( 'rtbiz' );
+	$p2p_installed = rthd_is_plugin_installed( 'posts-to-posts' );
+
+	if ( ! $p2p_installed ) {
+		rthd_install_plugin( 'posts-to-posts' );
+	}
+	if ( ! $biz_installed ) {
+		rthd_install_plugin( 'rtbiz' );
+	}
+	echo 'true';
+	die();
+}
+
+function rthd_install_plugin( $plugin_slug ) {
+	include_once( ABSPATH . 'wp-admin/includes/plugin-install.php' );
+
+	$api = plugins_api( 'plugin_information', array( 'slug' => $plugin_slug, 'fields' => array( 'sections' => false ) ) );
+
+	if ( is_wp_error( $api ) ) {
+		die( sprintf( __( 'ERROR: Error fetching plugin information: %s', RT_HD_TEXT_DOMAIN ), $api->get_error_message() ) );
+	}
+
+	if ( ! class_exists( 'Plugin_Upgrader' ) ) {
+		require_once( ABSPATH . 'wp-admin/includes/class-wp-upgrader.php' );
+	}
+
+	if ( ! class_exists( 'Rt_HD_Plugin_Upgrader_Skin' ) ) {
+		require_once( RT_HD_PATH . 'app/admin/class-rt-hd-plugin-upgrader-skin.php' );
+	}
+
+	$upgrader = new Plugin_Upgrader( new Rt_HD_Plugin_Upgrader_Skin( array(
+		'nonce' => 'install-plugin_' . $plugin_slug,
+		'plugin' => $plugin_slug,
+		'api' => $api,
+			) ) );
+
+	$install_result = $upgrader->install( $api->download_link );
+
+	if ( ! $install_result || is_wp_error( $install_result ) ) {
+		// $install_result can be false if the file system isn't writable.
+		$error_message = __( 'Please ensure the file system is writable', RT_HD_TEXT_DOMAIN );
+
+		if ( is_wp_error( $install_result ) ) {
+			$error_message = $install_result->get_error_message();
 		}
 
-		function rthd_install_plugin_ajax() {
-			if ( empty( $_POST[ 'plugin_slug' ] ) ) {
-				die( __( 'ERROR: No slug was passed to the AJAX callback.', RT_HD_TEXT_DOMAIN ) );
-			}
-			check_ajax_referer( 'rthd_install_plugin_rtbiz' );
+		die( sprintf( __( 'ERROR: Failed to install plugin: %s', RT_HD_TEXT_DOMAIN ), $error_message ) );
+	}
 
-			if ( ! current_user_can( 'install_plugins' ) || ! current_user_can( 'activate_plugins' ) ) {
-				die( __( 'ERROR: You lack permissions to install and/or activate plugins.', RT_HD_TEXT_DOMAIN ) );
-			}
-			$biz_installed = rthd_is_plugin_installed( 'rtbiz' );
-			$p2p_installed = rthd_is_plugin_installed( 'posts-to-posts' );
+	$activate_result = activate_plugin( rthd_get_path_for_plugin( $plugin_slug ) );
+	if ( is_wp_error( $activate_result ) ) {
+		die( sprintf( __( 'ERROR: Failed to activate plugin: %s', RT_HD_TEXT_DOMAIN ), $activate_result->get_error_message() ) );
+	}
+}
 
-			if ( ! $p2p_installed ) {
-				rthd_install_plugin( 'posts-to-posts' );
-			}
-			if ( ! $biz_installed ) {
-				rthd_install_plugin( 'rtbiz' );
-			}
-			echo 'true';
-			die();
+function rthd_plugin_check_enque_js() {
+	wp_enqueue_script( 'rtbiz-hd-plugin-check', RT_HD_URL . 'app/assets/javascripts/rthd_plugin_check.js', '', false, true );
+	wp_localize_script( 'rtbiz-hd-plugin-check', 'rthd_ajax_url', admin_url( 'admin-ajax.php' ) );
+}
+
+/**
+ * if rtbiz plugin is not installed or activated it gives notification to user to do so.
+ *
+ * @since 0.1
+ */
+function rthd_admin_notice_dependency_not_installed() {
+	$biz_installed = rthd_is_plugin_installed( 'rtbiz' );
+	$p2p_installed = rthd_is_plugin_installed( 'posts-to-posts' );
+
+	if ( ! $biz_installed || ! $p2p_installed ) {
+		$msg = '';
+		if ( ! $biz_installed && ! $p2p_installed ) {
+			$msg = 'rtBiz and Posts 2 Posts';
+		} else if ( ! $biz_installed ) {
+			$msg = 'rtBiz';
+		} else if ( ! $p2p_installed ) {
+			$msg = 'Posts 2 Posts';
 		}
-
-		function rthd_install_plugin( $plugin_slug ) {
-			include_once( ABSPATH . 'wp-admin/includes/plugin-install.php' );
-
-			$api = plugins_api( 'plugin_information', array( 'slug' => $plugin_slug, 'fields' => array( 'sections' => false ) ) );
-
-			if ( is_wp_error( $api ) ) {
-				die( sprintf( __( 'ERROR: Error fetching plugin information: %s', RT_HD_TEXT_DOMAIN ), $api->get_error_message() ) );
-			}
-
-			if ( ! class_exists( 'Plugin_Upgrader' ) ) {
-				require_once( ABSPATH . 'wp-admin/includes/class-wp-upgrader.php' );
-			}
-
-			if ( ! class_exists( 'Rt_HD_Plugin_Upgrader_Skin' ) ) {
-				require_once( RT_HD_PATH . 'app/admin/class-rt-hd-plugin-upgrader-skin.php' );
-			}
-
-			$upgrader = new Plugin_Upgrader( new Rt_HD_Plugin_Upgrader_Skin( array(
-				'nonce' => 'install-plugin_' . $plugin_slug,
-				'plugin' => $plugin_slug,
-				'api' => $api,
-					) ) );
-
-			$install_result = $upgrader->install( $api->download_link );
-
-			if ( ! $install_result || is_wp_error( $install_result ) ) {
-				// $install_result can be false if the file system isn't writable.
-				$error_message = __( 'Please ensure the file system is writable', RT_HD_TEXT_DOMAIN );
-
-				if ( is_wp_error( $install_result ) ) {
-					$error_message = $install_result->get_error_message();
-				}
-
-				die( sprintf( __( 'ERROR: Failed to install plugin: %s', RT_HD_TEXT_DOMAIN ), $error_message ) );
-			}
-
-			$activate_result = activate_plugin( rthd_get_path_for_plugin( $plugin_slug ) );
-			if ( is_wp_error( $activate_result ) ) {
-				die( sprintf( __( 'ERROR: Failed to activate plugin: %s', RT_HD_TEXT_DOMAIN ), $activate_result->get_error_message() ) );
-			}
-		}
-
-		function rthd_plugin_check_enque_js() {
-			wp_enqueue_script( 'rtbiz-hd-plugin-check', RT_HD_URL . 'app/assets/javascripts/rthd_plugin_check.js', '', false, true );
-			wp_localize_script( 'rtbiz-hd-plugin-check', 'rthd_ajax_url', admin_url( 'admin-ajax.php' ) );
-		}
-
-		/**
-		 * if rtbiz plugin is not installed or activated it gives notification to user to do so.
-		 *
-		 * @since 0.1
-		 */
-		function rthd_admin_notice_dependency_not_installed() {
-			$biz_installed = rthd_is_plugin_installed( 'rtbiz' );
-			$p2p_installed = rthd_is_plugin_installed( 'posts-to-posts' );
-
-			if ( ! $biz_installed || ! $p2p_installed ) {
-				$msg = '';
-				if ( ! $biz_installed && ! $p2p_installed ) {
-					$msg = 'rtBiz and Posts 2 Posts';
-				} else if ( ! $biz_installed ) {
-					$msg = 'rtBiz';
-				} else if ( ! $p2p_installed ) {
-					$msg = 'Posts 2 Posts';
-				}
-				?>
+		?>
 		<div class="error rthd-plugin-not-installed-error">
-		<?php $nonce = wp_create_nonce( 'rthd_install_plugin_rtbiz' ); ?>
+			<?php $nonce = wp_create_nonce( 'rthd_install_plugin_rtbiz' ); ?>
 
 			<p><b><?php _e( 'rtBiz Helpdesk:' ) ?></b> <?php _e( 'Click' ) ?> <a href="#"
 																				 onclick="install_rthd_plugin( '<?php echo $msg ?>', 'rthd_install_plugin', '<?php echo $nonce ?>' )">here</a> <?php _e( 'to install ' . $msg . '.', RT_HD_TEXT_DOMAIN ) ?>
 			</p>
 		</div>
-	<?php
+		<?php
 	}
 	$rtbiz_active = rthd_is_plugin_active( 'rtbiz' );
 	$p2p_active = rthd_is_plugin_active( 'posts-to-posts' );
@@ -970,7 +971,7 @@ function rthd_admin_notice_dependency_installed() {
 																				 onclick="activate_rthd_plugin( '<?php echo $msg ?>', 'rthd_activate_plugin', '<?php echo $nonce; ?>' )">here</a> <?php _e( 'to activate ' . $msg . '.', RT_HD_TEXT_DOMAIN ) ?>
 			</p>
 		</div>
-	<?php
+		<?php
 	}
 }
 
@@ -1109,7 +1110,7 @@ function rthd_get_attachment_url_from_followups( $postid ) {
 				'key' => 'attachment',
 				'compare' => 'EXISTS',
 			), ),
-	) );
+			) );
 	$attach_cmt = array();
 	foreach ( $attach_comments as $comment ) {
 		$url_arr = get_comment_meta( $comment, 'attachment' );
@@ -1820,10 +1821,10 @@ function rthd_admin_sidebar() {
 							<h3 class="hndle"><span>Spread the Word</span></h3>
 							<div class="inside">
 								<div class="rthd-social-share" id="social">
-											<p><a href="http://twitter.com/home/?status=' . $message . '" class="button" target= "_blank" title="' . __( 'Post to Twitter Now', RT_HD_TEXT_DOMAIN ) . '">' . __( 'Post to Twitter', RT_HD_TEXT_DOMAIN ) . '<span class="dashicons dashicons-twitter"></span></a></p>
-											<p><a href="https://www.facebook.com/sharer/sharer.php?u=http://rtcamp.com/helpdesk/" class="button" target="_blank" title="' . __( 'Share on Facebook Now', RT_HD_TEXT_DOMAIN ) . '">' . __( 'Share on Facebook', RT_HD_TEXT_DOMAIN ) . '<span class="dashicons dashicons-facebook"></span></a></p>
-											<p><a href="https://wordpress.org/support/view/plugin-reviews/rtbiz?rate=5#postform" class="button" target= "_blank" title="' . __( 'Rate rtBiz on Wordpress.org', RT_HD_TEXT_DOMAIN ) . '">' . __( 'Rate on Wordpress.org', RT_HD_TEXT_DOMAIN ) . '<span class="dashicons dashicons-wordpress"></span></a></p>
-											<p><a href="' . sprintf( '%s', 'https://rtcamp.com/feed/' ) . '"  title="' . __( 'Subscribe to our feeds', RT_HD_TEXT_DOMAIN ) . '" class="button" target="_blank" title="' . __( 'Subscribe to our Feeds', RT_HD_TEXT_DOMAIN ) . '">' . __( 'Subscribe to our Feeds', RT_HD_TEXT_DOMAIN ) . '<span class="dashicons dashicons-rss"></span></a></a></p>
+											<p><a href="http://twitter.com/home/?status=' . $message . '" class="button twitter" target= "_blank" title="' . __( 'Post to Twitter Now', RT_HD_TEXT_DOMAIN ) . '">' . __( 'Post to Twitter', RT_HD_TEXT_DOMAIN ) . '<span class="dashicons dashicons-twitter"></span></a></p>
+											<p><a href="https://www.facebook.com/sharer/sharer.php?u=http://rtcamp.com/helpdesk/" class="button facebook" target="_blank" title="' . __( 'Share on Facebook Now', RT_HD_TEXT_DOMAIN ) . '">' . __( 'Share on Facebook', RT_HD_TEXT_DOMAIN ) . '<span class="dashicons dashicons-facebook"></span></a></p>
+											<p><a href="https://wordpress.org/support/view/plugin-reviews/rtbiz?rate=5#postform" class="button wordpress" target= "_blank" title="' . __( 'Rate rtBiz on Wordpress.org', RT_HD_TEXT_DOMAIN ) . '">' . __( 'Rate on Wordpress.org', RT_HD_TEXT_DOMAIN ) . '<span class="dashicons dashicons-wordpress"></span></a></p>
+											<p><a href="' . sprintf( '%s', 'https://rtcamp.com/feed/' ) . '"  title="' . __( 'Subscribe to our feeds', RT_HD_TEXT_DOMAIN ) . '" class="button rss" target="_blank" title="' . __( 'Subscribe to our Feeds', RT_HD_TEXT_DOMAIN ) . '">' . __( 'Subscribe to our Feeds', RT_HD_TEXT_DOMAIN ) . '<span class="dashicons dashicons-rss"></span></a></a></p>
 										</div>
 									</div>
 								</div>';

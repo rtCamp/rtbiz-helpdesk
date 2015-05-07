@@ -141,8 +141,10 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 						$this->generate_wizard( $wizard );
 						?>
 					</div>
+					<?php rthd_admin_sidebar(); ?>
+				</div>
+			</div>
 			<?php
-			rthd_admin_sidebar();
 		}
 
 		function rthd_ACL() {
@@ -517,11 +519,11 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				<div class="rthd_wizard_container rthd_selected_user " style="display: none;">
 					<table class="rthd-setup-ul-text-decoration rthd-setup-list-users">
 						<tr>
-							<th> User </th>
-							<th> Admin </th>
-							<th> Editor</th>
-							<th> Author</th>
-							<th> </th>
+							<th>User</th>
+							<th>Admin</th>
+							<th>Editor</th>
+							<th>Author</th>
+							<th>Remove</th>
 						</tr>
 
 					</table>
