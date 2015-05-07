@@ -154,7 +154,13 @@ jQuery( document ).ready( function () {
 			function sendFollowup( force ){
 				var followuptype = jQuery( "#followup-type" ).val();
 				var formData = new FormData();
-				formData.append( "private_comment", jQuery( '#add-private-comment' ).val() );
+				var followup_type= jQuery("input[name='private_comment']:checked");
+				if(followup_type.length){
+					followup_type = followup_type.val();
+				} else {
+					followup_type = jQuery("input[name='private_comment']" ).val();
+				}
+				formData.append( "private_comment", followup_type );
 				formData.append( "followup_ticket_unique_id", jQuery( '#ticket_unique_id' ).val() );
 				formData.append( "post_type", jQuery( '#followup_post_type' ).val() );
 				formData.append( "action", 'rthd_add_new_followup_front' );
@@ -276,7 +282,13 @@ jQuery( document ).ready( function () {
 				rthd_common.rthd_tinymce_set_content( 'editedfollowupcontent', jQuery(this).parents().siblings('.rthd-comment-content').data('content'));
 				commentid=select.siblings('#followup-id' ).val();
 				var that = select.siblings( '#is-private-comment' ).val();
-				jQuery('#edit-private' ).val(that);
+				var followup_type= jQuery("input[name='edit_private'][value='"+that+"']");
+				if ( followup_type.length ){
+					followup_type.prop( 'checked',true );
+				} else {
+					followup_type.val( that );
+				}
+				//jQuery('#edit-private' ).val(that);
 				jQuery('#new-followup-form' ).hide();
 				if ( ! jQuery('#dialog-form').is(":visible")){
 					jQuery('#dialog-form' ).slideToggle('slow');
@@ -309,7 +321,13 @@ jQuery( document ).ready( function () {
 				requestArray['followup_ticket_unique_id']=jQuery('#ticket_unique_id' ).val();
 				//requestArray['followup_private']='no';
 				requestArray['followup_post_id']=jQuery('#post-id' ).val();
-				requestArray['followup_private']= jQuery('#edit-private').val();
+				var followup_type= jQuery("input[name='edit_private']:checked");
+				if(followup_type.length){
+					followup_type = followup_type.val();
+				} else {
+					followup_type = jQuery("input[name='edit_private']" ).val();
+				}
+				requestArray['followup_private'] = followup_type;
 				requestArray["followuptype"] = 'comment';
 				//requestArray["followup_post_id"] = jQuery( "#ticket_id" ).val();
 				//requestArray["follwoup-time"] = jQuery( "#follwoup-time" ).val();

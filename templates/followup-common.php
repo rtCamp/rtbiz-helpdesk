@@ -117,17 +117,18 @@ if ( ! empty( $post->post_content ) ) {
 	));
 	wp_editor( '', $editor_id, $settings );
 	?>
-	<div id="edit-private-comment">
-		<span class="rthd-visibility"> Visibility: </span>
-		<select name="private" id="edit-private" >
-			<option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ) ?> </option>
-			<option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ) ?> </option>
-			<?php
-			if ( current_user_can( $cap ) ){ ?>
-				<option value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_STAFF ) ?> </option>
-			<?php }
-			?>
-		</select>
+		<div id="edit-private-comment">
+		<?php
+		if ( current_user_can( $cap ) ) { ?>
+				<label class="rthd-visibility"> Visibility: </label>
+				<input type="radio" class="radio" name="edit_private" value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>" id="followup_edit_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"/>
+				<label for="followup_edit_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ) ?></label>
+				<input type="radio" class="radio" name="edit_private" value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF; ?>" id="followup_edit_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF ?>" />
+				<label for="followup_edit_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF ?>"> <?php echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_STAFF ) ?> </label>
+		<?php } else { ?>
+			<input type="hidden" name="edit_private" id="edit-private" value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>" >
+		<?php
+		} ?>
 		<img id='edithdspinner' class="helpdeskspinner" src="<?php echo admin_url().'images/spinner.gif'; ?>">
 	</div>
 	<button type="button" class="btn close-edit-followup">Close</button>
