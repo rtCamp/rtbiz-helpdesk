@@ -91,7 +91,11 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 
 			if ( 'rtbiz_helpdesk_role_updated' == $_REQUEST['rtbiz_action'] ){
 				global $rt_biz_acl_model;
-				$users = rt_biz_get_wp_user_for_contact( $_REQUEST['post'] );
+				if ( isset( $_REQUEST['post_ID'] ) ){
+					$users = rt_biz_get_wp_user_for_contact( $_REQUEST['post_ID'] );
+				}else{
+					$users = rt_biz_get_wp_user_for_contact( $_REQUEST['post'] );
+				}
 				$module_permission = $_REQUEST['rt_biz_profile_permissions'][ RT_HD_TEXT_DOMAIN ];
 				foreach( $users as $user){
 					switch ( $module_permission ) {

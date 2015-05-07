@@ -123,7 +123,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 					<p><?php _e( 'Thank you for choosing rtBiz', RT_BIZ_TEXT_DOMAIN ); ?></p>
 				</div>
 
-				<div class="clearfix rthd-row-container">
+				<div class="rthd-row-container">
 					<div class="rthd-content-section">
 
 						<h3 class="rthd-option-title">Please follow given steps to configure your Helpdesk.</h3>
@@ -143,6 +143,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 					</div>
 					<?php rthd_admin_sidebar(); ?>
 				</div>
+				<?php rthd_admin_sidebar(); ?>
 			</div>
 			<?php
 		}
