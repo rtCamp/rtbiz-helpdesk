@@ -141,6 +141,8 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 						$this->generate_wizard( $wizard );
 						?>
 					</div>
+				</div>
+			</div>
 			<?php
 			rthd_admin_sidebar();
 		}
