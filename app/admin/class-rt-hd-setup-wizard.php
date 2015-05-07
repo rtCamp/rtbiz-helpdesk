@@ -136,7 +136,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 							'Setup Your Team' => array( $this, 'setup_team' ),
 							'Set Assignee' => array( $this, 'set_assignee_ui' ),
 							'Mailbox Setup' => array( $this, 'mail_box_ui' ),
-							'Set Roles' => array( $this, 'set_role_ui' ),
+							'Finish' => array( $this, 'set_role_ui' ),
 						);
 						$this->generate_wizard( $wizard );
 						?>
