@@ -188,9 +188,9 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				'rthd-' . self::$post_type . '-dashboard',
                 'edit.php?post_type=' . self::$post_type,
                 'post-new.php?post_type=' . self::$post_type,
-				'edit.php?post_type=' . rt_biz_get_contact_post_type() . '&rt_contact_group=customer',
-				'edit.php?post_type=' . rt_biz_get_contact_post_type() . '&rt_contact_group=staff',
-				'edit-tags.php?taxonomy=' . RT_Departments::$slug . '&post_type=' . self::$post_type,
+				esc_url( 'edit.php?post_type=' . rt_biz_get_contact_post_type() . '&rt_contact_group=customer' ),
+				esc_url( 'edit.php?post_type=' . rt_biz_get_contact_post_type() . '&rt_contact_group=staff' ),
+				esc_url( 'edit-tags.php?taxonomy=' . RT_Departments::$slug . '&post_type=' . self::$post_type ),
 				'edit-tags.php?taxonomy=' . Rt_Offerings::$offering_slug . '&amp;post_type=' . self::$post_type,
                 $rt_hd_attributes->attributes_page_slug,
                 Redux_Framework_Helpdesk_Config::$page_slug,
@@ -319,8 +319,9 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 		 * @return object|\WP_Error
 		 */
 		function register_custom_post( $menu_position ) {
-			$settings = rthd_get_redux_settings();
-			$logo = apply_filters('rthd_helpdesk_logo', 'dashicons-businessman');
+
+			$logo = apply_filters( 'rthd_helpdesk_logo', RT_HD_URL . 'app/assets/img/hd-16X16.png' );
+
 			$args = array(
 				'labels'             => $this->labels,
 				'public'             => true,

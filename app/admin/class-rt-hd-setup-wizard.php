@@ -82,7 +82,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			</div>
 			<div class="rthd-mailbox-setup-process rthd-wizard-process" style="display: none;">
 				<span>Loading outbound emails</span>
-				<img src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
+				<img class="helpdeskspinner" alt="load" src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
 			</div> <?php
 		}
 
@@ -141,7 +141,6 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 						$this->generate_wizard( $wizard );
 						?>
 					</div>
-					<?php rthd_admin_sidebar(); ?>
 				</div>
 			</div>
 			<?php
@@ -181,7 +180,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 									   name="ACL_<?php echo $user->ID; ?>"
 									   value="<?php echo Rt_Access_Control::$permissions[ 'author' ][ 'value' ]; ?>" <?php echo ( $row->permission == Rt_Access_Control::$permissions[ 'author' ][ 'value' ] ) ? 'checked' : ''; ?> />
 							</td>
-							<td><img class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
+							<td><img alt="load" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
 							</td>
 						</tr> <?php }
 					?>
@@ -406,14 +405,14 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 					<input type="text" id="rthd-setup-store-new-team" />
 					<input type="button" id="rthd-setup-store-new-team-submit" value="Add" />
 				</div>
-				<ul class="rthd-setup-wizard-new-offering">
+				<ol class="rthd-setup-wizard-new-offering">
 
-				</ul>
+				</ol>
 			</div>
 
 			<div class="rthd-store-process rthd-wizard-process" style="display: none; float: left;">
 				<span>Connecting store and importing existing products</span>
-				<img id="rthd-support-page-spinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
+				<img class="helpdeskspinner" alt="load"  src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 			</div>
 
 			<?php
@@ -453,7 +452,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 
 			<div class="rthd-support-process rthd-wizard-process" style="display: none;">
 				<span>Setting up support page</span>
-				<img id="rthd-support-page-spinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
+				<img class="helpdeskspinner" alt="load" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 			</div>
 			<?php
 		}
@@ -461,19 +460,21 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 		/**
 		 * setup team UI
 		 */
-		function setup_team() {
+		function setup_team( $isheader = true ) {
 			?>
 
 			<div>
 				<div class="rthd-setup-wizard-controls rthd-setup-team-wizard-controls">
-					<h3 class="rthd-setup-wizard-title">Setup Your Team</h3>
+					<?php if ( $isheader ){ ?>
+						<h3 class="rthd-setup-wizard-title">Setup Your Team</h3>
+					<?php } ?>
 					<p class="rthd-notice"><?php _e( "There are 3 ways you can add users to your ‘Support' team. If you forget somebody now, you can add them later. You (admin) are already part of this team.", RT_HD_TEXT_DOMAIN ) ?></p>
 					<div class="rthd_wizard_container rthd-setup-wizard-row">
 
 						<div class="rthd-setup-value-container">
 							<label for="rthd-user-autocomplete"> 1. Search and add users </label>
 							<input id="rthd-user-autocomplete" type="text" placeholder="Search by name or email" class="rthd-user-autocomplete rthd-setup-wizard-text " />
-							<img id="rthd-autocomplete-page-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
+							<img id="rthd-autocomplete-page-spinner" alt="load" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 							<br/>
 							<span class="rthd-warning" style="display: none;"></span>
 							<input type="button" class='button rthd-importer-add-contact' value="Add" style="display: none;" />
@@ -492,7 +493,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 						<div class="rthd-domain-action">
 							<span id='rthd-domain-import-message' style=""> Found <?php echo sprintf( _n( '%s user', '%s users', $count_domain_users, RT_HD_TEXT_DOMAIN ), $count_domain_users ); ?></span>
 							<input id="rthd-import-domain-users" class="button" type="button" value="Add Users" />
-							<img id="rthd-domain-import-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
+							<img id="rthd-domain-import-spinner" alt="load" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 							<?php wp_nonce_field( get_current_user_id() . 'import-user-domain', 'import_domain' ); ?>
 						</div>
 
@@ -507,7 +508,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 							?>
 							<label> 3. Add all WordPress <?php echo sprintf( _n( '(%s) user', '(%s) users', $remain_wp_users, RT_HD_TEXT_DOMAIN ), $remain_wp_users ); ?></label>
 							<input id="rthd-add-all-users" class="button" type="button" value="Add Users" />
-							<img id="rthd-import-all-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
+							<img id="rthd-import-all-spinner" alt="load" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 							<?php wp_nonce_field( get_current_user_id() . 'import-all-users', 'import_all_users' ); ?>
 							<input type="hidden" id="rthd-setup-import-all-count" value="<?php echo $remain_wp_users; ?>" />
 							<progress id="rthd-setup-import-users-progress" max="<?php echo $remain_wp_users; ?>" value="0" style="display: none;"></progress>
@@ -532,7 +533,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			</div>
 			<div class="rthd-team-setup-loading" style="display: none;">
 				<span>Loading next page</span>
-				<img id="rthd-support-page-spinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
+				<img class="helpdeskspinner" alt="load" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 			</div>
 			<?php
 		}

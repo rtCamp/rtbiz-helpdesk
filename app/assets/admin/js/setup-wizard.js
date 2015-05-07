@@ -21,10 +21,9 @@ jQuery( document ).ready( function ( $ ) {
 			wizard = jQuery( "#wizard" ).steps( {
 				headerTag: "h3",
 				bodyTag: "fieldset",
-				transitionEffect: "slideLeft",
-				//titleTemplate: '#title#',
+				transitionEffect: 1,
 				forceMoveForward: true,
-				titleTemplate: "#title#",
+				//titleTemplate: "#title#",
 				//enableAllSteps: true,
 				onStepChanging: function ( event, currentIndex, newIndex ) {
 					//alert("moving to "+newIndex+" from "+ currentIndex);
@@ -89,7 +88,6 @@ jQuery( document ).ready( function ( $ ) {
 			} );
 
 			jQuery( document ).on( 'click', '#rthd-setup-store-new-team-submit', function ( e ) {
-				console.log( 'inside' );
 				var new_term = jQuery( '#rthd-setup-store-new-team' ).val();
 				if ( new_term.length != 0 && ! new_term.trim() ) {
 					return;
@@ -320,7 +318,7 @@ jQuery( document ).ready( function ( $ ) {
 						} else {
 							jQuery( '#rthd-import-all-spinner' ).hide();
 							jQuery( '#rthd-setup-import-users-progress' ).hide();
-							if ( imported_users == 0 ) {
+							if ( imported_users == 0 || !data.imported_count ) {
 								jQuery( '#rthd-all-import-message' ).html( 'No Users Found' );
 							} else {
 								jQuery( '#rthd-all-import-message' ).html( imported_users + ' Users Added' );

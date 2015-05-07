@@ -112,12 +112,13 @@ ul#chat-UI {
 
 #private-comment{
 	display: inline-block;
+	margin-bottom: 10px;
 }
 #rthd-followup-form {
 	margin-top: 1.5em;
 }
 #rthd-followup-form > div {
-	margin-bottom: 1em;
+	/*margin-bottom: 1em;*/
 }
 #rthd-followup-form #rthd-followup-action {
 	float: right;
@@ -600,6 +601,14 @@ h2.rthd-ticket-list-title{
 
 .self .followup_staff_only_arrow:after, .other .followup_staff_only_arrow:after{
 	border-right-color: beige;
+}
+
+.rthd-attachment-box{
+	float: left;
+}
+
+#followup-filelist div{
+	margin-top: 5px;
 }
 /*#rthd-subscribe-email{*/
 	/*width: 250px;*/

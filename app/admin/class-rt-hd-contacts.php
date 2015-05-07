@@ -62,7 +62,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 			<fieldset id="rtbiz_contact_helpdesk_access" class="inline-edit-col-right">
 				<div class="inline-edit-col">
 					<label class="alignleft">
-						<span>Helpdesk Roled</span>
+						<span>Helpdesk Role</span>
 						<input type="hidden" name="rtbiz_action" value="rtbiz_helpdesk_role_updated">
 						<select name="rt_biz_profile_permissions[rtbiz-helpdesk]">
 							<?php foreach ( $permissions as $pkey => $p ) { ?>
@@ -91,17 +91,49 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 
 			if ( 'rtbiz_helpdesk_role_updated' == $_REQUEST['rtbiz_action'] ){
 				global $rt_biz_acl_model;
-				$data = array(
-					'permission' => $_REQUEST['rt_biz_profile_permissions'][ RT_HD_TEXT_DOMAIN ],
-				);
 				$users = rt_biz_get_wp_user_for_contact( $_REQUEST['post'] );
+				$module_permission = $_REQUEST['rt_biz_profile_permissions'][ RT_HD_TEXT_DOMAIN ];
 				foreach( $users as $user){
-					$where = array(
-						'userid'     => $user->ID,
-						'module'     => RT_HD_TEXT_DOMAIN,
-						'groupid'    => 0,
-					);
-					$rt_biz_acl_model->update_acl( $data, $where );
+					switch ( $module_permission ) {
+						case 0:
+							//if group level permission is enable for helpdesk then write group level code here
+							//remove all permission
+							$where = array(
+								'userid'     => $user->ID,
+								'module'     => RT_HD_TEXT_DOMAIN,
+							);
+							$rt_biz_acl_model->remove_acl( $where );
+							break;
+						case 10:
+						case 20:
+						case 30:
+							$where = array(
+								'userid'     => $user->ID,
+								'module'     => RT_HD_TEXT_DOMAIN,
+							);
+							$acl = $rt_biz_acl_model->get_acl( $where );
+							if ( ! empty( $acl ) ){
+								$data = array(
+									'permission' => $module_permission,
+								);
+								$where = array(
+									'userid'     => $user->ID,
+									'module'     => RT_HD_TEXT_DOMAIN,
+									'groupid'    => 0,
+								);
+								$rt_biz_acl_model->update_acl( $data, $where );
+							} else {
+								$data = array(
+									'userid'     => $user->ID,
+									'module'     => RT_HD_TEXT_DOMAIN,
+									'groupid'    => 0,
+									'permission' => $module_permission,
+								);
+								$rt_biz_acl_model->add_acl( $data );
+							}
+							break;
+					}
+
 				}
 			}
 		}
