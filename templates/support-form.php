@@ -99,7 +99,7 @@
 
 	<div>
 		<input type="hidden" name="rthd_support_form_submit" value="1" />
-		<input class="btn btn-primary" id="sumit-support-form" type="submit" value="Submit" />
+		<input class="btn btn-primary" id="submit-support-form" type="submit" value="Submit" />
 	</div>
 
 </form>

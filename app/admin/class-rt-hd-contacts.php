@@ -89,14 +89,21 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 			if ( isset( $post->post_type ) && $post->post_type != rt_biz_get_contact_post_type() )
 				return $post_id;
 
-			if ( 'rtbiz_helpdesk_role_updated' == $_REQUEST['rtbiz_action'] ){
+			if ( isset( $_REQUEST['rtbiz_action'] ) && 'rtbiz_helpdesk_role_updated' == $_REQUEST['rtbiz_action'] ){
 				global $rt_biz_acl_model;
-				if ( isset( $_REQUEST['post_ID'] ) ){
-					$users = rt_biz_get_wp_user_for_contact( $_REQUEST['post_ID'] );
-				}else{
-					$users = rt_biz_get_wp_user_for_contact( $_REQUEST['post'] );
-				}
+				$contactIds = array();
 				$module_permission = $_REQUEST['rt_biz_profile_permissions'][ RT_HD_TEXT_DOMAIN ];
+				if ( isset( $_REQUEST['post_ID'] ) ){
+					$contactIds = array( $_REQUEST['post_ID'] );
+				}else{
+					$contactIds = $_REQUEST['post'];
+				}
+				foreach( $contactIds as $contactId ){
+					$user_permissions = get_post_meta( $contactId, 'rt_biz_profile_permissions', true );
+					$user_permissions[ RT_HD_TEXT_DOMAIN ] = $module_permission;
+					update_post_meta( $contactId, 'rt_biz_profile_permissions', $user_permissions );
+				}
+				$users = rt_biz_get_wp_user_for_contact( $contactIds );
 				foreach( $users as $user){
 					switch ( $module_permission ) {
 						case 0:

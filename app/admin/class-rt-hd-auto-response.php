@@ -76,11 +76,18 @@ if ( ! class_exists( 'Rt_HD_Auto_Response' ) ) {
                         // if [ time not empty and off time ] or [ time is empty ]
                         if ( ( -1 != $shifttime['start'][ $day ] && -1 != $shifttime['end'][ $day ] && ( $hour < $shifttime['start'][ $day ] || $hour > $shifttime['end'][ $day ] ) ) || ( -1 == $shifttime['start'][ $day ] && -1 == $shifttime['end'][ $day ] ) ){
                             // Get next Working hours
-                            $nextday = $this->next_day( $day + 1, $shifttime, $isDayShift );
+	                        $isSameDay = false;
+	                        $nextday = ( $day + 1 );
+	                        if ( $hour < $shifttime['start'][ $day ] ){
+		                        $nextday = $day;
+		                        $isSameDay = true;
+	                        }
+	                        $nextday = $this->next_day( $nextday, $shifttime, $isDayShift );
+
                             //get next staring time
                             $NextStatingTime = $shifttime['start'][ $nextday ];
                             // check nextday is same day or not
-                            if ( ( $nextday == $day && $NextStatingTime < $hour ) || $nextday != $day ){
+                            if ( ! $isSameDay ){
                                 $nextday = $this->weekdays[ $nextday ] . ' after ';
                             } else {
                                 $nextday = 'Today after ';
@@ -111,9 +118,11 @@ if ( ! class_exists( 'Rt_HD_Auto_Response' ) ) {
                              ( ( -1 == $shifttime['am_start'][ $day ] && -1 == $shifttime['am_end'][ $day ] && -1 != $shifttime['pm_start'][ $day ] && -1 != $shifttime['pm_end'][ $day ]  ) && ( $hour < $shifttime['pm_start'][ $day ] || $hour > $shifttime['pm_end'][ $day ] ) ) // am time is empty but pm time is not empty
                            ){
                             // Get next Working hours
-                            $nextday = ( $day + 1 );
+                            $isSameDay = false;
+	                        $nextday = ( $day + 1 );
                             if (   $hour < $shifttime['am_start'][ $day ] || ( $hour > $shifttime['am_end'][ $day ] && $hour < $shifttime['pm_start'][ $day ] )  ){
                                 $nextday = $day;
+	                            $isSameDay = true;
                             }
 
                             $nextday = $this->next_day($nextday, $shifttime, $isDayShift);
@@ -125,12 +134,12 @@ if ( ! class_exists( 'Rt_HD_Auto_Response' ) ) {
                                 $NextStatingTime = $shifttime['pm_start'][$nextday];
                             }
 
-                            if ( $hour >= 12  && $NextStatingTime < $hour && $nextday == $day ){
+                            if (  $isSameDay && $hour >= 12  && $NextStatingTime < $hour && $nextday == $day ){
                                 $NextStatingTime = $shifttime['pm_start'][$nextday];
                             }
 
                             // check nextday is same day or not
-                            if ( $nextday != $day ) {
+                            if ( ! $isSameDay ) {
                                 $nextday = $this->weekdays[$nextday] . ' after ';
                             } else {
                                 $nextday = 'Today after ';
