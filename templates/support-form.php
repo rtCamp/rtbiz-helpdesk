@@ -87,7 +87,7 @@
 		</div>
 	<?php } ?>
 	<div>
-		<!--		--><?php //wp_nonce_field( 'rthd_support_add_nonce_for_security_thats_all', 'rthd_support_nonce' );    ?>
+		<!--		--><?php //wp_nonce_field( 'rthd_support_add_nonce_for_security_thats_all', 'rthd_support_nonce' );      ?>
 
 		<!--		<input type="file" id="filesToUpload" name="attachment[]" multiple="multiple"/>-->
 		<div id="attachment-container">

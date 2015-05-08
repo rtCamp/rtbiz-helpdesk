@@ -80,30 +80,30 @@
 		vertical-align: top;
 	}
 
-	.delete_row {
-		background-color: #dd3d36;
-		border-radius: 100%;
-		box-shadow: 0 0 0;
-		color: #fff;
-		display: inline-block;
-		float: none;
-		font-size: 14px;
-		font-weight: bold;
-		height: 14px;
-		line-height: 14px;
-		padding: 0;
-		position: relative;
-		text-align: center;
-		text-decoration: none;
-		top: -3px;
-		vertical-align: top;
-		width: 14px;
-
-		&:focus,
-			&:hover {
+	/*	.delete_row {
+			background-color: #dd3d36;
+			border-radius: 100%;
+			box-shadow: 0 0 0;
 			color: #fff;
-		}
-	}
+			display: inline-block;
+			float: none;
+			font-size: 14px;
+			font-weight: bold;
+			height: 14px;
+			line-height: 14px;
+			padding: 0;
+			position: relative;
+			text-align: center;
+			text-decoration: none;
+			top: -3px;
+			vertical-align: top;
+			width: 14px;
+
+			&:focus,
+				&:hover {
+				color: #fff;
+			}
+		}*/
 }
 
 .rthd-setup-user-title {
@@ -118,6 +118,14 @@
     white-space: nowrap;
     width: 75%;
     word-break: keep-all;
+}
+
+.delete_row.rthd_delete_attachment {
+	background-color: transparent;
+	border-radius: 0;
+	box-shadow: 0 0 0;
+	color: inherit;
+	outline: 0;
 }
 
 .rthd-wizard-process {

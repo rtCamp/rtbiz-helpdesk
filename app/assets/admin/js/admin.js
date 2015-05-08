@@ -148,7 +148,7 @@ jQuery( document ).ready( function () {
 					selection.map( function ( attachment ) {
 						attachment = attachment.toJSON();
 						strAttachment = '<li data-attachment-id="' + attachment.id + '" class="attachment-item row_group">';
-						strAttachment += '<a href="#" class="delete_row rthd_delete_attachment">x</a>';
+						strAttachment += '<a href="#" class="delete_row rthd_delete_attachment"><span class="dashicons dashicons-dismiss"></span></a>';
 						strAttachment += '<a target="_blank" href="' + attachment.url + '"><img height="20px" width="20px" src="' + attachment.icon + '" > ' + attachment.filename + '</a>';
 						strAttachment += '<input type="hidden" name="attachment[]" value="' + attachment.id + '" /></div>';
 

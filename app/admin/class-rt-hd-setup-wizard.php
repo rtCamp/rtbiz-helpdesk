@@ -56,13 +56,13 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 		 *  Register page to Wordpress with admin capability
 		 */
 		function register_setup_wizard() {
-//			if ( ! rthd_check_wizard_completed() ) {
+			//if ( ! rthd_check_wizard_completed() ) {
 			$admin_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' );
 			$this->screen_id = add_submenu_page( 'edit.php?post_type=' . esc_html( Rt_HD_Module::$post_type ), __( 'Setup Wizard', RT_HD_TEXT_DOMAIN ), __( 'Setup Wizard', RT_HD_TEXT_DOMAIN ), $admin_cap, 'rthd-setup-wizard', array(
 				$this,
 				'setup_wizard_ui',
 					) );
-//			}
+			//}
 		}
 
 		function set_assignee_ui() {
@@ -88,8 +88,9 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 
 		function set_role_ui() {
 			?>
-			<div class="rthd-setup-wizard-controls rthd-ACL-change">
-				Yay!! Your Helpdesk is ready.  Click on finish to get started.
+			<div class="rthd-setup-wizard-controls rthd-ACL-change rthd-setup-wizard-row">
+				<h3 class="rthd-setup-wizard-title"><?php _e( 'Congrats !!!', RT_BIZ_TEXT_DOMAIN ); ?></h3>
+				<p>Your Helpdesk is ready. Click on finish to get started.</p>
 			</div>
 			<?php
 		}
@@ -119,9 +120,9 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 
 				<h2><?php _e( 'rtBiz Helpdesk Setup', RT_BIZ_TEXT_DOMAIN ); ?></h2>
 				<hr>
-				<div class="updated notice notice-success is-dismissible below-h2 rthd-hide-notice-setup-wizard" id="message">
-					<p><?php _e( 'Thank you for choosing rtBiz', RT_BIZ_TEXT_DOMAIN ); ?></p>
-				</div>
+				<!--				<div class="updated notice notice-success is-dismissible below-h2 rthd-hide-notice-setup-wizard" id="message">
+									<p><?php //_e( 'Thank you for choosing rtBiz', RT_BIZ_TEXT_DOMAIN );   ?></p>
+								</div>-->
 
 				<div class="rthd-row-container">
 					<div class="rthd-content-section">
@@ -519,6 +520,11 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 							</form>
 						</div>
 
+						<div class="rthd-team-setup-loading rthd-wizard-process" style="display: none;">
+							<span>Loading next page</span>
+							<img class="" alt="load" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
+						</div>
+
 					</div>
 
 					<div class="rthd_wizard_container rthd_selected_user clearfix">
@@ -534,13 +540,8 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 						</table>
 					</div>
 				</div>
-
-
 			</div>
-			<div class="rthd-team-setup-loading" style="display: none;">
-				<span>Loading next page</span>
-				<img class="" alt="load" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
-			</div>
+
 			<?php
 		}
 

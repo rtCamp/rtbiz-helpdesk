@@ -113,6 +113,31 @@ ul#chat-UI {
 #private-comment{
 	display: inline-block;
 }
+
+.rthd-visibility-wrap {
+	margin-bottom: 16px;
+
+	label {
+		margin-right: 10px;
+	}
+}
+
+.rthd-keep-status-wrap {
+	margin-bottom: 16px;
+}
+
+.rthd-info-meta-created-by-li {
+	.avatar {
+		float: left;
+		margin-right: 10px;
+	}
+
+	.rthd-info-meta-created-by {
+		line-height: 25px;
+		text-decoration: none;
+	}
+}
+
 #rthd-followup-form {
 	margin-top: 1.5em;
 }
@@ -426,24 +451,23 @@ h2.rt-hd-ticket-front-title{
     word-break: initial;
 }
 
-#followup-filelist .followup-attach-remove{
-	text-align: center;
-	color: #FFF;
-	background: #000;
-	border-radius: 100%;
-	padding: 0 5px;
-	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-	text-decoration: none;
-	margin-right: 5px;
-}
-
 .rthd-followup-file-uploaded{
 	color: #71dd7f;
 }
 
-#followup-filelist .followup-attach-remove:hover{
+.followup-attach-remove {
+	color: inherit;
 	text-decoration: none;
-	color: #FFF;
+}
+
+#followup-filelist {
+	margin: 16px 0;
+}
+
+.blacklist_contacts_list {
+	list-style: none;
+	margin: 0 0 16px;
+	padding: 0;
 }
 
 .rthd-front-icons, .rthd-ticket-user-activity, .rthd-collapse-icon{

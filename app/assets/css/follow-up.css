@@ -74,9 +74,9 @@ ul#chat-UI {
 	-ms-word-break:break-all;
 	word-wrap: break-word;
 	word-break: break-word;
-  	-webkit-hyphens:auto;
-  	-moz-hyphens:auto;
-  	hyphens:auto;
+	-webkit-hyphens:auto;
+	-moz-hyphens:auto;
+	hyphens:auto;
 }
 .self .avatar {
 	position: relative;
@@ -112,13 +112,37 @@ ul#chat-UI {
 
 #private-comment{
 	display: inline-block;
-	margin-bottom: 10px;
 }
+
+.rthd-visibility-wrap {
+	margin-bottom: 16px;
+
+	label {
+		margin-right: 10px;
+	}
+}
+
+.rthd-keep-status-wrap {
+	margin-bottom: 16px;
+}
+
+.rthd-info-meta-created-by-li {
+	.avatar {
+		float: left;
+		margin-right: 10px;
+	}
+
+	.rthd-info-meta-created-by {
+		line-height: 25px;
+		text-decoration: none;
+	}
+}
+
 #rthd-followup-form {
 	margin-top: 1.5em;
 }
 #rthd-followup-form > div {
-	/*margin-bottom: 1em;*/
+	margin-bottom: 1em;
 }
 #rthd-followup-form #rthd-followup-action {
 	float: right;
@@ -185,9 +209,9 @@ ul#chat-UI {
 	-ms-word-break:break-all;
 	word-wrap: break-word;
 	word-break: break-word;
-  	-webkit-hyphens:auto;
-  	-moz-hyphens:auto;
-  	hyphens:auto;
+	-webkit-hyphens:auto;
+	-moz-hyphens:auto;
+	hyphens:auto;
 }
 
 .rthd-container {
@@ -199,9 +223,9 @@ ul#chat-UI {
 	-ms-word-break:break-all;
 	word-wrap: break-word;
 	word-break: break-word;
-  	-webkit-hyphens:auto;
-  	-moz-hyphens:auto;
-  	hyphens:auto;
+	-webkit-hyphens:auto;
+	-moz-hyphens:auto;
+	hyphens:auto;
 }
 
 .rthd-clearfix {
@@ -374,8 +398,8 @@ li.load-more-spinner-li {
 	display: inline-block;
 }
 /*#ticket-information-edit-ticket-link {*/
-	/*right: 0;*/
-	/*position: absolute;*/
+/*right: 0;*/
+/*position: absolute;*/
 /*}*/
 
 .rt-hd-ticket-info-header {
@@ -427,24 +451,23 @@ h2.rt-hd-ticket-front-title{
     word-break: initial;
 }
 
-#followup-filelist .followup-attach-remove{
-	text-align: center;
-	color: #FFF;
-	background: #000;
-	border-radius: 100%;
-	padding: 0 5px;
-	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-	text-decoration: none;
-	margin-right: 5px;
-}
-
 .rthd-followup-file-uploaded{
 	color: #71dd7f;
 }
 
-#followup-filelist .followup-attach-remove:hover{
+.followup-attach-remove {
+	color: inherit;
 	text-decoration: none;
-	color: #FFF;
+}
+
+#followup-filelist {
+	margin: 16px 0;
+}
+
+.blacklist_contacts_list {
+	list-style: none;
+	margin: 0 0 16px;
+	padding: 0;
 }
 
 .rthd-front-icons, .rthd-ticket-user-activity, .rthd-collapse-icon{
@@ -510,13 +533,13 @@ h2.rt-hd-ticket-front-title{
 }
 
 .rthd-add-people-button{
-	position: absolute;
+	position: relative;
 	display: inline-block;
-	/*float: right;*/
+	float: right;
 }
 
 /*.rthd-add-people-button:hover .rthd-add-people-box {*/
-	/*display: block;*/
+/*display: block;*/
 /*}*/
 
 .rthd-add-people-button.rthd-show-add-people-box{
@@ -594,27 +617,11 @@ ul#attachment-files {
 h2.rthd-ticket-list-title{
 	margin-top: 20px;
 }
-
-.followup_staffonly{
-	background: beige;
-}
-
-.self .followup_staff_only_arrow:after, .other .followup_staff_only_arrow:after{
-	border-right-color: beige;
-}
-
-.rthd-attachment-box{
-	float: left;
-}
-
-#followup-filelist div{
-	margin-top: 5px;
-}
 /*#rthd-subscribe-email{*/
-	/*width: 250px;*/
-	/*float: right;*/
+/*width: 250px;*/
+/*float: right;*/
 /*}*/
 
 /*.rthd-subscribe-email-submit{*/
-	/*float: right;*/
+/*float: right;*/
 /*}*/
