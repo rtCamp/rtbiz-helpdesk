@@ -66,9 +66,28 @@ jQuery(document).ready(function (){
 					                                      PostInit: function () {
 						                                      document.getElementById( 'support-filelist' ).innerHTML = '';
 
-						                                      document.getElementById( 'sumit-support-form' ).onclick = function ( e ) {
+						                                      document.getElementById( 'submit-support-form' ).onclick = function ( e ) {
 							                                      e.preventDefault();
-							                                      uploader.start();
+							                                      jQuery( '#support-form-filelist' ).html( '' );
+							                                      jQuery( '#rthd_support_attach_ids' ).val( uploadedfiles );
+							                                      if ( ! rthd_tinymce_get_content_support( 'post_description' ) ) {
+								                                      alert( 'Please enter Description' );
+								                                      // need to find tinyMCE change event and add
+								                                      // jQuery('#editor_container').after("<span class='error'>Please enter Discrpition</span>");
+							                                      }
+							                                      var name = jQuery('#title' );
+							                                      var product = jQuery('select[name="post[product_id]"]' );
+							                                      if ( ! name.val().length ){
+								                                      name.css('border-color','red');
+							                                      }
+							                                      if ( product.length ) {
+								                                      if ( ! product.val().length ) {
+									                                      product.css( 'border-color', 'red' );
+								                                      }
+							                                      }
+																  if ( jQuery('.rthd_support_from')[0].checkValidity() ){
+																	  uploader.start();
+																  }
 							                                      //return false;
 						                                      };
 					                                      },
@@ -96,15 +115,7 @@ jQuery(document).ready(function (){
 					                                      UploadComplete: function () {
 						                                      jQuery( '#support-form-filelist' ).html( '' );
 						                                      jQuery( '#rthd_support_attach_ids' ).val( uploadedfiles );
-						                                      if ( ! rthd_tinymce_get_content_support( 'post_description' ) ) {
-							                                      alert( 'Please enter Description' );
-						                                      } else {
-							                                      jQuery( '.rthd_support_from' ).submit(); //function ( e ) {
-							                                      //if ( ! jQuery( ".rthd_support_from" ).valid() ) {
-							                                      //   e.preventDefault();
-							                                      //}
-							                                      //} );
-						                                      }
+						                                      jQuery( '.rthd_support_from' ).submit();
 					                                      },
 
 					                                      FileUploaded: function ( up, file, info ) {
@@ -124,6 +135,26 @@ jQuery(document).ready(function (){
 			e.preventDefault();
 			uploader.removeFile(jQuery(this ).parent().attr("id"));
 		});
+
+		jQuery('#title' ).change( function ( e ) {
+			ShowErrors(this);
+		});
+
+		function ShowErrors(val){
+			if ( jQuery(val).val().length > 0 ) {
+				//jQuery(val).css('border-color','');
+				jQuery(val).removeClass('rthd-support-input-error');
+			} else{
+				//jQuery(val).css('border-color','red');
+				jQuery(val).addClass('rthd-support-input-error');
+			}
+		}
+
+		jQuery('select[name="post[product_id]"]' ).change( function ( e ) {
+			ShowErrors(this);
+		})
+
+
 	});
 
 
