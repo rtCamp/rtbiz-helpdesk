@@ -36,6 +36,8 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 
 			add_filter( 'rtbiz_offering_setting', array( $this, 'rthd_offering_setting' ) );
 
+			//after redux setting saved
+			add_action( 'redux/options/' . self::$hd_opt . '/saved',  array( $this, 'rt_on_redux_save' ), 10, 2 );
 		}
 
 		function rthd_offering_setting( $setting ){
@@ -47,6 +49,22 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				$setting = $redux['offering_plugin'];
 			}
 			return $setting;
+		}
+
+		public function rt_on_redux_save( $setting, $old_setting ){
+			//removed offering sync option
+			$diff = array();
+
+			if ( isset( $setting['offering_plugin'] ) && isset( $old_setting['offering_plugin'] ) ){
+				$diff = array_diff( $setting['offering_plugin'], $old_setting['offering_plugin'] );
+				$diff = array_unique( $diff );
+			}
+
+			if ( ! empty( $diff ) ) {
+				update_option( 'rtbiz_offering_plugin_synx', 'true' );
+			} else {
+				update_option( 'rtbiz_offering_plugin_synx', 'false' );
+			}
 		}
 
 		public function init_settings() {
