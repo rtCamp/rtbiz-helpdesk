@@ -89,7 +89,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 			if ( isset( $post->post_type ) && $post->post_type != rt_biz_get_contact_post_type() )
 				return $post_id;
 
-			if ( 'rtbiz_helpdesk_role_updated' == $_REQUEST['rtbiz_action'] ){
+			if ( isset( $_REQUEST['rtbiz_action'] ) && 'rtbiz_helpdesk_role_updated' == $_REQUEST['rtbiz_action'] ){
 				global $rt_biz_acl_model;
 				if ( isset( $_REQUEST['post_ID'] ) ){
 					$users = rt_biz_get_wp_user_for_contact( $_REQUEST['post_ID'] );
