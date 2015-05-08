@@ -18,8 +18,10 @@ jQuery( document ).ready( function ( $ ) {
 			rthdSetup.hide_notice();
 
 		},
-		hide_notice: function() {
-			setTimeout(function(){ jQuery(".rthd-hide-notice-setup-wizard").hide(); }, 10000 );
+		hide_notice: function () {
+			setTimeout( function () {
+				jQuery( ".rthd-hide-notice-setup-wizard" ).hide();
+			}, 10000 );
 		},
 		setup_wizard: function () {
 			wizard = jQuery( "#wizard" ).steps( {
@@ -322,7 +324,7 @@ jQuery( document ).ready( function ( $ ) {
 						} else {
 							jQuery( '#rthd-import-all-spinner' ).hide();
 							jQuery( '#rthd-setup-import-users-progress' ).hide();
-							if ( imported_users == 0 || !data.imported_count ) {
+							if ( imported_users == 0 || ! data.imported_count ) {
 								jQuery( '#rthd-all-import-message' ).html( 'No Users Found' );
 							} else {
 								jQuery( '#rthd-all-import-message' ).html( imported_users + ' Users Added' );
