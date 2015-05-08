@@ -710,6 +710,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				}
 			}
 			$offering = array_merge( $defaultoffering, $offering );
+			$offering  = array_keys( $offering );
 			rthd_set_redux_setting( 'offering_plugin', $offering );
 			global $rtbiz_offerings;
 			$rtbiz_offerings->bulk_insert_offerings( $offering );
