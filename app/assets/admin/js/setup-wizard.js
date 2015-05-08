@@ -106,7 +106,7 @@ jQuery( document ).ready( function ( $ ) {
 					},
 					success: function ( data ) {
 						if ( data.status ) {
-							jQuery( 'ul.rthd-setup-wizard-new-offering' ).append( '<li> ' + new_term + ' </li>' );
+							jQuery( 'ol.rthd-setup-wizard-new-offering' ).append( '<li> ' + new_term + ' </li>' );
 							jQuery( '#rthd-setup-store-new-team' ).val( '' );
 						}
 					}
