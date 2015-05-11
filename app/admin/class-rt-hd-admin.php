@@ -122,7 +122,7 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 
 				if ( isset( $post->post_type ) && $post->post_type == Rt_HD_Module::$post_type ) {
 
-					wp_enqueue_script( 'jquery-ui-timepicker-addon', RT_HD_URL . 'app/assets/javascripts/jquery-ui-timepicker-addon.js', array(
+					wp_enqueue_script( 'jquery-ui-timepicker-addon', RT_HD_URL . 'app/assets/admin/js/vendors/jquery-ui-timepicker-addon.js', array(
 						'jquery-ui-datepicker',
 						'jquery-ui-slider',
 							), RT_HD_VERSION, true );
@@ -141,7 +141,7 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 			}
 
 			if ( isset( $rthd_post_type ) && in_array( $rthd_post_type, array( rt_biz_get_contact_post_type() ) ) )  {
-				wp_enqueue_script( 'rthd-menu-hack-js', RT_HD_URL . 'app/assets/javascripts/rt-custom-status.js', array( 'jquery' ), time(), true );
+				wp_enqueue_script( 'rthd-menu-hack-js', RT_HD_URL . 'app/assets/admin/js/rt-custom-status.js', array( 'jquery' ), time(), true );
 				wp_localize_script( 'rthd-menu-hack-js', 'rthd_menu', Rt_HD_Module::$post_type );
 				if ( ! empty( $_GET['rt_contact_group'] ) ){
 					wp_localize_script( 'rthd-menu-hack-js', 'rthd_url', admin_url( 'edit.php?post_type=' . rt_biz_get_contact_post_type() . '&rt_contact_group=' . $_GET['rt_contact_group'] ) );
