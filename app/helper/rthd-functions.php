@@ -851,6 +851,7 @@ function rthd_admin_notice_dependency_installed() {
 			</p>
 		</div>
 		<?php
+		delete_option( 'rtbiz_helpdesk_dependency_installed' );
 	}
 }
 
