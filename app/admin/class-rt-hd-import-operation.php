@@ -1209,10 +1209,21 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			}
 
 			$subscribe_to = get_post_meta( $comment_post_ID, '_rtbiz_hd_subscribe_to', true );
-			if ( $subscribe_to && is_array( $subscribe_to ) && sizeof( $subscribe_to ) > 0 ) {
-				$subscriber = array_merge( $subscribe_to, $subscriber );
+			if ( !empty( $subscriber )  ){
+				if ( empty( $subscribe_to ) ){
+					$subscribe_to = array();
+				}
+				foreach( $subscriber as $sub ){
+					if( is_email( $sub ) ){
+						$sub_userid = get_user_by( 'email', $sub );
+						if ( ! empty( $sub_userid ) ){
+							$subscribe_to = $sub_userid->ID;
+						}
+					}
+				}
+				$subscribe_to = array_unique( $subscribe_to );
 			}
-			update_post_meta( $comment_post_ID, '_rtbiz_hd_subscribe_to', $subscriber );
+			update_post_meta( $comment_post_ID, '_rtbiz_hd_subscribe_to', $subscribe_to );
 
 			/* assignee toogle code */
 			//check auto assign feature enable and followup created by staff
