@@ -101,9 +101,9 @@ $user_edit_content = current_user_can( $cap );
 				</div>
 
 				<div class="rt-hd-ticket-sub-row">
-					<div class="rthd-ticket-sidebar-sub-title">
-						<span>Status</span></div>
+
 					<div class="rthd-ticket-sidebar-sub-result">
+						<label for="rthd-status-list">Status</label>
 						<?php
 						if ( current_user_can( $cap ) ) {
 							?>
@@ -128,13 +128,10 @@ $user_edit_content = current_user_can( $cap );
 					$rtcamp_users = Rt_HD_Utils::get_hd_rtcamp_user();
 					?>
 					<div class="rt-hd-ticket-sub-row">
-						<div class="rthd-ticket-sidebar-sub-title">
-							<span>
-								<?php _e( 'Assignee', RT_HD_TEXT_DOMAIN ); ?>
-							</span>
-						</div>
 						<div class="rthd-ticket-sidebar-sub-result">
-
+							<label for="rthd-assignee-list">
+								<?php _e( 'Assignee', RT_HD_TEXT_DOMAIN ); ?>
+							</label>
 							<select id="rthd-assignee-list" class="rthd-ticket-dropdown" name="rt-hd-assignee">
 								<?php
 								if ( ! empty( $rtcamp_users ) ) {
@@ -222,12 +219,10 @@ $user_edit_content = current_user_can( $cap );
 					if ( ! empty( $ticket_offering ) || current_user_can( $cap ) ) {
 						?>
 						<div class="rt-hd-ticket-sub-row">
-							<div class="rthd-ticket-sidebar-sub-title">
-								<span>
-									<?php _e( 'Offering' ); ?>
-								</span>
-							</div>
 							<div class="rthd-ticket-sidebar-sub-result">
+								<label for="rthd-offering-list">
+									<?php _e( 'Offering' ); ?>
+								</label>
 								<?php if ( current_user_can( $cap ) ) { ?>
 									<select id="rthd-offering-list" class="rthd-ticket-dropdown" name="rt-hd-offering">
 										<?php
@@ -260,18 +255,14 @@ $user_edit_content = current_user_can( $cap );
 
 
 				<div class="rt-hd-ticket-sub-row" style="">
-					<div class="rthd-ticket-sidebar-sub-title">
-						<span>
 							<?php
 //						if ( ! empty( $emails ) || ! empty( $subscriber ) || ! empty( $comment ) || ! empty( $other_contacts )){
-							echo '<span class="rthd-participants">Participants</span>';
 //						} else {
 //							echo '<span class="rthd-participants" style="display: none">Participants</span>';
 //						}
 							?>
-						</span>
-					</div>
 					<div class="rthd-ticket-sidebar-sub-result rthd-ticket-user-activity">
+						<label class="rthd-participants">Participants</label>
 						<?php
 						if ( ! empty( $created_by ) ) {
 							echo ' <a class="rthd-ticket-created-by" title="Created by ' . $created_by->display_name . ' ' . $create_by_time . '" href="' . ( current_user_can( $cap ) ? rthd_biz_user_profile_link( $created_by->user_email ) : '#') . '">' . get_avatar( $created_by->user_email, '30' ) . '</a>';
