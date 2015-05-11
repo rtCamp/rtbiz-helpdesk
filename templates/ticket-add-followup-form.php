@@ -23,10 +23,6 @@ global $current_user;
 
 <!--	<textarea id="followupcontent" class="followup-content" name="followupcontent" placeholder="Add new followup"></textarea>-->
 	<div id="rthd-followup-form">
-		<div id="rthd-followup-action">
-			<button class="add-savefollowup button-primary button" id="savefollwoup" type="button">Add followup</button>
-			<img id='hdspinner' class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>">
-		</div>
 		<div class="rthd-attachment-box">
 			<?php
 			$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
@@ -41,11 +37,6 @@ global $current_user;
 						<input type="radio" class="radio" name="private_comment" value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF; ?>" id="followup_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF ?>" />
 						<label for="followup_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF ?>"> <?php echo rthd_get_comment_type( Rt_HD_Import_Operation::$FOLLOWUP_STAFF ) ?> </label>
 					</div>
-					<!--				<select name="private_comment" id="add-private-comment" >-->
-					<!--					<option value="--><?php //echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC     ?><!--"> --><?php //echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC )     ?><!-- </option>-->
-					<!--					<option value="--><?php //echo Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE     ?><!--"> --><?php //echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE )     ?><!-- </option>-->
-					<!--					<option value="--><?php //echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF     ?><!--"> --><?php //echo rthd_get_comment_type(Rt_HD_Import_Operation::$FOLLOWUP_STAFF )     ?><!-- </option>-->
-					<!--				</select>-->
 				</div>
 			<?php } else { ?>
 				<input type="hidden" name="private_comment" id="add-private-comment" value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>" >
@@ -66,6 +57,10 @@ global $current_user;
 				<div id="followup-filelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
 	<!--	        <span class="followup-note"><b>Note:</b> Attachments will be uploaded when the form is submitted by clicking <i>Add Followup</i> button.</span>-->
 			</div>
+		</div>
+		<div id="rthd-followup-action">
+			<button class="add-savefollowup button-primary button" id="savefollwoup" type="button">Add followup</button>
+			<img id='hdspinner' class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>">
 		</div>
 	</div>
 
