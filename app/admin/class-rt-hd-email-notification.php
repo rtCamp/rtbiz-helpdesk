@@ -883,10 +883,15 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		 * @return array
 		 */
 		public function get_contacts( $post_id ){
+			$created_by = rt_biz_get_contact_for_wp_user(get_post_meta( $post_id, '_rtbiz_hd_created_by', true ));
 			$tocontact      = array();
+			if ( ! empty( $created_by[0] ) ){
+				$email = get_post_meta( $created_by[0]->ID, Rt_Entity::$meta_key_prefix.Rt_Contact::$primary_email_key, true );
+				array_push( $tocontact, array( 'email' => $email ) );
+			}
 			$contacts = rt_biz_get_post_for_contact_connection( $post_id, Rt_HD_Module::$post_type );
 			foreach ( $contacts as $contact ) {
-				$emails = get_post_meta( $contact->ID, Rt_Entity::$meta_key_prefix.Rt_Contact::$primary_email_key );
+				$emails = get_post_meta( $contact->ID, Rt_Entity::$meta_key_prefix.Rt_Contact::$primary_email_key, true );
 				foreach ( $emails as $email ) {
 					array_push( $tocontact, array( 'email' => $email ) );
 				}

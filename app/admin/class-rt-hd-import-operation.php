@@ -407,6 +407,15 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$labels        = $rt_hd_module->labels;
 			$settings      = rthd_get_redux_settings();
 
+			$new_all_emails = array();
+			// remove creator from all emails
+			foreach( $allemail as $email ){
+				if ( $senderEmail != $email['address'] ){
+					$new_all_emails[] = $email;
+				}
+			}
+			$allemail = $new_all_emails;
+
 			$userid = $rt_hd_contacts->get_user_from_email( $senderEmail );
 
 			$postArray = array(
