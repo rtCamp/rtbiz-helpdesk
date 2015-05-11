@@ -523,6 +523,21 @@ function rthd_get_user_fav_ticket( $userid ) {
 	return $result;
 }
 
+/**
+ * get subscribe ticket of user
+ *
+ * @param $current_userid
+ *
+ * @return mixed
+ */
+function rthd_get_user_subscribe_ticket( $current_userid ) {
+	global $wpdb;
+	$lenght = strlen( (string) $current_userid );
+	$current_userid = '"' . $current_userid .'"';
+	$sql = $wpdb->prepare( "SELECT $wpdb->posts.ID FROM $wpdb->postmeta, $wpdb->posts where $wpdb->postmeta.post_id = $wpdb->posts.ID and $wpdb->postmeta.meta_key = '_rtbiz_hd_subscribe_to' and $wpdb->postmeta.meta_value like '%s' ", "%s:$lenght:$current_userid%" );
+	return $wpdb->get_col( $sql );
+}
+
 function rthd_delete_user_fav_ticket( $user_id, $postid ) {
 	delete_user_meta( $user_id, '_rthd_fav_tickets', $postid );
 }

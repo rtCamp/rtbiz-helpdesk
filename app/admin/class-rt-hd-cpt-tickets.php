@@ -544,9 +544,19 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 					$query->set( 'post__in', $fav_ticket );
 				}
 
-				$editor_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
-				if ( ! current_user_can( $editor_cap ) ){
-					$query->set( 'author', get_current_user_id() );
+				if( isset( $_GET['subscribe'] ) ){
+					global $wpdb;
+					//subscribe ticket
+					$contacts = rthd_get_user_subscribe_ticket( get_current_user_id() );
+					$query->set( 'post__in', $contacts );
+					$query->set( 'author', '' );
+
+
+				}else{
+					$editor_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
+					if ( ! current_user_can( $editor_cap ) ){
+						//$query->set( 'author', get_current_user_id() );
+					}
 				}
 			}
 
@@ -670,9 +680,19 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 					$class = ' class="current"';
 				else
 					$class = '';
-				$temp_view['favorite_ticket'] = "<a href='edit.php?post_type=".Rt_HD_Module::$post_type."&favorite=true' $class>" . sprintf( _nx( 'Favorite <span class="count">(%s)</span>', 'Favorites <span class="count">(%s)</span>', count( $fav_ticket ), RT_HD_TEXT_DOMAIN ), number_format_i18n( count( $fav_ticket )) ) . '</a>';
+				$views['favorite_ticket'] = "<a href='edit.php?post_type=".Rt_HD_Module::$post_type."&favorite=true' $class>" . sprintf( _nx( 'Favorite <span class="count">(%s)</span>', 'Favorites <span class="count">(%s)</span>', count( $fav_ticket ), RT_HD_TEXT_DOMAIN ), number_format_i18n( count( $fav_ticket )) ) . '</a>';
 			}
-            $views = array_merge( $temp_view, $views );
+
+			$contacts = rthd_get_user_subscribe_ticket( get_current_user_id() );
+			if ( ! empty( $contacts ) ) {
+				if ( isset( $_GET['subscribe'] ) ) {
+					$class = ' class="current"';
+				} else {
+					$class = '';
+				}
+				$views['subscribe_ticket'] = "<a href='edit.php?post_type=" . Rt_HD_Module::$post_type . "&subscribe=true' $class>" . sprintf( _nx( 'Subscribe <span class="count">(%s)</span>', 'Subscribe <span class="count">(%s)</span>', count( $fav_ticket ), RT_HD_TEXT_DOMAIN ), number_format_i18n( count( $contacts ) ) ) . '</a>';
+			}
+			$views = array_merge( $temp_view, $views );
 			return $views;
 		}
 
