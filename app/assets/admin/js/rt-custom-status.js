@@ -1,3 +1,4 @@
+// Conditional Load do not add in admin-min.js
 jQuery(document).ready(function() {
     if ( typeof rthd_menu !== 'undefined' && typeof rthd_url !== 'undefined' ) {
         jQuery('#menu-posts').removeClass('wp-menu-open wp-has-current-submenu').addClass('wp-not-current-submenu');

@@ -65,6 +65,9 @@ if ( ! class_exists( 'RT_Meta_Box_Subscribers ' ) ) {
 			}
 
 			$get_assigned_to = get_post_meta( $post->ID, '_rtbiz_hd_subscribe_to', true );
+			if ( empty( $get_assigned_to ) ){
+				$get_assigned_to = array();
+			}
 
 			$results             = Rt_HD_Utils::get_hd_rtcamp_user();
 			$arrCommentReply     = array();

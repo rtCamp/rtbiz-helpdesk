@@ -447,8 +447,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 				return false;
 			}
 			// remove ticket creator from client email list
-			//			$creator = $_POST['post']['email'][0];
-			//			unset($_POST['post']['email'][0]);
+			$creator = $_POST['post']['email'][0];
 
 			$data = $_POST['post'];
 			$data['description'] = $_POST['post_description'];
