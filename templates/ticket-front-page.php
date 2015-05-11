@@ -263,7 +263,7 @@ $user_edit_content = current_user_can( $cap );
        global $rtbiz_offerings;
        $products = array();
        if ( ! empty( $rtbiz_offerings ) ) {
-       $products = get_terms( Rt_Offerings::$offering_slug );
+       $products = get_terms( Rt_Offerings::$offering_slug, array( 'hide_empty' => 0 ) );
        $ticket_offering = wp_get_post_terms( $post->ID, Rt_Offerings::$offering_slug );
        }
        if ( ! $products instanceof WP_Error && ! empty( $products ) ) {
