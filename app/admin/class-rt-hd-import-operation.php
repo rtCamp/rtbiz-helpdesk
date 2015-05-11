@@ -1217,7 +1217,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					if( is_email( $sub ) ){
 						$sub_userid = get_user_by( 'email', $sub );
 						if ( ! empty( $sub_userid ) ){
-							$subscribe_to = $sub_userid->ID;
+							$subscribe_to[] = $sub_userid->ID;
 						}
 					}
 				}
