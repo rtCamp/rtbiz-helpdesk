@@ -16,7 +16,14 @@ jQuery( document ).ready( function ( $ ) {
 			rthdSetup.acl_save();
 			rthdSetup.on_connected_store_change();
 			rthdSetup.hide_notice();
+		},
 
+		bind_enter_event: function ( textbox, button ) {
+			jQuery(document).on( 'keypress', textbox, function ( e ) {
+	             if( e.keyCode == 13 ) {
+		             button.click();
+	             }
+			});
 		},
 		hide_notice: function () {
 			setTimeout( function () {
@@ -243,6 +250,8 @@ jQuery( document ).ready( function ( $ ) {
 				jQuery( '#rthd-setup-import-users-progress' ).show();
 				rthdSetup.import_all_users();
 			} );
+
+			rthdSetup.bind_enter_event('#rthd-setup-wizard-support-page-new',jQuery('a[href="#next"]'));
 
 			jQuery( '#rthd-setup-wizard-support-page' ).on( 'change', function ( e ) {
 				val = jQuery( this ).val();

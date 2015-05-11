@@ -152,7 +152,7 @@ jQuery( document ).ready( function () {
 
 		jQuery('select[name="post[product_id]"]' ).change( function ( e ) {
 			ShowErrors(this);
-		})
+		});
 
 
 	});
