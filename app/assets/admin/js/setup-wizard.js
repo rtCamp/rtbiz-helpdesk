@@ -123,6 +123,7 @@ jQuery( document ).ready( function ( $ ) {
 			} );
 		},
 		search_users: function () {
+			AutocomepleteTextBox = jQuery( '#rthd-user-autocomplete' );
 			if ( jQuery( ".rthd-user-autocomplete" ).length > 0 ) {
 				jQuery( ".rthd-user-autocomplete" ).autocomplete( {
 					source: function ( request, response ) {
@@ -138,14 +139,14 @@ jQuery( document ).ready( function ( $ ) {
 							success: function ( data ) {
 								if ( data.hasOwnProperty( 'have_access' ) ) {
 									// email have access so no need of popup to asking for adding user
-									jQuery( '.rthd-warning' ).html( '<strong>' + jQuery( '#rthd-user-autocomplete' ).val() + '</strong> Already have helpdesk access' );
+									jQuery( '.rthd-warning' ).html( '<strong>' + AutocomepleteTextBox.val() + '</strong> Already have helpdesk access' );
 									jQuery( '.rthd-warning' ).show();
 									response();
 								} else if ( data.hasOwnProperty( 'show_add' ) ) {
 
-									jQuery( '.rthd-warning' ).html( 'Hey, Looks like <strong>' + jQuery( '#rthd-user-autocomplete' ).val() + '</strong> is not in your system, would you like to add?' );
+									jQuery( '.rthd-warning' ).html( 'Hey, Looks like <strong>' + AutocomepleteTextBox.val() + '</strong> is not in your system, would you like to add?' );
 									jQuery( '.rthd-importer-add-contact' ).show();
-									jQuery( '#rthd-new-user-email' ).val( jQuery( '#rthd-user-autocomplete' ).val() );
+									jQuery( '#rthd-new-user-email' ).val(AutocomepleteTextBox.val() );
 									jQuery( '.rthd-warning' ).show();
 									response();
 								} else {
@@ -404,6 +405,7 @@ jQuery( document ).ready( function ( $ ) {
 					if ( jQuery( '.rthd-warning' ).is( ':visible' ) ) {
 						jQuery( '.rthd-warning' ).html( '' );
 						jQuery( '.rthd-warning' ).hide();
+						jQuery( '#rthd-user-autocomplete' ).val('');
 					}
 					if ( jQuery( '.rthd-importer-add-contact' ).is( ':visible' ) ) {
 						jQuery( '.rthd-importer-add-contact' ).hide();
