@@ -442,10 +442,9 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			$this->charts[] = array(
 				'id' => 5,
 				'chart_type' => 'line',
-				'vAxisMin' => '0',
 				'data_source' => $data_source,
 				'dom_element' => 'rthd_hd_line_daily_tickets',
-				'options' => array( 'title' => __( 'Daily Tickets', RT_HD_TEXT_DOMAIN ), 'vAxisMin' => 0 ),
+				'options' => array( 'title' => __( 'Daily Tickets', RT_HD_TEXT_DOMAIN ), 'vAxis' => json_encode( array( 'viewWindow' => array( 'min' => 0 )) ) ),
 			);
 			?>
 			<div id="rthd_hd_line_daily_tickets"></div>
