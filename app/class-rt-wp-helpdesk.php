@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Don't load this file directly!
  */
@@ -47,7 +48,6 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			add_action( 'init', array( $this, 'init' ), 6 );
 
 			add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
-
 		}
 
 		/**
@@ -57,29 +57,29 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 		 */
 		function init_globals() {
 
-			global  $rt_hd_mail_acl_model, $rt_hd_ticket_history_model, $rthd_form, $rt_hd_reports, $rt_hd_attributes, $rt_hd_dashboard, $rt_hd_module, $rt_hd_cpt_tickets, $rt_hd_acl, $rt_hd_accounts, $rt_hd_contacts, $rt_hd_tickets_operation, $rt_hd_email_notification, $rt_hd_gravity_form_importer, $rt_hd_logs, $rt_hd_auto_response, $rt_hd_ticket_index_model;
+			global $rt_hd_mail_acl_model, $rt_hd_ticket_history_model, $rthd_form, $rt_hd_reports, $rt_hd_attributes, $rt_hd_dashboard, $rt_hd_module, $rt_hd_cpt_tickets, $rt_hd_acl, $rt_hd_accounts, $rt_hd_contacts, $rt_hd_tickets_operation, $rt_hd_email_notification, $rt_hd_gravity_form_importer, $rt_hd_logs, $rt_hd_auto_response, $rt_hd_ticket_index_model;
 
 			//Model class init
-			$rt_hd_mail_acl_model               = new Rt_HD_Mail_ACL_Model();
-			$rt_hd_ticket_history_model         = new Rt_HD_Ticket_History_Model();
-			$rt_hd_ticket_index_model           = new Rt_HD_Ticket_Model();
+			$rt_hd_mail_acl_model = new Rt_HD_Mail_ACL_Model();
+			$rt_hd_ticket_history_model = new Rt_HD_Ticket_History_Model();
+			$rt_hd_ticket_index_model = new Rt_HD_Ticket_Model();
 
-			$rthd_form         = new Rt_Form();
+			$rthd_form = new Rt_Form();
 
-			$rt_hd_attributes     = new Rt_HD_Attributes();
-			$rt_hd_module         = new Rt_HD_Module();
-			$rt_hd_cpt_tickets    = new Rt_HD_CPT_Tickets();
+			$rt_hd_attributes = new Rt_HD_Attributes();
+			$rt_hd_module = new Rt_HD_Module();
+			$rt_hd_cpt_tickets = new Rt_HD_CPT_Tickets();
 
-			$page_slugs    = array( 'rthd-' . Rt_HD_Module::$post_type . '-dashboard', );
+			$page_slugs = array( 'rthd-' . Rt_HD_Module::$post_type . '-dashboard', );
 			$rt_hd_reports = new Rt_Reports( $page_slugs );
 
-			$rt_hd_dashboard          = new Rt_HD_Dashboard();
-			$rt_hd_acl                = new Rt_HD_ACL();
-			$rt_hd_accounts           = new Rt_HD_Accounts();
-			$rt_hd_contacts           = new Rt_HD_Contacts();
-			$rt_hd_tickets_operation  = new Rt_HD_Tickets_Operation();
+			$rt_hd_dashboard = new Rt_HD_Dashboard();
+			$rt_hd_acl = new Rt_HD_ACL();
+			$rt_hd_accounts = new Rt_HD_Accounts();
+			$rt_hd_contacts = new Rt_HD_Contacts();
+			$rt_hd_tickets_operation = new Rt_HD_Tickets_Operation();
 			$rt_hd_email_notification = new RT_HD_Email_Notification();
-			$rt_hd_auto_response 	  = new Rt_HD_Auto_Response();
+			$rt_hd_auto_response = new Rt_HD_Auto_Response();
 
 			// setup wizard need to check condition for setup
 			global $rt_hd_setup_wizard;
@@ -90,10 +90,10 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			global $rt_hd_redux_framework_Helpdesk_Config, $rt_hd_import_operation, $rt_hd_offering_support, $rt_hd_short_code;
 
 			$rt_hd_redux_framework_Helpdesk_Config = new Redux_Framework_Helpdesk_Config();
-			$rt_hd_import_operation                = new Rt_HD_Import_Operation();
+			$rt_hd_import_operation = new Rt_HD_Import_Operation();
 
 			$rt_hd_gravity_form_importer = new Rt_HD_Gravity_Form_Importer();
-			$rt_hd_logs                  = new Rt_HD_Logs();
+			$rt_hd_logs = new Rt_HD_Logs();
 
 			$rt_hd_offering_support = new Rt_HD_Offering_Support();
 			$rt_hd_short_code = new RT_HD_Short_Code();
@@ -101,8 +101,8 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			global $Rt_Hd_Help;
 			$Rt_Hd_Help = new Rt_Hd_Help();
 
-            // For ajax request register with WordPress
-            $temp_meta_box_contact_blacklist = new RT_Meta_Box_Ticket_Contacts_Blacklist();
+			// For ajax request register with WordPress
+			$temp_meta_box_contact_blacklist = new RT_Meta_Box_Ticket_Contacts_Blacklist();
 		}
 
 		/**
@@ -149,7 +149,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 		function load_scripts() {
 			global $wp_query, $post;
 
-			if ( ! isset( $wp_query->query_vars['post_type'] ) || $wp_query->query_vars['post_type'] != Rt_HD_Module::$post_type || empty( $post ) ) {
+			if ( ! isset( $wp_query->query_vars[ 'post_type' ] ) || $wp_query->query_vars[ 'post_type' ] != Rt_HD_Module::$post_type || empty( $post ) ) {
 				return;
 			}
 
@@ -164,10 +164,12 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			wp_enqueue_script( 'jquery-fancybox', RT_HD_URL . 'app/assets/js/vendors/lightbox/jquery.fancybox.pack.js', array( 'jquery' ), RT_HD_VERSION, true );
 			wp_enqueue_style( 'jquery-fancybox', RT_HD_URL . 'app/assets/css/jquery.fancybox.css', array(), RT_HD_VERSION, 'all' );
 
-			wp_enqueue_style( 'rthd-followup-css', RT_HD_URL . 'app/assets/css/follow-up.css', array(), RT_HD_VERSION, 'all' );
+			//wp_enqueue_style( 'rthd-followup-css', RT_HD_URL . 'app/assets/css/follow-up.css', array(), RT_HD_VERSION, 'all' );
+			wp_enqueue_style( 'rthd-main-css', RT_HD_URL . 'app/assets/css/rthd-main.css', array(), RT_HD_VERSION, 'all' );
 
 			$this->localize_scripts();
 		}
+
 		/**
 		 * This is functions localize values for JScript
 		 * @since 0.1
@@ -190,5 +192,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 
 			return true;
 		}
+
 	}
+
 }

@@ -195,23 +195,10 @@ ul#chat-UI {
 	margin-right: 5px;
 }
 
-#rthd-ticket {
-	width: 63%;
+.rthd-ticket-content {
+	font-size: 14px;
 	float: left;
-	margin-right: 2%;
-}
-
-#rthd-sidebar {
-	width: 33%;
-	float: left;
-	margin-left: 2%;
-	position: relative;
-	-ms-word-break:break-all;
-	word-wrap: break-word;
-	word-break: break-word;
-	-webkit-hyphens:auto;
-	-moz-hyphens:auto;
-	hyphens:auto;
+	width: 72%;
 }
 
 .rthd-container {
@@ -386,24 +373,12 @@ li.load-more-spinner-li {
 	padding: 5px;
 }
 
-#rthd-status-list, #rthd-assignee-list, #edit-private {
-	width: 100%;
-}
-
 #rthd-change-status{
 	padding: 5px;
 }
 
 #rthd-status-visiable{
 	display: inline-block;
-}
-/*#ticket-information-edit-ticket-link {*/
-/*right: 0;*/
-/*position: absolute;*/
-/*}*/
-
-.rt-hd-ticket-info-header {
-	display: inline;
 }
 
 .rthd_order_status{
@@ -470,14 +445,6 @@ h2.rt-hd-ticket-front-title{
 	padding: 0;
 }
 
-.rthd-front-icons, .rthd-ticket-user-activity, .rthd-collapse-icon{
-	display: inline-block;
-	/*float: right;*/
-}
-
-.rthd-collapse-icon,.rthd-front-icons{
-	float: right;
-}
 .rthd-front-icons:after,.rthd-ticket-user-activity:after{
 	clear: both;
 }
@@ -514,22 +481,8 @@ h2.rt-hd-ticket-front-title{
 	margin: 10px 0;
 }
 
-.rthd-ticket-sidebar-sub-title,.rthd-ticket-sidebar-sub-result{
-	display: inline-block;
-}
-
-.rthd-ticket-sidebar-sub-title{
-	width: 28%;
-	vertical-align: top;
-}
-
-.rthd-ticket-sidebar-sub-result{
-	width: 70%;
-}
-
 .rthd-ticket-dropdown{
 	background: transparent;
-	/*height: 34px;*/
 }
 
 .rthd-add-people-button{
@@ -537,10 +490,6 @@ h2.rt-hd-ticket-front-title{
 	display: inline-block;
 	float: right;
 }
-
-/*.rthd-add-people-button:hover .rthd-add-people-box {*/
-/*display: block;*/
-/*}*/
 
 .rthd-add-people-button.rthd-show-add-people-box{
 	display: block;
@@ -559,17 +508,6 @@ h2.rt-hd-ticket-front-title{
 	display: block;
 }
 
-.rthd-add-contact-icon{
-	font-size: 30px;
-	height: 30px;
-	width: 30px;
-}
-
-.rthd-front-icons a span,.rthd-collapse-icon a span{
-	font-size: 30px;
-	width: 30px;
-	height: 30px;
-}
 .rthd-collapse-icon a span{
 	background: #E5E5E5;
 	border-radius: 10%;
@@ -617,11 +555,3 @@ ul#attachment-files {
 h2.rthd-ticket-list-title{
 	margin-top: 20px;
 }
-/*#rthd-subscribe-email{*/
-/*width: 250px;*/
-/*float: right;*/
-/*}*/
-
-/*.rthd-subscribe-email-submit{*/
-/*float: right;*/
-/*}*/
