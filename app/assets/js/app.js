@@ -118,11 +118,13 @@ jQuery( document ).ready( function ( $ ) {
 									}
 									if ( ! data.has_replied ){
 										var htmlappend=  '<a title="'+data.display_name+'" class="rthd-last-reply-by" href="'+data.edit_link+'">'+data.avatar+' </a>';
-										if (data.is_contact){
-											jQuery('.rthd-contact-avatar-no-reply-div' ).append( htmlappend );
-										} else {
-											jQuery('.rthd-subscriber-avatar-no-reply-div' ).append( htmlappend );
-										}
+										jQuery('.rthd-ticket-created-by' ).after( htmlappend );
+										//if (data.is_contact){
+										//	jQuery('.rthd-contact-avatar-no-reply-div' ).append( htmlappend );
+										//} else {
+											//jQuery('.rthd-subscriber-avatar-no-reply-div' ).append( htmlappend );
+											//jQuery('.rthd-ticket-created-by' ).after( htmlappend );
+										//}
 									}
 									// hide box when person is added
 									jQuery('.rthd-add-people-box' ).hide();
