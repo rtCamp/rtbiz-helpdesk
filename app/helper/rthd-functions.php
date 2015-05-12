@@ -1099,7 +1099,8 @@ function rthd_status_markup( $pstatus ) {
 		}
 	}
 	if ( ! empty( $pstatus ) ) {
-		return '<mark style="' . $style . '" class="' . $pstatus . ' tips" data-tip="' . $pstatus . '">' . $pstatus . '</mark>';
+//		return '<mark style="' . $style . '" class="rthd-' . trim(strtolower($pstatus)). ' rthd-status tips" data-tip="' . $pstatus . '">' . $pstatus . '</mark>';
+		return '<mark class="rthd-' . trim( strtolower( $pstatus ) ). ' rthd-status tips" data-tip="' . $pstatus . '">' . $pstatus . '</mark>';
 	}
 	return '';
 }
