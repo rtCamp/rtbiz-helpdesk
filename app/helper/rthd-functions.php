@@ -1290,8 +1290,10 @@ function rthd_is_ticket_subscriber( $post_id ) {
 
 	$ticket_subscribers = get_post_meta( $post_id, '_rtbiz_hd_subscribe_to', true );
 
-	if ( in_array( get_current_user_id(), $ticket_subscribers ) ) {
-		$flag = true;
+	if ( ! empty( $ticket_subscribers ) ) {
+		if ( in_array( get_current_user_id(), $ticket_subscribers ) ) {
+			$flag = true;
+		}
 	}
 
 	return $flag;
