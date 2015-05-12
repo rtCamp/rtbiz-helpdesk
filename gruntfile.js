@@ -50,6 +50,13 @@ module.exports = function ( grunt ) {
 				    'app/assets/admin/js/rthd_plugin_check.js'
 				],
 				dest: 'app/assets/admin/js/admin-min.js'
+			},
+			support: {
+				src: [
+					'app/assets/js/rt_support_form.js',
+					'app/assets/js/vendors/plupupload/plupload.full.min.js'
+				],
+				dest: 'app/assets/js/helpdesk-support-min.js'
 			}
 		},
 		// Watch for hanges and trigger compass and uglify
@@ -59,7 +66,7 @@ module.exports = function ( grunt ) {
 				tasks: [ 'compass' ]
 			},
 			uglify: {
-				files: [ '<%= uglify.frontend.src %>', '<%= uglify.backend.src %>' ],
+				files: [ '<%= uglify.frontend.src %>', '<%= uglify.backend.src %>', '<%= uglify.support.src %>'  ],
 				tasks: [ 'uglify' ]
 			}
 		}
