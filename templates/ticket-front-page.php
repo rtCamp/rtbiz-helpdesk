@@ -96,8 +96,7 @@ $user_edit_content = current_user_can( $cap );
 								}
 								?></a>
 							<?php wp_nonce_field( 'heythisisrthd_ticket_fav_' . $post->ID, 'rthd_fav_tickets_nonce' ); ?>
-
-					</div> <div class="rthd-clearfix"></div>
+					</div>
 				</div>
 
 				<div class="rt-hd-ticket-sub-row">
@@ -254,15 +253,23 @@ $user_edit_content = current_user_can( $cap );
 				?>
 
 
-				<div class="rt-hd-ticket-sub-row" style="">
-							<?php
-//						if ( ! empty( $emails ) || ! empty( $subscriber ) || ! empty( $comment ) || ! empty( $other_contacts )){
-//						} else {
-//							echo '<span class="rthd-participants" style="display: none">Participants</span>';
-//						}
-							?>
+				<div class="rt-hd-ticket-sub-row">
+
 					<div class="rthd-ticket-sidebar-sub-result rthd-ticket-user-activity">
-						<label class="rthd-participants">Participants</label>
+						<div class="clearfix rthd-participants-wrap">
+							<label class="rthd-participants">Participants</label>
+
+							<div class="rthd-add-people-button">
+								<a href="#" id="rthd-add-contact" title="Add people to this ticket"><span class="dashicons dashicons-plus-alt rthd-add-contact-icon"></span></a>
+								<div class="rthd-add-people-box">
+									<input type="email" placeholder="Enter email to add people" id="rthd-subscribe-email">
+									<button type="button" class='rthd-subscribe-email-submit button btn'>Add</button>
+									<span style="display: none;" class="rthd-subscribe-validation"></span>
+									<img id="rthd-subscribe-email-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
+								</div>
+							</div>
+						</div>
+
 						<?php
 						if ( ! empty( $created_by ) ) {
 							echo ' <a class="rthd-ticket-created-by" title="Created by ' . $created_by->display_name . ' ' . $create_by_time . '" href="' . ( current_user_can( $cap ) ? rthd_biz_user_profile_link( $created_by->user_email ) : '#') . '">' . get_avatar( $created_by->user_email, '30' ) . '</a>';
@@ -312,16 +319,6 @@ $user_edit_content = current_user_can( $cap );
 							echo '<a class="rthd-last-reply-by" title="last reply by ' . $comment->comment_author . ' ' . esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . ' ago " href="' . (current_user_can( $cap ) ? rthd_biz_user_profile_link( $comment->comment_author_email ) : '#') . '">' . get_avatar( $comment->comment_author_email, '30' ) . ' </a>'
 							?>
 						<?php } ?>
-
-						<div class="rthd-add-people-button">
-							<a href="#" id="rthd-add-contact" title="Add people to this ticket"><span class="dashicons dashicons-plus-alt rthd-add-contact-icon"></span></a>
-							<div class="rthd-add-people-box">
-								<input type="email" placeholder="Enter email to add people" id="rthd-subscribe-email">
-								<button type="button" class='rthd-subscribe-email-submit button btn'>Add</button>
-								<span style="display: none;" class="rthd-subscribe-validation" ></span>
-								<img id="rthd-subscribe-email-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
-							</div>
-						</div>
 					</div>
 				</div>
 			</div>

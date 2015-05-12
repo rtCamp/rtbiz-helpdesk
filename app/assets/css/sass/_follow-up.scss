@@ -6,7 +6,7 @@ ul#chat-UI {
 	margin: 0;
 	padding: 0;
 }
-.discussion > li {
+.discussion.discussion > li {
 	padding: 25px 0;
 	margin: 0;
 	overflow: hidden;
@@ -348,9 +348,10 @@ li.load-more-spinner-li {
 	word-wrap: break-word;
 }
 
-.rt-hd-ticket-info{
+.rt-hd-ticket-info {
 	border-bottom: 1px dotted #ddd;
 	padding: 10px 0;
+	margin-bottom: 20px;
 }
 
 .rt-hd-related-ticket ul li, .rt-hd-ticket-history ul li{
@@ -458,10 +459,10 @@ h2.rt-hd-ticket-front-title{
 	border-radius: 100%;
 	vertical-align: middle;
 }
-.rthd-ticket-user-activity a{
+
+.rthd-ticket-user-activity > a {
 	display: inline-block;
-	margin: 2px;
-	/*margin-left: 3px;*/
+	margin: 5px 8px 5px 0;
 	text-decoration: none;
 }
 
@@ -527,14 +528,9 @@ h2.rt-hd-ticket-front-title{
 	text-decoration:none;
 }
 
-.rt-hd-sidebar-box:first-of-type, .rt-hd-ticket-info:first-of-type{
-	padding-top: 0;
-	margin-top: 0;
-}
 
 .rt-hd-sidebar-box{
 	margin: 15px 0;
-	/*background: #cfd1c1;*/
 	padding: 10px 5px;
 	border-radius: 5%;
 }
@@ -543,6 +539,10 @@ ul#attachment-files {
 	list-style-type: none;
 	padding: 0;
 	margin: 0;
+
+	li {
+		margin-left: 0; // 2012
+	}
 }
 
 #rthd-offering-list{
@@ -555,4 +555,9 @@ ul#attachment-files {
 
 h2.rthd-ticket-list-title{
 	margin-top: 20px;
+}
+
+.rthd-collapse-icon {
+    float: right;
+    margin: 20px 0;
 }
