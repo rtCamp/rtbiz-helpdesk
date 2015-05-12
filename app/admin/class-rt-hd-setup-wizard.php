@@ -636,10 +636,9 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				} else {
 					$users_to_import = rthd_search_non_helpdesk_users( $_POST[ 'domain_query' ], false, false );
 //					$team_id = rthd_get_default_support_team();
-					$team_id = 0;
 					$arrReturn[ 'imported_all' ] = true;
 					foreach ( $users_to_import as $user ) {
-						if ( rthd_give_user_access( $user->ID, Rt_Access_Control::$permissions[ 'author' ][ 'value' ], $team_id ) ) {
+						if ( rthd_give_user_access( $user->ID, Rt_Access_Control::$permissions[ 'author' ][ 'value' ], 0 ) ) {
 							$arrReturn[ 'imported_users' ][] = array( 'id' => $user->ID,
 								'label' => $user->display_name,
 								'imghtml' => get_avatar( $user->user_email, 25 ),
@@ -676,10 +675,9 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				$users_to_import = $wpdb->get_results( "SELECT ID,display_name,user_email FROM $wpdb->users" . $q . "LIMIT " . $LIMIT );
 				$arrReturn[ 'imported_all' ] = true;
 //				$team_id = rthd_get_default_support_team();
-				$team_id = 0;
 
 				foreach ( $users_to_import as $user ) {
-					if ( rthd_give_user_access( $user->ID, Rt_Access_Control::$permissions[ 'author' ][ 'value' ], $team_id ) ) {
+					if ( rthd_give_user_access( $user->ID, Rt_Access_Control::$permissions[ 'author' ][ 'value' ], 0 ) ) {
 						$arrReturn[ 'imported_users' ][] = array( 'id' => $user->ID,
 							'label' => $user->display_name,
 							'imghtml' => get_avatar( $user->user_email, 25 ),
@@ -796,13 +794,20 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			global $rt_biz_acl_model;
 			$arrReturn = array( 'status' => false );
 			if ( ! empty( $_POST[ 'permission' ] ) && ! empty( $_POST[ 'userid' ] ) ) {
+
+				//helpdesk role change in custom table
 				$rt_biz_acl_model->update_acl( array( 'permission' => $_POST[ 'permission' ] ), array( 'userid' => $_POST[ 'userid' ], 'module' => RT_HD_TEXT_DOMAIN ) );
+				//rtbiz role change in custom table
+				$rt_biz_acl_model->update_acl( array( 'permission' => $_POST[ 'permission' ] ), array( 'userid' => $_POST[ 'userid' ], 'module' => RT_BIZ_TEXT_DOMAIN ) );
 
 				$contact = rt_biz_get_contact_for_wp_user( $_POST[ 'userid' ] );
 				// update contact meta as we store ACL values in contact meta as well
 				if ( ! empty( $contact[ 0 ] ) ) {
 					$user_permissions = get_post_meta( $contact[ 0 ]->ID, 'rt_biz_profile_permissions', true );
-					$value = array( RT_HD_TEXT_DOMAIN => $_POST[ 'permission' ] );
+					$value = array(
+						RT_HD_TEXT_DOMAIN  => $_POST['permission'],
+						RT_BIZ_TEXT_DOMAIN => $_POST['permission'],
+					);
 					if ( ! empty( $user_permissions ) ) {
 						$value = array_merge( $user_permissions, $value );
 					}

@@ -1719,7 +1719,7 @@ function rthd_give_user_access( $user, $access_role, $team_term_id = 0 ) {
 	if ( ! empty( $team_term_id ) ) {
 		wp_set_post_terms( $contact_ID, array( $team_term_id ), RT_Departments::$slug );
 	}
-	// add new group level permission
+	// Add helpdesk role in custome table
 	$data = array(
 		'userid' => $user->ID,
 		'module' => RT_HD_TEXT_DOMAIN,
@@ -1727,15 +1727,26 @@ function rthd_give_user_access( $user, $access_role, $team_term_id = 0 ) {
 		'permission' => $access_role,
 	);
 	$rt_biz_acl_model->add_acl( $data );
-	$contact = rt_biz_get_contact_for_wp_user( $user->ID );
-	if ( ! empty( $contact[ 0 ] ) && empty( $team_term_id ) ) {
-		$user_permissions = get_post_meta( $contact[ 0 ]->ID, 'rt_biz_profile_permissions', true );
-		$value = array( RT_HD_TEXT_DOMAIN => Rt_Access_Control::$permissions[ 'author' ][ 'value' ] );
+	// Add rtbiz role in custom table
+	$data = array(
+		'userid' => $user->ID,
+		'module' => RT_BIZ_TEXT_DOMAIN,
+		'groupid' => $team_term_id,
+		'permission' => $access_role,
+	);
+	$rt_biz_acl_model->add_acl( $data );
+
+	if ( ! empty( $contact_ID ) && empty( $team_term_id ) ) {
+		$user_permissions = get_post_meta( $contact_ID, 'rt_biz_profile_permissions', true );
+		$value = array(
+			RT_HD_TEXT_DOMAIN  => $access_role,
+			RT_BIZ_TEXT_DOMAIN => $access_role,
+		);
 		// check existing if exist merge with that
 		if ( ! empty( $user_permissions ) && is_array( $user_permissions ) ) {
 			$value = array_merge( $value, $user_permissions );
 		}
-		update_post_meta( $contact[ 0 ]->ID, 'rt_biz_profile_permissions', $value );
+		update_post_meta( $contact_ID, 'rt_biz_profile_permissions', $value );
 	}
 	return true;
 }
