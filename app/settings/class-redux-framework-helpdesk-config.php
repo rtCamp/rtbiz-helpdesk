@@ -706,7 +706,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						);*/
 
 			// Only initiates in case of settings page is getting displayed. Not otherwise
-			if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] == self::$page_slug ) {
+			/*if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] == self::$page_slug ) {
 				ob_start();
 				rthd_ticket_import_logs();
 				$import_log_content = ob_get_clean();
@@ -725,7 +725,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'content' => $import_log_content,
 					),
 				),
-			);
+			);*/
 
 			$this->sections[] = array(
 				'icon'        => 'el-icon-key',
