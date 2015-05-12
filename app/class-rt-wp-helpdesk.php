@@ -154,7 +154,7 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 			}
 
 //			wp_enqueue_script( 'rthd-app-js', RT_HD_URL . 'app/assets/js/app.js', array( 'jquery' ), RT_HD_VERSION, true );
-			wp_enqueue_script( 'rthd-app-js', RT_HD_URL . 'app/assets/js/main.js', array( 'jquery' ), RT_HD_VERSION, true );
+			wp_enqueue_script( 'rthd-app-js', RT_HD_URL . 'app/assets/js/helpdesk-min.js', array( 'jquery' ), RT_HD_VERSION, true );
 //			wp_enqueue_script( 'rthd-common', RT_HD_URL . 'app/assets/js/common.js', array( 'jquery' ), RT_HD_VERSION, true );
 
 //			wp_enqueue_script( 'jquery-file-uploader', RT_HD_URL . 'app/assets/js/vendors/plupupload/plupload.full.min.js', array( 'jquery' ), RT_HD_VERSION, true );

@@ -37,7 +37,7 @@ module.exports = function ( grunt ) {
 					'app/assets/js/vendors/stickyfloat.js',
 				    'app/assets/js/vendors/plupupload/plupload.full.min.js'
 				],
-				dest: 'app/assets/js/main.js'
+				dest: 'app/assets/js/helpdesk-min.js'
 			},
 			backend: {
 				src: [
@@ -49,7 +49,7 @@ module.exports = function ( grunt ) {
 					'app/assets/admin/js/admin.js',
 				    'app/assets/admin/js/rthd_plugin_check.js'
 				],
-				dest: 'app/assets/admin/js/admin-min.js'
+				dest: 'app/assets/admin/js/helpdesk-admin-min.js'
 			},
 			support: {
 				src: [
