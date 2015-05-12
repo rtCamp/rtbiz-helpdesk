@@ -206,6 +206,9 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				if ( $user ){
 					if ( user_can( $user, rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' ) ) ) { // add user to subscriber
 						$ticket_subscribers = get_post_meta( $_POST['post_id'], '_rtbiz_hd_subscribe_to', true );
+						if ( empty( $ticket_subscribers ) ){
+							$ticket_subscribers = array();
+						}
 						if ( ! in_array( $user->ID, $ticket_subscribers ) ){
 							$ticket_subscribers[] = $user->ID;
 							update_post_meta( $_POST['post_id'], '_rtbiz_hd_subscribe_to', $ticket_subscribers );
