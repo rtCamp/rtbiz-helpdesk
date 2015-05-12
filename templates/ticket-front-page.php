@@ -463,7 +463,7 @@ $user_edit_content = current_user_can( $cap );
 	</div>
 
 </article>
-<a href="#" class="rthd-scroll-up"></a>
+<a href="#" class="rthd-scroll-up"><span class="dashicons dashicons-arrow-up-alt2"></span><label>up</label></a>
 <?php
 do_action( 'rthd_ticket_front_page_before_footer' );
 get_footer();

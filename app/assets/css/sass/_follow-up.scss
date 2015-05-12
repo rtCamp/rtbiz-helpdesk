@@ -400,9 +400,17 @@ li.load-more-spinner-li {
 	position: fixed;
 	bottom: 100px;
 	right: 50px;
-	background: url(../img/toparrow.png) no-repeat 6px center;
 	width: 50px;
 	height: 50px;
+}
+
+.rthd-scroll-up label{
+	display: block;
+	margin-left: 7px;
+}
+.rthd-scroll-up .dashicons{
+	font-weight: bold;
+	font-size: 2em;
 }
 
 h2.rt-hd-ticket-front-title{
