@@ -84,10 +84,16 @@
 		<div>
 			<input type="checkbox" name="post[adult_ticket]" value="1" />
 			<span class="description"><?php _e( 'Adult Content', RT_HD_TEXT_DOMAIN ); ?></span>
+			<span class="rthd-tooltip">
+				<i class="dashicons dashicons-info rtmicon"></i>
+				<span class="rthd-tip">
+					<?php _e( 'My site has adult content', RT_HD_TEXT_DOMAIN ); ?>
+				</span>
+			</span>
 		</div>
 	<?php } ?>
 	<div>
-		<!--		--><?php //wp_nonce_field( 'rthd_support_add_nonce_for_security_thats_all', 'rthd_support_nonce' );      ?>
+		<!--		--><?php //wp_nonce_field( 'rthd_support_add_nonce_for_security_thats_all', 'rthd_support_nonce' );       ?>
 
 		<!--		<input type="file" id="filesToUpload" name="attachment[]" multiple="multiple"/>-->
 		<div id="attachment-container">

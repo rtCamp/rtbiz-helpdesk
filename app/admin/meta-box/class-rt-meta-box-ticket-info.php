@@ -221,10 +221,10 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 				}
 				?>
 				<div class="row_group">
-					<span class="prefix"
-						  title="<?php _e( 'Adult Content', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Adult Content', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
-					<input type="checkbox" name="post[adult_ticket]" style="width: auto" <?php echo $text; ?>
-						   value="1">
+					<span class="prefix" title="<?php _e( 'Adult Content', RT_HD_TEXT_DOMAIN ); ?>">
+						<label><strong><?php _e( 'Adult Content', RT_HD_TEXT_DOMAIN ); ?></strong></label>
+					</span>
+					<input type="checkbox" name="post[adult_ticket]" <?php echo $text; ?> value="1" />
 				</div>
 			<?php } ?>
 
