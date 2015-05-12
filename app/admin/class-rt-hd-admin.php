@@ -145,6 +145,8 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 				wp_localize_script( 'rthd-menu-hack-js', 'rthd_menu', Rt_HD_Module::$post_type );
 				if ( ! empty( $_GET['rt_contact_group'] ) ){
 					wp_localize_script( 'rthd-menu-hack-js', 'rthd_url', admin_url( 'edit.php?post_type=' . rt_biz_get_contact_post_type() . '&rt_contact_group=' . $_GET['rt_contact_group'] ) );
+				}else{
+					wp_localize_script( 'rthd-menu-hack-js', 'rthd_url', admin_url( 'edit.php?post_type=' . rt_biz_get_contact_post_type() ) );
 				}
 			}
 

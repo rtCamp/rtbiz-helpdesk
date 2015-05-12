@@ -47,6 +47,34 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 			add_action( 'wp_ajax_rthd_add_contact', array( $this, 'add_new_contact_ajax' ) );
 			add_filter( 'rt_biz_contact_meta_fields', array( $this, 'rthd_add_setting_to_rtbiz_user' ), 10, 1 );
 
+			add_action( 'rtbiz_after_delete_staff_acl_remove-' . RT_HD_TEXT_DOMAIN , array( $this, 'rthd_before_delete_staff' ), 10, 3 );
+
+		}
+
+		/**
+		 * assigne ticket to admin
+		 * @param $contactid
+		 * @param $userid
+		 */
+		function rthd_before_delete_staff( $contactid, $userid, $permission ){
+			$settings      = rthd_get_redux_settings();
+			$args = array (
+				'numberposts' => -1,
+				'post_type' => Rt_HD_Module::$post_type,
+				'author' => $userid
+			);
+			$tickets = new WP_Query( $args );
+			if ( $tickets->have_posts() ) {
+				$tickets = $tickets->posts;
+				foreach( $tickets as $ticket ) {
+					$data = array(
+						'ID'           => $ticket->ID,
+						'post_author'   => $settings['rthd_default_user'],
+					);
+					// Update the post into the database
+					wp_update_post( $data );
+				}
+			}
 		}
 
 		/**
