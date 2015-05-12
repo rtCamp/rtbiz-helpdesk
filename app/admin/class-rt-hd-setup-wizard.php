@@ -668,8 +668,8 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				$q = '';
 				if ( ! empty( $helpdesk_users ) ) {
 					$q = ' WHERE ID not IN (' . implode( ',', $helpdesk_users ) . ') ';
-					if ( ! empty( $_POST['last_import'] ) ){
-						$q= 'AND ID > '. intval( $_POST['last_import'] ). ' ';
+					if ( isset( $_POST['last_import'] ) ){
+						$q .= 'AND ID > '. intval( $_POST['last_import'] ). ' ';
 					}
 				}
 				$users_to_import = $wpdb->get_results( "SELECT ID,display_name,user_email FROM $wpdb->users" . $q . "LIMIT " . $LIMIT );
@@ -689,12 +689,9 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				}
 				$arrReturn[ 'imported_count' ] = count( $users_to_import );
 				$arrReturn[ 'status' ] = true;
+				// count remain users
 				$users_to_import = $wpdb->get_var( "SELECT count(ID) FROM $wpdb->users" . $q );
-				$users_to_import = $users_to_import  - count($arrReturn[ 'imported_users' ]);
-
-//				$helpdesk_users = rthd_get_helpdesk_user_ids( $_POST['last_import'] );
-//				$count = count_users();
-//				$arrReturn[ 'remain_import' ] = $count[ 'total_users' ] - count( $helpdesk_users );
+				$users_to_import = $users_to_import  - $arrReturn[ 'imported_count' ];
 				$arrReturn[ 'remain_import' ] = $users_to_import;
 			}
 
