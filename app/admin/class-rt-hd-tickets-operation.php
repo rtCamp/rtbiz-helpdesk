@@ -61,7 +61,9 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 
 		function ticket_status_changed( $new_status, $old_status, $post ){
 			global $rt_hd_ticket_index_model;
-			$rt_hd_ticket_index_model->update_ticket_status( $new_status, $post->ID );
+			if ( $post->post_type == Rt_HD_Module::$post_type ) {
+				$rt_hd_ticket_index_model->update_ticket_status( $new_status, $post->ID );
+			}
 		}
 		/**
 		 * Create/Update Default ticket Fields
