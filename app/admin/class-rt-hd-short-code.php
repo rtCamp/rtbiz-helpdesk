@@ -38,7 +38,7 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 
 			ob_start();
 			$rt_hd_offering_support->check_active_plugin();
-			wp_enqueue_style( 'support-form-style', RT_HD_URL . 'app/assets/css/support_form_front.css', false, RT_HD_VERSION, 'all' );
+//			wp_enqueue_style( 'support-form-style', RT_HD_URL . 'app/assets/css/support_form_front.css', false, RT_HD_VERSION, 'all' );
 			wp_enqueue_style( 'helpdesk-style', RT_HD_URL . 'app/assets/css/rthd-main.css', false, RT_HD_VERSION, 'all' );
 			wp_enqueue_script( 'rthd-support-form', RT_HD_URL . 'app/assets/js/helpdesk-support-min.js', array( 'jquery' ), RT_HD_VERSION, true );
 //			wp_enqueue_script( 'rthd-support-form', RT_HD_URL . 'app/assets/js/rt_support_form.js', array( 'jquery' ), RT_HD_VERSION, true );
