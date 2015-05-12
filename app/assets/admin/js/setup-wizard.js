@@ -249,7 +249,7 @@ jQuery( document ).ready( function ( $ ) {
 
 			jQuery( '#rthd-add-all-users' ).click( function ( e ) {
 				jQuery( '#rthd-setup-import-users-progress' ).show();
-				rthdSetup.import_all_users();
+				rthdSetup.import_all_users(0);
 			} );
 
 			rthdSetup.bind_enter_event('#rthd-setup-wizard-support-page-new',jQuery('a[href="#next"]'));
@@ -303,11 +303,12 @@ jQuery( document ).ready( function ( $ ) {
 				} );
 			}
 		},
-		import_all_users: function () {
+		import_all_users: function ( last_user ) {
 			var requestArray = new Object();
 			requestArray['action'] = 'rthd_import_all_users';
 			requestArray['nonce'] = jQuery( '#import_all_users' ).val();
 			requestArray['import'] = true;
+			requestArray['last_import'] = last_user;
 			jQuery( '#rthd-import-all-spinner' ).show();
 			jQuery( '#rthd-all-import-message' ).html( '' );
 			jQuery.ajax( {
@@ -325,12 +326,13 @@ jQuery( document ).ready( function ( $ ) {
 						jQuery( '#rthd-setup-import-users-progress' ).val( progressbar );
 						if ( data.hasOwnProperty( 'imported_users' ) ) {
 							$.each( data.imported_users, function ( i, user ) {
+								last_user = user.id;
 								rthdSetup.add_contact_to_list( user.id, user.label, user.imghtml, user.editlink );
 							} );
 						}
 						if ( data.remain_import > 0 ) {
 							jQuery( '#rthd-setup-import-all-count' ).val( remain );
-							rthdSetup.import_all_users();
+							rthdSetup.import_all_users( last_user );
 						} else {
 							jQuery( '#rthd-import-all-spinner' ).hide();
 							jQuery( '#rthd-setup-import-users-progress' ).hide();
