@@ -69,7 +69,7 @@ jQuery( document ).ready( function ( $ ) {
 					//
 					if ( currentIndex == 4 ) {
 						//rthdSetup.get_acl_view();
-						return rthdSetup.outbound_mail_setu();
+						return rthdSetup.outbound_mail_setup();
 					}
 
 					return true;
@@ -517,7 +517,7 @@ jQuery( document ).ready( function ( $ ) {
 			 }, 2000);
 			 }*/
 		},
-		outbound_mail_setu: function () {
+		outbound_mail_setup: function () {
 			if ( jQuery( '#mailbox-list>.rtmailbox-row' ).length > 0 ) {
 				jQuery( '.rthd-mailbox-setup-process' ).show();
 				//jQuery('div.actions a[href="#next"]').parent().after('<li id="rthd_spinner"><img src="' + adminurl + 'images/spinner.gif"/></li>')
@@ -552,9 +552,11 @@ jQuery( document ).ready( function ( $ ) {
 							jQuery( '#wizard-p-4' ).html( data.html );
 							skip_step = true;
 							jQuery( '.wizard' ).steps( 'next' );
-						}
-						//jQuery('div.actions li#rthd_spinner').remove();
-						jQuery( '.rthd-outbound-setup-process' ).show();
+                        }else{
+                            alert( data.error );
+                        }
+                        //jQuery('div.actions li#rthd_spinner').remove();
+                        jQuery( '.rthd-outbound-setup-process' ).hide();
 					}
 				} );
 			} else {
