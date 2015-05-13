@@ -121,7 +121,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				<h2><?php _e( 'rtBiz Helpdesk Setup', RT_BIZ_TEXT_DOMAIN ); ?></h2>
 				<hr>
 				<!--				<div class="updated notice notice-success is-dismissible below-h2 rthd-hide-notice-setup-wizard" id="message">
-									<p><?php //_e( 'Thank you for choosing rtBiz', RT_BIZ_TEXT_DOMAIN );   ?></p>
+									<p><?php //_e( 'Thank you for choosing rtBiz', RT_BIZ_TEXT_DOMAIN );    ?></p>
 								</div>-->
 
 				<div class="rthd-row-container">
@@ -531,27 +531,27 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 						<table class="rthd-setup-ul-text-decoration rthd-setup-list-users">
 							<tr>
 								<th>User</th>
-								<th><span><?php _e('Admin', RT_HD_TEXT_DOMAIN ); ?></span>
+								<th><span><?php _e( 'Admin', RT_HD_TEXT_DOMAIN ); ?></span>
 									<span class="rthd-tooltip">
 										<i class="dashicons dashicons-info rtmicon"></i>
-										<span class="rthd-tip-top">
-															<?php _e( 'Can manage all tickets and Helpdesk settings.', RT_HD_TEXT_DOMAIN ); ?>
+										<span class="rthd-tip-bottom">
+											<?php _e( 'Can manage all tickets and Helpdesk settings.', RT_HD_TEXT_DOMAIN ); ?>
 										</span>
 									</span>
 								</th>
-								<th><span><?php _e('Editor', RT_HD_TEXT_DOMAIN ); ?></span>
+								<th><span><?php _e( 'Editor', RT_HD_TEXT_DOMAIN ); ?></span>
 									<span class="rthd-tooltip">
 										<i class="dashicons dashicons-info rtmicon"></i>
-										<span class="rthd-tip-top">
-															<?php _e( 'Can manage all the tickets. No access to settings. ', RT_HD_TEXT_DOMAIN ); ?>
+										<span class="rthd-tip-bottom">
+											<?php _e( 'Can manage all the tickets. No access to settings. ', RT_HD_TEXT_DOMAIN ); ?>
 										</span>
 									</span>
 								</th>
-								<th><span><?php _e('Author', RT_HD_TEXT_DOMAIN ); ?></span>
-										<span class="rthd-tooltip">
+								<th><span><?php _e( 'Author', RT_HD_TEXT_DOMAIN ); ?></span>
+									<span class="rthd-tooltip">
 										<i class="dashicons dashicons-info rtmicon"></i>
-										<span class="rthd-tip-top">
-														<?php _e( 'Can manager only the tickets assigned to him/her. No access to settings.', RT_HD_TEXT_DOMAIN ); ?>
+										<span class="rthd-tip-bottom">
+											<?php _e( 'Can manager only the tickets assigned to him/her. No access to settings.', RT_HD_TEXT_DOMAIN ); ?>
 										</span>
 									</span>
 								</th>
@@ -689,8 +689,8 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				$q = '';
 				if ( ! empty( $helpdesk_users ) ) {
 					$q = ' WHERE ID not IN (' . implode( ',', $helpdesk_users ) . ') ';
-					if ( isset( $_POST['last_import'] ) ){
-						$q .= 'AND ID > '. intval( $_POST['last_import'] ). ' ';
+					if ( isset( $_POST[ 'last_import' ] ) ) {
+						$q .= 'AND ID > ' . intval( $_POST[ 'last_import' ] ) . ' ';
 					}
 				}
 				$users_to_import = $wpdb->get_results( "SELECT ID,display_name,user_email FROM $wpdb->users" . $q . "LIMIT " . $LIMIT );
@@ -712,7 +712,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				$arrReturn[ 'status' ] = true;
 				// count remain users
 				$users_to_import = $wpdb->get_var( "SELECT count(ID) FROM $wpdb->users" . $q );
-				$users_to_import = $users_to_import  - $arrReturn[ 'imported_count' ];
+				$users_to_import = $users_to_import - $arrReturn[ 'imported_count' ];
 				$arrReturn[ 'remain_import' ] = $users_to_import;
 			}
 
@@ -737,7 +737,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			rthd_set_redux_setting( 'offering_plugin', $offering );
 			rt_biz_set_redux_setting( 'offering_plugin', $offering );
 			global $rtbiz_offerings;
-			$offering  = array_keys( $offering );
+			$offering = array_keys( $offering );
 			$rtbiz_offerings->bulk_insert_offerings( $offering );
 			$arrReturn[ 'status' ] = true;
 			header( 'Content-Type: application/json' );
@@ -825,8 +825,8 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				if ( ! empty( $contact[ 0 ] ) ) {
 					$user_permissions = get_post_meta( $contact[ 0 ]->ID, 'rt_biz_profile_permissions', true );
 					$value = array(
-						RT_HD_TEXT_DOMAIN  => $_POST['permission'],
-						RT_BIZ_TEXT_DOMAIN => $_POST['permission'],
+						RT_HD_TEXT_DOMAIN => $_POST[ 'permission' ],
+						RT_BIZ_TEXT_DOMAIN => $_POST[ 'permission' ],
 					);
 					if ( ! empty( $user_permissions ) ) {
 						$value = array_merge( $user_permissions, $value );

@@ -60,7 +60,16 @@
 
 	th {
 		padding: 10px;
-		text-align: left;
+		text-align: center;
+		vertical-align: top;
+
+		&:first-child {
+			text-align: left;
+		}
+	}
+
+	.rthd-tooltip {
+		margin: 0 auto;
 	}
 
 	td {
