@@ -751,6 +751,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			if ( ! empty( $_POST[ 'userid' ] ) ) {
 				global $rt_biz_acl_model;
 				$rt_biz_acl_model->remove_acl( array( 'module' => RT_HD_TEXT_DOMAIN, 'userid' => $_POST[ 'userid' ] ) );
+				$rt_biz_acl_model->remove_acl( array( 'module' => RT_BIZ_TEXT_DOMAIN, 'userid' => $_POST[ 'userid' ] ) );
 				$arrReturn[ 'status' ] = true;
 				$contact = rt_biz_get_contact_for_wp_user( $_POST[ 'userid' ] );
 //				$support_team = get_option( 'rthd_default_support_team' );
@@ -761,6 +762,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 					$user_permissions = get_post_meta( $contact[ 0 ]->ID, 'rt_biz_profile_permissions', true );
 					if ( ! empty( $user_permissions[ RT_HD_TEXT_DOMAIN ] ) ) {
 						$user_permissions[ RT_HD_TEXT_DOMAIN ] = 0;
+						$user_permissions[ RT_BIZ_TEXT_DOMAIN ] = 0;
 						update_post_meta( $contact[ 0 ]->ID, 'rt_biz_profile_permissions', $user_permissions );
 					}
 				}
