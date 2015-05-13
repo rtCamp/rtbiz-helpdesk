@@ -350,8 +350,6 @@ li.load-more-spinner-li {
 
 .rt-hd-ticket-info {
 	border-bottom: 1px dotted #ddd;
-	padding: 10px 0;
-	margin-bottom: 20px;
 }
 
 .rt-hd-related-ticket ul li, .rt-hd-ticket-history ul li{
@@ -510,29 +508,18 @@ h2.rt-hd-ticket-front-title{
 	display: block;
 }
 
-.rthd-collapse-icon a span{
+.rthd-collapse-icon a span {
 	background: #E5E5E5;
 	border-radius: 10%;
 }
 
-.rthd-collapse-icon a{
-	margin-right: 10px;
-}
 
 .rthd-front-icons a:hover,.rthd-collapse-click:hover{
 	text-decoration:none;
 }
 
-
 .rthd-front-icons a,.rthd-collapse-click{
 	text-decoration:none;
-}
-
-
-.rt-hd-sidebar-box{
-	margin: 15px 0;
-	padding: 10px 5px;
-	border-radius: 5%;
 }
 
 ul#attachment-files {
@@ -559,5 +546,4 @@ h2.rthd-ticket-list-title{
 
 .rthd-collapse-icon {
     float: right;
-    margin: 20px 0;
 }
