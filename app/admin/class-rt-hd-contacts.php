@@ -49,6 +49,40 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 
 			add_action( 'rtbiz_after_delete_staff_acl_remove-' . RT_HD_TEXT_DOMAIN , array( $this, 'rthd_before_delete_staff' ), 10, 3 );
 
+			//update contact lable for staff and customer
+			add_filter( 'rt_biz_contact_labels', array( $this, 'rthd_change_contact_lablels' ) );
+
+		}
+
+		/*
+		 * change label for staff and customer
+		 */
+		function rthd_change_contact_lablels( $labels ){
+			if ( is_plugin_active( 'rtbiz-helpdesk/rtbiz-helpdesk.php' ) ){
+				$label = '';
+				if (  isset( $_GET[ 'rt_contact_group' ] ) && 'staff' == $_GET[ 'rt_contact_group' ] ) {
+					$label = "Staff";
+				} elseif ( isset( $_GET[ 'rt_contact_group' ] ) && 'customer' == $_GET[ 'rt_contact_group' ] ) {
+					$label = "Customer";
+				}
+				if ( !empty( $label ) ){
+					$labels = array(
+						'name' => __( $label . 's' ),
+						'singular_name' => __( $label ),
+						'menu_name' => __( $label ),
+						'all_items' => __( 'All ' . $label . 's' ),
+						'add_new' => __( 'New ' . $label ),
+						'add_new_item' => __( 'Add ' . $label ),
+						'edit_item' => __( 'Edit '. $label ),
+						'new_item' => __( 'New ' . $label ),
+						'view_item' => __( 'View ' . $label ),
+						'search_items' => __( 'Search ' . $label ),
+						'not_found' => __( 'No ' . $label . ' found' ),
+						'not_found_in_trash' => __( 'No ' . $label .' found in Trash' ),
+					);
+				}
+			}
+			return $labels;
 		}
 
 		/**
