@@ -531,9 +531,30 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 						<table class="rthd-setup-ul-text-decoration rthd-setup-list-users">
 							<tr>
 								<th>User</th>
-								<th>Admin</th>
-								<th>Editor</th>
-								<th>Author</th>
+								<th><span><?php _e('Admin', RT_HD_TEXT_DOMAIN ); ?></span>
+									<span class="rthd-tooltip">
+										<i class="dashicons dashicons-info rtmicon"></i>
+										<span class="rthd-tip-top">
+															<?php _e( 'Can manage all tickets and Helpdesk settings.', RT_HD_TEXT_DOMAIN ); ?>
+										</span>
+									</span>
+								</th>
+								<th><span><?php _e('Editor', RT_HD_TEXT_DOMAIN ); ?></span>
+									<span class="rthd-tooltip">
+										<i class="dashicons dashicons-info rtmicon"></i>
+										<span class="rthd-tip-top">
+															<?php _e( 'Can manage all the tickets. No access to settings. ', RT_HD_TEXT_DOMAIN ); ?>
+										</span>
+									</span>
+								</th>
+								<th><span><?php _e('Author', RT_HD_TEXT_DOMAIN ); ?></span>
+										<span class="rthd-tooltip">
+										<i class="dashicons dashicons-info rtmicon"></i>
+										<span class="rthd-tip-top">
+														<?php _e( 'Can manager only the tickets assigned to him/her. No access to settings.', RT_HD_TEXT_DOMAIN ); ?>
+										</span>
+									</span>
+								</th>
 								<th></th>
 							</tr>
 
