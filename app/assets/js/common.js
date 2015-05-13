@@ -357,7 +357,8 @@ jQuery( document ).ready( function () {
 					return;
 				}
 				jQuery( this ).parent().hide();
-				jQuery( '#load-more-hdspinner' ).show();
+				jQuery('.load-more-spinner-li' ).show();
+				jQuery( '#load-more-hdspinner' ).css('display','inline');
 				requestArray['limit'] = totalcomment - 3;
 				requestArray['offset'] = 0;
 				requestArray["action"] = "load_more_followup";

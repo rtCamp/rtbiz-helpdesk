@@ -649,7 +649,7 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 	}
 
 
-	$side_class = ( $type == 'right' ) ? 'self' : ( ( $type == 'left' ) ? 'other' : '' );
+	$side_class = ( $type == 'right' ) ? 'rthd-self' : ( ( $type == 'left' ) ? 'rthd-other' : '' );
 	$editable_class = ( $display_private_comment_flag ) ? 'editable' : '';
 	?>
 	<li class="<?php echo $side_class . ' ' . $editable_class . ' ' . ( ( $display_private_comment_flag ) ? '' : 'private-comment-item' ); ?>" id="comment-<?php echo esc_attr( $comment->comment_ID ); ?>">
@@ -657,7 +657,7 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 		<div class="avatar <?php echo $is_staff_followup?'followup_staff_only_arrow':''; ?>">
 			<?php echo get_avatar( $comment->comment_author_email, 48 ); ?>
 		</div>
-		<div class="messages <?php echo $is_staff_followup ? 'followup_staffonly' : ''; ?> <?php echo ( $display_private_comment_flag ) ? '' : 'private-comment-display'; ?>">
+		<div class="rthd-messages <?php echo $is_staff_followup ? 'followup_staffonly' : ''; ?> <?php echo ( $display_private_comment_flag ) ? '' : 'private-comment-display'; ?>">
 			<div class="followup-information">
 				<?php
 				if ( current_user_can( $cap ) ) {

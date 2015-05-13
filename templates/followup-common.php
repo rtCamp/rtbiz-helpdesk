@@ -30,13 +30,13 @@ if ( ! empty( $post->post_content ) ) {
 		$authoremail = $created_by->user_email;
 	}
 	?>
-	<ul class="discussion" id="ticket-content-UI">
-		<li class="other ticketother">
+	<ul class="rthd-discussion" id="ticket-content-UI">
+		<li class="rthd-other ticketother">
 			<div class="avatar">
 				<?php
 				echo get_avatar( $authoremail, 48 ); ?>
 			</div>
-			<div class="messages ticketcontent">
+			<div class="rthd-messages ticketcontent">
                 <div class="followup-information">
 	                <?php
 	                if ( current_user_can( $cap ) ){
@@ -75,7 +75,7 @@ if ( ! empty( $post->post_content ) ) {
 
 <?php if ($Limit < $totalComment){
 	?>
-	<ul class="discussion load-more-ul" id="load-more-UI">
+	<ul class="rthd-discussion load-more-ul" id="load-more-UI">
 		<li><a class="load-more-block" href="#">
 			<p>
 				<span class="load-more-circle" id="followup-load-more-count"><?php echo $offset ?></span>
@@ -90,7 +90,7 @@ if ( ! empty( $post->post_content ) ) {
 	</ul>
 <?php } ?>
 
-<ul class="discussion js-stream" id="chat-UI">
+<ul class="rthd-discussion js-stream" id="chat-UI">
 
 	<?php
 	foreach ( $comments as $comment ) {
