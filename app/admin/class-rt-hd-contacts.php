@@ -130,15 +130,13 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 				}else{
 					$contactIds = $_REQUEST['post'];
 				}
-				foreach( $contactIds as $contactId ){
-					$user_permissions = get_post_meta( $contactId, 'rt_biz_profile_permissions', true );
-					$user_permissions[ RT_BIZ_TEXT_DOMAIN ] = $profile_permissions[ RT_BIZ_TEXT_DOMAIN ];
-					$user_permissions[ RT_HD_TEXT_DOMAIN ] = $profile_permissions[ RT_HD_TEXT_DOMAIN ];
-					update_post_meta( $contactId, 'rt_biz_profile_permissions', $user_permissions );
-				}
 				$users = rt_biz_get_wp_user_for_contact( $contactIds );
 				foreach( $users as $user){
 					foreach ( $profile_permissions as $module_Key => $module_permission  ) {
+						if( in_array( 'administrator', $user->roles ) ){
+							$module_permission = Rt_Access_Control::$permissions['admin']['value'];
+							$profile_permissions[ $module_Key ] = $module_permission;
+						}
 						switch ( $module_permission ) {
 							case 0:
 								//if group level permission is enable for helpdesk then write group level code here
@@ -179,6 +177,12 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 								break;
 						}
 					}
+				}
+				foreach( $contactIds as $contactId ){
+					$user_permissions = get_post_meta( $contactId, 'rt_biz_profile_permissions', true );
+					$user_permissions[ RT_BIZ_TEXT_DOMAIN ] = $profile_permissions[ RT_BIZ_TEXT_DOMAIN ];
+					$user_permissions[ RT_HD_TEXT_DOMAIN ] = $profile_permissions[ RT_HD_TEXT_DOMAIN ];
+					update_post_meta( $contactId, 'rt_biz_profile_permissions', $user_permissions );
 				}
 			}
 		}
