@@ -1,29 +1,22 @@
+.rthd-status {
+	border-radius: 3px;
+    color: #fff;
+    display: inline-block;
+    font-size: 12px;
+    padding: 0 5px;
+}
+
 mark.rthd-unanswered{
-	padding: 5px;
 	background: #C85D5D;
-	color: #FFF;
 	border: 1px solid #C85D5D;
-	border-radius: 5px;
-	font-weight: bold;
-	display: inline-block;
 }
 
-mark.rthd-answered{
-	padding: 5px;
+mark.rthd-answered {
 	background: #5FA364;
-	color: #FFF;
 	border: 1px solid #5FA364;
-	border-radius: 5px;
-	font-weight: bold;
-	display: inline-block;
 }
 
-mark.rthd-archived{
-	padding: 5px;
+mark.rthd-archived {
 	background: #9CB8D4;
-	color: #FFF;
 	border: 1px solid #9CB8D4;
-	border-radius: 5px;
-	font-weight: bold;
-	display: inline-block;
 }

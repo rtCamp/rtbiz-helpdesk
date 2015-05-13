@@ -12,6 +12,7 @@
 	.rt-hd-ticket-info-header {
 		display: inline-block;
 		font-size: 16px;
+		line-height: 1;
 		margin-bottom: 0;
 		margin-top: 0;
 	}
@@ -28,19 +29,6 @@
 	select {
 		font-size: inherit;
 		width: 100%;
-	}
-}
-
-.rthd-front-icons {
-	padding-bottom: 5px;
-	text-align: left;
-
-	a {
-		margin: 0 6px;
-	}
-
-	.dashicons {
-
 	}
 }
 
