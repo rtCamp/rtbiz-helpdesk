@@ -654,7 +654,7 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 	?>
 	<li class="<?php echo $side_class . ' ' . $editable_class . ' ' . ( ( $display_private_comment_flag ) ? '' : 'private-comment-item' ); ?>" id="comment-<?php echo esc_attr( $comment->comment_ID ); ?>">
 
-		<div class="avatar followup_staff_only_arrow">
+		<div class="avatar <?php echo $is_staff_followup?'followup_staff_only_arrow':''; ?>">
 			<?php echo get_avatar( $comment->comment_author_email, 48 ); ?>
 		</div>
 		<div class="messages <?php echo $is_staff_followup ? 'followup_staffonly' : ''; ?> <?php echo ( $display_private_comment_flag ) ? '' : 'private-comment-display'; ?>">

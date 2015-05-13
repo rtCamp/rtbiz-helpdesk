@@ -578,3 +578,11 @@ h2.rthd-ticket-list-title{
 .rthd-collapse-icon {
     float: right;
 }
+
+.followup_staffonly{
+	background: beige;
+}
+
+.self .followup_staff_only_arrow:after, .other .followup_staff_only_arrow:after{
+	border-right-color: beige;
+}

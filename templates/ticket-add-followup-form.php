@@ -52,14 +52,14 @@ global $current_user;
 			<div class="rthd-attachment">
 				<!--			<input id="attachemntlist" name="attachemntlist[]" type="file" multiple />-->
 				<div id="rthd-attachment-container">
-					<input type="button" class="btn button" id="attachemntlist" value="Attach Files">
+					<button class="btn button" id="attachemntlist" value="Attach Files"><span class="dashicons dashicons-upload" id="attachemntlist"></span><span>Attach Files</span></button>
 				</div>
 				<div id="followup-filelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
 	<!--	        <span class="followup-note"><b>Note:</b> Attachments will be uploaded when the form is submitted by clicking <i>Add Followup</i> button.</span>-->
 			</div>
 		</div>
 		<div id="rthd-followup-action">
-			<button class="add-savefollowup button-primary button" id="savefollwoup" type="button">Add followup</button>
+			<button class="add-savefollowup btn btn-primary button-primary button" id="savefollwoup" type="button">Add followup</button>
 			<img id='hdspinner' class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>">
 		</div>
 	</div>
