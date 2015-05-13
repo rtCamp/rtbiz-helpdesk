@@ -1,11 +1,13 @@
 ul#chat-UI {
 	margin-bottom: 30px;
 }
-.discussion {
+
+.rthd-ticket-content .discussion.discussion {
 	list-style: none;
 	margin: 0;
 	padding: 0;
 }
+
 .discussion.discussion > li {
 	padding: 25px 0;
 	margin: 0;
@@ -32,14 +34,16 @@ ul#chat-UI {
 	top: 30px;
 }
 
-.discussion .avatar {
-	border-radius: 100%;
+.discussion div.avatar {
 	min-width: 40px;
 	position: relative;
 	margin-right: 12px;
 }
+
 .discussion .avatar img {
+	border-radius: 100%;
 	display: block;
+	height: auto;
 	max-width: 100%;
 }
 
@@ -87,11 +91,17 @@ ul#chat-UI {
 	background: rgb(246, 247, 248);
 	padding: 10px;
 	border-radius: 2px;
-	width: 100%;
+
+	pre {
+		white-space: pre-wrap;
+		word-wrap: break-word;
+	}
 }
+
 .messages p {
-	margin: 0 0 1.5rem 0;
+	margin: 0 0 1.5rem;
 }
+
 .messages time {
 	color: #777;
     float: right;
@@ -585,4 +595,8 @@ h2.rthd-ticket-list-title{
 
 .self .followup_staff_only_arrow:after, .other .followup_staff_only_arrow:after{
 	border-right-color: beige;
+}
+
+.load-more-ul {
+
 }
