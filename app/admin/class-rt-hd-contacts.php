@@ -168,8 +168,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 				foreach( $users as $user){
 					foreach ( $profile_permissions as $module_Key => $module_permission  ) {
 						if( in_array( 'administrator', $user->roles ) ){
-							$module_permission = Rt_Access_Control::$permissions['admin']['value'];
-							$profile_permissions[ $module_Key ] = $module_permission;
+							continue;
 						}
 						switch ( $module_permission ) {
 							case 0:
