@@ -759,8 +759,8 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 										</li>
 									<?php else: ?>
 										<li>
-											<a id="rthd-new-support-page" class="welcome-icon welcome-add-page" href="javascript:;"><?php _e( 'Setup Support Page' ); ?></a>
-											<img id="rthd-support-spinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
+											<a id="rthd-new-support-page" class="rthd-new-support-page welcome-icon welcome-add-page" href="javascript:;"><?php _e( 'Setup Support Page' ); ?></a>
+											<img id="rthd-support-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 										</li>
 									<?php endif; ?>
 								</div>
