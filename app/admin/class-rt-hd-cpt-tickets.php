@@ -533,12 +533,10 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 					$contacts = rthd_get_user_subscribe_ticket( get_current_user_id() );
 					$query->set( 'post__in', $contacts );
 					$query->set( 'author', '' );
-
-
 				}else{
 					$editor_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' );
 					if ( ! current_user_can( $editor_cap ) ){
-						//$query->set( 'author', get_current_user_id() );
+						$query->set( 'author', get_current_user_id() );
 					}
 				}
 			}
