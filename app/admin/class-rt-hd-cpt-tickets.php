@@ -673,6 +673,14 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 				}
 				$views['subscribe_ticket'] = "<a href='edit.php?post_type=" . Rt_HD_Module::$post_type . "&subscribe=true' $class>" . sprintf( _nx( 'Subscribe <span class="count">(%s)</span>', 'Subscribe <span class="count">(%s)</span>', count( $fav_ticket ), RT_HD_TEXT_DOMAIN ), number_format_i18n( count( $contacts ) ) ) . '</a>';
 			}
+
+			//remove count for editor
+			if ( ! current_user_can( $editor_cap ) ){
+				foreach( $views as $key => $view ){
+					$views[ $key ] = preg_replace('#<span class=["\']count["\']>(.*?)</span>#', '', $view);
+				}
+			}
+
 			$views = array_merge( $temp_view, $views );
 			return $views;
 		}
