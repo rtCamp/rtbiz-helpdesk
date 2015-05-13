@@ -638,7 +638,7 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 				}
 				return;
 			}
-			$private_text = 'Staff only';
+			$private_text = 'Staff Note';
 			$is_comment_private = true;
 			$is_staff_followup = true;
 
