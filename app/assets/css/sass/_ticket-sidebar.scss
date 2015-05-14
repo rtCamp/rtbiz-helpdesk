@@ -30,8 +30,19 @@
 		font-size: inherit;
 		width: 100%;
 	}
+
+	.helpdeskspinner {
+		box-shadow: 0 0 0;
+		float: right;
+		margin-top: 5px;
+	}
 }
 
 .rthd-participants-wrap {
     margin-bottom: 10px;
+}
+
+.rt-hd-assign-me {
+    display: inline-block;
+    margin: 5px 0 0;
 }

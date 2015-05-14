@@ -101,7 +101,7 @@ $user_edit_content = current_user_can( $cap );
 
 				<div class="rt-hd-ticket-sub-row">
 
-					<div class="rthd-ticket-sidebar-sub-result">
+					<div class="rthd-ticket-sidebar-sub-result clearfix">
 						<label for="rthd-status-list">Status</label>
 						<?php
 						if ( current_user_can( $cap ) ) {
@@ -127,7 +127,7 @@ $user_edit_content = current_user_can( $cap );
 					$rtcamp_users = Rt_HD_Utils::get_hd_rtcamp_user();
 					?>
 					<div class="rt-hd-ticket-sub-row">
-						<div class="rthd-ticket-sidebar-sub-result">
+						<div class="rthd-ticket-sidebar-sub-result clearfix">
 							<label for="rthd-assignee-list">
 								<?php _e( 'Assignee', RT_HD_TEXT_DOMAIN ); ?>
 							</label>
@@ -218,7 +218,7 @@ $user_edit_content = current_user_can( $cap );
 					if ( ! empty( $ticket_offering ) || current_user_can( $cap ) ) {
 						?>
 						<div class="rt-hd-ticket-sub-row">
-							<div class="rthd-ticket-sidebar-sub-result">
+							<div class="rthd-ticket-sidebar-sub-result clearfix">
 								<label for="rthd-offering-list">
 									<?php _e( 'Offering' ); ?>
 								</label>
@@ -255,7 +255,7 @@ $user_edit_content = current_user_can( $cap );
 
 				<div class="rt-hd-ticket-sub-row">
 
-					<div class="rthd-ticket-sidebar-sub-result rthd-ticket-user-activity">
+					<div class="rthd-ticket-sidebar-sub-result rthd-ticket-user-activity clearfix">
 						<div class="clearfix rthd-participants-wrap">
 							<label class="rthd-participants">Participants</label>
 

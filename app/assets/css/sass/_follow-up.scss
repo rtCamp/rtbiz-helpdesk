@@ -518,8 +518,12 @@ h2.rt-hd-ticket-front-title{
 
 .rthd-add-people-button{
 	position: relative;
-	display: inline-block;
 	float: right;
+
+	& > a {
+		display: inline-block;
+		margin-top: 2px;
+	}
 }
 
 .rthd-add-people-button.rthd-show-add-people-box{
@@ -527,12 +531,13 @@ h2.rt-hd-ticket-front-title{
 }
 
 .rthd-add-people-box {
-	position: absolute;
 	background: #f0f0f0;
-	z-index: 999;
 	display: none;
 	padding: 10px;
-	margin-left: -225px;
+	position: absolute;
+	right: 0;
+    width: 225px;
+	z-index: 999;
 }
 
 .rthd-add-people-button a:hover {
