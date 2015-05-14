@@ -123,6 +123,10 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 			$permissions = rt_biz_get_acl_permissions(); ?>
 			<fieldset id="rtbiz_contact_helpdesk_access" class="inline-edit-col-right">
 				<div class="inline-edit-col">
+					<?php $selected = ( isset( $_REQUEST['rt_contact_group'] ) && 'staff' == $_REQUEST['rt_contact_group'] ) ? 'Checked="Checked' : ''; ?>
+					<label><input type="checkbox" id="rt_biz_is_staff_member" <?php echo $selected;?>  name="rt_biz_is_staff_member" value="yes"><span class="checkbox-title"><?php _e( 'Staff Member ', RT_BIZ_TEXT_DOMAIN ) ?></span></label>
+				</div>
+				<div id="rtbiz-permission-container" class="inline-edit-col">
 					<label class="alignleft">
 						<span>Helpdesk Role</span>
 						<input type="hidden" name="rtbiz_action" value="rtbiz_helpdesk_role_updated">
@@ -153,62 +157,70 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 
 			if ( isset( $_REQUEST['rtbiz_action'] ) && 'rtbiz_helpdesk_role_updated' == $_REQUEST['rtbiz_action'] ){
 				global $rt_biz_acl_model;
-				$contactIds = array();
 
 				// rtbiz has same acl as helpdesk
 				$_REQUEST['rt_biz_profile_permissions'][ RT_BIZ_TEXT_DOMAIN ] = $_REQUEST['rt_biz_profile_permissions'][ RT_HD_TEXT_DOMAIN ];
 				$profile_permissions = $_REQUEST['rt_biz_profile_permissions'];
 
+				$contactIds = array();
 				if ( isset( $_REQUEST['post_ID'] ) ){
 					$contactIds = array( $_REQUEST['post_ID'] );
 				}else{
 					$contactIds = $_REQUEST['post'];
 				}
 				$users = rt_biz_get_wp_user_for_contact( $contactIds );
-				foreach( $users as $user){
-					foreach ( $profile_permissions as $module_Key => $module_permission  ) {
-						if( in_array( 'administrator', $user->roles ) ){
-							continue;
-						}
-						switch ( $module_permission ) {
-							case 0:
-								//if group level permission is enable for helpdesk then write group level code here
-								//remove all permission
-								$where = array(
-									'userid' => $user->ID,
-									'module' => $module_Key,
-								);
-								$rt_biz_acl_model->remove_acl( $where );
-								break;
-							case 10:
-							case 20:
-							case 30:
-								$where = array(
-									'userid' => $user->ID,
-									'module' => $module_Key,
-								);
-								$acl   = $rt_biz_acl_model->get_acl( $where );
-								if ( ! empty( $acl ) ) {
-									$data  = array(
-										'permission' => $module_permission,
-									);
+				foreach ( $users as $user) {
+					if( in_array( 'administrator', $user->roles ) ){
+						continue;
+					}
+					if ( 'yes' == $_REQUEST['rt_biz_is_staff_member'] ) {
+						foreach ( $profile_permissions as $module_Key => $module_permission  ) {
+							switch ( $module_permission ) {
+								case 0:
+									//if group level permission is enable for helpdesk then write group level code here
+									//remove all permission
 									$where = array(
-										'userid'  => $user->ID,
-										'module'  => $module_Key,
-										'groupid' => 0,
+										'userid' => $user->ID,
+										'module' => $module_Key,
 									);
-									$rt_biz_acl_model->update_acl( $data, $where );
-								} else {
-									$data = array(
-										'userid'     => $user->ID,
-										'module'     => $module_Key,
-										'groupid'    => 0,
-										'permission' => $module_permission,
+									$rt_biz_acl_model->remove_acl( $where );
+									break;
+								case 10:
+								case 20:
+								case 30:
+									$where = array(
+										'userid' => $user->ID,
+										'module' => $module_Key,
 									);
-									$rt_biz_acl_model->add_acl( $data );
-								}
-								break;
+									$acl   = $rt_biz_acl_model->get_acl( $where );
+									if ( ! empty( $acl ) ) {
+										$data  = array(
+											'permission' => $module_permission,
+										);
+										$where = array(
+											'userid'  => $user->ID,
+											'module'  => $module_Key,
+											'groupid' => 0,
+										);
+										$rt_biz_acl_model->update_acl( $data, $where );
+									} else {
+										$data = array(
+											'userid'     => $user->ID,
+											'module'     => $module_Key,
+											'groupid'    => 0,
+											'permission' => $module_permission,
+										);
+										$rt_biz_acl_model->add_acl( $data );
+									}
+									break;
+							}
 						}
+					} else {
+						$where = array(
+							'userid'     => $user->ID,
+						);
+						$rt_biz_acl_model->remove_acl( $where );
+						$profile_permissions = array();
 					}
 				}
 				foreach( $contactIds as $contactId ){
@@ -216,6 +228,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 					$user_permissions[ RT_BIZ_TEXT_DOMAIN ] = $profile_permissions[ RT_BIZ_TEXT_DOMAIN ];
 					$user_permissions[ RT_HD_TEXT_DOMAIN ] = $profile_permissions[ RT_HD_TEXT_DOMAIN ];
 					update_post_meta( $contactId, 'rt_biz_profile_permissions', $user_permissions );
+					update_post_meta( $contactId, 'rt_biz_is_staff_member', $_REQUEST['rt_biz_is_staff_member'] );
 				}
 			}
 		}
