@@ -8,15 +8,24 @@ jQuery(document).ready(function() {
         jQuery('li.menu-icon-'+rthd_menu+' ul li').removeClass('current');
         jQuery('li.menu-icon-'+rthd_menu+' ul li a').removeClass('current');
         jQuery('li.menu-icon-'+rthd_menu+' ul li a').each(function(e) {
-            console.log( this.href )
-            console.log( rthd_url )
-            console.log( this.href === rthd_url )
             if ( this.href === rthd_url ) {
                 jQuery(this).parent().addClass('current');
                 jQuery(this).addClass('current');
             }
         });
         jQuery(window).resize();
+    }
+
+    if ( jQuery('h2 .add-new-h2') ) {
+        $contact_type = getParameterByName( 'rt_contact_group' );
+        jQuery('h2 .add-new-h2').attr( 'href', jQuery('h2 .add-new-h2').attr('href') + '&rt_contact_group=' + $contact_type );
+    }
+
+    function getParameterByName(name) {
+        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+            results = regex.exec(location.search);
+        return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
     }
 
 });
