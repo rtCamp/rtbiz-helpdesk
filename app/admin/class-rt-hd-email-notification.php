@@ -180,12 +180,12 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			if ( $comment_privacy != Rt_HD_Import_Operation::$FOLLOWUP_STAFF ){
 				$notificationFlagClient = ( isset( $redux['rthd_notification_acl_client_events']) && $redux['rthd_notification_acl_client_events']['new_followup_created_mail'] == 1 );
 				$notificationFlagAssignee = ( isset( $redux['rthd_notification_acl_assignee_events']) && $redux['rthd_notification_acl_assignee_events']['new_followup_created_mail'] == 1 );
-				$notificationFlagSsubscriber = ( isset( $redux['rthd_notification_acl_staff_events']) && $redux['rthd_notification_acl_staff_events']['new_followup_created_mail'] == 1 );
+				$notificationFlagSubscriber = ( isset( $redux['rthd_notification_acl_staff_events']) && $redux['rthd_notification_acl_staff_events']['new_followup_created_mail'] == 1 );
 				$notificationFlagGroup = ( isset( $redux['rthd_notification_acl_group_events']) && $redux['rthd_notification_acl_group_events']['new_followup_created_mail'] == 1 );
 			} else {
 				$notificationFlagClient = false;
 				$notificationFlagAssignee = ( isset( $redux['rthd_notification_acl_assignee_events']) && $redux['rthd_notification_acl_assignee_events']['new_staff_only_followup_created_mail'] == 1 );
-				$notificationFlagSsubscriber = ( isset( $redux['rthd_notification_acl_staff_events']) && $redux['rthd_notification_acl_staff_events']['new_staff_only_followup_created_mail'] == 1 );
+				$notificationFlagSubscriber = ( isset( $redux['rthd_notification_acl_staff_events']) && $redux['rthd_notification_acl_staff_events']['new_staff_only_followup_created_mail'] == 1 );
 				$notificationFlagGroup = ( isset( $redux['rthd_notification_acl_group_events']) && $redux['rthd_notification_acl_group_events']['new_staff_only_followup_created_mail'] == 1 );
 			}
 
@@ -203,7 +203,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				$bccemails = array_merge( $bccemails, $groupEmail );
 			}
 
-			if ( $notificationFlagSsubscriber ) {
+			if ( $notificationFlagSubscriber ) {
 				$subscriberEmail = $this->get_subscriber($comment->comment_post_ID);
 				$bccemails = array_merge($bccemails, $subscriberEmail);
 			}
