@@ -76,7 +76,7 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Contacts_Blacklist' ) ) {
 					</a>
 				</p>
 			</div>
-			<p class="description">Note : Added ticket contacts as blacklist.</p>
+			<p class="description"><?php _e( 'Note : Add ticket contacts as blacklist.', RT_HD_TEXT_DOMAIN ); ?></p>
 			<?php
 		}
 

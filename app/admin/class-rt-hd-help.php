@@ -129,7 +129,7 @@ if ( ! class_exists( 'Rt_Hd_Help' ) ) {
 					),
 				),
 				'edit-tags.php' => array(
-					array(
+					/*array(
 						'id'       => 'user_group_overview',
 						'title'    => __( 'Overview' ),
 						'content'  => '',
@@ -140,7 +140,7 @@ if ( ! class_exists( 'Rt_Hd_Help' ) ) {
 						'title'    => __( 'Screen Content' ),
 						'content'  => '',
 						'taxonomy' => 'user-group',
-					),
+					),*/
 				),
 			) );
 
@@ -270,35 +270,22 @@ if ( ! class_exists( 'Rt_Hd_Help' ) ) {
 					<?php
 					break;
 				case 'ticket_list_overview':
-					$title = __( '' );
-					if ( isset( $_GET['rt-biz-my-team'] ) && $_GET['rt-biz-my-team'] ) {
-						$title = __( 'Employees' );
-					}
 					?>
 					<p>
-						<?php echo esc_attr( __( 'This screen provides access to all' )  . ' ' . esc_attr( $title ). esc_attr( __( '. You can customize the display of this screen to suit your workflow.' ) ) ); ?>
+						<?php echo esc_attr( __( 'This screen lists all the Helpdesk tickets on which the logged in user is a part of. The WordPress admin will see all tickets by default.  ' ) );?>
 					</p>
 					<?php
 					break;
 				case 'ticket_list_screen_content':
 					?>
-					<p><?php _e( 'You can customize the display of this screen’s contents in a number of ways :' ); ?></p>
 					<ul>
-						<li><?php _e( 'You can hide/display columns based on your needs and decide how many Tickets to list per screen using the Screen Options tab.' ); ?></li>
-						<li>
-							<?php _e( 'You can filter the list of Tickets by status using the text links in the upper left to show All, Published, Draft, or Trashed Tickets.' ); ?>
-							<?php _e( 'The default view is to show all Tickets.' ); ?>
-						</li>
-						<li>
-							<?php _e( 'You can view Tickets in a simple title list or with an excerpt.' ); ?>
-							<?php _e( 'Choose the view you prefer by clicking on the icons at the top of the list on the right.' ); ?>
-						</li>
-						<li>
-							<?php _e( 'You can refine the list to show only Tickets in a specific category or from a specific month by using the dropdown menus above the Tickets list.' ); ?>
-							<?php _e( 'Click the Filter button after making your selection.' ); ?>
-							<?php _e( 'You also can refine the list by clicking on the author, company or tag in the Tickets list.' ); ?>
-						</li>
-						<li><?php _e( 'You can also see the entity counts for respective modules, if activated, such as Lead Count, Ticket Count etc.' ) ?></li>
+						<li><strong><?php _e( 'All, Unanswered, Answered, Solved - ' ); ?></strong><?php _e( 'Filters to see ticket sorted by status. All tickets are listed in latest first order.' ); ?></li>
+						<li><strong><?php _e( 'Filter by status, Filter by assignee, Filter by offering - ' ); ?></strong><?php _e( 'Used to sort tickets.' ); ?></li>
+						<li><strong><?php _e( 'Assignee - ' ); ?></strong><?php _e( 'Staff member to whom ticket is assigned.' ); ?></li>
+						<li><strong><?php _e( 'Ticket Author - ' ); ?></strong><?php _e( 'Customer who has created the ticket.' ); ?></li>
+						<li><strong><?php _e( 'Reply count  - ' ); ?></strong><?php _e( 'The number replies added on a ticket.' ); ?></li>
+						<li><strong><?php _e( 'Last Reply - ' ); ?></strong><?php _e( 'Customer/staff who has last replied to the ticket.' ); ?></li>
+						<li><strong><?php _e( 'Participants (Customer) - ' ); ?></strong><?php _e( 'Non-staff people on ticket who have been added by ticket author/customer.' ); ?></li>
 					</ul>
 					<?php
 					break;
@@ -356,13 +343,10 @@ if ( ! class_exists( 'Rt_Hd_Help' ) ) {
 						<?php _e( 'This screen will let you add attribute.' ) ?>
 						<?php //_e( 'It will show the various chart distribution based on the attributes assigned to the contacts & their terms.' ); ?>
 					</p>
-
-
-
 					<?php
 					break;
 				default:
-					do_action( 'rt_biz_help_tab_content', $screen, $tab );
+					do_action( 'rtbiz_hd_help_tab_content', $screen, $tab );
 					break;
 			}
 		}
