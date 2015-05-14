@@ -1623,6 +1623,10 @@ function rthd_get_default_email_template( $key = '', $all = false ) {
 
 
 	// Ticket template default body
+
+	/*	<div style="font-size: 17px; line-height: 26px; color: #888888;">
+	           Visibility: <div style="color: #333333; padding-left: 20px;">{visibility_diff}</div>
+			</div>*/
 	$redux[ 'rthd_email_template_followup_add' ] = '
 		<div style="color: #888888; font-size: 14px;">
 				New Followup Added by <strong>{followup_author}</strong>. {ticket_link}
@@ -1676,9 +1680,6 @@ function rthd_get_default_email_template( $key = '', $all = false ) {
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0" />
 			<div>The changes are as follows:</div>
 			<div style="font-size: 17px; line-height: 26px; color: #888888;">
-				Visibility: <div style="color: #333333; padding-left: 20px;">{visibility_diff}</div>
-			</div>
-			<div style="font-size: 17px; line-height: 26px; color: #888888; padding-left: 20px">
 				Followup Content: <div style="color: #333333; padding-left: 20px;">{followup_diff}</div>
 			</div>
 		    <hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
