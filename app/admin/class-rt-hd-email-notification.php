@@ -218,10 +218,15 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			}
 
 			if ( isset( $comment_privacy ) && ! empty( $comment_privacy ) && intval( $comment_privacy ) && $comment_privacy > Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC  ){
-				// Filter for email when follow up is added as private
-				$subject = rthd_create_new_ticket_title( 'rthd_new_followup_email_title_private', $comment->comment_post_ID );
-				$body = apply_filters( 'rthd_email_template_followup_add_private', rthd_get_email_template_body( 'rthd_email_template_followup_add_private' ) );
-				$uploaded = array();
+				if ( $comment_privacy == Rt_HD_Import_Operation::$FOLLOWUP_STAFF ){
+					$subject  = rthd_create_new_ticket_title( 'rthd_new_followup_email_title_staff_note', $comment->comment_post_ID );
+					$body     = apply_filters( 'rthd_email_template_followup_add_staff_note', rthd_get_email_template_body( 'rthd_email_template_followup_add_staff_note' ) );
+				} else {
+					// Filter for email when follow up is added as private
+					$subject  = rthd_create_new_ticket_title( 'rthd_new_followup_email_title_private', $comment->comment_post_ID );
+					$body     = apply_filters( 'rthd_email_template_followup_add_private', rthd_get_email_template_body( 'rthd_email_template_followup_add_private' ) );
+					$uploaded = array();
+				}
 			} else {
 				$subject = rthd_create_new_ticket_title( 'rthd_new_followup_email_title', $comment->comment_post_ID );
 				$body = apply_filters( 'rthd_email_template_followup_add', rthd_get_email_template_body('rthd_email_template_followup_add') );

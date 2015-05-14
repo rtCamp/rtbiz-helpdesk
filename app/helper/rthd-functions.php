@@ -1620,6 +1620,7 @@ function rthd_get_default_email_template( $key = '', $all = false ) {
 	$redux[ 'rthd_delete_followup_email_title_private' ] = '[{module_name} #{ticket_id}] {ticket_title}';
 	$redux[ 'rthd_ticket_subscribe_email_title' ] = '[{module_name} #{ticket_id}] {ticket_title}';
 	$redux[ 'rthd_ticket_unsubscribe_email_title' ] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux[ 'rthd_new_followup_email_title_staff_note' ] = '[{module_name} #{ticket_id}] {ticket_title}';
 
 
 	// Ticket template default body
@@ -1630,6 +1631,16 @@ function rthd_get_default_email_template( $key = '', $all = false ) {
 	$redux[ 'rthd_email_template_followup_add' ] = '
 		<div style="color: #888888; font-size: 14px;">
 				New followup added by <strong>{followup_author}</strong>. {ticket_link}
+		</div>
+		<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0" />
+			<div style="font-size: 16px; line-height: 26px; color:#333333; ">
+				{followup_content}
+			</div>
+		<hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
+
+	$redux[ 'rthd_email_template_followup_add_staff_note' ] = '
+		<div style="color: #888888; font-size: 14px;">
+				New staff note added by <strong>{followup_author}</strong>. {ticket_link}
 		</div>
 		<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0" />
 			<div style="font-size: 16px; line-height: 26px; color:#333333; ">
