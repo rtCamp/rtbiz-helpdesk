@@ -67,7 +67,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 				}
 				if ( !empty( $label ) ){
 					$labels = array(
-						'name' => __( $label . 's' ),
+						'name' => __( $label ),
 						'singular_name' => __( $label ),
 						'menu_name' => __( $label ),
 						'all_items' => __( 'All ' . $label . 's' ),
@@ -341,7 +341,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 							case 30 :
 								$permission_role = 'Admin'; break;
 							default:
-								$permission_role = '-'; break;
+								$permission_role = '—'; break;
 						}
 					}
 

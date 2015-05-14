@@ -10,10 +10,8 @@
 
 		<?php
 		if ( $replyflag && rthd_is_enable_mailbox_reading() && rthd_get_reply_via_email() ) {
-			echo '<div style="color: #c5c5c5; font-size: 11px;">' . htmlentities( ':: Reply Above This Line ::' ) . '</div>';
+			echo '<div style="color: #c5c5c5; font-size: 11px; margin: 10px 0 20px;">' . htmlentities( ':: Reply Above This Line ::' ) . '</div>';
 		}
-
-		echo $title;
 
 		$beforeHTML = apply_filters( 'rthd_before_email_body', $body );
 		$afterHTML = apply_filters( 'rthd_after_email_body', $body );
@@ -25,6 +23,7 @@
 		if ( ! has_filter( 'rthd_after_email_body' ) ) {
 			$afterHTML = '';
 		}
+		$body = rthd_replace_placeholder( $body, '{ticket_link}', $title );
 
 		echo $beforeHTML;
 		?>
@@ -38,7 +37,7 @@
 
 		$signature = rthd_get_email_signature_settings();
 
-		echo ( ( ! empty( $signature ) ) ? '<div style="color:#666;">' . wpautop( $signature ) . '</div>' : '' ) . '<br/>'
+		echo ( ( ! empty( $signature ) ) ? '<div style="color:#c5c5c5; font-size: 14px;">' . wpautop( $signature ) . '</div>' : '' ) . '<br/>'
 		?>
 
 	</body>

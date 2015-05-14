@@ -158,19 +158,16 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 					'slug'        => 'hd-unanswered',
 					'name'        => __( 'Unanswered', RT_HD_TEXT_DOMAIN ),
 					'description' => __( 'Ticket is unanswered. It needs to be replied. The default state.', RT_HD_TEXT_DOMAIN ),
-				    'style'       => 'padding: 5px; background: #C85D5D; color: #FFF; border: 1px solid #C85D5D; border-radius: 5px; font-weight: bold; display: inline-block;',
 				),
 				array(
 					'slug'        => 'hd-answered',
 					'name'        => __( 'Answered', RT_HD_TEXT_DOMAIN ),
 					'description' => __( 'Ticket is answered. Expecting further communication from client', RT_HD_TEXT_DOMAIN ),
-					'style'       => 'padding: 5px; background: #5FA364; color: #FFF; border: 1px solid #5FA364; border-radius: 5px; font-weight: bold; display: inline-block;',
 				),
 				array(
 					'slug'        => 'hd-archived',
-					'name'        => __( 'Archived', RT_HD_TEXT_DOMAIN ),
+					'name'        => __( 'Solved', RT_HD_TEXT_DOMAIN ),
 					'description' => __( 'Ticket is archived. Client can re-open if they wish to.', RT_HD_TEXT_DOMAIN ),
-					'style'       => 'padding: 5px; background: #9CB8D4; color: #FFF; border: 1px solid #9CB8D4; border-radius: 5px; font-weight: bold; display: inline-block;',
 				),
 			);
 
