@@ -1727,15 +1727,12 @@ function rthd_get_default_email_template( $key = '', $all = false ) {
 
 	$redux[ 'rthd_email_template_new_ticket_created_assignee' ] = '
 			<div style="color: #888888; font-size: 14px;">
-				A new support ticket created is assigned to you. </strong> {ticket_link}
+				A new support ticket created by {ticket_author} is assigned to you. </strong> {ticket_link}
 			</div>
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0" />
 			<div style="font-size: 16px; line-height: 26px; color: #888888;">
 				Offering: <strong style="color: #333333;">{ticket_offerings}</strong>
 			</div>
-		    <div style="font-size: 16px; line-height: 26px; color: #888888;">
-		        Created by: <strong style="color: #333333; ">{ticket_author}</strong>
-	        </div>
 			<div style="font-size: 16px; line-height: 26px; color:#333333; " >
 				{ticket_body}
 			</div>
