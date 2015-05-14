@@ -46,7 +46,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		 * @return string Body Title
 		 */
 		public function get_email_title( $post_id, $posttype ){
-			return '<div style="font-style:italic;color:#666"><a href="'.  ( rthd_is_unique_hash_enabled() ? rthd_get_unique_hash_url( $post_id ) : get_post_permalink( $post_id ) ) .'">Click here</a> to view ticket online.</div><br/>';
+			return '<i style="color:#888888">To view ticket online <a style="color: #3455ff; text-decoration: none;" href="'.  ( rthd_is_unique_hash_enabled() ? rthd_get_unique_hash_url( $post_id ) : get_post_permalink( $post_id ) ) .'">Click here</a></i>';
 		}
 
 		/**
@@ -374,16 +374,16 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$diff_followup_content = rthd_text_diff( trim( html_entity_decode( strip_tags( $old_content ) ) ), trim( html_entity_decode( strip_tags( $new_content ) ) ) );
 
 			if ( $diff_visibility ){
-				$body = rthd_replace_placeholder( $body, '{visibility_diff}', '<br/><b>Visibility : </b><hr style="color: #DCEAF5;" />' . $diff_visibility );
+				$body = rthd_replace_placeholder( $body, '{visibility_diff}', $diff_visibility );
 			} else{
-				$body = rthd_replace_placeholder( $body, '{visibility_diff}', '' );
+				$body = rthd_replace_placeholder( $body, '{visibility_diff}', rthd_get_comment_type( $new_privacy ) );
 			}
 			if ( ! $private_update ){ // not private then add diff content if exists or add actual content if no diff
 				if ($diff_followup_content){
-					$body = rthd_replace_placeholder( $body, '{followup_diff}', '<br/><b>Followup Content : </b><hr style="color: #DCEAF5;" />' . $diff_followup_content );
+					$body = rthd_replace_placeholder( $body, '{followup_diff}', $diff_followup_content );
 				}
 				else{
-					$body = rthd_replace_placeholder( $body, '{followup_diff}', '<br/><b>Followup Content : </b><hr style="color: #DCEAF5;" /><div  style="display: inline-block">' . rthd_content_filter( $comment->comment_content ) . '</div>');
+					$body = rthd_replace_placeholder( $body, '{followup_diff}', rthd_content_filter( $comment->comment_content ) );
 				}
 			}
 			global $rt_hd_module;
@@ -500,7 +500,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				//rthd_email_template_new_ticket_created_author
 				$htmlbody =  apply_filters( 'rthd_email_template_new_ticket_created_author', rthd_get_email_template_body('rthd_email_template_new_ticket_created_author' ) );
 				if ( isset( $body ) && !empty( $body ) ){
-					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_body}', '<hr style="color: #DCEAF5;" /><div>' . rthd_content_filter( $body ) . '</div>' );
+					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_body}', '<div>' . rthd_content_filter( $body ) . '</div>' );
 				} else {
 					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_body}', '' );
 				}
@@ -516,7 +516,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				$htmlbody =  apply_filters( 'rthd_email_template_new_ticket_created_contacts', rthd_get_email_template_body('rthd_email_template_new_ticket_created_contacts' ) );
 				$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_author}', $ticket_created_by->display_name );
 				if ( isset( $body ) && !empty( $body ) ){
-					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_body}', '<hr style="color: #DCEAF5;" /><div>' . rthd_content_filter( $body ) . '</div>' );
+					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_body}', '<div>' . rthd_content_filter( $body ) . '</div>' );
 				} else {
 					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_body}', '' );
 				}
@@ -534,12 +534,12 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 
 				// Add product info into mail body.
 				if( ! empty( $arrProducts ) ) {
-					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_offerings}', "<p><b>Product: </b>" . $arrProducts . '</p> <br />');
+					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_offerings}', $arrProducts);
 				} else {
-					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_offerings}', '' );
+					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_offerings}', 'No Offering' );
 				}
 				if ( isset( $body ) && !empty( $body ) ){
-					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_body}', '<hr style="color: #DCEAF5;" /><div>' . rthd_content_filter( $body ) . '</div>' );
+					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_body}', '<div>' . rthd_content_filter( $body ) . '</div>' );
 				} else {
 					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_body}', '' );
 				}
@@ -555,12 +555,12 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 
 				// Add product info into mail body.
 				if( ! empty( $arrProducts ) ) {
-					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_offerings}', "<p><b>Product: </b>" . $arrProducts . '</p> <br />');
+					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_offerings}', $arrProducts );
 				} else {
-					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_offerings}', '' );
+					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_offerings}', 'No Offering' );
 				}
 				if ( isset( $body ) && !empty( $body ) ){
-					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_body}', '<hr style="color: #DCEAF5;" /><div>' . rthd_content_filter( $body ) . '</div>' );
+					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_body}', '<div>' . rthd_content_filter( $body ) . '</div>' );
 				} else {
 					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_body}', '' );
 				}
@@ -578,12 +578,12 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 
 				// Add product info into mail body.
 				if( ! empty( $arrProducts ) ) {
-					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_offerings}', "<p><b>Product: </b>" . $arrProducts . '</p> <br />');
+					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_offerings}', $arrProducts );
 				} else {
-					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_offerings}', '' );
+					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_offerings}', 'No Offering' );
 				}
 				if ( isset( $body ) && !empty( $body ) ){
-					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_body}', '<hr style="color: #DCEAF5;" /><div>' . rthd_content_filter( $body ) . '</div>' );
+					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_body}', '<div>' . rthd_content_filter( $body ) . '</div>' );
 				} else {
 					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_body}', '' );
 				}

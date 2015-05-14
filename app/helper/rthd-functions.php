@@ -745,7 +745,7 @@ function rthd_content_filter( $content ) {
 		$content = $output_array[ 1 ][ 0 ];
 	}
 
-	$offset = strpos( $content, '[!-------REPLY ABOVE THIS LINE-------!]' );
+	$offset = strpos( $content, ':: Reply Above This Line ::' );
 	$content = substr( $content, 0, ( $offset === false ) ? strlen( $content ) : $offset  );
 
 	$content = balanceTags( $content, true );
@@ -1623,22 +1623,175 @@ function rthd_get_default_email_template( $key = '', $all = false ) {
 
 
 	// Ticket template default body
-	$redux[ 'rthd_email_template_followup_add' ] = '<div>New Followup Added by <strong>{followup_author}</strong></div><hr style="color: #DCEAF5;" /><div style="display: inline-block;">{followup_content}</div>';
-	$redux[ 'rthd_email_template_followup_add_private' ] = '<div>A private followup has been added by <strong>{followup_author}</strong>. Please go to ticket to view content. </div>';
-	$redux[ 'rthd_email_template_followup_deleted_private' ] = '<div>A Private followup is deleted by <Strong>{followup_deleted_by}</Strong></div>';
-	$redux[ 'rthd_email_template_followup_deleted' ] = '<div>A Followup is deleted by <Strong>{followup_deleted_by}</Strong></div><hr style="color: #DCEAF5;" /><div  style="display: inline-block;">{followup_content}</div>';
-	$redux[ 'rthd_email_template_followup_updated_private' ] = '<div>A <strong>private</strong> followup has been edited by <strong>{followup_updated_by}</strong>. Please go to ticket to view content.</div> <div style="display: inline-block;">{visibility_diff}</div>';
-	$redux[ 'rthd_email_template_followup_updated' ] = '<div>A Followup Updated by <strong>{followup_updated_by}.</strong></div><div> The changes are as follows: </div><div style="display: inline-block;">{visibility_diff}</div> <div style="display: inline-block;">{followup_diff}</div>';
-	$redux[ 'rthd_email_template_new_ticket_created_author' ] = '<div>Thank you for opening a new support ticket. We will look into your request and respond as soon as possible.</div> <div style="display: inline-block;">{ticket_body}</div>';
-	$redux[ 'rthd_email_template_new_ticket_created_contacts' ] = '<div>A new support ticket created by <strong> {ticket_author} </strong>. You have been subscribed to this ticket.</div><div style="display: inline-block;">{ticket_body}</div>';
-	$redux[ 'rthd_email_template_new_ticket_created_group_notification' ] = '<div>A new support ticket created by <strong> {ticket_author} </strong>. </div> <div>Ticket Assigned to <strong>{ticket_assignee}</strong> </div><div>{ticket_offerings}</div> <div style="display: inline-block;">{ticket_body}</div>';
-	$redux[ 'rthd_email_template_new_ticket_created_assignee' ] = '<div>A new support ticket created by <strong> {ticket_author} </strong> is assigned to you. </strong></div><div>{ticket_offerings}</div> <div style="display: inline-block;" >{ticket_body} </div>';
-	$redux[ 'rthd_email_template_new_ticket_created_subscriber' ] = '<div>A new support ticket created by <strong>{ticket_author}</strong>. You have been subscribed to this ticket. </div><div>Ticket Assigned to <strong>{ticket_assignee}</strong></div><div>{ticket_offerings}</div><div style="display: inline-block;">{ticket_body}</div> ';
-	$redux[ 'rthd_email_template_ticket_subscribed' ] = '<div>{ticket_subscribers} been subscribed to this ticket</div>';
-	$redux[ 'rthd_email_template_ticket_unsubscribed' ] = '<div>{ticket_unsubscribers} been un-subscribed from this ticket</div>';
-	$redux[ 'rthd_email_template_ticket_reassigned_old_assignee' ] = '<div>You are no longer responsible for this ticket.</div>';
-	$redux[ 'rthd_email_template_ticket_reassigned_new_assignee' ] = '<div>A ticket is reassigned to {new_ticket_assignee}.</div>';
-	$redux[ 'rthd_email_template_ticket_updated' ] = '<div>Ticket updated by : <strong>{ticket_updated_by}</strong>.</div><div style="display: inline-block;;">{ticket_diference}</div>';
+	$redux[ 'rthd_email_template_followup_add' ] = '
+		<div style="color: #888888; font-size: 14px;">
+				New Followup Added by <strong>{followup_author}</strong>. {ticket_link}
+		</div>
+		<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0" />
+			<div style="font-size: 17px; line-height: 26px; color:#333333; padding-left: 20px;">
+				{followup_content}
+			</div>
+		<hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
+
+	$redux[ 'rthd_email_template_followup_add_private' ] = '
+			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0;" />
+			<div style="color: #333333; line-height: 26px; font-size: 17px; padding-left: 20px;">
+				A private followup has been added by <strong>{followup_author}</strong>. Please go to ticket to view content.
+			</div>
+			{ticket_link}
+		    <hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
+
+	$redux[ 'rthd_email_template_followup_deleted_private' ] = '
+			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0;" />
+				<div style="color: #333333; line-height: 26px; font-size: 17px; padding-left: 20px;">
+					A Private followup is deleted by <Strong>{followup_deleted_by}</Strong> {ticket_link}
+				</div>
+			<hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
+
+	$redux[ 'rthd_email_template_followup_deleted' ] = '
+			<div style="color: #888888; font-size: 14px;">
+				A Followup is deleted by <Strong>{followup_deleted_by}</Strong> {ticket_link}
+			</div>
+			<hr style="color: #DCEAF5;" />
+			<div style="font-size: 17px; line-height: 26px; color:#333333; padding-left: 20px;">
+				{followup_content}
+			</div>
+
+			<hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px;" />';
+
+	$redux[ 'rthd_email_template_followup_updated_private' ] = '
+			<div style="color: #888888; font-size: 14px;">
+				A <strong>private</strong> followup has been edited by <strong>{followup_updated_by}</strong>.Please go to ticket to view content.{ticket_link}
+			</div>
+			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0;" />
+			<div style="font-size: 17px; line-height: 26px; color: #888888;">
+				Visibility: <div style="color: #333333; padding-left: 20px;">{visibility_diff}</div>
+			</div>
+			<hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
+
+	$redux[ 'rthd_email_template_followup_updated' ] = '
+			<div style="color: #888888; font-size: 14px;">
+				A Followup Updated by <strong>{followup_updated_by}.</strong> {ticket_link}
+			</div>
+			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0" />
+			<div>The changes are as follows:</div>
+			<div style="font-size: 17px; line-height: 26px; color: #888888;">
+				Visibility: <div style="color: #333333; padding-left: 20px;">{visibility_diff}</div>
+			</div>
+			<div style="font-size: 17px; line-height: 26px; color: #888888; padding-left: 20px">
+				Followup Content: <div style="color: #333333; padding-left: 20px;">{followup_diff}</div>
+			</div>
+		    <hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
+
+	$redux[ 'rthd_email_template_new_ticket_created_author' ] = '
+			<div style="color: #333333; font-size: 17px; line-height: 26px">
+				Thank you for opening a new support ticket. We will look into your request and respond as soon as possible.
+				<br/>
+				{ticket_link}
+			</div>
+		    <hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0" />
+		    <div style="font-size: 14px; color:#888888; line-height: 24px; padding-left: 20px;">
+		        {ticket_body}
+		    </div>
+		    <hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
+
+	$redux[ 'rthd_email_template_new_ticket_created_contacts' ] = '
+			<div style="color: #888888; font-size: 14px;">
+				A new support ticket created by <strong>{ticket_author}</strong>. You have been subscribed to this ticket.{ticket_link}
+			</div>
+			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0" />
+			<div style="font-size: 17px; line-height: 26px; color:#333333; padding-left: 20px;">
+				{ticket_body}
+			</div>
+			<hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
+
+	$redux[ 'rthd_email_template_new_ticket_created_group_notification' ] = '
+			<div style="color: #888888; font-size: 14px;">
+				A new support ticket created. {ticket_link}
+			</div>
+			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0" />
+			<div style="font-size: 17px; line-height: 26px; color: #888888; ">
+				Offering: <strong style="color: #333333;">{ticket_offerings}</strong>
+			</div>
+		    <div style="font-size: 17px; line-height: 26px; color: #888888;">
+		        Created by: <strong style="color: #333333; ">{ticket_author}</strong>
+	        </div>
+	        <div style="font-size: 17px; line-height: 26px; color: #888888;">
+	            Assigned to: <strong style="color: #333333;">{ticket_assignee}</strong>
+            </div>
+            <div style="font-size: 17px; line-height: 26px; color:#333333; padding-left: 20px;">
+                {ticket_body}
+            </div>
+            <hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
+
+	$redux[ 'rthd_email_template_new_ticket_created_assignee' ] = '
+			<div style="color: #888888; font-size: 14px;">
+				A new support ticket created is assigned to you. </strong> {ticket_link}
+			</div>
+			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0" />
+			<div style="font-size: 17px; line-height: 26px; color: #888888;">
+				Offering: <strong style="color: #333333;">{ticket_offerings}</strong>
+			</div>
+		    <div style="font-size: 17px; line-height: 26px; color: #888888;">
+		        Created by: <strong style="color: #333333; ">{ticket_author}</strong>
+	        </div>
+			<div style="font-size: 17px; line-height: 26px; color:#333333; padding-left: 20px;" >
+				{ticket_body}
+			</div>
+			<hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
+
+	$redux[ 'rthd_email_template_new_ticket_created_subscriber' ] = '
+			<div style="color: #888888; font-size: 14px;">
+				A new support ticket created by <strong>{ticket_author}</strong>. You have been subscribed to this ticket. {ticket_link}
+			</div>
+		    <hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0" />
+		    <div style="font-size: 17px; line-height: 26px; color: #888888;">
+				Offering: <strong style="color: #333333;">{ticket_offerings}</strong>
+			</div>
+			<div style="font-size: 17px; line-height: 26px; color: #888888;">
+				Assigned To: <strong style="color: #333333;">{ticket_assignee}</strong>
+			</div>
+			<div style="font-size: 17px; line-height: 26px; color:#333333; padding-left: 20px;">
+			    {ticket_body}
+			</div>
+            <hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
+	// If offering not assigned use -
+	$redux[ 'rthd_email_template_ticket_subscribed' ] = '
+			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0" />
+			<div style="color: #333333; font-size: 17px; line-height: 26px; padding-left: 20px;">
+				{ticket_subscribers} been subscribed to this ticket {ticket_link}
+			</div>
+		    <hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
+	$redux[ 'rthd_email_template_ticket_unsubscribed' ] = '
+			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0" />
+			<div style="color: #333333; font-size: 17px; line-height: 26px; padding-left: 20px;">
+				{ticket_unsubscribers} been un-subscribed from this ticket{ticket_link}
+			</div>
+			<hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
+
+	$redux[ 'rthd_email_template_ticket_reassigned_old_assignee' ] = '
+			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0" />
+			<div style="color: #333333; font-size: 17px; line-height: 26px; padding-left: 20px;">
+				You are no longer responsible for this ticket.{ticket_link}
+			</div>
+			<hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
+
+	$redux[ 'rthd_email_template_ticket_reassigned_new_assignee' ] = '
+			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0" />
+			<div style="color: #333333; font-size: 17px; line-height: 26px; padding-left: 20px;">
+				A ticket is reassigned to {new_ticket_assignee}. {ticket_link}
+			</div>
+			<hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
+
+	$redux[ 'rthd_email_template_ticket_updated' ] = '
+			<div style="color: #888888; font-size: 14px;">
+				Ticket updated by : <strong>{ticket_updated_by}</strong>.{ticket_link}
+			</div>
+			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0" />
+			<div style="font-size: 17px; line-height: 26px; color: #888888;">
+				Assigned To: <strong style="color: #333333;">{ticket_difference}</strong>
+			</div>
+			<hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
 
 	if ( ! empty( $key ) && isset( $redux[ $key ] ) ) {
 		return $redux[ $key ];
