@@ -127,20 +127,16 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Contacts_Blacklist' ) ) {
 			$reponse = array();
 			$reponse[ 'status' ] = false;
 			$contacts = rt_biz_get_post_for_contact_connection( $_POST[ 'post_id' ], Rt_HD_Module::$post_type );
-			$arrContactsEmail = array();
-			$blacklistedEmail = rthd_get_blacklist_emails();
+			$blacklistedEmail = array();
 			foreach ( $contacts as $contact ) {
-				$arrContactsEmail[] = get_post_meta( $contact->ID, Rt_Entity::$meta_key_prefix . Rt_Contact::$primary_email_key, true );
+				$blacklistedEmail[] = get_post_meta( $contact->ID, Rt_Entity::$meta_key_prefix . Rt_Contact::$primary_email_key, true );
 			}
-			if ( ! empty( $arrContactsEmail ) ) {
-				if ( ! empty( $blacklistedEmail ) ) {
-					$arrContactsEmail = array_merge( $blacklistedEmail, $arrContactsEmail );
-				}
-			}
-			$arrContactsEmail = array_unique( $arrContactsEmail );
-			$arrContactsEmail = implode( "\n", $arrContactsEmail );
-			if ( ! empty( $arrContactsEmail ) ) {
-				rthd_set_redux_settings( 'rthd_blacklist_emails_textarea', $arrContactsEmail );
+			$created_by = get_user_by( 'id', get_post_meta( $_POST[ 'post_id' ], '_rtbiz_hd_created_by', true ) );
+			$blacklistedEmail[] = $created_by->user_email;
+			if ( ! empty( $blacklistedEmail ) ) {
+				$blacklistedEmail = array_merge( rthd_get_blacklist_emails(), $blacklistedEmail );
+				$blacklistedEmail = implode( "\n", array_unique( $blacklistedEmail ) );
+				rthd_set_redux_settings( 'rthd_blacklist_emails_textarea', $blacklistedEmail );
 				update_post_meta( $_POST[ 'post_id' ], '_rtbiz_hd_is_blocklised', 'true' );
 				ob_start();
 				?>
