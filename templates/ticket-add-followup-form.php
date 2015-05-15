@@ -22,7 +22,7 @@ global $current_user;
 	?>
 
 <!--	<textarea id="followupcontent" class="followup-content" name="followupcontent" placeholder="Add new followup"></textarea>-->
-	<div id="rthd-followup-form">
+	<div id="rthd-followup-form" class="clearfix">
 		<div class="rthd-attachment-box">
 			<?php
 			$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
@@ -58,7 +58,7 @@ global $current_user;
 	<!--	        <span class="followup-note"><b>Note:</b> Attachments will be uploaded when the form is submitted by clicking <i>Add Followup</i> button.</span>-->
 			</div>
 		</div>
-		<div id="rthd-followup-action">
+		<div id="rthd-followup-action" class="rthd-followup-action">
 			<button class="add-savefollowup btn btn-primary button-primary button" id="savefollwoup" type="button">Add followup</button>
 			<img id='hdspinner' class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>">
 		</div>

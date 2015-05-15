@@ -210,7 +210,7 @@ ul#chat-UI {
 }
 
 .rthd-container {
-	margin: 10px;
+	//margin: 10px;
 	/*overflow: auto;*/
 }
 
@@ -612,4 +612,12 @@ img#hdspinner{
 	border-radius: 0;
 	box-shadow: none;
 	vertical-align: middle;
+}
+
+.rthd-attachment-box {
+	float: left;
+}
+
+.rthd-followup-action {
+	float: right;
 }
