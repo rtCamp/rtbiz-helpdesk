@@ -308,25 +308,21 @@ jQuery( document ).ready( function ( $ ) {
 		jQuery('span',this).toggleClass('dashicons-arrow-up-alt2 dashicons-arrow-down-alt2');
 	});
 
-	jQuery('.rthd-add-contact-icon' ).click( function ( e ) {
-		e.preventDefault();
-		e.stopPropagation();
-		toggle_add_people_box();
+	jQuery('#rthd-add-contact' ).click( function ( e ) {
+        if(jQuery('.rthd-add-people-box' ).is(':visible')){
+            jQuery('.rthd-add-people-box' ).hide();
+        } else {
+            jQuery('.rthd-add-people-box' ).show();
+        }
+        e.preventDefault();
+        e.stopPropagation();
 	});
-	function toggle_add_people_box(){
-		if(jQuery('.rthd-add-people-box' ).is(':visible')){
-			jQuery('.rthd-add-people-box' ).hide();
-		} else {
-			jQuery('.rthd-add-people-box' ).show();
-		}
-	}
-
 
 	jQuery(document).mouseup(function (e){
 
         var container = jQuery(".rthd-add-people-box");
         if ( ! container.is(e.target)  // if the target of the click isn't the container...
-            && container.has(e.target).length === 0 && !jQuery('.rthd-add-contact-icon').is( e.target ) ) // ... nor a descendant of the container
+            && container.has(e.target).length === 0 && ! jQuery('.rthd-add-contact-icon').is( e.target ) ) // ... nor a descendant of the container
         {
             if(container.is(':visible')){
                 //console.log('hiding');
