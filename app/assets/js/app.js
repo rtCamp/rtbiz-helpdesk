@@ -308,7 +308,7 @@ jQuery( document ).ready( function ( $ ) {
 		jQuery('span',this).toggleClass('dashicons-arrow-up-alt2 dashicons-arrow-down-alt2');
 	});
 
-	jQuery('#rthd-add-contact' ).click( function ( e ) {
+	jQuery('.rthd-add-contact-icon' ).click( function ( e ) {
 		e.preventDefault();
 		e.stopPropagation();
 		toggle_add_people_box();
@@ -323,14 +323,14 @@ jQuery( document ).ready( function ( $ ) {
 
 
 	jQuery(document).mouseup(function (e){
-        var container = $(".rthd-add-people-box");
 
-        if ( ! container.is(e.target) // if the target of the click isn't the container...
-            && container.has(e.target).length === 0) // ... nor a descendant of the container
+        var container = jQuery(".rthd-add-people-box");
+        if ( ! container.is(e.target)  // if the target of the click isn't the container...
+            && container.has(e.target).length === 0 && !jQuery('.rthd-add-contact-icon').is( e.target ) ) // ... nor a descendant of the container
         {
-            if(jQuery('.rthd-add-people-box' ).is(':visible')){
+            if(container.is(':visible')){
                 //console.log('hiding');
-                jQuery('.rthd-add-people-box' ).hide();
+	            container.hide();
             }
         }
     });
