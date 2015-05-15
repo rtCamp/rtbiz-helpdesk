@@ -62,15 +62,17 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 				$label = '';
 				if (  isset( $_GET[ 'rt_contact_group' ] ) && 'staff' == $_GET[ 'rt_contact_group' ] ) {
 					$label = "Staff";
+					$labelp = $label;
 				} elseif ( isset( $_GET[ 'rt_contact_group' ] ) && 'customer' == $_GET[ 'rt_contact_group' ] ) {
 					$label = "Customer";
+					$labelp = $label. "s";
 				}
 				if ( !empty( $label ) ){
 					$labels = array(
-						'name' => __( $label ),
+						'name' => __( $labelp ),
 						'singular_name' => __( $label ),
-						'menu_name' => __( $label ),
-						'all_items' => __( 'All ' . $label . 's' ),
+						'menu_name' => __( $labelp ),
+						'all_items' => __( 'All ' . $labelp ),
 						'add_new' => __( 'New ' . $label ),
 						'add_new_item' => __( 'Add ' . $label ),
 						'edit_item' => __( 'Edit '. $label ),

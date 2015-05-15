@@ -218,37 +218,23 @@ if ( ! class_exists( 'Rt_Hd_Help' ) ) {
 				case 'edit_ticket_overview':
 					?>
 					<p>
-						<?php _e( 'From this screen you can add new Ticket into the system.' ); ?>
-						<?php _e( 'You can fill up optional additional details related to product such as title details, Subscriber, Attachment, External link etc.' ); ?>
-						<?php _e( 'Those can be updated later on from the Edit ticket screen as well.' ); ?>
+						<?php _e( 'Screen to add a new ticket. Only staff can create ticket from this screen. ' ); ?>
 					</p>
 					<?php
 					break;
 				case 'create_Ticket_screen_content':
 				case 'edit_ticket_screen_content':
 					?>
-					<p><?php _e( 'There are a few sections where you can save essential information about Ticket: ' ); ?></p>
 					<ul>
-						<li><?php _e( 'There is a textbox for the title of a product.' ); ?></li>
-						<li><?php _e( 'You can also put any description/comments related to the product in to the rich text editor provided.' ); ?></li>
-						<li>
-							<?php _e( 'There\'s a follow up.' ); ?>
-							<?php _e( 'You can mark the checkbox accordingly for that.' ); ?>
-						</li>
-						<li>
-							<?php _e( 'There might be other extra attributes metaboxes depending upon how you add an attribute from the attributes page' ); ?>
-							<a href="<?php echo esc_url( add_query_arg( array( 'page' => Rt_Biz_Attributes::$attributes_page_slug ), admin_url( 'admin.php' ) ) ); ?>"><?php _e( 'here' ); ?></a>.
-						</li>
-						<li>
-							<?php _e( 'You will see a numerous "Connected X" metaboxes in the side colum.' ); ?>
-							<?php _e( 'They are the supportive modules of the system which are connected to the Ticket.' ); ?>
-							<?php _e( 'E.g., An Customer is connected to a product since a contact can be a part of an company.' ); ?>
-							<?php _e( 'You can select any entity from the metabox to connect it to the contact.' ); ?>
-						</li>
-						<li>
-							<?php _e( 'There might be metaboxes visible depending upon the plugins you\'ve activated on the site.' ); ?>
-							<?php _e( 'E.g., If HRM Module is activated then "Documents" metabox & "Leaves" metabox also will be displayed for those who are team mates.' ); ?>
-						</li>
+						<li><strong><?php _e( 'Title - ' ); ?></strong><?php _e( 'Ticket title' ); ?></li>
+						<li><strong><?php _e( 'Ticket Information - ' ); ?></strong><?php _e( 'Has information about ticket creations date, customer who created ticket, ticket assignee and status.' ); ?></li>
+						<li><strong><?php _e( 'Offerings - ' ); ?></strong><?php _e( 'The offering/product for which customer has created a ticket' ); ?></li>
+						<li><strong><?php _e( 'Team - ' ); ?></strong><?php _e( ' Staff members can update the relevant user departments the ticket belongs to.' ); ?></li>
+						<li><strong><?php _e( 'Participant (Customers) - ' ); ?></strong><?php _e( 'Non-staff people on ticket who have been added by ticket author/customer' ); ?></li>
+						<li><strong><?php _e( 'Participant (Staff) - ' ); ?></strong><?php _e( 'Staff people (other than assignee) on ticket.' ); ?></li>
+						<li><strong><?php _e( 'Related Tickets - ' ); ?></strong><?php _e( 'Option for staff to connect two tickets ' ); ?></li>
+						<li><strong><?php _e( 'Teams - ' ); ?></strong><?php _e( 'Team that is handling a ticket' ); ?></li>
+						<li><strong><?php _e( 'Blacklist Contacts - ' ); ?></strong><?php _e( "To blacklist contacts from which spam tickets are being created. A blacklisted contact can't create tickets and can't add replies to a ticket." ); ?></li>
 					</ul>
 					<?php
 					break;
