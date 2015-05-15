@@ -203,8 +203,11 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 				$modifydate = $modify->format( 'M d, Y h:i A' );
 				?>
 				<div class="row_group">
-					<span class="prefix"
-						  title="<?php _e( 'Last Reply On', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Last Reply On', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
+					<p>
+						<span class="prefix" title="<?php _e( 'Last Reply On', RT_HD_TEXT_DOMAIN ); ?>">
+							<label><strong><?php _e( 'Last Reply On', RT_HD_TEXT_DOMAIN ); ?></strong></label>
+						</span>
+					</p>
 					<input class="moment-from-now" type="text" placeholder="Last Reply On Date"
 						   value="<?php echo esc_attr( $modifydate ); ?>" title="<?php echo esc_attr( $modifydate ); ?>"
 						   readonly="readonly">
@@ -221,10 +224,12 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 				}
 				?>
 				<div class="row_group">
-					<span class="prefix" title="<?php _e( 'Adult Content', RT_HD_TEXT_DOMAIN ); ?>">
-						<label><strong><?php _e( 'Adult Content', RT_HD_TEXT_DOMAIN ); ?></strong></label>
-					</span>
-					<input type="checkbox" name="post[adult_ticket]" <?php echo $text; ?> value="1" />
+					<p>
+						<span class="prefix" title="<?php _e( 'Adult Content', RT_HD_TEXT_DOMAIN ); ?>">
+							<label><strong><?php _e( 'Adult Content', RT_HD_TEXT_DOMAIN ); ?></strong></label>
+						</span>
+						<input type="checkbox" name="post[adult_ticket]" <?php echo $text; ?> value="1" />
+					</p>
 				</div>
 			<?php } ?>
 

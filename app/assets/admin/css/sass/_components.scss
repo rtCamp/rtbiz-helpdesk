@@ -129,6 +129,7 @@
     word-break: keep-all;
 }
 
+#divSubscriberList .delete_row,
 .delete_row.rthd_delete_attachment {
 	background-color: transparent;
 	border-radius: 0;
@@ -194,4 +195,62 @@ a#rthd-new-support-page{
 
 #rthd-support-spinner{
 	position: absolute;
+}
+
+.rthd-ticket-author {
+	text-align: center;
+
+	a {
+		display: inline-block;
+	}
+
+	span {
+		display: block;
+		word-break: break-all;
+	}
+}
+
+.rthd-avatar-img {
+	border-radius: 100%;
+}
+
+.rthd_ticket_followup {
+	text-align: center;
+
+	.post-com-count {
+		display: inline-block;
+	}
+}
+
+.rthd_ticket_assignee {
+	text-align: center;
+
+	span {
+		display: block;
+	}
+}
+
+.rthd_ticket_status {
+	.rthd-status {
+		min-width: 70px;
+		text-align: center;
+	}
+}
+
+#rt-hd-ticket-data {
+	input[type="text"],
+	select {
+		width: 100%;
+	}
+}
+
+.rthd-author-row {
+	.rthd-tip-bottom {
+		right: -10px;
+	}
+
+	.rthd-tip-bottom::after,
+	.rthd-tip-bottom::before {
+		left: 89%;
+	}
 }

@@ -121,7 +121,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 				<h2><?php _e( 'rtBiz Helpdesk Setup', RT_BIZ_TEXT_DOMAIN ); ?></h2>
 				<hr>
 				<!--				<div class="updated notice notice-success is-dismissible below-h2 rthd-hide-notice-setup-wizard" id="message">
-									<p><?php //_e( 'Thank you for choosing rtBiz', RT_BIZ_TEXT_DOMAIN );    ?></p>
+									<p><?php //_e( 'Thank you for choosing rtBiz', RT_BIZ_TEXT_DOMAIN );     ?></p>
 								</div>-->
 
 				<div class="rthd-row-container">
@@ -547,7 +547,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 										</span>
 									</span>
 								</th>
-								<th><span><?php _e( 'Author', RT_HD_TEXT_DOMAIN ); ?></span>
+								<th class="rthd-author-row"><span><?php _e( 'Author', RT_HD_TEXT_DOMAIN ); ?></span>
 									<span class="rthd-tooltip">
 										<i class="dashicons dashicons-info rtmicon"></i>
 										<span class="rthd-tip-bottom">

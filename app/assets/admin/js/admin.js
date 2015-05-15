@@ -200,7 +200,7 @@ jQuery( document ).ready( function () {
 						},
 						select: function ( event, ui ) {
 							if ( jQuery( "#subscribe-auth-" + ui.item.id ).length < 1 ) {
-								jQuery( "#divSubscriberList" ).append( "<li id='subscribe-auth-" + ui.item.id + "' class='contact-list' >" + ui.item.imghtml + "<a href='#removeSubscriber' class='delete_row'>×</a><br/><a class='subscribe-title heading' target='_blank' href='" + ui.item.user_edit_link + "'>" + ui.item.label + "</a><input type='hidden' name='subscribe_to[]' value='" + ui.item.id + "' /></li>" )
+								jQuery( "#divSubscriberList" ).append( "<li id='subscribe-auth-" + ui.item.id + "' class='contact-list' >" + ui.item.imghtml + "<a href='#removeSubscriber' class='delete_row'><span class='dashicons dashicons-dismiss'></span></a><br/><a class='subscribe-title heading' target='_blank' href='" + ui.item.user_edit_link + "'>" + ui.item.label + "</a><input type='hidden' name='subscribe_to[]' value='" + ui.item.id + "' /></li>" )
 							}
 							jQuery( "#subscriber_user_ac" ).val( "" );
 							return false;
