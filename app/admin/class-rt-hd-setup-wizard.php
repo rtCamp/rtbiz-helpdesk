@@ -551,7 +551,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 									<span class="rthd-tooltip">
 										<i class="dashicons dashicons-info rtmicon"></i>
 										<span class="rthd-tip-bottom">
-											<?php _e( 'Can manager only the tickets assigned to him/her. No access to settings.', RT_HD_TEXT_DOMAIN ); ?>
+											<?php _e( 'Can manage only the tickets assigned to them. No access to settings.', RT_HD_TEXT_DOMAIN ); ?>
 										</span>
 									</span>
 								</th>

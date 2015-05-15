@@ -149,6 +149,9 @@ if ( ! class_exists( 'RT_WP_Helpdesk' ) ) {
 		function load_scripts() {
 			global $wp_query, $post;
 
+			// include this css everywhere
+			wp_enqueue_style( 'rthd-common-css', RT_HD_URL . 'app/assets/css/rthd-common.css', array(), RT_HD_VERSION, 'all' );
+
 			if ( ! isset( $wp_query->query_vars[ 'post_type' ] ) || $wp_query->query_vars[ 'post_type' ] != Rt_HD_Module::$post_type || empty( $post ) ) {
 				return;
 			}

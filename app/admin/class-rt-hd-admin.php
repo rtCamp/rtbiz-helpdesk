@@ -117,6 +117,8 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 			} elseif ( isset( $_GET[ 'post_type' ] ) && ( $pagenow == 'post-new.php' || $pagenow == 'edit.php' ) ) {
 				$rthd_post_type = $_GET[ 'post_type' ];
 			}
+			// include this css everywhere
+			wp_enqueue_style( 'rthd-common-css', RT_HD_URL . 'app/assets/css/rthd-common.css', array(), RT_HD_VERSION, 'all' );
 
 			if ( in_array( $pagenow, array( 'edit.php', 'post.php', 'post-new.php' ) ) && $rthd_post_type == Rt_HD_Module::$post_type ) {
 
