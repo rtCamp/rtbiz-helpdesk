@@ -621,3 +621,9 @@ img#hdspinner{
 .rthd-followup-action {
 	float: right;
 }
+
+.rthd-visibility-wrap input[type="radio"]{
+	display: inline;
+	min-height: 0;
+	margin-top: 0;
+}

@@ -32,10 +32,10 @@ global $current_user;
 				<div id="private-comment">
 					<div class="rthd-visibility-wrap">
 						<label class="rthd-visibility"> Visibility: </label>
-						<input type="radio" class="radio" name="private_comment" value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC; ?>" id="followup_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>" checked />
-						<label for="followup_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"> <?php echo rthd_get_comment_type( Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ) ?></label>
-						<input type="radio" class="radio" name="private_comment" value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF; ?>" id="followup_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF ?>" />
-						<label for="followup_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF ?>"> <?php echo rthd_get_comment_type( Rt_HD_Import_Operation::$FOLLOWUP_STAFF ) ?> </label>
+						<input type="radio" class="radio" name="private_comment" value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC; ?>" id="followup_privacy_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>" checked />
+						<label for="followup_privacy_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"> <?php echo rthd_get_comment_type( Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ) ?></label>
+						<input type="radio" class="radio" name="private_comment" value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF; ?>" id="followup_privacy_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF ?>" />
+						<label for="followup_privacy_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF ?>"> <?php echo rthd_get_comment_type( Rt_HD_Import_Operation::$FOLLOWUP_STAFF ) ?> </label>
 					</div>
 				</div>
 			<?php } else { ?>
