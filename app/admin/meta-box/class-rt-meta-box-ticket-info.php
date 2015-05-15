@@ -28,7 +28,8 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 		 */
 		public static function ui( $post ) {
 
-			global $rt_hd_module, $rt_hd_attributes;
+			global $rt_hd_module, $rt_hd_attributes, $rt_hd_cpt_tickets;
+
 			$labels = $rt_hd_module->labels;
 			$post_type = Rt_HD_Module::$post_type;
 
@@ -124,9 +125,15 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 					if ( ! empty( $created_by ) ) {
 						?>
 						<ul>
-							<li class="rthd-info-meta-created-by-li">
+								<li class="rthd-info-meta-created-by-li">
 								<p>
-									<?php echo get_avatar( $created_by->user_email, 25 ); ?>
+									<?php
+									add_filter( 'get_avatar', array( $rt_hd_cpt_tickets, 'add_gravatar_class' ) );
+
+									echo get_avatar( $created_by->user_email, 25 );
+
+									remove_filter( 'get_avatar', array( $rt_hd_cpt_tickets, 'add_gravatar_class' ) );
+									?>
 									<!--								<a href="#deleteContactUser" class="delete_row">×</a><br>-->
 									<a class="rthd-info-meta-created-by heading" target="_blank" href="<?php echo rthd_biz_user_profile_link( $created_by->user_email ); ?>"><?php echo $created_by->display_name; ?></a>
 									<input type="hidden" name="post[rthd_created_by]" value="<?php echo $created_by->ID; ?>" />
