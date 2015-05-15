@@ -541,7 +541,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				if( ! empty( $arrProducts ) ) {
 					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_offerings}', $arrProducts);
 				} else {
-					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_offerings}', 'No Offering' );
+					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_offerings}', 'No offering found' );
 				}
 				if ( isset( $body ) && !empty( $body ) ){
 					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_body}', '<div>' . rthd_content_filter( $body ) . '</div>' );
@@ -562,7 +562,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				if( ! empty( $arrProducts ) ) {
 					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_offerings}', $arrProducts );
 				} else {
-					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_offerings}', 'No Offering' );
+					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_offerings}', 'No offering found' );
 				}
 				if ( isset( $body ) && !empty( $body ) ){
 					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_body}', '<div>' . rthd_content_filter( $body ) . '</div>' );
@@ -585,7 +585,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				if( ! empty( $arrProducts ) ) {
 					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_offerings}', $arrProducts );
 				} else {
-					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_offerings}', 'No Offering' );
+					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_offerings}', 'No offering found' );
 				}
 				if ( isset( $body ) && !empty( $body ) ){
 					$htmlbody = rthd_replace_placeholder( $htmlbody,'{ticket_body}', '<div>' . rthd_content_filter( $body ) . '</div>' );

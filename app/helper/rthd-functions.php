@@ -1689,9 +1689,8 @@ function rthd_get_default_email_template( $key = '', $all = false ) {
 				A followup updated by <strong>{followup_updated_by}.</strong> {ticket_link}
 			</div>
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0" />
-			<div>The changes are as follows:</div>
 			<div style="font-size: 16px; line-height: 26px; color: #888888;">
-				Followup content: <div style="color: #333333; ">{followup_diff}</div>
+				The changes are as follows: <div style="color: #333333; ">{followup_diff}</div>
 			</div>
 		    <hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
 

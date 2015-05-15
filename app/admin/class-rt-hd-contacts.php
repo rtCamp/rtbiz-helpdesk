@@ -308,6 +308,34 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 			}
 
 			switch ( $column ) {
+				case Rt_HD_Module::$post_type:
+					$userid = rt_biz_get_wp_user_for_contact( $post_id );
+					if ( ! empty( $userid[0] ) ) {
+						if ( ! empty ( $_REQUEST[ 'rt_contact_group' ] ) && $_REQUEST[ 'rt_contact_group' ] == 'staff' ) {
+							$args  = array(
+								'post_type'   => Rt_HD_Module::$post_type,
+								'post_status' => 'any',
+								'author'      => $userid[ 0 ]->id,
+							);
+							$query = new WP_Query( $args );
+							$link = get_admin_url().'edit.php?post_type='.Rt_HD_Module::$post_type.'&assigned='.$userid[ 0 ]->id;
+							echo '<a href="'.$link.'" target="_blank">'.$query->found_posts.'</a>';
+						} else {
+							$args  = array(
+								'post_type'   => Rt_HD_Module::$post_type,
+								'post_status' => 'any',
+								'meta_key'    => '_rtbiz_hd_created_by',
+								'meta_value'  => $userid[ 0 ]->id,
+							);
+							$query = new WP_Query( $args );
+							$link = get_admin_url().'edit.php?post_type='.Rt_HD_Module::$post_type.'&created_by='.$userid[ 0 ]->id;
+							echo '<a href="'.$link.'" target="_blank">'.$query->found_posts.'</a>';
+						}
+					} else {
+						echo '0';
+					}
+					break;
+
 				case 'hd_role':
 					$permission_role = '-';
 					$userid = rt_biz_get_wp_user_for_contact( $post_id );
