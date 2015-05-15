@@ -76,6 +76,7 @@ $user_edit_content = current_user_can( $cap );
 								$watch_unwatch_value = 'watch';
 							}
 						}
+
 						if ( ! empty( $watch_unwatch_label ) ) {
 							?>
 							<a id="rthd-ticket-watch-unwatch" href="#" data-value="<?php echo $watch_unwatch_value; ?>" title="<?php _e( $watch_unwatch_label ) ?>">
@@ -242,7 +243,7 @@ $user_edit_content = current_user_can( $cap );
 										 src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
 										 <?php
 									 } else {
-										 echo '<span>' . $ticket_offering[ 0 ]->name . '</span>';
+										 echo '<strong>' . $ticket_offering[ 0 ]->name . '</strong>';
 									 }
 									 ?>
 							</div>
