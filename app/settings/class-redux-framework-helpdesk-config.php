@@ -37,25 +37,26 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			add_filter( 'rtbiz_offering_setting', array( $this, 'rthd_offering_setting' ) );
 
 			//after redux setting saved
-			add_action( 'redux/options/' . self::$hd_opt . '/saved',  array( $this, 'rt_on_redux_save' ), 10, 2 );
+			add_action( 'redux/options/' . self::$hd_opt . '/saved', array( $this, 'rt_on_redux_save' ), 10, 2 );
 		}
 
-		function rthd_offering_setting( $setting ){
+		function rthd_offering_setting( $setting ) {
 			$redux = rthd_get_redux_settings();
 			if ( ! empty( $redux['offering_plugin'] ) ) {
-				if ( empty( $redux['offering_plugin'] ) ){
+				if ( empty( $redux['offering_plugin'] ) ) {
 					$redux['offering_plugin'] = array();
 				}
 				$setting = $redux['offering_plugin'];
 			}
+
 			return $setting;
 		}
 
-		public function rt_on_redux_save( $setting, $old_setting ){
+		public function rt_on_redux_save( $setting, $old_setting ) {
 			//removed offering sync option
 			$diff = array();
 
-			if ( isset( $setting['offering_plugin'] ) && isset( $old_setting['offering_plugin'] ) ){
+			if ( isset( $setting['offering_plugin'] ) && isset( $old_setting['offering_plugin'] ) ) {
 				$diff = array_diff( $setting['offering_plugin'], $old_setting['offering_plugin'] );
 				$diff = array_unique( $diff );
 			}
@@ -71,12 +72,11 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			// Set the default arguments
 			$this->set_arguments();
 
-
 			// Set a few help tabs so you can see how it's done
 			//			$this->set_helptabs();
 
 			// Create the sections and fields
-			if ( !empty($_GET['page']) && ! empty( $_GET['post_type'] ) &&  $_GET['page'] === self::$page_slug && $_GET['post_type'] === Rt_HD_Module::$post_type ) {
+			if ( ! empty( $_GET['page'] ) && ! empty( $_GET['post_type'] ) && self::$page_slug === $_GET['page'] && Rt_HD_Module::$post_type === $_GET['post_type'] ) {
 				$this->set_sections();
 			}
 
@@ -150,7 +150,10 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 
 			// Used to hide the demo mode link from the plugin page. Only used when Redux is a plugin.
 			if ( class_exists( 'ReduxFrameworkPlugin' ) ) {
-				remove_filter( 'plugin_row_meta', array( ReduxFrameworkPlugin::instance(), 'plugin_metalinks', ), null, 2 );
+				remove_filter( 'plugin_row_meta', array(
+					ReduxFrameworkPlugin::instance(),
+					'plugin_metalinks',
+				), null, 2 );
 
 				// Used to hide the activation notice informing users of the demo panel. Only used when Redux is a plugin.
 				remove_action( 'admin_notices', array( ReduxFrameworkPlugin::instance(), 'admin_notices' ) );
@@ -182,11 +185,11 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			$system_emails = rtmb_get_module_mailbox_emails( RT_HD_TEXT_DOMAIN );
 
 			$mailbox_options = array();
-			foreach( $system_emails as $email ) {
+			foreach ( $system_emails as $email ) {
 
 				$mailbox_options[ $email ] = $email;
 			}
-			$acl_page_link = '<a href="' . admin_url( 'admin.php?page=' . Rt_Biz::$access_control_slug ) . '">Access Control</a> page.';
+			$acl_page_link       = '<a href="' . admin_url( 'admin.php?page=' . Rt_Biz::$access_control_slug ) . '">Access Control</a> page.';
 			$offerings_page_link = '<a href="' . admin_url( 'edit-tags.php?taxonomy=' . Rt_Offerings::$offering_slug . '&post_type=' . Rt_HD_Module::$post_type ) . '">offerings</a>';
 			// ACTUAL DECLARATION OF SECTIONS
 			$general_fields = array(
@@ -206,7 +209,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					'type'     => 'checkbox',
 					'options'  => array(
 						'woocommerce' => __( 'WooCommerce' ),
-						'edd' => __( 'Easy Digital Download' ),
+						'edd'         => __( 'Easy Digital Download' ),
 					),
 					'default'  => '',
 				),
@@ -238,16 +241,18 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				'fields'      => $general_fields,
 			);
 
-			if (  ! current_user_can( $admin_cap ) ){
+			if ( ! current_user_can( $admin_cap ) ) {
 				$this->sections[] = array(
 					'icon'        => 'el-icon-cogs',
 					'title'       => __( 'Note' ),
 					'permissions' => $editor_cap,
-					'fields'      => array( array (
-						'id'      => 'rt_hd_no_access',
-						'type'    => 'raw',
-						'content'   => rthd_no_access_redux(),
-					) )
+					'fields'      => array(
+						array(
+							'id'      => 'rt_hd_no_access',
+							'type'    => 'raw',
+							'content' => rthd_no_access_redux(),
+						),
+					)
 				);
 			}
 
@@ -270,39 +275,37 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				),
 			);
 
-
-
 			$email_fields = array();
 
 			array_push( $email_fields, array(
-				'id'      => 'rthd_Mailboxes_setup',
-				'type'    => 'callback',
-				'title'   => 'Mailboxes Setup',
+				'id'       => 'rthd_Mailboxes_setup',
+				'type'     => 'callback',
+				'title'    => 'Mailboxes Setup',
 				'subtitle' => __( 'Helpdesk Configured Mailbox(s)' ),
 				'callback' => 'rthd_mailbox_setup_view',
 			) );
 
 			if ( ! empty( $system_emails ) ) {
-				array_push($email_fields, array(
-					'id' => 'rthd_enable_mailbox_reading',
-					'type' => 'switch',
-					'title' => __('Mailbox Reading'),
-					'subtitle' => __('To enable/disable Mailbox Reading'),
-					'default' => true,
-					'on' => __('Enable'),
-					'off' => __('Disable'),
-				));
+				array_push( $email_fields, array(
+					'id'       => 'rthd_enable_mailbox_reading',
+					'type'     => 'switch',
+					'title'    => __( 'Mailbox Reading' ),
+					'subtitle' => __( 'To enable/disable Mailbox Reading' ),
+					'default'  => true,
+					'on'       => __( 'Enable' ),
+					'off'      => __( 'Disable' ),
+				) );
 
-				array_push($email_fields, array(
-					'id' => 'rthd_reply_via_email',
-					'type' => 'switch',
-					'title' => __('Reply Via Email'),
-					'subtitle' => __('To enable/disable Reply Via Email'),
-					'default' => true,
-					'on' => __('Enable'),
-					'off' => __('Disable'),
+				array_push( $email_fields, array(
+					'id'       => 'rthd_reply_via_email',
+					'type'     => 'switch',
+					'title'    => __( 'Reply Via Email' ),
+					'subtitle' => __( 'To enable/disable Reply Via Email' ),
+					'default'  => true,
+					'on'       => __( 'Enable' ),
+					'off'      => __( 'Disable' ),
 					'required' => array( 'rthd_enable_mailbox_reading', '=', 1 ),
-				));
+				) );
 
 				array_push( $email_fields, array(
 					'id'       => 'rthd_outgoing_email_mailbox',
@@ -372,7 +375,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'validate'   => 'email',
 						'multi'      => true,
 						'show_empty' => false,
-						'add_text'   => 'Add Emails'
+						'add_text'   => 'Add Emails',
 					),
 					array(
 						'id'       => 'rthd_enable_notification_acl',
@@ -390,109 +393,108 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'required' => array( 'rthd_enable_notification_acl', '=', 1 ),
 					),
 					array(
-						'id'       => 'rthd_notification_acl_client_events',
-						'title'    => __( 'Notification Event for Client [ Contact ] ' ),
-						'type'     => 'checkbox',
-						'default'	   => array(
-							'new_ticket_created_mail' => '1',
-							'new_followup_created_mail' => '1' ),
+						'id'      => 'rthd_notification_acl_client_events',
+						'title'   => __( 'Notification Event for Client [ Contact ] ' ),
+						'type'    => 'checkbox',
+						'default' => array(
+							'new_ticket_created_mail'   => '1',
+							'new_followup_created_mail' => '1',
+						),
 						'options' => array(
-							'new_ticket_created_mail'	=> __( 'When a customer creates a ticket via the web form or email' ),
-							'new_followup_created_mail'	=> __( 'When a new follow-up is added to a ticket' ),
-							'new_followup_updated_mail'	=> __( 'When any follow-up is edited by staff' ),
-							'new_followup_deleted_mail'	=> __( 'When a follow-up is deleted by staff/customer' ),
+							'new_ticket_created_mail'   => __( 'When a customer creates a ticket via the web form or email' ),
+							'new_followup_created_mail' => __( 'When a new follow-up is added to a ticket' ),
+							'new_followup_updated_mail' => __( 'When any follow-up is edited by staff' ),
+							'new_followup_deleted_mail' => __( 'When a follow-up is deleted by staff/customer' ),
 							//'new_customer_accoutn_created_mail'	=> __( 'When a customer creates a ticket for the first time and an account is created automatically for them' ),
 							//'ticket_solved_mail'	=> __( 'When a ticket status is changed to solved' ),
 						),
 					),
 					array(
-						'id'       => 'rthd_notification_acl_assignee_events',
-						'title'    => __( 'Notification Event for Assignee' ),
-						'type'     => 'checkbox',
-						'default'	   => array(
-							'new_ticket_created_mail' => '1',
-							'new_followup_created_mail' => '1',
-							'new_followup_updated_mail' => '1',
-							'new_followup_deleted_mail' => '1',
-							'ticket_reassigned_mail' => '1',
+						'id'      => 'rthd_notification_acl_assignee_events',
+						'title'   => __( 'Notification Event for Assignee' ),
+						'type'    => 'checkbox',
+						'default' => array(
+							'new_ticket_created_mail'              => '1',
+							'new_followup_created_mail'            => '1',
+							'new_followup_updated_mail'            => '1',
+							'new_followup_deleted_mail'            => '1',
+							'ticket_reassigned_mail'               => '1',
 							'new_staff_only_followup_created_mail' => '1',
-							'ticket_updated_mail' => '1',
+							'ticket_updated_mail'                  => '1',
 						),
 						'options' => array(
-							'new_ticket_created_mail'	=> __( 'When a customer creates a ticket via the web form or email' ),
-							'new_followup_created_mail'	=> __( 'When a New follow-up is added to a ticket' ),
-							'new_followup_updated_mail'	=> __( 'When a follow-up is edited by staff/customer' ),
-							'new_followup_deleted_mail'	=> __( 'When a follow-up is deleted by staff/customer' ),
-							'ticket_reassigned_mail'	=> __( 'When a ticket is reassigned' ),
-							'new_staff_only_followup_created_mail'	=> __( 'When a staff-only follow-up is added/edited on a ticket' ),
-							'ticket_updated_mail'	=> __( 'When any status or metadata changed for a ticket' ),
-							'new_subscriber_added_mail'	=> __( 'When a staff member subscribes to a ticket' ),
-							'subscriber_removed_mail'	=> __( 'When a subscriber is removed from a ticket' ),
+							'new_ticket_created_mail'              => __( 'When a customer creates a ticket via the web form or email' ),
+							'new_followup_created_mail'            => __( 'When a New follow-up is added to a ticket' ),
+							'new_followup_updated_mail'            => __( 'When a follow-up is edited by staff/customer' ),
+							'new_followup_deleted_mail'            => __( 'When a follow-up is deleted by staff/customer' ),
+							'ticket_reassigned_mail'               => __( 'When a ticket is reassigned' ),
+							'new_staff_only_followup_created_mail' => __( 'When a staff-only follow-up is added/edited on a ticket' ),
+							'ticket_updated_mail'                  => __( 'When any status or metadata changed for a ticket' ),
+							'new_subscriber_added_mail'            => __( 'When a staff member subscribes to a ticket' ),
+							'subscriber_removed_mail'              => __( 'When a subscriber is removed from a ticket' ),
 						),
 					),
 					array(
-						'id'       => 'rthd_notification_acl_staff_events',
-						'title'    => __( 'Notification Event for Staff [ Subscriber ]' ),
-						'type'     => 'checkbox',
-						'default'	   => array(
-							'new_ticket_created_mail' => '1',
-							'new_followup_created_mail' => '1',
-							'new_followup_updated_mail' => '1',
-							'new_followup_deleted_mail' => '1',
-							'ticket_reassigned_mail' => '1',
+						'id'      => 'rthd_notification_acl_staff_events',
+						'title'   => __( 'Notification Event for Staff [ Subscriber ]' ),
+						'type'    => 'checkbox',
+						'default' => array(
+							'new_ticket_created_mail'              => '1',
+							'new_followup_created_mail'            => '1',
+							'new_followup_updated_mail'            => '1',
+							'new_followup_deleted_mail'            => '1',
+							'ticket_reassigned_mail'               => '1',
 							'new_staff_only_followup_created_mail' => '1',
-							'ticket_updated_mail' => '1',
+							'ticket_updated_mail'                  => '1',
 						),
 						'options' => array(
-							'new_ticket_created_mail'	=> __( 'When a customer creates a ticket via the web form or email' ),
-							'new_followup_created_mail'	=> __( 'When a New follow-up is added to a ticket' ),
-							'new_followup_updated_mail'	=> __( 'When a follow-up is edited by staff/customer' ),
-							'new_followup_deleted_mail'	=> __( 'When a follow-up is deleted by staff/customer' ),
-							'ticket_reassigned_mail'	=> __( 'When a ticket is reassigned' ),
-							'new_staff_only_followup_created_mail'	=> __( 'When a staff-only follow-up is added/edited on a ticket' ),
-							'ticket_updated_mail'	=> __( 'When any status or metadata changed for a ticket' ),
-							'new_subscriber_added_mail'	=> __( 'When a staff member subscribes to a ticket' ),
-							'subscriber_removed_mail'	=> __( 'When a subscriber is removed from a ticket' ),
+							'new_ticket_created_mail'              => __( 'When a customer creates a ticket via the web form or email' ),
+							'new_followup_created_mail'            => __( 'When a New follow-up is added to a ticket' ),
+							'new_followup_updated_mail'            => __( 'When a follow-up is edited by staff/customer' ),
+							'new_followup_deleted_mail'            => __( 'When a follow-up is deleted by staff/customer' ),
+							'ticket_reassigned_mail'               => __( 'When a ticket is reassigned' ),
+							'new_staff_only_followup_created_mail' => __( 'When a staff-only follow-up is added/edited on a ticket' ),
+							'ticket_updated_mail'                  => __( 'When any status or metadata changed for a ticket' ),
+							'new_subscriber_added_mail'            => __( 'When a staff member subscribes to a ticket' ),
+							'subscriber_removed_mail'              => __( 'When a subscriber is removed from a ticket' ),
 						),
 					),
 					array(
-						'id'       => 'rthd_notification_acl_group_events',
-						'title'    => __( 'Notification Event for Group [ Global ]' ),
-						'type'     => 'checkbox',
-						'default'	   => array(
-							'new_ticket_created_mail' => '1',
-							'new_followup_created_mail' => '1',
-							'new_followup_updated_mail' => '1',
-							'new_followup_deleted_mail' => '1',
-							'ticket_reassigned_mail' => '1',
+						'id'      => 'rthd_notification_acl_group_events',
+						'title'   => __( 'Notification Event for Group [ Global ]' ),
+						'type'    => 'checkbox',
+						'default' => array(
+							'new_ticket_created_mail'              => '1',
+							'new_followup_created_mail'            => '1',
+							'new_followup_updated_mail'            => '1',
+							'new_followup_deleted_mail'            => '1',
+							'ticket_reassigned_mail'               => '1',
 							'new_staff_only_followup_created_mail' => '1',
-							'ticket_updated_mail' => '1',
+							'ticket_updated_mail'                  => '1',
 						),
 						'options' => array(
-							'new_ticket_created_mail'	=> __( 'When a customer creates a ticket via the web form or email' ),
-							'new_followup_created_mail'	=> __( 'When a New follow-up is added to a ticket' ),
-							'new_followup_updated_mail'	=> __( 'When a follow-up is edited by staff/customer' ),
-							'new_followup_deleted_mail'	=> __( 'When a follow-up is deleted by staff/customer' ),
-							'ticket_reassigned_mail'	=> __( 'When a ticket is reassigned' ),
-							'new_staff_only_followup_created_mail'	=> __( 'When a staff-only follow-up is added/edited on a ticket' ),
-							'ticket_updated_mail'	=> __( 'When any status or metadata changed for a ticket' ),
-							'new_subscriber_added_mail'	=> __( 'When a staff member subscribes to a ticket' ),
-							'subscriber_removed_mail'	=> __( 'When a subscriber is removed from a ticket' ),
+							'new_ticket_created_mail'              => __( 'When a customer creates a ticket via the web form or email' ),
+							'new_followup_created_mail'            => __( 'When a New follow-up is added to a ticket' ),
+							'new_followup_updated_mail'            => __( 'When a follow-up is edited by staff/customer' ),
+							'new_followup_deleted_mail'            => __( 'When a follow-up is deleted by staff/customer' ),
+							'ticket_reassigned_mail'               => __( 'When a ticket is reassigned' ),
+							'new_staff_only_followup_created_mail' => __( 'When a staff-only follow-up is added/edited on a ticket' ),
+							'ticket_updated_mail'                  => __( 'When any status or metadata changed for a ticket' ),
+							'new_subscriber_added_mail'            => __( 'When a staff member subscribes to a ticket' ),
+							'subscriber_removed_mail'              => __( 'When a subscriber is removed from a ticket' ),
 						),
 					),
 					array(
-						'id'       => 'section-notification_acl-start',
-						'type'     => 'section',
-						'indent'   => false, // Indent all options below until the next 'section' option is set.
+						'id'     => 'section-notification_acl-start',
+						'type'   => 'section',
+						'indent' => false, // Indent all options below until the next 'section' option is set.
 					),
-
 					array(
-						'id'       => 'section-notification_email-customize-start',
-						'type'     => 'section',
-						'title'       => __( 'Customize Notification Emails ' ),
-						'indent'   => true, // Indent all options below until the next 'section' option is set.
+						'id'     => 'section-notification_email-customize-start',
+						'type'   => 'section',
+						'title'  => __( 'Customize Notification Emails ' ),
+						'indent' => true, // Indent all options below until the next 'section' option is set.
 					),
-
 					array(
 						'id'       => 'rthd_enable_signature',
 						'type'     => 'switch',
@@ -527,9 +529,9 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						),
 					),
 					array(
-						'id'       => 'section-notification_email-customize-end',
-						'type'     => 'section',
-						'indent'   => false, // Indent all options below until the next 'section' option is set.
+						'id'     => 'section-notification_email-customize-end',
+						'type'   => 'section',
+						'indent' => false, // Indent all options below until the next 'section' option is set.
 					),
 				)
 			);
@@ -555,13 +557,13 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'required' => array( 'rthd_enable_auto_assign', '=', 1 ),
 					),
 					array(
-						'id'       => 'rthd_auto_assign_events',
-						'title'    => __( 'Event For Auto assign' ),
-						'default'  => 'on_first_followup',
-						'type'     => 'radio',
+						'id'      => 'rthd_auto_assign_events',
+						'title'   => __( 'Event For Auto assign' ),
+						'default' => 'on_first_followup',
+						'type'    => 'radio',
 						'options' => array(
-							'on_first_followup'	=> __( 'When first follow-up is added to a ticket by any staff member.' ),
-							'on_any_followup' => __( 'When any follow-up is added to a ticket by any staff member.' ),
+							'on_first_followup' => __( 'When first follow-up is added to a ticket by any staff member.' ),
+							'on_any_followup'   => __( 'When any follow-up is added to a ticket by any staff member.' ),
 						),
 					),
 					array(
@@ -569,7 +571,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'type'   => 'section',
 						'indent' => false,
 					),
-
 					array(
 						'id'       => 'rthd_enable_auto_response',
 						'type'     => 'switch',
@@ -598,14 +599,17 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'id'       => 'section-auto-response-dayshift-start',
 						'type'     => 'section',
 						'indent'   => true, //Indent all options below until the next 'section' option is set.
-						'required' => array( array( 'rthd_enable_auto_response_mode', '=', 1 ), array( 'rthd_enable_auto_response', '=', 1 ) ),
+						'required' => array(
+							array( 'rthd_enable_auto_response_mode', '=', 1 ),
+							array( 'rthd_enable_auto_response', '=', 1 ),
+						),
 					),
 					array(
-						'id'      => 'rthd_auto_response_dayshift_time',
-						'type'    => 'callback',
-						'title'   => __( 'Configure working time for dayshift' ),
+						'id'       => 'rthd_auto_response_dayshift_time',
+						'type'     => 'callback',
+						'title'    => __( 'Configure working time for dayshift' ),
 						'subtitle' => __( 'Add hours of operation' ),
-						'desc'    => '',
+						'desc'     => '',
 						'callback' => 'rthd_auto_response_dayshift_view',
 					),
 					array(
@@ -617,14 +621,17 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'id'       => 'section-auto-response-nightshift-start',
 						'type'     => 'section',
 						'indent'   => true, //Indent all options below until the next 'section' option is set.
-						'required' => array( array( 'rthd_enable_auto_response_mode', '=', 0 ), array( 'rthd_enable_auto_response', '=', 1 ) ),
+						'required' => array(
+							array( 'rthd_enable_auto_response_mode', '=', 0 ),
+							array( 'rthd_enable_auto_response', '=', 1 ),
+						),
 					),
 					array(
-						'id'      => 'rthd_auto_response_nightshift_time',
-						'type'    => 'callback',
-						'title'   => __( 'Configure working time for nightshift' ),
+						'id'       => 'rthd_auto_response_nightshift_time',
+						'type'     => 'callback',
+						'title'    => __( 'Configure working time for nightshift' ),
 						'subtitle' => __( 'Add hours of operation' ),
-						'desc'    => '',
+						'desc'     => '',
 						'callback' => 'rthd_auto_response_daynightshift_view',
 					),
 					array(
@@ -648,7 +655,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'desc'         => esc_attr( 'You can add email message here that will be send into followup when your team are offline, Allowed tags are <a> <br> <em> <strong>. ' ) . 'Use <b>{NextStartingHour}</b> to get next working hours like <b>`Today after 10 pm` or `Monday after 9 AM`</b>',
 						'validate'     => 'html_custom',
 						'default'      => esc_attr( '' ),
-						'required' => array( 'rthd_enable_auto_response', '=', 1 ),
+						'required'     => array( 'rthd_enable_auto_response', '=', 1 ),
 						'allowed_html' => array(
 							'a'      => array(
 								'href'  => array(),
@@ -659,20 +666,19 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 							'strong' => array()
 						),
 					),
-
 					array(
 						'id'     => 'section-auto-response-end',
 						'type'   => 'section',
 						'indent' => false,
 					),
 					array(
-						'id'       => 'rthd_enable_ticket_adult_content',
-						'type'     => 'switch',
-						'title'    => __( 'Adult Content Filter' ),
-						'desc'     => __( 'For customer, a form feature to mark adult content will be enabled. For staff, profile level setting to filter the adult content will be enabled.' ),
-						'default'  => false,
-						'on'       => __( 'Enable' ),
-						'off'      => __( 'Disable' ),
+						'id'      => 'rthd_enable_ticket_adult_content',
+						'type'    => 'switch',
+						'title'   => __( 'Adult Content Filter' ),
+						'desc'    => __( 'For customer, a form feature to mark adult content will be enabled. For staff, profile level setting to filter the adult content will be enabled.' ),
+						'default' => false,
+						'on'      => __( 'Enable' ),
+						'off'     => __( 'Disable' ),
 					),
 				),
 			);
@@ -733,22 +739,22 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				'permissions' => $admin_cap,
 				'fields'      => array(
 					array(
-						'id'      => 'rt_hd_activiation',
-						'type'    => 'callback',
-						'title'        => __( 'Plugin Activation' ),
-						'subtitle'     => __( 'Enter License Key and Activate plugin' ),
+						'id'       => 'rt_hd_activiation',
+						'type'     => 'callback',
+						'title'    => __( 'Plugin Activation' ),
+						'subtitle' => __( 'Enter License Key and Activate plugin' ),
 						'callback' => 'rthd_activation_view',
-					)
+					),
 				),
 			);
 
 			$this->sections[] = array(
-				'title'   => __( 'Miscellaneous' ),
-				'heading' => __( 'Import / Export Settings' ),
-				'desc'    => __( 'Import and Export your settings from file, text or URL.' ),
-				'icon'    => 'el-icon-refresh',
+				'title'       => __( 'Miscellaneous' ),
+				'heading'     => __( 'Import / Export Settings' ),
+				'desc'        => __( 'Import and Export your settings from file, text or URL.' ),
+				'icon'        => 'el-icon-refresh',
 				'permissions' => $admin_cap,
-				'fields'  => array(
+				'fields'      => array(
 					array(
 						'id'         => 'rthd_settings_import_export',
 						'type'       => 'import_export',
@@ -770,7 +776,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 		public function set_arguments() {
 
 			//$theme = wp_get_theme(); // For use with some settings. Not necessary.
-			$admin_cap  = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' );
+			$admin_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' );
 
 			$this->args = array(
 				// TYPICAL -> Change these values as you need/desire
@@ -865,6 +871,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					),
 				)
 			);
+
 			return true;
 		}
 
