@@ -213,7 +213,7 @@ $user_edit_content = current_user_can( $cap );
 				$products = array();
 				if ( ! empty( $rtbiz_offerings ) ) {
 					add_filter( 'get_terms', array( $rtbiz_offerings, 'offering_filter' ), 10, 3 );
-					$products = get_terms( Rt_Offerings::$offering_slug );
+					$products = get_terms( Rt_Offerings::$offering_slug, array( 'hide_empty' => 0 ) );
 					remove_filter( 'get_terms', array( $rtbiz_offerings, 'offering_filter' ), 10, 3 );
 
 					$ticket_offering = wp_get_post_terms( $post->ID, Rt_Offerings::$offering_slug );
