@@ -36,8 +36,8 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 			add_filter( 'rt_entity_columns', array( $this, 'contacts_columns' ), 10, 2 );
 			add_action( 'rt_entity_manage_columns', array( $this, 'manage_contacts_columns' ), 10, 3 );
 
-			add_action('bulk_edit_custom_box', array( $this, 'contact_quick_action' ) , 10, 2);
-			add_action('quick_edit_custom_box', array( $this, 'contact_quick_action' ) , 10, 2);
+			add_action( 'bulk_edit_custom_box', array( $this, 'contact_quick_action' ) , 10, 2 );
+			add_action( 'quick_edit_custom_box', array( $this, 'contact_quick_action' ) , 10, 2 );
 			add_action( 'save_post', array( $this, 'save_helpdesk_role' ), 10, 2 );
 
 			add_action( 'wp_ajax_rthd_search_contact', array( $this, 'contact_autocomplete_ajax' ) );
@@ -57,17 +57,18 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		/*
 		 * change label for staff and customer
 		 */
-		function rthd_change_contact_lablels( $labels ){
-			if ( is_plugin_active( 'rtbiz-helpdesk/rtbiz-helpdesk.php' ) ){
+		function rthd_change_contact_lablels( $labels ) {
+			if ( is_plugin_active( 'rtbiz-helpdesk/rtbiz-helpdesk.php' ) ) {
 				$label = '';
-				if (  isset( $_GET[ 'rt_contact_group' ] ) && 'staff' == $_GET[ 'rt_contact_group' ] ) {
-					$label = "Staff";
+				$labelp = '';
+				if (  isset( $_GET['rt_contact_group'] ) && 'staff' == $_GET['rt_contact_group'] ) {
+					$label = 'Staff';
 					$labelp = $label;
-				} elseif ( isset( $_GET[ 'rt_contact_group' ] ) && 'customer' == $_GET[ 'rt_contact_group' ] ) {
-					$label = "Customer";
-					$labelp = $label. "s";
+				} elseif ( isset( $_GET['rt_contact_group'] ) && 'customer' == $_GET['rt_contact_group'] ) {
+					$label = 'Customer';
+					$labelp = $label. 's';
 				}
-				if ( !empty( $label ) ){
+				if ( ! empty( $label ) ) {
 					$labels = array(
 						'name' => __( $labelp ),
 						'singular_name' => __( $label ),
@@ -92,17 +93,17 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		 * @param $contactid
 		 * @param $userid
 		 */
-		function rthd_before_delete_staff( $contactid, $userid, $permission ){
+		function rthd_before_delete_staff( $contactid, $userid, $permission ) {
 			$settings      = rthd_get_redux_settings();
-			$args = array (
+			$args = array(
 				'numberposts' => -1,
 				'post_type' => Rt_HD_Module::$post_type,
-				'author' => $userid
+				'author' => $userid,
 			);
 			$tickets = new WP_Query( $args );
 			if ( $tickets->have_posts() ) {
 				$tickets = $tickets->posts;
-				foreach( $tickets as $ticket ) {
+				foreach ( $tickets as $ticket ) {
 					$data = array(
 						'ID'           => $ticket->ID,
 						'post_author'   => $settings['rthd_default_user'],
@@ -118,8 +119,8 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		 * @param $col
 		 * @param $type
 		 */
-		function contact_quick_action( $col, $type ){
-			if( $type != rt_biz_get_contact_post_type() || 'hd_role' != $col ){
+		function contact_quick_action( $col, $type ) {
+			if ( rt_biz_get_contact_post_type() != $type || 'hd_role' != $col ) {
 				return;
 			}
 			$permissions = rt_biz_get_acl_permissions(); ?>
@@ -150,14 +151,14 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		 *
 		 * @return mixed
 		 */
-		function save_helpdesk_role( $post_id, $post ){
-			if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
-				return $post_id;
+		function save_helpdesk_role( $post_id, $post ) {
+			if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+				return $post_id; }
 
-			if ( isset( $post->post_type ) && $post->post_type != rt_biz_get_contact_post_type() )
-				return $post_id;
+			if ( isset( $post->post_type ) && $post->post_type != rt_biz_get_contact_post_type() ) {
+				return $post_id; }
 
-			if ( isset( $_REQUEST['rtbiz_action'] ) && 'rtbiz_helpdesk_role_updated' == $_REQUEST['rtbiz_action'] ){
+			if ( isset( $_REQUEST['rtbiz_action'] ) && 'rtbiz_helpdesk_role_updated' == $_REQUEST['rtbiz_action'] ) {
 				global $rt_biz_acl_model;
 
 				// rtbiz has same acl as helpdesk
@@ -165,14 +166,14 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 				$profile_permissions = $_REQUEST['rt_biz_profile_permissions'];
 
 				$contactIds = array();
-				if ( isset( $_REQUEST['post_ID'] ) ){
+				if ( isset( $_REQUEST['post_ID'] ) ) {
 					$contactIds = array( $_REQUEST['post_ID'] );
-				}else{
+				} else {
 					$contactIds = $_REQUEST['post'];
 				}
 				$users = rt_biz_get_wp_user_for_contact( $contactIds );
-				foreach ( $users as $user) {
-					if( in_array( 'administrator', $user->roles ) ){
+				foreach ( $users as $user ) {
+					if ( in_array( 'administrator', $user->roles ) ) {
 						continue;
 					}
 					if ( 'yes' == $_REQUEST['rt_biz_is_staff_member'] ) {
@@ -225,7 +226,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 						$profile_permissions = array();
 					}
 				}
-				foreach( $contactIds as $contactId ){
+				foreach ( $contactIds as $contactId ) {
 					$user_permissions = get_post_meta( $contactId, 'rt_biz_profile_permissions', true );
 					$user_permissions[ RT_BIZ_TEXT_DOMAIN ] = $profile_permissions[ RT_BIZ_TEXT_DOMAIN ];
 					$user_permissions[ RT_HD_TEXT_DOMAIN ] = $profile_permissions[ RT_HD_TEXT_DOMAIN ];
@@ -235,9 +236,9 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 			}
 		}
 
-		function rthd_add_setting_to_rtbiz_user( $fields ){
+		function rthd_add_setting_to_rtbiz_user( $fields ) {
 			if ( rthd_get_redux_adult_filter() ) {
-				$fields[ ] = array(
+				$fields[] = array(
 					'key'         => 'rthd_contact_adult_filter',
 					'text'        => __( 'Don\'t show Adult content' ),
 					'label'       => __( 'Helpdesk Content Preference' ),
@@ -279,7 +280,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 
 			global $rt_hd_module;
 			if ( in_array( Rt_HD_Module::$post_type, array_keys( $rt_entity->enabled_post_types ) ) ) {
-				$columns[ 'hd_role' ] = 'Helpdesk Role';
+				$columns['hd_role'] = 'Helpdesk Role';
 				$columns[ Rt_HD_Module::$post_type ] = $rt_hd_module->labels['name'];
 			}
 
@@ -311,24 +312,24 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 				case Rt_HD_Module::$post_type:
 					$userid = rt_biz_get_wp_user_for_contact( $post_id );
 					if ( ! empty( $userid[0] ) ) {
-						if ( ! empty ( $_REQUEST[ 'rt_contact_group' ] ) && $_REQUEST[ 'rt_contact_group' ] == 'staff' ) {
+						if ( ! empty ( $_REQUEST['rt_contact_group'] ) && 'staff' == $_REQUEST['rt_contact_group'] ) {
 							$args  = array(
 								'post_type'   => Rt_HD_Module::$post_type,
 								'post_status' => 'any',
-								'author'      => $userid[ 0 ]->id,
+								'author'      => $userid[0]->id,
 							);
 							$query = new WP_Query( $args );
-							$link = get_admin_url().'edit.php?post_type='.Rt_HD_Module::$post_type.'&assigned='.$userid[ 0 ]->id;
+							$link = get_admin_url().'edit.php?post_type='.Rt_HD_Module::$post_type.'&assigned='.$userid[0]->id;
 							echo '<a href="'.$link.'" target="_blank">'.$query->found_posts.'</a>';
 						} else {
 							$args  = array(
 								'post_type'   => Rt_HD_Module::$post_type,
 								'post_status' => 'any',
 								'meta_key'    => '_rtbiz_hd_created_by',
-								'meta_value'  => $userid[ 0 ]->id,
+								'meta_value'  => $userid[0]->id,
 							);
 							$query = new WP_Query( $args );
-							$link = get_admin_url().'edit.php?post_type='.Rt_HD_Module::$post_type.'&created_by='.$userid[ 0 ]->id;
+							$link = get_admin_url().'edit.php?post_type='.Rt_HD_Module::$post_type.'&created_by='.$userid[0]->id;
 							echo '<a href="'.$link.'" target="_blank">'.$query->found_posts.'</a>';
 						}
 					} else {
@@ -339,7 +340,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 				case 'hd_role':
 					$permission_role = '-';
 					$userid = rt_biz_get_wp_user_for_contact( $post_id );
-					if ( ! empty( $userid ) ){
+					if ( ! empty( $userid ) ) {
 						$where = array(
 							'userid'     => $userid[0]->ID,
 							'module'     => RT_HD_TEXT_DOMAIN,
@@ -356,14 +357,14 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 						$module_user = get_users( array( 'fields' => 'ID', 'role' => 'administrator' ) );
 						$admin_contact = rt_biz_get_contact_for_wp_user( $module_user );
 
-						foreach( $admin_contact as $contact ){
+						foreach ( $admin_contact as $contact ) {
 							$contacts[] = $contact->ID;
 						}
 						if ( in_array( $post_id, $contacts ) ) {
 							$permission_role = 30;
 						}
 
-						switch( $permission_role ){
+						switch ( $permission_role ){
 							case 10 :
 								$permission_role = 'Author'; break;
 							case 20 :
@@ -375,11 +376,10 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 						}
 					}
 
-
 					echo '<span>' . $permission_role . '</span>';
 					break;
 				default:
-					if ( in_array( Rt_HD_Module::$post_type, array_keys( $rt_entity->enabled_post_types ) ) && $column == Rt_HD_Module::$post_type ) {
+					if ( in_array( Rt_HD_Module::$post_type, array_keys( $rt_entity->enabled_post_types ) ) && Rt_HD_Module::$post_type == $column ) {
 						$post_details = get_post( $post_id );
 						$pages        = rt_biz_get_post_for_contact_connection( $post_id, Rt_HD_Module::$post_type );
 						echo balanceTags( sprintf( '<a href="%s">%d</a>', esc_url( add_query_arg( array( 'contact_id' => $post_details->ID, 'post_type' => Rt_HD_Module::$post_type ), admin_url( 'edit.php' ) ) ), count( $pages ) ) );

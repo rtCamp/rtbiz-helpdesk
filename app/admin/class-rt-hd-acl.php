@@ -54,8 +54,8 @@ if ( ! class_exists( 'Rt_HD_ACL' ) ) {
 				'department_support' => array( Rt_HD_Module::$post_type ),
 				'offering_support' => array( Rt_HD_Module::$post_type ),
 				'setting_option_name' => Redux_Framework_Helpdesk_Config::$hd_opt, // Use for setting page acl to add manage_options capability
-				'setting_page_url' => admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&page=rthd-settings'), //
-			    'email_template_support' =>array( Rt_HD_Module::$post_type ),
+				'setting_page_url' => admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&page=rthd-settings' ), //
+			    'email_template_support' => array( Rt_HD_Module::$post_type ),
 			);
 			return $modules;
 		}

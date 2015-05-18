@@ -71,7 +71,7 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 		 */
 		function rthd_acl_page_help() {
 			global $rt_biz_help;
-			if ( ! empty($_GET[ 'post_type' ]) && $_GET[ 'post_type' ] == Rt_HD_Module::$post_type && ! empty( $_GET[ 'page' ] ) && $_GET[ 'page' ] == Rt_Biz::$access_control_slug ) {
+			if ( ! empty($_GET['post_type']) && Rt_HD_Module::$post_type == $_GET['post_type'] && ! empty( $_GET['page'] ) && Rt_Biz::$access_control_slug == $_GET['page'] ) {
 				get_current_screen()->add_help_tab( array(
 					'id' => 'hd_acl_overview',
 					'title' => 'Overview',
@@ -87,7 +87,7 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 		 * @param $tab
 		 */
 		function tab_content( $screen, $tab ) {
-			switch ( $tab[ 'id' ] ) {
+			switch ( $tab['id'] ) {
 				case 'hd_acl_overview':
 					?>
 					<p>
@@ -112,15 +112,15 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 
 			$rthd_post_type = '';
 
-			if ( isset( $_GET[ 'post' ] ) ) {
-				$rthd_post_type = get_post_type( $_GET[ 'post' ] );
-			} elseif ( isset( $_GET[ 'post_type' ] ) && ( $pagenow == 'post-new.php' || $pagenow == 'edit.php' ) ) {
-				$rthd_post_type = $_GET[ 'post_type' ];
+			if ( isset( $_GET['post'] ) ) {
+				$rthd_post_type = get_post_type( $_GET['post'] );
+			} elseif ( isset( $_GET['post_type'] ) && ( 'post-new.php' == $pagenow || 'edit.php' == $pagenow ) ) {
+				$rthd_post_type = $_GET['post_type'];
 			}
 			// include this css everywhere
 			wp_enqueue_style( 'rthd-common-css', RT_HD_URL . 'app/assets/css/rthd-common.css', array(), RT_HD_VERSION, 'all' );
 
-			if ( in_array( $pagenow, array( 'edit.php', 'post.php', 'post-new.php' ) ) && $rthd_post_type == Rt_HD_Module::$post_type ) {
+			if ( in_array( $pagenow, array( 'edit.php', 'post.php', 'post-new.php' ) ) && Rt_HD_Module::$post_type == $rthd_post_type ) {
 
 				if ( isset( $post->post_type ) && $post->post_type == Rt_HD_Module::$post_type ) {
 
@@ -142,12 +142,12 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 
 			}
 
-			if ( isset( $rthd_post_type ) && in_array( $rthd_post_type, array( rt_biz_get_contact_post_type() ) ) )  {
+			if ( isset( $rthd_post_type ) && in_array( $rthd_post_type, array( rt_biz_get_contact_post_type() ) ) ) {
 				wp_enqueue_script( 'rthd-menu-hack-js', RT_HD_URL . 'app/assets/admin/js/rt-custom-status.js', array( 'jquery' ), time(), true );
 				wp_localize_script( 'rthd-menu-hack-js', 'rthd_menu', Rt_HD_Module::$post_type );
-				if ( ! empty( $_GET['rt_contact_group'] ) ){
+				if ( ! empty( $_GET['rt_contact_group'] ) ) {
 					wp_localize_script( 'rthd-menu-hack-js', 'rthd_url', admin_url( 'edit.php?post_type=' . rt_biz_get_contact_post_type() . '&rt_contact_group=' . $_GET['rt_contact_group'] ) );
-				}else{
+				} else {
 					wp_localize_script( 'rthd-menu-hack-js', 'rthd_url', admin_url( 'edit.php?post_type=' . rt_biz_get_contact_post_type() ) );
 				}
 			}
@@ -161,8 +161,8 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 		 */
 		function localize_scripts() {
 			global $post, $pagenow, $wp_scripts;
-			$rthd_post_type = isset( $_GET[ 'post' ] ) ? get_post_type( $_GET[ 'post' ] ) : '';
-			if ( in_array( $pagenow, array( 'edit.php', 'post.php', 'post-new.php' ) ) && $rthd_post_type == Rt_HD_Module::$post_type ) {
+			$rthd_post_type = isset( $_GET['post'] ) ? get_post_type( $_GET['post'] ) : '';
+			if ( in_array( $pagenow, array( 'edit.php', 'post.php', 'post-new.php' ) ) && Rt_HD_Module::$post_type == $rthd_post_type ) {
 				$user_edit = false;
 				if ( current_user_can( 'edit_' . Rt_HD_Module::$post_type ) ) {
 					$user_edit = true;
@@ -209,13 +209,13 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 		 */
 		function handle_upload_prefilter( $file ) {
 			$postype = '';
-			if ( isset( $_REQUEST[ 'post_type' ] ) ) {
-				$postype = $_REQUEST[ 'post_type' ];
+			if ( isset( $_REQUEST['post_type'] ) ) {
+				$postype = $_REQUEST['post_type'];
 			}
-			if ( empty( $postype ) && ! empty( $_REQUEST[ 'post_id' ] ) ) {
-				$postype = get_post_type( $_REQUEST[ 'post_id' ] );
+			if ( empty( $postype ) && ! empty( $_REQUEST['post_id'] ) ) {
+				$postype = get_post_type( $_REQUEST['post_id'] );
 			}
-			if ( $postype == Rt_HD_Module::$post_type ) {
+			if ( Rt_HD_Module::$post_type == $postype ) {
 				add_filter( 'upload_dir', array( $this, 'custom_upload_dir' ) );
 			}
 			return $file;
@@ -230,13 +230,13 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 		 */
 		function handle_upload( $fileinfo ) {
 			$postype = '';
-			if ( isset( $_REQUEST[ 'post_type' ] ) ) {
-				$postype = $_REQUEST[ 'post_type' ];
+			if ( isset( $_REQUEST['post_type'] ) ) {
+				$postype = $_REQUEST['post_type'];
 			}
-			if ( empty( $postype ) && ! empty( $_REQUEST[ 'post_id' ] ) ) {
-				$postype = get_post_type( $_REQUEST[ 'post_id' ] );
+			if ( empty( $postype ) && ! empty( $_REQUEST['post_id'] ) ) {
+				$postype = get_post_type( $_REQUEST['post_id'] );
 			}
-			if ( $postype == Rt_HD_Module::$post_type ) {
+			if ( Rt_HD_Module::$post_type == $postype ) {
 				remove_filter( 'upload_dir', array( $this, 'custom_upload_dir' ) );
 			}
 			return $fileinfo;
@@ -250,8 +250,8 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 		 * @return mixed
 		 */
 		function custom_upload_dir( $args ) {
-			$args[ 'path' ] = $args[ 'basedir' ] . '/' . RT_HD_TEXT_DOMAIN . $args[ 'subdir' ];
-			$args[ 'url' ] = $args[ 'baseurl' ] . '/' . RT_HD_TEXT_DOMAIN . $args[ 'subdir' ];
+			$args['path'] = $args['basedir'] . '/' . RT_HD_TEXT_DOMAIN . $args['subdir'];
+			$args['url'] = $args['baseurl'] . '/' . RT_HD_TEXT_DOMAIN . $args['subdir'];
 			return $args;
 		}
 
