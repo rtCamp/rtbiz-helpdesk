@@ -648,7 +648,7 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 			break;
 	}
 
-	$side_class = ( $type == 'right' ) ? 'rthd-self' : ( ( $type == 'left' ) ? 'rthd-other' : '' );
+	$side_class = ( 'right' == $type ) ? 'rthd-self' : ( ( 'left' == $type ) ? 'rthd-other' : '' );
 	$editable_class = ( $display_private_comment_flag ) ? 'editable' : '';
 	?>
 	<li class="<?php echo $side_class . ' ' . $editable_class . ' ' . ( ( $display_private_comment_flag ) ? '' : 'private-comment-item' ); ?>" id="comment-<?php echo esc_attr( $comment->comment_ID ); ?>">
@@ -745,7 +745,7 @@ function rthd_content_filter( $content ) {
 	}
 
 	$offset = strpos( $content, ':: Reply Above This Line ::' );
-	$content = substr( $content, 0, ( $offset === false ) ? strlen( $content ) : $offset );
+	$content = substr( $content, 0, ( false === $offset ) ? strlen( $content ) : $offset );
 
 	$content = balanceTags( $content, true );
 
@@ -1346,7 +1346,7 @@ function rt_hd_check_email_blacklisted( $testemail ) {
  */
 function rthd_is_enable_mailbox_reading() {
 	$redux = rthd_get_redux_settings();
-	$flag = ( isset( $redux['rthd_enable_mailbox_reading'] ) && $redux['rthd_enable_mailbox_reading'] == 1 );
+	$flag = ( isset( $redux['rthd_enable_mailbox_reading'] ) && 1 == $redux['rthd_enable_mailbox_reading'] );
 	return $flag;
 }
 
@@ -1399,7 +1399,7 @@ function update_offering_meta( $key, $value, $term_id ) {
  */
 function rthd_get_reply_via_email() {
 	$redux = rthd_get_redux_settings();
-	return ( isset( $redux['rthd_reply_via_email'] ) && $redux['rthd_reply_via_email'] == 1 );
+	return ( isset( $redux['rthd_reply_via_email'] ) && 1 == $redux['rthd_reply_via_email'] );
 }
 
 /**
@@ -2029,7 +2029,7 @@ function rthd_admin_sidebar() {
 /**
  * get contact of setup page
  */
-function rthd_get_setup_team_ui(){
+function rthd_get_setup_team_ui() {
 	global $rt_hd_setup_wizard;
 	ob_start();
 	$rt_hd_setup_wizard -> setup_team( false );
