@@ -83,6 +83,7 @@ $user_edit_content = current_user_can( $cap );
 									$watch_unwatch_value = 'watch';
 								}
 							}
+
 							if ( ! empty( $watch_unwatch_label ) ) {
 							?>
 							<a id="rthd-ticket-watch-unwatch" href="#" data-value="<?php echo $watch_unwatch_value; ?>"
@@ -94,14 +95,16 @@ $user_edit_content = current_user_can( $cap );
 									echo '<span class="dashicons dashicons-email"></span>';
 								}
 								?>
-								<?php } ?>
+								<?php }
+								?>
 								<a id="ticket-add-fav" href="#" title="<?php _e( 'Favorite ticket' ) ?>"><?php
 								if ( in_array( $post->ID, rthd_get_user_fav_ticket( get_current_user_id() ) ) ) {
 									echo '<span class="dashicons dashicons-star-filled"></span>';
 								} else {
 									echo '<span class="dashicons dashicons-star-empty"></span>';
 								}
-								?></a>
+								?>
+								</a>
 								<?php wp_nonce_field( 'heythisisrthd_ticket_fav_' . $post->ID, 'rthd_fav_tickets_nonce' ); ?>
 						</div>
 					</div>
@@ -218,48 +221,46 @@ $user_edit_content = current_user_can( $cap );
 					}
 					?>
 
-				<?php
-				// Products
-				global $rtbiz_offerings;
-				$products = array();
-				if ( ! empty( $rtbiz_offerings ) ) {
-					add_filter( 'get_terms', array( $rtbiz_offerings, 'offering_filter' ), 10, 3 );
-					$products = get_terms( Rt_Offerings::$offering_slug, array( 'hide_empty' => 0 ) );
-					remove_filter( 'get_terms', array( $rtbiz_offerings, 'offering_filter' ), 10, 3 );
+					<?php
+					// Products
+					global $rtbiz_offerings;
+					$products = array();
+					if ( ! empty( $rtbiz_offerings ) ) {
+						add_filter( 'get_terms', array( $rtbiz_offerings, 'offering_filter' ), 10, 3 );
+						$products = get_terms( Rt_Offerings::$offering_slug, array( 'hide_empty' => 0 ) );
+						remove_filter( 'get_terms', array( $rtbiz_offerings, 'offering_filter' ), 10, 3 );
 
-					$ticket_offering = wp_get_post_terms( $post->ID, Rt_Offerings::$offering_slug );
-				}
-				if ( ! $products instanceof WP_Error && ! empty( $products ) ) {
-					if ( ! empty( $ticket_offering ) || current_user_can( $cap ) ) {
-						?>
-						<div class="rt-hd-ticket-sub-row">
-							<div class="rthd-ticket-sidebar-sub-result clearfix">
-								<label for="rthd-offering-list">
-									<?php _e( 'Offering' ); ?>
-								</label>
-								<?php if ( current_user_can( $cap ) ) { ?>
-									<select id="rthd-offering-list" class="rthd-ticket-dropdown" name="rt-hd-offering">
-										<?php
-										foreach ( $products as $p ) {
-											if ( ! empty( $ticket_offering ) && $ticket_offering[ 0 ]->term_id == $p->term_id ) {
-												$selected = ' selected="selected" ';
-											} else {
-												$selected = ' ';
+						$ticket_offering = wp_get_post_terms( $post->ID, Rt_Offerings::$offering_slug );
+					}
+					if ( ! $products instanceof WP_Error && ! empty( $products ) ) {
+						if ( ! empty( $ticket_offering ) || current_user_can( $cap ) ) {
+							?>
+							<div class="rt-hd-ticket-sub-row">
+								<div class="rthd-ticket-sidebar-sub-result clearfix">
+									<label for="rthd-offering-list">
+										<?php _e( 'Offering' ); ?>
+									</label>
+									<?php if ( current_user_can( $cap ) ) { ?>
+										<select id="rthd-offering-list" class="rthd-ticket-dropdown"
+										        name="rt-hd-offering">
+											<?php
+											foreach ( $products as $p ) {
+												if ( ! empty( $ticket_offering ) && $ticket_offering[0]->term_id == $p->term_id ) {
+													$selected = ' selected="selected" ';
+												} else {
+													$selected = ' ';
+												}
+												echo '<option value="' . esc_attr( $p->term_id ) . '"' . esc_attr( $selected ) . '>' . esc_attr( $p->name ) . '</option>';
 											}
-											echo '<option value="' . esc_attr( $p->term_id ) . '"' . esc_attr( $selected ) . '>' . esc_attr( $p->name ) . '</option>';
-										}
-										if ( empty( $ticket_offering ) ) {
-											echo '<option value="0" selected="selected" >-Select Offering-</option>';
-										}
-										?>
-									</select>
-									<img id="offering-change-spinner" class="helpdeskspinner"
-										 src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
-										 <?php
-									 } else {
-										 echo '<strong>' . $ticket_offering[ 0 ]->name . '</strong>';
-									 }
-									 ?>
+											if ( empty( $ticket_offering ) ) {
+												echo '<option value="0" selected="selected" >-Select Offering-</option>';
+											}
+											?>
+										</select>
+										<img id="offering-change-spinner" class="helpdeskspinner"
+										     src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
+									<?php } else { echo '<strong>' . $ticket_offering[0]->name . '</strong>'; } ?>
+								</div>
 							</div>
 						<?php
 						}
@@ -322,13 +323,24 @@ $user_edit_content = current_user_can( $cap );
 								}
 								//echo "</div>";
 							}
-						}
+							// Other comments authors
+							if ( ! empty( $emails ) ) {
+								foreach ( $emails as $email ) {
+									$user         = get_user_by( 'email', $email );
+									$display_name = $email;
+									if ( ! empty( $user ) ) {
+										$display_name = $user->display_name;
+									}
+									echo '<a title= "' . $display_name . '" class="rthd-last-reply-by"  href="' . ( current_user_can( $cap ) ? rthd_biz_user_profile_link( $email ) : '#' ) . '">' . get_avatar( $email, '30' ) . ' </a>';
+								}
+							}
 
-						// Last reply author
-						if ( ! empty( $comment ) && $comment->comment_author_email != $created_by->user_email ) {
-							echo '<a class="rthd-last-reply-by" title="last reply by ' . $comment->comment_author . ' ' . esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . ' ago " href="' . (current_user_can( $cap ) ? rthd_biz_user_profile_link( $comment->comment_author_email ) : '#') . '">' . get_avatar( $comment->comment_author_email, '30' ) . ' </a>'
-							?>
-						<?php } ?>
+							// Last reply author
+							if ( ! empty( $comment ) && $comment->comment_author_email != $created_by->user_email ) {
+								echo '<a class="rthd-last-reply-by" title="last reply by ' . $comment->comment_author . ' ' . esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . ' ago " href="' . ( current_user_can( $cap ) ? rthd_biz_user_profile_link( $comment->comment_author_email ) : '#' ) . '">' . get_avatar( $comment->comment_author_email, '30' ) . ' </a>'
+								?>
+							<?php } ?>
+						</div>
 					</div>
 				</div>
 				<?php
