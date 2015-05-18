@@ -28,7 +28,7 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 		 */
 		public static function ui( $post ) {
 
-			global $rt_hd_module, $rt_hd_attributes;
+			global $rt_hd_module, $rt_hd_attributes, $rt_hd_cpt_tickets;
 			$labels    = $rt_hd_module->labels;
 			$post_type = Rt_HD_Module::$post_type;
 
