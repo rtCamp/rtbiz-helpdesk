@@ -81,10 +81,10 @@
 }
 
 .myerror {
-    background-color: #FFEBE8;
-    border-left: 5px #C00 solid;
-    padding: 5px 10px;
-    font-weight: bold;
+	background-color: #FFEBE8;
+	border-left: 5px #C00 solid;
+	padding: 5px 10px;
+	font-weight: bold;
 }
 
 .importloading {
@@ -211,7 +211,7 @@ li.toplevel_page_hd-dashboard a:active {
 
 }
 #rthd-response tr td {
-  	padding: 6px;
+		padding: 6px;
 }
 #rthd-response tr th {
 	text-align: center;

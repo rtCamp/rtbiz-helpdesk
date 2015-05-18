@@ -1,7 +1,7 @@
 /**
  * Created by spock on 21/4/15.
  */
-jQuery( document ).ready( function ( $ ) {
+jQuery( document ).ready(function ($) {
 
 	var wizard;
 	var skip_step = false;
@@ -18,94 +18,94 @@ jQuery( document ).ready( function ( $ ) {
 			rthdSetup.hide_notice();
 		},
 
-		bind_enter_event: function ( textbox, button ) {
-			jQuery(document).on( 'keypress', textbox, function ( e ) {
-	             if( e.keyCode == 13 ) {
-		             button.click();
-	             }
+		bind_enter_event: function (textbox, button) {
+			jQuery( document ).on('keypress', textbox, function (e) {
+				if (e.keyCode == 13) {
+					button.click();
+				}
 			});
 		},
 		hide_notice: function () {
-			setTimeout( function () {
+			setTimeout(function () {
 				jQuery( ".rthd-hide-notice-setup-wizard" ).hide();
-			}, 10000 );
+			}, 10000);
 		},
 		setup_wizard: function () {
-			wizard = jQuery( "#wizard" ).steps( {
+			wizard = jQuery( "#wizard" ).steps({
 				headerTag: "h3",
 				bodyTag: "fieldset",
 				transitionEffect: 1,
 				forceMoveForward: true,
 				//titleTemplate: "#title#",
 				//enableAllSteps: true,
-				onStepChanging: function ( event, currentIndex, newIndex ) {
+				onStepChanging: function (event, currentIndex, newIndex) {
 					//alert("moving to "+newIndex+" from "+ currentIndex);
-					if ( skip_step ) {
+					if (skip_step) {
 						skip_step = false;
 						return true;
 					}
 
-					if ( currentIndex == 1 ) {
+					if (currentIndex == 1) {
 						// save offering selection and sync offerings
 						skip_step = false;
 						return rthdSetup.connect_store();
 					}
 					// active this after screen is fixed
-					if ( currentIndex == 0 ) {
+					if (currentIndex == 0) {
 						//save support form
 						return rthdSetup.support_page();
 					}
 					// save assingee
-					if ( currentIndex == 3 ) {
+					if (currentIndex == 3) {
 						rthdSetup.save_assignee();
 						return false;
 					}
 					// get assignee UI
-					if ( currentIndex == 2 ) {
+					if (currentIndex == 2) {
 						rthdSetup.get_assingee_ui();
 						return false;
 					}
 
 					//
-					if ( currentIndex == 4 ) {
+					if (currentIndex == 4) {
 						//rthdSetup.get_acl_view();
 						return rthdSetup.outbound_mail_setup();
 					}
 
 					return true;
 				},
-				onStepChanged: function ( event, currentIndex, priorIndex ) {
+				onStepChanged: function (event, currentIndex, priorIndex) {
 
 					rthdSetup.custom_page_action( currentIndex );
 
 					//alert("on step changed moved to "+currentIndex+" from "+ priorIndex);
 					return true;
 				},
-				onFinishing: function ( event, currentIndex ) {
+				onFinishing: function (event, currentIndex) {
 					//alert("on finishing changed moved to "+currentIndex);
 					return true;
 				},
-				onFinished: function ( event, currentIndex ) {
+				onFinished: function (event, currentIndex) {
 					window.location.replace( hdDashboardUrl );
 				}
-			} );
+			});
 		},
 		on_connected_store_change: function () {
-			jQuery( document ).on( 'change', 'input:checkbox[name=rthd-wizard-store]', function ( e ) {
-				if ( jQuery( this ).val() == 'custom' && jQuery( this ).is( ':checked' ) ) {
+			jQuery( document ).on('change', 'input:checkbox[name=rthd-wizard-store]', function (e) {
+				if (jQuery( this ).val() == 'custom' && jQuery( this ).is( ':checked' )) {
 					jQuery( '.rthd-wizard-store-custom-div' ).show();
 				}
-				if ( ! jQuery( this ).is( ':checked' ) ) {
+				if ( ! jQuery( this ).is( ':checked' )) {
 					jQuery( '.rthd-wizard-store-custom-div' ).hide();
 				}
-			} );
+			});
 
-			jQuery( document ).on( 'click', '#rthd-setup-store-new-team-submit', function ( e ) {
+			jQuery( document ).on('click', '#rthd-setup-store-new-team-submit', function (e) {
 				var new_term = jQuery( '#rthd-setup-store-new-team' ).val();
-				if ( new_term.length != 0 && ! new_term.trim() ) {
+				if (new_term.length != 0 && ! new_term.trim()) {
 					return;
 				}
-				$.ajax( {
+				$.ajax({
 					url: ajaxurl,
 					dataType: "json",
 					type: 'post',
@@ -113,21 +113,21 @@ jQuery( document ).ready( function ( $ ) {
 						action: 'rthd_add_new_offering',
 						offering: new_term
 					},
-					success: function ( data ) {
-						if ( data.status ) {
+					success: function (data) {
+						if (data.status) {
 							jQuery( 'ol.rthd-setup-wizard-new-offering' ).append( '<li> ' + new_term + ' </li>' );
 							jQuery( '#rthd-setup-store-new-team' ).val( '' );
 						}
 					}
-				} );
-			} );
+				});
+			});
 		},
 		search_users: function () {
 			AutocomepleteTextBox = jQuery( '#rthd-user-autocomplete' );
-			if ( jQuery( ".rthd-user-autocomplete" ).length > 0 ) {
-				jQuery( ".rthd-user-autocomplete" ).autocomplete( {
-					source: function ( request, response ) {
-						$.ajax( {
+			if (jQuery( ".rthd-user-autocomplete" ).length > 0) {
+				jQuery( ".rthd-user-autocomplete" ).autocomplete({
+					source: function (request, response) {
+						$.ajax({
 							url: ajaxurl,
 							dataType: "json",
 							type: 'post',
@@ -136,35 +136,35 @@ jQuery( document ).ready( function ( $ ) {
 								maxRows: 10,
 								query: request.term
 							},
-							success: function ( data ) {
-								if ( data.hasOwnProperty( 'have_access' ) ) {
+							success: function (data) {
+								if (data.hasOwnProperty( 'have_access' )) {
 									// email have access so no need of popup to asking for adding user
 									jQuery( '.rthd-warning' ).html( '<strong>' + AutocomepleteTextBox.val() + '</strong> Already have helpdesk access' );
 									jQuery( '.rthd-warning' ).show();
 									response();
-								} else if ( data.hasOwnProperty( 'show_add' ) ) {
+								} else if (data.hasOwnProperty( 'show_add' )) {
 
 									jQuery( '.rthd-warning' ).html( 'Hey, Looks like <strong>' + AutocomepleteTextBox.val() + '</strong> is not in your system, would you like to add?' );
 									jQuery( '.rthd-importer-add-contact' ).show();
-									jQuery( '#rthd-new-user-email' ).val(AutocomepleteTextBox.val() );
+									jQuery( '#rthd-new-user-email' ).val( AutocomepleteTextBox.val() );
 									jQuery( '.rthd-warning' ).show();
 									response();
 								} else {
-									response( $.map( data, function ( item ) {
+									response($.map(data, function (item) {
 										return {
 											id: item.id,
 											imghtml: item.imghtml,
 											label: item.label,
 											editlink: item.editlink
 										}
-									} ) );
+									}));
 									jQuery( '.rthd-warning' ).hide();
 									jQuery( '.rthd-importer-add-contact' ).hide();
 								}
 							}
-						} );
+						});
 					}, minLength: 2,
-					select: function ( event, ui ) {
+					select: function (event, ui) {
 						rthdSetup.give_user_helpdesk_access( false, ui.item.id );
 						//if (jQuery("#imported-user-auth-" + ui.item.id).length < 1) {
 						//    jQuery(".rthd-setup-list-users").append("<li id='imported-user-auth-" + ui.item.id + "' class='contact-list' >" + ui.item.imghtml + "<a href='#removeUser' class='delete_row'>×</a><br/><a class='rthd-setup-user-title heading' target='_blank' href='" + ui.item.editlink + "'>" + ui.item.label + "</a><input type='hidden' class='rthd-import-selected-users' name='import_users[]' value='" + ui.item.id + "' /></li>")
@@ -172,34 +172,34 @@ jQuery( document ).ready( function ( $ ) {
 						jQuery( ".rthd-user-autocomplete" ).val( '' );
 						return false;
 					}
-				} ).data( 'ui-Autocomplete' )._renderItem = function ( ul, item ) {
+				}).data( 'ui-Autocomplete' )._renderItem = function (ul, item) {
 					return $( '<li></li>' ).data( 'ui-autocomplete-item', item ).append( '<a>' + item.imghtml + '&nbsp;' + item.label + '</a>' ).appendTo( ul );
 				};
 
-				jQuery( document ).on( "click", "a[href=#removeUser]", function ( e ) {
+				jQuery( document ).on("click", "a[href=#removeUser]", function (e) {
 					e.preventDefault();
 					that = this;
 					var requestArray = new Object();
 					requestArray['action'] = 'rthd_remove_user';
 					requestArray['userid'] = jQuery( this ).next( '.rthd-import-selected-users' ).val();
-					jQuery.ajax( {
+					jQuery.ajax({
 						url: ajaxurl,
 						dataType: "json",
 						type: 'post',
 						data: requestArray,
-						success: function ( data ) {
-							if ( data.status ) {
+						success: function (data) {
+							if (data.status) {
 								jQuery( that ).parent().parent().remove();
 							}
 						}
-					} );
-				} );
+					});
+				});
 			}
 
-			if ( jQuery( '#rthd-add-user-domain' ).length > 0 ) {
-				jQuery( '#rthd-add-user-domain' ).autocomplete( {
-					source: function ( request, response ) {
-						$.ajax( {
+			if (jQuery( '#rthd-add-user-domain' ).length > 0) {
+				jQuery( '#rthd-add-user-domain' ).autocomplete({
+					source: function (request, response) {
+						$.ajax({
 							url: ajaxurl,
 							dataType: "json",
 							type: 'post',
@@ -208,102 +208,102 @@ jQuery( document ).ready( function ( $ ) {
 								maxRows: 10,
 								query: request.term
 							},
-							success: function ( data ) {
-								response( $.map( data, function ( item ) {
+							success: function (data) {
+								response($.map(data, function (item) {
 									return {
 										name: item,
 										value: item
 									}
-								} ) );
+								}));
 							}
-						} );
+						});
 					},
-					select: function ( event, ui ) {
+					select: function (event, ui) {
 						jQuery( '#rthd-add-user-domain' ).val( ui.item.value );
 						rthdSetup.import_domain_users( true );
 					}
-				} );
+				});
 			}
 
 		},
 		add_user_single: function () {
-			jQuery( '.rthd-importer-add-contact' ).click( function () {
+			jQuery( '.rthd-importer-add-contact' ).click(function () {
 				rthdSetup.give_user_helpdesk_access( jQuery( '#rthd-new-user-email' ).val(), false );
-			} );
+			});
 
-			jQuery( '#rthd-get-domain-count-users' ).click( function () {
+			jQuery( '#rthd-get-domain-count-users' ).click(function () {
 				rthdSetup.import_domain_users( true );
-			} );
+			});
 
-			$( '#rthd-add-user-domain' ).on( "keypress", function ( e ) {
-				if ( e.keyCode == 13 ) {
+			$( '#rthd-add-user-domain' ).on("keypress", function (e) {
+				if (e.keyCode == 13) {
 					rthdSetup.import_domain_users( true );
 					e.preventDefault();
 					return false;
 				}
-			} );
+			});
 
-			jQuery( '#rthd-import-domain-users' ).click( function () {
+			jQuery( '#rthd-import-domain-users' ).click(function () {
 				rthdSetup.import_domain_users( false );
-			} );
+			});
 
-			jQuery( '#rthd-add-all-users' ).click( function ( e ) {
+			jQuery( '#rthd-add-all-users' ).click(function (e) {
 				jQuery( '#rthd-setup-import-users-progress' ).show();
-				rthdSetup.import_all_users(0);
-			} );
+				rthdSetup.import_all_users( 0 );
+			});
 
-			rthdSetup.bind_enter_event('#rthd-setup-wizard-support-page-new',jQuery('a[href="#next"]'));
+			rthdSetup.bind_enter_event( '#rthd-setup-wizard-support-page-new', jQuery( 'a[href="#next"]' ) );
 
-			jQuery( '#rthd-setup-wizard-support-page' ).on( 'change', function ( e ) {
+			jQuery( '#rthd-setup-wizard-support-page' ).on('change', function (e) {
 				val = jQuery( this ).val();
-				if ( val == - 1 ) {
+				if (val == -1) {
 					jQuery( '.rthd-setup-wizard-support-page-new-div' ).show();
 				} else {
-					if ( jQuery( '.rthd-setup-wizard-support-page-new-div' ).is( ":visible" ) ) {
+					if (jQuery( '.rthd-setup-wizard-support-page-new-div' ).is( ":visible" )) {
 						jQuery( '.rthd-setup-wizard-support-page-new-div' ).hide();
 					}
 				}
-			} );
+			});
 		},
 		support_page: function () {
 			var requestArray = new Object();
 			requestArray['action'] = 'rthd_setup_support_page';
 			val = jQuery( '#rthd-setup-wizard-support-page' ).val();
-			if ( val == 0 || ( val == - 1 && jQuery( '#rthd-setup-wizard-support-page-new' ).val().length === 0 && ! jQuery( '#rthd-setup-wizard-support-page-new' ).val().trim() ) ) {
+			if (val == 0 || ( val == -1 && jQuery( '#rthd-setup-wizard-support-page-new' ).val().length === 0 && ! jQuery( '#rthd-setup-wizard-support-page-new' ).val().trim() )) {
 				var strconfirm = confirm( 'Do you want to skip this step ?' );
-				if ( strconfirm == true ) {
+				if (strconfirm == true) {
 					return true;
 				} else {
 					jQuery( '.rthd-support-process' ).hide();
 					return false;
 				}
 
-			} else if ( val == - 1 ) {
-				if ( jQuery( '.rthd-setup-wizard-support-page-new-div' ).is( ":visible" ) ) {
+			} else if (val == -1) {
+				if (jQuery( '.rthd-setup-wizard-support-page-new-div' ).is( ":visible" )) {
 					requestArray['new_page'] = jQuery( '#rthd-setup-wizard-support-page-new' ).val();
 					requestArray['page_action'] = 'add';
 				}
 			} else {
 				requestArray['old_page'] = val;
 			}
-			if ( val !== 0 ) {
+			if (val !== 0) {
 				jQuery( '.rthd-support-process' ).show();
-				jQuery.ajax( {
+				jQuery.ajax({
 					url: ajaxurl,
 					dataType: "json",
 					type: 'post',
 					data: requestArray,
-					success: function ( data ) {
-						if ( data.status ) {
+					success: function (data) {
+						if (data.status) {
 							jQuery( '.rthd-support-process' ).hide();
 							skip_step = true;
 							jQuery( '.wizard' ).steps( 'next' );
 						}
 					}
-				} );
+				});
 			}
 		},
-		import_all_users: function ( last_user ) {
+		import_all_users: function (last_user) {
 			var requestArray = new Object();
 			requestArray['action'] = 'rthd_import_all_users';
 			requestArray['nonce'] = jQuery( '#import_all_users' ).val();
@@ -311,32 +311,32 @@ jQuery( document ).ready( function ( $ ) {
 			requestArray['last_import'] = last_user;
 			jQuery( '#rthd-import-all-spinner' ).show();
 			jQuery( '#rthd-all-import-message' ).html( '' );
-			jQuery.ajax( {
+			jQuery.ajax({
 				url: ajaxurl,
 				dataType: "json",
 				type: 'post',
 				data: requestArray,
-				success: function ( data ) {
-					if ( data.status ) {
+				success: function (data) {
+					if (data.status) {
 						var remain = jQuery( '#rthd-setup-import-all-count' ).val();
 						remain = parseInt( remain ) - parseInt( data.imported_count );
 						imported_users += parseInt( data.imported_count );
 						var progressbar = jQuery( '#rthd-setup-import-users-progress' ).val();
 						progressbar = parseInt( progressbar ) + parseInt( data.imported_count );
 						jQuery( '#rthd-setup-import-users-progress' ).val( progressbar );
-						if ( data.hasOwnProperty( 'imported_users' ) ) {
-							$.each( data.imported_users, function ( i, user ) {
+						if (data.hasOwnProperty( 'imported_users' )) {
+							$.each(data.imported_users, function (i, user) {
 								last_user = user.id;
 								rthdSetup.add_contact_to_list( user.id, user.label, user.imghtml, user.editlink );
-							} );
+							});
 						}
-						if ( data.remain_import > 0 ) {
+						if (data.remain_import > 0) {
 							jQuery( '#rthd-setup-import-all-count' ).val( remain );
 							rthdSetup.import_all_users( last_user );
 						} else {
 							jQuery( '#rthd-import-all-spinner' ).hide();
 							jQuery( '#rthd-setup-import-users-progress' ).hide();
-							if ( imported_users == 0 || ! data.imported_count ) {
+							if (imported_users == 0 || ! data.imported_count) {
 								jQuery( '#rthd-all-import-message' ).html( 'No Users Found' );
 							} else {
 								jQuery( '#rthd-all-import-message' ).html( imported_users + ' Users Added' );
@@ -344,9 +344,9 @@ jQuery( document ).ready( function ( $ ) {
 						}
 					}
 				}
-			} );
+			});
 		},
-		import_domain_users: function ( get_count ) {
+		import_domain_users: function (get_count) {
 			var requestArray = new Object();
 			jQuery( '#rthd-domain-import-spinner' ).show();
 			requestArray['action'] = 'rthd_domain_search_and_import';
@@ -354,30 +354,29 @@ jQuery( document ).ready( function ( $ ) {
 			requestArray['domain_query'] = jQuery( '#rthd-add-user-domain' ).val();
 			requestArray['nonce'] = jQuery( '#import_domain' ).val();
 
-			jQuery.ajax( {
+			jQuery.ajax({
 				url: ajaxurl,
 				dataType: "json",
 				type: 'post',
 				data: requestArray,
-				success: function ( data ) {
-					if ( data.status ) {
-						if ( data.hasOwnProperty( 'count' ) ) {
+				success: function (data) {
+					if (data.status) {
+						if (data.hasOwnProperty( 'count' )) {
 							jQuery( '#rthd-domain-import-message' ).html( 'Found ' + data.count + ' Users' );
 						} else {
-							if ( data.hasOwnProperty( 'imported_users' ) ) {
-								$.each( data.imported_users, function ( i, user ) {
+							if (data.hasOwnProperty( 'imported_users' )) {
+								$.each(data.imported_users, function (i, user) {
 									rthdSetup.add_contact_to_list( user.id, user.label, user.imghtml, user.editlink );
-								} );
+								});
 							}
-							if ( data.imported_all ) {
-								if ( data.hasOwnProperty( 'imported_users' ) ) {
+							if (data.imported_all) {
+								if (data.hasOwnProperty( 'imported_users' )) {
 									jQuery( '#rthd-domain-import-message' ).html( 'Imported ' + ( data.imported_users.length ) + ' Users' );
-								}
-								else {
+								} else {
 									jQuery( '#rthd-domain-import-message' ).html( 'No Users to Add' );
 								}
 							} else {
-								if ( data.hasOwnProperty( 'not_imported_users' ) ) {
+								if (data.hasOwnProperty( 'not_imported_users' )) {
 									jQuery( '#rthd-domain-import-message' ).html( 'Could not import ' + ( data.not_imported_users.length ) );
 								}
 							}
@@ -386,42 +385,42 @@ jQuery( document ).ready( function ( $ ) {
 					}
 					jQuery( '#rthd-domain-import-spinner' ).hide();
 				}
-			} );
+			});
 		},
-		give_user_helpdesk_access: function ( email, id ) {
+		give_user_helpdesk_access: function (email, id) {
 			jQuery( '#rthd-autocomplete-page-spinner' ).show();
 			var requestArray = new Object();
-			if ( email != false ) {
+			if (email != false) {
 				requestArray['email'] = email;
 			}
-			if ( id != false ) {
+			if (id != false) {
 				requestArray['ID'] = id;
 			}
 			requestArray['action'] = 'rthd_creater_rtbiz_and_give_access_helpdesk';
-			jQuery.ajax( {
+			jQuery.ajax({
 				url: ajaxurl,
 				dataType: "json",
 				type: 'post',
 				data: requestArray,
-				success: function ( data ) {
-					if ( jQuery( '.rthd-warning' ).is( ':visible' ) ) {
+				success: function (data) {
+					if (jQuery( '.rthd-warning' ).is( ':visible' )) {
 						jQuery( '.rthd-warning' ).html( '' );
 						jQuery( '.rthd-warning' ).hide();
-						jQuery( '#rthd-user-autocomplete' ).val('');
+						jQuery( '#rthd-user-autocomplete' ).val( '' );
 					}
-					if ( jQuery( '.rthd-importer-add-contact' ).is( ':visible' ) ) {
+					if (jQuery( '.rthd-importer-add-contact' ).is( ':visible' )) {
 						jQuery( '.rthd-importer-add-contact' ).hide();
 					}
 					rthdSetup.add_contact_to_list( data.id, data.label, data.imghtml, data.editlink );
 					jQuery( '#rthd-autocomplete-page-spinner' ).hide();
 				}
-			} );
+			});
 		},
-		add_contact_to_list: function ( id, label, imghtml, editlink ) {
-			if ( ! jQuery( '.rthd_selected_user' ).is( ':visible' ) ) {
+		add_contact_to_list: function (id, label, imghtml, editlink) {
+			if ( ! jQuery( '.rthd_selected_user' ).is( ':visible' )) {
 				jQuery( '.rthd_selected_user' ).show();
 			}
-			if ( jQuery( "#imported-user-auth-" + id ).length < 1 ) {
+			if (jQuery( "#imported-user-auth-" + id ).length < 1) {
 				//jQuery(".rthd-setup-list-users").append("<li id='imported-user-auth-" + id + "' class='contact-list' >" + imghtml + "<a href='#removeUser' class='delete_row'>×</a><br/><a class='rthd-setup-user-title heading' target='_blank' href='" + editlink + "'>" + label + "</a><input type='hidden' class='rthd-import-selected-users' name='import_users[]' value='" + id + "' /></li>")
 				//jQuery(".rthd-setup-list-users").append("<li id='imported-user-auth-" + id + "' class='contact-list' >" + imghtml + "<a class='rthd-setup-user-title heading' target='_blank' href='" + editlink + "'>" + label + "</a> <input type='hidden' class='rthd-import-selected-users' name='import_users[]' value='" + id + "' /></li>")
 				//jQuery( ".rthd-setup-list-users" ).append( "<li id='imported-user-auth-" + id + "' class='contact-list' >" + imghtml + "<a class='rthd-setup-user-title heading' target='_blank' href='" + editlink + "'>" + label + "</a> <a href='#removeUser' class='delete_row'>×</a> <input type='hidden' class='rthd-import-selected-users' name='import_users[]' value='" + id + "' /></li>" )
@@ -429,29 +428,29 @@ jQuery( document ).ready( function ( $ ) {
 			}
 		},
 		connect_store: function () {
-			var selected = [ ];
-			jQuery( "input:checkbox[name=rthd-wizard-store]:checked" ).each( function () {
-				if ( $( this ).val() != 'custom' ) {
+			var selected = [];
+			jQuery( "input:checkbox[name=rthd-wizard-store]:checked" ).each(function () {
+				if ($( this ).val() != 'custom') {
 					selected.push( $( this ).val() );
 				}
-			} );
-			if ( selected.length > 0 ) {
+			});
+			if (selected.length > 0) {
 				var requestArray = new Object();
 				requestArray['store'] = selected;
 				requestArray['action'] = 'rthd_offering_sync';
 				jQuery( '.rthd-store-process' ).show();
-				jQuery.ajax( {
+				jQuery.ajax({
 					url: ajaxurl,
 					dataType: "json",
 					type: 'post',
 					data: requestArray,
-					success: function ( data ) {
-						if ( data.status ) {
+					success: function (data) {
+						if (data.status) {
 							skip_step = true;
 							jQuery( '.wizard' ).steps( 'next' );
 						}
 					}
-				} );
+				});
 			} else {
 				return true;
 			}
@@ -459,33 +458,33 @@ jQuery( document ).ready( function ( $ ) {
 		get_assingee_ui: function () {
 			jQuery( '.rthd-team-setup-loading' ).show();
 
-			jQuery.ajax( {
+			jQuery.ajax({
 				url: ajaxurl,
 				dataType: "json",
 				type: 'post',
 				data: {
 					action: 'rthd_get_default_assignee_ui'
 				},
-				success: function ( data ) {
-					if ( data.status ) {
+				success: function (data) {
+					if (data.status) {
 						jQuery( '#rthd-setup-set-assignee-ui' ).html( data.html );
 						jQuery( '.rthd-team-setup-loading' ).hide();
 						skip_step = true;
 						jQuery( '.wizard' ).steps( 'next' );
 					}
 				}
-			} );
+			});
 		},
 		save_assignee: function () {
 			jQuery( '.rthd-assignee-process' ).show();
-			var requestArray = [ ];
-			jQuery( '.rthd-setup-assignee' ).each( function () {
+			var requestArray = [];
+			jQuery( '.rthd-setup-assignee' ).each(function () {
 				var temp = new Object();
 				temp['term_ID'] = jQuery( this ).attr( 'data' );
 				temp['user_ID'] = jQuery( this ).val();
 				requestArray.push( temp );
-			} );
-			jQuery.ajax( {
+			});
+			jQuery.ajax({
 				url: ajaxurl,
 				dataType: "json",
 				type: 'post',
@@ -494,54 +493,54 @@ jQuery( document ).ready( function ( $ ) {
 					assignee: requestArray,
 					default_assignee: jQuery( '#rthd_offering-default' ).val()
 				},
-				success: function ( data ) {
-					if ( data.status ) {
+				success: function (data) {
+					if (data.status) {
 						jQuery( '.rthd-assignee-process' ).show();
 						skip_step = true;
 						jQuery( '.wizard' ).steps( 'next' );
 					}
 				}
-			} );
+			});
 		},
 		assingee_page: function () {
-			jQuery( '#rthd_offering-default' ).on( 'change', function ( e ) {
+			jQuery( '#rthd_offering-default' ).on('change', function (e) {
 				jQuery( '.rthd-setup-assignee' ).val( jQuery( this ).val() );
-			} )
+			})
 		},
-		custom_page_action: function ( currentIndex ) {
+		custom_page_action: function (currentIndex) {
 			/* if (currentIndex == 3 && jQuery('.rthd-setup-assignee').length == 0) {
-			 jQuery('div.actions a[href="#next"]').hide();
-			 setTimeout(function () {
-			 jQuery('div.actions a[href="#next"]').show();
-			 skip_step = true;
-			 jQuery('.wizard').steps('next');
-			 return true;
-			 }, 2000);
-			 }*/
+             jQuery('div.actions a[href="#next"]').hide();
+             setTimeout(function () {
+             jQuery('div.actions a[href="#next"]').show();
+             skip_step = true;
+             jQuery('.wizard').steps('next');
+             return true;
+             }, 2000);
+             }*/
 		},
 		outbound_mail_setup: function () {
-			if ( jQuery( '#mailbox-list>.rtmailbox-row' ).length > 0 ) {
+			if (jQuery( '#mailbox-list>.rtmailbox-row' ).length > 0) {
 				jQuery( '.rthd-mailbox-setup-process' ).show();
 				//jQuery('div.actions a[href="#next"]').parent().after('<li id="rthd_spinner"><img src="' + adminurl + 'images/spinner.gif"/></li>')
-				jQuery.ajax( {
+				jQuery.ajax({
 					url: ajaxurl,
 					dataType: "json",
 					type: 'post',
 					data: {
 						action: 'rthd_outboud_mail_setup_ui'
 					},
-					success: function ( data ) {
-						if ( data.status ) {
+					success: function (data) {
+						if (data.status) {
 							jQuery( '#wizard-p-4' ).html( data.html );
 						}
 						//jQuery('div.actions li#rthd_spinner').remove();
 						jQuery( '.rthd-outbound-setup-process' ).hide();
 					}
-				} );
-			} else if ( jQuery( '#rthd_outound_sub-action' ).val() === 'rthd_outound_setup_wizard' ) {
+				});
+			} else if (jQuery( '#rthd_outound_sub-action' ).val() === 'rthd_outound_setup_wizard') {
 				//jQuery('div.actions a[href="#next"]').parent().after('<li id="rthd_spinner"><img src="' + adminurl + 'images/spinner.gif"/></li>')
 				jQuery( '.rthd-outbound-setup-process' ).show();
-				jQuery.ajax( {
+				jQuery.ajax({
 					url: ajaxurl,
 					dataType: "json",
 					type: 'post',
@@ -549,21 +548,21 @@ jQuery( document ).ready( function ( $ ) {
 						action: 'rthd_outound_setup_wizard',
 						data: jQuery( '#rthd_outgoing_mailbox_setup_container' ).find( "select,textarea, input" ).serialize()
 					},
-					success: function ( data ) {
-						if ( data.status ) {
+					success: function (data) {
+						if (data.status) {
 							jQuery( '#wizard-p-4' ).html( data.html );
 							skip_step = true;
 							jQuery( '.wizard' ).steps( 'next' );
-                        }else{
-                            alert( data.error );
-                        }
-                        //jQuery('div.actions li#rthd_spinner').remove();
-                        jQuery( '.rthd-outbound-setup-process' ).hide();
+						} else {
+							alert( data.error );
+						}
+						//jQuery('div.actions li#rthd_spinner').remove();
+						jQuery( '.rthd-outbound-setup-process' ).hide();
 					}
-				} );
+				});
 			} else {
 				var strconfirm = confirm( 'Mailbox is not configured. Do you want to skip this step?' );
-				if ( strconfirm == true ) {
+				if (strconfirm == true) {
 					return true;
 				} else {
 					return false;
@@ -571,11 +570,11 @@ jQuery( document ).ready( function ( $ ) {
 			}
 		},
 		acl_save: function () {
-			jQuery( document ).on( 'change', 'input.rt-hd-setup-acl:radio', function ( e ) {
+			jQuery( document ).on('change', 'input.rt-hd-setup-acl:radio', function (e) {
 				var userid = jQuery( this ).data( 'id' );
 				var spinner = jQuery( '#ACL_' + userid + ' td:last .helpdeskspinner' );
 				spinner.show();
-				jQuery.ajax( {
+				jQuery.ajax({
 					url: ajaxurl,
 					dataType: "json",
 					type: 'post',
@@ -584,31 +583,31 @@ jQuery( document ).ready( function ( $ ) {
 						permission: jQuery( this ).val(),
 						userid: userid
 					},
-					success: function ( data ) {
+					success: function (data) {
 						spinner.hide();
-						if ( data.status ) {
+						if (data.status) {
 						} else {
 							e.preventDefault();
 						}
 					}
-				} );
-			} );
+				});
+			});
 		},
 		get_acl_view: function () {
-			jQuery.ajax( {
+			jQuery.ajax({
 				url: ajaxurl,
 				dataType: "json",
 				type: 'post',
 				data: {
 					action: 'rthd_get_ACL'
 				},
-				success: function ( data ) {
-					if ( data.status ) {
+				success: function (data) {
+					if (data.status) {
 						jQuery( '.rthd-ACL-change' ).html( data.html );
 					}
 				}
-			} );
+			});
 		}
 	};
 	rthdSetup.init();
-} );
+});

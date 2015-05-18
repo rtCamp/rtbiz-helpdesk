@@ -121,7 +121,7 @@ if ( ! class_exists( 'Rt_Form' ) ) {
 		}
 
 
-		private function embedd_class( $element, $class = NULL ) {
+		private function embedd_class( $element, $class = null ) {
 
 			$html = 'class="' . $this->get_default_class( $element );
 
@@ -138,7 +138,7 @@ if ( ! class_exists( 'Rt_Form' ) ) {
 			return $html;
 		}
 
-		private function generate_element_id( $element, $id = NULL ) {
+		private function generate_element_id( $element, $id = null ) {
 
 			$html = 'id="';
 			if ( isset( $id ) ) {
