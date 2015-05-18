@@ -428,22 +428,22 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 				return false;
 			}
 			if ( empty( $_POST['post'] ) || empty( $_POST['post_description'] )|| empty( $_POST['post']['title'] ) || empty( $_POST['post']['email'][0] ) ) {
-				echo '<div id="info" class="error">Please fill all the details.</div>';
+				echo '<div id="info" class="error rthd-notice">Please fill all the details.</div>';
 				return false;
 			}
 
 			if ( ( $this->isWoocommerceActive || $this->iseddActive ) && ( isset( $_POST['post']['product_id'] ) && empty( $_POST['post']['product_id'] ) ) ) {
-				echo '<div id="info" class="error">Please select a product to let us know more about your query.</div>';
+				echo '<div id="info" class="error rthd-notice">Please select a product to let us know more about your query.</div>';
 				return false;
 			}
 
 			if ( rt_hd_check_email_blacklisted( $_POST['post']['email'][0] ) ){
-				echo '<div id="info" class="error">You have been blocked from the system.</div>';
+				echo '<div id="info" class="error rthd-notice">You have been blocked from the system.</div>';
 				return false;
 			}
 
 			if ( ! is_email( $_POST['post']['email'][0] ) ){
-				echo '<div id="info" class="error">Please enter valid email id.</div>';
+				echo '<div id="info" class="error rthd-notice">Please enter valid email id.</div>';
 				return false;
 			}
 			// remove ticket creator from client email list

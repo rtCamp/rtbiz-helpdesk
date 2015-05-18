@@ -48,7 +48,7 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 				$post_id = $rt_hd_offering_support->save_support_form();
 				if ( ! empty( $post_id ) && is_int( $post_id ) ) {
 					?>
-					<div id="info" class="success">Your support request has been submitted. We will get back to you for
+					<div id="info" class="success rthd-notice">Your support request has been submitted. We will get back to you for
 						your query soon.
 					</div>
 				<?php
@@ -111,7 +111,7 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 				}
 			} else {
 				?>
-				<div id="info" class="error">You're not logged in. Please login first to create support ticket.
+				<div id="info" class="error rthd-notice">You're not logged in. Please login first to create support ticket.
 				</div>
 				<?php
 			}
