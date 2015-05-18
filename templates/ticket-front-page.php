@@ -208,7 +208,7 @@ $user_edit_content = current_user_can( $cap );
 				?>
 
 				<?php
-// Products
+				// Products
 				global $rtbiz_offerings;
 				$products = array();
 				if ( ! empty( $rtbiz_offerings ) ) {
@@ -318,8 +318,9 @@ $user_edit_content = current_user_can( $cap );
 								echo '<a title= "' . $display_name . '" class="rthd-last-reply-by"  href="' . ( current_user_can( $cap ) ? rthd_biz_user_profile_link( $email ) : '#' ) . '">' . get_avatar( $email, '30' ) . ' </a>';
 							}
 						}
+
 						// Last reply author
-						if ( ! empty( $comment ) ) {
+						if ( ! empty( $comment ) && $comment->comment_author_email != $created_by->user_email ) {
 							echo '<a class="rthd-last-reply-by" title="last reply by ' . $comment->comment_author . ' ' . esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . ' ago " href="' . (current_user_can( $cap ) ? rthd_biz_user_profile_link( $comment->comment_author_email ) : '#') . '">' . get_avatar( $comment->comment_author_email, '30' ) . ' </a>'
 							?>
 						<?php } ?>
