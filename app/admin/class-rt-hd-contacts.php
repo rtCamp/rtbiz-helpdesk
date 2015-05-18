@@ -456,8 +456,8 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		 */
 		function get_user_from_email( $email ) {
 
-			$userid = @email_exists( $email );
-			if ( ! $userid ) {
+			$userid = email_exists( $email );
+			if ( ! $userid && ! is_wp_error( $userid ) ) {
 				//add_filter( 'wpmu_welcome_user_notification', '__return_false' );
 				$random_password = wp_generate_password( $length = 12, $include_standard_special_chars = false );
 				$userid          = wp_create_user( $email, $random_password, $email );

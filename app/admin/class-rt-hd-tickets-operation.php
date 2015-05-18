@@ -92,7 +92,11 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 				$ticketModel = new Rt_HD_Ticket_Model();
 
 				if ( empty( $post_id ) ) { // new post
-					$post_id = @wp_insert_post( $postArray );
+					$post_id = wp_insert_post( $postArray );
+
+					if ( is_wp_error( $post_id ) ) {
+						return false;
+					}
 					update_post_meta( $post_id, '_rtbiz_hd_created_by', ( empty( $created_by) ) ? get_current_user_id() : $created_by );
 					$dataArray = array_merge( $dataArray, array(
 						'date_create'     => $postArray['post_date'],
@@ -120,7 +124,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 
 					// update the post, which calls save_post again
 					$postArray = array_merge( $postArray, array( 'ID' => $post_id ) );
-					$post_id   = @wp_update_post( $postArray );
+					$post_id   = wp_update_post( $postArray );
 
 					// re-hook this function
 					add_action( 'save_post', array( $rt_hd_cpt_tickets, 'save_meta_boxes' ), 1, 2 );

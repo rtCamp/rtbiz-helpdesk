@@ -1170,7 +1170,10 @@ function rthd_wp_new_user_notification( $user_id, $plaintext_pass = '' ) {
 	$message .= sprintf( __( 'Username: %s' ), $user->user_login ) . "\r\n\r\n";
 	$message .= sprintf( __( 'E-mail: %s' ), $user->user_email ) . "\r\n";
 
-	@wp_mail( get_option( 'admin_email' ), sprintf( __( '[%s] New User Registration' ), $blogname ), $message );
+	try {
+		wp_mail( get_option( 'admin_email' ), sprintf( __( '[%s] New User Registration' ), $blogname ), $message );
+	} catch ( Exception $e ) {
+	}
 
 	if ( empty( $plaintext_pass ) ) {
 		return; }
@@ -1196,7 +1199,11 @@ function rthd_wp_new_user_notification( $user_id, $plaintext_pass = '' ) {
 	$message .= sprintf( __( 'Please visit following link to activate the account.' . "\r\n" . '%s' ), $reset_pass_link ) . "\r\n\r\n";
 	$message .= __( 'Thanks.' ) . "\r\n" . __( 'Admin.' );
 
-	wp_mail( $user->user_email, sprintf( __( 'Your New %s Account' ), $module_label ), $message );
+	try {
+		wp_mail( $user->user_email, sprintf( __( 'Your New %s Account' ), $module_label ), $message );
+	} catch ( Exception $e ) {
+	}
+
 }
 
 function rthd_get_blacklist_emails() {

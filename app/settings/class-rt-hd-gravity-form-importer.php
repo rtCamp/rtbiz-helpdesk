@@ -1002,7 +1002,10 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 										}
 										$term     = get_term_by( 'id', $term_id, $tax_name );
 										$termslug = $term->slug;
-										@wp_set_object_terms( $ticket_id, $termslug, $tax_name, true );
+										try {
+											wp_set_object_terms( $ticket_id, $termslug, $tax_name, true );
+										} catch (Exception $e) {
+										}
 
 										// Update Index Table
 										$attr_name = str_replace( '-', '_', $tax_name );
@@ -1045,7 +1048,10 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 											$term       = get_term_by( 'id', $term_id, $tax_name );
 											$termslug[] = $term->slug;
 										}
-										@wp_set_object_terms( $ticket_id, $termslug, $tax_name, true );
+										try {
+											wp_set_object_terms( $ticket_id, $termslug, $tax_name, true );
+										} catch (Exception $e) {
+										}
 
 										// Update Index Table
 										$attr_name = str_replace( '-', '_', $tax_name );
