@@ -205,7 +205,7 @@ function rthd_is_system_email( $email ) {
 
 	foreach ( $google_acs as $ac ) {
 		$ac->email_data = unserialize( $ac->email_data );
-		$ac_email = filter_var( $ac->email_data[ 'email' ], FILTER_SANITIZE_EMAIL );
+		$ac_email = filter_var( $ac->email_data['email'], FILTER_SANITIZE_EMAIL );
 		if ( $ac_email == $email ) {
 			return true;
 		}
@@ -308,7 +308,7 @@ function rthd_get_user_ids( $user ) {
 function rthd_update_post_term_count( $terms, $taxonomy ) {
 	global $wpdb;
 
-	$object_types = ( array ) $taxonomy->object_type;
+	$object_types = (array) $taxonomy->object_type;
 
 	foreach ( $object_types as &$object_type ) {
 		list( $object_type ) = explode( ':', $object_type );
@@ -325,16 +325,16 @@ function rthd_update_post_term_count( $terms, $taxonomy ) {
 		$object_types = esc_sql( array_filter( $object_types, 'post_type_exists' ) );
 	}
 
-	foreach ( ( array ) $terms as $term ) {
+	foreach ( (array) $terms as $term ) {
 		$count = 0;
 
 		// Attachments can be 'inherit' status, we need to base count off the parent's status if so
 		if ( $check_attachments ) {
-			$count += ( int ) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->term_relationships, $wpdb->posts p1 WHERE p1.ID = $wpdb->term_relationships.object_id  AND post_type = 'attachment' AND term_taxonomy_id = %d", $term ) );
+			$count += (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->term_relationships, $wpdb->posts p1 WHERE p1.ID = $wpdb->term_relationships.object_id  AND post_type = 'attachment' AND term_taxonomy_id = %d", $term ) );
 		}
 
 		if ( $object_types ) {
-			$count += ( int ) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->term_relationships, $wpdb->posts WHERE $wpdb->posts.ID = $wpdb->term_relationships.object_id  AND post_type IN ('" . implode( "', '", $object_types ) . "') AND term_taxonomy_id = %d", $term ) );
+			$count += (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM $wpdb->term_relationships, $wpdb->posts WHERE $wpdb->posts.ID = $wpdb->term_relationships.object_id  AND post_type IN ('" . implode( "', '", $object_types ) . "') AND term_taxonomy_id = %d", $term ) );
 		}
 
 		do_action( 'edit_term_taxonomy', $term, $taxonomy );
@@ -405,19 +405,19 @@ function rthd_text_diff( $left_string, $right_string, $args = null ) {
 	$r = "<table class='diff' style='width: 100%;background: white;margin-bottom: 1.25em;border: solid 1px #dddddd;border-radius: 3px;margin: 0 0 18px;'>\n";
 	$r .= "<col class='ltype' /><col class='content' /><col class='ltype' /><col class='content' />";
 
-	if ( $args[ 'title' ] || $args[ 'title_left' ] || $args[ 'title_right' ] ) {
+	if ( $args['title'] || $args['title_left'] || $args['title_right'] ) {
 		$r .= '<thead>';
 	}
-	if ( $args[ 'title' ] ) {
-		$r .= "<tr class='diff-title'><th colspan='4'>" . $args[ 'title' ] . '</th></tr>\n';
+	if ( $args['title'] ) {
+		$r .= "<tr class='diff-title'><th colspan='4'>" . $args['title'] . '</th></tr>\n';
 	}
-	if ( $args[ 'title_left' ] || $args[ 'title_right' ] ) {
+	if ( $args['title_left'] || $args['title_right'] ) {
 		$r .= "<tr class='diff-sub-title'>\n";
-		$r .= "\t<td></td><th>{$args[ 'title_left' ]}</th>\n";
-		$r .= "\t<td></td><th>{$args[ 'title_right' ]}</th>\n";
+		$r .= "\t<td></td><th>{$args['title_left']}</th>\n";
+		$r .= "\t<td></td><th>{$args['title_right']}</th>\n";
 		$r .= "</tr>\n";
 	}
-	if ( $args[ 'title' ] || $args[ 'title_left' ] || $args[ 'title_right' ] ) {
+	if ( $args['title'] || $args['title_left'] || $args['title_right'] ) {
 		$r .= "</thead>\n";
 	}
 	$r .= "<tbody>\n$diff\n</tbody>\n";
@@ -439,12 +439,12 @@ function rthd_get_unique_hash_url( $ticket_id ) {
 	global $rt_hd_module;
 	$labels = $rt_hd_module->labels;
 	$rthd_unique_id = get_post_meta( $ticket_id, '_rtbiz_hd_unique_id', true );
-	return trailingslashit( site_url() ) . strtolower( $labels[ 'name' ] ) . '/?rthd_unique_id=' . $rthd_unique_id;
+	return trailingslashit( site_url() ) . strtolower( $labels['name'] ) . '/?rthd_unique_id=' . $rthd_unique_id;
 }
 
 function rthd_is_unique_hash_enabled() {
 	$settings = rthd_get_redux_settings();
-	if ( ! empty( $settings[ 'rthd_enable_ticket_unique_hash' ] ) ) {
+	if ( ! empty( $settings['rthd_enable_ticket_unique_hash'] ) ) {
 		return true;
 	}
 	return false;
@@ -452,16 +452,16 @@ function rthd_is_unique_hash_enabled() {
 
 // Setting ApI
 function rthd_get_redux_settings() {
-	if ( ! isset( $GLOBALS[ 'redux_helpdesk_settings' ] ) ) {
-		$GLOBALS[ 'redux_helpdesk_settings' ] = get_option( 'redux_helpdesk_settings', array() );
+	if ( ! isset( $GLOBALS['redux_helpdesk_settings'] ) ) {
+		$GLOBALS['redux_helpdesk_settings'] = get_option( 'redux_helpdesk_settings', array() );
 	}
 
-	return $GLOBALS[ 'redux_helpdesk_settings' ];
+	return $GLOBALS['redux_helpdesk_settings'];
 }
 
 function rthd_my_mail_from( $email ) {
 	$settings = rthd_get_redux_settings();
-	return $settings[ 'rthd_outgoing_email_from_address' ];
+	return $settings['rthd_outgoing_email_from_address'];
 }
 
 // user notification preference
@@ -471,8 +471,8 @@ function rthd_get_user_notification_preference( $user_id, $email = '' ) {
 		$email = $user->user_email;
 	}
 	$post = rt_biz_get_contact_by_email( $email );
-	if ( ! empty( $post[ 0 ] ) ) {
-		$pref = Rt_Entity::get_meta( $post[ 0 ]->ID, 'rthd_receive_notification', true );
+	if ( ! empty( $post[0] ) ) {
+		$pref = Rt_Entity::get_meta( $post[0]->ID, 'rthd_receive_notification', true );
 	}
 
 	//	$pref = get_user_meta( $user_id, 'rthd_notification_pref', true );
@@ -485,7 +485,7 @@ function rthd_get_user_notification_preference( $user_id, $email = '' ) {
 //adult filter redux setting
 function rthd_get_redux_adult_filter() {
 	$settings = rthd_get_redux_settings();
-	if ( ! empty( $settings[ 'rthd_enable_ticket_adult_content' ] ) ) {
+	if ( ! empty( $settings['rthd_enable_ticket_adult_content'] ) ) {
 		return true;
 	}
 	return false;
@@ -499,8 +499,8 @@ function rthd_get_user_adult_preference( $user_id, $email = '' ) {
 	}
 	$post = rt_biz_get_contact_by_email( $email );
 
-	if ( ! empty( $post[ 0 ] ) ) {
-		$pref = Rt_Entity::get_meta( $post[ 0 ]->ID, 'rthd_contact_adult_filter', true );
+	if ( ! empty( $post[0] ) ) {
+		$pref = Rt_Entity::get_meta( $post[0]->ID, 'rthd_contact_adult_filter', true );
 	}
 	//  Old adult pref meta key
 	//	$pref = get_user_meta( $user_id, 'rthd_adult_pref', true );
@@ -562,16 +562,16 @@ function rthd_create_new_ticket_title( $key, $post_id ) {
 
 function rthd_get_email_signature_settings() {
 	$redux = rthd_get_redux_settings();
-	if ( isset( $redux[ 'rthd_enable_signature' ] ) && 1 == $redux[ 'rthd_enable_signature' ] && isset( $redux[ 'rthd_email_signature' ] ) ) {
-		return $redux[ 'rthd_email_signature' ];
+	if ( isset( $redux['rthd_enable_signature'] ) && 1 == $redux['rthd_enable_signature'] && isset( $redux['rthd_email_signature'] ) ) {
+		return $redux['rthd_email_signature'];
 	}
 	return '';
 }
 
 function rthd_get_auto_response_message() {
 	$redux = rthd_get_redux_settings();
-	if ( isset( $redux[ 'rthd_enable_auto_response' ] ) && 1 == $redux[ 'rthd_enable_auto_response' ] && isset( $redux[ 'rthd_auto_response_message' ] ) ) {
-		return $redux[ 'rthd_auto_response_message' ];
+	if ( isset( $redux['rthd_enable_auto_response'] ) && 1 == $redux['rthd_enable_auto_response'] && isset( $redux['rthd_auto_response_message'] ) ) {
+		return $redux['rthd_auto_response_message'];
 	}
 	return '';
 }
@@ -582,7 +582,7 @@ function rthd_generate_email_title( $post_id, $title ) {
 	$title = str_replace( '{ticket_id}', $post_id, $title );
 	$title = str_replace( '{ticket_title}', html_entity_decode( get_the_title( $post_id ), ENT_COMPAT, 'UTF-8' ), $title );
 
-	if ( strpos( $title, '{offerings_name}' ) !== false ) {
+	if ( false !== strpos( $title, '{offerings_name}' ) ) {
 		global $rtbiz_offerings;
 		$offering = '';
 		$products = array();
@@ -648,7 +648,6 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 			break;
 	}
 
-
 	$side_class = ( $type == 'right' ) ? 'rthd-self' : ( ( $type == 'left' ) ? 'rthd-other' : '' );
 	$editable_class = ( $display_private_comment_flag ) ? 'editable' : '';
 	?>
@@ -667,7 +666,7 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 				}
 				?>
 
-				<span title="<?php echo esc_attr( ( $comment->comment_author_email == '' ) ? $comment->comment_author_IP : $comment->comment_author_email  ); ?>"><?php echo ( ( $comment->comment_author == '' ) ? $comment->comment_author_email : $commentAuthorLink ); ?> </span>
+				<span title="<?php echo esc_attr( ( $comment->comment_author_email == '' ) ? $comment->comment_author_IP : $comment->comment_author_email ); ?>"><?php echo ( ( $comment->comment_author == '' ) ? $comment->comment_author_email : $commentAuthorLink ); ?> </span>
 				<time title="<?php echo esc_attr( mysql2date( get_option( 'date_format' ), $comment->comment_date ) . ' at ' . mysql2date( get_option( 'time_format' ), $comment->comment_date, true ) ); ?>" datetime="<?php echo esc_attr( $comment->comment_date ); ?>">
 					<?php if ( $user_edit ) {
 						?>
@@ -680,10 +679,10 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 							<a href="<?php echo $href; ?>" class="show-original-email" target="_blank"> Show original email</a> |
 							<?php
 						}
-					}
-					if ( $is_comment_private == true ) {
-						echo "<span class='private_comment_span'> $private_text </span> | ";
-					}
+}
+if ( true == $is_comment_private ) {
+	echo "<span class='private_comment_span'> $private_text </span> | ";
+}
 					?>
 					<?php echo '<a class="followup-hash-url" id="followup_' . $comment->comment_ID . '" href="#followup_' . $comment->comment_ID . '" >' . esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . ' ago </a>'; ?>
 
@@ -705,7 +704,7 @@ function rthd_render_comment( $comment, $user_edit, $type = 'right', $echo = tru
 			</div>
 			<?php
 			if ( $display_private_comment_flag ) {
-				$comment_attechment = get_comment_meta( $comment->comment_ID, "attachment" );
+				$comment_attechment = get_comment_meta( $comment->comment_ID, 'attachment' );
 				$comment_attechment = array_unique( $comment_attechment );
 				if ( ! empty( $comment_attechment ) ) {
 					?>
@@ -741,12 +740,12 @@ function rthd_content_filter( $content ) {
 	$content = balanceTags( $content, true );
 
 	preg_match_all( '/<body\s[^>]*>(.*?)<\/body>/s', $content, $output_array );
-	if ( count( $output_array ) > 0 && ! empty( $output_array[ 1 ] ) ) {
-		$content = $output_array[ 1 ][ 0 ];
+	if ( count( $output_array ) > 0 && ! empty( $output_array[1] ) ) {
+		$content = $output_array[1][0];
 	}
 
 	$offset = strpos( $content, ':: Reply Above This Line ::' );
-	$content = substr( $content, 0, ( $offset === false ) ? strlen( $content ) : $offset  );
+	$content = substr( $content, 0, ( $offset === false ) ? strlen( $content ) : $offset );
 
 	$content = balanceTags( $content, true );
 
@@ -790,7 +789,7 @@ function rthd_check_plugin_dependecy() {
 		add_action( 'admin_enqueue_scripts', 'rthd_plugin_check_enque_js' );
 		add_action( 'wp_ajax_rthd_activate_plugin', 'rthd_activate_plugin_ajax' );
 		add_action( 'wp_ajax_rthd_install_plugin', 'rthd_install_plugin_ajax' );
-//		add_action( 'admin_notices', 'rthd_admin_notice_dependency_not_installed' );
+		//      add_action( 'admin_notices', 'rthd_admin_notice_dependency_not_installed' );
 		add_action( 'admin_init', 'rthd_install_dependency' );
 	}
 
@@ -871,7 +870,7 @@ function rthd_admin_notice_dependency_installed() {
 }
 
 function rthd_install_plugin_ajax() {
-	if ( empty( $_POST[ 'plugin_slug' ] ) ) {
+	if ( empty( $_POST['plugin_slug'] ) ) {
 		die( __( 'ERROR: No slug was passed to the AJAX callback.', RT_HD_TEXT_DOMAIN ) );
 	}
 	check_ajax_referer( 'rthd_install_plugin_rtbiz' );
@@ -993,7 +992,7 @@ function rthd_admin_notice_dependency_not_installed() {
 
 function rthd_get_path_for_plugin( $slug ) {
 	global $rthd_plugin_check;
-	$filename = ( ! empty( $rthd_plugin_check[ $slug ][ 'filename' ] ) ) ? $rthd_plugin_check[ $slug ][ 'filename' ] : $slug . '.php';
+	$filename = ( ! empty( $rthd_plugin_check[ $slug ]['filename'] ) ) ? $rthd_plugin_check[ $slug ]['filename'] : $slug . '.php';
 
 	return $slug . '/' . $filename;
 }
@@ -1004,7 +1003,7 @@ function rthd_is_plugin_active( $slug ) {
 		return false;
 	}
 
-	return $rthd_plugin_check[ $slug ][ 'active' ];
+	return $rthd_plugin_check[ $slug ]['active'];
 }
 
 function rthd_is_plugin_installed( $slug ) {
@@ -1024,7 +1023,7 @@ function rthd_is_plugin_installed( $slug ) {
  * ajax call for active plugin
  */
 function rthd_activate_plugin_ajax() {
-	if ( empty( $_POST[ 'path' ] ) ) {
+	if ( empty( $_POST['path'] ) ) {
 		die( __( 'ERROR: No slug was passed to the AJAX callback.', RT_HD_TEXT_DOMAIN ) );
 	}
 	$rtbizpath = rthd_get_path_for_plugin( 'rtbiz' );
@@ -1043,7 +1042,6 @@ function rthd_activate_plugin_ajax() {
 	if ( ! $rtbiz_active ) {
 		rthd_activate_plugin( $rtbizpath );
 	}
-
 
 	echo 'true';
 	die();
@@ -1080,17 +1078,17 @@ function rthd_get_comment_type( $comment_type_value ) {
 function rthd_edit_comment_type( $Comment_ID, $value ) {
 	global $wpdb;
 	$wpdb->query(
-			$wpdb->prepare( "UPDATE $wpdb->comments SET comment_type=%s WHERE comment_ID = %d", $value, $Comment_ID )
+		$wpdb->prepare( "UPDATE $wpdb->comments SET comment_type=%s WHERE comment_ID = %d", $value, $Comment_ID )
 	);
 }
 
 function rthd_status_markup( $pstatus ) {
 	global $rt_hd_module;
 	$post_statuses = $rt_hd_module->get_custom_statuses();
-	$key = array_search( $pstatus, array_column( $post_statuses, 'slug'));
-	if ( $key !== false ) {
-		$pstatus = ucfirst( $post_statuses[ $key ][ 'name' ] );
-		$tstatus = $post_statuses[ $key ][ 'slug' ];
+	$key = array_search( $pstatus, array_column( $post_statuses, 'slug' ) );
+	if ( false !== $key ) {
+		$pstatus = ucfirst( $post_statuses[ $key ]['name'] );
+		$tstatus = $post_statuses[ $key ]['slug'];
 		return '<mark class="rt' . $tstatus . ' rthd-status tips" data-tip="' . $pstatus . '">' . $pstatus . '</mark>';
 	}
 	return '';
@@ -1099,7 +1097,7 @@ function rthd_status_markup( $pstatus ) {
 function rthd_biz_user_profile_link( $email ) {
 	$post = rt_biz_get_contact_by_email( $email );
 	if ( ! empty( $post ) ) {
-		return get_edit_post_link( $post[ 0 ]->ID );
+		return get_edit_post_link( $post[0]->ID );
 	} else {
 		return '#';
 	}
@@ -1174,8 +1172,8 @@ function rthd_wp_new_user_notification( $user_id, $plaintext_pass = '' ) {
 
 	@wp_mail( get_option( 'admin_email' ), sprintf( __( '[%s] New User Registration' ), $blogname ), $message );
 
-	if ( empty( $plaintext_pass ) )
-		return;
+	if ( empty( $plaintext_pass ) ) {
+		return; }
 
 	$settings = rthd_get_redux_settings();
 	$module_label = 'Helpdesk';
@@ -1195,7 +1193,7 @@ function rthd_wp_new_user_notification( $user_id, $plaintext_pass = '' ) {
 	$message = __( 'Howdy,' ) . "\r\n\r\n";
 	$message .= sprintf( __( 'A new account on %s has been created for you.' ), $module_label ) . "\r\n\r\n";
 	$message .= sprintf( __( 'Your username is: %s' ), $user->user_login ) . "\r\n";
-	$message .= sprintf( __( "Please visit following link to activate the account." . "\r\n" . "%s" ), $reset_pass_link ) . "\r\n\r\n";
+	$message .= sprintf( __( 'Please visit following link to activate the account.' . "\r\n" . '%s' ), $reset_pass_link ) . "\r\n\r\n";
 	$message .= __( 'Thanks.' ) . "\r\n" . __( 'Admin.' );
 
 	wp_mail( $user->user_email, sprintf( __( 'Your New %s Account' ), $module_label ), $message );
@@ -1204,8 +1202,8 @@ function rthd_wp_new_user_notification( $user_id, $plaintext_pass = '' ) {
 function rthd_get_blacklist_emails() {
 	$redux = rthd_get_redux_settings();
 	$blacklist = array();
-	if ( isset( $redux[ 'rthd_blacklist_emails_textarea' ] ) && ! empty( $redux[ 'rthd_blacklist_emails_textarea' ] ) ) {
-		$blacklist = explode( "\n", $redux[ 'rthd_blacklist_emails_textarea' ] );
+	if ( isset( $redux['rthd_blacklist_emails_textarea'] ) && ! empty( $redux['rthd_blacklist_emails_textarea'] ) ) {
+		$blacklist = explode( "\n", $redux['rthd_blacklist_emails_textarea'] );
 	}
 	return array_filter( $blacklist );
 }
@@ -1228,7 +1226,7 @@ function rthd_set_redux_settings( $option_name, $option_value ) {
 function rthd_get_taxonomy_diff( $post_id, $tax_slug ) {
 
 	$post_terms = wp_get_post_terms( $post_id, $tax_slug );
-	$postterms = array_filter( $_POST[ 'tax_input' ][ $tax_slug ] );
+	$postterms = array_filter( $_POST['tax_input'][ $tax_slug ] );
 	$termids = wp_list_pluck( $post_terms, 'term_id' );
 	$diff = array_diff( $postterms, $termids );
 	$diff2 = array_diff( $termids, $postterms );
@@ -1243,8 +1241,6 @@ function rthd_get_taxonomy_diff( $post_id, $tax_slug ) {
 		$tmp = get_term_by( 'id', $tax_id, $tax_slug );
 		$diff_tax2[] = $tmp->name;
 	}
-
-
 
 	$diff = rthd_text_diff( implode( ', ', $diff_tax2 ), implode( ', ', $diff_tax1 ) );
 
@@ -1317,12 +1313,12 @@ function rthd_filter_emails( $allemails ) {
 	$subscriber = array();
 	$allemail = array();
 	foreach ( $allemails as $mail ) {
-		if ( ! array_key_exists( $mail[ 'address' ], $hdUser ) ) {
-			if ( ! rt_hd_check_email_blacklisted( $mail[ 'address' ] ) ) {
+		if ( ! array_key_exists( $mail['address'], $hdUser ) ) {
+			if ( ! rt_hd_check_email_blacklisted( $mail['address'] ) ) {
 				$allemail[] = $mail;
 			}
 		} else {
-			$subscriber[] = $hdUser[ $mail[ 'address' ] ];
+			$subscriber[] = $hdUser[ $mail['address'] ];
 		}
 	}
 	return array( 'subscriber' => $subscriber, 'allemail' => $allemail );
@@ -1350,7 +1346,7 @@ function rt_hd_check_email_blacklisted( $testemail ) {
  */
 function rthd_is_enable_mailbox_reading() {
 	$redux = rthd_get_redux_settings();
-	$flag = ( isset( $redux[ 'rthd_enable_mailbox_reading' ] ) && $redux[ 'rthd_enable_mailbox_reading' ] == 1 );
+	$flag = ( isset( $redux['rthd_enable_mailbox_reading'] ) && $redux['rthd_enable_mailbox_reading'] == 1 );
 	return $flag;
 }
 
@@ -1362,8 +1358,8 @@ function rthd_is_enable_mailbox_reading() {
  */
 function get_offering_meta( $key, $term_id = '' ) {
 
-	if ( empty( $term_id ) && isset( $_GET[ 'tag_ID' ] ) ) {
-		$term_id = $_GET[ 'tag_ID' ];
+	if ( empty( $term_id ) && isset( $_GET['tag_ID'] ) ) {
+		$term_id = $_GET['tag_ID'];
 	}
 
 	if ( empty( $term_id ) ) {
@@ -1386,7 +1382,6 @@ function get_offering_meta( $key, $term_id = '' ) {
  * @param $value
  * @param $term_id
  * update offering meta
- * @return bool
  */
 function update_offering_meta( $key, $value, $term_id ) {
 	if ( empty( $term_id ) ) {
@@ -1404,7 +1399,7 @@ function update_offering_meta( $key, $value, $term_id ) {
  */
 function rthd_get_reply_via_email() {
 	$redux = rthd_get_redux_settings();
-	return ( isset( $redux[ 'rthd_reply_via_email' ] ) && $redux[ 'rthd_reply_via_email' ] == 1 );
+	return ( isset( $redux['rthd_reply_via_email'] ) && $redux['rthd_reply_via_email'] == 1 );
 }
 
 /**
@@ -1441,7 +1436,7 @@ function rthd_get_tickets( $key, $value ) {
 
 	if ( 'created_by' == $key ) {
 		$value = rthd_convert_into_userid( $value );
-		$args[ 'meta_query' ] = array(
+		$args['meta_query'] = array(
 			array(
 				'key' => '_rtbiz_hd_created_by',
 				'value' => $value,
@@ -1449,12 +1444,12 @@ function rthd_get_tickets( $key, $value ) {
 		);
 	} elseif ( 'assignee' == $key ) {
 		$value = rthd_convert_into_userid( $value );
-		$args[ 'author' ] = $value;
+		$args['author'] = $value;
 	} elseif ( 'subscribe' == $key ) {
 		// check given user is staff or contact
 		if ( rthd_is_our_employee( $value, RT_HD_TEXT_DOMAIN ) ) {
 			$value = rthd_convert_into_userid( $value );
-			$args[ 'meta_query' ] = array(
+			$args['meta_query'] = array(
 				array(
 					'key' => '_rtbiz_hd_subscribe_to',
 					'value' => ':' . $value . ',',
@@ -1465,15 +1460,15 @@ function rthd_get_tickets( $key, $value ) {
 			$value = rthd_convert_into_useremail( $value );
 			$person = rt_biz_get_contact_by_email( $value );
 			if ( isset( $person ) && ! empty( $person ) ) {
-				$args[ 'connected_items' ] = $person[ 0 ]->ID;
-				$args[ 'connected_type' ] = Rt_HD_Module::$post_type . '_to_' . rtbiz_post_type_name( 'contact' );
+				$args['connected_items'] = $person[0]->ID;
+				$args['connected_type'] = Rt_HD_Module::$post_type . '_to_' . rtbiz_post_type_name( 'contact' );
 			}
 		}
 	} elseif ( 'order' == $key ) {
 		if ( is_object( $value ) ) {
 			$value = $value->ID;
 		}
-		$args[ 'meta_query' ] = array(
+		$args['meta_query'] = array(
 			array(
 				'key' => 'rtbiz_hd_order_id',
 				'value' => $value,
@@ -1485,7 +1480,7 @@ function rthd_get_tickets( $key, $value ) {
 		if ( empty( $fav ) ) {
 			return array();
 		} else {
-			$args[ 'post__in' ] = $fav;
+			$args['post__in'] = $fav;
 		}
 	}
 	if ( ! empty( $args ) ) {
@@ -1533,7 +1528,7 @@ function rthd_convert_into_useremail( $value ) {
 }
 
 /*
- * get attachment link with facybox
+ * get attachment link with fancybox
  */
 
 function rt_hd_get_attchment_link_with_fancybox( $attachment, $post_id = '', $echo = true ) {
@@ -1555,7 +1550,7 @@ function rt_hd_get_attchment_link_with_fancybox( $attachment, $post_id = '', $ec
 	   href="<?php echo esc_url( $attachment_url ); ?>"> <img
 			height="20px" width="20px"
 			src="<?php echo esc_url( RT_HD_URL . 'app/assets/file-type/' . $extn . '.png' ); ?>"/>
-		<span title="<?php echo balanceTags( $attachment->post_title ); ?>"> 	<?php echo esc_attr( strlen( balanceTags( $attachment->post_title ) ) > 40 ? substr( balanceTags( $attachment->post_title ), 0, 40 ) . '...' : balanceTags( $attachment->post_title )  ); ?> </span>
+		<span title="<?php echo balanceTags( $attachment->post_title ); ?>"> 	<?php echo esc_attr( strlen( balanceTags( $attachment->post_title ) ) > 40 ? substr( balanceTags( $attachment->post_title ), 0, 40 ) . '...' : balanceTags( $attachment->post_title ) ); ?> </span>
 	</a>
 	<?php
 	$attachment_html = ob_get_clean();
@@ -1604,31 +1599,30 @@ function rthd_get_default_email_template( $key = '', $all = false ) {
 	$redux = array();
 
 	//Ticket default title
-	$redux[ 'rthd_new_ticket_email_title' ] = '[{module_name} #{ticket_id}] {ticket_title}';
-	$redux[ 'rthd_new_ticket_email_title_contacts' ] = '[{module_name} #{ticket_id}] {ticket_title}';
-	$redux[ 'rthd_new_ticket_email_title_group' ] = '[{module_name} #{ticket_id}] {ticket_title}';
-	$redux[ 'rthd_new_ticket_email_title_assignee' ] = '[{module_name} #{ticket_id}] {ticket_title}';
-	$redux[ 'rthd_new_ticket_email_title_subscriber' ] = '[{module_name} #{ticket_id}] {ticket_title}';
-	$redux[ 'rthd_update_ticket_email_title' ] = '[{module_name} #{ticket_id}] {ticket_title}';
-	$redux[ 'rthd_ticket_reassign_email_title' ] = '[{module_name} #{ticket_id}] {ticket_title}';
-	$redux[ 'rthd_ticket_reassign_email_title_old_assignee' ] = '[{module_name} #{ticket_id}] {ticket_title}';
-	$redux[ 'rthd_new_followup_email_title' ] = '[{module_name} #{ticket_id}] {ticket_title}';
-	$redux[ 'rthd_new_followup_email_title_private' ] = '[{module_name} #{ticket_id}] {ticket_title}';
-	$redux[ 'rthd_update_followup_email_title' ] = '[{module_name} #{ticket_id}] {ticket_title}';
-	$redux[ 'rthd_update_followup_email_title_private' ] = '[{module_name} #{ticket_id}] {ticket_title}';
-	$redux[ 'rthd_delete_followup_email_title' ] = '[{module_name} #{ticket_id}] {ticket_title}';
-	$redux[ 'rthd_delete_followup_email_title_private' ] = '[{module_name} #{ticket_id}] {ticket_title}';
-	$redux[ 'rthd_ticket_subscribe_email_title' ] = '[{module_name} #{ticket_id}] {ticket_title}';
-	$redux[ 'rthd_ticket_unsubscribe_email_title' ] = '[{module_name} #{ticket_id}] {ticket_title}';
-	$redux[ 'rthd_new_followup_email_title_staff_note' ] = '[{module_name} #{ticket_id}] {ticket_title}';
-
+	$redux['rthd_new_ticket_email_title'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_new_ticket_email_title_contacts'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_new_ticket_email_title_group'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_new_ticket_email_title_assignee'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_new_ticket_email_title_subscriber'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_update_ticket_email_title'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_ticket_reassign_email_title'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_ticket_reassign_email_title_old_assignee'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_new_followup_email_title'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_new_followup_email_title_private'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_update_followup_email_title'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_update_followup_email_title_private'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_delete_followup_email_title'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_delete_followup_email_title_private'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_ticket_subscribe_email_title'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_ticket_unsubscribe_email_title'] = '[{module_name} #{ticket_id}] {ticket_title}';
+	$redux['rthd_new_followup_email_title_staff_note'] = '[{module_name} #{ticket_id}] {ticket_title}';
 
 	// Ticket template default body
 
 	/*	<div style="font-size: 16px; line-height: 26px; color: #888888;">
 	           Visibility: <div style="color: #333333; ">{visibility_diff}</div>
 			</div>*/
-	$redux[ 'rthd_email_template_followup_add' ] = '
+	$redux['rthd_email_template_followup_add'] = '
 		<div style="color: #888888; font-size: 14px;">
 				New followup added by <strong>{followup_author}</strong>. {ticket_link}
 		</div>
@@ -1638,7 +1632,7 @@ function rthd_get_default_email_template( $key = '', $all = false ) {
 			</div>
 		<hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
 
-	$redux[ 'rthd_email_template_followup_add_staff_note' ] = '
+	$redux['rthd_email_template_followup_add_staff_note'] = '
 		<div style="color: #888888; font-size: 14px;">
 				New staff note added by <strong>{followup_author}</strong>. {ticket_link}
 		</div>
@@ -1648,7 +1642,7 @@ function rthd_get_default_email_template( $key = '', $all = false ) {
 			</div>
 		<hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
 
-	$redux[ 'rthd_email_template_followup_add_private' ] = '
+	$redux['rthd_email_template_followup_add_private'] = '
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0;" />
 			<div style="color: #333333; line-height: 26px; font-size: 16px; ">
 				A private followup has been added by <strong>{followup_author}</strong>. Please go to ticket to view content.
@@ -1656,14 +1650,14 @@ function rthd_get_default_email_template( $key = '', $all = false ) {
 			{ticket_link}
 		    <hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
 
-	$redux[ 'rthd_email_template_followup_deleted_private' ] = '
+	$redux['rthd_email_template_followup_deleted_private'] = '
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0;" />
 				<div style="color: #333333; line-height: 26px; font-size: 16px; ">
 					A private followup is deleted by <Strong>{followup_deleted_by}</Strong> {ticket_link}
 				</div>
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
 
-	$redux[ 'rthd_email_template_followup_deleted' ] = '
+	$redux['rthd_email_template_followup_deleted'] = '
 			<div style="color: #888888; font-size: 14px;">
 				A followup is deleted by <Strong>{followup_deleted_by}</Strong> {ticket_link}
 			</div>
@@ -1674,7 +1668,7 @@ function rthd_get_default_email_template( $key = '', $all = false ) {
 
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px;" />';
 
-	$redux[ 'rthd_email_template_followup_updated_private' ] = '
+	$redux['rthd_email_template_followup_updated_private'] = '
 			<div style="color: #888888; font-size: 14px;">
 				A <strong>private</strong> followup has been edited by <strong>{followup_updated_by}</strong>.Please go to ticket to view content.{ticket_link}
 			</div>
@@ -1684,7 +1678,7 @@ function rthd_get_default_email_template( $key = '', $all = false ) {
 			</div>
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
 
-	$redux[ 'rthd_email_template_followup_updated' ] = '
+	$redux['rthd_email_template_followup_updated'] = '
 			<div style="color: #888888; font-size: 14px;">
 				A followup updated by <strong>{followup_updated_by}.</strong> {ticket_link}
 			</div>
@@ -1694,7 +1688,7 @@ function rthd_get_default_email_template( $key = '', $all = false ) {
 			</div>
 		    <hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
 
-	$redux[ 'rthd_email_template_new_ticket_created_author' ] = '
+	$redux['rthd_email_template_new_ticket_created_author'] = '
 			<div style="color: #333333; font-size: 16px; line-height: 26px">
 				Thank you for opening a new support ticket. We will look into your request and respond as soon as possible.
 				<br/>
@@ -1706,7 +1700,7 @@ function rthd_get_default_email_template( $key = '', $all = false ) {
 		    </div>
 		    <hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
 
-	$redux[ 'rthd_email_template_new_ticket_created_contacts' ] = '
+	$redux['rthd_email_template_new_ticket_created_contacts'] = '
 			<div style="color: #888888; font-size: 14px;">
 				A new support ticket created by <strong>{ticket_author}</strong>. You have been subscribed to this ticket.{ticket_link}
 			</div>
@@ -1716,7 +1710,7 @@ function rthd_get_default_email_template( $key = '', $all = false ) {
 			</div>
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
 
-	$redux[ 'rthd_email_template_new_ticket_created_group_notification' ] = '
+	$redux['rthd_email_template_new_ticket_created_group_notification'] = '
 			<div style="color: #888888; font-size: 14px;">
 				A new support ticket created. {ticket_link}
 			</div>
@@ -1729,13 +1723,13 @@ function rthd_get_default_email_template( $key = '', $all = false ) {
 	        </div>
 	        <div style="font-size: 16px; line-height: 26px; color: #888888;">
 	            Assigned to: <strong style="color: #333333;">{ticket_assignee}</strong>
-            </div>
-            <div style="font-size: 16px; line-height: 26px; color:#333333; ">
-                {ticket_body}
-            </div>
-            <hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
+			</div>
+			<div style="font-size: 16px; line-height: 26px; color:#333333; ">
+				{ticket_body}
+			</div>
+			<hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
 
-	$redux[ 'rthd_email_template_new_ticket_created_assignee' ] = '
+	$redux['rthd_email_template_new_ticket_created_assignee'] = '
 			<div style="color: #888888; font-size: 14px;">
 				A new support ticket created by {ticket_author} is assigned to you. </strong> {ticket_link}
 			</div>
@@ -1748,7 +1742,7 @@ function rthd_get_default_email_template( $key = '', $all = false ) {
 			</div>
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
 
-	$redux[ 'rthd_email_template_new_ticket_created_subscriber' ] = '
+	$redux['rthd_email_template_new_ticket_created_subscriber'] = '
 			<div style="color: #888888; font-size: 14px;">
 				A new support ticket created by <strong>{ticket_author}</strong>. You have been subscribed to this ticket. {ticket_link}
 			</div>
@@ -1762,36 +1756,36 @@ function rthd_get_default_email_template( $key = '', $all = false ) {
 			<div style="font-size: 16px; line-height: 26px; color:#333333; ">
 			    {ticket_body}
 			</div>
-            <hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
+			<hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
 	// If offering not assigned use -
-	$redux[ 'rthd_email_template_ticket_subscribed' ] = '
+	$redux['rthd_email_template_ticket_subscribed'] = '
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0" />
 			<div style="color: #333333; font-size: 16px; line-height: 26px; ">
 				{ticket_subscribers} been subscribed to this ticket {ticket_link}
 			</div>
 		    <hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
-	$redux[ 'rthd_email_template_ticket_unsubscribed' ] = '
+	$redux['rthd_email_template_ticket_unsubscribed'] = '
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0" />
 			<div style="color: #333333; font-size: 16px; line-height: 26px; ">
 				{ticket_unsubscribers} been un-subscribed from this ticket{ticket_link}
 			</div>
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
 
-	$redux[ 'rthd_email_template_ticket_reassigned_old_assignee' ] = '
+	$redux['rthd_email_template_ticket_reassigned_old_assignee'] = '
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0" />
 			<div style="color: #333333; font-size: 16px; line-height: 26px; ">
 				You are no longer responsible for this ticket.{ticket_link}
 			</div>
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
 
-	$redux[ 'rthd_email_template_ticket_reassigned_new_assignee' ] = '
+	$redux['rthd_email_template_ticket_reassigned_new_assignee'] = '
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0" />
 			<div style="color: #333333; font-size: 16px; line-height: 26px; ">
 				A ticket is reassigned to {new_ticket_assignee}. {ticket_link}
 			</div>
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
 
-	$redux[ 'rthd_email_template_ticket_updated' ] = '
+	$redux['rthd_email_template_ticket_updated'] = '
 			<div style="color: #888888; font-size: 14px;">
 				Ticket updated by : <strong>{ticket_updated_by}</strong>.{ticket_link}
 			</div>
@@ -1848,8 +1842,8 @@ function rthd_search_non_helpdesk_users( $query, $domain_search = false, $count 
 function rthd_get_helpdesk_user_ids() {
 	global $wpdb, $rt_biz_acl_model;
 	$admins = get_users( array( 'role' => 'Administrator', 'fields' => 'ID' ) );
-//	$result  =$wpdb->get_col("SELECT DISTINCT(acl.userid) FROM ".$rt_biz_acl_model->table_name." acl where acl.module = '".RT_HD_TEXT_DOMAIN."' and acl.permission != 0 ");
-	$result = $wpdb->get_col( "SELECT DISTINCT(acl.userid) FROM " . $rt_biz_acl_model->table_name . " as acl INNER JOIN " . $wpdb->prefix . "p2p as p2p on ( acl.userid = p2p.p2p_to ) INNER JOIN " . $wpdb->posts . " as posts on (p2p.p2p_from = posts.ID )  where acl.module =  '" . RT_HD_TEXT_DOMAIN . "' and acl.permission != 0 and p2p.p2p_type = '" . rt_biz_get_contact_post_type() . "_to_user' and posts.post_status= 'publish' and posts.post_type= '" . rt_biz_get_contact_post_type() . "' " );
+	//  $result  =$wpdb->get_col("SELECT DISTINCT(acl.userid) FROM ".$rt_biz_acl_model->table_name." acl where acl.module = '".RT_HD_TEXT_DOMAIN."' and acl.permission != 0 ");
+	$result = $wpdb->get_col( 'SELECT DISTINCT(acl.userid) FROM ' . $rt_biz_acl_model->table_name . ' as acl INNER JOIN ' . $wpdb->prefix . 'p2p as p2p on ( acl.userid = p2p.p2p_to ) INNER JOIN ' . $wpdb->posts . " as posts on (p2p.p2p_from = posts.ID )  where acl.module =  '" . RT_HD_TEXT_DOMAIN . "' and acl.permission != 0 and p2p.p2p_type = '" . rt_biz_get_contact_post_type() . "_to_user' and posts.post_status= 'publish' and posts.post_type= '" . rt_biz_get_contact_post_type() . "' " );
 	return array_merge( $admins, $result );
 }
 
@@ -1915,14 +1909,14 @@ function rthd_get_default_support_team() {
 	$isSyncOpt = get_option( 'rthd_default_support_team' );
 	if ( empty( $isSyncOpt ) ) {
 		$term = wp_insert_term( 'General Support', // the term
-				RT_Departments::$slug // the taxonomy
+			RT_Departments::$slug // the taxonomy
 		);
 		if ( ! empty( $term ) ) {
 			$module_permissions = get_site_option( 'rt_biz_module_permissions' );
-			$module_permissions[ RT_HD_TEXT_DOMAIN ][ $term[ 'term_id' ] ] = Rt_Access_Control::$permissions[ 'author' ][ 'value' ];
+			$module_permissions[ RT_HD_TEXT_DOMAIN ][ $term['term_id'] ] = Rt_Access_Control::$permissions['author']['value'];
 			update_site_option( 'rt_biz_module_permissions', $module_permissions );
-			update_option( 'rthd_default_support_team', $term[ 'term_id' ] );
-			$isSyncOpt = $term[ 'term_id' ];
+			update_option( 'rthd_default_support_team', $term['term_id'] );
+			$isSyncOpt = $term['term_id'];
 		}
 	}
 	return $isSyncOpt;
@@ -1953,12 +1947,12 @@ function rthd_set_redux_setting( $key, $val ) {
 
 function rthd_get_redux_post_settings( $post ) {
 	// NOTE : Make modifications for what value to return.
-	if ( ! isset( $GLOBALS[ 'redux_helpdesk_settings' ] ) ) {
-		$GLOBALS[ 'redux_helpdesk_settings' ] = get_option( 'redux_helpdesk_settings', array() );
+	if ( ! isset( $GLOBALS['redux_helpdesk_settings'] ) ) {
+		$GLOBALS['redux_helpdesk_settings'] = get_option( 'redux_helpdesk_settings', array() );
 	}
-	$data = wp_parse_args( get_post_meta( $post->ID, 'redux_helpdesk_settings', true ), $GLOBALS[ 'redux_helpdesk_settings' ] );
+	$data = wp_parse_args( get_post_meta( $post->ID, 'redux_helpdesk_settings', true ), $GLOBALS['redux_helpdesk_settings'] );
 
-	return $GLOBALS[ 'redux_helpdesk_settings' ];
+	return $GLOBALS['redux_helpdesk_settings'];
 }
 
 function rthd_ticket_import_logs() {
