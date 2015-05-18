@@ -497,6 +497,9 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 						$temp[] = intval( $count );
 					}
 					$user = get_user_by( 'id', $user );
+					if ( empty( $user ) ){
+						continue;
+					}
 					$url  = esc_url( add_query_arg(
 						array(
 							'post_type' => Rt_HD_Module::$post_type,
