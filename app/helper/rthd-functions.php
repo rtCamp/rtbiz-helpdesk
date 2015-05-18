@@ -1896,6 +1896,7 @@ function rthd_give_user_access( $user, $access_role, $team_term_id = 0 ) {
 			$value = array_merge( $value, $user_permissions );
 		}
 		update_post_meta( $contact_ID, 'rt_biz_profile_permissions', $value );
+		update_post_meta( $contact_ID, 'rt_biz_is_staff_member', 'yes' );
 	}
 	return true;
 }

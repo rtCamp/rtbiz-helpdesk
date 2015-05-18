@@ -789,6 +789,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 						$user_permissions[ RT_BIZ_TEXT_DOMAIN ] = 0;
 						update_post_meta( $contact[0]->ID, 'rt_biz_profile_permissions', $user_permissions );
 					}
+					delete_post_meta( $contact[0]->ID, 'rt_biz_is_staff_member' );
 				}
 			}
 			header( 'Content-Type: application/json' );
