@@ -9,6 +9,14 @@
 		text-decoration: none;
 	}
 
+	.rt-hd-ticket-history a{
+		display: inline-block;
+		width: 65%;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
 	.rt-hd-ticket-info-header {
 		display: inline-block;
 		font-size: 16px;
