@@ -198,7 +198,7 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 			echo '</div>';
 			if ( ! empty( $tickets ) ) {
 				?>
-				<table class="shop_table my_account_orders rthd_ticket_short_code">
+				<table class="widefat fixed shop_table my_account_orders rthd_ticket_short_code">
 					<tr>
 						<th>Ticket ID</th>
 						<th>Title</th>

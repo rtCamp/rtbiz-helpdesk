@@ -311,7 +311,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 		 * Display ticket history on order page
 		 */
 		function order_support_history( $post ) {
-			add_meta_box( 'rtbiz-helpdesk-support-info', __( 'Support History' ), array( $this, 'support_info' ), 'shop_order', 'side' );
+			add_meta_box( 'rtbiz-helpdesk-support-info', __( 'Support History' ), array( $this, 'support_info' ), 'shop_order', 'normal' );
 			add_action( 'edd_view_order_details_main_after', array( $this, 'edd_support_info' ), 700 );
 		}
 
