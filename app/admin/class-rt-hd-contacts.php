@@ -129,7 +129,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 					<?php $selected = ( isset( $_REQUEST['rt_contact_group'] ) && 'staff' == $_REQUEST['rt_contact_group'] ) ? 'Checked="Checked' : ''; ?>
 					<label><input type="checkbox" id="rt_biz_is_staff_member" <?php echo $selected;?>  name="rt_biz_is_staff_member" value="yes"><span class="checkbox-title"><?php _e( 'Staff Member ', RT_BIZ_TEXT_DOMAIN ) ?></span></label>
 				</div>
-				<div id="rtbiz-permission-container" class="inline-edit-col">
+				<div id="rtbiz-permission-container" class="inline-edit-col <?php if( ! $selected ){ echo "rtbiz-hide"; } ?> ">
 					<label class="alignleft">
 						<span>Helpdesk Role</span>
 						<input type="hidden" name="rtbiz_action" value="rtbiz_helpdesk_role_updated">

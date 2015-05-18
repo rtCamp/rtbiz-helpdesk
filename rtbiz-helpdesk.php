@@ -126,7 +126,7 @@ if ( ! defined( 'EDD_RT_HELPDESK_STORE_URL' ) ) {
 	define( 'EDD_RT_HELPDESK_STORE_URL', 'https://rtcamp.com/' );
 }
 
-if ( ! defined( 'EDD_RT_HELPDESK_ITEM_NAME' ) ){
+if ( ! defined( 'EDD_RT_HELPDESK_ITEM_NAME' ) ) {
 	/**
 	 * define helpdesk item slug
 	 *
