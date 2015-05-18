@@ -65,7 +65,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		 * Setup default value for dashboard.
 		 */
 		function setup_defaults() {
-			if ( ! empty( $_REQUEST[ 'page' ] ) && $_REQUEST[ 'page' ] == 'rthd-' . Rt_HD_Module::$post_type . '-dashboard' && ! metadata_exists( 'user', get_current_user_id(), 'show_rt_hd_welcome_panel' ) ) {
+			if ( ! empty( $_REQUEST['page'] ) && 'rthd-' . Rt_HD_Module::$post_type . '-dashboard' == $_REQUEST['page'] && ! metadata_exists( 'user', get_current_user_id(), 'show_rt_hd_welcome_panel' ) ) {
 				update_user_meta( get_current_user_id(), 'show_rt_hd_welcome_panel', 1 );
 			}
 		}
@@ -124,7 +124,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		 * @since 0.1
 		 */
 		function page_actions() {
-			if ( isset( $_REQUEST[ 'page' ] ) && 'rthd-' . Rt_HD_Module::$post_type . '-dashboard' === $_REQUEST[ 'page' ] ) {
+			if ( isset( $_REQUEST['page'] ) && 'rthd-' . Rt_HD_Module::$post_type . '-dashboard' === $_REQUEST['page'] ) {
 				do_action( 'add_meta_boxes_' . $this->screen_id, null );
 				do_action( 'rthd_dashboard_add_meta_boxes', $this->screen_id, null );
 
@@ -225,11 +225,11 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			$totalcustomers = count( $customers_userid );
 
 			$customers_userid = implode( ',', $customers_userid );
-			$query = $wpdb->prepare( "SELECT count( distinct( meta_value ) ) FROM $wpdb->posts INNER JOIN  $wpdb->postmeta ON post_id = ID  WHERE post_status <> 'trash' and post_type = %s and meta_key = '_rtbiz_hd_created_by' and meta_value in ( " . $customers_userid . " )", Rt_HD_Module::$post_type );
+			$query = $wpdb->prepare( "SELECT count( distinct( meta_value ) ) FROM $wpdb->posts INNER JOIN  $wpdb->postmeta ON post_id = ID  WHERE post_status <> 'trash' and post_type = %s and meta_key = '_rtbiz_hd_created_by' and meta_value in ( " . $customers_userid . ' )', Rt_HD_Module::$post_type );
 			$customers_userid = $wpdb->get_col( $query );
 			$custWithicket = 0;
 			if ( ! empty( $customers_userid ) ) {
-				$custWithicket = ( int ) $customers_userid[ 0 ];
+				$custWithicket = (int) $customers_userid[0];
 			}
 			$cols = array( __( 'Purchase', RT_BIZ_TEXT_DOMAIN ), __( 'Count', RT_BIZ_TEXT_DOMAIN ) );
 			$rows = array();
@@ -237,19 +237,19 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			$rows[] = array( __( 'Customers have not created any Tickets' ), $totalcustomers - $custWithicket );
 
 			$data_source = array();
-			$data_source[ 'cols' ] = $cols;
-			$data_source[ 'rows' ] = $rows;
+			$data_source['cols'] = $cols;
+			$data_source['rows'] = $rows;
 			$this->charts[] = array(
-				'id' => $args[ 'id' ],
+				'id' => $args['id'],
 				'chart_type' => 'pie',
 				'data_source' => $data_source,
-				'dom_element' => 'rtbiz_pie_' . $args[ 'id' ],
+				'dom_element' => 'rtbiz_pie_' . $args['id'],
 				'options' => array(
-					'title' => $args[ 'title' ],
+					'title' => $args['title'],
 				),
 			);
 			?>
-			<div id="<?php echo 'rtbiz_pie_' . $args[ 'id' ]; ?>"></div>
+			<div id="<?php echo 'rtbiz_pie_' . $args['id']; ?>"></div>
 			<?php
 		}
 
@@ -289,7 +289,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			$post_type = Rt_HD_Module::$post_type;
 			$total = 0;
 			if ( empty( $terms ) ) {
-				printf(  'No offerings [ products / downloads ] found. <a target="_blank" href="%s" >Add new offering</a>', admin_url( 'edit-tags.php?taxonomy=' . Rt_Offerings::$offering_slug . '&post_type=' . Rt_HD_Module::$post_type ) );
+				printf( 'No offerings [ products / downloads ] found. <a target="_blank" href="%s" >Add new offering</a>', admin_url( 'edit-tags.php?taxonomy=' . Rt_Offerings::$offering_slug . '&post_type=' . Rt_HD_Module::$post_type ) );
 				return;
 			}
 			if ( ! $terms instanceof WP_Error ) {
@@ -311,20 +311,20 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 
 			$rows[] = array( __( 'Uncategorized' ), $this->get_post_count_excluding_tax( $taxonomy, $post_type ) );
 
-			$data_source[ 'cols' ] = $cols;
-			$data_source[ 'rows' ] = $rows;
+			$data_source['cols'] = $cols;
+			$data_source['rows'] = $rows;
 
 			$this->charts[] = array(
-				'id' => $args[ 'id' ],
+				'id' => $args['id'],
 				'chart_type' => 'pie',
 				'data_source' => $data_source,
-				'dom_element' => 'rtbiz_pie_' . $args[ 'id' ],
+				'dom_element' => 'rtbiz_pie_' . $args['id'],
 				'options' => array(
-					'title' => $args[ 'title' ],
+					'title' => $args['title'],
 				),
 			);
 			?>
-			<div id="<?php echo 'rtbiz_pie_' . $args[ 'id' ]; ?>"></div>
+			<div id="<?php echo 'rtbiz_pie_' . $args['id']; ?>"></div>
 			<?php
 		}
 
@@ -339,7 +339,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			$table_name = rthd_get_ticket_table_name();
 			$post_statuses = array();
 			foreach ( $rt_hd_module->statuses as $status ) {
-				$post_statuses[ $status[ 'slug' ] ] = $status[ 'name' ];
+				$post_statuses[ $status['slug'] ] = $status['name'];
 			}
 
 			$query = "SELECT post_status, COUNT(id) AS rthd_count FROM {$table_name} WHERE 1=1 GROUP BY post_status";
@@ -370,10 +370,8 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			}
 			?>
 			<div id="rthd_hd_pie_tickets_by_status"></div>
-				<?php if( empty( $results ) ){
-					printf(  'No tickets found. <a target="_blank" href="%s" >Add new ticket</a>', get_page_link( $settings[ 'rthd_support_page' ] ) );
-				} ?>
-			<?php
+				<?php if ( empty( $results ) ) {
+					printf( 'No tickets found. <a target="_blank" href="%s" >Add new ticket</a>', get_page_link( $settings['rthd_support_page'] ) ); }
 		}
 
 		/**
@@ -385,7 +383,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			global $rt_hd_module, $rt_hd_ticket_history_model;
 			$post_statuses = array();
 			foreach ( $rt_hd_module->statuses as $status ) {
-				$post_statuses[ $status[ 'slug' ] ] = $status[ 'name' ];
+				$post_statuses[ $status['slug'] ] = $status['name'];
 			}
 			$current_date = new DateTime();
 			$first_date = date( 'Y-m-d', strtotime( 'first day of this month', $current_date->format( 'U' ) ) );
@@ -421,7 +419,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			} while ( $current_date < $last_date );
 
 			$data_source = array();
-			$cols[ 0 ] = __( 'Daily Tickets', RT_HD_TEXT_DOMAIN );
+			$cols[0] = __( 'Daily Tickets', RT_HD_TEXT_DOMAIN );
 			foreach ( $post_statuses as $status ) {
 				$cols[] = $status;
 			}
@@ -436,15 +434,18 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 				$rows[] = $temp;
 			}
 
-			$data_source[ 'cols' ] = $cols;
-			$data_source[ 'rows' ] = $rows;
+			$data_source['cols'] = $cols;
+			$data_source['rows'] = $rows;
 
 			$this->charts[] = array(
 				'id' => 5,
 				'chart_type' => 'line',
 				'data_source' => $data_source,
 				'dom_element' => 'rthd_hd_line_daily_tickets',
-				'options' => array( 'title' => __( 'Daily Tickets', RT_HD_TEXT_DOMAIN ), 'vAxis' => json_encode( array( 'viewWindow' => array( 'min' => 0 )) ) ),
+				'options' => array(
+					'title' => __( 'Daily Tickets', RT_HD_TEXT_DOMAIN ),
+					'vAxis' => json_encode( array( 'viewWindow' => array( 'min' => 0 ) ) )
+				),
 			);
 			?>
 			<div id="rthd_hd_line_daily_tickets"></div>
@@ -461,7 +462,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			$table_name = rthd_get_ticket_table_name();
 			$post_statuses = array();
 			foreach ( $rt_hd_module->statuses as $status ) {
-				$post_statuses[ $status[ 'slug' ] ] = $status[ 'name' ];
+				$post_statuses[ $status['slug'] ] = $status['name'];
 			}
 
 			$query = "SELECT assignee, post_status, COUNT(ID) AS rthd_ticket_count FROM {$table_name} WHERE 1=1 GROUP BY assignee, post_status";
@@ -497,14 +498,13 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 						$temp[] = intval( $count );
 					}
 					$user = get_user_by( 'id', $user );
-					if ( empty( $user ) ){
+					if ( empty( $user ) ) {
 						continue;
 					}
-					$url  = esc_url( add_query_arg(
-						array(
-							'post_type' => Rt_HD_Module::$post_type,
-							'assigned'  => $user->ID,
-						), admin_url( 'edit.php' ) ) );
+					$url  = esc_url( add_query_arg( array(
+						                                'post_type' => Rt_HD_Module::$post_type,
+						                                'assigned'  => $user->ID,
+					                                ), admin_url( 'edit.php' ) ) );
 					if ( ! empty( $user ) ) {
 						array_unshift( $temp, '<a href="' . $url . '">' . $user->display_name . '</a>' );
 						$rows[] = $temp;
@@ -524,10 +524,8 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			}
 			?>
 			<div id="rthd_hd_table_team_load"></div>
-				<?php if( empty( $results ) ){
-					_e( 'No staff / ticket found.' );
-				} ?>
-			<?php
+			<?php if ( empty( $results ) ) {
+				_e( 'No staff / ticket found.' ); }
 		}
 
 		/**
@@ -552,19 +550,18 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 
 			$rows = array();
 			foreach ( $results as $item ) {
-				$url = esc_url( add_query_arg(
-								array(
-					'post_type' => Rt_HD_Module::$post_type,
-					'account_id' => $item->account_id,
-								), admin_url( 'edit.php' ) ) );
+				$url = esc_url( add_query_arg( array(
+					                               'post_type'  => Rt_HD_Module::$post_type,
+					                               'account_id' => $item->account_id,
+				                               ), admin_url( 'edit.php' ) ) );
 				$rows[] = array(
 					'<a href="' . $url . '">' . $item->account_name . '</a>',
 					intval( $item->account_tickets ),
 				);
 			}
 
-			$data_source[ 'cols' ] = $cols;
-			$data_source[ 'rows' ] = $rows;
+			$data_source['cols'] = $cols;
+			$data_source['rows'] = $rows;
 
 			$this->charts[] = array(
 				'id' => 3,
@@ -592,7 +589,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			$query = 'SELECT contact.ID AS contact_id, contact.post_title AS contact_name ' . ( ( isset( $wpdb->p2p ) ) ? ', COUNT( ticket.ID ) AS contact_tickets ' : ' ' ) . "FROM {$wpdb->posts} AS contact " . ( ( isset( $wpdb->p2p ) ) ? "JOIN {$wpdb->p2p} AS p2p_lc ON contact.ID = p2p_lc.p2p_to " : ' ' ) . ( ( isset( $wpdb->p2p ) ) ? "JOIN {$table_name} AS ticket ON ticket.post_id = p2p_lc.p2p_from " : ' ' ) . ( ( isset( $wpdb->p2p ) ) ? "LEFT JOIN {$wpdb->p2p} AS p2p_ac ON contact.ID = p2p_ac.p2p_to AND p2p_ac.p2p_type = '{$account}_to_{$contact}'  " : ' ' ) . 'WHERE 2=2 ' . ( ( isset( $wpdb->p2p ) ) ? "AND p2p_lc.p2p_type = '" . Rt_HD_Module::$post_type . "_to_{$contact}' " : ' ' ) . "AND contact.post_type = '{$contact}' " . ( ( isset( $wpdb->p2p ) ) ? 'AND p2p_ac.p2p_type IS NULL ' : ' ' ) . 'GROUP BY contact.ID ' . ( ( isset( $wpdb->p2p ) ) ? 'ORDER BY contact_tickets DESC ' : ' ' ) . 'LIMIT 0 , 10';
 
 			$results = $wpdb->get_results( $query );
-			if ( ! empty( $results ) ){
+			if ( ! empty( $results ) ) {
 				$data_source = array();
 				$cols = array(
 					array( 'type' => 'string', 'label' => __( 'Contact Name', RT_HD_TEXT_DOMAIN ), ),
@@ -601,19 +598,18 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 
 				$rows = array();
 				foreach ( $results as $item ) {
-					$url = esc_url( add_query_arg(
-						array(
-							'post_type' => Rt_HD_Module::$post_type,
-							'contact_id' => $item->contact_id,
-						), admin_url( 'edit.php' ) ) );
+					$url = esc_url( add_query_arg( array(
+						                               'post_type'  => Rt_HD_Module::$post_type,
+						                               'contact_id' => $item->contact_id,
+					                               ), admin_url( 'edit.php' ) ) );
 					$rows[] = array(
 						'<a href="' . $url . '">' . $item->contact_name . '</a>',
 						intval( $item->contact_tickets ),
 					);
 				}
 
-				$data_source[ 'cols' ] = $cols;
-				$data_source[ 'rows' ] = $rows;
+				$data_source['cols'] = $cols;
+				$data_source['rows'] = $rows;
 
 				$this->charts[] = array(
 					'id' => 4,
@@ -625,9 +621,8 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			}
 			?>
 			<div id="rthd_hd_table_top_clients">
-				<?php if( empty( $results ) ){
-					_e( 'No customer found' );
-				} ?>
+				<?php if ( empty( $results ) ) {
+					_e( 'No customer found' ); } ?>
 			</div>
 			<?php
 		}
@@ -643,7 +638,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		function dashboard_attributes_widget_content( $obj, $args ) {
 			global $rt_hd_rt_attributes;
 			$rt_hd_attributes_model = new RT_Attributes_Model();
-			$attribute_id = $args[ 'args' ][ 'attribute_id' ];
+			$attribute_id = $args['args']['attribute_id'];
 			$attr = $rt_hd_attributes_model->get_attribute( $attribute_id );
 			$taxonomy = $rt_hd_rt_attributes->get_taxonomy_name( $attr->attribute_name );
 			$post_type = Rt_HD_Module::$post_type;
@@ -655,15 +650,16 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			$total = 0;
 
 			foreach ( $terms as $t ) {
-				$posts = new WP_Query(
-						array(
-					'post_type' => $post_type,
-					'post_status' => 'any',
-					'nopaging' => true,
-					$taxonomy => $t->slug,
-						) );
-
-				$rows[] = array( $t->name, count( $posts->posts ), );
+				$posts = new WP_Query( array(
+					                       'post_type'   => $post_type,
+					                       'post_status' => 'any',
+					                       'nopaging'    => true,
+					                       $taxonomy     => $t->slug,
+				                       ) );
+				$rows[] = array(
+					$t->name,
+					count( $posts->posts ),
+				);
 				$total += count( $posts->posts );
 			}
 
@@ -671,18 +667,18 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 
 			$rows[] = array( __( 'Others', RT_HD_TEXT_DOMAIN ), count( $posts->posts ) - $total );
 
-			$data_source[ 'cols' ] = $cols;
-			$data_source[ 'rows' ] = $rows;
+			$data_source['cols'] = $cols;
+			$data_source['rows'] = $rows;
 
 			$this->charts[] = array(
-				'id' => $args[ 'id' ],
+				'id' => $args['id'],
 				'chart_type' => 'pie',
 				'data_source' => $data_source,
-				'dom_element' => 'rthd_pie_' . $args[ 'id' ],
-				'options' => array( 'title' => $args[ 'title' ], ),
+				'dom_element' => 'rthd_pie_' . $args['id'],
+				'options' => array( 'title' => $args['title'], ),
 			);
 			?>
-			<div id="<?php echo esc_attr( 'rthd_pie_' . $args[ 'id' ] ); ?>"></div>
+			<div id="<?php echo esc_attr( 'rthd_pie_' . $args['id'] ); ?>"></div>
 			<?php
 		}
 
@@ -714,7 +710,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 				wp_die( -1 );
 			}
 
-			update_user_meta( get_current_user_id(), 'show_rt_hd_welcome_panel', empty( $_POST[ 'visible' ] ) ? 0 : 1  );
+			update_user_meta( get_current_user_id(), 'show_rt_hd_welcome_panel', empty( $_POST['visible'] ) ? 0 : 1 );
 
 			wp_die( 1 );
 		}
@@ -723,8 +719,8 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		 * Check welcome panel for logged in user.
 		 */
 		function check_welcome_panel() {
-			if ( isset( $_GET[ 'rthdwelcome' ] ) ) {
-				$welcome_checked = empty( $_GET[ 'rthdwelcome' ] ) ? 0 : 1;
+			if ( isset( $_GET['rthdwelcome'] ) ) {
+				$welcome_checked = empty( $_GET['rthdwelcome'] ) ? 0 : 1;
 				update_user_meta( get_current_user_id(), 'show_rt_hd_welcome_panel', $welcome_checked );
 			}
 		}
@@ -746,7 +742,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 				<p class="about-description"><?php _e( 'We&#8217;ve assembled some links to get you started:' ); ?></p>
 				<div class="welcome-panel-column-container">
 					<div class="welcome-panel-column">
-						<?php if ( current_user_can( $admin_cap ) ): ?>
+						<?php if ( current_user_can( $admin_cap ) ) : ?>
 							<h4><?php _e( 'Get Started' ); ?></h4>
 							<a id="rt-hd-customize-biz" class="button button-primary button-hero" href="<?php echo admin_url( 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&page=' . Redux_Framework_Helpdesk_Config::$page_slug ); ?>"><?php _e( 'Helpdesk Settings' ); ?></a>
 						<?php endif; ?>
@@ -756,11 +752,11 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 						<ul>
 							<?php if ( current_user_can( $editor_cap ) ) { ?>
 								<div id="rthd-support-page">
-									<?php if ( isset( $settings[ 'rthd_support_page' ] ) && ! empty( $settings[ 'rthd_support_page' ] ) && get_post( $settings[ 'rthd_support_page' ] ) ) : ?>
+									<?php if ( isset( $settings['rthd_support_page'] ) && ! empty( $settings['rthd_support_page'] ) && get_post( $settings['rthd_support_page'] ) ) : ?>
 										<li>
-											<a id="rthd-view-support-page" class="welcome-icon welcome-view-site" target="_blank" href="<?php echo get_page_link( $settings[ 'rthd_support_page' ] ); ?>"><?php _e( 'Add Support Ticket' ); ?></a>
+											<a id="rthd-view-support-page" class="welcome-icon welcome-view-site" target="_blank" href="<?php echo get_page_link( $settings['rthd_support_page'] ); ?>"><?php _e( 'Add Support Ticket' ); ?></a>
 										</li>
-									<?php else: ?>
+									<?php else : ?>
 										<li>
 											<a id="rthd-new-support-page" class="rthd-new-support-page welcome-icon welcome-add-page" href="javascript:;"><?php _e( 'Setup Support Page' ); ?></a>
 											<img id="rthd-support-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
@@ -791,8 +787,8 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		 * Add js for hide/show welcome panel in rtHelpdesk dashboard.
 		 */
 		function print_dashboard_js() {
-			if ( isset( $_GET[ 'rthdwelcome' ] ) ) {
-				$welcome_checked = empty( $_GET[ 'rthdwelcome' ] ) ? 0 : 1;
+			if ( isset( $_GET['rthdwelcome'] ) ) {
+				$welcome_checked = empty( $_GET['rthdwelcome'] ) ? 0 : 1;
 				update_user_meta( get_current_user_id(), 'show_rt_hd_welcome_panel', $welcome_checked );
 			} else {
 				$welcome_checked = get_user_meta( get_current_user_id(), 'show_rt_hd_welcome_panel', true );
@@ -854,7 +850,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 						} );
 					} );
 
-					$( '#screen-options-wrap #adv-settings .metabox-prefs' ).append( "<label for='rthd_welcome_panel-hide'><input type='checkbox' id='rthd_welcome_panel-hide' value='welcome-panel' <?php echo checked( ( bool ) $welcome_checked, true, false ); ?> /><?php _e( 'Welcome', RT_HD_TEXT_DOMAIN ); ?></label>" );
+					$( '#screen-options-wrap #adv-settings .metabox-prefs' ).append( "<label for='rthd_welcome_panel-hide'><input type='checkbox' id='rthd_welcome_panel-hide' value='welcome-panel' <?php echo checked( (bool) $welcome_checked, true, false ); ?> /><?php _e( 'Welcome', RT_HD_TEXT_DOMAIN ); ?></label>" );
 				} );
 			</script>
 			<?php
@@ -866,12 +862,12 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		function rthd_setup_support_page_callback() {
 
 			$response = array();
-			$response[ 'status' ] = false;
+			$response['status'] = false;
 			$page_name = 'Support';
-			if ( ! empty( $_POST[ 'new_page' ] ) ) {
-				$page_name = $_POST[ 'new_page' ];
+			if ( ! empty( $_POST['new_page'] ) ) {
+				$page_name = $_POST['new_page'];
 			}
-			if ( isset( $_POST[ 'page_action' ] ) && 'add' == $_POST[ 'page_action' ] ) {
+			if ( isset( $_POST['page_action'] ) && 'add' == $_POST['page_action'] ) {
 				$support_page = array(
 					'post_type' => 'page',
 					'post_title' => $page_name,
@@ -880,20 +876,20 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 					'post_author' => get_current_user_id(),
 				);
 				$support_page_id = wp_insert_post( $support_page );
-				$response[ 'status' ] = true;
-			} else if ( ! empty( $_POST[ 'old_page' ] ) ) {
-				$support_page = get_post( $_POST[ 'old_page' ] );
+				$response['status'] = true;
+			} else if ( ! empty( $_POST['old_page'] ) ) {
+				$support_page = get_post( $_POST['old_page'] );
 				if ( strstr( $support_page->post_content, '[rt_hd_support_form]' ) === false ) {
-					$support_page->post_content.= '[rt_hd_support_form]';
+					$support_page->post_content .= '[rt_hd_support_form]';
 					$support_page_id = wp_update_post( $support_page );
 				}
-				$response[ 'status' ] = true;
+				$response['status'] = true;
 			}
 			if ( ! empty( $support_page_id ) && ! $support_page_id instanceof WP_Error ) {
 				/* Set support page option. */
 				rthd_set_redux_settings( 'rthd_support_page', $support_page_id );
-				$response[ 'status' ] = true;
-				$response[ 'html' ] = '<li><a id="rthd-view-support-page" class="welcome-icon welcome-view-site" target="_blank" href="' . get_page_link( $support_page_id ) . '">' . __( 'View Support Page' ) . '</a></li>';
+				$response['status'] = true;
+				$response['html'] = '<li><a id="rthd-view-support-page" class="welcome-icon welcome-view-site" target="_blank" href="' . get_page_link( $support_page_id ) . '">' . __( 'View Support Page' ) . '</a></li>';
 			}
 			echo json_encode( $response );
 			die();

@@ -1631,28 +1631,28 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 						'count'     => true,
 					) );
 
-				$returnArray['comment_id'] = $comment_ID;
-				$returnArray['private']       = $comment_type;
-				$comment_user  = get_user_by( 'id', $userid );
-				$comment_render_type = 'left';
-				$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
-				if ( ! empty( $comment_user ) ) {
-					if ( $comment_user->has_cap( $cap ) ) {
-						$comment_render_type = 'right';
+					$returnArray['comment_id'] = $comment_ID;
+					$returnArray['private']       = $comment_type;
+					$comment_user  = get_user_by( 'id', $userid );
+					$comment_render_type = 'left';
+					$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
+					if ( ! empty( $comment_user ) ) {
+						if ( $comment_user->has_cap( $cap ) ) {
+							$comment_render_type = 'right';
+						}
 					}
-				}
-				$user_edit = current_user_can( $cap ) || ( get_current_user_id() == $userid );
-				$comment = get_comment( $comment_ID );
-				$returnArray['comment_content'] = rthd_render_comment( $comment, $user_edit, $comment_render_type, false );
-				$returnArray['assign_value'] = get_post_field( 'post_author', $comment_post_ID, 'raw' );
-				if ( current_user_can( $cap ) ) {
-					$commentlink = '<a href="'.rthd_biz_user_profile_link( $comment->comment_author_email ).'" >'.$comment->comment_author.'</a>';
-					$returnArray['post_status'] = get_post_field( 'post_status', $comment_post_ID, 'raw' );
-				} else {
-					$commentlink = $comment->comment_author;
-					$returnArray['post_status'] = rthd_status_markup( get_post_field( 'post_status', $comment_post_ID, 'raw' ) );
-				}
-				$returnArray['last_reply'] = esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . ' ago by ' . $commentlink;
+					$user_edit = current_user_can( $cap ) || ( get_current_user_id() == $userid );
+					$comment = get_comment( $comment_ID );
+					$returnArray['comment_content'] = rthd_render_comment( $comment, $user_edit, $comment_render_type, false );
+					$returnArray['assign_value'] = get_post_field( 'post_author', $comment_post_ID, 'raw' );
+					if ( current_user_can( $cap ) ) {
+						$commentlink = '<a href="'.rthd_biz_user_profile_link( $comment->comment_author_email ).'" >'.$comment->comment_author.'</a>';
+						$returnArray['post_status'] = get_post_field( 'post_status', $comment_post_ID, 'raw' );
+					} else {
+						$commentlink = $comment->comment_author;
+						$returnArray['post_status'] = rthd_status_markup( get_post_field( 'post_status', $comment_post_ID, 'raw' ) );
+					}
+					$returnArray['last_reply'] = esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . ' ago by ' . $commentlink;
 
 			}
 			echo json_encode( $returnArray );

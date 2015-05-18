@@ -60,13 +60,13 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 			$this->get_custom_menu_order();
 			add_action( 'init', array( $this, 'init_hd' ) );
 			add_action( 'p2p_init', array( $this, 'create_connection' ) );
-			add_filter( 'bulk_post_updated_messages', array( $this, 'bulk_ticket_update_messages' ), 10, 2);
+			add_filter( 'bulk_post_updated_messages', array( $this, 'bulk_ticket_update_messages' ), 10, 2 );
 			add_filter( 'post_updated_messages', array( $this, 'ticket_updated_messages' ), 10, 2 );
 
 			$this->hooks();
 		}
 
-		function ticket_updated_messages( $messages ){
+		function ticket_updated_messages( $messages ) {
 			//			$post             = get_post();
 			//			$post_type        = get_post_type( $post );
 			//			$post_type_object = get_post_type_object( $post_type );
@@ -109,8 +109,8 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 		 *
 		 * @return $bulk_messages
 		 */
-		function bulk_ticket_update_messages( $bulk_messages, $bulk_counts ){
-			$bulk_messages[self::$post_type] = array(
+		function bulk_ticket_update_messages( $bulk_messages, $bulk_counts ) {
+			$bulk_messages[ self::$post_type ] = array(
 				'updated'   => _n( '%s ticket updated.', '%s tickets updated.', $bulk_counts['updated'] ),
 				'locked'    => _n( '%s ticket not updated, somebody is editing it.', '%s tickets not updated, somebody is editing them.', $bulk_counts['locked'] ),
 				'deleted'   => _n( '%s ticket permanently deleted.', '%s tickets permanently deleted.', $bulk_counts['deleted'] ),
@@ -183,22 +183,22 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 			global $rt_hd_attributes;
 			$this->custom_menu_order = array(
 				'rthd-' . self::$post_type . '-dashboard',
-                'edit.php?post_type=' . self::$post_type,
-                'post-new.php?post_type=' . self::$post_type,
+				'edit.php?post_type=' . self::$post_type,
+				'post-new.php?post_type=' . self::$post_type,
 				esc_url( 'edit.php?post_type=' . rt_biz_get_contact_post_type() . '&rt_contact_group=customer' ),
 				esc_url( 'edit.php?post_type=' . rt_biz_get_contact_post_type() . '&rt_contact_group=staff' ),
 				esc_url( 'edit-tags.php?taxonomy=' . RT_Departments::$slug . '&post_type=' . self::$post_type ),
 				'edit-tags.php?taxonomy=' . Rt_Offerings::$offering_slug . '&amp;post_type=' . self::$post_type,
-                $rt_hd_attributes->attributes_page_slug,
-                Redux_Framework_Helpdesk_Config::$page_slug,
+				$rt_hd_attributes->attributes_page_slug,
+				Redux_Framework_Helpdesk_Config::$page_slug,
 				'rthd-setup-wizard',
-                /*'edit-tags.php?taxonomy=' . Rt_Contact::$user_category_taxonomy . '&post_type=' . self::$post_type,
+				/*'edit-tags.php?taxonomy=' . Rt_Contact::$user_category_taxonomy . '&post_type=' . self::$post_type,
                 'edit.php?post_type=' . rt_biz_get_company_post_type(),*/
 			);
 
-            if ( ! empty( Rt_Biz::$access_control_slug ) ) {
-               $this->custom_menu_order[] = Rt_Biz::$access_control_slug;
-            }
+			if ( ! empty( Rt_Biz::$access_control_slug ) ) {
+				$this->custom_menu_order[] = Rt_Biz::$access_control_slug;
+			}
 
 			return $this->custom_menu_order;
 		}
@@ -206,7 +206,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 		/**
 		 * create ticket to ticket connection
 		 */
-		function create_connection(){
+		function create_connection() {
 			p2p_register_connection_type( array(
 				'name' => self::$post_type . '_to_' . self::$post_type,
 				'from' => self::$post_type,
@@ -214,7 +214,6 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				'reciprocal' => true,
 				'title' => 'Related ' . $this->labels['all_items'],
 			) );
-
 
 		}
 
@@ -227,40 +226,39 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 		 * p2p hook for hiding staff member and creator from connected contacts meta box
 		 * p2p hook for making id serachable in related ticket box
 		 */
-		function p2p_hook_for_rthd_post_filter( $args, $ctype, $post  ){
+		function p2p_hook_for_rthd_post_filter( $args, $ctype, $post  ) {
 			global $wpdb, $rt_biz_acl_model;
 			// hide staff member and creator of ticket from connected contacts
 			if ( $ctype->name == self::$post_type.'_to_'.rt_biz_get_contact_post_type() ) {
 				$exclude = array();
 				// ACL
-				$result  =$wpdb->get_col("SELECT p2p_from FROM ".$wpdb->prefix."p2p WHERE p2p_type = '".rt_biz_get_contact_post_type()."_to_user' AND p2p_to in (SELECT DISTINCT(userid) FROM ".$rt_biz_acl_model->table_name." where module = '".RT_HD_TEXT_DOMAIN."' and permission != 0 )");
-				$exclude = array_merge($exclude, $result );
+				$result  = $wpdb->get_col( 'SELECT p2p_from FROM '.$wpdb->prefix."p2p WHERE p2p_type = '".rt_biz_get_contact_post_type()."_to_user' AND p2p_to in (SELECT DISTINCT(userid) FROM ".$rt_biz_acl_model->table_name." where module = '".RT_HD_TEXT_DOMAIN."' and permission != 0 )" );
+				$exclude = array_merge( $exclude, $result );
 				// Ticket Creator
 				$creator = get_post_meta( $post->ID, '_rtbiz_hd_created_by', true );
-				$contact = rt_biz_get_contact_for_wp_user($creator);
-				if ( ! empty( $contact ) ){
-					$exclude[]=$contact[0]->ID;
+				$contact = rt_biz_get_contact_for_wp_user( $creator );
+				if ( ! empty( $contact ) ) {
+					$exclude[] = $contact[0]->ID;
 				}
 				// Exclude Admins
 				$admins = get_users(array(
 						'fields' => 'ID',
 				        'role'   => 'administrator',
 				          ));
-				foreach ( $admins as $admin ){
+				foreach ( $admins as $admin ) {
 					// get contact and add it in exclude list
 					$contact = rt_biz_get_contact_for_wp_user( $admin );
-					if ( ! empty( $contact ) ){
-						$exclude[]=$contact[0]->ID;
+					if ( ! empty( $contact ) ) {
+						$exclude[] = $contact[0]->ID;
 					}
 				}
-				$exclude = array_filter($exclude);
+				$exclude = array_filter( $exclude );
 				$exclude = array_unique( $exclude );
-				$args['p2p:exclude'] = array_merge($args['p2p:exclude'], $exclude);
-			}
-			// related ticket - ticket id searchable
-			elseif ( $ctype->name == self::$post_type.'_to_'.self::$post_type ){
+				$args['p2p:exclude'] = array_merge( $args['p2p:exclude'], $exclude );
+			} // related ticket - ticket id searchable
+			elseif ( $ctype->name == self::$post_type.'_to_'.self::$post_type ) {
 				// check if search string is number
-				if ( ! empty($args['p2p:search']) && is_numeric($args['p2p:search']) ){
+				if ( ! empty($args['p2p:search']) && is_numeric( $args['p2p:search'] ) ) {
 					// if it is number then search it in post ID
 					$args['post__in'] = array( $args['p2p:search'] );
 					$args['p2p:search'] = '';
@@ -279,8 +277,8 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 		 *
 		 * Related tickets - p2p - Append post id in post title
 		 */
-		function p2p_hook_for_changing_post_title( $title, $post, $ctype ){
-			if ( $ctype->name == self::$post_type.'_to_'.self::$post_type ){
+		function p2p_hook_for_changing_post_title( $title, $post, $ctype ) {
+			if ( $ctype->name == self::$post_type.'_to_'.self::$post_type ) {
 				$title = '[#'.$post->ID.'] '.$title;
 			}
 			return $title;
@@ -390,7 +388,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 
 			foreach ( $relations as $relation ) {
 				$attr      = $rt_hd_attributes_model->get_attribute( $relation->attr_id );
-				if ( 'taxonomy' === $attr->attribute_store_as ){
+				if ( 'taxonomy' === $attr->attribute_store_as ) {
 					$attr_name = str_replace( '-', '_', rtbiz_post_type_name( $attr->attribute_name ) );
 				} else {
 					$attr_name = str_replace( '-', '_', rthd_attribute_taxonomy_name( $attr->attribute_name ) );
@@ -442,14 +440,14 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 		 * Filter adult pref
 		 * @param $query
 		 */
-		function adult_post_filter( $query ){
+		function adult_post_filter( $query ) {
 
-			if ( is_admin() && $query->query['post_type'] == self::$post_type && strpos($_SERVER[ 'REQUEST_URI' ], '/wp-admin/edit.php') !== false ) {
+			if ( is_admin() && $query->query['post_type'] == self::$post_type && strpos( $_SERVER['REQUEST_URI'], '/wp-admin/edit.php' ) !== false ) {
 				$qv = &$query->query_vars;
 
 				$current_user = get_current_user_id();
 				$pref = rthd_get_user_adult_preference( $current_user );
-				if ( 'yes' == $pref ){
+				if ( 'yes' == $pref ) {
 					$meta_q = array(
 						'relation' => 'OR',
 						array(
@@ -459,7 +457,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 						array(
 							'key'     => '_rthd_ticket_adult_content',
 							'value'   => 'yes',
-							'compare' => '!='
+							'compare' => '!=',
 						),
 					);
 					$qv['meta_query'] = array_merge( empty( $qv['meta_query'] ) ? array() : $qv['meta_query'], $meta_q );
@@ -524,22 +522,22 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 		 * @return mixed
 		 */
 		function custom_pages_order( $menu_order ) {
-            global $submenu;
-            global $menu;
+			global $submenu;
+			global $menu;
 
 			unset( $submenu[ Rt_Biz::$dashboard_slug ] );
-			foreach( $menu as $key => $menu_item ){
+			foreach ( $menu as $key => $menu_item ) {
 				if ( in_array( Rt_Biz::$dashboard_slug, $menu_item ) ) {
 					unset( $menu[ $key ] );
 				}
 			}
 
-            if ( isset( $submenu[ 'edit.php?post_type=' . self::$post_type ] ) && ! empty( $submenu[ 'edit.php?post_type=' . self::$post_type ] ) ) {
-                $module_menu = $submenu[ 'edit.php?post_type=' . self::$post_type ];
-                unset( $submenu[ 'edit.php?post_type=' . self::$post_type ] );
-                $submenu[ 'edit.php?post_type=' . self::$post_type ] = array();
-                $new_index = 5;
-                foreach ( $this->custom_menu_order as $item ) {
+			if ( isset( $submenu[ 'edit.php?post_type=' . self::$post_type ] ) && ! empty( $submenu[ 'edit.php?post_type=' . self::$post_type ] ) ) {
+				$module_menu = $submenu[ 'edit.php?post_type=' . self::$post_type ];
+				unset( $submenu[ 'edit.php?post_type=' . self::$post_type ] );
+				$submenu[ 'edit.php?post_type=' . self::$post_type ] = array();
+				$new_index = 5;
+				foreach ( $this->custom_menu_order as $item ) {
 	                if ( rthd_check_wizard_completed() || ( ! rthd_check_wizard_completed() && 'rthd-setup-wizard' == $item ) ) {
 		                foreach ( $module_menu as $p_key => $menu_item ) {
 			                $out = array_filter( $menu_item, function ( $in ) {
@@ -553,17 +551,17 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 			                }
 		                }
 	                }
-                }
-                /*foreach ( $module_menu as $p_key => $menu_item ) {
+				}
+				/*foreach ( $module_menu as $p_key => $menu_item ) {
 	                if ( rthd_check_wizard_completed() || ( ! rthd_check_wizard_completed() && in_array( 'rthd-setup-wizard', $menu_item ) ) ) {
 		                $submenu[ 'edit.php?post_type=' . self::$post_type ][ $new_index ] = $menu_item;
 		                unset( $module_menu[ $p_key ] );
 		                $new_index += 5;
 	                }
                 }*/
-            }
+			}
 
-            return $menu_order;
+			return $menu_order;
 		}
 	}
 }

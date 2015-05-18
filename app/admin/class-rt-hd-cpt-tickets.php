@@ -41,7 +41,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 			add_action( 'rt_hd_process_' . Rt_HD_Module::$post_type . '_meta', 'RT_Meta_Box_Ticket_Info::save', 10, 2 );
 			add_action( 'rt_hd_process_' . Rt_HD_Module::$post_type . '_meta', 'RT_Meta_Box_Subscribers::save', 10, 2 );
 			add_action( 'rt_hd_process_' . Rt_HD_Module::$post_type . '_meta', 'RT_Meta_Box_Attachment::save', 10, 2 );
-//			add_action( 'rt_hd_process_' . Rt_HD_Module::$post_type . '_meta', 'RT_Meta_Box_External_Link::save', 10, 2 );
+			//          add_action( 'rt_hd_process_' . Rt_HD_Module::$post_type . '_meta', 'RT_Meta_Box_External_Link::save', 10, 2 );
 			add_action( 'rt_hd_process_' . Rt_HD_Module::$post_type . '_meta', 'RT_Ticket_Diff_Email::save', 10, 2 );
 
 			add_action( 'pre_get_posts', array( $this, 'pre_filter' ), 1 );
@@ -81,19 +81,19 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 		public function edit_custom_columns( $cols ) {
 			$columns = array();
 
-			unset( $cols[ 'cb' ] );
-			unset( $cols[ 'title' ] );
-			unset( $cols[ 'comments' ] );
-			unset( $cols[ 'date' ] );
+			unset( $cols['cb'] );
+			unset( $cols['title'] );
+			unset( $cols['comments'] );
+			unset( $cols['date'] );
 
-			$columns[ 'cb' ] = '<input type="checkbox" />';
-			$columns[ 'rthd_ticket_title' ] = __( 'Ticket', RT_HD_TEXT_DOMAIN );
-			$columns[ 'rthd_ticket_status' ] = '<span class="status_head tips" data-tip="' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '">' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '</span>';
-			$columns[ 'rthd_ticket_assignee' ] = __( 'Assignee', RT_HD_TEXT_DOMAIN );
-			$columns[ 'rthd_ticket_created_by' ] = __( 'Ticket Author', RT_HD_TEXT_DOMAIN );
-			$columns[ 'rthd_ticket_followup' ] = __( 'Reply Count', RT_HD_TEXT_DOMAIN );
-//            $columns['rthd_ticket_updated_by']     = __( 'Updated By', RT_HD_TEXT_DOMAIN );
-			$columns[ 'rthd_ticket_last_reply_by' ] = __( 'Last Reply By', RT_HD_TEXT_DOMAIN );
+			$columns['cb'] = '<input type="checkbox" />';
+			$columns['rthd_ticket_title'] = __( 'Ticket', RT_HD_TEXT_DOMAIN );
+			$columns['rthd_ticket_status'] = '<span class="status_head tips" data-tip="' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '">' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '</span>';
+			$columns['rthd_ticket_assignee'] = __( 'Assignee', RT_HD_TEXT_DOMAIN );
+			$columns['rthd_ticket_created_by'] = __( 'Ticket Author', RT_HD_TEXT_DOMAIN );
+			$columns['rthd_ticket_followup'] = __( 'Reply Count', RT_HD_TEXT_DOMAIN );
+			//            $columns['rthd_ticket_updated_by']     = __( 'Updated By', RT_HD_TEXT_DOMAIN );
+			$columns['rthd_ticket_last_reply_by'] = __( 'Last Reply By', RT_HD_TEXT_DOMAIN );
 
 			$columns = array_merge( $columns, $cols );
 
@@ -110,10 +110,10 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 		 * @return mixed
 		 */
 		function sortable_column( $columns ) {
-			$columns[ 'rthd_ticket_title' ] = 'ticket';
-			$columns[ 'rthd_ticket_created_by' ] = 'created_by';
-			$columns[ 'rthd_ticket_updated_by' ] = 'updated_by';
-			$columns[ 'rthd_ticket_followup' ] = 'comments';
+			$columns['rthd_ticket_title'] = 'ticket';
+			$columns['rthd_ticket_created_by'] = 'created_by';
+			$columns['rthd_ticket_updated_by'] = 'updated_by';
+			$columns['rthd_ticket_followup'] = 'comments';
 			return $columns;
 		}
 
@@ -121,8 +121,8 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 			$action_count = count( $actions );
 			$i = 0;
 
-			if ( ! $action_count )
-				return '';
+			if ( ! $action_count ) {
+				return ''; }
 
 			$out = '<div class="' . ( $always_visible ? 'row-actions visible' : 'row-actions' ) . '">';
 			foreach ( $actions as $action => $link ) {
@@ -165,7 +165,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 					);
 					$url = esc_url( add_query_arg( $query_var, 'edit.php' ) );
 					if ( $user_info ) {
-//						printf( "<a href='%s'>%s</a>", $url, $user_info->display_name );
+						//                      printf( "<a href='%s'>%s</a>", $url, $user_info->display_name );
 						add_filter( 'get_avatar', array( $this, 'add_gravatar_class' ) );
 						printf( " <a href='%s'>%s <span>%s</span> ", $url, get_avatar( $user_info->user_email, 25 ), $user_info->display_name );
 						remove_filter( 'get_avatar', array( $this, 'add_gravatar_class' ) );
@@ -182,8 +182,8 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 				case 'rthd_ticket_last_reply_by' :
 					$comment = get_comments( array( 'post_id' => $post->ID, 'number' => 1 ) );
 					if ( ! empty( $comment ) ) {
-						$comment = $comment[ 0 ];
-//						echo ''.esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) )) ." ago by ". $comment->comment_author ;
+						$comment = $comment[0];
+						//                      echo ''.esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) )) ." ago by ". $comment->comment_author ;
 						$user_info = get_user_by( 'id', $comment->user_id );
 						$lastreplyby = sprintf( __( '<span class="created-by tips" data-tip="%s">%s </span>', RT_HD_PATH_ADMIN ), $comment->comment_date, human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) . __( ' ago' ) );
 						if ( $user_info ) {
@@ -216,30 +216,30 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 						'assigned' => $user_id,
 					);
 
-					if ( $user_id == get_current_user_id() ) {
-						$query_var[ 'post_status' ] = 'assigned';
+					if ( get_current_user_id() == $user_id ) {
+						$query_var['post_status'] = 'assigned';
 					}
 
 					$url = esc_url( add_query_arg( $query_var, 'edit.php' ) );
 
-//					if ( $user_info ) {
-//						printf( " Assigned to <a href='%s'>%s</a>", $url, $user_info->display_name );
-//					}
+					//                  if ( $user_info ) {
+					//                      printf( " Assigned to <a href='%s'>%s</a>", $url, $user_info->display_name );
+					//                  }
 
 					$actions = array();
 					if ( $can_edit_post && 'trash' != $post->post_status ) {
-						$actions[ 'edit' ] = '<a href="' . get_edit_post_link( $post->ID, true ) . '" title="' . esc_attr( __( 'Edit this item' ) ) . '">' . __( 'Edit' ) . '</a>';
-						$actions[ 'inline hide-if-no-js' ] = '<a href="#" class="editinline" title="' . esc_attr( __( 'Edit this item inline' ) ) . '">' . __( 'Quick&nbsp;Edit' ) . '</a>';
+						$actions['edit'] = '<a href="' . get_edit_post_link( $post->ID, true ) . '" title="' . esc_attr( __( 'Edit this item' ) ) . '">' . __( 'Edit' ) . '</a>';
+						$actions['inline hide-if-no-js'] = '<a href="#" class="editinline" title="' . esc_attr( __( 'Edit this item inline' ) ) . '">' . __( 'Quick&nbsp;Edit' ) . '</a>';
 					}
 
 					if ( current_user_can( 'delete_post', $post->ID ) ) {
 						if ( 'trash' == $post->post_status ) {
-							$actions[ 'untrash' ] = "<a title='" . esc_attr( __( 'Restore this item from the Trash' ) ) . "' href='" . wp_nonce_url( admin_url( sprintf( $post_type_object->_edit_link . '&amp;action=untrash', $post->ID ) ), 'untrash-post_' . $post->ID ) . "'>" . __( 'Restore' ) . "</a>";
+							$actions['untrash'] = "<a title='" . esc_attr( __( 'Restore this item from the Trash' ) ) . "' href='" . wp_nonce_url( admin_url( sprintf( $post_type_object->_edit_link . '&amp;action=untrash', $post->ID ) ), 'untrash-post_' . $post->ID ) . "'>" . __( 'Restore' ) . '</a>';
 						} else {
-							$actions[ 'trash' ] = "<a class='submitdelete' title='" . esc_attr( __( 'Move this item to the Trash' ) ) . "' href='" . get_delete_post_link( $post->ID ) . "'>" . __( 'Trash' ) . "</a>";
+							$actions['trash'] = "<a class='submitdelete' title='" . esc_attr( __( 'Move this item to the Trash' ) ) . "' href='" . get_delete_post_link( $post->ID ) . "'>" . __( 'Trash' ) . '</a>';
 						}
 						if ( 'trash' == $post->post_status ) {
-							$actions[ 'delete' ] = "<a class='submitdelete' title='" . esc_attr( __( 'Delete this item permanently' ) ) . "' href='" . get_delete_post_link( $post->ID, '', true ) . "'>" . __( 'Delete Permanently' ) . "</a>";
+							$actions['delete'] = "<a class='submitdelete' title='" . esc_attr( __( 'Delete this item permanently' ) ) . "' href='" . get_delete_post_link( $post->ID, '', true ) . "'>" . __( 'Delete Permanently' ) . '</a>';
 						}
 					}
 					if ( $post_type_object->public ) {
@@ -248,10 +248,10 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 								$preview_link = set_url_scheme( get_permalink( $post->ID ) );
 								/** This filter is documented in wp-admin/includes/meta-boxes.php */
 								$preview_link = apply_filters( 'preview_post_link', esc_url( add_query_arg( 'preview', 'true', $preview_link ) ), $post );
-								$actions[ 'view' ] = '<a href="' . esc_url( $preview_link ) . '" title="' . esc_attr( sprintf( __( 'Preview &#8220;%s&#8221;' ), $post->post_title ) ) . '" rel="permalink">' . __( 'Preview' ) . '</a>';
+								$actions['view'] = '<a href="' . esc_url( $preview_link ) . '" title="' . esc_attr( sprintf( __( 'Preview &#8220;%s&#8221;' ), $post->post_title ) ) . '" rel="permalink">' . __( 'Preview' ) . '</a>';
 							}
 						} elseif ( 'trash' != $post->post_status ) {
-							$actions[ 'view' ] = '<a href="' . get_permalink( $post->ID ) . '" title="' . esc_attr( sprintf( __( 'View &#8220;%s&#8221;' ), $post->post_title ) ) . '" rel="permalink">' . __( 'View' ) . '</a>';
+							$actions['view'] = '<a href="' . get_permalink( $post->ID ) . '" title="' . esc_attr( sprintf( __( 'View &#8220;%s&#8221;' ), $post->post_title ) ) . '" rel="permalink">' . __( 'View' ) . '</a>';
 						}
 					}
 
@@ -269,18 +269,18 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 					$user_id = get_post_meta( $post->ID, '_rtbiz_hd_created_by', true );
 					$user_info = get_userdata( $user_id );
 					$url = esc_url(
-							add_query_arg(
-									array(
-						'post_type' => Rt_HD_Module::$post_type,
-						'created_by' => $user_id,
+						add_query_arg(
+							array(
+								'post_type' => Rt_HD_Module::$post_type,
+								'created_by' => $user_id,
 									), 'edit.php' ) );
 
-					$replyby = sprintf( __( '<span class="created-by tips" data-tip="%s">%s </span>', RT_HD_PATH_ADMIN ), get_the_date( 'd-m-Y H:i' ), $datediff );
-					if ( $user_info ) {
-						add_filter( 'get_avatar', array( $this, 'add_gravatar_class' ) );
-						printf( "<div class='rthd-ticket-author'><a href='%s'>%s <span>%s</span></a> %s</div>", $url, get_avatar( $user_info->user_email, 25 ), $user_info->display_name, $replyby );
-						remove_filter( 'get_avatar', array( $this, 'add_gravatar_class' ) );
-					}
+									$replyby = sprintf( __( '<span class="created-by tips" data-tip="%s">%s </span>', RT_HD_PATH_ADMIN ), get_the_date( 'd-m-Y H:i' ), $datediff );
+							if ( $user_info ) {
+								add_filter( 'get_avatar', array( $this, 'add_gravatar_class' ) );
+								printf( "<div class='rthd-ticket-author'><a href='%s'>%s <span>%s</span></a> %s</div>", $url, get_avatar( $user_info->user_email, 25 ), $user_info->display_name, $replyby );
+								remove_filter( 'get_avatar', array( $this, 'add_gravatar_class' ) );
+							}
 					break;
 
 				/* case 'rthd_ticket_updated_by':
@@ -334,7 +334,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 			add_meta_box( 'rt-hd-ticket-order-history', __( 'Purchase History', RT_HD_TEXT_DOMAIN ), array( $this, 'order_history' ), Rt_HD_Module::$post_type, 'side', 'default' );
 			add_meta_box( 'rt-hd-ticket-contacts-blacklist', __( 'Blacklist Contacts', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Ticket_Contacts_Blacklist::ui', Rt_HD_Module::$post_type, 'side', 'low' );
 			add_meta_box( 'rt-hd-attachment', __( 'Attachments', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Attachment::ui', Rt_HD_Module::$post_type, 'side', 'low' );
-//			add_meta_box( 'rt-hd-external-link', __( 'Reference Links', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_External_Link::ui', Rt_HD_Module::$post_type, 'side', 'default' );
+			//          add_meta_box( 'rt-hd-external-link', __( 'Reference Links', RT_HD_TEXT_DOMAIN ), 'RT_Meta_Box_External_Link::ui', Rt_HD_Module::$post_type, 'side', 'default' );
 		}
 
 		/**
@@ -342,20 +342,20 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 		 */
 		public function metabox_rearrenge() {
 			global $wp_meta_boxes;
-			$custom_order[ 'submitdiv' ] = $wp_meta_boxes[ Rt_HD_Module::$post_type ][ 'side' ][ 'core' ][ 'submitdiv' ];
-			$custom_order[ 'rt-hd-ticket-data' ] = $wp_meta_boxes[ Rt_HD_Module::$post_type ][ 'side' ][ 'default' ][ 'rt-hd-ticket-data' ];
-			$custom_order[ 'rt-offeringdiv' ] = $wp_meta_boxes[ Rt_HD_Module::$post_type ][ 'side' ][ 'core' ][ 'rt-offeringdiv' ];
-			$custom_order[ 'p2p-from-' . Rt_HD_Module::$post_type . '_to_' . rt_biz_get_contact_post_type() ] = $wp_meta_boxes[ Rt_HD_Module::$post_type ][ 'side' ][ 'default' ][ 'p2p-from-' . Rt_HD_Module::$post_type . '_to_' . rt_biz_get_contact_post_type() ];
-			$custom_order[ 'rt-hd-subscriiber' ] = $wp_meta_boxes[ Rt_HD_Module::$post_type ][ 'side' ][ 'default' ][ 'rt-hd-subscriiber' ];
-			$custom_order[ 'rt-hd-ticket-order-history' ] = $wp_meta_boxes[ Rt_HD_Module::$post_type ][ 'side' ][ 'default' ][ 'rt-hd-ticket-order-history' ];
-			$custom_order[ 'p2p-any-' . Rt_HD_Module::$post_type . '_to_' . Rt_HD_Module::$post_type ] = $wp_meta_boxes[ Rt_HD_Module::$post_type ][ 'side' ][ 'default' ][ 'p2p-any-' . Rt_HD_Module::$post_type . '_to_' . Rt_HD_Module::$post_type ];
-			$custom_order[ 'rt-departmentdiv' ] = $wp_meta_boxes[ Rt_HD_Module::$post_type ][ 'side' ][ 'core' ][ 'rt-departmentdiv' ];
-			$wp_meta_boxes[ Rt_HD_Module::$post_type ][ 'side' ][ 'core' ] = $custom_order;
-			unset( $wp_meta_boxes[ Rt_HD_Module::$post_type ][ 'side' ][ 'default' ][ 'rt-hd-ticket-data' ] );
-			unset( $wp_meta_boxes[ Rt_HD_Module::$post_type ][ 'side' ][ 'default' ][ 'p2p-from-' . Rt_HD_Module::$post_type . '_to_' . rt_biz_get_contact_post_type() ] );
-			unset( $wp_meta_boxes[ Rt_HD_Module::$post_type ][ 'side' ][ 'default' ][ 'rt-hd-subscriiber' ] );
-			unset( $wp_meta_boxes[ Rt_HD_Module::$post_type ][ 'side' ][ 'default' ][ 'rt-hd-ticket-order-history' ] );
-			unset( $wp_meta_boxes[ Rt_HD_Module::$post_type ][ 'side' ][ 'default' ][ 'p2p-any-' . Rt_HD_Module::$post_type . '_to_' . Rt_HD_Module::$post_type ] );
+			$custom_order['submitdiv'] = $wp_meta_boxes[ Rt_HD_Module::$post_type ]['side']['core']['submitdiv'];
+			$custom_order['rt-hd-ticket-data'] = $wp_meta_boxes[ Rt_HD_Module::$post_type ]['side']['default']['rt-hd-ticket-data'];
+			$custom_order['rt-offeringdiv'] = $wp_meta_boxes[ Rt_HD_Module::$post_type ]['side']['core']['rt-offeringdiv'];
+			$custom_order[ 'p2p-from-' . Rt_HD_Module::$post_type . '_to_' . rt_biz_get_contact_post_type() ] = $wp_meta_boxes[ Rt_HD_Module::$post_type ]['side']['default'][ 'p2p-from-' . Rt_HD_Module::$post_type . '_to_' . rt_biz_get_contact_post_type() ];
+			$custom_order['rt-hd-subscriiber'] = $wp_meta_boxes[ Rt_HD_Module::$post_type ]['side']['default']['rt-hd-subscriiber'];
+			$custom_order['rt-hd-ticket-order-history'] = $wp_meta_boxes[ Rt_HD_Module::$post_type ]['side']['default']['rt-hd-ticket-order-history'];
+			$custom_order[ 'p2p-any-' . Rt_HD_Module::$post_type . '_to_' . Rt_HD_Module::$post_type ] = $wp_meta_boxes[ Rt_HD_Module::$post_type ]['side']['default'][ 'p2p-any-' . Rt_HD_Module::$post_type . '_to_' . Rt_HD_Module::$post_type ];
+			$custom_order['rt-departmentdiv'] = $wp_meta_boxes[ Rt_HD_Module::$post_type ]['side']['core']['rt-departmentdiv'];
+			$wp_meta_boxes[ Rt_HD_Module::$post_type ]['side']['core'] = $custom_order;
+			unset( $wp_meta_boxes[ Rt_HD_Module::$post_type ]['side']['default']['rt-hd-ticket-data'] );
+			unset( $wp_meta_boxes[ Rt_HD_Module::$post_type ]['side']['default'][ 'p2p-from-' . Rt_HD_Module::$post_type . '_to_' . rt_biz_get_contact_post_type() ] );
+			unset( $wp_meta_boxes[ Rt_HD_Module::$post_type ]['side']['default']['rt-hd-subscriiber'] );
+			unset( $wp_meta_boxes[ Rt_HD_Module::$post_type ]['side']['default']['rt-hd-ticket-order-history'] );
+			unset( $wp_meta_boxes[ Rt_HD_Module::$post_type ]['side']['default'][ 'p2p-any-' . Rt_HD_Module::$post_type . '_to_' . Rt_HD_Module::$post_type ] );
 		}
 
 		/**
@@ -394,7 +394,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 			}
 
 			// Check the post being saved == the $post_id to prevent triggering this call for other save_post events
-			if ( empty( $_POST[ 'post_ID' ] ) || $_POST[ 'post_ID' ] != $post_id ) {
+			if ( empty( $_POST['post_ID'] ) || $_POST['post_ID'] != $post_id ) {
 				return;
 			}
 
@@ -426,34 +426,34 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 		 * @param $query
 		 */
 		function pre_filter( $query ) {
-			if ( isset( $_GET[ 'post_type' ] ) && $_GET[ 'post_type' ] == Rt_HD_Module::$post_type && $query->is_main_query() ) {
+			if ( isset( $_GET['post_type'] ) && Rt_HD_Module::$post_type == $_GET['post_type'] && $query->is_main_query() ) {
 				$orderby = $query->get( 'orderby' );
-				if ( isset( $_GET[ 'contact_id' ] ) ) {
+				if ( isset( $_GET['contact_id'] ) ) {
 					$formss = array();
-					$contact_id = $_GET[ 'contact_id' ];
+					$contact_id = $_GET['contact_id'];
 					global $wpdb;
 					global $rt_contact;
 					$contact_froms = $wpdb->get_results(
-							"SELECT p2p_from
-							FROM " . $wpdb->prefix . "p2p
+						'SELECT p2p_from
+                            FROM ' . $wpdb->prefix . "p2p
 								WHERE p2p_type = '" . Rt_HD_Module::$post_type . '_to_' . $rt_contact->post_type .
-							"' AND p2p_to = " . $contact_id );
+					"' AND p2p_to = " . $contact_id );
 
 					foreach ( $contact_froms as $form ) {
 						$formss[] = intval( $form->p2p_from );
 					}
 					$query->set( 'post__in', $formss );
 				}
-				if ( isset( $_GET[ 'account_id' ] ) ) {
+				if ( isset( $_GET['account_id'] ) ) {
 					$formss = array();
-					$account_id = $_GET[ 'account_id' ];
+					$account_id = $_GET['account_id'];
 					global $wpdb;
 					global $rt_company;
 					$account_froms = $wpdb->get_results(
-							"SELECT p2p_from
+						"SELECT p2p_from
 							FROM wp_p2p
 								WHERE p2p_type = '" . Rt_HD_Module::$post_type . '_to_' . $rt_company->post_type .
-							"' AND p2p_to = " . $account_id );
+					"' AND p2p_to = " . $account_id );
 
 					foreach ( $account_froms as $form ) {
 						$formss[] = intval( $form->p2p_from );
@@ -479,55 +479,55 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 					$query->set( 'order', 'desc' );
 				}
 
-				if ( isset( $_GET[ 'product_id' ] ) ) {
+				if ( isset( $_GET['product_id'] ) ) {
 					global $rtbiz_offerings;
 					$query->set( 'tax_query', array(
 						array(
 							'taxonomy' => Rt_Offerings::$offering_slug,
 							'field' => 'term_id',
-							'terms' => $_GET[ 'product_id' ],
+							'terms' => $_GET['product_id'],
 						),
 					) );
 				}
 
-				if ( isset( $_GET[ 'created_by' ] ) ) {
+				if ( isset( $_GET['created_by'] ) ) {
 
 					$query->set( 'meta_query', array(
 						array(
 							'key' => '_rtbiz_hd_created_by',
-							'value' => $_GET[ 'created_by' ],
+							'value' => $_GET['created_by'],
 						),
 					) );
 				}
 
-				if ( isset( $_GET[ 'assigned' ] ) ) {
-					$query->set( 'author', $_GET[ 'assigned' ] );
+				if ( isset( $_GET['assigned'] ) ) {
+					$query->set( 'author', $_GET['assigned'] );
 				}
 
-				if ( isset( $_GET[ 'updated_by' ] ) ) {
+				if ( isset( $_GET['updated_by'] ) ) {
 
 					$query->set( 'meta_query', array(
 						array(
 							'key' => '_rtbiz_hd_updated_by',
-							'value' => $_GET[ 'updated_by' ],
+							'value' => $_GET['updated_by'],
 						),
 					) );
 				}
 
-				if ( isset( $_GET[ 'ticket_status' ] ) ) {
-					$query->set( 'post_status', $_GET[ 'ticket_status' ] );
+				if ( isset( $_GET['ticket_status'] ) ) {
+					$query->set( 'post_status', $_GET['ticket_status'] );
 				}
 
-				if ( isset( $_GET[ 'ticket_assigned' ] ) ) {
-					$query->set( 'author', $_GET[ 'ticket_assigned' ] );
+				if ( isset( $_GET['ticket_assigned'] ) ) {
+					$query->set( 'author', $_GET['ticket_assigned'] );
 				}
 
-				if ( isset( $_GET[ 'favorite' ] ) ) {
+				if ( isset( $_GET['favorite'] ) ) {
 					$fav_ticket = rthd_get_user_fav_ticket( get_current_user_id() );
 					$query->set( 'post__in', $fav_ticket );
 				}
 
-				if ( isset( $_GET[ 'subscribe' ] ) ) {
+				if ( isset( $_GET['subscribe'] ) ) {
 					global $wpdb;
 					//subscribe ticket
 					$contacts = rthd_get_user_subscribe_ticket( get_current_user_id() );
@@ -558,7 +558,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 				global $rt_hd_ticket_history_model;
 
 				$rt_hd_ticket_history_model->insert(
-						array(
+					array(
 							'ticket_id' => $post_id,
 							'type' => 'post_status',
 							'old_value' => 'trash',
@@ -566,10 +566,10 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 							'message' => null,
 							'update_time' => current_time( 'mysql' ),
 							'updated_by' => get_current_user_id(),
-				) );
+						) );
 
-				$ticket->post_status = 'hd-unanswered';
-				wp_update_post( $ticket );
+						$ticket->post_status = 'hd-unanswered';
+						wp_update_post( $ticket );
 			}
 		}
 
@@ -607,7 +607,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 			if ( get_post_type( $post_id ) == Rt_HD_Module::$post_type ) {
 				global $rt_hd_ticket_history_model;
 				$rt_hd_ticket_history_model->insert(
-						array(
+					array(
 							'ticket_id' => $post_id,
 							'type' => 'post_status',
 							'old_value' => get_post_status( $post_id ),
@@ -615,7 +615,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 							'message' => null,
 							'update_time' => current_time( 'mysql' ),
 							'updated_by' => get_current_user_id(),
-				) );
+						) );
 			}
 		}
 
@@ -633,7 +633,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 			$current_user_id = get_current_user_id();
 
 			$count_user_tickets = new WP_Query(
-					array(
+				array(
 				'posts_per_page' => -1,
 				'post_type' => Rt_HD_Module::$post_type,
 				'post_status' => 'any',
@@ -644,32 +644,28 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 			//For Author WordPress provide mine link to view display current user post so added My ticket link only for admin/editor
 			if ( current_user_can( $editor_cap ) ) {
 
-				if ( isset( $_GET[ 'author' ] ) && ( $_GET[ 'author' ] == $current_user_id ) )
-					$class = ' class="current"';
-				else
-					$class = '';
-				$temp_view[ 'mine' ] = "<a href='edit.php?post_type=" . Rt_HD_Module::$post_type . "&author=$current_user_id' $class>" . sprintf( _nx( 'Mine <span class="count">(%s)</span>', 'Mine <span class="count">(%s)</span>', $count_user_tickets->post_count, RT_HD_TEXT_DOMAIN ), number_format_i18n( $count_user_tickets->post_count ) ) . '</a>';
-			}else {
-				unset( $views[ 'all' ] );
+				if ( isset( $_GET['author'] ) && ( $_GET['author'] == $current_user_id ) ) {
+					$class = ' class="current"'; } else { 					$class = ''; }
+				$temp_view['mine'] = "<a href='edit.php?post_type=" . Rt_HD_Module::$post_type . "&author=$current_user_id' $class>" . sprintf( _nx( 'Mine <span class="count">(%s)</span>', 'Mine <span class="count">(%s)</span>', $count_user_tickets->post_count, RT_HD_TEXT_DOMAIN ), number_format_i18n( $count_user_tickets->post_count ) ) . '</a>';
+			} else {
+				unset( $views['all'] );
 			}
 
 			$fav_ticket = rthd_get_user_fav_ticket( $current_user_id );
 			if ( ! empty( $fav_ticket ) ) {
-				if ( isset( $_GET[ 'favorite' ] ) )
-					$class = ' class="current"';
-				else
-					$class = '';
-				$views[ 'favorite_ticket' ] = "<a href='edit.php?post_type=" . Rt_HD_Module::$post_type . "&favorite=true' $class>" . sprintf( _nx( 'Favorite <span class="count">(%s)</span>', 'Favorites <span class="count">(%s)</span>', count( $fav_ticket ), RT_HD_TEXT_DOMAIN ), number_format_i18n( count( $fav_ticket ) ) ) . '</a>';
+				if ( isset( $_GET['favorite'] ) ) {
+					$class = ' class="current"'; } else { 					$class = ''; }
+				$views['favorite_ticket'] = "<a href='edit.php?post_type=" . Rt_HD_Module::$post_type . "&favorite=true' $class>" . sprintf( _nx( 'Favorite <span class="count">(%s)</span>', 'Favorites <span class="count">(%s)</span>', count( $fav_ticket ), RT_HD_TEXT_DOMAIN ), number_format_i18n( count( $fav_ticket ) ) ) . '</a>';
 			}
 
 			$contacts = rthd_get_user_subscribe_ticket( get_current_user_id() );
 			if ( ! empty( $contacts ) ) {
-				if ( isset( $_GET[ 'subscribe' ] ) ) {
+				if ( isset( $_GET['subscribe'] ) ) {
 					$class = ' class="current"';
 				} else {
 					$class = '';
 				}
-				$views[ 'subscribe_ticket' ] = "<a href='edit.php?post_type=" . Rt_HD_Module::$post_type . "&subscribe=true' $class>" . sprintf( _nx( 'Subscribe <span class="count">(%s)</span>', 'Subscribe <span class="count">(%s)</span>', count( $fav_ticket ), RT_HD_TEXT_DOMAIN ), number_format_i18n( count( $contacts ) ) ) . '</a>';
+				$views['subscribe_ticket'] = "<a href='edit.php?post_type=" . Rt_HD_Module::$post_type . "&subscribe=true' $class>" . sprintf( _nx( 'Subscribe <span class="count">(%s)</span>', 'Subscribe <span class="count">(%s)</span>', count( $fav_ticket ), RT_HD_TEXT_DOMAIN ), number_format_i18n( count( $contacts ) ) ) . '</a>';
 			}
 
 			//remove count for editor
@@ -689,7 +685,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 		public function display_custom_filters() {
 			global $typenow, $rt_hd_module, $rtbiz_offerings, $rt_hd_rt_attributes;
 
-			if ( $typenow == Rt_HD_Module::$post_type ) {
+			if ( Rt_HD_Module::$post_type == $typenow ) {
 
 				// Filter by status
 				echo '<label class="screen-reader-text" for="ticket_status">' . __( 'Filter by status' ) . '</label>';
@@ -700,10 +696,10 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 				echo '<option value="0">Select Status</option>';
 
 				foreach ( $statuses as $status ) {
-					if ( isset( $_GET[ 'ticket_status' ] ) && $status[ 'slug' ] == $_GET[ 'ticket_status' ] ) {
-						echo '<option value="' . $status[ 'slug' ] . '" selected="selected">' . $status[ 'name' ] . '</option>';
+					if ( isset( $_GET['ticket_status'] ) && $status['slug'] == $_GET['ticket_status'] ) {
+						echo '<option value="' . $status['slug'] . '" selected="selected">' . $status['name'] . '</option>';
 					} else {
-						echo '<option value="' . $status[ 'slug' ] . '">' . $status[ 'name' ] . '</option>';
+						echo '<option value="' . $status['slug'] . '">' . $status['name'] . '</option>';
 					}
 				}
 				echo '</select>';
@@ -717,7 +713,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 				echo '<option value="0">Select Assignee</option>';
 
 				foreach ( $ticket_authors as $author ) {
-					if ( isset( $_GET[ 'ticket_assigned' ] ) && $author->ID == $_GET[ 'ticket_assigned' ] ) {
+					if ( isset( $_GET['ticket_assigned'] ) && $author->ID == $_GET['ticket_assigned'] ) {
 						echo '<option value="' . $author->ID . '" selected="selected">' . $author->display_name . '</option>';
 					} else {
 						echo '<option value="' . $author->ID . '">' . $author->display_name . '</option>';
@@ -739,7 +735,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 					echo '<option value="0">Select Product</option>';
 
 					foreach ( $products as $product ) {
-						if ( isset( $_GET[ 'rt-offering' ] ) && $product->slug == $_GET[ 'rt-offering' ] ) {
+						if ( isset( $_GET['rt-offering'] ) && $product->slug == $_GET['rt-offering'] ) {
 							echo '<option value="' . $product->slug . '" selected="selected">' . $product->name . '</option>';
 						} else {
 							echo '<option value="' . $product->slug . '">' . $product->name . '</option>';

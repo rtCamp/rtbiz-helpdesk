@@ -25,41 +25,41 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 		 */
 		public function __construct() {
 			add_action( 'transition_post_status', array( $this, 'ticket_status_changed' ), 10, 3 );
-			add_action( 'rt_hd_before_send_notification', array( $this,'rt_hd_before_send_notification'),10 );
-			add_action( 'rt_hd_process_' . Rt_HD_Module::$post_type . '_meta', array( $this,'rt_hd_before_send_notification'),20 );
+			add_action( 'rt_hd_before_send_notification', array( $this, 'rt_hd_before_send_notification' ), 10 );
+			add_action( 'rt_hd_process_' . Rt_HD_Module::$post_type . '_meta', array( $this, 'rt_hd_before_send_notification' ), 20 );
 		}
 
 		/**
 		 * @param $postid
 		 * @param $post
 		 */
-		function rt_hd_before_send_notification( $postid, $post = null ){
-			if ( empty( $post ) ){
+		function rt_hd_before_send_notification( $postid, $post = null ) {
+			if ( empty( $post ) ) {
 				$post = get_post( $postid );
 			}
-            //  ( offering selecting form backend  ) || offering selected form support form
+			//  ( offering selecting form backend  ) || offering selected form support form
 			if ( ( isset( $_POST['tax_input'] ) && isset( $_POST['tax_input'][ Rt_Offerings::$offering_slug ] ) && ! empty( $_POST['tax_input'][ Rt_Offerings::$offering_slug ][0] ) ) || isset( $_POST['post']['product_id'] ) ) {
 				$terms = wp_get_post_terms( $postid, Rt_Offerings::$offering_slug );
 				$default_assignee = null;
 				$settings = rthd_get_redux_settings();
-				if ( ! empty( $terms ) && count( $terms ) == 1 ){
+				if ( ! empty( $terms ) && count( $terms ) == 1 ) {
 					$default_assignee = get_offering_meta( 'default_assignee', $terms[0]->term_id );
-					if ( empty( $default_assignee ) ){
+					if ( empty( $default_assignee ) ) {
 						$default_assignee = $settings['rthd_default_user'];
 					}
 				} else {
 					$default_assignee = $settings['rthd_default_user'];
 				}
-				if ( $post->post_author != $default_assignee ){
+				if ( $post->post_author != $default_assignee ) {
 					global $rt_hd_cpt_tickets;
 					remove_action( 'save_post', array( $rt_hd_cpt_tickets, 'save_meta_boxes' ), 1, 2 );
-					wp_update_post( array( 'ID'=> $postid, 'post_author' => $default_assignee ) );
+					wp_update_post( array( 'ID' => $postid, 'post_author' => $default_assignee ) );
 					add_action( 'save_post', array( $rt_hd_cpt_tickets, 'save_meta_boxes' ), 1, 2 );
 				}
 			}
 		}
 
-		function ticket_status_changed( $new_status, $old_status, $post ){
+		function ticket_status_changed( $new_status, $old_status, $post ) {
 			global $rt_hd_ticket_index_model;
 			if ( $post->post_type == Rt_HD_Module::$post_type ) {
 				$rt_hd_ticket_index_model->update_ticket_status( $new_status, $post->ID );
@@ -108,7 +108,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 						update_post_meta( $post_id, '_rtbiz_hd_created_by', $created_by );
 					} else {
 						$created_by = get_post_meta( $post_id, '_rtbiz_hd_created_by', true );
-						if ( empty( $created_by ) ){
+						if ( empty( $created_by ) ) {
 							update_post_meta( $post_id, '_rtbiz_hd_created_by', get_current_user_id() );
 							$dataArray = array_merge( $dataArray, array(
 								'date_create'     => current_time( 'mysql' ),
@@ -188,7 +188,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 						$rt_hd_attributes->save_attributes( $attr, $post_id, $newTicket );
 
 						/* Update Index Table */
-						if ( $attribute_store_as == 'taxonomy' ){
+						if ( 'taxonomy' == $attribute_store_as ) {
 							$attr_name = str_replace( '-', '_', rtbiz_post_type_name( $attr->attribute_name ) );
 						} else {
 							$attr_name = str_replace( '-', '_', rthd_attribute_taxonomy_name( $attr->attribute_name ) );

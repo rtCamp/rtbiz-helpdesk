@@ -39,14 +39,14 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			add_action( 'wp_ajax_rthd_outound_setup_wizard', array( $this, 'rthd_outound_setup_wizard_callback' ) );
 			add_action( 'wp_ajax_rthd_remove_user', array( $this, 'rthd_remove_user' ) );
 			add_action( 'wp_ajax_rthd_search_domain', array( $this, 'rthd_search_domain' ) );
-			add_action( 'wp_ajax_rthd_change_ACL', array( $this, 'rthd_change_ACL' ) );
-//			add_action( 'wp_ajax_rthd_get_ACL', array( $this, 'rthd_ACL' ) );
+			add_action( 'wp_ajax_rthd_change_ACL', array( $this, 'rthd_change_acl' ) );
+			//          add_action( 'wp_ajax_rthd_get_ACL', array( $this, 'rthd_acl' ) );
 			add_action( 'wp_ajax_rthd_add_new_offering', array( $this, 'rthd_add_new_offering' ) );
 
-			if ( ! empty( $_REQUEST[ 'close_notice' ] ) ) {
+			if ( ! empty( $_REQUEST['close_notice'] ) ) {
 				delete_option( 'rtbiz_helpdesk_dependency_installed' );
 			}
-			if ( ! empty( $_REQUEST[ 'finish-wizard' ] ) ) {
+			if ( ! empty( $_REQUEST['finish-wizard'] ) ) {
 				update_option( 'rtbiz_helpdesk_setup_wizard_option', 'true' );
 			}
 			add_action( 'admin_notices', 'rthd_admin_notice_dependency_installed' );
@@ -148,9 +148,9 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			<?php
 		}
 
-		function rthd_ACL() {
+		function rthd_acl() {
 			global $wpdb, $rt_biz_acl_model;
-			$result = $wpdb->get_results( "SELECT acl.userid, acl.permission FROM " . $rt_biz_acl_model->table_name . " as acl INNER JOIN " . $wpdb->prefix . "p2p as p2p on ( acl.userid = p2p.p2p_to ) INNER JOIN " . $wpdb->posts . " as posts on (p2p.p2p_from = posts.ID )  where acl.module =  '" . RT_HD_TEXT_DOMAIN . "' and acl.permission != 0 and p2p.p2p_type = '" . rt_biz_get_contact_post_type() . "_to_user' and posts.post_status= 'publish' and posts.post_type= '" . rt_biz_get_contact_post_type() . "' and acl.groupid = 0 " );
+			$result = $wpdb->get_results( 'SELECT acl.userid, acl.permission FROM ' . $rt_biz_acl_model->table_name . ' as acl INNER JOIN ' . $wpdb->prefix . 'p2p as p2p on ( acl.userid = p2p.p2p_to ) INNER JOIN ' . $wpdb->posts . " as posts on (p2p.p2p_from = posts.ID )  where acl.module =  '" . RT_HD_TEXT_DOMAIN . "' and acl.permission != 0 and p2p.p2p_type = '" . rt_biz_get_contact_post_type() . "_to_user' and posts.post_status= 'publish' and posts.post_type= '" . rt_biz_get_contact_post_type() . "' and acl.groupid = 0 " );
 			ob_start();
 			if ( ! empty( $result ) ) {
 				?>
@@ -172,15 +172,15 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 							<td><?php echo $user->display_name ?></td>
 							<td><input type="radio" class="rt-hd-setup-acl" data-id="<?php echo $user->ID; ?>"
 									   name="ACL_<?php echo $user->ID; ?>"
-									   value="<?php echo Rt_Access_Control::$permissions[ 'admin' ][ 'value' ]; ?>" <?php echo ( $row->permission == Rt_Access_Control::$permissions[ 'admin' ][ 'value' ] ) ? 'checked' : ''; ?> />
+									   value="<?php echo Rt_Access_Control::$permissions['admin']['value']; ?>" <?php echo ( $row->permission == Rt_Access_Control::$permissions['admin']['value'] ) ? 'checked' : ''; ?> />
 							</td>
 							<td><input type="radio" class="rt-hd-setup-acl" data-id="<?php echo $user->ID; ?>"
 									   name="ACL_<?php echo $user->ID; ?>"
-									   value="<?php echo Rt_Access_Control::$permissions[ 'editor' ][ 'value' ]; ?>" <?php echo ( $row->permission == Rt_Access_Control::$permissions[ 'editor' ][ 'value' ] ) ? 'checked' : ''; ?> />
+									   value="<?php echo Rt_Access_Control::$permissions['editor']['value']; ?>" <?php echo ( $row->permission == Rt_Access_Control::$permissions['editor']['value'] ) ? 'checked' : ''; ?> />
 							</td>
 							<td><input type="radio" class="rt-hd-setup-acl" data-id="<?php echo $user->ID; ?>"
 									   name="ACL_<?php echo $user->ID; ?>"
-									   value="<?php echo Rt_Access_Control::$permissions[ 'author' ][ 'value' ]; ?>" <?php echo ( $row->permission == Rt_Access_Control::$permissions[ 'author' ][ 'value' ] ) ? 'checked' : ''; ?> />
+									   value="<?php echo Rt_Access_Control::$permissions['author']['value']; ?>" <?php echo ( $row->permission == Rt_Access_Control::$permissions['author']['value'] ) ? 'checked' : ''; ?> />
 							</td>
 							<td><img alt="load" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
 							</td>
@@ -239,31 +239,31 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 		 */
 		function rthd_outound_setup_wizard_callback() {
 			$result = array();
-			$result[ 'status' ] = false;
+			$result['status'] = false;
 
 			$obj_data = array();
-			parse_str( $_POST[ 'data' ], $obj_data );
+			parse_str( $_POST['data'], $obj_data );
 
-			if ( ! wp_verify_nonce( $obj_data[ '_wpnonce' ], 'rthd_outound_setup_wizard' ) ) {
-				$result[ 'error' ] = 'Security check false';
+			if ( ! wp_verify_nonce( $obj_data['_wpnonce'], 'rthd_outound_setup_wizard' ) ) {
+				$result['error'] = 'Security check false';
 				echo json_encode( $result );
 				die();
 			}
 
-			if ( empty( $obj_data[ 'rthd_outgoing_email_from_name' ] ) || empty( $obj_data[ 'rthd_outgoing_email_mailbox' ] ) ) {
-				$result[ 'error' ] = 'Error: Required mailbox field missing';
+			if ( empty( $obj_data['rthd_outgoing_email_from_name'] ) || empty( $obj_data['rthd_outgoing_email_mailbox'] ) ) {
+				$result['error'] = 'Error: Required mailbox field missing';
 				echo json_encode( $result );
 				die();
 			}
 
-			if ( ! empty( $obj_data[ 'rthd_outgoing_email_from_name' ] ) ) {
-				rthd_set_redux_settings( 'rthd_outgoing_email_from_name', $obj_data[ 'rthd_outgoing_email_from_name' ] );
+			if ( ! empty( $obj_data['rthd_outgoing_email_from_name'] ) ) {
+				rthd_set_redux_settings( 'rthd_outgoing_email_from_name', $obj_data['rthd_outgoing_email_from_name'] );
 			}
 
-			if ( ! empty( $obj_data[ 'rthd_outgoing_email_mailbox' ] ) ) {
-				rthd_set_redux_settings( 'rthd_outgoing_email_mailbox', $obj_data[ 'rthd_outgoing_email_mailbox' ] );
+			if ( ! empty( $obj_data['rthd_outgoing_email_mailbox'] ) ) {
+				rthd_set_redux_settings( 'rthd_outgoing_email_mailbox', $obj_data['rthd_outgoing_email_mailbox'] );
 			}
-			$result[ 'status' ] = true;
+			$result['status'] = true;
 			echo json_encode( $result );
 			die( 0 );
 		}
@@ -304,11 +304,11 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 												<?php
 												// if needed to set default assignee that already have assigned
 												//							$selected_userid = get_offering_meta( 'default_assignee', $tm->term_id );
-//                                    if (empty($current)) {
-//                                        echo '<option disabled selected> -- select an assignee -- </option>';
-//                                    } else {
-//                                        echo '<option > -- select an assignee -- </option>';
-//                                    }
+												//                                    if (empty($current)) {
+												//                                        echo '<option disabled selected> -- select an assignee -- </option>';
+												//                                    } else {
+												//                                        echo '<option > -- select an assignee -- </option>';
+												//                                    }
 												foreach ( $users as $user ) {
 													if ( $user->ID == $current ) {
 														$selected = 'selected';
@@ -321,7 +321,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 									</select>
 								</li>
 								<?php
-							}
+}
 							?>
 						</ul>
 					</div>
@@ -488,7 +488,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 
 						<div class="rthd_wizard_container rthd-setup-wizard-row">
 							<?php
-							$domain_name = preg_replace( '/^www\./', '', $_SERVER[ 'SERVER_NAME' ] );
+							$domain_name = preg_replace( '/^www\./', '', $_SERVER['SERVER_NAME'] );
 
 							$count_domain_users = rthd_search_non_helpdesk_users( $domain_name, true, true );
 							?>
@@ -508,7 +508,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 								<?php
 								$helpdesk_users = rthd_get_helpdesk_user_ids();
 								$count = count_users();
-								$remain_wp_users = $count[ 'total_users' ] - count( $helpdesk_users );
+								$remain_wp_users = $count['total_users'] - count( $helpdesk_users );
 								?>
 								<label> 3. Add all WordPress <?php echo sprintf( _n( '(%s) user', '(%s) users', $remain_wp_users, RT_HD_TEXT_DOMAIN ), $remain_wp_users ); ?></label>
 								<input id="rthd-add-all-users" class="button" type="button" value="Add Users" />
@@ -572,26 +572,27 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 		 *
 		 */
 		function get_user_from_name() {
-			if ( ! isset( $_POST[ 'query' ] ) ) {
+			if ( ! isset( $_POST['query'] ) ) {
 				wp_die( 'Invalid request Data' );
 			}
-			$query = $_POST[ 'query' ];
+			$query = $_POST['query'];
 			$results = rthd_search_non_helpdesk_users( $query, false, false );
 			$arrReturn = array();
 			if ( ! empty( $results ) ) {
 				foreach ( $results as $author ) {
-					$arrReturn[] = array( 'id' => $author->ID,
+					$arrReturn[] = array(
+						'id' => $author->ID,
 						'label' => $author->display_name,
 						'imghtml' => get_avatar( $author->user_email, 25 ),
 						'editlink' => rt_biz_get_contact_edit_link( $author->user_email )
 					);
 				}
 			} else {
-				if ( is_email( $_POST[ 'query' ] ) ) {
-					if ( email_exists( $_POST[ 'query' ] ) ) {
-						$arrReturn[ 'have_access' ] = true;
+				if ( is_email( $_POST['query'] ) ) {
+					if ( email_exists( $_POST['query'] ) ) {
+						$arrReturn['have_access'] = true;
 					} else {
-						$arrReturn[ 'show_add' ] = true;
+						$arrReturn['show_add'] = true;
 					}
 				}
 			}
@@ -606,20 +607,20 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 		 */
 		function rthd_creater_rtbiz_and_give_access_helpdesk() {
 			$arrReturn = array( 'status' => false );
-			if ( ! empty( $_POST[ 'email' ] ) || ! empty( $_POST[ 'ID' ] ) ) {
-				if ( ! empty( $_POST[ 'email' ] ) && is_email( $_POST[ 'email' ] ) ) {
+			if ( ! empty( $_POST['email'] ) || ! empty( $_POST['ID'] ) ) {
+				if ( ! empty( $_POST['email'] ) && is_email( $_POST['email'] ) ) {
 					// create wordpress user and get it's id for creating rt contact user
 					global $rt_hd_contacts;
-					$_POST[ 'ID' ] = $rt_hd_contacts->get_user_from_email( $_POST[ 'email' ] );
+					$_POST['ID'] = $rt_hd_contacts->get_user_from_email( $_POST['email'] );
 				}
-				if ( ! empty( $_POST[ 'ID' ] ) ) {
+				if ( ! empty( $_POST['ID'] ) ) {
 					// Create dept if not exist in wp-option, if exist assign new user to that taxonomy and add entry for author access to that user
-//					global $rt_biz_acl_model,$rt_contact;
-					$wpuser = get_user_by( 'id', $_POST[ 'ID' ] );
+					//                  global $rt_biz_acl_model,$rt_contact;
+					$wpuser = get_user_by( 'id', $_POST['ID'] );
 
-//					$team_id = rthd_get_default_support_team();
+					//                  $team_id = rthd_get_default_support_team();
 
-					if ( rthd_give_user_access( $wpuser, Rt_Access_Control::$permissions[ 'author' ][ 'value' ], 0 ) ) {
+					if ( rthd_give_user_access( $wpuser, Rt_Access_Control::$permissions['author']['value'], 0 ) ) {
 						/* $contact = rt_biz_get_contact_for_wp_user($wpuser->ID);
 						  if ( ! empty( $contact[0] ) ) {
 						  $user_permissions = get_post_meta( $contact[0]->ID, 'rt_biz_profile_permissions', true );
@@ -630,7 +631,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 						  update_post_meta( $contact[0]->ID, 'rt_biz_profile_permissions', $value );
 						  } */
 						// do something
-						$arrReturn[ 'status' ] = true;
+						$arrReturn['status'] = true;
 						$arrReturn = array_merge( $arrReturn, array(
 							'id' => $wpuser->ID,
 							'label' => $wpuser->display_name,
@@ -650,26 +651,27 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 		 */
 		function domain_search_and_import() {
 			$arrReturn = array( 'status' => false );
-			if ( ! empty( $_POST[ 'count' ] ) && ! empty( $_POST[ 'domain_query' ] ) && ! empty( $_POST[ 'nonce' ] ) && wp_verify_nonce( $_POST[ 'nonce' ], get_current_user_id() . 'import-user-domain' ) ) {
-				if ( $_POST[ 'count' ] === 'true' ) { // return counts of users
-					$arrReturn[ 'count' ] = rthd_search_non_helpdesk_users( $_POST[ 'domain_query' ], true, true );
-					$arrReturn[ 'status' ] = true;
+			if ( ! empty( $_POST['count'] ) && ! empty( $_POST['domain_query'] ) && ! empty( $_POST['nonce'] ) && wp_verify_nonce( $_POST['nonce'], get_current_user_id() . 'import-user-domain' ) ) {
+				if ( 'true' === $_POST['count'] ) { // return counts of users
+					$arrReturn['count'] = rthd_search_non_helpdesk_users( $_POST['domain_query'], true, true );
+					$arrReturn['status'] = true;
 				} else {
-					$users_to_import = rthd_search_non_helpdesk_users( $_POST[ 'domain_query' ], false, false );
-//					$team_id = rthd_get_default_support_team();
-					$arrReturn[ 'imported_all' ] = true;
+					$users_to_import = rthd_search_non_helpdesk_users( $_POST['domain_query'], false, false );
+					//                  $team_id = rthd_get_default_support_team();
+					$arrReturn['imported_all'] = true;
 					foreach ( $users_to_import as $user ) {
-						if ( rthd_give_user_access( $user->ID, Rt_Access_Control::$permissions[ 'author' ][ 'value' ], 0 ) ) {
-							$arrReturn[ 'imported_users' ][] = array( 'id' => $user->ID,
+						if ( rthd_give_user_access( $user->ID, Rt_Access_Control::$permissions['author']['value'], 0 ) ) {
+							$arrReturn['imported_users'][] = array(
+								'id' => $user->ID,
 								'label' => $user->display_name,
 								'imghtml' => get_avatar( $user->user_email, 25 ),
 								'editlink' => rt_biz_get_contact_edit_link( $user->user_email ) );
 						} else {
-							$arrReturn[ 'not_imported_users' ][] = $user;
-							$arrReturn[ 'imported_all' ] = false;
+							$arrReturn['not_imported_users'][] = $user;
+							$arrReturn['imported_all'] = false;
 						}
 					}
-					$arrReturn[ 'status' ] = true;
+					$arrReturn['status'] = true;
 				}
 			}
 			header( 'Content-Type: application/json' );
@@ -683,37 +685,38 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 		function import_all_users() {
 			$arrReturn = array( 'status' => false );
 			$LIMIT = 5; //todo change this limit to 50
-			if ( ! empty( $_POST[ 'import' ] ) && ! empty( $_POST[ 'nonce' ] ) && wp_verify_nonce( $_POST[ 'nonce' ], get_current_user_id() . 'import-all-users' ) ) {
+			if ( ! empty( $_POST['import'] ) && ! empty( $_POST['nonce'] ) && wp_verify_nonce( $_POST['nonce'], get_current_user_id() . 'import-all-users' ) ) {
 				global $wpdb;
 				$helpdesk_users = rthd_get_helpdesk_user_ids();
 				$q = '';
 				if ( ! empty( $helpdesk_users ) ) {
 					$q = ' WHERE ID not IN (' . implode( ',', $helpdesk_users ) . ') ';
-					if ( isset( $_POST[ 'last_import' ] ) ) {
-						$q .= 'AND ID > ' . intval( $_POST[ 'last_import' ] ) . ' ';
+					if ( isset( $_POST['last_import'] ) ) {
+						$q .= 'AND ID > ' . intval( $_POST['last_import'] ) . ' ';
 					}
 				}
-				$users_to_import = $wpdb->get_results( "SELECT ID,display_name,user_email FROM $wpdb->users" . $q . "LIMIT " . $LIMIT );
-				$arrReturn[ 'imported_all' ] = true;
-//				$team_id = rthd_get_default_support_team();
+				$users_to_import = $wpdb->get_results( "SELECT ID,display_name,user_email FROM $wpdb->users" . $q . 'LIMIT ' . $LIMIT );
+				$arrReturn['imported_all'] = true;
+				//              $team_id = rthd_get_default_support_team();
 
 				foreach ( $users_to_import as $user ) {
-					if ( rthd_give_user_access( $user->ID, Rt_Access_Control::$permissions[ 'author' ][ 'value' ], 0 ) ) {
-						$arrReturn[ 'imported_users' ][] = array( 'id' => $user->ID,
+					if ( rthd_give_user_access( $user->ID, Rt_Access_Control::$permissions['author']['value'], 0 ) ) {
+						$arrReturn['imported_users'][] = array(
+							'id' => $user->ID,
 							'label' => $user->display_name,
 							'imghtml' => get_avatar( $user->user_email, 25 ),
 							'editlink' => rt_biz_get_contact_edit_link( $user->user_email ) );
 					} else {
-						$arrReturn[ 'not_imported_users' ][] = $user;
-						$arrReturn[ 'imported_all' ] = false;
+						$arrReturn['not_imported_users'][] = $user;
+						$arrReturn['imported_all'] = false;
 					}
 				}
-				$arrReturn[ 'imported_count' ] = count( $users_to_import );
-				$arrReturn[ 'status' ] = true;
+				$arrReturn['imported_count'] = count( $users_to_import );
+				$arrReturn['status'] = true;
 				// count remain users
 				$users_to_import = $wpdb->get_var( "SELECT count(ID) FROM $wpdb->users" . $q );
-				$users_to_import = $users_to_import - $arrReturn[ 'imported_count' ];
-				$arrReturn[ 'remain_import' ] = $users_to_import;
+				$users_to_import = $users_to_import - $arrReturn['imported_count'];
+				$arrReturn['remain_import'] = $users_to_import;
 			}
 
 			header( 'Content-Type: application/json' );
@@ -728,8 +731,8 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			$arrReturn = array( 'status' => false );
 			$offering = array();
 			$defaultoffering = array( 'woocommerce' => 0, 'edd' => 0 );
-			if ( ! empty( $_POST[ 'store' ] ) ) {
-				foreach ( $_POST[ 'store' ] as $store ) {
+			if ( ! empty( $_POST['store'] ) ) {
+				foreach ( $_POST['store'] as $store ) {
 					$offering[ $store ] = '1';
 				}
 			}
@@ -739,7 +742,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			global $rtbiz_offerings;
 			$offering = array_keys( $offering );
 			$rtbiz_offerings->bulk_insert_offerings( $offering );
-			$arrReturn[ 'status' ] = true;
+			$arrReturn['status'] = true;
 			header( 'Content-Type: application/json' );
 			echo json_encode( $arrReturn );
 			die( 0 );
@@ -750,16 +753,16 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 		 */
 		function assignee_save() {
 			$arrReturn = array( 'status' => false );
-			if ( ! empty( $_POST[ 'assignee' ] ) ) {
-				foreach ( $_POST[ 'assignee' ] as $assingee ) {
-					update_offering_meta( 'default_assignee', $assingee[ 'user_ID' ], $assingee[ 'term_ID' ] );
+			if ( ! empty( $_POST['assignee'] ) ) {
+				foreach ( $_POST['assignee'] as $assingee ) {
+					update_offering_meta( 'default_assignee', $assingee['user_ID'], $assingee['term_ID'] );
 				}
-				$arrReturn[ 'status' ] = true;
+				$arrReturn['status'] = true;
 			}
 			//default_assignee
-			if ( ! empty( $_POST[ 'default_assignee' ] ) && is_numeric( $_POST[ 'default_assignee' ] ) ) {
-				rthd_set_redux_settings( 'rthd_default_user', $_POST[ 'default_assignee' ] );
-				$arrReturn[ 'status' ] = true;
+			if ( ! empty( $_POST['default_assignee'] ) && is_numeric( $_POST['default_assignee'] ) ) {
+				rthd_set_redux_settings( 'rthd_default_user', $_POST['default_assignee'] );
+				$arrReturn['status'] = true;
 			}
 
 			header( 'Content-Type: application/json' );
@@ -769,22 +772,22 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 
 		function rthd_remove_user() {
 			$arrReturn = array( 'status' => false );
-			if ( ! empty( $_POST[ 'userid' ] ) ) {
+			if ( ! empty( $_POST['userid'] ) ) {
 				global $rt_biz_acl_model;
-				$rt_biz_acl_model->remove_acl( array( 'module' => RT_HD_TEXT_DOMAIN, 'userid' => $_POST[ 'userid' ] ) );
-				$rt_biz_acl_model->remove_acl( array( 'module' => RT_BIZ_TEXT_DOMAIN, 'userid' => $_POST[ 'userid' ] ) );
-				$arrReturn[ 'status' ] = true;
-				$contact = rt_biz_get_contact_for_wp_user( $_POST[ 'userid' ] );
-//				$support_team = get_option( 'rthd_default_support_team' );
-//				if ( ! empty( $support_team ) && ! empty( $contact[0] ) ){
-//					wp_remove_object_terms($contact[0]->ID,array($support_team),RT_Departments::$slug );
-//				}
-				if ( ! empty( $contact[ 0 ] ) && empty( $team_term_id ) ) {
-					$user_permissions = get_post_meta( $contact[ 0 ]->ID, 'rt_biz_profile_permissions', true );
+				$rt_biz_acl_model->remove_acl( array( 'module' => RT_HD_TEXT_DOMAIN, 'userid' => $_POST['userid'] ) );
+				$rt_biz_acl_model->remove_acl( array( 'module' => RT_BIZ_TEXT_DOMAIN, 'userid' => $_POST['userid'] ) );
+				$arrReturn['status'] = true;
+				$contact = rt_biz_get_contact_for_wp_user( $_POST['userid'] );
+				//              $support_team = get_option( 'rthd_default_support_team' );
+				//              if ( ! empty( $support_team ) && ! empty( $contact[0] ) ){
+				//                  wp_remove_object_terms($contact[0]->ID,array($support_team),RT_Departments::$slug );
+				//              }
+				if ( ! empty( $contact[0] ) && empty( $team_term_id ) ) {
+					$user_permissions = get_post_meta( $contact[0]->ID, 'rt_biz_profile_permissions', true );
 					if ( ! empty( $user_permissions[ RT_HD_TEXT_DOMAIN ] ) ) {
 						$user_permissions[ RT_HD_TEXT_DOMAIN ] = 0;
 						$user_permissions[ RT_BIZ_TEXT_DOMAIN ] = 0;
-						update_post_meta( $contact[ 0 ]->ID, 'rt_biz_profile_permissions', $user_permissions );
+						update_post_meta( $contact[0]->ID, 'rt_biz_profile_permissions', $user_permissions );
 					}
 				}
 			}
@@ -796,12 +799,12 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 		function rthd_search_domain() {
 			global $wpdb;
 			$arrReturn = array();
-			if ( ! empty( $_POST[ 'query' ] ) ) {
+			if ( ! empty( $_POST['query'] ) ) {
 				$prefix = '@';
-				if ( substr( $_POST[ 'query' ], 0, strlen( $prefix ) ) == $prefix ) {
-					$_POST[ 'query' ] = substr( $_POST[ 'query' ], strlen( $prefix ) );
+				if ( substr( $_POST['query'], 0, strlen( $prefix ) ) == $prefix ) {
+					$_POST['query'] = substr( $_POST['query'], strlen( $prefix ) );
 				}
-				$domains = $wpdb->get_col( "SELECT DISTINCT( SUBSTRING_INDEX(user_email,'@',-1)) FROM $wpdb->users where user_email like '%@" . $_POST[ 'query' ] . "%'" );
+				$domains = $wpdb->get_col( "SELECT DISTINCT( SUBSTRING_INDEX(user_email,'@',-1)) FROM $wpdb->users where user_email like '%@" . $_POST['query'] . "%'" );
 				$domains = array_filter( $domains );
 				$arrReturn = $domains;
 			}
@@ -810,30 +813,30 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 			die( 0 );
 		}
 
-		function rthd_change_ACL() {
+		function rthd_change_acl() {
 			global $rt_biz_acl_model;
 			$arrReturn = array( 'status' => false );
-			if ( ! empty( $_POST[ 'permission' ] ) && ! empty( $_POST[ 'userid' ] ) ) {
+			if ( ! empty( $_POST['permission'] ) && ! empty( $_POST['userid'] ) ) {
 
 				//helpdesk role change in custom table
-				$rt_biz_acl_model->update_acl( array( 'permission' => $_POST[ 'permission' ] ), array( 'userid' => $_POST[ 'userid' ], 'module' => RT_HD_TEXT_DOMAIN ) );
+				$rt_biz_acl_model->update_acl( array( 'permission' => $_POST['permission'] ), array( 'userid' => $_POST['userid'], 'module' => RT_HD_TEXT_DOMAIN ) );
 				//rtbiz role change in custom table
-				$rt_biz_acl_model->update_acl( array( 'permission' => $_POST[ 'permission' ] ), array( 'userid' => $_POST[ 'userid' ], 'module' => RT_BIZ_TEXT_DOMAIN ) );
+				$rt_biz_acl_model->update_acl( array( 'permission' => $_POST['permission'] ), array( 'userid' => $_POST['userid'], 'module' => RT_BIZ_TEXT_DOMAIN ) );
 
-				$contact = rt_biz_get_contact_for_wp_user( $_POST[ 'userid' ] );
+				$contact = rt_biz_get_contact_for_wp_user( $_POST['userid'] );
 				// update contact meta as we store ACL values in contact meta as well
-				if ( ! empty( $contact[ 0 ] ) ) {
-					$user_permissions = get_post_meta( $contact[ 0 ]->ID, 'rt_biz_profile_permissions', true );
+				if ( ! empty( $contact[0] ) ) {
+					$user_permissions = get_post_meta( $contact[0]->ID, 'rt_biz_profile_permissions', true );
 					$value = array(
-						RT_HD_TEXT_DOMAIN => $_POST[ 'permission' ],
-						RT_BIZ_TEXT_DOMAIN => $_POST[ 'permission' ],
+						RT_HD_TEXT_DOMAIN => $_POST['permission'],
+						RT_BIZ_TEXT_DOMAIN => $_POST['permission'],
 					);
 					if ( ! empty( $user_permissions ) ) {
 						$value = array_merge( $user_permissions, $value );
 					}
-					update_post_meta( $contact[ 0 ]->ID, 'rt_biz_profile_permissions', $value );
+					update_post_meta( $contact[0]->ID, 'rt_biz_profile_permissions', $value );
 				}
-				$arrReturn[ 'status' ] = true;
+				$arrReturn['status'] = true;
 			}
 			header( 'Content-Type: application/json' );
 			echo json_encode( $arrReturn );
@@ -842,8 +845,8 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 
 		function rthd_add_new_offering() {
 			$arrReturn = array( 'status' => false );
-			if ( ! empty( $_POST[ 'offering' ] ) ) {
-				$term = wp_insert_term( $_POST[ 'offering' ], Rt_Offerings::$offering_slug );
+			if ( ! empty( $_POST['offering'] ) ) {
+				$term = wp_insert_term( $_POST['offering'], Rt_Offerings::$offering_slug );
 				if ( ! $term instanceof WP_Error && ! empty( $term ) ) {
 					$arrReturn = array( 'status' => true );
 				}

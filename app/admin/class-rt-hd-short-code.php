@@ -66,9 +66,9 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 				foreach ( $terms as $tm ) {
 					$term_offering_id = '';
 					$loggedin_id = get_current_user_id();
-					if ( isset( $_REQUEST[ 'order_id' ] ) && $rt_hd_offering_support->order_post_type == get_post_type( $_REQUEST[ 'order_id' ] ) ) {
+					if ( isset( $_REQUEST['order_id'] ) && $rt_hd_offering_support->order_post_type == get_post_type( $_REQUEST['order_id'] ) ) {
 						if ( $rt_hd_offering_support->isWoocommerceActive ) {
-							$order = new WC_Order( $_REQUEST[ 'order_id' ] );
+							$order = new WC_Order( $_REQUEST['order_id'] );
 							if ( $loggedin_id = $order->get_user_id() ) {
 								if ( ! empty( $order ) ) {
 									$items = $order->get_items();
@@ -82,7 +82,7 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 								$wrong_user_flag = true;
 							}
 						} else if ( $rt_hd_offering_support->iseddActive ) {
-							$payment = get_post( $_REQUEST[ 'order_id' ] );
+							$payment = get_post( $_REQUEST['order_id'] );
 							if ( $loggedin_id == $payment->post_author ) {
 								if ( ! empty( $payment ) ) {
 									$items = edd_get_payment_meta_downloads( $payment->ID );
@@ -97,7 +97,7 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 							}
 						}
 					}
-					$offering_option .= '<option value="' . $tm->term_id . '" ' . ( ( ! empty( $_REQUEST[ 'product_id' ] ) && $term_offering_id == $_REQUEST[ 'product_id' ] ) ? 'selected="selected"' : '' ) . '> ' . $tm->name . '</option>';
+					$offering_option .= '<option value="' . $tm->term_id . '" ' . ( ( ! empty( $_REQUEST['product_id'] ) && $term_offering_id == $_REQUEST['product_id'] ) ? 'selected="selected"' : '' ) . '> ' . $tm->name . '</option>';
 					$offering_exists = true;
 				}
 
@@ -106,7 +106,7 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 				} else {
 					rthd_get_template( 'support-form.php', array(
 						'product_exists' => $offering_exists,
-						'product_option' => $offering_option
+						'product_option' => $offering_option,
 					) );
 				}
 			} else {
@@ -131,51 +131,50 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 			global $rt_hd_module, $current_user;
 
 			$arg_shortcode = shortcode_atts(
-					array(
+				array(
 				'userid' => '',
 				'email' => '',
 				'orderid' => '',
 				'show_support_form_link' => 'no',
-				'fav' => false
+				'fav' => false,
 					), $atts );
 
-			$args = array(
-				'post_type' => Rt_HD_Module::$post_type,
-				'post_status' => 'any',
-				'nopaging' => true,
-			);
+					$args = array(
+					'post_type' => Rt_HD_Module::$post_type,
+					'post_status' => 'any',
+					'nopaging' => true,
+					);
 
+					global $current_user;
 
-			global $current_user;
+					if ( ! empty( $arg_shortcode['email'] ) && empty( $arg_shortcode['userid'] ) ) {
+						if ( '{{logged_in_user}}' == $arg_shortcode['email'] ) {
+							$arg_shortcode['userid'] = $current_user;
+						} else {
+							$person = rt_biz_get_contact_by_email( $arg_shortcode['email'] );
+							$arg_shortcode['userid'] = rt_biz_get_wp_user_for_contact( $person->ID );
+						}
+						if ( is_object( $arg_shortcode['userid'] ) ) {
+							$arg_shortcode['userid'] = $arg_shortcode['userid']->ID;
+						}
+					}
 
-			if ( ! empty( $arg_shortcode[ 'email' ] ) && empty( $arg_shortcode[ 'userid' ] ) ) {
-				if ( $arg_shortcode[ 'email' ] == '{{logged_in_user}}' ) {
-					$arg_shortcode[ 'userid' ] = $current_user;
-				} else {
-					$person = rt_biz_get_contact_by_email( $arg_shortcode[ 'email' ] );
-					$arg_shortcode[ 'userid' ] = rt_biz_get_wp_user_for_contact( $person->ID );
-				}
-				if ( is_object( $arg_shortcode[ 'userid' ] ) ) {
-					$arg_shortcode[ 'userid' ] = $arg_shortcode[ 'userid' ]->ID;
-				}
-			}
-
-			$tickets = array();
-			if ( ! empty( $arg_shortcode[ 'userid' ] ) ) {
-				if ( ! empty( $arg_shortcode[ 'fav' ] ) ) {
-					$tickets = rthd_get_tickets( 'favourite', $arg_shortcode[ 'userid' ] );
-				} elseif ( rthd_is_our_employee( $arg_shortcode[ 'userid' ], RT_HD_TEXT_DOMAIN ) ) {
-					$tickets = rthd_get_tickets( 'assignee', $arg_shortcode[ 'userid' ] );
-				} else {
-					$tickets = rthd_get_tickets( 'created_by', $arg_shortcode[ 'userid' ] );
-				}
-			} elseif ( ! empty( $arg_shortcode[ 'orderid' ] ) ) {
-				$tickets = rthd_get_tickets( 'order', $arg_shortcode[ 'orderid' ] );
-			}
+					$tickets = array();
+					if ( ! empty( $arg_shortcode['userid'] ) ) {
+						if ( ! empty( $arg_shortcode['fav'] ) ) {
+							$tickets = rthd_get_tickets( 'favourite', $arg_shortcode['userid'] );
+						} elseif ( rthd_is_our_employee( $arg_shortcode['userid'], RT_HD_TEXT_DOMAIN ) ) {
+							$tickets = rthd_get_tickets( 'assignee', $arg_shortcode['userid'] );
+						} else {
+							$tickets = rthd_get_tickets( 'created_by', $arg_shortcode['userid'] );
+						}
+					} elseif ( ! empty( $arg_shortcode['orderid'] ) ) {
+						$tickets = rthd_get_tickets( 'order', $arg_shortcode['orderid'] );
+					}
 			?>
 			<?php
 			ob_start();
-			if ( ! empty( $arg_shortcode[ 'fav' ] ) ) {
+			if ( ! empty( $arg_shortcode['fav'] ) ) {
 				?>
 				<h2 class="rthd-ticket-list-title"><?php _e( 'Favourite Tickets', RT_HD_TEXT_DOMAIN ); ?></h2>
 				<?php
@@ -186,10 +185,10 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 			}
 			echo '<div class="rthd-ticket-list">';
 			printf( '<p>'._n( 'One Ticket Found', '%d Tickets Found', count( $tickets ), 'my-RT_HD_TEXT_DOMAIN-domain' ). '</p>', count( $tickets ) );
-			if ( 'yes' == $arg_shortcode[ 'show_support_form_link' ] ) {
+			if ( 'yes' == $arg_shortcode['show_support_form_link'] ) {
 				global $redux_helpdesk_settings;
-				if ( isset( $redux_helpdesk_settings[ 'rthd_support_page' ] ) && ! empty( $redux_helpdesk_settings[ 'rthd_support_page' ] ) ) {
-					$page = get_post( $redux_helpdesk_settings[ 'rthd_support_page' ] );
+				if ( isset( $redux_helpdesk_settings['rthd_support_page'] ) && ! empty( $redux_helpdesk_settings['rthd_support_page'] ) ) {
+					$page = get_post( $redux_helpdesk_settings['rthd_support_page'] );
 					?>
 					<a href="<?php echo "/{$page->post_name}"; ?>"><?php _e( '(Get Support)', RT_HD_TEXT_DOMAIN ) ?></a>
 					<?php
@@ -223,12 +222,12 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 							</td>
 							<td>
 
-								   <?php if ( current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' ) ) || $ticket->post_author == $current_user->ID ) { ?>
+									<?php if ( current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' ) ) || $ticket->post_author == $current_user->ID ) { ?>
 									<a class="button support" target="_blank"
 									   href="<?php echo get_edit_post_link( $ticket->ID ); ?>"><?php _e( 'Edit' ); ?></a> |
 					<?php } ?>
 								<a class="button support" target="_blank"
-								   href="<?php echo esc_url( ( rthd_is_unique_hash_enabled() ) ? rthd_get_unique_hash_url( $ticket->ID ) : get_post_permalink( $ticket->ID )  ); ?>"><?php _e( 'View' ); ?></a>
+								   href="<?php echo esc_url( ( rthd_is_unique_hash_enabled() ) ? rthd_get_unique_hash_url( $ticket->ID ) : get_post_permalink( $ticket->ID ) ); ?>"><?php _e( 'View' ); ?></a>
 							</td>
 						</tr>
 					<?php }

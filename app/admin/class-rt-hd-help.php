@@ -199,15 +199,14 @@ if ( ! class_exists( 'Rt_Hd_Help' ) ) {
 		}
 
 		function add_tab( $args ) {
-			get_current_screen()->add_help_tab(
-				array(
-					'id'       => $args['id'],
-					'title'    => $args['title'],
-					// You can directly set content as well.
-					//				'content' => $args[ 'content' ],
-					// This is for some extra content & logic
-					'callback' => array( $this, 'tab_content' ),
-				) );
+			get_current_screen()->add_help_tab( array(
+				                                    'id'       => $args['id'],
+				                                    'title'    => $args['title'],
+				                                    // You can directly set content as well.
+				                                    //				'content' => $args[ 'content' ],
+				                                    // This is for some extra content & logic
+				                                    'callback' => array( $this, 'tab_content' ),
+			                                    ) );
 			get_current_screen()->set_help_sidebar( $this->help_sidebar_content );
 		}
 

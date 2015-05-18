@@ -241,7 +241,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$toBody = rthd_replace_placeholder( $body,'{followup_author}', 'you' );
 			$from_email = get_comment_meta( $comment->comment_ID, 'rt_hd_original_email', true );
 			// if followup is added via email do not send email as he will already have email content so we should not flood his email thread.
-			if ( empty( $from_email ) ){
+			if ( empty( $from_email ) ) {
 				// follow up did not came from email send email
 				$this->insert_new_send_email( $subject, rthd_get_general_body_template( $toBody, $title, true ), $followup_creator, array(), array(), $uploaded, $comment->comment_ID , 'comment' );
 			}
