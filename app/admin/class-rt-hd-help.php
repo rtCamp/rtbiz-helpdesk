@@ -144,7 +144,7 @@ if ( ! class_exists( 'Rt_Hd_Help' ) ) {
 				),
 			) );
 
-			$documentation_link         = apply_filters( 'rt_hd_help_documentation_link', '#' );
+			$documentation_link         = apply_filters( 'rt_hd_help_documentation_link', 'http://docs.rtcamp.com/rtbiz/' );
 			$support_forum_link         = apply_filters( 'rt_hd_help_support_forum_link', '#' );
 			$this->help_sidebar_content = apply_filters( 'rt_hd_help_sidebar_content', '<p><strong>' . esc_attr( __( 'For More Information : ' ) ) . '</strong></p><p><a href="' . esc_url( $documentation_link ) . '">' . esc_attr( __( 'Documentation' ) ) . '</a></p><p><a href="' . esc_url( $support_forum_link ). '">' . esc_attr( __( 'Support Forum' ) ) . '</a></p>' );
 
