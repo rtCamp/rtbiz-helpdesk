@@ -259,7 +259,7 @@ $user_edit_content = current_user_can( $cap );
 										</select>
 										<img id="offering-change-spinner" class="helpdeskspinner"
 										     src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
-									<?php } else { echo '<strong>' . $ticket_offering[0]->name . '</strong>'; } ?>
+									<?php } else { echo '<span class="rthd-front-offering-value">' . $ticket_offering[0]->name . '</span>'; } ?>
 								</div>
 							</div>
 						<?php
