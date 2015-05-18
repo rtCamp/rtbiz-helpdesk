@@ -152,7 +152,7 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 				}
 			}
 
-			if ( isset( $_REQUEST['taxonomy'] ) && isset( $_REQUEST['post_type'] ) && in_array( $_REQUEST['post_type'], array( Rt_HD_Module::$post_type ) ) )  {
+			if ( isset( $_REQUEST['taxonomy'] ) && isset( $_REQUEST['post_type'] ) && in_array( $_REQUEST['post_type'], array( Rt_HD_Module::$post_type ) ) ) {
 				wp_enqueue_script( 'rthd-menu-hack-js', RT_HD_URL . 'app/assets/admin/js/rt-custom-status.js', array( 'jquery' ), time(), true );
 				wp_localize_script( 'rthd-menu-hack-js', 'rthd_menu', Rt_HD_Module::$post_type );
 				wp_localize_script( 'rthd-menu-hack-js', 'rthd_url', admin_url( 'edit-tags.php?taxonomy=' . $_REQUEST['taxonomy'] . '&post_type=' . $_REQUEST['post_type'] ) );

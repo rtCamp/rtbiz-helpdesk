@@ -45,27 +45,27 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 			add_action( 'rthd_ticket_front_page_after_header', array( $this, 'set_rthd_ticket_post_data' ) );
 		}
 
-		function show_original_email(){
+		function show_original_email() {
 			global $post;
 
-			$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
+			$cap               = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
 			$user_edit_content = current_user_can( $cap );
 
-			if ( ! empty( $_REQUEST['show_original'] ) && 'true' === $_REQUEST['show_original'] && empty( $_REQUEST['comment-id'] ) && $user_edit_content ){
+			if ( ! empty( $_REQUEST['show_original'] ) && 'true' === $_REQUEST['show_original'] && empty( $_REQUEST['comment-id'] ) && $user_edit_content ) {
 				$data = get_post_meta( $post->ID, '_rt_hd_original_email_body', true );
-				echo '<div class="rt_original_email">'.wpautop($data) .'</div>';
-				die(0);
+				echo '<div class="rt_original_email">' . wpautop( $data ) . '</div>';
+				die( 0 );
 			}
-			if ( ! empty( $_REQUEST['show_original'] ) && 'true' === $_REQUEST['show_original'] && ! empty( $_REQUEST['comment-id'] ) && $user_edit_content ){
+			if ( ! empty( $_REQUEST['show_original'] ) && 'true' === $_REQUEST['show_original'] && ! empty( $_REQUEST['comment-id'] ) && $user_edit_content ) {
 				$data = get_comment_meta( $_REQUEST['comment-id'], 'rt_hd_original_email', true );
-				echo '<div class="rt_original_email">'.wpautop($data) .'</div>';
-				die(0);
+				echo '<div class="rt_original_email">' . wpautop( $data ) . '</div>';
+				die( 0 );
 			}
 		}
 
 		function restrict_seo_on_helpdesk() {
 			add_filter( 'jetpack_enable_open_graph', '__return_false' );
-			if( isset ( $GLOBALS['wpseo_og'] ) ) {
+			if ( isset ( $GLOBALS['wpseo_og'] ) ) {
 				remove_action( 'wpseo_head', array( $GLOBALS['wpseo_og'], 'opengraph' ), 30 );
 			}
 			remove_action( 'wpseo_head', array( 'WPSEO_GooglePlus', 'get_instance' ), 35 );
@@ -74,13 +74,13 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 
 		function admin_bar_edit_menu( $wp_admin_bar ) {
 			global $rt_hd_module, $rtbiz_helpdesk_template, $post;
-			$labels    = $rt_hd_module->labels;
-			$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
+			$labels = $rt_hd_module->labels;
+			$cap    = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
 			if ( ! empty( $rtbiz_helpdesk_template ) && current_user_can( $cap ) ) {
 				$wp_admin_bar->add_menu( array(
-					'id' => 'edit',
+					'id'    => 'edit',
 					'title' => $labels['edit_item'],
-					'href' => get_edit_post_link( $post->ID ),
+					'href'  => get_edit_post_link( $post->ID ),
 				) );
 			}
 		}
@@ -132,8 +132,8 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 
 			if ( ! is_user_logged_in() ) {
 				$redirect_url = ( ( is_ssl() ) ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-				$login_url = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( $redirect_url ) );
-				$message = sprintf( '%s <a href="%s">%s</a> %s', __( 'You are not logged in. Please login' ), $login_url, __( 'here' ), __( 'to view this ticket.' ) );
+				$login_url    = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( $redirect_url ) );
+				$message      = sprintf( '%s <a href="%s">%s</a> %s', __( 'You are not logged in. Please login' ), $login_url, __( 'here' ), __( 'to view this ticket.' ) );
 				global $rthd_messages;
 				$rthd_messages[] = array( 'type' => 'error', 'message' => $message, 'displayed' => 'no' );
 				global $rthd_front_page_title;
@@ -142,45 +142,45 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 				return rthd_locate_template( 'ticket-error-page.php' );
 			}
 
-			if ( ! empty( $post ) ){
+			if ( ! empty( $post ) ) {
 				global $rt_hd_email_notification;
 				$user = wp_get_current_user();
-				if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' ) ) && current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' ) )  ) {
-					$subscriber = get_post_meta( $post->ID, '_rtbiz_hd_subscribe_to', true );
+				if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' ) ) && current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' ) ) ) {
+					$subscriber     = get_post_meta( $post->ID, '_rtbiz_hd_subscribe_to', true );
 					$post_author_id = get_post_field( 'post_author', $post->ID );
-					if ( ! in_array( $user->ID, $subscriber ) && ! in_array( $user->user_email, $subscriber )  && $user->ID != $post_author_id ){
+					if ( ! in_array( $user->ID, $subscriber ) && ! in_array( $user->user_email, $subscriber ) && $user->ID != $post_author_id ) {
 						$redirect_url = ( ( is_ssl() ) ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-						$login_url = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( $redirect_url ) );
-						$message = sprintf( '%s ', __( 'You do not have sufficient permissions to access this ticket.' ) );
+						$login_url    = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( $redirect_url ) );
+						$message      = sprintf( '%s ', __( 'You do not have sufficient permissions to access this ticket.' ) );
 						global $rthd_messages;
 						$rthd_messages[] = array( 'type' => 'error', 'message' => $message, 'displayed' => 'no' );
 						global $rthd_front_page_title;
 						$rthd_front_page_title = __( 'Helpdesk' );
+
 						return rthd_locate_template( 'ticket-404-page.php' );
 					}
-
-				}else if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' ) ) ) {
-					$contacts = rt_biz_get_post_for_contact_connection( $post->ID, Rt_HD_Module::$post_type );
+				} else if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' ) ) ) {
+					$contacts       = rt_biz_get_post_for_contact_connection( $post->ID, Rt_HD_Module::$post_type );
 					$other_contacts = $rt_hd_email_notification->get_contacts( $post->ID );
-					$contact_ids = wp_list_pluck($contacts,'ID');
+					$contact_ids    = wp_list_pluck( $contacts, 'ID' );
 					$contact_emails = wp_list_pluck( $other_contacts, 'email' );
 
 					$current_contact = '';
-					if ( !empty( $user ) ){
-						$current_contact = rt_biz_get_contact_for_wp_user($user->ID);
+					if ( ! empty( $user ) ) {
+						$current_contact = rt_biz_get_contact_for_wp_user( $user->ID );
 					}
 					$creator = get_post_meta( $post->ID, '_rtbiz_hd_created_by', true );
-					if ( ( empty( $current_contact ) || ( ! in_array( $current_contact->ID, $contact_ids ) && ! in_array( $user->user_email, $contact_emails ) ) ) && $creator != $user->ID ){
+					if ( ( empty( $current_contact ) || ( ! in_array( $current_contact->ID, $contact_ids ) && ! in_array( $user->user_email, $contact_emails ) ) ) && $creator != $user->ID ) {
 						$redirect_url = ( ( is_ssl() ) ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-						$login_url = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( $redirect_url ) );
-						$message = sprintf( '%s ', __( 'You do not have sufficient permissions to access this ticket.' ) );
+						$login_url    = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( $redirect_url ) );
+						$message      = sprintf( '%s ', __( 'You do not have sufficient permissions to access this ticket.' ) );
 						global $rthd_messages;
 						$rthd_messages[] = array( 'type' => 'error', 'message' => $message, 'displayed' => 'no' );
 						global $rthd_front_page_title;
 						$rthd_front_page_title = __( 'Helpdesk' );
+
 						return rthd_locate_template( 'ticket-404-page.php' );
 					}
-
 				}
 			}
 
@@ -196,16 +196,14 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 				if ( ! empty( $ticketpost ) ) {
 					$ticket = $ticketpost[0];
 					global $rthd_front_page_title;
-					$labels    = $rt_hd_module->labels;
+					$labels                = $rt_hd_module->labels;
 					$rthd_front_page_title = $ticket->post_title . ' | ' . get_bloginfo();
-					$post = $ticket;
+					$post                  = $ticket;
 					setup_postdata( $post );
-				}
-				else {
+				} else {
 					$wrong_unique_id = true;
 				}
-			}
-			else if( is_archive('ticket') ) {
+			} else if ( is_archive( 'ticket' ) ) {
 				$wrong_unique_id = true;
 			}
 
@@ -217,12 +215,14 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 				$rthd_messages[] = array( 'type' => 'error', 'message' => $message, 'displayed' => 'no' );
 				global $rthd_front_page_title;
 				$rthd_front_page_title = __( 'Helpdesk' );
+
 				return rthd_locate_template( 'ticket-404-page.php' );
 
 				//return get_404_template();
 			}
 
 			$rtbiz_helpdesk_template = true;
+
 			return rthd_locate_template( 'ticket-front-page.php' );
 		}
 
@@ -234,16 +234,16 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 
 			if ( rthd_is_unique_hash_enabled() && ! empty( $_REQUEST['rthd_unique_id'] ) ) {
 				$args = array(
-						'meta_key'    => '_rtbiz_hd_unique_id',
-						'meta_value'  => $_REQUEST['rthd_unique_id'],
-						'post_status' => 'any',
-						'post_type'   => Rt_HD_Module::$post_type,
+					'meta_key'    => '_rtbiz_hd_unique_id',
+					'meta_value'  => $_REQUEST['rthd_unique_id'],
+					'post_status' => 'any',
+					'post_type'   => Rt_HD_Module::$post_type,
 				);
 
 				$ticketpost = get_posts( $args );
 				if ( ! empty( $ticketpost ) ) {
 					$ticket = $ticketpost[0];
-					$post = $ticket;
+					$post   = $ticket;
 				}
 			}
 		}

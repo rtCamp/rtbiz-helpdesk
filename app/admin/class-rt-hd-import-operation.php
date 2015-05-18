@@ -746,7 +746,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			//Exclude mailbox email form all emails
 			$contactEmail = array();
 			if ( ! empty( $allemails ) && is_array( $allemails ) ) {
-				foreach ( $allemails as $email  ) {
+				foreach ( $allemails as $email ) {
 					if ( ! rtmb_get_module_mailbox_email( $email['address'], RT_HD_TEXT_DOMAIN ) ) { //check mail is exist in mailbox or not
 						$contactEmail[] = $email;
 					}
@@ -1198,7 +1198,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			/* end of status toogle code */
 
 			if ( isset( $allemails  ) ) {
-				foreach ( $allemails  as $email ) {
+				foreach ( $allemails as $email ) {
 					if ( isset( $email['key'] ) ) {
 						$meta = get_comment_meta( $comment_id, '_email_' . $email['key'], true );
 						if ( empty( $meta ) ) {
