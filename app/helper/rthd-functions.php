@@ -1766,41 +1766,30 @@ function rthd_get_default_email_template( $key = '', $all = false ) {
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
 	// If offering not assigned use -
 	$redux['rthd_email_template_ticket_subscribed'] = '
-			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0" />
 			<div style="color: #333333; font-size: 16px; line-height: 26px; ">
 				{ticket_subscribers} been subscribed to this ticket {ticket_link}
-			</div>
-		    <hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
+			</div>';
 	$redux['rthd_email_template_ticket_unsubscribed'] = '
-			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0" />
 			<div style="color: #333333; font-size: 16px; line-height: 26px; ">
 				{ticket_unsubscribers} been un-subscribed from this ticket{ticket_link}
-			</div>
-			<hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
-
+			</div> ';
 	$redux['rthd_email_template_ticket_reassigned_old_assignee'] = '
-			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0" />
 			<div style="color: #333333; font-size: 16px; line-height: 26px; ">
 				You are no longer responsible for this ticket.{ticket_link}
-			</div>
-			<hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
+			</div>';
 
 	$redux['rthd_email_template_ticket_reassigned_new_assignee'] = '
-			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0" />
 			<div style="color: #333333; font-size: 16px; line-height: 26px; ">
 				A ticket is reassigned to {new_ticket_assignee}. {ticket_link}
-			</div>
-			<hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
+			</div>';
 
 	$redux['rthd_email_template_ticket_updated'] = '
 			<div style="color: #888888; font-size: 14px;">
 				Ticket updated by : <strong>{ticket_updated_by}</strong>.{ticket_link}
 			</div>
-			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0" />
-			<div style="font-size: 16px; line-height: 26px; color:#333333; ">
+			<div style="font-size: 16px; line-height: 26px; color:#333333; margin: 25px 0">
 				{ticket_difference}
-			</div>
-			<hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
+			</div>';
 
 	if ( ! empty( $key ) && isset( $redux[ $key ] ) ) {
 		return $redux[ $key ];
