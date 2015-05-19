@@ -148,7 +148,21 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 				if ( ! empty( $_GET['rt_contact_group'] ) ) {
 					wp_localize_script( 'rthd-menu-hack-js', 'rthd_url', admin_url( 'edit.php?post_type=' . rt_biz_get_contact_post_type() . '&rt_contact_group=' . $_GET['rt_contact_group'] ) );
 				} else {
-					wp_localize_script( 'rthd-menu-hack-js', 'rthd_url', admin_url( 'edit.php?post_type=' . rt_biz_get_contact_post_type() ) );
+					$query_arg = '';
+					if ( isset( $_REQUEST['post'] ) ) {
+						$user = rt_biz_get_wp_user_for_contact( $_REQUEST['post'] );
+						if ( in_array( 'administrator', $user[0]->roles ) ) {
+							$query_arg = '&rt_contact_group=staff';
+						} else {
+							$is_staff_member = get_post_meta( $_REQUEST['post'], 'rt_biz_is_staff_member', true );
+							if ( 'no' == $is_staff_member ) {
+								$query_arg = '&rt_contact_group=customer';
+							} else if ( 'yes' == $is_staff_member ) {
+								$query_arg = '&rt_contact_group=staff';
+							}
+						}
+					}
+					wp_localize_script( 'rthd-menu-hack-js', 'rthd_url', admin_url( 'edit.php?post_type=' . rt_biz_get_contact_post_type() . $query_arg ) );
 				}
 			}
 

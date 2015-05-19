@@ -56,13 +56,13 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 		 *  Register page to Wordpress with admin capability
 		 */
 		function register_setup_wizard() {
-			//if ( ! rthd_check_wizard_completed() ) {
-			$admin_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' );
-			$this->screen_id = add_submenu_page( 'edit.php?post_type=' . esc_html( Rt_HD_Module::$post_type ), __( 'Setup Wizard', RT_HD_TEXT_DOMAIN ), __( 'Setup Wizard', RT_HD_TEXT_DOMAIN ), $admin_cap, 'rthd-setup-wizard', array(
-				$this,
-				'setup_wizard_ui',
-					) );
-			//}
+			if ( ! rthd_check_wizard_completed() ) {
+				$admin_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' );
+				$this->screen_id = add_submenu_page( 'edit.php?post_type=' . esc_html( Rt_HD_Module::$post_type ), __( 'Setup Wizard', RT_HD_TEXT_DOMAIN ), __( 'Setup Wizard', RT_HD_TEXT_DOMAIN ), $admin_cap, 'rthd-setup-wizard', array(
+					$this,
+					'setup_wizard_ui',
+						) );
+			}
 		}
 
 		function set_assignee_ui() {
@@ -684,7 +684,7 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 		 */
 		function import_all_users() {
 			$arrReturn = array( 'status' => false );
-			$LIMIT = 5; //todo change this limit to 50
+			$LIMIT = 50;
 			if ( ! empty( $_POST['import'] ) && ! empty( $_POST['nonce'] ) && wp_verify_nonce( $_POST['nonce'], get_current_user_id() . 'import-all-users' ) ) {
 				global $wpdb;
 				$helpdesk_users = rthd_get_helpdesk_user_ids();
