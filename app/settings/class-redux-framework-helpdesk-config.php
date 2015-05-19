@@ -279,7 +279,6 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				'type'     => 'callback',
 				'title'    => 'Mailboxes Setup',
 				'subtitle' => __( 'Helpdesk Configured Mailbox(s)' ),
-				'desc'    => 'Following mailboxes have been configured for Helpdesk. Emails from these mailboxes will be parsed and Helpdesk will use them to create new ticket / add new followup accordingly. You can configure these mailboxes from <a href="'.add_query_arg( 'page', RT_BIZ_Configuration::$page_slug, admin_url( 'admin.php' ) ).'"rtBiz</a>',
 				'callback' => 'rthd_mailbox_setup_view',
 			) );
 
