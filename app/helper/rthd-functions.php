@@ -1797,8 +1797,8 @@ function rthd_get_default_email_template( $key = '', $all = false ) {
 				Ticket updated by : <strong>{ticket_updated_by}</strong>.{ticket_link}
 			</div>
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0" />
-			<div style="font-size: 16px; line-height: 26px; color: #888888;">
-				Assigned To: <strong style="color: #333333;">{ticket_difference}</strong>
+			<div style="font-size: 16px; line-height: 26px; color:#333333; ">
+				{ticket_difference}
 			</div>
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
 

@@ -423,6 +423,7 @@ ul#chat-UI {
 	text-decoration: none;
 }
 .rthd-scroll-up {
+	z-index: 1;
 	position: fixed;
 	bottom: 100px;
 	right: 50px;

@@ -820,8 +820,11 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$title = $this->get_email_title( $post_id, $post_type );
 			$user = get_post_meta( $post_id, '_rtbiz_hd_updated_by', true );
 			$ticket_update_user = get_user_by( 'id', $user );
-			$body = '<br />' . 'Ticket updated by : <strong>' . $ticket_update_user->display_name . '</strong><br/>'. $body;
-			$this->insert_new_send_email( $subject, rthd_get_general_body_template( $body, $title, true ) , $assigneEmail, array(), $bccemails, array(), $post_id, 'post' );
+			$htmlbody_ticket_update = apply_filters( 'rthd_email_template_ticket_updated', rthd_get_email_template_body( 'rthd_email_template_ticket_updated' ) );
+			$htmlbody_ticket_update = rthd_replace_placeholder( $htmlbody_ticket_update,'{ticket_updated_by}', $ticket_update_user->display_name );
+			$htmlbody_ticket_update = rthd_replace_placeholder( $htmlbody_ticket_update,'{ticket_difference}', $body );
+
+			$this->insert_new_send_email( $subject, rthd_get_general_body_template( $htmlbody_ticket_update, $title, true ) , $assigneEmail, array(), $bccemails, array(), $post_id, 'post' );
 		}
 
 		function get_notification_emails() {
