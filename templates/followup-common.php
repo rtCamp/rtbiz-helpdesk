@@ -123,7 +123,7 @@ if ( ! empty( $post->post_content ) ) {
 	);
 	wp_editor( '', $editor_id, $settings );
 	?>
-	<div id="edit-private-comment">
+	<div id="edit-private-comment" class="rthd-visibility-wrap">
 		<?php if ( current_user_can( $cap ) ) { ?>
 			<label class="rthd-visibility"> Visibility: </label>
 			<input type="radio" class="radio" name="edit_private"
