@@ -106,10 +106,10 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 			}
 
 			//Content
-			$diff = rthd_text_diff( strip_tags( $oldpost->post_content ), strip_tags( $_POST['post_content'] ) );
-			if ( $diff ) {
-				$emailHTML .= '<tr><th style="padding: .5em;border: 0;"> Ticket Content</th><td>' . $diff . '</td><td></td></tr>';
-			}
+			//			$diff = rthd_text_diff( strip_tags( $oldpost->post_content ), strip_tags( $_POST['post_content'] ) );
+			//			if ( $diff ) {
+			//				$emailHTML .= '<tr><th style="padding: .5em;border: 0;"> Ticket Content</th><td>' . $diff . '</td><td></td></tr>';
+			//			}
 
 			// Attachments Diff
 			if ( isset( $_POST['attachment'] ) ) {
