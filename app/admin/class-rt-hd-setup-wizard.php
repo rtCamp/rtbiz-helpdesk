@@ -56,13 +56,13 @@ if ( ! class_exists( 'Rt_HD_setup_wizard' ) ) {
 		 *  Register page to Wordpress with admin capability
 		 */
 		function register_setup_wizard() {
-			//if ( ! rthd_check_wizard_completed() ) {
-			$admin_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' );
-			$this->screen_id = add_submenu_page( 'edit.php?post_type=' . esc_html( Rt_HD_Module::$post_type ), __( 'Setup Wizard', RT_HD_TEXT_DOMAIN ), __( 'Setup Wizard', RT_HD_TEXT_DOMAIN ), $admin_cap, 'rthd-setup-wizard', array(
-				$this,
-				'setup_wizard_ui',
-					) );
-			//}
+			if ( ! rthd_check_wizard_completed() ) {
+				$admin_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' );
+				$this->screen_id = add_submenu_page( 'edit.php?post_type=' . esc_html( Rt_HD_Module::$post_type ), __( 'Setup Wizard', RT_HD_TEXT_DOMAIN ), __( 'Setup Wizard', RT_HD_TEXT_DOMAIN ), $admin_cap, 'rthd-setup-wizard', array(
+					$this,
+					'setup_wizard_ui',
+						) );
+			}
 		}
 
 		function set_assignee_ui() {
