@@ -50,11 +50,12 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 
 		}
 
-		function  add_hd_importer( $post_type ){
+		function  add_hd_importer( $post_type ) {
 			$post_type[ Rt_HD_Module::$post_type ] = array(
 				'module' => RT_HD_TEXT_DOMAIN,
-				'lable' => 'Ticket',
+				'lable'  => 'Ticket',
 			);
+
 			return $post_type;
 		}
 
@@ -67,7 +68,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 			global $rt_hd_attributes_relationship_model;
 
 			//check current page is helpdesk setting page
-			if ( empty( $_REQUEST['rtbiz_hd_ticket'] ) || $_REQUEST['rtbiz_hd_ticket'] != Rt_HD_Module::$post_type || empty( $_REQUEST['page'] ) || $_REQUEST['page'] != Redux_Framework_Helpdesk_Config::$page_slug ){
+			if ( empty( $_REQUEST['rtbiz_hd_ticket'] ) || Rt_HD_Module::$post_type !== $_REQUEST['rtbiz_hd_ticket'] || empty( $_REQUEST['page'] ) || Redux_Framework_Helpdesk_Config::$page_slug != $_REQUEST['page'] ) {
 				return $field_array;
 			}
 
@@ -132,13 +133,13 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 				if ( ! isset( $relation[0] ) ) {
 					continue;
 				}
-				$relation                    = $relation[0];
-				$attr_settings               = maybe_unserialize( $relation->settings );
-				$slug                        = str_replace( array( '-' ), '_', $attr->attribute_name );
+				$relation              = $relation[0];
+				$attr_settings         = maybe_unserialize( $relation->settings );
+				$slug                  = str_replace( array( '-' ), '_', $attr->attribute_name );
 				$ticket_field[ $slug ] = array(
 					'display_name' => $attr->attribute_label,
 					'slug'         => $slug,
-					'required'     => ( isset( $attr_settings['is_required'] ) && $attr_settings['is_required'] == 'yes' ) ? true : false,
+					'required'     => ( isset( $attr_settings['is_required'] ) && 'yes' === $attr_settings['is_required'] ) ? true : false,
 				);
 				switch ( $attr->attribute_store_as ) {
 					case 'meta':
@@ -160,7 +161,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 				}
 			}
 
-			$temp_arr           = array(
+			$temp_arr     = array(
 				'contactname'      => array(
 					'display_name' => 'Contact Name',
 					'slug'         => 'contactname',
@@ -227,7 +228,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 			);
 			$ticket_field = array_merge( $ticket_field, $temp_arr );
 
-			$temp_arr           = array(
+			$temp_arr                                = array(
 				'accountname'    => array(
 					'display_name' => 'Account Name',
 					'slug'         => 'accountname',
@@ -258,12 +259,13 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 				),
 			);
 			$field_array[ Rt_HD_Module::$post_type ] = array_merge( $ticket_field, $temp_arr );
+
 			return $field_array;
 		}
 
-		function add_hd_mapping_field_ui( $post_type ){
+		function add_hd_mapping_field_ui( $post_type ) {
 
-			if ( $post_type != Rt_HD_Module::$post_type ){
+			if ( Rt_HD_Module::$post_type !== $post_type ) {
 				return;
 			}
 
@@ -272,21 +274,21 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 			?>
 			<tr>
 				<td>
-				 Status
+					Status
 				</td>
 				<td>
-			<?php
-			$ticketStatus     = $rt_hd_module->statuses;
-			$arr_ticketstatus = array();
-			$form_fields      = '<select name="ticketstatus" class="map_form_fields">';
-			foreach ( $ticketStatus as $key => $lfield ) {
-				$form_fields .= '<option value="' . esc_attr( $lfield['slug'] ) . '">' . esc_html( $lfield['name'] ) . '</option>';
-				$arr_ticketstatus[] = array( 'slug' => $lfield['slug'], 'display' => $lfield['name'] );
-			}
-			$form_fields .= '</select>';
-			echo balanceTags( $form_fields );
-			echo '<script> var arr_ticketstatus=' . json_encode( $arr_ticketstatus ) . '; </script>';
-			?>
+					<?php
+					$ticketStatus     = $rt_hd_module->statuses;
+					$arr_ticketstatus = array();
+					$form_fields      = '<select name="ticketstatus" class="map_form_fields">';
+					foreach ( $ticketStatus as $key => $lfield ) {
+						$form_fields .= '<option value="' . esc_attr( $lfield['slug'] ) . '">' . esc_html( $lfield['name'] ) . '</option>';
+						$arr_ticketstatus[] = array( 'slug' => $lfield['slug'], 'display' => $lfield['name'] );
+					}
+					$form_fields .= '</select>';
+					echo balanceTags( $form_fields );
+					echo '<script> var arr_ticketstatus=' . json_encode( $arr_ticketstatus ) . '; </script>';
+					?>
 				</td>
 				<td></td>
 				<td></td>
@@ -297,30 +299,30 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 					Assignee
 				</td>
 				<td>
-			<?php
-			global $wpdb;
-			$results          = Rt_HD_Utils::get_hd_rtcamp_user();
-			$meta_key_results = $wpdb->get_results( " select distinct meta_key from $wpdb->postmeta inner join $wpdb->posts on post_id=ID and post_type='" . $post_type . "' and  not meta_key like '\_%' order by meta_key" );
+					<?php
+					global $wpdb;
+					$results          = Rt_HD_Utils::get_hd_rtcamp_user();
+					$meta_key_results = $wpdb->get_results( " select distinct meta_key from $wpdb->postmeta inner join $wpdb->posts on post_id=ID and post_type='" . $post_type . "' and  not meta_key like '\_%' order by meta_key" );
 
-			$arr_assignedto = array();
-			if ( ! empty( $results ) ) {
-				// Name is your custom field key
-				echo "<select name='assignedto'>";
-				// loop trough each author
-				foreach ( $results as $author ) {
-					echo '<option value=' . esc_attr( $author->ID ) . ' >' . esc_html( $author->display_name ) . '</option>';
-					$arr_assignedto[] = array(
-						'slug'    => $author->ID,
-						'display' => $author->display_name . ' ' . $author->user_email,
-					);
-				}
+					$arr_assignedto = array();
+					if ( ! empty( $results ) ) {
+						// Name is your custom field key
+						echo "<select name='assignedto'>";
+						// loop trough each author
+						foreach ( $results as $author ) {
+							echo '<option value=' . esc_attr( $author->ID ) . ' >' . esc_html( $author->display_name ) . '</option>';
+							$arr_assignedto[] = array(
+								'slug'    => $author->ID,
+								'display' => $author->display_name . ' ' . $author->user_email,
+							);
+						}
 
-				echo '</select>';
-			} else {
-				_e( 'No authors found', RT_HD_TEXT_DOMAIN );
-			}
-			echo '<script> var arr_assignedto=' . json_encode( $arr_assignedto ) . '; </script>';
-			?>
+						echo '</select>';
+					} else {
+						_e( 'No authors found', RT_HD_TEXT_DOMAIN );
+					}
+					echo '<script> var arr_assignedto=' . json_encode( $arr_assignedto ) . '; </script>';
+					?>
 				</td>
 				<td></td>
 				<td></td>
@@ -369,6 +371,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 				</tr>
 			<?php
 			}
+
 			return ob_get_clean();
 		}
 
@@ -452,7 +455,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 			if ( ! $autoDieFlag ) {
 				header( 'Content-Type: application/json' );
 			}
-			if ( $type == 'gravity' ) {
+			if ( 'gravity' === $type ) {
 				if ( is_array( $gravity_lead_id ) ) {
 					$gravity_lead_id = $gravity_lead_id[0];
 				}
@@ -493,7 +496,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 									}
 								}
 
-								if ( isset( $this->ticket_field[ $key ]['type'] ) && $this->ticket_field[ $key ]['type'] == 'defined' ) {
+								if ( isset( $this->ticket_field[ $key ]['type'] ) && 'defined' === $this->ticket_field[ $key ]['type'] ) {
 									if ( trim( $meta['fieldName'] ) == '' ) {
 										$tValue = $meta['defaultValue'];
 									} else {
@@ -511,14 +514,14 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 									}
 								}
 								$tKey = $f_field['label'];
-								if ( isset( $this->ticket_field[ $key ]['type'] ) && $this->ticket_field[ $key ]['type'] == 'type' ) {
+								if ( isset( $this->ticket_field[ $key ]['type'] ) && 'type' === $this->ticket_field[ $key ]['type'] ) {
 									if ( isset( $meta['keyname'] ) && trim( $meta['keyname'] ) != '' ) {
 										$tKey = $meta['keyname'];
 									}
 								}
 								$meta = array( 'key' => ucfirst( $tKey ), 'value' => $tValue );
 							} else {
-								if ( isset( $this->ticket_field[ $key ]['type'] ) && $this->ticket_field[ $key ]['type'] == 'defined' ) {
+								if ( isset( $this->ticket_field[ $key ]['type'] ) && 'defined' === $this->ticket_field[ $key ]['type'] ) {
 									if ( trim( $meta['fieldName'] ) == '' ) {
 										$tfield = $meta['defaultValue'];
 									} else {
@@ -532,7 +535,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 									$tfield = $meta['fieldName'];
 								}
 								$tKey = $f_field['label'];
-								if ( isset( $this->ticket_field[ $key ]['type'] ) && $this->ticket_field[ $key ]['type'] == 'type' ) {
+								if ( isset( $this->ticket_field[ $key ]['type'] ) && 'type' === $this->ticket_field[ $key ]['type'] ) {
 									if ( isset( $meta['keyname'] ) && trim( $meta['keyname'] ) != '' ) {
 										$tKey = $meta['keyname'];
 									}
@@ -542,7 +545,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 							}
 						}
 					} else {
-						if ( ! ( strpos( $field['fieldName'], 'field-' ) === false ) ) {
+						if ( ! ( false === strpos( $field['fieldName'], 'field-' ) ) ) {
 							$f_field = RGFormsModel::get_field( $form, intval( str_replace( 'field-', '', $field['fieldName'] ) ) );
 							$tfield  = '';
 							if ( isset( $lead_data[ intval( str_replace( 'field-', '', $field['fieldName'] ) ) ] ) ) {
@@ -557,7 +560,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 								}
 							}
 
-							if ( isset( $this->ticket_field[ $key ]['type'] ) && $this->ticket_field[ $key ]['type'] == 'defined' ) {
+							if ( isset( $this->ticket_field[ $key ]['type'] ) && 'defined' === $this->ticket_field[ $key ]['type'] ) {
 								if ( trim( $tfield ) == '' ) {
 									$tfield = $field['defaultValue'];
 								} else {
@@ -628,7 +631,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 				echo json_encode( $response );
 				die( 0 );
 			} else {
-				if ( $type == 'csv' ) {
+				if ( 'csv' === $type ) {
 					$start_memory = memory_get_usage();
 					$csv          = new parseCSV();
 					$csv->auto( $form_id );
@@ -643,7 +646,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 									foreach ( $field as &$meta ) {
 										if ( ! ( strpos( $meta['fieldName'], 'field-' ) === false ) ) {
 											$field_id = str_replace( '-s-', ' ', str_replace( 'field-', '', $meta['fieldName'] ) );
-											if ( isset( $this->ticket_field[ $key ]['type'] ) && $this->ticket_field[ $key ]['type'] == 'defined' ) {
+											if ( isset( $this->ticket_field[ $key ]['type'] ) && 'defined' === $this->ticket_field[ $key ]['type'] ) {
 												if ( array_key_exists( $field_id, $csv->data[ $row_index ] ) ) {
 													$tfield = $csv->data[ $row_index ][ $field_id ];
 													if ( trim( $tfield ) == '' ) {
@@ -659,7 +662,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 													$tfield = $meta['defaultValue'];
 												}
 												$tKey = $field_id;
-												if ( isset( $this->ticket_field[ $key ]['type'] ) && $this->ticket_field[ $key ]['type'] == 'key' ) {
+												if ( isset( $this->ticket_field[ $key ]['type'] ) && 'key' === $this->ticket_field[ $key ]['type'] ) {
 													if ( isset( $meta['keyname'] ) && trim( $meta['keyname'] ) != '' ) {
 														$tKey = $meta['keyname'];
 													}
@@ -668,13 +671,13 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 											} else {
 												if ( array_key_exists( $field_id, $csv->data[ $row_index ] ) ) {
 													$tKey = $field_id;
-													if ( isset( $this->ticket_field[ $key ]['type'] ) && $this->ticket_field[ $key ]['type'] == 'key' ) {
-														if ( isset( $meta['keyname'] ) && trim( $meta['keyname'] ) != '' ) {
+													if ( isset( $this->ticket_field[ $key ]['type'] ) && 'key' === $this->ticket_field[ $key ]['type'] ) {
+														if ( isset( $meta['keyname'] ) && '' !== trim( $meta['keyname'] ) ) {
 															$tKey = $meta['keyname'];
 														}
 													}
 
-													if ( $csv->data[ $row_index ][ $field_id ] == '' ) {
+													if ( '' === $csv->data[ $row_index ][ $field_id ] ) {
 														$meta = array(
 															'key'   => ucfirst( $tKey ),
 															'value' => $meta['defaultValue'],
@@ -694,7 +697,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 											}
 										} else {
 											$tKey = $field_id;
-											if ( isset( $this->ticket_field[ $key ]['type'] ) && $this->ticket_field[ $key ]['type'] == 'key' ) {
+											if ( isset( $this->ticket_field[ $key ]['type'] ) && 'key' === $this->ticket_field[ $key ]['type'] ) {
 												if ( isset( $meta['keyname'] ) && trim( $meta['keyname'] ) != '' ) {
 													$tKey = $meta['keyname'];
 												}
@@ -707,7 +710,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 										$field_id = str_replace( '-s-', ' ', str_replace( 'field-', '', $field['fieldName'] ) );
 										if ( array_key_exists( $field_id, $csv->data[ $row_index ] ) ) {
 											$tfield = $csv->data[ $row_index ][ $field_id ];
-											if ( isset( $this->ticket_field[ $key ]['type'] ) && $this->ticket_field[ $key ]['type'] == 'defined' ) {
+											if ( isset( $this->ticket_field[ $key ]['type'] ) && 'defined' === $this->ticket_field[ $key ]['type'] ) {
 												if ( trim( $tfield ) == '' ) {
 													$tfield = $field['defaultValue'];
 												} else {
@@ -718,7 +721,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 													}
 												}
 											}
-											if ( trim( $tfield ) == '' ) {
+											if ( '' === trim( $tfield ) ) {
 												$tfield = $field['defaultValue'];
 											}
 											$field = $tfield;
@@ -764,22 +767,22 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 			global $rt_importer;
 
 			$contactemail = array();
-			$description = '';
-			$assignedto = false;
+			$description  = '';
+			$assignedto   = false;
 
 			extract( $map_data, EXTR_OVERWRITE );
 
 			global $transaction_id;
-			if ( empty( $transaction_id ) ){
+			if ( empty( $transaction_id ) ) {
 				$transaction_id = esc_attr( time() );
 			}
 
-			$post_type       = Rt_HD_Module::$post_type;
-			$ticketModel     = new Rt_HD_Ticket_Model();
+			$post_type   = Rt_HD_Module::$post_type;
+			$ticketModel = new Rt_HD_Ticket_Model();
 			if ( isset( $creationdate ) ) {
 				$creationdate = trim( $creationdate );
 
-				if ( isset( $dateformat ) && $dateformat != '' ) {
+				if ( isset( $dateformat ) && '' !== $dateformat ) {
 					$dateformat = trim( $dateformat );
 					$dr         = date_create_from_format( $dateformat, $creationdate );
 					if ( $dr ) {
@@ -841,8 +844,8 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 				$titlesuffix = '';
 			}
 
-			if ( $title == '' ) {
-				if ( $type == 'csv' ) {
+			if ( '' === $title ) {
+				if ( 'csv' === $type ) {
 					$title = 'CSV Entry ' . $gravity_lead_id;
 				} else {
 					$title = 'Gravity Entry ' . $gravity_lead_id;
@@ -859,7 +862,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 			if ( ! $ticket_id ) {
 				$response['status'] = false;
 			} else {
-				if ( $type == 'gravity' ) {
+				if ( 'gravity' === $type ) {
 					$rt_importer->gform_update_meta( $gravity_lead_id, 'import-to-helpdesk', 1 );
 					$rt_importer->gform_update_meta( $gravity_lead_id, 'helpdesk-' . $post_type . '-post-id', $ticket_id );
 					if ( isset( $transaction_id ) && $transaction_id > 0 ) {
@@ -951,7 +954,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 					}
 				}
 
-				if ( isset( $ticketstatus ) && $ticketstatus != 'new' ) {
+				if ( isset( $ticketstatus ) && 'new' !== $ticketstatus ) {
 					$my_post                = array();
 					$my_post['ID']          = $ticket_id;
 					$my_post['post_status'] = $ticketstatus;
@@ -969,7 +972,6 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 
 					// System Notification -- Meta Attribute updated
 				}
-
 
 				$attributes = rthd_get_attributes( Rt_HD_Module::$post_type );
 				foreach ( $attributes as $attr ) {
@@ -1000,7 +1002,10 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 										}
 										$term     = get_term_by( 'id', $term_id, $tax_name );
 										$termslug = $term->slug;
-										@wp_set_object_terms( $ticket_id, $termslug, $tax_name, true );
+										try {
+											wp_set_object_terms( $ticket_id, $termslug, $tax_name, true );
+										} catch (Exception $e) {
+										}
 
 										// Update Index Table
 										$attr_name = str_replace( '-', '_', $tax_name );
@@ -1020,7 +1025,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 									if ( isset( ${$slug} ) && ! empty( ${$slug} ) && is_array( ${$slug} ) ) {
 										$termslug = array();
 										foreach ( ${$slug} as $attr_term ) {
-											if ( $attr_term['value'] == '' ) {
+											if ( '' === $attr_term['value'] ) {
 												continue;
 											}
 											$term_id = term_exists( $attr_term['value'], $tax_name );
@@ -1043,7 +1048,10 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 											$term       = get_term_by( 'id', $term_id, $tax_name );
 											$termslug[] = $term->slug;
 										}
-										@wp_set_object_terms( $ticket_id, $termslug, $tax_name, true );
+										try {
+											wp_set_object_terms( $ticket_id, $termslug, $tax_name, true );
+										} catch (Exception $e) {
+										}
 
 										// Update Index Table
 										$attr_name = str_replace( '-', '_', $tax_name );

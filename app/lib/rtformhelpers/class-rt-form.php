@@ -121,7 +121,7 @@ if ( ! class_exists( 'Rt_Form' ) ) {
 		}
 
 
-		private function embedd_class( $element, $class = NULL ) {
+		private function embedd_class( $element, $class = null ) {
 
 			$html = 'class="' . $this->get_default_class( $element );
 
@@ -138,7 +138,7 @@ if ( ! class_exists( 'Rt_Form' ) ) {
 			return $html;
 		}
 
-		private function generate_element_id( $element, $id = NULL ) {
+		private function generate_element_id( $element, $id = null ) {
 
 			$html = 'id="';
 			if ( isset( $id ) ) {
@@ -161,7 +161,7 @@ if ( ! class_exists( 'Rt_Form' ) ) {
 				$html .= isset( $name ) ? $name . '[]' : $element . '[]';
 
 				// for select - add multiple = multiple
-				if ( $element == 'rtSelect' ) {
+				if ( 'rtSelect' === $element ) {
 					$html .= 'multiple = "multiple"';
 				}
 			} else {
@@ -277,15 +277,15 @@ if ( ! class_exists( 'Rt_Form' ) ) {
 
 				foreach ( (array) $opt as $key => $val ) {
 
-					if ( $key == 'checked' ) {
+					if ( 'checked' === $key ) {
 						$attrib['checked'] = $val;
-					} else if ( $key == 'selected' ) {
+					} else if ( 'selected' === $key ) {
 						$attrib['selected'] = $val;
-					} else if ( $key == 'desc' ) {
+					} else if ( 'desc' === $key ) {
 						$attrib['desc'] = $val;
-					} else if ( $key == 'id' ) {
+					} else if ( 'id' === $key ) {
 						$attrib['id'] = $val;
-					} else if ( $key == 'title' ) {
+					} else if ( 'title' === $key ) {
 						$attrib['title'] = $val;
 					} else {
 						$attrib['key']   = $key;
@@ -314,7 +314,7 @@ if ( ! class_exists( 'Rt_Form' ) ) {
 						break;
 				}
 
-				if ( $element != 'rtSelect' ) {
+				if ( 'rtSelect' !== $element ) {
 					$data .= $this->process_attributes( $element, $attrib, true );
 
 					if ( isset( $attrib['switch_square'] ) && $attrib['switch_square'] ) {
@@ -353,8 +353,8 @@ if ( ! class_exists( 'Rt_Form' ) ) {
 					$attrib     = array();
 
 					foreach ( $attribKeys as $key ) {
-						if ( $key != 'rtForm_options' ) {
-							$attrib[$key] = $attributes[$key];
+						if ( 'rtForm_options' !== $key ) {
+							$attrib[ $key ] = $attributes[ $key ];
 						}
 					}
 
@@ -378,7 +378,7 @@ if ( ! class_exists( 'Rt_Form' ) ) {
 
 			$data = '<li><label for="' . $this->element_id . '" ' . $labelClass . '>';
 
-			if ( $element == 'rtRadio' || $element == 'rtCheckbox' ) {
+			if ( 'rtRadio' === $element || 'rtCheckbox' === $element ) {
 				$data .= $html . ' ' . $label;
 			} else {
 				$data .= $label . ' ' . $html;

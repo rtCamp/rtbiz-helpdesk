@@ -88,15 +88,15 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		/**
 		 * Ajax call back of favorite ticket
 		 */
-		function favourite_tickets(){
+		function favourite_tickets() {
 			$status = false;
 			if ( ! empty( $_POST['nonce'] )
 			     && ! empty( $_POST['post_id'] )
-			     && get_post_type($_POST['post_id']) == Rt_HD_Module::$post_type
+			     && get_post_type( $_POST['post_id'] ) == Rt_HD_Module::$post_type
 				 && wp_verify_nonce( $_POST['nonce'], 'heythisisrthd_ticket_fav_'.$_POST['post_id'] )
-			){
+			) {
 				$favs = rthd_get_user_fav_ticket( get_current_user_id() );
-				if ( in_array( $_POST['post_id'], $favs )){
+				if ( in_array( $_POST['post_id'], $favs ) ) {
 					rthd_delete_user_fav_ticket( get_current_user_id(), $_POST['post_id'] );
 				} else {
 					rthd_add_user_fav_ticket( get_current_user_id(),$_POST['post_id'] );
@@ -110,11 +110,11 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		/**
 		 * Ajax call for changing offering of the post.
 		 */
-		function front_end_offering_change(){
+		function front_end_offering_change() {
 			$flag = false;
-			if ( ! empty( $_POST['offering_id'] ) && ! empty( $_POST['post_id'] ) ){
-				$return = wp_set_object_terms($_POST['post_id'], array( intval( $_POST['offering_id'] ) ), Rt_Offerings::$offering_slug, false );
-				if ( !$return instanceof WP_Error && ! empty( $return )){
+			if ( ! empty( $_POST['offering_id'] ) && ! empty( $_POST['post_id'] ) ) {
+				$return = wp_set_object_terms( $_POST['post_id'], array( intval( $_POST['offering_id'] ) ), Rt_Offerings::$offering_slug, false );
+				if ( ! $return instanceof WP_Error && ! empty( $return ) ) {
 					$flag = true;
 				}
 			}
@@ -125,9 +125,9 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		/**
 		 *  Check followup duplicate
 		 */
-		function rthd_check_duplicate_followup(){
-			$return_data= array( 'status' => false );
-			if ( ! empty( $_POST['followup_content'] ) && ! empty( $_POST['followup_ticket_unique_id'] ) ){
+		function rthd_check_duplicate_followup() {
+			$return_data = array( 'status' => false );
+			if ( ! empty( $_POST['followup_content'] ) && ! empty( $_POST['followup_ticket_unique_id'] ) ) {
 				global $signature;
 				$rthd_ticket = $this->get_ticket_from_ticket_unique_id( $_POST['followup_ticket_unique_id'] );
 				$comment_post_ID = $rthd_ticket->ID;
@@ -137,15 +137,15 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$d->setTimezone( $UTC );
 				$timeStamp      = $d->getTimestamp();
 				$commentDate    = gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) + ( get_option( 'gmt_offset' ) * 3600 ) ) );
-				$comment_content_old =  $_POST['followup_content'];
+				$comment_content_old = $_POST['followup_content'];
 				$comment_content     = str_replace( $signature, '', $_POST['followup_content'] );
 				$checkDupli = $this->check_duplicate_comment( $comment_post_ID, $commentDate, $comment_content, $comment_content_old );
 				if ( false !== $checkDupli ) {
-					$return_data['isDuplicate']= true;
+					$return_data['isDuplicate'] = true;
 				} else {
-					$return_data['isDuplicate']= false;
+					$return_data['isDuplicate'] = false;
 				}
-				$return_data['status']= true;
+				$return_data['status'] = true;
 			}
 			echo json_encode( $return_data );
 			die();
@@ -154,18 +154,18 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		/**
 		 * For create attachment
 		 */
-		function rthd_upload_attachment(){
+		function rthd_upload_attachment() {
 			$response = array();
 			if ( $_FILES ) {
 				$comment_post_ID = '';
-				if ( ! empty( $_POST['followup_ticket_unique_id'] ) ){
+				if ( ! empty( $_POST['followup_ticket_unique_id'] ) ) {
 					$rthd_ticket = $this->get_ticket_from_ticket_unique_id( $_POST['followup_ticket_unique_id'] );
 					$comment_post_ID = $rthd_ticket->ID;
 				}
 				$attachment = $_FILES['file'];
 				$uploaded[] = Rt_HD_Offering_Support::insert_attachment( $attachment );
 				$attachments = $this->add_attachment_to_post( $uploaded, $comment_post_ID );
-				if ( ! empty( $attachments['ids'] ) ){
+				if ( ! empty( $attachments['ids'] ) ) {
 					$response['attach_ids'] = $attachments['ids'];
 				} else {
 					$response['attach_ids'] = array();
@@ -179,7 +179,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		/**
 		 * For quick download link
 		 */
-		function rthd_quick_download(){
+		function rthd_quick_download() {
 			if ( ! empty( $_POST['url'] ) ) {
 				$file = $_POST['url'] ;
 				header( 'Content-Type: octet-stream' );
@@ -196,39 +196,41 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		/**
 		 * ajax call for add subscriber or contact
 		 */
-		function rt_hd_add_subscriber_email(){
+		function rt_hd_add_subscriber_email() {
 			global $rt_hd_email_notification;
 			$response = array();
 			$response['status'] = false;
 			$response['is_contact'] = false;
-			if ( ! empty( $_POST['post_id'] ) && ! empty( $_POST['email'] ) ){
-				$user = get_user_by('email',$_POST['email']);
-				if ( $user ){
+			if ( ! empty( $_POST['post_id'] ) && ! empty( $_POST['email'] ) ) {
+				$user = get_user_by( 'email',$_POST['email'] );
+				if ( $user ) {
 					if ( user_can( $user, rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' ) ) ) { // add user to subscriber
 						$ticket_subscribers = get_post_meta( $_POST['post_id'], '_rtbiz_hd_subscribe_to', true );
-						if ( ! in_array( $user->ID, $ticket_subscribers ) ){
+						if ( empty( $ticket_subscribers ) ) {
+							$ticket_subscribers = array();
+						}
+						if ( ! in_array( $user->ID, $ticket_subscribers ) ) {
 							$ticket_subscribers[] = $user->ID;
 							update_post_meta( $_POST['post_id'], '_rtbiz_hd_subscribe_to', $ticket_subscribers );
 							$rt_hd_email_notification->notification_ticket_subscribed( $_POST['post_id'], Rt_HD_Module::$post_type, array( array( 'email' => $user->user_email, 'name' => $user->display_name ) ) );
 							$response['status'] = true;
-						} else{
+						} else {
 							$response['msg'] = 'Already subscribed.';
 						}
-					} else{ // add user to p2p connection
+					} else { // add user to p2p connection
 						$user_contact_info = rt_biz_get_contact_by_email( $_POST['email'] );
 						$user_contact_info = $user_contact_info[0];
-						if ( ! p2p_connection_exists(  Rt_HD_Module::$post_type . '_to_' . rt_biz_get_contact_post_type(), array( 'from' => $_POST['post_id'], 'to' => $user_contact_info->ID ) ) ) {
-							rt_biz_connect_post_to_contact( Rt_HD_Module::$post_type, $_POST[ 'post_id' ], $user_contact_info );
-							$response[ 'status' ] = true;
+						if ( ! p2p_connection_exists( Rt_HD_Module::$post_type . '_to_' . rt_biz_get_contact_post_type(), array( 'from' => $_POST['post_id'], 'to' => $user_contact_info->ID ) ) ) {
+							rt_biz_connect_post_to_contact( Rt_HD_Module::$post_type, $_POST['post_id'], $user_contact_info );
+							$response['status'] = true;
 							$response['is_contact'] = true;
-						}
-						else {
-							$response[ 'status' ] = false;
+						} else {
+							$response['status'] = false;
 							$response['msg'] = 'Already subscribed.';
 						}
 					}
-				} else{ // create user and then add to p2p
-					$this->add_contacts_to_post( array( array( 'address'=>$_POST['email'] ) ), $_POST['post_id'] );
+				} else { // create user and then add to p2p
+					$this->add_contacts_to_post( array( array( 'address' => $_POST['email'] ) ), $_POST['post_id'] );
 					$response['status'] = true;
 					$response['is_contact'] = true;
 				}
@@ -236,22 +238,22 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$response['msg'] = 'Something went wrong.';
 			}
 			$can = current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' ) );
-			if ( $response['is_contact'] || ( $can && $response['status'] == true ) ){
-				$user = get_user_by('email', $_POST['email']);
-				$response['avatar'] = get_avatar(  $_POST['email'], 30 );
-				if ( ! empty( $user ) ){
+			if ( $response['is_contact'] || ( $can && true == $response['status'] ) ) {
+				$user = get_user_by( 'email', $_POST['email'] );
+				$response['avatar'] = get_avatar( $_POST['email'], 30 );
+				if ( ! empty( $user ) ) {
 					$response['display_name'] = $user->display_name;
 				} else {
 					$response['display_name'] = $_POST['email'];
 				}
 				global $wpdb;
-				$count_names = $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(comment_author_email) from '.$wpdb->comments.' where comment_post_ID= %d AND comment_author_email = %s AND comment_type= %d', $_POST['post_id'], $_POST['email'], self::$FOLLOWUP_PUBLIC ));
-				if ( empty( $count_names )){
+				$count_names = $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(comment_author_email) from '.$wpdb->comments.' where comment_post_ID= %d AND comment_author_email = %s AND comment_type= %d', $_POST['post_id'], $_POST['email'], self::$FOLLOWUP_PUBLIC ) );
+				if ( empty( $count_names ) ) {
 					$response['has_replied'] = false;
 				} else {
 					$response['has_replied'] = true;
 				}
-				if ( $can ){
+				if ( $can ) {
 					$response['edit_link'] = rthd_biz_user_profile_link( $user->user_email, 30 );
 				} else {
 					$response['edit_link'] = '#';
@@ -263,8 +265,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 		function ticket_bulk_edit() {
 
-			$post_ids = ( isset( $_POST[ 'post_ids' ] ) && ! empty( $_POST[ 'post_ids' ] ) ) ? $_POST[ 'post_ids' ] : array();
-			$status = ( isset( $_POST[ 'ticket_status' ] ) && ! empty( $_POST[ 'ticket_status' ] ) ) ? $_POST[ 'ticket_status' ] : NULL;
+			$post_ids = ( isset( $_POST['post_ids'] ) && ! empty( $_POST['post_ids'] ) ) ? $_POST['post_ids'] : array();
+			$status = ( isset( $_POST['ticket_status'] ) && ! empty( $_POST['ticket_status'] ) ) ? $_POST['ticket_status'] : null;
 
 			if ( ! empty( $post_ids ) && is_array( $post_ids ) ) {
 				global $rt_hd_module, $rt_hd_email_notification, $rt_hd_ticket_history_model;
@@ -272,7 +274,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$labels = $rt_hd_module->labels;
 				$flag = false;
 
-				foreach( $post_ids as $post_id ) {
+				foreach ( $post_ids as $post_id ) {
 
 					$diff_body = '<table style="width:100%;border-collapse:collapse;border:none">';
 
@@ -313,7 +315,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 							$tax_info = get_taxonomy( $tax_slug );
 
-							if ( $diff != '' ) {
+							if ( '' != $diff ) {
 								$diff_body .= '<tr><th style="padding: .5em;border: 0;">'.$tax_info->labels->name.'</th><td>' . $diff . '</td><td></td></tr>';
 								$flag = true;
 							}
@@ -322,33 +324,33 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 					$diff_body .= '</table>';
 
-					if( $flag ) {
+					if ( $flag ) {
 						$rt_hd_email_notification->notification_ticket_updated( $post_id, $labels['name'], $diff_body, array() );
 					}
 				}
 			}
 		}
 
-		function add_new_ticket_ajax(){
+		function add_new_ticket_ajax() {
 			$result = array();
 
-			if ( !isset( $_POST['nonce'] ) && ! wp_verify_nonce( $_POST['nonce'], 'rt_hd_ticket_edit' ) ){
+			if ( ! isset( $_POST['nonce'] ) && ! wp_verify_nonce( $_POST['nonce'], 'rt_hd_ticket_edit' ) ) {
 				$result['status'] = false;
-				$result['msg'] = "Incorrect nonce";
+				$result['msg'] = 'Incorrect nonce';
 				echo json_encode( $result );
 				die();
 			}
-			if ( ! isset( $_POST['post_id'] ) && ! isset( $_POST['body'] ) ){
+			if ( ! isset( $_POST['post_id'] ) && ! isset( $_POST['body'] ) ) {
 				$result['status'] = false;
-				$result['msg'] = "Incorrect Param";
+				$result['msg'] = 'Incorrect Param';
 				echo json_encode( $result );
 				die();
 			}
-			wp_update_post( array (
+			wp_update_post( array(
 				                'ID'           => $_POST['post_id'],
 				                'post_content' => rthd_content_filter( $_POST['body'] ),
 			                ) );
-			$body = "Ticket content updated : ". rthd_content_filter( $_POST['body'] );
+			$body = 'Ticket content updated : '. rthd_content_filter( $_POST['body'] );
 			global $rt_hd_module, $rt_hd_email_notification;
 			$labels = $rt_hd_module->labels;
 			$rt_hd_email_notification->notification_ticket_updated( $_POST['post_id'], $labels['name'], $body, array() );
@@ -407,6 +409,15 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$labels        = $rt_hd_module->labels;
 			$settings      = rthd_get_redux_settings();
 
+			$new_all_emails = array();
+			// remove creator from all emails
+			foreach ( $allemail as $email ) {
+				if ( $senderEmail != $email['address'] ) {
+					$new_all_emails[] = $email;
+				}
+			}
+			$allemail = $new_all_emails;
+
 			$userid = $rt_hd_contacts->get_user_from_email( $senderEmail );
 
 			$postArray = array(
@@ -447,27 +458,25 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$this->add_contacts_to_post( $allemail, $post_id );
 
 			$uploaded = $this->add_attachment_to_post( $uploaded, $post_id );
-			if ( ! empty($uploaded['files'] ) ){
+			if ( ! empty($uploaded['files'] ) ) {
 				$uploaded = $uploaded['files'];
 			} else {
 				$uploaded = array();
 			}
 
-
-			update_post_meta( $post_id, '_rtbiz_hd_email', $senderEmail );
 			update_post_meta( $post_id, '_rtbiz_hd_email', $senderEmail );
 
 			global $transaction_id;
 			if ( isset( $transaction_id ) && $transaction_id > 0 ) {
 				update_post_meta( $post_id, '_rtbiz_hd_transaction_id', $transaction_id );
 			}
-			if ( $messageid != '' ) {
+			if ( '' != $messageid ) {
 				update_post_meta( $post_id, '_rtbiz_hd_messageid', $messageid );
 			}
-			if ( $inreplyto != '' ) {
+			if ( '' != $inreplyto ) {
 				update_post_meta( $post_id, '_rtbiz_hd_inreplyto', $inreplyto );
 			}
-			if ( $references != '' ) {
+			if ( '' != $references ) {
 				update_post_meta( $post_id, '_rtbiz_hd_references', $references );
 			}
 
@@ -475,7 +484,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			do_action( 'rt_hd_add_ticket_offering_info', $post_id );
 			// Call action to change default assignee accoding to offerings
 
-			do_action( 'rt_hd_before_send_notification', $post_id, get_post( $post_id ));
+			do_action( 'rt_hd_before_send_notification', $post_id, get_post( $post_id ) );
 
 			//send Notification
 			global $bulkimport, $gravity_auto_import, $rt_hd_email_notification, $helpdesk_import_ticket_id;
@@ -539,21 +548,21 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 					//Postid is null when support page requested
 					$post_attachment_hashes = '';
-					if ( ! empty( $post_id ) ){
+					if ( ! empty( $post_id ) ) {
 						$post_attachment_hashes = get_post_meta( $post_id, '_rtbiz_hd_attachment_hash' );
 					}
 
 					$file_location = null;
-					if ( !is_array( $upload ) ){
+					if ( ! is_array( $upload ) ) {
 						$file_location = get_attached_file( $upload );
 					} else {
 						$file_location = $upload['file'];
 					}
 
 					if ( empty( $post_attachment_hashes ) || ! in_array( md5_file( $file_location ), $post_attachment_hashes ) ) {
-						if ( ! is_array( $upload ) ){
+						if ( ! is_array( $upload ) ) {
 							$attachment = get_post( $upload );
-							if ( ! empty( $post_id ) && $attachment->post_parent != $post_id ){
+							if ( ! empty( $post_id ) && $attachment->post_parent != $post_id ) {
 								$attachment->post_parent = $post_id;
 								wp_update_post( $attachment );
 								add_post_meta( $post_id, '_rtbiz_hd_attachment_hash', md5_file( $file_location ) );
@@ -562,33 +571,33 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 						} else {
 
 							$attachment = array(
-								'post_title'     => $upload[ 'filename' ],
-								'image_alt'      => $upload[ 'filename' ],
+								'post_title'     => $upload['filename'],
+								'image_alt'      => $upload['filename'],
 								'post_content'   => '',
 								'post_excerpt'   => '',
 								'post_parent'    => ! empty( $post_id ) ? $post_id : '',
-								'post_mime_type' => $this->get_mime_type_from_extn( $upload[ 'extn' ] ),
-								'guid'           => $upload[ 'url' ],
+								'post_mime_type' => $this->get_mime_type_from_extn( $upload['extn'] ),
+								'guid'           => $upload['url'],
 							);
 							add_filter( 'upload_dir', array(
 								$rt_hd_admin,
-								'custom_upload_dir'
+								'custom_upload_dir',
 							) );//added hook for add addon specific folder for attachment
 							$attach_id = wp_insert_attachment( $attachment );
 							remove_filter( 'upload_dir', array(
 								$rt_hd_admin,
-								'custom_upload_dir'
+								'custom_upload_dir',
 							) );//remove hook for add addon specific folder for attachment
 							add_post_meta( $attach_id, '_wp_attached_file', $file_location );
-							add_post_meta( $attach_id, '_rthd_file_hash', md5_file( $upload[ 'file' ] ) );
-							if ( ! empty( $post_id ) ){
+							add_post_meta( $attach_id, '_rthd_file_hash', md5_file( $upload['file'] ) );
+							if ( ! empty( $post_id ) ) {
 								add_post_meta( $post_id, '_rtbiz_hd_attachment_hash', md5_file( $file_location ) );
 							}
 						}
 					} else {
-						if ( !is_array( $upload ) ){
+						if ( ! is_array( $upload ) ) {
 							$attach_id = $upload;
-						}else{
+						} else {
 							$attach = get_posts( array(
 								                     'post_type' => 'attachment',
 								                     'post_status' => 'any',
@@ -597,7 +606,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 								                     'meta_key'     => '_rthd_file_hash',
 								                     'meta_value'   => md5_file( $file_location ),
 							                     ));
-							if ( ! empty( $attach ) && ! empty( $attach[0] ) ){
+							if ( ! empty( $attach ) && ! empty( $attach[0] ) ) {
 								$attach = $attach[0];
 								$attach_id = $attach->ID;
 							}
@@ -628,38 +637,34 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			global $rt_hd_contacts;
 			$postterms = array();
 			foreach ( $allemail as $email ) {
-				$term = rt_biz_get_contact_by_email( $email['address'] );
-				if ( ! empty( $term ) ) {
-					foreach ( $term as $tm ) {
-						$postterms[] = $tm->ID;
+				$contacts = rt_biz_get_contact_by_email( $email );
+				if ( ! empty( $contacts ) ) {
+					foreach ( $contacts as $contact ) {
+						$postterms[] = $contact->ID;
 					}
 				} else {
-					$term        = $rt_hd_contacts->insert_new_contact( $email['address'], ( isset( $email['name'] ) ) ? $email['name'] : $email['address'] );
-					$postterms[] = $term->ID;
+					$contact        = $rt_hd_contacts->insert_new_contact( $email['address'], ( isset( $email['name'] ) ) ? $email['name'] : $email['address'] );
+					$postterms[] = $contact->ID;
 				}
-
-				$postterms = array_unique( $postterms );
-
-				if ( ! empty( $postterms ) ) {
-
-					$post_type = get_post_type( $post_id );
-					foreach ( $postterms as $term ) {
-						rt_biz_connect_post_to_contact( $post_type, $post_id, $term );
-					}
-
-					// Update Index
-					$ticketModel = new Rt_HD_Ticket_Model();
-					$where       = array( 'post_id' => $post_id );
-					$attr_name   = rt_biz_get_contact_post_type();
-					$data        = array(
-						$attr_name        => implode( ',', $postterms ),
-						'date_update'     => current_time( 'mysql' ),
-						'date_update_gmt' => gmdate( 'Y-m-d H:i:s' ),
-						'user_updated_by' => get_current_user_id(),
-					);
-					$ticketModel->update_ticket( $data, $where );
-					// System Notification -- Contact added
+			}
+			$postterms = array_unique( $postterms );
+			if ( ! empty( $postterms ) ) {
+				$post_type = get_post_type( $post_id );
+				foreach ( $postterms as $term ) {
+					rt_biz_connect_post_to_contact( $post_type, $post_id, $term );
 				}
+				// Update Index
+				$ticketModel = new Rt_HD_Ticket_Model();
+				$where       = array( 'post_id' => $post_id );
+				$attr_name   = rt_biz_get_contact_post_type();
+				$data        = array(
+					$attr_name        => implode( ',', $postterms ),
+					'date_update'     => current_time( 'mysql' ),
+					'date_update_gmt' => gmdate( 'Y-m-d H:i:s' ),
+					'user_updated_by' => get_current_user_id(),
+				);
+				$ticketModel->update_ticket( $data, $where );
+				// System Notification -- Contact added
 			}
 		}
 
@@ -734,21 +739,21 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		) {
 
 			// check mailbox reading enable or not
-			if ( ! empty( $mailbox_email ) &&  ( ! rthd_is_enable_mailbox_reading() ) ){
+			if ( ! empty( $mailbox_email ) &&  ( ! rthd_is_enable_mailbox_reading() ) ) {
 				return false;
 			}
 
 			//Exclude mailbox email form all emails
 			$contactEmail = array();
-			if( !empty( $allemails ) && is_array( $allemails ) ){
-				foreach( $allemails as $email  ){
-					if ( ! rtmb_get_module_mailbox_email( $email['address'], RT_HD_TEXT_DOMAIN ) ){ //check mail is exist in mailbox or not
+			if ( ! empty( $allemails ) && is_array( $allemails ) ) {
+				foreach ( $allemails as $email ) {
+					if ( ! rtmb_get_module_mailbox_email( $email['address'], RT_HD_TEXT_DOMAIN ) ) { //check mail is exist in mailbox or not
 						$contactEmail[] = $email;
 					}
 				}
 			}
 			$allemails = $contactEmail;
-			if ( rt_hd_check_email_blacklisted( $fromemail['address'] ) ){
+			if ( rt_hd_check_email_blacklisted( $fromemail['address'] ) ) {
 				return false;
 			}
 			$emailsarrays = rthd_filter_emails( $allemails );
@@ -793,23 +798,23 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 				$postid = $this->get_post_id_from_subject( $title );
 
-				error_log("POST ID FOUND FROM MAIL SUBJECT\n\r");
+				error_log( "POST ID FOUND FROM MAIL SUBJECT\n\r" );
 
 				if ( ! $postid ) {
 					//get postID from inreply to and refrence meta
 					$postid = $this->get_post_id_from_mail_meta( $inreplyto, $references );
-					error_log("POST ID FOUND FROM MAIL META\n\r");
+					error_log( "POST ID FOUND FROM MAIL META\n\r" );
 				}
 
 				//if we got post id from subject
 			} else {
 				$postid = $threadPostId;
 			}
-			error_log( "POST ID : ". var_export( $postid, true ) . "\r\n" );
+			error_log( 'POST ID : '. var_export( $postid, true ) . "\r\n" );
 			$dndEmails = array();
 
 			if ( $postid && get_post( $postid ) != null ) { // if post id found from title or mail meta & mail is Re: or Fwd:
-				if ( ! rthd_get_reply_via_email() ){
+				if ( ! rthd_get_reply_via_email() ) {
 					error_log( 'Mail Parse Status : ' . var_export( false, true ) . " Reply via email | false \n\r" );
 					return false;
 				}
@@ -818,7 +823,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					$this->process_forward_email_data( $title, $body, $mailtime, $allemail, $mailBodyText, $dndEmails );
 				}
 
-				$success_flag = $this->insert_post_comment( $postid, $userid, $body, $fromemail['name'], $fromemail['address'], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $subscriber, $originalBody);
+				$success_flag = $this->insert_post_comment( $postid, $userid, $body, $fromemail['name'], $fromemail['address'], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $subscriber, $originalBody );
 
 				error_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
 
@@ -835,7 +840,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			//if subject is re to post title
 
 			if ( $replyFlag ) { // if post id not found from title or mail meta & mail is Re: or Fwd:
-				error_log("MAIL IS A REPLY / FORWARD OF PREVIOUS TICKET\n\r");
+				error_log( "MAIL IS A REPLY / FORWARD OF PREVIOUS TICKET\n\r" );
 				$title       = str_replace( 'Re:', '', $title );
 				$title       = str_replace( 're:', '', $title );
 				$title       = trim( $title );
@@ -845,7 +850,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				}
 				//if given post title exits then it will be add as comment other wise as post
 				if ( $existPostId ) {
-					if ( ! rthd_get_reply_via_email() ){
+					if ( ! rthd_get_reply_via_email() ) {
 						error_log( 'Mail Parse Status : ' . var_export( false, true ) . " Reply via email | false \n\r" );
 						return false;
 					}
@@ -874,7 +879,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			} else { // if post id not found from title or mail meta & mail is not Re: or Fwd:
 				$existPostId = $this->post_exists( $title, $mailtime );
 				//if given post title exits then it will be add as comment other wise as post
-				error_log( "Post Exists : ". var_export( $existPostId, true ) . "\r\n" );
+				error_log( 'Post Exists : '. var_export( $existPostId, true ) . "\r\n" );
 				if ( ! $existPostId ) {
 					$success_flag = $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], $messageid, $inreplyto, $references, $subscriber, $originalBody );
 					error_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
@@ -886,7 +891,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					}
 					return $success_flag;
 				} else {
-					if ( ! rthd_get_reply_via_email() ){
+					if ( ! rthd_get_reply_via_email() ) {
 						error_log( 'Mail Parse Status : ' . var_export( false, true ) . " Reply via email | false \n\r" );
 						return false;
 					}
@@ -918,14 +923,14 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		function get_post_id_from_mail_meta( $inreplyto, $refrences ) {
-			if ( $inreplyto == '' && $refrences == '' ) {
+			if ( '' == $inreplyto && '' == $refrences ) {
 				return false;
 			}
 			global $wpdb;
 			$sql1       = "select post_id as id ,'post' as type from {$wpdb->postmeta} where ";
 			$sql2       = "select comment_id as id, 'comment' as type from {$wpdb->commentmeta} where ";
 			$operatorOr = '';
-			if ( $inreplyto != '' ) {
+			if ( '' != $inreplyto ) {
 				$sql1 .= " ({$wpdb->postmeta}.meta_key in('_messageid','_references','_inreplyto') and {$wpdb->postmeta}.meta_value like '%{$inreplyto}%' ) ";
 				$sql2 .= " ({$wpdb->commentmeta}.meta_key in('_messageid','_references','_inreplyto') and {$wpdb->commentmeta}.meta_value like '%{$inreplyto}%' ) ";
 				$operatorOr = ' or ';
@@ -1022,7 +1027,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$query = "SELECT ID FROM $wpdb->posts WHERE 1=1 and post_type IN ('" . Rt_HD_Module::$post_type . "') ";
 			$args  = array();
 
-			if ( ! empty( $date ) && $date != '' ) {
+			if ( ! empty( $date ) && '' != $date ) {
 				$d   = new DateTime( $date );
 				$UTC = new DateTimeZone( 'UTC' );
 				$d->setTimezone( $UTC );
@@ -1091,21 +1096,21 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$comment_agent = substr( $_SERVER['HTTP_USER_AGENT'], 0, 254 );
 			$comment_agent = empty( $comment_agent ) ? ' ' : $comment_author;
 			$user = '';
-			if ( ! empty( $comment_author_email ) ){
+			if ( ! empty( $comment_author_email ) ) {
 				$user = get_user_by( 'email', $comment_author_email );
 			}
 
 			/* auto assign flag set */
 			global $rt_hd_email_notification;
 			$redux = rthd_get_redux_settings();
-			$autoAssingeFlag = ( isset( $redux['rthd_enable_auto_assign']) && $redux['rthd_enable_auto_assign'] == 1 ) ;
+			$autoAssingeFlag = ( isset( $redux['rthd_enable_auto_assign'] ) && 1 == $redux['rthd_enable_auto_assign'] ) ;
 			$autoAssignEvent = ( isset( $redux['rthd_auto_assign_events'] ) ) ? $redux['rthd_auto_assign_events'] : '' ;
 			$isFirstStaffComment = false;
 			//check auto assign feature enable and followup created by staff
-			if ( $autoAssingeFlag && $rt_hd_email_notification->is_internal_user( $comment_author_email ) ){
-				if ( 'on_first_followup' == $autoAssignEvent ){
+			if ( $autoAssingeFlag && $rt_hd_email_notification->is_internal_user( $comment_author_email ) ) {
+				if ( 'on_first_followup' == $autoAssignEvent ) {
 					$Comment = $this->get_first_staff_followup( $comment_post_ID );
-					$Comment = array_filter($Comment);
+					$Comment = array_filter( $Comment );
 					if ( empty( $Comment ) ) {
 						$isFirstStaffComment = true;
 					}
@@ -1176,24 +1181,24 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$post = get_post( $comment_post_ID );
 
 			if ( $rt_hd_email_notification->is_internal_user( $comment_author_email ) ) {
-				if ( $keep_status ){
-					if ( $post->post_status != 'hd-unanswered' ){
-						wp_update_post( array( 'ID'=>$comment_post_ID ,'post_status'=>'hd-unanswered') );
+				if ( $keep_status ) {
+					if ( $post->post_status != 'hd-unanswered' ) {
+						wp_update_post( array( 'ID' => $comment_post_ID, 'post_status' => 'hd-unanswered' ) );
 					}
-				}else{
-					if ( $post->post_status != 'hd-answered' ){
-						wp_update_post( array( 'ID'=>$comment_post_ID ,'post_status'=>'hd-answered') );
+				} else {
+					if ( $post->post_status != 'hd-answered' ) {
+						wp_update_post( array( 'ID' => $comment_post_ID, 'post_status' => 'hd-answered' ) );
 					}
 				}
 			} else {
-				if ( $post->post_status != 'hd-unanswered' ){
-					wp_update_post( array( 'ID'=>$comment_post_ID ,'post_status'=>'hd-unanswered') );
+				if ( $post->post_status != 'hd-unanswered' ) {
+					wp_update_post( array( 'ID' => $comment_post_ID, 'post_status' => 'hd-unanswered' ) );
 				}
 			}
 			/* end of status toogle code */
 
 			if ( isset( $allemails  ) ) {
-				foreach ( $allemails  as $email ) {
+				foreach ( $allemails as $email ) {
 					if ( isset( $email['key'] ) ) {
 						$meta = get_comment_meta( $comment_id, '_email_' . $email['key'], true );
 						if ( empty( $meta ) ) {
@@ -1206,24 +1211,35 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			}
 
 			$subscribe_to = get_post_meta( $comment_post_ID, '_rtbiz_hd_subscribe_to', true );
-			if ( $subscribe_to && is_array( $subscribe_to ) && sizeof( $subscribe_to ) > 0 ) {
-				$subscriber = array_merge( $subscribe_to, $subscriber );
+			if ( ! empty( $subscriber )  ) {
+				if ( empty( $subscribe_to ) ) {
+					$subscribe_to = array();
+				}
+				foreach ( $subscriber as $sub ) {
+					if ( is_email( $sub ) ) {
+						$sub_userid = get_user_by( 'email', $sub );
+						if ( ! empty( $sub_userid ) ) {
+							$subscribe_to[] = $sub_userid->ID;
+						}
+					}
+				}
+				$subscribe_to = array_unique( $subscribe_to );
 			}
-			update_post_meta( $comment_post_ID, '_rtbiz_hd_subscribe_to', $subscriber );
+			update_post_meta( $comment_post_ID, '_rtbiz_hd_subscribe_to', $subscribe_to );
 
 			/* assignee toogle code */
 			//check auto assign feature enable and followup created by staff
-			if ( $autoAssingeFlag && $rt_hd_email_notification->is_internal_user( $comment_author_email ) ){
+			if ( $autoAssingeFlag && $rt_hd_email_notification->is_internal_user( $comment_author_email ) ) {
 				//check on 'on_first_followup' selected and its first staff followup || select 'on_any_followup'
-				if ( ( 'on_first_followup' == $autoAssignEvent && $isFirstStaffComment ) || 'on_any_followup' == $autoAssignEvent ){
-					wp_update_post( array( 'ID' => $comment_post_ID ,'post_author' => $userid ) );
+				if ( ( 'on_first_followup' == $autoAssignEvent && $isFirstStaffComment ) || 'on_any_followup' == $autoAssignEvent ) {
+					wp_update_post( array( 'ID' => $comment_post_ID, 'post_author' => $userid ) );
 				}
 			}
 			/* end assignee toogle code */
 
 			$uploaded = $this->add_attachment_to_post( $uploaded, $comment_post_ID, $comment_id );
 
-			if ( ! empty( $uploaded['files'] ) ){
+			if ( ! empty( $uploaded['files'] ) ) {
 				$uploaded = $uploaded['files'];
 			} else {
 				$uploaded = array();
@@ -1237,7 +1253,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 			// fololowup crated by client then hook will called
 			if ( ! empty( $comment_author_email )  && ! $rt_hd_email_notification->is_internal_user( $comment_author_email ) ) {
-				do_action('rt_hd_auto_response', $comment_post_ID, $commenttime );
+				do_action( 'rt_hd_auto_response', $comment_post_ID, $commenttime );
 			}
 			return $comment_id;
 		}
@@ -1249,11 +1265,11 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 *
 		 * @return array
 		 */
-		function get_first_staff_followup( $comment_post_ID ){
+		function get_first_staff_followup( $comment_post_ID ) {
 
 			$staff = get_post_meta( $comment_post_ID, '_rtbiz_hd_subscribe_to', true );;
 			$post_author_id = get_post_field( 'post_author', $comment_post_ID );
-			if ( is_numeric( $post_author_id ) ){
+			if ( is_numeric( $post_author_id ) ) {
 				$staff = array_merge( $staff, array(  $post_author_id ) );
 			}
 			$args = array(
@@ -1339,7 +1355,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			if ( ! $this->check_setting_for_new_followup_email( ) ) {
 				return false;
 			}
-			if ( isset( $_REQUEST['commentSendAttachment'] ) && $_REQUEST['commentSendAttachment'] != '' ) {
+			if ( isset( $_REQUEST['commentSendAttachment'] ) && '' != $_REQUEST['commentSendAttachment'] ) {
 				$arrAttache = explode( ',', $_REQUEST['commentSendAttachment'] );
 				foreach ( $arrAttache as $strAttach ) {
 					add_comment_meta( $comment_id, 'attachment', intval( $strAttach ) );
@@ -1376,7 +1392,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 			//commentSendAttachment
 			$attachment = array();
-			if ( isset( $_REQUEST['commentSendAttachment'] ) && $_REQUEST['commentSendAttachment'] != '' ) {
+			if ( isset( $_REQUEST['commentSendAttachment'] ) && '' != $_REQUEST['commentSendAttachment'] ) {
 				$arrAttache = explode( ',', $_REQUEST['commentSendAttachment'] );
 				foreach ( $arrAttache as $strAttach ) {
 					$attachfile = get_attached_file( intval( $strAttach ) );
@@ -1496,25 +1512,25 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		}
 
 
-        function process_file_attachment($file){
-            if ($_FILES[$file]['error'] !== UPLOAD_ERR_OK) __return_false();
-            require_once(ABSPATH . "wp-admin" . '/includes/image.php');
-            require_once(ABSPATH . "wp-admin" . '/includes/file.php');
-            require_once(ABSPATH . "wp-admin" . '/includes/media.php');
-            $attachment_id = media_handle_upload($file, "");
-            return $attachment_id;
-        }
+		function process_file_attachment($file) {
+			if ( UPLOAD_ERR_OK !== $_FILES[ $file ]['error'] ) { __return_false(); }
+			require_once(ABSPATH . 'wp-admin' . '/includes/image.php');
+			require_once(ABSPATH . 'wp-admin' . '/includes/file.php');
+			require_once(ABSPATH . 'wp-admin' . '/includes/media.php');
+			$attachment_id = media_handle_upload( $file, '' );
+			return $attachment_id;
+		}
 
 		/**
 		 * Add follow up of tickets on front end
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		function add_new_followup_front(){
+		function add_new_followup_front() {
 			$returnArray     = array();
 			$returnArray['status']  = false;
 
-			if ( ! is_user_logged_in() ){
+			if ( ! is_user_logged_in() ) {
 				$returnArray['message'] = 'ERROR: please login to continue.';
 				echo json_encode( $returnArray );
 				die( 0 );
@@ -1554,7 +1570,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$comment_type                   = $_POST['private_comment'];
 			$comment_parent                 = 0;
 
-			if ( isset( $_REQUEST['follwoup-time'] ) && $_REQUEST['follwoup-time'] != '' ) {
+			if ( isset( $_REQUEST['follwoup-time'] ) && '' != $_REQUEST['follwoup-time'] ) {
 				$d                           = new DateTime( $_REQUEST['follwoup-time'] );
 				$commenttime = $d->format( 'Y-m-d H:i:s' );
 				//$commentdata['comment_date_gmt'] = $d->format( 'Y-m-d H:i:s' );
@@ -1574,35 +1590,35 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 			// add followup creator into contact or subscribers
 			if ( ! array_key_exists( $comment_author_email, $hdUser ) ) {
-				if ( ! empty( $black_list_emails ) ){
-					foreach ( $black_list_emails as $email ){
-						if ( ! preg_match( '/'.str_replace('*','\/*',$email).'/',  $comment_author_email ) ){
-							$allemail[]= array( 'address' => $comment_author_email, 'name' => $comment_author, 'key' => 'to', );
-						}else{
+				if ( ! empty( $black_list_emails ) ) {
+					foreach ( $black_list_emails as $email ) {
+						if ( ! preg_match( '/'.str_replace( '*','\/*',$email ).'/',  $comment_author_email ) ) {
+							$allemail[] = array( 'address' => $comment_author_email, 'name' => $comment_author, 'key' => 'to', );
+						} else {
 							$returnArray['message'] = 'ERROR: You are blacklisted for this system';
 							echo json_encode( $returnArray );
 							die( 0 );
 						}
 					}
-				}else{
-					$allemail[]= array( 'address' => $comment_author_email, 'name' => $comment_author, 'key' => 'to', );
+				} else {
+					$allemail[] = array( 'address' => $comment_author_email, 'name' => $comment_author, 'key' => 'to', );
 				}
 			} else {
-				$subscriber[]= $comment_author_email;
+				$subscriber[] = $comment_author_email;
 			}
 
 			$keep_status = false;
-			if ( isset($_POST['rthd_keep_status']) && !empty($_POST['rthd_keep_status']) && $_POST['rthd_keep_status'] == 'true'){
+			if ( isset( $_POST['rthd_keep_status'] ) && ! empty( $_POST['rthd_keep_status'] ) && 'true' == $_POST['rthd_keep_status'] ) {
 				$keep_status = true;
 			}
 			$uploaded = explode( ',', $_POST['followup_attachments'] );
-//			$force_duplicate = false;
-//			if ( ! empty( $_POST['followup_duplicate_force'] ) ){
+			//          $force_duplicate = false;
+			//          if ( ! empty( $_POST['followup_duplicate_force'] ) ) {
 				$force_duplicate = true;
-//			}
-			$comment_ID = $this->insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, array_filter( $uploaded ), $allemail, $dndEmails, '', '', '', $subscriber, '', $comment_type, $comment_parent, $keep_status, $force_duplicate);
+			//          }
+			$comment_ID = $this->insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, array_filter( $uploaded ), $allemail, $dndEmails, '', '', '', $subscriber, '', $comment_type, $comment_parent, $keep_status, $force_duplicate );
 
-			if ( empty( $comment_ID ) ){
+			if ( empty( $comment_ID ) ) {
 				$returnArray['status'] = false;
 				$returnArray['message'] = 'Something went wrong please contact admin.';
 			} else {
@@ -1615,29 +1631,28 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 						'count'     => true,
 					) );
 
-				$returnArray['comment_id'] = $comment_ID;
-				$returnArray['private']       = $comment_type;
-				$comment_user  = get_user_by( 'id', $userid );
-				$comment_render_type = 'left';
-				$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
-				if ( ! empty( $comment_user ) ) {
-					if ( $comment_user->has_cap( $cap ) ) {
-						$comment_render_type = 'right';
+					$returnArray['comment_id'] = $comment_ID;
+					$returnArray['private']       = $comment_type;
+					$comment_user  = get_user_by( 'id', $userid );
+					$comment_render_type = 'left';
+					$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
+					if ( ! empty( $comment_user ) ) {
+						if ( $comment_user->has_cap( $cap ) ) {
+							$comment_render_type = 'right';
+						}
 					}
-				}
-				$user_edit = current_user_can( $cap ) || ( get_current_user_id() == $userid );
-				$comment = get_comment( $comment_ID );
-				$returnArray['comment_content'] = rthd_render_comment( $comment, $user_edit, $comment_render_type, false );
-				$returnArray['assign_value'] = get_post_field( 'post_author', $comment_post_ID, 'raw' );
-				if ( current_user_can( $cap ) ){
-					$commentlink = '<a href="'.rthd_biz_user_profile_link($comment->comment_author_email).'" >'.$comment->comment_author.'</a>';
-					$returnArray['post_status'] = get_post_field( 'post_status', $comment_post_ID, 'raw' );
-				}
-				else {
-					$commentlink = $comment->comment_author;
-					$returnArray['post_status'] = rthd_status_markup( get_post_field( 'post_status', $comment_post_ID, 'raw' ) );
-				}
-				$returnArray['last_reply'] =esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . ' ago by ' . $commentlink;
+					$user_edit = current_user_can( $cap ) || ( get_current_user_id() == $userid );
+					$comment = get_comment( $comment_ID );
+					$returnArray['comment_content'] = rthd_render_comment( $comment, $user_edit, $comment_render_type, false );
+					$returnArray['assign_value'] = get_post_field( 'post_author', $comment_post_ID, 'raw' );
+					if ( current_user_can( $cap ) ) {
+						$commentlink = '<a href="'.rthd_biz_user_profile_link( $comment->comment_author_email ).'" >'.$comment->comment_author.'</a>';
+						$returnArray['post_status'] = get_post_field( 'post_status', $comment_post_ID, 'raw' );
+					} else {
+						$commentlink = $comment->comment_author;
+						$returnArray['post_status'] = rthd_status_markup( get_post_field( 'post_status', $comment_post_ID, 'raw' ) );
+					}
+					$returnArray['last_reply'] = esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . ' ago by ' . $commentlink;
 
 			}
 			echo json_encode( $returnArray );
@@ -1645,7 +1660,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			die( 0 );
 		}
 
-		function get_ticket_from_ticket_unique_id( $ticket_unique_id ){
+		function get_ticket_from_ticket_unique_id( $ticket_unique_id ) {
 			$args             = array(
 				'meta_key'    => '_rtbiz_hd_unique_id',
 				'meta_value'  => $ticket_unique_id,
@@ -1656,7 +1671,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			if ( empty( $ticketpost ) ) {
 				return false;
 			}
-			if ( is_array( $ticketpost ) ){
+			if ( is_array( $ticketpost ) ) {
 				$ticketpost = $ticketpost[0];
 			}
 			return $ticketpost;
@@ -1674,7 +1689,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 			$returnArray     = array();
 			$returnArray['status']  = false;
-			if ( ! is_user_logged_in() ){
+			if ( ! is_user_logged_in() ) {
 				$returnArray['message'] = 'ERROR: please login to continue.';
 				echo json_encode( $returnArray );
 				die( 0 );
@@ -1710,7 +1725,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$commentdata = get_comment( $_POST['comment_id'], ARRAY_A );
 			$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
 			$user_edit = current_user_can( $cap ) || (get_current_user_id() == $commentdata['user_id'] );
-			if ( !$user_edit ) {
+			if ( ! $user_edit ) {
 				$returnArray['message'] = 'ERROR: Unauthorized Access';
 				echo json_encode( $returnArray );
 				die( 0 );
@@ -1720,20 +1735,19 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 			$oldDate                        = $commentdata['comment_date'];
 			$newDate                        = '';
-			if ( isset( $_REQUEST['follwoup-time'] ) && $_REQUEST['follwoup-time'] != '' ) {
+			if ( isset( $_REQUEST['follwoup-time'] ) && '' != $_REQUEST['follwoup-time'] ) {
 				$d                           = new DateTime( $_REQUEST['follwoup-time'] );
 				$UTC                         = new DateTimeZone( 'UTC' );
 				$commentdata['comment_date'] = $d->format( 'Y-m-d H:i:s' );
 				$newDate                     = $commentdata['comment_date'];
 				$d->setTimezone( $UTC );
 				$commentdata['comment_date_gmt'] = $d->format( 'Y-m-d H:i:s' );
-			}
-			else {
+			} else {
 				$newDate = current_time( 'mysql', 1 );
 			}
 
-			$old_privacy=  $commentdata['comment_type'];
-			$commentdata['comment_type']= $comment_privacy;
+			$old_privacy = $commentdata['comment_type'];
+			$commentdata['comment_type'] = $comment_privacy;
 
 			wp_update_comment( $commentdata ); //update comment
 			//todo: remove below line when comment wordpress start supporting comment_type edit
@@ -1761,14 +1775,14 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					}
 				}
 				$uploaded = $this->add_attachment_to_post( $uploaded, $comment_post_ID, $_POST['comment_id'] );
-				if ( ! empty( $uploaded['files'] ) ){
+				if ( ! empty( $uploaded['files'] ) ) {
 					$uploaded = $uploaded['files'];
 				} else {
 					$uploaded = array();
 				}
 			}
 
-			$rt_hd_email_notification->notification_followup_updated( $comment, get_current_user_id(),$old_privacy, $comment_privacy, $oldCommentBody, $commentdata[ 'comment_content' ] );
+			$rt_hd_email_notification->notification_followup_updated( $comment, get_current_user_id(),$old_privacy, $comment_privacy, $oldCommentBody, $commentdata['comment_content'] );
 
 			$returnArray['status']        = true;
 			$returnArray['private']       = $comment->comment_type;
@@ -1779,7 +1793,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 					$comment_render_type = 'right';
 				}
 			}
-			clean_comment_cache( $comment->comment_ID  );
+			clean_comment_cache( $comment->comment_ID );
 			$user_edit = current_user_can( $cap ) || ( get_current_user_id() == $comment->user_id );
 			$returnArray['comment_content'] = rthd_render_comment( get_comment( $comment->comment_ID ), $user_edit, $comment_render_type, false );
 			echo json_encode( $returnArray );
@@ -1799,8 +1813,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$user_id = get_current_user_id();
 			global $wpdb, $rt_mail_accounts_model, $rt_hd_mail_acl_model;
 			$sql    = $wpdb->prepare( '(select * from {$rt_mail_accounts_model->table_name} where user_id=%d and email = %s)
-                                union (select a.* from {$rt_hd_mail_acl_model->table_name} b inner join
-                                {$rt_mail_accounts_model->table_name} a on a.email=b.email where b.allow_user=%d and a.email=%s)', $user_id, $email, $user_id, $email );
+								union (select a.* from {$rt_hd_mail_acl_model->table_name} b inner join
+								{$rt_mail_accounts_model->table_name} a on a.email=b.email where b.allow_user=%d and a.email=%s)', $user_id, $email, $user_id, $email );
 			$result = $wpdb->get_results( $sql );
 			if ( $result && ! empty( $result ) ) {
 				return true;
@@ -1823,9 +1837,9 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$comment          = get_comment( $_POST['comment_id'] );
 			$attachments_urls = get_comment_meta( $_POST['comment_id'], 'attachment' );
 			$attachments = get_children( array( 'post_parent' => $comment->comment_post_ID, 'post_type' => 'attachment', ) );
-			if ( ! empty( $attachments ) && ! empty( $attachments_urls ) ){
-				foreach ( $attachments as $att ){
-					if ( in_array( wp_get_attachment_url( $att->ID ),$attachments_urls ) ){
+			if ( ! empty( $attachments ) && ! empty( $attachments_urls ) ) {
+				foreach ( $attachments as $att ) {
+					if ( in_array( wp_get_attachment_url( $att->ID ),$attachments_urls ) ) {
 						wp_delete_attachment( $att->ID, true );
 					}
 				}
@@ -1909,27 +1923,26 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 			return $rows_affected;
 		}
-		public function check_setting_for_new_followup_email(){
+		public function check_setting_for_new_followup_email() {
 			$redux = rthd_get_redux_settings();
-			if ( 1 != $redux['rthd_notification_events']['new_comment_added'] ){
+			if ( 1 != $redux['rthd_notification_events']['new_comment_added'] ) {
 				return false;
 			}
 			return true;
 		}
 
-		function load_more_followup(){
+		function load_more_followup() {
 			$response = array();
-			$response['status']= false;
-			if (isset($_REQUEST['post_id']) && isset($_REQUEST['offset']) && isset($_REQUEST['limit'])  ){
-				$postid=  $_REQUEST['post_id'];
-				$offset=  $_REQUEST['offset'];
-				$Limit=  $_REQUEST['limit'];
+			$response['status'] = false;
+			if ( isset($_REQUEST['post_id']) && isset($_REQUEST['offset']) && isset($_REQUEST['limit'])  ) {
+				$postid = $_REQUEST['post_id'];
+				$offset = $_REQUEST['offset'];
+				$Limit = $_REQUEST['limit'];
 				//				if ( ! isset($_POST['getall']) && $_POST['all']!='true') {
 				//					$offset = $offset + $Limit;
 				//				}
-			}
-			else{
-				echo json_encode($response);
+			} else {
+				echo json_encode( $response );
 				die();
 			}
 
@@ -1940,8 +1953,8 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 	              'number' => $Limit,
 	              'offset' => $offset,
 	          ) );
-//			$user_edit = current_user_can( rt_biz_get_access_role_cap( RT_BIZ_TEXT_DOMAIN, 'editor' ) );
-			$commenthtml='';
+			//          $user_edit = current_user_can( rt_biz_get_access_role_cap( RT_BIZ_TEXT_DOMAIN, 'editor' ) );
+			$commenthtml = '';
 			$count = 0;
 			foreach ( $comments as $comment ) {
 				$comment_user  = get_user_by( 'id', $comment->user_id );
@@ -1962,56 +1975,60 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				$placeholder = '<div class="content-stream stream-loading js-loading-placeholder"><img id="load-more-hdspinner" class="js-loading-placeholder" src="' . admin_url() . 'images/spinner.gif' . '" /></div>';
 			}
 
-			$response['offset']= $offset;
-			$response['comments']= $commenthtml;
+			$response['offset'] = $offset;
+			$response['comments'] = $commenthtml;
 			$response['placeholder'] = $placeholder;
-			$response['status']= true;
-			echo json_encode($response);
+			$response['status'] = true;
+			echo json_encode( $response );
 			die();
 		}
 
-		function front_end_status_change(){
+		function front_end_status_change() {
 			$response = array();
-			$response['status']= false;
+			$response['status'] = false;
 			$post_id = $_POST['post_id'];
 			$old = get_post_status( $post_id );
 			$post_status = $_POST['post_status'];
-			if ( $post_id ){
-				$ticket = array( 'ID' => $post_id,
-				                      'post_status' => $post_status,);
+			if ( $post_id ) {
+				$ticket = array(
+					'ID'          => $post_id,
+					'post_status' => $post_status,
+					);
 				wp_update_post( $ticket );
 			}
-			$response['stauts_markup']= rthd_status_markup( $post_status );
-			$response['status']= true;
+			$response['stauts_markup'] = rthd_status_markup( $post_status );
+			$response['status'] = true;
 			global $rt_hd_module;
 			$labels = $rt_hd_module->labels;
 			rthd_update_ticket_updated_by_user( $post_id, get_current_user_id() );
 			global $rt_hd_email_notification;
 			$body = $labels['name'].' Status '.rthd_status_markup( $old ).' changed to '.rthd_status_markup( $post_status );
 			$rt_hd_email_notification->notification_ticket_updated( $post_id, $labels['name'], $body, array() );
-			echo json_encode($response);
+			echo json_encode( $response );
 			die();
 		}
 
 		/**
 		 * Change ticket assignee. Request come from front end.
 		 */
-		function front_end_assignee_change(){
+		function front_end_assignee_change() {
 			$response = array();
-			$response['status']= false;
+			$response['status'] = false;
 			$post_id = $_POST['post_id'];
 			$old_post = get_post( $post_id );
 			$new_assignee = $_POST['post_author'];
 			global $rt_hd_ticket_index_model;
 			if ( $old_post->post_author != $new_assignee ) {
-				if ( $post_id ){
-					$ticket = array( 'ID' => $post_id,
-							'post_author' => $new_assignee,);
+				if ( $post_id ) {
+					$ticket = array(
+						'ID'          => $post_id,
+						'post_author' => $new_assignee,
+						);
 					wp_update_post( $ticket );
 					$rt_hd_ticket_index_model->update_ticket_assignee( $new_assignee, $post_id );
 				}
 
-				$response['status']= true;
+				$response['status'] = true;
 				global $rt_hd_module;
 
 				$labels = $rt_hd_module->labels;
@@ -2021,7 +2038,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 				$rt_hd_email_notification->notification_new_ticket_reassigned( $post_id, $old_post->post_author, $new_assignee, $labels['name'] );
 			}
-			echo json_encode($response);
+			echo json_encode( $response );
 			die();
 		}
 
@@ -2036,7 +2053,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$current_user = get_user_by( 'id', $current_user_id );
 
 			$response = $subscriber_info = array();
-			$response['status']= false;
+			$response['status'] = false;
 
 			$post_id = $_POST['post_id'];
 			$post_type = get_post_type( $post_id );
@@ -2044,7 +2061,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 			$subscriber_info[] = array( 'email' => $current_user->user_email, 'name' => $current_user->display_name );
 
-			if( 'watch' == $watch_unwatch ) {
+			if ( 'watch' == $watch_unwatch ) {
 				if ( current_user_can( $cap ) ) {
 					// Add user to ticket subcriber list.
 					$ticket_subscribers = get_post_meta( $post_id, '_rtbiz_hd_subscribe_to', true );
@@ -2053,47 +2070,44 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 					update_post_meta( $post_id, '_rtbiz_hd_subscribe_to', $ticket_subscribers );
 
-					$rt_hd_email_notification->notification_ticket_subscribed($post_id, $post_type, $subscriber_info );
-				}
-				else {
+					$rt_hd_email_notification->notification_ticket_subscribed( $post_id, $post_type, $subscriber_info );
+				} else {
 					// Add user to ticket contact list.
 					$user_contact_info = rt_biz_get_contact_by_email( $current_user->user_email );
 
 					rt_biz_connect_post_to_contact( $post_type, $post_id, $user_contact_info );
 				}
 
-				$response['status']= true;
-				$response['label']= 'Unsubscribe';
-				$response['value']= 'unwatch';
-			}
-			else if( 'unwatch' == $watch_unwatch ) {
+				$response['status'] = true;
+				$response['label'] = 'Unsubscribe';
+				$response['value'] = 'unwatch';
+			} else if ( 'unwatch' == $watch_unwatch ) {
 				if ( current_user_can( $cap ) ) {
 					// Remove user from ticket subcriber list.
 					$ticket_subscribers = get_post_meta( $post_id, '_rtbiz_hd_subscribe_to', true );
 					$new_ticket_subscribers = array();
 
 					foreach ( $ticket_subscribers as $ticket_subscriber ) {
-						if( $ticket_subscriber != $current_user_id ) {
+						if ( $ticket_subscriber != $current_user_id ) {
 							$new_ticket_subscribers[] = $ticket_subscriber;
 						}
 					}
 					update_post_meta( $post_id, '_rtbiz_hd_subscribe_to', $new_ticket_subscribers );
 
 					$rt_hd_email_notification->notification_ticket_unsubscribed( $post_id, $post_type, $subscriber_info );
-				}
-				else {
+				} else {
 					// Remove user from ticket contact list.
 					$user_contact_info = rt_biz_get_contact_by_email( $current_user->user_email );
 
 					rt_biz_clear_post_connection_to_contact( $post_type, $post_id, $user_contact_info );
 				}
 
-				$response['status']= true;
-				$response['label']= 'Subscribe';
-				$response['value']= 'watch';
+				$response['status'] = true;
+				$response['label'] = 'Subscribe';
+				$response['value'] = 'watch';
 			}
 
-			echo json_encode($response);
+			echo json_encode( $response );
 			die();
 		}
 	}

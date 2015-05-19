@@ -1,46 +1,45 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: spock
- * Date: 26/3/15
- * Time: 1:40 PM
- */
+<?php $date = strtotime( current_time( 'mysql', 1 ) ); ?>
 
-$date = strtotime( current_time( 'mysql', 1 ) );
-?>
 <!DOCTYPE html>
 <html>
-<head> <title></title></head>
-<body>
-<?php
-if ( $replyflag && rthd_is_enable_mailbox_reading() && rthd_get_reply_via_email() ){
-	echo '<div style="color:#777">'.htmlentities('[!-------REPLY ABOVE THIS LINE-------!]').'</div><br /> ';
-}
+	<head>
+		<title>Email</title>
+	</head>
 
-echo $title;
-$beforeHTML = apply_filters( 'rthd_before_email_body', $body );
-$afterHTML = apply_filters( 'rthd_after_email_body', $body );
+	<body>
 
-if ( ! has_filter( 'rthd_before_email_body' ) ) {
-	$beforeHTML = '';
-}
-if ( ! has_filter( 'rthd_after_email_body' ) ) {
-	$afterHTML = '';
-}
+		<?php
+		if ( $replyflag && rthd_is_enable_mailbox_reading() && rthd_get_reply_via_email() ) {
+			echo '<div style="color: #c5c5c5; font-size: 11px; margin: 10px 0 20px;">' . htmlentities( ':: Reply Above This Line ::' ) . '</div>';
+		}
 
-echo $beforeHTML;
-?>
+		$beforeHTML = apply_filters( 'rthd_before_email_body', $body );
+		$afterHTML = apply_filters( 'rthd_after_email_body', $body );
 
-<div style="border: 1px solid #DFE9f2;padding: 20px;background: #f1f6fa;">
-	<?php echo rthd_content_filter( $body ) ;?>
-	<div style="float: right;color: gray;">
-		<?php echo date( 'l M d, Y H:i e', $date ); ?>
-	</div>
-	<div style="display:block;height:0;clear:both;visibility:hidden;"></div>
-</div>
-<?php echo $afterHTML;
-$signature = rthd_get_email_signature_settings();
-echo  ( ( ! empty( $signature ) ) ? '<div style="color:#666;">' . wpautop( $signature ) . '</div>' : '' ) . '<br/>'
-?>
-</body>
+		if ( ! has_filter( 'rthd_before_email_body' ) ) {
+			$beforeHTML = '';
+		}
+
+		if ( ! has_filter( 'rthd_after_email_body' ) ) {
+			$afterHTML = '';
+		}
+		$body = rthd_replace_placeholder( $body, '{ticket_link}', $title );
+
+		echo $beforeHTML;
+		?>
+
+		<div>
+			<?php echo rthd_content_filter( $body ); ?>
+		</div>
+
+		<?php
+		echo $afterHTML;
+
+		$signature = rthd_get_email_signature_settings();
+
+		echo ( ( ! empty( $signature ) ) ? '<div style="color:#c5c5c5; font-size: 14px;">' . wpautop( $signature ) . '</div>' : '' ) . '<br/>'
+		?>
+
+	</body>
+
 </html>

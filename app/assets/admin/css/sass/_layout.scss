@@ -1,0 +1,21 @@
+.rthd-content-section {
+	background-color: #fff;
+	border: 1px solid $border-dark;
+	@include box-shadow( 0 1px 1px rgba( $black, 0.04 ) );
+	margin-top: 10px;
+
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+
+	padding: 20px;
+}
+
+.rthd-sidebar {
+
+	.postbox {
+		.hndle {
+			cursor: default;
+		}
+	}
+}

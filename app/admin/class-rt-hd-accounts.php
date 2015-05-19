@@ -84,9 +84,9 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 
 			switch ( $column ) {
 				default:
-					if ( in_array( Rt_HD_Module::$post_type, array_keys( $rt_entity->enabled_post_types ) ) && $column == Rt_HD_Module::$post_type ) {
+					if ( in_array( Rt_HD_Module::$post_type, array_keys( $rt_entity->enabled_post_types ) ) && Rt_HD_Module::$post_type == $column ) {
 						$post_details = get_post( $post_id );
-						$pages        = rt_biz_get_post_for_company_connection( $post_id, Rt_HD_Module::$post_type );
+						$pages = rt_biz_get_post_for_company_connection( $post_id, Rt_HD_Module::$post_type );
 						echo balanceTags( '<a href = edit.php?' . $post_details->post_type . '=' . $post_details->ID . '&post_type=' . Rt_HD_Module::$post_type . '>' . count( $pages ) . '</a>' );
 					}
 					break;
@@ -99,16 +99,16 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 		 * @since 0.1
 		 */
 		public function add_new_account_ajax() {
-			$returnArray           = array();
+			$returnArray = array();
 			$returnArray['status'] = false;
-			$accountData           = $_POST['data'];
+			$accountData = $_POST['data'];
 			if ( ! isset( $accountData['new-account-name'] ) ) {
-				$returnArray['status']  = false;
+				$returnArray['status'] = false;
 				$returnArray['message'] = 'Invalid Data Please Check';
 			} else {
 				$post_id = post_exists( $accountData['new-account-name'] );
 				if ( ! empty( $post_id ) && get_post_type( $post_id ) === rt_biz_get_company_post_type() ) {
-					$returnArray['status']  = false;
+					$returnArray['status'] = false;
 					$returnArray['message'] = 'Account Already Exits';
 				} else {
 					if ( ! isset( $accountData['new-account-note'] ) ) {
@@ -126,13 +126,13 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 
 					$post_id = rt_biz_add_company( $accountData['new-account-name'], $accountData['new-account-note'], $accountData['new-account-address'], $accountData['new-account-country'], $accountData['accountmeta'] );
 
-					$post                  = get_post( $post_id );
+					$post = get_post( $post_id );
 					$returnArray['status'] = true;
-					$returnArray['data']   = array(
-						'id'      => $post_id,
-						'label'   => $accountData['new-account-name'],
-						'url'     => admin_url( 'edit.php?' . $post->post_type . '=' . $post->ID . '&post_type=' . $accountData['post_type'] ),
-						'value'   => $post->ID,
+					$returnArray['data'] = array(
+						'id' => $post_id,
+						'label' => $accountData['new-account-name'],
+						'url' => admin_url( 'edit.php?' . $post->post_type . '=' . $post->ID . '&post_type=' . $accountData['post_type'] ),
+						'value' => $post->ID,
 						'imghtml' => get_avatar( $accountData['new-account-name'], 24 ),
 					);
 				}
@@ -152,14 +152,14 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 			}
 
 			$accounts = rt_biz_search_company( $_POST['query'] );
-			$result   = array();
+			$result = array();
 			foreach ( $accounts as $account ) {
 				$result[] = array(
-					'label'   => $account->post_title,
-					'id'      => $account->ID,
-					'slug'    => $account->post_name,
+					'label' => $account->post_title,
+					'id' => $account->ID,
+					'slug' => $account->post_name,
 					'imghtml' => get_avatar( '', 24 ),
-					'url'     => admin_url( 'edit.php?' . $account->post_type . '=' . $account->ID . '&post_type=' . $_POST['post_type'] ),
+					'url' => admin_url( 'edit.php?' . $account->post_type . '=' . $account->ID . '&post_type=' . $_POST['post_type'] ),
 				);
 			}
 
@@ -180,13 +180,13 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 				wp_die( 'Opss!! Invalid request' );
 			}
 
-			$result      = get_post( $_POST['account_id'] );
+			$result = get_post( $_POST['account_id'] );
 			$returnArray = array();
 			if ( $result ) {
-				$returnArray['url']   = admin_url( 'edit.php?' . $result->post_type . '=' . $result->ID . '&post_type=' . $_POST['post_type'] );
+				$returnArray['url'] = admin_url( 'edit.php?' . $result->post_type . '=' . $result->ID . '&post_type=' . $_POST['post_type'] );
 				$returnArray['label'] = $result->post_title;
 
-				$returnArray['id']      = $result->ID;
+				$returnArray['id'] = $result->ID;
 				$returnArray['imghtml'] = get_avatar( $result->post_title, 24 );
 			}
 			echo json_encode( $returnArray );
@@ -213,11 +213,11 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 			$accounts = array_unique( $accounts );
 
 			$oldAccountsString = rt_biz_company_connection_to_string( $post_id );
-			$newAccountsSring  = '';
+			$newAccountsSring = '';
 			if ( ! empty( $accounts ) ) {
 				$accountsArr = array();
 				foreach ( $accounts as $account ) {
-					$newA          = get_post( $account );
+					$newA = get_post( $account );
 					$accountsArr[] = $newA->post_title;
 				}
 				$newAccountsSring = implode( ',', $accountsArr );
@@ -252,6 +252,7 @@ if ( ! class_exists( 'Rt_HD_Accounts' ) ) {
 				rt_biz_connect_post_to_company( $post_type, $post_id, $account );
 			}
 		}
+
 	}
 
 }

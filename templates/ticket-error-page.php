@@ -13,26 +13,26 @@ do_action( 'rthd_ticket_front_page_after_header' );
 global $rthd_messages;
 
 ?>
-<div id="primary" class="content-area">
-	<main id="main" class="site-main" role="main">
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
 
-		<section class="error-404 not-found">
-			<div class="page-content">
-				<div class="rthd-container">
-					<?php
+			<section class="error-404 not-found">
+				<div class="page-content">
+					<div class="rthd-container">
+						<?php
 						foreach ( $rthd_messages as $key => $message ) {
-							if ( $message['displayed'] == 'no' ) {
+							if ( 'no' == $message['displayed'] ) {
 								echo '<div class="' . $message['type'] . '">' . $message['message'] . '</div>';
-								$rthd_messages[$key]['displayed'] = 'yes';
+								$rthd_messages[ $key ]['displayed'] = 'yes';
 							}
 						}
-					?>
+						?>
+					</div>
 				</div>
-			</div>
-		</section>
+			</section>
 
-	</main>
-</div>
+		</main>
+	</div>
 
 <?php
 

@@ -123,7 +123,7 @@ if (!class_exists('Rt_HD_Edd_License')) {
                 );
 
                 // Call the custom API.
-                $response = wp_remote_get( add_query_arg( $api_params, EDD_RT_HELPDESK_STORE_URL ), array( 'timeout' => 15, 'sslverify' => false, ) );
+                $response = wp_remote_get( esc_url_raw( add_query_arg( $api_params, EDD_RT_HELPDESK_STORE_URL ) ), array( 'timeout' => 15, 'sslverify' => false, ) );
 
                 //		var_dump($response);
 
@@ -163,7 +163,7 @@ if (!class_exists('Rt_HD_Edd_License')) {
                 );
 
                 // Call the custom API.
-                $response = wp_remote_get( add_query_arg( $api_params, EDD_RT_HELPDESK_STORE_URL ), array( 'timeout' => 15, 'sslverify' => false, ) );
+                $response = wp_remote_get( esc_url_raw( add_query_arg( $api_params, EDD_RT_HELPDESK_STORE_URL ) ), array( 'timeout' => 15, 'sslverify' => false, ) );
 
                 //		var_dump($response);
 
@@ -195,7 +195,7 @@ if (!class_exists('Rt_HD_Edd_License')) {
             );
 
             // Call the custom API.
-            $response = wp_remote_get( add_query_arg( $api_params, EDD_RT_HELPDESK_STORE_URL ), array( 'timeout' => 15, 'sslverify' => false ) );
+            $response = wp_remote_get( esc_url_raw( add_query_arg( $api_params, EDD_RT_HELPDESK_STORE_URL ) ), array( 'timeout' => 15, 'sslverify' => false ) );
 
 
             if ( is_wp_error( $response ) ) {

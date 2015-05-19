@@ -126,7 +126,7 @@ if ( ! defined( 'EDD_RT_HELPDESK_STORE_URL' ) ) {
 	define( 'EDD_RT_HELPDESK_STORE_URL', 'https://rtcamp.com/' );
 }
 
-if ( ! defined( 'EDD_RT_HELPDESK_ITEM_NAME' ) ){
+if ( ! defined( 'EDD_RT_HELPDESK_ITEM_NAME' ) ) {
 	/**
 	 * define helpdesk item slug
 	 *
@@ -195,23 +195,27 @@ function init_call_rtbiz_hd_flush_rewrite_rules(){
 
 function rthd_welcome_to_helpdesk(){
 	// Bail if no activation redirect
-	if ( ! get_transient( '_rthd_activation_redirect' ) ) {
+	if ( ! get_option( '_rthd_activation_redirect' ) ) {
 		return;
 	}
 
 	// Delete the redirect transient
-	delete_transient( '_rthd_activation_redirect' );
+	delete_option( '_rthd_activation_redirect' );
 
 	// Bail if activating from network, or bulk
 	if ( is_network_admin() || isset( $_GET['activate-multi'] ) ) {
 		return;
 	}
 
-	wp_safe_redirect( admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&page=rthd-'.Rt_HD_Module::$post_type.'-dashboard' ) );
+	if ( rthd_check_wizard_completed() ) {
+		wp_safe_redirect( admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&page=rthd-'.Rt_HD_Module::$post_type.'-dashboard' ) );
+	} else {
+		wp_safe_redirect( admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&page=rthd-setup-wizard' ) );
+	}
 	exit;
 }
 
 function plugin_activation_redirect() {
 	// Add the transient to redirect
-	set_transient( '_rthd_activation_redirect', true, 30 );
+	add_option( '_rthd_activation_redirect', true );
 }

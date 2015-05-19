@@ -129,7 +129,7 @@ if ( ! class_exists( 'Rt_Hd_Help' ) ) {
 					),
 				),
 				'edit-tags.php' => array(
-					array(
+					/*array(
 						'id'       => 'user_group_overview',
 						'title'    => __( 'Overview' ),
 						'content'  => '',
@@ -140,11 +140,11 @@ if ( ! class_exists( 'Rt_Hd_Help' ) ) {
 						'title'    => __( 'Screen Content' ),
 						'content'  => '',
 						'taxonomy' => 'user-group',
-					),
+					),*/
 				),
 			) );
 
-			$documentation_link         = apply_filters( 'rt_hd_help_documentation_link', '#' );
+			$documentation_link         = apply_filters( 'rt_hd_help_documentation_link', 'http://docs.rtcamp.com/rtbiz/' );
 			$support_forum_link         = apply_filters( 'rt_hd_help_support_forum_link', '#' );
 			$this->help_sidebar_content = apply_filters( 'rt_hd_help_sidebar_content', '<p><strong>' . esc_attr( __( 'For More Information : ' ) ) . '</strong></p><p><a href="' . esc_url( $documentation_link ) . '">' . esc_attr( __( 'Documentation' ) ) . '</a></p><p><a href="' . esc_url( $support_forum_link ). '">' . esc_attr( __( 'Support Forum' ) ) . '</a></p>' );
 
@@ -199,15 +199,14 @@ if ( ! class_exists( 'Rt_Hd_Help' ) ) {
 		}
 
 		function add_tab( $args ) {
-			get_current_screen()->add_help_tab(
-				array(
-					'id'       => $args['id'],
-					'title'    => $args['title'],
-					// You can directly set content as well.
-					//				'content' => $args[ 'content' ],
-					// This is for some extra content & logic
-					'callback' => array( $this, 'tab_content' ),
-				) );
+			get_current_screen()->add_help_tab( array(
+				                                    'id'       => $args['id'],
+				                                    'title'    => $args['title'],
+				                                    // You can directly set content as well.
+				                                    //				'content' => $args[ 'content' ],
+				                                    // This is for some extra content & logic
+				                                    'callback' => array( $this, 'tab_content' ),
+			                                    ) );
 			get_current_screen()->set_help_sidebar( $this->help_sidebar_content );
 		}
 
@@ -218,37 +217,23 @@ if ( ! class_exists( 'Rt_Hd_Help' ) ) {
 				case 'edit_ticket_overview':
 					?>
 					<p>
-						<?php _e( 'From this screen you can add new Ticket into the system.' ); ?>
-						<?php _e( 'You can fill up optional additional details related to product such as title details, Subscriber, Attachment, External link etc.' ); ?>
-						<?php _e( 'Those can be updated later on from the Edit ticket screen as well.' ); ?>
+						<?php _e( 'Screen to add a new ticket. Only staff can create ticket from this screen. ' ); ?>
 					</p>
 					<?php
 					break;
 				case 'create_Ticket_screen_content':
 				case 'edit_ticket_screen_content':
 					?>
-					<p><?php _e( 'There are a few sections where you can save essential information about Ticket: ' ); ?></p>
 					<ul>
-						<li><?php _e( 'There is a textbox for the title of a product.' ); ?></li>
-						<li><?php _e( 'You can also put any description/comments related to the product in to the rich text editor provided.' ); ?></li>
-						<li>
-							<?php _e( 'There\'s a follow up.' ); ?>
-							<?php _e( 'You can mark the checkbox accordingly for that.' ); ?>
-						</li>
-						<li>
-							<?php _e( 'There might be other extra attributes metaboxes depending upon how you add an attribute from the attributes page' ); ?>
-							<a href="<?php echo esc_url( add_query_arg( array( 'page' => Rt_Biz_Attributes::$attributes_page_slug ), admin_url( 'admin.php' ) ) ); ?>"><?php _e( 'here' ); ?></a>.
-						</li>
-						<li>
-							<?php _e( 'You will see a numerous "Connected X" metaboxes in the side colum.' ); ?>
-							<?php _e( 'They are the supportive modules of the system which are connected to the Ticket.' ); ?>
-							<?php _e( 'E.g., An Customer is connected to a product since a contact can be a part of an company.' ); ?>
-							<?php _e( 'You can select any entity from the metabox to connect it to the contact.' ); ?>
-						</li>
-						<li>
-							<?php _e( 'There might be metaboxes visible depending upon the plugins you\'ve activated on the site.' ); ?>
-							<?php _e( 'E.g., If HRM Module is activated then "Documents" metabox & "Leaves" metabox also will be displayed for those who are team mates.' ); ?>
-						</li>
+						<li><strong><?php _e( 'Title - ' ); ?></strong><?php _e( 'Ticket title' ); ?></li>
+						<li><strong><?php _e( 'Ticket Information - ' ); ?></strong><?php _e( 'Has information about ticket creations date, customer who created ticket, ticket assignee and status.' ); ?></li>
+						<li><strong><?php _e( 'Offerings - ' ); ?></strong><?php _e( 'The offering/product for which customer has created a ticket' ); ?></li>
+						<li><strong><?php _e( 'Team - ' ); ?></strong><?php _e( ' Staff members can update the relevant user departments the ticket belongs to.' ); ?></li>
+						<li><strong><?php _e( 'Participant (Customers) - ' ); ?></strong><?php _e( 'Non-staff people on ticket who have been added by ticket author/customer' ); ?></li>
+						<li><strong><?php _e( 'Participant (Staff) - ' ); ?></strong><?php _e( 'Staff people (other than assignee) on ticket.' ); ?></li>
+						<li><strong><?php _e( 'Related Tickets - ' ); ?></strong><?php _e( 'Option for staff to connect two tickets ' ); ?></li>
+						<li><strong><?php _e( 'Teams - ' ); ?></strong><?php _e( 'Team that is handling a ticket' ); ?></li>
+						<li><strong><?php _e( 'Blacklist Contacts - ' ); ?></strong><?php _e( "To blacklist contacts from which spam tickets are being created. A blacklisted contact can't create tickets and can't add replies to a ticket." ); ?></li>
 					</ul>
 					<?php
 					break;
@@ -270,35 +255,22 @@ if ( ! class_exists( 'Rt_Hd_Help' ) ) {
 					<?php
 					break;
 				case 'ticket_list_overview':
-					$title = __( '' );
-					if ( isset( $_GET['rt-biz-my-team'] ) && $_GET['rt-biz-my-team'] ) {
-						$title = __( 'Employees' );
-					}
 					?>
 					<p>
-						<?php echo esc_attr( __( 'This screen provides access to all' )  . ' ' . esc_attr( $title ). esc_attr( __( '. You can customize the display of this screen to suit your workflow.' ) ) ); ?>
+						<?php echo esc_attr( __( 'This screen lists all the Helpdesk tickets on which the logged in user is a part of. The WordPress admin will see all tickets by default.  ' ) );?>
 					</p>
 					<?php
 					break;
 				case 'ticket_list_screen_content':
 					?>
-					<p><?php _e( 'You can customize the display of this screen’s contents in a number of ways :' ); ?></p>
 					<ul>
-						<li><?php _e( 'You can hide/display columns based on your needs and decide how many Tickets to list per screen using the Screen Options tab.' ); ?></li>
-						<li>
-							<?php _e( 'You can filter the list of Tickets by status using the text links in the upper left to show All, Published, Draft, or Trashed Tickets.' ); ?>
-							<?php _e( 'The default view is to show all Tickets.' ); ?>
-						</li>
-						<li>
-							<?php _e( 'You can view Tickets in a simple title list or with an excerpt.' ); ?>
-							<?php _e( 'Choose the view you prefer by clicking on the icons at the top of the list on the right.' ); ?>
-						</li>
-						<li>
-							<?php _e( 'You can refine the list to show only Tickets in a specific category or from a specific month by using the dropdown menus above the Tickets list.' ); ?>
-							<?php _e( 'Click the Filter button after making your selection.' ); ?>
-							<?php _e( 'You also can refine the list by clicking on the author, company or tag in the Tickets list.' ); ?>
-						</li>
-						<li><?php _e( 'You can also see the entity counts for respective modules, if activated, such as Lead Count, Ticket Count etc.' ) ?></li>
+						<li><strong><?php _e( 'All, Unanswered, Answered, Solved - ' ); ?></strong><?php _e( 'Filters to see ticket sorted by status. All tickets are listed in latest first order.' ); ?></li>
+						<li><strong><?php _e( 'Filter by status, Filter by assignee, Filter by offering - ' ); ?></strong><?php _e( 'Used to sort tickets.' ); ?></li>
+						<li><strong><?php _e( 'Assignee - ' ); ?></strong><?php _e( 'Staff member to whom ticket is assigned.' ); ?></li>
+						<li><strong><?php _e( 'Ticket Author - ' ); ?></strong><?php _e( 'Customer who has created the ticket.' ); ?></li>
+						<li><strong><?php _e( 'Reply count  - ' ); ?></strong><?php _e( 'The number replies added on a ticket.' ); ?></li>
+						<li><strong><?php _e( 'Last Reply - ' ); ?></strong><?php _e( 'Customer/staff who has last replied to the ticket.' ); ?></li>
+						<li><strong><?php _e( 'Participants (Customer) - ' ); ?></strong><?php _e( 'Non-staff people on ticket who have been added by ticket author/customer.' ); ?></li>
 					</ul>
 					<?php
 					break;
@@ -356,13 +328,10 @@ if ( ! class_exists( 'Rt_Hd_Help' ) ) {
 						<?php _e( 'This screen will let you add attribute.' ) ?>
 						<?php //_e( 'It will show the various chart distribution based on the attributes assigned to the contacts & their terms.' ); ?>
 					</p>
-
-
-
 					<?php
 					break;
 				default:
-					do_action( 'rt_biz_help_tab_content', $screen, $tab );
+					do_action( 'rtbiz_hd_help_tab_content', $screen, $tab );
 					break;
 			}
 		}

@@ -112,6 +112,9 @@ class test_Rt_HD_Tickets_Operation extends RT_WP_TestCase {
 
 			$attid = $rt_hd_rt_attributes->add_attribute( 'demo_unittest_meta', 'demo_unittest_mata', 'meta', 'text' );
 			$rt_hd_rt_attributes->add_attribute_relations( $attid, array( Rt_HD_Module::$post_type ) );
+
+			$rt_hd_rt_attributes->attr_cap = array();
+			$rt_hd_rt_attributes->register_attribute_mappings();
 		}
 
 		$term = wp_insert_term(
@@ -190,4 +193,3 @@ class test_Rt_HD_Tickets_Operation extends RT_WP_TestCase {
 		$this->assertEquals( array( '2'), get_post_meta( $this->post_ID, '_rtbiz_hd_subscribe_to', true ) );
 	}
 }
- 

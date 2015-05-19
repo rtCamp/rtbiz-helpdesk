@@ -1,0 +1,47 @@
+.rthd-sidebar {
+	.button {
+		display: block;
+		opacity: 0.8;
+		position: relative;
+		text-decoration: none;
+	}
+}
+
+.rthd-social-share {
+
+	.dashicons {
+		font-size: 18px;
+		position: absolute;
+		right: 10px;
+		top: 4px;
+	}
+
+	.twitter {
+		.dashicons {
+			color: #45b0e3;
+		}
+	}
+
+	.facebook {
+		.dashicons {
+			color: #3b5998;
+		}
+	}
+
+
+	.wordpress {
+		.dashicons {
+			color: #21759b;
+		}
+	}
+
+	.rss {
+		.dashicons {
+			color: #FF6600;
+		}
+	}
+
+	p:last-child {
+		margin-bottom: 0;
+	}
+}

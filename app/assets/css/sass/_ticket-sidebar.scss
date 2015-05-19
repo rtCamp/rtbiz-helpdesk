@@ -1,0 +1,56 @@
+.rthd-sidebar {
+	font-size: 14px;
+	float: right;
+	position: relative;
+	width: 26%;
+
+	&.rthd-sidebar a {
+		border: 0; // 2015
+		text-decoration: none;
+	}
+
+	.rt-hd-ticket-history a{
+		display: inline-block;
+		width: 65%;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.rt-hd-ticket-info-header {
+		display: inline-block;
+		font-size: 16px;
+		line-height: 1;
+		margin-bottom: 0;
+		margin-top: 0;
+	}
+
+	label {
+		display: block;
+		margin-bottom: 4px;
+	}
+
+	.rthd-participants {
+		display: inline-block;
+	}
+
+	select {
+		font-size: inherit;
+		width: 100%;
+	}
+
+	.helpdeskspinner {
+		box-shadow: 0 0 0;
+		float: right;
+		margin-top: 5px;
+	}
+}
+
+.rthd-participants-wrap {
+    margin-bottom: 10px;
+}
+
+.rt-hd-assign-me {
+    display: inline-block;
+    margin: 5px 0 0;
+}

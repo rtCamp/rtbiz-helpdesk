@@ -49,13 +49,13 @@ if ( ! class_exists( 'Rt_HD_ACL' ) ) {
 			$settings               = rthd_get_redux_settings();
 			$module_key             = rt_biz_sanitize_module_key( RT_HD_TEXT_DOMAIN );
 			$modules[ $module_key ] = array(
-				'label'      => isset( $settings['rthd_menu_label'] ) ? $settings['rthd_menu_label'] : 'Helpdesk',
+				'label'      => 'Helpdesk',
 				'post_types' => array( Rt_HD_Module::$post_type ),
 				'department_support' => array( Rt_HD_Module::$post_type ),
 				'offering_support' => array( Rt_HD_Module::$post_type ),
 				'setting_option_name' => Redux_Framework_Helpdesk_Config::$hd_opt, // Use for setting page acl to add manage_options capability
-				'setting_page_url' => admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&page=rthd-settings'), //
-			    'email_template_support' =>array( Rt_HD_Module::$post_type ),
+				'setting_page_url' => admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&page=rthd-settings' ), //
+			    'email_template_support' => array( Rt_HD_Module::$post_type ),
 			);
 			return $modules;
 		}

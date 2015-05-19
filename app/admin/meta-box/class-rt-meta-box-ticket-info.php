@@ -7,18 +7,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /*
-* To change this license header, choose License Headers in Project Properties.
-* To change this template file, choose Tools | Templates
-* and open the template in the editor.
-*/
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 
 /**
  * Description of RT_HD_Admin_Meta_Boxes
  *
  * @since rt-Helpdesk 0.1
  */
-
 if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
+
 	class RT_Meta_Box_Ticket_Info {
 
 		/**
@@ -28,19 +28,18 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 		 */
 		public static function ui( $post ) {
 
-			global $rt_hd_module, $rt_hd_attributes;
+			global $rt_hd_module, $rt_hd_attributes, $rt_hd_cpt_tickets;
 			$labels    = $rt_hd_module->labels;
 			$post_type = Rt_HD_Module::$post_type;
 
 			$create = new DateTime( $post->post_date );
 
-			$modify     = new DateTime( $post->post_modified );
 			$createdate = $create->format( 'M d, Y h:i A' );
-			$modifydate = $modify->format( 'M d, Y h:i A' );
 
 			$post_author = $post->post_author;
 
-			$rtcamp_users = Rt_HD_Utils::get_hd_rtcamp_user(); ?>
+			$rtcamp_users = Rt_HD_Utils::get_hd_rtcamp_user();
+			?>
 
 			<style type="text/css">
 				.hide {
@@ -53,177 +52,220 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 					display: none
 				}
 			</style>
-            <input type="hidden" name="rthd_check_matabox" value="true">
+			<input type="hidden" name="rthd_check_matabox" value="true">
 			<div class="row_group">
-                    <span class="prefix" title="<?php _e( 'Assignee', RT_HD_TEXT_DOMAIN ); ?>"><label
-						for="post[post_author]"><strong><?php _e( 'Assignee' ); ?></strong></label></span> <select
-					name="post[post_author]"><?php
-			if ( ! empty( $rtcamp_users ) ) {
-				foreach ( $rtcamp_users as $author ) {
-					if ( $author->ID == $post_author ) {
-						$selected = ' selected';
-					} else {
-						$selected = ' ';
+				<p>
+					<span class="prefix" title="<?php _e( 'Assignee', RT_HD_TEXT_DOMAIN ); ?>"><label
+							for="post[post_author]"><strong><?php _e( 'Assignee' ); ?></strong></label>
+					</span>
+				</p>
+
+				<select name="post[post_author]"><?php
+				if ( ! empty( $rtcamp_users ) ) {
+					foreach ( $rtcamp_users as $author ) {
+						if ( $author->ID == $post_author ) {
+							$selected = ' selected';
+						} else {
+							$selected = ' ';
+						}
+						echo '<option value="' . esc_attr( $author->ID ) . '"' . esc_attr( $selected ) . '>' . esc_attr( $author->display_name ) . '</option>';
 					}
-					echo '<option value="' . esc_attr( $author->ID ) . '"' . esc_attr( $selected ) . '>' . esc_attr( $author->display_name ) . '</option>';
-				}
-			} ?>
+				} ?>
 				</select>
 			</div>
 
 			<div class="row_group">
-				<span class="prefix"
-				      title="<?php _e( 'Status' ); ?>"><label><strong><?php _e( 'Status', RT_HD_TEXT_DOMAIN ); ?></strong></label></span><?php
-			$pstatus = '';
-			if ( isset( $post->ID ) ) {
-				$pstatus = $post->post_status;
-			}
-			$post_status = $rt_hd_module->get_custom_statuses();
-
-			$default_wp_status = array( 'auto-draft', 'draft' );
-			if ( in_array( $pstatus, $default_wp_status ) ) {
-				$pstatus = $post_status[0]['slug'];
-			}
-			$custom_status_flag = true;?>
-				<select id="rthd_post_status" class="right" name="post_status"><?php
-			foreach ( $post_status as $status ) {
-				if ( $status['slug'] == $pstatus ) {
-					$selected           = 'selected="selected"';
-					$custom_status_flag = false;
-				} else {
-					$selected = '';
-				}
-				printf( '<option value="%s" %s >%s</option>', $status['slug'], $selected, $status['name'] );
-			}
-			if ( $custom_status_flag && isset( $post->ID ) ) {
-				echo '<option selected="selected" value="' . esc_attr( $pstatus ) . '">' . esc_attr( $pstatus ) . '</option>';
-			} ?>
-				</select>
-			</div>
-
-			<div class="row_group">
-				<span class="prefix" title="<?php _e( 'Created By', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Created By', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
-<!--				<input type="text" name="created_by" class="user-autocomplete" placeholder="Search for User" />-->
-				<div id="selected_user">
+				<p>
+					<span class="prefix" title="<?php _e( 'Status' ); ?>">
+						<label><strong><?php _e( 'Status', RT_HD_TEXT_DOMAIN ); ?></strong></label>
+					</span>
+				</p>
 				<?php
+				$pstatus = '';
+				if ( isset( $post->ID ) ) {
+					$pstatus = $post->post_status;
+				}
+				$post_status = $rt_hd_module->get_custom_statuses();
+
+				$default_wp_status = array( 'auto-draft', 'draft' );
+				if ( in_array( $pstatus, $default_wp_status ) ) {
+					$pstatus = $post_status[0]['slug'];
+				}
+				$custom_status_flag = true;
+				?>
+				<select id="rthd_post_status" class="right" name="post_status"><?php
+				foreach ( $post_status as $status ) {
+					if ( $status['slug'] == $pstatus ) {
+						$selected           = 'selected="selected"';
+						$custom_status_flag = false;
+					} else {
+						$selected = '';
+					}
+					printf( '<option value="%s" %s >%s</option>', $status['slug'], $selected, $status['name'] );
+				}
+				if ( $custom_status_flag && isset( $post->ID ) ) {
+					echo '<option selected="selected" value="' . esc_attr( $pstatus ) . '">' . esc_attr( $pstatus ) . '</option>';
+				} ?>
+				</select>
+			</div>
+
+			<div class="row_group">
+				<p>
+					<span class="prefix" title="<?php _e( 'Created By', RT_HD_TEXT_DOMAIN ); ?>">
+						<label><strong><?php _e( 'Created By', RT_HD_TEXT_DOMAIN ); ?></strong></label>
+					</span>
+				</p>
+				<!--				<input type="text" name="created_by" class="user-autocomplete" placeholder="Search for User" />-->
+				<div id="selected_user">
+					<?php
 					$created_by = get_user_by( 'id', get_post_meta( $post->ID, '_rtbiz_hd_created_by', true ) );
-					if ( ! empty( $created_by ) ) { ?>
+					if ( ! empty( $created_by ) ) {
+						?>
 						<ul>
-							<li class="rthd-info-meta-created-by-li">
-								 <?php echo get_avatar( $created_by->user_email, 25 ); ?>
-<!--								<a href="#deleteContactUser" class="delete_row">×</a><br>-->
-								<a class="rthd-info-meta-created-by heading" target="_blank" href="<?php echo rthd_biz_user_profile_link( $created_by->user_email );?>"><?php echo $created_by->display_name; ?></a>
-								<input type="hidden" name="post[rthd_created_by]" value="<?php echo $created_by->ID; ?>" />
+								<li class="rthd-info-meta-created-by-li">
+								<p>
+									<?php
+									add_filter( 'get_avatar', array( $rt_hd_cpt_tickets, 'add_gravatar_class' ) );
+
+									echo get_avatar( $created_by->user_email, 25 );
+
+									remove_filter( 'get_avatar', array( $rt_hd_cpt_tickets, 'add_gravatar_class' ) );
+									?>
+									<!--								<a href="#deleteContactUser" class="delete_row">×</a><br>-->
+									<a class="rthd-info-meta-created-by heading" target="_blank"
+									   href="<?php echo rthd_biz_user_profile_link( $created_by->user_email ); ?>"><?php echo $created_by->display_name; ?></a>
+									<input type="hidden" name="post[rthd_created_by]"
+									       value="<?php echo $created_by->ID; ?>"/>
+								</p>
 							</li>
 
 						</ul>
 					<?php } ?>
 				</div>
-<!--				<script>
-					jQuery(document ).ready(function($) {
-						if ( jQuery( ".user-autocomplete" ).length > 0 ) {
-							jQuery( ".user-autocomplete" ).autocomplete( {
-								source: function( request, response ) {
-									$.ajax( {
-									 url: ajaxurl,
-									 dataType: "json",
-									 type: 'post',
-									 data: {
-									     action: 'seach_user_from_name',
-									     maxRows: 10,
-									     query: request.term
-									 },
-									 success: function( data ) {
-									     response( $.map( data, function( item ) {
-									         return {
-									             id: item.id,
-									             imghtml: item.imghtml,
-									             label: item.label,
-										         editlink: item.editlink
-									         }
-									     } ) );
-									 }
-									} );
-								}, minLength: 2,
-								select: function( event, ui ) {
-									jQuery( "#selected_user" ).html( "<ul> <li class='rthd-info-meta-created-by-li'>"+ ui.item.imghtml +"<a href='#deleteContactUser' class='delete_row'>×</a><br> <a class='rthd-info-meta-created-by heading' target='_blank' href='"+ui.item.editlink+"'> "+ ui.item.label + "</a> <input type='hidden' name='post[rthd_created_by]' value='" + ui.item.id + "' /></div></li> </ul>" );
-									jQuery( ".user-autocomplete" ).val( "" );
-									return false;
-								}
-							} ).data( 'ui-autocomplete' )._renderItem = function( ul, item ) {
-								return $( '<li></li>' ).data( 'ui-autocomplete-item', item ).append( '<a>' + item.imghtml + '&nbsp;' + item.label + '</a>' ).appendTo( ul );
-							};
+				<!--				<script>
+						jQuery(document ).ready(function($) {
+							if ( jQuery( ".user-autocomplete" ).length > 0 ) {
+								jQuery( ".user-autocomplete" ).autocomplete( {
+									source: function( request, response ) {
+										$.ajax( {
+										 url: ajaxurl,
+										 dataType: "json",
+										 type: 'post',
+										 data: {
+											 action: 'search_user_from_name',
+											 maxRows: 10,
+											 query: request.term
+										 },
+										 success: function( data ) {
+											 response( $.map( data, function( item ) {
+												 return {
+													 id: item.id,
+													 imghtml: item.imghtml,
+													 label: item.label,
+													 editlink: item.editlink
+												 }
+											 } ) );
+										 }
+										} );
+									}, minLength: 2,
+									select: function( event, ui ) {
+										jQuery( "#selected_user" ).html( "<ul> <li class='rthd-info-meta-created-by-li'>"+ ui.item.imghtml +"<a href='#deleteContactUser' class='delete_row'>×</a><br> <a class='rthd-info-meta-created-by heading' target='_blank' href='"+ui.item.editlink+"'> "+ ui.item.label + "</a> <input type='hidden' name='post[rthd_created_by]' value='" + ui.item.id + "' /></div></li> </ul>" );
+										jQuery( ".user-autocomplete" ).val( "" );
+										return false;
+									}
+								} ).data( 'ui-autocomplete' )._renderItem = function( ul, item ) {
+									return $( '<li></li>' ).data( 'ui-autocomplete-item', item ).append( '<a>' + item.imghtml + '&nbsp;' + item.label + '</a>' ).appendTo( ul );
+								};
 
-							$( document ).on( "click", "a[href=#deleteContactUser]", function() {
-								$( this ).parent().remove();
-							} );
-						}
+								$( document ).on( "click", "a[href=#deleteContactUser]", function() {
+									$( this ).parent().remove();
+								} );
+							}
 
-					});
-				</script>
--->
+						});
+					</script>
+					-->
 			</div>
 
 			<div class="row_group">
-				<span class="prefix"
-				      title="<?php _e( 'Created On', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Created On', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
-<!--				<input class="datetimepicker moment-from-now" type="text" placeholder="Select Created On"-->
-				<input class="moment-from-now" type="text" placeholder="Select Created On"
-				       value="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>"
-				       title="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>" readonly="readonly">
-<!--				<input-->
-<!--					name="post[post_date]" type="hidden"-->
-<!--					value="--><?php //echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?><!--"/>-->
+				<p>
+					<span class="prefix" title="<?php _e( 'Created On', RT_HD_TEXT_DOMAIN ); ?>">
+						<label><strong><?php _e( 'Created On', RT_HD_TEXT_DOMAIN ); ?></strong></label>
+					</span>
+				</p>
+
+				<p>
+					<input class="moment-from-now" type="text" placeholder="Select Created On"
+					       value="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>"
+					       title="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>"
+					       readonly="readonly">
+				</p>
 			</div>
 
-			<div class="row_group">
-				<span class="prefix"
-				      title="<?php _e( 'Last Modified On', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Last Modified On', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
-				<input class="moment-from-now" type="text" placeholder="Modified on Date"
-				       value="<?php echo esc_attr( $modifydate ); ?>" title="<?php echo esc_attr( $modifydate ); ?>"
-				       readonly="readonly">
-			</div>
 			<?php
+			// Last reply on Field
+			$comment = get_comments( array( 'post_id' => $post->ID, 'number' => 1 ) );
+			if ( ! empty( $comment[0] ) ) {
+				$comment    = $comment[0];
+				$modify     = new DateTime( $comment->comment_date );
+				$modifydate = $modify->format( 'M d, Y h:i A' );
+				?>
+				<div class="row_group">
+					<p>
+						<span class="prefix" title="<?php _e( 'Last Reply On', RT_HD_TEXT_DOMAIN ); ?>">
+							<label><strong><?php _e( 'Last Reply On', RT_HD_TEXT_DOMAIN ); ?></strong></label>
+						</span>
+					</p>
+					<input class="moment-from-now" type="text" placeholder="Last Reply On Date"
+					       value="<?php echo esc_attr( $modifydate ); ?>" title="<?php echo esc_attr( $modifydate ); ?>"
+					       readonly="readonly">
+				</div>
+			<?php
+			}
+
 			//adult content
 			if ( rthd_get_redux_adult_filter() ) {
 				$text = '';
-				$val = rthd_get_adult_ticket_meta( $post->ID );
-				if ( 'yes' == $val ){
+				$val  = rthd_get_adult_ticket_meta( $post->ID );
+				if ( 'yes' == $val ) {
 					$text = 'checked="checked"';
 				}
 				?>
-			<div class="row_group">
-				<span class="prefix"
-				      title="<?php _e( 'Adult Content', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Adult Content', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
-				<input type="checkbox" name="post[adult_ticket]" style="width: auto" <?php echo $text; ?>
-				       value="1">
-			</div>
+				<div class="row_group">
+					<p>
+						<span class="prefix" title="<?php _e( 'Adult Content', RT_HD_TEXT_DOMAIN ); ?>">
+							<label><strong><?php _e( 'Adult Content', RT_HD_TEXT_DOMAIN ); ?></strong></label>
+						</span>
+						<input type="checkbox" name="post[adult_ticket]" <?php echo $text; ?> value="1" />
+					</p>
+				</div>
 			<?php } ?>
 
 			<?php
 			$rthd_unique_id = get_post_meta( $post->ID, '_rtbiz_hd_unique_id', true );
-			if ( ! empty( $rthd_unique_id ) && rthd_is_unique_hash_enabled() ) { ?>
+			if ( ! empty( $rthd_unique_id ) && rthd_is_unique_hash_enabled() ) {
+				?>
 				<div class="row_group">
-				<span class="prefix"
-				      title="<?php _e( 'Public URL', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Unique Hash URL', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
+					<span class="prefix"
+					      title="<?php _e( 'Public URL', RT_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Unique Hash URL', RT_HD_TEXT_DOMAIN ); ?></strong></label></span>
 
-				<div class="rthd_attr_border">
-					<a class="rthd_public_link" target="_blank"
-					   href="<?php echo rthd_is_unique_hash_enabled() ? rthd_get_unique_hash_url( $post->ID ) : get_post_permalink( $post->ID ); ?>"><?php _e( 'Link' ); ?></a>
+					<div class="rthd_attr_border">
+						<a class="rthd_public_link" target="_blank"
+						   href="<?php echo rthd_is_unique_hash_enabled() ? rthd_get_unique_hash_url( $post->ID ) : get_post_permalink( $post->ID ); ?>"><?php _e( 'Link' ); ?></a>
+					</div>
 				</div>
-				</div>
-			<?php }
+			<?php
+			}
 
 			$meta_attributes = rthd_get_attributes( $post_type, 'meta' );
 			foreach ( $meta_attributes as $attr ) {
 				?>
-				<div class="row_group"><?php
-				$rt_hd_attributes->render_meta( $attr, isset( $post->ID ) ? $post->ID : '', true ); ?>
+				<div
+					class="row_group"><?php $rt_hd_attributes->render_meta( $attr, isset( $post->ID ) ? $post->ID : '', true ); ?>
 				</div><?php
 			}
 
 			do_action( 'rt_hd_after_ticket_information', $post );
-
 		}
 
 		/**
@@ -234,27 +276,26 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 		public static function save( $post_id, $post ) {
 
 			global $rt_hd_tickets_operation;
-            if (isset($_REQUEST['rthd_check_matabox']) && 'true' == $_REQUEST['rthd_check_matabox'] ){
-                $newTicket = $_POST['post'];
-                $datetimeformat =  'M d, Y h:i A';
-            }
-            else{
-                $newTicket = $_POST;
-                $datetimeformat = 'Y-m-d H:i:s';
-            }
-			$newTicket = ( array ) $newTicket;
+			if ( isset( $_REQUEST['rthd_check_matabox'] ) && 'true' == $_REQUEST['rthd_check_matabox'] ) {
+				$newTicket      = $_POST['post'];
+				$datetimeformat = 'M d, Y h:i A';
+			} else {
+				$newTicket      = $_POST;
+				$datetimeformat = 'Y-m-d H:i:s';
+			}
+			$newTicket = (array) $newTicket;
 
 			//Adult Filter
 			if ( rthd_get_redux_adult_filter() ) {
-				if ( $newTicket[ 'adult_ticket' ] ) {
+				if ( $newTicket['adult_ticket'] ) {
 					rthd_save_adult_ticket_meta( $post_id, 'yes' );
-				} else{
+				} else {
 					rthd_save_adult_ticket_meta( $post_id, 'no' );
 				}
 			}
 			//Create Date
 			$creationdate = $newTicket['post_date'];
-			if ( isset( $creationdate ) && $creationdate != '' ) {
+			if ( isset( $creationdate ) && '' != $creationdate ) {
 				try {
 					$dr                         = date_create_from_format( $datetimeformat, $creationdate );
 					$timeStamp                  = $dr->getTimestamp();
@@ -274,7 +315,7 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 				'post_author'   => $newTicket['post_author'],
 				'post_date'     => $newTicket['post_date'],
 				'post_date_gmt' => $newTicket['post_date_gmt'],
-			    'post_name'     => $post_id,
+				'post_name'     => $post_id,
 			);
 
 			$dataArray = array(
@@ -291,7 +332,6 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 
 			$rt_hd_tickets_operation->ticket_default_field_update( $postArray, $dataArray, $post->post_type, $post_id, $created_by );
 			$rt_hd_tickets_operation->ticket_attribute_update( $newTicket, $post->post_type, $post_id, 'meta' );
-
 		}
 
 		public static function custom_post_status_rendar() {
@@ -319,8 +359,8 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 
 				echo '<script>
                         jQuery(document).ready(function($) {
-                            $("select#post_status").html("'. $option .'");
-                            $(".inline-edit-status select").html("'. $option .'");
+                            $("select#post_status").html("' . $option . '");
+                            $(".inline-edit-status select").html("' . $option . '");
 
                             $(document).on("change","#rthd_post_status",function(){
                                 $("#post_status").val($(this).val());
@@ -329,5 +369,7 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
                         </script>';
 			}
 		}
+
 	}
+
 }

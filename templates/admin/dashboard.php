@@ -1,15 +1,13 @@
 <?php
-
 /**
  * rtHelpdesk Studio Dashboard Template
  *
  * @author udit
  */
-
 global $rt_hd_dashboard;
 $author_cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
 $settings = rthd_get_redux_settings();
-$welcome_label = $settings['rthd_menu_label'];
+$welcome_label = 'Helpdesk';
 ?>
 <div class="wrap">
 
@@ -27,12 +25,11 @@ $welcome_label = $settings['rthd_menu_label'];
 		if ( $hide ) {
 			$classes .= ' hidden';
 		}
-	?>
+		?>
 
-		<div id="rthd-welcome-panel" class="<?php echo esc_attr( $classes ); ?>">
-<!--			<img class="rthd-banner-dashboard" src="http://placehold.it/1150x240&text=rtBiz+Helpdesk">-->
+		<div id="welcome-panel" class="<?php echo esc_attr( $classes ); ?>">
 			<?php wp_nonce_field( 'rthd-welcome-panel-nonce', 'rthdwelcomepanelnonce', false ); ?>
-			<a class="welcome-panel-close" href="<?php echo esc_url( admin_url( 'admin.php?page=' . $rt_hd_dashboard->screen_id . '&rthdwelcome=0' ) ); ?>"><?php _e( 'Dismiss' ); ?></a>
+			<a class="welcome-panel-close" href="<?php echo esc_url( admin_url( 'admin.php?page=rthd-' . esc_html( Rt_HD_Module::$post_type ) . '-dashboard&rthdwelcome=0' ) ); ?>"><?php _e( 'Dismiss' ); ?></a>
 			<?php
 			/**
 			 * Add content to the welcome panel on the admin dashboard.
@@ -41,12 +38,11 @@ $welcome_label = $settings['rthd_menu_label'];
 			do_action( 'rt_hd_welcome_panel' );
 			?>
 		</div>
-<?php } ?>
+	<?php } ?>
 
 	<div id="poststuff">
 
 		<div id="dashboard-widgets" class="metabox-holder">
-
 
 			<div id="postbox-container-1" class="postbox-container">
 				<?php do_meta_boxes( '', 'column1', null ); ?>
@@ -63,9 +59,11 @@ $welcome_label = $settings['rthd_menu_label'];
 			<div id="postbox-container-4" class="postbox-container">
 				<?php do_meta_boxes( '', 'column4', null ); ?>
 			</div>
+
 			<div id="postbox-container-4" class="postbox-container">
 				<?php do_meta_boxes( '', 'column5', null ); ?>
 			</div>
+
 			<div id="postbox-container-4" class="postbox-container">
 				<?php do_meta_boxes( '', 'column6', null ); ?>
 			</div>
