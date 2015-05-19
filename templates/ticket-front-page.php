@@ -1,4 +1,5 @@
 <?php
+
 /*
  * ticket front page Template
  *
