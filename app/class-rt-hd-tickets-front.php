@@ -65,7 +65,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 
 		function restrict_seo_on_helpdesk() {
 			add_filter( 'jetpack_enable_open_graph', '__return_false' );
-			if ( isset ( $GLOBALS['wpseo_og'] ) ) {
+			if ( isset( $GLOBALS['wpseo_og'] ) ) {
 				remove_action( 'wpseo_head', array( $GLOBALS['wpseo_og'], 'opengraph' ), 30 );
 			}
 			remove_action( 'wpseo_head', array( 'WPSEO_GooglePlus', 'get_instance' ), 35 );

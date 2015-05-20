@@ -258,7 +258,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 			} // related ticket - ticket id searchable
 			elseif ( $ctype->name == self::$post_type.'_to_'.self::$post_type ) {
 				// check if search string is number
-				if ( ! empty($args['p2p:search']) && is_numeric( $args['p2p:search'] ) ) {
+				if ( ! empty( $args['p2p:search'] ) && is_numeric( $args['p2p:search'] ) ) {
 					// if it is number then search it in post ID
 					$args['post__in'] = array( $args['p2p:search'] );
 					$args['p2p:search'] = '';

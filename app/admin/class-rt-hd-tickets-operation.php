@@ -97,11 +97,11 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 					if ( is_wp_error( $post_id ) ) {
 						return false;
 					}
-					update_post_meta( $post_id, '_rtbiz_hd_created_by', ( empty( $created_by) ) ? get_current_user_id() : $created_by );
+					update_post_meta( $post_id, '_rtbiz_hd_created_by', ( empty( $created_by ) ) ? get_current_user_id() : $created_by );
 					$dataArray = array_merge( $dataArray, array(
 						'date_create'     => $postArray['post_date'],
 						'date_create_gmt' => $postArray['post_date_gmt'],
-						'user_created_by' => ( empty( $created_by) ) ? get_current_user_id() : $created_by,
+						'user_created_by' => ( empty( $created_by ) ) ? get_current_user_id() : $created_by,
 					) );
 				} else { //update post
 					// unhook this function so it doesn't loop infinitely
@@ -117,7 +117,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 							$dataArray = array_merge( $dataArray, array(
 								'date_create'     => current_time( 'mysql' ),
 								'date_create_gmt' => gmdate( 'Y-m-d H:i:s' ),
-								'user_created_by' => ( empty( $created_by) ) ? get_current_user_id() : $created_by,
+								'user_created_by' => ( empty( $created_by ) ) ? get_current_user_id() : $created_by,
 							) );
 						}
 					}

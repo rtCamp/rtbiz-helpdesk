@@ -25,7 +25,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			if ( rthd_get_redux_adult_filter() && rthd_get_adult_ticket_meta( $postid ) != 'no' ) {
 				$new = array();
 				foreach ( $emails as $email ) {
-					if ( ! empty ( $email )  ) {
+					if ( ! empty( $email )  ) {
 						$user = get_user_by( 'email', $email['email'] );
 						if ( ! $user instanceof WP_Error && ! empty( $user ) && rthd_get_user_adult_preference( $user->ID ) == 'yes' ) {
 							continue;
@@ -178,15 +178,15 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 
 			$redux = rthd_get_redux_settings();
 			if ( Rt_HD_Import_Operation::$FOLLOWUP_STAFF != $comment_privacy ) {
-				$notificationFlagClient = ( isset( $redux['rthd_notification_acl_client_events']) && 1 == $redux['rthd_notification_acl_client_events']['new_followup_created_mail'] );
-				$notificationFlagAssignee = ( isset( $redux['rthd_notification_acl_assignee_events']) && 1 == $redux['rthd_notification_acl_assignee_events']['new_followup_created_mail'] );
-				$notificationFlagSubscriber = ( isset( $redux['rthd_notification_acl_staff_events']) && 1 == $redux['rthd_notification_acl_staff_events']['new_followup_created_mail'] );
-				$notificationFlagGroup = ( isset( $redux['rthd_notification_acl_group_events']) && 1 == $redux['rthd_notification_acl_group_events']['new_followup_created_mail'] );
+				$notificationFlagClient = ( isset( $redux['rthd_notification_acl_client_events'] ) && 1 == $redux['rthd_notification_acl_client_events']['new_followup_created_mail'] );
+				$notificationFlagAssignee = ( isset( $redux['rthd_notification_acl_assignee_events'] ) && 1 == $redux['rthd_notification_acl_assignee_events']['new_followup_created_mail'] );
+				$notificationFlagSubscriber = ( isset( $redux['rthd_notification_acl_staff_events'] ) && 1 == $redux['rthd_notification_acl_staff_events']['new_followup_created_mail'] );
+				$notificationFlagGroup = ( isset( $redux['rthd_notification_acl_group_events'] ) && 1 == $redux['rthd_notification_acl_group_events']['new_followup_created_mail'] );
 			} else {
 				$notificationFlagClient = false;
-				$notificationFlagAssignee = ( isset( $redux['rthd_notification_acl_assignee_events']) && 1 == $redux['rthd_notification_acl_assignee_events']['new_staff_only_followup_created_mail'] );
-				$notificationFlagSubscriber = ( isset( $redux['rthd_notification_acl_staff_events']) && 1 == $redux['rthd_notification_acl_staff_events']['new_staff_only_followup_created_mail'] );
-				$notificationFlagGroup = ( isset( $redux['rthd_notification_acl_group_events']) && 1 == $redux['rthd_notification_acl_group_events']['new_staff_only_followup_created_mail'] );
+				$notificationFlagAssignee = ( isset( $redux['rthd_notification_acl_assignee_events'] ) && 1 == $redux['rthd_notification_acl_assignee_events']['new_staff_only_followup_created_mail'] );
+				$notificationFlagSubscriber = ( isset( $redux['rthd_notification_acl_staff_events'] ) && 1 == $redux['rthd_notification_acl_staff_events']['new_staff_only_followup_created_mail'] );
+				$notificationFlagGroup = ( isset( $redux['rthd_notification_acl_group_events'] ) && 1 == $redux['rthd_notification_acl_group_events']['new_staff_only_followup_created_mail'] );
 			}
 
 			$followup_creator[] = array( 'email' => $comment->comment_author_email, 'name' => $comment->comment_author );
@@ -263,10 +263,10 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$user = get_user_by( 'id', $user_id );
 
 			$redux = rthd_get_redux_settings();
-			$notificationFlagClient = ( isset( $redux['rthd_notification_acl_client_events']) && 1 == $redux['rthd_notification_acl_client_events']['new_followup_deleted_mail'] );
-			$notificationFlagAssignee = ( isset( $redux['rthd_notification_acl_assignee_events']) && 1 == $redux['rthd_notification_acl_assignee_events']['new_followup_deleted_mail'] );
-			$notificationFlagSsubscriber = ( isset( $redux['rthd_notification_acl_staff_events']) && 1 == $redux['rthd_notification_acl_staff_events']['new_followup_deleted_mail'] );
-			$notificationFlagGroup = ( isset( $redux['rthd_notification_acl_group_events']) && 1 == $redux['rthd_notification_acl_group_events']['new_followup_deleted_mail'] );
+			$notificationFlagClient = ( isset( $redux['rthd_notification_acl_client_events'] ) && 1 == $redux['rthd_notification_acl_client_events']['new_followup_deleted_mail'] );
+			$notificationFlagAssignee = ( isset( $redux['rthd_notification_acl_assignee_events'] ) && 1 == $redux['rthd_notification_acl_assignee_events']['new_followup_deleted_mail'] );
+			$notificationFlagSsubscriber = ( isset( $redux['rthd_notification_acl_staff_events'] ) && 1 == $redux['rthd_notification_acl_staff_events']['new_followup_deleted_mail'] );
+			$notificationFlagGroup = ( isset( $redux['rthd_notification_acl_group_events'] ) && 1 == $redux['rthd_notification_acl_group_events']['new_followup_deleted_mail'] );
 
 			$followup_deletor[] = array( 'email' => $comment->comment_author_email, 'name' => $comment->comment_author );
 
@@ -334,10 +334,10 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$user = get_user_by( 'id', $user_id );
 
 			$redux = rthd_get_redux_settings();
-			$notificationFlagClient = ( isset( $redux['rthd_notification_acl_client_events']) && 1 == $redux['rthd_notification_acl_client_events']['new_followup_updated_mail'] );
-			$notificationFlagAssignee = ( isset( $redux['rthd_notification_acl_assignee_events']) && 1 == $redux['rthd_notification_acl_assignee_events']['new_followup_updated_mail'] );
-			$notificationFlagSsubscriber = ( isset( $redux['rthd_notification_acl_staff_events']) && 1 == $redux['rthd_notification_acl_staff_events']['new_followup_updated_mail'] );
-			$notificationFlagGroup = ( isset( $redux['rthd_notification_acl_group_events']) && 1 == $redux['rthd_notification_acl_group_events']['new_followup_updated_mail'] );
+			$notificationFlagClient = ( isset( $redux['rthd_notification_acl_client_events'] ) && 1 == $redux['rthd_notification_acl_client_events']['new_followup_updated_mail'] );
+			$notificationFlagAssignee = ( isset( $redux['rthd_notification_acl_assignee_events'] ) && 1 == $redux['rthd_notification_acl_assignee_events']['new_followup_updated_mail'] );
+			$notificationFlagSsubscriber = ( isset( $redux['rthd_notification_acl_staff_events'] ) && 1 == $redux['rthd_notification_acl_staff_events']['new_followup_updated_mail'] );
+			$notificationFlagGroup = ( isset( $redux['rthd_notification_acl_group_events'] ) && 1 == $redux['rthd_notification_acl_group_events']['new_followup_updated_mail'] );
 
 			// find if followup was private before or right now it is private
 			$private_update = false;
@@ -424,7 +424,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 					$Result = $Result && $this->is_array_empty( $Value );
 				}
 			} else {
-				$Result = empty($InputVariable);
+				$Result = empty( $InputVariable );
 			}
 
 			return $Result;
@@ -442,7 +442,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 
 			if ( ! empty( $array ) ) {
 				foreach ( $array as $arr ) {
-					if ( ! empty ( $arr ) ) {
+					if ( ! empty( $arr ) ) {
 						if ( $arr['email'] != $email ) {
 							$new[] = $arr;
 						}
@@ -463,10 +463,10 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$ticket_creator = $ContactEmail = $groupEmail = $assigneEmail = $subscriberEmail = array();
 
 			$redux = rthd_get_redux_settings();
-			$notificationFlagClient = ( isset( $redux['rthd_notification_acl_client_events']) && 1 == $redux['rthd_notification_acl_client_events']['new_ticket_created_mail'] );
-			$notificationFlagAssignee = ( isset( $redux['rthd_notification_acl_assignee_events']) && 1 == $redux['rthd_notification_acl_assignee_events']['new_ticket_created_mail'] );
-			$notificationFlagSsubscriber = ( isset( $redux['rthd_notification_acl_staff_events']) && 1 == $redux['rthd_notification_acl_staff_events']['new_ticket_created_mail'] );
-			$notificationFlagGroup = ( isset( $redux['rthd_notification_acl_group_events']) && 1 == $redux['rthd_notification_acl_group_events']['new_ticket_created_mail'] );
+			$notificationFlagClient = ( isset( $redux['rthd_notification_acl_client_events'] ) && 1 == $redux['rthd_notification_acl_client_events']['new_ticket_created_mail'] );
+			$notificationFlagAssignee = ( isset( $redux['rthd_notification_acl_assignee_events'] ) && 1 == $redux['rthd_notification_acl_assignee_events']['new_ticket_created_mail'] );
+			$notificationFlagSsubscriber = ( isset( $redux['rthd_notification_acl_staff_events'] ) && 1 == $redux['rthd_notification_acl_staff_events']['new_ticket_created_mail'] );
+			$notificationFlagGroup = ( isset( $redux['rthd_notification_acl_group_events'] ) && 1 == $redux['rthd_notification_acl_group_events']['new_ticket_created_mail'] );
 
 			$user = get_post_meta( $post_id, '_rtbiz_hd_created_by', true );
 			$ticket_created_by = get_user_by( 'id', $user );
@@ -611,9 +611,9 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$bccemails = $groupEmail = $assigneEmail = $subscriberEmail = array();
 
 			$redux = rthd_get_redux_settings();
-			$notificationFlagAssignee = ( isset( $redux['rthd_notification_acl_assignee_events']) && 1 == $redux['rthd_notification_acl_assignee_events']['new_subscriber_added_mail'] );
-			$notificationFlagSsubscriber = ( isset( $redux['rthd_notification_acl_staff_events']) && 1 == $redux['rthd_notification_acl_staff_events']['new_subscriber_added_mail'] );
-			$notificationFlagGroup = ( isset( $redux['rthd_notification_acl_group_events']) && 1 == $redux['rthd_notification_acl_group_events']['new_subscriber_added_mail'] );
+			$notificationFlagAssignee = ( isset( $redux['rthd_notification_acl_assignee_events'] ) && 1 == $redux['rthd_notification_acl_assignee_events']['new_subscriber_added_mail'] );
+			$notificationFlagSsubscriber = ( isset( $redux['rthd_notification_acl_staff_events'] ) && 1 == $redux['rthd_notification_acl_staff_events']['new_subscriber_added_mail'] );
+			$notificationFlagGroup = ( isset( $redux['rthd_notification_acl_group_events'] ) && 1 == $redux['rthd_notification_acl_group_events']['new_subscriber_added_mail'] );
 
 			if ( $notificationFlagGroup ) {
 				$groupEmail = $this->get_notification_emails();
@@ -669,9 +669,9 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$bccemails = $groupEmail = $assigneEmail = $subscriberEmail = array();
 
 			$redux = rthd_get_redux_settings();
-			$notificationFlagAssignee = ( isset( $redux['rthd_notification_acl_assignee_events']) && 1 == $redux['rthd_notification_acl_assignee_events']['subscriber_removed_mail'] );
-			$notificationFlagSsubscriber = ( isset( $redux['rthd_notification_acl_staff_events']) && 1 == $redux['rthd_notification_acl_staff_events']['subscriber_removed_mail'] );
-			$notificationFlagGroup = ( isset( $redux['rthd_notification_acl_group_events']) && 1 == $redux['rthd_notification_acl_group_events']['subscriber_removed_mail'] );
+			$notificationFlagAssignee = ( isset( $redux['rthd_notification_acl_assignee_events'] ) && 1 == $redux['rthd_notification_acl_assignee_events']['subscriber_removed_mail'] );
+			$notificationFlagSsubscriber = ( isset( $redux['rthd_notification_acl_staff_events'] ) && 1 == $redux['rthd_notification_acl_staff_events']['subscriber_removed_mail'] );
+			$notificationFlagGroup = ( isset( $redux['rthd_notification_acl_group_events'] ) && 1 == $redux['rthd_notification_acl_group_events']['subscriber_removed_mail'] );
 
 			if ( $notificationFlagGroup ) {
 				$groupEmail = $this->get_notification_emails();
@@ -726,9 +726,9 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$bccemails = $newassigneEmail = $oldassigneEmail = $groupEmail = $subscriberEmail = array();
 
 			$redux = rthd_get_redux_settings();
-			$notificationFlagAssignee = ( isset( $redux['rthd_notification_acl_assignee_events']) && 1 == $redux['rthd_notification_acl_assignee_events']['ticket_reassigned_mail'] );
-			$notificationFlagSsubscriber = ( isset( $redux['rthd_notification_acl_staff_events']) && 1 == $redux['rthd_notification_acl_staff_events']['ticket_reassigned_mail'] );
-			$notificationFlagGroup = ( isset( $redux['rthd_notification_acl_group_events']) && 1 == $redux['rthd_notification_acl_group_events']['ticket_reassigned_mail'] );
+			$notificationFlagAssignee = ( isset( $redux['rthd_notification_acl_assignee_events'] ) && 1 == $redux['rthd_notification_acl_assignee_events']['ticket_reassigned_mail'] );
+			$notificationFlagSsubscriber = ( isset( $redux['rthd_notification_acl_staff_events'] ) && 1 == $redux['rthd_notification_acl_staff_events']['ticket_reassigned_mail'] );
+			$notificationFlagGroup = ( isset( $redux['rthd_notification_acl_group_events'] ) && 1 == $redux['rthd_notification_acl_group_events']['ticket_reassigned_mail'] );
 
 			if ( $notificationFlagGroup ) {
 				$groupEmail = $this->get_notification_emails();
@@ -788,9 +788,9 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$ticket_updator = $ContactEmail = $groupEmail = $assigneEmail = $subscriberEmail = array();
 
 			$redux = rthd_get_redux_settings();
-			$notificationFlagAssignee = ( isset( $redux['rthd_notification_acl_assignee_events']) && 1 == $redux['rthd_notification_acl_assignee_events']['ticket_reassigned_mail'] );
-			$notificationFlagSsubscriber = ( isset( $redux['rthd_notification_acl_staff_events']) && 1 == $redux['rthd_notification_acl_staff_events']['ticket_reassigned_mail'] );
-			$notificationFlagGroup = ( isset( $redux['rthd_notification_acl_group_events']) && 1 == $redux['rthd_notification_acl_group_events']['ticket_reassigned_mail'] );
+			$notificationFlagAssignee = ( isset( $redux['rthd_notification_acl_assignee_events'] ) && 1 == $redux['rthd_notification_acl_assignee_events']['ticket_reassigned_mail'] );
+			$notificationFlagSsubscriber = ( isset( $redux['rthd_notification_acl_staff_events'] ) && 1 == $redux['rthd_notification_acl_staff_events']['ticket_reassigned_mail'] );
+			$notificationFlagGroup = ( isset( $redux['rthd_notification_acl_group_events'] ) && 1 == $redux['rthd_notification_acl_group_events']['ticket_reassigned_mail'] );
 
 			$user = get_post_meta( $post_id, '_rtbiz_hd_updated_by', true );
 			$ticket_update_by = get_user_by( 'id', $user );

@@ -458,7 +458,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$this->add_contacts_to_post( $allemail, $post_id );
 
 			$uploaded = $this->add_attachment_to_post( $uploaded, $post_id );
-			if ( ! empty($uploaded['files'] ) ) {
+			if ( ! empty( $uploaded['files'] ) ) {
 				$uploaded = $uploaded['files'];
 			} else {
 				$uploaded = array();
@@ -1197,7 +1197,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			}
 			/* end of status toogle code */
 
-			if ( isset( $allemails  ) ) {
+			if ( isset( $allemails ) ) {
 				foreach ( $allemails as $email ) {
 					if ( isset( $email['key'] ) ) {
 						$meta = get_comment_meta( $comment_id, '_email_' . $email['key'], true );
@@ -1514,9 +1514,9 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 		function process_file_attachment($file) {
 			if ( UPLOAD_ERR_OK !== $_FILES[ $file ]['error'] ) { __return_false(); }
-			require_once(ABSPATH . 'wp-admin' . '/includes/image.php');
-			require_once(ABSPATH . 'wp-admin' . '/includes/file.php');
-			require_once(ABSPATH . 'wp-admin' . '/includes/media.php');
+			require_once( ABSPATH . 'wp-admin' . '/includes/image.php' );
+			require_once( ABSPATH . 'wp-admin' . '/includes/file.php' );
+			require_once( ABSPATH . 'wp-admin' . '/includes/media.php' );
 			$attachment_id = media_handle_upload( $file, '' );
 			return $attachment_id;
 		}
@@ -1934,7 +1934,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		function load_more_followup() {
 			$response = array();
 			$response['status'] = false;
-			if ( isset($_REQUEST['post_id']) && isset($_REQUEST['offset']) && isset($_REQUEST['limit'])  ) {
+			if ( isset( $_REQUEST['post_id'] ) && isset( $_REQUEST['offset'] ) && isset( $_REQUEST['limit'] ) ) {
 				$postid = $_REQUEST['post_id'];
 				$offset = $_REQUEST['offset'];
 				$Limit = $_REQUEST['limit'];
