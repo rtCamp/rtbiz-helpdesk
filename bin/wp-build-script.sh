@@ -28,7 +28,7 @@ rm -rf $PHPCS_DIR/CodeSniffer/Standards/WordPress-Coding-Standards/WordPress/Sni
 cd ../
 
 rm -rf rtbiz
-git clone git@git.rtcamp.com:rtbiz/rtbiz.git
+git clone https://github.com/rtCamp/rtbiz.git
 cd rtbiz
 git checkout develop
 cd ../
@@ -46,7 +46,7 @@ function run_test ()
 
     #script
     find ./app \( -name "*.php" -o -name "*.inc" \)  ! -path "./app/assets/*" ! -path "./app/vendor/*" ! -path "./app/lib/*" ! -path "./app/schema/*" -exec php -lf {} \;
-    
+
     if [ -e phpunit.xml ] || [ -e phpunit.xml.dist ]; then phpunit || return 1; fi
     $PHPCS_DIR/scripts/phpcs --standard=$WPCS_STANDARD $(if [ -n "$PHPCS_IGNORE" ]; then echo --ignore=$PHPCS_IGNORE; fi) $(find ./app -name "*.php" ! -path "./app/assets/*" ! -path "./app/vendor/*" ! -path "./app/lib/*" ! -path "./app/schema/*" ) || return 1
     jshint . || return 1
@@ -66,7 +66,7 @@ for WP_VERSION in 4.0 3.9; do
     for PHP_VERSION in 5.2.17 5.3.29 5.4.32 5.5.16 5.6.0; do
 
         export PATH=/opt/phpbrew/php/php-${PHP_VERSION}/bin:$OLD_PATH
-        
+
         php --version
 
         for WP_MULTISITE in 0 1; do
