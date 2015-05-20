@@ -210,7 +210,8 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 						$date = new DateTime( $ticket->post_modified );
 						?>
 						<tr>
-							<td> #<?php echo esc_attr( $ticket->ID ) ?> </td>
+							<td><a class="button support" target="_blank"
+							       href="<?php echo esc_url( ( rthd_is_unique_hash_enabled() ) ? rthd_get_unique_hash_url( $ticket->ID ) : get_post_permalink( $ticket->ID ) ); ?>"> #<?php echo esc_attr( $ticket->ID ) ?> </a></td>
 							<td><?php echo $ticket->post_title; ?></td>
 							<td> <?php echo esc_attr( human_time_diff( $date->format( 'U' ), current_time( 'timestamp' ) ) ) . esc_attr( __( ' ago' ) ) ?> </td>
 							<td>
