@@ -40,7 +40,7 @@ unzip -q posts-to-posts.zip
 cd $PLUGIN_DIR
 
 # Test to be conducted
-function run_test ()
+function run_test()
 {
     # PHP Setup Code
 
