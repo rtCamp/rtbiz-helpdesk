@@ -51,7 +51,7 @@ jQuery( document ).ready(function ($) {
 						return rthdSetup.connect_store();
 					}
 					// active this after screen is fixed
-					if (currentIndex == 0) {
+					if (currentIndex === 0) {
 						//save support form
 						return rthdSetup.support_page();
 					}
@@ -102,7 +102,7 @@ jQuery( document ).ready(function ($) {
 
 			jQuery( document ).on('click', '#rthd-setup-store-new-team-submit', function (e) {
 				var new_term = jQuery( '#rthd-setup-store-new-team' ).val();
-				if (new_term.length != 0 && ! new_term.trim()) {
+				if (new_term.length !== 0 && ! new_term.trim()) {
 					return;
 				}
 				$.ajax({
@@ -156,7 +156,7 @@ jQuery( document ).ready(function ($) {
 											imghtml: item.imghtml,
 											label: item.label,
 											editlink: item.editlink
-										}
+										};
 									}));
 									jQuery( '.rthd-warning' ).hide();
 									jQuery( '.rthd-importer-add-contact' ).hide();
@@ -179,9 +179,9 @@ jQuery( document ).ready(function ($) {
 				jQuery( document ).on("click", "a[href=#removeUser]", function (e) {
 					e.preventDefault();
 					that = this;
-					var requestArray = new Object();
-					requestArray['action'] = 'rthd_remove_user';
-					requestArray['userid'] = jQuery( this ).next( '.rthd-import-selected-users' ).val();
+					var requestArray = {};
+					requestArray.action = 'rthd_remove_user';
+					requestArray.userid = jQuery( this ).next( '.rthd-import-selected-users' ).val();
 					jQuery.ajax({
 						url: ajaxurl,
 						dataType: "json",
@@ -213,7 +213,7 @@ jQuery( document ).ready(function ($) {
 									return {
 										name: item,
 										value: item
-									}
+                                    };
 								}));
 							}
 						});
@@ -266,12 +266,12 @@ jQuery( document ).ready(function ($) {
 			});
 		},
 		support_page: function () {
-			var requestArray = new Object();
-			requestArray['action'] = 'rthd_setup_support_page';
+			var requestArray = {};
+			requestArray.action = 'rthd_setup_support_page';
 			val = jQuery( '#rthd-setup-wizard-support-page' ).val();
-			if (val == 0 || ( val == -1 && jQuery( '#rthd-setup-wizard-support-page-new' ).val().length === 0 && ! jQuery( '#rthd-setup-wizard-support-page-new' ).val().trim() )) {
+			if (val === 0 || ( val == -1 && jQuery( '#rthd-setup-wizard-support-page-new' ).val().length === 0 && ! jQuery( '#rthd-setup-wizard-support-page-new' ).val().trim() )) {
 				var strconfirm = confirm( 'Do you want to skip this step ?' );
-				if (strconfirm == true) {
+				if (strconfirm === true) {
 					return true;
 				} else {
 					jQuery( '.rthd-support-process' ).hide();
@@ -280,11 +280,11 @@ jQuery( document ).ready(function ($) {
 
 			} else if (val == -1) {
 				if (jQuery( '.rthd-setup-wizard-support-page-new-div' ).is( ":visible" )) {
-					requestArray['new_page'] = jQuery( '#rthd-setup-wizard-support-page-new' ).val();
-					requestArray['page_action'] = 'add';
+					requestArray.new_page = jQuery( '#rthd-setup-wizard-support-page-new' ).val();
+					requestArray.page_action = 'add';
 				}
 			} else {
-				requestArray['old_page'] = val;
+				requestArray.old_page = val;
 			}
 			if (val !== 0) {
 				jQuery( '.rthd-support-process' ).show();
@@ -304,11 +304,11 @@ jQuery( document ).ready(function ($) {
 			}
 		},
 		import_all_users: function (last_user) {
-			var requestArray = new Object();
-			requestArray['action'] = 'rthd_import_all_users';
-			requestArray['nonce'] = jQuery( '#import_all_users' ).val();
-			requestArray['import'] = true;
-			requestArray['last_import'] = last_user;
+			var requestArray = {};
+			requestArray.action = 'rthd_import_all_users';
+			requestArray.nonce = jQuery( '#import_all_users' ).val();
+			requestArray.import = true;
+			requestArray.last_import = last_user;
 			jQuery( '#rthd-import-all-spinner' ).show();
 			jQuery( '#rthd-all-import-message' ).html( '' );
 			jQuery.ajax({
@@ -336,7 +336,7 @@ jQuery( document ).ready(function ($) {
 						} else {
 							jQuery( '#rthd-import-all-spinner' ).hide();
 							jQuery( '#rthd-setup-import-users-progress' ).hide();
-							if (imported_users == 0 || ! data.imported_count) {
+							if (imported_users === 0 || ! data.imported_count) {
 								jQuery( '#rthd-all-import-message' ).html( 'No Users Found' );
 							} else {
 								jQuery( '#rthd-all-import-message' ).html( imported_users + ' Users Added' );
@@ -347,12 +347,12 @@ jQuery( document ).ready(function ($) {
 			});
 		},
 		import_domain_users: function (get_count) {
-			var requestArray = new Object();
+			var requestArray = {};
 			jQuery( '#rthd-domain-import-spinner' ).show();
-			requestArray['action'] = 'rthd_domain_search_and_import';
-			requestArray['count'] = get_count;
-			requestArray['domain_query'] = jQuery( '#rthd-add-user-domain' ).val();
-			requestArray['nonce'] = jQuery( '#import_domain' ).val();
+			requestArray.action = 'rthd_domain_search_and_import';
+			requestArray.count = get_count;
+			requestArray.domain_query = jQuery( '#rthd-add-user-domain' ).val();
+			requestArray.nonce = jQuery( '#import_domain' ).val();
 
 			jQuery.ajax({
 				url: ajaxurl,
@@ -389,14 +389,14 @@ jQuery( document ).ready(function ($) {
 		},
 		give_user_helpdesk_access: function (email, id) {
 			jQuery( '#rthd-autocomplete-page-spinner' ).show();
-			var requestArray = new Object();
-			if (email != false) {
-				requestArray['email'] = email;
+			var requestArray = {};
+			if (email !== false) {
+				requestArray.email = email;
 			}
-			if (id != false) {
-				requestArray['ID'] = id;
+			if (id !== false) {
+				requestArray.ID = id;
 			}
-			requestArray['action'] = 'rthd_creater_rtbiz_and_give_access_helpdesk';
+			requestArray.action = 'rthd_creater_rtbiz_and_give_access_helpdesk';
 			jQuery.ajax({
 				url: ajaxurl,
 				dataType: "json",
@@ -435,9 +435,9 @@ jQuery( document ).ready(function ($) {
 				}
 			});
 			if (selected.length > 0) {
-				var requestArray = new Object();
-				requestArray['store'] = selected;
-				requestArray['action'] = 'rthd_offering_sync';
+				var requestArray = {};
+				requestArray.store = selected;
+				requestArray.action = 'rthd_offering_sync';
 				jQuery( '.rthd-store-process' ).show();
 				jQuery.ajax({
 					url: ajaxurl,
@@ -479,9 +479,9 @@ jQuery( document ).ready(function ($) {
 			jQuery( '.rthd-assignee-process' ).show();
 			var requestArray = [];
 			jQuery( '.rthd-setup-assignee' ).each(function () {
-				var temp = new Object();
-				temp['term_ID'] = jQuery( this ).attr( 'data' );
-				temp['user_ID'] = jQuery( this ).val();
+				var temp = {};
+				temp.term_ID = jQuery( this ).attr( 'data' );
+				temp.user_ID = jQuery( this ).val();
 				requestArray.push( temp );
 			});
 			jQuery.ajax({
@@ -505,7 +505,7 @@ jQuery( document ).ready(function ($) {
 		assingee_page: function () {
 			jQuery( '#rthd_offering-default' ).on('change', function (e) {
 				jQuery( '.rthd-setup-assignee' ).val( jQuery( this ).val() );
-			})
+			});
 		},
 		custom_page_action: function (currentIndex) {
 			/* if (currentIndex == 3 && jQuery('.rthd-setup-assignee').length == 0) {
@@ -562,7 +562,7 @@ jQuery( document ).ready(function ($) {
 				});
 			} else {
 				var strconfirm = confirm( 'Mailbox is not configured. Do you want to skip this step?' );
-				if (strconfirm == true) {
+				if (strconfirm === true) {
 					return true;
 				} else {
 					return false;

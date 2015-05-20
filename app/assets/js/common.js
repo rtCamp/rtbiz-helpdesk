@@ -219,7 +219,7 @@ jQuery( document ).ready(function () {
 			//ajax call to remove followup
 			jQuery( "#delfollowup" ).click(function () {
 				var r = confirm( "Are you sure you want to remove this Followup?" );
-				if (r != true) {
+				if (r !== true) {
 					e.preventDefault();
 					return false;
 				}
@@ -291,7 +291,7 @@ jQuery( document ).ready(function () {
 
 			// edit followup ajax call
 			jQuery( "#editfollowup" ).click(function () {
-				var requestArray = new Object();
+				var requestArray = {};
 				var content = rthd_common.rthd_tinymce_get_content( 'editedfollowupcontent' );
 				if ( ! content) {
 					alert( "Please enter comment" );
@@ -303,24 +303,24 @@ jQuery( document ).ready(function () {
 				}
 				jQuery( '#edithdspinner' ).show();
 				jQuery( this ).attr( 'disabled', 'disabled' );
-				requestArray['post_type'] = rthd_post_type;
-				requestArray["comment_id"] = commentid;
-				requestArray["action"] = "rthd_update_followup_ajax";
-				requestArray['followuptype'] = "comment";
-				requestArray['followup_ticket_unique_id'] = jQuery( '#ticket_unique_id' ).val();
-				//requestArray['followup_private']='no';
-				requestArray['followup_post_id'] = jQuery( '#post-id' ).val();
+				requestArray.post_type = rthd_post_type;
+				requestArray.comment_id = commentid;
+				requestArray.action = "rthd_update_followup_ajax";
+				requestArray.followuptype = "comment";
+				requestArray.followup_ticket_unique_id = jQuery( '#ticket_unique_id' ).val();
+				//requestArray.followup_private='no';
+				requestArray.followup_post_id = jQuery( '#post-id' ).val();
 				var followup_type = jQuery( "input[name='edit_private']:checked" );
 				if (followup_type.length) {
 					followup_type = followup_type.val();
 				} else {
 					followup_type = jQuery( "input[name='edit_private']" ).val();
 				}
-				requestArray['followup_private'] = followup_type;
-				requestArray["followuptype"] = 'comment';
-				//requestArray["followup_post_id"] = jQuery( "#ticket_id" ).val();
-				//requestArray["follwoup-time"] = jQuery( "#follwoup-time" ).val();
-				requestArray["followup_content"] = content;
+				requestArray.followup_private = followup_type;
+				requestArray.followuptype = 'comment';
+				//requestArray.followup_post_id = jQuery( "#ticket_id" ).val();
+				//requestArray.follwoup_time = jQuery( "#follwoup_time" ).val();
+				requestArray.followup_content = content;
 				jQuery.ajax({
 					url: ajaxurl,
 					dataType: "json",
@@ -350,7 +350,7 @@ jQuery( document ).ready(function () {
 			// if there are more than 3 followup show load followp button
 			jQuery( '#followup-load-more, .load-more-block' ).click(function (e) {
 				e.preventDefault();
-				var requestArray = new Object();
+				var requestArray = {};
 				var totalcomment = parseInt( jQuery( '#followup-totalcomment' ).val(), 10 );
 				var limit = parseInt( jQuery( '#followup-limit' ).val(), 10 );
 				if (limit != 3) {
@@ -359,11 +359,11 @@ jQuery( document ).ready(function () {
 				jQuery( this ).parent().hide();
 				jQuery( '.load-more-spinner-li' ).show();
 				jQuery( '#load-more-hdspinner' ).css( 'display', 'inline' );
-				requestArray['limit'] = totalcomment - 3;
-				requestArray['offset'] = 0;
-				requestArray["action"] = "load_more_followup";
-				requestArray['post_id'] = jQuery( '#post-id' ).val();
-				//requestArray['all'] =  'true';
+				requestArray.limit = totalcomment - 3;
+				requestArray.offset = 0;
+				requestArray.action = "load_more_followup";
+				requestArray.post_id = jQuery( '#post-id' ).val();
+				//requestArray.all =  'true';
 				jQuery.ajax({
 					url: ajaxurl,
 					dataType: "json",
@@ -413,12 +413,12 @@ jQuery( document ).ready(function () {
 			jQuery( '#edit-ticket-content-click' ).click(function () {
 				jQuery( '#edit-ticket-data' ).slideToggle( 'slow' );
 				jQuery( '#new-followup-form' ).hide();
-				var requestArray = new Object();
-				requestArray['action'] = 'rthd_add_new_ticket_ajax';
-				requestArray['post_id'] = jQuery( '#post-id' ).val();
+				var requestArray = {};
+				requestArray.action = 'rthd_add_new_ticket_ajax';
+				requestArray.post_id = jQuery( '#post-id' ).val();
 				var content = rthd_common.rthd_tinymce_get_content( 'editedticketcontent' );
-				requestArray['body'] = content;
-				requestArray['nonce'] = jQuery( '#edit_ticket_nonce' ).val();
+				requestArray.body = content;
+				requestArray.nonce = jQuery( '#edit_ticket_nonce' ).val();
 				jQuery( '#ticket-edithdspinner' ).show();
 				jQuery( this ).attr( 'disabled', 'disabled' );
 				jQuery.ajax({
