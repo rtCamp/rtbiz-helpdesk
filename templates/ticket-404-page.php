@@ -18,6 +18,7 @@ global $rthd_messages;
 
 			<section class="error-404 not-found entry-content">
 				<div class="page-content">
+					<?php if ( ! empty( $message['message'] ) ) { ?>
 					<div class="rthd-container">
 						<?php
 						foreach ( $rthd_messages as $key => $message ) {
@@ -28,6 +29,7 @@ global $rthd_messages;
 						}
 						?>
 					</div>
+				<?php } ?>
 					<div class="rthd-fav-ticket">
 						<?php
 						global $current_user;

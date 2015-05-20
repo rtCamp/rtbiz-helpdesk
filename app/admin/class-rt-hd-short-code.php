@@ -128,7 +128,7 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 		 * @return string
 		 */
 		function rt_hd_tickets_callback( $atts ) {
-			global $rt_hd_module, $current_user;
+			global $rt_hd_module, $current_user, $redux_helpdesk_settings;
 
 			$arg_shortcode = shortcode_atts(
 				array(
@@ -145,7 +145,6 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 					'post_status' => 'any',
 					'nopaging' => true,
 					);
-					global $current_user;
 					$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
 
 
@@ -206,16 +205,22 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 						echo ( empty( $tickets ) ) ? '' : ' <span class="rthd-count">(' . count( $tickets ) . ')</span>'; ?></h2><?php
 				}
 				if ( 'yes' == $arg_shortcode['show_support_form_link'] ) {
-					global $redux_helpdesk_settings;
 					if ( isset( $redux_helpdesk_settings['rthd_support_page'] ) && ! empty( $redux_helpdesk_settings['rthd_support_page'] ) ) {
 						$page = get_post( $redux_helpdesk_settings['rthd_support_page'] );
 						?>
-						<a class="" href="<?php echo "/{$page->post_name}"; ?>"><button class=""><?php _e( 'Create New Ticket', RT_HD_TEXT_DOMAIN ) ?></button></a>
+						<a class="clearfix" href="<?php echo "/{$page->post_name}"; ?>"><button class="button btn button-primary btn-primary"><?php _e( 'Create New Ticket', RT_HD_TEXT_DOMAIN ) ?></button></a>
 					<?php
 					}
 				}
-				if ( empty( $tickets ) ) {
-					_e( '<p>You have not created any tickets yet. Create one now.</p>' );
+				if ( empty( $tickets ) && ! $is_staff ) {
+					if ( empty( $page ) ) {
+						if ( isset( $redux_helpdesk_settings['rthd_support_page'] ) && ! empty( $redux_helpdesk_settings['rthd_support_page'] ) ) {
+							$page = get_post( $redux_helpdesk_settings['rthd_support_page'] );
+						}
+					}
+					echo '<p>'.__( 'You have not created any tickets yet.', RT_HD_TEXT_DOMAIN ).' <a href="/'.$page->post_name.'" target="_blank">'.__( 'Create one', RT_HD_TEXT_DOMAIN ).'</a> '.__( 'now.', RT_HD_TEXT_DOMAIN ).'</p>';
+				} else {
+					echo '<p>'.__( 'No tickets found', RT_HD_TEXT_DOMAIN ).'</p>';
 				}
 			}
 			//			echo '<div class="rthd-ticket-list">';
