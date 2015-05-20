@@ -33,3 +33,19 @@ mark.rthd-trash {
 	margin-bottom: 20px;
 	padding: 8px 10px;
 }
+
+
+.rthd-ticket-list-header{
+	margin-bottom: 30px;
+	& h2{
+		display: inline;
+	}
+	& a{
+		float: right;
+	}
+	& .rthd-count{
+		color: #808080;
+	}
+
+}
+

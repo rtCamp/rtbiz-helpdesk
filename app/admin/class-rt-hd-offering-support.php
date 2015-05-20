@@ -317,7 +317,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 		 * Display ticket history on WooCommerce order page
 		 */
 		function support_info( $post ) {
-			echo balanceTags( do_shortcode( '[rt_hd_tickets orderid=' . $post->ID . ']' ) );
+			echo balanceTags( do_shortcode( '[rt_hd_tickets title="false" orderid=' . $post->ID . ']' ) );
 		}
 
 		/*
