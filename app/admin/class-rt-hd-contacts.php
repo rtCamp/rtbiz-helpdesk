@@ -55,6 +55,40 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 			//update contact lable for staff and customer
 			add_filter( 'rt_biz_contact_labels', array( $this, 'rthd_change_contact_lablels' ) );
 
+			add_filter( 'get_edit_post_link', array( $this, 'rthd_edit_contact_link' ), 10, 2 );
+			add_filter( 'rt_entity_remove_meta_box', array( $this, 'rthd_remove_contact_meta_box' ) );
+
+		}
+
+		/**
+		 * @param $metaboxids
+		 *
+		 * @return array
+		 */
+		function  rthd_remove_contact_meta_box( $metaboxids ) {
+			if ( ! empty( $_REQUEST['module'] ) && RT_HD_TEXT_DOMAIN == $_REQUEST['module']  && ! empty( $_REQUEST['post'] ) && get_post_type( $_REQUEST['post'] ) == rt_biz_get_contact_post_type() ) {
+				$metaboxids = array_merge( $metaboxids, array(
+					array( 'p2p-to-rt_lead_to_rt_contact', 'side' ),
+					array( 'postimagediv', 'side' ),
+					array( 'p2p-to-testimonial_rt_contact', 'side' ),
+					array( 'rt-biz-entity-assigned_to', 'side' ),
+				) );
+
+			}
+			return $metaboxids;
+
+		}
+
+		/**
+		 * add module query argument
+		 * @param $url
+		 * @param $postid
+		 */
+		function rthd_edit_contact_link( $url, $postid ){
+			if ( ! empty( $_REQUEST['module'] ) && ! empty( $postid ) && get_post_type( $postid ) == rt_biz_get_contact_post_type() ) {
+				$url = esc_url( add_query_arg( 'module', $_REQUEST['module'], $url ) );
+			}
+			return $url;
 		}
 
 		/*
