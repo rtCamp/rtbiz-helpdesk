@@ -10,7 +10,7 @@
 
 		<?php
 		if ( $replyflag && rthd_is_enable_mailbox_reading() && rthd_get_reply_via_email() ) {
-			echo '<div style="color: #c5c5c5; font-size: 11px; margin: 10px 0 20px;">' . htmlentities( ':: Reply Above This Line ::' ) . '</div>';
+			echo '<div style="display: none !important;">' . htmlentities( ':: Reply Above This Line ::' ) . '</div>';
 		}
 
 		$beforeHTML = apply_filters( 'rthd_before_email_body', $body );
