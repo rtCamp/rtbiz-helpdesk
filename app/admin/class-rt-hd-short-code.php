@@ -144,8 +144,10 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 					'post_status' => 'any',
 					'nopaging' => true,
 					);
-
 					global $current_user;
+					$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
+
+
 
 					if ( ! empty( $arg_shortcode['email'] ) && empty( $arg_shortcode['userid'] ) ) {
 						if ( '{{logged_in_user}}' == $arg_shortcode['email'] ) {
@@ -156,6 +158,12 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 						}
 						if ( is_object( $arg_shortcode['userid'] ) ) {
 							$arg_shortcode['userid'] = $arg_shortcode['userid']->ID;
+						}
+					}
+					// if user can not access Helpdesk don't show him fav tickets
+					if ( $arg_shortcode['fav'] ) {
+						if ( ! user_can( $arg_shortcode['userid'], $cap ) ) {
+							return '';
 						}
 					}
 
