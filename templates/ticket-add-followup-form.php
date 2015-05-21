@@ -38,6 +38,13 @@ global $current_user;
 						       id="followup_privacy_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>" checked/>
 						<label
 							for="followup_privacy_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"> <?php echo rthd_get_comment_type( Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ) ?></label>
+
+						<input type="radio" class="radio" name="private_comment"
+						       value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE; ?>"
+						       id="followup_privacy_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ?>"/>
+						<label
+							for="followup_privacy_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"> <?php echo rthd_get_comment_type( Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ) ?></label>
+
 						<input type="radio" class="radio" name="private_comment"
 						       value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF; ?>"
 						       id="followup_privacy_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF ?>"/>
@@ -46,8 +53,16 @@ global $current_user;
 					</div>
 				</div>
 			<?php } else { ?>
-				<input type="hidden" name="private_comment" id="add-private-comment"
-				       value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>">
+				<label for="add-private-comment" class="description">
+					<input id="add-private-comment" name="private_comment" type="checkbox"  value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ?>" />
+					<?php echo rthd_get_comment_type( Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE )?></label>
+					<span class="rthd-tooltip rthd-followup-type-tolltip">
+						<i class="dashicons dashicons-info rtmicon"></i>
+						<span class="rthd-tip">
+							<?php _e( 'Use this when you\'re sending password or sever details.' , RT_HD_TEXT_DOMAIN ); ?>
+						</span>
+					</span>
+
 			<?php }	?>
 			<?php if ( current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' ) ) && $post->post_status != 'hd-answered' ) { ?>
 				<div class="rthd-keep-status-wrap">
