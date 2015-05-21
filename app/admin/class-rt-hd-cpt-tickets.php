@@ -655,17 +655,17 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 			if ( ! empty( $fav_ticket ) ) {
 				if ( isset( $_GET['favorite'] ) ) {
 					$class = ' class="current"'; } else { 					$class = ''; }
-				$views['favorite_ticket'] = "<a href='edit.php?post_type=" . Rt_HD_Module::$post_type . "&favorite=true' $class>" . sprintf( _nx( 'Favorite <span class="count">(%s)</span>', 'Favorites <span class="count">(%s)</span>', count( $fav_ticket ), RT_HD_TEXT_DOMAIN ), number_format_i18n( count( $fav_ticket ) ) ) . '</a>';
+				$temp_view['favorite_ticket'] = "<a href='edit.php?post_type=" . Rt_HD_Module::$post_type . "&favorite=true' $class>" . sprintf( _nx( 'Favorite <span class="count">(%s)</span>', 'Favorites <span class="count">(%s)</span>', count( $fav_ticket ), RT_HD_TEXT_DOMAIN ), number_format_i18n( count( $fav_ticket ) ) ) . '</a>';
 			}
 
 			$contacts = rthd_get_user_subscribe_ticket( get_current_user_id() );
 			if ( ! empty( $contacts ) ) {
-				if ( isset( $_GET['subscribe'] ) ) {
+				if ( isset( $_GET['subscribed'] ) ) {
 					$class = ' class="current"';
 				} else {
 					$class = '';
 				}
-				$views['subscribe_ticket'] = "<a href='edit.php?post_type=" . Rt_HD_Module::$post_type . "&subscribe=true' $class>" . sprintf( _nx( 'Subscribed <span class="count">(%s)</span>', 'Subscribed <span class="count">(%s)</span>', count( $fav_ticket ), RT_HD_TEXT_DOMAIN ), number_format_i18n( count( $contacts ) ) ) . '</a>';
+				$temp_view['subscribe_ticket'] = "<a href='edit.php?post_type=" . Rt_HD_Module::$post_type . "&subscribed=true' $class>" . sprintf( _nx( 'Subscribed <span class="count">(%s)</span>', 'Subscribed <span class="count">(%s)</span>', count( $fav_ticket ), RT_HD_TEXT_DOMAIN ), number_format_i18n( count( $contacts ) ) ) . '</a>';
 			}
 
 			//remove count for editor
@@ -674,8 +674,11 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 					$views[ $key ] = preg_replace( '#<span class=["\']count["\']>(.*?)</span>#', '', $view );
 				}
 			}
+			$views = $temp_view + $views;
+			$trash = $views['trash'];
+			unset( $views['trash'] );
+			$views['trash'] = $trash;
 
-			$views = array_merge( $temp_view, $views );
 			return $views;
 		}
 
