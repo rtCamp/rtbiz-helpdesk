@@ -665,7 +665,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 				} else {
 					$class = '';
 				}
-				$views['subscribe_ticket'] = "<a href='edit.php?post_type=" . Rt_HD_Module::$post_type . "&subscribe=true' $class>" . sprintf( _nx( 'Subscribe <span class="count">(%s)</span>', 'Subscribe <span class="count">(%s)</span>', count( $fav_ticket ), RT_HD_TEXT_DOMAIN ), number_format_i18n( count( $contacts ) ) ) . '</a>';
+				$views['subscribe_ticket'] = "<a href='edit.php?post_type=" . Rt_HD_Module::$post_type . "&subscribe=true' $class>" . sprintf( _nx( 'Subscribed <span class="count">(%s)</span>', 'Subscribed <span class="count">(%s)</span>', count( $fav_ticket ), RT_HD_TEXT_DOMAIN ), number_format_i18n( count( $contacts ) ) ) . '</a>';
 			}
 
 			//remove count for editor
@@ -750,7 +750,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 						$attr_tax = $rt_hd_rt_attributes->get_taxonomy_name( $attr->attribute_name );
 						$attr_terms = get_terms( $attr_tax, array( 'hide_empty' => false ) );
 						if ( ! empty( $attr_terms ) ) {
-							echo '<label class="screen-reader-text" for="' . $attr_tax . '">' . __( 'Filter by offering' ) . '</label>';
+							echo '<label class="screen-reader-text" for="' . $attr_tax . '">' . __( 'Filter by '.$attr->attribute_label ) . '</label>';
 
 							echo '<select id="' . $attr->attribute_name . '" class="postform" name="' . $attr_tax . '">';
 							echo '<option value="0">Select ' . $attr->attribute_label . '</option>';
