@@ -166,7 +166,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				),
 				array(
 					'slug'        => 'hd-archived',
-					'name'        => __( 'Solved', RT_HD_TEXT_DOMAIN ),
+					'name'        => __( 'Archived', RT_HD_TEXT_DOMAIN ),
 					'description' => __( 'Ticket is archived. Client can re-open if they wish to.', RT_HD_TEXT_DOMAIN ),
 				),
 			);
