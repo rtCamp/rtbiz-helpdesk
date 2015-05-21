@@ -45,6 +45,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 
 			add_action( 'wp_ajax_rthd_get_account_contacts', array( $this, 'get_account_contacts_ajax' ) );
 			add_action( 'wp_ajax_rthd_add_contact', array( $this, 'add_new_contact_ajax' ) );
+
 			add_filter( 'rt_biz_contact_meta_fields', array( $this, 'rthd_add_setting_to_rtbiz_user' ), 10, 1 );
 
 			add_action( 'rtbiz_after_delete_staff_acl_remove-' . RT_HD_TEXT_DOMAIN, array(
@@ -308,6 +309,15 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		}
 
 		function rthd_add_setting_to_rtbiz_user( $fields ) {
+			$custom_filed = array();
+			if ( ( ! empty( $_REQUEST['module'] ) && ! empty( $_REQUEST['post'] ) && get_post_type( $_REQUEST['post'] ) == rt_biz_get_contact_post_type() ) ||
+			     ( ! empty( $_POST['post_type'] ) && rt_biz_get_contact_post_type() == $_POST['post_type']
+			       &&  strpos( $_POST['_wp_http_referer'], 'module=' . RT_HD_TEXT_DOMAIN ) !== false ) ) {
+				$custom_filed[] = $fields[0];
+				$custom_filed[] = $fields[1];
+				$fields = $custom_filed;
+			}
+
 			if ( rthd_get_redux_adult_filter() ) {
 				$fields[] = array(
 					'key'      => 'rthd_contact_adult_filter',
