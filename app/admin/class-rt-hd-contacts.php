@@ -45,6 +45,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 
 			add_action( 'wp_ajax_rthd_get_account_contacts', array( $this, 'get_account_contacts_ajax' ) );
 			add_action( 'wp_ajax_rthd_add_contact', array( $this, 'add_new_contact_ajax' ) );
+
 			add_filter( 'rt_biz_contact_meta_fields', array( $this, 'rthd_add_setting_to_rtbiz_user' ), 10, 1 );
 
 			add_action( 'rtbiz_after_delete_staff_acl_remove-' . RT_HD_TEXT_DOMAIN, array(
@@ -55,6 +56,64 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 			//update contact lable for staff and customer
 			add_filter( 'rt_biz_contact_labels', array( $this, 'rthd_change_contact_lablels' ) );
 
+			//update contact page module wise
+			add_filter( 'get_edit_post_link', array( $this, 'rthd_edit_contact_link' ), 10, 2 );
+			add_action( 'add_meta_boxes_' . rt_biz_get_contact_post_type() , array( $this, 'metabox_rearrenge_removed' ), 20 );
+			add_filter( 'redirect_post_location', array( $this, 'rthd_redirect_post_location_filter' ), 99 );
+		}
+
+		/**
+		 * add query parameter after post update redirection url
+		 * @param $location
+		 */
+		function rthd_redirect_post_location_filter( $location ) {
+			if ( ! empty( $_POST['post_type'] ) && rt_biz_get_contact_post_type() == $_POST['post_type']
+			     &&  strpos( $_POST['_wp_http_referer'], 'module=' . RT_HD_TEXT_DOMAIN ) !== false ) {
+				$location = add_query_arg( 'module', RT_HD_TEXT_DOMAIN, $location );
+			}
+			return $location;
+		}
+
+		function metabox_rearrenge_removed(){
+			global $wp_meta_boxes;
+
+			$users = rt_biz_get_wp_user_for_contact( $_REQUEST['post'] );
+			if ( in_array( 'administrator', $users[0]->roles ) ) {
+				$is_staff_member = 'yes';
+			} else {
+				$is_staff_member  = get_post_meta( $_REQUEST['post'], 'rt_biz_is_staff_member', true );
+			}
+
+			$contact_metaboxes['normal']['default']['rt-biz-entity-details'] = $wp_meta_boxes[ rt_biz_get_contact_post_type() ]['normal']['default']['rt-biz-entity-details'];
+			$contact_metaboxes['normal']['core']['commentsdiv'] = $wp_meta_boxes[ rt_biz_get_contact_post_type() ]['normal']['core']['commentsdiv'];
+			$contact_metaboxes['side']['core']['submitdiv'] = $wp_meta_boxes[ rt_biz_get_contact_post_type() ]['side']['core']['submitdiv'];
+			$contact_metaboxes['side']['core'][ 'p2p-from-' . rt_biz_get_contact_post_type() . '_to_user' ] = $wp_meta_boxes[ rt_biz_get_contact_post_type() ]['side']['core'][ 'p2p-from-' . rt_biz_get_contact_post_type() . '_to_user' ];
+			$contact_metaboxes['side']['core']['rt-biz-acl-details'] = $wp_meta_boxes[ rt_biz_get_contact_post_type() ]['side']['core']['rt-biz-acl-details'];
+			$contact_metaboxes['side']['core']['rt-offeringdiv'] = $wp_meta_boxes[ rt_biz_get_contact_post_type() ]['side']['core']['rt-offeringdiv'];
+			$contact_metaboxes['side']['core'][ 'p2p-to-' . Rt_HD_Module::$post_type . '_to_' . rt_biz_get_contact_post_type() ] = $wp_meta_boxes[ rt_biz_get_contact_post_type() ]['side']['core'][ 'p2p-to-' . Rt_HD_Module::$post_type . '_to_' . rt_biz_get_contact_post_type() ];
+			$contact_metaboxes['side']['core']['rt-departmentdiv'] = $wp_meta_boxes[ rt_biz_get_contact_post_type() ]['side']['core']['rt-departmentdiv'];
+
+			if ( ! empty( $is_staff_member ) && 'yes' == $is_staff_member ) {
+				// remove metabox only staff
+			} else {
+				//remove metabox only customer
+				unset( $contact_metaboxes['side']['core']['rt-offeringdiv'] );
+				unset( $contact_metaboxes['side']['core']['rt-departmentdiv'] );
+			}
+
+			$wp_meta_boxes[ rt_biz_get_contact_post_type() ] = $contact_metaboxes;
+		}
+
+		/**
+		 * add module query argument
+		 * @param $url
+		 * @param $postid
+		 */
+		function rthd_edit_contact_link( $url, $postid ){
+			if ( ! empty( $_REQUEST['module'] ) && ! empty( $postid ) && get_post_type( $postid ) == rt_biz_get_contact_post_type() ) {
+				$url = esc_url( add_query_arg( 'module', $_REQUEST['module'], $url ) );
+			}
+			return $url;
 		}
 
 		/*
@@ -250,6 +309,15 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		}
 
 		function rthd_add_setting_to_rtbiz_user( $fields ) {
+			$custom_filed = array();
+			if ( ( ! empty( $_REQUEST['module'] ) && ! empty( $_REQUEST['post'] ) && get_post_type( $_REQUEST['post'] ) == rt_biz_get_contact_post_type() ) ||
+			     ( ! empty( $_POST['post_type'] ) && rt_biz_get_contact_post_type() == $_POST['post_type']
+			       &&  strpos( $_POST['_wp_http_referer'], 'module=' . RT_HD_TEXT_DOMAIN ) !== false ) ) {
+				$custom_filed[] = $fields[0];
+				$custom_filed[] = $fields[1];
+				$fields = $custom_filed;
+			}
+
 			if ( rthd_get_redux_adult_filter() ) {
 				$fields[] = array(
 					'key'      => 'rthd_contact_adult_filter',
