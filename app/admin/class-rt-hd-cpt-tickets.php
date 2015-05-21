@@ -91,11 +91,11 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 			$columns['rthd_ticket_status'] = '<span class="status_head tips" data-tip="' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '">' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '</span>';
 			$columns['rthd_ticket_assignee'] = __( 'Assignee', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_created_by'] = __( 'Ticket Author', RT_HD_TEXT_DOMAIN );
+			$columns['rthd_ticket_last_reply_by'] = __( 'Last Reply By', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_followup'] = __( 'Reply Count', RT_HD_TEXT_DOMAIN );
 			//            $columns['rthd_ticket_updated_by']     = __( 'Updated By', RT_HD_TEXT_DOMAIN );
-			$columns['rthd_ticket_last_reply_by'] = __( 'Last Reply By', RT_HD_TEXT_DOMAIN );
-
 			$columns = array_merge( $columns, $cols );
+			$columns[ 'p2p-from-'.Rt_HD_Module::$post_type.'_to_'.rt_biz_get_contact_post_type() ] = __( 'Participants (Customers)', RT_HD_TEXT_DOMAIN );
 
 			return $columns;
 		}
@@ -732,7 +732,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 					echo '<label class="screen-reader-text" for="rt_offering">' . __( 'Filter by offering' ) . '</label>';
 
 					echo '<select id="rt_offering" class="postform" name="rt-offering">';
-					echo '<option value="0">Select Product</option>';
+					echo '<option value="0">Select Offering</option>';
 
 					foreach ( $products as $product ) {
 						if ( isset( $_GET['rt-offering'] ) && $product->slug == $_GET['rt-offering'] ) {
