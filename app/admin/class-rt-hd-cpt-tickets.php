@@ -167,7 +167,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 					if ( $user_info ) {
 						//                      printf( "<a href='%s'>%s</a>", $url, $user_info->display_name );
 						add_filter( 'get_avatar', array( $this, 'add_gravatar_class' ) );
-						printf( " <a href='%s'>%s <span>%s</span> ", $url, get_avatar( $user_info->user_email, 25 ), $user_info->display_name );
+						printf( " <a href='%s'>%s <span  class='rthd_td_show'>%s</span> ", $url, get_avatar( $user_info->user_email, 25 ), $user_info->display_name );
 						remove_filter( 'get_avatar', array( $this, 'add_gravatar_class' ) );
 					} else {
 						echo '<div>' . __( 'No assignee', RT_HD_TEXT_DOMAIN ) . '</div>';
@@ -188,7 +188,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 						$lastreplyby = sprintf( __( '<span class="created-by tips" data-tip="%s">%s </span>', RT_HD_PATH_ADMIN ), $comment->comment_date, human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) . __( ' ago' ) );
 						if ( $user_info ) {
 							add_filter( 'get_avatar', array( $this, 'add_gravatar_class' ) );
-							printf( "<div class='rthd-ticket-author'>%s <span>%s</span> %s</div>", get_avatar( $user_info->user_email, 25 ), $user_info->display_name, $lastreplyby );
+							printf( "<div class='rthd-ticket-author'>%s <span class='rthd_td_show'>%s</span> <span class='rthd_td_show'>%s</span></div>", get_avatar( $user_info->user_email, 25 ), $user_info->display_name, $lastreplyby );
 							remove_filter( 'get_avatar', array( $this, 'add_gravatar_class' ) );
 						}
 					} else {
@@ -278,7 +278,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 									$replyby = sprintf( __( '<span class="created-by tips" data-tip="%s">%s </span>', RT_HD_PATH_ADMIN ), get_the_date( 'd-m-Y H:i' ), $datediff );
 							if ( $user_info ) {
 								add_filter( 'get_avatar', array( $this, 'add_gravatar_class' ) );
-								printf( "<div class='rthd-ticket-author'><a href='%s'>%s <span>%s</span></a> %s</div>", $url, get_avatar( $user_info->user_email, 25 ), $user_info->display_name, $replyby );
+								printf( "<div class='rthd-ticket-author'><a href='%s'>%s <span  class='rthd_td_show'>%s</span></a> <span class='rthd_td_show'>%s</span></div>", $url, get_avatar( $user_info->user_email, 25 ), $user_info->display_name, $replyby );
 								remove_filter( 'get_avatar', array( $this, 'add_gravatar_class' ) );
 							}
 					break;

@@ -9,6 +9,13 @@
     //text-transform: uppercase;
 }
 
+.rthd_td_show{
+	visibility: hidden;
+}
+
+.mobile .rthd_td_show, .row-actions.visible, div.comment-item:hover .rthd_td_show, tr:hover .rthd_td_show{
+	visibility: visible;
+}
 
 .rthd-setup-wizard-row {
 	overflow: hidden;
