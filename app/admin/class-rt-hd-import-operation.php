@@ -635,8 +635,15 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 */
 		function add_contacts_to_post( $allemail, $post_id ) {
 			global $rt_hd_contacts;
+			$ticket_creator = get_post_meta( $post_id, '_rtbiz_hd_created_by',true );
+			$ticket_creator = get_userdata( $ticket_creator );
 			$postterms = array();
+
 			foreach ( $allemail as $email ) {
+				// skip ticket creator getting added in contact list of ticket.
+				if ( $email['address'] == $ticket_creator->user_email ){
+					continue;
+				}
 				$contacts = rt_biz_get_contact_by_email( $email );
 				if ( ! empty( $contacts ) ) {
 					foreach ( $contacts as $contact ) {
