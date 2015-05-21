@@ -43,7 +43,7 @@ global $current_user;
 						       value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE; ?>"
 						       id="followup_privacy_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ?>"/>
 						<label
-							for="followup_privacy_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"> <?php echo rthd_get_comment_type( Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ) ?></label>
+							for="followup_privacy_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ?>"> <?php echo rthd_get_comment_type( Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ) ?></label>
 
 						<input type="radio" class="radio" name="private_comment"
 						       value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF; ?>"

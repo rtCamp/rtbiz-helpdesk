@@ -168,7 +168,7 @@ $user_edit_content = current_user_can( $cap );
 								<input type="hidden" class="rthd-current-user-id"
 								       value="<?php echo get_current_user_id(); ?>"/>
 								<a style="<?php echo $assign_tome_style; ?>" href="#"
-								   class="rt-hd-assign-me"><?php _e( 'Assign me' ); ?></a>
+								   class="rt-hd-assign-me"><?php _e( 'Assign me', RT_HD_TEXT_DOMAIN ); ?></a>
 								<img id="assignee-change-spinner" class="helpdeskspinner"
 								     src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
 							</div>

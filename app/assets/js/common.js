@@ -148,7 +148,11 @@ jQuery( document ).ready(function () {
 				if (followup_type.length) {
 					followup_type = followup_type.val();
 				} else {
-					followup_type = jQuery( "input[name='private_comment']" ).val();
+					//if ( jQuery( "input[name='private_comment']" ).is(':checked')){
+					//	followup_type = jQuery( "input[name='private_comment']" ).val();
+					//} else {
+						followup_type = 10;
+					//}
 				}
 				formData.append( "private_comment", followup_type );
 				formData.append( "followup_ticket_unique_id", jQuery( '#ticket_unique_id' ).val() );
@@ -193,7 +197,14 @@ jQuery( document ).ready(function () {
 							// front end code end
 
 							rthd_common.rthd_tinymce_set_content( 'followupcontent', '' );
-							jQuery( '#add-private-comment' ).val( 10 );
+
+							var comment_privacy = jQuery( "input[name='private_comment']" );
+							if (comment_privacy.is(':radio')){
+								jQuery('#followup_privacy_10').attr('checked','checked');
+							} else {
+								comment_privacy.attr('checked',false);
+							}
+
 							uploadedfiles = [];
 							if (data.ticket_status == 'answered') {
 								if (jQuery( '#rthd_keep_status' )) {
