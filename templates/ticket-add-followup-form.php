@@ -32,22 +32,48 @@ global $current_user;
 				?>
 				<div id="private-comment">
 					<div class="rthd-visibility-wrap">
-						<label class="rthd-visibility"> Visibility: </label>
+						<label class="rthd-visibility"> <strong>Visibility </strong></label>
+            <div>
 						<input type="radio" class="radio" name="private_comment"
 						       value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC; ?>"
 						       id="followup_privacy_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>" checked/>
 						<label
-							for="followup_privacy_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"> <?php echo rthd_get_comment_type( Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ) ?></label>
+							for="followup_privacy_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"> Customers + Staff </label> <br />
+
 						<input type="radio" class="radio" name="private_comment"
+						       value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE; ?>"
+						       id="followup_privacy_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ?>"/>
+						<label
+							for="followup_privacy_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ?>"> Customers + Staff (<?php echo rthd_get_comment_type( Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ) ?>)
+
+						<span class="rthd-tooltip rthd-followup-type-tolltip">
+						<i class="dashicons dashicons-info rtmicon"></i>
+						<span class="rthd-tip">
+							<?php _e( 'Email notification will not show content of this followup. Recommended, if you are sharing password or other sensitive information.' , RT_HD_TEXT_DOMAIN ); ?>
+						</span>
+					</span>
+						</label> <br />
+
+
+              <input type="radio" class="radio" name="private_comment"
 						       value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF; ?>"
 						       id="followup_privacy_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF ?>"/>
 						<label
-							for="followup_privacy_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF ?>"> <?php echo rthd_get_comment_type( Rt_HD_Import_Operation::$FOLLOWUP_STAFF ) ?> </label>
-					</div>
+							for="followup_privacy_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF ?>"> <?php echo rthd_get_comment_type( Rt_HD_Import_Operation::$FOLLOWUP_STAFF ) ?> </label> <br />
+            </div>
+          </div>
 				</div>
 			<?php } else { ?>
-				<input type="hidden" name="private_comment" id="add-private-comment"
-				       value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>">
+				<label for="add-private-comment" class="description">
+					<input id="add-private-comment" name="private_comment" type="checkbox"  value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ?>" />
+					<?php echo 'Mark this as '.rthd_get_comment_type( Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE )?></label>
+					<span class="rthd-tooltip rthd-followup-type-tolltip">
+						<i class="dashicons dashicons-info rtmicon"></i>
+						<span class="rthd-tip">
+							<?php _e( 'Email notification will not show content of this followup. Recommended, if you are sharing password or other sensitive information.' , RT_HD_TEXT_DOMAIN ); ?>
+						</span>
+					</span>
+
 			<?php }	?>
 			<?php if ( current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' ) ) && $post->post_status != 'hd-answered' ) { ?>
 				<div class="rthd-keep-status-wrap">

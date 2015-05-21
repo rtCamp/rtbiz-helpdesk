@@ -95,15 +95,18 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			     && get_post_type( $_POST['post_id'] ) == Rt_HD_Module::$post_type
 				 && wp_verify_nonce( $_POST['nonce'], 'heythisisrthd_ticket_fav_'.$_POST['post_id'] )
 			) {
+				$label = '';
 				$favs = rthd_get_user_fav_ticket( get_current_user_id() );
 				if ( in_array( $_POST['post_id'], $favs ) ) {
 					rthd_delete_user_fav_ticket( get_current_user_id(), $_POST['post_id'] );
+					$label = 'Favorite this ticket';
 				} else {
 					rthd_add_user_fav_ticket( get_current_user_id(),$_POST['post_id'] );
+					$label = 'Remove this ticket from favorites';
 				}
 				$status = true;
 			}
-			echo json_encode( array( 'status' => $status ) );
+			echo json_encode( array( 'status' => $status , 'label' => $label ) );
 			die();
 		}
 
@@ -2086,7 +2089,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				}
 
 				$response['status'] = true;
-				$response['label'] = 'Unsubscribe';
+				$response['label'] = 'Unsubscribe notifications from this ticket';
 				$response['value'] = 'unwatch';
 			} else if ( 'unwatch' == $watch_unwatch ) {
 				if ( current_user_can( $cap ) ) {
@@ -2110,7 +2113,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				}
 
 				$response['status'] = true;
-				$response['label'] = 'Subscribe';
+				$response['label'] = 'Subscribe for notifications from this ticket';
 				$response['value'] = 'watch';
 			}
 

@@ -199,6 +199,9 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 					       value="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>"
 					       title="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>"
 					       readonly="readonly">
+					<input
+						name="post[post_date]" type="hidden"
+						value="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>"/>
 				</p>
 			</div>
 
