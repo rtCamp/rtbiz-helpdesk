@@ -77,10 +77,10 @@ $user_edit_content = current_user_can( $cap );
 							$watch_unwatch_label = $watch_unwatch_value = '';
 							if ( current_user_can( $cap ) ) { // For staff/subscriber
 								if ( rthd_is_ticket_subscriber( $post->ID ) ) {
-									$watch_unwatch_label = 'Unsubscribe';
+									$watch_unwatch_label = 'Unsubscribe notifications from this ticket';
 									$watch_unwatch_value = 'unwatch';
 								} else {
-									$watch_unwatch_label = 'Subscribe';
+									$watch_unwatch_label = 'Subscribe for notifications from this ticket';
 									$watch_unwatch_value = 'watch';
 								}
 							}
@@ -91,18 +91,19 @@ $user_edit_content = current_user_can( $cap );
 							   title="<?php _e( $watch_unwatch_label ) ?>">
 								<?php
 								if ( 'watch' == $watch_unwatch_value ) {
-									echo '<span class="dashicons dashicons-email-alt"></span>';
+									echo '<span class="dashicons dashicons-email-alt rthd-gray"></span>';
 								} else {
 									echo '<span class="dashicons dashicons-email"></span>';
 								}
 								?>
 								<?php }
+								$isfav = in_array( $post->ID, rthd_get_user_fav_ticket( get_current_user_id() ) );
 								?>
-								<a id="ticket-add-fav" href="#" title="<?php _e( 'Favorite ticket' ) ?>"><?php
-								if ( in_array( $post->ID, rthd_get_user_fav_ticket( get_current_user_id() ) ) ) {
-									echo '<span class="dashicons dashicons-star-filled"></span>';
+								<a id="ticket-add-fav" href="#" title="<?php ($isfav)?_e( 'Remove this ticket from favorites', RT_HD_TEXT_DOMAIN ):_e( 'Favorite this ticket', RT_HD_TEXT_DOMAIN ) ?>"><?php
+								if ( $isfav ) {
+									echo '<span class="dashicons dashicons-heart"></span>';
 								} else {
-									echo '<span class="dashicons dashicons-star-empty"></span>';
+									echo '<span class="dashicons dashicons-heart rthd-gray"></span>';
 								}
 								?>
 								</a>
@@ -295,7 +296,6 @@ $user_edit_content = current_user_can( $cap );
 							if ( ! empty( $created_by ) ) {
 								echo ' <a class="rthd-ticket-created-by" title="Created by ' . $created_by->display_name . ' ' . $create_by_time . '" href="' . ( current_user_can( $cap ) ? rthd_biz_user_profile_link( $created_by->user_email ) : '#' ) . '">' . get_avatar( $created_by->user_email, '30' ) . '</a>';
 							}
-							//						echo "<div class='rthd-contact-avatar-no-reply-div'>";
 							// contact group
 							foreach ( $other_contacts as $email ) {
 
@@ -309,10 +309,8 @@ $user_edit_content = current_user_can( $cap );
 
 								echo '<a title= "' . $display_name . '" class="rthd-last-reply-by rthd-contact-avatar-no-reply"  href="' . ( current_user_can( $cap ) ? rthd_biz_user_profile_link( $email ) : '#' ) . '">' . get_avatar( $email, '30' ) . ' </a>';
 							}
-							//						echo "</div>";
 
 							if ( current_user_can( $cap ) ) {
-								//echo '<div class="rthd-subscriber-avatar-no-reply-div">';
 								// Subscriber
 								foreach ( $subscriber as $email ) {
 									$user         = get_user_by( 'email', $email );
@@ -322,7 +320,6 @@ $user_edit_content = current_user_can( $cap );
 									}
 									echo '<a title= "' . $display_name . '" class="rthd-last-reply-by rthd-contact-avatar-no-reply"  href="' . ( current_user_can( $cap ) ? rthd_biz_user_profile_link( $email ) : '#' ) . '">' . get_avatar( $email, '30' ) . ' </a>';
 								}
-								//echo "</div>";
 							}
 							// Other comments authors
 							if ( ! empty( $emails ) ) {
