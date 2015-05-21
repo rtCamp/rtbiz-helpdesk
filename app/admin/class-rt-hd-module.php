@@ -134,9 +134,9 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				'singular_name' => __( 'Ticket', RT_HD_TEXT_DOMAIN ),
 				'menu_name'     => 'Helpdesk',
 				'all_items'     => __( 'Tickets', RT_HD_TEXT_DOMAIN ),
-				'add_new'       => __( 'Add Ticket', RT_HD_TEXT_DOMAIN ),
-				'add_new_item'  => __( 'Add Ticket', RT_HD_TEXT_DOMAIN ),
-				'new_item'      => __( 'Add Ticket', RT_HD_TEXT_DOMAIN ),
+				'add_new'       => __( 'Add New Ticket', RT_HD_TEXT_DOMAIN ),
+				'add_new_item'  => __( 'Add New Ticket', RT_HD_TEXT_DOMAIN ),
+				'new_item'      => __( 'Add New Ticket', RT_HD_TEXT_DOMAIN ),
 				'edit_item'     => __( 'Edit Ticket', RT_HD_TEXT_DOMAIN ),
 				'view_item'     => __( 'View Ticket', RT_HD_TEXT_DOMAIN ),
 				'search_items'  => __( 'Search Tickets', RT_HD_TEXT_DOMAIN ),
@@ -166,7 +166,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				),
 				array(
 					'slug'        => 'hd-archived',
-					'name'        => __( 'Solved', RT_HD_TEXT_DOMAIN ),
+					'name'        => __( 'Archived', RT_HD_TEXT_DOMAIN ),
 					'description' => __( 'Ticket is archived. Client can re-open if they wish to.', RT_HD_TEXT_DOMAIN ),
 				),
 			);

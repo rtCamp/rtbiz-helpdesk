@@ -317,7 +317,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 		 * Display ticket history on WooCommerce order page
 		 */
 		function support_info( $post ) {
-			echo balanceTags( do_shortcode( '[rt_hd_tickets orderid=' . $post->ID . ']' ) );
+			echo balanceTags( do_shortcode( '[rt_hd_tickets title="false" orderid=' . $post->ID . ']' ) );
 		}
 
 		/*
@@ -487,7 +487,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 		function woo_my_tickets_my_account() {
 			global $current_user;
 			echo balanceTags( do_shortcode( '[rt_hd_tickets userid = ' . $current_user->ID . ' fav= true]' ) );
-			echo balanceTags( do_shortcode( '[rt_hd_tickets userid = ' . $current_user->ID . ']' ) );
+			echo balanceTags( do_shortcode( '[rt_hd_tickets show_support_form_link=yes userid = ' . $current_user->ID . ']' ) );
 		}
 
 

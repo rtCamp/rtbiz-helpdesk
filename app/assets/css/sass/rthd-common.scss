@@ -19,8 +19,8 @@ mark.rthd-answered {
 }
 
 mark.rthd-archived {
-	background: #9CB8D4;
-	border: 1px solid #9CB8D4;
+	background: #b4b9be;
+	border: 1px solid #b4b9be;
 }
 
 mark.rthd-trash {
@@ -33,3 +33,19 @@ mark.rthd-trash {
 	margin-bottom: 20px;
 	padding: 8px 10px;
 }
+
+
+.rthd-ticket-list-header{
+	margin-bottom: 30px;
+	& h2{
+		display: inline;
+	}
+	& a{
+		float: right;
+	}
+	& .rthd-count{
+		color: #808080;
+	}
+
+}
+

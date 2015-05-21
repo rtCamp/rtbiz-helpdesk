@@ -91,11 +91,11 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 			$columns['rthd_ticket_status'] = '<span class="status_head tips" data-tip="' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '">' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '</span>';
 			$columns['rthd_ticket_assignee'] = __( 'Assignee', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_created_by'] = __( 'Ticket Author', RT_HD_TEXT_DOMAIN );
+			$columns['rthd_ticket_last_reply_by'] = __( 'Last Reply By', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_followup'] = __( 'Reply Count', RT_HD_TEXT_DOMAIN );
 			//            $columns['rthd_ticket_updated_by']     = __( 'Updated By', RT_HD_TEXT_DOMAIN );
-			$columns['rthd_ticket_last_reply_by'] = __( 'Last Reply By', RT_HD_TEXT_DOMAIN );
-
 			$columns = array_merge( $columns, $cols );
+			$columns[ 'p2p-from-'.Rt_HD_Module::$post_type.'_to_'.rt_biz_get_contact_post_type() ] = __( 'Participants (Customers)', RT_HD_TEXT_DOMAIN );
 
 			return $columns;
 		}
@@ -167,7 +167,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 					if ( $user_info ) {
 						//                      printf( "<a href='%s'>%s</a>", $url, $user_info->display_name );
 						add_filter( 'get_avatar', array( $this, 'add_gravatar_class' ) );
-						printf( " <a href='%s'>%s <span>%s</span> ", $url, get_avatar( $user_info->user_email, 25 ), $user_info->display_name );
+						printf( " <a href='%s'>%s <span  class='rthd_td_show'>%s</span> ", $url, get_avatar( $user_info->user_email, 25 ), $user_info->display_name );
 						remove_filter( 'get_avatar', array( $this, 'add_gravatar_class' ) );
 					} else {
 						echo '<div>' . __( 'No assignee', RT_HD_TEXT_DOMAIN ) . '</div>';
@@ -188,7 +188,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 						$lastreplyby = sprintf( __( '<span class="created-by tips" data-tip="%s">%s </span>', RT_HD_PATH_ADMIN ), $comment->comment_date, human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) . __( ' ago' ) );
 						if ( $user_info ) {
 							add_filter( 'get_avatar', array( $this, 'add_gravatar_class' ) );
-							printf( "<div class='rthd-ticket-author'>%s <span>%s</span> %s</div>", get_avatar( $user_info->user_email, 25 ), $user_info->display_name, $lastreplyby );
+							printf( "<div class='rthd-ticket-author'>%s <span class='rthd_td_show'>%s</span> <span class='rthd_td_show'>%s</span></div>", get_avatar( $user_info->user_email, 25 ), $user_info->display_name, $lastreplyby );
 							remove_filter( 'get_avatar', array( $this, 'add_gravatar_class' ) );
 						}
 					} else {
@@ -278,7 +278,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 									$replyby = sprintf( __( '<span class="created-by tips" data-tip="%s">%s </span>', RT_HD_PATH_ADMIN ), get_the_date( 'd-m-Y H:i' ), $datediff );
 							if ( $user_info ) {
 								add_filter( 'get_avatar', array( $this, 'add_gravatar_class' ) );
-								printf( "<div class='rthd-ticket-author'><a href='%s'>%s <span>%s</span></a> %s</div>", $url, get_avatar( $user_info->user_email, 25 ), $user_info->display_name, $replyby );
+								printf( "<div class='rthd-ticket-author'><a href='%s'>%s <span  class='rthd_td_show'>%s</span></a> <span class='rthd_td_show'>%s</span></div>", $url, get_avatar( $user_info->user_email, 25 ), $user_info->display_name, $replyby );
 								remove_filter( 'get_avatar', array( $this, 'add_gravatar_class' ) );
 							}
 					break;
@@ -655,17 +655,17 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 			if ( ! empty( $fav_ticket ) ) {
 				if ( isset( $_GET['favorite'] ) ) {
 					$class = ' class="current"'; } else { 					$class = ''; }
-				$views['favorite_ticket'] = "<a href='edit.php?post_type=" . Rt_HD_Module::$post_type . "&favorite=true' $class>" . sprintf( _nx( 'Favorite <span class="count">(%s)</span>', 'Favorites <span class="count">(%s)</span>', count( $fav_ticket ), RT_HD_TEXT_DOMAIN ), number_format_i18n( count( $fav_ticket ) ) ) . '</a>';
+				$temp_view['favorite_ticket'] = "<a href='edit.php?post_type=" . Rt_HD_Module::$post_type . "&favorite=true' $class>" . sprintf( _nx( 'Favorite <span class="count">(%s)</span>', 'Favorites <span class="count">(%s)</span>', count( $fav_ticket ), RT_HD_TEXT_DOMAIN ), number_format_i18n( count( $fav_ticket ) ) ) . '</a>';
 			}
 
 			$contacts = rthd_get_user_subscribe_ticket( get_current_user_id() );
 			if ( ! empty( $contacts ) ) {
-				if ( isset( $_GET['subscribe'] ) ) {
+				if ( isset( $_GET['subscribed'] ) ) {
 					$class = ' class="current"';
 				} else {
 					$class = '';
 				}
-				$views['subscribe_ticket'] = "<a href='edit.php?post_type=" . Rt_HD_Module::$post_type . "&subscribe=true' $class>" . sprintf( _nx( 'Subscribe <span class="count">(%s)</span>', 'Subscribe <span class="count">(%s)</span>', count( $fav_ticket ), RT_HD_TEXT_DOMAIN ), number_format_i18n( count( $contacts ) ) ) . '</a>';
+				$temp_view['subscribe_ticket'] = "<a href='edit.php?post_type=" . Rt_HD_Module::$post_type . "&subscribed=true' $class>" . sprintf( _nx( 'Subscribed <span class="count">(%s)</span>', 'Subscribed <span class="count">(%s)</span>', count( $fav_ticket ), RT_HD_TEXT_DOMAIN ), number_format_i18n( count( $contacts ) ) ) . '</a>';
 			}
 
 			//remove count for editor
@@ -674,8 +674,11 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 					$views[ $key ] = preg_replace( '#<span class=["\']count["\']>(.*?)</span>#', '', $view );
 				}
 			}
+			$views = $temp_view + $views;
+			$trash = $views['trash'];
+			unset( $views['trash'] );
+			$views['trash'] = $trash;
 
-			$views = array_merge( $temp_view, $views );
 			return $views;
 		}
 
@@ -732,7 +735,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 					echo '<label class="screen-reader-text" for="rt_offering">' . __( 'Filter by offering' ) . '</label>';
 
 					echo '<select id="rt_offering" class="postform" name="rt-offering">';
-					echo '<option value="0">Select Product</option>';
+					echo '<option value="0">Select Offering</option>';
 
 					foreach ( $products as $product ) {
 						if ( isset( $_GET['rt-offering'] ) && $product->slug == $_GET['rt-offering'] ) {
@@ -750,7 +753,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 						$attr_tax = $rt_hd_rt_attributes->get_taxonomy_name( $attr->attribute_name );
 						$attr_terms = get_terms( $attr_tax, array( 'hide_empty' => false ) );
 						if ( ! empty( $attr_terms ) ) {
-							echo '<label class="screen-reader-text" for="' . $attr_tax . '">' . __( 'Filter by offering' ) . '</label>';
+							echo '<label class="screen-reader-text" for="' . $attr_tax . '">' . __( 'Filter by '.$attr->attribute_label ) . '</label>';
 
 							echo '<select id="' . $attr->attribute_name . '" class="postform" name="' . $attr_tax . '">';
 							echo '<option value="0">Select ' . $attr->attribute_label . '</option>';
