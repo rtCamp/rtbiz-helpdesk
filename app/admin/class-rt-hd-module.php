@@ -130,7 +130,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 		function get_custom_labels() {
 			$settings     = rthd_get_redux_settings();
 			$this->labels = array(
-				'name'          => __( 'Tickets', RT_HD_TEXT_DOMAIN ),
+				'name'          => __( 'Ticket', RT_HD_TEXT_DOMAIN ),
 				'singular_name' => __( 'Ticket', RT_HD_TEXT_DOMAIN ),
 				'menu_name'     => 'Helpdesk',
 				'all_items'     => __( 'Tickets', RT_HD_TEXT_DOMAIN ),
