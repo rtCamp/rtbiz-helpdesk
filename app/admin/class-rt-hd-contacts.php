@@ -34,6 +34,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		function hooks() {
 
 			add_filter( 'rt_entity_columns', array( $this, 'contacts_columns' ), 10, 2 );
+			add_filter( 'rt_entity_rearrange_columns', array( $this, 'contacts_rearrange_columns' ), 10, 2 );
 			add_action( 'rt_entity_manage_columns', array( $this, 'manage_contacts_columns' ), 10, 3 );
 
 			add_action( 'bulk_edit_custom_box', array( $this, 'contact_quick_action' ), 10, 2 );
@@ -310,7 +311,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 
 		function rthd_add_setting_to_rtbiz_user( $fields ) {
 			$custom_filed = array();
-			if ( ( ! empty( $_REQUEST['module'] ) && ! empty( $_REQUEST['post'] ) && get_post_type( $_REQUEST['post'] ) == rt_biz_get_contact_post_type() ) ||
+			if ( ( ! empty( $_REQUEST['module'] ) &&  RT_HD_TEXT_DOMAIN == $_REQUEST['module']  && ! empty( $_REQUEST['post'] ) && get_post_type( $_REQUEST['post'] ) == rt_biz_get_contact_post_type() ) ||
 			     ( ! empty( $_POST['post_type'] ) && rt_biz_get_contact_post_type() == $_POST['post_type']
 			       &&  strpos( $_POST['_wp_http_referer'], 'module=' . RT_HD_TEXT_DOMAIN ) !== false ) ) {
 				$custom_filed[] = $fields[0];
@@ -342,6 +343,29 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 			return $fields;
 		}
 
+		function contacts_rearrange_columns( $columns, $rt_entity ){
+
+			global $rt_contact;
+			if ( $rt_entity->post_type != $rt_contact->post_type ) {
+				return $columns;
+			}
+
+			if ( ! empty( $_REQUEST['module'] ) &&  RT_HD_TEXT_DOMAIN == $_REQUEST['module'] ) {
+				$hd_columns = array();
+				$hd_columns['cb'] = $columns['cb'];
+				if ( ! empty( $_REQUEST['rt_contact_group'] ) && 'staff' == $_REQUEST['rt_contact_group'] ) {
+					$hd_columns['title'] = $columns['title'];
+					$hd_columns[ 'taxonomy-' . Rt_Offerings::$offering_slug ] = $columns[ 'taxonomy-' . Rt_Offerings::$offering_slug ];
+					$hd_columns[ 'taxonomy-' . RT_Departments::$slug ] = $columns[ 'taxonomy-' . RT_Departments::$slug ];
+				} else {
+					$hd_columns['title'] = $columns['title'];
+				}
+				$hd_columns[ Rt_HD_Module::$post_type ] = $columns[ Rt_HD_Module::$post_type ];
+				$columns = $hd_columns;
+			}
+
+			return $columns;
+		}
 
 		/**
 		 * Create custom column 'Tickets' for Contacts taxonomy
@@ -355,17 +379,14 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		 */
 		public function contacts_columns( $columns, $rt_entity ) {
 
-			global $rt_contact;
+			global $rt_contact, $rt_hd_module;
 			if ( $rt_entity->post_type != $rt_contact->post_type ) {
 				return $columns;
 			}
 
-			global $rt_hd_module;
 			if ( in_array( Rt_HD_Module::$post_type, array_keys( $rt_entity->enabled_post_types ) ) ) {
-				$columns['hd_role']                  = 'Helpdesk Role';
 				$columns[ Rt_HD_Module::$post_type ] = $rt_hd_module->labels['name'];
 			}
-
 			return $columns;
 		}
 
@@ -417,52 +438,6 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 					} else {
 						echo '0';
 					}
-					break;
-
-				case 'hd_role':
-					$permission_role = '-';
-					$userid          = rt_biz_get_wp_user_for_contact( $post_id );
-					if ( ! empty( $userid ) ) {
-						$where = array(
-							'userid' => $userid[0]->ID,
-							'module' => RT_HD_TEXT_DOMAIN,
-						);
-						$user  = $rt_biz_acl_model->get_acl( $where );
-						if ( empty( $user ) ) {
-							$permission_role = 0;
-						} else {
-							$permission_role = $user[0]->permission;
-						}
-
-						//check admin contact
-						$contacts      = array();
-						$module_user   = get_users( array( 'fields' => 'ID', 'role' => 'administrator' ) );
-						$admin_contact = rt_biz_get_contact_for_wp_user( $module_user );
-
-						foreach ( $admin_contact as $contact ) {
-							$contacts[] = $contact->ID;
-						}
-						if ( in_array( $post_id, $contacts ) ) {
-							$permission_role = 30;
-						}
-
-						switch ( $permission_role ) {
-							case 10 :
-								$permission_role = 'Author';
-								break;
-							case 20 :
-								$permission_role = 'Editor';
-								break;
-							case 30 :
-								$permission_role = 'Admin';
-								break;
-							default:
-								$permission_role = '—';
-								break;
-						}
-					}
-
-					echo '<span>' . $permission_role . '</span>';
 					break;
 				default:
 					if ( in_array( Rt_HD_Module::$post_type, array_keys( $rt_entity->enabled_post_types ) ) && Rt_HD_Module::$post_type == $column ) {
