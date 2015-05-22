@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Email</title>
+		<title><?php echo get_bloginfo( 'name' ); ?></title>
 	</head>
 
 	<body>

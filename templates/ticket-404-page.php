@@ -18,6 +18,8 @@ global $rthd_messages;
 
 			<section class="error-404 not-found entry-content">
 				<div class="page-content">
+				<?php $messages = wp_list_pluck( $rthd_messages, 'message' );
+				if ( ! empty( $messages ) ) { ?>
 					<div class="rthd-container">
 						<?php
 						foreach ( $rthd_messages as $key => $message ) {
@@ -28,6 +30,7 @@ global $rthd_messages;
 						}
 						?>
 					</div>
+				<?php } ?>
 					<div class="rthd-fav-ticket">
 						<?php
 						global $current_user;
@@ -36,7 +39,7 @@ global $rthd_messages;
 					<div class="rthd-my-ticket">
 						<?php
 						global $current_user;
-						echo balanceTags( do_shortcode( '[rt_hd_tickets userid = ' . $current_user->ID . ']' ) ); ?>
+						echo balanceTags( do_shortcode( '[rt_hd_tickets show_support_form_link=yes userid = ' . $current_user->ID . ']' ) ); ?>
 					</div>
 				</div>
 			</section>

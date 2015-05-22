@@ -305,7 +305,7 @@ ul#chat-UI {
 }
 
 .followup-information span,.followup-information span a{
-    color: #06C;
+	font-weight: bold;
 }
 
 .load-more-count {
@@ -432,6 +432,9 @@ ul#chat-UI {
 	&:hover{
 		text-decoration: none;
 	}
+}
+.rthd-followup-type-tolltip{
+	vertical-align: middle;
 }
 
 .rthd-scroll-up label{
@@ -627,7 +630,7 @@ img#hdspinner{
 }
 
 .rthd-visibility-wrap input[type="radio"]{
-	display: inline;
-	min-height: 0;
-	margin-top: 0;
+	display: inline-block;
+	min-height: inherit;
+	margin-top: auto;
 }

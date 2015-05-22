@@ -51,8 +51,8 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 		function add_people_menu() {
 			global $rt_access_control;
 			if ( rthd_check_wizard_completed() ) {
-				add_submenu_page( 'edit.php?post_type=' . Rt_HD_Module::$post_type, __( 'Customers' ), __( 'Customers' ), rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' ), esc_url( 'edit.php?post_type=' . rt_biz_get_contact_post_type() . '&rt_contact_group=customer' ) );
-				add_submenu_page( 'edit.php?post_type=' . Rt_HD_Module::$post_type, __( 'Staff' ), __( 'Staff' ), rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' ), esc_url( 'edit.php?post_type=' . rt_biz_get_contact_post_type() . '&rt_contact_group=staff' ) );
+				add_submenu_page( 'edit.php?post_type=' . Rt_HD_Module::$post_type, __( 'Customers' ), __( 'Customers' ), rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' ), esc_url( 'edit.php?post_type=' . rt_biz_get_contact_post_type() . '&rt_contact_group=customer&module=' . RT_HD_TEXT_DOMAIN ) );
+				add_submenu_page( 'edit.php?post_type=' . Rt_HD_Module::$post_type, __( 'Staff' ), __( 'Staff' ), rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' ), esc_url( 'edit.php?post_type=' . rt_biz_get_contact_post_type() . '&rt_contact_group=staff&module=' . RT_HD_TEXT_DOMAIN ) );
 				add_submenu_page( 'edit.php?post_type=' . esc_html( Rt_HD_Module::$post_type ), __( '---Teams' ), __( '---Teams' ), rt_biz_get_access_role_cap( RT_BIZ_TEXT_DOMAIN, 'editor' ), esc_url( 'edit-tags.php?taxonomy=' . RT_Departments::$slug . '&post_type=' . Rt_HD_Module::$post_type ) );
 				/* add_submenu_page( 'edit.php?post_type=' . esc_html( Rt_HD_Module::$post_type ), __( 'Companies' ), __( '--- Companies' ), rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' ), 'edit.php?post_type=' . rt_biz_get_company_post_type() );
 				  add_submenu_page( 'edit.php?post_type=' . esc_html( Rt_HD_Module::$post_type ), __( 'Access Control' ), __( '--- Access Control' ), rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'admin' ), Rt_Biz::$access_control_slug, array(
@@ -145,10 +145,10 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 			if ( isset( $rthd_post_type ) && in_array( $rthd_post_type, array( rt_biz_get_contact_post_type() ) ) ) {
 				wp_enqueue_script( 'rthd-menu-hack-js', RT_HD_URL . 'app/assets/admin/js/rt-custom-status.js', array( 'jquery' ), time(), true );
 				wp_localize_script( 'rthd-menu-hack-js', 'rthd_menu', Rt_HD_Module::$post_type );
+				$query_arg = '';
 				if ( ! empty( $_GET['rt_contact_group'] ) ) {
-					wp_localize_script( 'rthd-menu-hack-js', 'rthd_url', admin_url( 'edit.php?post_type=' . rt_biz_get_contact_post_type() . '&rt_contact_group=' . $_GET['rt_contact_group'] ) );
+					$query_arg = '&rt_contact_group=' . $_GET['rt_contact_group'] . '&module=' . RT_HD_TEXT_DOMAIN;
 				} else {
-					$query_arg = '';
 					if ( isset( $_REQUEST['post'] ) ) {
 						$user = rt_biz_get_wp_user_for_contact( $_REQUEST['post'] );
 						if ( in_array( 'administrator', $user[0]->roles ) ) {
@@ -161,9 +161,10 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 								$query_arg = '&rt_contact_group=staff';
 							}
 						}
+						$query_arg .= '&module=' . RT_HD_TEXT_DOMAIN;
 					}
-					wp_localize_script( 'rthd-menu-hack-js', 'rthd_url', admin_url( 'edit.php?post_type=' . rt_biz_get_contact_post_type() . $query_arg ) );
 				}
+				wp_localize_script( 'rthd-menu-hack-js', 'rthd_url', admin_url( 'edit.php?post_type=' . rt_biz_get_contact_post_type() . $query_arg ) );
 			}
 
 			if ( isset( $_REQUEST['taxonomy'] ) && isset( $_REQUEST['post_type'] ) && in_array( $_REQUEST['post_type'], array( Rt_HD_Module::$post_type ) ) ) {

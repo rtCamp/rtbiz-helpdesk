@@ -147,7 +147,9 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 				if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' ) ) && current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' ) ) ) {
 					$subscriber     = get_post_meta( $post->ID, '_rtbiz_hd_subscribe_to', true );
 					$post_author_id = get_post_field( 'post_author', $post->ID );
-					if ( ! in_array( $user->ID, $subscriber ) && ! in_array( $user->user_email, $subscriber ) && $user->ID != $post_author_id ) {
+					$creator = get_post_meta( $post->ID, '_rtbiz_hd_created_by', true );
+
+					if ( ! in_array( $user->ID, $subscriber ) && ! in_array( $user->user_email, $subscriber ) && $user->ID != $post_author_id && $creator != $user->ID ) {
 						$redirect_url = ( ( is_ssl() ) ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 						$login_url    = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( $redirect_url ) );
 						$message      = sprintf( '%s ', __( 'You do not have sufficient permissions to access this ticket.' ) );
@@ -207,7 +209,11 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 			if ( empty( $post ) || $wrong_unique_id ) {
 				$wp_query->is_404 = true;
 				$wp_query->set_404();
-				$message = sprintf( '%s ', __( "<div style='margin-left: 0;'>Sorry! Your requested ticket wasn't found." ) );
+				if ( isset( $wp_query->query['rtbiz_hd_ticket'] ) ) {
+					$message = sprintf( '%s ', __( "<div style='margin-left: 0;'>Sorry! Your requested ticket wasn't found." ) );
+				} else {
+					$message = '';
+				}
 				global $rthd_messages;
 				$rthd_messages[] = array( 'type' => 'error', 'message' => $message, 'displayed' => 'no' );
 				$rthd_front_page_title = __( 'Helpdesk' );

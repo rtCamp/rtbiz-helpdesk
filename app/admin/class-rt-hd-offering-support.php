@@ -84,6 +84,11 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 
 			add_action( 'rt_biz_offering_column_content', array( $this, 'manage_offering_column_body' ), 10, 3 );
 			add_filter( 'rt_biz_offerings_columns', array( $this, 'manage_offering_column_header' ) );
+			// Show tickets in woocommerce order page
+			add_action( 'woocommerce_view_order', array( $this, 'woocommerce_view_order_show_ticket' ) );
+		}
+		function woocommerce_view_order_show_ticket( $order_id ) {
+			echo balanceTags( do_shortcode( '[rt_hd_tickets show_support_form_link=yes orderid=' . $order_id. ']' ) );
 		}
 
 		/*
@@ -317,7 +322,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 		 * Display ticket history on WooCommerce order page
 		 */
 		function support_info( $post ) {
-			echo balanceTags( do_shortcode( '[rt_hd_tickets orderid=' . $post->ID . ']' ) );
+			echo balanceTags( do_shortcode( '[rt_hd_tickets title="false" orderid=' . $post->ID . ']' ) );
 		}
 
 		/*
@@ -359,7 +364,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 				$page = get_post( $redux_helpdesk_settings['rthd_support_page'] );
 				?>
 				<td class="edd_rt_hd_support"><a
-						href="<?php echo "/{$page->post_name}/?product_id={$download_id}&order_id={$payment_id}&order_type=edd"; ?>"><?php _e( 'Get Support', RT_HD_TEXT_DOMAIN ) ?></a>
+						href="<?php echo "/{$page->post_name}/?product_id={$download_id}&order_id={$payment_id}&order_type=edd"; ?>"><?php _e( 'Create Ticket', RT_HD_TEXT_DOMAIN ) ?></a>
 				</td>
 			<?php
 			}
@@ -383,7 +388,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 				$page                 = get_post( $redux_helpdesk_settings['rthd_support_page'] );
 				$actions['support'] = array(
 					'url'  => "/{$page->post_name}/?order_id={$order->id}&order_type=woocommerce",
-					'name' => __( 'Get Support', RT_HD_TEXT_DOMAIN )
+					'name' => __( 'Create Ticket', RT_HD_TEXT_DOMAIN )
 				);
 			}
 			return $actions;
@@ -487,7 +492,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 		function woo_my_tickets_my_account() {
 			global $current_user;
 			echo balanceTags( do_shortcode( '[rt_hd_tickets userid = ' . $current_user->ID . ' fav= true]' ) );
-			echo balanceTags( do_shortcode( '[rt_hd_tickets userid = ' . $current_user->ID . ']' ) );
+			echo balanceTags( do_shortcode( '[rt_hd_tickets show_support_form_link=yes userid = ' . $current_user->ID . ']' ) );
 		}
 
 

@@ -132,6 +132,19 @@ if ( ! empty( $post->post_content ) ) {
 			<label
 				for="followup_edit_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"> <?php echo rthd_get_comment_type( Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ) ?></label>
 			<input type="radio" class="radio" name="edit_private"
+			       value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE; ?>"
+			       id="followup_edit_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ?>"/>
+			<label
+				for="followup_edit_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ?>"> Customers + Staff (<?php echo rthd_get_comment_type( Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ) ?>)
+
+						<span class="rthd-tooltip rthd-followup-type-tolltip">
+						<i class="dashicons dashicons-info rtmicon"></i>
+						<span class="rthd-tip">
+							<?php _e( 'Email notification will not show content of this followup. Recommended, if you are sharing password or other sensitive information.' , RT_HD_TEXT_DOMAIN ); ?>
+						</span>
+					</span>
+			</label>
+			<input type="radio" class="radio" name="edit_private"
 			       value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF; ?>"
 			       id="followup_edit_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF ?>"/>
 			<label
