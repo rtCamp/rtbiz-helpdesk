@@ -1,0 +1,6 @@
+**/vendors/**
+**/*.min.js
+**/*-min.js
+**/node_modules/**
+app/lib/**
+gruntfile.js

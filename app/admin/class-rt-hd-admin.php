@@ -71,7 +71,7 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 		 */
 		function rthd_acl_page_help() {
 			global $rt_biz_help;
-			if ( ! empty($_GET['post_type']) && Rt_HD_Module::$post_type == $_GET['post_type'] && ! empty( $_GET['page'] ) && Rt_Biz::$access_control_slug == $_GET['page'] ) {
+			if ( ! empty( $_GET['post_type'] ) && Rt_HD_Module::$post_type == $_GET['post_type'] && ! empty( $_GET['page'] ) && Rt_Biz::$access_control_slug == $_GET['page'] ) {
 				get_current_screen()->add_help_tab( array(
 					'id' => 'hd_acl_overview',
 					'title' => 'Overview',

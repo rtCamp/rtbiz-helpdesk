@@ -56,14 +56,14 @@ jQuery( document ).ready(function () {
 						if (jQuery( this ).hasClass( "moment-from-now" )) {
 							var oldDate = jQuery( this ).attr( "title" );
 
-							if (newDate != "" && moment( newDate ).isValid()) {
+							if (newDate !== "" && moment( newDate ).isValid()) {
 								jQuery( this ).val( moment( new Date( newDate ) ).fromNow() );
 								jQuery( this ).attr( "title", newDate );
 
 								if (jQuery( this ).next().length > 0) {
 									jQuery( this ).next().val( newDate );
 								}
-							} else if (oldDate != "") {
+							} else if (oldDate !== "") {
 								jQuery( this ).val( moment( new Date( oldDate ) ).fromNow() );
 								jQuery( this ).attr( "title", oldDate );
 
@@ -77,7 +77,7 @@ jQuery( document ).ready(function () {
 			}
 			jQuery( ".datepicker-toggle" ).click(function (e) {
 				jQuery( "#" + jQuery( this ).data( "datepicker" ) ).datepicker( "show" );
-			})
+			});
 		},
 		initDateTimePicker: function () {
 			if (jQuery( ".datetimepicker" ).length > 0) {
@@ -88,7 +88,7 @@ jQuery( document ).ready(function () {
 
 						var oldDate = jQuery( this ).attr( "title" );
 
-						if (newDate != "" && moment( newDate ).isValid()) {
+						if (newDate !== "" && moment( newDate ).isValid()) {
 							jQuery( this ).val( moment( new Date( newDate ) ).fromNow() );
 							jQuery( this ).attr( "title", newDate );
 
@@ -96,7 +96,7 @@ jQuery( document ).ready(function () {
 								if (jQuery( this ).hasClass( "moment-from-now" )) {
 									jQuery( this ).next().val( newDate );
 								}
-							} else if (oldDate != "") {
+							} else if (oldDate !== "") {
 								jQuery( this ).val( moment( new Date( oldDate ) ).fromNow() );
 								jQuery( this ).attr( "title", oldDate );
 
@@ -113,14 +113,14 @@ jQuery( document ).ready(function () {
 			jQuery( document ).on("click", ".moment-from-now", function (e) {
 				var oldDate = jQuery( this ).attr( "title" );
 
-				if (oldDate != "") {
+				if (oldDate !== "") {
 					jQuery( this ).datepicker( "setDate", new Date( jQuery( this ).attr( "title" ) ) );
 				}
 			});
 
 			jQuery( ".moment-from-now" ).each(function () {
 
-				if (jQuery( this ).is( "input[type='text']" ) && jQuery( this ).val() != "") {
+				if (jQuery( this ).is( "input[type='text']" ) && jQuery( this ).val() !== "") {
 					jQuery( this ).val( moment( new Date( jQuery( this ).attr( "title" ) ) ).fromNow() );
 				} else if (jQuery( this ).is( ".comment-date" )) {
 					jQuery( this ).html( moment( new Date( jQuery( this ).attr( "title" ) ) ).fromNow() );
@@ -173,7 +173,7 @@ jQuery( document ).ready(function () {
 			jQuery( "#add_new_ex_file" ).click(function (e) {
 				var title = jQuery( "#add_ex_file_title" ).val();
 				var link = jQuery( "#add_ex_file_link" ).val();
-				if (jQuery.trim( link ) == "") {
+				if (jQuery.trim( link ) === "") {
 					return false;
 				}
 				jQuery( "#add_ex_file_title" ).val( "" );
@@ -191,7 +191,7 @@ jQuery( document ).ready(function () {
 		},
 		initSubscriberSearch: function () {
 			try {
-				if (arr_subscriber_user != undefined) {
+				if (arr_subscriber_user !== undefined) {
 					jQuery( "#subscriber_user_ac" ).autocomplete({
 						source: function (request, response) {
 							var term = jQuery.ui.autocomplete.escapeRegex( request.term ), startsWithMatcher = new RegExp( "^" + term, "i" ), startsWith = jQuery.grep(arr_subscriber_user, function (value) {
@@ -207,7 +207,7 @@ jQuery( document ).ready(function () {
 						},
 						select: function (event, ui) {
 							if (jQuery( "#subscribe-auth-" + ui.item.id ).length < 1) {
-								jQuery( "#divSubscriberList" ).append( "<li id='subscribe-auth-" + ui.item.id + "' class='contact-list' >" + ui.item.imghtml + "<a href='#removeSubscriber' class='delete_row'><span class='dashicons dashicons-dismiss'></span></a><br/><a class='subscribe-title heading' target='_blank' href='" + ui.item.user_edit_link + "'>" + ui.item.label + "</a><input type='hidden' name='subscribe_to[]' value='" + ui.item.id + "' /></li>" )
+								jQuery( "#divSubscriberList" ).append( "<li id='subscribe-auth-" + ui.item.id + "' class='contact-list' >" + ui.item.imghtml + "<a href='#removeSubscriber' class='delete_row'><span class='dashicons dashicons-dismiss'></span></a><br/><a class='subscribe-title heading' target='_blank' href='" + ui.item.user_edit_link + "'>" + ui.item.label + "</a><input type='hidden' name='subscribe_to[]' value='" + ui.item.id + "' /></li>" );
 							}
 							jQuery( "#subscriber_user_ac" ).val( "" );
 							return false;
@@ -255,22 +255,22 @@ jQuery( document ).ready(function () {
 				jQuery.ajaxPrefilter(function (options, originalOptions, jqXHR) {
 					var action = JSON.stringify( options.data );
 					if (action.indexOf( 'action=redux_helpdesk_settings_ajax_save&' ) !== -1) {
-						var flag = true;
-						if (jQuery( '#rthd_enable_auto_response' ).val() == 0) {
-							return true
+						var flag = true, i, tr_parent;
+						if (jQuery( '#rthd_enable_auto_response' ).val() === 0) {
+							return true;
 						}
-						if (jQuery( '#rthd_enable_auto_response_mode' ).val() == 1) {
-							for (var i = 0; i < 7; i++) {
-								var tr_parent = jQuery( '.rthd-dayshift-time-start' ).eq( i ).parent().parent();
+						if (jQuery( '#rthd_enable_auto_response_mode' ).val() === 1) {
+							for ( i = 0; i < 7; i++) {
+								tr_parent = jQuery( '.rthd-dayshift-time-start' ).eq( i ).parent().parent();
 								if ( ! rthdAdmin.initDayValidation( tr_parent )) {
 									flag = false;
 								}
 							}
 						}
 
-						if (jQuery( '#rthd_enable_auto_response_mode' ).val() == 0) {
-							for (var i = 0; i < 7; i++) {
-								var tr_parent = jQuery( '.rthd-daynight-am-time-start' ).eq( i ).parent().parent();
+						if (jQuery( '#rthd_enable_auto_response_mode' ).val() === 0) {
+							for ( i = 0; i < 7; i++) {
+								tr_parent = jQuery( '.rthd-daynight-am-time-start' ).eq( i ).parent().parent();
 								if ( ! rthdAdmin.initDayNightValidation( tr_parent )) {
 									flag = false;
 								}
@@ -316,11 +316,11 @@ jQuery( document ).ready(function () {
 
 			if (flag) {
 				jQuery( $tr_parent ).next( '.rthd-dayshift-error' ).hide();
-				if (jQuery( '#rthd_autoresponse_weekend' ).val() == 0) { // if Weekend only off then che check weektime enter or not
+				if (jQuery( '#rthd_autoresponse_weekend' ).val() === 0) { // if Weekend only off then che check weektime enter or not
 					for (var i = 0; i < 7; i++) {
 						$tr_parent = jQuery( '.rthd-dayshift-time-start' ).eq( i ).parent().parent();
-						var starting_val = $tr_parent.find( '.rthd-dayshift-time-start' ).val();
-						var ending_val = $tr_parent.find( '.rthd-dayshift-time-end' ).val();
+						starting_val = $tr_parent.find( '.rthd-dayshift-time-start' ).val();
+						ending_val = $tr_parent.find( '.rthd-dayshift-time-end' ).val();
 						if (starting_val != -1 || ending_val != -1) {
 							allflag = false;
 						}
@@ -382,13 +382,13 @@ jQuery( document ).ready(function () {
 
 			if (flag) {
 				jQuery( $tr_parent ).next( '.rthd-daynightshift-error' ).hide();
-				if (jQuery( '#rthd_autoresponse_weekend' ).val() == 0) { // if Weekend only off then che check weektime enter or not
+				if (jQuery( '#rthd_autoresponse_weekend' ).val() === 0) { // if Weekend only off then che check weektime enter or not
 					for (var i = 0; i < 7; i++) {
 						$tr_parent = jQuery( '.rthd-daynight-am-time-start' ).eq( i ).parent().parent();
-						var starting_am_val = $tr_parent.find( '.rthd-daynight-am-time-start' ).val();
-						var ending_am_val = $tr_parent.find( '.rthd-daynight-am-time-end' ).val();
-						var starting_pm_val = $tr_parent.find( '.rthd-daynight-pm-time-start' ).val();
-						var ending_pm_val = $tr_parent.find( '.rthd-daynight-pm-time-end' ).val();
+						starting_am_val = $tr_parent.find( '.rthd-daynight-am-time-start' ).val();
+						ending_am_val = $tr_parent.find( '.rthd-daynight-am-time-end' ).val();
+						starting_pm_val = $tr_parent.find( '.rthd-daynight-pm-time-start' ).val();
+						ending_pm_val = $tr_parent.find( '.rthd-daynight-pm-time-end' ).val();
 						if (starting_am_val != -1 || ending_am_val != -1 || starting_pm_val != -1 || ending_pm_val != -1) {
 							allflag = false;
 						}
@@ -410,11 +410,11 @@ jQuery( document ).ready(function () {
 			jQuery( document ).on('click', '#rthd_ticket_contacts_blacklist', function (e) {
 				e.preventDefault();
 				var action = jQuery( this ).data( 'action' );
-				var requestArray = new Object();
-				requestArray['post_id'] = jQuery( '#post-id' ).val();
+				var requestArray = {};
+				requestArray.post_id = jQuery( '#post-id' ).val();
 
 				if (action == 'remove_blacklisted') {
-					requestArray['action'] = 'rthd_remove_blacklisted_contact';
+					requestArray.action = 'rthd_remove_blacklisted_contact';
 					jQuery.ajax({
 						url: ajaxurl,
 						type: 'POST',
@@ -431,7 +431,7 @@ jQuery( document ).ready(function () {
 						}
 					});
 				} else if (action == 'blacklisted_confirmation') {
-					requestArray['action'] = 'rthd_show_blacklisted_confirmation';
+					requestArray.action = 'rthd_show_blacklisted_confirmation';
 					jQuery.ajax({
 						url: ajaxurl,
 						type: 'POST',
@@ -454,10 +454,10 @@ jQuery( document ).ready(function () {
 			jQuery( document ).on('click', '#rthd_ticket_contacts_blacklist_yes', function (e) {
 				e.preventDefault();
 				var action = jQuery( this ).data( 'action' );
-				var requestArray = new Object();
-				requestArray['post_id'] = jQuery( '#post-id' ).val();
+				var requestArray = {};
+				requestArray.post_id = jQuery( '#post-id' ).val();
 				if (action == 'blacklisted_contact') {
-					requestArray['action'] = 'rthd_add_blacklisted_contact';
+					requestArray.action = 'rthd_add_blacklisted_contact';
 				}
 
 				jQuery.ajax({

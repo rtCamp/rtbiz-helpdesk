@@ -106,7 +106,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				}
 				$status = true;
 			}
-			echo json_encode( array( 'status' => $status , 'label' => $label ) );
+			echo json_encode( array( 'status' => $status, 'label' => $label ) );
 			die();
 		}
 
@@ -461,7 +461,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$this->add_contacts_to_post( $allemail, $post_id );
 
 			$uploaded = $this->add_attachment_to_post( $uploaded, $post_id );
-			if ( ! empty($uploaded['files'] ) ) {
+			if ( ! empty( $uploaded['files'] ) ) {
 				$uploaded = $uploaded['files'];
 			} else {
 				$uploaded = array();
@@ -644,7 +644,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 			foreach ( $allemail as $email ) {
 				// skip ticket creator getting added in contact list of ticket.
-				if ( $email['address'] == $ticket_creator->user_email ){
+				if ( $email['address'] == $ticket_creator->user_email ) {
 					continue;
 				}
 				$contacts = rt_biz_get_contact_by_email( $email );
@@ -1207,7 +1207,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			}
 			/* end of status toogle code */
 
-			if ( isset( $allemails  ) ) {
+			if ( isset( $allemails ) ) {
 				foreach ( $allemails as $email ) {
 					if ( isset( $email['key'] ) ) {
 						$meta = get_comment_meta( $comment_id, '_email_' . $email['key'], true );
@@ -1524,9 +1524,9 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 		function process_file_attachment($file) {
 			if ( UPLOAD_ERR_OK !== $_FILES[ $file ]['error'] ) { __return_false(); }
-			require_once(ABSPATH . 'wp-admin' . '/includes/image.php');
-			require_once(ABSPATH . 'wp-admin' . '/includes/file.php');
-			require_once(ABSPATH . 'wp-admin' . '/includes/media.php');
+			require_once( ABSPATH . 'wp-admin' . '/includes/image.php' );
+			require_once( ABSPATH . 'wp-admin' . '/includes/file.php' );
+			require_once( ABSPATH . 'wp-admin' . '/includes/media.php' );
 			$attachment_id = media_handle_upload( $file, '' );
 			return $attachment_id;
 		}
@@ -1944,7 +1944,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		function load_more_followup() {
 			$response = array();
 			$response['status'] = false;
-			if ( isset($_REQUEST['post_id']) && isset($_REQUEST['offset']) && isset($_REQUEST['limit'])  ) {
+			if ( isset( $_REQUEST['post_id'] ) && isset( $_REQUEST['offset'] ) && isset( $_REQUEST['limit'] ) ) {
 				$postid = $_REQUEST['post_id'];
 				$offset = $_REQUEST['offset'];
 				$Limit = $_REQUEST['limit'];

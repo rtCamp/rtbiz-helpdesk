@@ -418,7 +418,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 				case Rt_HD_Module::$post_type:
 					$userid = rt_biz_get_wp_user_for_contact( $post_id );
 					if ( ! empty( $userid[0] ) ) {
-						if ( ! empty ( $_REQUEST['rt_contact_group'] ) && 'staff' == $_REQUEST['rt_contact_group'] ) {
+						if ( ! empty( $_REQUEST['rt_contact_group'] ) && 'staff' == $_REQUEST['rt_contact_group'] ) {
 							$args  = array(
 								'post_type'   => Rt_HD_Module::$post_type,
 								'post_status' => 'any',

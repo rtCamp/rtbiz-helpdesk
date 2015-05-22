@@ -1,0 +1,9 @@
+svn-url
+dev-lib
+readme.md
+.ci-env.sh
+.gitmodules
+.travis.yml
+.git
+docs
+tests

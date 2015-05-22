@@ -42,9 +42,9 @@ if ( ! class_exists( 'Rt_HD_Auto_Response' ) ) {
 		function  auto_response( $comment_post_ID, $post_date ) {
 			global $rt_hd_import_operation;
 			$redux = rthd_get_redux_settings();
-			$isEnableAutoResponse = ( isset( $redux['rthd_enable_auto_response']) && 1 == $redux['rthd_enable_auto_response'] ) ;
-			$isDayShift = ( isset( $redux['rthd_enable_auto_response_mode']) && 1 == $redux['rthd_enable_auto_response_mode'] ) ;
-	        $isWeekEndsOnly = ( isset( $redux['rthd_autoresponse_weekend']) && 1 == $redux['rthd_autoresponse_weekend'] ) ;
+			$isEnableAutoResponse = ( isset( $redux['rthd_enable_auto_response'] ) && 1 == $redux['rthd_enable_auto_response'] );
+			$isDayShift = ( isset( $redux['rthd_enable_auto_response_mode'] ) && 1 == $redux['rthd_enable_auto_response_mode'] );
+	        $isWeekEndsOnly = ( isset( $redux['rthd_autoresponse_weekend'] ) && 1 == $redux['rthd_autoresponse_weekend'] ) ;
 			$placeholder_list = array();
 
 			if ( $isEnableAutoResponse ) {
@@ -105,10 +105,10 @@ if ( ! class_exists( 'Rt_HD_Auto_Response' ) ) {
 					}
 				} else {
 					$shifttime = array();
-					$shifttime['am_start'] = isset( $redux['rthd_daynight_am_time_start']) ? $redux['rthd_daynight_am_time_start'] : array( 0 => -1, 1 => -1, 2 => -1, 3 => -1, 4 => -1, 5 => -1, 6 => -1 );
-					$shifttime['am_end'] = isset( $redux['rthd_daynight_am_time_end']) ? $redux['rthd_daynight_am_time_end'] : array( 0 => -1, 1 => -1, 2 => -1, 3 => -1, 4 => -1, 5 => -1, 6 => -1 );
-					$shifttime['pm_start'] = isset( $redux['rthd_daynight_pm_time_start']) ? $redux['rthd_daynight_pm_time_start'] : array( 0 => -1, 1 => -1, 2 => -1, 3 => -1, 4 => -1, 5 => -1, 6 => -1 );
-					$shifttime['pm_end'] = isset( $redux['rthd_daynight_pm_time_end']) ? $redux['rthd_daynight_pm_time_end'] : array( 0 => -1, 1 => -1, 2 => -1, 3 => -1, 4 => -1, 5 => -1, 6 => -1 );
+					$shifttime['am_start'] = isset( $redux['rthd_daynight_am_time_start'] ) ? $redux['rthd_daynight_am_time_start'] : array( 0 => -1, 1 => -1, 2 => -1, 3 => -1, 4 => -1, 5 => -1, 6 => -1 );
+					$shifttime['am_end'] = isset( $redux['rthd_daynight_am_time_end'] ) ? $redux['rthd_daynight_am_time_end'] : array( 0 => -1, 1 => -1, 2 => -1, 3 => -1, 4 => -1, 5 => -1, 6 => -1 );
+					$shifttime['pm_start'] = isset( $redux['rthd_daynight_pm_time_start'] ) ? $redux['rthd_daynight_pm_time_start'] : array( 0 => -1, 1 => -1, 2 => -1, 3 => -1, 4 => -1, 5 => -1, 6 => -1 );
+					$shifttime['pm_end'] = isset( $redux['rthd_daynight_pm_time_end'] ) ? $redux['rthd_daynight_pm_time_end'] : array( 0 => -1, 1 => -1, 2 => -1, 3 => -1, 4 => -1, 5 => -1, 6 => -1 );
 					if ( ! empty( $shifttime ) ) {
 
 						// if [ time not empty and off time ] or [ time is empty ]
@@ -198,8 +198,8 @@ if ( ! class_exists( 'Rt_HD_Auto_Response' ) ) {
 		function setting_dayshift_ui() {
 			$redux = rthd_get_redux_settings();
 			$shifttime = array();
-	        $shifttime['start'] = isset( $redux['rthd_dayshift_time_start']) ? $redux['rthd_dayshift_time_start'] : array( 0 => -1, 1 => -1, 2 => -1, 3 => -1, 4 => -1, 5 => -1, 6 => -1 );
-			$shifttime['end'] = isset( $redux['rthd_dayshift_time_end']) ? $redux['rthd_dayshift_time_end'] : array( 0 => -1, 1 => -1, 2 => -1, 3 => -1, 4 => -1, 5 => -1, 6 => -1 ); ?>
+	        $shifttime['start'] = isset( $redux['rthd_dayshift_time_start'] ) ? $redux['rthd_dayshift_time_start'] : array( 0 => -1, 1 => -1, 2 => -1, 3 => -1, 4 => -1, 5 => -1, 6 => -1 );
+			$shifttime['end'] = isset( $redux['rthd_dayshift_time_end'] ) ? $redux['rthd_dayshift_time_end'] : array( 0 => -1, 1 => -1, 2 => -1, 3 => -1, 4 => -1, 5 => -1, 6 => -1 ); ?>
 	        <span id="rthd-response-day-error" class="myerror rthd-hide-row"></span>
 	        <table id="rthd-response">
                 <tbody>
@@ -243,10 +243,10 @@ if ( ! class_exists( 'Rt_HD_Auto_Response' ) ) {
 		function setting_daynightshift_ui() {
 			$redux = rthd_get_redux_settings();
 			$shifttime = array();
-	        $shifttime['am_start'] = isset( $redux['rthd_daynight_am_time_start']) ? $redux['rthd_daynight_am_time_start'] : array( 0 => -1, 1 => -1, 2 => -1, 3 => -1, 4 => -1, 5 => -1, 6 => -1 );
-			$shifttime['am_end'] = isset( $redux['rthd_daynight_am_time_end']) ? $redux['rthd_daynight_am_time_end'] : array( 0 => -1, 1 => -1, 2 => -1, 3 => -1, 4 => -1, 5 => -1, 6 => -1 );
-			$shifttime['pm_start'] = isset( $redux['rthd_daynight_pm_time_start']) ? $redux['rthd_daynight_pm_time_start'] : array( 0 => -1, 1 => -1, 2 => -1, 3 => -1, 4 => -1, 5 => -1, 6 => -1 );
-			$shifttime['pm_end'] = isset( $redux['rthd_daynight_pm_time_end']) ? $redux['rthd_daynight_pm_time_end'] : array( 0 => -1, 1 => -1, 2 => -1, 3 => -1, 4 => -1, 5 => -1, 6 => -1 ); ?>
+	        $shifttime['am_start'] = isset( $redux['rthd_daynight_am_time_start'] ) ? $redux['rthd_daynight_am_time_start'] : array( 0 => -1, 1 => -1, 2 => -1, 3 => -1, 4 => -1, 5 => -1, 6 => -1 );
+			$shifttime['am_end'] = isset( $redux['rthd_daynight_am_time_end'] ) ? $redux['rthd_daynight_am_time_end'] : array( 0 => -1, 1 => -1, 2 => -1, 3 => -1, 4 => -1, 5 => -1, 6 => -1 );
+			$shifttime['pm_start'] = isset( $redux['rthd_daynight_pm_time_start'] ) ? $redux['rthd_daynight_pm_time_start'] : array( 0 => -1, 1 => -1, 2 => -1, 3 => -1, 4 => -1, 5 => -1, 6 => -1 );
+			$shifttime['pm_end'] = isset( $redux['rthd_daynight_pm_time_end'] ) ? $redux['rthd_daynight_pm_time_end'] : array( 0 => -1, 1 => -1, 2 => -1, 3 => -1, 4 => -1, 5 => -1, 6 => -1 ); ?>
 	        <span id="rthd-response-daynight-error" class="myerror rthd-hide-row"></span>
 	        <table id="rthd-response">
                 <tbody>
