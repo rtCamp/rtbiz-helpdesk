@@ -106,7 +106,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				}
 				$status = true;
 			}
-			echo json_encode( array( 'status' => $status , 'label' => $label ) );
+			echo json_encode( array( 'status' => $status, 'label' => $label ) );
 			die();
 		}
 
@@ -644,7 +644,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 
 			foreach ( $allemail as $email ) {
 				// skip ticket creator getting added in contact list of ticket.
-				if ( $email['address'] == $ticket_creator->user_email ){
+				if ( $email['address'] == $ticket_creator->user_email ) {
 					continue;
 				}
 				$contacts = rt_biz_get_contact_by_email( $email );
