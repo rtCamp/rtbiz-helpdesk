@@ -675,9 +675,11 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 				}
 			}
 			$views = $temp_view + $views;
-			$trash = $views['trash'];
-			unset( $views['trash'] );
-			$views['trash'] = $trash;
+			if ( isset( $views['trash'] ) ) {
+				$trash = $views['trash'];
+				unset( $views['trash'] );
+				$views['trash'] = $trash;
+			}
 
 			return $views;
 		}
