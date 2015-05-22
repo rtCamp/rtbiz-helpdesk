@@ -180,9 +180,14 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 					} elseif ( ! empty( $arg_shortcode['orderid'] ) ) {
 						$tickets = rthd_get_tickets( 'order', $arg_shortcode['orderid'] );
 					}
+
+					if ( ! empty( $arg_shortcode['fav'] ) && empty( $tickets ) ) {
+						return '';
+					}
 			?>
 			<?php
-			ob_start(); ?>
+			ob_start();
+			?>
 			<div class="rthd-ticket-list-header"> <?php
 			if ( ! empty( $arg_shortcode['fav'] ) && ! empty( $tickets ) ) {
 				if ( 'yes' === $arg_shortcode['title'] ) { ?>
@@ -218,8 +223,8 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 							$page = get_post( $redux_helpdesk_settings['rthd_support_page'] );
 						}
 					}
-					echo '<p>'.__( 'You have not created any tickets yet.', RT_HD_TEXT_DOMAIN ).' <a href="/'.$page->post_name.'" target="_blank">'.__( 'Create one', RT_HD_TEXT_DOMAIN ).'</a> '.__( 'now.', RT_HD_TEXT_DOMAIN ).'</p>';
-				} else {
+					echo '<p>'.__( 'You have not created any tickets yet. Create one now.', RT_HD_TEXT_DOMAIN ).'</p>';
+				} else if ( empty( $tickets ) ) {
 					echo '<p>'.__( 'No tickets found', RT_HD_TEXT_DOMAIN ).'</p>';
 				}
 			}
