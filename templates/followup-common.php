@@ -131,11 +131,11 @@ if ( ! empty( $post->post_content ) ) {
 			       id="followup_edit_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"/>
 			<label
 				for="followup_edit_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"> <?php echo rthd_get_comment_type( Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ) ?></label>
-			<input type="radio" class="radio" name="private_comment"
+			<input type="radio" class="radio" name="edit_private"
 			       value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE; ?>"
-			       id="followup_privacy_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ?>"/>
+			       id="followup_edit_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ?>"/>
 			<label
-				for="followup_privacy_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ?>"> Customers + Staff (<?php echo rthd_get_comment_type( Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ) ?>)
+				for="followup_edit_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ?>"> Customers + Staff (<?php echo rthd_get_comment_type( Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ) ?>)
 
 						<span class="rthd-tooltip rthd-followup-type-tolltip">
 						<i class="dashicons dashicons-info rtmicon"></i>
