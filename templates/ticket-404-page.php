@@ -18,7 +18,8 @@ global $rthd_messages;
 
 			<section class="error-404 not-found entry-content">
 				<div class="page-content">
-					<?php if ( ! empty( $message['message'] ) ) { ?>
+				<?php $messages = wp_list_pluck( $rthd_messages, 'message' );
+				if ( ! empty( $messages ) ) { ?>
 					<div class="rthd-container">
 						<?php
 						foreach ( $rthd_messages as $key => $message ) {
