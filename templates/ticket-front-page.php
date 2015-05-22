@@ -64,25 +64,21 @@ $user_edit_content = current_user_can( $cap );
 						<h3 class="rt-hd-ticket-info-header"><?php _e( esc_attr( ucfirst( $labels['name'] ) ) . ' Information' ); ?>
 						</h3>
 
+						<?php if ( current_user_can( $cap ) ) { ?>
 						<div class="rthd-front-icons clearfix">
-							<?php if ( current_user_can( $cap ) ) { ?>
-								<a id='ticket-information-edit-ticket-link'
-								   href="<?php echo get_edit_post_link( $post->ID ) ?>"
-								   title="<?php _e( 'Edit ' . esc_attr( ucfirst( $labels['name'] ) ) ); ?>"> <span
-										class="dashicons dashicons-edit"></span></a>
-							<?php } ?>
-
+							<a id='ticket-information-edit-ticket-link'
+							   href="<?php echo get_edit_post_link( $post->ID ) ?>"
+							   title="<?php _e( 'Edit ' . esc_attr( ucfirst( $labels['name'] ) ) ); ?>"> <span
+									class="dashicons dashicons-edit"></span></a>
 							<?php
 							// Watch/Unwatch ticket feature.
 							$watch_unwatch_label = $watch_unwatch_value = '';
-							if ( current_user_can( $cap ) ) { // For staff/subscriber
-								if ( rthd_is_ticket_subscriber( $post->ID ) ) {
-									$watch_unwatch_label = 'Unsubscribe notifications from this ticket';
-									$watch_unwatch_value = 'unwatch';
-								} else {
-									$watch_unwatch_label = 'Subscribe for notifications from this ticket';
-									$watch_unwatch_value = 'watch';
-								}
+							if ( rthd_is_ticket_subscriber( $post->ID ) ) {
+								$watch_unwatch_label = 'Unsubscribe notifications from this ticket';
+								$watch_unwatch_value = 'unwatch';
+							} else {
+								$watch_unwatch_label = 'Subscribe for notifications from this ticket';
+								$watch_unwatch_value = 'watch';
 							}
 
 							if ( ! empty( $watch_unwatch_label ) ) {
@@ -99,16 +95,19 @@ $user_edit_content = current_user_can( $cap );
 								<?php }
 								$isfav = in_array( $post->ID, rthd_get_user_fav_ticket( get_current_user_id() ) );
 								?>
-								<a id="ticket-add-fav" href="#" title="<?php ($isfav)?_e( 'Remove this ticket from favorites', RT_HD_TEXT_DOMAIN ):_e( 'Favorite this ticket', RT_HD_TEXT_DOMAIN ) ?>"><?php
-								if ( $isfav ) {
-									echo '<span class="dashicons dashicons-heart"></span>';
-								} else {
-									echo '<span class="dashicons dashicons-heart rthd-gray"></span>';
-								}
-								?>
+								<a id="ticket-add-fav" href="#"
+								   title="<?php ( $isfav ) ? _e( 'Remove this ticket from favorites', RT_HD_TEXT_DOMAIN ) : _e( 'Favorite this ticket', RT_HD_TEXT_DOMAIN ) ?>"><?php
+									if ( $isfav ) {
+										echo '<span class="dashicons dashicons-heart"></span>';
+									} else {
+										echo '<span class="dashicons dashicons-heart rthd-gray"></span>';
+									}
+									?>
 								</a>
 								<?php wp_nonce_field( 'heythisisrthd_ticket_fav_' . $post->ID, 'rthd_fav_tickets_nonce' ); ?>
+
 						</div>
+					<?php } ?>
 					</div>
 
 					<div class="rt-hd-ticket-sub-row">
