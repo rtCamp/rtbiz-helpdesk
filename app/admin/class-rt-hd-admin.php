@@ -120,7 +120,8 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 			// include this css everywhere
 			wp_enqueue_style( 'rthd-common-css', RT_HD_URL . 'app/assets/css/rthd-common.css', array(), RT_HD_VERSION, 'all' );
 
-			if ( in_array( $pagenow, array( 'edit.php', 'post.php', 'post-new.php' ) ) && Rt_HD_Module::$post_type == $rthd_post_type ) {
+			if ( ( in_array( $pagenow, array( 'edit.php', 'post.php', 'post-new.php' ) ) && Rt_HD_Module::$post_type == $rthd_post_type )
+			     || ( in_array( $pagenow, array( 'admin.php', ) ) && 'rthd-setup-wizard' == $_REQUEST['page'] ) ) {
 
 				if ( isset( $post->post_type ) && $post->post_type == Rt_HD_Module::$post_type ) {
 

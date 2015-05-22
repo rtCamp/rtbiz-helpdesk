@@ -537,8 +537,9 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				unset( $submenu[ 'edit.php?post_type=' . self::$post_type ] );
 				$submenu[ 'edit.php?post_type=' . self::$post_type ] = array();
 				$new_index = 5;
+				$wizard_completed = rthd_check_wizard_completed();
 				foreach ( $this->custom_menu_order as $item ) {
-	                if ( rthd_check_wizard_completed() || ( ! rthd_check_wizard_completed() && 'rthd-setup-wizard' == $item ) ) {
+	                if ( $wizard_completed || ( ! $wizard_completed && 'rthd-setup-wizard' == $item ) ) {
 		                foreach ( $module_menu as $p_key => $menu_item ) {
 			                $out = array_filter( $menu_item, function ( $in ) {
 				                return true !== $in;
