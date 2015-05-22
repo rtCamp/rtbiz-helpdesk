@@ -23,23 +23,20 @@ global $rthd_messages;
 					<div class="rthd-container">
 						<?php
 						foreach ( $rthd_messages as $key => $message ) {
-							if ( 'no' == $message['displayed'] ) {
+							if ( 'no' == $message['displayed'] && ! empty( $message['message'] ) ) {
 								echo '<div class="' . $message['type'] . '">' . $message['message'] . '</div>';
 								$rthd_messages[ $key ]['displayed'] = 'yes';
 							}
 						}
 						?>
 					</div>
-				<?php } ?>
+				<?php }
+				global $current_user; ?>
 					<div class="rthd-fav-ticket">
-						<?php
-						global $current_user;
-						echo balanceTags( do_shortcode( '[rt_hd_tickets userid = ' . $current_user->ID . ' fav= true]' ) ); ?>
+						<?php echo balanceTags( do_shortcode( '[rt_hd_tickets userid = ' . $current_user->ID . ' fav= true]' ) ); ?>
 					</div>
 					<div class="rthd-my-ticket">
-						<?php
-						global $current_user;
-						echo balanceTags( do_shortcode( '[rt_hd_tickets show_support_form_link=yes userid = ' . $current_user->ID . ']' ) ); ?>
+						<?php echo balanceTags( do_shortcode( '[rt_hd_tickets show_support_form_link=yes userid = ' . $current_user->ID . ']' ) ); ?>
 					</div>
 				</div>
 			</section>
