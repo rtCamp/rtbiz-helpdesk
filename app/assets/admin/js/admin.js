@@ -39,6 +39,13 @@ jQuery( document ).ready(function () {
 			rthdAdmin.initAutoResponseSettings();
 			rthdAdmin.initBlacklistConfirmationOrRemove();
 			rthdAdmin.initAddContactBlacklist();
+			rthdAdmin.initDependencyNoticeClose();
+		},
+		initDependencyNoticeClose: function () {
+			jQuery( '.rthd-dependency-notice-closed' ).click( function ( e ) {
+				e.preventDefault();
+				jQuery( this ).parent().parent().hide();
+			} );
 		},
 		initDatePicket: function () {
 			if (jQuery( ".datepicker" ).length > 0) {

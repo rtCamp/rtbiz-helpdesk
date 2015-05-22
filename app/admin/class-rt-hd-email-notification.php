@@ -367,7 +367,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$bccemails = $this->exclude_author( $bccemails, $comment->comment_author_email );
 			$bccemails = apply_filters( 'rthd_filter_adult_emails', $bccemails , $comment->comment_post_ID );
 
-			if ( $notificationFlagClient ) {
+			if ( $notificationFlagClient && Rt_HD_Import_Operation::$FOLLOWUP_STAFF != $new_privacy && Rt_HD_Import_Operation::$FOLLOWUP_STAFF != $old_privacy ) {
 				$ContactEmail  = $this->get_contacts( $comment->comment_post_ID );
 				$ContactEmail = $this->exclude_author( $ContactEmail, $comment->comment_author_email );
 				$ContactEmail = apply_filters( 'rthd_filter_adult_emails', $ContactEmail, $comment->comment_post_ID );

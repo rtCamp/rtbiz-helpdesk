@@ -134,9 +134,9 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				'singular_name' => __( 'Ticket', RT_HD_TEXT_DOMAIN ),
 				'menu_name'     => 'Helpdesk',
 				'all_items'     => __( 'Tickets', RT_HD_TEXT_DOMAIN ),
-				'add_new'       => __( 'Add Ticket', RT_HD_TEXT_DOMAIN ),
-				'add_new_item'  => __( 'Add Ticket', RT_HD_TEXT_DOMAIN ),
-				'new_item'      => __( 'Add Ticket', RT_HD_TEXT_DOMAIN ),
+				'add_new'       => __( 'Add New Ticket', RT_HD_TEXT_DOMAIN ),
+				'add_new_item'  => __( 'Add New Ticket', RT_HD_TEXT_DOMAIN ),
+				'new_item'      => __( 'Add New Ticket', RT_HD_TEXT_DOMAIN ),
 				'edit_item'     => __( 'Edit Ticket', RT_HD_TEXT_DOMAIN ),
 				'view_item'     => __( 'View Ticket', RT_HD_TEXT_DOMAIN ),
 				'search_items'  => __( 'Search Tickets', RT_HD_TEXT_DOMAIN ),
@@ -166,7 +166,7 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				),
 				array(
 					'slug'        => 'hd-archived',
-					'name'        => __( 'Solved', RT_HD_TEXT_DOMAIN ),
+					'name'        => __( 'Archived', RT_HD_TEXT_DOMAIN ),
 					'description' => __( 'Ticket is archived. Client can re-open if they wish to.', RT_HD_TEXT_DOMAIN ),
 				),
 			);
@@ -185,8 +185,8 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				'rthd-' . self::$post_type . '-dashboard',
 				'edit.php?post_type=' . self::$post_type,
 				'post-new.php?post_type=' . self::$post_type,
-				esc_url( 'edit.php?post_type=' . rt_biz_get_contact_post_type() . '&rt_contact_group=customer' ),
-				esc_url( 'edit.php?post_type=' . rt_biz_get_contact_post_type() . '&rt_contact_group=staff' ),
+				esc_url( 'edit.php?post_type=' . rt_biz_get_contact_post_type() . '&rt_contact_group=customer&module=' . RT_HD_TEXT_DOMAIN ),
+				esc_url( 'edit.php?post_type=' . rt_biz_get_contact_post_type() . '&rt_contact_group=staff&module=' . RT_HD_TEXT_DOMAIN ),
 				esc_url( 'edit-tags.php?taxonomy=' . RT_Departments::$slug . '&post_type=' . self::$post_type ),
 				'edit-tags.php?taxonomy=' . Rt_Offerings::$offering_slug . '&amp;post_type=' . self::$post_type,
 				$rt_hd_attributes->attributes_page_slug,
@@ -537,8 +537,9 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 				unset( $submenu[ 'edit.php?post_type=' . self::$post_type ] );
 				$submenu[ 'edit.php?post_type=' . self::$post_type ] = array();
 				$new_index = 5;
+				$wizard_completed = rthd_check_wizard_completed();
 				foreach ( $this->custom_menu_order as $item ) {
-	                if ( rthd_check_wizard_completed() || ( ! rthd_check_wizard_completed() && 'rthd-setup-wizard' == $item ) ) {
+	                if ( $wizard_completed || ( ! $wizard_completed && 'rthd-setup-wizard' == $item ) ) {
 		                foreach ( $module_menu as $p_key => $menu_item ) {
 			                $out = array_filter( $menu_item, function ( $in ) {
 				                return true !== $in;

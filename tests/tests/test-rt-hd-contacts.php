@@ -33,7 +33,6 @@ class test_Rt_HD_Contacts extends RT_WP_TestCase {
 		global $rt_contact;
 		$exp_output = array(
 			'rtbiz_hd_ticket' => 'Ticket',
-			'hd_role' => 'Helpdesk Role',
 		);
 		$this->assertEquals( $exp_output, $this->rthdContacts->contacts_columns( array(), $rt_contact ) );
 	}

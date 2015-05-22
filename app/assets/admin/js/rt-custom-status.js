@@ -18,7 +18,10 @@ jQuery( document ).ready(function () {
 
 	if (jQuery( 'h2 .add-new-h2' )) {
 		$contact_type = getParameterByName( 'rt_contact_group' );
-		jQuery( 'h2 .add-new-h2' ).attr( 'href', jQuery( 'h2 .add-new-h2' ).attr( 'href' ) + '&rt_contact_group=' + $contact_type );
+		$module = getParameterByName( 'module' );
+        if ( $contact_type && $module ){
+            jQuery( 'h2 .add-new-h2' ).attr( 'href', jQuery( 'h2 .add-new-h2' ).attr( 'href' ) + '&rt_contact_group=' + $contact_type + '&module=' + $module );
+        }
 	}
 
 	function getParameterByName(name) {

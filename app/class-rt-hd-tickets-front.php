@@ -121,7 +121,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		function template_include( $template ) {
-			global $wp_query, $post, $rtbiz_helpdesk_template, $rt_hd_module;
+			global $wp_query, $post, $rtbiz_helpdesk_template, $rt_hd_module, $rthd_front_page_title;
 			$wrong_unique_id = false;
 			if ( empty( $wp_query->query_vars['post_type'] ) || $wp_query->query_vars['post_type'] != Rt_HD_Module::$post_type ) {
 				return $template;
@@ -136,7 +136,6 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 				$message      = sprintf( '%s <a href="%s">%s</a> %s', __( 'You are not logged in. Please login' ), $login_url, __( 'here' ), __( 'to view this ticket.' ) );
 				global $rthd_messages;
 				$rthd_messages[] = array( 'type' => 'error', 'message' => $message, 'displayed' => 'no' );
-				global $rthd_front_page_title;
 				$rthd_front_page_title = __( 'Helpdesk' );
 
 				return rthd_locate_template( 'ticket-error-page.php' );
@@ -148,13 +147,14 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 				if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' ) ) && current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' ) ) ) {
 					$subscriber     = get_post_meta( $post->ID, '_rtbiz_hd_subscribe_to', true );
 					$post_author_id = get_post_field( 'post_author', $post->ID );
-					if ( ! in_array( $user->ID, $subscriber ) && ! in_array( $user->user_email, $subscriber ) && $user->ID != $post_author_id ) {
+					$creator = get_post_meta( $post->ID, '_rtbiz_hd_created_by', true );
+
+					if ( ! in_array( $user->ID, $subscriber ) && ! in_array( $user->user_email, $subscriber ) && $user->ID != $post_author_id && $creator != $user->ID ) {
 						$redirect_url = ( ( is_ssl() ) ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 						$login_url    = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( $redirect_url ) );
 						$message      = sprintf( '%s ', __( 'You do not have sufficient permissions to access this ticket.' ) );
 						global $rthd_messages;
 						$rthd_messages[] = array( 'type' => 'error', 'message' => $message, 'displayed' => 'no' );
-						global $rthd_front_page_title;
 						$rthd_front_page_title = __( 'Helpdesk' );
 
 						return rthd_locate_template( 'ticket-404-page.php' );
@@ -176,7 +176,6 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 						$message      = sprintf( '%s ', __( 'You do not have sufficient permissions to access this ticket.' ) );
 						global $rthd_messages;
 						$rthd_messages[] = array( 'type' => 'error', 'message' => $message, 'displayed' => 'no' );
-						global $rthd_front_page_title;
 						$rthd_front_page_title = __( 'Helpdesk' );
 
 						return rthd_locate_template( 'ticket-404-page.php' );
@@ -210,10 +209,13 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 			if ( empty( $post ) || $wrong_unique_id ) {
 				$wp_query->is_404 = true;
 				$wp_query->set_404();
-				$message = sprintf( '%s ', __( "<div style='margin-left: 0;'>Sorry! Your requested ticket wasn't found." ) );
+				if ( isset( $wp_query->query['rtbiz_hd_ticket'] ) ) {
+					$message = sprintf( '%s ', __( "<div style='margin-left: 0;'>Sorry! Your requested ticket wasn't found." ) );
+				} else {
+					$message = '';
+				}
 				global $rthd_messages;
 				$rthd_messages[] = array( 'type' => 'error', 'message' => $message, 'displayed' => 'no' );
-				global $rthd_front_page_title;
 				$rthd_front_page_title = __( 'Helpdesk' );
 
 				return rthd_locate_template( 'ticket-404-page.php' );

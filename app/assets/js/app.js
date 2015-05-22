@@ -196,7 +196,8 @@ jQuery( document ).ready(function ($) {
 			data: requestArray,
 			success: function (data) {
 				if (data.status) {
-					jQuery( '#ticket-add-fav span' ).toggleClass( 'dashicons-star-empty dashicons-star-filled' );
+					jQuery( '#ticket-add-fav span' ).toggleClass( 'rthd-gray' );
+					jQuery( '#ticket-add-fav' ).attr( 'title', data.label );
 				}
 			},
 			error: function () {
@@ -290,7 +291,7 @@ jQuery( document ).ready(function ($) {
 			success: function (data) {
 				if (data.status) {
 					//jQuery('#rthd-ticket-watch-unwatch').val( data.label );
-					jQuery( '#rthd-ticket-watch-unwatch span' ).toggleClass( 'dashicons-email dashicons-email-alt' );
+					jQuery( '#rthd-ticket-watch-unwatch span' ).toggleClass( 'rthd-gray' );
 					jQuery( '#rthd-ticket-watch-unwatch' ).attr( 'data-value', data.value );
 					jQuery( '#rthd-ticket-watch-unwatch' ).attr( 'title', data.label );
 				}

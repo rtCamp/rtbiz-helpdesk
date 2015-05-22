@@ -95,15 +95,18 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			     && get_post_type( $_POST['post_id'] ) == Rt_HD_Module::$post_type
 				 && wp_verify_nonce( $_POST['nonce'], 'heythisisrthd_ticket_fav_'.$_POST['post_id'] )
 			) {
+				$label = '';
 				$favs = rthd_get_user_fav_ticket( get_current_user_id() );
 				if ( in_array( $_POST['post_id'], $favs ) ) {
 					rthd_delete_user_fav_ticket( get_current_user_id(), $_POST['post_id'] );
+					$label = 'Favorite this ticket';
 				} else {
 					rthd_add_user_fav_ticket( get_current_user_id(),$_POST['post_id'] );
+					$label = 'Remove this ticket from favorites';
 				}
 				$status = true;
 			}
-			echo json_encode( array( 'status' => $status ) );
+			echo json_encode( array( 'status' => $status , 'label' => $label ) );
 			die();
 		}
 
@@ -635,8 +638,15 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 		 */
 		function add_contacts_to_post( $allemail, $post_id ) {
 			global $rt_hd_contacts;
+			$ticket_creator = get_post_meta( $post_id, '_rtbiz_hd_created_by',true );
+			$ticket_creator = get_userdata( $ticket_creator );
 			$postterms = array();
+
 			foreach ( $allemail as $email ) {
+				// skip ticket creator getting added in contact list of ticket.
+				if ( $email['address'] == $ticket_creator->user_email ){
+					continue;
+				}
 				$contacts = rt_biz_get_contact_by_email( $email );
 				if ( ! empty( $contacts ) ) {
 					foreach ( $contacts as $contact ) {
@@ -2079,7 +2089,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				}
 
 				$response['status'] = true;
-				$response['label'] = 'Unsubscribe';
+				$response['label'] = 'Unsubscribe notifications from this ticket';
 				$response['value'] = 'unwatch';
 			} else if ( 'unwatch' == $watch_unwatch ) {
 				if ( current_user_can( $cap ) ) {
@@ -2103,7 +2113,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 				}
 
 				$response['status'] = true;
-				$response['label'] = 'Subscribe';
+				$response['label'] = 'Subscribe for notifications from this ticket';
 				$response['value'] = 'watch';
 			}
 

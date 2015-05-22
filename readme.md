@@ -7,7 +7,7 @@ rtBiz Helpdesk - Keep your customers happy & gay !
 **Tags:** [helpdesk](https://wordpress.org/plugins/tags/helpdesk), [support](https://wordpress.org/plugins/tags/support), [products](https://wordpress.org/plugins/tags/products), [tickets](https://wordpress.org/plugins/tags/tickets), [followups](https://wordpress.org/plugins/tags/followups), [customers](https://wordpress.org/plugins/tags/customers), [e-commerce](https://wordpress.org/plugins/tags/e-commerce)  
 **Requires at least:** 4.1  
 **Tested up to:** 4.1  
-**Stable tag:** 1.2.4  
+**Stable tag:** 1.2.5  
 **License:** [GPLv2 or later](http://www.gnu.org/licenses/gpl-2.0.html)  
 **Donate Link:** http://rtcamp.com/donate  
 
@@ -58,8 +58,20 @@ Please refer to the documentation.
 
 ## Changelog ##
 
+### 1.2.5 ###
+* UI updates
+* Easy Digital Download plugin integration updates
+* Woocommerce plugin integration updates
+* Ticket backend updates
+* Reporting filters' updates
+* Contact backend updates
+* Sensitive reply type added
+* Ticket short-code updates
+* Notification mails minor updates
+* Bug fixes
+
 ### 1.2.4 ###
-* UI update
+* UI updates
 * Email Template update
 * Wizard added
 * Bug fixes
