@@ -630,7 +630,7 @@ img#hdspinner{
 }
 
 .rthd-visibility-wrap input[type="radio"]{
-	display: inline;
-	min-height: 0;
-	margin-top: 0;
+	display: inline-block;
+	min-height: inherit;
+	margin-top: auto;
 }
