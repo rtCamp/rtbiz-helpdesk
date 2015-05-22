@@ -47,9 +47,9 @@ if [ -e phpunit.xml ] || [ -e phpunit.xml.dist ]; then
 fi
 
 # Install PHP_CodeSniffer and the WordPress Coding Standards
-mkdir -p $PHPCS_DIR && curl -L https://github.com/$PHPCS_GITHUB_SRC/archive/$PHPCS_GIT_TREE.tar.gz | tar xvz --strip-components=1 -C $PHPCS_DIR
-mkdir -p $WPCS_DIR && curl -L https://github.com/$WPCS_GITHUB_SRC/archive/$WPCS_GIT_TREE.tar.gz | tar xvz --strip-components=1 -C $WPCS_DIR
-$PHPCS_DIR/scripts/phpcs --config-set installed_paths $WPCS_DIR
+#mkdir -p $PHPCS_DIR && curl -L https://github.com/$PHPCS_GITHUB_SRC/archive/$PHPCS_GIT_TREE.tar.gz | tar xvz --strip-components=1 -C $PHPCS_DIR
+#mkdir -p $WPCS_DIR && curl -L https://github.com/$WPCS_GITHUB_SRC/archive/$WPCS_GIT_TREE.tar.gz | tar xvz --strip-components=1 -C $WPCS_DIR
+#$PHPCS_DIR/scripts/phpcs --config-set installed_paths $WPCS_DIR
 
 # Install JSHint
 if ! command -v jshint >/dev/null 2>&1; then
@@ -71,10 +71,8 @@ cd ../
 rm -rf posts-to-posts
 wget -nv -O posts-to-posts.zip http://downloads.wordpress.org/plugin/posts-to-posts.1.6.3.zip
 unzip -q posts-to-posts.zip
-cd $PLUGIN_DIR
 
 # rtBiz Plugin Setup for rtBiz-helpdesk
-cd ../
 rm -rf rtbiz
 git clone https://github.com/rtCamp/rtbiz.git
 cd rtbiz
