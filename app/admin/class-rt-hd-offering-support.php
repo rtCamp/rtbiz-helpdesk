@@ -84,6 +84,11 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 
 			add_action( 'rt_biz_offering_column_content', array( $this, 'manage_offering_column_body' ), 10, 3 );
 			add_filter( 'rt_biz_offerings_columns', array( $this, 'manage_offering_column_header' ) );
+			// Show tickets in woocommerce order page
+			add_action( 'woocommerce_view_order', array( $this, 'woocommerce_view_order_show_ticket' ) );
+		}
+		function woocommerce_view_order_show_ticket( $order_id ) {
+			echo balanceTags( do_shortcode( '[rt_hd_tickets show_support_form_link=yes orderid=' . $order_id. ']' ) );
 		}
 
 		/*

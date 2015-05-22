@@ -147,8 +147,6 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 					);
 					$cap = rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' );
 
-
-
 					if ( ! empty( $arg_shortcode['email'] ) && empty( $arg_shortcode['userid'] ) ) {
 						if ( '{{logged_in_user}}' == $arg_shortcode['email'] ) {
 							$arg_shortcode['userid'] = $current_user;
@@ -241,7 +239,7 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 						<th>Title</th>
 						<th>Last Updated</th>
 						<th>Status</th>
-						<?php echo ( $is_staff )?'<th>Links</th>':''; ?>
+						<?php echo ( $is_staff )?'<th>Edit</th>':''; ?>
 					</tr>
 					</thead>
 					<?php
