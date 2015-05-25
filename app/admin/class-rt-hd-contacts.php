@@ -58,12 +58,28 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 			add_filter( 'rt_biz_contact_labels', array( $this, 'rthd_change_contact_lablels' ) );
 
 			//update contact page module wise
+			add_action( 'rt_biz_entity_meta_boxes', array( $this, 'rthd_contact_custom_metabox' ) );
+
 			add_filter( 'get_edit_post_link', array( $this, 'rthd_edit_contact_link' ), 10, 2 );
 			add_action( 'add_meta_boxes_' . rt_biz_get_contact_post_type() , array( $this, 'metabox_rearrange' ), 20 );
 			add_filter( 'redirect_post_location', array( $this, 'rthd_redirect_post_location_filter' ), 99 );
 
 			add_filter( 'views_edit-' . rt_biz_get_contact_post_type() , array( &$this, 'display_custom_views' ) );
 			add_action( 'pre_get_posts', array( $this, 'contact_posts_filter' ) );
+		}
+
+		function rthd_contact_custom_metabox( ){
+			add_meta_box( 'rthd-ticket-listing', __( 'Tickets' ), array(
+				$this,
+				'rthd_ticket_listing_metabox',
+			), rt_biz_get_contact_post_type(), 'normal', 'default' );
+		}
+
+		function rthd_ticket_listing_metabox( $post ){
+			if ( ! empty( $_REQUEST['module'] ) && RT_HD_TEXT_DOMAIN == $_REQUEST['module'] ) {
+				$user = rt_biz_get_wp_user_for_contact( $post->ID );
+				echo balanceTags( do_shortcode( '[rt_hd_tickets userid = ' . $user[0]->ID . " title='no' ]" ) );
+			}
 		}
 
 		/**
@@ -111,6 +127,8 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		}
 
 		/**
+		 * add filter link for staff & customer
+		 *
 		 * @param $views
 		 *
 		 * @return mixed
@@ -164,6 +182,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 				$is_staff_member  = get_post_meta( $_REQUEST['post'], 'rt_biz_is_staff_member', true );
 			}
 
+			$contact_metaboxes['normal']['default']['rthd-ticket-listing'] = $wp_meta_boxes[ rt_biz_get_contact_post_type() ]['normal']['default']['rthd-ticket-listing'];
 			$contact_metaboxes['normal']['default']['rt-biz-entity-details'] = $wp_meta_boxes[ rt_biz_get_contact_post_type() ]['normal']['default']['rt-biz-entity-details'];
 			$contact_metaboxes['normal']['core']['commentsdiv'] = $wp_meta_boxes[ rt_biz_get_contact_post_type() ]['normal']['core']['commentsdiv'];
 			$contact_metaboxes['side']['core']['submitdiv'] = $wp_meta_boxes[ rt_biz_get_contact_post_type() ]['side']['core']['submitdiv'];
