@@ -177,7 +177,6 @@ $user_edit_content = current_user_can( $cap );
 					}
 					// Participants
 					$create_by_time     = esc_attr( human_time_diff( strtotime( $createdate ), current_time( 'timestamp' ) ) ) . ' ago';
-					$created_by_user_id = get_post_meta( $post->ID, '_rtbiz_hd_created_by', true );
 					$created_by         = get_user_by( 'id', get_post_meta( $post->ID, '_rtbiz_hd_created_by', true ) );
 
 					global $wpdb, $rt_hd_email_notification;
@@ -206,7 +205,7 @@ $user_edit_content = current_user_can( $cap );
 					}
 
 					$other_contacts = wp_list_pluck( $other_contacts, 'email' );
-
+					$other_contacts = array_filter( $other_contacts );
 					// remove user who have added followup and are also in connected contacts list
 					$other_contacts = array_diff( $other_contacts, $emails );
 

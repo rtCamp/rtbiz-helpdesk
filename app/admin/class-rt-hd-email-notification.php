@@ -896,7 +896,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				$email = get_post_meta( $created_by[0]->ID, Rt_Entity::$meta_key_prefix.Rt_Contact::$primary_email_key, true );
 				array_push( $tocontact, array( 'email' => $email ) );
 			}
-			$contacts = rt_biz_get_post_for_contact_connection( $post_id, Rt_HD_Module::$post_type );
+			$contacts = rt_biz_get_post_for_contact_connection( $post_id, Rt_HD_Module::$post_type, true );
 			foreach ( $contacts as $contact ) {
 				$emails = get_post_meta( $contact->ID, Rt_Entity::$meta_key_prefix.Rt_Contact::$primary_email_key );
 				foreach ( $emails as $email ) {

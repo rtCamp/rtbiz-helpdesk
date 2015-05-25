@@ -85,17 +85,20 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 			unset( $cols['title'] );
 			unset( $cols['comments'] );
 			unset( $cols['date'] );
+			unset($columns[ 'p2p-from-'.Rt_HD_Module::$post_type.'_to_'.rt_biz_get_contact_post_type() ] );
 
 			$columns['cb'] = '<input type="checkbox" />';
 			$columns['rthd_ticket_title'] = __( 'Ticket', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_status'] = '<span class="status_head tips" data-tip="' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '">' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '</span>';
-			$columns['rthd_ticket_assignee'] = __( 'Assignee', RT_HD_TEXT_DOMAIN );
-			$columns['rthd_ticket_created_by'] = __( 'Ticket Author', RT_HD_TEXT_DOMAIN );
-			$columns['rthd_ticket_last_reply_by'] = __( 'Last Reply By', RT_HD_TEXT_DOMAIN );
+			$columns['rthd_ticket_customers'] = __( 'Customers', RT_HD_TEXT_DOMAIN );
+			$columns['rthd_ticket_staff'] = __( 'Staff', RT_HD_TEXT_DOMAIN );
+			//			$columns['rthd_ticket_assignee'] = __( 'Assignee', RT_HD_TEXT_DOMAIN );
+			//			$columns['rthd_ticket_created_by'] = __( 'Ticket Author', RT_HD_TEXT_DOMAIN );
+			//			$columns['rthd_ticket_last_reply_by'] = __( 'Last Reply By', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_followup'] = __( 'Reply Count', RT_HD_TEXT_DOMAIN );
 			//            $columns['rthd_ticket_updated_by']     = __( 'Updated By', RT_HD_TEXT_DOMAIN );
 			$columns = array_merge( $columns, $cols );
-			$columns[ 'p2p-from-'.Rt_HD_Module::$post_type.'_to_'.rt_biz_get_contact_post_type() ] = __( 'Participants (Customers)', RT_HD_TEXT_DOMAIN );
+			//			$columns[ 'p2p-from-'.Rt_HD_Module::$post_type.'_to_'.rt_biz_get_contact_post_type() ] = __( 'Participants (Customers)', RT_HD_TEXT_DOMAIN );
 
 			return $columns;
 		}
@@ -149,12 +152,68 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 		 */
 		function manage_custom_columns( $column ) {
 
-			global $post, $rt_hd_module;
+			global $post, $rt_hd_module,$rt_hd_email_notification;
 
 			$can_edit_post = current_user_can( 'edit_post', $post->ID );
 			$post_type_object = get_post_type_object( $post->post_type );
 
 			switch ( $column ) {
+
+				case 'rthd_ticket_customers':
+					// customers
+					$create             = new DateTime( $post->post_date );
+					$createdate         = $create->format( 'M d, Y h:i A' );
+					$create_by_time     = esc_attr( human_time_diff( strtotime( $createdate ), current_time( 'timestamp' ) ) ) . ' ago';
+					$created_by         = get_user_by( 'id', get_post_meta( $post->ID, '_rtbiz_hd_created_by', true ) );
+					$CCs                = $rt_hd_email_notification->get_contacts( $post->ID );
+					$CCs                = wp_list_pluck( $CCs, 'email' );
+					$CCs                = array_diff( $CCs, array( $created_by->user_email ) );
+					?>
+					<div class="rthd-ticket-user-activity">
+						<?php
+						if ( ! empty( $created_by ) ) {
+							// Show ticket created by with large gravatar
+							echo ' <a class="rthd-ticket-created-by" title="Created by ' . $created_by->display_name . ' ' . $create_by_time . '" href="' .  rthd_biz_user_profile_link( $created_by->user_email ) .'">' . get_avatar( $created_by->user_email, '30' ) . '</a>';
+						}
+						foreach ( $CCs as $email ) {
+							// show other CCs' contact
+							$user         = get_user_by( 'email', $email );
+							$display_name = $email;
+							if ( ! empty( $user ) ) {
+								$display_name = $user->display_name;
+							}
+							echo '<a title= "' . $display_name . '" class="rthd-last-reply-by rthd-contact-avatar-no-reply"  href="' . rthd_biz_user_profile_link( $email ) . '">' . get_avatar( $email, '30' ) . ' </a>';
+						}
+						?>
+					</div>
+					<?php
+					break;
+
+				case 'rthd_ticket_staff':
+					$subscriber         = $rt_hd_email_notification->get_subscriber( $post->ID );
+					$subscriber         = wp_list_pluck( $subscriber, 'email' );
+					$assigned_to        = get_user_by( 'id', $post->post_author );
+					$subscriber                = array_diff( $subscriber, array( $assigned_to->user_email ) );
+					?>
+					<div class="rthd-ticket-user-activity">
+						<?php
+						if ( ! empty( $assigned_to ) ) {
+							// Show ticket assignee by with large gravatar
+							echo ' <a class="rthd-ticket-created-by" title="Assigned to ' . $assigned_to->display_name .'" href="' .  rthd_biz_user_profile_link( $assigned_to->user_email ) .'">' . get_avatar( $assigned_to->user_email, '30' ) . '</a>';
+						}
+						foreach ( $subscriber as $email ) {
+							// show other CCs' contact
+							$user         = get_user_by( 'email', $email );
+							$display_name = $email;
+							if ( ! empty( $user ) ) {
+								$display_name = $user->display_name;
+							}
+							echo '<a title= "' . $display_name . '" class="rthd-last-reply-by rthd-contact-avatar-no-reply"  href="' . rthd_biz_user_profile_link( $email ) . '">' . get_avatar( $email, '30' ) . ' </a>';
+						}
+						?>
+					</div>
+					<?php
+					break;
 
 				case 'rthd_ticket_assignee':
 					$user_id = $post->post_author;
@@ -203,9 +262,9 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 				case 'rthd_ticket_title' :
 
 					if ( $can_edit_post && $post->post_status != 'trash' ) {
-						printf( __( '%s : %s', RT_HD_PATH_ADMIN ), '<a href="' . esc_url( get_edit_post_link( $post->ID ) ) . '"><strong>' . esc_attr( _x( '#', 'hash before order number', 'RT_HD_PATH_ADMIN' ) . esc_attr( $post->ID ) ) . '</strong></a>', $post->post_title );
+						printf( __( '%s  %s', RT_HD_PATH_ADMIN ), '<a href="' . esc_url( get_edit_post_link( $post->ID ) ) . '"><strong>' . esc_attr( _x( '#', 'hash before order number', 'RT_HD_PATH_ADMIN' ) . esc_attr( $post->ID ) ) . '</strong></a>', $post->post_title );
 					} else {
-						printf( __( '%s : %s', RT_HD_PATH_ADMIN ), '<strong>' . esc_attr( _x( '#', 'hash before order number', 'RT_HD_PATH_ADMIN' ) . esc_attr( $post->ID ) ) . '</strong>', $post->post_title );
+						printf( __( '%s  %s', RT_HD_PATH_ADMIN ), '<strong>' . esc_attr( _x( '#', 'hash before order number', 'RT_HD_PATH_ADMIN' ) . esc_attr( $post->ID ) ) . '</strong>', $post->post_title );
 					}
 
 					$user_id = $post->post_author;

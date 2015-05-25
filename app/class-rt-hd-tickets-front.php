@@ -135,7 +135,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 				$login_url    = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( $redirect_url ) );
 				$message      = sprintf( '%s <a href="%s">%s</a> %s', __( 'You are not logged in. Please login' ), $login_url, __( 'here' ), __( 'to view this ticket.' ) );
 				global $rthd_messages;
-				$rthd_messages[] = array( 'type' => 'error', 'message' => $message, 'displayed' => 'no' );
+				$rthd_messages[] = array( 'type' => 'error rthd-error', 'message' => $message, 'displayed' => 'no' );
 				$rthd_front_page_title = __( 'Helpdesk' );
 
 				return rthd_locate_template( 'ticket-error-page.php' );
@@ -154,7 +154,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 						$login_url    = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( $redirect_url ) );
 						$message      = sprintf( '%s ', __( 'You do not have sufficient permissions to access this ticket.' ) );
 						global $rthd_messages;
-						$rthd_messages[] = array( 'type' => 'error', 'message' => $message, 'displayed' => 'no' );
+						$rthd_messages[] = array( 'type' => 'error rthd-error', 'message' => $message, 'displayed' => 'no' );
 						$rthd_front_page_title = __( 'Helpdesk' );
 
 						return rthd_locate_template( 'ticket-404-page.php' );
@@ -175,7 +175,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 						$login_url    = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( $redirect_url ) );
 						$message      = sprintf( '%s ', __( 'You do not have sufficient permissions to access this ticket.' ) );
 						global $rthd_messages;
-						$rthd_messages[] = array( 'type' => 'error', 'message' => $message, 'displayed' => 'no' );
+						$rthd_messages[] = array( 'type' => 'error rthd-error', 'message' => $message, 'displayed' => 'no' );
 						$rthd_front_page_title = __( 'Helpdesk' );
 
 						return rthd_locate_template( 'ticket-404-page.php' );
@@ -215,7 +215,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 					$message = '';
 				}
 				global $rthd_messages;
-				$rthd_messages[] = array( 'type' => 'error', 'message' => $message, 'displayed' => 'no' );
+				$rthd_messages[] = array( 'type' => 'error rthd-error', 'message' => $message, 'displayed' => 'no' );
 				$rthd_front_page_title = __( 'Helpdesk' );
 
 				return rthd_locate_template( 'ticket-404-page.php' );
