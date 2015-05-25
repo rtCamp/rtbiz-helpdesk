@@ -84,9 +84,96 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 
 			add_action( 'rt_biz_offering_column_content', array( $this, 'manage_offering_column_body' ), 10, 3 );
 			add_filter( 'rt_biz_offerings_columns', array( $this, 'manage_offering_column_header' ) );
+
 			// Show tickets in woocommerce order page
 			add_action( 'woocommerce_view_order', array( $this, 'woocommerce_view_order_show_ticket' ) );
+
+			// Show ticket column in product and download post type
+			add_filter( 'edd_download_columns', array( $this, 'manage_woo_edd_post_columns' ) );
+			add_filter( 'manage_product_posts_columns', array( $this, 'manage_woo_edd_post_columns' ) );
+			add_action( 'manage_posts_custom_column', array( $this, 'manage_woo_edd_post_columns_show' ), 10, 2 );
+
+			// Show ticket in order of woo and edd
+			add_filter( 'manage_shop_order_posts_columns', array( $this, 'order_post_columns' ) );
+			add_filter( 'edd_payments_table_columns', array( $this, 'order_post_columns' ) );
+			add_filter( 'edd_payments_table_column', array( $this, 'order_post_columns_show' ), 10, 3 );
 		}
+
+		function order_post_columns_show( $value, $payment, $column_name ) {
+			if ( Rt_HD_Module::$post_type.'_order' == $column_name ) {
+				$value = $this->get_order_ticket_column_view( $payment );
+			}
+			return $value;
+		}
+
+		function get_order_ticket_column_view( $payment ) {
+			$posts = new WP_Query( array(
+				                       'post_type' => Rt_HD_Module::$post_type,
+				                       'post_status' => 'any',
+				                       'nopaging' => true,
+				                       'meta_key' => 'rtbiz_hd_order_id',
+				                       'meta_value' => $payment,
+			                       ) );
+			return '<a target="_blank" href="'.admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&order='.$payment ).'">'.$posts->post_count.'</a>';
+		}
+
+		/**
+		 * Add ticket column to order of EDD and Woocommerce
+		 * @param $existing_columns
+		 *
+		 * @return mixed
+		 */
+		function order_post_columns( $existing_columns ) {
+			$existing_columns[ Rt_HD_Module::$post_type.'_order' ] = __( 'Tickets', RT_HD_TEXT_DOMAIN );
+			return $existing_columns;
+		}
+
+		/**
+		 * Show ticket column in product and download post type
+		 * @param $column_name
+		 * @param $post_id
+		 */
+		function manage_woo_edd_post_columns_show( $column_name, $post_id ) {
+			global $wpdb;
+			switch ( $column_name ) {
+				case Rt_HD_Module::$post_type.'_offering':
+					// to find count and display
+					$tax = $wpdb->get_var( 'SELECT taxonomy_id FROM '.$wpdb->prefix.'taxonomymeta WHERE meta_key = "'.Rt_Offerings::$term_product_id_meta_key.'" AND meta_value ='.$post_id );
+					if ( ! empty( $tax ) ) {
+						$terms = get_term( $tax, Rt_Offerings::$offering_slug );
+						if ( ! is_wp_error( $terms ) ) {
+							$posts = new WP_Query( array(
+								                       'post_type' => Rt_HD_Module::$post_type,
+								                       'post_status' => 'any',
+								                       'nopaging' => true,
+								                       Rt_Offerings::$offering_slug  => $terms->slug,
+							                       ) );
+							echo '<a target="_blank" href="'.admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&'.Rt_Offerings::$offering_slug.'='.$terms->slug ).'">'.$posts->post_count.'</a>';
+						}
+					}
+					break;
+				case Rt_HD_Module::$post_type.'_order':
+					echo $this->get_order_ticket_column_view( $post_id );
+					break;
+			}
+		}
+
+		/**
+		 * Add ticket column to product and download post type
+		 * @param $columns
+		 *
+		 * @return mixed
+		 */
+		function manage_woo_edd_post_columns( $columns ) {
+			$columns[ Rt_HD_Module::$post_type.'_offering' ] = __( 'Tickets', RT_HD_TEXT_DOMAIN );
+			return $columns;
+		}
+
+
+		/**
+		 * Show Tickets in woocommerce single page view
+		 * @param $order_id
+		 */
 		function woocommerce_view_order_show_ticket( $order_id ) {
 			echo balanceTags( do_shortcode( '[rt_hd_tickets show_support_form_link=yes orderid=' . $order_id. ']' ) );
 		}

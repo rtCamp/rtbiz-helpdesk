@@ -559,6 +559,15 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 					) );
 				}
 
+				if ( isset( $_GET['order'] ) ) {
+					$query->set( 'meta_query', array(
+						array(
+							'key' => 'rtbiz_hd_order_id',
+							'value' => $_GET['order'],
+						),
+					) );
+				}
+
 				if ( isset( $_GET['assigned'] ) ) {
 					$query->set( 'author', $_GET['assigned'] );
 				}

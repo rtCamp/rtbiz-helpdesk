@@ -290,7 +290,7 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 
 			//Adult Filter
 			if ( rthd_get_redux_adult_filter() ) {
-				if ( $newTicket['adult_ticket'] ) {
+				if ( ! empty( $newTicket['adult_ticket'] ) ) {
 					rthd_save_adult_ticket_meta( $post_id, 'yes' );
 				} else {
 					rthd_save_adult_ticket_meta( $post_id, 'no' );
