@@ -212,8 +212,13 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 				if ( 'yes' == $arg_shortcode['show_support_form_link'] ) {
 					if ( isset( $redux_helpdesk_settings['rthd_support_page'] ) && ! empty( $redux_helpdesk_settings['rthd_support_page'] ) ) {
 						$page = get_post( $redux_helpdesk_settings['rthd_support_page'] );
-						?>
-						<a class="clearfix" href="<?php echo "/{$page->post_name}"; ?>"><button class="button btn button-primary btn-primary"><?php _e( 'Create New Ticket', RT_HD_TEXT_DOMAIN ) ?></button></a>
+						if ( $oder_shortcode ) {
+						    $support_url = "/{$page->post_name}?order_id={$arg_shortcode['orderid']}";
+						} else {
+							$support_url = "/{$page->post_name}";
+						} ?>
+
+						<a class="clearfix" href="<?php echo $support_url; ?>"><button class="button btn button-primary btn-primary"><?php _e( 'Create New Ticket', RT_HD_TEXT_DOMAIN ) ?></button></a>
 					<?php
 					}
 				}

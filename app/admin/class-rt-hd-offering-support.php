@@ -561,9 +561,12 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 				}
 			}
 
-			if ( isset( $data['order_id'] ) && $data['order_type'] ) {
-				//Store Order ID
+			if ( isset( $data['order_id'] ) ) {
 				update_post_meta( $rt_hd_tickets_id, 'rtbiz_hd_order_id', esc_attr( $data['order_id'] ) );
+			}
+
+			if ( isset( $data['order_id'] ) && isset( $data['order_type'] ) ) {
+				//Store Order ID
 				update_post_meta( $rt_hd_tickets_id, 'rtbiz_hd_order_type', esc_attr( $data['order_type'] ) );
 
 				$link = '';
