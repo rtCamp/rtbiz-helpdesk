@@ -61,6 +61,85 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 			add_filter( 'get_edit_post_link', array( $this, 'rthd_edit_contact_link' ), 10, 2 );
 			add_action( 'add_meta_boxes_' . rt_biz_get_contact_post_type() , array( $this, 'metabox_rearrange' ), 20 );
 			add_filter( 'redirect_post_location', array( $this, 'rthd_redirect_post_location_filter' ), 99 );
+
+			add_filter( 'views_edit-' . rt_biz_get_contact_post_type() , array( &$this, 'display_custom_views' ) );
+			add_action( 'pre_get_posts', array( $this, 'contact_posts_filter' ) );
+		}
+
+		/**
+		 * Filter contact
+		 * @param $query
+		 */
+		function contact_posts_filter( $query ){
+			global $wpdb, $rt_biz_acl_model;
+			if ( isset( $_GET['post_type'] ) && rt_biz_get_contact_post_type() == $_GET['post_type'] && $query->is_main_query() ) {
+
+				if ( isset( $_GET['rt_contact_group'] ) && 'customer' == $_GET['rt_contact_group'] && isset( $_REQUEST['tickets'] ) ) {
+					$sql = "SELECT p2p_from FROM `wp_postmeta`, `wp_p2p` WHERE `meta_key` = '_rtbiz_hd_created_by' and meta_value = p2p_to and p2p_type = 'rt_contact_to_user'";
+					$contacts_with_ticket = $wpdb->get_col( $sql );
+					if ( empty( $contacts_with_ticket ) ) {
+						$contacts_with_ticket = array( -1 );
+					}
+					if ( isset( $_GET['tickets'] ) && 'yes' == $_GET['tickets'] ) {
+						$query->set( 'post__in', $contacts_with_ticket );
+					} elseif ( isset( $_GET['tickets'] ) && 'no' == $_GET['tickets'] ) {
+						$contacts_with_ticket = array_merge( $query->get( 'post__not_in' ), $contacts_with_ticket );
+						$query->set( 'post__not_in', $contacts_with_ticket );
+					}
+				} elseif ( isset( $_GET['rt_contact_group'] ) && 'staff' == $_GET['rt_contact_group'] && isset( $_REQUEST['role'] ) ) {
+					$permissions = Rt_Access_Control::$permissions;
+					$module_where = isset( $_GET['module'] ) ? "acl.module =  '" . $_GET['module'] . "' and" : '';
+					$where = ' and acl.permission = ' . $permissions[ $_REQUEST['role'] ]['value'];
+					$sql = 'SELECT DISTINCT(posts.ID) FROM '.$rt_biz_acl_model->table_name.' as acl INNER JOIN '.$wpdb->prefix.'p2p as p2p on ( acl.userid = p2p.p2p_to' . $where . ' ) INNER JOIN '.$wpdb->posts.' as posts on (p2p.p2p_from = posts.ID )  where ' . $module_where . " acl.permission > 0 and p2p.p2p_type = '".rt_biz_get_contact_post_type()."_to_user' and posts.post_status= 'publish' and posts.post_type= '".rt_biz_get_contact_post_type()."' ";
+					$contacts = $wpdb->get_col( $sql );
+
+					if ( 'admin' == $_REQUEST['role'] ) {
+						$module_user = get_users( array( 'fields' => 'ID', 'role' => 'administrator' ) );
+						$admin_contact = rt_biz_get_contact_for_wp_user( $module_user );
+						foreach ( $admin_contact as $contact ) {
+							$contacts[] = $contact->ID;
+						}
+					}
+					if ( empty( $contacts ) ) {
+						$contacts = array( -1 );
+					}
+					if ( isset( $_GET['role'] ) && in_array( $_REQUEST['role'], array( 'admin', 'editor', 'author' ) ) ) {
+						$query->set( 'post__in', $contacts );
+					}
+				}
+			}
+		}
+
+		/**
+		 * @param $views
+		 *
+		 * @return mixed
+		 */
+		function display_custom_views( $views ) {
+			if ( ! empty( $_REQUEST['module'] ) && RT_HD_TEXT_DOMAIN == $_REQUEST['module'] && isset( $_REQUEST['rt_contact_group'] ) ) {
+				if ( 'staff' == $_REQUEST['rt_contact_group'] ) {
+					if ( ! isset( $_GET['role'] ) ) { $class = ' class="current"'; } else { $class = ''; }
+					$temp_view['All'] = "<a href='edit.php?post_type=" . rt_biz_get_contact_post_type() . '&rt_contact_group=staff&module=' . RT_HD_TEXT_DOMAIN . "' $class>" . __( 'All' ) . '</a>';
+					if ( isset( $_GET['role'] ) && 'admin' == $_GET['role'] ) { $class = ' class="current"'; } else { $class = ''; }
+					$temp_view['Admin'] = "<a href='edit.php?post_type=" . rt_biz_get_contact_post_type() . '&rt_contact_group=staff&module=' . RT_HD_TEXT_DOMAIN . "&role=admin' $class>" . __( 'Admin' ) . '</a>';
+					if ( isset( $_GET['role'] ) && 'editor' == $_GET['role'] ) { $class = ' class="current"'; } else { $class = ''; }
+					$temp_view['Editor'] = "<a href='edit.php?post_type=" . rt_biz_get_contact_post_type() . '&rt_contact_group=staff&module=' . RT_HD_TEXT_DOMAIN . "&role=editor' $class>" . __( 'Editor' ) . '</a>';
+					if ( isset( $_GET['role'] ) && 'author' == $_GET['role'] ) { $class = ' class="current"'; } else { $class = ''; }
+					$temp_view['Author'] = "<a href='edit.php?post_type=" . rt_biz_get_contact_post_type() . '&rt_contact_group=staff&module=' . RT_HD_TEXT_DOMAIN . "&role=author' $class>" . __( 'Author' ) . '</a>';
+				} elseif ( 'customer' == $_REQUEST['rt_contact_group'] ) {
+					if ( ! isset( $_GET['tickets'] ) ) { $class = ' class="current"'; } else { $class = ''; }
+					$temp_view['All'] = "<a href='edit.php?post_type=" . rt_biz_get_contact_post_type() . '&rt_contact_group=customer&module=' . RT_HD_TEXT_DOMAIN . "' $class>" . __( 'All' ) . '</a>';
+					//$temp_view['All'] = "<a href='edit.php?post_type=" . rt_biz_get_contact_post_type() . "&rt_contact_group=customer&module=" . RT_HD_TEXT_DOMAIN . "&tickets=all' $class>" . sprintf( _nx( 'All <span class="count">(%s)</span>', 'All <span class="count">(%s)</span>', 0, RT_HD_TEXT_DOMAIN ), number_format_i18n( 0 ) ) . '</a>';
+					if ( isset( $_GET['tickets'] ) && 'yes' == $_GET['tickets'] ) { $class = ' class="current"'; } else { $class = ''; }
+					$temp_view['With_Ticket'] = "<a href='edit.php?post_type=" . rt_biz_get_contact_post_type() . '&rt_contact_group=customer&module=' . RT_HD_TEXT_DOMAIN . "&tickets=yes' $class>" . __( 'With Tickets' ) . '</a>';
+					//$temp_view['With_Ticket'] = "<a href='edit.php?post_type=" . rt_biz_get_contact_post_type() . "&rt_contact_group=customer&module=" . RT_HD_TEXT_DOMAIN . "&tickets=yes' $class>" . sprintf( _nx( 'With Tickets <span class="count">(%s)</span>', 'With Tickets <span class="count">(%s)</span>', 0, RT_HD_TEXT_DOMAIN ), number_format_i18n( 0 ) ) . '</a>';
+					if ( isset( $_GET['tickets'] ) && 'no' == $_GET['tickets'] ) { $class = ' class="current"'; } else { $class = ''; }
+					$temp_view['Without_Ticket'] = "<a href='edit.php?post_type=" . rt_biz_get_contact_post_type() . '&rt_contact_group=customer&module=' . RT_HD_TEXT_DOMAIN . "&tickets=no' $class>" . __( 'Without Tickets' ) . '</a>';
+					//$temp_view['Without_Ticket'] = "<a href='edit.php?post_type=" . rt_biz_get_contact_post_type() . "&rt_contact_group=customer&module=" . RT_HD_TEXT_DOMAIN . "&tickets=no' $class>" . sprintf( _nx( 'Without Tickets <span class="count">(%s)</span>', 'Without Tickets <span class="count">(%s)</span>', 0, RT_HD_TEXT_DOMAIN ), number_format_i18n( 0 ) ) . '</a>';
+				}
+				$views = $temp_view;
+			}
+			return $views;
 		}
 
 		/**
@@ -120,32 +199,31 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		 * change label for staff and customer
 		 */
 		function rthd_change_contact_lablels( $labels ) {
-			if ( is_plugin_active( 'rtbiz-helpdesk/rtbiz-helpdesk.php' ) ) {
-				$label  = '';
-				$labelp = '';
-				if ( isset( $_GET['rt_contact_group'] ) && 'staff' == $_GET['rt_contact_group'] ) {
-					$label  = 'Staff';
-					$labelp = $label;
-				} elseif ( isset( $_GET['rt_contact_group'] ) && 'customer' == $_GET['rt_contact_group'] ) {
-					$label  = 'Customer';
-					$labelp = $label . 's';
-				}
-				if ( ! empty( $label ) ) {
-					$labels = array(
-						'name'               => __( $labelp ),
-						'singular_name'      => __( $label ),
-						'menu_name'          => __( $labelp ),
-						'all_items'          => __( 'All ' . $labelp ),
-						'add_new'            => __( 'New ' . $label ),
-						'add_new_item'       => __( 'Add ' . $label ),
-						'edit_item'          => __( 'Edit ' . $label ),
-						'new_item'           => __( 'New ' . $label ),
-						'view_item'          => __( 'View ' . $label ),
-						'search_items'       => __( 'Search ' . $label ),
-						'not_found'          => __( 'No ' . $label . ' found' ),
-						'not_found_in_trash' => __( 'No ' . $label . ' found in Trash' ),
-					);
-				}
+			$label  = '';
+			$labelp = '';
+			if ( isset( $_GET['rt_contact_group'] ) && 'staff' == $_GET['rt_contact_group'] ) {
+				$label  = 'Staff';
+				$labelp = $label;
+			} elseif ( isset( $_GET['rt_contact_group'] ) && 'customer' == $_GET['rt_contact_group'] ) {
+				$label  = 'Customer';
+				$labelp = $label . 's';
+			}
+
+			if ( ! empty( $label ) ) {
+				$labels = array(
+					'name'               => __( $labelp ),
+					'singular_name'      => __( $label ),
+					'menu_name'          => __( $labelp ),
+					'all_items'          => __( 'All ' . $labelp ),
+					'add_new'            => __( 'New ' . $label ),
+					'add_new_item'       => __( 'Add ' . $label ),
+					'edit_item'          => __( 'Edit ' . $label ),
+					'new_item'           => __( 'New ' . $label ),
+					'view_item'          => __( 'View ' . $label ),
+					'search_items'       => __( 'Search ' . $label ),
+					'not_found'          => __( 'No ' . $label . ' found' ),
+					'not_found_in_trash' => __( 'No ' . $label . ' found in Trash' ),
+				);
 			}
 
 			return $labels;
@@ -185,13 +263,15 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		 * @param $type
 		 */
 		function contact_quick_action( $col, $type ) {
-			if ( rt_biz_get_contact_post_type() != $type || 'hd_role' != $col ) {
+			if ( rt_biz_get_contact_post_type() != $type || 'rtbiz_hd_ticket' != $col ) {
 				return;
 			}
 			$permissions = rt_biz_get_acl_permissions(); ?>
 			<fieldset id="rtbiz_contact_helpdesk_access" class="inline-edit-col-right">
+				<input type="hidden" name="rt_contact_group" value="<?php echo isset( $_GET['rt_contact_group'] ) ? $_GET['rt_contact_group'] : ''; ?>" >
+				<input type="hidden" name="module" value="<?php echo isset( $_GET['module'] ) ? $_GET['module'] : ''; ?>" >
 				<div class="inline-edit-col">
-					<?php $selected = ( isset( $_REQUEST['rt_contact_group'] ) && 'staff' == $_REQUEST['rt_contact_group'] ) ? 'Checked="Checked' : ''; ?>
+					<?php $selected = ( isset( $_REQUEST['rt_contact_group'] ) && 'staff' == $_REQUEST['rt_contact_group'] ) ? 'Checked="Checked"' : ''; ?>
 					<label><input type="checkbox" id="rt_biz_is_staff_member" <?php echo $selected; ?>
 					              name="rt_biz_is_staff_member" value="yes"><span
 							class="checkbox-title"><?php _e( 'Staff Member ', RT_BIZ_TEXT_DOMAIN ) ?></span></label>

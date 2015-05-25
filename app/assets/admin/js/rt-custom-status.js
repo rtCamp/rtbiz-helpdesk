@@ -31,4 +31,12 @@ jQuery( document ).ready(function () {
 		return results === null ? "" : decodeURIComponent( results[1].replace( /\+/g, " " ) );
 	}
 
+    jQuery('#rt_biz_is_staff_member').click( function( e ){
+        if( jQuery(this).is(':checked') ) {
+            jQuery('#rtbiz-permission-container').show();
+        } else {
+            jQuery('#rtbiz-permission-container').hide();
+        }
+    });
+
 });
