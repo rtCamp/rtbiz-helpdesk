@@ -150,6 +150,8 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 							                       ) );
 							echo '<a target="_blank" href="'.admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&'.Rt_Offerings::$offering_slug.'='.$terms->slug ).'">'.$posts->post_count.'</a>';
 						}
+					} else {
+						echo '-';
 					}
 					break;
 				case Rt_HD_Module::$post_type.'_order':
