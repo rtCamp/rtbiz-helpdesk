@@ -1439,6 +1439,7 @@ function rthd_get_tickets( $key, $value ) {
 		'post_type' => Rt_HD_Module::$post_type,
 		'post_status' => 'any',
 		'nopaging' => true,
+		'orderby' => 'modified',
 	);
 
 	if ( 'created_by' == $key ) {
@@ -1475,12 +1476,30 @@ function rthd_get_tickets( $key, $value ) {
 		if ( is_object( $value ) ) {
 			$value = $value->ID;
 		}
-		$args['meta_query'] = array(
-			array(
-				'key' => 'rtbiz_hd_order_id',
-				'value' => $value,
-			),
-		);
+		$user_id = rthd_get_user_id_from_order_id( $value );
+		if ( is_admin() ) {
+			$args['meta_query'] = array(
+				'relation' => 'OR',
+				array(
+					'key' => 'rtbiz_hd_order_id',
+					'value' => $value,
+					'compare' => '=',
+				),
+				array(
+					'key' => '_rtbiz_hd_created_by',
+					'value' => $user_id,
+					'compare' => '=',
+				),
+			);
+		} else {
+			$args['meta_query'] = array(
+				array(
+					'key' => 'rtbiz_hd_order_id',
+					'value' => $value,
+					'compare' => '=',
+				),
+			);
+		}
 	} elseif ( 'favourite' == $key ) {
 		$fav = rthd_get_user_fav_ticket( $value );
 		// if there is no fav tickets post__in query will not work so return empty array
@@ -2031,4 +2050,25 @@ function rthd_get_setup_team_ui() {
 	ob_start();
 	$rt_hd_setup_wizard -> setup_team( false );
 	return ob_get_clean();
+}
+
+/**
+ *
+ * Returns user id from Order
+ * @param $order_id
+ *
+ * @return mixed
+ */
+function rthd_get_user_id_from_order_id( $order_id ) {
+	$post_type = get_post_type( $order_id );
+	if ( is_object( $order_id ) ) {
+		$order_id = $order_id->ID;
+	}
+	if ( 'edd_payment' == $post_type ) {
+		// find in edd
+		return get_post_meta( $order_id, '_edd_payment_user_id', true );
+	} else if ( 'shop_order' == $post_type ) {
+		// find in woo
+		return get_post_meta( $order_id, '_customer_user', true );
+	}
 }

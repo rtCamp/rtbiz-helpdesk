@@ -167,6 +167,7 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 					}
 
 					$tickets = array();
+					$oder_shortcode = false;
 					if ( ! empty( $arg_shortcode['userid'] ) ) {
 						if ( ! empty( $arg_shortcode['fav'] ) ) {
 							$tickets = rthd_get_tickets( 'favourite', $arg_shortcode['userid'] );
@@ -177,6 +178,7 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 						}
 					} elseif ( ! empty( $arg_shortcode['orderid'] ) ) {
 						$tickets = rthd_get_tickets( 'order', $arg_shortcode['orderid'] );
+						$oder_shortcode = true;
 					}
 
 					if ( ! empty( $arg_shortcode['fav'] ) && empty( $tickets ) ) {
@@ -244,9 +246,18 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 					</thead>
 					<?php
 					foreach ( $tickets as $ticket ) {
+						$order_class = '';
+						if ( $oder_shortcode && is_admin() ) {
+							$hd_order_by = get_post_meta( $ticket->ID, 'rtbiz_hd_order_id', true );
+							$order_by = $arg_shortcode['orderid'];
+
+							if ( $hd_order_by == $order_by ) {
+								$order_class = 'rthd_highlight_row';
+							}
+						}
 						$date = new DateTime( $ticket->post_modified );
 						?>
-						<tr>
+						<tr class="<?php echo $order_class; ?>">
 							<td><a class="support" target="_blank"
 							       href="<?php echo esc_url( ( rthd_is_unique_hash_enabled() ) ? rthd_get_unique_hash_url( $ticket->ID ) : get_post_permalink( $ticket->ID ) ); ?>"> #<?php echo esc_attr( $ticket->ID ) ?> </a></td>
 							<td><?php echo $ticket->post_title; ?></td>
