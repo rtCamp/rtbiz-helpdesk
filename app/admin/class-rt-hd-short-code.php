@@ -237,6 +237,11 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 			//			printf( '<p>'._n( 'One Ticket Found', '%d Tickets Found', count( $tickets ), 'my-RT_HD_TEXT_DOMAIN-domain' ). '</p>', count( $tickets ) );
 
 			echo '</div>';
+
+			if ( is_admin() && ! empty( $tickets ) && $oder_shortcode ) { ?>
+				<p> <?php _e( 'Below are the all the tickets created by this customer. The tickets for this order are highlighted.', RT_HD_TEXT_DOMAIN ); ?></p>
+			<?php
+			}
 			if ( ! empty( $tickets ) ) {
 				?>
 				<table class="wp-list-table striped widefat shop_table my_account_orders rthd_ticket_short_code">
