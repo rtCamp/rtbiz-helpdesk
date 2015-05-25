@@ -185,6 +185,7 @@ $user_edit_content = current_user_can( $cap );
 					$emails = $wpdb->get_results( 'SELECT distinct(comment_author_email) from ' . $wpdb->comments . ' where comment_post_ID= ' . $post->ID . ' AND comment_type=' . Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC );
 					$emails = wp_list_pluck( $emails, 'comment_author_email' );
 
+					$emails = array_diff( $emails, array( $created_by->user_email ) );
 					// get last comment for getting date and time of last reply by
 					$comment = get_comments( array( 'post_id' => $post->ID, 'number' => 1 ) );
 
