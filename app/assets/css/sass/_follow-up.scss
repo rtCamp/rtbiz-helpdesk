@@ -487,15 +487,18 @@ h2.rt-hd-ticket-front-title{
 	margin-left: 5px;
 }
 
-.rthd-ticket-user-activity a img, .rthd-ticket-user-activity a input{
+.rthd-ticket-user-activity a img, .rthd-ticket-user-activity-backend a img, .rthd-ticket-user-activity a input{
 	border-radius: 100%;
 	vertical-align: middle;
 }
 
-.rthd-ticket-user-activity > a {
+.rthd-ticket-user-activity > a, .rthd-ticket-user-activity-backend > a{
 	display: inline-block;
-	margin: 5px 8px 5px 0;
+	padding-left: 8px;
 	text-decoration: none;
+}
+.rthd-ticket-user-activity > a {
+	margin: 5px 8px 5px 0;
 }
 
 .rthd-contact-avatar-no-reply-div a img,.rthd-subscriber-avatar-no-reply-div a img{

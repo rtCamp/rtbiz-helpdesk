@@ -169,7 +169,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 					$CCs                = wp_list_pluck( $CCs, 'email' );
 					$CCs                = array_diff( $CCs, array( $created_by->user_email ) );
 					?>
-					<div class="rthd-ticket-user-activity">
+					<div class="rthd-ticket-user-activity-backend">
 						<?php
 						if ( ! empty( $created_by ) ) {
 							// Show ticket created by with large gravatar
@@ -195,7 +195,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 					$assigned_to        = get_user_by( 'id', $post->post_author );
 					$subscriber                = array_diff( $subscriber, array( $assigned_to->user_email ) );
 					?>
-					<div class="rthd-ticket-user-activity">
+					<div class="rthd-ticket-user-activity-backend">
 						<?php
 						if ( ! empty( $assigned_to ) ) {
 							// Show ticket assignee by with large gravatar
