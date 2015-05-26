@@ -2072,3 +2072,11 @@ function rthd_get_user_id_from_order_id( $order_id ) {
 		return get_post_meta( $order_id, '_customer_user', true );
 	}
 }
+
+function rthd_compare_wp_post( $objA, $objB ) {
+	if ( $objA->ID == $objB->ID ) {
+		return 0;
+	} else {
+		return -1;
+	}
+}

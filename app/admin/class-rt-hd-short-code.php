@@ -180,8 +180,11 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 					if ( ! empty( $arg_shortcode['userid'] ) ) {
 						if ( ! empty( $arg_shortcode['fav'] ) ) {
 							$tickets = rthd_get_tickets( 'favourite', $arg_shortcode['userid'] );
-						} elseif ( rthd_is_our_employee( $arg_shortcode['userid'], RT_HD_TEXT_DOMAIN ) ) {
+						} elseif ( $is_staff ) {
+							$fav = rthd_get_tickets( 'favourite', $arg_shortcode['userid'] );
 							$tickets = rthd_get_tickets( 'assignee', $arg_shortcode['userid'] );
+							$tickets = array_udiff( $tickets, $fav, 'rthd_compare_wp_post' );
+							$tickets = $fav + $tickets ;
 						} else {
 							$tickets = rthd_get_tickets( 'created_by', $arg_shortcode['userid'] );
 						}
@@ -246,6 +249,14 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 			//			printf( '<p>'._n( 'One Ticket Found', '%d Tickets Found', count( $tickets ), 'my-RT_HD_TEXT_DOMAIN-domain' ). '</p>', count( $tickets ) );
 
 			echo '</div>';
+			if ( $is_staff && ! empty( $arg_shortcode['userid'] ) ) {
+				$fav_staff_tickets = rthd_get_user_fav_ticket( $arg_shortcode['userid'] );
+				if ( ! empty( $fav ) ) {
+					?>
+					<p> <?php _e( 'Your favourite tickets are highlighted below.' ); ?></p>
+				<?php
+				}
+			}
 
 			if ( is_admin() && ! empty( $tickets ) && $oder_shortcode ) { ?>
 				<p> <?php _e( 'Below are the all the tickets created by this customer. The tickets for this order are highlighted.', RT_HD_TEXT_DOMAIN ); ?></p>
@@ -265,18 +276,24 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 					</thead>
 					<?php
 					foreach ( $tickets as $ticket ) {
-						$order_class = '';
+						$highlight_class = '';
+
+						if ( $is_staff && ! empty( $fav_staff_tickets ) ) {
+							if ( in_array( $ticket->ID, $fav_staff_tickets ) ) {
+								$highlight_class = 'rthd_highlight_row';
+							}
+						}
 						if ( $oder_shortcode && is_admin() ) {
 							$hd_order_by = get_post_meta( $ticket->ID, 'rtbiz_hd_order_id', true );
 							$order_by = $arg_shortcode['orderid'];
 
 							if ( $hd_order_by == $order_by ) {
-								$order_class = 'rthd_highlight_row';
+								$highlight_class = 'rthd_highlight_row';
 							}
 						}
 						$date = new DateTime( $ticket->post_modified );
 						?>
-						<tr class="<?php echo $order_class; ?>">
+						<tr class="<?php echo $highlight_class; ?>">
 							<td><a class="support" target="_blank"
 							       href="<?php echo esc_url( ( rthd_is_unique_hash_enabled() ) ? rthd_get_unique_hash_url( $ticket->ID ) : get_post_permalink( $ticket->ID ) ); ?>"> #<?php echo esc_attr( $ticket->ID ) ?> </a></td>
 							<td><?php echo $ticket->post_title; ?></td>

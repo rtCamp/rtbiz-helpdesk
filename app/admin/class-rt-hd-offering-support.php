@@ -579,7 +579,6 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 		 */
 		function woo_my_tickets_my_account() {
 			global $current_user;
-			echo balanceTags( do_shortcode( '[rt_hd_tickets userid = ' . $current_user->ID . ' fav= true]' ) );
 			echo balanceTags( do_shortcode( '[rt_hd_tickets show_support_form_link=yes userid = ' . $current_user->ID . ']' ) );
 		}
 
