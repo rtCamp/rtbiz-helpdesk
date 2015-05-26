@@ -4,7 +4,7 @@ Donate Link:       http://rtcamp.com/donate
 Tags:              helpdesk, support, products, tickets, followups, customers, e-commerce
 Requires at least: 4.1
 Tested up to:      4.1
-Stable tag:        1.2.5
+Stable tag:        1.2.6
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,6 +57,11 @@ Please refer to the documentation.
 1. Dashboard
 
 == Changelog ==
+
+= 1.2.6 =
+* Ticket short-code updated
+* Ticket columns added on Woocommerce and EDD
+* Add contact and Add staff link updated
 
 = 1.2.5 =
 * UI updates
