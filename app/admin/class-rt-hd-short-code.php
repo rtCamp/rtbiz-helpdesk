@@ -42,7 +42,6 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 			wp_enqueue_style( 'helpdesk-style', RT_HD_URL . 'app/assets/css/rthd-main.css', false, RT_HD_VERSION, 'all' );
 			wp_enqueue_script( 'rthd-support-form', RT_HD_URL . 'app/assets/js/helpdesk-support-min.js', array( 'jquery' ), RT_HD_VERSION, true );
 			$offering_option = '';
-			$order_email = '';
 
 			if ( is_user_logged_in() ) {
 				$post_id = $rt_hd_offering_support->save_support_form();

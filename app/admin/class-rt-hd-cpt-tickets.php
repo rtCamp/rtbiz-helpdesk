@@ -173,16 +173,18 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 						<?php
 						if ( ! empty( $created_by ) ) {
 							// Show ticket created by with large gravatar
-							echo ' <a class="rthd-ticket-created-by" title="Created by ' . $created_by->display_name . ' ' . $create_by_time . '" href="' .  rthd_biz_user_profile_link( $created_by->user_email ) .'">' . get_avatar( $created_by->user_email, '30' ) . '</a>';
+							echo ' <a class="rthd-ticket-created-by" title="Created by ' . $created_by->display_name . ' ' . $create_by_time . '" href="' .  admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&created_by='.$created_by->ID ) .'">' . get_avatar( $created_by->user_email, '30' ) . '</a>';
 						}
 						foreach ( $CCs as $email ) {
 							// show other CCs' contact
 							$user         = get_user_by( 'email', $email );
 							$display_name = $email;
+							$url = '#';
 							if ( ! empty( $user ) ) {
 								$display_name = $user->display_name;
+								$url = admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&created_by='.$user->ID );
 							}
-							echo '<a title= "' . $display_name . '" class="rthd-last-reply-by rthd-contact-avatar-no-reply"  href="' . rthd_biz_user_profile_link( $email ) . '">' . get_avatar( $email, '30' ) . ' </a>';
+							echo '<a title= "' . $display_name . '" class="rthd-last-reply-by rthd-contact-avatar-no-reply"  href="' .$url . '">' . get_avatar( $email, '30' ) . ' </a>';
 						}
 						?>
 					</div>
@@ -199,7 +201,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 						<?php
 						if ( ! empty( $assigned_to ) ) {
 							// Show ticket assignee by with large gravatar
-							echo ' <a class="rthd-ticket-created-by" title="Assigned to ' . $assigned_to->display_name .'" href="' .  rthd_biz_user_profile_link( $assigned_to->user_email ) .'">' . get_avatar( $assigned_to->user_email, '30' ) . '</a>';
+							echo ' <a class="rthd-ticket-created-by" title="Assigned to ' . $assigned_to->display_name .'" href="' .  admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&assigned='.$assigned_to->ID ) .'">' . get_avatar( $assigned_to->user_email, '30' ) . '</a>';
 						}
 						foreach ( $subscriber as $email ) {
 							// show other CCs' contact
@@ -208,7 +210,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 							if ( ! empty( $user ) ) {
 								$display_name = $user->display_name;
 							}
-							echo '<a title= "' . $display_name . '" class="rthd-last-reply-by rthd-contact-avatar-no-reply"  href="' . rthd_biz_user_profile_link( $email ) . '">' . get_avatar( $email, '30' ) . ' </a>';
+							echo '<a title= "' . $display_name . '" class="rthd-last-reply-by rthd-contact-avatar-no-reply"  href="' . admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&assigned='.$user->ID )  . '">' . get_avatar( $email, '30' ) . ' </a>';
 						}
 						?>
 					</div>
