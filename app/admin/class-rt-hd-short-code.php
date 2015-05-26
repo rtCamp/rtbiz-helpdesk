@@ -65,40 +65,46 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 				$wrong_user_flag = false;
 				$loggedin_id = get_current_user_id();
 
-				// this code needs refactor
+				$product_ids = array();
+
+				if ( isset( $_REQUEST['order_id'] ) ) {
+					// check in woo orders
+					if ( $rt_hd_offering_support->isWoocommerceActive ) {
+						$order = new WC_Order( $_REQUEST['order_id'] );
+						if ( ! empty( $order ) && 'shop_order' == $order->post->post_type ) {
+							if ( $loggedin_id == $order->get_user_id() ) {
+								$items           = $order->get_items();
+								$product_ids     = wp_list_pluck( $items, 'product_id' );
+								$wrong_user_flag = false;
+							} else {
+								$wrong_user_flag = true;
+							}
+						} else {
+							$order = array();
+						}
+					}
+					// check in edd orders
+					if ( $rt_hd_offering_support->iseddActive && empty( $order ) ) {
+						$payment = get_post( $_REQUEST['order_id'] );
+						if ( ! empty( $payment ) && $loggedin_id == $payment->post_author ) {
+							if ( 'edd_payment' == $payment->post_type ) {
+								$items       = edd_get_payment_meta_downloads( $payment->ID );
+								$product_ids = wp_list_pluck( $items, 'id' );
+								$wrong_user_flag = false;
+							}
+						} else {
+							$wrong_user_flag = true;
+						}
+					}
+				}
+
 				foreach ( $terms as $tm ) {
 					$term_offering_id = '';
-					if ( isset( $_REQUEST['order_id'] ) ) {
-						if ( $rt_hd_offering_support->isWoocommerceActive ) {
-							$order = new WC_Order( $_REQUEST['order_id'] );
-							if ( ! empty( $order ) && $loggedin_id == $order->get_user_id() && 'shop_order' == $order->post->post_type ) {
-								$items = $order->get_items();
-								$product_ids = wp_list_pluck( $items, 'product_id' );
-								$wrong_user_flag = false;
-								$term_offering_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $tm->term_id, Rt_Offerings::$term_product_id_meta_key, true );
-								if ( ! in_array( $term_offering_id, $product_ids ) ) {
-									continue;
-								}
-							} else {
-								$order = array();
-								$wrong_user_flag = true;
-							}
-						}
-						if ( $rt_hd_offering_support->iseddActive && empty( $order ) ) {
-							$payment = get_post( $_REQUEST['order_id'] );
-							if ( $loggedin_id == $payment->post_author ) {
-								if ( ! empty( $payment ) && 'edd_payment' == $payment->post_type ) {
-									$items = edd_get_payment_meta_downloads( $payment->ID );
-									$product_ids = wp_list_pluck( $items, 'id' );
-									$wrong_user_flag = false;
-									$term_offering_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $tm->term_id, Rt_Offerings::$term_product_id_meta_key, true );
-									if ( ! in_array( $term_offering_id, $product_ids ) ) {
-										continue;
-									}
-								}
-							} else {
-								$wrong_user_flag = true;
-							}
+					// skip items if not from orders
+					if ( ! empty( $product_ids ) ) {
+						$term_offering_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $tm->term_id, Rt_Offerings::$term_product_id_meta_key, true );
+						if ( ! in_array( $term_offering_id, $product_ids ) ) {
+							continue;
 						}
 					}
 					$offering_option .= '<option value="' . $tm->term_id . '" ' . ( ( ! empty( $_REQUEST['product_id'] ) && $term_offering_id == $_REQUEST['product_id'] ) ? 'selected="selected"' : '' ) . '> ' . $tm->name . '</option>';
