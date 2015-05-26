@@ -63,30 +63,34 @@ if ( ! class_exists( 'RT_HD_Short_Code' ) ) {
 				}
 				$offering_exists = false;
 				$wrong_user_flag = false;
+				$loggedin_id = get_current_user_id();
+
+				// this code needs refactor
 				foreach ( $terms as $tm ) {
 					$term_offering_id = '';
-					$loggedin_id = get_current_user_id();
-					if ( isset( $_REQUEST['order_id'] ) && $rt_hd_offering_support->order_post_type == get_post_type( $_REQUEST['order_id'] ) ) {
+					if ( isset( $_REQUEST['order_id'] ) ) {
 						if ( $rt_hd_offering_support->isWoocommerceActive ) {
 							$order = new WC_Order( $_REQUEST['order_id'] );
-							if ( $loggedin_id = $order->get_user_id() ) {
-								if ( ! empty( $order ) ) {
-									$items = $order->get_items();
-									$product_ids = wp_list_pluck( $items, 'product_id' );
-									$term_offering_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $tm->term_id, Rt_Offerings::$term_product_id_meta_key, true );
-									if ( ! in_array( $term_offering_id, $product_ids ) ) {
-										continue;
-									}
+							if ( ! empty( $order ) && $loggedin_id == $order->get_user_id() && 'shop_order' == $order->post->post_type ) {
+								$items = $order->get_items();
+								$product_ids = wp_list_pluck( $items, 'product_id' );
+								$wrong_user_flag = false;
+								$term_offering_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $tm->term_id, Rt_Offerings::$term_product_id_meta_key, true );
+								if ( ! in_array( $term_offering_id, $product_ids ) ) {
+									continue;
 								}
 							} else {
+								$order = array();
 								$wrong_user_flag = true;
 							}
-						} else if ( $rt_hd_offering_support->iseddActive ) {
+						}
+						if ( $rt_hd_offering_support->iseddActive && empty( $order ) ) {
 							$payment = get_post( $_REQUEST['order_id'] );
 							if ( $loggedin_id == $payment->post_author ) {
-								if ( ! empty( $payment ) ) {
+								if ( ! empty( $payment ) && 'edd_payment' == $payment->post_type ) {
 									$items = edd_get_payment_meta_downloads( $payment->ID );
 									$product_ids = wp_list_pluck( $items, 'id' );
+									$wrong_user_flag = false;
 									$term_offering_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $tm->term_id, Rt_Offerings::$term_product_id_meta_key, true );
 									if ( ! in_array( $term_offering_id, $product_ids ) ) {
 										continue;

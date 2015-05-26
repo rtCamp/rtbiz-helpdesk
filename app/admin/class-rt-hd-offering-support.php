@@ -491,12 +491,11 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 			$activePlugin  = rt_biz_get_offering_selection_setting();
 			if ( ! empty( $activePlugin ) && is_plugin_active( 'woocommerce/woocommerce.php' ) && in_array( 'woocommerce', $activePlugin ) ) {
 				$this->isWoocommerceActive = true;
-				$this->iseddActive = false;
 				$this->activePostType = 'product';
 				$this->order_post_type = 'shop_order';
-			} else if ( ! empty( $activePlugin ) && is_plugin_active( 'easy-digital-downloads/easy-digital-downloads.php' ) && in_array( 'edd', $activePlugin ) ) {
+			}
+			if ( ! empty( $activePlugin ) && is_plugin_active( 'easy-digital-downloads/easy-digital-downloads.php' ) && in_array( 'edd', $activePlugin ) ) {
 				$this->iseddActive = true;
-				$this->isWoocommerceActive  = false;
 				$this->activePostType = 'download';
 				$this->order_post_type = 'edd_payment';
 			} else {
