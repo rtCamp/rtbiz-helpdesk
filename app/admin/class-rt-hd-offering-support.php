@@ -65,7 +65,9 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 			// Add product information in ticket meta.
 			add_action( 'rt_hd_add_ticket_offering_info', array( &$this, 'rt_hd_add_ticket_offering_info_callback' ) );
 
+			// my account and download history ticket list view
 			add_action( 'woocommerce_after_my_account', array( $this, 'woo_my_tickets_my_account' ) );
+			//			add_action( 'edd_after_download_history', array( $this, 'woo_my_tickets_my_account' ) );
 
 			// Metaboxes for Orders
 			// WP 3.0+
@@ -87,6 +89,8 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 
 			// Show tickets in woocommerce order page
 			add_action( 'woocommerce_view_order', array( $this, 'woocommerce_view_order_show_ticket' ) );
+			//			add_filter( 'edd_payment_receipt_after_table', array( $this, 'edd_view_order_show_ticket' ), 10, 3 );
+
 
 			// Show ticket column in product and download post type
 			add_filter( 'edd_download_columns', array( $this, 'manage_woo_edd_post_columns' ) );
@@ -177,10 +181,17 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 		 * @param $order_id
 		 */
 		function woocommerce_view_order_show_ticket( $order_id ) {
+			if ( is_object( $order_id ) ) {
+				$order_id = $order_id->ID;
+			}
 			echo balanceTags( do_shortcode( '[rt_hd_tickets show_support_form_link=yes orderid=' . $order_id. ']' ) );
 		}
 
-		/*
+		function edd_view_order_show_ticket( $payment, $edd_receipt_args ) {
+			$this->woocommerce_view_order_show_ticket( $payment );
+		}
+
+		/**
 		 * Add column heading on offering list page
 		 * @param $columns
 		 *

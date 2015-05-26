@@ -446,7 +446,6 @@ $user_edit_content = current_user_can( $cap );
 							<ul>
 								<?php foreach ( $otherposts as $p ) { ?>
 									<li>
-<!--										<a href="--><?php //echo get_post_permalink( $p->ID ); ?><!--">--><?php //echo '[#' . $p->ID . '] ' . esc_attr( strlen( balanceTags( $p->post_title ) ) > 15 ? substr( balanceTags( $p->post_title ), 0, 15 ) . '...' : balanceTags( $p->post_title ) ) ?><!--  </a>--><?php //echo rthd_status_markup( $p->post_status ); ?>
 										<a href="<?php echo get_post_permalink( $p->ID ); ?>"><?php echo '[#' . $p->ID . '] ' . balanceTags( $p->post_title );  ?>  </a><?php echo rthd_status_markup( $p->post_status ); ?>
 									</li>
 								<?php } ?>

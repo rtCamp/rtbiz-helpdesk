@@ -32,9 +32,6 @@ global $rthd_messages;
 					</div>
 				<?php }
 				global $current_user; ?>
-<!--					<div class="rthd-fav-ticket">-->
-<!--						--><?php //echo balanceTags( do_shortcode( '[rt_hd_tickets userid = ' . $current_user->ID . ' fav= true]' ) ); ?>
-<!--					</div>-->
 					<div class="rthd-my-ticket">
 						<?php echo balanceTags( do_shortcode( '[rt_hd_tickets show_support_form_link=yes userid = ' . $current_user->ID . ']' ) ); ?>
 					</div>
