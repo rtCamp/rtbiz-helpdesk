@@ -141,7 +141,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 				return rthd_locate_template( 'ticket-error-page.php' );
 			}
 
-			if ( ! empty( $post ) ) {
+			if ( ! empty( $post ) && isset( $wp_query->query['rtbiz_hd_ticket'] ) ) {
 				global $rt_hd_email_notification;
 				$user = wp_get_current_user();
 				if ( ! current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' ) ) && current_user_can( rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' ) ) ) {
