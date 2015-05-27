@@ -45,8 +45,15 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		 *
 		 * @return string Body Title
 		 */
-		public function get_email_title( $post_id, $posttype ) {
-			return '<i style="color:#888888">To view ticket online <a style="color: #3455ff; text-decoration: none;" href="'.  ( rthd_is_unique_hash_enabled() ? rthd_get_unique_hash_url( $post_id ) : get_post_permalink( $post_id ) ) .'">Click here</a></i>';
+		public function get_email_title( $post_id, $posttype, $followupid = 0 ) {
+			$followup_url = '';
+			$title = 'ticket';
+			if ( ! empty( $followupid ) ) {
+				$followup_url = '#followup-'.$followupid;
+				$title = 'followup';
+			}
+			$url  = rthd_is_unique_hash_enabled() ? rthd_get_unique_hash_url( $post_id ) : get_post_permalink( $post_id );
+			return '<i style="color:#888888">To view '.$title.' online <a style="color: #3455ff; text-decoration: none;" href="'. $url . $followup_url . '">Click here</a></i>';
 		}
 
 		/**
@@ -233,7 +240,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			}
 			global $rt_hd_module;
 			$labels = $rt_hd_module->labels;
-			$title = $this->get_email_title( $comment->comment_post_ID, $labels['name'] );
+			$title = $this->get_email_title( $comment->comment_post_ID, $labels['name'], $comment->comment_ID );
 			// replace followup_content placeholder with content
 			$body = rthd_replace_placeholder( $body, '{followup_content}', rthd_content_filter( $comment->comment_content ) );
 
@@ -397,7 +404,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			}
 			global $rt_hd_module;
 			$labels = $rt_hd_module->labels;
-			$title = $this->get_email_title( $comment->comment_post_ID, $labels['name'] );
+			$title = $this->get_email_title( $comment->comment_post_ID, $labels['name'], $comment->comment_ID );
 
 			// sending email to followup author [ To ]
 			if ( user_can( $user, rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'author' ) ) ) {

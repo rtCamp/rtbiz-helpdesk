@@ -684,7 +684,7 @@ if ( true == $is_comment_private ) {
 	echo "<span class='private_comment_span'> $private_text </span> | ";
 }
 					?>
-					<?php echo '<a class="followup-hash-url" id="followup_' . $comment->comment_ID . '" href="#followup_' . $comment->comment_ID . '" >' . esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . ' ago </a>'; ?>
+					<?php echo '<a class="followup-hash-url" id="followup-' . $comment->comment_ID . '" href="#followup-' . $comment->comment_ID . '" >' . esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . ' ago </a>'; ?>
 
 				</time>
 			</div>
