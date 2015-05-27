@@ -56,7 +56,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			//removed offering sync option
 			$diff = array();
 
-			if ( isset( $setting['offering_plugin'] ) && isset( $old_setting['offering_plugin'] ) ) {
+			if ( isset( $setting['offering_plugin'] ) && isset( $old_setting['offering_plugin'] ) && is_array( $setting['offering_plugin'] ) && is_array( $old_setting['offering_plugin'] ) ) {
 				$diff = array_diff( $setting['offering_plugin'], $old_setting['offering_plugin'] );
 				$diff = array_unique( $diff );
 			}
