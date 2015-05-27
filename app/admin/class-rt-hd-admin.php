@@ -49,7 +49,6 @@ if ( ! class_exists( 'Rt_HD_Admin' ) ) {
 		 * rtbiz page menu "people"
 		 */
 		function add_people_menu() {
-			global $rt_access_control;
 			if ( rthd_check_wizard_completed() ) {
 				add_submenu_page( 'edit.php?post_type=' . Rt_HD_Module::$post_type, __( 'Customers' ), __( 'Customers' ), rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' ), esc_url( 'edit.php?post_type=' . rt_biz_get_contact_post_type() . '&rt_contact_group=customer&module=' . RT_HD_TEXT_DOMAIN ) );
 				add_submenu_page( 'edit.php?post_type=' . Rt_HD_Module::$post_type, __( 'Staff' ), __( 'Staff' ), rt_biz_get_access_role_cap( RT_HD_TEXT_DOMAIN, 'editor' ), esc_url( 'edit.php?post_type=' . rt_biz_get_contact_post_type() . '&rt_contact_group=staff&module=' . RT_HD_TEXT_DOMAIN ) );

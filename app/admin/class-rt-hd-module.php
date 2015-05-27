@@ -525,7 +525,6 @@ if ( ! class_exists( 'Rt_HD_Module' ) ) {
 			global $submenu;
 			global $menu;
 
-			unset( $submenu[ Rt_Biz::$dashboard_slug ] );
 			foreach ( $menu as $key => $menu_item ) {
 				if ( in_array( Rt_Biz::$dashboard_slug, $menu_item ) ) {
 					unset( $menu[ $key ] );
