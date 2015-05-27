@@ -2012,7 +2012,7 @@ if ( ! class_exists( 'Rt_HD_Import_Operation' ) ) {
 			$labels = $rt_hd_module->labels;
 			rthd_update_ticket_updated_by_user( $post_id, get_current_user_id() );
 			global $rt_hd_email_notification;
-			$body = $labels['name'].' Status '.rthd_status_markup( $old ).' changed to '.rthd_status_markup( $post_status );
+			$body = $labels['name'].' Status <strong>'.rthd_status_markup( $old ).'</strong> changed to <strong>'.rthd_status_markup( $post_status ).'</strong>';
 			$rt_hd_email_notification->notification_ticket_updated( $post_id, $labels['name'], $body, array() );
 			echo json_encode( $response );
 			die();
