@@ -85,8 +85,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 			unset( $cols['title'] );
 			unset( $cols['comments'] );
 			unset( $cols['date'] );
-			unset( $columns[ 'p2p-from-'.Rt_HD_Module::$post_type.'_to_'.rt_biz_get_contact_post_type() ] );
-
+			unset( $cols[ 'p2p-from-'.Rt_HD_Module::$post_type.'_to_'.rt_biz_get_contact_post_type() ] );
 			$columns['cb'] = '<input type="checkbox" />';
 			$columns['rthd_ticket_title'] = __( 'Ticket', RT_HD_TEXT_DOMAIN );
 			$columns['rthd_ticket_status'] = '<span class="status_head tips" data-tip="' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '">' . esc_attr__( 'Status', RT_HD_TEXT_DOMAIN ) . '</span>';
