@@ -68,14 +68,14 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 			add_action( 'pre_get_posts', array( $this, 'contact_posts_filter' ) );
 		}
 
-		function rthd_contact_custom_metabox( ){
+		function rthd_contact_custom_metabox( ) {
 			add_meta_box( 'rthd-ticket-listing', __( 'Tickets' ), array(
 				$this,
 				'rthd_ticket_listing_metabox',
 			), rt_biz_get_contact_post_type(), 'normal', 'default' );
 		}
 
-		function rthd_ticket_listing_metabox( $post ){
+		function rthd_ticket_listing_metabox( $post ) {
 			if ( ! empty( $_REQUEST['module'] ) && RT_HD_TEXT_DOMAIN == $_REQUEST['module'] ) {
 				$user = rt_biz_get_wp_user_for_contact( $post->ID );
 				echo balanceTags( do_shortcode( '[rt_hd_tickets userid = ' . $user[0]->ID . " title='no' ]" ) );
@@ -86,7 +86,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		 * Filter contact
 		 * @param $query
 		 */
-		function contact_posts_filter( $query ){
+		function contact_posts_filter( $query ) {
 			global $wpdb, $rt_biz_acl_model;
 			if ( isset( $_GET['post_type'] ) && rt_biz_get_contact_post_type() == $_GET['post_type'] && $query->is_main_query() ) {
 
@@ -172,7 +172,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 			return $location;
 		}
 
-		function metabox_rearrange(){
+		function metabox_rearrange() {
 			global $wp_meta_boxes;
 
 			$users = rt_biz_get_wp_user_for_contact( $_REQUEST['post'] );
@@ -207,7 +207,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		 * @param $url
 		 * @param $postid
 		 */
-		function rthd_edit_contact_link( $url, $postid ){
+		function rthd_edit_contact_link( $url, $postid ) {
 			if ( ! empty( $_REQUEST['module'] ) && ! empty( $postid ) && get_post_type( $postid ) == rt_biz_get_contact_post_type() ) {
 				$url = esc_url( add_query_arg( 'module', $_REQUEST['module'], $url ) );
 			}
@@ -445,7 +445,7 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 			return $fields;
 		}
 
-		function contacts_rearrange_columns( $columns, $rt_entity ){
+		function contacts_rearrange_columns( $columns, $rt_entity ) {
 
 			global $rt_contact;
 			if ( $rt_entity->post_type != $rt_contact->post_type ) {
@@ -521,20 +521,20 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 							$args  = array(
 								'post_type'   => Rt_HD_Module::$post_type,
 								'post_status' => 'any',
-								'author'      => $userid[0]->id,
+								'author'      => $userid[0]->ID,
 							);
 							$query = new WP_Query( $args );
-							$link  = get_admin_url() . 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&assigned=' . $userid[0]->id;
+							$link  = get_admin_url() . 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&assigned=' . $userid[0]->ID;
 							echo '<a href="' . $link . '" target="_blank">' . $query->found_posts . '</a>';
 						} else {
 							$args  = array(
 								'post_type'   => Rt_HD_Module::$post_type,
 								'post_status' => 'any',
 								'meta_key'    => '_rtbiz_hd_created_by',
-								'meta_value'  => $userid[0]->id,
+								'meta_value'  => $userid[0]->ID,
 							);
 							$query = new WP_Query( $args );
-							$link  = get_admin_url() . 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&created_by=' . $userid[0]->id;
+							$link  = get_admin_url() . 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&created_by=' . $userid[0]->ID;
 							echo '<a href="' . $link . '" target="_blank">' . $query->found_posts . '</a>';
 						}
 					} else {
