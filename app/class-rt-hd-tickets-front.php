@@ -168,6 +168,9 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 					$current_contact = '';
 					if ( ! empty( $user ) ) {
 						$current_contact = rt_biz_get_contact_for_wp_user( $user->ID );
+						if ( ! empty( $current_contact[0] ) ) {
+							$current_contact = $current_contact[0];
+						}
 					}
 					$creator = get_post_meta( $post->ID, '_rtbiz_hd_created_by', true );
 					if ( ( empty( $current_contact ) || ( ! in_array( $current_contact->ID, $contact_ids ) && ! in_array( $user->user_email, $contact_emails ) ) ) && $creator != $user->ID ) {
