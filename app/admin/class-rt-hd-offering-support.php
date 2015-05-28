@@ -91,7 +91,6 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 			add_action( 'woocommerce_view_order', array( $this, 'woocommerce_view_order_show_ticket' ) );
 			//			add_filter( 'edd_payment_receipt_after_table', array( $this, 'edd_view_order_show_ticket' ), 10, 3 );
 
-
 			// Show ticket column in product and download post type
 			add_filter( 'edd_download_columns', array( $this, 'manage_woo_edd_post_columns' ) );
 			add_filter( 'manage_product_posts_columns', array( $this, 'manage_woo_edd_post_columns' ) );
@@ -118,7 +117,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 				                       'meta_key' => 'rtbiz_hd_order_id',
 				                       'meta_value' => $payment,
 			                       ) );
-			return '<a target="_blank" href="'.admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&order='.$payment ).'">'.$posts->post_count.'</a>';
+			return '<a target="_blank" href="'.admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&order-id='.$payment ).'">'.$posts->post_count.'</a>';
 		}
 
 		/**
@@ -488,7 +487,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 				$page                 = get_post( $redux_helpdesk_settings['rthd_support_page'] );
 				$actions['support'] = array(
 					'url'  => "/{$page->post_name}/?order_id={$order->id}&order_type=woocommerce",
-					'name' => __( 'Create Ticket', RT_HD_TEXT_DOMAIN )
+					'name' => __( 'Create Ticket', RT_HD_TEXT_DOMAIN ),
 				);
 			}
 			return $actions;

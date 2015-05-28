@@ -533,6 +533,7 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 							break;
 						case 'comments':
 							$query->set( 'orderby', 'comment_count' );
+							break;
 					}
 				} else {
 					$query->set( 'orderby', 'modified' );
@@ -560,11 +561,11 @@ if ( ! class_exists( 'Rt_HD_CPT_Tickets' ) ) {
 					) );
 				}
 
-				if ( isset( $_GET['order'] ) ) {
+				if ( isset( $_GET['order-id'] ) && intval( $_GET['order-id'] ) ) {
 					$query->set( 'meta_query', array(
 						array(
 							'key' => 'rtbiz_hd_order_id',
-							'value' => $_GET['order'],
+							'value' => $_GET['order-id'],
 						),
 					) );
 				}
