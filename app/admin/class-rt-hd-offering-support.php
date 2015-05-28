@@ -116,8 +116,9 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 				                       'nopaging' => true,
 				                       'meta_key' => 'rtbiz_hd_order_id',
 				                       'meta_value' => $payment,
+				                       'fields' => 'ids',
 			                       ) );
-			return '<a target="_blank" href="'.admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&order-id='.$payment ).'">'.$posts->post_count.'</a>';
+			return '<a target="_blank" href="'.admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&order-id='.$payment ).'">'.$posts->found_posts.'</a>';
 		}
 
 		/**
