@@ -75,11 +75,10 @@ class test_Rt_HD_Module extends RT_WP_TestCase {
 	function  test_register_custom_statuses() {
 		$status = array(
 			'slug'        => 'Demo',
-			'name'        => __( 'Demo', RT_HD_TEXT_DOMAIN ),
-			'description' => __( 'Ticket is unanswered. It needs to be replied. The default state.', RT_HD_TEXT_DOMAIN ),
+			'name'        => __( 'Demo', RT_BIZ_HD_TEXT_DOMAIN ),
+			'description' => __( 'Ticket is unanswered. It needs to be replied. The default state.', RT_BIZ_HD_TEXT_DOMAIN ),
 		);
 		$this->assertTrue( is_object( $this->rthdModule->register_custom_statuses( $status ) ) );
 	}
 
 }
- 

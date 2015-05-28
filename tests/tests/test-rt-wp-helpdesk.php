@@ -9,7 +9,7 @@
 class test_RT_WP_Help_desk extends RT_WP_TestCase {
 
 	/**
-	 * @var $rtwpHelpDesk object of RT_WP_Helpdesk
+	 * @var $rtwpHelpDesk object of Rt_Biz_Helpdesk
 	 */
 	var $rtwpHelpDesk;
 
@@ -19,8 +19,8 @@ class test_RT_WP_Help_desk extends RT_WP_TestCase {
 	 */
 	function setUp() {
 		parent::setUp();
-		$this->rtwpHelpDesk = new RT_WP_Helpdesk();
-		$this->rtdbupdate   = new RT_DB_Update( false, realpath( dirname( __FILE__ ) . '/../../app/schema/' ) );
+		$this->rtwpHelpDesk = new Rt_Biz_Helpdesk();
+		$this->rtdbupdate   = new RT_DB_Update( false, realpath( dirname( __FILE__ ) . '/../../admin/schema/' ) );
 		$this->rtdbupdate->do_upgrade();
 	}
 
@@ -56,7 +56,7 @@ class test_RT_WP_Help_desk extends RT_WP_TestCase {
 
 		$this->assertTrue( class_exists( 'Rt_HD_Offering_Support' ), 'Class Rt_HD_Offering_Support does not exist' );
 
-		$this->assertTrue( class_exists( 'Rt_HD_Admin' ), 'Class Rt_HD_Admin does not exist' );
+		$this->assertTrue( class_exists( 'Rt_Biz_Helpdesk_Admin' ), 'Class Rt_Biz_Helpdesk_Admin does not exist' );
 
 		$this->assertTrue( class_exists( 'Rt_HD_Tickets_Front' ), 'Class Rt_HD_Tickets_Front does not exist' );
 	}
@@ -65,14 +65,10 @@ class test_RT_WP_Help_desk extends RT_WP_TestCase {
 	 * Ensure that required function exist
 	 */
 	function  test_check_function() {
-		$this->assertTrue( function_exists( 'rthd_admin_notice_dependency_not_installed' ) , 'Helpdesk does not have method rt_biz_admin_notice' );
-		$this->assertTrue( function_exists( 'rthd_check_plugin_dependecy' ) , 'Helpdesk does not have method rthd_check_plugin_dependecy' );
-		$this->assertTrue( method_exists( $this->rtwpHelpDesk, 'init_globals' ), 'Class RT_WP_Helpdesk does not have method init_globals' );
-		$this->assertTrue( method_exists( $this->rtwpHelpDesk, 'admin_init' ), 'Class RT_WP_Helpdesk does not have method admin_init' );
-		$this->assertTrue( method_exists( $this->rtwpHelpDesk, 'update_database' ), 'Class RT_WP_Helpdesk does not have method update_database' );
-		$this->assertTrue( method_exists( $this->rtwpHelpDesk, 'init' ), 'Class RT_WP_Helpdesk does not have method init' );
-		$this->assertTrue( method_exists( $this->rtwpHelpDesk, 'load_scripts' ), 'Class RT_WP_Helpdesk does not have method load_scripts' );
-		$this->assertTrue( method_exists( $this->rtwpHelpDesk, 'localize_scripts' ), 'Class RT_WP_Helpdesk does not have method localize_scripts' );
+		$this->assertTrue( method_exists( $this->rtwpHelpDesk, 'define_admin_hooks' ), 'Class Rt_Biz_Helpdesk does not have method define_admin_hooks' );
+		$this->assertTrue( method_exists( $this->rtwpHelpDesk, 'admin_init' ), 'Class Rt_Biz_Helpdesk does not have method admin_init' );
+		$this->assertTrue( method_exists( $this->rtwpHelpDesk, 'update_database' ), 'Class Rt_Biz_Helpdesk does not have method update_database' );
+		$this->assertTrue( method_exists( $this->rtwpHelpDesk, 'define_public_hooks' ), 'Class Rt_Biz_Helpdesk does not have method define_public_hooks' );
 	}
 
 
@@ -80,6 +76,6 @@ class test_RT_WP_Help_desk extends RT_WP_TestCase {
 	 * Ensure that rtbiz dependecy & it's function
 	 */
 	function test_check_rt_biz_dependecy() {
-		$this->assertTrue( rthd_check_plugin_dependecy(), 'rtbiz depend function not exist' );
+		$this->assertTrue( method_exists( $this->rtwpHelpDesk, 'rtbiz_hd_check_plugin_dependency' ), 'Class Rt_Biz_Helpdesk does not have method rtbiz_hd_check_plugin_dependency' );
 	}
 }

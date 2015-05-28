@@ -12,37 +12,37 @@
  * Contributors: Udit<udit.desai@rtcamp.com>, Dipesh<dipesh.kakadiya@rtcamp.com>, Utkarsh<utkarsh.patel@rtcamp.com>
  */
 
-if ( ! defined( 'RT_HD_VERSION' ) ) {
+if ( ! defined( 'RT_BIZ_HD_VERSION' ) ) {
 	/**
-	 * Defines RT_HD_VERSION if it does not exits.
+	 * Defines RT_BIZ_HD_VERSION if it does not exits.
 	 *
 	 * @since 0.1
 	 */
-	define( 'RT_HD_VERSION', '1.2.6' );
+	define( 'RT_BIZ_HD_VERSION', '1.2.6' );
 }
-if ( ! defined( 'RT_HD_TEXT_DOMAIN' ) ) {
+if ( ! defined( 'RT_BIZ_HD_TEXT_DOMAIN' ) ) {
 	/**
-	 * Defines RT_HD_TEXT_DOMAIN if it does not exits.
+	 * Defines RT_BIZ_HD_TEXT_DOMAIN if it does not exits.
 	 *
 	 * @since 0.1
 	 */
-	define( 'RT_HD_TEXT_DOMAIN', 'rtbiz-helpdesk' );
+	define( 'RT_BIZ_HD_TEXT_DOMAIN', 'rtbiz-helpdesk' );
 }
-if ( ! defined( 'RT_HD_BASE_NAME' ) ) {
+if ( ! defined( 'RT_BIZ_HD_BASE_NAME' ) ) {
 	/**
-	 * Defines RT_HD_PATH if it does not exits.
+	 * Defines RT_BIZ_HD_PATH if it does not exits.
 	 *
 	 * @since 0.1
 	 */
-	define( 'RT_HD_BASE_NAME', plugin_basename( __FILE__ ) );
+	define( 'RT_BIZ_HD_BASE_NAME', plugin_basename( __FILE__ ) );
 }
-if ( ! defined( 'RT_HD_PATH' ) ) {
+if ( ! defined( 'RT_BIZ_HD_PATH' ) ) {
 	/**
-	 * Defines RT_HD_PATH if it does not exits.
+	 * Defines RT_BIZ_HD_PATH if it does not exits.
 	 *
 	 * @since 0.1
 	 */
-	define( 'RT_HD_PATH', plugin_dir_path( __FILE__ ) );
+	define( 'RT_BIZ_HD_PATH', plugin_dir_path( __FILE__ ) );
 }
 if ( ! defined( 'RT_HD_URL' ) ) {
 	/**
@@ -52,69 +52,47 @@ if ( ! defined( 'RT_HD_URL' ) ) {
 	 */
 	define( 'RT_HD_URL', plugin_dir_url( __FILE__ ) );
 }
-if ( ! defined( 'RT_HD_PATH_APP' ) ) {
+if ( ! defined( 'RT_BIZ_HD_PATH_INCLUDE' ) ) {
 	/**
 	 * Defines app folder path if it does not exits.
 	 *
 	 * @since 0.1
 	 */
-	define( 'RT_HD_PATH_APP', plugin_dir_path( __FILE__ ) . 'app/' );
+	define( 'RT_BIZ_HD_PATH_INCLUDE', plugin_dir_path( __FILE__ ) . 'includes/' );
 }
-if ( ! defined( 'RT_HD_PATH_ADMIN' ) ) {
+
+if ( ! defined( 'RT_BIZ_HD_PATH_ADMIN' ) ) {
 	/**
-	 *  Defines app/admin path if it does not exits.
+	 * Defines app folder path if it does not exits.
 	 *
 	 * @since 0.1
 	 */
-	define( 'RT_HD_PATH_ADMIN', plugin_dir_path( __FILE__ ) . 'app/admin/' );
+	define( 'RT_BIZ_HD_PATH_ADMIN', plugin_dir_path( __FILE__ ) . 'admin/' );
 }
-if ( ! defined( 'RT_HD_PATH_MODELS' ) ) {
+if ( ! defined( 'RT_BIZ_HD_PATH_PUBLIC' ) ) {
 	/**
-	 * Defines app/models path if it does not exits.
+	 * Defines app folder path if it does not exits.
 	 *
 	 * @since 0.1
 	 */
-	define( 'RT_HD_PATH_MODELS', plugin_dir_path( __FILE__ ) . 'app/models/' );
+	define( 'RT_BIZ_HD_PATH_PUBLIC', plugin_dir_path( __FILE__ ) . 'public/' );
 }
-if ( ! defined( 'RT_HD_PATH_SCHEMA' ) ) {
+
+if ( ! defined( 'RT_BIZ_HD_PATH_SCHEMA' ) ) {
 	/**
 	 *  Defines app/schema path if it does not exits.
 	 *
 	 * @since 0.1
 	 */
-	define( 'RT_HD_PATH_SCHEMA', plugin_dir_path( __FILE__ ) . 'app/schema/' );
+	define( 'RT_BIZ_HD_PATH_SCHEMA', plugin_dir_path( __FILE__ ) . 'admin/schema/' );
 }
-if ( ! defined( 'RT_HD_PATH_LIB' ) ) {
-	/**
-	 * Defines app/lib path if it does not exits.
-	 *
-	 * @since 0.1
-	 */
-	define( 'RT_HD_PATH_LIB', plugin_dir_path( __FILE__ ) . 'app/lib/' );
-}
-if ( ! defined( 'RT_HD_PATH_VENDOR' ) ) {
-	/**
-	 *  Defines app/vendor path if it does not exits.
-	 *
-	 * @since 0.1
-	 */
-	define( 'RT_HD_PATH_VENDOR', plugin_dir_path( __FILE__ ) . 'app/vendor/' );
-}
-if ( ! defined( 'RT_HD_PATH_HELPER' ) ) {
-	/**
-	 * Defines app/helper path if it does not exits.
-	 *
-	 * @since 0.1
-	 */
-	define( 'RT_HD_PATH_HELPER', plugin_dir_path( __FILE__ ) . 'app/helper/' );
-}
-if ( ! defined( 'RT_HD_PATH_TEMPLATES' ) ) {
+if ( ! defined( 'RT_BIZ_HD_PATH_TEMPLATES' ) ) {
 	/**
 	 * Defines templates/ path if it does not exits.
 	 *
 	 * @since 0.1
 	 */
-	define( 'RT_HD_PATH_TEMPLATES', plugin_dir_path( __FILE__ ) . 'templates/' );
+	define( 'RT_BIZ_HD_PATH_TEMPLATES', plugin_dir_path( __FILE__ ) . 'public/templates/' );
 }
 
 if ( ! defined( 'EDD_RT_HELPDESK_STORE_URL' ) ) {
@@ -135,87 +113,46 @@ if ( ! defined( 'EDD_RT_HELPDESK_ITEM_NAME' ) ) {
 	define( 'EDD_RT_HELPDESK_ITEM_NAME', 'rtBiz Helpdesk' );
 }
 
-include_once RT_HD_PATH_HELPER . 'rthd-functions.php';
+include_once( RT_BIZ_HD_PATH_ADMIN . 'vendor/edd-license/class-rt-hd-edd-license.php' );
+new Rt_HD_Edd_License();
 
 /**
- * Using rt-lib [ RT_WP_Autoload ] class, Includes all files & external Require Libraries with in given directory.
- *
- * @since 0.1
+ * The code that runs during plugin activation.
+ * This action is documented in includes/class-rt-biz-helpdesk-activator.php
  */
-function rt_hd_include() {
+function activate_rtbiz_helpdesk() {
 
-	include_once RT_HD_PATH_VENDOR . 'forceutf8/src/ForceUTF8/Encoding.php';
-	include_once RT_HD_PATH_VENDOR . 'excel_reader2.php';
-	include_once RT_HD_PATH_VENDOR . 'parsecsv.lib.php';
-	include_once RT_HD_PATH_VENDOR . 'simplexlsx.php';
-
-	global $rthd_app_autoload, $rthd_admin_autoload, $rthd_admin_metabox_autoload, $rthd_models_autoload, $rthd_helper_autoload, $rthd_settings_autoload, $rthd_form_autoload, $rthd_reports_autoload;
-	$rthd_app_autoload           = new RT_WP_Autoload( RT_HD_PATH_APP );
-	$rthd_admin_autoload         = new RT_WP_Autoload( RT_HD_PATH_ADMIN );
-	$rthd_admin_metabox_autoload = new RT_WP_Autoload( RT_HD_PATH_ADMIN . 'meta-box/' );
-	$rthd_models_autoload        = new RT_WP_Autoload( RT_HD_PATH_MODELS );
-	$rthd_helper_autoload        = new RT_WP_Autoload( RT_HD_PATH_HELPER );
-	$rthd_settings_autoload      = new RT_WP_Autoload( RT_HD_PATH_APP . 'settings' );
-	$rthd_form_autoload          = new RT_WP_Autoload( RT_HD_PATH_LIB . 'rtformhelpers/' );
-	$rthd_reports_autoload       = new RT_WP_Autoload( RT_HD_PATH_LIB . 'rtreports/' );
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-rt-biz-helpdesk-activator.php';
+	Rt_Biz_Helpdesk_Activator::activate();
 
 }
 
-include_once( RT_HD_PATH_VENDOR . 'edd-license/class-rt-hd-edd-license.php' );
-new Rt_HD_Edd_License();
+/**
+ * The code that runs during plugin deactivation.
+ * This action is documented in includes/class-plugin-name-deactivator.php
+ */
+function deactivate_rtbiz_helpdesk() {
+
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-rt-biz-helpdesk-deactivator.php';
+	Rt_Biz_Helpdesk_deactivator::deactivate();
+
+}
+
+register_activation_hook( __FILE__, 'activate_rtbiz_helpdesk' );
+register_activation_hook( __FILE__, 'deactivate_rtbiz_helpdesk' );
+
 
 /**
  * Main function that initiate rt-helpdesk plugin
  *
  * @since 0.1
  */
-function rt_hd_init() {
+function run_rtbiz_helpdesk() {
 
-	rt_hd_include();
+	require RT_BIZ_HD_PATH_INCLUDE. 'class-rt-biz-helpdesk.php';
+	global $rt_biz_hd;
+	$rt_biz_hd = new Rt_Biz_Helpdesk();
+	$rt_biz_hd->run();
 
-	global $rt_wp_hd;
-	$rt_wp_hd = new RT_WP_Helpdesk();
-	add_action( 'admin_init', 'rthd_welcome_to_helpdesk' );
 }
-add_action( 'rt_biz_init', 'rt_hd_init', 1 );
-
-/**
- * rt_hd_check_dependency check for rtbiz-HelpDesk dependency
- * dependencies are require to run file else this plugin can't function
- *
- * @since 0.1
- */
-add_action( 'init', 'rthd_check_plugin_dependecy' );
-
-register_activation_hook( __FILE__, 'plugin_activation_redirect' );
-register_activation_hook( __FILE__, 'init_call_rtbiz_hd_flush_rewrite_rules' );
-function init_call_rtbiz_hd_flush_rewrite_rules() {
-	add_option( 'rthd_flush_rewrite_rules', 'true' );
-}
-
-function rthd_welcome_to_helpdesk() {
-	// Bail if no activation redirect
-	if ( ! get_option( '_rthd_activation_redirect' ) ) {
-		return;
-	}
-
-	// Delete the redirect transient
-	delete_option( '_rthd_activation_redirect' );
-
-	// Bail if activating from network, or bulk
-	if ( is_network_admin() || isset( $_GET['activate-multi'] ) ) {
-		return;
-	}
-
-	if ( rthd_check_wizard_completed() ) {
-		wp_safe_redirect( admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&page=rthd-'.Rt_HD_Module::$post_type.'-dashboard' ) );
-	} else {
-		wp_safe_redirect( admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&page=rthd-setup-wizard' ) );
-	}
-	exit;
-}
-
-function plugin_activation_redirect() {
-	// Add the transient to redirect
-	add_option( '_rthd_activation_redirect', true );
-}
+add_action( 'rt_biz_init', 'run_rtbiz_helpdesk', 1 );
