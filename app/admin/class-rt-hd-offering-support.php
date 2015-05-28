@@ -111,12 +111,12 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 
 		function get_order_ticket_column_view( $payment ) {
 			$posts = new WP_Query( array(
-				                       'post_type' => Rt_HD_Module::$post_type,
-				                       'post_status' => 'any',
-				                       'nopaging' => true,
-				                       'meta_key' => 'rtbiz_hd_order_id',
-				                       'meta_value' => $payment,
-				                       'fields' => 'ids',
+				                       'post_type'      => Rt_HD_Module::$post_type,
+				                       'post_status'    => 'any',
+				                       'nopaging'       => true,
+				                       'meta_key'       => 'rtbiz_hd_order_id',
+				                       'meta_value'     => $payment,
+				                       'fields'         => 'ids',
 			                       ) );
 			return '<a target="_blank" href="'.admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&order-id='.$payment ).'">'.$posts->found_posts.'</a>';
 		}
@@ -147,12 +147,13 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 						$terms = get_term( $tax, Rt_Offerings::$offering_slug );
 						if ( ! is_wp_error( $terms ) ) {
 							$posts = new WP_Query( array(
-								                       'post_type' => Rt_HD_Module::$post_type,
-								                       'post_status' => 'any',
-								                       'nopaging' => true,
-								                       Rt_Offerings::$offering_slug  => $terms->slug,
+								                       'post_type'                      => Rt_HD_Module::$post_type,
+								                       'post_status'                    => 'any',
+								                       'nopaging'                       => true,
+								                       Rt_Offerings::$offering_slug     => $terms->slug,
+								                       'fields'                         => 'ids',
 							                       ) );
-							echo '<a target="_blank" href="'.admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&'.Rt_Offerings::$offering_slug.'='.$terms->slug ).'">'.$posts->post_count.'</a>';
+							echo '<a target="_blank" href="'.admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&'.Rt_Offerings::$offering_slug.'='.$terms->slug ).'">'.$posts->found_posts.'</a>';
 						}
 					} else {
 						echo '-';

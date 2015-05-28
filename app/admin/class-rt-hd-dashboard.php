@@ -259,20 +259,21 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			if ( ! $terms_name instanceof WP_Error && ! empty( $terms_name ) ) {
 				$terms_names = array_values( $terms_name );
 				$posts = new WP_Query( array(
-					'post_type' => $post_type,
-					'post_status' => 'any',
-					'nopaging' => true,
-					'tax_query' => array(
-						array(
-							'taxonomy' => $taxonomy,
-							'field' => 'slug',
-							'terms' => $terms_names,
-							'operator' => 'NOT IN',
-						),
-					),
-						) );
+					                       'post_type'   => $post_type,
+					                       'post_status' => 'any',
+					                       'nopaging'    => true,
+					                       'fields'      => 'ids',
+					                       'tax_query'   => array(
+						                       array(
+							                       'taxonomy' => $taxonomy,
+							                       'field'    => 'slug',
+							                       'terms'    => $terms_names,
+							                       'operator' => 'NOT IN',
+						                       ),
+					                       ),
+				                       ) );
 
-				$count = count( $posts->posts );
+				$count = $posts->found_posts;
 			}
 			return $count;
 		}
@@ -295,17 +296,17 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			if ( ! $terms instanceof WP_Error ) {
 				foreach ( $terms as $t ) {
 					$posts = new WP_Query( array(
-						'post_type' => $post_type,
-						'post_status' => 'any',
-						'nopaging' => true,
-						$taxonomy => $t->slug,
-							) );
-
+						                       'post_type'     => $post_type,
+						                       'post_status'   => 'any',
+						                       'nopaging'      => true,
+						                       $taxonomy       => $t->slug,
+						                       'fields'        => 'ids',
+					                       ) );
 					$rows[] = array(
 						$t->name,
-						count( $posts->posts ),
+						$posts->found_posts,
 					);
-					$total += count( $posts->posts );
+					$total += $posts->found_posts;
 				}
 			}
 
@@ -365,7 +366,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 					'chart_type'  => 'pie',
 					'data_source' => $data_source,
 					'dom_element' => 'rthd_hd_pie_tickets_by_status',
-					'options'     => array( 'title' => __( 'Status wise Tickets', RT_HD_TEXT_DOMAIN ), ),
+					'options'     => array( 'title' => __( 'Status wise Tickets', RT_HD_TEXT_DOMAIN ) ),
 				);
 			}
 			?>
@@ -391,8 +392,8 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 
 			$args = array(
 				'type' => 'post_status',
-				'update_time' => array( 'compare' => '>=', 'value' => array( $first_date ), ),
-				'update_time' => array( 'compare' => '<=', 'value' => array( $last_date ), ),
+				'update_time' => array( 'compare' => '>=', 'value' => array( $first_date ) ),
+				'update_time' => array( 'compare' => '<=', 'value' => array( $last_date ) ),
 			);
 			$history = $rt_hd_ticket_history_model->get( $args, false, false, 'update_time asc' );
 
@@ -444,7 +445,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 				'dom_element' => 'rthd_hd_line_daily_tickets',
 				'options' => array(
 					'title' => __( 'Daily Tickets', RT_HD_TEXT_DOMAIN ),
-					'vAxis' => json_encode( array( 'viewWindow' => array( 'min' => 0 ) ) )
+					'vAxis' => json_encode( array( 'viewWindow' => array( 'min' => 0 ) ) ),
 				),
 			);
 			?>
@@ -485,9 +486,9 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 				}
 
 				$data_source = array();
-				$cols[]      = array( 'type' => 'string', 'label' => __( 'Users', RT_HD_TEXT_DOMAIN ), );
+				$cols[]      = array( 'type' => 'string', 'label' => __( 'Users', RT_HD_TEXT_DOMAIN ) );
 				foreach ( $post_statuses as $status ) {
-					$cols[] = array( 'type' => 'number', 'label' => $status, );
+					$cols[] = array( 'type' => 'number', 'label' => $status );
 				}
 
 				$rows = array();
@@ -519,7 +520,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 					'chart_type'  => 'table',
 					'data_source' => $data_source,
 					'dom_element' => 'rthd_hd_table_team_load',
-					'options'     => array( 'title' => __( 'Team Load', RT_HD_TEXT_DOMAIN ), ),
+					'options'     => array( 'title' => __( 'Team Load', RT_HD_TEXT_DOMAIN ) ),
 				);
 			}
 			?>
@@ -544,8 +545,8 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 
 			$data_source = array();
 			$cols = array(
-				array( 'type' => 'string', 'label' => __( 'Account Name', RT_HD_TEXT_DOMAIN ), ),
-				array( 'type' => 'number', 'label' => __( 'Number of Tickets', RT_HD_TEXT_DOMAIN ), ),
+				array( 'type' => 'string', 'label' => __( 'Account Name', RT_HD_TEXT_DOMAIN ) ),
+				array( 'type' => 'number', 'label' => __( 'Number of Tickets', RT_HD_TEXT_DOMAIN ) ),
 			);
 
 			$rows = array();
@@ -568,7 +569,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 				'chart_type' => 'table',
 				'data_source' => $data_source,
 				'dom_element' => 'rthd_hd_table_top_accounts',
-				'options' => array( 'title' => __( 'Top Accounts', RT_HD_TEXT_DOMAIN ), ),
+				'options' => array( 'title' => __( 'Top Accounts', RT_HD_TEXT_DOMAIN ) ),
 			);
 			?>
 			<div id="rthd_hd_table_top_accounts"></div>
@@ -592,8 +593,8 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			if ( ! empty( $results ) ) {
 				$data_source = array();
 				$cols = array(
-					array( 'type' => 'string', 'label' => __( 'Contact Name', RT_HD_TEXT_DOMAIN ), ),
-					array( 'type' => 'number', 'label' => __( 'Number of Tickets', RT_HD_TEXT_DOMAIN ), ),
+					array( 'type' => 'string', 'label' => __( 'Contact Name', RT_HD_TEXT_DOMAIN ) ),
+					array( 'type' => 'number', 'label' => __( 'Number of Tickets', RT_HD_TEXT_DOMAIN ) ),
 				);
 
 				$rows = array();
@@ -616,7 +617,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 					'chart_type' => 'table',
 					'data_source' => $data_source,
 					'dom_element' => 'rthd_hd_table_top_clients',
-					'options' => array( 'title' => __( 'Top Clients', RT_HD_TEXT_DOMAIN ), ),
+					'options' => array( 'title' => __( 'Top Clients', RT_HD_TEXT_DOMAIN ) ),
 				);
 			}
 			?>
@@ -655,17 +656,23 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 					                       'post_status' => 'any',
 					                       'nopaging'    => true,
 					                       $taxonomy     => $t->slug,
+					                       'fields' => 'ids',
 				                       ) );
 				$rows[] = array(
 					$t->name,
-					count( $posts->posts ),
+					$posts->found_posts,
 				);
-				$total += count( $posts->posts );
+				$total += $posts->found_posts;
 			}
 
-			$posts = new WP_Query( array( 'post_type' => $post_type, 'post_status' => 'any', 'nopaging' => true, ) );
+			$posts = new WP_Query( array(
+				                       'post_type'     => $post_type,
+				                       'post_status'   => 'any',
+				                       'nopaging'      => true,
+				                       'fields'        => 'ids',
+			                       ) );
 
-			$rows[] = array( __( 'Others', RT_HD_TEXT_DOMAIN ), count( $posts->posts ) - $total );
+			$rows[] = array( __( 'Others', RT_HD_TEXT_DOMAIN ), $posts->found_posts - $total );
 
 			$data_source['cols'] = $cols;
 			$data_source['rows'] = $rows;
@@ -675,7 +682,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 				'chart_type' => 'pie',
 				'data_source' => $data_source,
 				'dom_element' => 'rthd_pie_' . $args['id'],
-				'options' => array( 'title' => $args['title'], ),
+				'options' => array( 'title' => $args['title'] ),
 			);
 			?>
 			<div id="<?php echo esc_attr( 'rthd_pie_' . $args['id'] ); ?>"></div>
