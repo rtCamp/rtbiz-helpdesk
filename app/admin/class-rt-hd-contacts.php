@@ -78,6 +78,9 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		function rthd_ticket_listing_metabox( $post ) {
 			if ( ! empty( $_REQUEST['module'] ) && RT_HD_TEXT_DOMAIN == $_REQUEST['module'] ) {
 				$user = rt_biz_get_wp_user_for_contact( $post->ID );
+				if ( empty($user[0]) ) {
+					return;
+				}
 				echo balanceTags( do_shortcode( '[rt_hd_tickets userid = ' . $user[0]->ID . " title='no' ]" ) );
 			}
 		}
@@ -175,6 +178,9 @@ if ( ! class_exists( 'Rt_HD_Contacts' ) ) {
 		function metabox_rearrange() {
 			global $wp_meta_boxes;
 
+			if ( empty ($_REQUEST['post']) ) {
+				return;
+			}
 			$users = rt_biz_get_wp_user_for_contact( $_REQUEST['post'] );
 			if ( in_array( 'administrator', $users[0]->roles ) ) {
 				$is_staff_member = 'yes';
