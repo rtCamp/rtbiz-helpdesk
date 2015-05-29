@@ -6,9 +6,9 @@
  * Version: 1.2.6
  * Author: rtCamp
  * Author URI: https://rtcamp.com
- * License: GPL
+ * License: GPLv2 or later
+ * License URI: http://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: rtbiz-helpdesk
- * Contributors: Udit<udit.desai@rtcamp.com>, Dipesh<dipesh.kakadiya@rtcamp.com>, Utkarsh<utkarsh.patel@rtcamp.com>
  */
 
 if ( ! defined( 'RT_BIZ_HD_VERSION' ) ) {
