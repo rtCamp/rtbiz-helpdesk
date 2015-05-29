@@ -1,12 +1,11 @@
 <?php
-
 /**
  * Plugin Name: rtBiz Helpdesk
- * Plugin URI: http://rtcamp.com/
+ * Plugin URI: https://rtcamp.com/rtbiz-helpdesk
  * Description: A WordPress based Helpdesk system with mail sync features, web based ticket UI and many custom settings. Easy to use for admin, staff and customers.
  * Version: 1.2.6
  * Author: rtCamp
- * Author URI: http://rtcamp.com
+ * Author URI: https://rtcamp.com
  * License: GPL
  * Text Domain: rtbiz-helpdesk
  * Contributors: Udit<udit.desai@rtcamp.com>, Dipesh<dipesh.kakadiya@rtcamp.com>, Utkarsh<utkarsh.patel@rtcamp.com>
