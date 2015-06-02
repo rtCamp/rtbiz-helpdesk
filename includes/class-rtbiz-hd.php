@@ -151,8 +151,8 @@ if ( ! class_exists( 'Rtbiz_HD' ) ) {
 				self::$loader->add_filter( 'plugin_row_meta', $plugin_admin, 'plugin_row_meta', 10, 4 );
 			}
 
-			self::$loader->add_action( 'admin_init', $plugin_admin, 'database_update');
-//			self::$loader->add_action( 'admin_init', $plugin_admin, 'rtbiz_welcome' );
+			self::$loader->add_action( 'admin_init', $plugin_admin, 'database_update' );
+			//          self::$loader->add_action( 'admin_init', $plugin_admin, 'rtbiz_welcome' );
 			self::$loader->add_filter( 'rtbiz_modules', $plugin_admin, 'module_register' );
 
 			self::$loader->add_filter( 'pre_insert_term', $plugin_admin, 'remove_wocommerce_actions' );

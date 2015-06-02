@@ -71,8 +71,8 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			// commented ajax call for checking followup duplicate and all other code
 			//			Rtbiz_HD::$loader->add_action( 'wp_ajax_rthd_check_duplicate_followup', $this, 'rthd_check_duplicate_followup' );
 			//			Rtbiz_HD::$loader->add_action( 'wp_ajax_nopriv_rthd_check_duplicate_followup', $this, 'rthd_check_duplicate_followup' );
-			Rtbiz_HD::$loader->add_action( 'wp_ajax_front_end_offering_change', $this, 'front_end_offering_change'  );
-			Rtbiz_HD::$loader->add_action( 'wp_ajax_rthd_fav_ticket', $this, 'favourite_tickets'  );
+			Rtbiz_HD::$loader->add_action( 'wp_ajax_front_end_offering_change', $this, 'front_end_offering_change' );
+			Rtbiz_HD::$loader->add_action( 'wp_ajax_rthd_fav_ticket', $this, 'favourite_tickets' );
 		}
 
 		/**
@@ -1378,7 +1378,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		public function mail_comment_data( $comment_id, $uploaded, $senderemail, $allemails, $dndEmails = array() ) {
-			if( ! is_object( $comment_id ) ){
+			if ( ! is_object( $comment_id ) ) {
 				return;
 			}
 			$comment         = get_comment( $comment_id );

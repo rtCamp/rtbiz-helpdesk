@@ -1070,8 +1070,8 @@ function rtbiz_hd_is_ticket_subscriber( $post_id ) {
  * Display settings for setup weekdays and hours operation for day shift.
  */
 function rtbiz_hd_auto_response_dayshift_view() {
-	global $rt_hd_auto_response;
-	return $rt_hd_auto_response->setting_dayshift_ui();
+	global $rtbiz_hd_auto_response;
+	return $rtbiz_hd_auto_response->setting_dayshift_ui();
 }
 
 /**

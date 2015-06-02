@@ -213,7 +213,7 @@ jQuery( document ).ready(function ($) {
 									return {
 										name: item,
 										value: item
-                                    };
+									};
 								}));
 							}
 						});

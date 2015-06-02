@@ -322,8 +322,8 @@ jQuery( document ).ready(function ($) {
 	jQuery( document ).mouseup(function (e) {
 
 		var container = jQuery( ".rthd-add-people-box" );
-        // if the target of the click isn't the container...
-        // ... nor a descendant of the container
+		// if the target of the click isn't the container...
+		// ... nor a descendant of the container
 		if ( ! container.is( e.target ) && container.has( e.target ).length === 0 && ! jQuery( '.rthd-add-contact-icon' ).is( e.target )) {
 			if (container.is( ':visible' )) {
 				container.hide();

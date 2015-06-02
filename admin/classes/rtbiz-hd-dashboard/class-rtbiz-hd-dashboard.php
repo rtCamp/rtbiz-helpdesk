@@ -71,7 +71,6 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 		 */
 		function register_dashboard() {
 
-
 			if ( rtbiz_hd_check_wizard_completed() ) {
 
 				$author_cap = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' );

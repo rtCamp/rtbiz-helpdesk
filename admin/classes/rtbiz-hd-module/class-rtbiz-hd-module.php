@@ -59,7 +59,7 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 
 			Rtbiz_HD::$loader->add_action( 'rt_attributes_relations_added', $this, 'update_ticket_table', 10, 2 );
 			Rtbiz_HD::$loader->add_action( 'rt_attributes_relations_updated', $this, 'update_ticket_table', 10, 2 );
-			Rtbiz_HD::$loader->add_action( 'rt_attributes_relations_deleted', $this, 'update_ticket_table', 10, 2  );
+			Rtbiz_HD::$loader->add_action( 'rt_attributes_relations_deleted', $this, 'update_ticket_table', 10, 2 );
 
 			rtbiz_register_p2p_connection( self::$post_type, self::$post_type, array(
 					'name' => self::$post_type . '_to_' . self::$post_type,

@@ -87,10 +87,10 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 		public function generate_wizard( $wizard ) {
 			if ( ! empty( $wizard ) ) { ?>
 				<div id="wizard"><?php
-					foreach ( $wizard as $key => $val ) { ?>
+				foreach ( $wizard as $key => $val ) { ?>
 						<h3><?php _e( $key ); ?></h3>
 						<fieldset> <?php call_user_func( $val ); ?></fieldset> <?php
-					} ?>
+				} ?>
 				</div> <?php
 			}
 		}
@@ -182,9 +182,9 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 		public function setup_team( $isheader = true ) { ?>
 			<div>
 				<div class="rthd-setup-wizard-controls rthd-setup-team-wizard-controls"><?php
-					if ( $isheader ) { ?>
+				if ( $isheader ) { ?>
 						<h3 class="rthd-setup-wizard-title"><?php _e( 'Setup Your Team', RTBIZ_HD_TEXT_DOMAIN ) ?></h3> <?php
-					} ?>
+				} ?>
 					<p class="rthd-notice"><?php
 						_e( "There are 3 ways you can add users to your ‘Support' team. If you forget somebody now, you can add them later. You (admin) are already part of this team.", RTBIZ_HD_TEXT_DOMAIN ) ?>
 					</p>
@@ -593,40 +593,40 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 					<p class="rthd-notice"> <?php _e( 'Select an assignee for the products we synced in previous setup.', RTBIZ_HD_TEXT_DOMAIN ); ?> </p>
 					<div class="rthd-setup-wizard-row">
 						<ul><?php
-							foreach ( $terms as $tm ) { ?>
+						foreach ( $terms as $tm ) { ?>
 								<li>
 									<label for="rthd_offering<?php echo $tm->term_id ?>"> <?php echo $tm->name ?></label>
 									<select class="rthd-setup-assignee" data="<?php echo $tm->term_id ?>"  id="rthd_offering<?php echo $tm->term_id ?>"><?php
-										foreach ( $users as $user ) {
-											if ( $user->ID == $current ) {
-												$selected = 'selected';
-											} else {
-												$selected = '';
-											}
-											echo '<option value="' . $user->ID . '" ' . $selected . '>' . $user->display_name . '</option>';
-										} ?>
+									foreach ( $users as $user ) {
+										if ( $user->ID == $current ) {
+											$selected = 'selected';
+										} else {
+											$selected = '';
+										}
+										echo '<option value="' . $user->ID . '" ' . $selected . '>' . $user->display_name . '</option>';
+									} ?>
 									</select>
 								</li><?php
-							} ?>
+						} ?>
 						</ul>
 					</div><?php
 				} else { ?>
 					<div class="rthd-setup-wizard-row">
 						<label class="rthd-offering-default-assignee" for="rthd_offering-default"> <strong><?php _e( 'Default Assignee', RTBIZ_HD_TEXT_DOMAIN ); ?> </strong></label>
 						<select id="rthd_offering-default"><?php
-							if ( empty( $current ) ) {
-								echo '<option disabled selected> -- select an assignee -- </option>';
+						if ( empty( $current ) ) {
+							echo '<option disabled selected> -- select an assignee -- </option>';
+						} else {
+							echo '<option > -- select an assignee -- </option>';
+						}
+						foreach ( $users as $user ) {
+							if ( $user->ID == $current ) {
+								$selected = 'selected';
 							} else {
-								echo '<option > -- select an assignee -- </option>';
+								$selected = '';
 							}
-							foreach ( $users as $user ) {
-								if ( $user->ID == $current ) {
-									$selected = 'selected';
-								} else {
-									$selected = '';
-								}
-								echo '<option value="' . $user->ID . '" ' . $selected . '>' . $user->display_name . '</option>';
-							} ?>
+							echo '<option value="' . $user->ID . '" ' . $selected . '>' . $user->display_name . '</option>';
+						} ?>
 						</select>
 					</div><?php
 				} ?>

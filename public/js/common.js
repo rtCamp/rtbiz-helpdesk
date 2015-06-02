@@ -199,10 +199,10 @@ jQuery( document ).ready(function () {
 							rthd_common.rthd_tinymce_set_content( 'followupcontent', '' );
 
 							var comment_privacy = jQuery( "input[name='private_comment']" );
-							if (comment_privacy.is(':radio')){
-								jQuery('#followup_privacy_10').attr('checked','checked');
+							if (comment_privacy.is( ':radio' )) {
+								jQuery( '#followup_privacy_10' ).attr( 'checked','checked' );
 							} else {
-								comment_privacy.attr('checked',false);
+								comment_privacy.attr( 'checked',false );
 							}
 
 							uploadedfiles = [];

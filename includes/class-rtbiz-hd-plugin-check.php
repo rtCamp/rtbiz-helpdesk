@@ -70,7 +70,7 @@ if ( ! class_exists( 'Rtbiz_HD_Plugin_Check' ) ) {
 					$string = 'installed and activated <strong>rtBiz</strong> plugin and <strong>posts to posts</strong> plugin.';
 				}
 			}
-//
+
 			$rtbiz_active = $this->rtbiz_hd_is_plugin_active( 'rtbiz' );
 			$p2p_active = $this->rtbiz_hd_is_plugin_active( 'posts-to-posts' );
 			if ( ! $rtbiz_active || ! $p2p_active ) {

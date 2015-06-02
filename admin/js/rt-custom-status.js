@@ -19,9 +19,9 @@ jQuery( document ).ready(function () {
 	if (jQuery( 'h2 .add-new-h2' )) {
 		$contact_type = getParameterByName( 'rt_contact_group' );
 		$module = getParameterByName( 'module' );
-        if ( $contact_type && $module ){
-            jQuery( 'h2 .add-new-h2' ).attr( 'href', jQuery( 'h2 .add-new-h2' ).attr( 'href' ) + '&rt_contact_group=' + $contact_type + '&module=' + $module );
-        }
+		if ( $contact_type && $module ) {
+			jQuery( 'h2 .add-new-h2' ).attr( 'href', jQuery( 'h2 .add-new-h2' ).attr( 'href' ) + '&rt_contact_group=' + $contact_type + '&module=' + $module );
+		}
 	}
 
 	function getParameterByName(name) {
@@ -31,12 +31,12 @@ jQuery( document ).ready(function () {
 		return results === null ? "" : decodeURIComponent( results[1].replace( /\+/g, " " ) );
 	}
 
-    jQuery('#rtbiz_is_staff_member').click( function( e ){
-        if( jQuery(this).is(':checked') ) {
-            jQuery('#rtbiz-permission-container').show();
-        } else {
-            jQuery('#rtbiz-permission-container').hide();
-        }
-    });
+	jQuery( '#rtbiz_is_staff_member' ).click( function( e ){
+		if ( jQuery( this ).is( ':checked' ) ) {
+			jQuery( '#rtbiz-permission-container' ).show();
+		} else {
+			jQuery( '#rtbiz-permission-container' ).hide();
+		}
+	});
 
 });

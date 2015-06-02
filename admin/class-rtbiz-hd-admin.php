@@ -132,7 +132,7 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 		                unset( $module_menu[ $p_key ] );
 		                $new_index += 5;
 	                }
-                }
+				}
 			}
 
 			return $menu_order;
@@ -312,11 +312,8 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 			 * class.
 			 */
 
-//			wp_enqueue_style( 'rthd-common-css', RT_HD_URL . 'app/assets/css/rthd-common.css', array(), RT_HD_VERSION, 'all' );
-//			wp_enqueue_style( 'rthd-admin-css', RT_HD_URL . 'app/assets/admin/css/admin.css', array(), RT_HD_VERSION );
-
-
-
+			//          wp_enqueue_style( 'rthd-common-css', RT_HD_URL . 'app/assets/css/rthd-common.css', array(), RT_HD_VERSION, 'all' );
+			//          wp_enqueue_style( 'rthd-admin-css', RT_HD_URL . 'app/assets/admin/css/admin.css', array(), RT_HD_VERSION );
 
 			wp_enqueue_style( RTBIZ_HD_TEXT_DOMAIN . 'admin-css', RTBIZ_HD_URL . 'admin/css/admin.css', array(), RTBIZ_HD_VERSION, 'all' );
 
@@ -343,22 +340,21 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 
 			global $post;
 
-//			wp_enqueue_script( 'jquery-ui-timepicker-addon', RT_HD_URL . 'app/assets/admin/js/vendors/jquery-ui-timepicker-addon.js', array(
-//				'jquery-ui-datepicker',
-//				'jquery-ui-slider',
-//			), RT_HD_VERSION, true );
-//
-//			wp_enqueue_script( 'jquery-ui-datepicker' );
-//
-//			wp_enqueue_script( 'jquery-ui-autocomplete', '', array(
-//				'jquery-ui-widget',
-//				'jquery-ui-position',
-//			), '1.9.2' );
-//
-//			wp_enqueue_media();
-//
-//			wp_enqueue_script( 'rthd-admin-js', RT_HD_URL . 'app/assets/admin/js/helpdesk-admin-min.js', array( 'jquery' ), RT_HD_VERSION, true );
-
+			//          wp_enqueue_script( 'jquery-ui-timepicker-addon', RT_HD_URL . 'app/assets/admin/js/vendors/jquery-ui-timepicker-addon.js', array(
+			//              'jquery-ui-datepicker',
+			//              'jquery-ui-slider',
+			//          ), RT_HD_VERSION, true );
+			//
+			//          wp_enqueue_script( 'jquery-ui-datepicker' );
+			//
+			//          wp_enqueue_script( 'jquery-ui-autocomplete', '', array(
+			//              'jquery-ui-widget',
+			//              'jquery-ui-position',
+			//          ), '1.9.2' );
+			//
+			//          wp_enqueue_media();
+			//
+			//          wp_enqueue_script( 'rthd-admin-js', RT_HD_URL . 'app/assets/admin/js/helpdesk-admin-min.js', array( 'jquery' ), RT_HD_VERSION, true );
 
 			wp_enqueue_script( RTBIZ_HD_TEXT_DOMAIN . 'admin-js', RTBIZ_HD_URL . 'admin/js/helpdesk-admin-min.js', array( 'jquery' ), RTBIZ_HD_VERSION, true );
 			wp_localize_script( RTBIZ_HD_TEXT_DOMAIN . 'admin-js', 'ajaxurl', admin_url( 'admin-ajax.php' ) );

@@ -379,10 +379,10 @@ if ( ! class_exists( 'Rtbiz_HD_Attributes' ) ) {
 					<div class="large-8 mobile-large-2 columns">
 						<?php if ( $edit ) {
 							$this->render_dropdown( $attr, $options );
-						} else {
-							$term = get_term( $selected_term, rtbiz_post_type_name( $attr->attribute_name ) );
-							?><span class="rthd_view_mode"><?php echo esc_html( $term->name ); ?></span><?php
-						} ?>
+} else {
+	$term = get_term( $selected_term, rtbiz_post_type_name( $attr->attribute_name ) );
+	?><span class="rthd_view_mode"><?php echo esc_html( $term->name ); ?></span><?php
+} ?>
 					</div>
 					<?php break;
 				case 'rating-stars':
@@ -411,14 +411,14 @@ if ( ! class_exists( 'Rtbiz_HD_Attributes' ) ) {
 								for="post[<?php echo esc_attr( $attr->attribute_name ); ?>]"><?php echo esc_html( $attr->attribute_label ); ?></label></span>
 					</div>
 					<div class="large-8 mobile-large-2 columns rthd_attr_border"><?php
-						if ( $edit ) {
-							$this->render_rating_stars( $attr, $options );
-						} else {
-							$term = get_term( $selected_term, rtbiz_post_type_name( $attr->attribute_name ) );
-							?>
-							<div
-								class="rthd_attr_border rthd_view_mode"><?php echo esc_html( $term->name ); ?></div><?php
-						} ?>
+					if ( $edit ) {
+						$this->render_rating_stars( $attr, $options );
+					} else {
+						$term = get_term( $selected_term, rtbiz_post_type_name( $attr->attribute_name ) );
+						?>
+						<div
+							class="rthd_attr_border rthd_view_mode"><?php echo esc_html( $term->name ); ?></div><?php
+					} ?>
 					</div>
 					<?php break;
 				case 'date':
@@ -431,9 +431,9 @@ if ( ! class_exists( 'Rtbiz_HD_Attributes' ) ) {
 						class="large-7 mobile-large-2 columns <?php echo sanitize_html_class( ( ! $edit ) ? 'rthd_attr_border' : '' ); ?>">
 						<?php if ( $edit ) {
 							$this->render_date( $attr, $value );
-						} else {
-							?><span class="rthd_view_mode moment-from-now"><?php echo esc_html( $value ) ?></span><?php
-						} ?>
+} else {
+	?><span class="rthd_view_mode moment-from-now"><?php echo esc_html( $value ) ?></span><?php
+} ?>
 					</div>
 					<?php if ( $edit ) { ?>
 					<div class="large-1 mobile-large-1 columns">
@@ -442,7 +442,7 @@ if ( ! class_exists( 'Rtbiz_HD_Attributes' ) ) {
 								class="foundicon-calendar"></label></span>
 					</div>
 				<?php
-				}
+}
 					break;
 				case 'datetime':
 					$value = get_post_meta( $post_id, '_rtbiz_hd_' . $attr->attribute_name, true ); ?>
@@ -454,9 +454,9 @@ if ( ! class_exists( 'Rtbiz_HD_Attributes' ) ) {
 						class="large-7 mobile-large-2 columns <?php echo sanitize_html_class( ( ! $edit ) ? 'rthd_attr_border' : '' ); ?>">
 						<?php if ( $edit ) {
 							$this->render_datetime( $attr, $value );
-						} else {
-							?><span class="rthd_view_mode moment-from-now"><?php echo esc_html( $value ); ?></span><?php
-						} ?>
+} else {
+	?><span class="rthd_view_mode moment-from-now"><?php echo esc_html( $value ); ?></span><?php
+} ?>
 					</div>
 					<?php if ( $edit ) { ?>
 					<div class="large-1 mobile-large-1 columns">
@@ -465,7 +465,7 @@ if ( ! class_exists( 'Rtbiz_HD_Attributes' ) ) {
 								class="foundicon-calendar"></label></span>
 					</div>
 				<?php
-				}
+}
 					break;
 				case 'currency':
 					$value = get_post_meta( $post_id, '_rtbiz_hd_' . $attr->attribute_name, true ); ?>
@@ -477,16 +477,16 @@ if ( ! class_exists( 'Rtbiz_HD_Attributes' ) ) {
 						class="large-7 mobile-large-2 columns <?php echo sanitize_html_class( ( ! $edit ) ? 'rthd_attr_border' : '' ); ?>">
 						<?php if ( $edit ) {
 							$this->render_currency( $attr, $value );
-						} else {
-							?><span class="rthd_view_mode"><?php echo esc_html( $value ); ?></span><?php
-						} ?>
+} else {
+	?><span class="rthd_view_mode"><?php echo esc_html( $value ); ?></span><?php
+} ?>
 					</div>
 					<?php if ( $edit ) { ?>
 					<div class="large-1 mobile-large-1 columns">
 						<span class="postfix">$</span>
 					</div>
 				<?php
-				}
+}
 					break;
 				case 'text':
 					$value = get_post_meta( $post_id, '_rtbiz_hd_' . $attr->attribute_name, true ); ?>
@@ -498,9 +498,9 @@ if ( ! class_exists( 'Rtbiz_HD_Attributes' ) ) {
 						class="large-8 mobile-large-2 columns <?php echo sanitize_html_class( ( ! $edit ) ? 'rthd_attr_border' : '' ); ?>">
 						<?php if ( $edit ) {
 							$this->render_text( $attr, $value );
-						} else {
-							?><span class="rthd_view_mode"><?php esc_htm( $value ); ?></span><?php
-						} ?>
+} else {
+	?><span class="rthd_view_mode"><?php esc_htm( $value ); ?></span><?php
+} ?>
 					</div>
 					<?php break;
 				default:
