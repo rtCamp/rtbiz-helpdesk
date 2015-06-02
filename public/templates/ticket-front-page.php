@@ -137,7 +137,7 @@ $user_edit_content = current_user_can( $cap );
 					</div>
 					<?php
 					if ( current_user_can( $cap ) ) {
-						$rtcamp_users = Rt_HD_Utils::get_hd_rtcamp_user();
+						$rtcamp_users = Rtbiz_HD_Utils::get_hd_rtcamp_user();
 						?>
 						<div class="rt-hd-ticket-sub-row">
 							<div class="rthd-ticket-sidebar-sub-result clearfix">

@@ -586,7 +586,7 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 				$terms = get_terms( Rt_Offerings::$offering_slug, array( 'hide_empty' => 0 ) );
 				remove_filter( 'get_terms', array( $rtbiz_offerings, 'offering_filter' ), 10, 3 );
 			}
-			$users = Rt_HD_Utils::get_hd_rtcamp_user(); ?>
+			$users = Rtbiz_HD_Utils::get_hd_rtcamp_user(); ?>
 			<div class="rthd-setup-wizard-controls">
 				<h3 class="rthd-setup-wizard-title"><?php _e( 'Select Ticket Assignee', RTBIZ_HD_TEXT_DOMAIN ); ?></h3><?php
 				if ( ! empty( $terms ) ) { ?>

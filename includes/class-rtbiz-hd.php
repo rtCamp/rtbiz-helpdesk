@@ -90,7 +90,7 @@ if ( ! class_exists( 'Rtbiz_HD' ) ) {
 			 * The class responsible for orchestrating the helping function
 			 * core plugin.
 			 */
-			include_once RTBIZ_HD_PATH . 'includes/rthd-functions.php';
+			include_once RTBIZ_HD_PATH . 'admin/helper/rthd-functions.php';
 			include_once RTBIZ_HD_PATH . 'vendor/forceutf8/src/ForceUTF8/Encoding.php';
 			include_once RTBIZ_HD_PATH . 'vendor/excel_reader2.php';
 			include_once RTBIZ_HD_PATH . 'vendor/parsecsv.lib.php';
@@ -99,8 +99,8 @@ if ( ! class_exists( 'Rtbiz_HD' ) ) {
 			new RT_WP_Autoload( RTBIZ_HD_PATH . 'includes/' );
 			new RT_WP_Autoload( RTBIZ_HD_PATH . 'admin/' );
 			new RT_WP_Autoload( RTBIZ_HD_PATH . 'admin/classes' );
-			new RT_WP_Autoload( RTBIZ_HD_PATH . 'admin/meta-box' );
-			new RT_WP_Autoload( RTBIZ_HD_PATH . 'admin/models/' );
+			new RT_WP_Autoload( RTBIZ_HD_PATH . 'admin/classes/models/' );
+			new RT_WP_Autoload( RTBIZ_HD_PATH . 'admin/classes/metabox' );
 			new RT_WP_Autoload( RTBIZ_HD_PATH . 'admin/settings/' );
 			new RT_WP_Autoload( RTBIZ_HD_PATH . 'admin/helper/' );
 			new RT_WP_Autoload( RTBIZ_HD_PATH . 'includes/migration/' );
@@ -154,6 +154,11 @@ if ( ! class_exists( 'Rtbiz_HD' ) ) {
 			self::$loader->add_action( 'admin_init', $plugin_admin, 'database_update');
 //			self::$loader->add_action( 'admin_init', $plugin_admin, 'rtbiz_welcome' );
 			self::$loader->add_filter( 'rtbiz_modules', $plugin_admin, 'module_register' );
+
+			self::$loader->add_filter( 'pre_insert_term', $plugin_admin, 'remove_wocommerce_actions' );
+
+			self::$loader->add_filter( 'wp_handle_upload_prefilter', $plugin_admin, 'handle_upload_prefilter' );
+			self::$loader->add_filter( 'wp_handle_upload', $plugin_admin, 'handle_upload' );
 
 			self::$loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 			self::$loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );

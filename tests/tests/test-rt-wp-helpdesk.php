@@ -58,7 +58,7 @@ class test_RT_WP_Help_desk extends RT_WP_TestCase {
 
 		$this->assertTrue( class_exists( 'Rt_Biz_Helpdesk_Admin' ), 'Class Rt_Biz_Helpdesk_Admin does not exist' );
 
-		$this->assertTrue( class_exists( 'Rt_HD_Tickets_Front' ), 'Class Rt_HD_Tickets_Front does not exist' );
+		$this->assertTrue( class_exists( 'Rtbiz_HD_Tickets_Front' ), 'Class Rt_HD_Tickets_Front does not exist' );
 	}
 
 	/**

@@ -46,10 +46,10 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 			$rtbiz_hd_module = new Rtbiz_HD_Module();
 			$rtbiz_hd_cpt_tickets = new Rtbiz_HD_CPT_Tickets();
 
-			$page_slugs = array( 'rthd-' . Rtbiz_HD_Module::$post_type . '-dashboard' );
+			$rtbiz_hd_dashboard = new Rtbiz_HD_Dashboard();
+			$page_slugs = array( Rtbiz_HD_Dashboard::$page_slug );
 			$rtbiz_hd_reports = new Rt_Reports( $page_slugs );
 
-			$rtbiz_hd_dashboard = new Rtbiz_HD_Dashboard();
 			$rtbiz_hd_accounts = new Rtbiz_HD_Accounts();
 			$rtbiz_hd_contacts = new Rtbiz_HD_Contacts();
 			$rtbiz_hd_tickets_operation = new Rtbiz_HD_Tickets_Operation();
@@ -60,14 +60,13 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 			$rtbiz_hd_setup_wizard = new Rtbiz_HD_Setup_Wizard();
 
 			//Setting
-
 			global $rtbiz_hd_settings, $rtbiz_hd_import_operation, $rtbiz_hd_offering_support, $rtbiz_hd_short_code;
 
 			$rtbiz_hd_settings = new Rtbiz_HD_Settings();
 			$rtbiz_hd_import_operation = new Rtbiz_HD_Import_Operation();
 
-			$rtbiz_hd_gravity_form_importer = new Rtbiz_HD_Gravity_Form_Importer();
-			$rtbiz_hd_logs = new Rtbiz_HD_Logs();
+			//$rtbiz_hd_gravity_form_importer = new Rtbiz_HD_Gravity_Form_Importer();
+			//$rtbiz_hd_logs = new Rtbiz_HD_Logs();
 
 			$rtbiz_hd_offering_support = new Rtbiz_HD_Offering_Support();
 			$rtbiz_hd_short_code = new Rtbiz_HD_Short_Code();
@@ -76,8 +75,7 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 			$Rtbiz_Hd_Help = new Rtbiz_Hd_Help();
 
 			// For ajax request register with WordPress
-			$temp_meta_box_contact_blacklist = new RT_Meta_Box_Ticket_Contacts_Blacklist();
-
+			$rtbiz_hd_contact_blacklist = new Rtbiz_HD_Ticket_Contacts_Blacklist();
 
 		}
 
@@ -145,7 +143,7 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 			global $rtbiz_hd_attributes;
 
 			$rtbizMenuOrder = array(
-				'rthd-' . Rtbiz_HD_Module::$post_type . '-dashboard',
+				Rtbiz_HD_Dashboard::$page_slug,
 				'edit.php?post_type=' . Rtbiz_HD_Module::$post_type,
 				'post-new.php?post_type=' . Rtbiz_HD_Module::$post_type,
 				esc_url( 'edit.php?post_type=' . rtbiz_get_contact_post_type() . '&rt_contact_group=customer&module=' . RTBIZ_HD_TEXT_DOMAIN ),
@@ -214,6 +212,84 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 			);
 
 			return $modules;
+		}
+
+		/**
+		 * @param $term
+		 * @param $taxonomy
+		 *
+		 * @return mixed
+		 * @since rt-Helpdesk 0.1
+		 */
+		function remove_wocommerce_actions( $term, $taxonomy ) {
+			$attrs = rthd_get_all_attributes();
+			$attr_list = array( 'contacts', 'accounts' );
+			foreach ( $attrs as $attr ) {
+				if ( 'taxonomy' == $attr->attribute_store_as ) {
+					$attr_list[] = $attr->attribute_name;
+				}
+			}
+			if ( in_array( $taxonomy, $attr_list ) ) {
+				remove_action( 'create_term', 'woocommerce_create_term', 5, 3 );
+				remove_action( 'delete_term', 'woocommerce_delete_term', 5, 3 );
+			}
+
+			return $term;
+		}
+
+		/**
+		 * add filter for Update path of helpdesk upload
+		 *
+		 * @param $file
+		 *
+		 * @return mixed
+		 */
+		function handle_upload_prefilter( $file ) {
+			$postype = '';
+			if ( isset( $_REQUEST['post_type'] ) ) {
+				$postype = $_REQUEST['post_type'];
+			}
+			if ( empty( $postype ) && ! empty( $_REQUEST['post_id'] ) ) {
+				$postype = get_post_type( $_REQUEST['post_id'] );
+			}
+			if ( Rtbiz_HD_Module::$post_type == $postype ) {
+				add_filter( 'upload_dir', array( $this, 'custom_upload_dir' ) );
+			}
+			return $file;
+		}
+
+		/**
+		 * remode filter for Update path of helpdesk upload
+		 *
+		 * @param $fileinfo
+		 *
+		 * @return mixed
+		 */
+		function handle_upload( $fileinfo ) {
+			$postype = '';
+			if ( isset( $_REQUEST['post_type'] ) ) {
+				$postype = $_REQUEST['post_type'];
+			}
+			if ( empty( $postype ) && ! empty( $_REQUEST['post_id'] ) ) {
+				$postype = get_post_type( $_REQUEST['post_id'] );
+			}
+			if ( Rtbiz_HD_Module::$post_type == $postype ) {
+				remove_filter( 'upload_dir', array( $this, 'custom_upload_dir' ) );
+			}
+			return $fileinfo;
+		}
+
+		/**
+		 * Update path for helpdesk upload
+		 *
+		 * @param $args
+		 *
+		 * @return mixed
+		 */
+		function custom_upload_dir( $args ) {
+			$args['path'] = $args['basedir'] . '/' . RTBIZ_HD_TEXT_DOMAIN . $args['subdir'];
+			$args['url'] = $args['baseurl'] . '/' . RTBIZ_HD_TEXT_DOMAIN . $args['subdir'];
+			return $args;
 		}
 
 

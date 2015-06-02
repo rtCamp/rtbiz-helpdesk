@@ -220,11 +220,11 @@ if ( ! class_exists( 'Rtbiz_HD_Plugin_Check' ) ) {
 				require_once( ABSPATH . 'wp-admin/includes/class-wp-upgrader.php' );
 			}
 
-			if ( ! class_exists( 'Rt_HD_Plugin_Upgrader_Skin' ) ) {
+			if ( ! class_exists( 'Rtbiz_HD_Plugin_Upgrader_Skin' ) ) {
 				require_once( RTBIZ_HD_PATH . 'admin/class-rt-hd-plugin-upgrader-skin.php' );
 			}
 
-			$upgrader = new Plugin_Upgrader( new Rt_HD_Plugin_Upgrader_Skin( array(
+			$upgrader = new Plugin_Upgrader( new Rtbiz_HD_Plugin_Upgrader_Skin( array(
 				'nonce' => 'install-plugin_' . $plugin_slug,
 				'plugin' => $plugin_slug,
 				'api' => $api,
