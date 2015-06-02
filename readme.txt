@@ -1,4 +1,6 @@
 === rtBiz Helpdesk ===
+Author URI:        https://rtcamp.com
+Plugin URI:        https://rtcamp.com/rtbiz-helpdesk
 Contributors:      rtcamp, rahul286, desaiuditd, dipesh.kakadiya, utkarshpatel, sagarjadhav
 Donate Link:       https://rtcamp.com/donate/
 Tags:              helpdesk, support, products, tickets, followups, customers, e-commerce
