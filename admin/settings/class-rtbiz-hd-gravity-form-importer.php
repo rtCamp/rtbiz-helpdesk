@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since  rt-Helpdesk 0.1
  */
-if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
+if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 
 	/**
 	 * Class Rt_HD_Gravity_Form_Importer
@@ -27,7 +27,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 	 *
 	 * @since rt-Helpdesk 0.1
 	 */
-	class Rt_HD_Gravity_Form_Importer {
+	class Rtbiz_HD_Gravity_Form_Importer {
 
 		/**
 		 * @var
@@ -51,8 +51,8 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 		}
 
 		function  add_hd_importer( $post_type ) {
-			$post_type[ Rt_HD_Module::$post_type ] = array(
-				'module' => RT_BIZ_HD_TEXT_DOMAIN,
+			$post_type[ Rtbiz_HD_Module::$post_type ] = array(
+				'module' => RTBIZ_HD_TEXT_DOMAIN,
 				'lable'  => 'Ticket',
 			);
 
@@ -65,10 +65,10 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		function init_importer( $field_array ) {
-			global $rt_hd_attributes_relationship_model;
+			global $rtbiz_hd_attributes_relationship_model;
 
 			//check current page is helpdesk setting page
-			if ( empty( $_REQUEST['rtbiz_hd_ticket'] ) || Rt_HD_Module::$post_type !== $_REQUEST['rtbiz_hd_ticket'] || empty( $_REQUEST['page'] ) || Redux_Framework_Helpdesk_Config::$page_slug != $_REQUEST['page'] ) {
+			if ( empty( $_REQUEST['rtbiz_hd_ticket'] ) || Rtbiz_HD_Module::$post_type !== $_REQUEST['rtbiz_hd_ticket'] || empty( $_REQUEST['page'] ) || Rtbiz_HD_Settings::$page_slug != $_REQUEST['page'] ) {
 				return $field_array;
 			}
 
@@ -127,9 +127,9 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 				),
 			);
 
-			$attributes = rt_biz_hd_get_attributes( Rt_HD_Module::$post_type );
+			$attributes = rtbiz_hd_get_attributes( Rtbiz_HD_Module::$post_type );
 			foreach ( $attributes as $attr ) {
-				$relation = $rt_hd_attributes_relationship_model->get_relations_by_post_type( Rt_HD_Module::$post_type, $attr->id );
+				$relation = $rtbiz_hd_attributes_relationship_model->get_relations_by_post_type( Rtbiz_HD_Module::$post_type, $attr->id );
 				if ( ! isset( $relation[0] ) ) {
 					continue;
 				}
@@ -258,18 +258,18 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 					'type'         => 'any',
 				),
 			);
-			$field_array[ Rt_HD_Module::$post_type ] = array_merge( $ticket_field, $temp_arr );
+			$field_array[ Rtbiz_HD_Module::$post_type ] = array_merge( $ticket_field, $temp_arr );
 
 			return $field_array;
 		}
 
 		function add_hd_mapping_field_ui( $post_type ) {
 
-			if ( Rt_HD_Module::$post_type !== $post_type ) {
+			if ( Rtbiz_HD_Module::$post_type !== $post_type ) {
 				return;
 			}
 
-			global $rt_hd_module;
+			global $rtbiz_hd_module;
 			ob_start();
 			?>
 			<tr>
@@ -278,7 +278,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 				</td>
 				<td>
 					<?php
-					$ticketStatus     = $rt_hd_module->statuses;
+					$ticketStatus     = $rtbiz_hd_module->statuses;
 					$arr_ticketstatus = array();
 					$form_fields      = '<select name="ticketstatus" class="map_form_fields">';
 					foreach ( $ticketStatus as $key => $lfield ) {
@@ -319,7 +319,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 
 						echo '</select>';
 					} else {
-						_e( 'No authors found', RT_BIZ_HD_TEXT_DOMAIN );
+						_e( 'No authors found', RTBIZ_HD_TEXT_DOMAIN );
 					}
 					echo '<script> var arr_assignedto=' . json_encode( $arr_assignedto ) . '; </script>';
 					?>
@@ -329,7 +329,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 			</tr>
 
 			<?php
-			$attributes = rt_biz_hd_get_attributes( Rt_HD_Module::$post_type );
+			$attributes = rtbiz_hd_get_attributes( Rtbiz_HD_Module::$post_type );
 			foreach ( $attributes as $attr ) {
 				?>
 				<tr>
@@ -338,7 +338,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 						<?php
 						switch ( $attr->attribute_store_as ) {
 							case 'taxonomy':
-								$attr_terms = get_terms( rt_biz_hd_attribute_taxonomy_name( $attr->attribute_name ), array(
+								$attr_terms = get_terms( rtbiz_hd_attribute_taxonomy_name( $attr->attribute_name ), array(
 									'hide_empty' => false,
 									'orderby'    => $attr->attribute_orderby,
 									'order'      => 'ASC',
@@ -417,12 +417,12 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 			global $rt_importer;
 			foreach ( $mappings as $mapping ) {
 				if ( $mapping->enable == 'yes' ) {
-					global $rt_hd_module;
-					$labels       = $rt_hd_module->labels;
-					$post_type    = Rt_HD_Module::$post_type;
+					global $rtbiz_hd_module;
+					$labels       = $rtbiz_hd_module->labels;
+					$post_type    = Rtbiz_HD_Module::$post_type;
 					$hd_ticket_id = intval( $rt_importer->gform_get_meta( $gr_lead_id, 'helpdesk-' . $post_type . '-post-id' ) );
 					if ( $hd_ticket_id ) {
-						echo 'Linked ' . esc_html( Rt_HD_Module::$name ) . " Post : <a href='" . esc_url( get_edit_post_link( $hd_ticket_id ) ) . "' >" . esc_html( get_the_title( $hd_ticket_id ) ) . '</a><br/>';
+						echo 'Linked ' . esc_html( Rtbiz_HD_Module::$name ) . " Post : <a href='" . esc_url( get_edit_post_link( $hd_ticket_id ) ) . "' >" . esc_html( get_the_title( $hd_ticket_id ) ) . '</a><br/>';
 					}
 				}
 			}
@@ -777,8 +777,8 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 				$transaction_id = esc_attr( time() );
 			}
 
-			$post_type   = Rt_HD_Module::$post_type;
-			$ticketModel = new Rt_HD_Ticket_Model();
+			$post_type   = Rtbiz_HD_Module::$post_type;
+			$ticketModel = new Rtbiz_HD_Ticket_Model();
 			if ( isset( $creationdate ) ) {
 				$creationdate = trim( $creationdate );
 
@@ -973,12 +973,12 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 					// System Notification -- Meta Attribute updated
 				}
 
-				$attributes = rt_biz_hd_get_attributes( Rt_HD_Module::$post_type );
+				$attributes = rtbiz_hd_get_attributes( Rtbiz_HD_Module::$post_type );
 				foreach ( $attributes as $attr ) {
 					$slug = str_replace( array( '-' ), '_', $attr->attribute_name );
 					switch ( $attr->attribute_store_as ) {
 						case 'taxonomy':
-							$tax_name = rt_biz_hd_attribute_taxonomy_name( $attr->attribute_name );
+							$tax_name = rtbiz_hd_attribute_taxonomy_name( $attr->attribute_name );
 							switch ( $attr->attribute_render_type ) {
 								case 'dropdown':
 								case 'radio':
@@ -1080,7 +1080,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 										add_post_meta( $ticket_id, $attr->attribute_name, ${$slug} );
 
 										// Update Index Table
-										$attr_name = str_replace( '-', '_', rt_biz_hd_attribute_taxonomy_name( $attr->attribute_name ) );
+										$attr_name = str_replace( '-', '_', rtbiz_hd_attribute_taxonomy_name( $attr->attribute_name ) );
 										$where     = array( 'post_id' => $ticket_id );
 										$data      = array(
 											$attr_name        => ${$slug},
@@ -1118,7 +1118,7 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 										add_post_meta( $ticket_id, $attr->attribute_name, ${$slug} );
 
 										// Update Index Table
-										$attr_name = str_replace( '-', '_', rt_biz_hd_attribute_taxonomy_name( $attr->attribute_name ) );
+										$attr_name = str_replace( '-', '_', rtbiz_hd_attribute_taxonomy_name( $attr->attribute_name ) );
 										$where     = array( 'post_id' => $ticket_id );
 										$data      = array(
 											$attr_name        => ${$slug},
@@ -1143,25 +1143,25 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 					}
 				}
 
-				$contact = rt_biz_get_contact_by_email( $fromemail['address'] );
+				$contact = rtbiz_get_contact_by_email( $fromemail['address'] );
 				if ( ! empty( $contact ) && isset( $contact[0] ) ) {
 					$contact = $contact[0];
 					if ( isset( $contactskypeid ) && ! empty( $contactskypeid ) ) {
 						foreach ( $contactskypeid as $cSkype ) {
-							rt_biz_add_entity_meta( $contact->ID, 'contact_skype_id', $cSkype['value'] );
+							rtbiz_add_entity_meta( $contact->ID, 'contact_skype_id', $cSkype['value'] );
 						}
 					}
 					if ( isset( $contactphoneno ) && ! empty( $contactphoneno ) ) {
 						foreach ( $contactphoneno as $cphone ) {
-							rt_biz_add_entity_meta( $contact->ID, 'contact_phone', $cphone['value'] );
+							rtbiz_add_entity_meta( $contact->ID, 'contact_phone', $cphone['value'] );
 						}
 					}
 					if ( isset( $contactaddress ) && ! empty( $contactaddress ) ) {
-						rt_biz_add_entity_meta( $contact->ID, 'contact_address', $contactaddress );
+						rtbiz_add_entity_meta( $contact->ID, 'contact_address', $contactaddress );
 					}
 					if ( isset( $contactmeta ) && ! empty( $contactmeta ) ) {
 						foreach ( $contactmeta as $cmeta ) {
-							rt_biz_add_entity_meta( $contact->ID, $cmeta['key'], $cmeta['value'] );
+							rtbiz_add_entity_meta( $contact->ID, $cmeta['key'], $cmeta['value'] );
 						}
 					}
 				}
@@ -1183,23 +1183,23 @@ if ( ! class_exists( 'Rt_HD_Gravity_Form_Importer' ) ) {
 					}
 					$account_id = $rt_hd_import_operation->post_exists( $accountname );
 
-					if ( ! empty( $account_id ) && get_post_type( $account_id ) === rt_biz_get_company_post_type() ) {
+					if ( ! empty( $account_id ) && get_post_type( $account_id ) === rtbiz_get_company_post_type() ) {
 						if ( isset( $transaction_id ) && $transaction_id > 0 ) {
 							delete_post_meta( $account_id, '_transaction_id' );
 							add_post_meta( $account_id, '_transaction_id', $transaction_id, true );
 						}
 					} else {
-						$account_id = rt_biz_add_company( $accountname, $accountnote, $accountaddress, $accountcountry, $accountmeta );
+						$account_id = rtbiz_add_company( $accountname, $accountnote, $accountaddress, $accountcountry, $accountmeta );
 						if ( isset( $transaction_id ) && $transaction_id > 0 ) {
 							add_post_meta( $account_id, '_transaction_id', $transaction_id, true );
 						}
 					}
 					$account = get_post( $account_id );
 
-					rt_biz_connect_post_to_company( $post_type, $ticket_id, $account );
+					rtbiz_connect_post_to_company( $post_type, $ticket_id, $account );
 
 					// Update Index Table
-					$attr_name = rt_biz_get_company_post_type();
+					$attr_name = rtbiz_get_company_post_type();
 					if ( ! empty( $attr_name ) ) {
 						$where = array( 'post_id' => $ticket_id );
 						$data  = array(

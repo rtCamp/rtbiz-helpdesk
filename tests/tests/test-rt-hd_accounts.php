@@ -15,7 +15,7 @@ class test_Rt_HD_Accounts extends PHPUnit_Framework_TestCase {
 	 */
 	function setUp() {
 		parent::setUp();
-		$this->rthdaccounts = new Rt_HD_Accounts();
+		$this->rthdaccounts = new Rtbiz_HD_Accounts();
 	}
 
 	function  test_check_function() {

@@ -16,7 +16,7 @@ class test_Rt_HD_Contacts extends RT_WP_TestCase {
 	 */
 	function setUp() {
 		parent::setUp();
-		$this->rthdContacts = new Rt_HD_Contacts();
+		$this->rthdContacts = new Rtbiz_HD_Contacts();
 	}
 
 	function  test_check_function() {
@@ -30,11 +30,11 @@ class test_Rt_HD_Contacts extends RT_WP_TestCase {
 	 * Test contacts_columns
 	 */
 	function  test_contacts_columns() {
-		global $rt_contact;
+		global $rtbiz_contact;
 		$exp_output = array(
 			'rtbiz_hd_ticket' => 'Ticket',
 		);
-		$this->assertEquals( $exp_output, $this->rthdContacts->contacts_columns( array(), $rt_contact ) );
+		$this->assertEquals( $exp_output, $this->rthdContacts->contacts_columns( array(), $rtbiz_contact ) );
 	}
 
 	/**

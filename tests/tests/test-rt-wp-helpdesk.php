@@ -29,32 +29,32 @@ class test_RT_WP_Help_desk extends RT_WP_TestCase {
 	 */
 	function test_check_class_exist() {
 
-		$this->assertTrue( class_exists( 'Rt_HD_Mail_ACL_Model' ), 'Class Rt_HD_Mail_ACL_Model does not exist' );
-		$this->assertTrue( class_exists( 'Rt_HD_Ticket_History_Model' ), 'Class Rt_HD_Ticket_History_Model does not exist' );
+		$this->assertTrue( class_exists( 'Rtbiz_HD_Mail_ACL_Model' ), 'Class Rt_HD_Mail_ACL_Model does not exist' );
+		$this->assertTrue( class_exists( 'Rtbiz_HD_Ticket_History_Model' ), 'Class Rt_HD_Ticket_History_Model does not exist' );
 
 
 		$this->assertTrue( class_exists( 'Rt_Form' ), 'Class Rt_Form does not exist' );
 
-		$this->assertTrue( class_exists( 'Rt_HD_Attributes' ), 'Class Rt_HD_Attributes does not exist' );
-		$this->assertTrue( class_exists( 'Rt_HD_Module' ), 'Class Rt_HD_Module does not exist' );
-		$this->assertTrue( class_exists( 'Rt_HD_CPT_Tickets' ), 'Class Rt_HD_CPT_Tickets does not exist' );
+		$this->assertTrue( class_exists( 'Rtbiz_HD_Attributes' ), 'Class Rt_HD_Attributes does not exist' );
+		$this->assertTrue( class_exists( 'Rtbiz_HD_Module' ), 'Class Rt_HD_Module does not exist' );
+		$this->assertTrue( class_exists( 'Rtbiz_HD_CPT_Tickets' ), 'Class Rt_HD_CPT_Tickets does not exist' );
 
 		$this->assertTrue( class_exists( 'Rt_Reports' ), 'Class Rt_Reports does not exist' );
 
-		$this->assertTrue( class_exists( 'Rt_HD_Dashboard' ), 'Class Rt_HD_Dashboard does not exist' );
-		$this->assertTrue( class_exists( 'Rt_HD_ACL' ), 'Class Rt_HD_ACL does not exist' );
-		$this->assertTrue( class_exists( 'Rt_HD_Accounts' ), 'Class Rt_HD_Accounts does not exist' );
-		$this->assertTrue( class_exists( 'Rt_HD_Contacts' ), 'Class Rt_HD_Contacts does not exist' );
-		$this->assertTrue( class_exists( 'Rt_HD_Tickets_Operation' ), 'Class Rt_HD_Tickets_Operation does not exist' );
-		$this->assertTrue( class_exists( 'RT_HD_Email_Notification' ), 'Class RT_HD_Email_Notification does not exist' );
+		$this->assertTrue( class_exists( 'Rtbiz_HD_Dashboard' ), 'Class Rt_HD_Dashboard does not exist' );
+		$this->assertTrue( class_exists( 'Rtbiz_HD_ACL' ), 'Class Rt_HD_ACL does not exist' );
+		$this->assertTrue( class_exists( 'Rtbiz_HD_Accounts' ), 'Class Rt_HD_Accounts does not exist' );
+		$this->assertTrue( class_exists( 'Rtbiz_HD_Contacts' ), 'Class Rt_HD_Contacts does not exist' );
+		$this->assertTrue( class_exists( 'Rtbiz_HD_Tickets_Operation' ), 'Class Rt_HD_Tickets_Operation does not exist' );
+		$this->assertTrue( class_exists( 'Rtbiz_HD_Email_Notification' ), 'Class RT_HD_Email_Notification does not exist' );
 
-		$this->assertTrue( class_exists( 'Redux_Framework_Helpdesk_Config' ), 'Class Redux_Framework_Helpdesk_Config does not exist' );
-		$this->assertTrue( class_exists( 'Rt_HD_Import_Operation' ), 'Class Rt_HD_Import_Operation does not exist' );
+		$this->assertTrue( class_exists( 'Rtbiz_HD_Settings' ), 'Class Redux_Framework_Helpdesk_Config does not exist' );
+		$this->assertTrue( class_exists( 'Rtbiz_HD_Import_Operation' ), 'Class Rt_HD_Import_Operation does not exist' );
 
-		$this->assertTrue( class_exists( 'Rt_HD_Gravity_Form_Importer' ), 'Class Rt_HD_Gravity_Form_Importer does not exist' );
-		$this->assertTrue( class_exists( 'Rt_HD_Logs' ), 'Class Rt_HD_Logs does not exist' );
+		$this->assertTrue( class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ), 'Class Rt_HD_Gravity_Form_Importer does not exist' );
+		$this->assertTrue( class_exists( 'Rtbiz_HD_Logs' ), 'Class Rt_HD_Logs does not exist' );
 
-		$this->assertTrue( class_exists( 'Rt_HD_Offering_Support' ), 'Class Rt_HD_Offering_Support does not exist' );
+		$this->assertTrue( class_exists( 'Rtbiz_HD_Offering_Support' ), 'Class Rt_HD_Offering_Support does not exist' );
 
 		$this->assertTrue( class_exists( 'Rt_Biz_Helpdesk_Admin' ), 'Class Rt_Biz_Helpdesk_Admin does not exist' );
 
@@ -75,7 +75,7 @@ class test_RT_WP_Help_desk extends RT_WP_TestCase {
 	/**
 	 * Ensure that rtbiz dependecy & it's function
 	 */
-	function test_check_rt_biz_dependecy() {
+	function test_check_rtbiz_dependecy() {
 		$this->assertTrue( method_exists( $this->rtwpHelpDesk, 'rtbiz_hd_check_plugin_dependency' ), 'Class Rt_Biz_Helpdesk does not have method rtbiz_hd_check_plugin_dependency' );
 	}
 }

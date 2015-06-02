@@ -30,7 +30,7 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		public static function store_old_post_data( $post_id, $post ) {
-			global $rt_hd_ticket_history_model, $rt_hd_module, $rt_hd_attributes, $rt_ticket_email_content, $rtbiz_department, $rtbiz_offerings;
+			global $rtbiz_hd_ticket_history_model, $rtbiz_hd_module, $rtbiz_hd_attributes, $rt_ticket_email_content, $rtbiz_department, $rtbiz_offerings;
 
 			// $post_id and $post are required
 			if ( empty( $post_id ) || empty( $post ) ) {
@@ -52,7 +52,7 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 				return;
 			}
 
-			if ( ! in_array( $post['post_type'], array( Rt_HD_Module::$post_type ) ) ) {
+			if ( ! in_array( $post['post_type'], array( Rtbiz_HD_Module::$post_type ) ) ) {
 				return;
 			}
 
@@ -64,13 +64,13 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 			$emailHTML = $diff = '';
 
 			// Title Diff
-			$diff = rt_biz_hd_text_diff( $oldpost->post_title, $_POST['post_title'] );
+			$diff = rtbiz_hd_text_diff( $oldpost->post_title, $_POST['post_title'] );
 			if ( $diff ) {
 				$emailHTML .= '<tr><th style="padding: .5em;border: 0;"> Title</th><td>' . $diff . '</td><td></td></tr>';
 			}
 
 			// Status Diff
-			$post_statuses = $rt_hd_module->get_custom_statuses();
+			$post_statuses = $rtbiz_hd_module->get_custom_statuses();
 			$old_status    = ucfirst( $oldpost->post_status );
 			$new_status    = ucfirst( $_POST['post_status'] );
 			foreach ( $post_statuses as $status ) {
@@ -81,11 +81,11 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 					$new_status = $status['name'];
 				}
 			}
-			$diff = rt_biz_hd_text_diff( $old_status, $new_status );
+			$diff = rtbiz_hd_text_diff( $old_status, $new_status );
 			if ( $diff ) {
 				$emailHTML .= '<tr><th style="padding: .5em;border: 0;"> Status </th><td>' . $diff . '</td><td></td></tr>';
 				/* Insert History for status */
-				$id = $rt_hd_ticket_history_model->insert(
+				$id = $rtbiz_hd_ticket_history_model->insert(
 					array(
 						'ticket_id'   => $post_id,
 						'type'        => 'post_status',
@@ -100,13 +100,13 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 			$oldUser = get_user_by( 'id', $oldpost->post_author );
 			$newUser = get_user_by( 'id', $newTicket['post_author'] );
 
-			$diff = rt_biz_hd_text_diff( ( ( ! empty( $oldUser->display_name ) ) ? $oldUser->display_name : '-NA-' ), ( ( ! empty( $newUser->display_name ) ) ? $newUser->display_name : '-NA-' ) );
+			$diff = rtbiz_hd_text_diff( ( ( ! empty( $oldUser->display_name ) ) ? $oldUser->display_name : '-NA-' ), ( ( ! empty( $newUser->display_name ) ) ? $newUser->display_name : '-NA-' ) );
 			if ( $diff ) {
 				$emailHTML .= '<tr><th style="padding: .5em;border: 0;"> Assignee</th><td>' . $diff . '</td><td></td></tr>';
 			}
 
 			//Content
-			//			$diff = rt_biz_hd_text_diff( strip_tags( $oldpost->post_content ), strip_tags( $_POST['post_content'] ) );
+			//			$diff = rtbiz_hd_text_diff( strip_tags( $oldpost->post_content ), strip_tags( $_POST['post_content'] ) );
 			//			if ( $diff ) {
 			//				$emailHTML .= '<tr><th style="padding: .5em;border: 0;"> Ticket Content</th><td>' . $diff . '</td><td></td></tr>';
 			//			}
@@ -131,7 +131,7 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 						$new_attachments_title[] = get_the_title( $attachment );
 					}
 					$new_attachments_str = implode( ' , ', $new_attachments_title );
-					$diff                = rt_biz_hd_text_diff( $old_attachments_str, $new_attachments_str );
+					$diff                = rtbiz_hd_text_diff( $old_attachments_str, $new_attachments_str );
 					if ( $diff ) {
 						$emailHTML .= '<tr><th style="padding: .5em;border: 0;">Attachments</th><td>' . $diff . '</td><td></td></tr>';
 					}
@@ -153,35 +153,35 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 					}
 					$new_ex_links[] = '<a href="' . $ex_file['link'] . '" target="_blank">' . $ex_file['title'] . '</a>';
 				}
-				$diff = rt_biz_hd_text_diff( implode( ' , ', $old_ex_links ), implode( ' , ', $new_ex_links ) );
+				$diff = rtbiz_hd_text_diff( implode( ' , ', $old_ex_links ), implode( ' , ', $new_ex_links ) );
 				if ( $diff ) {
 					$emailHTML .= '<tr><th style="padding: .5em;border: 0;">External Files Links</th><td>' . $diff . '</td><td></td></tr>';
 				}
 			}
 
 			// Attributes-meta Diff
-			$attributes = rt_biz_hd_get_attributes( Rt_HD_Module::$post_type, 'meta' );
+			$attributes = rtbiz_hd_get_attributes( Rtbiz_HD_Module::$post_type, 'meta' );
 			foreach ( $attributes as $attr ) {
-				$attr_diff = $rt_hd_attributes->attribute_diff( $attr, $post_id, $newTicket );
+				$attr_diff = $rtbiz_hd_attributes->attribute_diff( $attr, $post_id, $newTicket );
 				$emailHTML .= $attr_diff;
 			}
 
 			// Attributes-taxonomies Diff
-			$attributes = rt_biz_hd_get_attributes( Rt_HD_Module::$post_type, 'taxonomy' );
+			$attributes = rtbiz_hd_get_attributes( Rtbiz_HD_Module::$post_type, 'taxonomy' );
 			foreach ( $attributes as $attr ) {
-				$attr_diff = $rt_hd_attributes->attribute_diff( $attr, $post_id, $_POST['tax_input'] );
+				$attr_diff = $rtbiz_hd_attributes->attribute_diff( $attr, $post_id, $_POST['tax_input'] );
 				$emailHTML .= $attr_diff;
 			}
 
 			// Taxonomy Diff
 			if ( isset( $_POST['tax_input'] ) && isset( $_POST['tax_input'][ Rt_Offerings::$offering_slug ] ) ) {
-				$diff = rt_biz_hd_get_taxonomy_diff( $post_id, Rt_Offerings::$offering_slug );
+				$diff = rtbiz_hd_get_taxonomy_diff( $post_id, Rt_Offerings::$offering_slug );
 				if ( '' !== $diff ) {
 					$emailHTML .= '<tr><th style="padding: .5em;border: 0;">' . $rtbiz_offerings->labels['name'] . '</th><td>' . $diff . '</td><td></td></tr>';
 				}
 			}
 			if ( isset( $_POST['tax_input'] ) && isset( $_POST['tax_input'][ RT_Departments::$slug ] ) ) {
-				$diff = rt_biz_hd_get_taxonomy_diff( $post_id, RT_Departments::$slug );
+				$diff = rtbiz_hd_get_taxonomy_diff( $post_id, RT_Departments::$slug );
 				if ( '' !== $diff ) {
 					$emailHTML .= '<tr><th style="padding: .5em;border: 0;">' . $rtbiz_department->labels['name'] . '</th><td>' . $diff . '</td><td></td></tr>';
 				}
@@ -243,7 +243,7 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		public static function save( $post_id, $post ) {
-			global $rt_ticket_email_content, $rt_hd_module, $rt_hd_email_notification;
+			global $rt_ticket_email_content, $rtbiz_hd_module, $rtbiz_hd_email_notification;
 
 			$emailTable        = "<table style='width: 100%; border-collapse: collapse; border: none;'>";
 			$emailTableEnd     = '</table>';
@@ -254,39 +254,39 @@ if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
 			$oldSubscriberList = $rt_ticket_email_content['oldSubscriberList'];
 			$emailHTML         = $rt_ticket_email_content['emailHTML'];
 			$bccemails         = $rt_ticket_email_content['bccemails'];
-			$labels            = $rt_hd_module->labels;
+			$labels            = $rtbiz_hd_module->labels;
 
 			if ( $updateFlag ) {
 				if ( $oldUser != $newUser ) {
-					$rt_hd_email_notification->notification_new_ticket_reassigned( $post_id, $oldUser, $newUser, $labels['name'] );
+					$rtbiz_hd_email_notification->notification_new_ticket_reassigned( $post_id, $oldUser, $newUser, $labels['name'] );
 				}
 
 				if ( ! empty( $newSubscriberList ) ) {
-					$rt_hd_email_notification->notification_ticket_subscribed( $post_id, $labels['name'], $newSubscriberList );
+					$rtbiz_hd_email_notification->notification_ticket_subscribed( $post_id, $labels['name'], $newSubscriberList );
 				}
 
 				if ( ! empty( $oldSubscriberList ) ) {
-					$rt_hd_email_notification->notification_ticket_unsubscribed( $post_id, $labels['name'], $oldSubscriberList );
+					$rtbiz_hd_email_notification->notification_ticket_unsubscribed( $post_id, $labels['name'], $oldSubscriberList );
 				}
 
 				if ( '' !== $emailHTML && ! empty( $bccemails ) ) {
 					$emailHTML = $emailTable . $emailHTML . $emailTableEnd;
-					$rt_hd_email_notification->notification_ticket_updated( $post_id, $labels['name'], $emailHTML, $bccemails );
+					$rtbiz_hd_email_notification->notification_ticket_updated( $post_id, $labels['name'], $emailHTML, $bccemails );
 				} else {
 					if ( '' !== $emailHTML ) {
 						$emailHTML = $emailTable . $emailHTML . $emailTableEnd;
-						$rt_hd_email_notification->notification_ticket_updated( $post_id, $labels['name'], $emailHTML, array() );
+						$rtbiz_hd_email_notification->notification_ticket_updated( $post_id, $labels['name'], $emailHTML, array() );
 					}
 				}
 			} else {
 				$newUser = get_user_by( 'id', $post['post_author'] );
 				if ( $newUser ) {
-					$rt_hd_email_notification->notification_new_ticket_reassigned( $post_id, '', $newUser, $labels['name'] );
+					$rtbiz_hd_email_notification->notification_new_ticket_reassigned( $post_id, '', $newUser, $labels['name'] );
 				}
 				if ( ! empty( $bccemails ) ) {
-					$rt_hd_email_notification->notification_ticket_subscribed( $post_id, $labels['name'], $bccemails );
+					$rtbiz_hd_email_notification->notification_ticket_subscribed( $post_id, $labels['name'], $bccemails );
 				} else {
-					$rt_hd_email_notification->notification_new_ticket_created( $post_id, $labels['name'] );
+					$rtbiz_hd_email_notification->notification_new_ticket_created( $post_id, $labels['name'] );
 				}
 			}
 		}

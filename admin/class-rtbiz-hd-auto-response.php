@@ -6,11 +6,11 @@
  * Time: 4:13 PM
  */
 
-if ( ! class_exists( 'Rt_HD_Auto_Response' ) ) {
+if ( ! class_exists( 'Rtbiz_HD_Auto_Response' ) ) {
 	/**
 	 * Class Rt_HD_Auto_Response
 	 */
-	class Rt_HD_Auto_Response {
+	class Rtbiz_HD_Auto_Response {
 
 	    private $weekdays;
 	    private $weekend;
@@ -41,7 +41,7 @@ if ( ! class_exists( 'Rt_HD_Auto_Response' ) ) {
 		 */
 		function  auto_response( $comment_post_ID, $post_date ) {
 			global $rt_hd_import_operation;
-			$redux = rt_biz_hd_get_redux_settings();
+			$redux = rtbiz_hd_get_redux_settings();
 			$isEnableAutoResponse = ( isset( $redux['rthd_enable_auto_response'] ) && 1 == $redux['rthd_enable_auto_response'] );
 			$isDayShift = ( isset( $redux['rthd_enable_auto_response_mode'] ) && 1 == $redux['rthd_enable_auto_response_mode'] );
 	        $isWeekEndsOnly = ( isset( $redux['rthd_autoresponse_weekend'] ) && 1 == $redux['rthd_autoresponse_weekend'] ) ;
@@ -65,7 +65,7 @@ if ( ! class_exists( 'Rt_HD_Auto_Response' ) ) {
 				$userid = get_post_field( 'post_author', $comment_post_ID ); //post author
 				$comment_author = 'Helpdesk Bot';
 				$comment_author_email = '';
-				$comment_content = rt_biz_hd_get_auto_response_message();
+				$comment_content = rtbiz_hd_get_auto_response_message();
 
 				if ( $isDayShift ) {
 					$shifttime = array();
@@ -99,7 +99,7 @@ if ( ! class_exists( 'Rt_HD_Auto_Response' ) ) {
 								$comment_content = str_replace( '{' . $key . '}', $value, $comment_content );
 							}
 
-							$rt_hd_import_operation->insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, array(), array(), array(), '', '', '', array(), '', Rt_HD_Import_Operation::$FOLLOWUP_BOT, 0, true );
+							$rt_hd_import_operation->insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, array(), array(), array(), '', '', '', array(), '', Rtbiz_HD_Import_Operation::$FOLLOWUP_BOT, 0, true );
 
 						}
 					}
@@ -151,7 +151,7 @@ if ( ! class_exists( 'Rt_HD_Auto_Response' ) ) {
 								$comment_content = str_replace( '{' . $key . '}', $value, $comment_content );
 							}
 
-							$rt_hd_import_operation->insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, array(), array(), array(), '', '', '', array(), '', Rt_HD_Import_Operation::$FOLLOWUP_BOT, 0, true );
+							$rt_hd_import_operation->insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, array(), array(), array(), '', '', '', array(), '', Rtbiz_HD_Import_Operation::$FOLLOWUP_BOT, 0, true );
 						}
 					}
 				}
@@ -196,7 +196,7 @@ if ( ! class_exists( 'Rt_HD_Auto_Response' ) ) {
 		 * UI for dayshift setting
 		 */
 		function setting_dayshift_ui() {
-			$redux = rt_biz_hd_get_redux_settings();
+			$redux = rtbiz_hd_get_redux_settings();
 			$shifttime = array();
 	        $shifttime['start'] = isset( $redux['rthd_dayshift_time_start'] ) ? $redux['rthd_dayshift_time_start'] : array( 0 => -1, 1 => -1, 2 => -1, 3 => -1, 4 => -1, 5 => -1, 6 => -1 );
 			$shifttime['end'] = isset( $redux['rthd_dayshift_time_end'] ) ? $redux['rthd_dayshift_time_end'] : array( 0 => -1, 1 => -1, 2 => -1, 3 => -1, 4 => -1, 5 => -1, 6 => -1 ); ?>
@@ -241,7 +241,7 @@ if ( ! class_exists( 'Rt_HD_Auto_Response' ) ) {
 		 * UI for daynightshift setting
 		 */
 		function setting_daynightshift_ui() {
-			$redux = rt_biz_hd_get_redux_settings();
+			$redux = rtbiz_hd_get_redux_settings();
 			$shifttime = array();
 	        $shifttime['am_start'] = isset( $redux['rthd_daynight_am_time_start'] ) ? $redux['rthd_daynight_am_time_start'] : array( 0 => -1, 1 => -1, 2 => -1, 3 => -1, 4 => -1, 5 => -1, 6 => -1 );
 			$shifttime['am_end'] = isset( $redux['rthd_daynight_am_time_end'] ) ? $redux['rthd_daynight_am_time_end'] : array( 0 => -1, 1 => -1, 2 => -1, 3 => -1, 4 => -1, 5 => -1, 6 => -1 );

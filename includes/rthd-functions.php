@@ -9,13 +9,13 @@
  * used to render template
 
  */
-function rt_biz_hd_get_template( $template_name, $args = array(), $template_path = '', $default_path = '' ) {
+function rtbiz_hd_get_template( $template_name, $args = array(), $template_path = '', $default_path = '' ) {
 
 	if ( $args && is_array( $args ) ) {
 		extract( $args );
 	}
 
-	$located = rt_biz_hd_locate_template( $template_name, $template_path, $default_path );
+	$located = rtbiz_hd_locate_template( $template_name, $template_path, $default_path );
 
 	do_action( 'rthd_before_template_part', $template_name, $template_path, $located, $args );
 
@@ -32,14 +32,14 @@ function rt_biz_hd_get_template( $template_name, $args = array(), $template_path
  *
  * @return mixed|void
  */
-function rt_biz_hd_locate_template( $template_name, $template_path = '', $default_path = '' ) {
+function rtbiz_hd_locate_template( $template_name, $template_path = '', $default_path = '' ) {
 
-	global $rt_biz_hd;
+	global $rtbiz_hd;
 	if ( ! $template_path ) {
-		$template_path = $rt_biz_hd->templateURL;
+		$template_path = Rtbiz_HD::$templateURL;
 	}
 	if ( ! $default_path ) {
-		$default_path = RT_BIZ_HD_PATH_TEMPLATES;
+		$default_path = RTBIZ_HD_PATH_TEMPLATES;
 	}
 
 	// Look within passed path within the theme - this is priority
@@ -51,7 +51,7 @@ function rt_biz_hd_locate_template( $template_name, $template_path = '', $defaul
 	}
 
 	// Return what we found
-	return apply_filters( 'rt_biz_hd_locate_template', $template, $template_name, $template_path );
+	return apply_filters( 'rtbiz_hd_locate_template', $template, $template_name, $template_path );
 }
 
 /**
@@ -60,7 +60,7 @@ function rt_biz_hd_locate_template( $template_name, $template_path = '', $defaul
  *
  * @return mixed|string
  */
-function rt_biz_hd_sanitize_taxonomy_name( $taxonomy ) {
+function rtbiz_hd_sanitize_taxonomy_name( $taxonomy ) {
 	$taxonomy = strtolower( stripslashes( strip_tags( $taxonomy ) ) );
 	$taxonomy = preg_replace( '/&.+?;/', '', $taxonomy ); // Kill entities
 	$taxonomy = str_replace( array( '.', '\'', '"' ), '', $taxonomy ); // Kill quotes and full stops.
@@ -75,8 +75,8 @@ function rt_biz_hd_sanitize_taxonomy_name( $taxonomy ) {
  *
  * @return string
  */
-function rt_biz_hd_attribute_taxonomy_name( $name ) {
-	return 'rtbiz_hd_' . rt_biz_hd_sanitize_taxonomy_name( $name );
+function rtbiz_hd_attribute_taxonomy_name( $name ) {
+	return 'rtbiz_hd_' . rtbiz_hd_sanitize_taxonomy_name( $name );
 }
 
 /**
@@ -86,7 +86,7 @@ function rt_biz_hd_attribute_taxonomy_name( $name ) {
  * @return string
  */
 function rtbiz_post_type_name( $name ) {
-	return 'rt_' . rt_biz_hd_sanitize_taxonomy_name( $name );
+	return 'rt_' . rtbiz_hd_sanitize_taxonomy_name( $name );
 }
 
 /**
@@ -96,7 +96,7 @@ function rtbiz_post_type_name( $name ) {
  * @return string
  */
 function rthd_post_type_name( $name ) {
-	return 'rtbiz_hd_' . rt_biz_hd_sanitize_taxonomy_name( $name );
+	return 'rtbiz_hd_' . rtbiz_hd_sanitize_taxonomy_name( $name );
 }
 
 /**
@@ -106,8 +106,8 @@ function rthd_post_type_name( $name ) {
  * @return array
  */
 function rthd_get_all_attributes( $attribute_store_as = '' ) {
-	global $rt_hd_attributes_model;
-	$attrs = $rt_hd_attributes_model->get_all_attributes();
+	global $rtbiz_hd_attributes_model;
+	$attrs = $rtbiz_hd_attributes_model->get_all_attributes();
 
 	if ( empty( $attribute_store_as ) ) {
 		return $attrs;
@@ -130,13 +130,13 @@ function rthd_get_all_attributes( $attribute_store_as = '' ) {
  *
  * @return array
  */
-function rt_biz_hd_get_attributes( $post_type, $attribute_store_as = '' ) {
-	global $rt_hd_attributes_relationship_model, $rt_hd_attributes_model;
-	$relations = $rt_hd_attributes_relationship_model->get_relations_by_post_type( $post_type );
+function rtbiz_hd_get_attributes( $post_type, $attribute_store_as = '' ) {
+	global $rtbiz_hd_attributes_relationship_model, $rtbiz_hd_attributes_model;
+	$relations = $rtbiz_hd_attributes_relationship_model->get_relations_by_post_type( $post_type );
 	$attrs = array();
 
 	foreach ( $relations as $relation ) {
-		$attrs[] = $rt_hd_attributes_model->get_attribute( $relation->attr_id );
+		$attrs[] = $rtbiz_hd_attributes_model->get_attribute( $relation->attr_id );
 	}
 
 	if ( empty( $attribute_store_as ) ) {
@@ -164,7 +164,7 @@ function rt_biz_hd_get_attributes( $post_type, $attribute_store_as = '' ) {
  *
  * @return string
  */
-function rt_biz_hd_post_term_to_string( $postid, $taxonomy, $termsep = ',' ) {
+function rtbiz_hd_post_term_to_string( $postid, $taxonomy, $termsep = ',' ) {
 	$termsArr = get_the_terms( $postid, $taxonomy );
 	$tmpStr = '';
 	if ( $termsArr ) {
@@ -188,7 +188,7 @@ function rt_biz_hd_post_term_to_string( $postid, $taxonomy, $termsep = ',' ) {
  *
  * @return mixed
  */
-function rt_biz_hd_extract_key_from_attributes( $attr ) {
+function rtbiz_hd_extract_key_from_attributes( $attr ) {
 	return $attr->attribute_name;
 }
 
@@ -199,7 +199,7 @@ function rt_biz_hd_extract_key_from_attributes( $attr ) {
  *
  * @return bool
  */
-function rt_biz_hd_is_system_email( $email ) {
+function rtbiz_hd_is_system_email( $email ) {
 	global $rt_mail_settings;
 	$google_acs = $rt_mail_settings->get_user_google_ac();
 
@@ -221,7 +221,7 @@ function rt_biz_hd_is_system_email( $email ) {
  * @return array
  * @since rt-Helpdesk 0.1
  */
-function rt_biz_hd_get_all_participants( $ticket_id ) {
+function rtbiz_hd_get_all_participants( $ticket_id ) {
 	$ticket = get_post( $ticket_id );
 	$participants = array();
 	if ( isset( $ticket->post_author ) ) {
@@ -230,7 +230,7 @@ function rt_biz_hd_get_all_participants( $ticket_id ) {
 	$subscribers = get_post_meta( $ticket_id, '_rtbiz_hd_subscribe_to', true );
 	$participants = array_merge( $participants, $subscribers );
 
-	//	$contacts = wp_get_post_terms( $ticket_id, rt_biz_hd_attribute_taxonomy_name( 'contacts' ) );
+	//	$contacts = wp_get_post_terms( $ticket_id, rtbiz_hd_attribute_taxonomy_name( 'contacts' ) );
 	//	foreach ( $contacts as $contact ) {
 	//		$user_id = get_term_meta( $contact->term_id, 'user_id', true );
 	//		if(!empty($user_id)) {
@@ -277,7 +277,7 @@ function rt_biz_hd_get_all_participants( $ticket_id ) {
  * @return string
  * @since rt-Helpdesk 0.1
  */
-function rt_biz_hd_get_ticket_table_name() {
+function rtbiz_hd_get_ticket_table_name() {
 
 	global $wpdb;
 
@@ -292,7 +292,7 @@ function rt_biz_hd_get_ticket_table_name() {
  * @return mixed
  * @since rt-Helpdesk 0.1
  */
-function rt_biz_hd_get_user_ids( $user ) {
+function rtbiz_hd_get_user_ids( $user ) {
 	return $user->ID;
 }
 
@@ -304,7 +304,7 @@ function rt_biz_hd_get_user_ids( $user ) {
  *
  * @since rt-Helpdesk 0.1
  */
-function rt_biz_hd_update_post_term_count( $terms, $taxonomy ) {
+function rtbiz_hd_update_post_term_count( $terms, $taxonomy ) {
 	global $wpdb;
 
 	$object_types = (array) $taxonomy->object_type;
@@ -350,7 +350,7 @@ function rt_biz_hd_update_post_term_count( $terms, $taxonomy ) {
  * @return string Return the encrypted/decrypted string
  * @since rt-Helpdesk 0.1
  */
-function rt_biz_hd_encrypt_decrypt( $string ) {
+function rtbiz_hd_encrypt_decrypt( $string ) {
 
 	$string_length = strlen( $string );
 	$encrypted_string = '';
@@ -384,7 +384,7 @@ function rt_biz_hd_encrypt_decrypt( $string ) {
  * @return string
  * @since rt-Helpdesk 0.1
  */
-function rt_biz_hd_text_diff( $left_string, $right_string, $args = null ) {
+function rtbiz_hd_text_diff( $left_string, $right_string, $args = null ) {
 	$defaults = array( 'title' => '', 'title_left' => '', 'title_right' => '' );
 	$args = wp_parse_args( $args, $defaults );
 
@@ -430,19 +430,19 @@ function rt_biz_hd_text_diff( $left_string, $right_string, $args = null ) {
  * @return string
  * @since rt-Helpdesk 0.1
  */
-function rt_biz_hd_set_html_content_type() {
+function rtbiz_hd_set_html_content_type() {
 	return 'text/html';
 }
 
-function rt_biz_hd_get_unique_hash_url( $ticket_id ) {
-	global $rt_hd_module;
-	$labels = $rt_hd_module->labels;
+function rtbiz_hd_get_unique_hash_url( $ticket_id ) {
+	global $rtbiz_hd_module;
+	$labels = $rtbiz_hd_module->labels;
 	$rthd_unique_id = get_post_meta( $ticket_id, '_rtbiz_hd_unique_id', true );
 	return trailingslashit( site_url() ) . strtolower( $labels['name'] ) . '/?rthd_unique_id=' . $rthd_unique_id;
 }
 
-function rt_biz_hd_is_unique_hash_enabled() {
-	$settings = rt_biz_hd_get_redux_settings();
+function rtbiz_hd_is_unique_hash_enabled() {
+	$settings = rtbiz_hd_get_redux_settings();
 	if ( ! empty( $settings['rthd_enable_ticket_unique_hash'] ) ) {
 		return true;
 	}
@@ -450,7 +450,7 @@ function rt_biz_hd_is_unique_hash_enabled() {
 }
 
 // Setting ApI
-function rt_biz_hd_get_redux_settings() {
+function rtbiz_hd_get_redux_settings() {
 	if ( ! isset( $GLOBALS['redux_helpdesk_settings'] ) ) {
 		$GLOBALS['redux_helpdesk_settings'] = get_option( 'redux_helpdesk_settings', array() );
 	}
@@ -458,18 +458,18 @@ function rt_biz_hd_get_redux_settings() {
 	return $GLOBALS['redux_helpdesk_settings'];
 }
 
-function rt_biz_hd_my_mail_from( $email ) {
-	$settings = rt_biz_hd_get_redux_settings();
+function rtbiz_hd_my_mail_from( $email ) {
+	$settings = rtbiz_hd_get_redux_settings();
 	return $settings['rthd_outgoing_email_from_address'];
 }
 
 // user notification preference
-function rt_biz_hd_get_user_notification_preference( $user_id, $email = '' ) {
+function rtbiz_hd_get_user_notification_preference( $user_id, $email = '' ) {
 	if ( empty( $email ) ) {
 		$user = get_user_by( 'id', $user_id );
 		$email = $user->user_email;
 	}
-	$post = rt_biz_get_contact_by_email( $email );
+	$post = rtbiz_get_contact_by_email( $email );
 	if ( ! empty( $post[0] ) ) {
 		$pref = Rt_Entity::get_meta( $post[0]->ID, 'rthd_receive_notification', true );
 	}
@@ -482,8 +482,8 @@ function rt_biz_hd_get_user_notification_preference( $user_id, $email = '' ) {
 }
 
 //adult filter redux setting
-function rt_biz_hd_get_redux_adult_filter() {
-	$settings = rt_biz_hd_get_redux_settings();
+function rtbiz_hd_get_redux_adult_filter() {
+	$settings = rtbiz_hd_get_redux_settings();
 	if ( ! empty( $settings['rthd_enable_ticket_adult_content'] ) ) {
 		return true;
 	}
@@ -491,12 +491,12 @@ function rt_biz_hd_get_redux_adult_filter() {
 }
 
 //adult content preference
-function rt_biz_hd_get_user_adult_preference( $user_id, $email = '' ) {
+function rtbiz_hd_get_user_adult_preference( $user_id, $email = '' ) {
 	if ( empty( $email ) ) {
 		$user = get_user_by( 'id', $user_id );
 		$email = $user->user_email;
 	}
-	$post = rt_biz_get_contact_by_email( $email );
+	$post = rtbiz_get_contact_by_email( $email );
 
 	if ( ! empty( $post[0] ) ) {
 		$pref = Rt_Entity::get_meta( $post[0]->ID, 'rthd_contact_adult_filter', true );
@@ -509,11 +509,11 @@ function rt_biz_hd_get_user_adult_preference( $user_id, $email = '' ) {
 	return $pref;
 }
 
-function rt_biz_hd_add_user_fav_ticket( $userid, $postid ) {
+function rtbiz_hd_add_user_fav_ticket( $userid, $postid ) {
 	add_user_meta( $userid, '_rthd_fav_tickets', $postid );
 }
 
-function rt_biz_hd_get_user_fav_ticket( $userid ) {
+function rtbiz_hd_get_user_fav_ticket( $userid ) {
 	$result = get_user_meta( $userid, '_rthd_fav_tickets' );
 	if ( ! empty( $result ) ) {
 		$result = array_filter( $result );
@@ -529,7 +529,7 @@ function rt_biz_hd_get_user_fav_ticket( $userid ) {
  *
  * @return mixed
  */
-function rt_biz_hd_get_user_subscribe_ticket( $current_userid ) {
+function rtbiz_hd_get_user_subscribe_ticket( $current_userid ) {
 	global $wpdb;
 	$lenght = strlen( (string) $current_userid );
 	$current_userid = '"' . $current_userid .'"';
@@ -537,47 +537,47 @@ function rt_biz_hd_get_user_subscribe_ticket( $current_userid ) {
 	return $wpdb->get_col( $sql );
 }
 
-function rt_biz_hd_delete_user_fav_ticket( $user_id, $postid ) {
+function rtbiz_hd_delete_user_fav_ticket( $user_id, $postid ) {
 	delete_user_meta( $user_id, '_rthd_fav_tickets', $postid );
 }
 
-function rt_biz_hd_save_adult_ticket_meta( $post_id, $pref ) {
+function rtbiz_hd_save_adult_ticket_meta( $post_id, $pref ) {
 	update_post_meta( $post_id, '_rthd_ticket_adult_content', $pref );
 }
 
-function rt_biz_hd_get_adult_ticket_meta( $post_id ) {
+function rtbiz_hd_get_adult_ticket_meta( $post_id ) {
 	return get_post_meta( $post_id, '_rthd_ticket_adult_content', true );
 }
 
-function rt_biz_hd_create_new_ticket_title( $key, $post_id ) {
-	if ( rt_biz_is_email_template_addon_active() && rt_biz_is_email_template_on( Rt_HD_Module::$post_type ) ) {
-		$redux = rt_biz_hd_get_redux_settings();
+function rtbiz_hd_create_new_ticket_title( $key, $post_id ) {
+	if ( rtbiz_is_email_template_addon_active() && rtbiz_is_email_template_on( Rtbiz_HD_Module::$post_type ) ) {
+		$redux = rtbiz_hd_get_redux_settings();
 		$value = $redux[ $key ];
 	} else {
-		$value = rt_biz_hd_get_default_email_template( $key );
+		$value = rtbiz_hd_get_default_email_template( $key );
 	}
-	return rt_biz_hd_generate_email_title( $post_id, $value );
+	return rtbiz_hd_generate_email_title( $post_id, $value );
 }
 
-function rt_biz_hd_get_email_signature_settings() {
-	$redux = rt_biz_hd_get_redux_settings();
+function rtbiz_hd_get_email_signature_settings() {
+	$redux = rtbiz_hd_get_redux_settings();
 	if ( isset( $redux['rthd_enable_signature'] ) && 1 == $redux['rthd_enable_signature'] && isset( $redux['rthd_email_signature'] ) ) {
 		return $redux['rthd_email_signature'];
 	}
 	return '';
 }
 
-function rt_biz_hd_get_auto_response_message() {
-	$redux = rt_biz_hd_get_redux_settings();
+function rtbiz_hd_get_auto_response_message() {
+	$redux = rtbiz_hd_get_redux_settings();
 	if ( isset( $redux['rthd_enable_auto_response'] ) && 1 == $redux['rthd_enable_auto_response'] && isset( $redux['rthd_auto_response_message'] ) ) {
 		return $redux['rthd_auto_response_message'];
 	}
 	return '';
 }
 
-function rt_biz_hd_generate_email_title( $post_id, $title ) {
-	$redux = rt_biz_hd_get_redux_settings();
-	$title = str_replace( '{module_name}', Rt_HD_Module::$name, $title );
+function rtbiz_hd_generate_email_title( $post_id, $title ) {
+	$redux = rtbiz_hd_get_redux_settings();
+	$title = str_replace( '{module_name}', Rtbiz_HD_Module::$name, $title );
 	$title = str_replace( '{ticket_id}', $post_id, $title );
 	$title = str_replace( '{ticket_title}', html_entity_decode( get_the_title( $post_id ), ENT_COMPAT, 'UTF-8' ), $title );
 
@@ -597,18 +597,18 @@ function rt_biz_hd_generate_email_title( $post_id, $title ) {
 	return $title;
 }
 
-function rt_biz_hd_render_comment( $comment, $user_edit, $type = 'right', $echo = true ) {
+function rtbiz_hd_render_comment( $comment, $user_edit, $type = 'right', $echo = true ) {
 
 	ob_start();
 
-	$cap = rt_biz_get_access_role_cap( RT_BIZ_HD_TEXT_DOMAIN, 'author' ); //todo: find employee users if then only visible
+	$cap = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' ); //todo: find employee users if then only visible
 	$staffonly = current_user_can( $cap );
 	$private_text = '';
 	$display_private_comment_flag = false;
 	$is_comment_private = false;
 	$is_staff_followup = false;
 	switch ( $comment->comment_type ) {
-		case Rt_HD_Import_Operation::$FOLLOWUP_BOT:
+		case Rtbiz_HD_Import_Operation::$FOLLOWUP_BOT:
 			$display_private_comment_flag = true;
 			if ( $user_edit ) {
 				$is_comment_private = true;
@@ -616,18 +616,18 @@ function rt_biz_hd_render_comment( $comment, $user_edit, $type = 'right', $echo 
 			}
 			$user_edit = false;
 			break;
-		case Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC:
+		case Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC:
 			$display_private_comment_flag = true;
 			$is_comment_private = false;
 			break;
-		case Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE:
+		case Rtbiz_HD_Import_Operation::$FOLLOWUP_SENSITIVE:
 			if ( $user_edit || ( get_current_user_id() == get_post_meta( $comment->comment_post_ID, '_rtbiz_hd_created_by', true ) ) ) {
 				$display_private_comment_flag = true;
 			}
 			$private_text = 'Sensitive';
 			$is_comment_private = true;
 			break;
-		case Rt_HD_Import_Operation::$FOLLOWUP_STAFF:
+		case Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF:
 			if ( $staffonly ) {
 				$display_private_comment_flag = true;
 			} else {
@@ -659,7 +659,7 @@ function rt_biz_hd_render_comment( $comment, $user_edit, $type = 'right', $echo 
 			<div class="followup-information">
 				<?php
 				if ( current_user_can( $cap ) ) {
-					$commentAuthorLink = '<a class="rthd-ticket-author-link" href="' . rt_biz_hd_biz_user_profile_link( $comment->comment_author_email ) . '">' . $comment->comment_author . '</a>';
+					$commentAuthorLink = '<a class="rthd-ticket-author-link" href="' . rtbiz_hd_biz_user_profile_link( $comment->comment_author_email ) . '">' . $comment->comment_author . '</a>';
 				} else {
 					$commentAuthorLink = $comment->comment_author;
 				}
@@ -693,12 +693,12 @@ if ( true == $is_comment_private ) {
 				<?php
 				if ( $display_private_comment_flag ) {
 					if ( isset( $comment->comment_content ) && $comment->comment_content != '' ) {
-						$comment->comment_content = rt_biz_hd_content_filter( $comment->comment_content );
+						$comment->comment_content = rtbiz_hd_content_filter( $comment->comment_content );
 					}
 					?>
 					<p><?php echo $comment->comment_content; ?></p>
 				<?php } else { ?>
-					<p><?php _e( 'This followup has been marked private.', RT_BIZ_HD_TEXT_DOMAIN ); ?></p>
+					<p><?php _e( 'This followup has been marked private.', RTBIZ_HD_TEXT_DOMAIN ); ?></p>
 				<?php } ?>
 			</div>
 			<?php
@@ -712,7 +712,7 @@ if ( true == $is_comment_private ) {
 							<li>
 								<?php
 								$attachment = get_post( $a );
-								rt_biz_hd_get_attchment_link_with_fancybox( $attachment, $comment->comment_ID );
+								rtbiz_hd_get_attchment_link_with_fancybox( $attachment, $comment->comment_ID );
 								?>
 							</li>
 						<?php } ?>
@@ -734,7 +734,7 @@ if ( true == $is_comment_private ) {
 	}
 }
 
-function rt_biz_hd_content_filter( $content ) {
+function rtbiz_hd_content_filter( $content ) {
 
 	$content = balanceTags( $content, true );
 
@@ -753,7 +753,7 @@ function rt_biz_hd_content_filter( $content ) {
 	return balanceTags( wpautop( wp_kses_post( balanceTags( make_clickable( $content ), true ) ) ), true );
 }
 
-function rt_biz_hd_admin_notice_dependency_installed() {
+function rtbiz_hd_admin_notice_dependency_installed() {
 	$string = get_option( 'rtbiz_helpdesk_dependency_installed' );
 	if ( ! empty( $string ) ) {
 		?>
@@ -768,47 +768,7 @@ function rt_biz_hd_admin_notice_dependency_installed() {
 	}
 }
 
-function rt_biz_hd_install_plugin( $plugin_slug ) {
-	include_once( ABSPATH . 'wp-admin/includes/plugin-install.php' );
 
-	$api = plugins_api( 'plugin_information', array( 'slug' => $plugin_slug, 'fields' => array( 'sections' => false ) ) );
-
-	if ( is_wp_error( $api ) ) {
-		die( sprintf( __( 'ERROR: Error fetching plugin information: %s', RT_BIZ_HD_TEXT_DOMAIN ), $api->get_error_message() ) );
-	}
-
-	if ( ! class_exists( 'Plugin_Upgrader' ) ) {
-		require_once( ABSPATH . 'wp-admin/includes/class-wp-upgrader.php' );
-	}
-
-	if ( ! class_exists( 'Rt_HD_Plugin_Upgrader_Skin' ) ) {
-		require_once( RT_BIZ_HD_PATH_ADMIN. 'class-rt-hd-plugin-upgrader-skin.php' );
-	}
-
-	$upgrader = new Plugin_Upgrader( new Rt_HD_Plugin_Upgrader_Skin( array(
-		'nonce' => 'install-plugin_' . $plugin_slug,
-		'plugin' => $plugin_slug,
-		'api' => $api,
-			) ) );
-
-	$install_result = $upgrader->install( $api->download_link );
-
-	if ( ! $install_result || is_wp_error( $install_result ) ) {
-		// $install_result can be false if the file system isn't writable.
-		$error_message = __( 'Please ensure the file system is writable', RT_BIZ_HD_TEXT_DOMAIN );
-
-		if ( is_wp_error( $install_result ) ) {
-			$error_message = $install_result->get_error_message();
-		}
-
-		die( sprintf( __( 'ERROR: Failed to install plugin: %s', RT_BIZ_HD_TEXT_DOMAIN ), $error_message ) );
-	}
-
-	$activate_result = activate_plugin( rt_biz_hd_get_path_for_plugin( $plugin_slug ) );
-	if ( is_wp_error( $activate_result ) ) {
-		die( sprintf( __( 'ERROR: Failed to activate plugin: %s', RT_BIZ_HD_TEXT_DOMAIN ), $activate_result->get_error_message() ) );
-	}
-}
 
 
 /**
@@ -816,9 +776,9 @@ function rt_biz_hd_install_plugin( $plugin_slug ) {
  *
  * @since 0.1
  */
-function rt_biz_hd_admin_notice_dependency_not_installed() {
-	$biz_installed = rt_biz_hd_is_plugin_installed( 'rtbiz' );
-	$p2p_installed = rt_biz_hd_is_plugin_installed( 'posts-to-posts' );
+function rtbiz_hd_admin_notice_dependency_not_installed() {
+	$biz_installed = rtbiz_hd_is_plugin_installed( 'rtbiz' );
+	$p2p_installed = rtbiz_hd_is_plugin_installed( 'posts-to-posts' );
 
 	if ( ! $biz_installed || ! $p2p_installed ) {
 		$msg = '';
@@ -834,13 +794,13 @@ function rt_biz_hd_admin_notice_dependency_not_installed() {
 			<?php $nonce = wp_create_nonce( 'rthd_install_plugin_rtbiz' ); ?>
 
 			<p><b><?php _e( 'rtBiz Helpdesk:' ) ?></b> <?php _e( 'Click' ) ?> <a href="#"
-																				 onclick="install_rthd_plugin( '<?php echo $msg ?>', 'rthd_install_plugin', '<?php echo $nonce ?>' )">here</a> <?php _e( 'to install ' . $msg . '.', RT_BIZ_HD_TEXT_DOMAIN ) ?>
+																				 onclick="install_rthd_plugin( '<?php echo $msg ?>', 'rthd_install_plugin', '<?php echo $nonce ?>' )">here</a> <?php _e( 'to install ' . $msg . '.', RTBIZ_HD_TEXT_DOMAIN ) ?>
 			</p>
 		</div>
 		<?php
 	}
-	$rtbiz_active = rt_biz_hd_is_plugin_active( 'rtbiz' );
-	$p2p_active = rt_biz_hd_is_plugin_active( 'posts-to-posts' );
+	$rtbiz_active = rtbiz_hd_is_plugin_active( 'rtbiz' );
+	$p2p_active = rtbiz_hd_is_plugin_active( 'posts-to-posts' );
 	if ( ( $biz_installed && ! $rtbiz_active ) || ( $p2p_installed && ! $p2p_active ) ) {
 		$msg = '';
 		if ( ( $biz_installed && ! $rtbiz_active ) && ( $p2p_installed && ! $p2p_active ) ) {
@@ -851,68 +811,29 @@ function rt_biz_hd_admin_notice_dependency_not_installed() {
 			$msg = 'Posts 2 Posts';
 		}
 
-		$path = rt_biz_hd_get_path_for_plugin( 'rtbiz' );
+		$path = rtbiz_hd_get_path_for_plugin( 'rtbiz' );
 		$nonce = wp_create_nonce( 'rthd_activate_plugin_' . $path );
 		?>
 		<div class="error rthd-plugin-not-active-error">
 			<p><b><?php _e( 'rtBiz Helpdesk:' ) ?></b> <?php _e( 'Click' ) ?> <a href="#"
-																				 onclick="activate_rthd_plugin( '<?php echo $msg ?>', 'rthd_activate_plugin', '<?php echo $nonce; ?>' )">here</a> <?php _e( 'to activate ' . $msg . '.', RT_BIZ_HD_TEXT_DOMAIN ) ?>
+																				 onclick="activate_rthd_plugin( '<?php echo $msg ?>', 'rthd_activate_plugin', '<?php echo $nonce; ?>' )">here</a> <?php _e( 'to activate ' . $msg . '.', RTBIZ_HD_TEXT_DOMAIN ) ?>
 			</p>
 		</div>
 		<?php
 	}
 }
 
-function rt_biz_hd_get_path_for_plugin( $slug ) {
-	global $rthd_plugin_check;
-	$filename = ( ! empty( $rthd_plugin_check[ $slug ]['filename'] ) ) ? $rthd_plugin_check[ $slug ]['filename'] : $slug . '.php';
 
-	return $slug . '/' . $filename;
-}
 
-function rt_biz_hd_is_plugin_active( $slug ) {
-	global $rthd_plugin_check;
-	if ( empty( $rthd_plugin_check[ $slug ] ) ) {
-		return false;
-	}
-
-	return $rthd_plugin_check[ $slug ]['active'];
-}
-
-function rt_biz_hd_is_plugin_installed( $slug ) {
-	global $rthd_plugin_check;
-	if ( empty( $rthd_plugin_check[ $slug ] ) ) {
-		return false;
-	}
-
-	if ( rt_biz_hd_is_plugin_active( $slug ) || file_exists( WP_PLUGIN_DIR . '/' . rt_biz_hd_get_path_for_plugin( $slug ) ) ) {
-		return true;
-	}
-
-	return false;
-}
-
-/**
- * @param $plugin_path
- * ajax call for active plugin calls this function to active plugin
- */
-function rt_biz_hd_activate_plugin( $plugin_path ) {
-
-	$activate_result = activate_plugin( $plugin_path );
-	if ( is_wp_error( $activate_result ) ) {
-		die( sprintf( __( 'ERROR: Failed to activate plugin: %s', RT_BIZ_HD_TEXT_DOMAIN ), $activate_result->get_error_message() ) );
-	}
-}
-
-function rt_biz_hd_get_comment_type( $comment_type_value ) {
+function rtbiz_hd_get_comment_type( $comment_type_value ) {
 	switch ( $comment_type_value ) {
-		case Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC:
+		case Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC:
 			return 'Default';
 			break;
-		case Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE:
+		case Rtbiz_HD_Import_Operation::$FOLLOWUP_SENSITIVE:
 			return 'Sensitive';
 			break;
-		case Rt_HD_Import_Operation::$FOLLOWUP_STAFF:
+		case Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF:
 			return 'Only Staff';
 			break;
 		default:
@@ -920,16 +841,16 @@ function rt_biz_hd_get_comment_type( $comment_type_value ) {
 	}
 }
 
-function rt_biz_hd_edit_comment_type( $Comment_ID, $value ) {
+function rtbiz_hd_edit_comment_type( $Comment_ID, $value ) {
 	global $wpdb;
 	$wpdb->query(
 		$wpdb->prepare( "UPDATE $wpdb->comments SET comment_type=%s WHERE comment_ID = %d", $value, $Comment_ID )
 	);
 }
 
-function rt_biz_hd_status_markup( $pstatus ) {
-	global $rt_hd_module;
-	$post_statuses = $rt_hd_module->get_custom_statuses();
+function rtbiz_hd_status_markup( $pstatus ) {
+	global $rtbiz_hd_module;
+	$post_statuses = $rtbiz_hd_module->get_custom_statuses();
 	$key = array_search( $pstatus, array_column( $post_statuses, 'slug' ) );
 	if ( false !== $key ) {
 		$pstatus = ucfirst( $post_statuses[ $key ]['name'] );
@@ -939,8 +860,8 @@ function rt_biz_hd_status_markup( $pstatus ) {
 	return '';
 }
 
-function rt_biz_hd_biz_user_profile_link( $email ) {
-	$post = rt_biz_get_contact_by_email( $email );
+function rtbiz_hd_biz_user_profile_link( $email ) {
+	$post = rtbiz_get_contact_by_email( $email );
 	if ( ! empty( $post ) ) {
 		return get_edit_post_link( $post[0]->ID );
 	} else {
@@ -952,7 +873,7 @@ function rt_biz_hd_biz_user_profile_link( $email ) {
  * This function is used to get attachment url from comments only( not post)
  * used in ticket front page / attachment metabox to hide followup attachments
  */
-function rt_biz_hd_get_attachment_url_from_followups( $postid ) {
+function rtbiz_hd_get_attachment_url_from_followups( $postid ) {
 	$attach_comments = get_comments( array(
 		'post_id' => $postid,
 		'fields' => 'ids',
@@ -973,14 +894,14 @@ function rt_biz_hd_get_attachment_url_from_followups( $postid ) {
 	return $attach_cmt;
 }
 
-function rt_biz_hd_get_general_body_template( $body, $title, $replyflag = false ) {
+function rtbiz_hd_get_general_body_template( $body, $title, $replyflag = false ) {
 	$mail_template = apply_filters( 'rthd_email_template', 'email-template.php' );
 	ob_start();
-	rt_biz_hd_get_template( $mail_template, array( 'body' => $body, 'title' => $title, 'replyflag' => $replyflag ) );
+	rtbiz_hd_get_template( $mail_template, array( 'body' => $body, 'title' => $title, 'replyflag' => $replyflag ) );
 	return ob_get_clean();
 }
 
-function rt_biz_hd_update_ticket_updated_by_user( $post_id, $user_id ) {
+function rtbiz_hd_update_ticket_updated_by_user( $post_id, $user_id ) {
 	update_post_meta( $post_id, '_rtbiz_hd_updated_by', $user_id );
 }
 
@@ -991,7 +912,7 @@ function rt_biz_hd_update_ticket_updated_by_user( $post_id, $user_id ) {
  *
  * @return mixed
  */
-function rt_biz_hd_replace_placeholder( $str, $placeholder, $replacewith ) {
+function rtbiz_hd_replace_placeholder( $str, $placeholder, $replacewith ) {
 	return str_replace( $placeholder, $replacewith, $str );
 }
 
@@ -1003,7 +924,7 @@ function rt_biz_hd_replace_placeholder( $str, $placeholder, $replacewith ) {
  * @param int    $user_id        User ID.
  * @param string $plaintext_pass Optional. The user's plaintext password. Default empty.
  */
-function rt_biz_hd_wp_new_user_notification( $user_id, $plaintext_pass = '' ) {
+function rtbiz_hd_wp_new_user_notification( $user_id, $plaintext_pass = '' ) {
 	global $wpdb, $wp_hasher;
 
 	$user = get_userdata( $user_id );
@@ -1024,7 +945,7 @@ function rt_biz_hd_wp_new_user_notification( $user_id, $plaintext_pass = '' ) {
 	if ( empty( $plaintext_pass ) ) {
 		return; }
 
-	$settings = rt_biz_hd_get_redux_settings();
+	$settings = rtbiz_hd_get_redux_settings();
 	$module_label = 'Helpdesk';
 
 	// Generate something random for a password reset key.
@@ -1052,8 +973,8 @@ function rt_biz_hd_wp_new_user_notification( $user_id, $plaintext_pass = '' ) {
 
 }
 
-function rt_biz_hd_get_blacklist_emails() {
-	$redux = rt_biz_hd_get_redux_settings();
+function rtbiz_hd_get_blacklist_emails() {
+	$redux = rtbiz_hd_get_redux_settings();
 	$blacklist = array();
 	if ( isset( $redux['rthd_blacklist_emails_textarea'] ) && ! empty( $redux['rthd_blacklist_emails_textarea'] ) ) {
 		$blacklist = explode( "\n", $redux['rthd_blacklist_emails_textarea'] );
@@ -1068,15 +989,15 @@ function rt_biz_hd_get_blacklist_emails() {
  * @param string    $option_name        Setting option name.
  * @param string    $option_value       Setting option value.
  */
-function rt_biz_hd_set_redux_settings( $option_name, $option_value ) {
-	global $rt_hd_redux_framework_Helpdesk_Config;
-	$rt_hd_redux_framework_Helpdesk_Config->ReduxFramework->set( $option_name, $option_value );
+function rtbiz_hd_set_redux_settings( $option_name, $option_value ) {
+	global $rtbiz_hd_settings;
+	$rtbiz_hd_settings->ReduxFramework->set( $option_name, $option_value );
 }
 
 /**
  * Get taxonomy diff.
  */
-function rt_biz_hd_get_taxonomy_diff( $post_id, $tax_slug ) {
+function rtbiz_hd_get_taxonomy_diff( $post_id, $tax_slug ) {
 
 	$post_terms = wp_get_post_terms( $post_id, $tax_slug );
 	$postterms = array_filter( $_POST['tax_input'][ $tax_slug ] );
@@ -1095,7 +1016,7 @@ function rt_biz_hd_get_taxonomy_diff( $post_id, $tax_slug ) {
 		$diff_tax2[] = $tmp->name;
 	}
 
-	$diff = rt_biz_hd_text_diff( implode( ', ', $diff_tax2 ), implode( ', ', $diff_tax1 ) );
+	$diff = rtbiz_hd_text_diff( implode( ', ', $diff_tax2 ), implode( ', ', $diff_tax1 ) );
 
 	return $diff;
 }
@@ -1103,15 +1024,15 @@ function rt_biz_hd_get_taxonomy_diff( $post_id, $tax_slug ) {
 /**
  * Check whether current user has contact connection to the ticket.
  */
-function rt_biz_hd_is_ticket_contact_connection( $post_id ) {
+function rtbiz_hd_is_ticket_contact_connection( $post_id ) {
 	$flag = false;
 
 	$current_user = get_user_by( 'id', get_current_user_id() );
-	$ticket_contacts = rt_biz_get_post_for_contact_connection( $post_id, Rt_HD_Module::$post_type );
+	$ticket_contacts = rtbiz_get_post_for_contact_connection( $post_id, Rtbiz_HD_Module::$post_type );
 
 	foreach ( $ticket_contacts as $ticket_contact ) {
 
-		$contact_email = rt_biz_get_entity_meta( $ticket_contact->ID, 'contact_primary_email', true );
+		$contact_email = rtbiz_get_entity_meta( $ticket_contact->ID, 'contact_primary_email', true );
 
 		if ( $current_user->user_email == $contact_email ) {
 			$flag = true;
@@ -1124,7 +1045,7 @@ function rt_biz_hd_is_ticket_contact_connection( $post_id ) {
 /**
  * Check whether current user is subscribe to the ticket.
  */
-function rt_biz_hd_is_ticket_subscriber( $post_id ) {
+function rtbiz_hd_is_ticket_subscriber( $post_id ) {
 	$flag = false;
 
 	$current_user = get_user_by( 'id', get_current_user_id() );
@@ -1143,7 +1064,7 @@ function rt_biz_hd_is_ticket_subscriber( $post_id ) {
 /**
  * Display settings for setup weekdays and hours operation for day shift.
  */
-function rt_biz_hd_auto_response_dayshift_view() {
+function rtbiz_hd_auto_response_dayshift_view() {
 	global $rt_hd_auto_response;
 	return $rt_hd_auto_response->setting_dayshift_ui();
 }
@@ -1151,12 +1072,12 @@ function rt_biz_hd_auto_response_dayshift_view() {
 /**
  * Display settings for setup weekdays and hours operation for night shift.
  */
-function rt_biz_hd_auto_response_daynightshift_view() {
+function rtbiz_hd_auto_response_daynightshift_view() {
 	global $rt_hd_auto_response;
 	return $rt_hd_auto_response->setting_daynightshift_ui();
 }
 
-function rt_biz_hd_filter_emails( $allemails ) {
+function rtbiz_hd_filter_emails( $allemails ) {
 	//subscriber diff
 	$rtCampUser = Rt_HD_Utils::get_hd_rtcamp_user();
 	$hdUser = array();
@@ -1167,7 +1088,7 @@ function rt_biz_hd_filter_emails( $allemails ) {
 	$allemail = array();
 	foreach ( $allemails as $mail ) {
 		if ( ! array_key_exists( $mail['address'], $hdUser ) ) {
-			if ( ! rt_biz_hd_check_email_blacklisted( $mail['address'] ) ) {
+			if ( ! rtbiz_hd_check_email_blacklisted( $mail['address'] ) ) {
 				$allemail[] = $mail;
 			}
 		} else {
@@ -1177,8 +1098,8 @@ function rt_biz_hd_filter_emails( $allemails ) {
 	return array( 'subscriber' => $subscriber, 'allemail' => $allemail );
 }
 
-function rt_biz_hd_check_email_blacklisted( $testemail ) {
-	$black_list_emails = rt_biz_hd_get_blacklist_emails();
+function rtbiz_hd_check_email_blacklisted( $testemail ) {
+	$black_list_emails = rtbiz_hd_get_blacklist_emails();
 	if ( ! empty( $black_list_emails ) ) {
 		foreach ( $black_list_emails as $email ) {
 			$matching_string = str_replace( '*', '\/*', preg_replace( '/\s+/', '', $email ) );
@@ -1197,8 +1118,8 @@ function rt_biz_hd_check_email_blacklisted( $testemail ) {
  * get mailbox reading is enable or disable
  * @return bool
  */
-function rt_biz_hd_is_enable_mailbox_reading() {
-	$redux = rt_biz_hd_get_redux_settings();
+function rtbiz_hd_is_enable_mailbox_reading() {
+	$redux = rtbiz_hd_get_redux_settings();
 	$flag = ( isset( $redux['rthd_enable_mailbox_reading'] ) && 1 == $redux['rthd_enable_mailbox_reading'] );
 	return $flag;
 }
@@ -1209,7 +1130,7 @@ function rt_biz_hd_is_enable_mailbox_reading() {
  * @param string $term_id
  * @return bool|mixed
  */
-function rt_biz_hd_get_offering_meta( $key, $term_id = '' ) {
+function rtbiz_hd_get_offering_meta( $key, $term_id = '' ) {
 
 	if ( empty( $term_id ) && isset( $_GET['tag_ID'] ) ) {
 		$term_id = $_GET['tag_ID'];
@@ -1236,7 +1157,7 @@ function rt_biz_hd_get_offering_meta( $key, $term_id = '' ) {
  * @param $term_id
  * update offering meta
  */
-function rt_biz_hd_update_offering_meta( $key, $value, $term_id ) {
+function rtbiz_hd_update_offering_meta( $key, $value, $term_id ) {
 	if ( empty( $term_id ) ) {
 		return false;
 	}
@@ -1250,8 +1171,8 @@ function rt_biz_hd_update_offering_meta( $key, $value, $term_id ) {
  * Returns boolean of setting for reply via email is unable or not
  * @return bool
  */
-function rt_biz_hd_get_reply_via_email() {
-	$redux = rt_biz_hd_get_redux_settings();
+function rtbiz_hd_get_reply_via_email() {
+	$redux = rtbiz_hd_get_redux_settings();
 	return ( isset( $redux['rthd_reply_via_email'] ) && 1 == $redux['rthd_reply_via_email'] );
 }
 
@@ -1261,8 +1182,8 @@ function rt_biz_hd_get_reply_via_email() {
  *
  * @return mixed
  */
-function rt_biz_hd_is_our_employee( $userid ) {
-	return rt_biz_is_our_employee( $userid, RT_BIZ_HD_TEXT_DOMAIN );
+function rtbiz_hd_is_our_employee( $userid ) {
+	return rtbiz_is_our_employee( $userid, RTBIZ_HD_TEXT_DOMAIN );
 }
 
 /**
@@ -1273,7 +1194,7 @@ function rt_biz_hd_is_our_employee( $userid ) {
  *
  * @return bool
  */
-function rt_biz_hd_get_tickets( $key, $value ) {
+function rtbiz_hd_get_tickets( $key, $value ) {
 
 	$key_array = array( 'created_by', 'assignee', 'subscribe', 'order', 'favourite' );
 
@@ -1282,14 +1203,14 @@ function rt_biz_hd_get_tickets( $key, $value ) {
 	}
 
 	$args = array(
-		'post_type' => Rt_HD_Module::$post_type,
+		'post_type' => Rtbiz_HD_Module::$post_type,
 		'post_status' => 'any',
 		'nopaging' => true,
 		'orderby' => 'modified',
 	);
 
 	if ( 'created_by' == $key ) {
-		$value = rt_biz_hd_convert_into_userid( $value );
+		$value = rtbiz_hd_convert_into_userid( $value );
 		$args['meta_query'] = array(
 			array(
 				'key' => '_rtbiz_hd_created_by',
@@ -1297,12 +1218,12 @@ function rt_biz_hd_get_tickets( $key, $value ) {
 			),
 		);
 	} elseif ( 'assignee' == $key ) {
-		$value = rt_biz_hd_convert_into_userid( $value );
+		$value = rtbiz_hd_convert_into_userid( $value );
 		$args['author'] = $value;
 	} elseif ( 'subscribe' == $key ) {
 		// check given user is staff or contact
-		if ( rt_biz_hd_is_our_employee( $value, RT_BIZ_HD_TEXT_DOMAIN ) ) {
-			$value = rt_biz_hd_convert_into_userid( $value );
+		if ( rtbiz_hd_is_our_employee( $value, RTBIZ_HD_TEXT_DOMAIN ) ) {
+			$value = rtbiz_hd_convert_into_userid( $value );
 			$args['meta_query'] = array(
 				array(
 					'key' => '_rtbiz_hd_subscribe_to',
@@ -1311,18 +1232,18 @@ function rt_biz_hd_get_tickets( $key, $value ) {
 				),
 			);
 		} else {
-			$value = rt_biz_hd_convert_into_useremail( $value );
-			$person = rt_biz_get_contact_by_email( $value );
+			$value = rtbiz_hd_convert_into_useremail( $value );
+			$person = rtbiz_get_contact_by_email( $value );
 			if ( isset( $person ) && ! empty( $person ) ) {
 				$args['connected_items'] = $person[0]->ID;
-				$args['connected_type'] = Rt_HD_Module::$post_type . '_to_' . rtbiz_post_type_name( 'contact' );
+				$args['connected_type'] = Rtbiz_HD_Module::$post_type . '_to_' . rtbiz_post_type_name( 'contact' );
 			}
 		}
 	} elseif ( 'order' == $key ) {
 		if ( is_object( $value ) ) {
 			$value = $value->ID;
 		}
-		$user_id = rt_biz_hd_get_user_id_from_order_id( $value );
+		$user_id = rtbiz_hd_get_user_id_from_order_id( $value );
 		if ( is_admin() ) {
 			$args['meta_query'] = array(
 				'relation' => 'OR',
@@ -1347,7 +1268,7 @@ function rt_biz_hd_get_tickets( $key, $value ) {
 			);
 		}
 	} elseif ( 'favourite' == $key ) {
-		$fav = rt_biz_hd_get_user_fav_ticket( $value );
+		$fav = rtbiz_hd_get_user_fav_ticket( $value );
 		// if there is no fav tickets post__in query will not work so return empty array
 		if ( empty( $fav ) ) {
 			return array();
@@ -1368,7 +1289,7 @@ function rt_biz_hd_get_tickets( $key, $value ) {
  *
  * @return mixed
  */
-function rt_biz_hd_convert_into_userid( $value ) {
+function rtbiz_hd_convert_into_userid( $value ) {
 	if ( ! is_numeric( $value ) ) {
 		if ( is_string( $value ) ) {
 			$value = get_user_by( 'email', $value );
@@ -1387,7 +1308,7 @@ function rt_biz_hd_convert_into_userid( $value ) {
  *
  * @return mixed
  */
-function rt_biz_hd_convert_into_useremail( $value ) {
+function rtbiz_hd_convert_into_useremail( $value ) {
 	if ( ! is_string( $value ) ) {
 		if ( is_numeric( $value ) ) {
 			$value = get_user_by( 'id', $value );
@@ -1403,16 +1324,16 @@ function rt_biz_hd_convert_into_useremail( $value ) {
  * get attachment link with fancybox
  */
 
-function rt_biz_hd_get_attchment_link_with_fancybox( $attachment, $post_id = '', $echo = true ) {
+function rtbiz_hd_get_attchment_link_with_fancybox( $attachment, $post_id = '', $echo = true ) {
 	ob_start();
 	$attachment_url = wp_get_attachment_url( $attachment->ID );
 	$original_url = $attachment_url;
-	$extn = rt_biz_get_attchment_extension( $attachment_url );
+	$extn = rtbiz_get_attchment_extension( $attachment_url );
 	$class = 'rthd_attachment fancybox';
 	if ( rt_bix_is_google_doc_supported_type( $attachment->post_mime_type, $extn ) ) {
-		$attachment_url = rt_biz_google_doc_viewer_url( $attachment_url );
+		$attachment_url = rtbiz_google_doc_viewer_url( $attachment_url );
 		$class .= ' fancybox.iframe';
-	} elseif ( rt_biz_hd_is_fancybox_supported_type( $extn ) ) {
+	} elseif ( rtbiz_hd_is_fancybox_supported_type( $extn ) ) {
 		$class .= ' fancybox.iframe';
 	}
 	?>
@@ -1439,7 +1360,7 @@ function rt_biz_hd_get_attchment_link_with_fancybox( $attachment, $post_id = '',
  *
  * @return bool
  */
-function rt_biz_hd_is_fancybox_supported_type( $extation = '' ) {
+function rtbiz_hd_is_fancybox_supported_type( $extation = '' ) {
 	$extation_arr = array(
 		'mp4',
 	'mp3',
@@ -1453,12 +1374,12 @@ function rt_biz_hd_is_fancybox_supported_type( $extation = '' ) {
  *
  * @return mixed
  */
-function rt_biz_hd_get_email_template_body( $key ) {
-	if ( rt_biz_is_email_template_addon_active() && rt_biz_is_email_template_on( Rt_HD_Module::$post_type ) ) {
-		$redux = rt_biz_hd_get_redux_settings();
+function rtbiz_hd_get_email_template_body( $key ) {
+	if ( rtbiz_is_email_template_addon_active() && rtbiz_is_email_template_on( Rtbiz_HD_Module::$post_type ) ) {
+		$redux = rtbiz_hd_get_redux_settings();
 		return $redux[ $key ];
 	}
-	return rt_biz_hd_get_default_email_template( $key );
+	return rtbiz_hd_get_default_email_template( $key );
 }
 
 /**
@@ -1468,7 +1389,7 @@ function rt_biz_hd_get_email_template_body( $key ) {
  *
  * @return array|bool
  */
-function rt_biz_hd_get_default_email_template( $key = '', $all = false ) {
+function rtbiz_hd_get_default_email_template( $key = '', $all = false ) {
 	$redux = array();
 
 	//Ticket default title
@@ -1675,9 +1596,9 @@ function rt_biz_hd_get_default_email_template( $key = '', $all = false ) {
  *
  * @return mixed
  */
-function rt_biz_hd_search_non_helpdesk_users( $query, $domain_search = false, $count = false ) {
+function rtbiz_hd_search_non_helpdesk_users( $query, $domain_search = false, $count = false ) {
 	global $wpdb;
-	$helpdesk_users = rt_biz_hd_get_helpdesk_user_ids();
+	$helpdesk_users = rtbiz_hd_get_helpdesk_user_ids();
 	$q = '';
 	if ( ! empty( $helpdesk_users ) ) {
 		$q = 'AND ID not IN (' . implode( ',', $helpdesk_users ) . ')';
@@ -1701,11 +1622,11 @@ function rt_biz_hd_search_non_helpdesk_users( $query, $domain_search = false, $c
  * @return array
  * get Helpdesk user ids
  */
-function rt_biz_hd_get_helpdesk_user_ids() {
-	global $wpdb, $rt_biz_acl_model;
+function rtbiz_hd_get_helpdesk_user_ids() {
+	global $wpdb, $rtbiz_acl_model;
 	$admins = get_users( array( 'role' => 'Administrator', 'fields' => 'ID' ) );
-	//  $result  =$wpdb->get_col("SELECT DISTINCT(acl.userid) FROM ".$rt_biz_acl_model->table_name." acl where acl.module = '".RT_BIZ_HD_TEXT_DOMAIN."' and acl.permission != 0 ");
-	$result = $wpdb->get_col( 'SELECT DISTINCT(acl.userid) FROM ' . $rt_biz_acl_model->table_name . ' as acl INNER JOIN ' . $wpdb->prefix . 'p2p as p2p on ( acl.userid = p2p.p2p_to ) INNER JOIN ' . $wpdb->posts . " as posts on (p2p.p2p_from = posts.ID )  where acl.module =  '" . RT_BIZ_HD_TEXT_DOMAIN . "' and acl.permission != 0 and p2p.p2p_type = '" . rt_biz_get_contact_post_type() . "_to_user' and posts.post_status= 'publish' and posts.post_type= '" . rt_biz_get_contact_post_type() . "' " );
+	//  $result  =$wpdb->get_col("SELECT DISTINCT(acl.userid) FROM ".$rtbiz_acl_model->table_name." acl where acl.module = '".RT_BIZ_HD_TEXT_DOMAIN."' and acl.permission != 0 ");
+	$result = $wpdb->get_col( 'SELECT DISTINCT(acl.userid) FROM ' . $rtbiz_acl_model->table_name . ' as acl INNER JOIN ' . $wpdb->prefix . 'p2p as p2p on ( acl.userid = p2p.p2p_to ) INNER JOIN ' . $wpdb->posts . " as posts on (p2p.p2p_from = posts.ID )  where acl.module =  '" . RTBIZ_HD_TEXT_DOMAIN . "' and acl.permission != 0 and p2p.p2p_type = '" . rtbiz_get_contact_post_type() . "_to_user' and posts.post_status= 'publish' and posts.post_type= '" . rtbiz_get_contact_post_type() . "' " );
 	return array_merge( $admins, $result );
 }
 
@@ -1718,47 +1639,47 @@ function rt_biz_hd_get_helpdesk_user_ids() {
  * @return bool
  *
  */
-function rt_biz_hd_give_user_access( $user, $access_role, $team_term_id = 0 ) {
-	global $rt_biz_acl_model, $rt_contact;
+function rtbiz_hd_give_user_access( $user, $access_role, $team_term_id = 0 ) {
+	global $rtbiz_acl_model;
 
 	if ( ! is_object( $user ) ) {
 		$user = get_userdata( $user );
 	}
 	// get rtbiz user and set term to that user
 
-	$contact_ID = $rt_contact->export_biz_contact( $user->ID );
+	$contact_ID = rtbiz_export_contact( $user->ID );
 	if ( ! empty( $team_term_id ) ) {
-		wp_set_post_terms( $contact_ID, array( $team_term_id ), RT_Departments::$slug );
+		wp_set_post_terms( $contact_ID, array( $team_term_id ), Rtbiz_Teams::$slug );
 	}
 	// Add helpdesk role in custome table
 	$data = array(
 		'userid' => $user->ID,
-		'module' => RT_BIZ_HD_TEXT_DOMAIN,
+		'module' => RTBIZ_HD_TEXT_DOMAIN,
 		'groupid' => $team_term_id,
 		'permission' => $access_role,
 	);
-	$rt_biz_acl_model->add_acl( $data );
+	$rtbiz_acl_model->add_acl( $data );
 	// Add rtbiz role in custom table
 	$data = array(
 		'userid' => $user->ID,
-		'module' => RT_BIZ_TEXT_DOMAIN,
+		'module' => RTBIZ_TEXT_DOMAIN,
 		'groupid' => $team_term_id,
 		'permission' => $access_role,
 	);
-	$rt_biz_acl_model->add_acl( $data );
+	$rtbiz_acl_model->add_acl( $data );
 
 	if ( ! empty( $contact_ID ) && empty( $team_term_id ) ) {
-		$user_permissions = get_post_meta( $contact_ID, 'rt_biz_profile_permissions', true );
+		$user_permissions = get_post_meta( $contact_ID, 'rtbiz_profile_permissions', true );
 		$value = array(
-			RT_BIZ_HD_TEXT_DOMAIN  => $access_role,
-			RT_BIZ_TEXT_DOMAIN => $access_role,
+			RTBIZ_HD_TEXT_DOMAIN  => $access_role,
+			RTBIZ_TEXT_DOMAIN => $access_role,
 		);
 		// check existing if exist merge with that
 		if ( ! empty( $user_permissions ) && is_array( $user_permissions ) ) {
 			$value = array_merge( $value, $user_permissions );
 		}
-		update_post_meta( $contact_ID, 'rt_biz_profile_permissions', $value );
-		update_post_meta( $contact_ID, 'rt_biz_is_staff_member', 'yes' );
+		update_post_meta( $contact_ID, 'rtbiz_profile_permissions', $value );
+		update_post_meta( $contact_ID, 'rtbiz_is_staff_member', 'yes' );
 	}
 	return true;
 }
@@ -1768,16 +1689,16 @@ function rt_biz_hd_give_user_access( $user, $access_role, $team_term_id = 0 ) {
  * used in importer
  * @return mixed|void
  */
-function rt_biz_hd_get_default_support_team() {
+function rtbiz_hd_get_default_support_team() {
 	$isSyncOpt = get_option( 'rthd_default_support_team' );
 	if ( empty( $isSyncOpt ) ) {
 		$term = wp_insert_term( 'General Support', // the term
 			RT_Departments::$slug // the taxonomy
 		);
 		if ( ! empty( $term ) ) {
-			$module_permissions = get_site_option( 'rt_biz_module_permissions' );
-			$module_permissions[ RT_BIZ_HD_TEXT_DOMAIN ][ $term['term_id'] ] = Rt_Access_Control::$permissions['author']['value'];
-			update_site_option( 'rt_biz_module_permissions', $module_permissions );
+			$module_permissions = get_site_option( 'rtbiz_acl_module_permissions' );
+			$module_permissions[ RTBIZ_HD_TEXT_DOMAIN ][ $term['term_id'] ] = Rt_Access_Control::$permissions['author']['value'];
+			update_site_option( 'rtbiz_acl_module_permissions', $module_permissions );
 			update_option( 'rthd_default_support_team', $term['term_id'] );
 			$isSyncOpt = $term['term_id'];
 		}
@@ -1789,7 +1710,7 @@ function rt_biz_hd_get_default_support_team() {
  * check wizard completed
  * @return bool
  */
-function rt_biz_hd_check_wizard_completed() {
+function rtbiz_hd_check_wizard_completed() {
 	$option = get_option( 'rtbiz_helpdesk_setup_wizard_option' );
 	if ( ! empty( $option ) && 'true' == $option ) {
 		return true;
@@ -1802,13 +1723,13 @@ function rt_biz_hd_check_wizard_completed() {
  * @param $key
  * @param $val
  */
-function rt_biz_hd_set_redux_setting( $key, $val ) {
-	global $rt_hd_redux_framework_Helpdesk_Config;
-	$rt_hd_redux_framework_Helpdesk_Config->ReduxFramework->set( $key, $val );
-	$GLOBALS[ Redux_Framework_Helpdesk_Config::$hd_opt ] = get_option( Redux_Framework_Helpdesk_Config::$hd_opt, array() );
+function rtbiz_hd_set_redux_setting( $key, $val ) {
+	global $rtbiz_hd_settings;
+	$rtbiz_hd_settings->ReduxFramework->set( $key, $val );
+	$GLOBALS[ Rtbiz_HD_Settings::$hd_opt ] = get_option( Rtbiz_HD_Settings::$hd_opt, array() );
 }
 
-function rt_biz_hd_get_redux_post_settings( $post ) {
+function rtbiz_hd_get_redux_post_settings( $post ) {
 	// NOTE : Make modifications for what value to return.
 	if ( ! isset( $GLOBALS['redux_helpdesk_settings'] ) ) {
 		$GLOBALS['redux_helpdesk_settings'] = get_option( 'redux_helpdesk_settings', array() );
@@ -1818,26 +1739,26 @@ function rt_biz_hd_get_redux_post_settings( $post ) {
 	return $GLOBALS['redux_helpdesk_settings'];
 }
 
-function rt_biz_hd_ticket_import_logs() {
+function rtbiz_hd_ticket_import_logs() {
 	global $rt_hd_logs;
 	$rt_hd_logs->ui();
 }
 
-function rt_biz_hd_mailbox_setup_view() {
-	global $rt_MailBox;
-	$rt_MailBox->render_mailbox_setting_page( rt_biz_sanitize_module_key( RT_BIZ_HD_TEXT_DOMAIN ) );
+function rtbiz_hd_mailbox_setup_view() {
+	global $rtbiz_mailBox;
+	$rtbiz_mailBox->render_mailbox_setting_page( rtbiz_sanitize_module_key( RTBIZ_HD_TEXT_DOMAIN ) );
 }
 
-function rt_biz_hd_gravity_importer_view() {
-	$module_key = rt_biz_sanitize_module_key( RT_BIZ_HD_TEXT_DOMAIN );
-	return rt_biz_gravity_importer_view( $module_key );
+function rtbiz_hd_gravity_importer_view() {
+	$module_key = rtbiz_sanitize_module_key( RTBIZ_HD_TEXT_DOMAIN );
+	return rtbiz_gravity_importer_view( $module_key );
 }
 
-function rt_biz_hd_activation_view() {
+function rtbiz_hd_activation_view() {
 	do_action( 'rthelpdesk_addon_license_details' );
 }
 
-function rt_biz_hd_no_access_redux() {
+function rtbiz_hd_no_access_redux() {
 	return '<p class="description">Currently there are no settings available for you.</p>';
 }
 
@@ -1851,20 +1772,20 @@ function rt_biz_hd_no_access_redux() {
  *
  * @return void
  */
-function rt_biz_hd_admin_sidebar() {
+function rtbiz_hd_admin_sidebar() {
 	do_action( 'rthd_before_default_admin_widgets' );
 	$current_user = wp_get_current_user();
-	$message = sprintf( __( 'I use @rtbizwp on %s', RT_BIZ_HD_TEXT_DOMAIN ), home_url() ); ?>
+	$message = sprintf( __( 'I use @rtbizwp on %s', RTBIZ_HD_TEXT_DOMAIN ), home_url() ); ?>
 
 	<div class="metabox-holder bp-media-metabox-holder rthd-sidebar">
 		<div id="spread-the-word" class="postbox">
 			<h3 class="hndle"><span>Spread the Word</span></h3>
 			<div class="inside">
 				<div class="rthd-social-share" id="social">
-					<p><a href="<?php echo 'http://twitter.com/home/?status=' . $message; ?>" class="button twitter" target= "_blank" title="<?php _e( 'Post to Twitter Now', RT_BIZ_HD_TEXT_DOMAIN ) ?>"><?php _e( 'Post to Twitter', RT_BIZ_HD_TEXT_DOMAIN ) ?><span class="dashicons dashicons-twitter"></span></a></p>
-					<p><a href="<?php echo esc_url( 'https://www.facebook.com/sharer/sharer.php?u=http://rtcamp.com/helpdesk/' ); ?>" class="button facebook" target="_blank" title="<?php  _e( 'Share on Facebook Now', RT_BIZ_HD_TEXT_DOMAIN ) ?>"><?php  _e( 'Share on Facebook', RT_BIZ_HD_TEXT_DOMAIN ) ?><span class="dashicons dashicons-facebook"></span></a></p>
-					<p><a href="<?php echo esc_url( 'https://wordpress.org/support/view/plugin-reviews/rtbiz?rate=5#postform' ); ?>" class="button wordpress" target= "_blank" title="<?php _e( 'Rate rtBiz on Wordpress.org', RT_BIZ_HD_TEXT_DOMAIN ) ?>"><?php _e( 'Rate on Wordpress.org', RT_BIZ_HD_TEXT_DOMAIN ) ?><span class="dashicons dashicons-wordpress"></span></a></p>
-					<p><a href="<?php echo sprintf( '%s', 'https://rtcamp.com/feed/' ) ?>"  class="button rss" target="_blank" title="<?php _e( 'Subscribe to our Feeds', RT_BIZ_HD_TEXT_DOMAIN )  ?>"><?php _e( 'Subscribe to our Feeds', RT_BIZ_HD_TEXT_DOMAIN ) ?><span class="dashicons dashicons-rss"></span></a></p>
+					<p><a href="<?php echo 'http://twitter.com/home/?status=' . $message; ?>" class="button twitter" target= "_blank" title="<?php _e( 'Post to Twitter Now', RTBIZ_HD_TEXT_DOMAIN ) ?>"><?php _e( 'Post to Twitter', RTBIZ_HD_TEXT_DOMAIN ) ?><span class="dashicons dashicons-twitter"></span></a></p>
+					<p><a href="<?php echo esc_url( 'https://www.facebook.com/sharer/sharer.php?u=http://rtcamp.com/helpdesk/' ); ?>" class="button facebook" target="_blank" title="<?php  _e( 'Share on Facebook Now', RTBIZ_HD_TEXT_DOMAIN ) ?>"><?php  _e( 'Share on Facebook', RTBIZ_HD_TEXT_DOMAIN ) ?><span class="dashicons dashicons-facebook"></span></a></p>
+					<p><a href="<?php echo esc_url( 'https://wordpress.org/support/view/plugin-reviews/rtbiz?rate=5#postform' ); ?>" class="button wordpress" target= "_blank" title="<?php _e( 'Rate rtBiz on Wordpress.org', RTBIZ_HD_TEXT_DOMAIN ) ?>"><?php _e( 'Rate on Wordpress.org', RTBIZ_HD_TEXT_DOMAIN ) ?><span class="dashicons dashicons-wordpress"></span></a></p>
+					<p><a href="<?php echo sprintf( '%s', 'https://rtcamp.com/feed/' ) ?>"  class="button rss" target="_blank" title="<?php _e( 'Subscribe to our Feeds', RTBIZ_HD_TEXT_DOMAIN )  ?>"><?php _e( 'Subscribe to our Feeds', RTBIZ_HD_TEXT_DOMAIN ) ?><span class="dashicons dashicons-rss"></span></a></p>
 				</div>
 			</div>
 		</div>
@@ -1880,7 +1801,7 @@ function rt_biz_hd_admin_sidebar() {
 							<div class="response" id="mce-error-response" style="display:none"></div>
 							<div class="response" id="mce-success-response" style="display:none"></div>
 						</div>
-						<input type="submit" value="<?php _e( 'Subscribe', RT_BIZ_HD_TEXT_DOMAIN ) ?>" name="subscribe" id="mc-embedded-subscribe" class="button">
+						<input type="submit" value="<?php _e( 'Subscribe', RTBIZ_HD_TEXT_DOMAIN ) ?>" name="subscribe" id="mc-embedded-subscribe" class="button">
 					</div>
 				</form>
 			</div>
@@ -1892,7 +1813,7 @@ function rt_biz_hd_admin_sidebar() {
 /**
  * get contact of setup page
  */
-function rt_biz_hd_get_setup_team_ui() {
+function rtbiz_hd_get_setup_team_ui() {
 	global $rt_hd_setup_wizard;
 	ob_start();
 	$rt_hd_setup_wizard -> setup_team( false );
@@ -1906,7 +1827,7 @@ function rt_biz_hd_get_setup_team_ui() {
  *
  * @return mixed
  */
-function rt_biz_hd_get_user_id_from_order_id( $order_id ) {
+function rtbiz_hd_get_user_id_from_order_id( $order_id ) {
 	$post_type = get_post_type( $order_id );
 	if ( is_object( $order_id ) ) {
 		$order_id = $order_id->ID;
@@ -1920,7 +1841,7 @@ function rt_biz_hd_get_user_id_from_order_id( $order_id ) {
 	}
 }
 
-function rt_biz_hd_compare_wp_post( $objA, $objB ) {
+function rtbiz_hd_compare_wp_post( $objA, $objB ) {
 	if ( $objA->ID == $objB->ID ) {
 		return 0;
 	} else {

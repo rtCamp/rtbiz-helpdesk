@@ -40,11 +40,11 @@ if ( ! class_exists( 'RT_Meta_Box_Attachment' ) ) {
 					'post_type' => 'attachment',
 						) );
 			}
-			$attach_cmt = rt_biz_hd_get_attachment_url_from_followups( $post->ID );
+			$attach_cmt = rtbiz_hd_get_attachment_url_from_followups( $post->ID );
 			?>
 
 			<div id="attachment-container" class="row_group">
-				<p><a href="#" class="button" id="add_ticket_attachment"><?php _e( 'Add', RT_BIZ_HD_TEXT_DOMAIN ); ?></a></p>
+				<p><a href="#" class="button" id="add_ticket_attachment"><?php _e( 'Add', RTBIZ_HD_TEXT_DOMAIN ); ?></a></p>
 				<ul id="divAttachmentList" class="scroll-height">
 					<?php
 					foreach ( $attachments as $attachment ) {

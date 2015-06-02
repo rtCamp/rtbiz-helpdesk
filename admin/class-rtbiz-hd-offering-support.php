@@ -12,14 +12,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 
 
-if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
+if ( ! class_exists( 'Rtbiz_HD_Offering_Support' ) ) {
 
 	/**
 	 * Class Rt_HD_Offering_Support
 	 * Provide wooCommerce & EDD integration with HelpDesk for product support
 	 *
 	 */
-	class Rt_HD_Offering_Support {
+	class Rtbiz_HD_Offering_Support {
 
 		/**
 		 * @var Flag for WooCommerce active or not
@@ -84,8 +84,8 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 			add_action( 'create_term', array( $this, 'save_offerings' ), 10, 2 );
 			add_action( 'edit_term', array( $this, 'save_offerings' ), 10, 2 );
 
-			add_action( 'rt_biz_offering_column_content', array( $this, 'manage_offering_column_body' ), 10, 3 );
-			add_filter( 'rt_biz_offerings_columns', array( $this, 'manage_offering_column_header' ) );
+			add_action( 'rtbiz_offering_column_content', array( $this, 'manage_offering_column_body' ), 10, 3 );
+			add_filter( 'rtbiz_offerings_columns', array( $this, 'manage_offering_column_header' ) );
 
 			// Show tickets in woocommerce order page
 			add_action( 'woocommerce_view_order', array( $this, 'woocommerce_view_order_show_ticket' ) );
@@ -103,7 +103,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 		}
 
 		function order_post_columns_show( $value, $payment, $column_name ) {
-			if ( Rt_HD_Module::$post_type.'_order' == $column_name ) {
+			if ( Rtbiz_HD_Module::$post_type.'_order' == $column_name ) {
 				$value = $this->get_order_ticket_column_view( $payment );
 			}
 			return $value;
@@ -111,14 +111,14 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 
 		function get_order_ticket_column_view( $payment ) {
 			$posts = new WP_Query( array(
-				                       'post_type'      => Rt_HD_Module::$post_type,
+				                       'post_type'      => Rtbiz_HD_Module::$post_type,
 				                       'post_status'    => 'any',
 				                       'nopaging'       => true,
 				                       'meta_key'       => 'rtbiz_hd_order_id',
 				                       'meta_value'     => $payment,
 				                       'fields'         => 'ids',
 			                       ) );
-			return '<a target="_blank" href="'.admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&order-id='.$payment ).'">'.$posts->found_posts.'</a>';
+			return '<a target="_blank" href="'.admin_url( 'edit.php?post_type='.Rtbiz_HD_Module::$post_type.'&order-id='.$payment ).'">'.$posts->found_posts.'</a>';
 		}
 
 		/**
@@ -128,7 +128,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 		 * @return mixed
 		 */
 		function order_post_columns( $existing_columns ) {
-			$existing_columns[ Rt_HD_Module::$post_type.'_order' ] = __( 'Tickets', RT_BIZ_HD_TEXT_DOMAIN );
+			$existing_columns[ Rtbiz_HD_Module::$post_type.'_order' ] = __( 'Tickets', RTBIZ_HD_TEXT_DOMAIN );
 			return $existing_columns;
 		}
 
@@ -140,26 +140,26 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 		function manage_woo_edd_post_columns_show( $column_name, $post_id ) {
 			global $wpdb;
 			switch ( $column_name ) {
-				case Rt_HD_Module::$post_type.'_offering':
+				case Rtbiz_HD_Module::$post_type.'_offering':
 					// to find count and display
 					$tax = $wpdb->get_var( 'SELECT taxonomy_id FROM '.$wpdb->prefix.'taxonomymeta WHERE meta_key = "'.Rt_Offerings::$term_product_id_meta_key.'" AND meta_value ='.$post_id );
 					if ( ! empty( $tax ) ) {
 						$terms = get_term( $tax, Rt_Offerings::$offering_slug );
 						if ( ! is_wp_error( $terms ) ) {
 							$posts = new WP_Query( array(
-								                       'post_type'                      => Rt_HD_Module::$post_type,
+								                       'post_type'                      => Rtbiz_HD_Module::$post_type,
 								                       'post_status'                    => 'any',
 								                       'nopaging'                       => true,
 								                       Rt_Offerings::$offering_slug     => $terms->slug,
 								                       'fields'                         => 'ids',
 							                       ) );
-							echo '<a target="_blank" href="'.admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&'.Rt_Offerings::$offering_slug.'='.$terms->slug ).'">'.$posts->found_posts.'</a>';
+							echo '<a target="_blank" href="'.admin_url( 'edit.php?post_type='.Rtbiz_HD_Module::$post_type.'&'.Rt_Offerings::$offering_slug.'='.$terms->slug ).'">'.$posts->found_posts.'</a>';
 						}
 					} else {
 						echo '-';
 					}
 					break;
-				case Rt_HD_Module::$post_type.'_order':
+				case Rtbiz_HD_Module::$post_type.'_order':
 					echo $this->get_order_ticket_column_view( $post_id );
 					break;
 			}
@@ -172,7 +172,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 		 * @return mixed
 		 */
 		function manage_woo_edd_post_columns( $columns ) {
-			$columns[ Rt_HD_Module::$post_type.'_offering' ] = __( 'Tickets', RT_BIZ_HD_TEXT_DOMAIN );
+			$columns[ Rtbiz_HD_Module::$post_type.'_offering' ] = __( 'Tickets', RTBIZ_HD_TEXT_DOMAIN );
 			return $columns;
 		}
 
@@ -199,7 +199,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 		 * @return mixed
 		 */
 		function manage_offering_column_header( $columns ) {
-			$columns['default_assignee']         = __( 'Helpdesk default assignee', RT_BIZ_HD_TEXT_DOMAIN );
+			$columns['default_assignee']         = __( 'Helpdesk default assignee', RTBIZ_HD_TEXT_DOMAIN );
 			return $columns;
 		}
 
@@ -215,7 +215,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 		function manage_offering_column_body( $content, $column, $term_id ) {
 			switch ( $column ) {
 				case 'default_assignee':
-					$default_assignee = rt_biz_hd_get_offering_meta( 'default_assignee', $term_id );
+					$default_assignee = rtbiz_hd_get_offering_meta( 'default_assignee', $term_id );
 					if ( ! empty( $default_assignee ) ) {
 						$user = get_user_by( 'id', $default_assignee );
 						$content = esc_html( $user->display_name );
@@ -269,17 +269,17 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 			$users         = Rt_HD_Utils::get_hd_rtcamp_user();
 			if ( $this->is_edit_offerings( 'edit' ) ) {
 				?>
-				<h3><?php _e( 'Helpdesk Settings', RT_BIZ_HD_TEXT_DOMAIN ); ?></h3>
+				<h3><?php _e( 'Helpdesk Settings', RTBIZ_HD_TEXT_DOMAIN ); ?></h3>
 
 				<table class="form-table">
 					<tbody>
 					<tr class="form-field">
 						<th scope="row" valign="top"><label
-								for="<?php echo esc_attr( Rt_Offerings::$offering_slug ); ?>[default_assignee]"><?php _e( 'Helpdesk Default Assignee', RT_BIZ_HD_TEXT_DOMAIN ); ?></label></th>
+								for="<?php echo esc_attr( Rt_Offerings::$offering_slug ); ?>[default_assignee]"><?php _e( 'Helpdesk Default Assignee', RTBIZ_HD_TEXT_DOMAIN ); ?></label></th>
 						<td>
 							<select name="<?php echo esc_attr( Rt_Offerings::$offering_slug ); ?>[default_assignee]" id="<?php echo esc_attr( Rt_Offerings::$offering_slug ); ?>[default_assignee]" >
 								<?php
-								$selected_userid = rt_biz_hd_get_offering_meta( 'default_assignee' );
+								$selected_userid = rtbiz_hd_get_offering_meta( 'default_assignee' );
 								if ( empty( $selected_userid ) ) {
 									echo '<option disabled selected value="0"> -- select an assignee -- </option>';
 								} else {
@@ -296,7 +296,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 								?>
 							</select>
 
-							<p class="description"><?php _e( 'All new support request for this offering will be assigned to selected user.', RT_BIZ_HD_TEXT_DOMAIN ); ?></p>
+							<p class="description"><?php _e( 'All new support request for this offering will be assigned to selected user.', RTBIZ_HD_TEXT_DOMAIN ); ?></p>
 						</td>
 					</tr>
 					</tbody>
@@ -305,7 +305,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 
 				<div class="form-field">
 					<p>
-						<label for="<?php echo esc_attr( Rt_Offerings::$offering_slug ); ?>[default_assignee]"><?php _e( 'Helpdesk Default Assignee', RT_BIZ_HD_TEXT_DOMAIN ); ?></label>
+						<label for="<?php echo esc_attr( Rt_Offerings::$offering_slug ); ?>[default_assignee]"><?php _e( 'Helpdesk Default Assignee', RTBIZ_HD_TEXT_DOMAIN ); ?></label>
 						<select name="<?php echo esc_attr( Rt_Offerings::$offering_slug ); ?>[default_assignee]" id="<?php echo esc_attr( Rt_Offerings::$offering_slug ); ?>[default_assignee]" >
 							<option disabled selected > -- select an assignee -- </option>
 							<?php
@@ -315,7 +315,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 							?>
 						</select>
 					</p>
-					<p class="description"><?php _e( 'All new support request for this offering will be assigned to selected user.', RT_BIZ_HD_TEXT_DOMAIN ); ?></p>
+					<p class="description"><?php _e( 'All new support request for this offering will be assigned to selected user.', RTBIZ_HD_TEXT_DOMAIN ); ?></p>
 				</div>
 			<?php }
 		}
@@ -402,7 +402,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 							$status = wc_get_order_status_name( $payment->post_status );
 							$link = get_edit_post_link( $payment->ID );
 						}
-						echo '<li><a href="' . $link . '">' . sprintf( __( 'Order #%d', RT_BIZ_HD_TEXT_DOMAIN ), $payment->ID ) . '</a> <div class="rthd_order_status">'. $status .'</div></li>';
+						echo '<li><a href="' . $link . '">' . sprintf( __( 'Order #%d', RTBIZ_HD_TEXT_DOMAIN ), $payment->ID ) . '</a> <div class="rthd_order_status">'. $status .'</div></li>';
 					}
 					echo '</ul>';
 					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_wrapper_end', '</div>' );
@@ -465,7 +465,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 				$page = get_post( $redux_helpdesk_settings['rthd_support_page'] );
 				?>
 				<td class="edd_rt_hd_support"><a
-						href="<?php echo "/{$page->post_name}/?product_id={$download_id}&order_id={$payment_id}&order_type=edd"; ?>"><?php _e( 'Create Ticket', RT_BIZ_HD_TEXT_DOMAIN ) ?></a>
+						href="<?php echo "/{$page->post_name}/?product_id={$download_id}&order_id={$payment_id}&order_type=edd"; ?>"><?php _e( 'Create Ticket', RTBIZ_HD_TEXT_DOMAIN ) ?></a>
 				</td>
 			<?php
 			}
@@ -489,7 +489,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 				$page                 = get_post( $redux_helpdesk_settings['rthd_support_page'] );
 				$actions['support'] = array(
 					'url'  => "/{$page->post_name}/?order_id={$order->id}&order_type=woocommerce",
-					'name' => __( 'Create Ticket', RT_BIZ_HD_TEXT_DOMAIN ),
+					'name' => __( 'Create Ticket', RTBIZ_HD_TEXT_DOMAIN ),
 				);
 			}
 			return $actions;
@@ -500,7 +500,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 		 */
 		function check_active_plugin() {
 
-			$activePlugin  = rt_biz_get_offering_selection_setting();
+			$activePlugin  = rtbiz_get_offering_selection_setting();
 			if ( ! empty( $activePlugin ) && is_plugin_active( 'woocommerce/woocommerce.php' ) && in_array( 'woocommerce', $activePlugin ) ) {
 				$this->isWoocommerceActive = true;
 				$this->activePostType = 'product';
@@ -540,7 +540,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 				return false;
 			}
 
-			if ( rt_biz_hd_check_email_blacklisted( $_POST['post']['email'][0] ) ) {
+			if ( rtbiz_hd_check_email_blacklisted( $_POST['post']['email'][0] ) ) {
 				echo '<div id="info" class="error rthd-notice">You have been blocked from the system.</div>';
 				return false;
 			}
@@ -561,7 +561,7 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 					$allemails[] = array( 'address' => $email );
 				}
 			}
-			$emails_array = rt_biz_hd_filter_emails( $allemails );
+			$emails_array = rtbiz_hd_filter_emails( $allemails );
 			$subscriber = $emails_array['subscriber'];
 			$allemail = $emails_array['allemail'];
 
@@ -607,15 +607,15 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 		 *
 		 */
 		static function insert_attachment( $file_handler ) {
-			global $rt_biz_hd_admin;
+			global $rtbiz_hd_admin;
 			// check to make sure its a successful upload
 			if ( UPLOAD_ERR_OK !== $file_handler['error'] ) {
 				__return_empty_array();
 			}
 
-			add_filter( 'upload_dir', array( $rt_biz_hd_admin, 'custom_upload_dir' ) );//added hook for add addon specific folder for attachment
+			add_filter( 'upload_dir', array( $rtbiz_hd_admin, 'custom_upload_dir' ) );//added hook for add addon specific folder for attachment
 			$uploaded = wp_upload_bits( $file_handler['name'], null, file_get_contents( $file_handler['tmp_name'] ) );
-			remove_filter( 'upload_dir', array( $rt_biz_hd_admin, 'custom_upload_dir' ) );//remove hook for add addon specific folder for attachment
+			remove_filter( 'upload_dir', array( $rtbiz_hd_admin, 'custom_upload_dir' ) );//remove hook for add addon specific folder for attachment
 
 			$file = array();
 			if ( false == $uploaded['error'] ) {
@@ -643,14 +643,14 @@ if ( ! class_exists( 'Rt_HD_Offering_Support' ) ) {
 			$data = $_POST['post'];
 
 			// adult filter
-			if ( rt_biz_hd_get_redux_adult_filter() ) {
+			if ( rtbiz_hd_get_redux_adult_filter() ) {
 				$adultval = '';
 				if ( isset( $data['adult_ticket'] ) ) {
 					$adultval = 'yes';
 				} else {
 					$adultval = 'no';
 				}
-				rt_biz_hd_save_adult_ticket_meta( $rt_hd_tickets_id, $adultval );
+				rtbiz_hd_save_adult_ticket_meta( $rt_hd_tickets_id, $adultval );
 			}
 
 			if ( isset( $data['product_id'] ) ) {

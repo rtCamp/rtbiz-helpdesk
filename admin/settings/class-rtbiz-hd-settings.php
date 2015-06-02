@@ -15,9 +15,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author udit
  *
  * */
-if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
+if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 
-	class Redux_Framework_Helpdesk_Config {
+	class Rtbiz_HD_Settings {
 
 		public $args = array();
 		public $sections = array();
@@ -41,7 +41,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 		}
 
 		function rthd_offering_setting( $setting ) {
-			$redux = rt_biz_hd_get_redux_settings();
+			$redux = rtbiz_hd_get_redux_settings();
 			if ( ! empty( $redux['offering_plugin'] ) ) {
 				if ( empty( $redux['offering_plugin'] ) ) {
 					$redux['offering_plugin'] = array();
@@ -62,9 +62,9 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			}
 
 			if ( ! empty( $diff ) ) {
-				update_option( 'rtbiz_offering_plugin_synx', 'true' );
+				update_option( 'rtbiz_offering_plugin_sync', 'true' );
 			} else {
-				update_option( 'rtbiz_offering_plugin_synx', 'false' );
+				update_option( 'rtbiz_offering_plugin_sync', 'false' );
 			}
 		}
 
@@ -76,7 +76,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			//			$this->set_helptabs();
 
 			// Create the sections and fields
-			if ( ! empty( $_GET['page'] ) && ! empty( $_GET['post_type'] ) && self::$page_slug === $_GET['page'] && Rt_HD_Module::$post_type === $_GET['post_type'] ) {
+			if ( ! empty( $_GET['page'] ) && ! empty( $_GET['post_type'] ) && self::$page_slug === $_GET['page'] && Rtbiz_HD_Module::$post_type === $_GET['post_type'] ) {
 				$this->set_sections();
 			}
 
@@ -160,9 +160,9 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 
 		public function set_sections() {
 			//			$reply_by_email = new RT_HD_Setting_Inbound_Email();
-			$author_cap = rt_biz_get_access_role_cap( RT_BIZ_HD_TEXT_DOMAIN, 'author' );
-			$editor_cap = rt_biz_get_access_role_cap( RT_BIZ_HD_TEXT_DOMAIN, 'editor' );
-			$admin_cap  = rt_biz_get_access_role_cap( RT_BIZ_HD_TEXT_DOMAIN, 'admin' );
+			$author_cap = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' );
+			$editor_cap = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' );
+			$admin_cap  = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'admin' );
 
 			$users         = Rt_HD_Utils::get_hd_rtcamp_user();
 			$users_options = array();
@@ -179,7 +179,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				$default_assignee = strval( 1 );
 			}
 
-			$system_emails = rtmb_get_module_mailbox_emails( RT_BIZ_HD_TEXT_DOMAIN );
+			$system_emails = rtmb_get_module_mailbox_emails( RTBIZ_HD_TEXT_DOMAIN );
 
 			$mailbox_options = array();
 			foreach ( $system_emails as $email ) {
@@ -187,7 +187,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				$mailbox_options[ $email ] = $email;
 			}
 			$acl_page_link       = '<a href="' . admin_url( 'admin.php?page=' . Rt_Biz::$access_control_slug ) . '">Access Control</a> page.';
-			$offerings_page_link = '<a href="' . admin_url( 'edit-tags.php?taxonomy=' . Rt_Offerings::$offering_slug . '&post_type=' . Rt_HD_Module::$post_type ) . '">offerings</a>';
+			$offerings_page_link = '<a href="' . admin_url( 'edit-tags.php?taxonomy=' . Rt_Offerings::$offering_slug . '&post_type=' . Rtbiz_HD_Module::$post_type ) . '">offerings</a>';
 			// ACTUAL DECLARATION OF SECTIONS
 			$general_fields = array(
 				array(
@@ -247,7 +247,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						array(
 							'id'      => 'rt_hd_no_access',
 							'type'    => 'raw',
-							'content' => rt_biz_hd_no_access_redux(),
+							'content' => rtbiz_hd_no_access_redux(),
 						),
 					),
 				);
@@ -255,7 +255,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 
 			$redirect_url = get_option( 'rthd_googleapi_redirecturl' );
 			if ( ! $redirect_url ) {
-				$redirect_url = admin_url( 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&page=rthd-settings' );
+				$redirect_url = admin_url( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type . '&page=rthd-settings' );
 				update_option( 'rthd_googleapi_redirecturl', $redirect_url );
 			}
 
@@ -267,7 +267,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 					array(
 						'id'      => 'rthd_team_setup',
 						'type'    => 'raw',
-						'content' => rt_biz_hd_get_setup_team_ui(),
+						'content' => rtbiz_hd_get_setup_team_ui(),
 					),
 				),
 			);
@@ -279,7 +279,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				'type'     => 'callback',
 				'title'    => 'Mailboxes Setup',
 				'subtitle' => __( 'Helpdesk Configured Mailbox(s)' ),
-				'callback' => 'rt_biz_hd_mailbox_setup_view',
+				'callback' => 'rtbiz_hd_mailbox_setup_view',
 			) );
 
 			if ( ! empty( $system_emails ) ) {
@@ -355,7 +355,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				'fields'      => $email_fields,
 			);
 
-			if ( rt_biz_is_email_template_addon_active() && rt_biz_is_email_template_on( Rt_HD_Module::$post_type ) ) {
+			if ( rtbiz_is_email_template_addon_active() && rtbiz_is_email_template_on( Rtbiz_HD_Module::$post_type ) ) {
 				$this->sections = apply_filters( 'rthd_email_templates_settings', $this->sections );
 			}
 			$this->sections[] = array(
@@ -607,7 +607,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'title'    => __( 'Configure working time for dayshift' ),
 						'subtitle' => __( 'Add hours of operation' ),
 						'desc'     => '',
-						'callback' => 'rt_biz_hd_auto_response_dayshift_view',
+						'callback' => 'rtbiz_hd_auto_response_dayshift_view',
 					),
 					array(
 						'id'     => 'section-auto-response-dayshift-end',
@@ -629,7 +629,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'title'    => __( 'Configure working time for nightshift' ),
 						'subtitle' => __( 'Add hours of operation' ),
 						'desc'     => '',
-						'callback' => 'rt_biz_hd_auto_response_daynightshift_view',
+						'callback' => 'rtbiz_hd_auto_response_daynightshift_view',
 					),
 					array(
 						'id'     => 'section-auto-response-nightshift-end',
@@ -689,7 +689,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 							array(
 								'id'      => 'rthd_ticket_import_view',
 								'type'    => 'raw',
-								'content' => rt_biz_hd_gravity_importer_view(),
+								'content' => rtbiz_hd_gravity_importer_view(),
 							),
 						),
 					);*/
@@ -703,7 +703,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 								array(
 									'id'      => 'rthd_ticket_import_view',
 									'type'    => 'raw',
-									'content' => rt_biz_gravity_importer_mapper_view(),
+									'content' => rtbiz_gravity_importer_mapper_view(),
 								),
 							),
 						);*/
@@ -711,7 +711,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 			// Only initiates in case of settings page is getting displayed. Not otherwise
 			/*if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] == self::$page_slug ) {
 				ob_start();
-				rt_biz_hd_ticket_import_logs();
+				rtbiz_hd_ticket_import_logs();
 				$import_log_content = ob_get_clean();
 			} else {
 				$import_log_content = '';
@@ -723,7 +723,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				'subsection'  => true,
 				'fields'      => array(
 					array(
-						'id'      => 'rt_biz_hd_ticket_import_logs',
+						'id'      => 'rtbiz_hd_ticket_import_logs',
 						'type'    => 'raw',
 						'content' => $import_log_content,
 					),
@@ -740,7 +740,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 						'type'     => 'callback',
 						'title'    => __( 'Plugin Activation' ),
 						'subtitle' => __( 'Enter License Key and Activate plugin' ),
-						'callback' => 'rt_biz_hd_activation_view',
+						'callback' => 'rtbiz_hd_activation_view',
 					),
 				),
 			);
@@ -773,7 +773,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 		public function set_arguments() {
 
 			//$theme = wp_get_theme(); // For use with some settings. Not necessary.
-			$admin_cap = rt_biz_get_access_role_cap( RT_BIZ_HD_TEXT_DOMAIN, 'admin' );
+			$admin_cap = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'admin' );
 
 			$this->args = array(
 				// TYPICAL -> Change these values as you need/desire
@@ -781,7 +781,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				// This is where your data is stored in the database and also becomes your global variable name.
 				'display_name'       => __( 'Settings' ),
 				// Name that appears at the top of your panel
-				'display_version'    => RT_BIZ_HD_VERSION,
+				'display_version'    => RTBIZ_HD_VERSION,
 				// Version that appears at the top of your panel
 				'menu_type'          => 'submenu',
 				//Specify if the admin menu should appear or not. Options: menu or submenu (Under appearance only)
@@ -809,7 +809,7 @@ if ( ! class_exists( 'Redux_Framework_Helpdesk_Config' ) ) {
 				// OPTIONAL -> Give you extra features
 				'page_priority'      => null,
 				// Order where the menu appears in the admin area. If there is any conflict, something will not show. Warning.
-				'page_parent'        => 'edit.php?post_type=' . esc_attr( Rt_HD_Module::$post_type ),
+				'page_parent'        => 'edit.php?post_type=' . esc_attr( Rtbiz_HD_Module::$post_type ),
 				// For a full list of options, visit: http://codex.wordpress.org/Function_Reference/add_submenu_page#Parameters
 				'page_permissions'   => $admin_cap,
 				// Permissions needed to access the options panel.

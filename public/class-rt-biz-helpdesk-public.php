@@ -26,15 +26,15 @@ class Rt_Biz_Helpdesk_Public {
 		global $wp_query, $post;
 
 		// include this css everywhere
-		wp_enqueue_style( 'rthd-common-css', RT_HD_URL. 'public/css/rthd-common.css', array(), RT_BIZ_HD_VERSION, 'all' );
+		wp_enqueue_style( 'rthd-common-css', RTBIZ_HD_URL. 'public/css/rthd-common.css', array(), RTBIZ_HD_VERSION, 'all' );
 
 		// bail if not helpdesk
-		if ( ! isset( $wp_query->query_vars['post_type'] ) || $wp_query->query_vars['post_type'] != Rt_HD_Module::$post_type || empty( $post ) ) {
+		if ( ! isset( $wp_query->query_vars['post_type'] ) || $wp_query->query_vars['post_type'] != Rtbiz_HD_Module::$post_type || empty( $post ) ) {
 			return;
 		}
-		wp_enqueue_style( 'rthd-main-css', RT_HD_URL . 'public/css/rthd-main.css', array(), RT_BIZ_HD_VERSION, 'all' );
+		wp_enqueue_style( 'rthd-main-css', RTBIZ_HD_URL . 'public/css/rthd-main.css', array(), RTBIZ_HD_VERSION, 'all' );
 		//fancybox
-		wp_enqueue_style( 'jquery-fancybox', RT_HD_URL . 'public/css/jquery.fancybox.css', array(), RT_BIZ_HD_VERSION, 'all' );
+		wp_enqueue_style( 'jquery-fancybox', RTBIZ_HD_URL . 'public/css/jquery.fancybox.css', array(), RTBIZ_HD_VERSION, 'all' );
 
 	}
 
@@ -42,14 +42,14 @@ class Rt_Biz_Helpdesk_Public {
 		global $wp_query, $post;
 
 		// bail if not helpdesk
-		if ( ! isset( $wp_query->query_vars['post_type'] ) || $wp_query->query_vars['post_type'] != Rt_HD_Module::$post_type || empty( $post ) ) {
+		if ( ! isset( $wp_query->query_vars['post_type'] ) || $wp_query->query_vars['post_type'] != Rtbiz_HD_Module::$post_type || empty( $post ) ) {
 			return;
 		}
 
-		wp_enqueue_script( 'rthd-app-js', RT_HD_URL . 'public/js/helpdesk-min.js', array( 'jquery' ), RT_BIZ_HD_VERSION, true );
+		wp_enqueue_script( 'rthd-app-js', RTBIZ_HD_URL . 'public/js/helpdesk-min.js', array( 'jquery' ), RTBIZ_HD_VERSION, true );
 
 		//fancybox
-		wp_enqueue_script( 'jquery-fancybox', RT_HD_URL . 'public/js/vendors/lightbox/jquery.fancybox.pack.js', array( 'jquery' ), RT_BIZ_HD_VERSION, true );
+		wp_enqueue_script( 'jquery-fancybox', RTBIZ_HD_URL . 'public/js/vendors/lightbox/jquery.fancybox.pack.js', array( 'jquery' ), RTBIZ_HD_VERSION, true );
 		$this->localize_scripts();
 	}
 

@@ -4,9 +4,9 @@
  *
  * @author udit
  */
-global $rt_hd_dashboard;
-$author_cap = rt_biz_get_access_role_cap( RT_BIZ_HD_TEXT_DOMAIN, 'author' );
-$settings = rt_biz_hd_get_redux_settings();
+global $rtbiz_hd_dashboard;
+$author_cap = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' );
+$settings = rtbiz_hd_get_redux_settings();
 $welcome_label = 'Helpdesk';
 ?>
 <div class="wrap">
@@ -29,7 +29,7 @@ $welcome_label = 'Helpdesk';
 
 		<div id="welcome-panel" class="<?php echo esc_attr( $classes ); ?>">
 			<?php wp_nonce_field( 'rthd-welcome-panel-nonce', 'rthdwelcomepanelnonce', false ); ?>
-			<a class="welcome-panel-close" href="<?php echo esc_url( admin_url( 'admin.php?page=rthd-' . esc_html( Rt_HD_Module::$post_type ) . '-dashboard&rthdwelcome=0' ) ); ?>"><?php _e( 'Dismiss' ); ?></a>
+			<a class="welcome-panel-close" href="<?php echo esc_url( admin_url( 'admin.php?page=rthd-' . esc_html( Rtbiz_HD_Module::$post_type ) . '-dashboard&rthdwelcome=0' ) ); ?>"><?php _e( 'Dismiss' ); ?></a>
 			<?php
 			/**
 			 * Add content to the welcome panel on the admin dashboard.

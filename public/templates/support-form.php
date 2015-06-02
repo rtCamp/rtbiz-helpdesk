@@ -1,4 +1,4 @@
-<div class="rthd-support-title"><?php _e( 'Get Support', RT_BIZ_HD_TEXT_DOMAIN ); ?></div>
+<div class="rthd-support-title"><?php _e( 'Get Support', RTBIZ_HD_TEXT_DOMAIN ); ?></div>
 <form method="post" class="pure-form rthd_support_from" enctype="multipart/form-data">
 
 	<?php if ( isset( $_REQUEST['order_id'] ) ) { ?>
@@ -86,15 +86,15 @@
 	<?php
 	//is ticket have adult content
 
-	if ( rt_biz_hd_get_redux_adult_filter() ) {
+	if ( rtbiz_hd_get_redux_adult_filter() ) {
 		?>
 		<div>
 			<input type="checkbox" name="post[adult_ticket]" value="1"/>
-			<span class="description"><?php _e( 'Adult Content', RT_BIZ_HD_TEXT_DOMAIN ); ?></span>
+			<span class="description"><?php _e( 'Adult Content', RTBIZ_HD_TEXT_DOMAIN ); ?></span>
 			<span class="rthd-tooltip">
 				<i class="dashicons dashicons-info rtmicon"></i>
 				<span class="rthd-tip">
-					<?php _e( 'My site has adult content', RT_BIZ_HD_TEXT_DOMAIN ); ?>
+					<?php _e( 'My site has adult content', RTBIZ_HD_TEXT_DOMAIN ); ?>
 				</span>
 			</span>
 		</div>

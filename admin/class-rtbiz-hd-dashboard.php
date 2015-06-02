@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
+if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 
 	/**
 	 * Class Rt_HD_Dashboard
@@ -15,7 +15,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 	 *
 	 * @since 0.1
 	 */
-	class Rt_HD_Dashboard {
+	class Rtbiz_HD_Dashboard {
 
 		/**
 		 * @var string screen id for dashboard
@@ -49,7 +49,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		}
 
 		public function add_helpdesk_link() {
-			?><a id="rtbiz-customize-helpdesk" class="button button-primary button-hero" href="<?php echo admin_url( 'admin.php?page=rthd-' . Rt_HD_Module::$post_type . '-dashboard' ); ?>"><?php _e( 'Helpdesk' ); ?></a><?php
+			?><a id="rtbiz-customize-helpdesk" class="button button-primary button-hero" href="<?php echo admin_url( 'admin.php?page=rthd-' . Rtbiz_HD_Module::$post_type . '-dashboard' ); ?>"><?php _e( 'Helpdesk' ); ?></a><?php
 		}
 
 		/**
@@ -65,7 +65,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		 * Setup default value for dashboard.
 		 */
 		function setup_defaults() {
-			if ( ! empty( $_REQUEST['page'] ) && 'rthd-' . Rt_HD_Module::$post_type . '-dashboard' == $_REQUEST['page'] && ! metadata_exists( 'user', get_current_user_id(), 'show_rt_hd_welcome_panel' ) ) {
+			if ( ! empty( $_REQUEST['page'] ) && 'rthd-' . Rtbiz_HD_Module::$post_type . '-dashboard' == $_REQUEST['page'] && ! metadata_exists( 'user', get_current_user_id(), 'show_rt_hd_welcome_panel' ) ) {
 				update_user_meta( get_current_user_id(), 'show_rt_hd_welcome_panel', 1 );
 			}
 		}
@@ -77,11 +77,11 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		 */
 		function register_dashboard() {
 
-			if ( rt_biz_hd_check_wizard_completed() ) {
+			if ( rtbiz_hd_check_wizard_completed() ) {
 
-				$author_cap = rt_biz_get_access_role_cap( RT_BIZ_HD_TEXT_DOMAIN, 'author' );
+				$author_cap = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' );
 
-				$this->screen_id = add_submenu_page( 'edit.php?post_type=' . esc_html( Rt_HD_Module::$post_type ), __( 'Dashboard', RT_BIZ_HD_TEXT_DOMAIN ), __( 'Dashboard', RT_BIZ_HD_TEXT_DOMAIN ), $author_cap, 'rthd-' . esc_html( Rt_HD_Module::$post_type ) . '-dashboard', array(
+				$this->screen_id = add_submenu_page( 'edit.php?post_type=' . esc_html( Rtbiz_HD_Module::$post_type ), __( 'Dashboard', RTBIZ_HD_TEXT_DOMAIN ), __( 'Dashboard', RTBIZ_HD_TEXT_DOMAIN ), $author_cap, 'rthd-' . esc_html( Rtbiz_HD_Module::$post_type ) . '-dashboard', array(
 					$this,
 					'dashboard_ui',
 						) );
@@ -114,7 +114,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		 * @param $post_type
 		 */
 		function dashboard_ui( $post_type ) {
-			rt_biz_hd_get_template( 'admin/dashboard.php', array( 'post_type' => $post_type ) );
+			rtbiz_hd_get_template( 'admin/dashboard.php', array( 'post_type' => $post_type ) );
 		}
 
 		/**
@@ -124,7 +124,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		 * @since 0.1
 		 */
 		function page_actions() {
-			if ( isset( $_REQUEST['page'] ) && 'rthd-' . Rt_HD_Module::$post_type . '-dashboard' === $_REQUEST['page'] ) {
+			if ( isset( $_REQUEST['page'] ) && 'rthd-' . Rtbiz_HD_Module::$post_type . '-dashboard' === $_REQUEST['page'] ) {
 				do_action( 'add_meta_boxes_' . $this->screen_id, null );
 				do_action( 'rthd_dashboard_add_meta_boxes', $this->screen_id, null );
 
@@ -151,8 +151,8 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		 * @since 0.1
 		 */
 		function render_google_charts() {
-			global $rt_hd_reports;
-			$rt_hd_reports->render_chart( $this->charts );
+			global $rtbiz_hd_reports;
+			$rtbiz_hd_reports->render_chart( $this->charts );
 		}
 
 		/**
@@ -161,57 +161,57 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		 * @since 0.1
 		 */
 		function add_dashboard_widgets() {
-			global $rt_hd_dashboard, $rt_hd_attributes_model, $rt_hd_attributes_relationship_model;
+			global $rtbiz_hd_dashboard, $rtbiz_hd_attributes_model, $rtbiz_hd_attributes_relationship_model;
 
 			/* Pie Chart - Progress Indicator (Post status based) */
-			add_meta_box( 'rthd-tickets-by-status', __( 'Tickets by Status', RT_BIZ_HD_TEXT_DOMAIN ), array(
+			add_meta_box( 'rthd-tickets-by-status', __( 'Tickets by Status', RTBIZ_HD_TEXT_DOMAIN ), array(
 				$this,
 				'tickets_by_status',
-					), $rt_hd_dashboard->screen_id, 'column1' );
+					), $rtbiz_hd_dashboard->screen_id, 'column1' );
 			/* Line Chart for Answered::Archived */
-			add_meta_box( 'rthd-daily-tickets', __( 'Daily Tickets', RT_BIZ_HD_TEXT_DOMAIN ), array(
+			add_meta_box( 'rthd-daily-tickets', __( 'Daily Tickets', RTBIZ_HD_TEXT_DOMAIN ), array(
 				$this,
 				'daily_tickets',
-					), $rt_hd_dashboard->screen_id, 'column2' );
+					), $rtbiz_hd_dashboard->screen_id, 'column2' );
 			/* Load by Team (Matrix/Table) */
-			add_meta_box( 'rthd-team-load', __( 'WorkLoad', RT_BIZ_HD_TEXT_DOMAIN ), array(
+			add_meta_box( 'rthd-team-load', __( 'WorkLoad', RTBIZ_HD_TEXT_DOMAIN ), array(
 				$this,
 				'team_load',
-					), $rt_hd_dashboard->screen_id, 'column1' );
+					), $rtbiz_hd_dashboard->screen_id, 'column1' );
 			/* Top Accounts */
 			/* add_meta_box( 'rthd-top-accounts', __( 'Top Accounts', RT_BIZ_HD_TEXT_DOMAIN ), array(
 			  $this,
 			  'top_accounts',
 			  ), $rt_hd_dashboard->screen_id, 'column4' ); */
 			/* Top Clients */
-			add_meta_box( 'rthd-top-clients', __( 'Top Customers', RT_BIZ_HD_TEXT_DOMAIN ), array(
+			add_meta_box( 'rthd-top-clients', __( 'Top Customers', RTBIZ_HD_TEXT_DOMAIN ), array(
 				$this,
 				'top_clients',
-					), $rt_hd_dashboard->screen_id, 'column2' );
+					), $rtbiz_hd_dashboard->screen_id, 'column2' );
 
-			add_meta_box( 'rthd-tickets-by-product', __( 'Tickets by Offerings', RT_BIZ_HD_TEXT_DOMAIN ), array(
+			add_meta_box( 'rthd-tickets-by-product', __( 'Tickets by Offerings', RTBIZ_HD_TEXT_DOMAIN ), array(
 				$this,
 				'tickets_by_products',
-					), $rt_hd_dashboard->screen_id, 'column1' );
+					), $rtbiz_hd_dashboard->screen_id, 'column1' );
 
-			add_meta_box( 'rthd-customer-by-product-tickets', __( 'Ticket Conversion from Sales', RT_BIZ_HD_TEXT_DOMAIN ), array(
+			add_meta_box( 'rthd-customer-by-product-tickets', __( 'Ticket Conversion from Sales', RTBIZ_HD_TEXT_DOMAIN ), array(
 				$this,
 				'tickets_by_product_purchase',
-					), $rt_hd_dashboard->screen_id, 'column2' );
-			$relations = $rt_hd_attributes_relationship_model->get_relations_by_post_type( Rt_HD_Module::$post_type );
+					), $rtbiz_hd_dashboard->screen_id, 'column2' );
+			$relations = $rtbiz_hd_attributes_relationship_model->get_relations_by_post_type( Rtbiz_HD_Module::$post_type );
 			foreach ( $relations as $r ) {
-				$attr = $rt_hd_attributes_model->get_attribute( $r->attr_id );
+				$attr = $rtbiz_hd_attributes_model->get_attribute( $r->attr_id );
 				if ( 'taxonomy' == $attr->attribute_store_as ) {
-					add_meta_box( 'rthd-tickets-by-' . $attr->attribute_name, $attr->attribute_label . ' ' . __( 'Wise Tickets', RT_BIZ_HD_TEXT_DOMAIN ), array( $this, 'dashboard_attributes_widget_content' ), $rt_hd_dashboard->screen_id, 'column1', 'default', array( 'attribute_id' => $attr->id ) );
+					add_meta_box( 'rthd-tickets-by-' . $attr->attribute_name, $attr->attribute_label . ' ' . __( 'Wise Tickets', RTBIZ_HD_TEXT_DOMAIN ), array( $this, 'dashboard_attributes_widget_content' ), $rtbiz_hd_dashboard->screen_id, 'column1', 'default', array( 'attribute_id' => $attr->id ) );
 				}
 			}
 		}
 
 		function tickets_by_product_purchase( $obj, $args ) {
 
-			global $rt_hd_offering_support, $wpdb;
+			global $rtbiz_hd_offering_support, $wpdb;
 
-			$customers_userid = $rt_hd_offering_support->get_customers_userid();
+			$customers_userid = $rtbiz_hd_offering_support->get_customers_userid();
 
 			if ( empty( $customers_userid ) ) {
 				if ( ! class_exists( 'WooCommerce' ) && ! class_exists( 'Easy_Digital_Downloads' ) ) {
@@ -225,13 +225,13 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			$totalcustomers = count( $customers_userid );
 
 			$customers_userid = implode( ',', $customers_userid );
-			$query = $wpdb->prepare( "SELECT count( distinct( meta_value ) ) FROM $wpdb->posts INNER JOIN  $wpdb->postmeta ON post_id = ID  WHERE post_status <> 'trash' and post_type = %s and meta_key = '_rtbiz_hd_created_by' and meta_value in ( " . $customers_userid . ' )', Rt_HD_Module::$post_type );
+			$query = $wpdb->prepare( "SELECT count( distinct( meta_value ) ) FROM $wpdb->posts INNER JOIN  $wpdb->postmeta ON post_id = ID  WHERE post_status <> 'trash' and post_type = %s and meta_key = '_rtbiz_hd_created_by' and meta_value in ( " . $customers_userid . ' )', Rtbiz_HD_Module::$post_type );
 			$customers_userid = $wpdb->get_col( $query );
 			$custWithicket = 0;
 			if ( ! empty( $customers_userid ) ) {
 				$custWithicket = (int) $customers_userid[0];
 			}
-			$cols = array( __( 'Purchase', RT_BIZ_TEXT_DOMAIN ), __( 'Count', RT_BIZ_TEXT_DOMAIN ) );
+			$cols = array( __( 'Purchase', RTBIZ_HD_TEXT_DOMAIN ), __( 'Count', RTBIZ_HD_TEXT_DOMAIN ) );
 			$rows = array();
 			$rows[] = array( __( 'Customer who created Tickets' ), $custWithicket );
 			$rows[] = array( __( 'Customers have not created any Tickets' ), $totalcustomers - $custWithicket );
@@ -285,12 +285,12 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			$taxonomy = Rt_Offerings::$offering_slug;
 			$terms = get_terms( $taxonomy );
 			$data_source = array();
-			$cols = array( __( 'Offerings', RT_BIZ_TEXT_DOMAIN ), __( 'Count', RT_BIZ_TEXT_DOMAIN ) );
+			$cols = array( __( 'Offerings', RTBIZ_HD_TEXT_DOMAIN ), __( 'Count', RTBIZ_HD_TEXT_DOMAIN ) );
 			$rows = array();
-			$post_type = Rt_HD_Module::$post_type;
+			$post_type = Rtbiz_HD_Module::$post_type;
 			$total = 0;
 			if ( empty( $terms ) ) {
-				printf( 'No offerings [ products / downloads ] found. <a target="_blank" href="%s" >Add new offering</a>', admin_url( 'edit-tags.php?taxonomy=' . Rt_Offerings::$offering_slug . '&post_type=' . Rt_HD_Module::$post_type ) );
+				printf( 'No offerings [ products / downloads ] found. <a target="_blank" href="%s" >Add new offering</a>', admin_url( 'edit-tags.php?taxonomy=' . Rt_Offerings::$offering_slug . '&post_type=' . Rtbiz_HD_Module::$post_type ) );
 				return;
 			}
 			if ( ! $terms instanceof WP_Error ) {
@@ -335,11 +335,11 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		 * @since 0.1
 		 */
 		function tickets_by_status() {
-			global $rt_hd_module, $wpdb;
-			$settings = rt_biz_hd_get_redux_settings();
-			$table_name = rt_biz_hd_get_ticket_table_name();
+			global $rtbiz_hd_module, $wpdb;
+			$settings = rtbiz_hd_get_redux_settings();
+			$table_name = rtbiz_hd_get_ticket_table_name();
 			$post_statuses = array();
-			foreach ( $rt_hd_module->statuses as $status ) {
+			foreach ( $rtbiz_hd_module->statuses as $status ) {
 				$post_statuses[ $status['slug'] ] = $status['name'];
 			}
 
@@ -347,7 +347,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			$results = $wpdb->get_results( $query );
 			if ( ! empty( $results ) ) {
 				$data_source = array();
-				$cols        = array( __( 'Ticket Status', RT_BIZ_HD_TEXT_DOMAIN ), __( 'Count', RT_BIZ_HD_TEXT_DOMAIN ) );
+				$cols        = array( __( 'Ticket Status', RTBIZ_HD_TEXT_DOMAIN ), __( 'Count', RTBIZ_HD_TEXT_DOMAIN ) );
 				$rows        = array();
 				foreach ( $results as $item ) {
 					$post_status = ( isset( $post_statuses[ $item->post_status ] ) ) ? $post_statuses[ $item->post_status ] : '';
@@ -366,7 +366,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 					'chart_type'  => 'pie',
 					'data_source' => $data_source,
 					'dom_element' => 'rthd_hd_pie_tickets_by_status',
-					'options'     => array( 'title' => __( 'Status wise Tickets', RT_BIZ_HD_TEXT_DOMAIN ) ),
+					'options'     => array( 'title' => __( 'Status wise Tickets', RTBIZ_HD_TEXT_DOMAIN ) ),
 				);
 			}
 			?>
@@ -381,9 +381,9 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		 * @since 0.1
 		 */
 		function daily_tickets() {
-			global $rt_hd_module, $rt_hd_ticket_history_model;
+			global $rtbiz_hd_module, $rtbiz_hd_ticket_history_model;
 			$post_statuses = array();
-			foreach ( $rt_hd_module->statuses as $status ) {
+			foreach ( $rtbiz_hd_module->statuses as $status ) {
 				$post_statuses[ $status['slug'] ] = $status['name'];
 			}
 			$current_date = new DateTime();
@@ -395,7 +395,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 				'update_time' => array( 'compare' => '>=', 'value' => array( $first_date ) ),
 				'update_time' => array( 'compare' => '<=', 'value' => array( $last_date ) ),
 			);
-			$history = $rt_hd_ticket_history_model->get( $args, false, false, 'update_time asc' );
+			$history = $rtbiz_hd_ticket_history_model->get( $args, false, false, 'update_time asc' );
 
 			$month_map = array();
 			$i = 0;
@@ -420,7 +420,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			} while ( $current_date < $last_date );
 
 			$data_source = array();
-			$cols[0] = __( 'Daily Tickets', RT_BIZ_HD_TEXT_DOMAIN );
+			$cols[0] = __( 'Daily Tickets', RTBIZ_HD_TEXT_DOMAIN );
 			foreach ( $post_statuses as $status ) {
 				$cols[] = $status;
 			}
@@ -444,7 +444,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 				'data_source' => $data_source,
 				'dom_element' => 'rthd_hd_line_daily_tickets',
 				'options' => array(
-					'title' => __( 'Daily Tickets', RT_BIZ_HD_TEXT_DOMAIN ),
+					'title' => __( 'Daily Tickets', RTBIZ_HD_TEXT_DOMAIN ),
 					'vAxis' => json_encode( array( 'viewWindow' => array( 'min' => 0 ) ) ),
 				),
 			);
@@ -459,10 +459,10 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		 * @since 0.1
 		 */
 		function team_load() {
-			global $rt_hd_module, $wpdb;
-			$table_name = rt_biz_hd_get_ticket_table_name();
+			global $rtbiz_hd_module, $wpdb;
+			$table_name = rtbiz_hd_get_ticket_table_name();
 			$post_statuses = array();
-			foreach ( $rt_hd_module->statuses as $status ) {
+			foreach ( $rtbiz_hd_module->statuses as $status ) {
 				$post_statuses[ $status['slug'] ] = $status['name'];
 			}
 
@@ -486,7 +486,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 				}
 
 				$data_source = array();
-				$cols[]      = array( 'type' => 'string', 'label' => __( 'Users', RT_BIZ_HD_TEXT_DOMAIN ) );
+				$cols[]      = array( 'type' => 'string', 'label' => __( 'Users', RTBIZ_HD_TEXT_DOMAIN ) );
 				foreach ( $post_statuses as $status ) {
 					$cols[] = array( 'type' => 'number', 'label' => $status );
 				}
@@ -503,7 +503,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 						continue;
 					}
 					$url  = esc_url( add_query_arg( array(
-						                                'post_type' => Rt_HD_Module::$post_type,
+						                                'post_type' => Rtbiz_HD_Module::$post_type,
 						                                'assigned'  => $user->ID,
 					                                ), admin_url( 'edit.php' ) ) );
 					if ( ! empty( $user ) ) {
@@ -520,7 +520,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 					'chart_type'  => 'table',
 					'data_source' => $data_source,
 					'dom_element' => 'rthd_hd_table_team_load',
-					'options'     => array( 'title' => __( 'Team Load', RT_BIZ_HD_TEXT_DOMAIN ) ),
+					'options'     => array( 'title' => __( 'Team Load', RTBIZ_HD_TEXT_DOMAIN ) ),
 				);
 			}
 			?>
@@ -536,23 +536,23 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		 */
 		function top_accounts() {
 			global $wpdb;
-			$table_name = rt_biz_hd_get_ticket_table_name();
-			$account = rt_biz_get_company_post_type();
+			$table_name = rtbiz_hd_get_ticket_table_name();
+			$account = rtbiz_get_company_post_type();
 
-			$query = 'SELECT acc.ID AS account_id, acc.post_title AS account_name ' . ( ( isset( $wpdb->p2p ) ) ? ', COUNT( ticket.ID ) AS account_tickets ' : ' ' ) . "FROM {$wpdb->posts} AS acc " . ( ( isset( $wpdb->p2p ) ) ? "JOIN {$wpdb->p2p} AS p2p ON acc.ID = p2p.p2p_to " : ' ' ) . ( ( isset( $wpdb->p2p ) ) ? "JOIN {$table_name} AS ticket ON ticket.post_id = p2p.p2p_from " : ' ' ) . 'WHERE 2=2 ' . ( ( isset( $wpdb->p2p ) ) ? "AND p2p.p2p_type = '" . Rt_HD_Module::$post_type . "_to_{$account}' " : ' ' ) . "AND acc.post_type = '{$account}' " . 'GROUP BY acc.ID ' . ( ( isset( $wpdb->p2p ) ) ? 'ORDER BY account_tickets DESC ' : ' ' ) . 'LIMIT 0 , 10';
+			$query = 'SELECT acc.ID AS account_id, acc.post_title AS account_name ' . ( ( isset( $wpdb->p2p ) ) ? ', COUNT( ticket.ID ) AS account_tickets ' : ' ' ) . "FROM {$wpdb->posts} AS acc " . ( ( isset( $wpdb->p2p ) ) ? "JOIN {$wpdb->p2p} AS p2p ON acc.ID = p2p.p2p_to " : ' ' ) . ( ( isset( $wpdb->p2p ) ) ? "JOIN {$table_name} AS ticket ON ticket.post_id = p2p.p2p_from " : ' ' ) . 'WHERE 2=2 ' . ( ( isset( $wpdb->p2p ) ) ? "AND p2p.p2p_type = '" . Rtbiz_HD_Module::$post_type . "_to_{$account}' " : ' ' ) . "AND acc.post_type = '{$account}' " . 'GROUP BY acc.ID ' . ( ( isset( $wpdb->p2p ) ) ? 'ORDER BY account_tickets DESC ' : ' ' ) . 'LIMIT 0 , 10';
 
 			$results = $wpdb->get_results( $query );
 
 			$data_source = array();
 			$cols = array(
-				array( 'type' => 'string', 'label' => __( 'Account Name', RT_BIZ_HD_TEXT_DOMAIN ) ),
-				array( 'type' => 'number', 'label' => __( 'Number of Tickets', RT_BIZ_HD_TEXT_DOMAIN ) ),
+				array( 'type' => 'string', 'label' => __( 'Account Name', RTBIZ_HD_TEXT_DOMAIN ) ),
+				array( 'type' => 'number', 'label' => __( 'Number of Tickets', RTBIZ_HD_TEXT_DOMAIN ) ),
 			);
 
 			$rows = array();
 			foreach ( $results as $item ) {
 				$url = esc_url( add_query_arg( array(
-					                               'post_type'  => Rt_HD_Module::$post_type,
+					                               'post_type'  => Rtbiz_HD_Module::$post_type,
 					                               'account_id' => $item->account_id,
 				                               ), admin_url( 'edit.php' ) ) );
 				$rows[] = array(
@@ -569,7 +569,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 				'chart_type' => 'table',
 				'data_source' => $data_source,
 				'dom_element' => 'rthd_hd_table_top_accounts',
-				'options' => array( 'title' => __( 'Top Accounts', RT_BIZ_HD_TEXT_DOMAIN ) ),
+				'options' => array( 'title' => __( 'Top Accounts', RTBIZ_HD_TEXT_DOMAIN ) ),
 			);
 			?>
 			<div id="rthd_hd_table_top_accounts"></div>
@@ -583,24 +583,24 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		 */
 		function top_clients() {
 			global $wpdb;
-			$table_name = rt_biz_hd_get_ticket_table_name();
-			$contact = rt_biz_get_contact_post_type();
-			$account = rt_biz_get_company_post_type();
+			$table_name = rtbiz_hd_get_ticket_table_name();
+			$contact = rtbiz_get_contact_post_type();
+			$account = rtbiz_get_company_post_type();
 
-			$query = 'SELECT contact.ID AS contact_id, contact.post_title AS contact_name ' . ( ( isset( $wpdb->p2p ) ) ? ', COUNT( ticket.ID ) AS contact_tickets ' : ' ' ) . "FROM {$wpdb->posts} AS contact " . ( ( isset( $wpdb->p2p ) ) ? "JOIN {$wpdb->p2p} AS p2p_lc ON contact.ID = p2p_lc.p2p_to " : ' ' ) . ( ( isset( $wpdb->p2p ) ) ? "JOIN {$table_name} AS ticket ON ticket.post_id = p2p_lc.p2p_from " : ' ' ) . ( ( isset( $wpdb->p2p ) ) ? "LEFT JOIN {$wpdb->p2p} AS p2p_ac ON contact.ID = p2p_ac.p2p_to AND p2p_ac.p2p_type = '{$account}_to_{$contact}'  " : ' ' ) . 'WHERE 2=2 ' . ( ( isset( $wpdb->p2p ) ) ? "AND p2p_lc.p2p_type = '" . Rt_HD_Module::$post_type . "_to_{$contact}' " : ' ' ) . "AND contact.post_type = '{$contact}' " . ( ( isset( $wpdb->p2p ) ) ? 'AND p2p_ac.p2p_type IS NULL ' : ' ' ) . 'GROUP BY contact.ID ' . ( ( isset( $wpdb->p2p ) ) ? 'ORDER BY contact_tickets DESC ' : ' ' ) . 'LIMIT 0 , 10';
+			$query = 'SELECT contact.ID AS contact_id, contact.post_title AS contact_name ' . ( ( isset( $wpdb->p2p ) ) ? ', COUNT( ticket.ID ) AS contact_tickets ' : ' ' ) . "FROM {$wpdb->posts} AS contact " . ( ( isset( $wpdb->p2p ) ) ? "JOIN {$wpdb->p2p} AS p2p_lc ON contact.ID = p2p_lc.p2p_to " : ' ' ) . ( ( isset( $wpdb->p2p ) ) ? "JOIN {$table_name} AS ticket ON ticket.post_id = p2p_lc.p2p_from " : ' ' ) . ( ( isset( $wpdb->p2p ) ) ? "LEFT JOIN {$wpdb->p2p} AS p2p_ac ON contact.ID = p2p_ac.p2p_to AND p2p_ac.p2p_type = '{$account}_to_{$contact}'  " : ' ' ) . 'WHERE 2=2 ' . ( ( isset( $wpdb->p2p ) ) ? "AND p2p_lc.p2p_type = '" . Rtbiz_HD_Module::$post_type . "_to_{$contact}' " : ' ' ) . "AND contact.post_type = '{$contact}' " . ( ( isset( $wpdb->p2p ) ) ? 'AND p2p_ac.p2p_type IS NULL ' : ' ' ) . 'GROUP BY contact.ID ' . ( ( isset( $wpdb->p2p ) ) ? 'ORDER BY contact_tickets DESC ' : ' ' ) . 'LIMIT 0 , 10';
 
 			$results = $wpdb->get_results( $query );
 			if ( ! empty( $results ) ) {
 				$data_source = array();
 				$cols = array(
-					array( 'type' => 'string', 'label' => __( 'Contact Name', RT_BIZ_HD_TEXT_DOMAIN ) ),
-					array( 'type' => 'number', 'label' => __( 'Number of Tickets', RT_BIZ_HD_TEXT_DOMAIN ) ),
+					array( 'type' => 'string', 'label' => __( 'Contact Name', RTBIZ_HD_TEXT_DOMAIN ) ),
+					array( 'type' => 'number', 'label' => __( 'Number of Tickets', RTBIZ_HD_TEXT_DOMAIN ) ),
 				);
 
 				$rows = array();
 				foreach ( $results as $item ) {
 					$url = esc_url( add_query_arg( array(
-						                               'post_type'  => Rt_HD_Module::$post_type,
+						                               'post_type'  => Rtbiz_HD_Module::$post_type,
 						                               'contact_id' => $item->contact_id,
 					                               ), admin_url( 'edit.php' ) ) );
 					$rows[] = array(
@@ -617,7 +617,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 					'chart_type' => 'table',
 					'data_source' => $data_source,
 					'dom_element' => 'rthd_hd_table_top_clients',
-					'options' => array( 'title' => __( 'Top Clients', RT_BIZ_HD_TEXT_DOMAIN ) ),
+					'options' => array( 'title' => __( 'Top Clients', RTBIZ_HD_TEXT_DOMAIN ) ),
 				);
 			}
 			?>
@@ -638,15 +638,15 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		 */
 		function dashboard_attributes_widget_content( $obj, $args ) {
 			global $rt_hd_rt_attributes;
-			$rt_hd_attributes_model = new RT_Attributes_Model();
+			$rtbiz_hd_attributes_model = new RT_Attributes_Model();
 			$attribute_id = $args['args']['attribute_id'];
-			$attr = $rt_hd_attributes_model->get_attribute( $attribute_id );
+			$attr = $rtbiz_hd_attributes_model->get_attribute( $attribute_id );
 			$taxonomy = $rt_hd_rt_attributes->get_taxonomy_name( $attr->attribute_name );
-			$post_type = Rt_HD_Module::$post_type;
+			$post_type = Rtbiz_HD_Module::$post_type;
 			$terms = get_terms( $taxonomy );
 
 			$data_source = array();
-			$cols = array( $attr->attribute_label, __( 'Tickets', RT_BIZ_HD_TEXT_DOMAIN ) );
+			$cols = array( $attr->attribute_label, __( 'Tickets', RTBIZ_HD_TEXT_DOMAIN ) );
 			$rows = array();
 			$total = 0;
 
@@ -672,7 +672,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 				                       'fields'        => 'ids',
 			                       ) );
 
-			$rows[] = array( __( 'Others', RT_BIZ_HD_TEXT_DOMAIN ), $posts->found_posts - $total );
+			$rows[] = array( __( 'Others', RTBIZ_HD_TEXT_DOMAIN ), $posts->found_posts - $total );
 
 			$data_source['cols'] = $cols;
 			$data_source['rows'] = $rows;
@@ -711,7 +711,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 
 			check_ajax_referer( 'rthd-welcome-panel-nonce', 'rthdwelcomepanelnonce' );
 
-			$author_cap = rt_biz_get_access_role_cap( RT_BIZ_HD_TEXT_DOMAIN, 'author' );
+			$author_cap = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' );
 
 			if ( ! current_user_can( $author_cap ) ) {
 				wp_die( -1 );
@@ -736,13 +736,13 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 		 * Display welcome widget on rtHelpdesk dashboard.
 		 */
 		function rt_hd_welcome_panel() {
-			global $rt_hd_attributes;
+			global $rtbiz_hd_attributes;
 
-			$settings = rt_biz_hd_get_redux_settings();
+			$settings = rtbiz_hd_get_redux_settings();
 			$welcome_label = 'Helpdesk';
 
-			$admin_cap = rt_biz_get_access_role_cap( RT_BIZ_HD_TEXT_DOMAIN, 'admin' );
-			$editor_cap = rt_biz_get_access_role_cap( RT_BIZ_HD_TEXT_DOMAIN, 'editor' );
+			$admin_cap = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'admin' );
+			$editor_cap = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' );
 			?>
 			<div class="welcome-panel-content">
 				<h3><?php _e( 'Welcome to ' . $welcome_label ); ?></h3>
@@ -751,7 +751,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 					<div class="welcome-panel-column">
 						<?php if ( current_user_can( $admin_cap ) ) : ?>
 							<h4><?php _e( 'Get Started' ); ?></h4>
-							<a id="rt-hd-customize-biz" class="button button-primary button-hero" href="<?php echo admin_url( 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&page=' . Redux_Framework_Helpdesk_Config::$page_slug ); ?>"><?php _e( 'Helpdesk Settings' ); ?></a>
+							<a id="rt-hd-customize-biz" class="button button-primary button-hero" href="<?php echo admin_url( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type . '&page=' . Rtbiz_HD_Settings::$page_slug ); ?>"><?php _e( 'Helpdesk Settings' ); ?></a>
 						<?php endif; ?>
 					</div>
 					<div class="welcome-panel-column">
@@ -771,7 +771,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 									<?php endif; ?>
 								</div>
 								<!--<li><?php /* printf( '<a id="rtiz-add-ticket" href="%s" class="welcome-icon welcome-admin-users">' . __( 'Add new Ticket' ) . '</a>', admin_url( 'post-new.php?post_type=' . Rt_HD_Module::$post_type ) ); */ ?></li>-->
-								<li><?php printf( '<a href="%s" class="welcome-icon welcome-networking">' . __( 'Setup Attributes' ) . '</a>', admin_url( 'edit.php?post_type=' . Rt_HD_Module::$post_type . '&page=' . $rt_hd_attributes->attributes_page_slug ) ); ?></li>
+								<li><?php printf( '<a href="%s" class="welcome-icon welcome-networking">' . __( 'Setup Attributes' ) . '</a>', admin_url( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type . '&page=' . $rtbiz_hd_attributes->attributes_page_slug ) ); ?></li>
 							<?php } ?>
 						</ul>
 					</div>
@@ -781,7 +781,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 						<ul>
 							<li><?php printf( '<a href="%s" target="_blank" class="welcome-icon welcome-learn-more">' . __( 'Learn more about getting started' ) . '</a>', 'http://docs.rtcamp.com/rtbiz/' ); ?></li>
 							<?php if ( current_user_can( $editor_cap ) ) { ?>
-								<li><?php printf( '<a href="%s" class="welcome-icon welcome-universal-access-alt">' . __( 'Add new Team' ) . '</a>', admin_url( 'edit-tags.php?taxonomy=' . RT_Departments::$slug . '&post_type=' . Rt_HD_Module::$post_type ) ); ?></li>
+								<li><?php printf( '<a href="%s" class="welcome-icon welcome-universal-access-alt">' . __( 'Add new Team' ) . '</a>', admin_url( 'edit-tags.php?taxonomy=' . Rtbiz_Teams::$slug . '&post_type=' . Rtbiz_HD_Module::$post_type ) ); ?></li>
 							<?php } ?>
 						</ul>
 					</div>
@@ -857,7 +857,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 						} );
 					} );
 
-					$( '#screen-options-wrap #adv-settings .metabox-prefs' ).append( "<label for='rthd_welcome_panel-hide'><input type='checkbox' id='rthd_welcome_panel-hide' value='welcome-panel' <?php echo checked( (bool) $welcome_checked, true, false ); ?> /><?php _e( 'Welcome', RT_BIZ_HD_TEXT_DOMAIN ); ?></label>" );
+					$( '#screen-options-wrap #adv-settings .metabox-prefs' ).append( "<label for='rthd_welcome_panel-hide'><input type='checkbox' id='rthd_welcome_panel-hide' value='welcome-panel' <?php echo checked( (bool) $welcome_checked, true, false ); ?> /><?php _e( 'Welcome', RTBIZ_HD_TEXT_DOMAIN ); ?></label>" );
 				} );
 			</script>
 			<?php
@@ -894,7 +894,7 @@ if ( ! class_exists( 'Rt_HD_Dashboard' ) ) {
 			}
 			if ( ! empty( $support_page_id ) && ! $support_page_id instanceof WP_Error ) {
 				/* Set support page option. */
-				rt_biz_hd_set_redux_settings( 'rthd_support_page', $support_page_id );
+				rtbiz_hd_set_redux_settings( 'rthd_support_page', $support_page_id );
 				$response['status'] = true;
 				$response['html'] = '<li><a id="rthd-view-support-page" class="welcome-icon welcome-view-site" target="_blank" href="' . get_page_link( $support_page_id ) . '">' . __( 'View Support Page' ) . '</a></li>';
 			}

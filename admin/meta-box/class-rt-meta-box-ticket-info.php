@@ -28,9 +28,9 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 		 */
 		public static function ui( $post ) {
 
-			global $rt_hd_module, $rt_hd_attributes, $rt_hd_cpt_tickets;
-			$labels    = $rt_hd_module->labels;
-			$post_type = Rt_HD_Module::$post_type;
+			global $rtbiz_hd_module, $rtbiz_hd_attributes, $rt_hd_cpt_tickets;
+			$labels    = $rtbiz_hd_module->labels;
+			$post_type = Rtbiz_HD_Module::$post_type;
 
 			$create = new DateTime( $post->post_date );
 
@@ -55,7 +55,7 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 			<input type="hidden" name="rthd_check_matabox" value="true">
 			<div class="row_group">
 				<p>
-					<span class="prefix" title="<?php _e( 'Assignee', RT_BIZ_HD_TEXT_DOMAIN ); ?>"><label
+					<span class="prefix" title="<?php _e( 'Assignee', RTBIZ_HD_TEXT_DOMAIN ); ?>"><label
 							for="post[post_author]"><strong><?php _e( 'Assignee' ); ?></strong></label>
 					</span>
 				</p>
@@ -77,7 +77,7 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 			<div class="row_group">
 				<p>
 					<span class="prefix" title="<?php _e( 'Status' ); ?>">
-						<label><strong><?php _e( 'Status', RT_BIZ_HD_TEXT_DOMAIN ); ?></strong></label>
+						<label><strong><?php _e( 'Status', RTBIZ_HD_TEXT_DOMAIN ); ?></strong></label>
 					</span>
 				</p>
 				<?php
@@ -85,7 +85,7 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 				if ( isset( $post->ID ) ) {
 					$pstatus = $post->post_status;
 				}
-				$post_status = $rt_hd_module->get_custom_statuses();
+				$post_status = $rtbiz_hd_module->get_custom_statuses();
 
 				$default_wp_status = array( 'auto-draft', 'draft' );
 				if ( in_array( $pstatus, $default_wp_status ) ) {
@@ -111,8 +111,8 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 
 			<div class="row_group">
 				<p>
-					<span class="prefix" title="<?php _e( 'Created By', RT_BIZ_HD_TEXT_DOMAIN ); ?>">
-						<label><strong><?php _e( 'Created By', RT_BIZ_HD_TEXT_DOMAIN ); ?></strong></label>
+					<span class="prefix" title="<?php _e( 'Created By', RTBIZ_HD_TEXT_DOMAIN ); ?>">
+						<label><strong><?php _e( 'Created By', RTBIZ_HD_TEXT_DOMAIN ); ?></strong></label>
 					</span>
 				</p>
 				<!--				<input type="text" name="created_by" class="user-autocomplete" placeholder="Search for User" />-->
@@ -133,7 +133,7 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 									?>
 									<!--								<a href="#deleteContactUser" class="delete_row">×</a><br>-->
 									<a class="rthd-info-meta-created-by heading" target="_blank"
-									   href="<?php echo rt_biz_hd_biz_user_profile_link( $created_by->user_email ); ?>"><?php echo $created_by->display_name; ?></a>
+									   href="<?php echo rtbiz_hd_biz_user_profile_link( $created_by->user_email ); ?>"><?php echo $created_by->display_name; ?></a>
 									<input type="hidden" name="post[rthd_created_by]"
 									       value="<?php echo $created_by->ID; ?>"/>
 								</p>
@@ -189,8 +189,8 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 
 			<div class="row_group">
 				<p>
-					<span class="prefix" title="<?php _e( 'Created On', RT_BIZ_HD_TEXT_DOMAIN ); ?>">
-						<label><strong><?php _e( 'Created On', RT_BIZ_HD_TEXT_DOMAIN ); ?></strong></label>
+					<span class="prefix" title="<?php _e( 'Created On', RTBIZ_HD_TEXT_DOMAIN ); ?>">
+						<label><strong><?php _e( 'Created On', RTBIZ_HD_TEXT_DOMAIN ); ?></strong></label>
 					</span>
 				</p>
 
@@ -215,8 +215,8 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 				?>
 				<div class="row_group">
 					<p>
-						<span class="prefix" title="<?php _e( 'Last Reply On', RT_BIZ_HD_TEXT_DOMAIN ); ?>">
-							<label><strong><?php _e( 'Last Reply On', RT_BIZ_HD_TEXT_DOMAIN ); ?></strong></label>
+						<span class="prefix" title="<?php _e( 'Last Reply On', RTBIZ_HD_TEXT_DOMAIN ); ?>">
+							<label><strong><?php _e( 'Last Reply On', RTBIZ_HD_TEXT_DOMAIN ); ?></strong></label>
 						</span>
 					</p>
 					<input class="moment-from-now" type="text" placeholder="Last Reply On Date"
@@ -227,17 +227,17 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 			}
 
 			//adult content
-			if ( rt_biz_hd_get_redux_adult_filter() ) {
+			if ( rtbiz_hd_get_redux_adult_filter() ) {
 				$text = '';
-				$val  = rt_biz_hd_get_adult_ticket_meta( $post->ID );
+				$val  = rtbiz_hd_get_adult_ticket_meta( $post->ID );
 				if ( 'yes' == $val ) {
 					$text = 'checked="checked"';
 				}
 				?>
 				<div class="row_group">
 					<p>
-						<span class="prefix" title="<?php _e( 'Adult Content', RT_BIZ_HD_TEXT_DOMAIN ); ?>">
-							<label><strong><?php _e( 'Adult Content', RT_BIZ_HD_TEXT_DOMAIN ); ?></strong></label>
+						<span class="prefix" title="<?php _e( 'Adult Content', RTBIZ_HD_TEXT_DOMAIN ); ?>">
+							<label><strong><?php _e( 'Adult Content', RTBIZ_HD_TEXT_DOMAIN ); ?></strong></label>
 						</span>
 						<input type="checkbox" name="post[adult_ticket]" <?php echo $text; ?> value="1" />
 					</p>
@@ -246,25 +246,25 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 
 			<?php
 			$rthd_unique_id = get_post_meta( $post->ID, '_rtbiz_hd_unique_id', true );
-			if ( ! empty( $rthd_unique_id ) && rt_biz_hd_is_unique_hash_enabled() ) {
+			if ( ! empty( $rthd_unique_id ) && rtbiz_hd_is_unique_hash_enabled() ) {
 				?>
 				<div class="row_group">
 					<span class="prefix"
-					      title="<?php _e( 'Public URL', RT_BIZ_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Unique Hash URL', RT_BIZ_HD_TEXT_DOMAIN ); ?></strong></label></span>
+					      title="<?php _e( 'Public URL', RTBIZ_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Unique Hash URL', RTBIZ_HD_TEXT_DOMAIN ); ?></strong></label></span>
 
 					<div class="rthd_attr_border">
 						<a class="rthd_public_link" target="_blank"
-						   href="<?php echo rt_biz_hd_is_unique_hash_enabled() ? rt_biz_hd_get_unique_hash_url( $post->ID ) : get_post_permalink( $post->ID ); ?>"><?php _e( 'Link' ); ?></a>
+						   href="<?php echo rtbiz_hd_is_unique_hash_enabled() ? rtbiz_hd_get_unique_hash_url( $post->ID ) : get_post_permalink( $post->ID ); ?>"><?php _e( 'Link' ); ?></a>
 					</div>
 				</div>
 			<?php
 			}
 
-			$meta_attributes = rt_biz_hd_get_attributes( $post_type, 'meta' );
+			$meta_attributes = rtbiz_hd_get_attributes( $post_type, 'meta' );
 			foreach ( $meta_attributes as $attr ) {
 				?>
 				<div
-					class="row_group"><?php $rt_hd_attributes->render_meta( $attr, isset( $post->ID ) ? $post->ID : '', true ); ?>
+					class="row_group"><?php $rtbiz_hd_attributes->render_meta( $attr, isset( $post->ID ) ? $post->ID : '', true ); ?>
 				</div><?php
 			}
 
@@ -289,11 +289,11 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 			$newTicket = (array) $newTicket;
 
 			//Adult Filter
-			if ( rt_biz_hd_get_redux_adult_filter() ) {
+			if ( rtbiz_hd_get_redux_adult_filter() ) {
 				if ( ! empty( $newTicket['adult_ticket'] ) ) {
-					rt_biz_hd_save_adult_ticket_meta( $post_id, 'yes' );
+					rtbiz_hd_save_adult_ticket_meta( $post_id, 'yes' );
 				} else {
-					rt_biz_hd_save_adult_ticket_meta( $post_id, 'no' );
+					rtbiz_hd_save_adult_ticket_meta( $post_id, 'no' );
 				}
 			}
 			//Create Date
@@ -323,7 +323,7 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 
 			$dataArray = array(
 				'assignee'     => $postArray['post_author'],
-				'post_content' => rt_biz_hd_content_filter( $post->post_content ),
+				'post_content' => rtbiz_hd_content_filter( $post->post_content ),
 				'post_status'  => $post->post_status,
 				'post_title'   => $post->post_title,
 			);
@@ -338,19 +338,19 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
 		}
 
 		public static function custom_post_status_rendar() {
-			global $post, $pagenow, $rt_hd_module;
+			global $post, $pagenow, $rtbiz_hd_module;
 			$flag = false;
-			if ( isset( $post ) && ! empty( $post ) && $post->post_type === Rt_HD_Module::$post_type ) {
+			if ( isset( $post ) && ! empty( $post ) && $post->post_type === Rtbiz_HD_Module::$post_type ) {
 				if ( 'edit.php' == $pagenow || 'post-new.php' == $pagenow ) {
 					$flag = true;
 				}
 			}
-			if ( isset( $post ) && ! empty( $post ) && 'post.php' == $pagenow && get_post_type( $post->ID ) === Rt_HD_Module::$post_type ) {
+			if ( isset( $post ) && ! empty( $post ) && 'post.php' == $pagenow && get_post_type( $post->ID ) === Rtbiz_HD_Module::$post_type ) {
 				$flag = true;
 			}
 			if ( $flag ) {
 				$option      = '';
-				$post_status = $rt_hd_module->get_custom_statuses();
+				$post_status = $rtbiz_hd_module->get_custom_statuses();
 				foreach ( $post_status as $status ) {
 					if ( $post->post_status == $status['slug'] ) {
 						$complete = " selected='selected'";

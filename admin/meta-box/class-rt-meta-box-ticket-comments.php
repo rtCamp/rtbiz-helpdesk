@@ -29,11 +29,11 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Comments' ) ) {
 
 		public static function ui( $post ) {
 			$ticket_unique_id = get_post_meta( $post->ID, '_rtbiz_hd_unique_id', true );
-			rt_biz_hd_get_template( 'followup-common.php', array( 'post' => $post ) );
+			rtbiz_hd_get_template( 'followup-common.php', array( 'post' => $post ) );
 
 			// Remove this echo line if you're including add-folloup template.
 			//echo '<input id="post-id" type="hidden" value="' . esc_attr( $post->ID ) .'" />';
-			rt_biz_hd_get_template( 'ticket-add-followup-form.php', array( 'post' => $post, 'ticket_unique_id' => $ticket_unique_id ) );
+			rtbiz_hd_get_template( 'ticket-add-followup-form.php', array( 'post' => $post, 'ticket_unique_id' => $ticket_unique_id ) );
 		}
 
 	}

@@ -18,11 +18,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author udit
  * @since  rt-Helpdesk 0.1
  */
-if ( ! class_exists( 'Rt_HD_Ticket_Model' ) ) {
-	class Rt_HD_Ticket_Model extends RT_DB_Model {
+if ( ! class_exists( 'Rtbiz_HD_Ticket_Model' ) ) {
+	class Rtbiz_HD_Ticket_Model extends RT_DB_Model {
 
 		public function __construct() {
-			$table_name = rt_biz_hd_get_ticket_table_name();
+			$table_name = rtbiz_hd_get_ticket_table_name();
 			parent::__construct( $table_name, true );
 		}
 

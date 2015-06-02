@@ -9,15 +9,15 @@ get_header();
 
 do_action( 'rthd_ticket_front_page_after_header' );
 
-global $rt_hd_module, $post;
+global $rtbiz_hd_module, $post;
 $post_type     = get_post_type( $post );
-$labels        = $rt_hd_module->labels;
+$labels        = $rtbiz_hd_module->labels;
 $post_id       = $post->ID;
 $user_edit     = false;
 $assignee_info = array();
 $current_user  = get_user_by( 'id', get_current_user_id() );
 
-$cap               = rt_biz_get_access_role_cap( RT_BIZ_HD_TEXT_DOMAIN, 'author' );
+$cap               = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' );
 $user_edit_content = current_user_can( $cap );
 ?>
 	<article id="add-new-post" <?php post_class( 'rthd-container' ); ?>>
@@ -32,7 +32,7 @@ $user_edit_content = current_user_can( $cap );
 		$modify     = new DateTime( $post->post_modified );
 		$createdate = $create->format( 'M d, Y h:i A' );
 		$modifydate = $modify->format( 'M d, Y h:i A' );
-		$cap        = rt_biz_get_access_role_cap( RT_BIZ_HD_TEXT_DOMAIN, 'author' );
+		$cap        = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' );
 		?>
 
 		<header class="entry-header clearfix">
@@ -45,11 +45,11 @@ $user_edit_content = current_user_can( $cap );
 				<?php if ( isset( $post->ID ) ) { ?>
 					<div id="followup_wrapper">
 						<div id="commentlist">
-							<?php rt_biz_hd_get_template( 'followup-common.php', array( 'post' => $post ) ); ?>
+							<?php rtbiz_hd_get_template( 'followup-common.php', array( 'post' => $post ) ); ?>
 						</div>
 
 						<div class="add-followup-form">
-							<?php rt_biz_hd_get_template( 'ticket-add-followup-form.php', array(
+							<?php rtbiz_hd_get_template( 'ticket-add-followup-form.php', array(
 								'post'             => $post,
 								'ticket_unique_id' => $ticket_unique_id,
 							) ); ?>
@@ -73,7 +73,7 @@ $user_edit_content = current_user_can( $cap );
 							<?php
 							// Watch/Unwatch ticket feature.
 							$watch_unwatch_label = $watch_unwatch_value = '';
-							if ( rt_biz_hd_is_ticket_subscriber( $post->ID ) ) {
+							if ( rtbiz_hd_is_ticket_subscriber( $post->ID ) ) {
 								$watch_unwatch_label = 'Unsubscribe notifications from this ticket';
 								$watch_unwatch_value = 'unwatch';
 							} else {
@@ -93,10 +93,10 @@ $user_edit_content = current_user_can( $cap );
 								}
 								?>
 								<?php }
-								$isfav = in_array( $post->ID, rt_biz_hd_get_user_fav_ticket( get_current_user_id() ) );
+								$isfav = in_array( $post->ID, rtbiz_hd_get_user_fav_ticket( get_current_user_id() ) );
 								?>
 								<a id="ticket-add-fav" href="#"
-								   title="<?php ( $isfav ) ? _e( 'Remove this ticket from favorites', RT_BIZ_HD_TEXT_DOMAIN ) : _e( 'Favorite this ticket', RT_BIZ_HD_TEXT_DOMAIN ) ?>"><?php
+								   title="<?php ( $isfav ) ? _e( 'Remove this ticket from favorites', RTBIZ_HD_TEXT_DOMAIN ) : _e( 'Favorite this ticket', RTBIZ_HD_TEXT_DOMAIN ) ?>"><?php
 									if ( $isfav ) {
 										echo '<span class="dashicons dashicons-heart"></span>';
 									} else {
@@ -119,7 +119,7 @@ $user_edit_content = current_user_can( $cap );
 								?>
 								<select id="rthd-status-list" class="rthd-ticket-dropdown" name="rt-hd-status" class="">
 									<?php
-									$post_statuses = $rt_hd_module->get_custom_statuses();
+									$post_statuses = $rtbiz_hd_module->get_custom_statuses();
 									foreach ( $post_statuses as $status ) {
 										$selected = ( $status['slug'] == $post->post_status ) ? 'selected' : '';
 										?>
@@ -130,7 +130,7 @@ $user_edit_content = current_user_can( $cap );
 								               src="<?php echo admin_url() . 'images/spinner.gif'; ?>" /><?php
 							} else if ( isset( $post->ID ) ) {
 								$pstatus = $post->post_status;
-								echo '<div id="rthd-status-visiable" >' . rt_biz_hd_status_markup( $pstatus ) . '</div>';
+								echo '<div id="rthd-status-visiable" >' . rtbiz_hd_status_markup( $pstatus ) . '</div>';
 							}
 							?>
 						</div>
@@ -142,7 +142,7 @@ $user_edit_content = current_user_can( $cap );
 						<div class="rt-hd-ticket-sub-row">
 							<div class="rthd-ticket-sidebar-sub-result clearfix">
 								<label for="rthd-assignee-list">
-									<?php _e( 'Assignee', RT_BIZ_HD_TEXT_DOMAIN ); ?>
+									<?php _e( 'Assignee', RTBIZ_HD_TEXT_DOMAIN ); ?>
 								</label>
 								<select id="rthd-assignee-list" class="rthd-ticket-dropdown" name="rt-hd-assignee">
 									<?php
@@ -168,7 +168,7 @@ $user_edit_content = current_user_can( $cap );
 								<input type="hidden" class="rthd-current-user-id"
 								       value="<?php echo get_current_user_id(); ?>"/>
 								<a style="<?php echo $assign_tome_style; ?>" href="#"
-								   class="rt-hd-assign-me"><?php _e( 'Assign me', RT_BIZ_HD_TEXT_DOMAIN ); ?></a>
+								   class="rt-hd-assign-me"><?php _e( 'Assign me', RTBIZ_HD_TEXT_DOMAIN ); ?></a>
 								<img id="assignee-change-spinner" class="helpdeskspinner"
 								     src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
 							</div>
@@ -179,10 +179,10 @@ $user_edit_content = current_user_can( $cap );
 					$create_by_time     = esc_attr( human_time_diff( strtotime( $createdate ), current_time( 'timestamp' ) ) ) . ' ago';
 					$created_by         = get_user_by( 'id', get_post_meta( $post->ID, '_rtbiz_hd_created_by', true ) );
 
-					global $wpdb, $rt_hd_email_notification;
+					global $wpdb, $rtbiz_hd_email_notification;
 
 					// get all followup author ( aka followup email list ) to display their avatar
-					$emails = $wpdb->get_results( 'SELECT distinct(comment_author_email) from ' . $wpdb->comments . ' where comment_post_ID= ' . $post->ID . ' AND comment_type=' . Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC );
+					$emails = $wpdb->get_results( 'SELECT distinct(comment_author_email) from ' . $wpdb->comments . ' where comment_post_ID= ' . $post->ID . ' AND comment_type=' . Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC );
 					$emails = wp_list_pluck( $emails, 'comment_author_email' );
 
 					$emails = array_diff( $emails, array( $created_by->user_email ) );
@@ -190,13 +190,13 @@ $user_edit_content = current_user_can( $cap );
 					$comment = get_comments( array( 'post_id' => $post->ID, 'number' => 1 ) );
 
 					// get connected contacts email address
-					$other_contacts = $rt_hd_email_notification->get_contacts( $post->ID );
+					$other_contacts = $rtbiz_hd_email_notification->get_contacts( $post->ID );
 					$subscriber     = array();
 
 					// show subscriber to only authorized users
 					if ( current_user_can( $cap ) ) {
 
-						$subscriber = $rt_hd_email_notification->get_subscriber( $post->ID );
+						$subscriber = $rtbiz_hd_email_notification->get_subscriber( $post->ID );
 						$subscriber = wp_list_pluck( $subscriber, 'email' );
 						// remove subscriber from followup email list
 						$subscriber = array_diff( $subscriber, $emails );
@@ -293,7 +293,7 @@ $user_edit_content = current_user_can( $cap );
 
 							<?php
 							if ( ! empty( $created_by ) ) {
-								echo ' <a class="rthd-ticket-created-by" title="Created by ' . $created_by->display_name . ' ' . $create_by_time . '" href="' . ( current_user_can( $cap ) ? rt_biz_hd_biz_user_profile_link( $created_by->user_email ) : '#' ) . '">' . get_avatar( $created_by->user_email, '30' ) . '</a>';
+								echo ' <a class="rthd-ticket-created-by" title="Created by ' . $created_by->display_name . ' ' . $create_by_time . '" href="' . ( current_user_can( $cap ) ? rtbiz_hd_biz_user_profile_link( $created_by->user_email ) : '#' ) . '">' . get_avatar( $created_by->user_email, '30' ) . '</a>';
 							}
 							// contact group
 							foreach ( $other_contacts as $email ) {
@@ -306,7 +306,7 @@ $user_edit_content = current_user_can( $cap );
 									$display_name = $user->display_name;
 								}
 
-								echo '<a title= "' . $display_name . '" class="rthd-last-reply-by rthd-contact-avatar-no-reply"  href="' . ( current_user_can( $cap ) ? rt_biz_hd_biz_user_profile_link( $email ) : '#' ) . '">' . get_avatar( $email, '30' ) . ' </a>';
+								echo '<a title= "' . $display_name . '" class="rthd-last-reply-by rthd-contact-avatar-no-reply"  href="' . ( current_user_can( $cap ) ? rtbiz_hd_biz_user_profile_link( $email ) : '#' ) . '">' . get_avatar( $email, '30' ) . ' </a>';
 							}
 
 							if ( current_user_can( $cap ) ) {
@@ -317,7 +317,7 @@ $user_edit_content = current_user_can( $cap );
 									if ( ! empty( $user ) ) {
 										$display_name = $user->display_name;
 									}
-									echo '<a title= "' . $display_name . '" class="rthd-last-reply-by rthd-contact-avatar-no-reply"  href="' . ( current_user_can( $cap ) ? rt_biz_hd_biz_user_profile_link( $email ) : '#' ) . '">' . get_avatar( $email, '30' ) . ' </a>';
+									echo '<a title= "' . $display_name . '" class="rthd-last-reply-by rthd-contact-avatar-no-reply"  href="' . ( current_user_can( $cap ) ? rtbiz_hd_biz_user_profile_link( $email ) : '#' ) . '">' . get_avatar( $email, '30' ) . ' </a>';
 								}
 							}
 							// Other comments authors
@@ -328,13 +328,13 @@ $user_edit_content = current_user_can( $cap );
 									if ( ! empty( $user ) ) {
 										$display_name = $user->display_name;
 									}
-									echo '<a title= "' . $display_name . '" class="rthd-last-reply-by"  href="' . ( current_user_can( $cap ) ? rt_biz_hd_biz_user_profile_link( $email ) : '#' ) . '">' . get_avatar( $email, '30' ) . ' </a>';
+									echo '<a title= "' . $display_name . '" class="rthd-last-reply-by"  href="' . ( current_user_can( $cap ) ? rtbiz_hd_biz_user_profile_link( $email ) : '#' ) . '">' . get_avatar( $email, '30' ) . ' </a>';
 								}
 							}
 
 							// Last reply author
 							if ( ! empty( $comment ) && $comment->comment_author_email != $created_by->user_email ) {
-								echo '<a class="rthd-last-reply-by" title="last reply by ' . $comment->comment_author . ' ' . esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . ' ago " href="' . ( current_user_can( $cap ) ? rt_biz_hd_biz_user_profile_link( $comment->comment_author_email ) : '#' ) . '">' . get_avatar( $comment->comment_author_email, '30' ) . ' </a>'
+								echo '<a class="rthd-last-reply-by" title="last reply by ' . $comment->comment_author . ' ' . esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . ' ago " href="' . ( current_user_can( $cap ) ? rtbiz_hd_biz_user_profile_link( $comment->comment_author_email ) : '#' ) . '">' . get_avatar( $comment->comment_author_email, '30' ) . ' </a>'
 								?>
 							<?php } ?>
 						</div>
@@ -345,7 +345,7 @@ $user_edit_content = current_user_can( $cap );
 					$attachments = get_children( array( 'post_parent' => $post->ID, 'post_type' => 'attachment' ) );
 
 					if ( ! empty( $attachments ) ) {
-						$attach_cmt = rt_biz_hd_get_attachment_url_from_followups( $post->ID );
+						$attach_cmt = rtbiz_hd_get_attachment_url_from_followups( $post->ID );
 						$attachFlag = true;
 						$tmphtml    = '<div class="rt-hd-sidebar-box"><div class="rt-hd-ticket-info"><h3 class="rt-hd-ticket-info-header">' . __( 'Attachments' ) . '</h3> <div class="rthd-collapse-icon"><a class="rthd-collapse-click" href="#"><span class="dashicons dashicons-arrow-up-alt2"></span></a></div><div class="rthd-clearfix"></div></div><div class="rt-hd-ticket-sub-row"><ul id="attachment-files">';
 						?>
@@ -365,7 +365,7 @@ $user_edit_content = current_user_can( $cap );
 							?>
 							<li class="attachment-item"
 							    data-attachment-id="<?php echo esc_attr( $attachment->ID ); ?>">
-								<?php rt_biz_hd_get_attchment_link_with_fancybox( $attachment ); ?>
+								<?php rtbiz_hd_get_attchment_link_with_fancybox( $attachment ); ?>
 								<?php if ( $user_edit ) { ?>
 									<a href="#" class="rthd_delete_attachment right">x</a>
 								<?php } ?>
@@ -382,10 +382,10 @@ $user_edit_content = current_user_can( $cap );
 					if ( current_user_can( $cap ) ) {
 
 						// Attributes
-						global $rt_hd_attributes_relationship_model;
-						$relations = $rt_hd_attributes_relationship_model->get_relations_by_post_type( Rt_HD_Module::$post_type );
+						global $rtbiz_hd_attributes_relationship_model;
+						$relations = $rtbiz_hd_attributes_relationship_model->get_relations_by_post_type( Rtbiz_HD_Module::$post_type );
 						foreach ( $relations as $r ) {
-							$attr = $rt_hd_attributes_model->get_attribute( $r->attr_id );
+							$attr = $rtbiz_hd_attributes_model->get_attribute( $r->attr_id );
 							if ( 'taxonomy' == $attr->attribute_store_as ) {
 								$taxonomy = $rt_hd_rt_attributes->get_taxonomy_name( $attr->attribute_name );
 								$terms    = wp_get_post_terms( $post->ID, $taxonomy );
@@ -421,7 +421,7 @@ $user_edit_content = current_user_can( $cap );
 
 				$created_by = get_user_by( 'id', get_post_meta( $post->ID, '_rtbiz_hd_created_by', true ) );
 				$otherposts = get_posts( array(
-					'post_type'    => Rt_HD_Module::$post_type,
+					'post_type'    => Rtbiz_HD_Module::$post_type,
 					'post_status'  => 'any',
 					'post__not_in' => array( $post->ID ),
 					'meta_query'   => array(
@@ -446,7 +446,7 @@ $user_edit_content = current_user_can( $cap );
 							<ul>
 								<?php foreach ( $otherposts as $p ) { ?>
 									<li>
-										<a href="<?php echo get_post_permalink( $p->ID ); ?>"><?php echo '[#' . $p->ID . '] ' . balanceTags( $p->post_title );  ?>  </a><?php echo rt_biz_hd_status_markup( $p->post_status ); ?>
+										<a href="<?php echo get_post_permalink( $p->ID ); ?>"><?php echo '[#' . $p->ID . '] ' . balanceTags( $p->post_title );  ?>  </a><?php echo rtbiz_hd_status_markup( $p->post_status ); ?>
 									</li>
 								<?php } ?>
 							</ul>
@@ -457,7 +457,7 @@ $user_edit_content = current_user_can( $cap );
 				<?php
 				if ( current_user_can( $cap ) ) {
 					$connected_tickets = new WP_Query( array(
-						'connected_type'  => Rt_HD_Module::$post_type . '_to_' . Rt_HD_Module::$post_type,
+						'connected_type'  => Rtbiz_HD_Module::$post_type . '_to_' . Rtbiz_HD_Module::$post_type,
 						'connected_items' => $post->ID,
 						'nopaging'        => true,
 					) );
@@ -475,7 +475,7 @@ $user_edit_content = current_user_can( $cap );
 								<ul>
 									<?php foreach ( $connected_tickets->posts as $p ) { ?>
 										<li>
-											<a href="<?php echo get_post_permalink( $p->ID ); ?>"><?php echo '[#' . $p->ID . '] ' . esc_attr( strlen( balanceTags( $p->post_title ) ) > 15 ? substr( balanceTags( $p->post_title ), 0, 15 ) . '...' : balanceTags( $p->post_title ) ) ?>  </a><?php echo rt_biz_hd_status_markup( $p->post_status ); ?>
+											<a href="<?php echo get_post_permalink( $p->ID ); ?>"><?php echo '[#' . $p->ID . '] ' . esc_attr( strlen( balanceTags( $p->post_title ) ) > 15 ? substr( balanceTags( $p->post_title ), 0, 15 ) . '...' : balanceTags( $p->post_title ) ) ?>  </a><?php echo rtbiz_hd_status_markup( $p->post_status ); ?>
 										</li>
 									<?php } ?>
 								</ul>

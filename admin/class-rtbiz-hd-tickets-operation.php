@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
+if ( ! class_exists( 'Rtbiz_HD_Tickets_Operation' ) ) {
 
 	/**
 	 * Class Rt_HD_Tickets
@@ -16,7 +16,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 	 *
 	 * @author udit
 	 */
-	class Rt_HD_Tickets_Operation {
+	class Rtbiz_HD_Tickets_Operation {
 
 		/**
 		 * set hooks
@@ -26,7 +26,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 		public function __construct() {
 			add_action( 'transition_post_status', array( $this, 'ticket_status_changed' ), 10, 3 );
 			add_action( 'rt_hd_before_send_notification', array( $this, 'rt_hd_before_send_notification' ), 10 );
-			add_action( 'rt_hd_process_' . Rt_HD_Module::$post_type . '_meta', array( $this, 'rt_hd_before_send_notification' ), 20 );
+			add_action( 'rt_hd_process_' . Rtbiz_HD_Module::$post_type . '_meta', array( $this, 'rt_hd_before_send_notification' ), 20 );
 		}
 
 		/**
@@ -41,9 +41,9 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 			if ( ( isset( $_POST['tax_input'] ) && isset( $_POST['tax_input'][ Rt_Offerings::$offering_slug ] ) && ! empty( $_POST['tax_input'][ Rt_Offerings::$offering_slug ][0] ) ) || isset( $_POST['post']['product_id'] ) ) {
 				$terms = wp_get_post_terms( $postid, Rt_Offerings::$offering_slug );
 				$default_assignee = null;
-				$settings = rt_biz_hd_get_redux_settings();
+				$settings = rtbiz_hd_get_redux_settings();
 				if ( ! empty( $terms ) && count( $terms ) == 1 ) {
-					$default_assignee = rt_biz_hd_get_offering_meta( 'default_assignee', $terms[0]->term_id );
+					$default_assignee = rtbiz_hd_get_offering_meta( 'default_assignee', $terms[0]->term_id );
 					if ( empty( $default_assignee ) ) {
 						$default_assignee = $settings['rthd_default_user'];
 					}
@@ -61,7 +61,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 
 		function ticket_status_changed( $new_status, $old_status, $post ) {
 			global $rt_hd_ticket_index_model;
-			if ( $post->post_type == Rt_HD_Module::$post_type ) {
+			if ( $post->post_type == Rtbiz_HD_Module::$post_type ) {
 				$rt_hd_ticket_index_model->update_ticket_status( $new_status, $post->ID );
 			}
 		}
@@ -89,7 +89,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 
 			if ( isset( $postArray ) && ! empty( $postArray ) && isset( $dataArray ) && ! empty( $dataArray ) ) {
 
-				$ticketModel = new Rt_HD_Ticket_Model();
+				$ticketModel = new Rtbiz_HD_Ticket_Model();
 
 				if ( empty( $post_id ) ) { // new post
 					$post_id = wp_insert_post( $postArray );
@@ -181,21 +181,21 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 		 */
 		function ticket_attribute_update( $newTicket, $post_type, $post_id, $attribute_store_as = 'taxonomy' ) {
 
-			global $rt_hd_attributes;
+			global $rtbiz_hd_attributes;
 			if ( isset( $newTicket ) && ! empty( $newTicket ) && isset( $post_id ) && ! empty( $post_id ) ) {
 				$dataArray       = array();
-				$ticketModel     = new Rt_HD_Ticket_Model();
-				$meta_attributes = rt_biz_hd_get_attributes( $post_type, $attribute_store_as );
+				$ticketModel     = new Rtbiz_HD_Ticket_Model();
+				$meta_attributes = rtbiz_hd_get_attributes( $post_type, $attribute_store_as );
 				foreach ( $meta_attributes as $attr ) {
-					$attr_diff = $rt_hd_attributes->attribute_diff( $attr, $post_id, $newTicket );
+					$attr_diff = $rtbiz_hd_attributes->attribute_diff( $attr, $post_id, $newTicket );
 					if ( ! empty( $attr_diff ) ) {
-						$rt_hd_attributes->save_attributes( $attr, $post_id, $newTicket );
+						$rtbiz_hd_attributes->save_attributes( $attr, $post_id, $newTicket );
 
 						/* Update Index Table */
 						if ( 'taxonomy' == $attribute_store_as ) {
 							$attr_name = str_replace( '-', '_', rtbiz_post_type_name( $attr->attribute_name ) );
 						} else {
-							$attr_name = str_replace( '-', '_', rt_biz_hd_attribute_taxonomy_name( $attr->attribute_name ) );
+							$attr_name = str_replace( '-', '_', rtbiz_hd_attribute_taxonomy_name( $attr->attribute_name ) );
 						}
 
 						$attr_val  = ( ! isset( $newTicket[ $attr->attribute_name ] ) ) ? array() : $newTicket[ $attr->attribute_name ];
@@ -233,7 +233,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 		 * @return bool
 		 */
 		function ticket_attachment_update( $new_attachments, $post_id ) {
-			global $rt_biz_hd_admin;
+			global $rtbiz_hd_admin;
 			if ( isset( $post_id ) && ! empty( $post_id ) ) {
 				$old_attachments = get_posts( array(
 												'post_parent'    => $post_id,
@@ -266,9 +266,9 @@ if ( ! class_exists( 'Rt_HD_Tickets_Operation' ) ) {
 									'post_parent'    => $post_id,
 									'post_author'    => get_current_user_id(),
 								);
-								add_filter( 'upload_dir', array( $rt_biz_hd_admin, 'custom_upload_dir' ) );//added hook for add addon specific folder for attachment
+								add_filter( 'upload_dir', array( $rtbiz_hd_admin, 'custom_upload_dir' ) );//added hook for add addon specific folder for attachment
 								wp_insert_attachment( $args, $file->guid, $post_id );
-								remove_filter( 'upload_dir', array( $rt_biz_hd_admin, 'custom_upload_dir' ) );//remove hook for add addon specific folder for attachment
+								remove_filter( 'upload_dir', array( $rtbiz_hd_admin, 'custom_upload_dir' ) );//remove hook for add addon specific folder for attachment
 
 								add_post_meta( $post_id, '_rtbiz_hd_attachment_hash', md5_file( $filepath ) );
 

@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( ! class_exists( 'Rt_HD_Attributes' ) ) {
+if ( ! class_exists( 'Rtbiz_HD_Attributes' ) ) {
 	/**
 	 * Class Rt_HD_Attributes
 	 * Handel Custom page "Attribute"
@@ -15,7 +15,7 @@ if ( ! class_exists( 'Rt_HD_Attributes' ) ) {
 	 *
 	 * @author udit
 	 */
-	class Rt_HD_Attributes {
+	class Rtbiz_HD_Attributes {
 
 		/**
 		 * @var string attributes Page slug
@@ -30,10 +30,10 @@ if ( ! class_exists( 'Rt_HD_Attributes' ) ) {
 		 * @since 0.1
 		 */
 		public function __construct() {
-			global $rt_hd_rt_attributes, $rt_hd_attributes_model, $rt_hd_attributes_relationship_model;
-			$rt_hd_rt_attributes                 = new RT_Attributes( RT_BIZ_HD_TEXT_DOMAIN );
-			$rt_hd_attributes_model              = new RT_Attributes_Model();
-			$rt_hd_attributes_relationship_model = new RT_Attributes_Relationship_Model();
+			global $rt_hd_rt_attributes, $rtbiz_hd_attributes_model, $rtbiz_hd_attributes_relationship_model;
+			$rt_hd_rt_attributes                 = new RT_Attributes( RTBIZ_HD_TEXT_DOMAIN );
+			$rtbiz_hd_attributes_model              = new RT_Attributes_Model();
+			$rtbiz_hd_attributes_relationship_model = new RT_Attributes_Relationship_Model();
 
 			add_action( 'init', array( $this, 'init_attributes' ) );
 		}
@@ -47,8 +47,8 @@ if ( ! class_exists( 'Rt_HD_Attributes' ) ) {
 
 			global $rt_hd_rt_attributes;
 
-			$admin_cap  = rt_biz_get_access_role_cap( RT_BIZ_HD_TEXT_DOMAIN, 'admin' );
-			$editor_cap = rt_biz_get_access_role_cap( RT_BIZ_HD_TEXT_DOMAIN, 'editor' );
+			$admin_cap  = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'admin' );
+			$editor_cap = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' );
 
 			$terms_caps = array(
 				'manage_terms' => $editor_cap,
@@ -56,8 +56,8 @@ if ( ! class_exists( 'Rt_HD_Attributes' ) ) {
 				'delete_terms' => $editor_cap,
 				'assign_terms' => $editor_cap,
 			);
-			if ( rt_biz_hd_check_wizard_completed() ) {
-				$rt_hd_rt_attributes->add_attributes_page( $this->attributes_page_slug, 'edit.php?post_type=' . Rt_HD_Module::$post_type, Rt_HD_Module::$post_type, $admin_cap, $terms_caps, $render_type = true, $storage_type = true, $orderby = true );
+			if ( rtbiz_hd_check_wizard_completed() ) {
+				$rt_hd_rt_attributes->add_attributes_page( $this->attributes_page_slug, 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type, Rtbiz_HD_Module::$post_type, $admin_cap, $terms_caps, $render_type = true, $storage_type = true, $orderby = true );
 			}
 		}
 
@@ -131,7 +131,7 @@ if ( ! class_exists( 'Rt_HD_Attributes' ) ) {
 						$post_new_term_slug = '';
 						$post_new_term_name = '';
 					}
-					$diff = rt_biz_hd_text_diff( $post_term_name, $post_new_term_name );
+					$diff = rtbiz_hd_text_diff( $post_term_name, $post_new_term_name );
 					if ( $diff ) {
 						$diffHTML .= '<tr><th style="padding: .5em;border: 0;">' . $attr->attribute_label . '</th><td>' . $diff . '</td><td></td></tr>';
 					}
@@ -142,7 +142,7 @@ if ( ! class_exists( 'Rt_HD_Attributes' ) ) {
 					}
 					$newVals       = $newTicket[ 'rt_' . $attr->attribute_name ];
 					$newVals       = array_unique( $newVals );
-					$oldTermString = rt_biz_hd_post_term_to_string( $post_id, rtbiz_post_type_name( $attr->attribute_name ) );
+					$oldTermString = rtbiz_hd_post_term_to_string( $post_id, rtbiz_post_type_name( $attr->attribute_name ) );
 					$newTermString = '';
 					if ( ! empty( $newVals ) ) {
 						$newTermArr = array();
@@ -154,7 +154,7 @@ if ( ! class_exists( 'Rt_HD_Attributes' ) ) {
 						}
 						$newTermString = implode( ',', $newTermArr );
 					}
-					$diff = rt_biz_hd_text_diff( $oldTermString, $newTermString );
+					$diff = rtbiz_hd_text_diff( $oldTermString, $newTermString );
 					if ( $diff ) {
 						$diffHTML .= '<tr><th style="padding: .5em;border: 0;">' . $attr->attribute_label . '</th><td>' . $diff . '</td><td></td></tr>';
 					}
@@ -183,7 +183,7 @@ if ( ! class_exists( 'Rt_HD_Attributes' ) ) {
 
 			$oldattr = get_post_meta( $post_id, '_rtbiz_hd_' . $attr->attribute_name, true );
 			if ( $oldattr != $newTicket[ $attr->attribute_name ] ) {
-				$diffHTML .= '<tr><th style="padding: .5em;border: 0;">' . $attr->attribute_label . '</th><td>' . rt_biz_hd_text_diff( $oldattr, $newTicket[ $attr->attribute_name ] ) . '</td><td></td></tr>';
+				$diffHTML .= '<tr><th style="padding: .5em;border: 0;">' . $attr->attribute_label . '</th><td>' . rtbiz_hd_text_diff( $oldattr, $newTicket[ $attr->attribute_name ] ) . '</td><td></td></tr>';
 			}
 
 			//update_post_meta($post_id, '_'.$attr->attribute_name, $newTicket[$attr->attribute_name]);

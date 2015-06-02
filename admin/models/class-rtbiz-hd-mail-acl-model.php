@@ -22,11 +22,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since  rt-Helpdesk 0.1
  */
-if ( ! class_exists( 'Rt_HD_Mail_ACL_Model' ) ) {
+if ( ! class_exists( 'Rtbiz_HD_Mail_ACL_Model' ) ) {
 	/**
 	 * Class Rt_HD_Mail_ACL_Model
 	 */
-	class Rt_HD_Mail_ACL_Model extends RT_DB_Model {
+	class Rtbiz_HD_Mail_ACL_Model extends RT_DB_Model {
 		public function __construct() {
 			parent::__construct( 'wp_hd_mail_acl' );
 		}

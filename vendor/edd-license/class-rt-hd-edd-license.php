@@ -45,7 +45,7 @@ if ( ! class_exists( 'Rt_HD_Edd_License' ) ) {
                             <tbody>
                             <tr valign="top">
                                 <th scope="row" valign="top">
-                                    <?php _e( 'License Key', RT_BIZ_HD_TEXT_DOMAIN ); ?>
+                                    <?php _e( 'License Key', RTBIZ_HD_TEXT_DOMAIN ); ?>
                                 </th>
                                 <td>
                                     <input id="edd_rthelpdesk_license_key" name="edd_rthelpdesk_license_key"
@@ -56,20 +56,20 @@ if ( ! class_exists( 'Rt_HD_Edd_License' ) ) {
                             <?php if ( false !== $license ) { ?>
                                 <tr valign="top">
                                     <th scope="row" valign="top">
-                                        <?php _e( 'Activate / Deactivate License', RT_BIZ_HD_TEXT_DOMAIN ); ?>
+                                        <?php _e( 'Activate / Deactivate License', RTBIZ_HD_TEXT_DOMAIN ); ?>
                                     </th>
                                     <td>
                                         <?php if ( $status !== false && $status == 'valid' ) { ?>
                                             <?php wp_nonce_field( 'edd_rthelpdesk_nonce', 'edd_rthelpdesk_nonce' ); ?>
                                             <input type="submit" class="button-secondary"
                                                    name="edd_rthelpdesk_license_deactivate"
-                                                   value="<?php _e( 'Deactivate License', RT_BIZ_HD_TEXT_DOMAIN ); ?>"/>
+                                                   value="<?php _e( 'Deactivate License', RTBIZ_HD_TEXT_DOMAIN ); ?>"/>
                                         <?php
 } else {
 	wp_nonce_field( 'edd_rthelpdesk_nonce', 'edd_rthelpdesk_nonce' ); ?>
                                             <input type="submit" class="button-secondary"
                                                    name="edd_rthelpdesk_license_activate"
-                                                   value="<?php _e( 'Activate License', RT_BIZ_HD_TEXT_DOMAIN ); ?>"/>
+                                                   value="<?php _e( 'Activate License', RTBIZ_HD_TEXT_DOMAIN ); ?>"/>
                                         <?php } ?>
                                     </td>
                                 </tr>
@@ -90,7 +90,7 @@ if ( ! class_exists( 'Rt_HD_Edd_License' ) ) {
 
 			// setup the updater
 			$edd_updater = new EDD_SL_Plugin_Updater( EDD_RT_HELPDESK_STORE_URL, RT_BIZ_HD_BASE_NAME, array(
-				'version' => RT_BIZ_HD_VERSION, // current version number
+				'version' => RTBIZ_HD_VERSION, // current version number
 				'license' => $license_key, // license key (used get_option above to retrieve from DB)
 				'item_name' => EDD_RT_HELPDESK_ITEM_NAME, // name of this plugin
 				'author' => 'rtCamp', // author of this plugin

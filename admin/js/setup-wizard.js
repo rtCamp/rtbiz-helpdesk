@@ -86,7 +86,7 @@ jQuery( document ).ready(function ($) {
 					return true;
 				},
 				onFinished: function (event, currentIndex) {
-					window.location.replace( hdDashboardUrl );
+					window.location.replace( rtbiz_hd_dashboard_url );
 				}
 			});
 		},
@@ -110,7 +110,7 @@ jQuery( document ).ready(function ($) {
 					dataType: "json",
 					type: 'post',
 					data: {
-						action: 'rthd_add_new_offering',
+						action: 'rtbiz_hd_add_new_offering',
 						offering: new_term
 					},
 					success: function (data) {
@@ -132,7 +132,7 @@ jQuery( document ).ready(function ($) {
 							dataType: "json",
 							type: 'post',
 							data: {
-								action: 'rthd_search_non_helpdesk_user_from_name',
+								action: 'rtbiz_hd_search_non_hd_user_by_name',
 								maxRows: 10,
 								query: request.term
 							},
@@ -180,7 +180,7 @@ jQuery( document ).ready(function ($) {
 					e.preventDefault();
 					that = this;
 					var requestArray = {};
-					requestArray.action = 'rthd_remove_user';
+					requestArray.action = 'rtbiz_hd_remove_user';
 					requestArray.userid = jQuery( this ).next( '.rthd-import-selected-users' ).val();
 					jQuery.ajax({
 						url: ajaxurl,
@@ -204,7 +204,7 @@ jQuery( document ).ready(function ($) {
 							dataType: "json",
 							type: 'post',
 							data: {
-								action: 'rthd_search_domain',
+								action: 'rtbiz_hd_search_domain',
 								maxRows: 10,
 								query: request.term
 							},
@@ -305,7 +305,7 @@ jQuery( document ).ready(function ($) {
 		},
 		import_all_users: function (last_user) {
 			var requestArray = {};
-			requestArray.action = 'rthd_import_all_users';
+			requestArray.action = 'rtbiz_hd_import_all_users';
 			requestArray.nonce = jQuery( '#import_all_users' ).val();
 			requestArray.import = true;
 			requestArray.last_import = last_user;
@@ -349,7 +349,7 @@ jQuery( document ).ready(function ($) {
 		import_domain_users: function (get_count) {
 			var requestArray = {};
 			jQuery( '#rthd-domain-import-spinner' ).show();
-			requestArray.action = 'rthd_domain_search_and_import';
+			requestArray.action = 'rtbiz_hd_domain_user_import';
 			requestArray.count = get_count;
 			requestArray.domain_query = jQuery( '#rthd-add-user-domain' ).val();
 			requestArray.nonce = jQuery( '#import_domain' ).val();
@@ -396,7 +396,7 @@ jQuery( document ).ready(function ($) {
 			if (id !== false) {
 				requestArray.ID = id;
 			}
-			requestArray.action = 'rthd_creater_rtbiz_and_give_access_helpdesk';
+			requestArray.action = 'rtbiz_hd_create_contact_with_hd_access';
 			jQuery.ajax({
 				url: ajaxurl,
 				dataType: "json",
@@ -437,7 +437,7 @@ jQuery( document ).ready(function ($) {
 			if (selected.length > 0) {
 				var requestArray = {};
 				requestArray.store = selected;
-				requestArray.action = 'rthd_offering_sync';
+				requestArray.action = 'rtbiz_hd_offering_sync';
 				jQuery( '.rthd-store-process' ).show();
 				jQuery.ajax({
 					url: ajaxurl,
@@ -463,7 +463,7 @@ jQuery( document ).ready(function ($) {
 				dataType: "json",
 				type: 'post',
 				data: {
-					action: 'rthd_get_default_assignee_ui'
+					action: 'rtbiz_hd_default_assignee_ui'
 				},
 				success: function (data) {
 					if (data.status) {
@@ -489,7 +489,7 @@ jQuery( document ).ready(function ($) {
 				dataType: "json",
 				type: 'post',
 				data: {
-					action: 'rthd_setup_wizard_assignee_save',
+					action: 'rtbiz_hd_default_assignee_save',
 					assignee: requestArray,
 					default_assignee: jQuery( '#rthd_offering-default' ).val()
 				},
@@ -527,7 +527,7 @@ jQuery( document ).ready(function ($) {
 					dataType: "json",
 					type: 'post',
 					data: {
-						action: 'rthd_outboud_mail_setup_ui'
+						action: 'rtbiz_hd_outboud_mail_setup_ui'
 					},
 					success: function (data) {
 						if (data.status) {
@@ -537,7 +537,7 @@ jQuery( document ).ready(function ($) {
 						jQuery( '.rthd-outbound-setup-process' ).hide();
 					}
 				});
-			} else if (jQuery( '#rthd_outound_sub-action' ).val() === 'rthd_outound_setup_wizard') {
+			} else if (jQuery( '#rthd_outound_sub-action' ).val() === 'rtbiz_hd_save_outound_setup') {
 				//jQuery('div.actions a[href="#next"]').parent().after('<li id="rthd_spinner"><img src="' + adminurl + 'images/spinner.gif"/></li>')
 				jQuery( '.rthd-outbound-setup-process' ).show();
 				jQuery.ajax({
@@ -545,7 +545,7 @@ jQuery( document ).ready(function ($) {
 					dataType: "json",
 					type: 'post',
 					data: {
-						action: 'rthd_outound_setup_wizard',
+						action: 'rtbiz_hd_save_outound_setup',
 						data: jQuery( '#rthd_outgoing_mailbox_setup_container' ).find( "select,textarea, input" ).serialize()
 					},
 					success: function (data) {
@@ -579,7 +579,7 @@ jQuery( document ).ready(function ($) {
 					dataType: "json",
 					type: 'post',
 					data: {
-						action: 'rthd_change_ACL',
+						action: 'rtbiz_hd_change_acl',
 						permission: jQuery( this ).val(),
 						userid: userid
 					},
@@ -599,7 +599,7 @@ jQuery( document ).ready(function ($) {
 				dataType: "json",
 				type: 'post',
 				data: {
-					action: 'rthd_get_ACL'
+					action: 'rtbiz_hd_user_with_hd_role_list'
 				},
 				success: function (data) {
 					if (data.status) {

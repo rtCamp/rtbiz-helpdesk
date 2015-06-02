@@ -18,9 +18,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @author Utkarsh
  */
-if ( ! class_exists( 'Rt_Hd_Help' ) ) {
+if ( ! class_exists( 'Rtbiz_Hd_Help' ) ) {
 
-	class Rt_Hd_Help {
+	class Rtbiz_Hd_Help {
 
 		var $tabs = array();
 		var $help_sidebar_content;
@@ -30,25 +30,25 @@ if ( ! class_exists( 'Rt_Hd_Help' ) ) {
 		}
 
 		function init_help() {
-			$this->tabs = apply_filters( 'rt_biz_help_tabs', array(
+			$this->tabs = apply_filters( 'rtbiz_help_tabs', array(
 				'post-new.php'  => array(
 					array(
 						'id'        => 'create_Ticket_overview',
 						'title'     => __( 'Overview' ),
 						'content'   => '',
-						'post_type' => Rt_HD_Module::$post_type,
+						'post_type' => Rtbiz_HD_Module::$post_type,
 					),
 					array(
 						'id'        => 'create_Ticket_screen_content',
 						'title'     => __( 'Screen Content' ),
 						'content'   => '',
-						'post_type' => Rt_HD_Module::$post_type,
+						'post_type' => Rtbiz_HD_Module::$post_type,
 					),
 					array(
 						'id'        => 'create_organization_screen_content',
 						'title'     => __( 'Screen Content' ),
 						'content'   => '',
-						'post_type' => rt_biz_get_company_post_type(),
+						'post_type' => rtbiz_get_company_post_type(),
 					),
 				),
 				'post.php'      => array(
@@ -56,25 +56,25 @@ if ( ! class_exists( 'Rt_Hd_Help' ) ) {
 						'id'        => 'edit_ticket_overview',
 						'title'     => __( 'Overview' ),
 						'content'   => '',
-						'post_type' => Rt_HD_Module::$post_type,
+						'post_type' => Rtbiz_HD_Module::$post_type,
 					),
 					array(
 						'id'        => 'edit_ticket_screen_content',
 						'title'     => __( 'Screen Content' ),
 						'content'   => '',
-						'post_type' => Rt_HD_Module::$post_type,
+						'post_type' => Rtbiz_HD_Module::$post_type,
 					),
 					array(
 						'id'        => 'edit_organization_overview',
 						'title'     => __( 'Overview' ),
 						'content'   => '',
-						'post_type' => rt_biz_get_company_post_type(),
+						'post_type' => rtbiz_get_company_post_type(),
 					),
 					array(
 						'id'        => 'edit_organization_screen_content',
 						'title'     => __( 'Screen Content' ),
 						'content'   => '',
-						'post_type' => rt_biz_get_company_post_type(),
+						'post_type' => rtbiz_get_company_post_type(),
 					),
 				),
 				'edit.php'      => array(
@@ -82,26 +82,26 @@ if ( ! class_exists( 'Rt_Hd_Help' ) ) {
 						'id'        => 'dashboard_overview',
 						'title'     => __( 'Overview' ),
 						'content'   => '',
-						'post_type' => Rt_HD_Module::$post_type,
-						'page'      => 'rthd-' . esc_html( Rt_HD_Module::$post_type ) . '-dashboard',
+						'post_type' => Rtbiz_HD_Module::$post_type,
+						'page'      => 'rthd-' . esc_html( Rtbiz_HD_Module::$post_type ) . '-dashboard',
 					),
 					array(
 						'id'        => 'ticket_list_overview',
 						'title'     => __( 'Overview' ),
 						'content'   => '',
-						'post_type' => Rt_HD_Module::$post_type,
+						'post_type' => Rtbiz_HD_Module::$post_type,
 					),
 					array(
 						'id'        => 'ticket_list_screen_content',
 						'title'     => __( 'Screen Content' ),
 						'content'   => '',
-						'post_type' => Rt_HD_Module::$post_type,
+						'post_type' => Rtbiz_HD_Module::$post_type,
 					),
 					array(
 						'id'        => 'attribute_overview',
 						'title'     => __( 'Overview' ),
 						'content'   => '',
-						'post_type' => Rt_HD_Module::$post_type,
+						'post_type' => Rtbiz_HD_Module::$post_type,
 						'page'      => 'rthd-attributes',
 					),
 				),
@@ -110,22 +110,22 @@ if ( ! class_exists( 'Rt_Hd_Help' ) ) {
 						'id'        => 'dashboard_overview',
 						'title'     => __( 'Overview' ),
 						'content'   => '',
-						'page'      => 'rthd-' . esc_html( Rt_HD_Module::$post_type ) . '-dashboard',
-						'post_type' => Rt_HD_Module::$post_type,
+						'page'      => 'rthd-' . esc_html( Rtbiz_HD_Module::$post_type ) . '-dashboard',
+						'post_type' => Rtbiz_HD_Module::$post_type,
 					),
 					array(
 						'id'        => 'dashboard_screen_content',
 						'title'     => __( 'Screen Content' ),
 						'content'   => '',
-						'page'      => 'rthd-' . esc_html( Rt_HD_Module::$post_type ) . '-dashboard',
-						'post_type' => Rt_HD_Module::$post_type,
+						'page'      => 'rthd-' . esc_html( Rtbiz_HD_Module::$post_type ) . '-dashboard',
+						'post_type' => Rtbiz_HD_Module::$post_type,
 					),
 					array(
 						'id'        => 'settings_overview',
 						'title'     => __( 'Overview' ),
 						'content'   => '',
 						'page'      => 'srthd-settings',
-						'post_type' => Rt_HD_Module::$post_type,
+						'post_type' => Rtbiz_HD_Module::$post_type,
 					),
 				),
 				'edit-tags.php' => array(

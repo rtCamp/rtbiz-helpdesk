@@ -48,7 +48,7 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 		function show_original_email() {
 			global $post;
 
-			$cap               = rt_biz_get_access_role_cap( RT_BIZ_HD_TEXT_DOMAIN, 'author' );
+			$cap               = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' );
 			$user_edit_content = current_user_can( $cap );
 
 			if ( ! empty( $_REQUEST['show_original'] ) && 'true' === $_REQUEST['show_original'] && empty( $_REQUEST['comment-id'] ) && $user_edit_content ) {
@@ -73,9 +73,9 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 		}
 
 		function admin_bar_edit_menu( $wp_admin_bar ) {
-			global $rt_hd_module, $rtbiz_helpdesk_template, $post;
-			$labels = $rt_hd_module->labels;
-			$cap    = rt_biz_get_access_role_cap( RT_BIZ_HD_TEXT_DOMAIN, 'author' );
+			global $rtbiz_hd_module, $rtbiz_helpdesk_template, $post;
+			$labels = $rtbiz_hd_module->labels;
+			$cap    = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' );
 			if ( ! empty( $rtbiz_helpdesk_template ) && current_user_can( $cap ) ) {
 				$wp_admin_bar->add_menu( array(
 					'id'    => 'edit',
@@ -86,9 +86,9 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 		}
 
 		function flush_rewrite_rules() {
-			if ( is_admin() && 'true' == get_option( 'rthd_flush_rewrite_rules' ) ) {
+			if ( is_admin() && 'true' == get_option( 'rtbiz_hd_flush_rewrite_rules' ) ) {
 				flush_rewrite_rules();
-				delete_option( 'rthd_flush_rewrite_rules' );
+				delete_option( 'rtbiz_hd_flush_rewrite_rules' );
 			}
 		}
 
@@ -121,9 +121,9 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		function template_include( $template ) {
-			global $wp_query, $post, $rtbiz_helpdesk_template, $rt_hd_module, $rthd_front_page_title;
+			global $wp_query, $post, $rtbiz_helpdesk_template, $rtbiz_hd_module, $rthd_front_page_title;
 			$wrong_unique_id = false;
-			if ( empty( $wp_query->query_vars['post_type'] ) || $wp_query->query_vars['post_type'] != Rt_HD_Module::$post_type ) {
+			if ( empty( $wp_query->query_vars['post_type'] ) || $wp_query->query_vars['post_type'] != Rtbiz_HD_Module::$post_type ) {
 				return $template;
 			}
 
@@ -138,13 +138,13 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 				$rthd_messages[] = array( 'type' => 'error rthd-error', 'message' => $message, 'displayed' => 'no' );
 				$rthd_front_page_title = __( 'Helpdesk' );
 
-				return rt_biz_hd_locate_template( 'ticket-error-page.php' );
+				return rtbiz_hd_locate_template( 'ticket-error-page.php' );
 			}
 
 			if ( ! empty( $post ) && isset( $wp_query->query['rtbiz_hd_ticket'] ) ) {
-				global $rt_hd_email_notification;
+				global $rtbiz_hd_email_notification;
 				$user = wp_get_current_user();
-				if ( ! current_user_can( rt_biz_get_access_role_cap( RT_BIZ_HD_TEXT_DOMAIN, 'editor' ) ) && current_user_can( rt_biz_get_access_role_cap( RT_BIZ_HD_TEXT_DOMAIN, 'author' ) ) ) {
+				if ( ! current_user_can( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' ) ) && current_user_can( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' ) ) ) {
 					$subscriber     = get_post_meta( $post->ID, '_rtbiz_hd_subscribe_to', true );
 					$post_author_id = get_post_field( 'post_author', $post->ID );
 					$creator = get_post_meta( $post->ID, '_rtbiz_hd_created_by', true );
@@ -157,17 +157,17 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 						$rthd_messages[] = array( 'type' => 'error rthd-error', 'message' => $message, 'displayed' => 'no' );
 						$rthd_front_page_title = __( 'Helpdesk' );
 
-						return rt_biz_hd_locate_template( 'ticket-404-page.php' );
+						return rtbiz_hd_locate_template( 'ticket-404-page.php' );
 					}
-				} else if ( ! current_user_can( rt_biz_get_access_role_cap( RT_BIZ_HD_TEXT_DOMAIN, 'author' ) ) ) {
-					$contacts       = rt_biz_get_post_for_contact_connection( $post->ID, Rt_HD_Module::$post_type );
-					$other_contacts = $rt_hd_email_notification->get_contacts( $post->ID );
+				} else if ( ! current_user_can( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' ) ) ) {
+					$contacts       = rtbiz_get_post_for_contact_connection( $post->ID, Rtbiz_HD_Module::$post_type );
+					$other_contacts = $rtbiz_hd_email_notification->get_contacts( $post->ID );
 					$contact_ids    = wp_list_pluck( $contacts, 'ID' );
 					$contact_emails = wp_list_pluck( $other_contacts, 'email' );
 
 					$current_contact = '';
 					if ( ! empty( $user ) ) {
-						$current_contact = rt_biz_get_contact_for_wp_user( $user->ID );
+						$current_contact = rtbiz_get_contact_for_wp_user( $user->ID );
 						if ( ! empty( $current_contact[0] ) ) {
 							$current_contact = $current_contact[0];
 						}
@@ -181,24 +181,24 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 						$rthd_messages[] = array( 'type' => 'error rthd-error', 'message' => $message, 'displayed' => 'no' );
 						$rthd_front_page_title = __( 'Helpdesk' );
 
-						return rt_biz_hd_locate_template( 'ticket-404-page.php' );
+						return rtbiz_hd_locate_template( 'ticket-404-page.php' );
 					}
 				}
 			}
 
-			if ( rt_biz_hd_is_unique_hash_enabled() && ! empty( $_REQUEST['rthd_unique_id'] ) ) {
+			if ( rtbiz_hd_is_unique_hash_enabled() && ! empty( $_REQUEST['rthd_unique_id'] ) ) {
 				$args = array(
 					'meta_key'    => '_rtbiz_hd_unique_id',
 					'meta_value'  => $_REQUEST['rthd_unique_id'],
 					'post_status' => 'any',
-					'post_type'   => Rt_HD_Module::$post_type,
+					'post_type'   => Rtbiz_HD_Module::$post_type,
 				);
 
 				$ticketpost = get_posts( $args );
 				if ( ! empty( $ticketpost ) ) {
 					$ticket = $ticketpost[0];
 					global $rthd_front_page_title;
-					$labels                = $rt_hd_module->labels;
+					$labels                = $rtbiz_hd_module->labels;
 					$rthd_front_page_title = $ticket->post_title . ' | ' . get_bloginfo();
 					$post                  = $ticket;
 					setup_postdata( $post );
@@ -221,14 +221,14 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 				$rthd_messages[] = array( 'type' => 'error rthd-error', 'message' => $message, 'displayed' => 'no' );
 				$rthd_front_page_title = __( 'Helpdesk' );
 
-				return rt_biz_hd_locate_template( 'ticket-404-page.php' );
+				return rtbiz_hd_locate_template( 'ticket-404-page.php' );
 
 				//return get_404_template();
 			}
 
 			$rtbiz_helpdesk_template = true;
 
-			return rt_biz_hd_locate_template( 'ticket-front-page.php' );
+			return rtbiz_hd_locate_template( 'ticket-front-page.php' );
 		}
 
 		/**
@@ -237,12 +237,12 @@ if ( ! class_exists( 'Rt_HD_Tickets_Front' ) ) {
 		function set_rthd_ticket_post_data() {
 			global $post;
 
-			if ( rt_biz_hd_is_unique_hash_enabled() && ! empty( $_REQUEST['rthd_unique_id'] ) ) {
+			if ( rtbiz_hd_is_unique_hash_enabled() && ! empty( $_REQUEST['rthd_unique_id'] ) ) {
 				$args = array(
 					'meta_key'    => '_rtbiz_hd_unique_id',
 					'meta_value'  => $_REQUEST['rthd_unique_id'],
 					'post_status' => 'any',
-					'post_type'   => Rt_HD_Module::$post_type,
+					'post_type'   => Rtbiz_HD_Module::$post_type,
 				);
 
 				$ticketpost = get_posts( $args );

@@ -20,8 +20,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since  rt-Helpdesk 0.1
  */
-if ( ! class_exists( 'Rt_HD_Logs' ) ) {
-	class Rt_HD_Logs {
+if ( ! class_exists( 'Rtbiz_HD_Logs' ) ) {
+	class Rtbiz_HD_Logs {
 		function ui() {
 
 			if ( ! isset( $_REQUEST['generate_log'] ) ) {
@@ -36,13 +36,13 @@ if ( ! class_exists( 'Rt_HD_Logs' ) ) {
 			}
 
 			global $wpdb;
-			$editor_cap = rt_biz_get_access_role_cap( RT_BIZ_HD_TEXT_DOMAIN, 'editor' );
+			$editor_cap = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' );
 			//			if( !current_user_can( $editor_cap ) ) {
 			//				wp_die("Opsss!! You are in restricted area");
 			//			}
 			//Delete lead code
 			if ( isset( $_REQUEST['log-list'] ) ) {
-				rt_biz_hd_get_template( 'admin/list-transaction-post.php' );
+				rtbiz_hd_get_template( 'admin/list-transaction-post.php' );
 
 				return;
 			}
@@ -96,7 +96,7 @@ if ( ! class_exists( 'Rt_HD_Logs' ) ) {
 				$left = 0;
 			}
 			$taxmeta   = $wpdb->prefix . 'taxonomymeta';
-			$post_type = Rt_HD_Module::$post_type;
+			$post_type = Rtbiz_HD_Module::$post_type;
 
 			$sql = $wpdb->prepare( 'select gf2.meta_value as trans_id from ' . RGFormsModel::get_lead_meta_table_name() . ' as gf1, ' . RGFormsModel::get_lead_meta_table_name() . " as gf2 where gf1.meta_key LIKE 'helpdesk-" . $post_type . "-post-id' and gf2.meta_key LIKE '_transaction_id' and gf1.lead_id = gf2.lead_id group by convert( gf2.meta_value, UNSIGNED INTEGER) order by convert( gf2.meta_value, UNSIGNED INTEGER) desc limit %d, %d", $left, $size );
 			//$sql         = $wpdb->prepare( "select p.meta_value as trans_id from (select distinct meta_value from $wpdb->posts as p left join $wpdb->postmeta as m on p.ID = m.post_id where p.post_type=$post_type m.meta_key like '_transaction_id' order by convert(meta_value, UNSIGNED INTEGER) desc limit %d, %d) as p;", $left, $size );
@@ -107,25 +107,25 @@ if ( ! class_exists( 'Rt_HD_Logs' ) ) {
 				<thead>
 				<tr>
 					<th>
-						<?php _e( 'Transaction Id', RT_BIZ_HD_TEXT_DOMAIN ); ?>
+						<?php _e( 'Transaction Id', RTBIZ_HD_TEXT_DOMAIN ); ?>
 					</th>
 					<!--					<th>-->
 					<!--						--><?php //_e( 'Title', RT_BIZ_HD_TEXT_DOMAIN ); ?>
 					<!--					</th>-->
 					<th>
-						<?php _e( 'First Date', RT_BIZ_HD_TEXT_DOMAIN ); ?>
+						<?php _e( 'First Date', RTBIZ_HD_TEXT_DOMAIN ); ?>
 					</th>
 					<th>
-						<?php _e( 'Last Date', RT_BIZ_HD_TEXT_DOMAIN ); ?>
+						<?php _e( 'Last Date', RTBIZ_HD_TEXT_DOMAIN ); ?>
 					</th>
 					<th>
-						<?php _e( 'Post Count', RT_BIZ_HD_TEXT_DOMAIN ); ?>
+						<?php _e( 'Post Count', RTBIZ_HD_TEXT_DOMAIN ); ?>
 					</th>
 					<th>
-						<?php _e( 'Taxonomy Count', RT_BIZ_HD_TEXT_DOMAIN ); ?>
+						<?php _e( 'Taxonomy Count', RTBIZ_HD_TEXT_DOMAIN ); ?>
 					</th>
 					<th>
-						<?php _e( 'Transaction Start Time', RT_BIZ_HD_TEXT_DOMAIN ); ?>
+						<?php _e( 'Transaction Start Time', RTBIZ_HD_TEXT_DOMAIN ); ?>
 					</th>
 					<!--<th>
 

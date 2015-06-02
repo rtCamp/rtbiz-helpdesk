@@ -28,9 +28,9 @@ if ( ! class_exists( 'RT_Meta_Box_Subscribers ' ) ) {
 		 */
 		public static function ui( $post ) {
 
-			global $rt_hd_module;
+			global $rtbiz_hd_module;
 
-			$post_type = Rt_HD_Module::$post_type;
+			$post_type = Rtbiz_HD_Module::$post_type;
 
 			$all_hd_participants = array();
 			if ( isset( $post->ID ) ) {
@@ -100,7 +100,7 @@ if ( ! class_exists( 'RT_Meta_Box_Subscribers ' ) ) {
 							$subScribetHTML .= "<li id='subscribe-auth-" . $author->ID . "' class='contact-list'>" .
 									get_avatar( $author->user_email, 24 ) .
 									"<a href='#removeSubscriber' class='delete_row'><span class='dashicons dashicons-dismiss'></span></a>" .
-									"<br/><a target='_blank' class='subscribe-title heading' title='" . $author->display_name . "' href='" . rt_biz_hd_biz_user_profile_link( $author->user_email ) . "'>" . $author->display_name . '</a>' .
+									"<br/><a target='_blank' class='subscribe-title heading' title='" . $author->display_name . "' href='" . rtbiz_hd_biz_user_profile_link( $author->user_email ) . "'>" . $author->display_name . '</a>' .
 									"<input type='hidden' name='subscribe_to[]' value='" . $author->ID . "' /></li>";
 						}
 					}
@@ -110,7 +110,7 @@ if ( ! class_exists( 'RT_Meta_Box_Subscribers ' ) ) {
 							'id' => $author->ID,
 							'label' => $author->display_name,
 							'imghtml' => get_avatar( $author->user_email, 24 ),
-							'user_edit_link' => rt_biz_hd_biz_user_profile_link( $author->user_email ),
+							'user_edit_link' => rtbiz_hd_biz_user_profile_link( $author->user_email ),
 						);
 					}
 

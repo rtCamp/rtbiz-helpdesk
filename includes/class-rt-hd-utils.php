@@ -128,7 +128,7 @@ if ( ! class_exists( 'Rt_HD_Utils' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		static public function set_accounts( $rCount ) {
-			$log_file = RT_BIZ_HD_PATH . 'mailaccount.txt';
+			$log_file = RTBIZ_HD_PATH . 'mailaccount.txt';
 			if ( $fp = fopen( $log_file, 'w+' ) ) {
 				fwrite( $fp, $rCount );
 				fclose( $fp );
@@ -186,7 +186,7 @@ if ( ! class_exists( 'Rt_HD_Utils' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		public static function get_hd_rtcamp_user() {
-			$users = rt_biz_get_module_users( RT_BIZ_HD_TEXT_DOMAIN );
+			$users = rtbiz_get_module_employee( RTBIZ_HD_TEXT_DOMAIN );
 
 			return $users;
 		}

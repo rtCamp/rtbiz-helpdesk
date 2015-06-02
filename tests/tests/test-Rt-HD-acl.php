@@ -16,7 +16,7 @@ class test_Rt_HD_ACL extends RT_WP_TestCase {
 	 */
 	function setUp() {
 		parent::setUp();
-		$this->rthdAcl = new Rt_HD_ACL();
+		$this->rthdAcl = new Rtbiz_HD_ACL();
 	}
 
 	/**
@@ -24,17 +24,17 @@ class test_Rt_HD_ACL extends RT_WP_TestCase {
 	 */
 	function  test_register_rt_hd_module() {
 		$tmp = $this->rthdAcl->register_rt_hd_module( array() );
-		$settings               = rt_biz_hd_get_redux_settings();
+		$settings               = rtbiz_hd_get_redux_settings();
 
 		$this->assertEquals(
 			array(
 				'label'      => 'Helpdesk',
-				'post_types' => array( Rt_HD_Module::$post_type ),
-				'department_support' => array( Rt_HD_Module::$post_type ),
-				'offering_support' => array( Rt_HD_Module::$post_type ),
-				'setting_option_name' => Redux_Framework_Helpdesk_Config::$hd_opt, // Use For ACL
-				'setting_page_url' => admin_url( 'edit.php?post_type='.Rt_HD_Module::$post_type.'&page=rthd-settings'), // for Mailbox
-				'email_template_support' => array( Rt_HD_Module::$post_type ),
+				'post_types' => array( Rtbiz_HD_Module::$post_type ),
+				'department_support' => array( Rtbiz_HD_Module::$post_type ),
+				'offering_support' => array( Rtbiz_HD_Module::$post_type ),
+				'setting_option_name' => Rtbiz_HD_Settings::$hd_opt, // Use For ACL
+				'setting_page_url' => admin_url( 'edit.php?post_type='.Rtbiz_HD_Module::$post_type.'&page=rthd-settings'), // for Mailbox
+				'email_template_support' => array( Rtbiz_HD_Module::$post_type ),
 			), $tmp['rtbiz-helpdesk'] );
 	}
 }

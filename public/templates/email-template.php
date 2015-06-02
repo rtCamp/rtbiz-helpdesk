@@ -9,7 +9,7 @@
 	<body>
 
 		<?php
-		if ( $replyflag && rt_biz_hd_is_enable_mailbox_reading() && rt_biz_hd_get_reply_via_email() ) {
+		if ( $replyflag && rtbiz_hd_is_enable_mailbox_reading() && rtbiz_hd_get_reply_via_email() ) {
 			echo '<div style="display: none !important; color:#c5c5c5;font-size:11px;visibility: hidden;">' . htmlentities( ':: Reply Above This Line ::' ) . '</div>';
 		}
 
@@ -23,19 +23,19 @@
 		if ( ! has_filter( 'rthd_after_email_body' ) ) {
 			$afterHTML = '';
 		}
-		$body = rt_biz_hd_replace_placeholder( $body, '{ticket_link}', $title );
+		$body = rtbiz_hd_replace_placeholder( $body, '{ticket_link}', $title );
 
 		echo $beforeHTML;
 		?>
 
 		<div>
-			<?php echo rt_biz_hd_content_filter( $body ); ?>
+			<?php echo rtbiz_hd_content_filter( $body ); ?>
 		</div>
 
 		<?php
 		echo $afterHTML;
 
-		$signature = rt_biz_hd_get_email_signature_settings();
+		$signature = rtbiz_hd_get_email_signature_settings();
 
 		echo ( ( ! empty( $signature ) ) ? '<div style="color:#c5c5c5; font-size: 14px;">' . wpautop( $signature ) . '</div>' : '' ) . '<br/>'
 		?>

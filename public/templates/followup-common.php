@@ -14,7 +14,7 @@ $comments = get_comments( array(
 	'offset'  => $offset,
 ) );
 
-$cap        = rt_biz_get_access_role_cap( RT_BIZ_HD_TEXT_DOMAIN, 'author' );
+$cap        = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' );
 $created_by = get_post_meta( $post->ID, '_rtbiz_hd_created_by', true );
 
 $user_edit_content = current_user_can( $cap ) || ( get_current_user_id() == $post->$created_by );
@@ -39,7 +39,7 @@ if ( ! empty( $post->post_content ) ) {
 				<div class="followup-information">
 					<?php
 					if ( current_user_can( $cap ) ) {
-						$autherLink = '<a class="rthd-ticket-author-link" href="' . rt_biz_hd_biz_user_profile_link( $authoremail ) . '">' . $authorname . '</a>';
+						$autherLink = '<a class="rthd-ticket-author-link" href="' . rtbiz_hd_biz_user_profile_link( $authoremail ) . '">' . $authorname . '</a>';
 					} else {
 						$autherLink = $authorname;
 					}
@@ -66,7 +66,7 @@ if ( ! empty( $post->post_content ) ) {
 				<div class="rthd-comment-content"
 				     data-content="<?php echo( isset( $post->ID ) ? esc_attr( $post->post_content ) : '' ); ?>">
 					<?php
-					$content = rt_biz_hd_content_filter( isset( $post->ID ) ? $post->post_content : '' );
+					$content = rtbiz_hd_content_filter( isset( $post->ID ) ? $post->post_content : '' );
 					echo $content;
 					?>
 				</div>
@@ -100,11 +100,11 @@ if ( ! empty( $post->post_content ) ) {
 		$comment_user        = get_user_by( 'id', $comment->user_id );
 		$comment_render_type = 'left';
 		if ( ! empty( $comment_user ) ) {
-			if ( $comment_user->has_cap( rt_biz_get_access_role_cap( RT_BIZ_HD_TEXT_DOMAIN, 'author' ) ) ) {
+			if ( $comment_user->has_cap( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' ) ) ) {
 				$comment_render_type = 'right';
 			}
 		}
-		rt_biz_hd_render_comment( $comment, $user_edit, $comment_render_type );
+		rtbiz_hd_render_comment( $comment, $user_edit, $comment_render_type );
 	}
 	?>
 </ul>
@@ -127,31 +127,31 @@ if ( ! empty( $post->post_content ) ) {
 		<?php if ( current_user_can( $cap ) ) { ?>
 			<label class="rthd-visibility"> Visibility: </label>
 			<input type="radio" class="radio" name="edit_private"
-			       value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"
-			       id="followup_edit_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"/>
+			       value="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"
+			       id="followup_edit_<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"/>
 			<label
-				for="followup_edit_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"> <?php echo rt_biz_hd_get_comment_type( Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ) ?></label>
+				for="followup_edit_<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"> <?php echo rtbiz_hd_get_comment_type( Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC ) ?></label>
 			<input type="radio" class="radio" name="edit_private"
-			       value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE; ?>"
-			       id="followup_edit_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ?>"/>
+			       value="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_SENSITIVE; ?>"
+			       id="followup_edit_<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_SENSITIVE ?>"/>
 			<label
-				for="followup_edit_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ?>"> Customers + Staff (<?php echo rt_biz_hd_get_comment_type( Rt_HD_Import_Operation::$FOLLOWUP_SENSITIVE ) ?>)
+				for="followup_edit_<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_SENSITIVE ?>"> Customers + Staff (<?php echo rtbiz_hd_get_comment_type( Rtbiz_HD_Import_Operation::$FOLLOWUP_SENSITIVE ) ?>)
 
 						<span class="rthd-tooltip rthd-followup-type-tolltip">
 						<i class="dashicons dashicons-info rtmicon"></i>
 						<span class="rthd-tip">
-							<?php _e( 'Email notification will not show content of this followup. Recommended, if you are sharing password or other sensitive information.' , RT_BIZ_HD_TEXT_DOMAIN ); ?>
+							<?php _e( 'Email notification will not show content of this followup. Recommended, if you are sharing password or other sensitive information.' , RTBIZ_HD_TEXT_DOMAIN ); ?>
 						</span>
 					</span>
 			</label>
 			<input type="radio" class="radio" name="edit_private"
-			       value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF; ?>"
-			       id="followup_edit_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF ?>"/>
+			       value="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF; ?>"
+			       id="followup_edit_<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF ?>"/>
 			<label
-				for="followup_edit_<?php echo Rt_HD_Import_Operation::$FOLLOWUP_STAFF ?>"> <?php echo rt_biz_hd_get_comment_type( Rt_HD_Import_Operation::$FOLLOWUP_STAFF ) ?> </label>
+				for="followup_edit_<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF ?>"> <?php echo rtbiz_hd_get_comment_type( Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF ) ?> </label>
 		<?php } else { ?>
 			<input type="hidden" name="edit_private" id="edit-private"
-			       value="<?php echo Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>">
+			       value="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>">
 		<?php }
 		?>
 		<img id='edithdspinner' class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>">

@@ -15,7 +15,7 @@ class test_Rt_HD_Import_Operation extends RT_WP_TestCase {
 	 */
 	function setUp() {
 		parent::setUp();
-		$this->rthdImportOperation = new Rt_HD_Import_Operation();
+		$this->rthdImportOperation = new Rtbiz_HD_Import_Operation();
 	}
 
 	function  test_check_function() {

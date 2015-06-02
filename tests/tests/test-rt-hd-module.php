@@ -12,7 +12,7 @@ class test_Rt_HD_Module extends RT_WP_TestCase {
 	 */
 	function setUp() {
 		parent::setUp();
-		$this->rthdModule = new Rt_HD_Module();
+		$this->rthdModule = new Rtbiz_HD_Module();
 	}
 
 	/**
@@ -37,8 +37,8 @@ class test_Rt_HD_Module extends RT_WP_TestCase {
 	 * Test Class variable
 	 */
 	function  test_class_local_variable() {
-		$this->assertEquals( 'rtbiz_hd_ticket', Rt_HD_Module::$post_type );
-		$this->assertEquals( 'Helpdesk', Rt_HD_Module::$name);
+		$this->assertEquals( 'rtbiz_hd_ticket', Rtbiz_HD_Module::$post_type );
+		$this->assertEquals( 'Helpdesk', Rtbiz_HD_Module::$name);
 	}
 
 	/**
@@ -66,7 +66,7 @@ class test_Rt_HD_Module extends RT_WP_TestCase {
 	 * Test register_custom_post
 	 */
 	function  test_register_custom_post() {
-		$this->assertTrue( post_type_exists( Rt_HD_Module::$post_type ) );
+		$this->assertTrue( post_type_exists( Rtbiz_HD_Module::$post_type ) );
 	}
 
 	/**
@@ -75,8 +75,8 @@ class test_Rt_HD_Module extends RT_WP_TestCase {
 	function  test_register_custom_statuses() {
 		$status = array(
 			'slug'        => 'Demo',
-			'name'        => __( 'Demo', RT_BIZ_HD_TEXT_DOMAIN ),
-			'description' => __( 'Ticket is unanswered. It needs to be replied. The default state.', RT_BIZ_HD_TEXT_DOMAIN ),
+			'name'        => __( 'Demo', RTBIZ_HD_TEXT_DOMAIN ),
+			'description' => __( 'Ticket is unanswered. It needs to be replied. The default state.', RTBIZ_HD_TEXT_DOMAIN ),
 		);
 		$this->assertTrue( is_object( $this->rthdModule->register_custom_statuses( $status ) ) );
 	}

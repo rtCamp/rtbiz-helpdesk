@@ -46,9 +46,9 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Contacts_Blacklist' ) ) {
 			}
 			$class = 'rthd-hide-row';
 			if ( 'remove_blacklisted' == $blocklist_action ) {
-				$blacklistedEmail = rt_biz_hd_get_blacklist_emails();
+				$blacklistedEmail = rtbiz_hd_get_blacklist_emails();
 				$arrContactsEmail = array();
-				$contacts         = rt_biz_get_post_for_contact_connection( $post->ID, Rt_HD_Module::$post_type );
+				$contacts         = rtbiz_get_post_for_contact_connection( $post->ID, Rtbiz_HD_Module::$post_type );
 				foreach ( $contacts as $contact ) {
 					$arrContactsEmail[] = get_post_meta( $contact->ID, Rt_Entity::$meta_key_prefix . Rt_Contact::$primary_email_key, true );
 				}
@@ -71,15 +71,15 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Contacts_Blacklist' ) ) {
 					   id="rthd_ticket_contacts_blacklist">
 						<?php
 						if ( 'remove_blacklisted' == $blocklist_action ) {
-							_e( 'Remove', RT_BIZ_HD_TEXT_DOMAIN );
+							_e( 'Remove', RTBIZ_HD_TEXT_DOMAIN );
 						} else {
-							_e( 'Blacklist', RT_BIZ_HD_TEXT_DOMAIN );
+							_e( 'Blacklist', RTBIZ_HD_TEXT_DOMAIN );
 						}
 						?>
 					</a>
 				</p>
 			</div>
-			<p class="description"><?php _e( 'Note : Add ticket contacts as blacklist.', RT_BIZ_HD_TEXT_DOMAIN ); ?></p>
+			<p class="description"><?php _e( 'Note : Add ticket contacts as blacklist.', RTBIZ_HD_TEXT_DOMAIN ); ?></p>
 		<?php
 		}
 
@@ -93,7 +93,7 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Contacts_Blacklist' ) ) {
 			$reponse           = array();
 			$reponse['status'] = false;
 			$ticket_data       = $_POST;
-			$contacts          = rt_biz_get_post_for_contact_connection( $ticket_data['post_id'], Rt_HD_Module::$post_type );
+			$contacts          = rtbiz_get_post_for_contact_connection( $ticket_data['post_id'], Rtbiz_HD_Module::$post_type );
 			ob_start();
 			?>
 			<div class="confirmation-container notice notice-warning">
@@ -110,10 +110,10 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Contacts_Blacklist' ) ) {
 				<p>
 					<a href="#" data-action="blacklisted_contact" data-postid="<?php echo $ticket_data['post_id']; ?>"
 					   class="button"
-					   id="rthd_ticket_contacts_blacklist_yes"><?php _e( 'Yes', RT_BIZ_HD_TEXT_DOMAIN ); ?></a>
+					   id="rthd_ticket_contacts_blacklist_yes"><?php _e( 'Yes', RTBIZ_HD_TEXT_DOMAIN ); ?></a>
 					<a href="#" data-action="blacklisted_contact_no"
 					   data-postid="<?php echo $ticket_data['post_id']; ?>" class="button"
-					   id="rthd_ticket_contacts_blacklist_no"><?php _e( 'No', RT_BIZ_HD_TEXT_DOMAIN ); ?></a>
+					   id="rthd_ticket_contacts_blacklist_no"><?php _e( 'No', RTBIZ_HD_TEXT_DOMAIN ); ?></a>
 				</p>
 			</div>
 
@@ -133,7 +133,7 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Contacts_Blacklist' ) ) {
 			}
 			$reponse           = array();
 			$reponse['status'] = false;
-			$contacts          = rt_biz_get_post_for_contact_connection( $_POST['post_id'], Rt_HD_Module::$post_type );
+			$contacts          = rtbiz_get_post_for_contact_connection( $_POST['post_id'], Rtbiz_HD_Module::$post_type );
 			$blacklistedEmail  = array();
 			foreach ( $contacts as $contact ) {
 				$blacklistedEmail[] = get_post_meta( $contact->ID, Rt_Entity::$meta_key_prefix . Rt_Contact::$primary_email_key, true );
@@ -141,16 +141,16 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Contacts_Blacklist' ) ) {
 			$created_by         = get_user_by( 'id', get_post_meta( $_POST['post_id'], '_rtbiz_hd_created_by', true ) );
 			$blacklistedEmail[] = $created_by->user_email;
 			if ( ! empty( $blacklistedEmail ) ) {
-				$blacklistedEmail = array_merge( rt_biz_hd_get_blacklist_emails(), $blacklistedEmail );
+				$blacklistedEmail = array_merge( rtbiz_hd_get_blacklist_emails(), $blacklistedEmail );
 				$blacklistedEmail = implode( "\n", array_unique( $blacklistedEmail ) );
-				rt_biz_hd_set_redux_settings( 'rthd_blacklist_emails_textarea', $blacklistedEmail );
+				rtbiz_hd_set_redux_settings( 'rthd_blacklist_emails_textarea', $blacklistedEmail );
 				update_post_meta( $_POST['post_id'], '_rtbiz_hd_is_blocklised', 'true' );
 				ob_start();
 				?>
 				<p>
 					<a href="#" data-action="remove_blacklisted" data-postid="<?php echo $_POST['post_id']; ?>"
 					   class="button" id="rthd_ticket_contacts_blacklist">
-						<?php _e( 'Remove', RT_BIZ_HD_TEXT_DOMAIN ); ?>
+						<?php _e( 'Remove', RTBIZ_HD_TEXT_DOMAIN ); ?>
 					</a>
 				</p>
 
@@ -171,9 +171,9 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Contacts_Blacklist' ) ) {
 			}
 			$reponse           = array();
 			$reponse['status'] = false;
-			$contacts          = rt_biz_get_post_for_contact_connection( $_POST['post_id'], Rt_HD_Module::$post_type );
+			$contacts          = rtbiz_get_post_for_contact_connection( $_POST['post_id'], Rtbiz_HD_Module::$post_type );
 			$arrContactsEmail  = array();
-			$blacklistedEmail  = rt_biz_hd_get_blacklist_emails();
+			$blacklistedEmail  = rtbiz_hd_get_blacklist_emails();
 			foreach ( $contacts as $contact ) {
 				$arrContactsEmail[] = get_post_meta( $contact->ID, Rt_Entity::$meta_key_prefix . Rt_Contact::$primary_email_key, true );
 			}
@@ -185,14 +185,14 @@ if ( ! class_exists( 'RT_Meta_Box_Ticket_Contacts_Blacklist' ) ) {
 			$arrContactsEmail = array_unique( $arrContactsEmail );
 			$arrContactsEmail = implode( "\n", $arrContactsEmail );
 
-			rt_biz_hd_set_redux_settings( 'rthd_blacklist_emails_textarea', $arrContactsEmail );
+			rtbiz_hd_set_redux_settings( 'rthd_blacklist_emails_textarea', $arrContactsEmail );
 			update_post_meta( $_POST['post_id'], '_rtbiz_hd_is_blocklised', 'false' );
 			ob_start();
 			?>
 			<p>
 				<a href="#" data-action="blacklisted_confirmation" data-postid="<?php echo $_POST['post_id']; ?>"
 				   class="button" id="rthd_ticket_contacts_blacklist">
-					<?php _e( 'Blacklist', RT_BIZ_HD_TEXT_DOMAIN ); ?>
+					<?php _e( 'Blacklist', RTBIZ_HD_TEXT_DOMAIN ); ?>
 				</a>
 			</p>
 			<?php

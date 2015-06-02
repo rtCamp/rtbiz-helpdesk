@@ -13,7 +13,7 @@ function activate_rthd_plugin(path, action, rthd_nonce) {
 		path: path,
 		_ajax_nonce: rthd_nonce
 	};
-	jQuery.post(rthd_ajax_url, param, function (data) {
+	jQuery.post(rtbiz_hd_ajax_url, param, function (data) {
 		data = data.trim();
 		if (data == "true") {
 			jQuery( '.rthd-plugin-not-active-error p' ).html( '<b>rtBiz Helpdesk  :</b> ' + path + ' activated.' );
@@ -34,7 +34,7 @@ function install_rthd_plugin(plugin_slug, action, rtm_nonce) {
 		plugin_slug: plugin_slug,
 		_ajax_nonce: rtm_nonce
 	};
-	jQuery.post(rthd_ajax_url, param, function (data) {
+	jQuery.post(rtbiz_hd_ajax_url, param, function (data) {
 		data = data.trim();
 		if (data === 'true') {
 			jQuery( '.rthd-plugin-not-installed-error p' ).html( '<b>rtBiz Helpdesk  :</b> ' + plugin_slug + ' installed and activated successfully.' );

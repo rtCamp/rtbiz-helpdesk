@@ -6,7 +6,7 @@
  * Time: 7:37 PM
  */
 
-if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
+if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 
 	/**
 	 * Class RT_HD_Email_Notification
@@ -15,19 +15,19 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 	 *
 	 * @author dipesh
 	 */
-	class RT_HD_Email_Notification {
+	class Rtbiz_HD_Email_Notification {
 
 		function __construct() {
 			add_filter( 'rthd_filter_adult_emails', array( $this, 'rthd_filter_adult_emails' ), 10, 2 );
 		}
 
 		function rthd_filter_adult_emails( $emails, $postid ) {
-			if ( rt_biz_hd_get_redux_adult_filter() && rt_biz_hd_get_adult_ticket_meta( $postid ) != 'no' ) {
+			if ( rtbiz_hd_get_redux_adult_filter() && rtbiz_hd_get_adult_ticket_meta( $postid ) != 'no' ) {
 				$new = array();
 				foreach ( $emails as $email ) {
 					if ( ! empty( $email )  ) {
 						$user = get_user_by( 'email', $email['email'] );
-						if ( ! $user instanceof WP_Error && ! empty( $user ) && rt_biz_hd_get_user_adult_preference( $user->ID ) == 'yes' ) {
+						if ( ! $user instanceof WP_Error && ! empty( $user ) && rtbiz_hd_get_user_adult_preference( $user->ID ) == 'yes' ) {
 							continue;
 						}
 						$new[] = $email;
@@ -52,7 +52,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				$followup_url = '#followup-'.$followupid;
 				$title = 'followup';
 			}
-			$url  = rt_biz_hd_is_unique_hash_enabled() ? rt_biz_hd_get_unique_hash_url( $post_id ) : get_post_permalink( $post_id );
+			$url  = rtbiz_hd_is_unique_hash_enabled() ? rtbiz_hd_get_unique_hash_url( $post_id ) : get_post_permalink( $post_id );
 			return '<i style="color:#888888">To view '.$title.' online <a style="color: #3455ff; text-decoration: none;" href="'. $url . $followup_url . '">Click here</a></i>';
 		}
 
@@ -77,7 +77,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$user_id = get_current_user_id();
 			global $rt_outbound_model;
 
-			$settings = rt_biz_hd_get_redux_settings();
+			$settings = rtbiz_hd_get_redux_settings();
 			$attachments = wp_list_pluck( $attachement, 'file' );
 			$toemail = $this->filter_user_notification_preference( $toemail );
 			$ccemail = $this->filter_user_notification_preference( $ccemail );
@@ -98,7 +98,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				'refrence_id'   => $refrence_id,
 				'refrence_type' => $refrence_type,
 			);
-			if ( rtmb_get_module_mailbox_email( $settings['rthd_outgoing_email_mailbox'], RT_BIZ_HD_TEXT_DOMAIN ) != false ) {
+			if ( rtmb_get_module_mailbox_email( $settings['rthd_outgoing_email_mailbox'], RTBIZ_HD_TEXT_DOMAIN ) != false ) {
 				// send from mailbox
 				return $rt_outbound_model->add_outbound_mail( $args );
 			} else {
@@ -117,7 +117,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			foreach ( $email_ids as $email_id ) {
 				$user = get_user_by( 'email', $email_id );
 				if ( false != $user && ! $user instanceof WP_Error ) {
-					$user_pref = rt_biz_hd_get_user_notification_preference( $user->ID );
+					$user_pref = rtbiz_hd_get_user_notification_preference( $user->ID );
 					if (  'yes' == $user_pref ) { // if user don't want to notify itself
 						unset( $emails[ array_search( $email_id, $email_ids ) ] ); // Remove from the list who does not want.
 					}
@@ -142,9 +142,9 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$emailsendflag = true;
 			if ( ! empty( $arrayBCC ) ) {
 				foreach ( $arrayBCC as $temail ) {
-					add_filter( 'wp_mail_content_type', 'rt_biz_hd_set_html_content_type' );
+					add_filter( 'wp_mail_content_type', 'rtbiz_hd_set_html_content_type' );
 					$res = wp_mail( array( $temail['email'] ), $args['subject'], $args['body'], $headers, $attachments );
-					remove_filter( 'wp_mail_content_type', 'rt_biz_hd_set_html_content_type' );
+					remove_filter( 'wp_mail_content_type', 'rtbiz_hd_set_html_content_type' );
 					if ( ! $res ) {
 						$emailsendflag = false;
 					}
@@ -153,9 +153,9 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 
 			if ( ! empty( $arrayCC ) ) {
 				foreach ( $arrayCC as $tomail ) {
-					add_filter( 'wp_mail_content_type', 'rt_biz_hd_set_html_content_type' );
+					add_filter( 'wp_mail_content_type', 'rtbiz_hd_set_html_content_type' );
 					$res = wp_mail( array( $tomail ['email'] ), $args['subject'], $args['body'], $headers, $attachments );
-					remove_filter( 'wp_mail_content_type', 'rt_biz_hd_set_html_content_type' );
+					remove_filter( 'wp_mail_content_type', 'rtbiz_hd_set_html_content_type' );
 					if ( ! $res ) {
 						$emailsendflag = false;
 					}
@@ -164,9 +164,9 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 
 			if ( ! empty( $arrayTo ) ) {
 				foreach ( $arrayTo as $key => $temail ) {
-					add_filter( 'wp_mail_content_type', 'rt_biz_hd_set_html_content_type' );
+					add_filter( 'wp_mail_content_type', 'rtbiz_hd_set_html_content_type' );
 					$res = wp_mail( array( $temail['email'] ), $args['subject'], $args['body'], $headers, $attachments );
-					remove_filter( 'wp_mail_content_type', 'rt_biz_hd_set_html_content_type' );
+					remove_filter( 'wp_mail_content_type', 'rtbiz_hd_set_html_content_type' );
 					if ( ! $res ) {
 						$emailsendflag = false;
 					}
@@ -183,8 +183,8 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		public function notification_new_followup_added( $comment, $comment_privacy, $uploaded ) {
 			$followup_creator = $ContactEmail = $groupEmail = $assigneEmail = $subscriberEmail = $bccemails = array();
 
-			$redux = rt_biz_hd_get_redux_settings();
-			if ( Rt_HD_Import_Operation::$FOLLOWUP_STAFF != $comment_privacy ) {
+			$redux = rtbiz_hd_get_redux_settings();
+			if ( Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF != $comment_privacy ) {
 				$notificationFlagClient = ( isset( $redux['rthd_notification_acl_client_events'] ) && 1 == $redux['rthd_notification_acl_client_events']['new_followup_created_mail'] );
 				$notificationFlagAssignee = ( isset( $redux['rthd_notification_acl_assignee_events'] ) && 1 == $redux['rthd_notification_acl_assignee_events']['new_followup_created_mail'] );
 				$notificationFlagSubscriber = ( isset( $redux['rthd_notification_acl_staff_events'] ) && 1 == $redux['rthd_notification_acl_staff_events']['new_followup_created_mail'] );
@@ -224,38 +224,38 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				$ContactEmail  = apply_filters( 'rthd_filter_adult_emails', $ContactEmail, $comment->comment_post_ID );
 			}
 
-			if ( isset( $comment_privacy ) && ! empty( $comment_privacy ) && intval( $comment_privacy ) && $comment_privacy > Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC  ) {
-				if ( Rt_HD_Import_Operation::$FOLLOWUP_STAFF == $comment_privacy ) {
-					$subject  = rt_biz_hd_create_new_ticket_title( 'rthd_new_followup_email_title_staff_note', $comment->comment_post_ID );
-					$body     = apply_filters( 'rthd_email_template_followup_add_staff_note', rt_biz_hd_get_email_template_body( 'rthd_email_template_followup_add_staff_note' ) );
+			if ( isset( $comment_privacy ) && ! empty( $comment_privacy ) && intval( $comment_privacy ) && $comment_privacy > Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC  ) {
+				if ( Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF == $comment_privacy ) {
+					$subject  = rtbiz_hd_create_new_ticket_title( 'rthd_new_followup_email_title_staff_note', $comment->comment_post_ID );
+					$body     = apply_filters( 'rthd_email_template_followup_add_staff_note', rtbiz_hd_get_email_template_body( 'rthd_email_template_followup_add_staff_note' ) );
 				} else {
 					// Filter for email when follow up is added as private
-					$subject  = rt_biz_hd_create_new_ticket_title( 'rthd_new_followup_email_title_private', $comment->comment_post_ID );
-					$body     = apply_filters( 'rthd_email_template_followup_add_private', rt_biz_hd_get_email_template_body( 'rthd_email_template_followup_add_private' ) );
+					$subject  = rtbiz_hd_create_new_ticket_title( 'rthd_new_followup_email_title_private', $comment->comment_post_ID );
+					$body     = apply_filters( 'rthd_email_template_followup_add_private', rtbiz_hd_get_email_template_body( 'rthd_email_template_followup_add_private' ) );
 					$uploaded = array();
 				}
 			} else {
-				$subject = rt_biz_hd_create_new_ticket_title( 'rthd_new_followup_email_title', $comment->comment_post_ID );
-				$body = apply_filters( 'rthd_email_template_followup_add', rt_biz_hd_get_email_template_body( 'rthd_email_template_followup_add' ) );
+				$subject = rtbiz_hd_create_new_ticket_title( 'rthd_new_followup_email_title', $comment->comment_post_ID );
+				$body = apply_filters( 'rthd_email_template_followup_add', rtbiz_hd_get_email_template_body( 'rthd_email_template_followup_add' ) );
 			}
-			global $rt_hd_module;
-			$labels = $rt_hd_module->labels;
+			global $rtbiz_hd_module;
+			$labels = $rtbiz_hd_module->labels;
 			$title = $this->get_email_title( $comment->comment_post_ID, $labels['name'], $comment->comment_ID );
 			// replace followup_content placeholder with content
-			$body = rt_biz_hd_replace_placeholder( $body, '{followup_content}', rt_biz_hd_content_filter( $comment->comment_content ) );
+			$body = rtbiz_hd_replace_placeholder( $body, '{followup_content}', rtbiz_hd_content_filter( $comment->comment_content ) );
 
 			// sending email to followup author [ To ]
-			$toBody = rt_biz_hd_replace_placeholder( $body,'{followup_author}', 'you' );
+			$toBody = rtbiz_hd_replace_placeholder( $body,'{followup_author}', 'you' );
 			$from_email = get_comment_meta( $comment->comment_ID, 'rt_hd_original_email', true );
 			// if followup is added via email do not send email as he will already have email content so we should not flood his email thread.
 			if ( empty( $from_email ) ) {
 				// follow up did not came from email send email
-				$this->insert_new_send_email( $subject, rt_biz_hd_get_general_body_template( $toBody, $title, true ), $followup_creator, array(), array(), $uploaded, $comment->comment_ID , 'comment' );
+				$this->insert_new_send_email( $subject, rtbiz_hd_get_general_body_template( $toBody, $title, true ), $followup_creator, array(), array(), $uploaded, $comment->comment_ID , 'comment' );
 			}
 
 			//sending email to ticket assignee [ To ] | staff [ BCC ] | contact [ BCC ] | globel list [ BCC ]
-			$toBody = rt_biz_hd_replace_placeholder( $body,'{followup_author}', $comment->comment_author );
-			$this->insert_new_send_email( $subject, rt_biz_hd_get_general_body_template( $toBody, $title, true ), $ContactEmail , array(), $bccemails, $uploaded, $comment->comment_ID , 'comment' );
+			$toBody = rtbiz_hd_replace_placeholder( $body,'{followup_author}', $comment->comment_author );
+			$this->insert_new_send_email( $subject, rtbiz_hd_get_general_body_template( $toBody, $title, true ), $ContactEmail , array(), $bccemails, $uploaded, $comment->comment_ID , 'comment' );
 		}
 
 
@@ -269,7 +269,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 
 			$user = get_user_by( 'id', $user_id );
 
-			$redux = rt_biz_hd_get_redux_settings();
+			$redux = rtbiz_hd_get_redux_settings();
 			$notificationFlagClient = ( isset( $redux['rthd_notification_acl_client_events'] ) && 1 == $redux['rthd_notification_acl_client_events']['new_followup_deleted_mail'] );
 			$notificationFlagAssignee = ( isset( $redux['rthd_notification_acl_assignee_events'] ) && 1 == $redux['rthd_notification_acl_assignee_events']['new_followup_deleted_mail'] );
 			$notificationFlagSsubscriber = ( isset( $redux['rthd_notification_acl_staff_events'] ) && 1 == $redux['rthd_notification_acl_staff_events']['new_followup_deleted_mail'] );
@@ -303,28 +303,28 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 				$ContactEmail = apply_filters( 'rthd_filter_adult_emails', $ContactEmail , $comment->comment_post_ID );
 			}
 
-			if ( ! ( isset( $comment->comment_type ) && ! empty( $comment->comment_type ) && intval( $comment->comment_type ) && $comment->comment_type > Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC  ) ) {
-				$body = apply_filters( 'rthd_email_template_followup_deleted', rt_biz_hd_get_email_template_body( 'rthd_email_template_followup_deleted' ) );
-				$subject = rt_biz_hd_create_new_ticket_title( 'rthd_delete_followup_email_title', $comment->comment_post_ID );
+			if ( ! ( isset( $comment->comment_type ) && ! empty( $comment->comment_type ) && intval( $comment->comment_type ) && $comment->comment_type > Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC  ) ) {
+				$body = apply_filters( 'rthd_email_template_followup_deleted', rtbiz_hd_get_email_template_body( 'rthd_email_template_followup_deleted' ) );
+				$subject = rtbiz_hd_create_new_ticket_title( 'rthd_delete_followup_email_title', $comment->comment_post_ID );
 			} else {
-				$body = apply_filters( 'rthd_email_template_followup_deleted_private', rt_biz_hd_get_email_template_body( 'rthd_email_template_followup_deleted_private' ) );
-				$subject = rt_biz_hd_create_new_ticket_title( 'rthd_delete_followup_email_title_private', $comment->comment_post_ID );
+				$body = apply_filters( 'rthd_email_template_followup_deleted_private', rtbiz_hd_get_email_template_body( 'rthd_email_template_followup_deleted_private' ) );
+				$subject = rtbiz_hd_create_new_ticket_title( 'rthd_delete_followup_email_title_private', $comment->comment_post_ID );
 			}
-			$body = rt_biz_hd_replace_placeholder( $body, '{followup_content}', rt_biz_hd_content_filter( $comment->comment_content ) );
+			$body = rtbiz_hd_replace_placeholder( $body, '{followup_content}', rtbiz_hd_content_filter( $comment->comment_content ) );
 
-			global $rt_hd_module;
-			$labels = $rt_hd_module->labels;
+			global $rtbiz_hd_module;
+			$labels = $rtbiz_hd_module->labels;
 			$title = $this->get_email_title( $comment->comment_post_ID, $labels['name'] );
 
 			// sending email to followup author [ To ]
-			if ( user_can( $user, rt_biz_get_access_role_cap( RT_BIZ_HD_TEXT_DOMAIN, 'author' ) ) ) {
-				$bodyto = $toBody = rt_biz_hd_replace_placeholder( $body,'{followup_deleted_by}', 'you' );
-				$this->insert_new_send_email( $subject, rt_biz_hd_get_general_body_template( $bodyto, $title, true ), $followup_deletor, array(), array(), array(), $comment->comment_ID , 'comment' );
+			if ( user_can( $user, rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' ) ) ) {
+				$bodyto = $toBody = rtbiz_hd_replace_placeholder( $body,'{followup_deleted_by}', 'you' );
+				$this->insert_new_send_email( $subject, rtbiz_hd_get_general_body_template( $bodyto, $title, true ), $followup_deletor, array(), array(), array(), $comment->comment_ID , 'comment' );
 			}
 
 			//sending emial to ticket assignee [ To ] | staff [ BCC ] | contact [ BCC ] | globel list [ BCC ]
-			$bodyto = rt_biz_hd_replace_placeholder( $body,'{followup_deleted_by}', $comment->comment_author );
-			$this->insert_new_send_email( $subject, rt_biz_hd_get_general_body_template( $bodyto, $title, true ), $ContactEmail, array(), $bccemails, array(), $comment->comment_ID , 'comment' );
+			$bodyto = rtbiz_hd_replace_placeholder( $body,'{followup_deleted_by}', $comment->comment_author );
+			$this->insert_new_send_email( $subject, rtbiz_hd_get_general_body_template( $bodyto, $title, true ), $ContactEmail, array(), $bccemails, array(), $comment->comment_ID , 'comment' );
 		}
 
 		/**
@@ -340,7 +340,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 
 			$user = get_user_by( 'id', $user_id );
 
-			$redux = rt_biz_hd_get_redux_settings();
+			$redux = rtbiz_hd_get_redux_settings();
 			$notificationFlagClient = ( isset( $redux['rthd_notification_acl_client_events'] ) && 1 == $redux['rthd_notification_acl_client_events']['new_followup_updated_mail'] );
 			$notificationFlagAssignee = ( isset( $redux['rthd_notification_acl_assignee_events'] ) && 1 == $redux['rthd_notification_acl_assignee_events']['new_followup_updated_mail'] );
 			$notificationFlagSsubscriber = ( isset( $redux['rthd_notification_acl_staff_events'] ) && 1 == $redux['rthd_notification_acl_staff_events']['new_followup_updated_mail'] );
@@ -348,7 +348,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 
 			// find if followup was private before or right now it is private
 			$private_update = false;
-			if ( ( intval( $old_privacy ) && $old_privacy > Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ) || ( intval( $new_privacy ) && $new_privacy > Rt_HD_Import_Operation::$FOLLOWUP_PUBLIC ) ) {
+			if ( ( intval( $old_privacy ) && $old_privacy > Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC ) || ( intval( $new_privacy ) && $new_privacy > Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC ) ) {
 				$private_update = true;
 			}
 
@@ -374,47 +374,47 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$bccemails = $this->exclude_author( $bccemails, $comment->comment_author_email );
 			$bccemails = apply_filters( 'rthd_filter_adult_emails', $bccemails , $comment->comment_post_ID );
 
-			if ( $notificationFlagClient && Rt_HD_Import_Operation::$FOLLOWUP_STAFF != $new_privacy && Rt_HD_Import_Operation::$FOLLOWUP_STAFF != $old_privacy ) {
+			if ( $notificationFlagClient && Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF != $new_privacy && Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF != $old_privacy ) {
 				$ContactEmail  = $this->get_contacts( $comment->comment_post_ID );
 				$ContactEmail = $this->exclude_author( $ContactEmail, $comment->comment_author_email );
 				$ContactEmail = apply_filters( 'rthd_filter_adult_emails', $ContactEmail, $comment->comment_post_ID );
 			}
 
 			if ( $private_update ) {
-				$body = apply_filters( 'rthd_email_template_followup_updated_private', rt_biz_hd_get_email_template_body( 'rthd_email_template_followup_updated_private' ) );
-				$subject = rt_biz_hd_create_new_ticket_title( 'rthd_update_followup_email_title_private', $comment->comment_post_ID );
+				$body = apply_filters( 'rthd_email_template_followup_updated_private', rtbiz_hd_get_email_template_body( 'rthd_email_template_followup_updated_private' ) );
+				$subject = rtbiz_hd_create_new_ticket_title( 'rthd_update_followup_email_title_private', $comment->comment_post_ID );
 			} else {
-				$body = apply_filters( 'rthd_email_template_followup_updated', rt_biz_hd_get_email_template_body( 'rthd_email_template_followup_updated' ) );
-				$subject = rt_biz_hd_create_new_ticket_title( 'rthd_update_followup_email_title', $comment->comment_post_ID );
+				$body = apply_filters( 'rthd_email_template_followup_updated', rtbiz_hd_get_email_template_body( 'rthd_email_template_followup_updated' ) );
+				$subject = rtbiz_hd_create_new_ticket_title( 'rthd_update_followup_email_title', $comment->comment_post_ID );
 			}
-			$diff_visibility = rt_biz_hd_text_diff( rt_biz_hd_get_comment_type( $old_privacy ), rt_biz_hd_get_comment_type( $new_privacy ) );
-			$diff_followup_content = rt_biz_hd_text_diff( trim( html_entity_decode( strip_tags( $old_content ) ) ), trim( html_entity_decode( strip_tags( $new_content ) ) ) );
+			$diff_visibility = rtbiz_hd_text_diff( rtbiz_hd_get_comment_type( $old_privacy ), rtbiz_hd_get_comment_type( $new_privacy ) );
+			$diff_followup_content = rtbiz_hd_text_diff( trim( html_entity_decode( strip_tags( $old_content ) ) ), trim( html_entity_decode( strip_tags( $new_content ) ) ) );
 
 			if ( $diff_visibility ) {
-				$body = rt_biz_hd_replace_placeholder( $body, '{visibility_diff}', $diff_visibility );
+				$body = rtbiz_hd_replace_placeholder( $body, '{visibility_diff}', $diff_visibility );
 			} else {
-				$body = rt_biz_hd_replace_placeholder( $body, '{visibility_diff}', rt_biz_hd_get_comment_type( $new_privacy ) );
+				$body = rtbiz_hd_replace_placeholder( $body, '{visibility_diff}', rtbiz_hd_get_comment_type( $new_privacy ) );
 			}
 			if ( ! $private_update ) { // not private then add diff content if exists or add actual content if no diff
 				if ( $diff_followup_content ) {
-					$body = rt_biz_hd_replace_placeholder( $body, '{followup_diff}', $diff_followup_content );
+					$body = rtbiz_hd_replace_placeholder( $body, '{followup_diff}', $diff_followup_content );
 				} else {
-					$body = rt_biz_hd_replace_placeholder( $body, '{followup_diff}', rt_biz_hd_content_filter( $comment->comment_content ) );
+					$body = rtbiz_hd_replace_placeholder( $body, '{followup_diff}', rtbiz_hd_content_filter( $comment->comment_content ) );
 				}
 			}
-			global $rt_hd_module;
-			$labels = $rt_hd_module->labels;
+			global $rtbiz_hd_module;
+			$labels = $rtbiz_hd_module->labels;
 			$title = $this->get_email_title( $comment->comment_post_ID, $labels['name'], $comment->comment_ID );
 
 			// sending email to followup author [ To ]
-			if ( user_can( $user, rt_biz_get_access_role_cap( RT_BIZ_HD_TEXT_DOMAIN, 'author' ) ) ) {
-				$bodyto = rt_biz_hd_replace_placeholder( $body,'{followup_updated_by}', 'you' );
-				$this->insert_new_send_email( $subject, rt_biz_hd_get_general_body_template( $bodyto, $title, true ), $followup_updater, array(), array(), array(), $comment->comment_ID, 'comment' );
+			if ( user_can( $user, rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' ) ) ) {
+				$bodyto = rtbiz_hd_replace_placeholder( $body,'{followup_updated_by}', 'you' );
+				$this->insert_new_send_email( $subject, rtbiz_hd_get_general_body_template( $bodyto, $title, true ), $followup_updater, array(), array(), array(), $comment->comment_ID, 'comment' );
 			}
 
 			//sending email to ticket assignee [ To ] | staff [ BCC ] | contact [ BCC ] | globel list [ BCC ]
-			$bodyto = rt_biz_hd_replace_placeholder( $body,'{followup_updated_by}', $user->display_name );
-			$this->insert_new_send_email( $subject, rt_biz_hd_get_general_body_template( $bodyto, $title,  true ), $ContactEmail, array(), $bccemails, array(), $comment->comment_ID , 'comment' );
+			$bodyto = rtbiz_hd_replace_placeholder( $body,'{followup_updated_by}', $user->display_name );
+			$this->insert_new_send_email( $subject, rtbiz_hd_get_general_body_template( $bodyto, $title,  true ), $ContactEmail, array(), $bccemails, array(), $comment->comment_ID , 'comment' );
 
 		}
 
@@ -469,7 +469,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		public function notification_new_ticket_created( $post_id, $post_type, $body = '', $uploaded = array() ) {
 			$ticket_creator = $ContactEmail = $groupEmail = $assigneEmail = $subscriberEmail = array();
 
-			$redux = rt_biz_hd_get_redux_settings();
+			$redux = rtbiz_hd_get_redux_settings();
 			$notificationFlagClient = ( isset( $redux['rthd_notification_acl_client_events'] ) && 1 == $redux['rthd_notification_acl_client_events']['new_ticket_created_mail'] );
 			$notificationFlagAssignee = ( isset( $redux['rthd_notification_acl_assignee_events'] ) && 1 == $redux['rthd_notification_acl_assignee_events']['new_ticket_created_mail'] );
 			$notificationFlagSsubscriber = ( isset( $redux['rthd_notification_acl_staff_events'] ) && 1 == $redux['rthd_notification_acl_staff_events']['new_ticket_created_mail'] );
@@ -507,101 +507,101 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$arrProducts = implode( ', ', $arrProducts );
 
 			$title = $this->get_email_title( $post_id, $post_type );
-			$subject     = rt_biz_hd_create_new_ticket_title( 'rthd_new_ticket_email_title', $post_id );
+			$subject     = rtbiz_hd_create_new_ticket_title( 'rthd_new_ticket_email_title', $post_id );
 
 			// Ticket creator [ To ] Notification
 			if ( ! empty( $ticket_creator ) && $notificationFlagClient ) {
 				//rthd_email_template_new_ticket_created_author
-				$htmlbody = apply_filters( 'rthd_email_template_new_ticket_created_author', rt_biz_hd_get_email_template_body( 'rthd_email_template_new_ticket_created_author' ) );
+				$htmlbody = apply_filters( 'rthd_email_template_new_ticket_created_author', rtbiz_hd_get_email_template_body( 'rthd_email_template_new_ticket_created_author' ) );
 				if ( isset( $body ) && ! empty( $body ) ) {
-					$htmlbody = rt_biz_hd_replace_placeholder( $htmlbody,'{ticket_body}', '<div>' . rt_biz_hd_content_filter( $body ) . '</div>' );
+					$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_body}', '<div>' . rtbiz_hd_content_filter( $body ) . '</div>' );
 				} else {
-					$htmlbody = rt_biz_hd_replace_placeholder( $htmlbody,'{ticket_body}', '' );
+					$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_body}', '' );
 				}
-				$htmlbody = rt_biz_hd_get_general_body_template( $htmlbody, $title, true );
+				$htmlbody = rtbiz_hd_get_general_body_template( $htmlbody, $title, true );
 
 				$this->insert_new_send_email( $subject, $htmlbody, $ticket_creator, array(), array(), $uploaded, $post_id, 'post' );
 			}
 
 			// Conatcts [ TO ] Notification
 			if ( ! empty( $ContactEmail ) && $notificationFlagClient ) {
-				$subject     = rt_biz_hd_create_new_ticket_title( 'rthd_new_ticket_email_title_contacts', $post_id );
+				$subject     = rtbiz_hd_create_new_ticket_title( 'rthd_new_ticket_email_title_contacts', $post_id );
 
-				$htmlbody = apply_filters( 'rthd_email_template_new_ticket_created_contacts', rt_biz_hd_get_email_template_body( 'rthd_email_template_new_ticket_created_contacts' ) );
-				$htmlbody = rt_biz_hd_replace_placeholder( $htmlbody,'{ticket_author}', $ticket_created_by->display_name );
+				$htmlbody = apply_filters( 'rthd_email_template_new_ticket_created_contacts', rtbiz_hd_get_email_template_body( 'rthd_email_template_new_ticket_created_contacts' ) );
+				$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_author}', $ticket_created_by->display_name );
 				if ( isset( $body ) && ! empty( $body ) ) {
-					$htmlbody = rt_biz_hd_replace_placeholder( $htmlbody,'{ticket_body}', '<div>' . rt_biz_hd_content_filter( $body ) . '</div>' );
+					$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_body}', '<div>' . rtbiz_hd_content_filter( $body ) . '</div>' );
 				} else {
-					$htmlbody = rt_biz_hd_replace_placeholder( $htmlbody,'{ticket_body}', '' );
+					$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_body}', '' );
 				}
-				$htmlbody = rt_biz_hd_get_general_body_template( $htmlbody, $title, true );
+				$htmlbody = rtbiz_hd_get_general_body_template( $htmlbody, $title, true );
 				$this->insert_new_send_email( $subject, $htmlbody, $ContactEmail, array(), array(), $uploaded, $post_id, 'post' );
 			}
 
 			// Group [ BCC ] Notification
 			if ( ! empty( $groupEmail ) && $notificationFlagGroup ) {
-				$subject     = rt_biz_hd_create_new_ticket_title( 'rthd_new_ticket_email_title_group', $post_id );
+				$subject     = rtbiz_hd_create_new_ticket_title( 'rthd_new_ticket_email_title_group', $post_id );
 
-				$htmlbody = apply_filters( 'rthd_email_template_new_ticket_created_group_notification', rt_biz_hd_get_email_template_body( 'rthd_email_template_new_ticket_created_group_notification' ) );
-				$htmlbody = rt_biz_hd_replace_placeholder( $htmlbody,'{ticket_author}', $ticket_created_by->display_name );
-				$htmlbody = rt_biz_hd_replace_placeholder( $htmlbody,'{ticket_assignee}', $assigne_user->display_name );
+				$htmlbody = apply_filters( 'rthd_email_template_new_ticket_created_group_notification', rtbiz_hd_get_email_template_body( 'rthd_email_template_new_ticket_created_group_notification' ) );
+				$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_author}', $ticket_created_by->display_name );
+				$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_assignee}', $assigne_user->display_name );
 
 				// Add product info into mail body.
 				if ( ! empty( $arrProducts ) ) {
-					$htmlbody = rt_biz_hd_replace_placeholder( $htmlbody,'{ticket_offerings}', $arrProducts );
+					$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_offerings}', $arrProducts );
 				} else {
-					$htmlbody = rt_biz_hd_replace_placeholder( $htmlbody,'{ticket_offerings}', 'No offering found' );
+					$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_offerings}', 'No offering found' );
 				}
 				if ( isset( $body ) && ! empty( $body ) ) {
-					$htmlbody = rt_biz_hd_replace_placeholder( $htmlbody,'{ticket_body}', '<div>' . rt_biz_hd_content_filter( $body ) . '</div>' );
+					$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_body}', '<div>' . rtbiz_hd_content_filter( $body ) . '</div>' );
 				} else {
-					$htmlbody = rt_biz_hd_replace_placeholder( $htmlbody,'{ticket_body}', '' );
+					$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_body}', '' );
 				}
-				$htmlbody = rt_biz_hd_get_general_body_template( $htmlbody, $title, true );
+				$htmlbody = rtbiz_hd_get_general_body_template( $htmlbody, $title, true );
 				$this->insert_new_send_email( $subject, $htmlbody, $groupEmail, array(), array() , $uploaded, $post_id, 'post' );
 			}
 
 			// Assignee [ To ] Notification
 			if ( ! empty( $assigneEmail ) && $notificationFlagAssignee ) {
-				$subject     = rt_biz_hd_create_new_ticket_title( 'rthd_new_ticket_email_title_assignee', $post_id );
-				$htmlbody = apply_filters( 'rthd_email_template_new_ticket_created_assignee', rt_biz_hd_get_email_template_body( 'rthd_email_template_new_ticket_created_assignee' ) );
-				$htmlbody = rt_biz_hd_replace_placeholder( $htmlbody,'{ticket_author}', $ticket_created_by->display_name );
+				$subject     = rtbiz_hd_create_new_ticket_title( 'rthd_new_ticket_email_title_assignee', $post_id );
+				$htmlbody = apply_filters( 'rthd_email_template_new_ticket_created_assignee', rtbiz_hd_get_email_template_body( 'rthd_email_template_new_ticket_created_assignee' ) );
+				$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_author}', $ticket_created_by->display_name );
 
 				// Add product info into mail body.
 				if ( ! empty( $arrProducts ) ) {
-					$htmlbody = rt_biz_hd_replace_placeholder( $htmlbody,'{ticket_offerings}', $arrProducts );
+					$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_offerings}', $arrProducts );
 				} else {
-					$htmlbody = rt_biz_hd_replace_placeholder( $htmlbody,'{ticket_offerings}', 'No offering found' );
+					$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_offerings}', 'No offering found' );
 				}
 				if ( isset( $body ) && ! empty( $body ) ) {
-					$htmlbody = rt_biz_hd_replace_placeholder( $htmlbody,'{ticket_body}', '<div>' . rt_biz_hd_content_filter( $body ) . '</div>' );
+					$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_body}', '<div>' . rtbiz_hd_content_filter( $body ) . '</div>' );
 				} else {
-					$htmlbody = rt_biz_hd_replace_placeholder( $htmlbody,'{ticket_body}', '' );
+					$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_body}', '' );
 				}
-				$htmlbody = rt_biz_hd_get_general_body_template( $htmlbody, $title, true );
+				$htmlbody = rtbiz_hd_get_general_body_template( $htmlbody, $title, true );
 				$this->insert_new_send_email( $subject, $htmlbody, $assigneEmail, array(), array() , $uploaded, $post_id, 'post' );
 			}
 
 			// Subscrible [ BCC ] Notification
 			if ( ! empty( $subscriberEmail ) && $notificationFlagSsubscriber ) {
 				// A new support ticket is created by [CREATOR CONTACT NAME]. You have been subscribed to this ticket.
-				$subject     = rt_biz_hd_create_new_ticket_title( 'rthd_new_ticket_email_title_subscriber', $post_id );
-				$htmlbody = apply_filters( 'rthd_email_template_new_ticket_created_subscriber', rt_biz_hd_get_email_template_body( 'rthd_email_template_new_ticket_created_subscriber' ) );
-				$htmlbody = rt_biz_hd_replace_placeholder( $htmlbody,'{ticket_author}', $ticket_created_by->display_name );
-				$htmlbody = rt_biz_hd_replace_placeholder( $htmlbody,'{ticket_assignee}', $assigne_user->display_name );
+				$subject     = rtbiz_hd_create_new_ticket_title( 'rthd_new_ticket_email_title_subscriber', $post_id );
+				$htmlbody = apply_filters( 'rthd_email_template_new_ticket_created_subscriber', rtbiz_hd_get_email_template_body( 'rthd_email_template_new_ticket_created_subscriber' ) );
+				$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_author}', $ticket_created_by->display_name );
+				$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_assignee}', $assigne_user->display_name );
 
 				// Add product info into mail body.
 				if ( ! empty( $arrProducts ) ) {
-					$htmlbody = rt_biz_hd_replace_placeholder( $htmlbody,'{ticket_offerings}', $arrProducts );
+					$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_offerings}', $arrProducts );
 				} else {
-					$htmlbody = rt_biz_hd_replace_placeholder( $htmlbody,'{ticket_offerings}', 'No offering found' );
+					$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_offerings}', 'No offering found' );
 				}
 				if ( isset( $body ) && ! empty( $body ) ) {
-					$htmlbody = rt_biz_hd_replace_placeholder( $htmlbody,'{ticket_body}', '<div>' . rt_biz_hd_content_filter( $body ) . '</div>' );
+					$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_body}', '<div>' . rtbiz_hd_content_filter( $body ) . '</div>' );
 				} else {
-					$htmlbody = rt_biz_hd_replace_placeholder( $htmlbody,'{ticket_body}', '' );
+					$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_body}', '' );
 				}
-				$htmlbody = rt_biz_hd_get_general_body_template( $htmlbody, $title, true );
+				$htmlbody = rtbiz_hd_get_general_body_template( $htmlbody, $title, true );
 				$this->insert_new_send_email( $subject, $htmlbody, $subscriberEmail, array(), array() , $uploaded, $post_id, 'post' );
 			}
 
@@ -617,7 +617,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		public function notification_ticket_subscribed( $post_id, $post_type, $newSubscriberList ) {
 			$bccemails = $groupEmail = $assigneEmail = $subscriberEmail = array();
 
-			$redux = rt_biz_hd_get_redux_settings();
+			$redux = rtbiz_hd_get_redux_settings();
 			$notificationFlagAssignee = ( isset( $redux['rthd_notification_acl_assignee_events'] ) && 1 == $redux['rthd_notification_acl_assignee_events']['new_subscriber_added_mail'] );
 			$notificationFlagSsubscriber = ( isset( $redux['rthd_notification_acl_staff_events'] ) && 1 == $redux['rthd_notification_acl_staff_events']['new_subscriber_added_mail'] );
 			$notificationFlagGroup = ( isset( $redux['rthd_notification_acl_group_events'] ) && 1 == $redux['rthd_notification_acl_group_events']['new_subscriber_added_mail'] );
@@ -645,11 +645,11 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 
 			// New subscriber added Notification to subscriber
 			$title = $this->get_email_title( $post_id, $post_type );
-			$subject     = rt_biz_hd_create_new_ticket_title( 'rthd_ticket_subscribe_email_title', $post_id );
+			$subject     = rtbiz_hd_create_new_ticket_title( 'rthd_ticket_subscribe_email_title', $post_id );
 			//rthd_email_template_ticket_subscribed
-			$htmlbody_subscriber = apply_filters( 'rthd_email_template_ticket_subscribed', rt_biz_hd_get_email_template_body( 'rthd_email_template_ticket_subscribed' ) );
-			$htmlbody = rt_biz_hd_replace_placeholder( $htmlbody_subscriber,'{ticket_subscribers}', 'You have ' );
-			$htmlbody = rt_biz_hd_get_general_body_template( $htmlbody, $title );
+			$htmlbody_subscriber = apply_filters( 'rthd_email_template_ticket_subscribed', rtbiz_hd_get_email_template_body( 'rthd_email_template_ticket_subscribed' ) );
+			$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody_subscriber,'{ticket_subscribers}', 'You have ' );
+			$htmlbody = rtbiz_hd_get_general_body_template( $htmlbody, $title );
 			$this->insert_new_send_email( $subject, $htmlbody, $newSubscriberList, array(), array(), array(), $post_id, 'post' );
 
 			// Assignee [ To ] | group [ BCC ] notification for subscriber added
@@ -659,8 +659,8 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			}
 			$subscribers = trim( $subscribers, ' ' );
 			$subscribers .= ( count( $newSubscriberList ) >= 2 ) ? ' have ' : ' has ' ;
-			$htmlbody = rt_biz_hd_replace_placeholder( $htmlbody_subscriber,'{ticket_subscribers}', $subscribers );
-			$htmlbody = rt_biz_hd_get_general_body_template( $htmlbody, $title );
+			$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody_subscriber,'{ticket_subscribers}', $subscribers );
+			$htmlbody = rtbiz_hd_get_general_body_template( $htmlbody, $title );
 
 			$this->insert_new_send_email( $subject, $htmlbody, $assigneEmail, array(), $bccemails, array(), $post_id, 'post' );
 		}
@@ -675,7 +675,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		public function notification_ticket_unsubscribed( $post_id, $post_type, $oldSubscriberList  ) {
 			$bccemails = $groupEmail = $assigneEmail = $subscriberEmail = array();
 
-			$redux = rt_biz_hd_get_redux_settings();
+			$redux = rtbiz_hd_get_redux_settings();
 			$notificationFlagAssignee = ( isset( $redux['rthd_notification_acl_assignee_events'] ) && 1 == $redux['rthd_notification_acl_assignee_events']['subscriber_removed_mail'] );
 			$notificationFlagSsubscriber = ( isset( $redux['rthd_notification_acl_staff_events'] ) && 1 == $redux['rthd_notification_acl_staff_events']['subscriber_removed_mail'] );
 			$notificationFlagGroup = ( isset( $redux['rthd_notification_acl_group_events'] ) && 1 == $redux['rthd_notification_acl_group_events']['subscriber_removed_mail'] );
@@ -704,7 +704,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 
 			//subscriber removed Notification
 			$title = $this->get_email_title( $post_id, $post_type );
-			$subject     = rt_biz_hd_create_new_ticket_title( 'rthd_ticket_unsubscribe_email_title', $post_id );
+			$subject     = rtbiz_hd_create_new_ticket_title( 'rthd_ticket_unsubscribe_email_title', $post_id );
 
 			$htmlbody = '';
 			foreach ( $oldSubscriberList as $user ) {
@@ -714,9 +714,9 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$htmlbody = trim( $htmlbody, ' ' );
 			$htmlbody .= ( count( $oldSubscriberList ) >= 2 ) ? ' have' : '  has' ;
 
-			$htmlbody_unsubscriber = apply_filters( 'rthd_email_template_ticket_unsubscribed', rt_biz_hd_get_email_template_body( 'rthd_email_template_ticket_unsubscribed' ) );
-			$htmlbody = rt_biz_hd_replace_placeholder( $htmlbody_unsubscriber,'{ticket_unsubscribers}', $htmlbody );
-			$htmlbody = rt_biz_hd_get_general_body_template( $htmlbody, $title );
+			$htmlbody_unsubscriber = apply_filters( 'rthd_email_template_ticket_unsubscribed', rtbiz_hd_get_email_template_body( 'rthd_email_template_ticket_unsubscribed' ) );
+			$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody_unsubscriber,'{ticket_unsubscribers}', $htmlbody );
+			$htmlbody = rtbiz_hd_get_general_body_template( $htmlbody, $title );
 
 			$this->insert_new_send_email( $subject, $htmlbody, $assigneEmail, array(), $bccemails, array(), $post_id, 'post' );
 		}
@@ -732,7 +732,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		public function notification_new_ticket_reassigned( $post_id, $oldassignee, $assignee, $post_type ) {
 			$bccemails = $newassigneEmail = $oldassigneEmail = $groupEmail = $subscriberEmail = array();
 
-			$redux = rt_biz_hd_get_redux_settings();
+			$redux = rtbiz_hd_get_redux_settings();
 			$notificationFlagAssignee = ( isset( $redux['rthd_notification_acl_assignee_events'] ) && 1 == $redux['rthd_notification_acl_assignee_events']['ticket_reassigned_mail'] );
 			$notificationFlagSsubscriber = ( isset( $redux['rthd_notification_acl_staff_events'] ) && 1 == $redux['rthd_notification_acl_staff_events']['ticket_reassigned_mail'] );
 			$notificationFlagGroup = ( isset( $redux['rthd_notification_acl_group_events'] ) && 1 == $redux['rthd_notification_acl_group_events']['ticket_reassigned_mail'] );
@@ -763,24 +763,24 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 
 			// old assignee [ To ] mail Notification
 			if ( ! empty( $oldassigneEmail ) && $notificationFlagAssignee ) {
-				$subject = rt_biz_hd_create_new_ticket_title( 'rthd_ticket_reassign_email_title_old_assignee', $post_id );
-				$htmlbody = apply_filters( 'rthd_email_template_ticket_reassigned_old_assignee', rt_biz_hd_get_email_template_body( 'rthd_email_template_ticket_reassigned_old_assignee' ) );
-				$htmlbody = rt_biz_hd_get_general_body_template( $htmlbody, $title );
+				$subject = rtbiz_hd_create_new_ticket_title( 'rthd_ticket_reassign_email_title_old_assignee', $post_id );
+				$htmlbody = apply_filters( 'rthd_email_template_ticket_reassigned_old_assignee', rtbiz_hd_get_email_template_body( 'rthd_email_template_ticket_reassigned_old_assignee' ) );
+				$htmlbody = rtbiz_hd_get_general_body_template( $htmlbody, $title );
 				$this->insert_new_send_email( $subject, $htmlbody, $oldassigneEmail, array(), array(), array(), $post_id, 'post' );
 			}
-			$htmlbody_reassiged = apply_filters( 'rthd_email_template_ticket_reassigned_new_assignee', rt_biz_hd_get_email_template_body( 'rthd_email_template_ticket_reassigned_new_assignee' ) );
-			$subject = rt_biz_hd_create_new_ticket_title( 'rthd_ticket_reassign_email_title', $post_id );
+			$htmlbody_reassiged = apply_filters( 'rthd_email_template_ticket_reassigned_new_assignee', rtbiz_hd_get_email_template_body( 'rthd_email_template_ticket_reassigned_new_assignee' ) );
+			$subject = rtbiz_hd_create_new_ticket_title( 'rthd_ticket_reassign_email_title', $post_id );
 
 			// new assignee [ To ] mail Notification
 			if ( ! empty( $newassigneEmail ) && $notificationFlagAssignee ) {
-				$htmlbody = rt_biz_hd_replace_placeholder( $htmlbody_reassiged,'{new_ticket_assignee}', 'you' );
-				$htmlbody = rt_biz_hd_get_general_body_template( $htmlbody, $title );
+				$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody_reassiged,'{new_ticket_assignee}', 'you' );
+				$htmlbody = rtbiz_hd_get_general_body_template( $htmlbody, $title );
 				$this->insert_new_send_email( $subject, $htmlbody, $newassigneEmail, array(), array(), array(), $post_id, 'post' );
 			}
 
 			// group [ BCC ] mail Notification
-			$htmlbody = rt_biz_hd_replace_placeholder( $htmlbody_reassiged,'{new_ticket_assignee}', $newUser->display_name . ' ('. $newUser->user_email .')' );
-			$htmlbody = rt_biz_hd_get_general_body_template( $htmlbody, $title );
+			$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody_reassiged,'{new_ticket_assignee}', $newUser->display_name . ' ('. $newUser->user_email .')' );
+			$htmlbody = rtbiz_hd_get_general_body_template( $htmlbody, $title );
 			$this->insert_new_send_email( $subject, $htmlbody, array(), array(), $bccemails, array(), $post_id, 'post' );
 		}
 
@@ -794,7 +794,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		public function notification_ticket_updated( $post_id, $post_type, $body, $bccemails ) {
 			$ticket_updator = $ContactEmail = $groupEmail = $assigneEmail = $subscriberEmail = array();
 
-			$redux = rt_biz_hd_get_redux_settings();
+			$redux = rtbiz_hd_get_redux_settings();
 			$notificationFlagAssignee = ( isset( $redux['rthd_notification_acl_assignee_events'] ) && 1 == $redux['rthd_notification_acl_assignee_events']['ticket_reassigned_mail'] );
 			$notificationFlagSsubscriber = ( isset( $redux['rthd_notification_acl_staff_events'] ) && 1 == $redux['rthd_notification_acl_staff_events']['ticket_reassigned_mail'] );
 			$notificationFlagGroup = ( isset( $redux['rthd_notification_acl_group_events'] ) && 1 == $redux['rthd_notification_acl_group_events']['ticket_reassigned_mail'] );
@@ -823,15 +823,15 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$bccemails = $this->exclude_author( $bccemails, $ticket_update_by->user_email );
 			$bccemails = apply_filters( 'rthd_filter_adult_emails', $bccemails, $post_id );
 
-			$subject = rt_biz_hd_create_new_ticket_title( 'rthd_update_ticket_email_title', $post_id );
+			$subject = rtbiz_hd_create_new_ticket_title( 'rthd_update_ticket_email_title', $post_id );
 			$title = $this->get_email_title( $post_id, $post_type );
 			$user = get_post_meta( $post_id, '_rtbiz_hd_updated_by', true );
 			$ticket_update_user = get_user_by( 'id', $user );
-			$htmlbody_ticket_update = apply_filters( 'rthd_email_template_ticket_updated', rt_biz_hd_get_email_template_body( 'rthd_email_template_ticket_updated' ) );
-			$htmlbody_ticket_update = rt_biz_hd_replace_placeholder( $htmlbody_ticket_update,'{ticket_updated_by}', $ticket_update_user->display_name );
-			$htmlbody_ticket_update = rt_biz_hd_replace_placeholder( $htmlbody_ticket_update,'{ticket_difference}', $body );
+			$htmlbody_ticket_update = apply_filters( 'rthd_email_template_ticket_updated', rtbiz_hd_get_email_template_body( 'rthd_email_template_ticket_updated' ) );
+			$htmlbody_ticket_update = rtbiz_hd_replace_placeholder( $htmlbody_ticket_update,'{ticket_updated_by}', $ticket_update_user->display_name );
+			$htmlbody_ticket_update = rtbiz_hd_replace_placeholder( $htmlbody_ticket_update,'{ticket_difference}', $body );
 
-			$this->insert_new_send_email( $subject, rt_biz_hd_get_general_body_template( $htmlbody_ticket_update, $title, true ) , $assigneEmail, array(), $bccemails, array(), $post_id, 'post' );
+			$this->insert_new_send_email( $subject, rtbiz_hd_get_general_body_template( $htmlbody_ticket_update, $title, true ) , $assigneEmail, array(), $bccemails, array(), $post_id, 'post' );
 		}
 
 		function get_notification_emails() {
@@ -849,7 +849,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 			$sortedEmail = array();
 			$sortedEmail['client'] = array();
 			$sortedEmail['internal'] = array();
-			$cap = rt_biz_get_access_role_cap( RT_BIZ_HD_TEXT_DOMAIN, 'author' );
+			$cap = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' );
 			foreach ( $emails as $email ) {
 				$user     = get_user_by( 'email', $email );
 				if ( user_can( $user, $cap ) ) {
@@ -862,7 +862,7 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		}
 
 		function is_internal_user( $email ) {
-			$cap = rt_biz_get_access_role_cap( RT_BIZ_HD_TEXT_DOMAIN, 'author' );
+			$cap = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' );
 			$user     = get_user_by( 'email', $email );
 			if ( user_can( $user, $cap ) ) {
 				return true;
@@ -897,13 +897,13 @@ if ( ! class_exists( 'RT_HD_Email_Notification' ) ) {
 		 * @return array
 		 */
 		public function get_contacts( $post_id ) {
-			$created_by = rt_biz_get_contact_for_wp_user( get_post_meta( $post_id, '_rtbiz_hd_created_by', true ) );
+			$created_by = rtbiz_get_contact_for_wp_user( get_post_meta( $post_id, '_rtbiz_hd_created_by', true ) );
 			$tocontact      = array();
 			if ( ! empty( $created_by[0] ) ) {
 				$email = get_post_meta( $created_by[0]->ID, Rt_Entity::$meta_key_prefix.Rt_Contact::$primary_email_key, true );
 				array_push( $tocontact, array( 'email' => $email ) );
 			}
-			$contacts = rt_biz_get_post_for_contact_connection( $post_id, Rt_HD_Module::$post_type, true );
+			$contacts = rtbiz_get_post_for_contact_connection( $post_id, Rtbiz_HD_Module::$post_type, true );
 			foreach ( $contacts as $contact ) {
 				$emails = get_post_meta( $contact->ID, Rt_Entity::$meta_key_prefix.Rt_Contact::$primary_email_key );
 				foreach ( $emails as $email ) {
