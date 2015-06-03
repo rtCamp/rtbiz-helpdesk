@@ -324,7 +324,7 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 			}
 
 			// include this css everywhere
-			wp_enqueue_style( RTBIZ_HD_TEXT_DOMAIN . 'common-css', RTBIZ_HD_URL . 'admin/css/rthd-common.css', array(), RTBIZ_HD_VERSION, 'all' );
+			wp_enqueue_style( RTBIZ_HD_TEXT_DOMAIN . 'common-css', RTBIZ_HD_URL . 'public/css/rthd-common.css', array(), RTBIZ_HD_VERSION, 'all' );
 
 			if ( ( in_array( $pagenow, array( 'edit.php', 'post.php', 'post-new.php' ) ) && Rtbiz_HD_Module::$post_type == $rtbiz_hd_post_type )
 			     || ( in_array( $pagenow, array( 'admin.php', ) ) && Rtbiz_HD_Setup_Wizard::$page_slug == $_REQUEST['page'] ) ) {
