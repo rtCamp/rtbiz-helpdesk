@@ -581,18 +581,18 @@ function rtbiz_hd_generate_email_title( $post_id, $title ) {
 	$title = str_replace( '{ticket_id}', $post_id, $title );
 	$title = str_replace( '{ticket_title}', html_entity_decode( get_the_title( $post_id ), ENT_COMPAT, 'UTF-8' ), $title );
 
-	if ( false !== strpos( $title, '{offerings_name}' ) ) {
-		global $rtbiz_offerings;
-		$offering = '';
+	if ( false !== strpos( $title, '{products_name}' ) ) {
+		global $rtbiz_products;
+		$product = '';
 		$products = array();
-		if ( ! empty( $rtbiz_offerings ) ) {
-			$products = wp_get_post_terms( $post_id, Rt_Offerings::$offering_slug );
+		if ( ! empty( $rtbiz_products ) ) {
+			$products = wp_get_post_terms( $post_id, Rt_Products::$product_slug );
 		}
 		if ( ! $products instanceof WP_Error && ! empty( $products ) ) {
-			$offering_names = wp_list_pluck( $products, 'name' );
-			$offering = implode( ' ', $offering_names );
+			$product_names = wp_list_pluck( $products, 'name' );
+			$product = implode( ' ', $product_names );
 		}
-		$title = str_replace( '{offerings_name}', $offering, $title );
+		$title = str_replace( '{products_name}', $product, $title );
 	}
 	return $title;
 }
@@ -1130,12 +1130,12 @@ function rtbiz_hd_is_enable_mailbox_reading() {
 }
 
 /**
- * get meta value for offering
+ * get meta value for product
  * @param $key
  * @param string $term_id
  * @return bool|mixed
  */
-function rtbiz_hd_get_offering_meta( $key, $term_id = '' ) {
+function rtbiz_hd_get_product_meta( $key, $term_id = '' ) {
 
 	if ( empty( $term_id ) && isset( $_GET['tag_ID'] ) ) {
 		$term_id = $_GET['tag_ID'];
@@ -1145,7 +1145,7 @@ function rtbiz_hd_get_offering_meta( $key, $term_id = '' ) {
 		return false;
 	}
 
-	$term_meta = Rt_Lib_Taxonomy_Metadata\get_term_meta( $term_id, Rt_Offerings::$offering_slug . '-meta', true );
+	$term_meta = Rt_Lib_Taxonomy_Metadata\get_term_meta( $term_id, Rt_Products::$product_slug . '-meta', true );
 	if ( ! empty( $term_meta ) ) {
 		if ( ! empty( $key ) ) {
 			return isset( $term_meta[ $key ] ) ? $term_meta[ $key ] : false;
@@ -1160,16 +1160,16 @@ function rtbiz_hd_get_offering_meta( $key, $term_id = '' ) {
  * @param $key
  * @param $value
  * @param $term_id
- * update offering meta
+ * update product meta
  */
-function rtbiz_hd_update_offering_meta( $key, $value, $term_id ) {
+function rtbiz_hd_update_product_meta( $key, $value, $term_id ) {
 	if ( empty( $term_id ) ) {
 		return false;
 	}
-	$old_value = Rt_Lib_Taxonomy_Metadata\get_term_meta( $term_id, Rt_Offerings::$offering_slug . '-meta', true );
+	$old_value = Rt_Lib_Taxonomy_Metadata\get_term_meta( $term_id, Rt_Products::$product_slug . '-meta', true );
 	$new_value = $old_value;
 	$new_value[ $key ] = $value;
-	Rt_Lib_Taxonomy_Metadata\update_term_meta( $term_id, Rt_Offerings::$offering_slug . '-meta', $new_value, $old_value );
+	Rt_Lib_Taxonomy_Metadata\update_term_meta( $term_id, Rt_Products::$product_slug . '-meta', $new_value, $old_value );
 }
 
 /**
@@ -1514,7 +1514,7 @@ function rtbiz_hd_get_default_email_template( $key = '', $all = false ) {
 				A new support ticket created. {ticket_link}
 			</div>
 			<div style="font-size: 16px; line-height: 26px; color: #888888; ">
-				Offering: <strong style="color: #333333;">{ticket_offerings}</strong>
+				Offering: <strong style="color: #333333;">{ticket_products}</strong>
 			</div>
 		    <div style="font-size: 16px; line-height: 26px; color: #888888;">
 		        Created by: <strong style="color: #333333; ">{ticket_author}</strong>
@@ -1533,7 +1533,7 @@ function rtbiz_hd_get_default_email_template( $key = '', $all = false ) {
 				A new support ticket created by {ticket_author} is assigned to you. </strong> {ticket_link}
 			</div>
 			<div style="font-size: 16px; line-height: 26px; color: #888888;">
-				Offering: <strong style="color: #333333;">{ticket_offerings}</strong>
+				Offering: <strong style="color: #333333;">{ticket_products}</strong>
 			</div>
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0" />
 			<div style="font-size: 16px; line-height: 26px; color:#333333; " >
@@ -1546,7 +1546,7 @@ function rtbiz_hd_get_default_email_template( $key = '', $all = false ) {
 				A new support ticket created by <strong>{ticket_author}</strong>. You have been subscribed to this ticket. {ticket_link}
 			</div>
 		    <div style="font-size: 16px; line-height: 26px; color: #888888;">
-				Offering: <strong style="color: #333333;">{ticket_offerings}</strong>
+				Offering: <strong style="color: #333333;">{ticket_products}</strong>
 			</div>
 			<div style="font-size: 16px; line-height: 26px; color: #888888;">
 				Assigned to: <strong style="color: #333333;">{ticket_assignee}</strong>
@@ -1556,7 +1556,7 @@ function rtbiz_hd_get_default_email_template( $key = '', $all = false ) {
 			    {ticket_body}
 			</div>
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
-	// If offering not assigned use -
+	// If product not assigned use -
 	$redux['rthd_email_template_ticket_subscribed'] = '
 			<div style="color: #333333; font-size: 16px; line-height: 26px; ">
 				{ticket_subscribers} been subscribed to this ticket {ticket_link}

@@ -210,19 +210,19 @@ jQuery( document ).ready(function ($) {
 		assgine_request( jQuery( '#rthd-assignee-list' ).val() );
 	});
 
-	jQuery( '#rthd-offering-list' ).change(function (e) {
-		if (jQuery( '#rthd-offering-list' ).val() === 0) {
+	jQuery( '#rthd-product-list' ).change(function (e) {
+		if (jQuery( '#rthd-product-list' ).val() === 0) {
 			return false;
 		}
-		change_offerings( jQuery( '#rthd-offering-list' ).val() );
+		change_products( jQuery( '#rthd-product-list' ).val() );
 	});
 
-	function change_offerings(term_id) {
+	function change_products(term_id) {
 		var requestArray = {};
 		requestArray.post_id = jQuery( '#post-id' ).val();
-		requestArray.offering_id = term_id;
-		requestArray.action = "rtbiz_hd_front_end_offering_change";
-		jQuery( '#offering-change-spinner' ).show();
+		requestArray.product_id = term_id;
+		requestArray.action = "rtbiz_hd_front_end_product_change";
+		jQuery( '#product-change-spinner' ).show();
 		jQuery.ajax({
 			url: ajaxurl,
 			dataType: "json",
@@ -230,12 +230,12 @@ jQuery( document ).ready(function ($) {
 			data: requestArray,
 			success: function (data) {
 				if (data.status) {
-					jQuery( '#rthd-offering-list' ).val( term_id );
+					jQuery( '#rthd-product-list' ).val( term_id );
 				}
-				jQuery( '#offering-change-spinner' ).hide();
+				jQuery( '#product-change-spinner' ).hide();
 			},
 			error: function () {
-				jQuery( '#offering-change-spinner' ).hide();
+				jQuery( '#product-change-spinner' ).hide();
 				return false;
 			}
 		});

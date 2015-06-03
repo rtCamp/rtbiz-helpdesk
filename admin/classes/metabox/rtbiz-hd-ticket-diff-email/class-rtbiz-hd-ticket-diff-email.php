@@ -30,7 +30,7 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Diff_Email' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		public static function store_old_post_data( $post_id, $post ) {
-			global $rtbiz_hd_ticket_history_model, $rtbiz_hd_module, $rtbiz_hd_attributes, $rt_ticket_email_content, $rtbiz_department, $rtbiz_offerings;
+			global $rtbiz_hd_ticket_history_model, $rtbiz_hd_module, $rtbiz_hd_attributes, $rt_ticket_email_content, $rtbiz_department, $rtbiz_products;
 
 			// $post_id and $post are required
 			if ( empty( $post_id ) || empty( $post ) ) {
@@ -174,10 +174,10 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Diff_Email' ) ) {
 			}
 
 			// Taxonomy Diff
-			if ( isset( $_POST['tax_input'] ) && isset( $_POST['tax_input'][ Rt_Offerings::$offering_slug ] ) ) {
-				$diff = rtbiz_hd_get_taxonomy_diff( $post_id, Rt_Offerings::$offering_slug );
+			if ( isset( $_POST['tax_input'] ) && isset( $_POST['tax_input'][ Rt_Products::$product_slug ] ) ) {
+				$diff = rtbiz_hd_get_taxonomy_diff( $post_id, Rt_Products::$product_slug );
 				if ( '' !== $diff ) {
-					$emailHTML .= '<tr><th style="padding: .5em;border: 0;">' . $rtbiz_offerings->labels['name'] . '</th><td>' . $diff . '</td><td></td></tr>';
+					$emailHTML .= '<tr><th style="padding: .5em;border: 0;">' . $rtbiz_products->labels['name'] . '</th><td>' . $diff . '</td><td></td></tr>';
 				}
 			}
 			if ( isset( $_POST['tax_input'] ) && isset( $_POST['tax_input'][ Rtbiz_Teams::$slug ] ) ) {

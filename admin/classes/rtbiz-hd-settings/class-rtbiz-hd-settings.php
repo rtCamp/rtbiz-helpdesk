@@ -34,37 +34,37 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 			// hook priority 25 because rtBiz email model is on after_theme 20 and we can not get 'rt_get_all_system_emails' before that because of acl needs p2p
 			Rtbiz_HD::$loader->add_action( 'p2p_init', $this, 'init_settings', 30 );
 
-			Rtbiz_HD::$loader->add_filter( 'rtbiz_offering_setting', $this, 'offering_setting' );
+			Rtbiz_HD::$loader->add_filter( 'rtbiz_product_setting', $this, 'product_setting' );
 
 			//after redux setting saved
 			Rtbiz_HD::$loader->add_action( 'redux/options/' . self::$hd_opt . '/saved', $this, 'on_redux_save', 10, 2 );
 		}
 
-		function offering_setting( $setting ) {
+		function product_setting( $setting ) {
 			$redux = rtbiz_hd_get_redux_settings();
-			if ( ! empty( $redux['offering_plugin'] ) ) {
-				if ( empty( $redux['offering_plugin'] ) ) {
-					$redux['offering_plugin'] = array();
+			if ( ! empty( $redux['product_plugin'] ) ) {
+				if ( empty( $redux['product_plugin'] ) ) {
+					$redux['product_plugin'] = array();
 				}
-				$setting = $redux['offering_plugin'];
+				$setting = $redux['product_plugin'];
 			}
 
 			return $setting;
 		}
 
 		public function on_redux_save( $setting, $old_setting ) {
-			//removed offering sync option
+			//removed product sync option
 			$diff = array();
 
-			if ( isset( $setting['offering_plugin'] ) && isset( $old_setting['offering_plugin'] ) && is_array( $setting['offering_plugin'] ) && is_array( $old_setting['offering_plugin'] ) ) {
-				$diff = array_diff( $setting['offering_plugin'], $old_setting['offering_plugin'] );
+			if ( isset( $setting['product_plugin'] ) && isset( $old_setting['product_plugin'] ) && is_array( $setting['product_plugin'] ) && is_array( $old_setting['product_plugin'] ) ) {
+				$diff = array_diff( $setting['product_plugin'], $old_setting['product_plugin'] );
 				$diff = array_unique( $diff );
 			}
 
 			if ( ! empty( $diff ) ) {
-				update_option( 'rtbiz_offering_plugin_sync', 'true' );
+				update_option( 'rt_product_plugin_sync', 'true' );
 			} else {
-				update_option( 'rtbiz_offering_plugin_sync', 'false' );
+				update_option( 'rt_product_plugin_sync', 'false' );
 			}
 		}
 
@@ -186,7 +186,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 
 				$mailbox_options[ $email ] = $email;
 			}
-			$offerings_page_link = '<a href="' . admin_url( 'edit-tags.php?taxonomy=' . Rt_Offerings::$offering_slug . '&post_type=' . Rtbiz_HD_Module::$post_type ) . '">offerings</a>';
+			$products_page_link = '<a href="' . admin_url( 'edit-tags.php?taxonomy=' . Rt_Products::$product_slug . '&post_type=' . Rtbiz_HD_Module::$post_type ) . '">products</a>';
 			// ACTUAL DECLARATION OF SECTIONS
 			$general_fields = array(
 				array(
@@ -198,10 +198,10 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					'subtitle' => __( 'Select Page for Product Support' ),
 				),
 				array(
-					'id'       => 'offering_plugin',
+					'id'       => 'product_plugin',
 					'title'    => __( 'Connected Store' ),
 					'subtitle' => __( 'Select the plugin you want to connect Helpdesk with ' ),
-					'desc'     => __( 'All the existing and future products/offerings will be imported for the selected plugin. You can also create custom products from ' ) . $offerings_page_link . __( ' section.' ),
+					'desc'     => __( 'All the existing and future products/products will be imported for the selected plugin. You can also create custom products from ' ) . $products_page_link . __( ' section.' ),
 					'type'     => 'checkbox',
 					'options'  => array(
 						'woocommerce' => __( 'WooCommerce' ),
@@ -215,7 +215,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					'options'  => $users_options,
 					'default'  => $default_assignee,
 					'title'    => __( 'Default Assignee' ),
-					'desc'     => __( 'To select dedicated assignee for an offering, visit the ' ) . $offerings_page_link . __( ' section.' ),
+					'desc'     => __( 'To select dedicated assignee for an product, visit the ' ) . $products_page_link . __( ' section.' ),
 					'subtitle' => __( 'Select user for HelpDesk ticket Assignee' ),
 				),
 				array(

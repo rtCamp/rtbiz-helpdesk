@@ -46,7 +46,7 @@ jQuery( document ).ready(function ($) {
 					}
 
 					if (currentIndex == 1) {
-						// save offering selection and sync offerings
+						// save product selection and sync products
 						skip_step = false;
 						return rthdSetup.connect_store();
 					}
@@ -110,12 +110,12 @@ jQuery( document ).ready(function ($) {
 					dataType: "json",
 					type: 'post',
 					data: {
-						action: 'rtbiz_hd_add_new_offering',
-						offering: new_term
+						action: 'rtbiz_hd_add_new_product',
+						product: new_term
 					},
 					success: function (data) {
 						if (data.status) {
-							jQuery( 'ol.rthd-setup-wizard-new-offering' ).append( '<li> ' + new_term + ' </li>' );
+							jQuery( 'ol.rthd-setup-wizard-new-product' ).append( '<li> ' + new_term + ' </li>' );
 							jQuery( '#rthd-setup-store-new-team' ).val( '' );
 						}
 					}
@@ -437,7 +437,7 @@ jQuery( document ).ready(function ($) {
 			if (selected.length > 0) {
 				var requestArray = {};
 				requestArray.store = selected;
-				requestArray.action = 'rtbiz_hd_offering_sync';
+				requestArray.action = 'rtbiz_hd_product_sync';
 				jQuery( '.rthd-store-process' ).show();
 				jQuery.ajax({
 					url: ajaxurl,
@@ -491,7 +491,7 @@ jQuery( document ).ready(function ($) {
 				data: {
 					action: 'rtbiz_hd_default_assignee_save',
 					assignee: requestArray,
-					default_assignee: jQuery( '#rthd_offering-default' ).val()
+					default_assignee: jQuery( '#rthd_product-default' ).val()
 				},
 				success: function (data) {
 					if (data.status) {
@@ -503,7 +503,7 @@ jQuery( document ).ready(function ($) {
 			});
 		},
 		assingee_page: function () {
-			jQuery( '#rthd_offering-default' ).on('change', function (e) {
+			jQuery( '#rthd_product-default' ).on('change', function (e) {
 				jQuery( '.rthd-setup-assignee' ).val( jQuery( this ).val() );
 			});
 		},

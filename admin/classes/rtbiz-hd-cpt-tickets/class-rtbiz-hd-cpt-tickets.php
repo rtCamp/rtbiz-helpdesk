@@ -397,7 +397,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 			global $wp_meta_boxes;
 			$custom_order['submitdiv'] = $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['core']['submitdiv'];
 			$custom_order['rt-hd-ticket-data'] = $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default']['rt-hd-ticket-data'];
-			$custom_order['rt-offeringdiv'] = $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['core']['rt-offeringdiv'];
+			$custom_order['productdiv'] = $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['core']['productdiv'];
 			$custom_order[ 'p2p-from-' . Rtbiz_HD_Module::$post_type . '_to_' . rtbiz_get_contact_post_type() ] = $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default'][ 'p2p-from-' . Rtbiz_HD_Module::$post_type . '_to_' . rtbiz_get_contact_post_type() ];
 			$custom_order['rt-hd-subscriiber'] = $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default']['rt-hd-subscriiber'];
 			$custom_order['rt-hd-ticket-order-history'] = $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default']['rt-hd-ticket-order-history'];
@@ -534,10 +534,10 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 				}
 
 				if ( isset( $_GET['product_id'] ) ) {
-					global $rtbiz_offerings;
+					global $rtbiz_products;
 					$query->set( 'tax_query', array(
 						array(
-							'taxonomy' => Rt_Offerings::$offering_slug,
+							'taxonomy' => Rt_Products::$product_slug,
 							'field' => 'term_id',
 							'terms' => $_GET['product_id'],
 						),
@@ -752,7 +752,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 		 * Display custom filters to filter out tickets.
 		 */
 		public function display_custom_filters() {
-			global $typenow, $rtbiz_hd_module, $rtbiz_offerings, $rtbiz_hd_rt_attributes;
+			global $typenow, $rtbiz_hd_module, $rtbiz_products, $rtbiz_hd_rt_attributes;
 
 			if ( Rtbiz_HD_Module::$post_type == $typenow ) {
 
@@ -791,20 +791,20 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 
 				echo '</select>';
 
-				// Filter by offering
+				// Filter by product
 				$products = array();
-				if ( isset( $rtbiz_offerings ) ) {
-					$products = get_terms( Rt_Offerings::$offering_slug, array( 'hide_empty' => 0 ) );
+				if ( isset( $rtbiz_products ) ) {
+					$products = get_terms( Rt_Products::$product_slug, array( 'hide_empty' => 0 ) );
 				}
 
 				if ( ! empty( $products ) ) {
-					echo '<label class="screen-reader-text" for="rt_offering">' . __( 'Filter by offering' ) . '</label>';
+					echo '<label class="screen-reader-text" for="rt_product">' . __( 'Filter by product' ) . '</label>';
 
-					echo '<select id="rt_offering" class="postform" name="rt-offering">';
+					echo '<select id="rt_product" class="postform" name="product">';
 					echo '<option value="0">Select Offering</option>';
 
 					foreach ( $products as $product ) {
-						if ( isset( $_GET['rt-offering'] ) && $product->slug == $_GET['rt-offering'] ) {
+						if ( isset( $_GET['product'] ) && $product->slug == $_GET['product'] ) {
 							echo '<option value="' . $product->slug . '" selected="selected">' . $product->name . '</option>';
 						} else {
 							echo '<option value="' . $product->slug . '">' . $product->name . '</option>';

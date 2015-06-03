@@ -227,7 +227,7 @@ if ( ! class_exists( 'Rtbiz_Hd_Help' ) ) {
 					<ul>
 						<li><strong><?php _e( 'Title - ' ); ?></strong><?php _e( 'Ticket title' ); ?></li>
 						<li><strong><?php _e( 'Ticket Information - ' ); ?></strong><?php _e( 'Has information about ticket creations date, customer who created ticket, ticket assignee and status.' ); ?></li>
-						<li><strong><?php _e( 'Offerings - ' ); ?></strong><?php _e( 'The offering/product for which customer has created a ticket' ); ?></li>
+						<li><strong><?php _e( 'Offerings - ' ); ?></strong><?php _e( 'The product/product for which customer has created a ticket' ); ?></li>
 						<li><strong><?php _e( 'Team - ' ); ?></strong><?php _e( ' Staff members can update the relevant user departments the ticket belongs to.' ); ?></li>
 						<li><strong><?php _e( 'Participant (Customers) - ' ); ?></strong><?php _e( 'Non-staff people on ticket who have been added by ticket author/customer' ); ?></li>
 						<li><strong><?php _e( 'Participant (Staff) - ' ); ?></strong><?php _e( 'Staff people (other than assignee) on ticket.' ); ?></li>
@@ -265,7 +265,7 @@ if ( ! class_exists( 'Rtbiz_Hd_Help' ) ) {
 					?>
 					<ul>
 						<li><strong><?php _e( 'All, Unanswered, Answered, Solved - ' ); ?></strong><?php _e( 'Filters to see ticket sorted by status. All tickets are listed in latest first order.' ); ?></li>
-						<li><strong><?php _e( 'Filter by status, Filter by assignee, Filter by offering - ' ); ?></strong><?php _e( 'Used to sort tickets.' ); ?></li>
+						<li><strong><?php _e( 'Filter by status, Filter by assignee, Filter by product - ' ); ?></strong><?php _e( 'Used to sort tickets.' ); ?></li>
 						<li><strong><?php _e( 'Assignee - ' ); ?></strong><?php _e( 'Staff member to whom ticket is assigned.' ); ?></li>
 						<li><strong><?php _e( 'Ticket Author - ' ); ?></strong><?php _e( 'Customer who has created the ticket.' ); ?></li>
 						<li><strong><?php _e( 'Reply count  - ' ); ?></strong><?php _e( 'The number replies added on a ticket.' ); ?></li>

@@ -35,16 +35,16 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 		 */
 		function support_form( $attr ) {
 
-			global $rtbiz_hd_offering_support;
+			global $rtbiz_hd_product_support;
 
 			ob_start();
-			$rtbiz_hd_offering_support->check_active_plugin();
+			$rtbiz_hd_product_support->check_active_plugin();
 			wp_enqueue_style( 'helpdesk-style', RTBIZ_HD_URL  . 'public/css/rthd-main.css', false, RTBIZ_HD_VERSION, 'all' );
 			wp_enqueue_script( 'rthd-support-form', RTBIZ_HD_URL . 'public/js/helpdesk-support-min.js', array( 'jquery' ), RTBIZ_HD_VERSION, true );
-			$offering_option = '';
+			$product_option = '';
 
 			if ( is_user_logged_in() ) {
-				$post_id = $rtbiz_hd_offering_support->save_support_form();
+				$post_id = $rtbiz_hd_product_support->save_support_form();
 				if ( ! empty( $post_id ) && is_int( $post_id ) ) {
 					?>
 					<div id="info" class="success rthd-notice">Your support request has been submitted. We will get back to you for
@@ -53,14 +53,14 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 				<?php
 				}
 
-				global $rtbiz_offerings;
+				global $rtbiz_products;
 				$terms = array();
-				if ( isset( $rtbiz_offerings ) ) {
-					add_filter( 'get_terms', array( $rtbiz_offerings, 'offering_filter' ), 10, 3 );
-					$terms = get_terms( Rt_Offerings::$offering_slug, array( 'hide_empty' => 0 ) );
-					remove_filter( 'get_terms', array( $rtbiz_offerings, 'offering_filter' ), 10, 3 );
+				if ( isset( $rtbiz_products ) ) {
+					add_filter( 'get_terms', array( $rtbiz_products, 'product_filter' ), 10, 3 );
+					$terms = get_terms( Rt_Products::$product_slug, array( 'hide_empty' => 0 ) );
+					remove_filter( 'get_terms', array( $rtbiz_products, 'product_filter' ), 10, 3 );
 				}
-				$offering_exists = false;
+				$product_exists = false;
 				$wrong_user_flag = false;
 				$loggedin_id = get_current_user_id();
 
@@ -68,7 +68,7 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 
 				if ( isset( $_REQUEST['order_id'] ) ) {
 					// check in woo orders
-					if ( $rtbiz_hd_offering_support->isWoocommerceActive ) {
+					if ( $rtbiz_hd_product_support->isWoocommerceActive ) {
 						$order = new WC_Order( $_REQUEST['order_id'] );
 						if ( ! empty( $order ) && 'shop_order' == $order->post->post_type ) {
 							if ( $loggedin_id == $order->get_user_id() ) {
@@ -83,7 +83,7 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 						}
 					}
 					// check in edd orders
-					if ( $rtbiz_hd_offering_support->iseddActive && empty( $order ) ) {
+					if ( $rtbiz_hd_product_support->iseddActive && empty( $order ) ) {
 						$payment = get_post( $_REQUEST['order_id'] );
 						if ( ! empty( $payment ) && $loggedin_id == $payment->post_author ) {
 							if ( 'edd_payment' == $payment->post_type ) {
@@ -98,24 +98,24 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 				}
 
 				foreach ( $terms as $tm ) {
-					$term_offering_id = '';
+					$term_product_id = '';
 					// skip items if not from orders
 					if ( ! empty( $product_ids ) ) {
-						$term_offering_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $tm->term_id, Rt_Offerings::$term_product_id_meta_key, true );
-						if ( ! in_array( $term_offering_id, $product_ids ) ) {
+						$term_product_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $tm->term_id, Rt_Products::$term_product_id_meta_key, true );
+						if ( ! in_array( $term_product_id, $product_ids ) ) {
 							continue;
 						}
 					}
-					$offering_option .= '<option value="' . $tm->term_id . '" ' . ( ( ! empty( $_REQUEST['product_id'] ) && $term_offering_id == $_REQUEST['product_id'] ) ? 'selected="selected"' : '' ) . '> ' . $tm->name . '</option>';
-					$offering_exists = true;
+					$product_option .= '<option value="' . $tm->term_id . '" ' . ( ( ! empty( $_REQUEST['product_id'] ) && $term_product_id == $_REQUEST['product_id'] ) ? 'selected="selected"' : '' ) . '> ' . $tm->name . '</option>';
+					$product_exists = true;
 				}
 
 				if ( $wrong_user_flag ) {
 					echo '<span> You have not placed this order, Please login from account that placed this order. </span>';
 				} else {
 					rtbiz_hd_get_template( 'support-form.php', array(
-						'product_exists' => $offering_exists,
-						'product_option' => $offering_option,
+						'product_exists' => $product_exists,
+						'product_option' => $product_option,
 					) );
 				}
 			} else {

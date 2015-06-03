@@ -37,13 +37,13 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Operation' ) ) {
 			if ( empty( $post ) ) {
 				$post = get_post( $postid );
 			}
-			//  ( offering selecting form backend  ) || offering selected form support form
-			if ( ( isset( $_POST['tax_input'] ) && isset( $_POST['tax_input'][ Rt_Offerings::$offering_slug ] ) && ! empty( $_POST['tax_input'][ Rt_Offerings::$offering_slug ][0] ) ) || isset( $_POST['post']['product_id'] ) ) {
-				$terms = wp_get_post_terms( $postid, Rt_Offerings::$offering_slug );
+			//  ( product selecting form backend  ) || product selected form support form
+			if ( ( isset( $_POST['tax_input'] ) && isset( $_POST['tax_input'][ Rt_Products::$product_slug ] ) && ! empty( $_POST['tax_input'][ Rt_Products::$product_slug ][0] ) ) || isset( $_POST['post']['product_id'] ) ) {
+				$terms = wp_get_post_terms( $postid, Rt_Products::$product_slug );
 				$default_assignee = null;
 				$settings = rtbiz_hd_get_redux_settings();
 				if ( ! empty( $terms ) && count( $terms ) == 1 ) {
-					$default_assignee = rtbiz_hd_get_offering_meta( 'default_assignee', $terms[0]->term_id );
+					$default_assignee = rtbiz_hd_get_product_meta( 'default_assignee', $terms[0]->term_id );
 					if ( empty( $default_assignee ) ) {
 						$default_assignee = $settings['rthd_default_user'];
 					}

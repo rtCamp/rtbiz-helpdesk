@@ -181,14 +181,14 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 			$contact_metaboxes['side']['core']['submitdiv'] = $wp_meta_boxes[ rtbiz_get_contact_post_type() ]['side']['core']['submitdiv'];
 			$contact_metaboxes['side']['core'][ 'p2p-from-' . rtbiz_get_contact_post_type() . '_to_user' ] = $wp_meta_boxes[ rtbiz_get_contact_post_type() ]['side']['default'][ 'p2p-from-' . rtbiz_get_contact_post_type() . '_to_user' ];
 			$contact_metaboxes['side']['core']['rt-biz-acl-details'] = $wp_meta_boxes[ rtbiz_get_contact_post_type() ]['side']['default']['rt-biz-acl-details'];
-			$contact_metaboxes['side']['core']['rt-offeringdiv'] = $wp_meta_boxes[ rtbiz_get_contact_post_type() ]['side']['core']['rt-offeringdiv'];
+			$contact_metaboxes['side']['core']['productdiv'] = $wp_meta_boxes[ rtbiz_get_contact_post_type() ]['side']['core']['productdiv'];
 			$contact_metaboxes['side']['core']['rt-teamdiv'] = $wp_meta_boxes[ rtbiz_get_contact_post_type() ]['side']['core']['rt-teamdiv'];
 
 			if ( ! empty( $is_staff_member ) && 'yes' == $is_staff_member ) {
 				// remove metabox only staff
 			} else {
 				//remove metabox only customer
-				unset( $contact_metaboxes['side']['core']['rt-offeringdiv'] );
+				unset( $contact_metaboxes['side']['core']['productdiv'] );
 				unset( $contact_metaboxes['side']['core']['rt-departmentdiv'] );
 			}
 
@@ -451,7 +451,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 				$hd_columns['cb'] = $columns['cb'];
 				if ( ! empty( $_REQUEST['contact_group'] ) && 'staff' == $_REQUEST['contact_group'] ) {
 					$hd_columns['title'] = $columns['title'];
-					$hd_columns[ 'taxonomy-' . Rt_Offerings::$offering_slug ] = $columns[ 'taxonomy-' . Rt_Offerings::$offering_slug ];
+					$hd_columns[ 'taxonomy-' . Rt_Products::$product_slug ] = $columns[ 'taxonomy-' . Rt_Products::$product_slug ];
 					$hd_columns[ 'taxonomy-' . Rtbiz_Teams::$slug ] = $columns[ 'taxonomy-' . Rtbiz_Teams::$slug ];
 				} else {
 					$hd_columns['title'] = $columns['title'];

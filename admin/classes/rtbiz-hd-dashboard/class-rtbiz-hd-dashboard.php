@@ -210,9 +210,9 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 
 		public function tickets_by_product_purchase( $obj, $args ) {
 
-			global $rtbiz_hd_offering_support, $wpdb;
+			global $rtbiz_hd_product_support, $wpdb;
 
-			$customers_userid = $rtbiz_hd_offering_support->get_customers_userid();
+			$customers_userid = $rtbiz_hd_product_support->get_customers_userid();
 
 			if ( empty( $customers_userid ) ) {
 				if ( ! class_exists( 'WooCommerce' ) && ! class_exists( 'Easy_Digital_Downloads' ) ) {
@@ -283,7 +283,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 		 * Tickets by product pi chart
 		 */
 		public function tickets_by_products( $obj, $args ) {
-			$taxonomy = Rt_Offerings::$offering_slug;
+			$taxonomy = Rt_Products::$product_slug;
 			$terms = get_terms( $taxonomy );
 			$data_source = array();
 			$cols = array( __( 'Offerings', RTBIZ_HD_TEXT_DOMAIN ), __( 'Count', RTBIZ_HD_TEXT_DOMAIN ) );
@@ -291,7 +291,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 			$post_type = Rtbiz_HD_Module::$post_type;
 			$total = 0;
 			if ( empty( $terms ) ) {
-				printf( 'No offerings [ products / downloads ] found. <a target="_blank" href="%s" >Add new offering</a>', admin_url( 'edit-tags.php?taxonomy=' . Rt_Offerings::$offering_slug . '&post_type=' . Rtbiz_HD_Module::$post_type ) );
+				printf( 'No products [ products / downloads ] found. <a target="_blank" href="%s" >Add new product</a>', admin_url( 'edit-tags.php?taxonomy=' . Rt_Products::$product_slug . '&post_type=' . Rtbiz_HD_Module::$post_type ) );
 				return;
 			}
 			if ( ! $terms instanceof WP_Error ) {

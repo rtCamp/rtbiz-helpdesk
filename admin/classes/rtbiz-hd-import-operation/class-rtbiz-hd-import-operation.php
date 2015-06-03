@@ -80,7 +80,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			// commented ajax call for checking followup duplicate and all other code
 			//			Rtbiz_HD::$loader->add_action( 'wp_ajax_rthd_check_duplicate_followup', $this, 'rthd_check_duplicate_followup' );
 			//			Rtbiz_HD::$loader->add_action( 'wp_ajax_nopriv_rthd_check_duplicate_followup', $this, 'rthd_check_duplicate_followup' );
-			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_front_end_offering_change', $this, 'ajax_front_end_offering_change' );
+			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_front_end_product_change', $this, 'ajax_front_end_product_change' );
 			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_fav_ticket', $this, 'ajax_favourite_tickets' );
 		}
 
@@ -110,12 +110,12 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		}
 
 		/**
-		 * Ajax call for changing offering of the post.
+		 * Ajax call for changing product of the post.
 		 */
-		public function ajax_front_end_offering_change() {
+		public function ajax_front_end_product_change() {
 			$flag = false;
-			if ( ! empty( $_POST['offering_id'] ) && ! empty( $_POST['post_id'] ) ) {
-				$return = wp_set_object_terms( $_POST['post_id'], array( intval( $_POST['offering_id'] ) ), Rt_Offerings::$offering_slug, false );
+			if ( ! empty( $_POST['product_id'] ) && ! empty( $_POST['post_id'] ) ) {
+				$return = wp_set_object_terms( $_POST['post_id'], array( intval( $_POST['product_id'] ) ), Rt_Products::$product_slug, false );
 				if ( ! $return instanceof WP_Error && ! empty( $return ) ) {
 					$flag = true;
 				}
@@ -483,8 +483,8 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			}
 
 			// Call action to add product info into ticket meta data.
-			do_action( 'rtbiz_hd_add_ticket_offering_info', $post_id );
-			// Call action to change default assignee accoding to offerings
+			do_action( 'rtbiz_hd_add_ticket_product_info', $post_id );
+			// Call action to change default assignee accoding to products
 
 			do_action( 'rt_hd_before_send_notification', $post_id, get_post( $post_id ) );
 

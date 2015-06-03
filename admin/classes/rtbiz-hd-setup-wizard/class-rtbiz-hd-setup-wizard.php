@@ -29,8 +29,8 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 		 */
 		public function __construct() {
 
-			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_offering_sync', $this, 'ajax_offering_sync' );
-			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_add_new_offering', $this, 'ajax_add_new_offering' );
+			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_product_sync', $this, 'ajax_product_sync' );
+			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_add_new_product', $this, 'ajax_add_new_product' );
 
 			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_search_non_hd_user_by_name', $this, 'ajax_get_user_from_name' );
 			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_create_contact_with_hd_access', $this, 'ajax_creater_rtbiz_and_give_access_helpdesk' );
@@ -166,7 +166,7 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 					<input type="text" id="rthd-setup-store-new-team" />
 					<input type="button" id="rthd-setup-store-new-team-submit" value="Add" />
 				</div>
-				<ol class="rthd-setup-wizard-new-offering">
+				<ol class="rthd-setup-wizard-new-product">
 
 				</ol>
 			</div>
@@ -304,31 +304,31 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 		/**
 		 *  Offering save ajax call
 		 */
-		public function ajax_offering_sync() {
+		public function ajax_product_sync() {
 			$arrReturn = array( 'status' => false );
-			$offering = array();
-			$defaultoffering = array( 'woocommerce' => 0, 'edd' => 0 );
+			$product = array();
+			$defaultproduct = array( 'woocommerce' => 0, 'edd' => 0 );
 			if ( ! empty( $_POST['store'] ) ) {
 				foreach ( $_POST['store'] as $store ) {
-					$offering[ $store ] = '1';
+					$product[ $store ] = '1';
 				}
 			}
-			$offering = array_merge( $defaultoffering, $offering );
-			rtbiz_hd_set_redux_setting( 'offering_plugin', $offering );
-			rtbiz_set_redux_setting( 'offering_plugin', $offering );
-			global $rtbiz_offerings;
-			$offering = array_keys( $offering );
-			$rtbiz_offerings->bulk_insert_offerings( $offering );
+			$product = array_merge( $defaultproduct, $product );
+			rtbiz_hd_set_redux_setting( 'product_plugin', $product );
+			rtbiz_set_redux_setting( 'product_plugin', $product );
+			global $rtbiz_products;
+			$product = array_keys( $product );
+			$rtbiz_products->bulk_insert_products( $product );
 			$arrReturn['status'] = true;
 			header( 'Content-Type: application/json' );
 			echo json_encode( $arrReturn );
 			die( 0 );
 		}
 
-		public function ajax_add_new_offering() {
+		public function ajax_add_new_product() {
 			$arrReturn = array( 'status' => false );
-			if ( ! empty( $_POST['offering'] ) ) {
-				$term = wp_insert_term( $_POST['offering'], Rt_Offerings::$offering_slug );
+			if ( ! empty( $_POST['product'] ) ) {
+				$term = wp_insert_term( $_POST['product'], Rt_Products::$product_slug );
 				if ( ! $term instanceof WP_Error && ! empty( $term ) ) {
 					$arrReturn = array( 'status' => true );
 				}
@@ -580,11 +580,11 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 
 			// get product list
 			$terms = array();
-			global $rtbiz_offerings;
-			if ( isset( $rtbiz_offerings ) ) {
-				add_filter( 'get_terms', array( $rtbiz_offerings, 'offering_filter' ), 10, 3 );
-				$terms = get_terms( Rt_Offerings::$offering_slug, array( 'hide_empty' => 0 ) );
-				remove_filter( 'get_terms', array( $rtbiz_offerings, 'offering_filter' ), 10, 3 );
+			global $rtbiz_products;
+			if ( isset( $rtbiz_products ) ) {
+				add_filter( 'get_terms', array( $rtbiz_products, 'product_filter' ), 10, 3 );
+				$terms = get_terms( Rt_Products::$product_slug, array( 'hide_empty' => 0 ) );
+				remove_filter( 'get_terms', array( $rtbiz_products, 'product_filter' ), 10, 3 );
 			}
 			$users = Rtbiz_HD_Utils::get_hd_rtcamp_user(); ?>
 			<div class="rthd-setup-wizard-controls">
@@ -595,8 +595,8 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 						<ul><?php
 						foreach ( $terms as $tm ) { ?>
 								<li>
-									<label for="rthd_offering<?php echo $tm->term_id ?>"> <?php echo $tm->name ?></label>
-									<select class="rthd-setup-assignee" data="<?php echo $tm->term_id ?>"  id="rthd_offering<?php echo $tm->term_id ?>"><?php
+									<label for="rthd_product<?php echo $tm->term_id ?>"> <?php echo $tm->name ?></label>
+									<select class="rthd-setup-assignee" data="<?php echo $tm->term_id ?>"  id="rthd_product<?php echo $tm->term_id ?>"><?php
 									foreach ( $users as $user ) {
 										if ( $user->ID == $current ) {
 											$selected = 'selected';
@@ -612,8 +612,8 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 					</div><?php
 				} else { ?>
 					<div class="rthd-setup-wizard-row">
-						<label class="rthd-offering-default-assignee" for="rthd_offering-default"> <strong><?php _e( 'Default Assignee', RTBIZ_HD_TEXT_DOMAIN ); ?> </strong></label>
-						<select id="rthd_offering-default"><?php
+						<label class="rthd-product-default-assignee" for="rthd_product-default"> <strong><?php _e( 'Default Assignee', RTBIZ_HD_TEXT_DOMAIN ); ?> </strong></label>
+						<select id="rthd_product-default"><?php
 						if ( empty( $current ) ) {
 							echo '<option disabled selected> -- select an assignee -- </option>';
 						} else {
@@ -632,7 +632,7 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 				} ?>
 			</div>
 			<div class="rthd-assignee-process rthd-wizard-process" style="display: none;">
-				<span>Setting up default assignee for offerings</span>
+				<span>Setting up default assignee for products</span>
 				<img src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
 			</div><?php
 			$comment_html = ob_get_clean();
@@ -648,7 +648,7 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 			$arrReturn = array( 'status' => false );
 			if ( ! empty( $_POST['assignee'] ) ) {
 				foreach ( $_POST['assignee'] as $assingee ) {
-					rtbiz_hd_update_offering_meta( 'default_assignee', $assingee['user_ID'], $assingee['term_ID'] );
+					rtbiz_hd_update_product_meta( 'default_assignee', $assingee['user_ID'], $assingee['term_ID'] );
 				}
 				$arrReturn['status'] = true;
 			}

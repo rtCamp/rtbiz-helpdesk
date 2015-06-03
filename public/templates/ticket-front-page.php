@@ -224,43 +224,43 @@ $user_edit_content = current_user_can( $cap );
 
 					<?php
 					// Products
-					global $rtbiz_offerings;
+					global $rtbiz_products;
 					$products = array();
-					if ( ! empty( $rtbiz_offerings ) ) {
-						add_filter( 'get_terms', array( $rtbiz_offerings, 'offering_filter' ), 10, 3 );
-						$products = get_terms( Rt_Offerings::$offering_slug, array( 'hide_empty' => 0 ) );
-						remove_filter( 'get_terms', array( $rtbiz_offerings, 'offering_filter' ), 10, 3 );
+					if ( ! empty( $rtbiz_products ) ) {
+						add_filter( 'get_terms', array( $rtbiz_products, 'product_filter' ), 10, 3 );
+						$products = get_terms( Rt_Products::$product_slug, array( 'hide_empty' => 0 ) );
+						remove_filter( 'get_terms', array( $rtbiz_products, 'product_filter' ), 10, 3 );
 
-						$ticket_offering = wp_get_post_terms( $post->ID, Rt_Offerings::$offering_slug );
+						$ticket_product = wp_get_post_terms( $post->ID, Rt_Products::$product_slug );
 					}
 					if ( ! $products instanceof WP_Error && ! empty( $products ) ) {
-						if ( ! empty( $ticket_offering ) || current_user_can( $cap ) ) {
+						if ( ! empty( $ticket_product ) || current_user_can( $cap ) ) {
 							?>
 							<div class="rt-hd-ticket-sub-row">
 								<div class="rthd-ticket-sidebar-sub-result clearfix">
-									<label for="rthd-offering-list">
+									<label for="rthd-product-list">
 										<?php _e( 'Offering' ); ?>
 									</label>
 									<?php if ( current_user_can( $cap ) ) { ?>
-										<select id="rthd-offering-list" class="rthd-ticket-dropdown"
-										        name="rt-hd-offering">
+										<select id="rthd-product-list" class="rthd-ticket-dropdown"
+										        name="rt-hd-product">
 											<?php
 											foreach ( $products as $p ) {
-												if ( ! empty( $ticket_offering ) && $ticket_offering[0]->term_id == $p->term_id ) {
+												if ( ! empty( $ticket_product ) && $ticket_product[0]->term_id == $p->term_id ) {
 													$selected = ' selected="selected" ';
 												} else {
 													$selected = ' ';
 												}
 												echo '<option value="' . esc_attr( $p->term_id ) . '"' . esc_attr( $selected ) . '>' . esc_attr( $p->name ) . '</option>';
 											}
-											if ( empty( $ticket_offering ) ) {
+											if ( empty( $ticket_product ) ) {
 												echo '<option value="0" selected="selected" >-Select Offering-</option>';
 											}
 											?>
 										</select>
-										<img id="offering-change-spinner" class="helpdeskspinner"
+										<img id="product-change-spinner" class="helpdeskspinner"
 										     src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
-									<?php } else { echo '<span class="rthd-front-offering-value">' . $ticket_offering[0]->name . '</span>'; } ?>
+									<?php } else { echo '<span class="rthd-front-product-value">' . $ticket_product[0]->name . '</span>'; } ?>
 								</div>
 							</div>
 						<?php

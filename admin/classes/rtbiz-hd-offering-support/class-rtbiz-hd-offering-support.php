@@ -53,7 +53,7 @@ if ( ! class_exists( 'Rtbiz_HD_Offering_Support' ) ) {
 			Rtbiz_HD::$loader->add_action( 'edd_download_history_row_end', $this, 'edd_support_link', 10, 2 );
 
 			// Add product information in ticket meta.
-			Rtbiz_HD::$loader->add_action( 'rtbiz_hd_add_ticket_offering_info', $this, 'add_ticket_offering_info' );
+			Rtbiz_HD::$loader->add_action( 'rtbiz_hd_add_ticket_product_info', $this, 'add_ticket_product_info' );
 
 			// my account and download history ticket list view
 			Rtbiz_HD::$loader->add_action( 'woocommerce_after_my_account', $this, 'woo_my_tickets_my_account' );
@@ -68,14 +68,14 @@ if ( ! class_exists( 'Rtbiz_HD_Offering_Support' ) ) {
 			// User Purchase History on Ticket Page
 			Rtbiz_HD::$loader->add_action( 'rtbiz_hd_user_purchase_history', $this, 'user_purchase_history' );
 
-			Rtbiz_HD::$loader->add_action( Rt_Offerings::$offering_slug . '_add_form_fields', $this, 'offering_add_custom_field', 10, 2 );
-			Rtbiz_HD::$loader->add_action( Rt_Offerings::$offering_slug. '_edit_form', $this, 'offering_add_custom_field', 10, 2 );
+			Rtbiz_HD::$loader->add_action( Rt_Products::$product_slug . '_add_form_fields', $this, 'product_add_custom_field', 10, 2 );
+			Rtbiz_HD::$loader->add_action( Rt_Products::$product_slug. '_edit_form', $this, 'product_add_custom_field', 10, 2 );
 
-			Rtbiz_HD::$loader->add_action( 'create_term', $this, 'save_offerings', 10, 2 );
-			Rtbiz_HD::$loader->add_action( 'edit_term', $this, 'save_offerings', 10, 2 );
+			Rtbiz_HD::$loader->add_action( 'create_term', $this, 'save_products', 10, 2 );
+			Rtbiz_HD::$loader->add_action( 'edit_term', $this, 'save_products', 10, 2 );
 
-			Rtbiz_HD::$loader->add_action( 'rtbiz_offering_column_content', $this, 'manage_offering_column_body', 10, 3 );
-			Rtbiz_HD::$loader->add_filter( 'rtbiz_offerings_columns', $this, 'manage_offering_column_header' );
+			Rtbiz_HD::$loader->add_action( 'rtbiz_product_column_content', $this, 'manage_product_column_body', 10, 3 );
+			Rtbiz_HD::$loader->add_filter( 'rtbiz_products_columns', $this, 'manage_product_column_header' );
 
 			// Show tickets in woocommerce order page
 			Rtbiz_HD::$loader->add_action( 'woocommerce_view_order', $this, 'woocommerce_view_order_show_ticket' );
@@ -130,20 +130,20 @@ if ( ! class_exists( 'Rtbiz_HD_Offering_Support' ) ) {
 		function manage_woo_edd_post_columns_show( $column_name, $post_id ) {
 			global $wpdb;
 			switch ( $column_name ) {
-				case Rtbiz_HD_Module::$post_type.'_offering':
+				case Rtbiz_HD_Module::$post_type.'_product':
 					// to find count and display
-					$tax = $wpdb->get_var( 'SELECT taxonomy_id FROM '.$wpdb->prefix.'taxonomymeta WHERE meta_key = "'.Rt_Offerings::$term_product_id_meta_key.'" AND meta_value ='.$post_id );
+					$tax = $wpdb->get_var( 'SELECT taxonomy_id FROM '.$wpdb->prefix.'taxonomymeta WHERE meta_key = "'.Rt_Products::$term_product_id_meta_key.'" AND meta_value ='.$post_id );
 					if ( ! empty( $tax ) ) {
-						$terms = get_term( $tax, Rt_Offerings::$offering_slug );
+						$terms = get_term( $tax, Rt_Products::$product_slug );
 						if ( ! is_wp_error( $terms ) ) {
 							$posts = new WP_Query( array(
 								                       'post_type'                      => Rtbiz_HD_Module::$post_type,
 								                       'post_status'                    => 'any',
 								                       'nopaging'                       => true,
-								                       Rt_Offerings::$offering_slug     => $terms->slug,
+								                       Rt_Products::$product_slug     => $terms->slug,
 								                       'fields'                         => 'ids',
 							                       ) );
-							echo '<a target="_blank" href="'.admin_url( 'edit.php?post_type='.Rtbiz_HD_Module::$post_type.'&'.Rt_Offerings::$offering_slug.'='.$terms->slug ).'">'.$posts->found_posts.'</a>';
+							echo '<a target="_blank" href="'.admin_url( 'edit.php?post_type='.Rtbiz_HD_Module::$post_type.'&'.Rt_Products::$product_slug.'='.$terms->slug ).'">'.$posts->found_posts.'</a>';
 						}
 					} else {
 						echo '-';
@@ -162,7 +162,7 @@ if ( ! class_exists( 'Rtbiz_HD_Offering_Support' ) ) {
 		 * @return mixed
 		 */
 		function manage_woo_edd_post_columns( $columns ) {
-			$columns[ Rtbiz_HD_Module::$post_type.'_offering' ] = __( 'Tickets', RTBIZ_HD_TEXT_DOMAIN );
+			$columns[ Rtbiz_HD_Module::$post_type.'_product' ] = __( 'Tickets', RTBIZ_HD_TEXT_DOMAIN );
 			return $columns;
 		}
 
@@ -183,18 +183,18 @@ if ( ! class_exists( 'Rtbiz_HD_Offering_Support' ) ) {
 		}
 
 		/**
-		 * Add column heading on offering list page
+		 * Add column heading on product list page
 		 * @param $columns
 		 *
 		 * @return mixed
 		 */
-		function manage_offering_column_header( $columns ) {
+		function manage_product_column_header( $columns ) {
 			$columns['default_assignee']         = __( 'Helpdesk default assignee', RTBIZ_HD_TEXT_DOMAIN );
 			return $columns;
 		}
 
 		/**
-		 * UI for group List View custom Columns for offerings
+		 * UI for group List View custom Columns for products
 		 *
 		 * @param      $content
 		 * @param type $column
@@ -202,10 +202,10 @@ if ( ! class_exists( 'Rtbiz_HD_Offering_Support' ) ) {
 		 *
 		 * @return type
 		 */
-		function manage_offering_column_body( $content, $column, $term_id ) {
+		function manage_product_column_body( $content, $column, $term_id ) {
 			switch ( $column ) {
 				case 'default_assignee':
-					$default_assignee = rtbiz_hd_get_offering_meta( 'default_assignee', $term_id );
+					$default_assignee = rtbiz_hd_get_product_meta( 'default_assignee', $term_id );
 					if ( ! empty( $default_assignee ) ) {
 						$user = get_user_by( 'id', $default_assignee );
 						$content = esc_html( $user->display_name );
@@ -218,14 +218,14 @@ if ( ! class_exists( 'Rtbiz_HD_Offering_Support' ) ) {
 		}
 
 		/*
-		 * Save Default assignee for offering
+		 * Save Default assignee for product
 		 * @param $term_id
 		 */
-		function save_offerings( $term_id ) {
-			if ( isset( $_POST[ Rt_Offerings::$offering_slug  ] ) ) {
-				$prev_value = Rt_Lib_Taxonomy_Metadata\get_term_meta( $term_id, Rt_Offerings::$offering_slug  . '-meta', true );
-				$meta_value = (array) $_POST[ Rt_Offerings::$offering_slug ];
-				Rt_Lib_Taxonomy_Metadata\update_term_meta( $term_id, Rt_Offerings::$offering_slug  . '-meta', $meta_value, $prev_value );
+		function save_products( $term_id ) {
+			if ( isset( $_POST[ Rt_Products::$product_slug  ] ) ) {
+				$prev_value = Rt_Lib_Taxonomy_Metadata\get_term_meta( $term_id, Rt_Products::$product_slug  . '-meta', true );
+				$meta_value = (array) $_POST[ Rt_Products::$product_slug ];
+				Rt_Lib_Taxonomy_Metadata\update_term_meta( $term_id, Rt_Products::$product_slug  . '-meta', $meta_value, $prev_value );
 				if ( isset( $_POST['_wp_original_http_referer'] ) ) {
 					wp_safe_redirect( $_POST['_wp_original_http_referer'] );
 					exit();
@@ -234,30 +234,30 @@ if ( ! class_exists( 'Rtbiz_HD_Offering_Support' ) ) {
 		}
 
 		/*
-		 * To check user current page is offering page or not
+		 * To check user current page is product page or not
 		 * @param bool $page
 		 *
 		 * @return bool
 		 */
-		function is_edit_offerings( $page = false ) {
+		function is_edit_products( $page = false ) {
 			global $pagenow;
-			if ( ( ! $page || 'edit' === $page ) && 'edit-tags.php' === $pagenow && isset( $_GET['action'] ) && 'edit' === $_GET['action'] && isset( $_GET['taxonomy'] ) && Rt_Offerings::$offering_slug === $_GET['taxonomy'] ) {
+			if ( ( ! $page || 'edit' === $page ) && 'edit-tags.php' === $pagenow && isset( $_GET['action'] ) && 'edit' === $_GET['action'] && isset( $_GET['taxonomy'] ) && Rt_Products::$product_slug === $_GET['taxonomy'] ) {
 				return true;
 			}
-			if ( ( ! $page || 'all' === $page ) && 'edit-tags.php' === $pagenow && isset( $_GET['taxonomy'] ) && Rt_Offerings::$offering_slug === $_GET['taxonomy'] && ( ! isset( $_GET['action'] ) || 'edit' !== $_GET['action'] ) ) {
+			if ( ( ! $page || 'all' === $page ) && 'edit-tags.php' === $pagenow && isset( $_GET['taxonomy'] ) && Rt_Products::$product_slug === $_GET['taxonomy'] && ( ! isset( $_GET['action'] ) || 'edit' !== $_GET['action'] ) ) {
 				return true;
 			}
 			return false;
 		}
 
 		/*
-		 * Add custom field for default assignee on offering page
+		 * Add custom field for default assignee on product page
 		 * @param $tag
 		 * @param string $group
 		 */
-		function offering_add_custom_field( $tag, $group = '' ) {
+		function product_add_custom_field( $tag, $group = '' ) {
 			$users         = Rtbiz_HD_Utils::get_hd_rtcamp_user();
-			if ( $this->is_edit_offerings( 'edit' ) ) {
+			if ( $this->is_edit_products( 'edit' ) ) {
 				?>
 				<h3><?php _e( 'Helpdesk Settings', RTBIZ_HD_TEXT_DOMAIN ); ?></h3>
 
@@ -265,11 +265,11 @@ if ( ! class_exists( 'Rtbiz_HD_Offering_Support' ) ) {
 					<tbody>
 					<tr class="form-field">
 						<th scope="row" valign="top"><label
-								for="<?php echo esc_attr( Rt_Offerings::$offering_slug ); ?>[default_assignee]"><?php _e( 'Helpdesk Default Assignee', RTBIZ_HD_TEXT_DOMAIN ); ?></label></th>
+								for="<?php echo esc_attr( Rt_Products::$product_slug ); ?>[default_assignee]"><?php _e( 'Helpdesk Default Assignee', RTBIZ_HD_TEXT_DOMAIN ); ?></label></th>
 						<td>
-							<select name="<?php echo esc_attr( Rt_Offerings::$offering_slug ); ?>[default_assignee]" id="<?php echo esc_attr( Rt_Offerings::$offering_slug ); ?>[default_assignee]" >
+							<select name="<?php echo esc_attr( Rt_Products::$product_slug ); ?>[default_assignee]" id="<?php echo esc_attr( Rt_Products::$product_slug ); ?>[default_assignee]" >
 								<?php
-								$selected_userid = rtbiz_hd_get_offering_meta( 'default_assignee' );
+								$selected_userid = rtbiz_hd_get_product_meta( 'default_assignee' );
 								if ( empty( $selected_userid ) ) {
 									echo '<option disabled selected value="0"> -- select an assignee -- </option>';
 								} else {
@@ -286,7 +286,7 @@ if ( ! class_exists( 'Rtbiz_HD_Offering_Support' ) ) {
 								?>
 							</select>
 
-							<p class="description"><?php _e( 'All new support request for this offering will be assigned to selected user.', RTBIZ_HD_TEXT_DOMAIN ); ?></p>
+							<p class="description"><?php _e( 'All new support request for this product will be assigned to selected user.', RTBIZ_HD_TEXT_DOMAIN ); ?></p>
 						</td>
 					</tr>
 					</tbody>
@@ -295,8 +295,8 @@ if ( ! class_exists( 'Rtbiz_HD_Offering_Support' ) ) {
 
 				<div class="form-field">
 					<p>
-						<label for="<?php echo esc_attr( Rt_Offerings::$offering_slug ); ?>[default_assignee]"><?php _e( 'Helpdesk Default Assignee', RTBIZ_HD_TEXT_DOMAIN ); ?></label>
-						<select name="<?php echo esc_attr( Rt_Offerings::$offering_slug ); ?>[default_assignee]" id="<?php echo esc_attr( Rt_Offerings::$offering_slug ); ?>[default_assignee]" >
+						<label for="<?php echo esc_attr( Rt_Products::$product_slug ); ?>[default_assignee]"><?php _e( 'Helpdesk Default Assignee', RTBIZ_HD_TEXT_DOMAIN ); ?></label>
+						<select name="<?php echo esc_attr( Rt_Products::$product_slug ); ?>[default_assignee]" id="<?php echo esc_attr( Rt_Products::$product_slug ); ?>[default_assignee]" >
 							<option disabled selected > -- select an assignee -- </option>
 							<?php
 							foreach ( $users as $user ) {
@@ -305,7 +305,7 @@ if ( ! class_exists( 'Rtbiz_HD_Offering_Support' ) ) {
 							?>
 						</select>
 					</p>
-					<p class="description"><?php _e( 'All new support request for this offering will be assigned to selected user.', RTBIZ_HD_TEXT_DOMAIN ); ?></p>
+					<p class="description"><?php _e( 'All new support request for this product will be assigned to selected user.', RTBIZ_HD_TEXT_DOMAIN ); ?></p>
 				</div>
 			<?php }
 		}
@@ -490,7 +490,7 @@ if ( ! class_exists( 'Rtbiz_HD_Offering_Support' ) ) {
 		 */
 		function check_active_plugin() {
 
-			$activePlugin  = rtbiz_get_offering_selection_setting();
+			$activePlugin  = rtbiz_get_product_selection_setting();
 			if ( ! empty( $activePlugin ) && is_plugin_active( 'woocommerce/woocommerce.php' ) && in_array( 'woocommerce', $activePlugin ) ) {
 				$this->isWoocommerceActive = true;
 				$this->activePostType = 'product';
@@ -515,7 +515,7 @@ if ( ! class_exists( 'Rtbiz_HD_Offering_Support' ) ) {
 		 *
 		 */
 		function save_support_form() {
-			global $rtbiz_offerings, $rtbiz_hd_import_operation;
+			global $rtbiz_products, $rtbiz_hd_import_operation;
 
 			if ( empty( $_POST['rthd_support_form_submit'] ) ) {
 				return false;
@@ -628,7 +628,7 @@ if ( ! class_exists( 'Rtbiz_HD_Offering_Support' ) ) {
 		 *
 		 * @internal param int $rtbiz_hd_ticket_id
 		 */
-		function add_ticket_offering_info( $rtbiz_hd_tickets_id ) {
+		function add_ticket_product_info( $rtbiz_hd_tickets_id ) {
 
 			$data = $_POST['post'];
 
@@ -644,9 +644,9 @@ if ( ! class_exists( 'Rtbiz_HD_Offering_Support' ) ) {
 			}
 
 			if ( isset( $data['product_id'] ) ) {
-				$term = get_term_by( 'id', $data['product_id'], Rt_Offerings::$offering_slug );
+				$term = get_term_by( 'id', $data['product_id'], Rt_Products::$product_slug );
 				if ( $term ) {
-					wp_set_post_terms( $rtbiz_hd_tickets_id, array( $term->term_id ), Rt_Offerings::$offering_slug );
+					wp_set_post_terms( $rtbiz_hd_tickets_id, array( $term->term_id ), Rt_Products::$product_slug );
 				}
 			}
 

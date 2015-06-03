@@ -60,7 +60,7 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 			$rtbiz_hd_setup_wizard = new Rtbiz_HD_Setup_Wizard();
 
 			//Setting
-			global $rtbiz_hd_settings, $rtbiz_hd_import_operation, $rtbiz_hd_offering_support, $rtbiz_hd_short_code;
+			global $rtbiz_hd_settings, $rtbiz_hd_import_operation, $rtbiz_hd_product_support, $rtbiz_hd_short_code;
 
 			$rtbiz_hd_settings = new Rtbiz_HD_Settings();
 			$rtbiz_hd_import_operation = new Rtbiz_HD_Import_Operation();
@@ -68,7 +68,7 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 			//$rtbiz_hd_gravity_form_importer = new Rtbiz_HD_Gravity_Form_Importer();
 			//$rtbiz_hd_logs = new Rtbiz_HD_Logs();
 
-			$rtbiz_hd_offering_support = new Rtbiz_HD_Offering_Support();
+			$rtbiz_hd_product_support = new Rtbiz_HD_Offering_Support();
 			$rtbiz_hd_short_code = new Rtbiz_HD_Short_Code();
 
 			global $Rtbiz_Hd_Help;
@@ -149,7 +149,7 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 				esc_url( 'edit.php?post_type=' . rtbiz_get_contact_post_type() . '&contact_group=customer&module=' . RTBIZ_HD_TEXT_DOMAIN ),
 				esc_url( 'edit.php?post_type=' . rtbiz_get_contact_post_type() . '&contact_group=staff&module=' . RTBIZ_HD_TEXT_DOMAIN ),
 				esc_url( 'edit-tags.php?taxonomy=' . Rtbiz_Teams::$slug . '&post_type=' . Rtbiz_HD_Module::$post_type ),
-				'edit-tags.php?taxonomy=' . Rt_Offerings::$offering_slug . '&amp;post_type=' . Rtbiz_HD_Module::$post_type,
+				'edit-tags.php?taxonomy=' . Rt_Products::$product_slug . '&amp;post_type=' . Rtbiz_HD_Module::$post_type,
 				$rtbiz_hd_attributes->attributes_page_slug,
 				Rtbiz_HD_Settings::$page_slug,
 				Rtbiz_HD_Setup_Wizard::$page_slug,
@@ -209,7 +209,7 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 				'label'               => __( 'Helpdesk', RTBIZ_HD_TEXT_DOMAIN ),
 				'post_types' => array( Rtbiz_HD_Module::$post_type ),
 				'department_support' => array( Rtbiz_HD_Module::$post_type ),
-				'offering_support' => array( Rtbiz_HD_Module::$post_type ),
+				'product_support' => array( Rtbiz_HD_Module::$post_type ),
 				'setting_option_name' => Rtbiz_HD_Settings::$hd_opt, // Use for setting page acl to add manage_options capability
 				'setting_page_url' => admin_url( 'edit.php?post_type='.Rtbiz_HD_Module::$post_type.'&page=rthd-settings' ), //
 				'email_template_support' => array( Rtbiz_HD_Module::$post_type ),

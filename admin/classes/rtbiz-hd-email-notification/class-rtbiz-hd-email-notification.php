@@ -502,7 +502,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 			$ContactEmail = $this->exclude_author( $ContactEmail, $ticket_created_by->user_email );
 			$ContactEmail = apply_filters( 'rtbiz_hd_filter_adult_emails', $ContactEmail, $post_id );
 
-			$produc_list = wp_get_object_terms( $post_id, Rt_Offerings::$offering_slug );
+			$produc_list = wp_get_object_terms( $post_id, Rt_Products::$product_slug );
 			$arrProducts = array_unique( wp_list_pluck( $produc_list, 'name' ) );
 			$arrProducts = implode( ', ', $arrProducts );
 
@@ -548,9 +548,9 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 
 				// Add product info into mail body.
 				if ( ! empty( $arrProducts ) ) {
-					$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_offerings}', $arrProducts );
+					$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_products}', $arrProducts );
 				} else {
-					$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_offerings}', 'No offering found' );
+					$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_products}', 'No product found' );
 				}
 				if ( isset( $body ) && ! empty( $body ) ) {
 					$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_body}', '<div>' . rtbiz_hd_content_filter( $body ) . '</div>' );
@@ -569,9 +569,9 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 
 				// Add product info into mail body.
 				if ( ! empty( $arrProducts ) ) {
-					$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_offerings}', $arrProducts );
+					$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_products}', $arrProducts );
 				} else {
-					$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_offerings}', 'No offering found' );
+					$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_products}', 'No product found' );
 				}
 				if ( isset( $body ) && ! empty( $body ) ) {
 					$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_body}', '<div>' . rtbiz_hd_content_filter( $body ) . '</div>' );
@@ -592,9 +592,9 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 
 				// Add product info into mail body.
 				if ( ! empty( $arrProducts ) ) {
-					$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_offerings}', $arrProducts );
+					$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_products}', $arrProducts );
 				} else {
-					$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_offerings}', 'No offering found' );
+					$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_products}', 'No product found' );
 				}
 				if ( isset( $body ) && ! empty( $body ) ) {
 					$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_body}', '<div>' . rtbiz_hd_content_filter( $body ) . '</div>' );
