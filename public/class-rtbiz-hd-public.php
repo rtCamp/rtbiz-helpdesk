@@ -60,8 +60,8 @@ class Rtbiz_HD_Public {
 
 		if ( wp_script_is( 'rthd-app-js' ) ) {
 			wp_localize_script( 'rthd-app-js', 'ajaxurl', admin_url( 'admin-ajax.php' ) );
-			wp_localize_script( 'rthd-app-js', 'rthd_post_type', get_post_type( $post->ID ) );
-			wp_localize_script( 'rthd-app-js', 'rthd_user_edit', array( $user_edit ) );
+			wp_localize_script( 'rthd-app-js', 'rtbiz_hd_post_type', get_post_type( $post->ID ) );
+			wp_localize_script( 'rthd-app-js', 'rtbiz_hd_user_edit', array( $user_edit ) );
 		}
 
 		return true;

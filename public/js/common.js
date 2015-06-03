@@ -314,7 +314,7 @@ jQuery( document ).ready(function () {
 				}
 				jQuery( '#edithdspinner' ).show();
 				jQuery( this ).attr( 'disabled', 'disabled' );
-				requestArray.post_type = rthd_post_type;
+				requestArray.post_type = rtbiz_hd_post_type;
 				requestArray.comment_id = commentid;
 				requestArray.action = "rtbiz_hd_update_followup";
 				requestArray.followuptype = "comment";

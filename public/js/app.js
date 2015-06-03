@@ -9,7 +9,7 @@
 })(navigator.userAgent || navigator.vendor || window.opera);
 
 
-//rthd_user_edit = rthd_user_edit[0];
+//rtbiz_hd_user_edit = rtbiz_hd_user_edit[0];
 var file_frame_ticket;
 jQuery( document ).ready(function ($) {
 
