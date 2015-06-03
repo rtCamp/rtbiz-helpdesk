@@ -78,7 +78,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		 */
 		public function contact_posts_filter( $query ) {
 			global $wpdb, $rtbiz_acl_model;
-			if ( isset( $_GET['post_type'] ) && rtbiz_get_contact_post_type() == $_GET['post_type'] && $query->is_main_query() ) {
+			if ( isset( $_GET['post_type'] ) && rtbiz_get_contact_post_type() == $_GET['post_type'] ) {
 
 				if ( isset( $_GET['contact_group'] ) && 'customer' == $_GET['contact_group'] && isset( $_REQUEST['tickets'] ) ) {
 					$sql = "SELECT p2p_from FROM `wp_postmeta`, `wp_p2p` WHERE `meta_key` = '_rtbiz_hd_created_by' and meta_value = p2p_to and p2p_type = 'rt_contact_to_user'";
@@ -93,7 +93,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 						$query->set( 'post__not_in', $contacts_with_ticket );
 					}
 				} elseif ( isset( $_GET['contact_group'] ) && 'staff' == $_GET['contact_group'] && isset( $_REQUEST['role'] ) ) {
-					$permissions = Rt_Access_Control::$permissions;
+					$permissions = Rtbiz_Access_Control::$permissions;
 					$module_where = isset( $_GET['module'] ) ? "acl.module =  '" . $_GET['module'] . "' and" : '';
 					$where = ' and acl.permission = ' . $permissions[ $_REQUEST['role'] ]['value'];
 					$sql = 'SELECT DISTINCT(posts.ID) FROM '.$rtbiz_acl_model->table_name.' as acl INNER JOIN '.$wpdb->prefix.'p2p as p2p on ( acl.userid = p2p.p2p_to' . $where . ' ) INNER JOIN '.$wpdb->posts.' as posts on (p2p.p2p_from = posts.ID )  where ' . $module_where . " acl.permission > 0 and p2p.p2p_type = '".rtbiz_get_contact_post_type()."_to_user' and posts.post_status= 'publish' and posts.post_type= '".rtbiz_get_contact_post_type()."' ";
@@ -179,7 +179,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 			$contact_metaboxes['normal']['default']['rt-biz-entity-details'] = $wp_meta_boxes[ rtbiz_get_contact_post_type() ]['normal']['default']['rt-biz-entity-details'];
 			$contact_metaboxes['normal']['core']['commentsdiv'] = $wp_meta_boxes[ rtbiz_get_contact_post_type() ]['normal']['core']['commentsdiv'];
 			$contact_metaboxes['side']['core']['submitdiv'] = $wp_meta_boxes[ rtbiz_get_contact_post_type() ]['side']['core']['submitdiv'];
-			$contact_metaboxes['side']['core'][ 'p2p-from-' . rtbiz_get_contact_post_type() . '_to_user' ] = $wp_meta_boxes[ rtbiz_get_contact_post_type() ]['side']['default'][ 'p2p-from-' . rtbiz_get_contact_post_type() . '_to_user' ];
+//			$contact_metaboxes['side']['core'][ 'p2p-from-' . rtbiz_get_contact_post_type() . '_to_user' ] = $wp_meta_boxes[ rtbiz_get_contact_post_type() ]['side']['default'][ 'p2p-from-' . rtbiz_get_contact_post_type() . '_to_user' ];
 			$contact_metaboxes['side']['core']['rt-biz-acl-details'] = $wp_meta_boxes[ rtbiz_get_contact_post_type() ]['side']['default']['rt-biz-acl-details'];
 			$contact_metaboxes['side']['core']['productdiv'] = $wp_meta_boxes[ rtbiz_get_contact_post_type() ]['side']['core']['productdiv'];
 			$contact_metaboxes['side']['core']['rt-teamdiv'] = $wp_meta_boxes[ rtbiz_get_contact_post_type() ]['side']['core']['rt-teamdiv'];
