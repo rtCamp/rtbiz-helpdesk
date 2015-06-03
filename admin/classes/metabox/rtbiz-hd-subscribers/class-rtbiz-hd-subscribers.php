@@ -17,9 +17,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since rt-Helpdesk 0.1
  */
-if ( ! class_exists( 'RT_Meta_Box_Subscribers ' ) ) {
+if ( ! class_exists( 'Rtbiz_HD_Subscribers ' ) ) {
 
-	class RT_Meta_Box_Subscribers {
+	class Rtbiz_HD_Subscribers {
 
 		/**
 		 * Output the metabox

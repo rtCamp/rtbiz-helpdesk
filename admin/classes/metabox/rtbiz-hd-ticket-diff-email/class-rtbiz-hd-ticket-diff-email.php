@@ -18,8 +18,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since rt-Helpdesk 0.1
  */
 
-if ( ! class_exists( 'RT_Ticket_Diff_Email' ) ) {
-	class RT_Ticket_Diff_Email {
+if ( ! class_exists( 'Rtbiz_HD_Ticket_Diff_Email' ) ) {
+	class Rtbiz_HD_Ticket_Diff_Email {
 
 		/**
 		 * it stores different of new data and old data on ticket update.

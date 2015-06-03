@@ -106,7 +106,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Operation' ) ) {
 				} else { //update post
 					// unhook this function so it doesn't loop infinitely
 					remove_action( 'save_post', array( $rt_hd_cpt_tickets, 'save_meta_boxes' ), 1, 2 );
-					remove_action( 'pre_post_update', 'RT_Ticket_Diff_Email::store_old_post_data', 1, 2 );
+					remove_action( 'pre_post_update', 'Rtbiz_HD_Ticket_Diff_Email::store_old_post_data', 1, 2 );
 
 					if ( ! empty( $created_by ) ) {
 						update_post_meta( $post_id, '_rtbiz_hd_created_by', $created_by );
@@ -128,7 +128,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Operation' ) ) {
 
 					// re-hook this function
 					add_action( 'save_post', array( $rt_hd_cpt_tickets, 'save_meta_boxes' ), 1, 2 );
-					add_action( 'pre_post_update', 'RT_Ticket_Diff_Email::store_old_post_data', 1, 2 );
+					add_action( 'pre_post_update', 'Rtbiz_HD_Ticket_Diff_Email::store_old_post_data', 1, 2 );
 				}
 
 				if ( is_wp_error( $post_id ) ) {

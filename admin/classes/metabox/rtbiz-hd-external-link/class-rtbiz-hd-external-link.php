@@ -18,8 +18,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since rt-Helpdesk 0.1
  */
 
-if ( ! class_exists( 'RT_Meta_Box_External_Link' ) ) {
-	class RT_Meta_Box_External_Link {
+if ( ! class_exists( 'Rtbiz_HD_External_Link' ) ) {
+	class Rtbiz_HD_External_Link {
 
 		/**
 		 * Output the metabox

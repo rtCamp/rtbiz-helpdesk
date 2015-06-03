@@ -38,14 +38,14 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 			Rtbiz_HD::$loader->add_action( 'save_post', $this, 'save_meta_boxes', 1, 2 );
 
 			//metabox save
-			add_action( 'wp_before_admin_bar_render', 'RT_Meta_Box_Ticket_Info::custom_post_status_rendar', 10 );
+			add_action( 'wp_before_admin_bar_render', 'Rtbiz_HD_Ticket_Info::custom_post_status_rendar', 10 );
 
-			add_action( 'pre_post_update', 'RT_Ticket_Diff_Email::store_old_post_data', 1, 2 );
-			add_action( 'rt_hd_process_' . Rtbiz_HD_Module::$post_type . '_meta', 'RT_Meta_Box_Ticket_Info::save', 10, 2 );
-			add_action( 'rt_hd_process_' . Rtbiz_HD_Module::$post_type . '_meta', 'RT_Meta_Box_Subscribers::save', 10, 2 );
-			add_action( 'rt_hd_process_' . Rtbiz_HD_Module::$post_type . '_meta', 'RT_Meta_Box_Attachment::save', 10, 2 );
-			//          add_action( 'rt_hd_process_' . Rt_HD_Module::$post_type . '_meta', 'RT_Meta_Box_External_Link::save', 10, 2 );
-			add_action( 'rt_hd_process_' . Rtbiz_HD_Module::$post_type . '_meta', 'RT_Ticket_Diff_Email::save', 10, 2 );
+			add_action( 'pre_post_update', 'Rtbiz_HD_Ticket_Diff_Email::store_old_post_data', 1, 2 );
+			add_action( 'rt_hd_process_' . Rtbiz_HD_Module::$post_type . '_meta', 'Rtbiz_HD_Ticket_Info::save', 10, 2 );
+			add_action( 'rt_hd_process_' . Rtbiz_HD_Module::$post_type . '_meta', 'Rtbiz_HD_Subscribers::save', 10, 2 );
+			add_action( 'rt_hd_process_' . Rtbiz_HD_Module::$post_type . '_meta', 'Rtbiz_HD_Attachment::save', 10, 2 );
+			//          add_action( 'rt_hd_process_' . Rt_HD_Module::$post_type . '_meta', 'Rtbiz_HD_External_Link::save', 10, 2 );
+			add_action( 'rt_hd_process_' . Rtbiz_HD_Module::$post_type . '_meta', 'Rtbiz_HD_Ticket_Diff_Email::save', 10, 2 );
 
 			Rtbiz_HD::$loader->add_action( 'pre_get_posts', $this, 'pre_filter', 1 );
 			Rtbiz_HD::$loader->add_action( 'untrashed_post', $this, 'after_restore_trashed_ticket' );
@@ -379,15 +379,15 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 			global $post;
 			if ( ! empty( $post ) && 'auto-draft' != $post->post_status ) {
 				remove_post_type_support( Rtbiz_HD_Module::$post_type, 'editor' );
-				add_meta_box( 'rt-hd-ticket-follow-up', __( 'Follow Up', RTBIZ_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Ticket_Comments::ui', Rtbiz_HD_Module::$post_type, 'normal', 'high' );
+				add_meta_box( 'rt-hd-ticket-follow-up', __( 'Follow Up', RTBIZ_HD_TEXT_DOMAIN ), 'Rtbiz_HD_Ticket_Comments::ui', Rtbiz_HD_Module::$post_type, 'normal', 'high' );
 			}
 
-			add_meta_box( 'rt-hd-ticket-data', __( 'Ticket Information', RTBIZ_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Ticket_Info::ui', Rtbiz_HD_Module::$post_type, 'side', 'default' );
-			add_meta_box( 'rt-hd-subscriiber', __( 'Participants (Staff)', RTBIZ_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Subscribers::ui', Rtbiz_HD_Module::$post_type, 'side', 'default' );
+			add_meta_box( 'rt-hd-ticket-data', __( 'Ticket Information', RTBIZ_HD_TEXT_DOMAIN ), 'Rtbiz_HD_Ticket_Info::ui', Rtbiz_HD_Module::$post_type, 'side', 'default' );
+			add_meta_box( 'rt-hd-subscriiber', __( 'Participants (Staff)', RTBIZ_HD_TEXT_DOMAIN ), 'Rtbiz_HD_Subscribers::ui', Rtbiz_HD_Module::$post_type, 'side', 'default' );
 			add_meta_box( 'rt-hd-ticket-order-history', __( 'Purchase History', RTBIZ_HD_TEXT_DOMAIN ), array( $this, 'order_history' ), Rtbiz_HD_Module::$post_type, 'side', 'default' );
 			add_meta_box( 'rt-hd-ticket-contacts-blacklist', __( 'Blacklist Contacts', RTBIZ_HD_TEXT_DOMAIN ), 'Rtbiz_HD_Ticket_Contacts_Blacklist::ui', Rtbiz_HD_Module::$post_type, 'side', 'low' );
-			add_meta_box( 'rt-hd-attachment', __( 'Attachments', RTBIZ_HD_TEXT_DOMAIN ), 'RT_Meta_Box_Attachment::ui', Rtbiz_HD_Module::$post_type, 'side', 'low' );
-			//          add_meta_box( 'rt-hd-external-link', __( 'Reference Links', RT_BIZ_HD_TEXT_DOMAIN ), 'RT_Meta_Box_External_Link::ui', Rt_HD_Module::$post_type, 'side', 'default' );
+			add_meta_box( 'rt-hd-attachment', __( 'Attachments', RTBIZ_HD_TEXT_DOMAIN ), 'Rtbiz_HD_Attachment::ui', Rtbiz_HD_Module::$post_type, 'side', 'low' );
+			//          add_meta_box( 'rt-hd-external-link', __( 'Reference Links', RT_BIZ_HD_TEXT_DOMAIN ), 'Rtbiz_HD_External_Link::ui', Rt_HD_Module::$post_type, 'side', 'default' );
 		}
 
 		/**

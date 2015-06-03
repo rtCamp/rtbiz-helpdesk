@@ -17,9 +17,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since rt-Helpdesk 0.1
  */
-if ( ! class_exists( 'RT_Meta_Box_Ticket_Info' ) ) {
+if ( ! class_exists( 'Rtbiz_HD_Ticket_Info' ) ) {
 
-	class RT_Meta_Box_Ticket_Info {
+	class Rtbiz_HD_Ticket_Info {
 
 		/**
 		 * Metabox Ui for ticket info

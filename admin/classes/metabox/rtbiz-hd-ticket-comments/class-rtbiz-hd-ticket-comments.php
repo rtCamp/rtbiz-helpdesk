@@ -19,13 +19,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 */
 
 /**
- * Description of RT_Meta_Box_Ticket_Comments
+ * Description of Rtbiz_HD_Ticket_Comments
  *
  * @since rt-Helpdesk 0.1
  */
 
-if ( ! class_exists( 'RT_Meta_Box_Ticket_Comments' ) ) {
-	class RT_Meta_Box_Ticket_Comments {
+if ( ! class_exists( 'Rtbiz_HD_Ticket_Comments' ) ) {
+	class Rtbiz_HD_Ticket_Comments {
 
 		public static function ui( $post ) {
 			$ticket_unique_id = get_post_meta( $post->ID, '_rtbiz_hd_unique_id', true );
