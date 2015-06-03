@@ -19,7 +19,7 @@ if ( ! class_exists( 'Rtbiz_HD_Auto_Response' ) ) {
 		 * Constructor
 		 */
 		public function __construct() {
-			Rtbiz_HD::$loader->add_action( 'rt_hd_auto_response', $this, 'auto_response', 10, 2 );
+			Rtbiz_HD::$loader->add_action( 'rtbiz_hd_auto_response', $this, 'auto_response', 10, 2 );
 
 	        $this->weekdays = array( 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday' );
 	        $this->weekend = apply_filters( 'rthd_autoresponse_weekends', array( 'Saturday', 'Sunday' ) );

@@ -49,36 +49,45 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 
 			Rtbiz_HD::$loader->add_action( 'comment_post', $this, 'mail_new_comment_data', 10, 2 );
 
-			Rtbiz_HD::$loader->add_action( 'wp_ajax_rthd_update_followup_ajax', $this, 'update_followup_ajax' );
-			Rtbiz_HD::$loader->add_action( 'wp_ajax_rthd_add_new_followup_front', $this, 'add_new_followup_front' );
-			Rtbiz_HD::$loader->add_action( 'wp_ajax_nopriv_rthd_add_new_followup_front', $this, 'add_new_followup_front' );
-			Rtbiz_HD::$loader->add_action( 'wp_ajax_helpdesk_delete_followup', $this, 'delete_followup_ajax' );
-			Rtbiz_HD::$loader->add_action( 'wp_ajax_load_more_followup', $this, 'load_more_followup' );
-			Rtbiz_HD::$loader->add_action( 'wp_ajax_nopriv_load_more_followup', $this, 'load_more_followup' );
-			Rtbiz_HD::$loader->add_action( 'wp_ajax_rthd_add_new_ticket_ajax', $this, 'add_new_ticket_ajax' );
-			Rtbiz_HD::$loader->add_action( 'wp_ajax_nopriv_rthd_add_new_ticket_ajax', $this, 'add_new_ticket_ajax' );
+			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_update_followup', $this, 'ajax_update_followup' );
+
+			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_add_new_followup_front', $this, 'ajax_add_new_followup_front' );
+			Rtbiz_HD::$loader->add_action( 'wp_ajax_nopriv_rtbiz_hd_add_new_followup_front', $this, 'ajax_add_new_followup_front' );
+
+			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_delete_followup', $this, 'ajax_delete_followup' );
+
+			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_load_more_followup', $this, 'ajax_load_more_followup' );
+			Rtbiz_HD::$loader->add_action( 'wp_ajax_nopriv_rtbiz_hd_load_more_followup', $this, 'ajax_load_more_followup' );
+
+			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_add_new_ticket_ajax', $this, 'ajax_add_new_ticket' );
+			Rtbiz_HD::$loader->add_action( 'wp_ajax_nopriv_rtbiz_hd_add_new_ticket_ajax', $this, 'ajax_add_new_ticket' );
+
 			Rtbiz_HD::$loader->add_action( 'read_rt_mailbox_email_'. RTBIZ_HD_TEXT_DOMAIN, $this, 'process_email_to_ticket', 10, 16 );
-			Rtbiz_HD::$loader->add_action( 'wp_ajax_ticket_bulk_edit', $this, 'ticket_bulk_edit' );
-			Rtbiz_HD::$loader->add_action( 'wp_ajax_front_end_status_change', $this, 'front_end_status_change' );
-			Rtbiz_HD::$loader->add_action( 'wp_ajax_front_end_assignee_change', $this, 'front_end_assignee_change' );
-			Rtbiz_HD::$loader->add_action( 'wp_ajax_front_end_ticket_watch_unwatch', $this, 'front_end_ticket_watch_unwatch' );
-			Rtbiz_HD::$loader->add_action( 'wp_ajax_rt_hd_add_subscriber_email', $this, 'rt_hd_add_subscriber_email' );
-			Rtbiz_HD::$loader->add_action( 'wp_ajax_rthd_quick_download', $this, 'rthd_quick_download' );
-			Rtbiz_HD::$loader->add_action( 'wp_ajax_nopriv_rthd_quick_download', $this, 'rthd_quick_download' );
-			Rtbiz_HD::$loader->add_action( 'wp_ajax_nopriv_rthd_upload_attachment', $this, 'rthd_upload_attachment' );
-			Rtbiz_HD::$loader->add_action( 'wp_ajax_rthd_upload_attachment', $this, 'rthd_upload_attachment' );
+
+			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_ticket_bulk_edit', $this, 'ajax_ticket_bulk_edit' ); //no use
+
+			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_front_end_status_change', $this, 'ajax_front_end_status_change' );
+			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_front_end_assignee_change', $this, 'ajax_front_end_assignee_change' );
+			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_front_end_watch_unwatch', $this, 'ajax_front_end_watch_unwatch' );
+			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_add_subscriber_email', $this, 'ajax_add_subscriber_email' );
+
+			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_quick_download', $this, 'ajax_quick_download' );
+			Rtbiz_HD::$loader->add_action( 'wp_ajax_nopriv_rtbiz_hd_quick_download', $this, 'ajax_quick_download' );
+
+			Rtbiz_HD::$loader->add_action( 'wp_ajax_nopriv_rtbiz_hd_upload_attachment', $this, 'ajax_upload_attachment' );
+			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_upload_attachment', $this, 'ajax_upload_attachment' );
 
 			// commented ajax call for checking followup duplicate and all other code
 			//			Rtbiz_HD::$loader->add_action( 'wp_ajax_rthd_check_duplicate_followup', $this, 'rthd_check_duplicate_followup' );
 			//			Rtbiz_HD::$loader->add_action( 'wp_ajax_nopriv_rthd_check_duplicate_followup', $this, 'rthd_check_duplicate_followup' );
-			Rtbiz_HD::$loader->add_action( 'wp_ajax_front_end_offering_change', $this, 'front_end_offering_change' );
-			Rtbiz_HD::$loader->add_action( 'wp_ajax_rthd_fav_ticket', $this, 'favourite_tickets' );
+			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_front_end_offering_change', $this, 'ajax_front_end_offering_change' );
+			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_fav_ticket', $this, 'ajax_favourite_tickets' );
 		}
 
 		/**
 		 * Ajax call back of favorite ticket
 		 */
-		function favourite_tickets() {
+		public function ajax_favourite_tickets() {
 			$status = false;
 			if ( ! empty( $_POST['nonce'] )
 			     && ! empty( $_POST['post_id'] )
@@ -103,7 +112,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		/**
 		 * Ajax call for changing offering of the post.
 		 */
-		function front_end_offering_change() {
+		public function ajax_front_end_offering_change() {
 			$flag = false;
 			if ( ! empty( $_POST['offering_id'] ) && ! empty( $_POST['post_id'] ) ) {
 				$return = wp_set_object_terms( $_POST['post_id'], array( intval( $_POST['offering_id'] ) ), Rt_Offerings::$offering_slug, false );
@@ -118,7 +127,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		/**
 		 *  Check followup duplicate
 		 */
-		function rthd_check_duplicate_followup() {
+		public function rthd_check_duplicate_followup() {
 			$return_data = array( 'status' => false );
 			if ( ! empty( $_POST['followup_content'] ) && ! empty( $_POST['followup_ticket_unique_id'] ) ) {
 				global $signature;
@@ -147,7 +156,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		/**
 		 * For create attachment
 		 */
-		function rthd_upload_attachment() {
+		public function ajax_upload_attachment() {
 			$response = array();
 			if ( $_FILES ) {
 				$comment_post_ID = '';
@@ -172,7 +181,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		/**
 		 * For quick download link
 		 */
-		function rthd_quick_download() {
+		public function ajax_quick_download() {
 			if ( ! empty( $_POST['url'] ) ) {
 				$file = $_POST['url'] ;
 				header( 'Content-Type: octet-stream' );
@@ -189,7 +198,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		/**
 		 * ajax call for add subscriber or contact
 		 */
-		function rt_hd_add_subscriber_email() {
+		public function ajax_add_subscriber_email() {
 			global $rtbiz_hd_email_notification;
 			$response = array();
 			$response['status'] = false;
@@ -256,7 +265,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			die();
 		}
 
-		function ticket_bulk_edit() {
+		public function ajax_ticket_bulk_edit() {
 
 			$post_ids = ( isset( $_POST['post_ids'] ) && ! empty( $_POST['post_ids'] ) ) ? $_POST['post_ids'] : array();
 			$status = ( isset( $_POST['ticket_status'] ) && ! empty( $_POST['ticket_status'] ) ) ? $_POST['ticket_status'] : null;
@@ -324,7 +333,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			}
 		}
 
-		function add_new_ticket_ajax() {
+		public function ajax_add_new_ticket() {
 			$result = array();
 
 			if ( ! isset( $_POST['nonce'] ) && ! wp_verify_nonce( $_POST['nonce'], 'rt_hd_ticket_edit' ) ) {
@@ -361,7 +370,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		function filter_comment_from_admin( $_comment1 ) {
+		public function filter_comment_from_admin( $_comment1 ) {
 			global $hook_suffix;
 			if ( in_array( $hook_suffix, array( 'edit-comments.php', 'index.php' ) ) ) {
 				global $wpdb;
@@ -393,7 +402,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		public function insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $senderEmail, $messageid = '', $inreplyto = '', $references = '', $subscriber = array(), $originalBody = '' ) {
-			global $rtbiz_hd_module, $rt_hd_tickets_operation, $rtbiz_hd_ticket_history_model, $rtbiz_hd_contacts;
+			global $rtbiz_hd_module, $rtbiz_hd_tickets_operation, $rtbiz_hd_ticket_history_model, $rtbiz_hd_contacts;
 			$d             = new DateTime( $mailtime );
 			$timeStamp     = $d->getTimestamp();
 			$post_date     = gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) + ( get_option( 'gmt_offset' ) * 3600 ) ) );
@@ -430,12 +439,12 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				'post_title'   => $postArray['post_title'],
 			);
 
-			$post_id = $rt_hd_tickets_operation->ticket_default_field_update( $postArray, $dataArray, $post_type, '', $userid, $userid );
+			$post_id = $rtbiz_hd_tickets_operation->ticket_default_field_update( $postArray, $dataArray, $post_type, '', $userid, $userid );
 			if ( '' != $originalBody ) {
 				add_post_meta( $post_id, '_rt_hd_original_email_body', $originalBody );
 			}
 			// Updating Post Status from publish to unanswered
-			$rt_hd_tickets_operation->ticket_default_field_update( array( 'post_status' => 'hd-unanswered', 'post_name' => $post_id ), array( 'post_status' => 'hd-unanswered' ), $post_type, $post_id, $userid, $userid );
+			$rtbiz_hd_tickets_operation->ticket_default_field_update( array( 'post_status' => 'hd-unanswered', 'post_name' => $post_id ), array( 'post_status' => 'hd-unanswered' ), $post_type, $post_id, $userid, $userid );
 
 			$rtbiz_hd_ticket_history_model->insert( array(
 				'ticket_id'   => $post_id,
@@ -446,7 +455,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				'updated_by'  => get_current_user_id(),
 			) );
 
-			$rt_hd_tickets_operation->ticket_subscribe_update( $subscriber, $postArray['post_author'], $post_id );
+			$rtbiz_hd_tickets_operation->ticket_subscribe_update( $subscriber, $postArray['post_author'], $post_id );
 
 			$this->add_contacts_to_post( $allemail, $post_id );
 
@@ -474,7 +483,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			}
 
 			// Call action to add product info into ticket meta data.
-			do_action( 'rt_hd_add_ticket_offering_info', $post_id );
+			do_action( 'rtbiz_hd_add_ticket_offering_info', $post_id );
 			// Call action to change default assignee accoding to offerings
 
 			do_action( 'rt_hd_before_send_notification', $post_id, get_post( $post_id ) );
@@ -512,7 +521,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		function hijack_mail_subject( $data, $message_format ) {
+		public function hijack_mail_subject( $data, $message_format ) {
 			global $helpdesk_import_ticket_id;
 			$data['subject'] = '[' . ucfirst( Rtbiz_HD_Module::$name ) . ' #' . $helpdesk_import_ticket_id . ']' . $data['subject'];
 			$hd_url          = admin_url( "post.php?post={$helpdesk_import_ticket_id}action=edit" );
@@ -532,7 +541,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		 *
 		 * @return array
 		 */
-		function add_attachment_to_post( $uploaded, $post_id = '', $comment_id = 0 ) {
+		public function add_attachment_to_post( $uploaded, $post_id = '', $comment_id = 0 ) {
 			global $rtbiz_hd_admin;
 			$return = array();
 			if ( isset( $uploaded ) ) {
@@ -626,7 +635,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		 * @param $allemail
 		 * @param $post_id
 		 */
-		function add_contacts_to_post( $allemail, $post_id ) {
+		public function add_contacts_to_post( $allemail, $post_id ) {
 			global $rtbiz_hd_contacts;
 			$ticket_creator = get_post_meta( $post_id, '_rtbiz_hd_created_by',true );
 			$ticket_creator = get_userdata( $ticket_creator );
@@ -677,7 +686,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		function get_post_id_from_subject( $subject ) {
+		public function get_post_id_from_subject( $subject ) {
 			//\[([A-Za-z]+)\ \#([1-9]+)\]
 			$pattern     = '/\[([A-Za-z]+)\ \#([0-9]+)\]/im';
 			$intMatch    = preg_match_all( $pattern, $subject, $matches );
@@ -922,7 +931,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		function get_post_id_from_mail_meta( $inreplyto, $refrences ) {
+		public function get_post_id_from_mail_meta( $inreplyto, $refrences ) {
 			if ( '' == $inreplyto && '' == $refrences ) {
 				return false;
 			}
@@ -965,7 +974,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		function process_forward_email_data( &$title, &$body, &$mailtime, &$allemail, &$mailBodyText, &$dndEmails ) {
+		public function process_forward_email_data( &$title, &$body, &$mailtime, &$allemail, &$mailBodyText, &$dndEmails ) {
 			$forwardArray = explode( "\r", $mailBodyText );
 			$dndEmails    = array();
 			foreach ( $forwardArray as $forwardline ) {
@@ -998,7 +1007,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		function extract_all_email_from_string( $string ) {
+		public function extract_all_email_from_string( $string ) {
 			$pattern  = '/[a-z0-9_\-\+\.]+@[a-z0-9\-]+\.([a-z]{2,3})(?:\.[a-z]{2})?/i';
 			$intmatch = preg_match_all( $pattern, $string, $matches );
 			if ( ! empty( $matches[0] ) ) {
@@ -1016,7 +1025,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		function post_exists( $title, $date = '' ) {
+		public function post_exists( $title, $date = '' ) {
 			global $wpdb;
 			if ( trim( $title ) == '' ) {
 				return 0;
@@ -1265,7 +1274,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		 *
 		 * @return array
 		 */
-		function get_first_staff_followup( $comment_post_ID ) {
+		public function get_first_staff_followup( $comment_post_ID ) {
 
 			$staff = get_post_meta( $comment_post_ID, '_rtbiz_hd_subscribe_to', true );;
 			$post_author_id = get_post_field( 'post_author', $comment_post_ID );
@@ -1452,7 +1461,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		function get_mime_type_from_extn( $strFileType ) {
+		public function get_mime_type_from_extn( $strFileType ) {
 			$ContentType = 'application/octet-stream';
 			$strFileType = strtolower( '.' . $strFileType );
 			if ( '.asf' == $strFileType ) {
@@ -1514,7 +1523,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		}
 
 
-		function process_file_attachment($file) {
+		public function process_file_attachment($file) {
 			if ( UPLOAD_ERR_OK !== $_FILES[ $file ]['error'] ) { __return_false(); }
 			require_once( ABSPATH . 'wp-admin' . '/includes/image.php' );
 			require_once( ABSPATH . 'wp-admin' . '/includes/file.php' );
@@ -1528,7 +1537,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		function add_new_followup_front() {
+		public function ajax_add_new_followup_front() {
 			$returnArray     = array();
 			$returnArray['status']  = false;
 
@@ -1663,7 +1672,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			die( 0 );
 		}
 
-		function get_ticket_from_ticket_unique_id( $ticket_unique_id ) {
+		public function get_ticket_from_ticket_unique_id( $ticket_unique_id ) {
 			$args             = array(
 				'meta_key'    => '_rtbiz_hd_unique_id',
 				'meta_value'  => $ticket_unique_id,
@@ -1687,7 +1696,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		function update_followup_ajax() {
+		public function ajax_update_followup() {
 			global $rtbiz_hd_email_notification;
 
 			$returnArray     = array();
@@ -1831,7 +1840,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		function delete_followup_ajax() {
+		public function ajax_delete_followup() {
 			global $rtbiz_hd_email_notification;
 			$response = array();
 			if ( ! isset( $_POST['comment_id'] ) ) {
@@ -1858,7 +1867,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		function gmail_thread_import_request() {
+		public function gmail_thread_import_request() {
 			$response = array();
 			if ( ! isset( $_POST['post_id'] ) ) {
 				$response['false']   = true;
@@ -1934,7 +1943,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			return true;
 		}
 
-		function load_more_followup() {
+		public function ajax_load_more_followup() {
 			$response = array();
 			$response['status'] = false;
 			if ( isset( $_REQUEST['post_id'] ) && isset( $_REQUEST['offset'] ) && isset( $_REQUEST['limit'] ) ) {
@@ -1986,7 +1995,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			die();
 		}
 
-		function front_end_status_change() {
+		public function ajax_front_end_status_change() {
 			$response = array();
 			$response['status'] = false;
 			$post_id = $_POST['post_id'];
@@ -2014,7 +2023,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		/**
 		 * Change ticket assignee. Request come from front end.
 		 */
-		function front_end_assignee_change() {
+		public function ajax_front_end_assignee_change() {
 			$response = array();
 			$response['status'] = false;
 			$post_id = $_POST['post_id'];
@@ -2048,7 +2057,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		/**
 		 * User can watch/unwatch ticket.
 		 */
-		function front_end_ticket_watch_unwatch() {
+		public function ajax_front_end_watch_unwatch() {
 			global $rtbiz_hd_email_notification;
 
 			$cap = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' );

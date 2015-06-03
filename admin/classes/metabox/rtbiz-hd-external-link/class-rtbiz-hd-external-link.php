@@ -64,9 +64,9 @@ if ( ! class_exists( 'Rtbiz_HD_External_Link' ) ) {
 		 */
 		public static function save( $post_id, $post ) {
 
-			global $rt_hd_tickets_operation;
+			global $rtbiz_hd_tickets_operation;
 			if ( isset( $_POST['ticket_ex_files'] ) && ! empty( $_POST['ticket_ex_files'] ) ) {
-				$rt_hd_tickets_operation->ticket_external_link_update( $_POST['ticket_ex_files'], $post_id );
+				$rtbiz_hd_tickets_operation->ticket_external_link_update( $_POST['ticket_ex_files'], $post_id );
 			}
 
 		}

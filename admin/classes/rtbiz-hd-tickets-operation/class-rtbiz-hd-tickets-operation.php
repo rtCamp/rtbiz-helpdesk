@@ -25,15 +25,15 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Operation' ) ) {
 		 */
 		public function __construct() {
 			Rtbiz_HD::$loader->add_action( 'transition_post_status', $this, 'ticket_status_changed', 10, 3 );
-			Rtbiz_HD::$loader->add_action( 'rt_hd_before_send_notification', $this, 'rt_hd_before_send_notification' );
-			Rtbiz_HD::$loader->add_action( 'rt_hd_process_' . Rtbiz_HD_Module::$post_type . '_meta', $this, 'rt_hd_before_send_notification', 20 );
+			Rtbiz_HD::$loader->add_action( 'rtbiz_hd_before_send_notification', $this, 'before_send_notification' );
+			Rtbiz_HD::$loader->add_action( 'rt_hd_process_' . Rtbiz_HD_Module::$post_type . '_meta', $this, 'before_send_notification', 20 );
 		}
 
 		/**
 		 * @param $postid
 		 * @param $post
 		 */
-		function rt_hd_before_send_notification( $postid, $post = null ) {
+		public function before_send_notification( $postid, $post = null ) {
 			if ( empty( $post ) ) {
 				$post = get_post( $postid );
 			}
@@ -59,7 +59,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Operation' ) ) {
 			}
 		}
 
-		function ticket_status_changed( $new_status, $old_status, $post ) {
+		public function ticket_status_changed( $new_status, $old_status, $post ) {
 			global $rtbiz_hd_ticket_index_model;
 			if ( $post->post_type == Rtbiz_HD_Module::$post_type ) {
 				$rtbiz_hd_ticket_index_model->update_ticket_status( $new_status, $post->ID );
@@ -79,7 +79,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Operation' ) ) {
 		 *
 		 * @return null
 		 */
-		function ticket_default_field_update( $postArray, $dataArray, $post_type, $post_id = '', $created_by = '', $updated_by = '' ) {
+		public function ticket_default_field_update( $postArray, $dataArray, $post_type, $post_id = '', $created_by = '', $updated_by = '' ) {
 
 			global $rt_hd_cpt_tickets;
 
@@ -179,7 +179,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Operation' ) ) {
 		 *
 		 * @return bool
 		 */
-		function ticket_attribute_update( $newTicket, $post_type, $post_id, $attribute_store_as = 'taxonomy' ) {
+		public function ticket_attribute_update( $newTicket, $post_type, $post_id, $attribute_store_as = 'taxonomy' ) {
 
 			global $rtbiz_hd_attributes;
 			if ( isset( $newTicket ) && ! empty( $newTicket ) && isset( $post_id ) && ! empty( $post_id ) ) {
@@ -232,7 +232,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Operation' ) ) {
 		 *
 		 * @return bool
 		 */
-		function ticket_attachment_update( $new_attachments, $post_id ) {
+		public function ticket_attachment_update( $new_attachments, $post_id ) {
 			global $rtbiz_hd_admin;
 			if ( isset( $post_id ) && ! empty( $post_id ) ) {
 				$old_attachments = get_posts( array(
@@ -311,7 +311,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Operation' ) ) {
 		 *
 		 * @return bool
 		 */
-		function ticket_external_link_update( $new_ex_files, $post_id ) {
+		public function ticket_external_link_update( $new_ex_files, $post_id ) {
 			$old_ex_files = get_post_meta( $post_id, '_rtbiz_hd_external_file' );
 			if ( isset( $post_id ) && ! empty( $post_id ) ) {
 				delete_post_meta( $post_id, '_rtbiz_hd_external_file' );
@@ -344,7 +344,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Operation' ) ) {
 		 *
 		 * @return bool
 		 */
-		function ticket_subscribe_update( $subscribe_to, $post_author, $post_id ) {
+		public function ticket_subscribe_update( $subscribe_to, $post_author, $post_id ) {
 			if ( isset( $post_id ) && ! empty( $post_id ) ) {
 
 				if ( ! isset( $subscribe_to ) || empty( $subscribe_to ) ) {

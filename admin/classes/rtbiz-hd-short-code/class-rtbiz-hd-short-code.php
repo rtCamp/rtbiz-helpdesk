@@ -22,8 +22,8 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 		 * Constructor
 		 */
 		public function __construct() {
-			add_shortcode( 'rt_hd_support_form', array( $this, 'rt_hd_support_form_callback' ) );
-			add_shortcode( 'rt_hd_tickets', array( $this, 'rt_hd_tickets_callback' ) );
+			add_shortcode( 'rtbiz_hd_support_form', array( $this, 'support_form' ) );
+			add_shortcode( 'rtbiz_hd_tickets', array( $this, 'get_tickets' ) );
 		}
 
 		/**
@@ -31,9 +31,9 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 		 *
 		 * @since 0.1
 		 *
-		 * [rt_hd_support_form]
+		 * [rtbiz_hd_support_form]
 		 */
-		function rt_hd_support_form_callback( $attr ) {
+		function support_form( $attr ) {
 
 			global $rtbiz_hd_offering_support;
 
@@ -124,7 +124,7 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 				</div>
 				<?php
 			}
-			return apply_filters( 'rt_hd_support_form_shorcode', ob_get_clean(), $attr );
+			return apply_filters( 'rtbiz_hd_support_form_shorcode', ob_get_clean(), $attr );
 		}
 
 		/**
@@ -136,7 +136,7 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 		 *
 		 * @return string
 		 */
-		function rt_hd_tickets_callback( $atts ) {
+		function get_tickets( $atts ) {
 			global $rtbiz_hd_module, $current_user, $redux_helpdesk_settings;
 
 			$arg_shortcode = shortcode_atts(

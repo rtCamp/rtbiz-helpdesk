@@ -278,7 +278,7 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Info' ) ) {
 		 */
 		public static function save( $post_id, $post ) {
 
-			global $rt_hd_tickets_operation;
+			global $rtbiz_hd_tickets_operation;
 			if ( isset( $_REQUEST['rthd_check_matabox'] ) && 'true' == $_REQUEST['rthd_check_matabox'] ) {
 				$newTicket      = $_POST['post'];
 				$datetimeformat = 'M d, Y h:i A';
@@ -333,8 +333,8 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Info' ) ) {
 				$created_by = $newTicket['rthd_created_by'];
 			}
 
-			$rt_hd_tickets_operation->ticket_default_field_update( $postArray, $dataArray, $post->post_type, $post_id, $created_by );
-			$rt_hd_tickets_operation->ticket_attribute_update( $newTicket, $post->post_type, $post_id, 'meta' );
+			$rtbiz_hd_tickets_operation->ticket_default_field_update( $postArray, $dataArray, $post->post_type, $post_id, $created_by );
+			$rtbiz_hd_tickets_operation->ticket_attribute_update( $newTicket, $post->post_type, $post_id, 'meta' );
 		}
 
 		public static function custom_post_status_rendar() {

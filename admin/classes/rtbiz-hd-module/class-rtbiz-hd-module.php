@@ -90,7 +90,7 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 		 *
 		 * @return array
 		 */
-		function get_custom_labels() {
+		public function get_custom_labels() {
 			$this->labels = array(
 				'name'          => __( 'Ticket', RTBIZ_HD_TEXT_DOMAIN ),
 				'singular_name' => __( 'Ticket', RTBIZ_HD_TEXT_DOMAIN ),
@@ -114,7 +114,7 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 		 *
 		 * @return array
 		 */
-		function get_custom_statuses() {
+		public function get_custom_statuses() {
 			$this->statuses = array(
 				array(
 					'slug'        => 'hd-unanswered',
@@ -141,7 +141,7 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 		 *
 		 * @since 0.1
 		 */
-		function init_hd() {
+		public function init_hd() {
 			$menu_position = 32;
 			$this->register_custom_post( $menu_position );
 
@@ -174,7 +174,7 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 		 *
 		 * @return object|\WP_Error
 		 */
-		function register_custom_post( $menu_position ) {
+		public function register_custom_post( $menu_position ) {
 
 			$logo = apply_filters( 'rthd_helpdesk_logo', RTBIZ_HD_URL . 'public/img/hd-16X16.png' );
 
@@ -207,7 +207,7 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 		 *
 		 * @return array|object|string
 		 */
-		function register_custom_statuses( $status ) {
+		public function register_custom_statuses( $status ) {
 
 			return register_post_status( $status['slug'], array(
 				'label'       => $status['name'],
@@ -223,7 +223,7 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 		 *
 		 * @since 0.1
 		 */
-		function db_ticket_table_update() {
+		public function db_ticket_table_update() {
 			global $wpdb;
 			$table_name    = rtbiz_hd_get_ticket_table_name();
 			$db_table_name = $wpdb->get_var( "SHOW TABLES LIKE '$table_name'" );
@@ -238,7 +238,7 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 		 *
 		 * @since 0.1
 		 */
-		function create_database_table() {
+		public function create_database_table() {
 
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
@@ -277,7 +277,7 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 		 * @param $post_types
 		 */
 
-		function update_ticket_table( $attr_id, $post_types = array() ) {
+		public function update_ticket_table( $attr_id, $post_types = array() ) {
 			if ( isset( $post_types ) && in_array( self::$post_type, $post_types ) ) {
 				$updateDB = new RT_DB_Update( trailingslashit( RTBIZ_HD_PATH ) . 'rtbiz-helpdesk.php', trailingslashit( RTBIZ_HD_PATH . 'admin/schema/' ) );
 				delete_option( $updateDB->db_version_option_name );
@@ -285,7 +285,7 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 		}
 
 
-		function ticket_updated_messages( $messages ) {
+		public function ticket_updated_messages( $messages ) {
 			$messages[ self::$post_type ] = array(
 				0  => '', // Unused. Messages start at index 1.
 				1  => __( 'Ticket updated.', RTBIZ_HD_TEXT_DOMAIN ),
@@ -309,7 +309,7 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 		 *
 		 * @return $bulk_messages
 		 */
-		function bulk_ticket_update_messages( $bulk_messages, $bulk_counts ) {
+		public function bulk_ticket_update_messages( $bulk_messages, $bulk_counts ) {
 			$bulk_messages[ self::$post_type ] = array(
 				'updated'   => _n( '%s ticket updated.', '%s tickets updated.', $bulk_counts['updated'] ),
 				'locked'    => _n( '%s ticket not updated, somebody is editing it.', '%s tickets not updated, somebody is editing them.', $bulk_counts['locked'] ),
@@ -330,7 +330,7 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 		 * p2p hook for hiding staff member and creator from connected contacts meta box
 		 * p2p hook for making id serachable in related ticket box
 		 */
-		function p2p_hook_for_rthd_post_filter( $args, $ctype, $post  ) {
+		public function p2p_hook_for_rthd_post_filter( $args, $ctype, $post  ) {
 			global $wpdb, $rtbiz_acl_model;
 			// hide staff member and creator of ticket from connected contacts
 			if ( $ctype->name == self::$post_type.'_to_'.rtbiz_get_contact_post_type() ) {
@@ -381,7 +381,7 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 		 *
 		 * Related tickets - p2p - Append post id in post title
 		 */
-		function p2p_hook_for_changing_post_title( $title, $post, $ctype ) {
+		public function p2p_hook_for_changing_post_title( $title, $post, $ctype ) {
 			if ( $ctype->name == self::$post_type.'_to_'.self::$post_type ) {
 				$title = '[#'.$post->ID.'] '.$title;
 			}
@@ -396,7 +396,7 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 		 * @global type $pagenow
 		 * @global type $post
 		 */
-		function ticket_chnage_action_publish_update() {
+		public function ticket_chnage_action_publish_update() {
 			global $pagenow, $post;
 			if ( get_post_type() == self::$post_type && (  'post.php' === $pagenow ||'edit.php' === $pagenow || 'post-new.php' === $pagenow || 'edit' == ( isset( $_GET['action'] ) && $_GET['action'] ) ) ) {
 				if ( ! isset( $post ) ) {
@@ -423,7 +423,7 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 		 * Filter adult pref
 		 * @param $query
 		 */
-		function adult_post_filter( $query ) {
+		public function adult_post_filter( $query ) {
 
 			if ( is_admin() && $query->query['post_type'] == self::$post_type && strpos( $_SERVER['REQUEST_URI'], '/wp-admin/edit.php' ) !== false ) {
 				$qv = &$query->query_vars;

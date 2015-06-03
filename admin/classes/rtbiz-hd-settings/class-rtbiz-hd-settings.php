@@ -34,13 +34,13 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 			// hook priority 25 because rtBiz email model is on after_theme 20 and we can not get 'rt_get_all_system_emails' before that because of acl needs p2p
 			Rtbiz_HD::$loader->add_action( 'p2p_init', $this, 'init_settings', 30 );
 
-			Rtbiz_HD::$loader->add_filter( 'rtbiz_offering_setting', $this, 'rthd_offering_setting' );
+			Rtbiz_HD::$loader->add_filter( 'rtbiz_offering_setting', $this, 'offering_setting' );
 
 			//after redux setting saved
-			Rtbiz_HD::$loader->add_action( 'redux/options/' . self::$hd_opt . '/saved', $this, 'rt_on_redux_save', 10, 2 );
+			Rtbiz_HD::$loader->add_action( 'redux/options/' . self::$hd_opt . '/saved', $this, 'on_redux_save', 10, 2 );
 		}
 
-		function rthd_offering_setting( $setting ) {
+		function offering_setting( $setting ) {
 			$redux = rtbiz_hd_get_redux_settings();
 			if ( ! empty( $redux['offering_plugin'] ) ) {
 				if ( empty( $redux['offering_plugin'] ) ) {
@@ -52,7 +52,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 			return $setting;
 		}
 
-		public function rt_on_redux_save( $setting, $old_setting ) {
+		public function on_redux_save( $setting, $old_setting ) {
 			//removed offering sync option
 			$diff = array();
 
@@ -194,7 +194,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					'type'     => 'select',
 					'data'     => 'pages',
 					'title'    => __( 'Support Page' ),
-					'desc'     => __( 'Add <strong>[rt_hd_support_form]</strong> shortcode to add support form to a page and select this page in the drop down. This page will then be used to handle new support requests from front-end.' ),
+					'desc'     => __( 'Add <strong>[rtbiz_hd_support_form]</strong> shortcode to add support form to a page and select this page in the drop down. This page will then be used to handle new support requests from front-end.' ),
 					'subtitle' => __( 'Select Page for Product Support' ),
 				),
 				array(

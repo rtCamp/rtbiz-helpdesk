@@ -27,9 +27,9 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Contacts_Blacklist' ) ) {
 		 * @since 0.1
 		 */
 		public function __construct() {
-			add_action( 'wp_ajax_rthd_show_blacklisted_confirmation', array( $this, 'show_blacklisted_confirmation' ) );
-			add_action( 'wp_ajax_rthd_add_blacklisted_contact', array( $this, 'add_blacklisted_contact' ) );
-			add_action( 'wp_ajax_rthd_remove_blacklisted_contact', array( $this, 'remove_blacklisted_contact' ) );
+			add_action( 'wp_ajax_rtbiz_hd_show_blacklisted_confirmation', array( $this, 'ajax_show_blacklisted_confirmation' ) );
+			add_action( 'wp_ajax_rtbiz_hd_add_blacklisted_contact', array( $this, 'ajax_add_blacklisted_contact' ) );
+			add_action( 'wp_ajax_rtbiz_hd_remove_blacklisted_contact', array( $this, 'ajax_remove_blacklisted_contact' ) );
 		}
 
 		/**
@@ -86,7 +86,7 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Contacts_Blacklist' ) ) {
 		/**
 		 * Ajax request for show confirmation for block listed contact of given ticket before contacts are block listed
 		 */
-		function show_blacklisted_confirmation() {
+		function ajax_show_blacklisted_confirmation() {
 			if ( ! isset( $_POST['post_id'] ) || empty( $_POST['post_id'] ) ) {
 				return;
 			}
@@ -127,7 +127,7 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Contacts_Blacklist' ) ) {
 		/**
 		 * Ajax request for add blacklist email into blacklist email list
 		 */
-		function add_blacklisted_contact() {
+		function ajax_add_blacklisted_contact() {
 			if ( ! isset( $_POST['post_id'] ) || empty( $_POST['post_id'] ) ) {
 				return;
 			}
@@ -165,7 +165,7 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Contacts_Blacklist' ) ) {
 		/**
 		 * Ajax request for remove blacklist email into blacklist email list
 		 */
-		function remove_blacklisted_contact() {
+		function ajax_remove_blacklisted_contact() {
 			if ( ! isset( $_POST['post_id'] ) || empty( $_POST['post_id'] ) ) {
 				return;
 			}

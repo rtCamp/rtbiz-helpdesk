@@ -33,7 +33,7 @@ global $rthd_messages;
 				<?php }
 				global $current_user; ?>
 					<div class="rthd-my-ticket">
-						<?php echo balanceTags( do_shortcode( '[rt_hd_tickets show_support_form_link=yes userid = ' . $current_user->ID . ']' ) ); ?>
+						<?php echo balanceTags( do_shortcode( '[rtbiz_hd_tickets show_support_form_link=yes userid = ' . $current_user->ID . ']' ) ); ?>
 					</div>
 				</div>
 			</section>

@@ -18,10 +18,10 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 	class Rtbiz_HD_Email_Notification {
 
 		function __construct() {
-			Rtbiz_HD::$loader->add_filter( 'rthd_filter_adult_emails', $this, 'rthd_filter_adult_emails', 10, 2 );
+			Rtbiz_HD::$loader->add_filter( 'rtbiz_hd_filter_adult_emails', $this, 'filter_adult_emails', 10, 2 );
 		}
 
-		function rthd_filter_adult_emails( $emails, $postid ) {
+		function filter_adult_emails( $emails, $postid ) {
 			if ( rtbiz_hd_get_redux_adult_filter() && rtbiz_hd_get_adult_ticket_meta( $postid ) != 'no' ) {
 				$new = array();
 				foreach ( $emails as $email ) {
@@ -216,12 +216,12 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 			}
 
 			$bccemails = $this->exclude_author( $bccemails, $comment->comment_author_email );
-			$bccemails  = apply_filters( 'rthd_filter_adult_emails', $bccemails, $comment->comment_post_ID );
+			$bccemails  = apply_filters( 'rtbiz_hd_filter_adult_emails', $bccemails, $comment->comment_post_ID );
 
 			if ( $notificationFlagClient ) {
 				$ContactEmail  = $this->get_contacts( $comment->comment_post_ID );
 				$ContactEmail = $this->exclude_author( $ContactEmail, $comment->comment_author_email );
-				$ContactEmail  = apply_filters( 'rthd_filter_adult_emails', $ContactEmail, $comment->comment_post_ID );
+				$ContactEmail  = apply_filters( 'rtbiz_hd_filter_adult_emails', $ContactEmail, $comment->comment_post_ID );
 			}
 
 			if ( isset( $comment_privacy ) && ! empty( $comment_privacy ) && intval( $comment_privacy ) && $comment_privacy > Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC  ) {
@@ -295,12 +295,12 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 			}
 
 			$bccemails = $this->exclude_author( $bccemails, $comment->comment_author_email );
-			$bccemails = apply_filters( 'rthd_filter_adult_emails', $bccemails , $comment->comment_post_ID );
+			$bccemails = apply_filters( 'rtbiz_hd_filter_adult_emails', $bccemails , $comment->comment_post_ID );
 
 			if ( $notificationFlagClient ) {
 				$ContactEmail  = $this->get_contacts( $comment->comment_post_ID );
 				$ContactEmail = $this->exclude_author( $ContactEmail, $comment->comment_author_email );
-				$ContactEmail = apply_filters( 'rthd_filter_adult_emails', $ContactEmail , $comment->comment_post_ID );
+				$ContactEmail = apply_filters( 'rtbiz_hd_filter_adult_emails', $ContactEmail , $comment->comment_post_ID );
 			}
 
 			if ( ! ( isset( $comment->comment_type ) && ! empty( $comment->comment_type ) && intval( $comment->comment_type ) && $comment->comment_type > Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC  ) ) {
@@ -372,12 +372,12 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 			}
 
 			$bccemails = $this->exclude_author( $bccemails, $comment->comment_author_email );
-			$bccemails = apply_filters( 'rthd_filter_adult_emails', $bccemails , $comment->comment_post_ID );
+			$bccemails = apply_filters( 'rtbiz_hd_filter_adult_emails', $bccemails , $comment->comment_post_ID );
 
 			if ( $notificationFlagClient && Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF != $new_privacy && Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF != $old_privacy ) {
 				$ContactEmail  = $this->get_contacts( $comment->comment_post_ID );
 				$ContactEmail = $this->exclude_author( $ContactEmail, $comment->comment_author_email );
-				$ContactEmail = apply_filters( 'rthd_filter_adult_emails', $ContactEmail, $comment->comment_post_ID );
+				$ContactEmail = apply_filters( 'rtbiz_hd_filter_adult_emails', $ContactEmail, $comment->comment_post_ID );
 			}
 
 			if ( $private_update ) {
@@ -484,7 +484,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 
 			$assigneEmail[] = $this->get_assigne_email( $post_id );
 			$assigneEmail = $this->exclude_author( $assigneEmail, $ticket_created_by->user_email );
-			$assigneEmail = apply_filters( 'rthd_filter_adult_emails', $assigneEmail, $post_id );
+			$assigneEmail = apply_filters( 'rtbiz_hd_filter_adult_emails', $assigneEmail, $post_id );
 
 			if ( $notificationFlagGroup && isset( $redux['rthd_notification_emails'] ) ) {
 				foreach ( $redux['rthd_notification_emails'] as $email ) {
@@ -492,15 +492,15 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 				}
 			}
 			$groupEmail = $this->exclude_author( $groupEmail, $ticket_created_by->user_email );
-			$groupEmail = apply_filters( 'rthd_filter_adult_emails', $groupEmail, $post_id );
+			$groupEmail = apply_filters( 'rtbiz_hd_filter_adult_emails', $groupEmail, $post_id );
 
 			$subscriberEmail = $this->get_subscriber( $post_id );
 			$subscriberEmail = $this->exclude_author( $subscriberEmail, $ticket_created_by->user_email );
-			$subscriberEmail = apply_filters( 'rthd_filter_adult_emails', $subscriberEmail, $post_id );
+			$subscriberEmail = apply_filters( 'rtbiz_hd_filter_adult_emails', $subscriberEmail, $post_id );
 
 			$ContactEmail  = $this->get_contacts( $post_id );
 			$ContactEmail = $this->exclude_author( $ContactEmail, $ticket_created_by->user_email );
-			$ContactEmail = apply_filters( 'rthd_filter_adult_emails', $ContactEmail, $post_id );
+			$ContactEmail = apply_filters( 'rtbiz_hd_filter_adult_emails', $ContactEmail, $post_id );
 
 			$produc_list = wp_get_object_terms( $post_id, Rt_Offerings::$offering_slug );
 			$arrProducts = array_unique( wp_list_pluck( $produc_list, 'name' ) );
@@ -639,8 +639,8 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 			foreach ( $newSubscriberList as $user ) {
 				$bccemails = $this->exclude_author( $bccemails, $user['email'] );
 				$assigneEmail = $this->exclude_author( $assigneEmail, $user['email'] );
-				$bccemails = apply_filters( 'rthd_filter_adult_emails', $bccemails, $post_id );
-				$assigneEmail = apply_filters( 'rthd_filter_adult_emails', $assigneEmail, $post_id );
+				$bccemails = apply_filters( 'rtbiz_hd_filter_adult_emails', $bccemails, $post_id );
+				$assigneEmail = apply_filters( 'rtbiz_hd_filter_adult_emails', $assigneEmail, $post_id );
 			}
 
 			// New subscriber added Notification to subscriber
@@ -697,8 +697,8 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 			foreach ( $oldSubscriberList as $user ) {
 				$bccemails = $this->exclude_author( $bccemails, $user['email'] );
 				$assigneEmail = $this->exclude_author( $assigneEmail, $user['email'] );
-				$bccemails = apply_filters( 'rthd_filter_adult_emails', $bccemails, $post_id );
-				$assigneEmail = apply_filters( 'rthd_filter_adult_emails', $assigneEmail, $post_id );
+				$bccemails = apply_filters( 'rtbiz_hd_filter_adult_emails', $bccemails, $post_id );
+				$assigneEmail = apply_filters( 'rtbiz_hd_filter_adult_emails', $assigneEmail, $post_id );
 
 			}
 
@@ -806,7 +806,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 			if ( $notificationFlagAssignee ) {
 				$assigneEmail[] = $this->get_assigne_email( $post_id );
 				$assigneEmail = $this->exclude_author( $assigneEmail, $ticket_update_by->user_email );
-				$assigneEmail = apply_filters( 'rthd_filter_adult_emails', $assigneEmail, $post_id );
+				$assigneEmail = apply_filters( 'rtbiz_hd_filter_adult_emails', $assigneEmail, $post_id );
 			}
 
 			if ( $notificationFlagGroup && isset( $redux['rthd_notification_emails'] ) ) {
@@ -821,7 +821,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 				$bccemails = array_merge( $bccemails, $subscriberEmail );
 			}
 			$bccemails = $this->exclude_author( $bccemails, $ticket_update_by->user_email );
-			$bccemails = apply_filters( 'rthd_filter_adult_emails', $bccemails, $post_id );
+			$bccemails = apply_filters( 'rtbiz_hd_filter_adult_emails', $bccemails, $post_id );
 
 			$subject = rtbiz_hd_create_new_ticket_title( 'rthd_update_ticket_email_title', $post_id );
 			$title = $this->get_email_title( $post_id, $post_type );

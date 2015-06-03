@@ -79,9 +79,9 @@ if ( ! class_exists( 'Rtbiz_HD_Attachment' ) ) {
 		 */
 		public static function save( $post_id, $post ) {
 
-			global $rt_hd_tickets_operation;
+			global $rtbiz_hd_tickets_operation;
 			if ( isset( $_POST['attachment'] ) && ! empty( $_POST['attachment'] ) ) {
-				$rt_hd_tickets_operation->ticket_attachment_update( $_POST['attachment'], $post_id );
+				$rtbiz_hd_tickets_operation->ticket_attachment_update( $_POST['attachment'], $post_id );
 			}
 		}
 

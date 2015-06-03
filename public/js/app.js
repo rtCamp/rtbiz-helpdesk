@@ -15,7 +15,7 @@ jQuery( document ).ready(function ($) {
 
 	jQuery( ".fancybox" ).fancybox({
 		afterLoad: function () {
-			this.title = '<a class="rthd_quick_download" download="' + jQuery( this.element ).data( "downloadlink" ) + '" href="' + jQuery( this.element ).data( "downloadlink" ) + '">Download</a> ' + this.title;
+			this.title = '<a class="rtbiz_hd_quick_download" download="' + jQuery( this.element ).data( "downloadlink" ) + '" href="' + jQuery( this.element ).data( "downloadlink" ) + '">Download</a> ' + this.title;
 		},
 		iframe: {
 			preload: false
@@ -102,7 +102,7 @@ jQuery( document ).ready(function ($) {
 			return;
 		}
 		var requestArray = {};
-		requestArray.action = 'rt_hd_add_subscriber_email';
+		requestArray.action = 'rtbiz_hd_add_subscriber_email';
 		requestArray.email = email;
 		requestArray.post_id = jQuery( '#post-id' ).val();
 		jQuery.ajax({
@@ -162,7 +162,7 @@ jQuery( document ).ready(function ($) {
 		var requestArray = {};
 		requestArray.post_id = jQuery( '#post-id' ).val();
 		requestArray.post_status = jQuery( '#rthd-status-list' ).val();
-		requestArray.action = "front_end_status_change";
+		requestArray.action = "rtbiz_hd_front_end_status_change";
 		jQuery( '#status-change-spinner' ).show();
 		jQuery.ajax({
 			url: ajaxurl,
@@ -185,8 +185,8 @@ jQuery( document ).ready(function ($) {
 	jQuery( '#ticket-add-fav' ).click(function (e) {
 		e.preventDefault();
 		var requestArray = {};
-		requestArray.action = "rthd_fav_ticket";
-		requestArray.nonce = jQuery( '#rthd_fav_tickets_nonce' ).val();
+		requestArray.action = "rtbiz_hd_fav_ticket";
+		requestArray.nonce = jQuery( '#rtbiz_hd_fav_tickets_nonce' ).val();
 		requestArray.post_id = jQuery( '#post-id' ).val();
 
 		jQuery.ajax({
@@ -221,7 +221,7 @@ jQuery( document ).ready(function ($) {
 		var requestArray = {};
 		requestArray.post_id = jQuery( '#post-id' ).val();
 		requestArray.offering_id = term_id;
-		requestArray.action = "front_end_offering_change";
+		requestArray.action = "rtbiz_hd_front_end_offering_change";
 		jQuery( '#offering-change-spinner' ).show();
 		jQuery.ajax({
 			url: ajaxurl,
@@ -245,7 +245,7 @@ jQuery( document ).ready(function ($) {
 		var requestArray = {};
 		requestArray.post_id = jQuery( '#post-id' ).val();
 		requestArray.post_author = userid;
-		requestArray.action = "front_end_assignee_change";
+		requestArray.action = "rtbiz_hd_front_end_assignee_change";
 		jQuery( '#assignee-change-spinner' ).show();
 		jQuery.ajax({
 			url: ajaxurl,
@@ -281,7 +281,7 @@ jQuery( document ).ready(function ($) {
 		var requestArray = {};
 		requestArray.post_id = jQuery( '#post-id' ).val();
 		requestArray.watch_unwatch = jQuery( this ).attr( 'data-value' );
-		requestArray.action = "front_end_ticket_watch_unwatch";
+		requestArray.action = "rtbiz_hd_front_end_watch_unwatch";
 		//jQuery('#watch-unwatch-spinner' ).show();
 		jQuery.ajax({
 			url: ajaxurl,

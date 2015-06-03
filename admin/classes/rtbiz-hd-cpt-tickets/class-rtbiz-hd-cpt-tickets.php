@@ -24,7 +24,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 		 *
 		 * @since  0.1
 		 */
-		function __construct() {
+		public function __construct() {
 
 			// CPT List View
 			Rtbiz_HD::$loader->add_filter( 'manage_edit-' . Rtbiz_HD_Module::$post_type . '_columns', $this, 'edit_custom_columns', 20 );
@@ -104,7 +104,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 		 *
 		 * @return mixed
 		 */
-		function sortable_column( $columns ) {
+		public function sortable_column( $columns ) {
 			$columns['rthd_ticket_title'] = 'ticket';
 			$columns['rthd_ticket_created_by'] = 'created_by';
 			$columns['rthd_ticket_updated_by'] = 'updated_by';
@@ -112,7 +112,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 			return $columns;
 		}
 
-		function row_actions( $actions, $always_visible = false ) {
+		public function row_actions( $actions, $always_visible = false ) {
 			$action_count = count( $actions );
 			$i = 0;
 
@@ -130,7 +130,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 			return $out;
 		}
 
-		function add_gravatar_class( $class ) {
+		public function add_gravatar_class( $class ) {
 			$class = str_replace( "class='avatar", "class='avatar rthd-avatar-img", $class );
 			return $class;
 		}
@@ -142,7 +142,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 		 *
 		 * @param $column
 		 */
-		function manage_custom_columns( $column ) {
+		public function manage_custom_columns( $column ) {
 
 			global $post, $rtbiz_hd_module,$rtbiz_hd_email_notification;
 
@@ -415,7 +415,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 		 * @param $post
 		 * add meta box for showing purchase history history
 		 */
-		function order_history( $post ) {
+		public function order_history( $post ) {
 			add_filter( 'rtbiz_hd_ticket_purchase_history_box_wrapper_start', '__return_empty_string', 10, 1 );
 			add_filter( 'rtbiz_hd_ticket_purchase_history_header_wrapper_start', '__return_empty_string', 10, 1 );
 			add_filter( 'rtbiz_hd_ticket_purchase_history_heading', '__return_empty_string', 10, 1 );
@@ -478,7 +478,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 		 *
 		 * @param $query
 		 */
-		function pre_filter( $query ) {
+		public function pre_filter( $query ) {
 			if ( isset( $_GET['post_type'] ) && Rtbiz_HD_Module::$post_type == $_GET['post_type'] && $query->is_main_query() ) {
 				$orderby = $query->get( 'orderby' );
 				if ( isset( $_GET['contact_id'] ) ) {
@@ -612,7 +612,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 		 *
 		 * @param $post_id
 		 */
-		function after_restore_trashed_ticket( $post_id ) {
+		public function after_restore_trashed_ticket( $post_id ) {
 
 			$ticket = get_post( $post_id );
 
@@ -643,7 +643,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 		 *
 		 * @param $post_id
 		 */
-		function before_ticket_deleted( $post_id ) {
+		public function before_ticket_deleted( $post_id ) {
 
 			if ( get_post_type( $post_id ) == Rtbiz_HD_Module::$post_type ) {
 
@@ -666,7 +666,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 		 *
 		 * @param $post_id
 		 */
-		function before_ticket_trashed( $post_id ) {
+		public function before_ticket_trashed( $post_id ) {
 			if ( get_post_type( $post_id ) == Rtbiz_HD_Module::$post_type ) {
 				global $rtbiz_hd_ticket_history_model;
 				$rtbiz_hd_ticket_history_model->insert(
@@ -842,7 +842,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 		 * @param $post
 		 * Add ticket id on edit ticket
 		 */
-		function append_ticket_id_to_title( $post ) {
+		public function append_ticket_id_to_title( $post ) {
 			if ( ! empty( $post ) && $post->post_type == Rtbiz_HD_Module::$post_type ) {
 				echo '<h2>[#' . $post->ID . '] </h2>';
 			}

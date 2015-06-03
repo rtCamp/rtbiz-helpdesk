@@ -414,7 +414,7 @@ jQuery( document ).ready(function () {
 				requestArray.post_id = jQuery( '#post-id' ).val();
 
 				if (action == 'remove_blacklisted') {
-					requestArray.action = 'rthd_remove_blacklisted_contact';
+					requestArray.action = 'rtbiz_hd_remove_blacklisted_contact';
 					jQuery.ajax({
 						url: ajaxurl,
 						type: 'POST',
@@ -431,7 +431,7 @@ jQuery( document ).ready(function () {
 						}
 					});
 				} else if (action == 'blacklisted_confirmation') {
-					requestArray.action = 'rthd_show_blacklisted_confirmation';
+					requestArray.action = 'rtbiz_hd_show_blacklisted_confirmation';
 					jQuery.ajax({
 						url: ajaxurl,
 						type: 'POST',
@@ -457,7 +457,7 @@ jQuery( document ).ready(function () {
 				var requestArray = {};
 				requestArray.post_id = jQuery( '#post-id' ).val();
 				if (action == 'blacklisted_contact') {
-					requestArray.action = 'rthd_add_blacklisted_contact';
+					requestArray.action = 'rtbiz_hd_add_blacklisted_contact';
 				}
 
 				jQuery.ajax({

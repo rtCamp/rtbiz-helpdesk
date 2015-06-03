@@ -267,7 +267,7 @@ jQuery( document ).ready(function ($) {
 		},
 		support_page: function () {
 			var requestArray = {};
-			requestArray.action = 'rthd_setup_support_page';
+			requestArray.action = 'rtbiz_hd_setup_support_page';
 			val = jQuery( '#rthd-setup-wizard-support-page' ).val();
 			if (val === 0 || ( val == -1 && jQuery( '#rthd-setup-wizard-support-page-new' ).val().length === 0 && ! jQuery( '#rthd-setup-wizard-support-page-new' ).val().trim() )) {
 				var strconfirm = confirm( 'Do you want to skip this step ?' );

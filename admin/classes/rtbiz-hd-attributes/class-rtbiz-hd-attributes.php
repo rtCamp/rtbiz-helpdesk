@@ -43,7 +43,7 @@ if ( ! class_exists( 'Rtbiz_HD_Attributes' ) ) {
 		 *
 		 * @since 0.1
 		 */
-		function init_attributes() {
+		public function init_attributes() {
 
 			global $rtbiz_hd_rt_attributes;
 
@@ -72,7 +72,7 @@ if ( ! class_exists( 'Rtbiz_HD_Attributes' ) ) {
 		 *
 		 * @return string
 		 */
-		function attribute_diff( $attr, $post_id, $newTicket ) {
+		public function attribute_diff( $attr, $post_id, $newTicket ) {
 
 			$diffHTML = '';
 			switch ( $attr->attribute_store_as ) {
@@ -101,7 +101,7 @@ if ( ! class_exists( 'Rtbiz_HD_Attributes' ) ) {
 		 *
 		 * @return string
 		 */
-		function taxonomy_diff( $attr, $post_id, $newTicket ) {
+		public function taxonomy_diff( $attr, $post_id, $newTicket ) {
 			$diffHTML                    = '';
 			$attr->attribute_render_type = 'checklist';
 			switch ( $attr->attribute_render_type ) {
@@ -178,7 +178,7 @@ if ( ! class_exists( 'Rtbiz_HD_Attributes' ) ) {
 		 *
 		 * @return string
 		 */
-		function meta_diff( $attr, $post_id, $newTicket ) {
+		public function meta_diff( $attr, $post_id, $newTicket ) {
 			$diffHTML = '';
 
 			$oldattr = get_post_meta( $post_id, '_rtbiz_hd_' . $attr->attribute_name, true );
@@ -199,7 +199,7 @@ if ( ! class_exists( 'Rtbiz_HD_Attributes' ) ) {
 		 * @param $post_id
 		 * @param $newTicket
 		 */
-		function save_attributes( $attr, $post_id, $newTicket ) {
+		public function save_attributes( $attr, $post_id, $newTicket ) {
 			switch ( $attr->attribute_store_as ) {
 				case 'taxonomy':
 					if ( ! isset( $newTicket[ 'rt_' . $attr->attribute_name ] ) ) {
@@ -225,7 +225,7 @@ if ( ! class_exists( 'Rtbiz_HD_Attributes' ) ) {
 		 * @param      $post_id
 		 * @param bool $edit
 		 */
-		function render_attribute( $attr, $post_id, $edit = true ) {
+		public function render_attribute( $attr, $post_id, $edit = true ) {
 			switch ( $attr->attribute_store_as ) {
 				case 'taxonomy':
 					$this->render_taxonomy( $attr, $post_id, $edit );
@@ -248,7 +248,7 @@ if ( ! class_exists( 'Rtbiz_HD_Attributes' ) ) {
 		 * @param      $post_id
 		 * @param bool $edit
 		 */
-		function render_taxonomy( $attr, $post_id, $edit = true ) {
+		public function render_taxonomy( $attr, $post_id, $edit = true ) {
 			switch ( $attr->attribute_render_type ) {
 				//				case 'autocomplete':
 				//					break;
@@ -350,7 +350,7 @@ if ( ! class_exists( 'Rtbiz_HD_Attributes' ) ) {
 		 * @param      $post_id
 		 * @param bool $edit
 		 */
-		function render_meta( $attr, $post_id, $edit = true ) {
+		public function render_meta( $attr, $post_id, $edit = true ) {
 			switch ( $attr->attribute_render_type ) {
 				case 'dropdown':
 					$options       = array();
@@ -517,7 +517,7 @@ if ( ! class_exists( 'Rtbiz_HD_Attributes' ) ) {
 		 * @param $attr
 		 * @param $options
 		 */
-		function render_dropdown( $attr, $options ) {
+		public function render_dropdown( $attr, $options ) {
 			global $rthd_form;
 			$args = array(
 				'id'             => $attr->attribute_name,
@@ -535,7 +535,7 @@ if ( ! class_exists( 'Rtbiz_HD_Attributes' ) ) {
 		 * @param $attr
 		 * @param $options
 		 */
-		function render_rating_stars( $attr, $options ) {
+		public function render_rating_stars( $attr, $options ) {
 			global $rthd_form;
 			$args = array(
 				'id'             => $attr->attribute_name,
@@ -555,7 +555,7 @@ if ( ! class_exists( 'Rtbiz_HD_Attributes' ) ) {
 		 * @param $attr
 		 * @param $options
 		 */
-		function render_checklist( $attr, $options ) {
+		public function render_checklist( $attr, $options ) {
 			global $rthd_form;
 			$args = array(
 				'id'             => $attr->attribute_name,
@@ -574,7 +574,7 @@ if ( ! class_exists( 'Rtbiz_HD_Attributes' ) ) {
 		 * @param $attr
 		 * @param $value
 		 */
-		function render_date( $attr, $value ) {
+		public function render_date( $attr, $value ) {
 			global $rthd_form;
 			$args = array(
 				'id'    => $attr->attribute_name,
@@ -599,7 +599,7 @@ if ( ! class_exists( 'Rtbiz_HD_Attributes' ) ) {
 		 * @param $attr
 		 * @param $value
 		 */
-		function render_datetime( $attr, $value ) {
+		public function render_datetime( $attr, $value ) {
 			global $rthd_form;
 			$args = array(
 				'id'    => $attr->attribute_name,
@@ -624,7 +624,7 @@ if ( ! class_exists( 'Rtbiz_HD_Attributes' ) ) {
 		 * @param $attr
 		 * @param $value
 		 */
-		function render_currency( $attr, $value ) {
+		public function render_currency( $attr, $value ) {
 			global $rthd_form;
 			$args = array( 'name' => 'post[' . $attr->attribute_name . ']', 'value' => $value );
 			echo balanceTags( $rthd_form->get_textbox( $args ) );
@@ -638,7 +638,7 @@ if ( ! class_exists( 'Rtbiz_HD_Attributes' ) ) {
 		 * @param $attr
 		 * @param $value
 		 */
-		function render_text( $attr, $value ) {
+		public function render_text( $attr, $value ) {
 			global $rthd_form;
 			$args = array( 'name' => 'post[' . $attr->attribute_name . ']', 'value' => $value );
 			echo balanceTags( $rthd_form->get_textbox( $args ) );

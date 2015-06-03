@@ -31,14 +31,14 @@ if ( ! class_exists( 'Rtbiz_HD_Accounts' ) ) {
 		 *
 		 * @since 0.1
 		 */
-		function __construct() {
+		public function __construct() {
 			Rtbiz_HD::$loader->add_filter( 'rt_entity_columns', $this, 'accounts_columns', 10, 2 );
 			Rtbiz_HD::$loader->add_action( 'rt_entity_manage_columns', $this, 'manage_accounts_columns', 10, 3 );
 
 			//not use in wp-native-ui
-			Rtbiz_HD::$loader->add_action( 'wp_ajax_rthd_add_account', $this, 'add_new_account_ajax' );
-			Rtbiz_HD::$loader->add_action( 'wp_ajax_rthd_search_account', $this, 'account_autocomplete_ajax' );
-			Rtbiz_HD::$loader->add_action( 'wp_ajax_rthd_get_term_by_key', $this, 'get_term_by_key_ajax' );
+			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_add_account', $this, 'ajax_add_new_account' );
+			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_search_account', $this, 'ajax_account_autocomplete' );
+			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_get_term_by_key', $this, 'ajax_get_term_by_key' );
 
 		}
 
@@ -76,7 +76,7 @@ if ( ! class_exists( 'Rtbiz_HD_Accounts' ) ) {
 		 * @param $post_id
 		 * @param $rt_entity
 		 */
-		function manage_accounts_columns( $column, $post_id, $rt_entity ) {
+		public function manage_accounts_columns( $column, $post_id, $rt_entity ) {
 
 			global $rt_company;
 			if ( $rt_entity->post_type != $rt_company->post_type ) {
@@ -99,7 +99,7 @@ if ( ! class_exists( 'Rtbiz_HD_Accounts' ) ) {
 		 *
 		 * @since 0.1
 		 */
-		public function add_new_account_ajax() {
+		public function ajax_add_new_account() {
 			$returnArray = array();
 			$returnArray['status'] = false;
 			$accountData = $_POST['data'];
@@ -147,7 +147,7 @@ if ( ! class_exists( 'Rtbiz_HD_Accounts' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		public function account_autocomplete_ajax() {
+		public function ajax_account_autocomplete() {
 			if ( ! isset( $_POST['query'] ) ) {
 				wp_die( 'Opss!! Invalid request' );
 			}
@@ -173,7 +173,7 @@ if ( ! class_exists( 'Rtbiz_HD_Accounts' ) ) {
 		 *
 		 * @since 0.1
 		 */
-		public function get_term_by_key_ajax() {
+		public function ajax_get_term_by_key() {
 			if ( ! isset( $_POST['account_id'] ) ) {
 				wp_die( 'Opss!! Invalid request' );
 			}
@@ -204,7 +204,7 @@ if ( ! class_exists( 'Rtbiz_HD_Accounts' ) ) {
 		 *
 		 * @return string
 		 */
-		function accounts_diff_on_ticket( $post_id, $newTicket ) {
+		public function accounts_diff_on_ticket( $post_id, $newTicket ) {
 
 			$diffHTML = '';
 			if ( ! isset( $newTicket['accounts'] ) ) {
@@ -239,7 +239,7 @@ if ( ! class_exists( 'Rtbiz_HD_Accounts' ) ) {
 		 * @param $post_id
 		 * @param $newTicket
 		 */
-		function accounts_save_on_ticket( $post_id, $newTicket ) {
+		public function accounts_save_on_ticket( $post_id, $newTicket ) {
 			if ( ! isset( $newTicket['accounts'] ) ) {
 				$newTicket['accounts'] = array();
 			}

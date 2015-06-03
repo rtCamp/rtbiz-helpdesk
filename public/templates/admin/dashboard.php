@@ -19,7 +19,7 @@ $welcome_label = 'Helpdesk';
 	if ( current_user_can( $author_cap ) ) {
 		$classes = 'welcome-panel';
 
-		$option = get_user_meta( get_current_user_id(), 'show_rt_hd_welcome_panel', true );
+		$option = get_user_meta( get_current_user_id(), 'rtbiz_hd_show_welcome_panel', true );
 		// 0 = hide, 1 = toggled to show or single site creator, 2 = multisite site owner
 		$hide = 0 == $option || ( 2 == $option && wp_get_current_user()->user_email != get_option( 'admin_email' ) );
 		if ( $hide ) {
@@ -35,7 +35,7 @@ $welcome_label = 'Helpdesk';
 			 * Add content to the welcome panel on the admin dashboard.
 			 * @since 3.5.0
 			 */
-			do_action( 'rt_hd_welcome_panel' );
+			do_action( 'rtbiz_hd_welcome_panel' );
 			?>
 		</div>
 	<?php } ?>
@@ -72,7 +72,7 @@ $welcome_label = 'Helpdesk';
 		<!-- #post-body -->
 		<?php wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false ); ?>
 		<?php wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>
-		<?php do_action( 'rthd_after_dashboard' ); ?>
+		<?php do_action( 'rtbiz_hd_after_dashboard' ); ?>
 
 	</div>
 	<!-- #poststuff -->

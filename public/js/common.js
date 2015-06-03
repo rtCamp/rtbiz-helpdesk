@@ -45,7 +45,7 @@ jQuery( document ).ready(function () {
 					url: ajaxurl,
 					multipart: true,
 					multipart_params: {
-						'action': 'rthd_upload_attachment',
+						'action': 'rtbiz_hd_upload_attachment',
 						'followup_ticket_unique_id': $ticket_unique_id
 					},
 					container: document.getElementById( 'rthd-attachment-container' ), // ... or DOM Element itself
@@ -157,7 +157,7 @@ jQuery( document ).ready(function () {
 				formData.append( "private_comment", followup_type );
 				formData.append( "followup_ticket_unique_id", jQuery( '#ticket_unique_id' ).val() );
 				formData.append( "post_type", jQuery( '#followup_post_type' ).val() );
-				formData.append( "action", 'rthd_add_new_followup_front' );
+				formData.append( "action", 'rtbiz_hd_add_new_followup_front' );
 				formData.append( "followuptype", jQuery( '#followuptype' ).val() );
 				formData.append( "follwoup-time", jQuery( '#follwoup-time' ).val() );
 				formData.append( "followup_content", rthd_common.rthd_tinymce_get_content( 'followupcontent' ) );
@@ -242,7 +242,7 @@ jQuery( document ).ready(function () {
 					type: 'POST',
 					dataType: 'json',
 					data: {
-						action: 'helpdesk_delete_followup',
+						action: 'rtbiz_hd_delete_followup',
 						comment_id: commentid,
 						post_id: postid
 					},
@@ -316,7 +316,7 @@ jQuery( document ).ready(function () {
 				jQuery( this ).attr( 'disabled', 'disabled' );
 				requestArray.post_type = rthd_post_type;
 				requestArray.comment_id = commentid;
-				requestArray.action = "rthd_update_followup_ajax";
+				requestArray.action = "rtbiz_hd_update_followup";
 				requestArray.followuptype = "comment";
 				requestArray.followup_ticket_unique_id = jQuery( '#ticket_unique_id' ).val();
 				//requestArray.followup_private='no';
@@ -372,7 +372,7 @@ jQuery( document ).ready(function () {
 				jQuery( '#load-more-hdspinner' ).css( 'display', 'inline' );
 				requestArray.limit = totalcomment - 3;
 				requestArray.offset = 0;
-				requestArray.action = "load_more_followup";
+				requestArray.action = "rtbiz_hd_load_more_followup";
 				requestArray.post_id = jQuery( '#post-id' ).val();
 				//requestArray.all =  'true';
 				jQuery.ajax({
@@ -425,7 +425,7 @@ jQuery( document ).ready(function () {
 				jQuery( '#edit-ticket-data' ).slideToggle( 'slow' );
 				jQuery( '#new-followup-form' ).hide();
 				var requestArray = {};
-				requestArray.action = 'rthd_add_new_ticket_ajax';
+				requestArray.action = 'rtbiz_hd_add_new_ticket_ajax';
 				requestArray.post_id = jQuery( '#post-id' ).val();
 				var content = rthd_common.rthd_tinymce_get_content( 'editedticketcontent' );
 				requestArray.body = content;

@@ -73,7 +73,7 @@ class Rtbiz_HD_Public {
 	 * Load ticket front class on init
 	 */
 	function init() {
-		global $rt_hd_tickets_front;
-		$rt_hd_tickets_front = new Rtbiz_HD_Tickets_Front();
+		global $rtbiz_hd_tickets_front;
+		$rtbiz_hd_tickets_front = new Rtbiz_HD_Tickets_Front();
 	}
 }

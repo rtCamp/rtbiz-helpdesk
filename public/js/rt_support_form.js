@@ -40,7 +40,7 @@ jQuery( document ).ready(function () {
 				browse_button: 'attachemntlist', // you can pass in id...
 				url: ajaxurl,
 				multipart: true,
-				multipart_params: {'action': 'rthd_upload_attachment'},
+				multipart_params: {'action': 'rtbiz_hd_upload_attachment'},
 				container: document.getElementById( 'attachment-container' ), // ... or DOM Element itself
 
 				// Resize images on client-side if we can

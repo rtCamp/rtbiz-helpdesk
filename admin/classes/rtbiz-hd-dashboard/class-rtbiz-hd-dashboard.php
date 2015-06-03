@@ -45,17 +45,17 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 
 			Rtbiz_HD::$loader->add_action( 'rtbiz_welcome_panel_addon_link', $this, 'add_helpdesk_link' );
 
-			Rtbiz_HD::$loader->add_action( 'wp_ajax_update_rt_hd_welcome_panel', $this, 'update_rt_hd_welcome_panel' );
-			Rtbiz_HD::$loader->add_action( 'wp_ajax_rthd_setup_support_page', $this, 'rthd_setup_support_page_callback' );
+			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_update_welcome_panel', $this, 'ajax_update_welcome_panel' );
+			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_setup_support_page', $this, 'ajax_setup_support_page' );
 
 			/* Add Welcome panel on rt helpdesk dashboard. */
-			Rtbiz_HD::$loader->add_action( 'rt_hd_welcome_panel', $this, 'rt_hd_welcome_panel' );
+			Rtbiz_HD::$loader->add_action( 'rtbiz_hd_welcome_panel', $this, 'welcome_panel' );
 
 			/* Setup js for rtHelpdesk dashboard */
-			Rtbiz_HD::$loader->add_action( 'rthd_after_dashboard', $this, 'print_dashboard_js' );
+			Rtbiz_HD::$loader->add_action( 'rtbiz_hd_after_dashboard', $this, 'print_dashboard_js' );
 
 			/* Setup Google Charts */
-			Rtbiz_HD::$loader->add_action( 'rthd_after_dashboard', $this, 'render_google_charts' );
+			Rtbiz_HD::$loader->add_action( 'rtbiz_hd_after_dashboard', $this, 'render_google_charts' );
 
 			Rtbiz_HD::$loader->add_filter( 'set-screen-option', $this, 'tickets_table_set_option', 10, 3 );
 
@@ -69,7 +69,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 		 *
 		 * @since 0.1
 		 */
-		function register_dashboard() {
+		public function register_dashboard() {
 
 			if ( rtbiz_hd_check_wizard_completed() ) {
 
@@ -100,9 +100,9 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 		/**
 		 * Setup default value for dashboard.
 		 */
-		function setup_defaults() {
-			if ( ! empty( $_REQUEST['page'] ) && self::$page_slug == $_REQUEST['page'] && ! metadata_exists( 'user', get_current_user_id(), 'show_rt_hd_welcome_panel' ) ) {
-				update_user_meta( get_current_user_id(), 'show_rt_hd_welcome_panel', 1 );
+		public function setup_defaults() {
+			if ( ! empty( $_REQUEST['page'] ) && self::$page_slug == $_REQUEST['page'] && ! metadata_exists( 'user', get_current_user_id(), 'rtbiz_hd_show_welcome_panel' ) ) {
+				update_user_meta( get_current_user_id(), 'rtbiz_hd_show_welcome_panel', 1 );
 			}
 		}
 
@@ -114,7 +114,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 		 *
 		 * @param $post_type
 		 */
-		function dashboard_ui( $post_type ) {
+		public function dashboard_ui( $post_type ) {
 			rtbiz_hd_get_template( 'admin/dashboard.php', array( 'post_type' => $post_type ) );
 		}
 
@@ -124,7 +124,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 		 *
 		 * @since 0.1
 		 */
-		function page_actions() {
+		public function page_actions() {
 			if ( isset( $_REQUEST['page'] ) && self::$page_slug === $_REQUEST['page'] ) {
 				do_action( 'add_meta_boxes_' . $this->screen_id, null );
 				do_action( 'rthd_dashboard_add_meta_boxes', $this->screen_id, null );
@@ -140,7 +140,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 		 *
 		 * @since 0.1
 		 */
-		function footer_scripts() {
+		public function footer_scripts() {
 			?>
 			<script> postboxes.add_postbox_toggles( pagenow );</script>
 			<?php
@@ -151,7 +151,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 		 *
 		 * @since 0.1
 		 */
-		function render_google_charts() {
+		public function render_google_charts() {
 			global $rtbiz_hd_reports;
 			$rtbiz_hd_reports->render_chart( $this->charts );
 		}
@@ -161,7 +161,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 		 *
 		 * @since 0.1
 		 */
-		function add_dashboard_widgets() {
+		public function add_dashboard_widgets() {
 			global $rtbiz_hd_dashboard, $rtbiz_hd_attributes_model, $rtbiz_hd_attributes_relationship_model;
 
 			/* Pie Chart - Progress Indicator (Post status based) */
@@ -208,7 +208,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 			}
 		}
 
-		function tickets_by_product_purchase( $obj, $args ) {
+		public function tickets_by_product_purchase( $obj, $args ) {
 
 			global $rtbiz_hd_offering_support, $wpdb;
 
@@ -254,7 +254,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 			<?php
 		}
 
-		function get_post_count_excluding_tax( $taxonomy, $post_type ) {
+		public function get_post_count_excluding_tax( $taxonomy, $post_type ) {
 			$terms_name = get_terms( $taxonomy, array( 'fields' => 'id=>slug' ) );
 			$count = 0;
 			if ( ! $terms_name instanceof WP_Error && ! empty( $terms_name ) ) {
@@ -282,7 +282,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 		/**
 		 * Tickets by product pi chart
 		 */
-		function tickets_by_products( $obj, $args ) {
+		public function tickets_by_products( $obj, $args ) {
 			$taxonomy = Rt_Offerings::$offering_slug;
 			$terms = get_terms( $taxonomy );
 			$data_source = array();
@@ -335,7 +335,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 		 *
 		 * @since 0.1
 		 */
-		function tickets_by_status() {
+		public function tickets_by_status() {
 			global $rtbiz_hd_module, $wpdb;
 			$settings = rtbiz_hd_get_redux_settings();
 			$table_name = rtbiz_hd_get_ticket_table_name();
@@ -381,7 +381,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 		 *
 		 * @since 0.1
 		 */
-		function daily_tickets() {
+		public function daily_tickets() {
 			global $rtbiz_hd_module, $rtbiz_hd_ticket_history_model;
 			$post_statuses = array();
 			foreach ( $rtbiz_hd_module->statuses as $status ) {
@@ -459,7 +459,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 		 *
 		 * @since 0.1
 		 */
-		function team_load() {
+		public function team_load() {
 			global $rtbiz_hd_module, $wpdb;
 			$table_name = rtbiz_hd_get_ticket_table_name();
 			$post_statuses = array();
@@ -535,7 +535,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 		 *
 		 * @since 0.1
 		 */
-		function top_accounts() {
+		public function top_accounts() {
 			global $wpdb;
 			$table_name = rtbiz_hd_get_ticket_table_name();
 			$account = rtbiz_get_company_post_type();
@@ -582,7 +582,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 		 *
 		 * @since 0.1
 		 */
-		function top_clients() {
+		public function top_clients() {
 			global $wpdb;
 			$table_name = rtbiz_hd_get_ticket_table_name();
 			$contact = rtbiz_get_contact_post_type();
@@ -637,7 +637,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 		 * @param $obj
 		 * @param $args
 		 */
-		function dashboard_attributes_widget_content( $obj, $args ) {
+		public function dashboard_attributes_widget_content( $obj, $args ) {
 			global $rt_hd_rt_attributes;
 			$rtbiz_hd_attributes_model = new RT_Attributes_Model();
 			$attribute_id = $args['args']['attribute_id'];
@@ -701,14 +701,14 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 		 *
 		 * @return mixed
 		 */
-		function tickets_table_set_option( $status, $option, $value ) {
+		public function tickets_table_set_option( $status, $option, $value ) {
 			return $value;
 		}
 
 		/**
 		 * Update rtHelpdesk welcome panel
 		 */
-		function update_rt_hd_welcome_panel() {
+		public function ajax_update_welcome_panel() {
 
 			check_ajax_referer( 'rthd-welcome-panel-nonce', 'rthdwelcomepanelnonce' );
 
@@ -718,7 +718,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 				wp_die( -1 );
 			}
 
-			update_user_meta( get_current_user_id(), 'show_rt_hd_welcome_panel', empty( $_POST['visible'] ) ? 0 : 1 );
+			update_user_meta( get_current_user_id(), 'rtbiz_hd_show_welcome_panel', empty( $_POST['visible'] ) ? 0 : 1 );
 
 			wp_die( 1 );
 		}
@@ -726,17 +726,17 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 		/**
 		 * Check welcome panel for logged in user.
 		 */
-		function check_welcome_panel() {
+		public function check_welcome_panel() {
 			if ( isset( $_GET['rthdwelcome'] ) ) {
 				$welcome_checked = empty( $_GET['rthdwelcome'] ) ? 0 : 1;
-				update_user_meta( get_current_user_id(), 'show_rt_hd_welcome_panel', $welcome_checked );
+				update_user_meta( get_current_user_id(), 'rtbiz_hd_show_welcome_panel', $welcome_checked );
 			}
 		}
 
 		/**
 		 * Display welcome widget on rtHelpdesk dashboard.
 		 */
-		function rt_hd_welcome_panel() {
+		public function welcome_panel() {
 			global $rtbiz_hd_attributes;
 
 			$settings = rtbiz_hd_get_redux_settings();
@@ -794,12 +794,12 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 		/**
 		 * Add js for hide/show welcome panel in rtHelpdesk dashboard.
 		 */
-		function print_dashboard_js() {
+		public function print_dashboard_js() {
 			if ( isset( $_GET['rthdwelcome'] ) ) {
 				$welcome_checked = empty( $_GET['rthdwelcome'] ) ? 0 : 1;
-				update_user_meta( get_current_user_id(), 'show_rt_hd_welcome_panel', $welcome_checked );
+				update_user_meta( get_current_user_id(), 'rtbiz_hd_show_welcome_panel', $welcome_checked );
 			} else {
-				$welcome_checked = get_user_meta( get_current_user_id(), 'show_rt_hd_welcome_panel', true );
+				$welcome_checked = get_user_meta( get_current_user_id(), 'rtbiz_hd_show_welcome_panel', true );
 				if ( 2 == $welcome_checked && wp_get_current_user()->user_email != get_option( 'admin_email' ) ) {
 					$welcome_checked = false;
 				}
@@ -813,7 +813,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 
 					rthd_updateWelcomePanel = function ( visible ) {
 						$.post( '<?php echo admin_url( 'admin-ajax.php' ); ?>', {
-							action: 'update_rt_hd_welcome_panel',
+							action: 'rtbiz_hd_update_welcome_panel',
 							visible: visible,
 							rthdwelcomepanelnonce: $( '#rthdwelcomepanelnonce' ).val()
 						} );
@@ -839,7 +839,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 						var requestArray = { };
 
 						requestArray.page_action = 'add';
-						requestArray.action = 'rthd_setup_support_page';
+						requestArray.action = 'rtbiz_hd_setup_support_page';
 						jQuery( '#rthd-support-spinner' ).show();
 						jQuery.ajax( {
 							url: ajaxurl,
@@ -867,7 +867,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 		/**
 		 * Create page for support form if it is not set from settings page.
 		 */
-		function rthd_setup_support_page_callback() {
+		public function ajax_setup_support_page() {
 
 			$response = array();
 			$response['status'] = false;
@@ -879,7 +879,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 				$support_page = array(
 					'post_type' => 'page',
 					'post_title' => $page_name,
-					'post_content' => '[rt_hd_support_form]',
+					'post_content' => '[rtbiz_hd_support_form]',
 					'post_status' => 'publish',
 					'post_author' => get_current_user_id(),
 				);
@@ -887,8 +887,8 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 				$response['status'] = true;
 			} else if ( ! empty( $_POST['old_page'] ) ) {
 				$support_page = get_post( $_POST['old_page'] );
-				if ( strstr( $support_page->post_content, '[rt_hd_support_form]' ) === false ) {
-					$support_page->post_content .= '[rt_hd_support_form]';
+				if ( strstr( $support_page->post_content, '[rtbiz_hd_support_form]' ) === false ) {
+					$support_page->post_content .= '[rtbiz_hd_support_form]';
 					$support_page_id = wp_update_post( $support_page );
 				}
 				$response['status'] = true;

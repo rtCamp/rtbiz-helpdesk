@@ -53,7 +53,7 @@ if ( ! class_exists( 'Rtbiz_HD_Offering_Support' ) ) {
 			Rtbiz_HD::$loader->add_action( 'edd_download_history_row_end', $this, 'edd_support_link', 10, 2 );
 
 			// Add product information in ticket meta.
-			Rtbiz_HD::$loader->add_action( 'rt_hd_add_ticket_offering_info', $this, 'rt_hd_add_ticket_offering_info_callback' );
+			Rtbiz_HD::$loader->add_action( 'rtbiz_hd_add_ticket_offering_info', $this, 'add_ticket_offering_info' );
 
 			// my account and download history ticket list view
 			Rtbiz_HD::$loader->add_action( 'woocommerce_after_my_account', $this, 'woo_my_tickets_my_account' );
@@ -175,7 +175,7 @@ if ( ! class_exists( 'Rtbiz_HD_Offering_Support' ) ) {
 			if ( is_object( $order_id ) ) {
 				$order_id = $order_id->ID;
 			}
-			echo balanceTags( do_shortcode( '[rt_hd_tickets show_support_form_link=yes orderid=' . $order_id. ']' ) );
+			echo balanceTags( do_shortcode( '[rtbiz_hd_tickets show_support_form_link=yes orderid=' . $order_id. ']' ) );
 		}
 
 		function edd_view_order_show_ticket( $payment, $edd_receipt_args ) {
@@ -413,7 +413,7 @@ if ( ! class_exists( 'Rtbiz_HD_Offering_Support' ) ) {
 		 * Display ticket history on WooCommerce order page
 		 */
 		function support_info( $post ) {
-			echo balanceTags( do_shortcode( '[rt_hd_tickets title="false" orderid=' . $post->ID . ']' ) );
+			echo balanceTags( do_shortcode( '[rtbiz_hd_tickets title="false" orderid=' . $post->ID . ']' ) );
 		}
 
 		/*
@@ -559,7 +559,7 @@ if ( ! class_exists( 'Rtbiz_HD_Offering_Support' ) ) {
 			$uploaded = array_filter( $followup_attachment );
 
 			//Ticket created
-			$rt_hd_tickets_id = $rt_hd_import_operation->insert_new_ticket(
+			$rtbiz_hd_tickets_id = $rt_hd_import_operation->insert_new_ticket(
 				$data['title'],
 				stripslashes( $data['description'] ),
 				'now',
@@ -571,7 +571,7 @@ if ( ! class_exists( 'Rtbiz_HD_Offering_Support' ) ) {
 			$_POST['post'] = null;
 			$_POST['post_description'] = null;
 
-			return $rt_hd_tickets_id;
+			return $rtbiz_hd_tickets_id;
 		}
 
 		/**
@@ -581,7 +581,7 @@ if ( ! class_exists( 'Rtbiz_HD_Offering_Support' ) ) {
 		 */
 		function woo_my_tickets_my_account() {
 			global $current_user;
-			echo balanceTags( do_shortcode( '[rt_hd_tickets show_support_form_link=yes userid = ' . $current_user->ID . ']' ) );
+			echo balanceTags( do_shortcode( '[rtbiz_hd_tickets show_support_form_link=yes userid = ' . $current_user->ID . ']' ) );
 		}
 
 
@@ -624,11 +624,11 @@ if ( ! class_exists( 'Rtbiz_HD_Offering_Support' ) ) {
 		/**
 		 * Add product information in ticket meta data.
 		 *
-		 * @param $rt_hd_tickets_id
+		 * @param $rtbiz_hd_tickets_id
 		 *
 		 * @internal param int $rt_hd_ticket_id
 		 */
-		function rt_hd_add_ticket_offering_info_callback( $rt_hd_tickets_id ) {
+		function add_ticket_offering_info( $rtbiz_hd_tickets_id ) {
 
 			$data = $_POST['post'];
 
@@ -640,23 +640,23 @@ if ( ! class_exists( 'Rtbiz_HD_Offering_Support' ) ) {
 				} else {
 					$adultval = 'no';
 				}
-				rtbiz_hd_save_adult_ticket_meta( $rt_hd_tickets_id, $adultval );
+				rtbiz_hd_save_adult_ticket_meta( $rtbiz_hd_tickets_id, $adultval );
 			}
 
 			if ( isset( $data['product_id'] ) ) {
 				$term = get_term_by( 'id', $data['product_id'], Rt_Offerings::$offering_slug );
 				if ( $term ) {
-					wp_set_post_terms( $rt_hd_tickets_id, array( $term->term_id ), Rt_Offerings::$offering_slug );
+					wp_set_post_terms( $rtbiz_hd_tickets_id, array( $term->term_id ), Rt_Offerings::$offering_slug );
 				}
 			}
 
 			if ( isset( $data['order_id'] ) ) {
-				update_post_meta( $rt_hd_tickets_id, 'rtbiz_hd_order_id', esc_attr( $data['order_id'] ) );
+				update_post_meta( $rtbiz_hd_tickets_id, 'rtbiz_hd_order_id', esc_attr( $data['order_id'] ) );
 			}
 
 			if ( isset( $data['order_id'] ) && isset( $data['order_type'] ) ) {
 				//Store Order ID
-				update_post_meta( $rt_hd_tickets_id, 'rtbiz_hd_order_type', esc_attr( $data['order_type'] ) );
+				update_post_meta( $rtbiz_hd_tickets_id, 'rtbiz_hd_order_type', esc_attr( $data['order_type'] ) );
 
 				$link = '';
 				if ( 'woocommerce' === $data['order_type'] ) {
@@ -664,7 +664,7 @@ if ( ! class_exists( 'Rtbiz_HD_Offering_Support' ) ) {
 				} else if ( 'edd' === $data['order_type'] ) {
 					$link = add_query_arg( 'id', $_REQUEST['order_id'], admin_url( 'edit.php?post_type=download&page=edd-payment-history&view=view-order-details' ) );
 				}
-				update_post_meta( $rt_hd_tickets_id, 'rtbiz_hd_order_link', esc_url( $link ) );
+				update_post_meta( $rtbiz_hd_tickets_id, 'rtbiz_hd_order_link', esc_url( $link ) );
 			}
 		}
 	}

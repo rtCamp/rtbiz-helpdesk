@@ -104,7 +104,7 @@ $user_edit_content = current_user_can( $cap );
 									}
 									?>
 								</a>
-								<?php wp_nonce_field( 'heythisisrthd_ticket_fav_' . $post->ID, 'rthd_fav_tickets_nonce' ); ?>
+								<?php wp_nonce_field( 'heythisisrthd_ticket_fav_' . $post->ID, 'rtbiz_hd_fav_tickets_nonce' ); ?>
 
 						</div>
 					<?php } ?>

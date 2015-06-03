@@ -31,44 +31,44 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 			Rtbiz_HD::$loader->add_action( 'quick_edit_custom_box', $this, 'contact_quick_action', 10, 2 );
 			Rtbiz_HD::$loader->add_action( 'save_post', $this, 'save_helpdesk_role', 10, 2 );
 
-			Rtbiz_HD::$loader->add_action( 'wp_ajax_rthd_search_contact', $this, 'contact_autocomplete_ajax' );
-			Rtbiz_HD::$loader->add_action( 'wp_ajax_rthd_get_term_meta', $this, 'get_taxonomy_meta_ajax' );
-			Rtbiz_HD::$loader->add_action( 'wp_ajax_rthd_get_account_contacts', $this, 'get_account_contacts_ajax' );
-			Rtbiz_HD::$loader->add_action( 'wp_ajax_rthd_add_contact', $this, 'add_new_contact_ajax' );
+			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_search_contact', $this, 'ajax_contact_autocomplete' );
+			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_get_term_meta', $this, 'ajax_get_taxonomy_meta' );
+			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_get_account_contacts', $this, 'ajax_get_account_contacts' );
+			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_add_contact', $this, 'ajax_add_new_contact' );
 
-			Rtbiz_HD::$loader->add_filter( 'rtbiz_contact_meta_fields', $this, 'rthd_add_setting_to_rtbiz_user' );
+			Rtbiz_HD::$loader->add_filter( 'rtbiz_contact_meta_fields', $this, 'add_hd_additional_details' );
 
-			Rtbiz_HD::$loader->add_action( 'rtbiz_after_delete_staff_acl_remove-' . RTBIZ_HD_TEXT_DOMAIN, $this, 'rthd_before_delete_staff', 10, 3 );
+			Rtbiz_HD::$loader->add_action( 'rtbiz_after_delete_staff_acl_remove-' . RTBIZ_HD_TEXT_DOMAIN, $this, 'before_delete_staff', 10, 3 );
 
 			//update contact lable for staff and customer
-			Rtbiz_HD::$loader->add_filter( 'rtbiz_contact_labels', $this, 'rthd_change_contact_lablels' );
+			Rtbiz_HD::$loader->add_filter( 'rtbiz_contact_labels', $this, 'change_contact_lablels' );
 
 			//update contact page module wise
 
-			Rtbiz_HD::$loader->add_action( 'rtbiz_entity_meta_boxes', $this, 'rthd_contact_custom_metabox' );
-			Rtbiz_HD::$loader->add_filter( 'get_edit_post_link', $this, 'rthd_edit_contact_link', 10, 2 );
+			Rtbiz_HD::$loader->add_action( 'rtbiz_entity_meta_boxes', $this, 'contact_custom_metabox' );
+			Rtbiz_HD::$loader->add_filter( 'get_edit_post_link', $this, 'edit_contact_link', 10, 2 );
 			Rtbiz_HD::$loader->add_action( 'add_meta_boxes_'. rtbiz_get_contact_post_type(), $this, 'metabox_rearrange', 20 );
-			Rtbiz_HD::$loader->add_filter( 'redirect_post_location', $this, 'rthd_redirect_post_location_filter', 99 );
+			Rtbiz_HD::$loader->add_filter( 'redirect_post_location', $this, 'redirect_post_location_filter', 99 );
 
 			Rtbiz_HD::$loader->add_filter( 'views_edit-' . rtbiz_get_contact_post_type(), $this, 'display_custom_views' );
 			Rtbiz_HD::$loader->add_action( 'pre_get_posts', $this, 'contact_posts_filter' );
 
 		}
 
-		function rthd_contact_custom_metabox( ) {
+		public function contact_custom_metabox( ) {
 			add_meta_box( 'rthd-ticket-listing', __( 'Tickets' ), array(
 				$this,
 				'rthd_ticket_listing_metabox',
 			), rtbiz_get_contact_post_type(), 'normal', 'default' );
 		}
 
-		function rthd_ticket_listing_metabox( $post ) {
+		public function rthd_ticket_listing_metabox( $post ) {
 			if ( ! empty( $_REQUEST['module'] ) && RTBIZ_HD_TEXT_DOMAIN == $_REQUEST['module'] ) {
 				$user = rtbiz_get_wp_user_for_contact( $post->ID );
 				if ( empty($user[0]) ) {
 					return;
 				}
-				echo balanceTags( do_shortcode( '[rt_hd_tickets userid = ' . $user[0]->ID . " title='no' ]" ) );
+				echo balanceTags( do_shortcode( '[rtbiz_hd_tickets userid = ' . $user[0]->ID . " title='no' ]" ) );
 			}
 		}
 
@@ -76,7 +76,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		 * Filter contact
 		 * @param $query
 		 */
-		function contact_posts_filter( $query ) {
+		public function contact_posts_filter( $query ) {
 			global $wpdb, $rtbiz_acl_model;
 			if ( isset( $_GET['post_type'] ) && rtbiz_get_contact_post_type() == $_GET['post_type'] && $query->is_main_query() ) {
 
@@ -123,7 +123,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		 *
 		 * @return mixed
 		 */
-		function display_custom_views( $views ) {
+		public function display_custom_views( $views ) {
 			if ( ! empty( $_REQUEST['module'] ) && RTBIZ_HD_TEXT_DOMAIN == $_REQUEST['module'] && isset( $_REQUEST['rt_contact_group'] ) ) {
 				if ( 'staff' == $_REQUEST['rt_contact_group'] ) {
 					if ( ! isset( $_GET['role'] ) ) { $class = ' class="current"'; } else { $class = ''; }
@@ -154,7 +154,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		 * add query parameter after post update redirection url
 		 * @param $location
 		 */
-		function rthd_redirect_post_location_filter( $location ) {
+		public function redirect_post_location_filter( $location ) {
 			if ( ! empty( $_POST['post_type'] ) && rtbiz_get_contact_post_type() == $_POST['post_type']
 			     &&  strpos( $_POST['_wp_http_referer'], 'module=' . RTBIZ_HD_TEXT_DOMAIN ) !== false ) {
 				$location = add_query_arg( 'module', RTBIZ_HD_TEXT_DOMAIN, $location );
@@ -162,7 +162,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 			return $location;
 		}
 
-		function metabox_rearrange() {
+		public function metabox_rearrange() {
 			global $wp_meta_boxes;
 
 			if ( empty ($_REQUEST['post']) ) {
@@ -200,7 +200,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		 * @param $url
 		 * @param $postid
 		 */
-		function rthd_edit_contact_link( $url, $postid ) {
+		public function edit_contact_link( $url, $postid ) {
 			if ( ! empty( $_REQUEST['module'] ) && ! empty( $postid ) && get_post_type( $postid ) == rtbiz_get_contact_post_type() ) {
 				$url = esc_url( add_query_arg( 'module', $_REQUEST['module'], $url ) );
 			}
@@ -210,7 +210,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		/*
 		 * change label for staff and customer
 		 */
-		function rthd_change_contact_lablels( $labels ) {
+		public function change_contact_lablels( $labels ) {
 			$label  = '';
 			$labelp = '';
 			if ( isset( $_GET['rt_contact_group'] ) && 'staff' == $_GET['rt_contact_group'] ) {
@@ -247,7 +247,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		 * @param $contactid
 		 * @param $userid
 		 */
-		function rthd_before_delete_staff( $contactid, $userid, $permission ) {
+		public function before_delete_staff( $contactid, $userid, $permission ) {
 			$settings = rtbiz_hd_get_redux_settings();
 			$args     = array(
 				'numberposts' => - 1,
@@ -274,7 +274,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		 * @param $col
 		 * @param $type
 		 */
-		function contact_quick_action( $col, $type ) {
+		public function contact_quick_action( $col, $type ) {
 			if ( rtbiz_get_contact_post_type() != $type || 'rtbiz_hd_ticket' != $col ) {
 				return;
 			}
@@ -313,7 +313,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		 *
 		 * @return mixed
 		 */
-		function save_helpdesk_role( $post_id, $post ) {
+		public function save_helpdesk_role( $post_id, $post ) {
 			if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 				return $post_id;
 			}
@@ -400,7 +400,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 			}
 		}
 
-		function rthd_add_setting_to_rtbiz_user( $fields ) {
+		public function add_hd_additional_details( $fields ) {
 			var_dump( $fields );
 			$custom_filed = array();
 			$post_type = isset( $_REQUEST['post_type'] )? $_REQUEST['post_type'] : '';
@@ -439,7 +439,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 			return $fields;
 		}
 
-		function contacts_rearrange_columns( $columns, $rt_entity ) {
+		public function contacts_rearrange_columns( $columns, $rt_entity ) {
 
 			global $rtbiz_contact;
 			if ( $rt_entity->post_type != $rtbiz_contact->post_type ) {
@@ -487,7 +487,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		}
 
 		/**
-		 * Get count of contact terms used in individual ticket. This function returns the exact count
+		 * Get count of contact terms used in individual ticket. This public function returns the exact count
 		 *
 		 * @since    0.1
 		 *
@@ -500,7 +500,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		 * @internal param int $term_id
 		 * @return string $out
 		 */
-		function manage_contacts_columns( $column, $post_id, $rt_entity ) {
+		public function manage_contacts_columns( $column, $post_id, $rt_entity ) {
 
 			global $rtbiz_contact, $rtbiz_acl_model;
 			if ( $rt_entity->post_type != $rtbiz_contact->post_type ) {
@@ -593,7 +593,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		 *
 		 * @return bool|int|null
 		 */
-		function get_user_from_email( $email ) {
+		public function get_user_from_email( $email ) {
 
 			$userid = email_exists( $email );
 			if ( ! $userid && ! is_wp_error( $userid ) ) {
@@ -616,7 +616,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		 *
 		 * @return string
 		 */
-		function contacts_diff_on_ticket( $post_id, $newTicket ) {
+		public function contacts_diff_on_ticket( $post_id, $newTicket ) {
 
 			$diffHTML = '';
 			if ( ! isset( $newTicket['contacts'] ) ) {
@@ -651,7 +651,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		 * @param $post_id
 		 * @param $newTicket
 		 */
-		function contacts_save_on_ticket( $post_id, $newTicket ) {
+		public function contacts_save_on_ticket( $post_id, $newTicket ) {
 			if ( ! isset( $newTicket['contacts'] ) ) {
 				$newTicket['contacts'] = array();
 			}
@@ -671,7 +671,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		 *
 		 * @since 0.1
 		 */
-		function get_account_contacts_ajax() {
+		public function ajax_get_account_contacts() {
 
 			$contacts = rtbiz_get_company_to_contact_connection( $_POST['query'] );
 			$result   = array();
@@ -696,7 +696,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		 *
 		 * @since 0.1
 		 */
-		public function get_taxonomy_meta_ajax() {
+		public function ajax_get_taxonomy_meta() {
 			if ( ! isset( $_POST['query'] ) ) {
 				wp_die( 'Opss!! Invalid request' );
 			}
@@ -718,7 +718,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		 *
 		 * @since 0.1
 		 */
-		public function contact_autocomplete_ajax() {
+		public function ajax_contact_autocomplete() {
 			if ( ! isset( $_POST['query'] ) ) {
 				wp_die( 'Opss!! Invalid request' );
 			}
@@ -744,7 +744,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		 *
 		 * @since 0.1
 		 */
-		public function add_new_contact_ajax() {
+		public function ajax_add_new_contact() {
 			$returnArray           = array();
 			$returnArray['status'] = false;
 			$accountData           = $_POST['data'];

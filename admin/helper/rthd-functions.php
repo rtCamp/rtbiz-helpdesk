@@ -510,11 +510,11 @@ function rtbiz_hd_get_user_adult_preference( $user_id, $email = '' ) {
 }
 
 function rtbiz_hd_add_user_fav_ticket( $userid, $postid ) {
-	add_user_meta( $userid, '_rthd_fav_tickets', $postid );
+	add_user_meta( $userid, '_rtbiz_hd_fav_tickets', $postid );
 }
 
 function rtbiz_hd_get_user_fav_ticket( $userid ) {
-	$result = get_user_meta( $userid, '_rthd_fav_tickets' );
+	$result = get_user_meta( $userid, '_rtbiz_hd_fav_tickets' );
 	if ( ! empty( $result ) ) {
 		$result = array_filter( $result );
 		$result = array_unique( $result );
@@ -538,7 +538,7 @@ function rtbiz_hd_get_user_subscribe_ticket( $current_userid ) {
 }
 
 function rtbiz_hd_delete_user_fav_ticket( $user_id, $postid ) {
-	delete_user_meta( $user_id, '_rthd_fav_tickets', $postid );
+	delete_user_meta( $user_id, '_rtbiz_hd_fav_tickets', $postid );
 }
 
 function rtbiz_hd_save_adult_ticket_meta( $post_id, $pref ) {
@@ -1078,8 +1078,8 @@ function rtbiz_hd_auto_response_dayshift_view() {
  * Display settings for setup weekdays and hours operation for night shift.
  */
 function rtbiz_hd_auto_response_daynightshift_view() {
-	global $rt_hd_auto_response;
-	return $rt_hd_auto_response->setting_daynightshift_ui();
+	global $rtbiz_hd_auto_response;
+	return $rtbiz_hd_auto_response->setting_daynightshift_ui();
 }
 
 function rtbiz_hd_filter_emails( $allemails ) {

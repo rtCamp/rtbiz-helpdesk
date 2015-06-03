@@ -150,12 +150,12 @@ if ( ! class_exists( 'Rtbiz_HD_Subscribers ' ) ) {
 		 */
 		public static function save( $post_id, $post ) {
 
-			global $rt_hd_tickets_operation;
+			global $rtbiz_hd_tickets_operation;
 
 			$newTicket = ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] = 'inline-save' ) ? get_post( $_REQUEST['post_ID'] ) : $_POST['post'];
 			$newTicket = (array) $newTicket;
 
-			$rt_hd_tickets_operation->ticket_subscribe_update( $_POST['subscribe_to'], $newTicket['post_author'], $post_id );
+			$rtbiz_hd_tickets_operation->ticket_subscribe_update( $_POST['subscribe_to'], $newTicket['post_author'], $post_id );
 		}
 
 	}
