@@ -159,7 +159,9 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 					$created_by         = get_user_by( 'id', get_post_meta( $post->ID, '_rtbiz_hd_created_by', true ) );
 					$CCs                = $rtbiz_hd_email_notification->get_contacts( $post->ID );
 					$CCs                = wp_list_pluck( $CCs, 'email' );
-					$CCs                = array_diff( $CCs, array( $created_by->user_email ) );
+					if ( ! empty( $created_by ) ) {
+						$CCs = array_diff( $CCs, array( $created_by->user_email ) );
+					}
 					?>
 					<div class="rthd-ticket-user-activity-backend">
 						<?php
