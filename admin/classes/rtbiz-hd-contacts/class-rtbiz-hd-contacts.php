@@ -79,9 +79,12 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		public function contact_posts_filter( $query ) {
 			global $wpdb, $rtbiz_acl_model;
 			if ( isset( $_GET['post_type'] ) && rtbiz_get_contact_post_type() == $_GET['post_type'] ) {
-
+				if ( ! empty( $_GET['fall_back'] ) ){
+					return ;
+				}
+				$_GET['fall_back'] = 'yes';
 				if ( isset( $_GET['contact_group'] ) && 'customer' == $_GET['contact_group'] && isset( $_REQUEST['tickets'] ) ) {
-					$sql = "SELECT p2p_from FROM `wp_postmeta`, `wp_p2p` WHERE `meta_key` = '_rtbiz_hd_created_by' and meta_value = p2p_to and p2p_type = 'rt_contact_to_user'";
+					$sql = "SELECT DISTINCT p2p_from FROM `wp_postmeta`, `wp_p2p` WHERE `meta_key` = '_rtbiz_hd_created_by' and meta_value = p2p_to and p2p_type = '" . rtbiz_get_contact_post_type() . "_to_user'";
 					$contacts_with_ticket = $wpdb->get_col( $sql );
 					if ( empty( $contacts_with_ticket ) ) {
 						$contacts_with_ticket = array( -1 );
@@ -113,6 +116,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 						$query->set( 'post__in', $contacts );
 					}
 				}
+				$_GET['fall_back'] = '';
 			}
 		}
 
