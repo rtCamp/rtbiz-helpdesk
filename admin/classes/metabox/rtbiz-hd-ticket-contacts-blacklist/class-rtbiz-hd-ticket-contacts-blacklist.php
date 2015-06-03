@@ -94,6 +94,13 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Contacts_Blacklist' ) ) {
 			$reponse['status'] = false;
 			$ticket_data       = $_POST;
 			$contacts          = rtbiz_get_post_for_contact_connection( $ticket_data['post_id'], Rtbiz_HD_Module::$post_type );
+			$id  = get_post_meta( $_POST['post_id'], '_rtbiz_hd_created_by', true );
+			$created_by         = rtbiz_get_contact_for_wp_user( $id );
+
+			if ( ! empty( $created_by[0] ) ) {
+				$contacts[] = $created_by[0];
+			}
+
 			ob_start();
 			?>
 			<div class="confirmation-container notice notice-warning">

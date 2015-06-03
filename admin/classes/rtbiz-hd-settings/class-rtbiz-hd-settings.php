@@ -547,6 +547,15 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 						'off'      => __( 'Disable' ),
 					),
 					array(
+						'id'       => 'rthd_enable_auto_wp_user_create',
+						'type'     => 'switch',
+						'title'    => __( 'Auto Wordpress User Create' ),
+						'subtitle' => __( 'Create new wordpress user on adding of new customer' ),
+						'default'  => false,
+						'on'       => __( 'Enable' ),
+						'off'      => __( 'Disable' ),
+					),
+					array(
 						'id'       => 'section-auto-assign-start',
 						'type'     => 'section',
 						'indent'   => true, // Indent all options below until the next 'section' option is set.
