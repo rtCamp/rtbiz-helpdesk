@@ -501,7 +501,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				 * Hence pass $email_parse flag based on that.
 				 * $email_parse = ! empty( $originalBody )
 				 */
-				//$rt_hd_email_notification->notification_new_ticket_assigned( $post_id, $settings['rthd_default_user'], $labels['name'], $allemail, $uploaded, $email_parse = ! empty( $originalBody ) );
+				//$rtbiz_hd_email_notification->notification_new_ticket_assigned( $post_id, $settings['rthd_default_user'], $labels['name'], $allemail, $uploaded, $email_parse = ! empty( $originalBody ) );
 			}
 
 			$rtbiz_hd_email_notification->notification_new_ticket_created( $post_id,$labels['name'], $body, $uploaded );
@@ -1823,9 +1823,9 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		 */
 		public function is_allow_to_sendemail_fromemail( $email ) {
 			$user_id = get_current_user_id();
-			global $wpdb, $rt_mail_accounts_model, $rt_hd_mail_acl_model;
+			global $wpdb, $rt_mail_accounts_model, $rtbiz_hd_mail_acl_model;
 			$sql    = $wpdb->prepare( '(select * from {$rt_mail_accounts_model->table_name} where user_id=%d and email = %s)
-								union (select a.* from {$rt_hd_mail_acl_model->table_name} b inner join
+								union (select a.* from {$rtbiz_hd_mail_acl_model->table_name} b inner join
 								{$rt_mail_accounts_model->table_name} a on a.email=b.email where b.allow_user=%d and a.email=%s)', $user_id, $email, $user_id, $email );
 			$result = $wpdb->get_results( $sql );
 			if ( $result && ! empty( $result ) ) {
@@ -1965,7 +1965,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 	              'number' => $Limit,
 	              'offset' => $offset,
 	          ) );
-			//          $user_edit = current_user_can( rtbiz_get_access_role_cap( RT_BIZ_TEXT_DOMAIN, 'editor' ) );
+			//          $user_edit = current_user_can( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' ) );
 			$commenthtml = '';
 			$count = 0;
 			foreach ( $comments as $comment ) {
@@ -2029,7 +2029,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			$post_id = $_POST['post_id'];
 			$old_post = get_post( $post_id );
 			$new_assignee = $_POST['post_author'];
-			global $rt_hd_ticket_index_model;
+			global $rtbiz_hd_ticket_index_model;
 			if ( $old_post->post_author != $new_assignee ) {
 				if ( $post_id ) {
 					$ticket = array(
@@ -2037,7 +2037,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 						'post_author' => $new_assignee,
 						);
 					wp_update_post( $ticket );
-					$rt_hd_ticket_index_model->update_ticket_assignee( $new_assignee, $post_id );
+					$rtbiz_hd_ticket_index_model->update_ticket_assignee( $new_assignee, $post_id );
 				}
 
 				$response['status'] = true;

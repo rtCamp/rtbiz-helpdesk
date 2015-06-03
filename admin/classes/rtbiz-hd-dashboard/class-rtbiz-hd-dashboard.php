@@ -183,7 +183,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 			/* add_meta_box( 'rthd-top-accounts', __( 'Top Accounts', RT_BIZ_HD_TEXT_DOMAIN ), array(
 			  $this,
 			  'top_accounts',
-			  ), $rt_hd_dashboard->screen_id, 'column4' ); */
+			  ), $rtbiz_hd_dashboard->screen_id, 'column4' ); */
 			/* Top Clients */
 			add_meta_box( 'rthd-top-clients', __( 'Top Customers', RTBIZ_HD_TEXT_DOMAIN ), array(
 				$this,
@@ -638,11 +638,11 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 		 * @param $args
 		 */
 		public function dashboard_attributes_widget_content( $obj, $args ) {
-			global $rt_hd_rt_attributes;
+			global $rtbiz_hd_rt_attributes;
 			$rtbiz_hd_attributes_model = new RT_Attributes_Model();
 			$attribute_id = $args['args']['attribute_id'];
 			$attr = $rtbiz_hd_attributes_model->get_attribute( $attribute_id );
-			$taxonomy = $rt_hd_rt_attributes->get_taxonomy_name( $attr->attribute_name );
+			$taxonomy = $rtbiz_hd_rt_attributes->get_taxonomy_name( $attr->attribute_name );
 			$post_type = Rtbiz_HD_Module::$post_type;
 			$terms = get_terms( $taxonomy );
 

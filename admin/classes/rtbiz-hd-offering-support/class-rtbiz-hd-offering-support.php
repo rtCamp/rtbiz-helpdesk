@@ -515,7 +515,7 @@ if ( ! class_exists( 'Rtbiz_HD_Offering_Support' ) ) {
 		 *
 		 */
 		function save_support_form() {
-			global $rtbiz_offerings, $rt_hd_import_operation;
+			global $rtbiz_offerings, $rtbiz_hd_import_operation;
 
 			if ( empty( $_POST['rthd_support_form_submit'] ) ) {
 				return false;
@@ -559,7 +559,7 @@ if ( ! class_exists( 'Rtbiz_HD_Offering_Support' ) ) {
 			$uploaded = array_filter( $followup_attachment );
 
 			//Ticket created
-			$rtbiz_hd_tickets_id = $rt_hd_import_operation->insert_new_ticket(
+			$rtbiz_hd_tickets_id = $rtbiz_hd_import_operation->insert_new_ticket(
 				$data['title'],
 				stripslashes( $data['description'] ),
 				'now',
@@ -626,7 +626,7 @@ if ( ! class_exists( 'Rtbiz_HD_Offering_Support' ) ) {
 		 *
 		 * @param $rtbiz_hd_tickets_id
 		 *
-		 * @internal param int $rt_hd_ticket_id
+		 * @internal param int $rtbiz_hd_ticket_id
 		 */
 		function add_ticket_offering_info( $rtbiz_hd_tickets_id ) {
 

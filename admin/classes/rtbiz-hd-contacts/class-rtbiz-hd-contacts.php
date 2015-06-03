@@ -286,7 +286,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 					<?php $selected = ( isset( $_REQUEST['contact_group'] ) && 'staff' == $_REQUEST['contact_group'] ) ? 'Checked="Checked"' : ''; ?>
 					<label><input type="checkbox" id="rtbiz_is_staff_member" <?php echo $selected; ?>
 					              name="rtbiz_is_staff_member" value="yes"><span
-							class="checkbox-title"><?php _e( 'Staff Member ', RT_BIZ_TEXT_DOMAIN ) ?></span></label>
+							class="checkbox-title"><?php _e( 'Staff Member ', RTBIZ_HD_TEXT_DOMAIN ) ?></span></label>
 				</div>
 				<div id="rtbiz-permission-container" class="inline-edit-col <?php if ( ! $selected ) {
 					echo 'rtbiz-hide'; } ?> ">
@@ -326,7 +326,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 				global $rtbiz_acl_model;
 
 				// rtbiz has same acl as helpdesk
-				$_REQUEST['rtbiz_profile_permissions'][ RT_BIZ_TEXT_DOMAIN ] = $_REQUEST['rtbiz_profile_permissions'][ RTBIZ_HD_TEXT_DOMAIN ];
+				$_REQUEST['rtbiz_profile_permissions'][ RTBIZ_TEXT_DOMAIN ] = $_REQUEST['rtbiz_profile_permissions'][ RTBIZ_HD_TEXT_DOMAIN ];
 				$profile_permissions                                          = $_REQUEST['rtbiz_profile_permissions'];
 
 				$contactIds = array();
@@ -392,7 +392,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 				}
 				foreach ( $contactIds as $contactId ) {
 					$user_permissions                       = get_post_meta( $contactId, 'rtbiz_profile_permissions', true );
-					$user_permissions[ RT_BIZ_TEXT_DOMAIN ] = $profile_permissions[ RT_BIZ_TEXT_DOMAIN ];
+					$user_permissions[ RTBIZ_TEXT_DOMAIN ] = $profile_permissions[ RTBIZ_TEXT_DOMAIN ];
 					$user_permissions[ RTBIZ_HD_TEXT_DOMAIN ]  = $profile_permissions[ RTBIZ_HD_TEXT_DOMAIN ];
 					update_post_meta( $contactId, 'rtbiz_profile_permissions', $user_permissions );
 					update_post_meta( $contactId, 'rtbiz_is_staff_member', $_REQUEST['rtbiz_is_staff_member'] );
@@ -452,7 +452,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 				if ( ! empty( $_REQUEST['contact_group'] ) && 'staff' == $_REQUEST['contact_group'] ) {
 					$hd_columns['title'] = $columns['title'];
 					$hd_columns[ 'taxonomy-' . Rt_Offerings::$offering_slug ] = $columns[ 'taxonomy-' . Rt_Offerings::$offering_slug ];
-					$hd_columns[ 'taxonomy-' . RT_Departments::$slug ] = $columns[ 'taxonomy-' . RT_Departments::$slug ];
+					$hd_columns[ 'taxonomy-' . Rtbiz_Teams::$slug ] = $columns[ 'taxonomy-' . Rtbiz_Teams::$slug ];
 				} else {
 					$hd_columns['title'] = $columns['title'];
 				}
@@ -676,7 +676,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 			$contacts = rtbiz_get_company_to_contact_connection( $_POST['query'] );
 			$result   = array();
 			foreach ( $contacts as $contact ) {
-				$email    = rtbiz_get_entity_meta( $contact->ID, Rt_Contact::$primary_email_key, true );
+				$email    = rtbiz_get_entity_meta( $contact->ID, Rtbiz_Contact::$primary_email_key, true );
 				$result[] = array(
 					'label'   => $contact->post_title,
 					'id'      => $contact->ID,

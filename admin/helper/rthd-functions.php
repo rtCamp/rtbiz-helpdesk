@@ -471,7 +471,7 @@ function rtbiz_hd_get_user_notification_preference( $user_id, $email = '' ) {
 	}
 	$post = rtbiz_get_contact_by_email( $email );
 	if ( ! empty( $post[0] ) ) {
-		$pref = Rt_Entity::get_meta( $post[0]->ID, 'rthd_receive_notification', true );
+		$pref = Rtbiz_Entity::get_meta( $post[0]->ID, 'rthd_receive_notification', true );
 	}
 
 	//	$pref = get_user_meta( $user_id, 'rthd_notification_pref', true );
@@ -499,7 +499,7 @@ function rtbiz_hd_get_user_adult_preference( $user_id, $email = '' ) {
 	$post = rtbiz_get_contact_by_email( $email );
 
 	if ( ! empty( $post[0] ) ) {
-		$pref = Rt_Entity::get_meta( $post[0]->ID, 'rthd_contact_adult_filter', true );
+		$pref = Rtbiz_Entity::get_meta( $post[0]->ID, 'rthd_contact_adult_filter', true );
 	}
 	//  Old adult pref meta key
 	//	$pref = get_user_meta( $user_id, 'rthd_adult_pref', true );
@@ -550,12 +550,12 @@ function rtbiz_hd_get_adult_ticket_meta( $post_id ) {
 }
 
 function rtbiz_hd_create_new_ticket_title( $key, $post_id ) {
-	if ( rtbiz_is_email_template_addon_active() && rtbiz_is_email_template_on( Rtbiz_HD_Module::$post_type ) ) {
-		$redux = rtbiz_hd_get_redux_settings();
-		$value = $redux[ $key ];
-	} else {
+	//if ( rtbiz_is_email_template_addon_active() && rtbiz_is_email_template_on( Rtbiz_HD_Module::$post_type ) ) {
+		//$redux = rtbiz_hd_get_redux_settings();
+		//$value = $redux[ $key ];
+	//} else {
 		$value = rtbiz_hd_get_default_email_template( $key );
-	}
+	//}
 	return rtbiz_hd_generate_email_title( $post_id, $value );
 }
 
@@ -1335,7 +1335,7 @@ function rtbiz_hd_get_attchment_link_with_fancybox( $attachment, $post_id = '', 
 	$original_url = $attachment_url;
 	$extn = rtbiz_get_attchment_extension( $attachment_url );
 	$class = 'rthd_attachment fancybox';
-	if ( rt_bix_is_google_doc_supported_type( $attachment->post_mime_type, $extn ) ) {
+	if ( rtbiz_is_google_doc_supported_type( $attachment->post_mime_type, $extn ) ) {
 		$attachment_url = rtbiz_google_doc_viewer_url( $attachment_url );
 		$class .= ' fancybox.iframe';
 	} elseif ( rtbiz_hd_is_fancybox_supported_type( $extn ) ) {
@@ -1380,10 +1380,10 @@ function rtbiz_hd_is_fancybox_supported_type( $extation = '' ) {
  * @return mixed
  */
 function rtbiz_hd_get_email_template_body( $key ) {
-	if ( rtbiz_is_email_template_addon_active() && rtbiz_is_email_template_on( Rtbiz_HD_Module::$post_type ) ) {
+	/*if ( rtbiz_is_email_template_addon_active() && rtbiz_is_email_template_on( Rtbiz_HD_Module::$post_type ) ) {
 		$redux = rtbiz_hd_get_redux_settings();
 		return $redux[ $key ];
-	}
+	}*/
 	return rtbiz_hd_get_default_email_template( $key );
 }
 
@@ -1698,7 +1698,7 @@ function rtbiz_hd_get_default_support_team() {
 	$isSyncOpt = get_option( 'rthd_default_support_team' );
 	if ( empty( $isSyncOpt ) ) {
 		$term = wp_insert_term( 'General Support', // the term
-			RT_Departments::$slug // the taxonomy
+			Rtbiz_Teams::$slug // the taxonomy
 		);
 		if ( ! empty( $term ) ) {
 			$module_permissions = get_site_option( 'rtbiz_acl_module_permissions' );
@@ -1745,8 +1745,8 @@ function rtbiz_hd_get_redux_post_settings( $post ) {
 }
 
 function rtbiz_hd_ticket_import_logs() {
-	global $rt_hd_logs;
-	$rt_hd_logs->ui();
+	global $rtbiz_hd_logs;
+	$rtbiz_hd_logs->ui();
 }
 
 function rtbiz_hd_mailbox_setup_view() {

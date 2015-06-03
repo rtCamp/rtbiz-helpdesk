@@ -50,7 +50,7 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Contacts_Blacklist' ) ) {
 				$arrContactsEmail = array();
 				$contacts         = rtbiz_get_post_for_contact_connection( $post->ID, Rtbiz_HD_Module::$post_type );
 				foreach ( $contacts as $contact ) {
-					$arrContactsEmail[] = get_post_meta( $contact->ID, Rt_Entity::$meta_key_prefix . Rt_Contact::$primary_email_key, true );
+					$arrContactsEmail[] = get_post_meta( $contact->ID, Rtbiz_Entity::$meta_key_prefix . Rtbiz_Contact::$primary_email_key, true );
 				}
 				$contacts = array_intersect( $blacklistedEmail, $arrContactsEmail );
 				$class    = '';
@@ -101,7 +101,7 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Contacts_Blacklist' ) ) {
 			</div>
 			<ui class="blacklist_contacts_list"><?php
 			foreach ( $contacts as $contact ) {
-				$email = get_post_meta( $contact->ID, Rt_Entity::$meta_key_prefix . Rt_Contact::$primary_email_key, true );
+				$email = get_post_meta( $contact->ID, Rtbiz_Entity::$meta_key_prefix . Rtbiz_Contact::$primary_email_key, true );
 				?>
 				<li><?php echo $email; ?></li>
 			<?php } ?>
@@ -136,7 +136,7 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Contacts_Blacklist' ) ) {
 			$contacts          = rtbiz_get_post_for_contact_connection( $_POST['post_id'], Rtbiz_HD_Module::$post_type );
 			$blacklistedEmail  = array();
 			foreach ( $contacts as $contact ) {
-				$blacklistedEmail[] = get_post_meta( $contact->ID, Rt_Entity::$meta_key_prefix . Rt_Contact::$primary_email_key, true );
+				$blacklistedEmail[] = get_post_meta( $contact->ID, Rtbiz_Entity::$meta_key_prefix . Rtbiz_Contact::$primary_email_key, true );
 			}
 			$created_by         = get_user_by( 'id', get_post_meta( $_POST['post_id'], '_rtbiz_hd_created_by', true ) );
 			$blacklistedEmail[] = $created_by->user_email;
@@ -175,7 +175,7 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Contacts_Blacklist' ) ) {
 			$arrContactsEmail  = array();
 			$blacklistedEmail  = rtbiz_hd_get_blacklist_emails();
 			foreach ( $contacts as $contact ) {
-				$arrContactsEmail[] = get_post_meta( $contact->ID, Rt_Entity::$meta_key_prefix . Rt_Contact::$primary_email_key, true );
+				$arrContactsEmail[] = get_post_meta( $contact->ID, Rtbiz_Entity::$meta_key_prefix . Rtbiz_Contact::$primary_email_key, true );
 			}
 			if ( ! empty( $arrContactsEmail ) ) {
 				if ( ! empty( $blacklistedEmail ) ) {

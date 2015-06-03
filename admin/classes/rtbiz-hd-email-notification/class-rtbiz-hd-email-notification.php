@@ -900,12 +900,12 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 			$created_by = rtbiz_get_contact_for_wp_user( get_post_meta( $post_id, '_rtbiz_hd_created_by', true ) );
 			$tocontact      = array();
 			if ( ! empty( $created_by[0] ) ) {
-				$email = get_post_meta( $created_by[0]->ID, Rt_Entity::$meta_key_prefix.Rt_Contact::$primary_email_key, true );
+				$email = get_post_meta( $created_by[0]->ID, Rtbiz_Entity::$meta_key_prefix.Rtbiz_Contact::$primary_email_key, true );
 				array_push( $tocontact, array( 'email' => $email ) );
 			}
 			$contacts = rtbiz_get_post_for_contact_connection( $post_id, Rtbiz_HD_Module::$post_type, true );
 			foreach ( $contacts as $contact ) {
-				$emails = get_post_meta( $contact->ID, Rt_Entity::$meta_key_prefix.Rt_Contact::$primary_email_key );
+				$emails = get_post_meta( $contact->ID, Rtbiz_Entity::$meta_key_prefix.Rtbiz_Contact::$primary_email_key );
 				foreach ( $emails as $email ) {
 					array_push( $tocontact, array( 'email' => $email ) );
 				}

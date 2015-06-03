@@ -387,7 +387,7 @@ $user_edit_content = current_user_can( $cap );
 						foreach ( $relations as $r ) {
 							$attr = $rtbiz_hd_attributes_model->get_attribute( $r->attr_id );
 							if ( 'taxonomy' == $attr->attribute_store_as ) {
-								$taxonomy = $rt_hd_rt_attributes->get_taxonomy_name( $attr->attribute_name );
+								$taxonomy = $rtbiz_hd_rt_attributes->get_taxonomy_name( $attr->attribute_name );
 								$terms    = wp_get_post_terms( $post->ID, $taxonomy );
 
 								if ( ! $terms instanceof WP_Error && ! empty( $terms ) ) {

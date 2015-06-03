@@ -32,7 +32,7 @@ if ( ! class_exists( 'Rtbiz_HD_Auto_Response' ) ) {
 		 * @param $post_date
 		 */
 		function  auto_response( $comment_post_ID, $post_date ) {
-			global $rt_hd_import_operation;
+			global $rtbiz_hd_import_operation;
 			$redux = rtbiz_hd_get_redux_settings();
 			$isEnableAutoResponse = ( isset( $redux['rthd_enable_auto_response'] ) && 1 == $redux['rthd_enable_auto_response'] );
 			$isDayShift = ( isset( $redux['rthd_enable_auto_response_mode'] ) && 1 == $redux['rthd_enable_auto_response_mode'] );
@@ -91,7 +91,7 @@ if ( ! class_exists( 'Rtbiz_HD_Auto_Response' ) ) {
 								$comment_content = str_replace( '{' . $key . '}', $value, $comment_content );
 							}
 
-							$rt_hd_import_operation->insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, array(), array(), array(), '', '', '', array(), '', Rtbiz_HD_Import_Operation::$FOLLOWUP_BOT, 0, true );
+							$rtbiz_hd_import_operation->insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, array(), array(), array(), '', '', '', array(), '', Rtbiz_HD_Import_Operation::$FOLLOWUP_BOT, 0, true );
 
 						}
 					}
@@ -143,7 +143,7 @@ if ( ! class_exists( 'Rtbiz_HD_Auto_Response' ) ) {
 								$comment_content = str_replace( '{' . $key . '}', $value, $comment_content );
 							}
 
-							$rt_hd_import_operation->insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, array(), array(), array(), '', '', '', array(), '', Rtbiz_HD_Import_Operation::$FOLLOWUP_BOT, 0, true );
+							$rtbiz_hd_import_operation->insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, array(), array(), array(), '', '', '', array(), '', Rtbiz_HD_Import_Operation::$FOLLOWUP_BOT, 0, true );
 						}
 					}
 				}

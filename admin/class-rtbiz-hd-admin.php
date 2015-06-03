@@ -181,9 +181,9 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 			$updateDB->do_upgrade();
 		}
 
-		public function rtbiz_welcome() {
+		public function rtbiz_hd_welcome() {
 			// fail if no activation redirect
-			if ( ! get_option( 'rtbiz_activation_redirect', false ) ) {
+			if ( ! get_option( 'rtbiz_hd_activation_redirect', false ) ) {
 				return;
 			}
 
@@ -192,8 +192,12 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 				return;
 			}
 
-			wp_safe_redirect( admin_url( 'admin.php?page=' . Rtbiz_Dashboard::$page_slug ) );
-			delete_option( 'rtbiz_activation_redirect' );
+			if ( rtbiz_hd_check_wizard_completed() ) {
+				wp_safe_redirect( admin_url( 'edit.php?post_type='.Rtbiz_HD_Module::$post_type.'&page=' . Rtbiz_HD_Dashboard::$page_slug ) );
+			} else {
+				wp_safe_redirect( admin_url( 'edit.php?post_type='.Rtbiz_HD_Module::$post_type.'&page=' . Rtbiz_HD_Setup_Wizard::$page_slug ) );
+			}
+			delete_option( 'rtbiz_hd_activation_redirect' );
 			exit;
 		}
 
@@ -359,7 +363,7 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 			 * class.
 			 */
 
-			global $post, $pagenow, $rt_hd_setup_wizard;
+			global $post, $pagenow, $rtbiz_hd_setup_wizard;
 
 			if ( isset( $_GET['post'] ) ) {
 				$rtbiz_hd_post_type = get_post_type( $_GET['post'] );
@@ -437,7 +441,7 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 			}
 
 			wp_localize_script( RTBIZ_HD_TEXT_DOMAIN . 'admin-js', 'ajaxurl', admin_url( 'admin-ajax.php' ) );
-			wp_localize_script( RTBIZ_HD_TEXT_DOMAIN . 'admin-js', 'rtbiz_hd_dashboard_url', admin_url( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type . '&page=rthd-' . Rtbiz_HD_Module::$post_type . '-dashboard&finish-wizard=yes' ) );
+			wp_localize_script( RTBIZ_HD_TEXT_DOMAIN . 'admin-js', 'rtbiz_hd_dashboard_url', admin_url( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type . '&page=' . Rtbiz_HD_Dashboard::$page_slug . '&finish-wizard=yes' ) );
 
 		}
 

@@ -104,17 +104,17 @@ class test_Rt_HD_Tickets_Operation extends RT_WP_TestCase {
 	 * Test ticket_attribute_update
 	 */
 	function  test_ticket_attribute_update() {
-		global $rt_hd_rt_attributes, $rtbiz_hd_module;
+		global $rtbiz_hd_rt_attributes, $rtbiz_hd_module;
 
 		if ( ! ( taxonomy_exists( rtbiz_post_type_name( 'demo_unittest_taxo' ) ) ) ) {
-			$attid = $rt_hd_rt_attributes->add_attribute( 'demo_unittest_taxo', 'demo_unittest_taxo', 'taxonomy', 'checklist' );
-			$rt_hd_rt_attributes->add_attribute_relations( $attid, array( Rtbiz_HD_Module::$post_type ) );
+			$attid = $rtbiz_hd_rt_attributes->add_attribute( 'demo_unittest_taxo', 'demo_unittest_taxo', 'taxonomy', 'checklist' );
+			$rtbiz_hd_rt_attributes->add_attribute_relations( $attid, array( Rtbiz_HD_Module::$post_type ) );
 
-			$attid = $rt_hd_rt_attributes->add_attribute( 'demo_unittest_meta', 'demo_unittest_mata', 'meta', 'text' );
-			$rt_hd_rt_attributes->add_attribute_relations( $attid, array( Rtbiz_HD_Module::$post_type ) );
+			$attid = $rtbiz_hd_rt_attributes->add_attribute( 'demo_unittest_meta', 'demo_unittest_mata', 'meta', 'text' );
+			$rtbiz_hd_rt_attributes->add_attribute_relations( $attid, array( Rtbiz_HD_Module::$post_type ) );
 
-			$rt_hd_rt_attributes->attr_cap = array();
-			$rt_hd_rt_attributes->register_attribute_mappings();
+			$rtbiz_hd_rt_attributes->attr_cap = array();
+			$rtbiz_hd_rt_attributes->register_attribute_mappings();
 		}
 
 		$term = wp_insert_term(

@@ -549,18 +549,18 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 			if ( ! empty( $_POST['userid'] ) ) {
 				global $rtbiz_acl_model;
 				$rtbiz_acl_model->remove_acl( array( 'module' => RTBIZ_HD_TEXT_DOMAIN, 'userid' => $_POST['userid'] ) );
-				$rtbiz_acl_model->remove_acl( array( 'module' => RT_BIZ_TEXT_DOMAIN, 'userid' => $_POST['userid'] ) );
+				$rtbiz_acl_model->remove_acl( array( 'module' => RTBIZ_TEXT_DOMAIN, 'userid' => $_POST['userid'] ) );
 				$arrReturn['status'] = true;
 				$contact = rtbiz_get_contact_for_wp_user( $_POST['userid'] );
 				//              $support_team = get_option( 'rthd_default_support_team' );
 				//              if ( ! empty( $support_team ) && ! empty( $contact[0] ) ){
-				//                  wp_remove_object_terms($contact[0]->ID,array($support_team),RT_Departments::$slug );
+				//                  wp_remove_object_terms($contact[0]->ID,array($support_team),Rtbiz_Teams::$slug );
 				//              }
 				if ( ! empty( $contact[0] ) && empty( $team_term_id ) ) {
 					$user_permissions = get_post_meta( $contact[0]->ID, 'rtbiz_profile_permissions', true );
 					if ( ! empty( $user_permissions[ RTBIZ_HD_TEXT_DOMAIN ] ) ) {
 						$user_permissions[ RTBIZ_HD_TEXT_DOMAIN ] = 0;
-						$user_permissions[ RT_BIZ_TEXT_DOMAIN ] = 0;
+						$user_permissions[ RTBIZ_TEXT_DOMAIN ] = 0;
 						update_post_meta( $contact[0]->ID, 'rtbiz_profile_permissions', $user_permissions );
 					}
 					delete_post_meta( $contact[0]->ID, 'rtbiz_is_staff_member' );
@@ -671,7 +671,7 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 			ob_start();
 			?>
 			<div class="rthd-setup-wizard-controls">
-				<h3 class="rthd-setup-wizard-title"><?php _e( 'Outgoing Mail Setup ', RT_BIZ_TEXT_DOMAIN ); ?></h3>
+				<h3 class="rthd-setup-wizard-title"><?php _e( 'Outgoing Mail Setup ', RTBIZ_HD_TEXT_DOMAIN ); ?></h3>
 				<p class="rthd-notice">Configure settings for the mailbox from where you will like to send Helpdesk e-mails to customers and staff.</p>
 				<div id="rthd_outgoing_mailbox_setup_container">
 					<input type="hidden" id="rthd_outound_sub-action" name="rthd_outound_sub-action" value="rtbiz_hd_save_outound_setup">
@@ -711,7 +711,7 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 			$obj_data = array();
 			parse_str( $_POST['data'], $obj_data );
 
-			if ( ! wp_verify_nonce( $obj_data['_wpnonce'], 'rthd_save_outound_setup' ) ) {
+			if ( ! wp_verify_nonce( $obj_data['_wpnonce'], 'rtbiz_hd_save_outound_setup' ) ) {
 				$result['error'] = 'Security check false';
 				echo json_encode( $result );
 				die();
@@ -741,7 +741,7 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 			ob_start();
 			if ( ! empty( $result ) ) {
 				?>
-				<h3 class="rthd-setup-wizard-title"><?php _e( 'Set Roles', RT_BIZ_TEXT_DOMAIN ); ?></h3>
+				<h3 class="rthd-setup-wizard-title"><?php _e( 'Set Roles', RTBIZ_HD_TEXT_DOMAIN ); ?></h3>
 
 				<table class="shop_table my_account_orders">
 					<tr>

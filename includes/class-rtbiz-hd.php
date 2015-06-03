@@ -96,6 +96,7 @@ if ( ! class_exists( 'Rtbiz_HD' ) ) {
 			include_once RTBIZ_HD_PATH . 'vendor/parsecsv.lib.php';
 			include_once RTBIZ_HD_PATH . 'vendor/simplexlsx.php';
 
+			new RT_WP_Autoload( RTBIZ_HD_PATH . 'lib/rtformhelpers/' );
 			new RT_WP_Autoload( RTBIZ_HD_PATH . 'includes/' );
 			new RT_WP_Autoload( RTBIZ_HD_PATH . 'admin/' );
 			new RT_WP_Autoload( RTBIZ_HD_PATH . 'admin/classes' );
@@ -103,8 +104,8 @@ if ( ! class_exists( 'Rtbiz_HD' ) ) {
 			new RT_WP_Autoload( RTBIZ_HD_PATH . 'admin/classes/metabox' );
 			new RT_WP_Autoload( RTBIZ_HD_PATH . 'admin/settings/' );
 			new RT_WP_Autoload( RTBIZ_HD_PATH . 'admin/helper/' );
-			new RT_WP_Autoload( RTBIZ_HD_PATH . 'includes/migration/' );
-			new RT_WP_Autoload( RTBIZ_HD_PATH . 'lib/rtformhelpers/' );
+			new RT_WP_Autoload( RTBIZ_HD_PATH . 'public/' );
+			new RT_WP_Autoload( RTBIZ_HD_PATH . 'public/classes' );
 
 			self::$loader = new Rtbiz_HD_Loader();
 
@@ -152,10 +153,10 @@ if ( ! class_exists( 'Rtbiz_HD' ) ) {
 			}
 
 			self::$loader->add_action( 'admin_init', $plugin_admin, 'database_update' );
-			//          self::$loader->add_action( 'admin_init', $plugin_admin, 'rtbiz_welcome' );
+            self::$loader->add_action( 'admin_init', $plugin_admin, 'rtbiz_hd_welcome' );
 			self::$loader->add_filter( 'rtbiz_modules', $plugin_admin, 'module_register' );
 
-			self::$loader->add_filter( 'pre_insert_term', $plugin_admin, 'remove_wocommerce_actions' );
+			self::$loader->add_filter( 'pre_insert_term', $plugin_admin, 'remove_wocommerce_actions', 10, 2 );
 
 			self::$loader->add_filter( 'wp_handle_upload_prefilter', $plugin_admin, 'handle_upload_prefilter' );
 			self::$loader->add_filter( 'wp_handle_upload', $plugin_admin, 'handle_upload' );
@@ -173,10 +174,10 @@ if ( ! class_exists( 'Rtbiz_HD' ) ) {
 		 */
 		private function define_public_hooks() {
 
-			//$plugin_public = new Plugin_Name_Public( $this->get_plugin_name(), $this->get_version() );
+			$plugin_public = new Rtbiz_HD_Public( );
 
-			//$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
-			//$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+			self::$loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
+			self::$loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 
 		}
 

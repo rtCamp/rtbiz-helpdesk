@@ -51,10 +51,10 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Operation' ) ) {
 					$default_assignee = $settings['rthd_default_user'];
 				}
 				if ( $post->post_author != $default_assignee ) {
-					global $rt_hd_cpt_tickets;
-					remove_action( 'save_post', array( $rt_hd_cpt_tickets, 'save_meta_boxes' ), 1, 2 );
+					global $rtbiz_hd_cpt_tickets;
+					remove_action( 'save_post', array( $rtbiz_hd_cpt_tickets, 'save_meta_boxes' ), 1, 2 );
 					wp_update_post( array( 'ID' => $postid, 'post_author' => $default_assignee ) );
-					add_action( 'save_post', array( $rt_hd_cpt_tickets, 'save_meta_boxes' ), 1, 2 );
+					add_action( 'save_post', array( $rtbiz_hd_cpt_tickets, 'save_meta_boxes' ), 1, 2 );
 				}
 			}
 		}
@@ -81,7 +81,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Operation' ) ) {
 		 */
 		public function ticket_default_field_update( $postArray, $dataArray, $post_type, $post_id = '', $created_by = '', $updated_by = '' ) {
 
-			global $rt_hd_cpt_tickets;
+			global $rtbiz_hd_cpt_tickets;
 
 			if ( ! isset( $post_type ) || empty( $post_type ) ) {
 				return;
@@ -105,7 +105,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Operation' ) ) {
 					) );
 				} else { //update post
 					// unhook this function so it doesn't loop infinitely
-					remove_action( 'save_post', array( $rt_hd_cpt_tickets, 'save_meta_boxes' ), 1, 2 );
+					remove_action( 'save_post', array( $rtbiz_hd_cpt_tickets, 'save_meta_boxes' ), 1, 2 );
 					remove_action( 'pre_post_update', 'Rtbiz_HD_Ticket_Diff_Email::store_old_post_data', 1, 2 );
 
 					if ( ! empty( $created_by ) ) {
@@ -127,7 +127,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Operation' ) ) {
 					$post_id   = wp_update_post( $postArray );
 
 					// re-hook this function
-					add_action( 'save_post', array( $rt_hd_cpt_tickets, 'save_meta_boxes' ), 1, 2 );
+					add_action( 'save_post', array( $rtbiz_hd_cpt_tickets, 'save_meta_boxes' ), 1, 2 );
 					add_action( 'pre_post_update', 'Rtbiz_HD_Ticket_Diff_Email::store_old_post_data', 1, 2 );
 				}
 

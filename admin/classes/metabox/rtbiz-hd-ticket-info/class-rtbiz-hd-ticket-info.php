@@ -28,7 +28,7 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Info' ) ) {
 		 */
 		public static function ui( $post ) {
 
-			global $rtbiz_hd_module, $rtbiz_hd_attributes, $rt_hd_cpt_tickets;
+			global $rtbiz_hd_module, $rtbiz_hd_attributes, $rtbiz_hd_cpt_tickets;
 			$labels    = $rtbiz_hd_module->labels;
 			$post_type = Rtbiz_HD_Module::$post_type;
 
@@ -125,11 +125,11 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Info' ) ) {
 								<li class="rthd-info-meta-created-by-li">
 								<p>
 									<?php
-									add_filter( 'get_avatar', array( $rt_hd_cpt_tickets, 'add_gravatar_class' ) );
+									add_filter( 'get_avatar', array( $rtbiz_hd_cpt_tickets, 'add_gravatar_class' ) );
 
 									echo get_avatar( $created_by->user_email, 25 );
 
-									remove_filter( 'get_avatar', array( $rt_hd_cpt_tickets, 'add_gravatar_class' ) );
+									remove_filter( 'get_avatar', array( $rtbiz_hd_cpt_tickets, 'add_gravatar_class' ) );
 									?>
 									<!--								<a href="#deleteContactUser" class="delete_row">×</a><br>-->
 									<a class="rthd-info-meta-created-by heading" target="_blank"

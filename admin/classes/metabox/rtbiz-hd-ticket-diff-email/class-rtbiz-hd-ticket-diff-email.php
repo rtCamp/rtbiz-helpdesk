@@ -180,8 +180,8 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Diff_Email' ) ) {
 					$emailHTML .= '<tr><th style="padding: .5em;border: 0;">' . $rtbiz_offerings->labels['name'] . '</th><td>' . $diff . '</td><td></td></tr>';
 				}
 			}
-			if ( isset( $_POST['tax_input'] ) && isset( $_POST['tax_input'][ RT_Departments::$slug ] ) ) {
-				$diff = rtbiz_hd_get_taxonomy_diff( $post_id, RT_Departments::$slug );
+			if ( isset( $_POST['tax_input'] ) && isset( $_POST['tax_input'][ Rtbiz_Teams::$slug ] ) ) {
+				$diff = rtbiz_hd_get_taxonomy_diff( $post_id, Rtbiz_Teams::$slug );
 				if ( '' !== $diff ) {
 					$emailHTML .= '<tr><th style="padding: .5em;border: 0;">' . $rtbiz_department->labels['name'] . '</th><td>' . $diff . '</td><td></td></tr>';
 				}

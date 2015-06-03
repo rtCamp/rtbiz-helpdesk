@@ -97,9 +97,9 @@ if ( ! class_exists( 'Rtbiz_HD_Plugin_Check' ) ) {
 			}
 
 			if ( $this->rtbiz_hd_check_wizard_completed() ) {
-				wp_safe_redirect( admin_url( 'edit.php?post_type=rtbiz_hd_ticket&page=rthd-rtbiz_hd_ticket-dashboard' ) );
+				wp_safe_redirect( admin_url( 'edit.php?post_type=ticket&page=rtbiz-hd-dashboard' ) );
 			} else {
-				wp_safe_redirect( admin_url( 'edit.php?post_type=rtbiz_hd_ticket&page=rtbiz-hd-setup-wizard' ) );
+				wp_safe_redirect( admin_url( 'edit.php?post_type=ticket&page=rtbiz-hd-setup-wizard' ) );
 			}
 		}
 

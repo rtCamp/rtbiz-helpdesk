@@ -238,7 +238,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 						$comment = $comment[0];
 						//                      echo ''.esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) )) ." ago by ". $comment->comment_author ;
 						$user_info = get_user_by( 'id', $comment->user_id );
-						$lastreplyby = sprintf( '<span class="created-by tips" data-tip="%s">'.__( '%s', RT_BIZ_TEXT_DOMAIN ).'</span>', $comment->comment_date, human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) . __( ' ago' ) );
+						$lastreplyby = sprintf( '<span class="created-by tips" data-tip="%s">'.__( '%s', RTBIZ_HD_TEXT_DOMAIN ).'</span>', $comment->comment_date, human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) . __( ' ago' ) );
 						if ( $user_info ) {
 							add_filter( 'get_avatar', array( $this, 'add_gravatar_class' ) );
 							printf( "<div class='rthd-ticket-author'>%s <span class='rthd_td_show'>%s</span> <span class='rthd_td_show'>%s</span></div>", get_avatar( $user_info->user_email, 25 ), $user_info->display_name, $lastreplyby );
@@ -256,9 +256,9 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 				case 'rthd_ticket_title' :
 
 					if ( $can_edit_post && $post->post_status != 'trash' ) {
-						printf( __( '%s  %s', RT_BIZ_TEXT_DOMAIN ), '<a href="' . esc_url( get_edit_post_link( $post->ID ) ) . '"><strong>' . esc_attr( _x( '#', 'hash before order number', RT_BIZ_TEXT_DOMAIN ) . esc_attr( $post->ID ) ) . '</strong></a>', $post->post_title );
+						printf( __( '%s  %s', RTBIZ_HD_TEXT_DOMAIN ), '<a href="' . esc_url( get_edit_post_link( $post->ID ) ) . '"><strong>' . esc_attr( _x( '#', 'hash before order number', RTBIZ_HD_TEXT_DOMAIN ) . esc_attr( $post->ID ) ) . '</strong></a>', $post->post_title );
 					} else {
-						printf( __( '%s  %s', RT_BIZ_TEXT_DOMAIN ), '<strong>' . esc_attr( _x( '#', 'hash before order number', RT_BIZ_TEXT_DOMAIN ) . esc_attr( $post->ID ) ) . '</strong>', $post->post_title );
+						printf( __( '%s  %s', RTBIZ_HD_TEXT_DOMAIN ), '<strong>' . esc_attr( _x( '#', 'hash before order number', RTBIZ_HD_TEXT_DOMAIN ) . esc_attr( $post->ID ) ) . '</strong>', $post->post_title );
 					}
 
 					$user_id = $post->post_author;
@@ -328,7 +328,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 								'created_by' => $user_id,
 									), 'edit.php' ) );
 
-									$replyby = sprintf( __( '<span class="created-by tips" data-tip="%s">%s </span>', RT_BIZ_TEXT_DOMAIN ), get_the_date( 'd-m-Y H:i' ), $datediff );
+									$replyby = sprintf( __( '<span class="created-by tips" data-tip="%s">%s </span>', RTBIZ_HD_TEXT_DOMAIN ), get_the_date( 'd-m-Y H:i' ), $datediff );
 							if ( $user_info ) {
 								add_filter( 'get_avatar', array( $this, 'add_gravatar_class' ) );
 								printf( "<div class='rthd-ticket-author'><a href='%s'>%s <span  class='rthd_td_show'>%s</span></a> <span class='rthd_td_show'>%s</span></div>", $url, get_avatar( $user_info->user_email, 25 ), $user_info->display_name, $replyby );
@@ -350,7 +350,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 				  'updated_by' => $user_id,
 				  ), 'edit.php' ) );
 
-				  printf( __( '<span class="created-by tips" data-tip="%s">%s', RT_BIZ_TEXT_DOMAIN ), get_the_modified_date( 'd-m-Y H:i' ), $datediff );
+				  printf( __( '<span class="created-by tips" data-tip="%s">%s', RTBIZ_HD_TEXT_DOMAIN ), get_the_modified_date( 'd-m-Y H:i' ), $datediff );
 				  if ( $user_info ) {
 				  printf( ' by <a href="%s">%s</a>', $url, $user_info->display_name );
 				  }
@@ -435,7 +435,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 		 * @param $post
 		 */
 		public function save_meta_boxes( $post_id, $post ) {
-			//global $rt_hd_module;
+			//global $rtbiz_hd_module;
 			// $post_id and $post are required
 			if ( empty( $post_id ) || empty( $post ) ) {
 				return;
@@ -752,7 +752,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 		 * Display custom filters to filter out tickets.
 		 */
 		public function display_custom_filters() {
-			global $typenow, $rtbiz_hd_module, $rtbiz_offerings, $rt_hd_rt_attributes;
+			global $typenow, $rtbiz_hd_module, $rtbiz_offerings, $rtbiz_hd_rt_attributes;
 
 			if ( Rtbiz_HD_Module::$post_type == $typenow ) {
 
@@ -816,7 +816,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 				$attrs = rtbiz_hd_get_attributes( Rtbiz_HD_Module::$post_type );
 				foreach ( $attrs as $attr ) {
 					if ( ! empty( $attr->attribute_store_as ) && 'taxonomy' == $attr->attribute_store_as ) {
-						$attr_tax = $rt_hd_rt_attributes->get_taxonomy_name( $attr->attribute_name );
+						$attr_tax = $rtbiz_hd_rt_attributes->get_taxonomy_name( $attr->attribute_name );
 						$attr_terms = get_terms( $attr_tax, array( 'hide_empty' => false ) );
 						if ( ! empty( $attr_terms ) ) {
 							echo '<label class="screen-reader-text" for="' . $attr_tax . '">' . __( 'Filter by '.$attr->attribute_label ) . '</label>';

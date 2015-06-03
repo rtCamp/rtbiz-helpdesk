@@ -86,7 +86,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 		}
 
 		function flush_rewrite_rules() {
-			if ( is_admin() && 'true' == get_option( 'rtbiz_hd_flush_rewrite_rules' ) ) {
+			if ( is_admin() && true == get_option( 'rtbiz_hd_flush_rewrite_rules' ) ) {
 				flush_rewrite_rules();
 				delete_option( 'rtbiz_hd_flush_rewrite_rules' );
 			}

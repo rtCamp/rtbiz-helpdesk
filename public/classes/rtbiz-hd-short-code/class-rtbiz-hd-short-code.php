@@ -40,7 +40,7 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 			ob_start();
 			$rtbiz_hd_offering_support->check_active_plugin();
 			wp_enqueue_style( 'helpdesk-style', RTBIZ_HD_URL  . 'public/css/rthd-main.css', false, RTBIZ_HD_VERSION, 'all' );
-			wp_enqueue_script( 'rthd-support-form', RT_BIZ_HD_PATH_PUBLIC . 'js/helpdesk-support-min.js', array( 'jquery' ), RTBIZ_HD_VERSION, true );
+			wp_enqueue_script( 'rthd-support-form', RTBIZ_HD_URL . 'public/js/helpdesk-support-min.js', array( 'jquery' ), RTBIZ_HD_VERSION, true );
 			$offering_option = '';
 
 			if ( is_user_logged_in() ) {
