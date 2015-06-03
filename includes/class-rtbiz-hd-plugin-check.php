@@ -50,45 +50,21 @@ if ( ! class_exists( 'Rtbiz_HD_Plugin_Check' ) ) {
 		 */
 		function rtbiz_hd_install_dependency() {
 			$biz_installed = $this->rtbiz_hd_is_plugin_installed( 'rtbiz' );
-			$p2p_installed = $this->rtbiz_hd_is_plugin_installed( 'posts-to-posts' );
 			$isRtbizActionDone = false;
-			$isPtopActionDone = false;
 			$string = '';
 
-			if ( ! $biz_installed || ! $p2p_installed ) {
-				if ( ! $biz_installed ) {
-					$this->rtbiz_hd_install_plugin( 'rtbiz' );
-					$isRtbizActionDone = true;
-					$string = 'installed and activated <strong>rtBiz</strong> plugin.';
-				}
-				if ( ! $p2p_installed ) {
-					$this->rtbiz_hd_install_plugin( 'posts-to-posts' );
-					$isPtopActionDone = true;
-					$string = 'installed and activated <strong>posts to posts</strong> plugin.';
-				}
-				if ( $isRtbizActionDone && $isPtopActionDone ) {
-					$string = 'installed and activated <strong>rtBiz</strong> plugin and <strong>posts to posts</strong> plugin.';
-				}
+			if ( ! $biz_installed ) {
+				$this->rtbiz_hd_install_plugin( 'rtbiz' );
+				$isRtbizActionDone = true;
+				$string = 'installed and activated <strong>rtBiz</strong> plugin.';
 			}
 
 			$rtbiz_active = $this->rtbiz_hd_is_plugin_active( 'rtbiz' );
-			$p2p_active = $this->rtbiz_hd_is_plugin_active( 'posts-to-posts' );
-			if ( ! $rtbiz_active || ! $p2p_active ) {
-				if ( ! $p2p_active ) {
-					$p2ppath = $this->rtbiz_hd_get_path_for_plugin( 'posts-to-posts' );
-					$this->rtbiz_hd_activate_plugin( $p2ppath );
-					$isRtbizActionDone = true;
-					$string = 'activated <strong>posts to posts</strong> plugin.';
-				}
-				if ( ! $rtbiz_active ) {
-					$rtbizpath = $this->rtbiz_hd_get_path_for_plugin( 'rtbiz' );
-					$this->rtbiz_hd_activate_plugin( $rtbizpath );
-					$isPtopActionDone = true;
-					$string = 'activated <strong>rtBiz</strong> plugin.';
-				}
-				if ( $isRtbizActionDone && $isPtopActionDone ) {
-					$string = 'activated <strong>rtBiz</strong> plugin and <strong>posts to posts</strong> plugin.';
-				}
+			if ( ! $rtbiz_active  ) {
+				$rtbizpath = $this->rtbiz_hd_get_path_for_plugin( 'rtbiz' );
+				$this->rtbiz_hd_activate_plugin( $rtbizpath );
+				$isPtopActionDone = true;
+				$string = 'activated <strong>rtBiz</strong> plugin.';
 			}
 
 			if ( ! empty( $string ) ) {
@@ -128,11 +104,7 @@ if ( ! class_exists( 'Rtbiz_HD_Plugin_Check' ) ) {
 				die( __( 'ERROR: You lack permissions to install and/or activate plugins.', RTBIZ_HD_TEXT_DOMAIN ) );
 			}
 			$biz_installed = $this->rtbiz_hd_is_plugin_installed( 'rtbiz' );
-			$p2p_installed = $this->rtbiz_hd_is_plugin_installed( 'posts-to-posts' );
 
-			if ( ! $p2p_installed ) {
-				$this->rtbiz_hd_install_plugin( 'posts-to-posts' );
-			}
 			if ( ! $biz_installed ) {
 				$this->rtbiz_hd_install_plugin( 'rtbiz' );
 			}
@@ -166,11 +138,6 @@ if ( ! class_exists( 'Rtbiz_HD_Plugin_Check' ) ) {
 				die( __( 'ERROR: You lack permissions to activate plugins.', RTBIZ_HD_TEXT_DOMAIN ) );
 			}
 			$rtbiz_active = $this->rtbiz_hd_is_plugin_active( 'rtbiz' );
-			$p2p_active = $this->rtbiz_hd_is_plugin_active( 'posts-to-posts' );
-			if ( ! $p2p_active ) {
-				$p2ppath = $this->rtbiz_hd_get_path_for_plugin( 'posts-to-posts' );
-				$this->rtbiz_hd_activate_plugin( $p2ppath );
-			}
 
 			if ( ! $rtbiz_active ) {
 				$this->rtbiz_hd_activate_plugin( $rtbizpath );

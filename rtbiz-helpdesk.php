@@ -114,13 +114,6 @@ $plugins_dependency = array(
 		'active' => class_exists( 'Rt_Biz' ),
 		'filename' => 'rtbiz.php',
 	),
-	'posts-to-posts' => array(
-		'project_type' => 'all',
-		'name'         => esc_html__( 'Posts 2 Posts', RTBIZ_HD_TEXT_DOMAIN ),
-		'desc' => esc_html__( 'Create many-to-many relationships between all types of posts.', RTBIZ_HD_TEXT_DOMAIN ),
-		'active' => class_exists( 'P2P_Autoload' ),
-		'filename' => 'posts-to-posts.php',
-	),
 );
 
 $rtbiz_hd_plugin_check = new Rtbiz_HD_Plugin_Check( $plugins_dependency );
