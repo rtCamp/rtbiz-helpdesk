@@ -22,7 +22,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 		public $args = array();
 		public $sections = array();
 		public $ReduxFramework;
-		static $page_slug = 'rthd-settings';
+		static $page_slug = 'rtbiz-hd-settings';
 
 		static $hd_opt = 'redux_helpdesk_settings';
 

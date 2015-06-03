@@ -18,7 +18,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 	class Rtbiz_HD_Dashboard {
 
 
-		public static $page_slug = 'rtbiz_hd_ticket-dashboard';
+		public static $page_slug = 'rtbiz-hd-dashboard';
 
 		/**
 		 * @var string screen id for dashboard

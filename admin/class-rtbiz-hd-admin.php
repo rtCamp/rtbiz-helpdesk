@@ -391,7 +391,7 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 				wp_enqueue_script( RTBIZ_HD_TEXT_DOMAIN . 'admin-js', RTBIZ_HD_URL . 'admin/js/helpdesk-admin-min.js', array( 'jquery' ), RTBIZ_HD_VERSION, true );
 
 				$user_edit = false;
-				if ( current_user_can( 'edit_' . Rt_HD_Module::$post_type ) ) {
+				if ( current_user_can( 'edit_' . Rtbiz_HD_Module::$post_type ) ) {
 					$user_edit = true;
 				}
 
@@ -417,7 +417,7 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 						if ( in_array( 'administrator', $user[0]->roles ) ) {
 							$query_arg = '&contact_group=staff';
 						} else {
-							$is_staff_member = get_post_meta( $_REQUEST['post'], 'rt_biz_is_staff_member', true );
+							$is_staff_member = get_post_meta( $_REQUEST['post'], 'rtbiz_is_staff_member', true );
 							if ( 'no' == $is_staff_member ) {
 								$query_arg = '&contact_group=customer';
 							} else if ( 'yes' == $is_staff_member ) {
@@ -427,7 +427,7 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 						$query_arg .= '&module=' . RTBIZ_HD_TEXT_DOMAIN;
 					}
 				}
-				wp_localize_script( RTBIZ_HD_TEXT_DOMAIN . '-menu-hack-js', 'rtbiz_hd_url', admin_url( 'edit.php?post_type=' . rt_biz_get_contact_post_type() . $query_arg ) );
+				wp_localize_script( RTBIZ_HD_TEXT_DOMAIN . '-menu-hack-js', 'rtbiz_hd_url', admin_url( 'edit.php?post_type=' . rtbiz_get_contact_post_type() . $query_arg ) );
 			}
 
 			if ( isset( $_REQUEST['taxonomy'] ) && isset( $_REQUEST['post_type'] ) && in_array( $_REQUEST['post_type'], array( Rtbiz_HD_Module::$post_type ) ) ) {
