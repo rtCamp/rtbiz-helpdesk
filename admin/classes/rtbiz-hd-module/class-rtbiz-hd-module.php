@@ -150,13 +150,9 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 			}
 
 			rtbiz_register_contact_connection( self::$post_type, array(
-				'admin_column' => 'any',
-				'title' => 'Partcipants ( Clients )',
+				'admin_column' => 'from',
 				'from_labels' => array(
 					'column_title' => $this->labels['name'],
-				),
-				'to_labels' => array(
-					'column_title' => 'Partcipants ( Clients )',
 				),
 			) );
 

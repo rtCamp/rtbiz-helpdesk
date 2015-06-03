@@ -23,9 +23,9 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		public $user_id = 'contact_user_id';
 
 		public function __construct() {
-			Rtbiz_HD::$loader->add_filter( 'rt_entity_columns', $this, 'contacts_columns', 10, 2 );
-			Rtbiz_HD::$loader->add_filter( 'rt_entity_rearrange_columns', $this, 'contacts_rearrange_columns', 10, 2 );
-			Rtbiz_HD::$loader->add_action( 'rt_entity_manage_columns', $this, 'manage_contacts_columns', 10, 3 );
+			Rtbiz_HD::$loader->add_filter( 'rtbiz_entity_columns', $this, 'contacts_columns', 10, 2 );
+			Rtbiz_HD::$loader->add_filter( 'rtbiz_entity_rearrange_columns', $this, 'contacts_rearrange_columns', 10, 2 );
+			Rtbiz_HD::$loader->add_action( 'rtbiz_entity_manage_columns', $this, 'manage_contacts_columns', 10, 3 );
 
 			Rtbiz_HD::$loader->add_action( 'bulk_edit_custom_box', $this, 'contact_quick_action', 10, 2 );
 			Rtbiz_HD::$loader->add_action( 'quick_edit_custom_box', $this, 'contact_quick_action', 10, 2 );
@@ -455,7 +455,6 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 				$hd_columns['cb'] = $columns['cb'];
 				if ( ! empty( $_REQUEST['contact_group'] ) && 'staff' == $_REQUEST['contact_group'] ) {
 					$hd_columns['title'] = $columns['title'];
-					$hd_columns[ 'taxonomy-' . Rt_Products::$product_slug ] = $columns[ 'taxonomy-' . Rt_Products::$product_slug ];
 					$hd_columns[ 'taxonomy-' . Rtbiz_Teams::$slug ] = $columns[ 'taxonomy-' . Rtbiz_Teams::$slug ];
 				} else {
 					$hd_columns['title'] = $columns['title'];
@@ -484,9 +483,8 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 				return $columns;
 			}
 
-			if ( in_array( Rtbiz_HD_Module::$post_type, array_keys( $rt_entity->enabled_post_types ) ) ) {
-				$columns[ Rtbiz_HD_Module::$post_type ] = $rtbiz_hd_module->labels['name'];
-			}
+			$columns[ Rtbiz_HD_Module::$post_type ] = $rtbiz_hd_module->labels['all_items'];
+
 			return $columns;
 		}
 
@@ -540,7 +538,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 					}
 					break;
 				default:
-					if ( in_array( Rtbiz_HD_Module::$post_type, array_keys( $rt_entity->enabled_post_types ) ) && Rtbiz_HD_Module::$post_type == $column ) {
+					if ( Rtbiz_HD_Module::$post_type == $column ) {
 						$post_details = get_post( $post_id );
 						$pages        = rtbiz_get_post_for_contact_connection( $post_id, Rtbiz_HD_Module::$post_type );
 						echo balanceTags( sprintf( '<a href="%s">%d</a>', esc_url( add_query_arg( array(
