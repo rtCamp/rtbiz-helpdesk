@@ -74,8 +74,8 @@ if ( ! class_exists( 'Rtbiz_HD_Offering_Support' ) ) {
 			Rtbiz_HD::$loader->add_action( 'create_term', $this, 'save_products', 10, 2 );
 			Rtbiz_HD::$loader->add_action( 'edit_term', $this, 'save_products', 10, 2 );
 
-			Rtbiz_HD::$loader->add_action( 'rtbiz_product_column_content', $this, 'manage_product_column_body', 10, 3 );
-			Rtbiz_HD::$loader->add_filter( 'rtbiz_products_columns', $this, 'manage_product_column_header' );
+			Rtbiz_HD::$loader->add_action( 'rt_product_column_content', $this, 'manage_product_column_body', 10, 3 );
+			Rtbiz_HD::$loader->add_filter( 'rt_product_columns', $this, 'manage_product_column_header' );
 
 			// Show tickets in woocommerce order page
 			Rtbiz_HD::$loader->add_action( 'woocommerce_view_order', $this, 'woocommerce_view_order_show_ticket' );

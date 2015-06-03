@@ -204,7 +204,7 @@ if ( ! class_exists( 'Rtbiz_HD_Auto_Response' ) ) {
                         <td>
                             <select class="rthd-dayshift-time-start" name="redux_helpdesk_settings[rthd_dayshift_time_start][<?php echo $key; ?>]">
                                 <option value="-1">Select Time</option>
-                                <?php for ( $i = 0; $i < 24; $i++ ) {
+                                <?php for ( $i = 1; $i < 24; $i++ ) {
 									$selected = ( ! empty( $shifttime['start'][ $key ] ) && $shifttime['start'][ $key ] == $i ) ? 'selected' : '';
 									echo '<option value="'.$i.'" ' . $selected . '>' . date( 'H:i', strtotime( $i . ':00' ) ) . '</option>'. "\n" ;
 } ?>
@@ -256,7 +256,7 @@ if ( ! class_exists( 'Rtbiz_HD_Auto_Response' ) ) {
                         <td>
                             <select class="rthd-daynight-am-time-start" name="redux_helpdesk_settings[rthd_daynight_am_time_start][<?php echo $key; ?>]">
                                 <option value="-1">Select Time</option>
-                                <?php for ( $i = 0; $i <= 11; $i++ ) {
+                                <?php for ( $i = 1; $i <= 11; $i++ ) {
 									$selected = ( ! empty( $shifttime['am_start'][ $key ] ) && $shifttime['am_start'][ $key ] == $i ) ? 'selected' : '';
 									echo '<option value="'.$i.'" ' . $selected . '>' . date( 'H:i', strtotime( $i . ':00' ) ) . '</option>'. "\n" ;
 } ?>
