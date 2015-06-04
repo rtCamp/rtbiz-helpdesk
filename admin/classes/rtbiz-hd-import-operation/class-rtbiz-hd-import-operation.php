@@ -165,7 +165,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 					$comment_post_ID = $rthd_ticket->ID;
 				}
 				$attachment = $_FILES['file'];
-				$uploaded[] = Rtbiz_HD_Offering_Support::insert_attachment( $attachment );
+				$uploaded[] = Rtbiz_HD_Product_Support::insert_attachment( $attachment );
 				$attachments = $this->add_attachment_to_post( $uploaded, $comment_post_ID );
 				if ( ! empty( $attachments['ids'] ) ) {
 					$response['attach_ids'] = $attachments['ids'];

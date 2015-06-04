@@ -68,7 +68,7 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 			//$rtbiz_hd_gravity_form_importer = new Rtbiz_HD_Gravity_Form_Importer();
 			//$rtbiz_hd_logs = new Rtbiz_HD_Logs();
 
-			$rtbiz_hd_product_support = new Rtbiz_HD_Offering_Support();
+			$rtbiz_hd_product_support = new Rtbiz_HD_Product_Support();
 			$rtbiz_hd_short_code = new Rtbiz_HD_Short_Code();
 
 			global $Rtbiz_Hd_Help;

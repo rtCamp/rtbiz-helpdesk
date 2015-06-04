@@ -12,14 +12,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 
 
-if ( ! class_exists( 'Rtbiz_HD_Offering_Support' ) ) {
+if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 
 	/**
-	 * Class Rt_HD_Offering_Support
+	 * Class Rtbiz_HD_Product_Support
 	 * Provide wooCommerce & EDD integration with HelpDesk for product support
 	 *
 	 */
-	class Rtbiz_HD_Offering_Support {
+	class Rtbiz_HD_Product_Support {
 
 		/**
 		 * @var Flag for WooCommerce active or not
