@@ -43,6 +43,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 			add_action( 'pre_post_update', 'Rtbiz_HD_Ticket_Diff_Email::store_old_post_data', 1, 2 );
 			add_action( 'rt_hd_process_' . Rtbiz_HD_Module::$post_type . '_meta', 'Rtbiz_HD_Ticket_Info::save', 10, 2 );
 			add_action( 'rt_hd_process_' . Rtbiz_HD_Module::$post_type . '_meta', 'Rtbiz_HD_Subscribers::save', 10, 2 );
+			add_action( 'rt_hd_process_' . Rtbiz_HD_Module::$post_type . '_meta', 'Rtbiz_HD_Contact::save', 10, 2 );
 			add_action( 'rt_hd_process_' . Rtbiz_HD_Module::$post_type . '_meta', 'Rtbiz_HD_Attachment::save', 10, 2 );
 			//          add_action( 'rt_hd_process_' . Rt_HD_Module::$post_type . '_meta', 'Rtbiz_HD_External_Link::save', 10, 2 );
 			add_action( 'rt_hd_process_' . Rtbiz_HD_Module::$post_type . '_meta', 'Rtbiz_HD_Ticket_Diff_Email::save', 10, 2 );
@@ -386,6 +387,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 
 			add_meta_box( 'rt-hd-ticket-data', __( 'Ticket Information', RTBIZ_HD_TEXT_DOMAIN ), 'Rtbiz_HD_Ticket_Info::ui', Rtbiz_HD_Module::$post_type, 'side', 'default' );
 			add_meta_box( 'rt-hd-subscriiber', __( 'Participants (Staff)', RTBIZ_HD_TEXT_DOMAIN ), 'Rtbiz_HD_Subscribers::ui', Rtbiz_HD_Module::$post_type, 'side', 'default' );
+			add_meta_box( 'rt-hd-contact', __( 'Contacts', RTBIZ_HD_TEXT_DOMAIN ), 'Rtbiz_HD_Contact::ui', Rtbiz_HD_Module::$post_type, 'side', 'default' );
 			add_meta_box( 'rt-hd-ticket-order-history', __( 'Purchase History', RTBIZ_HD_TEXT_DOMAIN ), array( $this, 'order_history' ), Rtbiz_HD_Module::$post_type, 'side', 'default' );
 			add_meta_box( 'rt-hd-ticket-contacts-blacklist', __( 'Blacklist Contacts', RTBIZ_HD_TEXT_DOMAIN ), 'Rtbiz_HD_Ticket_Contacts_Blacklist::ui', Rtbiz_HD_Module::$post_type, 'side', 'low' );
 			add_meta_box( 'rt-hd-attachment', __( 'Attachments', RTBIZ_HD_TEXT_DOMAIN ), 'Rtbiz_HD_Attachment::ui', Rtbiz_HD_Module::$post_type, 'side', 'low' );
