@@ -90,6 +90,29 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 			Rtbiz_HD::$loader->add_filter( 'manage_shop_order_posts_columns', $this, 'order_post_columns' );
 			Rtbiz_HD::$loader->add_filter( 'edd_payments_table_columns', $this, 'order_post_columns' );
 			Rtbiz_HD::$loader->add_filter( 'edd_payments_table_column', $this, 'order_post_columns_show', 10, 3 );
+
+			// edd Customer column
+			Rtbiz_HD::$loader->add_filter( 'edd_report_customer_columns', $this, 'edd_customer_columns' );
+			Rtbiz_HD::$loader->add_filter( 'edd_report_column_'. Rtbiz_HD_Module::$post_type , $this, 'edd_customer_ticket_column', 10, 2 );
+		}
+
+		function edd_customer_ticket_column( $value, $item ) {
+			/* @var $customer EDD_Customer*/
+			$customer    = new EDD_Customer( $item );
+			$posts = new WP_Query(array(
+				                      'post_type'      => Rtbiz_HD_Module::$post_type,
+				                      'post_status'    => 'any',
+				                      'nopaging'       => true,
+				                      'meta_key'       => '_rtbiz_hd_created_by',
+				                      'meta_value'     => $customer->user_id,
+				                      'fields'         => 'ids',
+			                      ));
+			return '<a href="'.admin_url( 'edit.php?post_type='.Rtbiz_HD_Module::$post_type.'&created_by='.$customer->user_id ).'">'.$posts->found_posts.'</a>';
+		}
+
+		function edd_customer_columns( $columns ) {
+			$columns[ Rtbiz_HD_Module::$post_type ] = __( 'Tickets', RTBIZ_HD_TEXT_DOMAIN );
+			return $columns;
 		}
 
 		function order_post_columns_show( $value, $payment, $column_name ) {
