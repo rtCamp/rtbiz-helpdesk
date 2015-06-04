@@ -476,13 +476,17 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 		 * add support link with product id
 		 */
 		function edd_support_link( $payment_id, $download_id ) {
+			if ( is_array( $download_id ) ) {
+				$download_id = $download_id['downloads'][0]['id'];
+			}
 			global $redux_helpdesk_settings;
 			if ( isset( $redux_helpdesk_settings['rthd_support_page'] ) && ! empty( $redux_helpdesk_settings['rthd_support_page'] ) ) {
 				$page = get_post( $redux_helpdesk_settings['rthd_support_page'] );
 				$link = get_permalink( $page->ID );
+				$link = add_query_arg( array( 'product_id' => $download_id, 'order_id'=>$payment_id, 'order_type' => 'edd' ), $link );
 				?>
 				<td class="edd_rt_hd_support"><a
-						href="<?php echo "$link?product_id={$download_id}&order_id={$payment_id}&order_type=edd"; ?>"><?php _e( 'Create Ticket', RTBIZ_HD_TEXT_DOMAIN ) ?></a>
+						href="<?php echo $link; ?>"><?php _e( 'Create Ticket', RTBIZ_HD_TEXT_DOMAIN ) ?></a>
 				</td>
 			<?php
 			}
@@ -505,9 +509,9 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 			if ( isset( $redux_helpdesk_settings['rthd_support_page'] ) && ! empty( $redux_helpdesk_settings['rthd_support_page'] ) ) {
 				$page                 = get_post( $redux_helpdesk_settings['rthd_support_page'] );
 				$link                 = get_permalink( $page->ID );
-
+				$link = add_query_arg( array( 'order_id' => $order->id, 'order_type' => 'woocommerce' ), $link );
 				$actions['support'] = array(
-					'url'  => "$link?order_id={$order->id}&order_type=woocommerce",
+					'url'  => $link,
 					'name' => __( 'Create Ticket', RTBIZ_HD_TEXT_DOMAIN ),
 				);
 			}
