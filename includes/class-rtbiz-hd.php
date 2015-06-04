@@ -138,31 +138,31 @@ if ( ! class_exists( 'Rtbiz_HD' ) ) {
 		private function define_admin_hooks() {
 
 			self::$templateURL = apply_filters( 'rtbiz_template_url', 'rtbiz-helpdesk/' );
+			global $rtbiz_hd_admin;
+			$rtbiz_hd_admin = new RtBiz_HD_Admin( );
 
-			$plugin_admin = new RtBiz_HD_Admin( );
-
-			$plugin_admin->init_admin();
+			$rtbiz_hd_admin->init_admin();
 
 			if ( is_admin() ) {
 				// update menu order of rtbiz menu
-				self::$loader->add_action( 'admin_menu', $plugin_admin, 'register_menu', 1 );
-				self::$loader->add_action( 'custom_menu_order', $plugin_admin, 'custom_pages_order' );
+				self::$loader->add_action( 'admin_menu', $rtbiz_hd_admin, 'register_menu', 1 );
+				self::$loader->add_action( 'custom_menu_order', $rtbiz_hd_admin, 'custom_pages_order' );
 
-				self::$loader->add_filter( 'plugin_action_links_' . RTBIZ_HD_BASE_NAME, $plugin_admin, 'plugin_action_links' );
-				self::$loader->add_filter( 'plugin_row_meta', $plugin_admin, 'plugin_row_meta', 10, 4 );
+				self::$loader->add_filter( 'plugin_action_links_' . RTBIZ_HD_BASE_NAME, $rtbiz_hd_admin, 'plugin_action_links' );
+				self::$loader->add_filter( 'plugin_row_meta', $rtbiz_hd_admin, 'plugin_row_meta', 10, 4 );
 			}
 
-			self::$loader->add_action( 'admin_init', $plugin_admin, 'database_update' );
-            self::$loader->add_action( 'admin_init', $plugin_admin, 'rtbiz_hd_welcome' );
-			self::$loader->add_filter( 'rtbiz_modules', $plugin_admin, 'module_register' );
+			self::$loader->add_action( 'admin_init', $rtbiz_hd_admin, 'database_update' );
+			self::$loader->add_action( 'admin_init', $rtbiz_hd_admin, 'rtbiz_hd_welcome' );
+			self::$loader->add_filter( 'rtbiz_modules', $rtbiz_hd_admin, 'module_register' );
 
-			self::$loader->add_filter( 'pre_insert_term', $plugin_admin, 'remove_wocommerce_actions', 10, 2 );
+			self::$loader->add_filter( 'pre_insert_term', $rtbiz_hd_admin, 'remove_wocommerce_actions', 10, 2 );
 
-			self::$loader->add_filter( 'wp_handle_upload_prefilter', $plugin_admin, 'handle_upload_prefilter' );
-			self::$loader->add_filter( 'wp_handle_upload', $plugin_admin, 'handle_upload' );
+			self::$loader->add_filter( 'wp_handle_upload_prefilter', $rtbiz_hd_admin, 'handle_upload_prefilter' );
+			self::$loader->add_filter( 'wp_handle_upload', $rtbiz_hd_admin, 'handle_upload' );
 
-			self::$loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-			self::$loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+			self::$loader->add_action( 'admin_enqueue_scripts', $rtbiz_hd_admin, 'enqueue_styles' );
+			self::$loader->add_action( 'admin_enqueue_scripts', $rtbiz_hd_admin, 'enqueue_scripts' );
 		}
 
 		/**
