@@ -232,7 +232,12 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 						}
 					}
 				} else { // create user and then add to p2p
-					$this->add_contacts_to_post( array( array( 'address' => $_POST['email'] ) ), $_POST['post_id'] );
+					$create_wp_user = false;
+					$setting = rtbiz_hd_get_redux_settings();
+					if ( 1 == $setting['rthd_enable_auto_wp_user_create'] ) {
+						$create_wp_user = true;
+					}
+					$this->add_contacts_to_post( array( array( 'address' => $_POST['email'] ) ), $_POST['post_id'], $create_wp_user );
 					$response['status'] = true;
 					$response['is_contact'] = true;
 				}
@@ -256,7 +261,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 					$response['has_replied'] = true;
 				}
 				if ( $can ) {
-					$response['edit_link'] = rtbiz_hd_biz_user_profile_link( $user->user_email, 30 );
+					$response['edit_link'] = rtbiz_hd_biz_user_profile_link( $_POST['email'] );
 				} else {
 					$response['edit_link'] = '#';
 				}
@@ -632,10 +637,12 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		 *
 		 * @since 0.1
 		 *
-		 * @param $allemail
-		 * @param $post_id
+		 * @param      $allemail
+		 * @param      $post_id
+		 * @param bool $create_wp_user
 		 */
-		public function add_contacts_to_post( $allemail, $post_id ) {
+		public function add_contacts_to_post( $allemail, $post_id, $create_wp_user = true ) {
+			/* @var $rtbiz_hd_contacts Rtbiz_HD_Contacts */
 			global $rtbiz_hd_contacts;
 			$ticket_creator = get_post_meta( $post_id, '_rtbiz_hd_created_by',true );
 			$ticket_creator = get_userdata( $ticket_creator );
@@ -652,8 +659,8 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 						$postterms[] = $contact->ID;
 					}
 				} else {
-					$contact        = $rtbiz_hd_contacts->insert_new_contact( $email['address'], ( isset( $email['name'] ) ) ? $email['name'] : $email['address'] );
-					$postterms[] = $contact->ID;
+					$contact        = $rtbiz_hd_contacts->insert_new_contact( $email['address'], ( isset( $email['name'] ) ) ? $email['name'] : $email['address'], $create_wp_user );
+					$postterms[]    = $contact->ID;
 				}
 			}
 			$postterms = array_unique( $postterms );

@@ -555,12 +555,14 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		 *
 		 * @since 0.1
 		 *
-		 * @param $email
-		 * @param $title
+		 * @param      $email
+		 * @param      $title
+		 *
+		 * @param bool $create_wp_user to Create wordpress user or not
 		 *
 		 * @return mixed|null|WP_Post
 		 */
-		public function insert_new_contact( $email, $title ) {
+		public function insert_new_contact( $email, $title, $create_wp_user = true ) {
 
 			global $transaction_id;
 			$contact = rtbiz_get_contact_by_email( $email );
@@ -570,6 +572,9 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 				}
 				$contact_id = rtbiz_add_contact( $title, '', $email );
 				$contact    = get_post( $contact_id );
+				if ( ! $create_wp_user ) {
+					return $contact;
+				}
 				$userid     = $this->get_user_from_email( $email );
 
 				if ( ! empty( $userid ) ) {
