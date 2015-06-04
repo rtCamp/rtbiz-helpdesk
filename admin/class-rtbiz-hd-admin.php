@@ -418,7 +418,7 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 				} else {
 					if ( isset( $_REQUEST['post'] ) ) {
 						$user = rtbiz_get_wp_user_for_contact( $_REQUEST['post'] );
-						if ( in_array( 'administrator', $user[0]->roles ) ) {
+						if ( ! empty( $user[0] ) && in_array( 'administrator', $user[0]->roles ) ) {
 							$query_arg = '&contact_group=staff';
 						} else {
 							$is_staff_member = get_post_meta( $_REQUEST['post'], 'rtbiz_is_staff_member', true );
