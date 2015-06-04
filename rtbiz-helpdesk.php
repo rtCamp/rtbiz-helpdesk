@@ -99,8 +99,8 @@ function rtbiz_redirection_remove(){
 add_action( 'rtbiz_activation_redirect', 'rtbiz_redirection_remove' );
 
 
-//require_once RT_BIZ_HD_PATH . 'vendor/edd-license/class-rt-hd-edd-license.php';
-//new Rt_HD_Edd_License();
+require_once RTBIZ_HD_PATH . 'vendor/edd-license/class-rt-hd-edd-license.php';
+new Rt_HD_Edd_License();
 
 require_once RTBIZ_HD_PATH . 'includes/class-rtbiz-hd-plugin-check.php';
 

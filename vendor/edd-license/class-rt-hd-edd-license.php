@@ -11,7 +11,7 @@ if ( ! class_exists( 'Rt_HD_Edd_License' ) ) {
 
 			if ( ! class_exists( 'EDD_SL_Plugin_Updater' ) ) {
 				// load our custom updater
-				include_once( RT_BIZ_HD_PATH_ADMIN . 'vendor/edd-license/class-edd-sl-plugin-updater.php' );
+				include_once( RTBIZ_HD_PATH . 'vendor/edd-license/class-edd-sl-plugin-updater.php' );
 			}
 
 			add_action( 'admin_init', array( $this, 'edd_sl_sample_plugin_updater' ) );
@@ -24,7 +24,7 @@ if ( ! class_exists( 'Rt_HD_Edd_License' ) ) {
 			$license = get_option( 'edd_rthelpdesk_license_key' );
 			$status = get_option( 'edd_rthelpdesk_license_status' );
 
-			if ( $status !== false && $status == 'valid' ) {
+			if ( false !== $status && 'valid' == $status ) {
 				$status_class = 'rthd-addon-status-activated';
 				$status_value = __( 'Activated', 'rtmedia' );
 			} else {
