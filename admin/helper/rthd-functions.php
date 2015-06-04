@@ -1347,7 +1347,7 @@ function rtbiz_hd_get_attchment_link_with_fancybox( $attachment, $post_id = '', 
 	   title="<?php echo balanceTags( $attachment->post_title ); ?>"
 	   href="<?php echo esc_url( $attachment_url ); ?>"> <img
 			height="20px" width="20px"
-			src="<?php echo esc_url( RT_BIZ_HD_PATH_PUBLIC. 'file-type/' . $extn . '.png' ); ?>"/>
+			src="<?php echo esc_url( RTBIZ_HD_URL. 'public/file-type/' . $extn . '.png' ); ?>"/>
 		<span title="<?php echo balanceTags( $attachment->post_title ); ?>"> 	<?php echo esc_attr( strlen( balanceTags( $attachment->post_title ) ) > 40 ? substr( balanceTags( $attachment->post_title ), 0, 40 ) . '...' : balanceTags( $attachment->post_title ) ); ?> </span>
 	</a>
 	<?php

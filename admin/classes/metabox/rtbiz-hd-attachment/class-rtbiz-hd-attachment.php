@@ -59,7 +59,7 @@ if ( ! class_exists( 'Rtbiz_HD_Attachment' ) ) {
 							<a href="#" class="delete_row rthd_delete_attachment"><span class="dashicons dashicons-dismiss"></span></a>
 							<a target="_blank" href="<?php echo esc_url( $attachment_url ); ?>">
 								<img height="20px" width="20px"
-									 src="<?php echo esc_url( RT_BIZ_HD_PATH_PUBLIC . 'file-type/' . $extn . '.png' ); ?>"/><?php echo esc_attr( $attachment->post_title ); ?>
+									 src="<?php echo esc_url( RTBIZ_HD_URL. 'public/file-type/' . $extn . '.png' ); ?>"/><?php echo esc_attr( $attachment->post_title ); ?>
 							</a>
 							<input type="hidden" name="attachment[]" value="<?php echo esc_attr( $attachment->ID ); ?>"/>
 						</li><?php }
