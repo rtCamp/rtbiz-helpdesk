@@ -239,7 +239,7 @@ $user_edit_content = current_user_can( $cap );
 							<div class="rt-hd-ticket-sub-row">
 								<div class="rthd-ticket-sidebar-sub-result clearfix">
 									<label for="rthd-product-list">
-										<?php _e( 'Offering' ); ?>
+										<?php _e( 'Product' ); ?>
 									</label>
 									<?php if ( current_user_can( $cap ) ) { ?>
 										<select id="rthd-product-list" class="rthd-ticket-dropdown"
@@ -254,7 +254,7 @@ $user_edit_content = current_user_can( $cap );
 												echo '<option value="' . esc_attr( $p->term_id ) . '"' . esc_attr( $selected ) . '>' . esc_attr( $p->name ) . '</option>';
 											}
 											if ( empty( $ticket_product ) ) {
-												echo '<option value="0" selected="selected" >-Select Offering-</option>';
+												echo '<option value="0" selected="selected" >-Select Product-</option>';
 											}
 											?>
 										</select>
