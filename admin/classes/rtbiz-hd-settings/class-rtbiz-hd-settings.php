@@ -38,6 +38,8 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 
 			//after redux setting saved
 			Rtbiz_HD::$loader->add_action( 'redux/options/' . self::$hd_opt . '/saved', $this, 'on_redux_save', 10, 2 );
+			Rtbiz_HD::$loader->add_action( 'rt_mailbox_add_mailbox', $this, 'outbound_mail_setup_on_mailbox_add', 10, 2 );
+			Rtbiz_HD::$loader->add_action( 'rt_mailbox_remove_mailbox', $this, 'outbound_mail_setup_on_mailbox_remove', 10, 2 );
 		}
 
 		function product_setting( $setting ) {
@@ -56,15 +58,45 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 			//removed product sync option
 			$diff = array();
 
+			//product sync option updated
 			if ( isset( $setting['product_plugin'] ) && isset( $old_setting['product_plugin'] ) && is_array( $setting['product_plugin'] ) && is_array( $old_setting['product_plugin'] ) ) {
 				$diff = array_diff( $setting['product_plugin'], $old_setting['product_plugin'] );
 				$diff = array_unique( $diff );
 			}
-
 			if ( ! empty( $diff ) ) {
 				update_option( 'rt_product_plugin_sync', 'true' );
 			} else {
 				update_option( 'rt_product_plugin_sync', 'false' );
+			}
+
+			if ( isset( $setting['rthd_email_signature'] ) ) {
+				rtbiz_hd_set_redux_settings( 'rthd_email_signature', wp_strip_all_tags( $setting['rthd_email_signature'] ) );
+			}
+
+			if ( isset( $setting['rthd_auto_response_message'] ) ) {
+				rtbiz_hd_set_redux_settings( 'rthd_auto_response_message', wp_strip_all_tags( $setting['rthd_auto_response_message'] ) );
+			}
+
+		}
+
+		public  function outbound_mail_setup_on_mailbox_add( $email, $module ) {
+			if ( RTBIZ_HD_TEXT_DOMAIN == $module ){
+				$system_emails = rtmb_get_module_mailbox_emails( RTBIZ_HD_TEXT_DOMAIN );
+				if ( count( $system_emails ) == 1 ){
+					rtbiz_hd_set_redux_settings( 'rthd_outgoing_email_mailbox',     $email );
+				}
+			}
+		}
+
+		public  function outbound_mail_setup_on_mailbox_remove( $email, $module ) {
+			if ( RTBIZ_HD_TEXT_DOMAIN == $module ){
+				$system_emails = rtmb_get_module_mailbox_emails( RTBIZ_HD_TEXT_DOMAIN );
+				$settings = rtbiz_hd_get_redux_settings();
+				if ( count( $system_emails ) <= 0 ){
+					rtbiz_hd_set_redux_settings( 'rthd_outgoing_email_mailbox', get_option( 'admin_email' ) );
+				}else if ( empty( $settings['rthd_outgoing_email_mailbox'] ) || $email ==  $settings['rthd_outgoing_email_mailbox'] ){
+					rtbiz_hd_set_redux_settings( 'rthd_outgoing_email_mailbox', $system_emails[0] );
+				}
 			}
 		}
 
@@ -182,6 +214,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 			$system_emails = rtmb_get_module_mailbox_emails( RTBIZ_HD_TEXT_DOMAIN );
 
 			$mailbox_options = array();
+			$mailbox_options[] = '---- select email ----';
 			foreach ( $system_emails as $email ) {
 
 				$mailbox_options[ $email ] = $email;
@@ -511,10 +544,10 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 						'type'         => 'textarea',
 						'title'        => __( 'Email Signature' ),
 						'subtitle'     => __( 'Add here Email Signature' ),
-						'desc'         => esc_attr( 'You can add email signature here that will be send with every email send with the Helpdesk plugin, Allowed tags are <a> <br> <em> <strong>.' ),
-						'validate'     => 'html_custom',
+						'desc'         => esc_attr( 'You can add email signature here that will be send with every email send with the Helpdesk plugin.' ), // Allowed tags are <a> <br> <em> <strong>.
+						//'validate'     => 'html_custom',
 						'default'      => esc_attr( ' -- Sent via rtBiz Helpdesk Plugin' ),
-						'allowed_html' => array(
+						/*'allowed_html' => array(
 							'a'      => array(
 								'href'  => array(),
 								'title' => array(),
@@ -522,7 +555,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 							'br'     => array(),
 							'em'     => array(),
 							'strong' => array(),
-						),
+						),*/
 					),
 					array(
 						'id'     => 'section-notification_email-customize-end',
@@ -657,11 +690,11 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 						'id'           => 'rthd_auto_response_message',
 						'type'         => 'textarea',
 						'title'        => __( 'Auto response message' ),
-						'desc'         => esc_attr( 'You can add email message here that will be send into followup when your team are offline, Allowed tags are <a> <br> <em> <strong>. ' ) . 'Use <b>{NextStartingHour}</b> to get next working hours like <b>`Today after 10 pm` or `Monday after 9 AM`</b>',
-						'validate'     => 'html_custom',
+						'desc'         => esc_attr( 'You can add email message here that will be send into followup when your team are offline, ' ) . 'Use <b>{NextStartingHour}</b> to get next working hours like <b>`Today after 10 pm` or `Monday after 9 AM`</b>', //Allowed tags are <a> <br> <em> <strong>.
+						//'validate'     => 'html_custom',
 						'default'      => esc_attr( '' ),
 						'required'     => array( 'rthd_enable_auto_response', '=', 1 ),
-						'allowed_html' => array(
+						/*'allowed_html' => array(
 							'a'      => array(
 								'href'  => array(),
 								'title' => array(),
@@ -669,7 +702,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 							'br'     => array(),
 							'em'     => array(),
 							'strong' => array(),
-						),
+						),*/
 					),
 					array(
 						'id'     => 'section-auto-response-end',
@@ -845,6 +878,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 				'database'           => '',
 				// possible: options, theme_mods, theme_mods_expanded, transient. Not fully functional, warning!
 				'system_info'        => false,
+				'ajax_save'         => false,
 				// REMOVE
 				// HINTS
 				'hints'              => array(
