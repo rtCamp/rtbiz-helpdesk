@@ -230,6 +230,21 @@ jQuery( document ).ready(function () {
 
 			if (jQuery( '#rthd_enable_auto_response_mode' )) {
 
+                //set for all
+                jQuery( '#rthd-dayshift-time-set-all' ).click(function ( e ) {
+                    jQuery('.rthd-dayshift-time-start').val( jQuery('#rthd-dayshift-time-start-0').val() );
+                    jQuery('.rthd-dayshift-time-end').val( jQuery('#rthd-dayshift-time-end-0').val() );
+                    e.preventDefault();
+                });
+
+                jQuery( '#rthd-daynight-time-set-all' ).click(function ( e ) {
+                    jQuery('.rthd-daynight-am-time-start').val( jQuery('#rthd-daynight-am-time-start-0').val() );
+                    jQuery('.rthd-daynight-am-time-end').val( jQuery('#rthd-daynight-am-time-end-0').val() );
+                    jQuery('.rthd-daynight-pm-time-start').val( jQuery('#rthd-daynight-pm-time-start-0').val() );
+                    jQuery('.rthd-daynight-pm-time-end').val( jQuery('#rthd-daynight-pm-time-end-0').val() );
+                    e.preventDefault();
+                });
+
 				//day shift
 				jQuery( '.rthd-dayshift-time-end' ).change(function () {
 					rthdAdmin.initDayValidation( jQuery( this ).parent().parent() );
@@ -237,7 +252,6 @@ jQuery( document ).ready(function () {
 				jQuery( '.rthd-dayshift-time-start' ).change(function () {
 					rthdAdmin.initDayValidation( jQuery( this ).parent().parent() );
 				});
-
 				//day/night shift
 				jQuery( '.rthd-daynight-am-time-start' ).change(function () {
 					rthdAdmin.initDayNightValidation( jQuery( this ).parent().parent() );
@@ -314,8 +328,8 @@ jQuery( document ).ready(function () {
 				}
 			}
 
+            jQuery( '#rthd-response-day-error' ).hide().html( '' );
 			if (flag) {
-				jQuery( $tr_parent ).next( '.rthd-dayshift-error' ).hide();
 				if (jQuery( '#rthd_autoresponse_weekend' ).val() === 0) { // if Weekend only off then che check weektime enter or not
 					for (var i = 0; i < 7; i++) {
 						$tr_parent = jQuery( '.rthd-dayshift-time-start' ).eq( i ).parent().parent();
@@ -330,8 +344,6 @@ jQuery( document ).ready(function () {
 						flag = false;
 					}
 				}
-			} else {
-				jQuery( '#rthd-response-day-error' ).hide().html( '' );
 			}
 
 			return flag;
@@ -380,8 +392,8 @@ jQuery( document ).ready(function () {
 				}
 			}
 
+            jQuery( '#rthd-response-daynight-error' ).hide().html( '' );
 			if (flag) {
-				jQuery( $tr_parent ).next( '.rthd-daynightshift-error' ).hide();
 				if (jQuery( '#rthd_autoresponse_weekend' ).val() === 0) { // if Weekend only off then che check weektime enter or not
 					for (var i = 0; i < 7; i++) {
 						$tr_parent = jQuery( '.rthd-daynight-am-time-start' ).eq( i ).parent().parent();
@@ -400,8 +412,6 @@ jQuery( document ).ready(function () {
 
 					}
 				}
-			} else {
-				jQuery( '#rthd-response-daynight-error' ).hide().html( '' );
 			}
 
 			return flag;
