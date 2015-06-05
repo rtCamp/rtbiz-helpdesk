@@ -179,14 +179,19 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 		/**
 		 * setup team UI
 		 */
-		public function setup_team( $isheader = true ) { ?>
+		public function setup_team( $isheader = true ) {
+			?>
 			<div>
 				<div class="rthd-setup-wizard-controls rthd-setup-team-wizard-controls"><?php
 				if ( $isheader ) { ?>
 						<h3 class="rthd-setup-wizard-title"><?php _e( 'Setup Your Team', RTBIZ_HD_TEXT_DOMAIN ) ?></h3> <?php
 				} ?>
 					<p class="rthd-notice"><?php
-						_e( "There are 3 ways you can add users to your ‘Support' team. If you forget somebody now, you can add them later. You (admin) are already part of this team.", RTBIZ_HD_TEXT_DOMAIN ) ?>
+					_e( 'There are 3 ways you can add users to this helpdesk.', RTBIZ_HD_TEXT_DOMAIN );
+					if ( self::$page_slug == $_REQUEST['page'] ) {
+						_e( ' If you forget somebody now, you can add them later.' );
+					}
+					_e( ' You (admin) are already added to the helpdesk.', RTBIZ_HD_TEXT_DOMAIN ) ?>
 					</p>
 					<div class="rthd-setup-team-settings">
 						<div class="rthd_wizard_container rthd-setup-wizard-row">

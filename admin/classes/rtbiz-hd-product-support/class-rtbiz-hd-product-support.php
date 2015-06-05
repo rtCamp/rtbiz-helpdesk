@@ -483,7 +483,7 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 			if ( isset( $redux_helpdesk_settings['rthd_support_page'] ) && ! empty( $redux_helpdesk_settings['rthd_support_page'] ) ) {
 				$page = get_post( $redux_helpdesk_settings['rthd_support_page'] );
 				$link = get_permalink( $page->ID );
-				$link = add_query_arg( array( 'product_id' => $download_id, 'order_id'=>$payment_id, 'order_type' => 'edd' ), $link );
+				$link = add_query_arg( array( 'product_id' => $download_id, 'order_id' => $payment_id, 'order_type' => 'edd' ), $link );
 				?>
 				<td class="edd_rt_hd_support"><a
 						href="<?php echo $link; ?>"><?php _e( 'Create Ticket', RTBIZ_HD_TEXT_DOMAIN ) ?></a>
