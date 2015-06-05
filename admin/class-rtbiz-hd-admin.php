@@ -99,11 +99,11 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 			$rtbizMenuOrder = $this->get_custom_menu_order();
 
 			//remove rtbiz menu
-			/*foreach ( $menu as $key => $menu_item ) {
+			foreach ( $menu as $key => $menu_item ) {
 				if ( in_array( Rtbiz_Dashboard::$page_slug, $menu_item ) ) {
 					unset( $menu[ $key ] );
 				}
-			}*/
+			}
 
 			if ( isset( $submenu[ 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type ] ) && ! empty( $submenu[ 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type ] ) ) {
 				$module_menu = $submenu[ 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type ];
