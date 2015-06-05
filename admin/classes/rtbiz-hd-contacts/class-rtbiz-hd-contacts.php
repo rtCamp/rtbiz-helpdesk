@@ -78,7 +78,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		 */
 		public function contact_posts_filter( $query ) {
 			global $wpdb, $rtbiz_acl_model;
-			if ( isset( $_GET['post_type'] ) && rtbiz_get_contact_post_type() == $_GET['post_type'] ) {
+			if ( isset( $_GET['post_type'] ) && rtbiz_get_contact_post_type() == $_GET['post_type'] && rtbiz_get_contact_post_type() == $query->get( 'post_type'    )  ) {
 				if ( ! empty( $_GET['fall_back'] ) ){
 					return ;
 				}
@@ -529,6 +529,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 								'meta_key'    => '_rtbiz_hd_created_by',
 								'meta_value'  => $userid[0]->ID,
 							);
+							//$_REQUEST['tickets'] = null; // With/without pre post query override due to this argument. For preventing such condition argument set as null
 							$query = new WP_Query( $args );
 							$link  = get_admin_url() . 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type . '&created_by=' . $userid[0]->ID;
 							echo '<a href="' . $link . '" target="_blank">' . $query->found_posts . '</a>';
