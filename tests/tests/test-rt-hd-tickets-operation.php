@@ -20,8 +20,8 @@ class test_Rt_HD_Tickets_Operation extends RT_WP_TestCase {
 	 */
 	function setUp() {
 		parent::setUp();
-		$this->rthdTicketOperation = new Rt_HD_Tickets_Operation();
-		$this->rthdticketModel     = new Rt_HD_Ticket_Model();
+		$this->rthdTicketOperation = new Rtbiz_HD_Tickets_Operation();
+		$this->rthdticketModel     = new Rtbiz_HD_Ticket_Model();
 		$this->test_ticket_default_field_update_create_ticket();
 	}
 
@@ -37,7 +37,7 @@ class test_Rt_HD_Tickets_Operation extends RT_WP_TestCase {
 			'post_date'     => $post_date,
 			'post_status'   => 'hd-unanswered',
 			'post_title'    => 'Unit test',
-			'post_type'     => Rt_HD_Module::$post_type,
+			'post_type'     => Rtbiz_HD_Module::$post_type,
 			'post_date_gmt' => $post_date_gmt,
 		);
 
@@ -48,7 +48,7 @@ class test_Rt_HD_Tickets_Operation extends RT_WP_TestCase {
 			'post_title'   => $postArray['post_title'],
 		);
 
-		$this->post_ID = $this->rthdTicketOperation->ticket_default_field_update( $postArray, $dataArray, Rt_HD_Module::$post_type );
+		$this->post_ID = $this->rthdTicketOperation->ticket_default_field_update( $postArray, $dataArray, Rtbiz_HD_Module::$post_type );
 		$this->assertTrue( is_int( $this->post_ID ) );
 
 		//Compare post
@@ -60,7 +60,7 @@ class test_Rt_HD_Tickets_Operation extends RT_WP_TestCase {
 		$this->assertEquals( $post_date, $post->post_date );
 		$this->assertEquals( 'hd-unanswered', $post->post_status );
 		$this->assertEquals( 'Unit test', $post->post_title );
-		$this->assertEquals( Rt_HD_Module::$post_type, $post->post_type );
+		$this->assertEquals( Rtbiz_HD_Module::$post_type, $post->post_type );
 		$this->assertEquals( $post_date_gmt, $post->post_date_gmt );
 
 		$this->assertEquals( get_current_user_id(), get_post_meta( $this->post_ID, '_rtbiz_hd_created_by', true ) );
@@ -88,7 +88,7 @@ class test_Rt_HD_Tickets_Operation extends RT_WP_TestCase {
 			'post_status'  => $postArray['post_status'],
 			'post_title'   => $postArray['post_title'],
 		);
-		$this->rthdTicketOperation->ticket_default_field_update( $postArray, $dataArray, Rt_HD_Module::$post_type, $this->post_ID );
+		$this->rthdTicketOperation->ticket_default_field_update( $postArray, $dataArray, Rtbiz_HD_Module::$post_type, $this->post_ID );
 		$this->assertTrue( is_int( $this->post_ID ) );
 
 		//Compare post
@@ -104,17 +104,17 @@ class test_Rt_HD_Tickets_Operation extends RT_WP_TestCase {
 	 * Test ticket_attribute_update
 	 */
 	function  test_ticket_attribute_update() {
-		global $rt_hd_rt_attributes, $rt_hd_module;
+		global $rtbiz_hd_rt_attributes, $rtbiz_hd_module;
 
 		if ( ! ( taxonomy_exists( rtbiz_post_type_name( 'demo_unittest_taxo' ) ) ) ) {
-			$attid = $rt_hd_rt_attributes->add_attribute( 'demo_unittest_taxo', 'demo_unittest_taxo', 'taxonomy', 'checklist' );
-			$rt_hd_rt_attributes->add_attribute_relations( $attid, array( Rt_HD_Module::$post_type ) );
+			$attid = $rtbiz_hd_rt_attributes->add_attribute( 'demo_unittest_taxo', 'demo_unittest_taxo', 'taxonomy', 'checklist' );
+			$rtbiz_hd_rt_attributes->add_attribute_relations( $attid, array( Rtbiz_HD_Module::$post_type ) );
 
-			$attid = $rt_hd_rt_attributes->add_attribute( 'demo_unittest_meta', 'demo_unittest_mata', 'meta', 'text' );
-			$rt_hd_rt_attributes->add_attribute_relations( $attid, array( Rt_HD_Module::$post_type ) );
+			$attid = $rtbiz_hd_rt_attributes->add_attribute( 'demo_unittest_meta', 'demo_unittest_mata', 'meta', 'text' );
+			$rtbiz_hd_rt_attributes->add_attribute_relations( $attid, array( Rtbiz_HD_Module::$post_type ) );
 
-			$rt_hd_rt_attributes->attr_cap = array();
-			$rt_hd_rt_attributes->register_attribute_mappings();
+			$rtbiz_hd_rt_attributes->attr_cap = array();
+			$rtbiz_hd_rt_attributes->register_attribute_mappings();
 		}
 
 		$term = wp_insert_term(
@@ -133,8 +133,8 @@ class test_Rt_HD_Tickets_Operation extends RT_WP_TestCase {
 			'demo_unittest_mata'    => 'unit test',
 		);
 
-		$this->rthdTicketOperation->ticket_attribute_update( $newTicket, Rt_HD_Module::$post_type, $this->post_ID );
-		$this->rthdTicketOperation->ticket_attribute_update( $newTicket, Rt_HD_Module::$post_type, $this->post_ID, 'meta' );
+		$this->rthdTicketOperation->ticket_attribute_update( $newTicket, Rtbiz_HD_Module::$post_type, $this->post_ID );
+		$this->rthdTicketOperation->ticket_attribute_update( $newTicket, Rtbiz_HD_Module::$post_type, $this->post_ID, 'meta' );
 
 		$post_terms = wp_get_post_terms( $this->post_ID, rtbiz_post_type_name( 'demo_unittest_taxo' ) );
 		foreach ( $post_terms as $post_term ) {

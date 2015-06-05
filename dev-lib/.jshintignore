@@ -2,5 +2,6 @@
 **/*.min.js
 **/*-min.js
 **/node_modules/**
-app/lib/**
+admin/js/vendors/**
+admin/vendors/**
 gruntfile.js

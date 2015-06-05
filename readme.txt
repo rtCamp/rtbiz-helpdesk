@@ -1,9 +1,11 @@
 === rtBiz Helpdesk ===
-Contributors:      rtcamp, rahul286, desaiuditd, dipesh.kakadiya ,utkarshpatel
-Donate Link:       http://rtcamp.com/donate
+Author URI:        https://rtcamp.com
+Plugin URI:        https://rtcamp.com/rtbiz-helpdesk
+Contributors:      rtcamp, rahul286, desaiuditd, dipesh.kakadiya, utkarshpatel, sagarjadhav
+Donate Link:       https://rtcamp.com/donate/
 Tags:              helpdesk, support, products, tickets, followups, customers, e-commerce
 Requires at least: 4.1
-Tested up to:      4.1
+Tested up to:      4.2.2
 Stable tag:        1.2.6
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html

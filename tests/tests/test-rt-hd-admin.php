@@ -16,7 +16,7 @@ class test_Rt_HD_Admin extends RT_WP_TestCase {
 	 */
 	function setUp() {
 		parent::setUp();
-		$this->rthdAdmin = new Rt_HD_Admin();
+		$this->rthdAdmin = new Rt_Biz_Helpdesk_Admin();
 	}
 
 	/**
@@ -35,4 +35,3 @@ class test_Rt_HD_Admin extends RT_WP_TestCase {
 	}
 
 }
- 

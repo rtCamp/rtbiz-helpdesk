@@ -16,25 +16,25 @@ class test_Rt_HD_Contacts extends RT_WP_TestCase {
 	 */
 	function setUp() {
 		parent::setUp();
-		$this->rthdContacts = new Rt_HD_Contacts();
+		$this->rthdContacts = new Rtbiz_HD_Contacts();
 	}
 
 	function  test_check_function() {
-		$this->assertTrue( method_exists( $this->rthdContacts, 'contact_autocomplete_ajax' ), 'Class Rt_HD_Contacts does not have method contact_autocomplete_ajax' );
-		$this->assertTrue( method_exists( $this->rthdContacts, 'get_taxonomy_meta_ajax' ), 'Class Rt_HD_Contacts does not have method get_taxonomy_meta_ajax' );
-		$this->assertTrue( method_exists( $this->rthdContacts, 'get_account_contacts_ajax' ), 'Class Rt_HD_Contacts does not have method get_account_contacts_ajax' );
-		$this->assertTrue( method_exists( $this->rthdContacts, 'add_new_contact_ajax' ), 'Class Rt_HD_Contacts does not have method add_new_contact_ajax' );
+		$this->assertTrue( method_exists( $this->rthdContacts, 'ajax_contact_autocomplete' ), 'Class Rt_HD_Contacts does not have method ajax_contact_autocomplete' );
+		$this->assertTrue( method_exists( $this->rthdContacts, 'ajax_get_taxonomy_meta' ), 'Class Rt_HD_Contacts does not have method ajax_get_taxonomy_meta' );
+		$this->assertTrue( method_exists( $this->rthdContacts, 'ajax_get_account_contacts' ), 'Class Rt_HD_Contacts does not have method ajax_get_account_contacts' );
+		$this->assertTrue( method_exists( $this->rthdContacts, 'ajax_add_new_contact' ), 'Class Rt_HD_Contacts does not have method ajax_add_new_contact' );
 	}
 
 	/**
 	 * Test contacts_columns
 	 */
 	function  test_contacts_columns() {
-		global $rt_contact;
+		global $rtbiz_contact;
 		$exp_output = array(
 			'rtbiz_hd_ticket' => 'Ticket',
 		);
-		$this->assertEquals( $exp_output, $this->rthdContacts->contacts_columns( array(), $rt_contact ) );
+		$this->assertEquals( $exp_output, $this->rthdContacts->contacts_columns( array(), $rtbiz_contact ) );
 	}
 
 	/**
