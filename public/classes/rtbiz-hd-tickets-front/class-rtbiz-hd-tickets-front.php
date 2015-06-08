@@ -52,12 +52,12 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 			$user_edit_content = current_user_can( $cap );
 
 			if ( ! empty( $_REQUEST['show_original'] ) && 'true' === $_REQUEST['show_original'] && empty( $_REQUEST['comment-id'] ) && $user_edit_content ) {
-				$data = get_post_meta( $post->ID, '_rt_hd_original_email_body', true );
+				$data = get_post_meta( $post->ID, '_rtbiz_hd_original_email_body', true );
 				echo '<div class="rt_original_email">' . wpautop( $data ) . '</div>';
 				die( 0 );
 			}
 			if ( ! empty( $_REQUEST['show_original'] ) && 'true' === $_REQUEST['show_original'] && ! empty( $_REQUEST['comment-id'] ) && $user_edit_content ) {
-				$data = get_comment_meta( $_REQUEST['comment-id'], 'rt_hd_original_email', true );
+				$data = get_comment_meta( $_REQUEST['comment-id'], '_rtbiz_hd_original_email', true );
 				echo '<div class="rt_original_email">' . wpautop( $data ) . '</div>';
 				die( 0 );
 			}

@@ -242,15 +242,15 @@ function rtbiz_hd_get_all_participants( $ticket_id ) {
 	$all_p = array();
 	foreach ( $comments as $comment ) {
 		$p = '';
-		$to = get_comment_meta( $comment->comment_ID, '_email_to', true );
+		$to = get_comment_meta( $comment->comment_ID, '_rtbiz_hd_email_to', true );
 		if ( ! empty( $to ) ) {
 			$p .= $to . ',';
 		}
-		$cc = get_comment_meta( $comment->comment_ID, '_email_cc', true );
+		$cc = get_comment_meta( $comment->comment_ID, '_rtbiz_hd_email_cc', true );
 		if ( ! empty( $cc ) ) {
 			$p .= $cc . ',';
 		}
-		$bcc = get_comment_meta( $comment->comment_ID, '_email_bcc', true );
+		$bcc = get_comment_meta( $comment->comment_ID, '_rtbiz_hd_email_bcc', true );
 		if ( ! empty( $bcc ) ) {
 			$p .= $bcc;
 		}
@@ -542,11 +542,11 @@ function rtbiz_hd_delete_user_fav_ticket( $user_id, $postid ) {
 }
 
 function rtbiz_hd_save_adult_ticket_meta( $post_id, $pref ) {
-	update_post_meta( $post_id, '_rthd_ticket_adult_content', $pref );
+	update_post_meta( $post_id, '_rtbiz_hd_ticket_adult_content', $pref );
 }
 
 function rtbiz_hd_get_adult_ticket_meta( $post_id ) {
-	return get_post_meta( $post_id, '_rthd_ticket_adult_content', true );
+	return get_post_meta( $post_id, '_rtbiz_hd_ticket_adult_content', true );
 }
 
 function rtbiz_hd_create_new_ticket_title( $key, $post_id ) {
@@ -671,7 +671,7 @@ function rtbiz_hd_render_comment( $comment, $user_edit, $type = 'right', $echo =
 						?>
 						<a href="#" class="editfollowuplink">Edit</a> |
 						<?php
-						$data = get_comment_meta( $comment->comment_ID, 'rt_hd_original_email', true );
+						$data = get_comment_meta( $comment->comment_ID, '_rtbiz_hd_original_email', true );
 						if ( ! empty( $data ) ) {
 							$href = get_post_permalink( $comment->comment_post_ID ) . '?show_original=true&comment-id=' . $comment->comment_ID;
 							?>
@@ -703,7 +703,7 @@ if ( true == $is_comment_private ) {
 			</div>
 			<?php
 			if ( $display_private_comment_flag ) {
-				$comment_attechment = get_comment_meta( $comment->comment_ID, 'attachment' );
+				$comment_attechment = get_comment_meta( $comment->comment_ID, '_rtbiz_hd_attachment' );
 				$comment_attechment = array_unique( $comment_attechment );
 				if ( ! empty( $comment_attechment ) ) {
 					?>
@@ -884,14 +884,14 @@ function rtbiz_hd_get_attachment_url_from_followups( $postid ) {
 		'fields' => 'ids',
 		'meta_query' => array(
 			array(
-				'key' => 'attachment',
+				'key' => '_rtbiz_hd_attachment',
 				'compare' => 'EXISTS',
 			),
 		),
 			) );
 	$attach_cmt = array();
 	foreach ( $attach_comments as $comment ) {
-		$url_arr = get_comment_meta( $comment, 'attachment' );
+		$url_arr = get_comment_meta( $comment, '_rtbiz_hd_attachment' );
 		foreach ( $url_arr as $url ) {
 			$attach_cmt[] = $url;
 		}
@@ -1145,7 +1145,7 @@ function rtbiz_hd_get_product_meta( $key, $term_id = '' ) {
 		return false;
 	}
 
-	$term_meta = Rt_Lib_Taxonomy_Metadata\get_term_meta( $term_id, Rt_Products::$product_slug . '_meta', true );
+	$term_meta = Rt_Lib_Taxonomy_Metadata\get_term_meta( $term_id, '_' . Rt_Products::$product_slug . '_meta', true );
 	if ( ! empty( $term_meta ) ) {
 		if ( ! empty( $key ) ) {
 			return isset( $term_meta[ $key ] ) ? $term_meta[ $key ] : false;
@@ -1166,10 +1166,10 @@ function rtbiz_hd_update_product_meta( $key, $value, $term_id ) {
 	if ( empty( $term_id ) ) {
 		return false;
 	}
-	$old_value = Rt_Lib_Taxonomy_Metadata\get_term_meta( $term_id, Rt_Products::$product_slug . '_meta', true );
+	$old_value = Rt_Lib_Taxonomy_Metadata\get_term_meta( $term_id, '_' . Rt_Products::$product_slug . '_meta', true );
 	$new_value = $old_value;
 	$new_value[ $key ] = $value;
-	Rt_Lib_Taxonomy_Metadata\update_term_meta( $term_id, Rt_Products::$product_slug . '_meta', $new_value, $old_value );
+	Rt_Lib_Taxonomy_Metadata\update_term_meta( $term_id, '_' . Rt_Products::$product_slug . '_meta', $new_value, $old_value );
 }
 
 /**
@@ -1253,7 +1253,7 @@ function rtbiz_hd_get_tickets( $key, $value ) {
 			$args['meta_query'] = array(
 				'relation' => 'OR',
 				array(
-					'key' => 'rtbiz_hd_order_id',
+					'key' => '_rtbiz_hd_order_id',
 					'value' => $value,
 					'compare' => '=',
 				),
@@ -1266,7 +1266,7 @@ function rtbiz_hd_get_tickets( $key, $value ) {
 		} else {
 			$args['meta_query'] = array(
 				array(
-					'key' => 'rtbiz_hd_order_id',
+					'key' => '_rtbiz_hd_order_id',
 					'value' => $value,
 					'compare' => '=',
 				),
@@ -1698,7 +1698,7 @@ function rtbiz_hd_give_user_access( $user, $access_role, $team_term_id = 0 ) {
  * @return mixed|void
  */
 function rtbiz_hd_get_default_support_team() {
-	$isSyncOpt = get_option( 'rthd_default_support_team' );
+	$isSyncOpt = get_option( 'rtbiz_hd_default_support_team' );
 	if ( empty( $isSyncOpt ) ) {
 		$term = wp_insert_term( 'General Support', // the term
 			Rtbiz_Teams::$slug // the taxonomy
@@ -1707,7 +1707,7 @@ function rtbiz_hd_get_default_support_team() {
 			$module_permissions = get_site_option( 'rtbiz_acl_module_permissions' );
 			$module_permissions[ RTBIZ_HD_TEXT_DOMAIN ][ $term['term_id'] ] = Rt_Access_Control::$permissions['author']['value'];
 			update_site_option( 'rtbiz_acl_module_permissions', $module_permissions );
-			update_option( 'rthd_default_support_team', $term['term_id'] );
+			update_option( 'rtbiz_hd_default_support_team', $term['term_id'] );
 			$isSyncOpt = $term['term_id'];
 		}
 	}
@@ -1719,7 +1719,7 @@ function rtbiz_hd_get_default_support_team() {
  * @return bool
  */
 function rtbiz_hd_check_wizard_completed() {
-	$option = get_option( 'rtbiz_helpdesk_setup_wizard_option' );
+	$option = get_option( 'rtbiz_hd_setup_wizard_option' );
 	if ( ! empty( $option ) && 'true' == $option ) {
 		return true;
 	}

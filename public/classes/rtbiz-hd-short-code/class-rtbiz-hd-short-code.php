@@ -284,7 +284,7 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 							}
 						}
 						if ( $oder_shortcode && is_admin() ) {
-							$hd_order_by = get_post_meta( $ticket->ID, 'rtbiz_hd_order_id', true );
+							$hd_order_by = get_post_meta( $ticket->ID, '_rtbiz_hd_order_id', true );
 							$order_by = $arg_shortcode['orderid'];
 
 							if ( $hd_order_by == $order_by ) {

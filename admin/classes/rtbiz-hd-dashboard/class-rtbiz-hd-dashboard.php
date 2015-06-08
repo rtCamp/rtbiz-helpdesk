@@ -101,8 +101,8 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 		 * Setup default value for dashboard.
 		 */
 		public function setup_defaults() {
-			if ( ! empty( $_REQUEST['page'] ) && self::$page_slug == $_REQUEST['page'] && ! metadata_exists( 'user', get_current_user_id(), 'rtbiz_hd_show_welcome_panel' ) ) {
-				update_user_meta( get_current_user_id(), 'rtbiz_hd_show_welcome_panel', 1 );
+			if ( ! empty( $_REQUEST['page'] ) && self::$page_slug == $_REQUEST['page'] && ! metadata_exists( 'user', get_current_user_id(), '_rtbiz_hd_show_welcome_panel' ) ) {
+				update_user_meta( get_current_user_id(), '_rtbiz_hd_show_welcome_panel', 1 );
 			}
 		}
 
@@ -718,7 +718,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 				wp_die( -1 );
 			}
 
-			update_user_meta( get_current_user_id(), 'rtbiz_hd_show_welcome_panel', empty( $_POST['visible'] ) ? 0 : 1 );
+			update_user_meta( get_current_user_id(), '_rtbiz_hd_show_welcome_panel', empty( $_POST['visible'] ) ? 0 : 1 );
 
 			wp_die( 1 );
 		}
@@ -729,7 +729,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 		public function check_welcome_panel() {
 			if ( isset( $_GET['rthdwelcome'] ) ) {
 				$welcome_checked = empty( $_GET['rthdwelcome'] ) ? 0 : 1;
-				update_user_meta( get_current_user_id(), 'rtbiz_hd_show_welcome_panel', $welcome_checked );
+				update_user_meta( get_current_user_id(), '_rtbiz_hd_show_welcome_panel', $welcome_checked );
 			}
 		}
 
@@ -797,9 +797,9 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 		public function print_dashboard_js() {
 			if ( isset( $_GET['rthdwelcome'] ) ) {
 				$welcome_checked = empty( $_GET['rthdwelcome'] ) ? 0 : 1;
-				update_user_meta( get_current_user_id(), 'rtbiz_hd_show_welcome_panel', $welcome_checked );
+				update_user_meta( get_current_user_id(), '_rtbiz_hd_show_welcome_panel', $welcome_checked );
 			} else {
-				$welcome_checked = get_user_meta( get_current_user_id(), 'rtbiz_hd_show_welcome_panel', true );
+				$welcome_checked = get_user_meta( get_current_user_id(), '_rtbiz_hd_show_welcome_panel', true );
 				if ( 2 == $welcome_checked && wp_get_current_user()->user_email != get_option( 'admin_email' ) ) {
 					$welcome_checked = false;
 				}

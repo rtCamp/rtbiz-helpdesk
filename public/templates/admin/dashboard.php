@@ -19,7 +19,7 @@ $welcome_label = 'Helpdesk';
 	if ( current_user_can( $author_cap ) ) {
 		$classes = 'welcome-panel';
 
-		$option = get_user_meta( get_current_user_id(), 'rtbiz_hd_show_welcome_panel', true );
+		$option = get_user_meta( get_current_user_id(), '_rtbiz_hd_show_welcome_panel', true );
 		// 0 = hide, 1 = toggled to show or single site creator, 2 = multisite site owner
 		$hide = 0 == $option || ( 2 == $option && wp_get_current_user()->user_email != get_option( 'admin_email' ) );
 		if ( $hide ) {

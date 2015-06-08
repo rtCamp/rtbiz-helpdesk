@@ -42,15 +42,15 @@ if ( ! class_exists( 'Rtbiz_HD_Subscribers ' ) ) {
 					) );
 					foreach ( $comments as $comment ) {
 						$participants = '';
-						$to           = get_comment_meta( $comment->comment_ID, '_email_to', true );
+						$to           = get_comment_meta( $comment->comment_ID, '_rtbiz_hd_email_to', true );
 						if ( ! empty( $to ) ) {
 							$participants .= $to . ',';
 						}
-						$cc = get_comment_meta( $comment->comment_ID, '_email_cc', true );
+						$cc = get_comment_meta( $comment->comment_ID, '_rtbiz_hd_email_cc', true );
 						if ( ! empty( $cc ) ) {
 							$participants .= $cc . ',';
 						}
-						$bcc = get_comment_meta( $comment->comment_ID, '_email_bcc', true );
+						$bcc = get_comment_meta( $comment->comment_ID, '_rtbiz_hd_email_bcc', true );
 						if ( ! empty( $bcc ) ) {
 							$participants .= $bcc;
 						}

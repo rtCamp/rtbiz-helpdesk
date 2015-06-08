@@ -446,7 +446,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 
 			$post_id = $rtbiz_hd_tickets_operation->ticket_default_field_update( $postArray, $dataArray, $post_type, '', $userid, $userid );
 			if ( '' != $originalBody ) {
-				add_post_meta( $post_id, '_rt_hd_original_email_body', $originalBody );
+				add_post_meta( $post_id, '_rtbiz_hd_original_email_body', $originalBody );
 			}
 			// Updating Post Status from publish to unanswered
 			$rtbiz_hd_tickets_operation->ticket_default_field_update( array( 'post_status' => 'hd-unanswered', 'post_name' => $post_id ), array( 'post_status' => 'hd-unanswered' ), $post_type, $post_id, $userid, $userid );
@@ -624,7 +624,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 						$return['ids'][]   = $attach_id;
 						$return['files'][] = array( 'file' => $file_location );
 						if ( $comment_id > 0 ) {
-							add_comment_meta( $comment_id, 'attachment', $attach_id );
+							add_comment_meta( $comment_id, '_rtbiz_hd_attachment', $attach_id );
 						}
 					}
 				}
@@ -947,8 +947,8 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			$sql2       = "select comment_id as id, 'comment' as type from {$wpdb->commentmeta} where ";
 			$operatorOr = '';
 			if ( '' != $inreplyto ) {
-				$sql1 .= " ({$wpdb->postmeta}.meta_key in('_messageid','_references','_inreplyto') and {$wpdb->postmeta}.meta_value like '%{$inreplyto}%' ) ";
-				$sql2 .= " ({$wpdb->commentmeta}.meta_key in('_messageid','_references','_inreplyto') and {$wpdb->commentmeta}.meta_value like '%{$inreplyto}%' ) ";
+				$sql1 .= " ({$wpdb->postmeta}.meta_key in('_rtbiz_hd_messageid','_rtbiz_hd_references','_rtbiz_hd_inreplyto') and {$wpdb->postmeta}.meta_value like '%{$inreplyto}%' ) ";
+				$sql2 .= " ({$wpdb->commentmeta}.meta_key in('_rtbiz_hd_messageid','_rtbiz_hd_references','_rtbiz_hd_inreplyto') and {$wpdb->commentmeta}.meta_value like '%{$inreplyto}%' ) ";
 				$operatorOr = ' or ';
 			}
 
@@ -1155,13 +1155,13 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				$checkDupli = $this->check_duplicate_comment( $comment_post_ID, $commentDate, $comment_content, $comment_content_old );
 				if ( false !== $checkDupli ) {
 					if ( '' != $messageid ) {
-						add_comment_meta( $checkDupli, '_messageid', $messageid );
+						add_comment_meta( $checkDupli, '_rtbiz_hd_messageid', $messageid );
 					}
 					if ( '' != $inreplyto ) {
-						add_comment_meta( $checkDupli, '_inreplyto', $inreplyto );
+						add_comment_meta( $checkDupli, '_rtbiz_hd_inreplyto', $inreplyto );
 					}
 					if ( '' != $references ) {
-						add_comment_meta( $checkDupli, '_references', $references );
+						add_comment_meta( $checkDupli, '_rtbiz_hd_references', $references );
 					}
 					return false;
 				}
@@ -1169,16 +1169,16 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 
 			$comment_id = wp_insert_comment( $data );
 			if ( '' != $originalBody ) {
-				add_comment_meta( $comment_id, 'rt_hd_original_email', $originalBody );
+				add_comment_meta( $comment_id, '_rtbiz_hd_original_email', $originalBody );
 			}
 			if ( '' != $messageid ) {
-				add_comment_meta( $comment_id, '_messageid', $messageid );
+				add_comment_meta( $comment_id, '_rtbiz_hd_messageid', $messageid );
 			}
 			if ( '' != $inreplyto ) {
-				add_comment_meta( $comment_id, '_inreplyto', $inreplyto );
+				add_comment_meta( $comment_id, '_rtbiz_hd_inreplyto', $inreplyto );
 			}
 			if ( '' != $references ) {
-				add_comment_meta( $comment_id, '_references', $references );
+				add_comment_meta( $comment_id, '_rtbiz_hd_references', $references );
 			}
 
 			$data  = array(
@@ -1346,11 +1346,11 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				return false;
 			}
 
-			$sql    = $wpdb->prepare( "select meta_value from $wpdb->commentmeta where $wpdb->commentmeta.meta_key = '_messageid' and $wpdb->commentmeta.meta_value = %s", $messageid );
+			$sql    = $wpdb->prepare( "select meta_value from $wpdb->commentmeta where $wpdb->commentmeta.meta_key = '_rtbiz_hd_messageid' and $wpdb->commentmeta.meta_value = %s", $messageid );
 			$result = $wpdb->get_results( $sql );
 			if ( empty( $result ) ) {
 
-				$sql    = $wpdb->prepare( "select meta_value from $wpdb->postmeta where $wpdb->postmeta.meta_key = '_messageid' and $wpdb->postmeta.meta_value = %s", $messageid );
+				$sql    = $wpdb->prepare( "select meta_value from $wpdb->postmeta where $wpdb->postmeta.meta_key = '_rtbiz_hd_messageid' and $wpdb->postmeta.meta_value = %s", $messageid );
 				$result = $wpdb->get_results( $sql );
 
 				return ! empty( $result );
@@ -1374,7 +1374,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			if ( isset( $_REQUEST['commentSendAttachment'] ) && '' != $_REQUEST['commentSendAttachment'] ) {
 				$arrAttache = explode( ',', $_REQUEST['commentSendAttachment'] );
 				foreach ( $arrAttache as $strAttach ) {
-					add_comment_meta( $comment_id, 'attachment', intval( $strAttach ) );
+					add_comment_meta( $comment_id, '_rtbiz_hd_attachment', intval( $strAttach ) );
 				}
 			}
 			$this->mail_comment_data( $comment_id, array(), '', array() );
@@ -1776,7 +1776,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			$attachment = array();
 			$comment = get_comment( $_POST['comment_id'] );
 			if ( isset( $_REQUEST['attachemntlist'] ) && ! empty( $_REQUEST['attachemntlist'] ) ) {
-				delete_comment_meta( $_POST['comment_id'], 'attachment' );
+				delete_comment_meta( $_POST['comment_id'], '_rtbiz_hd_attachment' );
 				foreach ( $_REQUEST['attachemntlist'] as $strAttach ) {
 					$attachfile = get_attached_file( intval( $strAttach ) );
 					if ( $attachfile ) {
@@ -1854,7 +1854,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				die( 0 );
 			}
 			$comment          = get_comment( $_POST['comment_id'] );
-			$attachments_urls = get_comment_meta( $_POST['comment_id'], 'attachment' );
+			$attachments_urls = get_comment_meta( $_POST['comment_id'], '_rtbiz_hd_attachment' );
 			$attachments = get_children( array( 'post_parent' => $comment->comment_post_ID, 'post_type' => 'attachment' ) );
 			if ( ! empty( $attachments ) && ! empty( $attachments_urls ) ) {
 				foreach ( $attachments as $att ) {
