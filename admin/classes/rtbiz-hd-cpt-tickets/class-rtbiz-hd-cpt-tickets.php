@@ -805,7 +805,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 					echo '<label class="screen-reader-text" for="rt_product">' . __( 'Filter by product' ) . '</label>';
 
 					echo '<select id="rt_product" class="postform" name="product">';
-					echo '<option value="0">Select Offering</option>';
+					echo '<option value="0">Select Product</option>';
 
 					foreach ( $products as $product ) {
 						if ( isset( $_GET['product'] ) && $product->slug == $_GET['product'] ) {

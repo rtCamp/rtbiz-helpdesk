@@ -1514,7 +1514,7 @@ function rtbiz_hd_get_default_email_template( $key = '', $all = false ) {
 				A new support ticket created. {ticket_link}
 			</div>
 			<div style="font-size: 16px; line-height: 26px; color: #888888; ">
-				Offering: <strong style="color: #333333;">{ticket_products}</strong>
+				Product: <strong style="color: #333333;">{ticket_products}</strong>
 			</div>
 		    <div style="font-size: 16px; line-height: 26px; color: #888888;">
 		        Created by: <strong style="color: #333333; ">{ticket_author}</strong>
@@ -1533,7 +1533,7 @@ function rtbiz_hd_get_default_email_template( $key = '', $all = false ) {
 				A new support ticket created by {ticket_author} is assigned to you. </strong> {ticket_link}
 			</div>
 			<div style="font-size: 16px; line-height: 26px; color: #888888;">
-				Offering: <strong style="color: #333333;">{ticket_products}</strong>
+				Product: <strong style="color: #333333;">{ticket_products}</strong>
 			</div>
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0" />
 			<div style="font-size: 16px; line-height: 26px; color:#333333; " >
@@ -1546,7 +1546,7 @@ function rtbiz_hd_get_default_email_template( $key = '', $all = false ) {
 				A new support ticket created by <strong>{ticket_author}</strong>. You have been subscribed to this ticket. {ticket_link}
 			</div>
 		    <div style="font-size: 16px; line-height: 26px; color: #888888;">
-				Offering: <strong style="color: #333333;">{ticket_products}</strong>
+				Product: <strong style="color: #333333;">{ticket_products}</strong>
 			</div>
 			<div style="font-size: 16px; line-height: 26px; color: #888888;">
 				Assigned to: <strong style="color: #333333;">{ticket_assignee}</strong>
@@ -1577,7 +1577,7 @@ function rtbiz_hd_get_default_email_template( $key = '', $all = false ) {
 
 	$redux['rthd_email_template_ticket_updated'] = '
 			<div style="color: #888888; font-size: 14px;">
-				Ticket updated by : <strong>{ticket_updated_by}</strong>.{ticket_link}
+				Ticket updated by <strong>{ticket_updated_by}</strong>.{ticket_link}
 			</div>
 			<div style="font-size: 16px; line-height: 26px; color:#333333; margin: 25px 0">
 				{ticket_difference}

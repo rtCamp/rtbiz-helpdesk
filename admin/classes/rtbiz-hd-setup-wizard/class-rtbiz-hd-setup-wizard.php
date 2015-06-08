@@ -162,7 +162,7 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 					<label for="rthd-wizard-store-custom"><?php _e( 'Custom', RTBIZ_HD_TEXT_DOMAIN ) ?></label>
 				</div>
 				<div class="rthd-setup-wizard-row rthd-wizard-store-custom-div" style="display:none;">
-					<label for="rthd-setup-store-new-team"><?php _e( 'Add New Offering', RTBIZ_HD_TEXT_DOMAIN ); ?></label>
+					<label for="rthd-setup-store-new-team"><?php _e( 'Add New Product', RTBIZ_HD_TEXT_DOMAIN ); ?></label>
 					<input type="text" id="rthd-setup-store-new-team" />
 					<input type="button" id="rthd-setup-store-new-team-submit" value="Add" />
 				</div>
@@ -307,7 +307,7 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 		/***************** ajax mehod *********************/
 
 		/**
-		 *  Offering save ajax call
+		 *  Product save ajax call
 		 */
 		public function ajax_product_sync() {
 			$arrReturn = array( 'status' => false );
