@@ -175,7 +175,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 				'daily_tickets',
 					), $rtbiz_hd_dashboard->screen_id, 'column2' );
 			/* Load by Team (Matrix/Table) */
-			add_meta_box( 'rthd-team-load', __( 'WorkLoad', RTBIZ_HD_TEXT_DOMAIN ), array(
+			add_meta_box( 'rthd-team-load', __( 'Work Load', RTBIZ_HD_TEXT_DOMAIN ), array(
 				$this,
 				'team_load',
 					), $rtbiz_hd_dashboard->screen_id, 'column1' );
