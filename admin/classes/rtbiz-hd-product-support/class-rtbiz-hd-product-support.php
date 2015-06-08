@@ -32,16 +32,6 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 		var $iseddActive = false;
 
 		/**
-		 * @var Store product post type of active Plugin if plugin is not activate it is false
-		 */
-		var $activePostType = false;
-
-		/**
-		 * @var store order post type of active plugin if plugin is not activate it is false
-		 */
-		var $order_post_type = false;
-
-		/**
 		 * construct
 		 *
 		 * @since 0.1
@@ -249,9 +239,9 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 		 */
 		function save_products( $term_id ) {
 			if ( isset( $_POST[ Rt_Products::$product_slug  ] ) ) {
-				$prev_value = Rt_Lib_Taxonomy_Metadata\get_term_meta( $term_id, Rt_Products::$product_slug  . '-meta', true );
+				$prev_value = Rt_Lib_Taxonomy_Metadata\get_term_meta( $term_id, Rt_Products::$product_slug  . '_meta', true );
 				$meta_value = (array) $_POST[ Rt_Products::$product_slug ];
-				Rt_Lib_Taxonomy_Metadata\update_term_meta( $term_id, Rt_Products::$product_slug  . '-meta', $meta_value, $prev_value );
+				Rt_Lib_Taxonomy_Metadata\update_term_meta( $term_id, Rt_Products::$product_slug  . '_meta', $meta_value, $prev_value );
 				if ( isset( $_POST['_wp_original_http_referer'] ) ) {
 					wp_safe_redirect( $_POST['_wp_original_http_referer'] );
 					exit();
@@ -341,37 +331,40 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 		 * @return array
 		 */
 		function get_customers_userid() {
-			// todo : update code as per the multiple plugin
 			$this->check_active_plugin();
+			$woo_payment = $edd_payments = array();
 			if ( $this->isWoocommerceActive ) {
 				//
-				$payments = get_posts( array(
+				$woo_payment = get_posts( array(
 					                       'numberposts' => -1,
-					                       'post_type'   => $this->order_post_type,
+					                       'post_type'   => 'shop_order',
 					                       'meta_key'    => '_billing_email',
 					                       'order'       => 'ASC',
 					                       'post_status' => 'wc-completed',
 				                       ) );
-			} else if ( $this->iseddActive ) {
-				$payments = get_posts( array(
+			}
+			if ( $this->iseddActive ) {
+				$edd_payments = get_posts( array(
 					                       'numberposts' => -1,
-					                       'post_type'   => $this->order_post_type,
+					                       'post_type'   => 'edd_payment',
 					                       'order'       => 'ASC',
 					                       'post_status' => 'publish',
 				                       ) );
 			}
-			$emails = array();
+			$payments = array_merge( $woo_payment, $edd_payments );
+			$ids = array();
 
 			if ( ! empty( $payments ) ) {
 				foreach ( $payments as $payment ) {
-					if ( $this->isWoocommerceActive ) {
-						$emails[] = get_post_meta( $payment->ID, '_customer_user', true );
-					} else if ( $this->iseddActive ) {
-						$emails[] = get_post_meta( $payment->ID, '_edd_payment_user_id', true );
+				    if ( $payment->post_type == 'shop_order' ) {
+					    $ids[] = get_post_meta( $payment->ID, '_customer_user', true );
+				    }
+					else if ( $payment->post_type == 'edd_payment' ) {
+						$ids[] = get_post_meta( $payment->ID, '_edd_payment_user_id', true );
 					}
 				}
 			}
-			return $emails;
+			return $ids;
 		}
 
 		/*
@@ -382,26 +375,29 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 			$created_by_id = get_post_meta( $ticket_id, '_rtbiz_hd_created_by', true );
 			if ( ! empty( $created_by_id ) ) {
 				$this->check_active_plugin();
+				$woo_payment = array();
+				$edd_payments = array();
 				if ( $this->isWoocommerceActive ) {
-					$payments = get_posts( array(
+					$woo_payment = get_posts( array(
 						'numberposts' => -1,
 						'meta_key'    => '_customer_user',
 						'meta_value'  => $created_by_id,
-						'post_type'   => $this->order_post_type,
+						'post_type'   => 'shop_order',
 						'order'       => 'ASC',
 						'post_status' => 'any', // wc-completed is for completed orders
 					) );
-				} else if ( $this->iseddActive ) {
-					$payments = get_posts( array(
+				} if ( $this->iseddActive ) {
+					$edd_payments = get_posts( array(
 						'numberposts' => -1,
 						'meta_key'    => '_edd_payment_user_id',
 						'meta_value'  => $created_by_id,
-						'post_type'   => $this->order_post_type,
+						'post_type'   => 'edd_payment',
 						'order'       => 'ASC',
 						'post_status' => 'any', // publish is for completed orders
 					) );
 					$order_post_status = edd_get_payment_statuses();
 				}
+				$payments = array_merge( $woo_payment, $edd_payments );
 				if ( ! empty( $payments ) ) {
 					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_box_wrapper_start','<div class="rt-hd-sidebar-box">' );
 					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_header_wrapper_start','<div class="rt-hd-ticket-info">' );
@@ -411,10 +407,10 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 					echo '<ul>';
 					foreach ( $payments as $key => $payment ) {
 						$link = '';
-						if ( $this->iseddActive ) {
+						if ( $payment->post_type == 'edd_payment' ) {
 							$status = $order_post_status[ $payment->post_status ];
 							$link = admin_url( "edit.php?post_type=download&page=edd-payment-history&view=view-order-details&id={$payment->ID}" );
-						} else if ( $this->isWoocommerceActive ) {
+						} else if ( $payment->post_type == 'shop_order' ) {
 							$status = wc_get_order_status_name( $payment->post_status );
 							$link = get_edit_post_link( $payment->ID );
 						}
@@ -526,18 +522,14 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 			$activePlugin  = rtbiz_get_product_selection_setting();
 			if ( ! empty( $activePlugin ) && is_plugin_active( 'woocommerce/woocommerce.php' ) && in_array( 'woocommerce', $activePlugin ) ) {
 				$this->isWoocommerceActive = true;
-				$this->activePostType = 'product';
-				$this->order_post_type = 'shop_order';
+				// post type 'product';
 			}
 			if ( ! empty( $activePlugin ) && is_plugin_active( 'easy-digital-downloads/easy-digital-downloads.php' ) && in_array( 'edd', $activePlugin ) ) {
 				$this->iseddActive = true;
-				$this->activePostType = 'download';
-				$this->order_post_type = 'edd_payment';
+				// post type 'download';
 			} else {
 				$this->iseddActive = false;
 				$this->isWoocommerceActive = false;
-				$this->activePostType = false;
-				$this->order_post_type = false;
 			}
 		}
 
