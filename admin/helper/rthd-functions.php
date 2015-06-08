@@ -1330,6 +1330,9 @@ function rtbiz_hd_convert_into_useremail( $value ) {
  */
 
 function rtbiz_hd_get_attchment_link_with_fancybox( $attachment, $post_id = '', $echo = true ) {
+	if ( empty( $attachment ) ) {
+		return '';
+	}
 	ob_start();
 	$attachment_url = wp_get_attachment_url( $attachment->ID );
 	$original_url = $attachment_url;
