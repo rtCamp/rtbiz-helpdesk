@@ -186,7 +186,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 //			$contact_metaboxes['side']['core'][ 'p2p-from-' . rtbiz_get_contact_post_type() . '_to_user' ] = $wp_meta_boxes[ rtbiz_get_contact_post_type() ]['side']['default'][ 'p2p-from-' . rtbiz_get_contact_post_type() . '_to_user' ];
 			$contact_metaboxes['side']['core']['rt-biz-acl-details'] = $wp_meta_boxes[ rtbiz_get_contact_post_type() ]['side']['default']['rt-biz-acl-details'];
 			$contact_metaboxes['side']['core']['productdiv'] = $wp_meta_boxes[ rtbiz_get_contact_post_type() ]['side']['core']['productdiv'];
-			$contact_metaboxes['side']['core']['rt-teamdiv'] = $wp_meta_boxes[ rtbiz_get_contact_post_type() ]['side']['core']['rt-teamdiv'];
+			$contact_metaboxes['side']['core']['teamdiv'] = $wp_meta_boxes[ rtbiz_get_contact_post_type() ]['side']['core']['teamdiv'];
 
 			if ( ! empty( $is_staff_member ) && 'yes' == $is_staff_member ) {
 				// remove metabox only staff

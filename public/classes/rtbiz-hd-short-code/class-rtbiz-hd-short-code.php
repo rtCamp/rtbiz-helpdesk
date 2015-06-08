@@ -167,7 +167,13 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 							$arg_shortcode['userid'] = $arg_shortcode['userid']->ID;
 						}
 					}
-					$is_staff = user_can( $current_user, $cap );
+
+					if ( ! empty( $arg_shortcode['userid'] ) ){
+						$is_staff = user_can( $arg_shortcode['userid'], $cap );
+					} else {
+						$is_staff = user_can( $current_user, $cap );
+					}
+
 					// if user can not access Helpdesk don't show him fav tickets
 					if ( $arg_shortcode['fav'] ) {
 						if ( ! $is_staff ) {
