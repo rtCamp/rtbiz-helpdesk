@@ -120,7 +120,7 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 				                       'post_type'      => Rtbiz_HD_Module::$post_type,
 				                       'post_status'    => 'any',
 				                       'nopaging'       => true,
-				                       'meta_key'       => 'rtbiz_hd_order_id',
+				                       'meta_key'       => '_rtbiz_hd_order_id',
 				                       'meta_value'     => $payment,
 				                       'fields'         => 'ids',
 			                       ) );
@@ -239,9 +239,9 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 		 */
 		function save_products( $term_id ) {
 			if ( isset( $_POST[ Rt_Products::$product_slug  ] ) ) {
-				$prev_value = Rt_Lib_Taxonomy_Metadata\get_term_meta( $term_id, Rt_Products::$product_slug  . '_meta', true );
+				$prev_value = Rt_Lib_Taxonomy_Metadata\get_term_meta( $term_id, '_'.Rt_Products::$product_slug  . '_meta', true );
 				$meta_value = (array) $_POST[ Rt_Products::$product_slug ];
-				Rt_Lib_Taxonomy_Metadata\update_term_meta( $term_id, Rt_Products::$product_slug  . '_meta', $meta_value, $prev_value );
+				Rt_Lib_Taxonomy_Metadata\update_term_meta( $term_id, '_' . Rt_Products::$product_slug  . '_meta', $meta_value, $prev_value );
 				if ( isset( $_POST['_wp_original_http_referer'] ) ) {
 					wp_safe_redirect( $_POST['_wp_original_http_referer'] );
 					exit();
@@ -676,12 +676,12 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 			}
 
 			if ( isset( $data['order_id'] ) ) {
-				update_post_meta( $rtbiz_hd_tickets_id, 'rtbiz_hd_order_id', esc_attr( $data['order_id'] ) );
+				update_post_meta( $rtbiz_hd_tickets_id, '_rtbiz_hd_order_id', esc_attr( $data['order_id'] ) );
 			}
 
 			if ( isset( $data['order_id'] ) && isset( $data['order_type'] ) ) {
 				//Store Order ID
-				update_post_meta( $rtbiz_hd_tickets_id, 'rtbiz_hd_order_type', esc_attr( $data['order_type'] ) );
+				update_post_meta( $rtbiz_hd_tickets_id, '_rtbiz_hd_order_type', esc_attr( $data['order_type'] ) );
 
 				$link = '';
 				if ( 'woocommerce' === $data['order_type'] ) {
@@ -689,7 +689,7 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 				} else if ( 'edd' === $data['order_type'] ) {
 					$link = add_query_arg( 'id', $_REQUEST['order_id'], admin_url( 'edit.php?post_type=download&page=edd-payment-history&view=view-order-details' ) );
 				}
-				update_post_meta( $rtbiz_hd_tickets_id, 'rtbiz_hd_order_link', esc_url( $link ) );
+				update_post_meta( $rtbiz_hd_tickets_id, '_rtbiz_hd_order_link', esc_url( $link ) );
 			}
 		}
 	}

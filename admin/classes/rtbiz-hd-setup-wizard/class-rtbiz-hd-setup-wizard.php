@@ -52,7 +52,7 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 				delete_option( 'rtbiz_helpdesk_dependency_installed' );
 			}
 			if ( ! empty( $_REQUEST['finish-wizard'] ) ) {
-				update_option( 'rtbiz_helpdesk_setup_wizard_option', 'true' );
+				update_option( 'rtbiz_hd_setup_wizard_option', 'true' );
 			}
 		}
 
@@ -557,7 +557,7 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 				$rtbiz_acl_model->remove_acl( array( 'module' => RTBIZ_TEXT_DOMAIN, 'userid' => $_POST['userid'] ) );
 				$arrReturn['status'] = true;
 				$contact = rtbiz_get_contact_for_wp_user( $_POST['userid'] );
-				//              $support_team = get_option( 'rthd_default_support_team' );
+				//              $support_team = get_option( 'rtbiz_hd_default_support_team' );
 				//              if ( ! empty( $support_team ) && ! empty( $contact[0] ) ){
 				//                  wp_remove_object_terms($contact[0]->ID,array($support_team),Rtbiz_Teams::$slug );
 				//              }

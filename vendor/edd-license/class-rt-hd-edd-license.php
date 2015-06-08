@@ -21,8 +21,8 @@ if ( ! class_exists( 'Rt_HD_Edd_License' ) ) {
 		}
 
 		function edd_sample_license_page() {
-			$license = get_option( 'edd_rthelpdesk_license_key' );
-			$status = get_option( 'edd_rthelpdesk_license_status' );
+			$license = get_option( 'rtbiz_hd_edd_license_key' );
+			$status = get_option( 'rtbiz_hd_edd_license_status' );
 
 			if ( false !== $status && 'valid' == $status ) {
 				$status_class = 'rthd-addon-status-activated';
@@ -48,7 +48,7 @@ if ( ! class_exists( 'Rt_HD_Edd_License' ) ) {
                                     <?php _e( 'License Key', RTBIZ_HD_TEXT_DOMAIN ); ?>
                                 </th>
                                 <td>
-                                    <input id="edd_rthelpdesk_license_key" name="edd_rthelpdesk_license_key"
+                                    <input id="rtbiz_hd_edd_license_key" name="rtbiz_hd_edd_license_key"
                                            type="text"
                                            class="regular-text" value="<?php esc_attr_e( $license ); ?>"/>
                                 </td>
@@ -86,7 +86,7 @@ if ( ! class_exists( 'Rt_HD_Edd_License' ) ) {
 		function edd_sl_sample_plugin_updater() {
 
 			// retrieve our license key from the DB
-			$license_key = trim( get_option( 'edd_rthelpdesk_license_key' ) );
+			$license_key = trim( get_option( 'rtbiz_hd_edd_license_key' ) );
 
 			// setup the updater
 			$edd_updater = new EDD_SL_Plugin_Updater( EDD_RT_HELPDESK_STORE_URL, RTBIZ_HD_BASE_NAME, array(
@@ -100,8 +100,8 @@ if ( ! class_exists( 'Rt_HD_Edd_License' ) ) {
 
 		function edd_sample_activate_license() {
 
-			if ( isset( $_POST['edd_rthelpdesk_license_key'] ) ) {
-				update_option( 'edd_rthelpdesk_license_key', $_POST['edd_rthelpdesk_license_key'] );
+			if ( isset( $_POST['rtbiz_hd_edd_license_key'] ) ) {
+				update_option( 'rtbiz_hd_edd_license_key', $_POST['rtbiz_hd_edd_license_key'] );
 			}
 
 			// listen for our activate button to be clicked
@@ -113,7 +113,7 @@ if ( ! class_exists( 'Rt_HD_Edd_License' ) ) {
 				} // get out if we didn't click the Activate button
 
 				// retrieve the license from the database
-				$license = trim( get_option( 'edd_rthelpdesk_license_key' ) );
+				$license = trim( get_option( 'rtbiz_hd_edd_license_key' ) );
 
 				// data to send in our API request
 				$api_params = array(
@@ -138,7 +138,7 @@ if ( ! class_exists( 'Rt_HD_Edd_License' ) ) {
 
 				// $license_data->license will be either "valid" or "invalid"
 
-				update_option( 'edd_rthelpdesk_license_status', $license_data->license );
+				update_option( 'rtbiz_hd_edd_license_status', $license_data->license );
 
 			}
 		}
@@ -154,7 +154,7 @@ if ( ! class_exists( 'Rt_HD_Edd_License' ) ) {
 				} // get out if we didn't click the Activate button
 
 				// retrieve the license from the database
-				$license = trim( get_option( 'edd_rthelpdesk_license_key' ) );
+				$license = trim( get_option( 'rtbiz_hd_edd_license_key' ) );
 
 				// data to send in our API request
 				$api_params = array(
@@ -181,7 +181,7 @@ if ( ! class_exists( 'Rt_HD_Edd_License' ) ) {
 
 				// $license_data->license will be either "deactivated" or "failed"
 				if ( $license_data->license == 'deactivated' ) {
-					delete_option( 'edd_rthelpdesk_license_status' );
+					delete_option( 'rtbiz_hd_edd_license_status' );
 				}
 			}
 		}
@@ -190,7 +190,7 @@ if ( ! class_exists( 'Rt_HD_Edd_License' ) ) {
 
 			global $wp_version;
 
-			$license = trim( get_option( 'edd_rthelpdesk_license_key' ) );
+			$license = trim( get_option( 'rtbiz_hd_edd_license_key' ) );
 
 			$api_params = array(
 				'edd_action' => 'check_license',

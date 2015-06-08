@@ -80,7 +80,7 @@ if ( ! class_exists( 'Rtbiz_HD_Plugin_Check' ) ) {
 		}
 
 		function rtbiz_hd_check_wizard_completed() {
-			$option = get_option( 'rtbiz_helpdesk_setup_wizard_option' );
+			$option = get_option( 'rtbiz_hd_setup_wizard_option' );
 			if ( ! empty( $option ) && 'true' == $option ) {
 				return true;
 			}

@@ -14,6 +14,11 @@ ul#chat-UI {
 	overflow: hidden;
 	display: flex;
 	position: relative;
+	display: flex;
+	display: -webkit-box;
+	display: moz-box-flex;
+	display: -ms-flexbox;
+	display: -webkit-flex;
 }
 
 .rthd-discussion > li:before {

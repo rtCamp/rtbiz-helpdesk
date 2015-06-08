@@ -285,10 +285,10 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 				);
 			}
 
-			$redirect_url = get_option( 'rthd_googleapi_redirecturl' );
+			$redirect_url = get_option( 'rtbiz_hd_googleapi_redirecturl' );
 			if ( ! $redirect_url ) {
 				$redirect_url = admin_url( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type . '&page=rthd-settings' );
-				update_option( 'rthd_googleapi_redirecturl', $redirect_url );
+				update_option( 'rtbiz_hd_googleapi_redirecturl', $redirect_url );
 			}
 
 			$this->sections[] = array(

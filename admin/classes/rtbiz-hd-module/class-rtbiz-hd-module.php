@@ -430,11 +430,11 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 					$meta_q = array(
 						'relation' => 'OR',
 						array(
-							'key'     => '_rthd_ticket_adult_content',
+							'key'     => '_rtbiz_hd_ticket_adult_content',
 							'compare' => 'NOT EXISTS',
 						),
 						array(
-							'key'     => '_rthd_ticket_adult_content',
+							'key'     => '_rtbiz_hd_ticket_adult_content',
 							'value'   => 'yes',
 							'compare' => '!=',
 						),

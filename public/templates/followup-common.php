@@ -52,7 +52,7 @@ if ( ! empty( $post->post_content ) ) {
 							?>
 							<a href="#" class="edit-ticket-link">Edit</a> |
 							<?php
-							$data = get_post_meta( $post->ID, '_rt_hd_original_email_body', true );
+							$data = get_post_meta( $post->ID, '_rtbiz_hd_original_email_body', true );
 							if ( ! empty( $data ) ) {
 								$href = get_post_permalink( $post->ID ) . '?show_original=true';
 								?>
