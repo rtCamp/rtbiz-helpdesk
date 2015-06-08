@@ -1145,7 +1145,7 @@ function rtbiz_hd_get_product_meta( $key, $term_id = '' ) {
 		return false;
 	}
 
-	$term_meta = Rt_Lib_Taxonomy_Metadata\get_term_meta( $term_id, Rt_Products::$product_slug . '-meta', true );
+	$term_meta = Rt_Lib_Taxonomy_Metadata\get_term_meta( $term_id, Rt_Products::$product_slug . '_meta', true );
 	if ( ! empty( $term_meta ) ) {
 		if ( ! empty( $key ) ) {
 			return isset( $term_meta[ $key ] ) ? $term_meta[ $key ] : false;
@@ -1166,10 +1166,10 @@ function rtbiz_hd_update_product_meta( $key, $value, $term_id ) {
 	if ( empty( $term_id ) ) {
 		return false;
 	}
-	$old_value = Rt_Lib_Taxonomy_Metadata\get_term_meta( $term_id, Rt_Products::$product_slug . '-meta', true );
+	$old_value = Rt_Lib_Taxonomy_Metadata\get_term_meta( $term_id, Rt_Products::$product_slug . '_meta', true );
 	$new_value = $old_value;
 	$new_value[ $key ] = $value;
-	Rt_Lib_Taxonomy_Metadata\update_term_meta( $term_id, Rt_Products::$product_slug . '-meta', $new_value, $old_value );
+	Rt_Lib_Taxonomy_Metadata\update_term_meta( $term_id, Rt_Products::$product_slug . '_meta', $new_value, $old_value );
 }
 
 /**

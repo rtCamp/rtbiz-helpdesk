@@ -239,9 +239,9 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 		 */
 		function save_products( $term_id ) {
 			if ( isset( $_POST[ Rt_Products::$product_slug  ] ) ) {
-				$prev_value = Rt_Lib_Taxonomy_Metadata\get_term_meta( $term_id, Rt_Products::$product_slug  . '-meta', true );
+				$prev_value = Rt_Lib_Taxonomy_Metadata\get_term_meta( $term_id, Rt_Products::$product_slug  . '_meta', true );
 				$meta_value = (array) $_POST[ Rt_Products::$product_slug ];
-				Rt_Lib_Taxonomy_Metadata\update_term_meta( $term_id, Rt_Products::$product_slug  . '-meta', $meta_value, $prev_value );
+				Rt_Lib_Taxonomy_Metadata\update_term_meta( $term_id, Rt_Products::$product_slug  . '_meta', $meta_value, $prev_value );
 				if ( isset( $_POST['_wp_original_http_referer'] ) ) {
 					wp_safe_redirect( $_POST['_wp_original_http_referer'] );
 					exit();
