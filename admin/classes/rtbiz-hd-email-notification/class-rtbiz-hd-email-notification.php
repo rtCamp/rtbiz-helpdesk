@@ -282,7 +282,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 				$bccemails = array_merge( $bccemails, $assigneEmail );
 			}
 
-			if ( $notificationFlagGroup && isset( $redux['rthd_notification_emails'] ) ) {
+			if ( $notificationFlagGroup && isset( $redux['rthd_notification_emails'] ) && is_array( $redux['rthd_notification_emails'] ) ) {
 				foreach ( $redux['rthd_notification_emails'] as $email ) {
 					array_push( $groupEmail, array( 'email' => $email ) );
 				}
@@ -486,7 +486,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 			$assigneEmail = $this->exclude_author( $assigneEmail, $ticket_created_by->user_email );
 			$assigneEmail = apply_filters( 'rtbiz_hd_filter_adult_emails', $assigneEmail, $post_id );
 
-			if ( $notificationFlagGroup && isset( $redux['rthd_notification_emails'] ) ) {
+			if ( $notificationFlagGroup && isset( $redux['rthd_notification_emails'] ) && is_array( $redux['rthd_notification_emails'] ) ) {
 				foreach ( $redux['rthd_notification_emails'] as $email ) {
 					array_push( $groupEmail, array( 'email' => $email ) );
 				}
