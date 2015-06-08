@@ -127,7 +127,7 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 					}
 				}
 				foreach ( $module_menu as $p_key => $menu_item ) {
-					if ( $wizard_completed ) {
+					if ( $wizard_completed && ! in_array( esc_url( $menu_item[2] ), $rtbizMenuOrder ) ) {
 		                $submenu[ 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type ][ $new_index ] = $menu_item;
 		                unset( $module_menu[ $p_key ] );
 		                $new_index += 5;
