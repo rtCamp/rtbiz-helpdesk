@@ -1705,7 +1705,7 @@ function rtbiz_hd_get_default_support_team() {
 		);
 		if ( ! empty( $term ) ) {
 			$module_permissions = get_site_option( 'rtbiz_acl_module_permissions' );
-			$module_permissions[ RTBIZ_HD_TEXT_DOMAIN ][ $term['term_id'] ] = Rt_Access_Control::$permissions['author']['value'];
+			$module_permissions[ RTBIZ_HD_TEXT_DOMAIN ][ $term['term_id'] ] = Rtbiz_Access_Control::$permissions['author']['value'];
 			update_site_option( 'rtbiz_acl_module_permissions', $module_permissions );
 			update_option( 'rtbiz_hd_default_support_team', $term['term_id'] );
 			$isSyncOpt = $term['term_id'];

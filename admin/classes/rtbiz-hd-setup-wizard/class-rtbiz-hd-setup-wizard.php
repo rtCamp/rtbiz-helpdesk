@@ -408,7 +408,7 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 					//                  $team_id = rtbiz_hd_get_default_support_team();
 					$arrReturn['imported_all'] = true;
 					foreach ( $users_to_import as $user ) {
-						if ( rtbiz_hd_give_user_access( $user->ID, Rt_Access_Control::$permissions['author']['value'], 0 ) ) {
+						if ( rtbiz_hd_give_user_access( $user->ID, Rtbiz_Access_Control::$permissions['author']['value'], 0 ) ) {
 							$arrReturn['imported_users'][] = array(
 								'id' => $user->ID,
 								'label' => $user->display_name,
@@ -449,7 +449,7 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 				//              $team_id = rtbiz_hd_get_default_support_team();
 
 				foreach ( $users_to_import as $user ) {
-					if ( rtbiz_hd_give_user_access( $user->ID, Rt_Access_Control::$permissions['author']['value'], 0 ) ) {
+					if ( rtbiz_hd_give_user_access( $user->ID, Rtbiz_Access_Control::$permissions['author']['value'], 0 ) ) {
 						$arrReturn['imported_users'][] = array(
 							'id' => $user->ID,
 							'label' => $user->display_name,
@@ -497,7 +497,7 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 						/* $contact = rtbiz_get_contact_for_wp_user($wpuser->ID);
 						  if ( ! empty( $contact[0] ) ) {
 						  $user_permissions = get_post_meta( $contact[0]->ID, 'rtbiz_profile_permissions', true );
-						  $value =  array( RT_BIZ_HD_TEXT_DOMAIN => Rt_Access_Control::$permissions['author']['value'] );
+						  $value =  array( RT_BIZ_HD_TEXT_DOMAIN => Rtbiz_Access_Control::$permissions['author']['value'] );
 						  if ( ! empty( $user_permissions ) ){
 						  $value = array_merge( $value, $user_permissions );
 						  }
@@ -764,15 +764,15 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 							<td><?php echo $user->display_name ?></td>
 							<td><input type="radio" class="rt-hd-setup-acl" data-id="<?php echo $user->ID; ?>"
 									   name="ACL_<?php echo $user->ID; ?>"
-									   value="<?php echo Rt_Access_Control::$permissions['admin']['value']; ?>" <?php echo ( $row->permission == Rt_Access_Control::$permissions['admin']['value'] ) ? 'checked' : ''; ?> />
+									   value="<?php echo Rtbiz_Access_Control::$permissions['admin']['value']; ?>" <?php echo ( $row->permission == Rtbiz_Access_Control::$permissions['admin']['value'] ) ? 'checked' : ''; ?> />
 							</td>
 							<td><input type="radio" class="rt-hd-setup-acl" data-id="<?php echo $user->ID; ?>"
 									   name="ACL_<?php echo $user->ID; ?>"
-									   value="<?php echo Rt_Access_Control::$permissions['editor']['value']; ?>" <?php echo ( $row->permission == Rt_Access_Control::$permissions['editor']['value'] ) ? 'checked' : ''; ?> />
+									   value="<?php echo Rtbiz_Access_Control::$permissions['editor']['value']; ?>" <?php echo ( $row->permission == Rtbiz_Access_Control::$permissions['editor']['value'] ) ? 'checked' : ''; ?> />
 							</td>
 							<td><input type="radio" class="rt-hd-setup-acl" data-id="<?php echo $user->ID; ?>"
 									   name="ACL_<?php echo $user->ID; ?>"
-									   value="<?php echo Rt_Access_Control::$permissions['author']['value']; ?>" <?php echo ( $row->permission == Rt_Access_Control::$permissions['author']['value'] ) ? 'checked' : ''; ?> />
+									   value="<?php echo Rtbiz_Access_Control::$permissions['author']['value']; ?>" <?php echo ( $row->permission == Rtbiz_Access_Control::$permissions['author']['value'] ) ? 'checked' : ''; ?> />
 							</td>
 							<td><img alt="load" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
 							</td>
