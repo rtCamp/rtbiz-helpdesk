@@ -211,8 +211,9 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 					global $redux_helpdesk_settings;
 					if ( isset( $redux_helpdesk_settings['rthd_support_page'] ) && ! empty( $redux_helpdesk_settings['rthd_support_page'] ) ) {
 						$page = get_post( $redux_helpdesk_settings['rthd_support_page'] );
+						$link = get_permalink( $page->ID );
 						?>
-						<a class="clearfix" href="<?php echo "/{$page->post_name}"; ?>"><button class=""><?php _e( 'Create New Ticket', RTBIZ_HD_TEXT_DOMAIN ) ?></button></a>
+						<a class="clearfix" href="<?php echo $link; ?>"><button class=""><?php _e( 'Create New Ticket', RTBIZ_HD_TEXT_DOMAIN ) ?></button></a>
 					<?php
 					}
 				}
@@ -224,22 +225,15 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 				if ( 'yes' == $arg_shortcode['show_support_form_link'] ) {
 					if ( isset( $redux_helpdesk_settings['rthd_support_page'] ) && ! empty( $redux_helpdesk_settings['rthd_support_page'] ) ) {
 						$page = get_post( $redux_helpdesk_settings['rthd_support_page'] );
+						$link = get_permalink( $page->ID );
 						if ( $oder_shortcode ) {
-						    $support_url = "/{$page->post_name}?order_id={$arg_shortcode['orderid']}";
-						} else {
-							$support_url = "/{$page->post_name}";
+							$link = add_query_arg( array( 'order_id' => $arg_shortcode['orderid'] ), $link );
 						} ?>
-
-						<a class="clearfix" href="<?php echo $support_url; ?>"><button class="button btn button-primary btn-primary"><?php _e( 'Create New Ticket', RTBIZ_HD_TEXT_DOMAIN ) ?></button></a>
+						<a class="clearfix" href="<?php echo $link; ?>"><button class="button btn button-primary btn-primary"><?php _e( 'Create New Ticket', RTBIZ_HD_TEXT_DOMAIN ) ?></button></a>
 					<?php
 					}
 				}
 				if ( empty( $tickets ) && ! $is_staff ) {
-					if ( empty( $page ) ) {
-						if ( isset( $redux_helpdesk_settings['rthd_support_page'] ) && ! empty( $redux_helpdesk_settings['rthd_support_page'] ) ) {
-							$page = get_post( $redux_helpdesk_settings['rthd_support_page'] );
-						}
-					}
 					echo '<p>'.__( 'You have not created any tickets yet. Create one now.', RTBIZ_HD_TEXT_DOMAIN ).'</p>';
 				} else if ( empty( $tickets ) ) {
 					echo '<p>'.__( 'No tickets found', RTBIZ_HD_TEXT_DOMAIN ).'</p>';

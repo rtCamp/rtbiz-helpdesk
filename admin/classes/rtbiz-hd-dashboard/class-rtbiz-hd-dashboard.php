@@ -190,7 +190,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 				'top_clients',
 					), $rtbiz_hd_dashboard->screen_id, 'column2' );
 
-			add_meta_box( 'rthd-tickets-by-product', __( 'Tickets by Offerings', RTBIZ_HD_TEXT_DOMAIN ), array(
+			add_meta_box( 'rthd-tickets-by-product', __( 'Tickets by Prodcuts', RTBIZ_HD_TEXT_DOMAIN ), array(
 				$this,
 				'tickets_by_products',
 					), $rtbiz_hd_dashboard->screen_id, 'column1' );
@@ -286,7 +286,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 			$taxonomy = Rt_Products::$product_slug;
 			$terms = get_terms( $taxonomy );
 			$data_source = array();
-			$cols = array( __( 'Offerings', RTBIZ_HD_TEXT_DOMAIN ), __( 'Count', RTBIZ_HD_TEXT_DOMAIN ) );
+			$cols = array( __( 'Products', RTBIZ_HD_TEXT_DOMAIN ), __( 'Count', RTBIZ_HD_TEXT_DOMAIN ) );
 			$rows = array();
 			$post_type = Rtbiz_HD_Module::$post_type;
 			$total = 0;
