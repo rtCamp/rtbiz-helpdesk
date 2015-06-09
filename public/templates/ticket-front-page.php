@@ -219,6 +219,12 @@ $user_edit_content = current_user_can( $cap );
 						if ( ! empty( $emails ) ) {
 							$emails = array_diff( $emails, array( $comment->comment_author_email ) );
 						}
+						if ( ! empty( $other_contacts ) ) {
+							$other_contacts = array_diff( $other_contacts, array( $comment->comment_author_email ) );
+						}
+						if ( ! empty( $subscriber ) ) {
+							$subscriber = array_diff( $subscriber, array( $comment->comment_author_email ) );
+						}
 					}
 					?>
 
