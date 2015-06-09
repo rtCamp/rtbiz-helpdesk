@@ -188,7 +188,7 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 				'menu_position'      => $menu_position,
 				'supports'           => array( 'title', 'editor', 'comments', 'revisions' ),
 				'capability_type'    => self::$post_type,
-				'map_meta_cap'    => true,
+				//'map_meta_cap'    => true,
 			);
 
 			return register_post_type( self::$post_type, $args );
