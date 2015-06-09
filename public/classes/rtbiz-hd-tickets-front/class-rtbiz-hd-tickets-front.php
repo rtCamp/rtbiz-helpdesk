@@ -141,7 +141,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 				return rtbiz_hd_locate_template( 'ticket-error-page.php' );
 			}
 
-			if ( ! empty( $post ) && isset( $wp_query->query['rtbiz_hd_ticket'] ) ) {
+			if ( ! empty( $post ) && isset( $wp_query->query[ Rtbiz_HD_Module::$post_type ] ) ) {
 				global $rtbiz_hd_email_notification;
 				$user = wp_get_current_user();
 				if ( ! current_user_can( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' ) ) && current_user_can( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' ) ) ) {
@@ -212,7 +212,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 			if ( empty( $post ) || $wrong_unique_id ) {
 				$wp_query->is_404 = true;
 				$wp_query->set_404();
-				if ( isset( $wp_query->query['rtbiz_hd_ticket'] ) ) {
+				if ( isset( $wp_query->query[ Rtbiz_HD_Module::$post_type ] ) ) {
 					$message = sprintf( '%s ', __( "<div style='margin-left: 0;'>Sorry! Your requested ticket wasn't found." ) );
 				} else {
 					$message = '';
