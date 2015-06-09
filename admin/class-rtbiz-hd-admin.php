@@ -316,7 +316,7 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 			 * class.
 			 */
 			global $post, $pagenow;
-
+			$rtbiz_hd_post_type = 'post';
 			if ( isset( $_GET['post'] ) ) {
 				$rtbiz_hd_post_type = get_post_type( $_GET['post'] );
 			} elseif ( isset( $_GET['post_type'] ) && ( 'post-new.php' == $pagenow || 'edit.php' == $pagenow ) ) {
@@ -364,7 +364,7 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 			 */
 
 			global $post, $pagenow, $rtbiz_hd_setup_wizard;
-
+			$rtbiz_hd_post_type = 'post';
 			if ( isset( $_GET['post'] ) ) {
 				$rtbiz_hd_post_type = get_post_type( $_GET['post'] );
 			} elseif ( isset( $_GET['post_type'] ) && ( 'post-new.php' == $pagenow || 'edit.php' == $pagenow ) ) {
