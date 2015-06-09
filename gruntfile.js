@@ -18,8 +18,8 @@ module.exports = function ( grunt ) {
 			// Admin Panel CSS
 			backend: {
 				options: {
-					sassDir: 'app/assets/admin/css/sass/',
-					cssDir: 'app/assets/admin/css/'
+					sassDir: 'admin/css/sass/',
+					cssDir: 'admin/css/'
 				}
 			}
 		},
@@ -32,31 +32,31 @@ module.exports = function ( grunt ) {
 			},
 			frontend: {
 				src: [
-					'app/assets/js/common.js',
-					'app/assets/js/app.js',
-					'app/assets/js/vendors/stickyfloat.js',
-				    'app/assets/js/vendors/plupupload/plupload.full.min.js'
+					'public/js/common.js',
+					'public/js/app.js',
+					'public/js/vendors/stickyfloat.js',
+				    'public/js/vendors/plupupload/plupload.full.min.js'
 				],
-				dest: 'app/assets/js/helpdesk-min.js'
+				dest: 'public/js/helpdesk-min.js'
 			},
 			backend: {
 				src: [
-					'app/assets/admin/js/vendors/moment.js',
-					'app/assets/js/vendors/plupupload/plupload.full.min.js',
-					'app/assets/admin/js/vendors/jquery.steps.js',
-					'app/assets/admin/js/setup-wizard.js',
-					'app/assets/js/common.js',
-					'app/assets/admin/js/admin.js',
-				    'app/assets/admin/js/rthd_plugin_check.js'
+					'admin/js/vendors/moment.js',
+					'public/js/vendors/plupupload/plupload.full.min.js',
+					'admin/js/vendors/jquery.steps.js',
+					'admin/js/setup-wizard.js',
+					'public/js/common.js',
+					'admin/js/admin.js',
+				    'admin/js/rthd_plugin_check.js'
 				],
-				dest: 'app/assets/admin/js/helpdesk-admin-min.js'
+				dest: 'admin/js/helpdesk-admin-min.js'
 			},
 			support: {
 				src: [
-					'app/assets/js/rt_support_form.js',
-					'app/assets/js/vendors/plupupload/plupload.full.min.js'
+					'public/js/rt_support_form.js',
+					'public/js/vendors/plupupload/plupload.full.min.js'
 				],
-				dest: 'app/assets/js/helpdesk-support-min.js'
+				dest: 'public/js/helpdesk-support-min.js'
 			}
 		},
 		// Watch for hanges and trigger compass and uglify
