@@ -6,11 +6,9 @@ Donate Link:       https://rtcamp.com/donate/
 Tags:              helpdesk, support, products, tickets, followups, customers, e-commerce
 Requires at least: 4.1
 Tested up to:      4.2.2
-Stable tag:        1.2.6
+Stable tag:        1.3
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
-
-rtBiz Helpdesk - Keep your customers happy & gay !
 
 == Description ==
 
@@ -59,6 +57,10 @@ Please refer to the documentation.
 1. Dashboard
 
 == Changelog ==
+
+= 1.3 =
+* Skeleton update
+* Minor improvements and bug fixes
 
 = 1.2.6 =
 * Ticket short-code updated
