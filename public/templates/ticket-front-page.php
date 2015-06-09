@@ -453,38 +453,6 @@ $user_edit_content = current_user_can( $cap );
 						</div>
 					</div>
 				<?php } ?>
-
-				<?php
-				if ( current_user_can( $cap ) ) {
-					$connected_tickets = new WP_Query( array(
-						'connected_type'  => Rtbiz_HD_Module::$post_type . '_to_' . Rtbiz_HD_Module::$post_type,
-						'connected_items' => $post->ID,
-						'nopaging'        => true,
-					) );
-					if ( $connected_tickets->have_posts() ) {
-						?>
-						<div class="rt-hd-sidebar-box">
-							<div class="rt-hd-ticket-info">
-								<h3 class="rt-hd-ticket-info-header"><?php echo __( 'Related Tickets' ); ?></h3>
-
-								<div class="rthd-collapse-icon"><a class='rthd-collapse-click' href="#"><span
-											class="dashicons dashicons-arrow-up-alt2"></span></a></div>
-								<div class="rthd-clearfix"></div>
-							</div>
-							<div class="rt-hd-ticket-sub-row rt-hd-related-ticket">
-								<ul>
-									<?php foreach ( $connected_tickets->posts as $p ) { ?>
-										<li>
-											<a href="<?php echo get_post_permalink( $p->ID ); ?>"><?php echo '[#' . $p->ID . '] ' . esc_attr( strlen( balanceTags( $p->post_title ) ) > 15 ? substr( balanceTags( $p->post_title ), 0, 15 ) . '...' : balanceTags( $p->post_title ) ) ?>  </a><?php echo rtbiz_hd_status_markup( $p->post_status ); ?>
-										</li>
-									<?php } ?>
-								</ul>
-							</div>
-						</div>
-					<?php
-					}
-				}
-				?>
 			</div>
 
 		</div>

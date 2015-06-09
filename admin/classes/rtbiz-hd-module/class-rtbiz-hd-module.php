@@ -61,13 +61,13 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 			Rtbiz_HD::$loader->add_action( 'rt_attributes_relations_updated', $this, 'update_ticket_table', 10, 2 );
 			Rtbiz_HD::$loader->add_action( 'rt_attributes_relations_deleted', $this, 'update_ticket_table', 10, 2 );
 
-			rtbiz_register_p2p_connection( self::$post_type, self::$post_type, array(
+			/*rtbiz_register_p2p_connection( self::$post_type, self::$post_type, array(
 					'name' => self::$post_type . '_to_' . self::$post_type,
 					'from' => self::$post_type,
 					'to' => self::$post_type,
 					'reciprocal' => true,
 					'title' => 'Related ' . $this->labels['all_items'],
-				) );
+				) );*/
 
 			Rtbiz_HD::$loader->add_action( 'bulk_post_updated_messages', $this, 'bulk_ticket_update_messages', 10, 2 );
 			Rtbiz_HD::$loader->add_action( 'post_updated_messages', $this, 'ticket_updated_messages', 10, 2 );
