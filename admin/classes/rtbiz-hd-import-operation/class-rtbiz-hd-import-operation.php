@@ -233,10 +233,10 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 					}
 				} else { // create user and then add to p2p
 					$create_wp_user = false;
-					$setting = rtbiz_hd_get_redux_settings();
-					if ( 1 == $setting['rthd_enable_auto_wp_user_create'] ) {
-						$create_wp_user = true;
-					}
+					//					$setting = rtbiz_hd_get_redux_settings();
+					//					if ( 1 == $setting['rthd_enable_auto_wp_user_create'] ) {
+					//						$create_wp_user = true;
+					//					}
 					$this->add_contacts_to_post( array( array( 'address' => $_POST['email'] ) ), $_POST['post_id'], $create_wp_user );
 					$response['status'] = true;
 					$response['is_contact'] = true;

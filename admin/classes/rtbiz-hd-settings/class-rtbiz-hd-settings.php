@@ -570,15 +570,15 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 				'title'       => __( 'Advanced Settings' ),
 				'permissions' => $admin_cap,
 				'fields'      => array(
-					array(
-						'id'       => 'rthd_enable_auto_wp_user_create',
-						'type'     => 'switch',
-						'title'    => __( 'Auto Wordpress User Create' ),
-						'subtitle' => __( 'Create new wordpress user on adding of new customer' ),
-						'default'  => false,
-						'on'       => __( 'Enable' ),
-						'off'      => __( 'Disable' ),
-					),
+					/*					array(
+											'id'       => 'rthd_enable_auto_wp_user_create',
+											'type'     => 'switch',
+											'title'    => __( 'Auto Wordpress User Create' ),
+											'subtitle' => __( 'Create new wordpress user on adding of new customer' ),
+											'default'  => false,
+											'on'       => __( 'Enable' ),
+											'off'      => __( 'Disable' ),
+					),*/
 					array(
 						'id'       => 'rthd_enable_auto_assign',
 						'type'     => 'switch',
