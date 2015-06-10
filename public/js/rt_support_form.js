@@ -69,7 +69,8 @@ jQuery( document ).ready(function () {
 							e.preventDefault();
 							jQuery( '#support-form-filelist' ).html( '' );
 							jQuery( '#rthd_support_attach_ids' ).val( uploadedfiles );
-							if ( ! rthd_tinymce_get_content_support( 'post_description' )) {
+                            var post_content = rthd_tinymce_get_content_support( 'post_description' )
+							if ( ! jQuery.trim( post_content ) ) {
 								alert( 'Please enter Description' );
 								// need to find tinyMCE change event and add
 								// jQuery('#editor_container').after("<span class='error'>Please enter Discrpition</span>");
