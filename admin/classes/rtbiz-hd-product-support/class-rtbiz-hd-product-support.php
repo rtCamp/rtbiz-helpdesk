@@ -83,10 +83,10 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 
 			// Show ticket in order of woo and edd
 			Rtbiz_HD::$loader->add_filter( 'manage_shop_order_posts_columns', $this, 'order_post_columns', 20 );
-			Rtbiz_HD::$loader->add_action( 'manage_shop_order_posts_custom_column', $this, 'order_post_columns_show', 20, 2 );
+			Rtbiz_HD::$loader->add_action( 'manage_shop_order_posts_custom_column', $this, 'wc_order_post_columns_show', 20, 2 );
 
-			Rtbiz_HD::$loader->add_filter( 'manage_payments_posts_columns', $this, 'order_post_columns' );
-			Rtbiz_HD::$loader->add_filter( 'manage_payments_posts_custom_column', $this, 'order_post_columns_show', 10, 2 );
+			Rtbiz_HD::$loader->add_filter( 'edd_payments_table_columns', $this, 'order_post_columns' );
+			Rtbiz_HD::$loader->add_filter( 'edd_payments_table_column', $this, 'edd_order_post_columns_show', 10, 3 );
 
 			// edd Customer column
 			Rtbiz_HD::$loader->add_filter( 'edd_report_customer_columns', $this, 'edd_customer_columns' );
@@ -112,10 +112,17 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 			return $columns;
 		}
 
-		function order_post_columns_show( $column_name, $payment ) {
+		function wc_order_post_columns_show( $column_name, $payment ) {
 			if ( Rtbiz_HD_Module::$post_type.'_order' == $column_name ) {
 				echo $this->get_order_ticket_column_view( $payment );
 			}
+		}
+
+		function edd_order_post_columns_show( $value, $payment, $column_name ) {
+			if ( Rtbiz_HD_Module::$post_type.'_order' == $column_name ) {
+				$value = $this->get_order_ticket_column_view( $payment );
+			}
+			return $value;
 		}
 
 		function get_order_ticket_column_view( $payment ) {
