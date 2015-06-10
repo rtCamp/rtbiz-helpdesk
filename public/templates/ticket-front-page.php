@@ -299,7 +299,7 @@ $user_edit_content = current_user_can( $cap );
 
 							<?php
 							if ( ! empty( $created_by ) ) {
-								echo ' <a class="rthd-ticket-created-by" title="Created by ' . $created_by->display_name . ' ' . $create_by_time . '" href="' . ( current_user_can( $cap ) ? rtbiz_hd_biz_user_profile_link( $created_by->user_email ) : '#' ) . '">' . get_avatar( $created_by->user_email, '30' ) . '</a>';
+								echo ' <a class="rthd-ticket-created-by" title="Created by ' . $created_by->display_name . ' ' . $create_by_time . '" href="' . ( current_user_can( $cap ) ? rtbiz_hd_biz_user_profile_link( $created_by->user_email ) : '#' ) . '">' . get_avatar( $created_by->user_email, '48' ) . '</a>';
 							}
 							// contact group
 							foreach ( $other_contacts as $email ) {
@@ -312,7 +312,7 @@ $user_edit_content = current_user_can( $cap );
 									$display_name = $user->display_name;
 								}
 
-								echo '<a title= "' . $display_name . '" class="rthd-last-reply-by rthd-contact-avatar-no-reply"  href="' . ( current_user_can( $cap ) ? rtbiz_hd_biz_user_profile_link( $email ) : '#' ) . '">' . get_avatar( $email, '30' ) . ' </a>';
+								echo '<a title= "' . $display_name . '" class="rthd-last-reply-by rthd-contact-avatar-no-reply"  href="' . ( current_user_can( $cap ) ? rtbiz_hd_biz_user_profile_link( $email ) : '#' ) . '">' . get_avatar( $email, '48' ) . ' </a>';
 							}
 
 							if ( current_user_can( $cap ) ) {
@@ -323,7 +323,7 @@ $user_edit_content = current_user_can( $cap );
 									if ( ! empty( $user ) ) {
 										$display_name = $user->display_name;
 									}
-									echo '<a title= "' . $display_name . '" class="rthd-last-reply-by rthd-contact-avatar-no-reply"  href="' . ( current_user_can( $cap ) ? rtbiz_hd_biz_user_profile_link( $email ) : '#' ) . '">' . get_avatar( $email, '30' ) . ' </a>';
+									echo '<a title= "' . $display_name . '" class="rthd-last-reply-by rthd-contact-avatar-no-reply"  href="' . ( current_user_can( $cap ) ? rtbiz_hd_biz_user_profile_link( $email ) : '#' ) . '">' . get_avatar( $email, '48' ) . ' </a>';
 								}
 							}
 							// Other comments authors
@@ -334,13 +334,13 @@ $user_edit_content = current_user_can( $cap );
 									if ( ! empty( $user ) ) {
 										$display_name = $user->display_name;
 									}
-									echo '<a title= "' . $display_name . '" class="rthd-last-reply-by"  href="' . ( current_user_can( $cap ) ? rtbiz_hd_biz_user_profile_link( $email ) : '#' ) . '">' . get_avatar( $email, '30' ) . ' </a>';
+									echo '<a title= "' . $display_name . '" class="rthd-last-reply-by"  href="' . ( current_user_can( $cap ) ? rtbiz_hd_biz_user_profile_link( $email ) : '#' ) . '">' . get_avatar( $email, '48' ) . ' </a>';
 								}
 							}
 
 							// Last reply author
 							if ( ! empty( $comment ) && $comment->comment_author_email != $created_by->user_email ) {
-								echo '<a class="rthd-last-reply-by" title="last reply by ' . $comment->comment_author . ' ' . esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . ' ago " href="' . ( current_user_can( $cap ) ? rtbiz_hd_biz_user_profile_link( $comment->comment_author_email ) : '#' ) . '">' . get_avatar( $comment->comment_author_email, '30' ) . ' </a>'
+								echo '<a class="rthd-last-reply-by" title="last reply by ' . $comment->comment_author . ' ' . esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . ' ago " href="' . ( current_user_can( $cap ) ? rtbiz_hd_biz_user_profile_link( $comment->comment_author_email ) : '#' ) . '">' . get_avatar( $comment->comment_author_email, '48' ) . ' </a>'
 								?>
 							<?php } ?>
 						</div>
