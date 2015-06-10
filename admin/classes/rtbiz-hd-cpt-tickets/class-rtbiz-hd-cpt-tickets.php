@@ -808,7 +808,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 					echo '<option value="0">Select Product</option>';
 
 					foreach ( $products as $product ) {
-						if ( isset( $_GET['product'] ) && $product->slug == $_GET['product'] ) {
+						if ( isset( $_GET[ Rt_Products::$product_slug ] ) && $product->slug == $_GET[ Rt_Products::$product_slug ] ) {
 							echo '<option value="' . $product->slug . '" selected="selected">' . $product->name . '</option>';
 						} else {
 							echo '<option value="' . $product->slug . '">' . $product->name . '</option>';
