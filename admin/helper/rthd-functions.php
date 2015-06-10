@@ -648,6 +648,7 @@ function rtbiz_hd_render_comment( $comment, $user_edit, $type = 'right', $echo =
 	}
 
 	$side_class = ( 'right' == $type ) ? 'rthd-self' : ( ( 'left' == $type ) ? 'rthd-other' : '' );
+	$side_class .= ' ' . $private_text;
 	$editable_class = ( $display_private_comment_flag ) ? 'editable' : '';
 	?>
 	<li class="<?php echo $side_class . ' ' . $editable_class . ' ' . ( ( $display_private_comment_flag ) ? '' : 'private-comment-item' ); ?>" id="comment-<?php echo esc_attr( $comment->comment_ID ); ?>">

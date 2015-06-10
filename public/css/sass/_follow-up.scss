@@ -345,6 +345,16 @@ ul#chat-UI {
     border-right-color: #bbb;
 }
 
+.rthd-discussion li.Sensitive{
+  .avatar:before {
+    border-right-color: #C85D5D;
+  }
+
+  .rthd-messages{
+    border: 1px solid #C85D5D;
+  }
+}
+
 #followup-load-more:hover {
     background: #039;
 }
