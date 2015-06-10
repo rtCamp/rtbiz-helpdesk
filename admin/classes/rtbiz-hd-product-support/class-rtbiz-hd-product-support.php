@@ -83,7 +83,7 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 
 			// Show ticket in order of woo and edd
 			Rtbiz_HD::$loader->add_filter( 'manage_shop_order_posts_columns', $this, 'order_post_columns', 20 );
-			Rtbiz_HD::$loader->add_action( 'manage_shop_order_posts_custom_column', $this, 'order_post_columns_show', 20, 2 );
+			Rtbiz_HD::$loader->add_action( 'manage_shop_order_posts_custom_column', $this, 'order_post_columns_show', 20, 3 );
 
 			Rtbiz_HD::$loader->add_filter( 'edd_payments_table_columns', $this, 'order_post_columns' );
 			Rtbiz_HD::$loader->add_filter( 'edd_payments_table_column', $this, 'order_post_columns_show', 10, 3 );
