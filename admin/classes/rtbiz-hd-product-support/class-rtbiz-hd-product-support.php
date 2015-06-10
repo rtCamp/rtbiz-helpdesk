@@ -76,11 +76,15 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 
 			// Show ticket column in product and download post type
 			Rtbiz_HD::$loader->add_filter( 'edd_download_columns', $this, 'manage_woo_edd_post_columns' );
+			Rtbiz_HD::$loader->add_action( 'manage_download_posts_custom_column', $this, 'manage_woo_edd_post_columns_show', 10, 2 );
+
 			Rtbiz_HD::$loader->add_filter( 'manage_product_posts_columns', $this, 'manage_woo_edd_post_columns' );
-			Rtbiz_HD::$loader->add_action( 'manage_posts_custom_column', $this, 'manage_woo_edd_post_columns_show', 10, 2 );
+			Rtbiz_HD::$loader->add_action( 'manage_product_posts_custom_column', $this, 'manage_woo_edd_post_columns_show', 10, 2 );
 
 			// Show ticket in order of woo and edd
-			Rtbiz_HD::$loader->add_filter( 'manage_shop_order_posts_columns', $this, 'order_post_columns' );
+			Rtbiz_HD::$loader->add_filter( 'manage_shop_order_posts_columns', $this, 'order_post_columns', 20 );
+			Rtbiz_HD::$loader->add_action( 'manage_shop_order_posts_custom_column', $this, 'order_post_columns_show', 20, 2 );
+
 			Rtbiz_HD::$loader->add_filter( 'edd_payments_table_columns', $this, 'order_post_columns' );
 			Rtbiz_HD::$loader->add_filter( 'edd_payments_table_column', $this, 'order_post_columns_show', 10, 3 );
 
@@ -151,7 +155,7 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 					$tax = $wpdb->get_var( 'SELECT taxonomy_id FROM '.$wpdb->prefix.'taxonomymeta WHERE meta_key = "'.Rt_Products::$term_product_id_meta_key.'" AND meta_value ='.$post_id );
 					if ( ! empty( $tax ) ) {
 						$terms = get_term( $tax, Rt_Products::$product_slug );
-						if ( ! is_wp_error( $terms ) ) {
+						if ( ! is_wp_error( $terms ) && !empty( $terms ) ) {
 							$posts = new WP_Query( array(
 								                       'post_type'                      => Rtbiz_HD_Module::$post_type,
 								                       'post_status'                    => 'any',
