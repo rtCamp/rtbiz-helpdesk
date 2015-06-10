@@ -102,6 +102,9 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 				'edit_item'     => __( 'Edit Ticket', RTBIZ_HD_TEXT_DOMAIN ),
 				'view_item'     => __( 'View Ticket', RTBIZ_HD_TEXT_DOMAIN ),
 				'search_items'  => __( 'Search Tickets', RTBIZ_HD_TEXT_DOMAIN ),
+				'parent_item_colon'  => __( 'Parent Tickets', RTBIZ_HD_TEXT_DOMAIN ),
+				'not_found'  => __( 'No Tickets found', RTBIZ_HD_TEXT_DOMAIN ),
+				'not_found_in_trash'  => __( 'No Tickets found in Trash', RTBIZ_HD_TEXT_DOMAIN ),
 			);
 			return $this->labels;
 		}
