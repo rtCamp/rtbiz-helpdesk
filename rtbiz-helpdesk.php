@@ -104,7 +104,7 @@ new Rt_HD_Edd_License();
 
 require_once RTBIZ_HD_PATH . 'includes/class-rtbiz-hd-plugin-check.php';
 
-global $plugins_dependency;
+global $rtbiz_hd_plugin_check;
 
 $plugins_dependency = array(
 	'rtbiz' => array(
