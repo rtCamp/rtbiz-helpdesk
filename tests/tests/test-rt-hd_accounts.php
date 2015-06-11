@@ -15,13 +15,13 @@ class test_Rt_HD_Accounts extends PHPUnit_Framework_TestCase {
 	 */
 	function setUp() {
 		parent::setUp();
-		$this->rthdaccounts = new Rt_HD_Accounts();
+		$this->rthdaccounts = new Rtbiz_HD_Accounts();
 	}
 
 	function  test_check_function() {
-		$this->assertTrue( method_exists( $this->rthdaccounts, 'add_new_account_ajax' ), 'Class Rt_HD_Accounts does not have method add_new_account_ajax' );
-		$this->assertTrue( method_exists( $this->rthdaccounts, 'account_autocomplete_ajax' ), 'Class Rt_HD_Accounts does not have method account_autocomplete_ajax' );
-		$this->assertTrue( method_exists( $this->rthdaccounts, 'get_term_by_key_ajax' ), 'Class Rt_HD_Accounts does not have method get_term_by_key_ajax' );
+		$this->assertTrue( method_exists( $this->rthdaccounts, 'ajax_add_new_account' ), 'Class Rt_HD_Accounts does not have method ajax_add_new_account' );
+		$this->assertTrue( method_exists( $this->rthdaccounts, 'ajax_account_autocomplete' ), 'Class Rt_HD_Accounts does not have method ajax_account_autocomplete' );
+		$this->assertTrue( method_exists( $this->rthdaccounts, 'ajax_get_term_by_key' ), 'Class Rt_HD_Accounts does not have method ajax_get_term_by_key' );
 	}
 
 	/**

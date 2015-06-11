@@ -1,0 +1,262 @@
+
+.rthd-option-title {
+    border-bottom: 1px solid #eee;
+    font-size: 15px;
+    letter-spacing: 0.02rem;
+    margin-bottom: 15px;
+    margin-top: 0;
+    padding: 0 0 6px;
+    //text-transform: uppercase;
+}
+
+.rthd_td_show{
+	visibility: hidden;
+}
+
+.mobile .rthd_td_show, .row-actions.visible, div.comment-item:hover .rthd_td_show, tr:hover .rthd_td_show{
+	visibility: visible;
+}
+
+.column-rthd_ticket_title{
+	width: 30%;
+}
+
+.rthd-setup-wizard-row {
+	overflow: hidden;
+	margin-bottom: 20px;
+
+	label {
+		float: left;
+		width: 25%;
+	}
+
+	input {
+		margin: 0;
+	}
+
+	li {
+		margin-bottom: 14px;
+	}
+}
+
+.rthd-domain-action {
+	line-height: 30px;
+    padding: 10px 0 0 25%;
+	position: relative;
+
+	span {
+		display: inline-block;
+		margin-right: 5px;
+	}
+
+	img {
+		position: relative;
+		top: 4px;
+	}
+}
+
+#rthd-all-import-message {
+	display: inline-block;
+    line-height: 28px;
+    margin-left: 5px;
+}
+
+.rthd-setup-list-users {
+	text-align: center;
+
+	th {
+		padding: 10px;
+		text-align: center;
+		vertical-align: top;
+
+		&:first-child {
+			text-align: left;
+		}
+	}
+
+	.rthd-tooltip {
+		margin: 0 auto;
+	}
+
+	td {
+		padding: 2px 10px;
+	}
+
+	.avatar {
+		border-radius: 100%;
+		float: left;
+		margin-bottom: 5px;
+		margin-right: 8px;
+		position: relative;
+		top: 3px;
+	}
+
+	input[type="radio"] {
+		vertical-align: top;
+	}
+
+	/*	.delete_row {
+			background-color: #dd3d36;
+			border-radius: 100%;
+			box-shadow: 0 0 0;
+			color: #fff;
+			display: inline-block;
+			float: none;
+			font-size: 14px;
+			font-weight: bold;
+			height: 14px;
+			line-height: 14px;
+			padding: 0;
+			position: relative;
+			text-align: center;
+			text-decoration: none;
+			top: -3px;
+			vertical-align: top;
+			width: 14px;
+
+			&:focus,
+				&:hover {
+				color: #fff;
+			}
+		}*/
+}
+
+.rthd-setup-user-title {
+	display: block;
+    float: left;
+    overflow: hidden;
+    position: relative;
+    text-align: left;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    top: 5px;
+    white-space: nowrap;
+    width: 75%;
+    word-break: keep-all;
+}
+
+#divSubscriberList .delete_row,
+.delete_row.rthd_delete_attachment {
+	background-color: transparent;
+	border-radius: 0;
+	box-shadow: 0 0 0;
+	color: inherit;
+	outline: 0;
+}
+
+.rthd-wizard-process {
+    margin-bottom: 20px;
+    overflow: hidden;
+
+	span {
+		float: left;
+		margin-right: 10px;
+	}
+}
+
+.rthd-setup-store-controls {
+	.rthd-setup-wizard-row label {
+		float: none;
+		width: auto;
+	}
+}
+
+#rthd-import-all-spinner {
+	position: relative;
+    top: 4px;
+}
+
+.rthd_selected_user {
+	background-color: #f9f9f9;
+    display: none;
+    float: left;
+    max-height: 260px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 50%;
+	margin-top: 20px;
+}
+
+.rthd-setup-team-settings {
+	margin-top: 20px;
+
+	.rthd-setup-wizard-row label {
+		width: 45%;
+	}
+
+	.rthd-domain-action {
+		padding-left: 45%;
+	}
+}
+
+.delete_row_user{
+	border: 0;
+	text-decoration: none;
+	color: inherit;
+	vertical-align: top;
+	margin-top: -5px;
+	display: inline-block;
+}
+
+a#rthd-new-support-page{
+	display: inline-block;
+}
+
+#rthd-support-spinner{
+	position: absolute;
+}
+
+.rthd-ticket-author {
+	text-align: center;
+
+	a {
+		display: inline-block;
+	}
+
+	span {
+		display: block;
+		word-break: break-all;
+	}
+}
+
+.rthd-avatar-img {
+	border-radius: 100%;
+}
+
+.rthd_ticket_followup {
+	text-align: center;
+
+	.post-com-count {
+		display: inline-block;
+	}
+}
+
+.rthd_ticket_assignee {
+	text-align: center;
+
+	span {
+		display: block;
+	}
+}
+
+#rt-hd-ticket-data {
+	input[type="text"],
+	select {
+		width: 100%;
+	}
+}
+
+.rthd-author-row {
+	.rthd-tip-bottom {
+		right: -10px;
+	}
+
+	.rthd-tip-bottom::after,
+	.rthd-tip-bottom::before {
+		left: 89%;
+	}
+}
+
+.rthd-addon-license-status{
+	margin: 20px 0 10px 0;
+}
