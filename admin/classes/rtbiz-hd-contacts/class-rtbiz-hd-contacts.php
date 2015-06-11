@@ -185,15 +185,15 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 			$contact_metaboxes['side']['core']['submitdiv'] = $wp_meta_boxes[ rtbiz_get_contact_post_type() ]['side']['core']['submitdiv'];
 //			$contact_metaboxes['side']['core'][ 'p2p-from-' . rtbiz_get_contact_post_type() . '_to_user' ] = $wp_meta_boxes[ rtbiz_get_contact_post_type() ]['side']['default'][ 'p2p-from-' . rtbiz_get_contact_post_type() . '_to_user' ];
 			$contact_metaboxes['side']['core']['rt-biz-acl-details'] = $wp_meta_boxes[ rtbiz_get_contact_post_type() ]['side']['default']['rt-biz-acl-details'];
-			$contact_metaboxes['side']['core']['productdiv'] = $wp_meta_boxes[ rtbiz_get_contact_post_type() ]['side']['core']['productdiv'];
-			$contact_metaboxes['side']['core']['teamdiv'] = $wp_meta_boxes[ rtbiz_get_contact_post_type() ]['side']['core']['teamdiv'];
+			$contact_metaboxes['side']['core'][ Rt_Products::$product_slug . 'div' ] = $wp_meta_boxes[ rtbiz_get_contact_post_type() ]['side']['core'][ Rt_Products::$product_slug . 'div' ];
+			$contact_metaboxes['side']['core'][ Rtbiz_Teams::$slug . 'div' ] = $wp_meta_boxes[ rtbiz_get_contact_post_type() ]['side']['core'][ Rtbiz_Teams::$slug . 'div' ];
 
 			if ( ! empty( $is_staff_member ) && 'yes' == $is_staff_member ) {
 				// remove metabox only staff
 			} else {
 				//remove metabox only customer
-				unset( $contact_metaboxes['side']['core']['productdiv'] );
-				unset( $contact_metaboxes['side']['core']['rt-departmentdiv'] );
+				unset( $contact_metaboxes['side']['core'][ Rt_Products::$product_slug . 'div' ] );
+				unset( $contact_metaboxes['side']['core'][ Rtbiz_Teams::$slug . 'div' ] );
 			}
 
 			$wp_meta_boxes[ rtbiz_get_contact_post_type() ] = $contact_metaboxes;
@@ -405,7 +405,6 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		}
 
 		public function add_hd_additional_details( $fields ) {
-			var_dump( $fields );
 			$custom_filed = array();
 			$post_type = isset( $_REQUEST['post_type'] )? $_REQUEST['post_type'] : '';
 			if ( empty( $post_type ) && ! empty( $_REQUEST['post'] ) ) {
