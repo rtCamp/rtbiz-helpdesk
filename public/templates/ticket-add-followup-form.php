@@ -17,7 +17,9 @@ global $current_user;
 	<input id="post-id" type="hidden" value="<?php echo esc_attr( $post->ID ); ?>"/>
 	<input id="edit-comment-id" name="comment_id" type="hidden"/>
 
-	<textarea id="followupcontent" class="followupcontent" rows="5" cols="20" name="followupcontent" placeholder="Add new followup" required></textarea>
+	<p><textarea id="followupcontent" class="followupcontent" rows="5" cols="20" name="followupcontent" placeholder="Add new followup" required></textarea></p>
+
+	<p class="form-allowed-tags" id="form-allowed-tags">You may use these <abbr title="HyperText Markup Language">HTML</abbr> tags and attributes:  <code>&lt;a href="" title=""&gt; &lt;abbr title=""&gt; &lt;acronym title=""&gt; &lt;b&gt; &lt;blockquote cite=""&gt; &lt;cite&gt; &lt;code&gt; &lt;del datetime=""&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=""&gt; &lt;s&gt; &lt;strike&gt; &lt;strong&gt; </code></p>
 
 	<div id="rthd-followup-form" class="clearfix">
 		<div class="rthd-attachment-box">

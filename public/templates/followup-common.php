@@ -113,7 +113,9 @@ if ( ! empty( $post->post_content ) ) {
 <input id="followup-totalcomment" type="hidden" value="<?php echo esc_attr( $totalComment ); ?>"/>
 <div id="dialog-form" title="Edit Followup" style='display: none'>
 
-	<textarea id="editedfollowupcontent" name="editedfollowupcontent" placeholder="edit followup" rows="5" cols="20" required></textarea>
+	<p><textarea id="editedfollowupcontent" name="editedfollowupcontent" placeholder="edit followup" rows="5" cols="20" required></textarea></p>
+
+	<p class="form-allowed-tags" id="form-allowed-tags">You may use these <abbr title="HyperText Markup Language">HTML</abbr> tags and attributes:  <code>&lt;a href="" title=""&gt; &lt;abbr title=""&gt; &lt;acronym title=""&gt; &lt;b&gt; &lt;blockquote cite=""&gt; &lt;cite&gt; &lt;code&gt; &lt;del datetime=""&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=""&gt; &lt;s&gt; &lt;strike&gt; &lt;strong&gt; </code></p>
 
 	<div id="edit-private-comment" class="rthd-visibility-wrap">
 		<?php if ( current_user_can( $cap ) ) { ?>
