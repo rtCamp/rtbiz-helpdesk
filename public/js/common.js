@@ -130,12 +130,14 @@ jQuery( document ).ready(function () {
 					//jQuery(this).removeAttr('disabled');
 					return false;
 				}
-				if ( ! rthd_common.rthd_tinymce_get_content( 'followupcontent' )) {
-					alert( "Please input followup." );
-					jQuery( '#hdspinner' ).hide();
-					//jQuery(this).removeAttr('disabled');
-					return false;
-				}
+                var post_content = jQuery( '#followupcontent' )
+                if ( ! jQuery.trim( post_content.val() ) ) {
+                    post_content.css( 'border-color', 'red' );
+                    jQuery( '#hdspinner' ).hide();
+                    return false;
+                } else {
+                    post_content.css( 'border-color', '' );
+                }
 				return true;
 			}
 
@@ -160,7 +162,7 @@ jQuery( document ).ready(function () {
 				formData.append( "action", 'rtbiz_hd_add_new_followup_front' );
 				formData.append( "followuptype", jQuery( '#followuptype' ).val() );
 				formData.append( "follwoup-time", jQuery( '#follwoup-time' ).val() );
-				formData.append( "followup_content", rthd_common.rthd_tinymce_get_content( 'followupcontent' ) );
+				formData.append( "followup_content", jQuery( '#followupcontent' ).val() );
 				formData.append( "followup_attachments", uploadedfiles );
 
 				//if ( force ){
@@ -195,8 +197,7 @@ jQuery( document ).ready(function () {
 							jQuery( '.rt-hd-ticket-last-reply-value' ).html( data.last_reply );
 
 							// front end code end
-
-							rthd_common.rthd_tinymce_set_content( 'followupcontent', '' );
+                            jQuery('#followupcontent').val('');
 
 							var comment_privacy = jQuery( "input[name='private_comment']" );
 							if (comment_privacy.is( ':radio' )) {
@@ -279,7 +280,7 @@ jQuery( document ).ready(function () {
 			jQuery( document ).on('click', '.editfollowuplink', function (e) {
 				e.preventDefault();
 				var select = jQuery( this ).parents();
-				rthd_common.rthd_tinymce_set_content( 'editedfollowupcontent', jQuery( this ).parents().siblings( '.rthd-comment-content' ).data( 'content' ) );
+                jQuery('#editedfollowupcontent').val( jQuery( this ).parents().siblings( '.rthd-comment-content' ).data( 'content' ) );
 				commentid = select.siblings( '#followup-id' ).val();
 				var that = select.siblings( '#is-private-comment' ).val();
 				var followup_type = jQuery( "input[name='edit_private'][value='" + that + "']" );
@@ -303,12 +304,15 @@ jQuery( document ).ready(function () {
 			// edit followup ajax call
 			jQuery( "#editfollowup" ).click(function () {
 				var requestArray = {};
-				var content = rthd_common.rthd_tinymce_get_content( 'editedfollowupcontent' );
-				if ( ! content) {
-					alert( "Please enter comment" );
-					return false;
-				}
-				if (content.replace( /\s+/g, " " ) === jQuery( '#comment-' + commentid ).find( '.rthd-comment-content' ).data( 'content' )) {
+				var post_content = jQuery( '#editedfollowupcontent' );
+                if ( ! jQuery.trim( post_content.val() ) ) {
+                    post_content.css( 'border-color', 'red' );
+                    return false;
+                } else {
+                    post_content.css( 'border-color', '' );
+                }
+
+				if ( post_content.val() === jQuery( '#comment-' + commentid ).find( '.rthd-comment-content' ).data( 'content' )) {
 					alert( 'You have not edited comment!' );
 					return false;
 				}
@@ -331,7 +335,7 @@ jQuery( document ).ready(function () {
 				requestArray.followuptype = 'comment';
 				//requestArray.followup_post_id = jQuery( "#ticket_id" ).val();
 				//requestArray.follwoup_time = jQuery( "#follwoup_time" ).val();
-				requestArray.followup_content = content;
+				requestArray.followup_content = post_content.val();
 				jQuery.ajax({
 					url: ajaxurl,
 					dataType: "json",

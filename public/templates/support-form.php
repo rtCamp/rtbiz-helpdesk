@@ -66,21 +66,7 @@
 	</div>
 
 	<div id="editor_container">
-		<!--		<textarea name="post[description]" placeholder="Description" rows="5" cols="20" required></textarea>-->
-		<?php
-		$editor_id = 'post_description';
-		$settings  = array(
-			'media_buttons' => false,
-			'editor_class'  => 'post_description',
-			'tinymce'       => array(
-				'height' => 150,
-			),
-		);
-		if ( empty( $_POST['post_description'] ) ) {
-			$_POST['post_description'] = '';
-		}
-		wp_editor( $_POST['post_description'], $editor_id, $settings );
-		?>
+		<textarea id="post_description" placeholder="Description" rows="5" cols="20" name="post[description]" class="post_description" required><?php echo isset( $_POST['post']['description'] ) ? $_POST['post']['description'] : ''; ?></textarea>
 	</div>
 
 	<?php

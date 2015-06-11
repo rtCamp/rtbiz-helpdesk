@@ -16,13 +16,9 @@ global $current_user;
 
 	<input id="post-id" type="hidden" value="<?php echo esc_attr( $post->ID ); ?>"/>
 	<input id="edit-comment-id" name="comment_id" type="hidden"/>
-	<?php
-	$editor_id = 'followupcontent';
-	$settings  = array( 'textarea_rows' => 5, 'media_buttons' => false, 'editor_class' => 'followupcontent' );
-	wp_editor( '', $editor_id, $settings );
-	?>
 
-	<!--	<textarea id="followupcontent" class="followup-content" name="followupcontent" placeholder="Add new followup"></textarea>-->
+	<textarea id="followupcontent" class="followupcontent" rows="5" cols="20" name="followupcontent" placeholder="Add new followup" required></textarea>
+
 	<div id="rthd-followup-form" class="clearfix">
 		<div class="rthd-attachment-box">
 			<?php

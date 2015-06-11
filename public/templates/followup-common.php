@@ -112,17 +112,9 @@ if ( ! empty( $post->post_content ) ) {
 <input id="followup-limit" type="hidden" value="<?php echo esc_attr( $Limit ); ?>"/>
 <input id="followup-totalcomment" type="hidden" value="<?php echo esc_attr( $totalComment ); ?>"/>
 <div id="dialog-form" title="Edit Followup" style='display: none'>
-	<!--	<textarea id="editedfollowupcontent" name="editedfollowupcontent" placeholder="edit followup" rows="5"></textarea>-->
-	<?php
-	$editor_id = 'editedfollowupcontent';
-	$settings  = array(
-		'media_buttons' => false,
-		'tinymce'       => array(
-			'height' => 150,
-		),
-	);
-	wp_editor( '', $editor_id, $settings );
-	?>
+
+	<textarea id="editedfollowupcontent" name="editedfollowupcontent" placeholder="edit followup" rows="5" cols="20" required></textarea>
+
 	<div id="edit-private-comment" class="rthd-visibility-wrap">
 		<?php if ( current_user_can( $cap ) ) { ?>
 			<label class="rthd-visibility"> Visibility: </label>
