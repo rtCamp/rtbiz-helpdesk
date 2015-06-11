@@ -401,18 +401,13 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 			global $wp_meta_boxes;
 			$custom_order['submitdiv'] = $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['core']['submitdiv'];
 			$custom_order['rt-hd-ticket-data'] = $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default']['rt-hd-ticket-data'];
-			$custom_order['productdiv'] = $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['core']['productdiv'];
-			//$custom_order[ 'p2p-from-' . Rtbiz_HD_Module::$post_type . '_to_' . rtbiz_get_contact_post_type() ] = $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default'][ 'p2p-from-' . Rtbiz_HD_Module::$post_type . '_to_' . rtbiz_get_contact_post_type() ];
+			$custom_order[ Rt_Products::$product_slug . 'div' ] = $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['core'][ Rt_Products::$product_slug . 'div' ];
 			$custom_order['rt-hd-subscriiber'] = $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default']['rt-hd-subscriiber'];
 			$custom_order['rt-hd-ticket-order-history'] = $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default']['rt-hd-ticket-order-history'];
-			//$custom_order[ 'p2p-any-' . Rtbiz_HD_Module::$post_type . '_to_' . Rtbiz_HD_Module::$post_type ] = $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default'][ 'p2p-any-' . Rtbiz_HD_Module::$post_type . '_to_' . Rtbiz_HD_Module::$post_type ];
-			//$custom_order['rt-teamsdiv'] = $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['core']['rt-teamsdiv'];
 			$wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['core'] = $custom_order;
 			unset( $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default']['rt-hd-ticket-data'] );
-			unset( $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default'][ 'p2p-from-' . Rtbiz_HD_Module::$post_type . '_to_' . rtbiz_get_contact_post_type() ] );
 			unset( $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default']['rt-hd-subscriiber'] );
 			unset( $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default']['rt-hd-ticket-order-history'] );
-			unset( $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default'][ 'p2p-any-' . Rtbiz_HD_Module::$post_type . '_to_' . Rtbiz_HD_Module::$post_type ] );
 		}
 
 		/**
