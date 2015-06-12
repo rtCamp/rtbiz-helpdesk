@@ -70,11 +70,32 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 			}
 
 			if ( isset( $setting['rthd_email_signature'] ) ) {
-				rtbiz_hd_set_redux_settings( 'rthd_email_signature', wp_strip_all_tags( $setting['rthd_email_signature'] ) );
+				$setting['rthd_email_signature'] = wp_kses( $setting['rthd_email_signature'], array(
+					'a' => array(
+						'href' => array(),
+						'title' => array(),
+						'target' => array(),
+					),
+					'br' => array(),
+					'em' => array(),
+					'strong' => array(),
+				) );
+
+				rtbiz_hd_set_redux_settings( 'rthd_email_signature', $setting['rthd_email_signature'] );
 			}
 
 			if ( isset( $setting['rthd_auto_response_message'] ) ) {
-				rtbiz_hd_set_redux_settings( 'rthd_auto_response_message', wp_strip_all_tags( $setting['rthd_auto_response_message'] ) );
+				$setting['rthd_auto_response_message'] = wp_kses( $setting['rthd_auto_response_message'], array(
+					'a' => array(
+						'href' => array(),
+						'title' => array(),
+						'target' => array(),
+					),
+					'br' => array(),
+					'em' => array(),
+					'strong' => array(),
+				) );
+				rtbiz_hd_set_redux_settings( 'rthd_auto_response_message', $setting['rthd_auto_response_message'] );
 			}
 
 		}
