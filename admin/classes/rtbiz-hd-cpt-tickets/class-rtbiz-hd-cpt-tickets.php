@@ -400,14 +400,27 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 		public function metabox_rearrenge() {
 			global $wp_meta_boxes;
 			$custom_order['submitdiv'] = $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['core']['submitdiv'];
+			unset( $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['core']['submitdiv'] );
+
 			$custom_order['rt-hd-ticket-data'] = $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default']['rt-hd-ticket-data'];
+			unset( $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default']['rt-hd-ticket-data'] );
+
 			$custom_order[ Rt_Products::$product_slug . 'div' ] = $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['core'][ Rt_Products::$product_slug . 'div' ];
+			unset( $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['core'][ Rt_Products::$product_slug . 'div' ] );
+
 			$custom_order['rt-hd-subscriiber'] = $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default']['rt-hd-subscriiber'];
+			unset( $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default']['rt-hd-subscriiber'] );
+
 			$custom_order['rt-hd-ticket-order-history'] = $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default']['rt-hd-ticket-order-history'];
-			$wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['core'] = $custom_order;
+			unset( $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default']['rt-hd-ticket-order-history'] );
+
 			unset( $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default']['rt-hd-ticket-data'] );
 			unset( $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default']['rt-hd-subscriiber'] );
 			unset( $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default']['rt-hd-ticket-order-history'] );
+			unset( $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['core'][ Rtbiz_Teams::$slug . 'div' ] );
+
+			$custom_order = array_merge( $custom_order, $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['core'] );
+			$wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['core'] = $custom_order;
 		}
 
 		/**
