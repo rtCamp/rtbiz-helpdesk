@@ -189,7 +189,7 @@ if ( ! class_exists( 'Rtbiz_HD_Plugin_Check' ) ) {
 			}
 
 			if ( ! class_exists( 'Rtbiz_HD_Plugin_Upgrader_Skin' ) ) {
-				require_once( RTBIZ_HD_PATH . 'admin/class-rt-hd-plugin-upgrader-skin.php' );
+				require_once( RTBIZ_HD_PATH . 'admin/classes/rtbiz-hd-plugin-upgrader-skin/class-rt-hd-plugin-upgrader-skin.php' );
 			}
 
 			$upgrader = new Plugin_Upgrader( new Rtbiz_HD_Plugin_Upgrader_Skin( array(

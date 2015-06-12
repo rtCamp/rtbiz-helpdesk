@@ -1109,7 +1109,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			$comment_content     = str_replace( $signature, '', $comment_content );
 			$comment_author_ip = preg_replace( '/[^0-9a-fA-F:., ]/', '', $_SERVER['REMOTE_ADDR'] );
 			$comment_author_ip = empty( $comment_author_ip ) ? ' ' : $comment_author_ip;
-			$comment_agent = substr( $_SERVER['HTTP_USER_AGENT'], 0, 254 );
+			$comment_agent = isset( $_SERVER['HTTP_USER_AGENT'] ) ? substr( $_SERVER['HTTP_USER_AGENT'], 0, 254 ) : '';
 			$comment_agent = empty( $comment_agent ) ? ' ' : $comment_author;
 			$user = '';
 			if ( ! empty( $comment_author_email ) ) {
