@@ -17,6 +17,8 @@ class Rtbiz_HD_Public {
 		global $wp_query, $post;
 
 		// include this css everywhere
+		wp_enqueue_style( 'dashicons' );
+
 		wp_enqueue_style( 'rthd-common-css', RTBIZ_HD_URL. 'public/css/rthd-common.css', array(), RTBIZ_HD_VERSION, 'all' );
 
 		// bail if not helpdesk
@@ -36,6 +38,8 @@ class Rtbiz_HD_Public {
 		if ( ! isset( $wp_query->query_vars['post_type'] ) || $wp_query->query_vars['post_type'] != Rtbiz_HD_Module::$post_type || empty( $post ) ) {
 			return;
 		}
+
+		wp_enqueue_style( 'dashicons' );
 
 		wp_enqueue_script( 'rthd-app-js', RTBIZ_HD_URL . 'public/js/helpdesk-min.js', array( 'jquery' ), RTBIZ_HD_VERSION, true );
 
