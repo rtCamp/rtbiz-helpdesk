@@ -121,8 +121,8 @@ jQuery( document ).ready(function ($) {
 						jQuery( '.rthd-participants' ).show();
 					}
 					if ( ! data.has_replied) {
-						var htmlappend = '<a title="' + data.display_name + '" class="rthd-last-reply-by" href="' + data.edit_link + '">' + data.avatar + ' </a>';
-						jQuery( '.rthd-ticket-created-by' ).after( htmlappend );
+						var htmlappend = '<div class="rthd-participant-container"><a title="' + data.display_name + '" class="rthd-last-reply-by" href="' + data.edit_link + '">' + data.avatar + ' </a><a href="javascript:;" class="rthd-participant-remove" data-email="' + email + '" data-post_id="' + jQuery( '#post-id' ).val() + '" >X</a></div>';
+						jQuery( '.rthd-ticket-created-by').parent().after( htmlappend );
 						//if (data.is_contact){
 						//	jQuery('.rthd-contact-avatar-no-reply-div' ).append( htmlappend );
 						//} else {
@@ -145,6 +145,30 @@ jQuery( document ).ready(function ($) {
 			}
 		});
 	});
+
+    jQuery( document ).on( "click", ".rthd-participant-remove", function() {
+        var requestArray = {};
+        //jQuery( '#rthd-subscribe-email-spinner' ).show();
+        var participant_div = jQuery( this);
+        requestArray.action = 'rtbiz_hd_remove_subscriber_email';
+        requestArray.email = participant_div.data('email');
+        requestArray.post_id = jQuery( '#post-id' ).val();
+        jQuery.ajax({
+            url: ajaxurl,
+            type: 'POST',
+            dataType: 'json',
+            data: requestArray,
+            success: function (data) {
+                if (data.status) {
+                    participant_div.parent().remove();
+                } else {
+                    alert( 'Error: participant not removed' )
+                }
+                //jQuery( '#rthd-subscribe-email-spinner' ).hide();
+            }
+        });
+    });
+
 
 	var hashcheck = check_hash_call_hash();
 	if ( ! hashcheck && window.location.hash.length !== 0) {

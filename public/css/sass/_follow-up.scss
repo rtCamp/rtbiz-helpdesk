@@ -499,6 +499,14 @@ h2.rt-hd-ticket-front-title{
 	margin-left: 5px;
 }
 
+.rthd-ticket-user-activity div.rthd-participant-container{
+  display: inline-block;
+  vertical-align: middle;
+  margin: 5px 15px 5px 0;
+  height: 48px;
+  width: 48px;
+}
+
 .rthd-ticket-user-activity a img, .rthd-ticket-user-activity-backend a img, .rthd-ticket-user-activity a input{
 	border-radius: 100%;
 	vertical-align: middle;
@@ -506,15 +514,11 @@ h2.rt-hd-ticket-front-title{
 
 .rthd-ticket-user-activity > a, .rthd-ticket-user-activity-backend > a{
 	display: inline-block;
-	padding-left: 8px;
 	text-decoration: none;
 }
 
 .rthd-ticket-user-activity-backend > a{
 	padding-bottom: 8px;
-}
-.rthd-ticket-user-activity > a {
-	margin: 5px 8px 5px 0;
 }
 
 .rthd-contact-avatar-no-reply-div a img,.rthd-subscriber-avatar-no-reply-div a img{
@@ -529,6 +533,25 @@ h2.rt-hd-ticket-front-title{
 	margin: 0;
 	padding: 0;
 }
+
+.rthd-ticket-user-activity div.rthd-participant-container .rthd-participant-remove{
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    display: none;
+    position: relative;
+    top: -57px;
+    background-color: rgb(136, 136, 136);
+    border-radius: 25px;
+    font-size: 14px;
+    vertical-align: middle;
+    left: 33px;
+}
+
+.rthd-ticket-user-activity div.rthd-participant-container:hover .rthd-participant-remove{
+    display: inline-block;
+}
+
 
 .rt-hd-ticket-sub-row {
 	margin: 10px 0 15px;
