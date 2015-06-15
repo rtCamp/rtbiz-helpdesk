@@ -247,7 +247,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			$can = current_user_can( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' ) );
 			if ( $response['is_contact'] || ( $can && true == $response['status'] ) ) {
 				$user = get_user_by( 'email', $_POST['email'] );
-				$response['avatar'] = get_avatar( $_POST['email'], 30 );
+				$response['avatar'] = get_avatar( $_POST['email'], 48 );
 				if ( ! empty( $user ) ) {
 					$response['display_name'] = $user->display_name;
 				} else {
