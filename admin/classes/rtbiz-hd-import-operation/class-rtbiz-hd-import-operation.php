@@ -281,7 +281,6 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				if ( $user ) {
 					// remove user to subscriber
 					$ticket_subscribers = get_post_meta( $_POST['post_id'], '_rtbiz_hd_subscribe_to', true );
-					var_dump( $ticket_subscribers );
 					if ( in_array( $user->ID, $ticket_subscribers ) ) {
 						unset( $ticket_subscribers[ array_search( $user->ID, $ticket_subscribers ) ] );
 						update_post_meta( $_POST['post_id'], '_rtbiz_hd_subscribe_to', $ticket_subscribers );
