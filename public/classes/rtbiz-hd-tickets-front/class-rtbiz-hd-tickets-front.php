@@ -41,6 +41,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 
 			add_filter( 'template_include', array( $this, 'template_include' ), 1, 1 );
 			add_filter( 'wp_title', array( $this, 'change_title' ), 9999, 1 );
+			add_filter( 'wpseo_title', array( $this, 'change_title' ), 9999, 1 );
 
 			add_action( 'rthd_ticket_front_page_after_header', array( $this, 'set_rthd_ticket_post_data' ) );
 		}
@@ -102,7 +103,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		function change_title( $title ) {
+		function change_title( $title, $separator = '', $separator_location = ''  ) {
 			global $rthd_front_page_title;
 			if ( isset( $rthd_front_page_title ) && ! empty( $rthd_front_page_title ) ) {
 				return $rthd_front_page_title;
@@ -155,7 +156,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 						$message      = sprintf( '%s ', __( 'You do not have sufficient permissions to access this ticket.' ) );
 						global $rthd_messages;
 						$rthd_messages[] = array( 'type' => 'error rthd-error', 'message' => $message, 'displayed' => 'no' );
-						$rthd_front_page_title = __( 'Helpdesk' );
+						$rthd_front_page_title = __( 'Helpdesk - Ticket #' . $post->ID );
 
 						return rtbiz_hd_locate_template( 'ticket-404-page.php' );
 					}
@@ -179,7 +180,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 						$message      = sprintf( '%s ', __( 'You do not have sufficient permissions to access this ticket.' ) );
 						global $rthd_messages;
 						$rthd_messages[] = array( 'type' => 'error rthd-error', 'message' => $message, 'displayed' => 'no' );
-						$rthd_front_page_title = __( 'Helpdesk' );
+						$rthd_front_page_title = __( 'Helpdesk - Ticket #' . $post->ID );
 
 						return rtbiz_hd_locate_template( 'ticket-404-page.php' );
 					}
@@ -200,6 +201,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 					global $rthd_front_page_title;
 					$labels                = $rtbiz_hd_module->labels;
 					$rthd_front_page_title = $ticket->post_title . ' | ' . get_bloginfo();
+					$rthd_front_page_title = __( 'Helpdesk - Ticket #' . $ticket->ID );
 					$post                  = $ticket;
 					setup_postdata( $post );
 				} else {
@@ -219,7 +221,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 				}
 				global $rthd_messages;
 				$rthd_messages[] = array( 'type' => 'error rthd-error', 'message' => $message, 'displayed' => 'no' );
-				$rthd_front_page_title = __( 'Helpdesk' );
+				$rthd_front_page_title = __( 'Helpdesk - Ticket not found' );
 
 				return rtbiz_hd_locate_template( 'ticket-404-page.php' );
 
@@ -227,6 +229,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 			}
 
 			$rtbiz_helpdesk_template = true;
+			$rthd_front_page_title = __( 'Helpdesk - Ticket #' . $post->ID );
 
 			return rtbiz_hd_locate_template( 'ticket-front-page.php' );
 		}

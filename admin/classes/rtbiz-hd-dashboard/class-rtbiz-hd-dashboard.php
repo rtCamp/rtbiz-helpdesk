@@ -190,7 +190,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 				'top_clients',
 					), $rtbiz_hd_dashboard->screen_id, 'column2' );
 
-			add_meta_box( 'rthd-tickets-by-product', __( 'Tickets by Prodcuts', RTBIZ_HD_TEXT_DOMAIN ), array(
+			add_meta_box( 'rthd-tickets-by-product', __( 'Tickets by Products', RTBIZ_HD_TEXT_DOMAIN ), array(
 				$this,
 				'tickets_by_products',
 					), $rtbiz_hd_dashboard->screen_id, 'column1' );
@@ -291,7 +291,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 			$post_type = Rtbiz_HD_Module::$post_type;
 			$total = 0;
 			if ( empty( $terms ) ) {
-				printf( 'No products [ products / downloads ] found. <a target="_blank" href="%s" >Add new product</a>', admin_url( 'edit-tags.php?taxonomy=' . Rt_Products::$product_slug . '&post_type=' . Rtbiz_HD_Module::$post_type ) );
+				printf( 'No products [ product / downloads ] found. <a target="_blank" href="%s" >Add new product</a>', admin_url( 'edit-tags.php?taxonomy=' . Rt_Products::$product_slug . '&post_type=' . Rtbiz_HD_Module::$post_type ) );
 				return;
 			}
 			if ( ! $terms instanceof WP_Error ) {

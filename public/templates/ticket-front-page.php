@@ -291,15 +291,14 @@ $user_edit_content = current_user_can( $cap );
 										<button type="button" class='rthd-subscribe-email-submit button btn'>Add
 										</button>
 										<span style="display: none;" class="rthd-subscribe-validation"></span>
-										<img id="rthd-subscribe-email-spinner" class="helpdeskspinner"
-										     src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
+										<img id="rthd-subscribe-email-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
 									</div>
 								</div>
 							</div>
 
 							<?php
 							if ( ! empty( $created_by ) ) {
-								echo ' <a class="rthd-ticket-created-by" title="Created by ' . $created_by->display_name . ' ' . $create_by_time . '" href="' . ( current_user_can( $cap ) ? rtbiz_hd_biz_user_profile_link( $created_by->user_email ) : '#' ) . '">' . get_avatar( $created_by->user_email, '48' ) . '</a>';
+								echo '<div class="rthd-participant-container"><a class="rthd-ticket-created-by" title="Created by ' . $created_by->display_name . ' ' . $create_by_time . '" href="' . ( current_user_can( $cap ) ? rtbiz_hd_biz_user_profile_link( $created_by->user_email ) : '#' ) . '">' . get_avatar( $created_by->user_email, '48' ) . '</a></div>';
 							}
 							// contact group
 							foreach ( $other_contacts as $email ) {
@@ -312,7 +311,7 @@ $user_edit_content = current_user_can( $cap );
 									$display_name = $user->display_name;
 								}
 
-								echo '<a title= "' . $display_name . '" class="rthd-last-reply-by rthd-contact-avatar-no-reply"  href="' . ( current_user_can( $cap ) ? rtbiz_hd_biz_user_profile_link( $email ) : '#' ) . '">' . get_avatar( $email, '48' ) . ' </a>';
+								echo '<div class="rthd-participant-container"><a title= "' . $display_name . '" class="rthd-last-reply-by rthd-contact-avatar-no-reply"  href="' . ( current_user_can( $cap ) ? rtbiz_hd_biz_user_profile_link( $email ) : '#' ) . '">' . get_avatar( $email, '48' ) . ' </a><a href="javascript:;" class="rthd-participant-remove" data-email="' . $email . '" data-post_id="' . $post->ID . '" >X</a></div>';
 							}
 
 							if ( current_user_can( $cap ) ) {
@@ -323,7 +322,7 @@ $user_edit_content = current_user_can( $cap );
 									if ( ! empty( $user ) ) {
 										$display_name = $user->display_name;
 									}
-									echo '<a title= "' . $display_name . '" class="rthd-last-reply-by rthd-contact-avatar-no-reply"  href="' . ( current_user_can( $cap ) ? rtbiz_hd_biz_user_profile_link( $email ) : '#' ) . '">' . get_avatar( $email, '48' ) . ' </a>';
+									echo '<div class="rthd-participant-container"><a title= "' . $display_name . '" class="rthd-last-reply-by rthd-contact-avatar-no-reply"  href="' . ( current_user_can( $cap ) ? rtbiz_hd_biz_user_profile_link( $email ) : '#' ) . '">' . get_avatar( $email, '48' ) . ' </a><a href="javascript:;" class="rthd-participant-remove" data-email="' . $email . '" data-post_id="' . $post->ID . '" >X</a></div>';
 								}
 							}
 							// Other comments authors
@@ -334,13 +333,13 @@ $user_edit_content = current_user_can( $cap );
 									if ( ! empty( $user ) ) {
 										$display_name = $user->display_name;
 									}
-									echo '<a title= "' . $display_name . '" class="rthd-last-reply-by"  href="' . ( current_user_can( $cap ) ? rtbiz_hd_biz_user_profile_link( $email ) : '#' ) . '">' . get_avatar( $email, '48' ) . ' </a>';
+									echo '<div class="rthd-participant-container"> class="rthd-participant-container"<a title= "' . $display_name . '" class="rthd-last-reply-by"  href="' . ( current_user_can( $cap ) ? rtbiz_hd_biz_user_profile_link( $email ) : '#' ) . '">' . get_avatar( $email, '48' ) . ' </a><a href="javascript:;" class="rthd-participant-remove" data-email="' . $email . '" data-post_id="' . $post->ID . '" >X</a></div>';
 								}
 							}
 
 							// Last reply author
 							if ( ! empty( $comment ) && $comment->comment_author_email != $created_by->user_email ) {
-								echo '<a class="rthd-last-reply-by" title="last reply by ' . $comment->comment_author . ' ' . esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . ' ago " href="' . ( current_user_can( $cap ) ? rtbiz_hd_biz_user_profile_link( $comment->comment_author_email ) : '#' ) . '">' . get_avatar( $comment->comment_author_email, '48' ) . ' </a>'
+								echo '<div class="rthd-participant-container"><a class="rthd-last-reply-by" title="last reply by ' . $comment->comment_author . ' ' . esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . ' ago " href="' . ( current_user_can( $cap ) ? rtbiz_hd_biz_user_profile_link( $comment->comment_author_email ) : '#' ) . '">' . get_avatar( $comment->comment_author_email, '48' ) . ' </a><a href="javascript:;" class="rthd-participant-remove" data-email="' . $comment->comment_author_email . '" data-post_id="' . $post->ID . '" >X</a><div>'
 								?>
 							<?php } ?>
 						</div>

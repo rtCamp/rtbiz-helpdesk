@@ -562,7 +562,16 @@ function rtbiz_hd_create_new_ticket_title( $key, $post_id ) {
 function rtbiz_hd_get_email_signature_settings() {
 	$redux = rtbiz_hd_get_redux_settings();
 	if ( isset( $redux['rthd_enable_signature'] ) && 1 == $redux['rthd_enable_signature'] && isset( $redux['rthd_email_signature'] ) ) {
-		return wp_strip_all_tags( $redux['rthd_email_signature'] );
+		return wp_kses( $redux['rthd_email_signature'], array(
+			'a' => array(
+				'href' => array(),
+				'title' => array(),
+				'target' => array(),
+			),
+			'br' => array(),
+			'em' => array(),
+			'strong' => array(),
+		) );
 	}
 	return '';
 }
@@ -570,7 +579,16 @@ function rtbiz_hd_get_email_signature_settings() {
 function rtbiz_hd_get_auto_response_message() {
 	$redux = rtbiz_hd_get_redux_settings();
 	if ( isset( $redux['rthd_enable_auto_response'] ) && 1 == $redux['rthd_enable_auto_response'] && isset( $redux['rthd_auto_response_message'] ) ) {
-		return wp_strip_all_tags( $redux['rthd_auto_response_message'] );
+		return wp_kses( $redux['rthd_auto_response_message'], array(
+			'a' => array(
+				'href' => array(),
+				'title' => array(),
+				'target' => array(),
+			),
+			'br' => array(),
+			'em' => array(),
+			'strong' => array(),
+		) );
 	}
 	return '';
 }

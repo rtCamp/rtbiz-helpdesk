@@ -191,6 +191,7 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 				'menu_position'      => $menu_position,
 				'supports'           => array( 'title', 'editor', 'comments', 'revisions' ),
 				'capability_type'    => self::$post_type,
+				'exclude_from_search'=> true,
 				//'map_meta_cap'    => true,
 			);
 
