@@ -156,7 +156,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 						$message      = sprintf( '%s ', __( 'You do not have sufficient permissions to access this ticket.' ) );
 						global $rthd_messages;
 						$rthd_messages[] = array( 'type' => 'error rthd-error', 'message' => $message, 'displayed' => 'no' );
-						$rthd_front_page_title = __( 'Helpdesk' );
+						$rthd_front_page_title = __( 'Helpdesk - Ticket #' . $post->ID );
 
 						return rtbiz_hd_locate_template( 'ticket-404-page.php' );
 					}
@@ -180,7 +180,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 						$message      = sprintf( '%s ', __( 'You do not have sufficient permissions to access this ticket.' ) );
 						global $rthd_messages;
 						$rthd_messages[] = array( 'type' => 'error rthd-error', 'message' => $message, 'displayed' => 'no' );
-						$rthd_front_page_title = __( 'Helpdesk' );
+						$rthd_front_page_title = __( 'Helpdesk - Ticket #' . $post->ID );
 
 						return rtbiz_hd_locate_template( 'ticket-404-page.php' );
 					}
@@ -201,6 +201,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 					global $rthd_front_page_title;
 					$labels                = $rtbiz_hd_module->labels;
 					$rthd_front_page_title = $ticket->post_title . ' | ' . get_bloginfo();
+					$rthd_front_page_title = __( 'Helpdesk - Ticket #' . $ticket->ID );
 					$post                  = $ticket;
 					setup_postdata( $post );
 				} else {
@@ -220,7 +221,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 				}
 				global $rthd_messages;
 				$rthd_messages[] = array( 'type' => 'error rthd-error', 'message' => $message, 'displayed' => 'no' );
-				$rthd_front_page_title = __( 'Helpdesk' );
+				$rthd_front_page_title = __( 'Helpdesk - Ticket not found' );
 
 				return rtbiz_hd_locate_template( 'ticket-404-page.php' );
 
@@ -228,6 +229,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 			}
 
 			$rtbiz_helpdesk_template = true;
+			$rthd_front_page_title = __( 'Helpdesk - Ticket #' . $post->ID );
 
 			return rtbiz_hd_locate_template( 'ticket-front-page.php' );
 		}
