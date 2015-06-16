@@ -41,6 +41,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 
 			add_filter( 'template_include', array( $this, 'template_include' ), 1, 1 );
 			add_filter( 'wp_title', array( $this, 'change_title' ), 9999, 1 );
+			add_filter( 'wpseo_title', array( $this, 'change_title' ), 9999, 1 );
 
 			add_action( 'rthd_ticket_front_page_after_header', array( $this, 'set_rthd_ticket_post_data' ) );
 		}
@@ -102,7 +103,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		function change_title( $title ) {
+		function change_title( $title, $separator = '', $separator_location = ''  ) {
 			global $rthd_front_page_title;
 			if ( isset( $rthd_front_page_title ) && ! empty( $rthd_front_page_title ) ) {
 				return $rthd_front_page_title;
