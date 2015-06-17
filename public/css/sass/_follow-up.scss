@@ -74,9 +74,6 @@ ul#chat-UI {
 	border-width: 8px;
 	margin-top: -8px;
 }
-.private-comment-item.rthd-self .avatar:after, .private-comment-item.rthd-other .avatar:after {
-	border-right-color: #FFC0CB;
-}
 
 .rthd-self .rthd-messages, .rthd-other .rthd-messages, .rt-hd-ticket-front-title{
 	-ms-word-break:break-all;
@@ -125,10 +122,6 @@ ul#chat-UI {
 	margin-right: 5px;
 }
 
-#private-comment{
-	display: inline-block;
-}
-
 .rthd-visibility-wrap {
 	margin-bottom: 16px;
 
@@ -170,11 +163,6 @@ ul#chat-UI {
 	color: red;
 	float: right;
 	margin-left: 10px;
-}
-
-.private-comment-display{
-	/*color: red;*/
-	background: pink;
 }
 
 .followup-content {
@@ -345,7 +333,7 @@ ul#chat-UI {
     border-right-color: #bbb;
 }
 
-.rthd-discussion li.Sensitive{
+.rthd-discussion li.sensitive{
   .avatar:before {
     border-right-color: #C85D5D;
   }
@@ -366,7 +354,7 @@ ul#chat-UI {
 .load-more-ul li a:hover {
     background: #039;
 }
-.followup-information .private_comment_span{
+.followup-information .comment_type{
 	color: #C85D5D;
 }
 
@@ -645,11 +633,11 @@ h2.rthd-ticket-list-title{
     float: right;
 }
 
-.followup_staffonly{
-	background: beige;
+.rthd-self.staff_only .rthd-messages, .rthd-other.staff_only .rthd-messages {
+  background-color: beige;
 }
 
-.rthd-self .followup_staff_only_arrow:after, .rthd-other .followup_staff_only_arrow:after{
+.rthd-self.staff_only .avatar:after, .rthd-other.staff_only .avatar:after{
 	border-right-color: beige;
 }
 

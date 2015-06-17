@@ -108,46 +108,38 @@ if ( ! empty( $post->post_content ) ) {
 	}
 	?>
 </ul>
-<input id="followup-offset" type="hidden" value="<?php echo esc_attr( $offset ); ?>"/>
-<input id="followup-limit" type="hidden" value="<?php echo esc_attr( $Limit ); ?>"/>
-<input id="followup-totalcomment" type="hidden" value="<?php echo esc_attr( $totalComment ); ?>"/>
 <div id="dialog-form" title="Edit Followup" style='display: none'>
+
+	<input id="followup-offset" type="hidden" value="<?php echo esc_attr( $offset ); ?>"/>
+	<input id="followup-limit" type="hidden" value="<?php echo esc_attr( $Limit ); ?>"/>
+	<input id="followup-totalcomment" type="hidden" value="<?php echo esc_attr( $totalComment ); ?>"/>
+	<input id="followup-type" type="hidden" name="followuptype" value=""/>
+
+	<ui id="followup-type-list" class="">
+		<li data-ctype="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC; ?>">Customer + Staff</li>
+		<li data-ctype="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF; ?>">Staff</li>
+	</ui>
 
 	<p><textarea id="editedfollowupcontent" name="editedfollowupcontent" placeholder="edit followup" rows="5" cols="20" required></textarea></p>
 
 	<p class="form-allowed-tags" id="form-allowed-tags">You may use these <abbr title="HyperText Markup Language">HTML</abbr> tags and attributes:  <code>&lt;a href="" title=""&gt; &lt;abbr title=""&gt; &lt;acronym title=""&gt; &lt;b&gt; &lt;blockquote cite=""&gt; &lt;cite&gt; &lt;code&gt; &lt;del datetime=""&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=""&gt; &lt;s&gt; &lt;strike&gt; &lt;strong&gt; </code></p>
 
 	<div id="edit-private-comment" class="rthd-visibility-wrap">
-		<?php if ( current_user_can( $cap ) ) { ?>
-			<label class="rthd-visibility"> Visibility: </label>
-			<input type="radio" class="radio" name="edit_private"
-			       value="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"
-			       id="followup_edit_<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"/>
-			<label
-				for="followup_edit_<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"> <?php echo rtbiz_hd_get_comment_type( Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC ) ?></label>
-			<input type="radio" class="radio" name="edit_private"
-			       value="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_SENSITIVE; ?>"
-			       id="followup_edit_<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_SENSITIVE ?>"/>
-			<label
-				for="followup_edit_<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_SENSITIVE ?>"> Customers + Staff (<?php echo rtbiz_hd_get_comment_type( Rtbiz_HD_Import_Operation::$FOLLOWUP_SENSITIVE ) ?>)
-
-						<span class="rthd-tooltip rthd-followup-type-tolltip">
-						<i class="dashicons dashicons-info rtmicon"></i>
-						<span class="rthd-tip">
-							<?php _e( 'Email notification will not show content of this followup. Recommended, if you are sharing password or other sensitive information.' , RTBIZ_HD_TEXT_DOMAIN ); ?>
+		<div class="rthd-visibility-wrap">
+			<label class="rthd-visibility"> <strong>Visibility </strong></label>
+			<div class="rthd-sensitive-wrap">
+				<label for="rthd_sensitive">
+					<input id="rthd_sensitive" type="checkbox" name="followup_sensitive"
+					       value="true"/>&nbsp;<?php _e( 'Mark this as Sensitive' ); ?>
+					<span class="rthd-tooltip rthd-followup-type-tolltip">
+							<i class="dashicons dashicons-info rtmicon"></i>
+							<span class="rthd-tip"><?php
+								_e( 'Email notification will not show content of this followup. Recommended, if you are sharing password or other sensitive information.', RTBIZ_HD_TEXT_DOMAIN ); ?>
+							</span>
 						</span>
-					</span>
-			</label>
-			<input type="radio" class="radio" name="edit_private"
-			       value="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF; ?>"
-			       id="followup_edit_<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF ?>"/>
-			<label
-				for="followup_edit_<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF ?>"> <?php echo rtbiz_hd_get_comment_type( Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF ) ?> </label>
-		<?php } else { ?>
-			<input type="hidden" name="edit_private" id="edit-private"
-			       value="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>">
-		<?php }
-		?>
+				</label>
+			</div>
+		</div>
 		<img id='edithdspinner' class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>">
 	</div>
 	<button type="button" class="btn close-edit-followup">Close</button>
@@ -157,23 +149,4 @@ if ( ! empty( $post->post_content ) ) {
 	</div>
 </div>
 <?php
-if ( $user_edit_content ) {
-	?>
-	<div id="edit-ticket-data" title="Edit Ticket" style="display: none;">
-		<?php
-		$editor_id = 'editedticketcontent';
-		$settings  = array(
-			'media_buttons' => false,
-			'tinymce'       => array(
-				'height' => 150,
-			),
-		);
-		wp_editor( '', $editor_id, $settings );
-		?>
-		<!--	   <textarea id="editedticketcontent" name="editedticketcontent" placeholder="Edit ticket" rows="5"></textarea>-->
-		<button class="edit-ticket btn btn-primary" id="edit-ticket-content-click" type="button">Update</button>
-		<?php wp_nonce_field( 'rt_hd_ticket_edit', 'edit_ticket_nonce' ); ?>
-		<img id='ticket-edithdspinner' class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>">
-		<button class="btn close-edit-content">Close</button>
-	</div>
-<?php } ?>
+

@@ -17,69 +17,46 @@ global $current_user;
 	<input id="post-id" type="hidden" value="<?php echo esc_attr( $post->ID ); ?>"/>
 	<input id="edit-comment-id" name="comment_id" type="hidden"/>
 
-	<p><textarea id="followupcontent" class="followupcontent" rows="5" cols="20" name="followupcontent" placeholder="Add new followup" required></textarea></p>
+	<ui id="followup-type-list" class="">
+		<li data-ctype="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC; ?>">Customer + Staff</li>
+		<li data-ctype="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF; ?>">Staff</li>
+	</ui>
 
-	<p class="form-allowed-tags" id="form-allowed-tags">You may use these <abbr title="HyperText Markup Language">HTML</abbr> tags and attributes:  <code>&lt;a href="" title=""&gt; &lt;abbr title=""&gt; &lt;acronym title=""&gt; &lt;b&gt; &lt;blockquote cite=""&gt; &lt;cite&gt; &lt;code&gt; &lt;del datetime=""&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=""&gt; &lt;s&gt; &lt;strike&gt; &lt;strong&gt; </code></p>
+	<p><textarea id="followupcontent" class="followupcontent" rows="5" cols="20" name="followupcontent"
+	             placeholder="Add new followup" required></textarea></p>
+
+	<p class="form-allowed-tags" id="form-allowed-tags">You may use these <abbr
+			title="HyperText Markup Language">HTML</abbr> tags and attributes: <code>&lt;a href="" title=""&gt; &lt;abbr
+			title=""&gt; &lt;acronym title=""&gt; &lt;b&gt; &lt;blockquote cite=""&gt; &lt;cite&gt; &lt;code&gt; &lt;del
+			datetime=""&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=""&gt; &lt;s&gt; &lt;strike&gt; &lt;strong&gt; </code></p>
 
 	<div id="rthd-followup-form" class="clearfix">
 		<div class="rthd-attachment-box">
 			<?php
 			$cap       = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' );
-			$staffonly = current_user_can( $cap );
-			if ( $staffonly ) {
-				?>
-				<div id="private-comment">
-					<div class="rthd-visibility-wrap">
-						<label class="rthd-visibility"> <strong>Visibility </strong></label>
-            <div>
-						<input type="radio" class="radio" name="private_comment"
-						       value="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC; ?>"
-						       id="followup_privacy_<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>" checked/>
-						<label
-							for="followup_privacy_<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC ?>"> Customers + Staff </label> <br />
-
-						<input type="radio" class="radio" name="private_comment"
-						       value="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_SENSITIVE; ?>"
-						       id="followup_privacy_<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_SENSITIVE ?>"/>
-						<label
-							for="followup_privacy_<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_SENSITIVE ?>"> Customers + Staff (<?php echo rtbiz_hd_get_comment_type( Rtbiz_HD_Import_Operation::$FOLLOWUP_SENSITIVE ) ?>)
-
+			$staffonly = current_user_can( $cap ); ?>
+			<div class="rthd-visibility-wrap">
+				<label class="rthd-visibility"> <strong>Visibility </strong></label>
+				<div class="rthd-sensitive-wrap">
+					<label for="rthd_sensitive">
+						<input id="rthd_sensitive" type="checkbox" name="followup_sensitive"
+						       value="true"/>&nbsp;<?php _e( 'Mark this as Sensitive' ); ?>
 						<span class="rthd-tooltip rthd-followup-type-tolltip">
-						<i class="dashicons dashicons-info rtmicon"></i>
-						<span class="rthd-tip">
-							<?php _e( 'Email notification will not show content of this followup. Recommended, if you are sharing password or other sensitive information.' , RTBIZ_HD_TEXT_DOMAIN ); ?>
+							<i class="dashicons dashicons-info rtmicon"></i>
+							<span class="rthd-tip"><?php
+								_e( 'Email notification will not show content of this followup. Recommended, if you are sharing password or other sensitive information.', RTBIZ_HD_TEXT_DOMAIN ); ?>
+							</span>
 						</span>
-					</span>
-						</label> <br />
+					</label></div>
+				<?php if ( $staffonly && $post->post_status != 'hd-answered' ) { ?>
+					<div class="rthd-keep-status-wrap">
+						<label for="rthd_keep_status">
+							<input id="rthd_keep_status" type="checkbox" name="rthd_keep_status"
+							       text="check keep status unanswered"/>&nbsp;
+							<?php _e( 'Keep unanswered' ); ?></label></div>
+				<?php } ?>
 
-
-              <input type="radio" class="radio" name="private_comment"
-						       value="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF; ?>"
-						       id="followup_privacy_<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF ?>"/>
-						<label
-							for="followup_privacy_<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF ?>"> <?php echo rtbiz_hd_get_comment_type( Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF ) ?> </label> <br />
-            </div>
-          </div>
-				</div>
-			<?php } else { ?>
-				<label for="add-private-comment" class="description">
-					<input id="add-private-comment" name="private_comment" type="checkbox"  value="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_SENSITIVE ?>" />
-					<?php echo 'Mark this as '.rtbiz_hd_get_comment_type( Rtbiz_HD_Import_Operation::$FOLLOWUP_SENSITIVE )?></label>
-					<span class="rthd-tooltip rthd-followup-type-tolltip">
-						<i class="dashicons dashicons-info rtmicon"></i>
-						<span class="rthd-tip">
-							<?php _e( 'Email notification will not show content of this followup. Recommended, if you are sharing password or other sensitive information.' , RTBIZ_HD_TEXT_DOMAIN ); ?>
-						</span>
-					</span>
-
-			<?php }	?>
-			<?php if ( current_user_can( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' ) ) && $post->post_status != 'hd-answered' ) { ?>
-				<div class="rthd-keep-status-wrap">
-					<label for="rthd_keep_status">
-						<input id="rthd_keep_status" type="checkbox" name="rthd_keep_status"
-						       text="check keep status unanswered"/>&nbsp;
-						<?php _e( 'Keep unanswered' ); ?></label></div>
-			<?php } ?>
+			</div>
 			<div class="rthd-attachment">
 				<!--			<input id="attachemntlist" name="attachemntlist[]" type="file" multiple />-->
 				<div id="rthd-attachment-container">
