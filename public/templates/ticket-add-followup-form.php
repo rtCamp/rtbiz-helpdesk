@@ -30,8 +30,6 @@ $staffonly = current_user_can( $cap ); ?>
 	<?php } ?>
 
 	<p>
-		<textarea id="followupcontent" class="followupcontent" rows="5" cols="20" name="followupcontent"
-	             placeholder="Add new followup" required></textarea>
 		<span class="rthd-tooltip rthd-followup-content-tolltip">
 			<i class="dashicons dashicons-info rtmicon"></i>
 			<span class="rthd-tip"><?php
@@ -40,6 +38,8 @@ $staffonly = current_user_can( $cap ); ?>
 			datetime=""&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=""&gt; &lt;s&gt; &lt;strike&gt; &lt;strong&gt; </code>', RTBIZ_HD_TEXT_DOMAIN ); ?>
 			</span>
 		</span>
+		<textarea id="followupcontent" class="followupcontent" rows="5" cols="20" name="followupcontent"
+	             placeholder="Add new followup" required></textarea>
 	</p>
 
 	<div id="rthd-followup-form" class="clearfix">

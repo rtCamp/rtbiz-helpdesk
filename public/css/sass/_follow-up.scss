@@ -124,7 +124,6 @@ ul#chat-UI {
 
 .rthd-visibility-wrap {
 	margin-bottom: 16px;
-    float: left;
 	label {
 		margin-right: 10px;
 	}
@@ -651,10 +650,6 @@ img#hdspinner{
 	float: right;
 }
 
-#rthd-attachment-container{
-  text-align: right;
-}
-
 .rthd-visibility-wrap input[type="radio"]{
 	display: inline-block;
 	min-height: inherit;
@@ -684,4 +679,10 @@ img#hdspinner{
 .followup-tabs .tab.active {
     font-weight: bold;
     border-bottom: 3px solid #06C;
+}
+
+.rthd-followup-content-tolltip{
+    top: 0px;
+    position: relative;
+    float: right;
 }
