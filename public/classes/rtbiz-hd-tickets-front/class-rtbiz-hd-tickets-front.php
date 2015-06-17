@@ -216,12 +216,14 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 				$wp_query->set_404();
 				if ( isset( $wp_query->query[ Rtbiz_HD_Module::$post_type ] ) ) {
 					$message = sprintf( '%s ', __( "<div style='margin-left: 0;'>Sorry! Your requested ticket wasn't found." ) );
+					$rthd_front_page_title = __( 'Helpdesk - Ticket Not Found' );
 				} else {
 					$message = '';
+					$rthd_front_page_title = __( 'Helpdesk - Tickets' );
 				}
 				global $rthd_messages;
 				$rthd_messages[] = array( 'type' => 'error rthd-error', 'message' => $message, 'displayed' => 'no' );
-				$rthd_front_page_title = __( 'Helpdesk - Ticket not found' );
+
 
 				return rtbiz_hd_locate_template( 'ticket-404-page.php' );
 
