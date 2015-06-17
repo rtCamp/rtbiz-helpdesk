@@ -36,7 +36,6 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		 */
 		public static $FOLLOWUP_BOT = 5;
 		public static $FOLLOWUP_PUBLIC = 10;
-		public static $FOLLOWUP_SENSITIVE = 20;
 		public static $FOLLOWUP_STAFF = 30;
 
 		/**
@@ -1130,7 +1129,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		 * @return bool
 		 * @since rt-Helpdesk 0.1
 		 */
-		public function insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, $uploaded, $allemails = array(), $dndEmails, $messageid = '', $inreplyto = '', $references = '', $subscriber = array(), $originalBody = '', $comment_type = '10', $comment_parent = 0, $keep_status = false, $force_skip_duplicate_check = true ) {
+		public function insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, $uploaded, $allemails = array(), $dndEmails, $messageid = '', $inreplyto = '', $references = '', $subscriber = array(), $originalBody = '', $comment_type = '10', $comment_parent = 0, $keep_status = false, $force_skip_duplicate_check = true, $sensitive = false ) {
 
 			$post_type       = get_post_type( $comment_post_ID );
 			$ticketModel     = new Rtbiz_HD_Ticket_Model();
@@ -1143,7 +1142,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			global $signature;
 			$this->add_contacts_to_post( $allemails, $comment_post_ID );
 			$comment_content_old = $comment_content;
-			$comment_content     = str_replace( $signature, '', $comment_content );
+			$comment_content     = wp_kses_post( str_replace( $signature, '', $comment_content ) );
 			$comment_author_ip = preg_replace( '/[^0-9a-fA-F:., ]/', '', $_SERVER['REMOTE_ADDR'] );
 			$comment_author_ip = empty( $comment_author_ip ) ? ' ' : $comment_author_ip;
 			$comment_agent = isset( $_SERVER['HTTP_USER_AGENT'] ) ? substr( $_SERVER['HTTP_USER_AGENT'], 0, 254 ) : '';
@@ -1216,6 +1215,10 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			}
 			if ( '' != $references ) {
 				add_comment_meta( $comment_id, '_rtbiz_hd_references', $references );
+			}
+
+			if ( $sensitive ){
+				update_comment_meta( $comment_id, '_rtbiz_hd_sensitive', true );
 			}
 
 			$data  = array(
@@ -1301,7 +1304,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			global $threadPostId;
 			if ( ! isset( $threadPostId ) ) {
 				global $rtbiz_hd_email_notification;
-				$rtbiz_hd_email_notification->notification_new_followup_added( get_comment( $comment_id ), $comment_type, $uploaded );
+				$rtbiz_hd_email_notification->notification_new_followup_added( get_comment( $comment_id ), $comment_type, $uploaded, $sensitive );
 			}
 
 			// fololowup crated by client then hook will called
@@ -1598,7 +1601,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				die( 0 );
 			}
 
-			if ( ! isset( $_POST['private_comment'] ) ) {
+			if ( ! isset( $_POST['followuptype'] ) ) {
 				$returnArray['message'] = 'ERROR: Invalid Request';
 				echo json_encode( $returnArray );
 				die( 0 );
@@ -1622,7 +1625,8 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				$comment_author_email = esc_sql( $user->user_email );
 			}
 
-			$comment_type                   = $_POST['private_comment'];
+			$comment_type                   = $_POST['followuptype'];
+			$sensitive                      = ( "true" === $_POST['private_comment'] ) ? true : false;
 			$comment_parent                 = 0;
 
 			if ( isset( $_REQUEST['follwoup-time'] ) && '' != $_REQUEST['follwoup-time'] ) {
@@ -1672,7 +1676,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			//          if ( ! empty( $_POST['followup_duplicate_force'] ) ) {
 				$force_duplicate = true;
 			//          }
-			$comment_ID = $this->insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, array_filter( $uploaded ), $allemail, $dndEmails, '', '', '', $subscriber, '', $comment_type, $comment_parent, $keep_status, $force_duplicate );
+			$comment_ID = $this->insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, array_filter( $uploaded ), $allemail, $dndEmails, '', '', '', $subscriber, '', $comment_type, $comment_parent, $keep_status, $force_duplicate, $sensitive );
 
 			if ( empty( $comment_ID ) ) {
 				$returnArray['status'] = false;
@@ -1688,7 +1692,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 					) );
 
 					$returnArray['comment_id'] = $comment_ID;
-					$returnArray['private']       = $comment_type;
+					$returnArray['comment_type']       = $comment_type;
 					$comment_user  = get_user_by( 'id', $userid );
 					$comment_render_type = 'left';
 					$cap = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' );
@@ -1769,7 +1773,8 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			$comment_post_ID = $_POST['followup_post_id'];
 			$post_type       = get_post_type( $comment_post_ID );
 			$comment_content = rtbiz_hd_content_filter( $_POST['followup_content'] );
-			$comment_privacy = $_POST['followup_private'];
+			$comment_type = $_POST['followuptype'];
+			$sensitive = "true" === $_POST['private_comment'] ? true : false;
 
 			$user = wp_get_current_user();
 			if ( $user->exists() ) {
@@ -1787,7 +1792,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				die( 0 );
 			}
 			$oldCommentBody = $commentdata['comment_content'];
-			$commentdata['comment_content'] = $comment_content;
+			$commentdata['comment_content'] = wp_kses_post( $comment_content );
 
 			$oldDate                        = $commentdata['comment_date'];
 			$newDate                        = '';
@@ -1802,12 +1807,18 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				$newDate = current_time( 'mysql', 1 );
 			}
 
-			$old_privacy = $commentdata['comment_type'];
-			$commentdata['comment_type'] = $comment_privacy;
+			$oldtype = $commentdata['comment_type'];
+			$commentdata['comment_type'] = $comment_type;
 
 			wp_update_comment( $commentdata ); //update comment
 			//todo: remove below line when comment wordpress start supporting comment_type edit
-			rtbiz_hd_edit_comment_type( $commentdata['comment_ID'], $comment_privacy );
+			rtbiz_hd_edit_comment_type( $commentdata['comment_ID'], $comment_type );
+
+			if ( $sensitive ){
+				update_comment_meta( $commentdata['comment_ID'], '_rtbiz_hd_sensitive', true );
+			} else {
+				delete_comment_meta( $commentdata['comment_ID'], '_rtbiz_hd_sensitive' );
+			}
 
 			$uploaded = array();
 			$attachment = array();
@@ -1838,10 +1849,10 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				}
 			}
 
-			$rtbiz_hd_email_notification->notification_followup_updated( $comment, get_current_user_id(),$old_privacy, $comment_privacy, $oldCommentBody, $commentdata['comment_content'] );
+			$rtbiz_hd_email_notification->notification_followup_updated( $comment, get_current_user_id(), $oldtype, $comment_type, $oldCommentBody, $commentdata['comment_content'], $sensitive );
 
 			$returnArray['status']        = true;
-			$returnArray['private']       = $comment->comment_type;
+			$returnArray['comment_type']       = $comment->comment_type;
 			$comment_render_type = 'left';
 			$cap = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' );
 			if ( ! empty( $comment_user ) ) {
@@ -1892,6 +1903,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			}
 			$comment          = get_comment( $_POST['comment_id'] );
 			$attachments_urls = get_comment_meta( $_POST['comment_id'], '_rtbiz_hd_attachment' );
+			$sensitive = get_comment_meta( $comment->comment_ID, '_rtbiz_hd_sensitive', true ) == 1 ? true : false;
 			$attachments = get_children( array( 'post_parent' => $comment->comment_post_ID, 'post_type' => 'attachment' ) );
 			if ( ! empty( $attachments ) && ! empty( $attachments_urls ) ) {
 				foreach ( $attachments as $att ) {
@@ -1901,7 +1913,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				}
 			}
 			$response['status'] = wp_delete_comment( $_POST['comment_id'], true );
-			$rtbiz_hd_email_notification->notification_followup_deleted( $comment, get_current_user_id() );
+			$rtbiz_hd_email_notification->notification_followup_deleted( $comment, get_current_user_id(), $sensitive );
 			echo json_encode( $response );
 			die( 0 );
 		}

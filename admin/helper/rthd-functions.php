@@ -616,38 +616,31 @@ function rtbiz_hd_generate_email_title( $post_id, $title ) {
 }
 
 function rtbiz_hd_render_comment( $comment, $user_edit, $type = 'right', $echo = true ) {
-
 	ob_start();
-
-	$cap = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' ); //todo: find employee users if then only visible
-	$staffonly = current_user_can( $cap );
-	$private_text = '';
-	$display_private_comment_flag = false;
-	$is_comment_private = false;
+	$cap               = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' ); //todo: find employee users if then only visible
+	$staffonly         = current_user_can( $cap );
+	$comment_type_text = '';
+	$comment_type_class = '';
+	$sensitive         = true;
 	$is_staff_followup = false;
 	switch ( $comment->comment_type ) {
 		case Rtbiz_HD_Import_Operation::$FOLLOWUP_BOT:
-			$display_private_comment_flag = true;
+			$sensitive = false;
 			if ( $user_edit ) {
-				$is_comment_private = true;
-				$private_text = 'Bot';
+				$comment_type_text = 'Bot';
+				$comment_type_class = 'Bot';
 			}
 			$user_edit = false;
 			break;
 		case Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC:
-			$display_private_comment_flag = true;
-			$is_comment_private = false;
-			break;
-		case Rtbiz_HD_Import_Operation::$FOLLOWUP_SENSITIVE:
-			if ( $user_edit || ( get_current_user_id() == get_post_meta( $comment->comment_post_ID, '_rtbiz_hd_created_by', true ) ) ) {
-				$display_private_comment_flag = true;
-			}
-			$private_text = 'Sensitive';
-			$is_comment_private = true;
+			$sensitive = get_comment_meta( $comment->comment_ID, '_rtbiz_hd_sensitive', true ) == 1 ? true : false;
 			break;
 		case Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF:
 			if ( $staffonly ) {
-				$display_private_comment_flag = true;
+				$comment_type_text = 'Staff Note';
+				$comment_type_class = 'staff_only';
+				$is_staff_followup = true;
+				$sensitive = get_comment_meta( $comment->comment_ID, '_rtbiz_hd_sensitive', true ) == 1 ? true : false;
 			} else {
 				ob_end_flush();
 				if ( ! $echo ) {
@@ -655,93 +648,74 @@ function rtbiz_hd_render_comment( $comment, $user_edit, $type = 'right', $echo =
 				}
 				return;
 			}
-			$private_text = 'Staff Note';
-			$is_comment_private = true;
-			$is_staff_followup = true;
-
 			break;
 		default:
-			$display_private_comment_flag = true;
+			$sensitive = false;
 			break;
 	}
 
 	$side_class = ( 'right' == $type ) ? 'rthd-self' : ( ( 'left' == $type ) ? 'rthd-other' : '' );
-	$side_class .= ' ' . $private_text;
-	$editable_class = ( $display_private_comment_flag ) ? 'editable' : '';
 	?>
-	<li class="<?php echo $side_class . ' ' . $editable_class . ' ' . ( ( $display_private_comment_flag ) ? '' : 'private-comment-item' ); ?>" id="comment-<?php echo esc_attr( $comment->comment_ID ); ?>">
-
-		<div class="avatar <?php echo $is_staff_followup?'followup_staff_only_arrow':''; ?>">
+	<li class="<?php echo $side_class . ' editable  ' . $comment_type_class; ?> <?php echo $sensitive ? 'sensitive' : ''; ?>"
+	    id="comment-<?php echo esc_attr( $comment->comment_ID ); ?>">
+		<div class="avatar">
 			<?php echo get_avatar( $comment->comment_author_email, 48 ); ?>
 		</div>
-		<div class="rthd-messages <?php echo $is_staff_followup ? 'followup_staffonly' : ''; ?> <?php echo ( $display_private_comment_flag ) ? '' : 'private-comment-display'; ?>">
-			<div class="followup-information">
-				<?php
+		<div class="rthd-messages">
+			<div class="followup-information"> <?php
 				if ( current_user_can( $cap ) ) {
 					$commentAuthorLink = '<a class="rthd-ticket-author-link" href="' . rtbiz_hd_biz_user_profile_link( $comment->comment_author_email ) . '">' . $comment->comment_author . '</a>';
 				} else {
 					$commentAuthorLink = $comment->comment_author;
-				}
-				?>
+				} ?>
 
-				<span title="<?php echo esc_attr( ( $comment->comment_author_email == '' ) ? $comment->comment_author_IP : $comment->comment_author_email ); ?>"><?php echo ( ( $comment->comment_author == '' ) ? $comment->comment_author_email : $commentAuthorLink ); ?> </span>
-				<time title="<?php echo esc_attr( mysql2date( get_option( 'date_format' ), $comment->comment_date ) . ' at ' . mysql2date( get_option( 'time_format' ), $comment->comment_date, true ) ); ?>" datetime="<?php echo esc_attr( $comment->comment_date ); ?>">
-					<?php if ( $user_edit ) {
-						?>
-						<a href="#" class="editfollowuplink">Edit</a> |
-						<?php
+				<span
+					title="<?php echo esc_attr( ( $comment->comment_author_email == '' ) ? $comment->comment_author_IP : $comment->comment_author_email ); ?>">
+					<?php echo( ( $comment->comment_author == '' ) ? $comment->comment_author_email : $commentAuthorLink ); ?>
+				</span>
+				<time
+					title="<?php echo esc_attr( mysql2date( get_option( 'date_format' ), $comment->comment_date ) . ' at ' . mysql2date( get_option( 'time_format' ), $comment->comment_date, true ) ); ?>"
+					datetime="<?php echo esc_attr( $comment->comment_date ); ?>"><?php
+					if ( $user_edit ) { ?>
+						<a href="#" class="editfollowuplink">Edit</a> | <?php
 						$data = get_comment_meta( $comment->comment_ID, '_rtbiz_hd_original_email', true );
 						if ( ! empty( $data ) ) {
-							$href = get_post_permalink( $comment->comment_post_ID ) . '?show_original=true&comment-id=' . $comment->comment_ID;
-							?>
-							<a href="<?php echo $href; ?>" class="show-original-email" target="_blank"> Show original email</a> |
-							<?php
+							$href = get_post_permalink( $comment->comment_post_ID ) . '?show_original=true&comment-id=' . $comment->comment_ID; ?>
+							<a href="<?php echo $href; ?>" class="show-original-email" target="_blank"> Show original
+								email</a> | <?php
 						}
-}
-if ( true == $is_comment_private ) {
-	echo "<span class='private_comment_span'> $private_text </span> | ";
-}
-					?>
+					}
+					if ( true == $comment_type_text ) {
+						echo "<span class='comment_type'> $comment_type_text </span> | ";
+					} ?>
 					<?php echo '<a class="followup-hash-url" id="followup-' . $comment->comment_ID . '" href="#followup-' . $comment->comment_ID . '" >' . esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . ' ago </a>'; ?>
-
 				</time>
 			</div>
 			<input id="followup-id" type="hidden" value="<?php echo esc_attr( $comment->comment_ID ); ?>">
-			<input id="is-private-comment" type="hidden" value="<?php echo esc_attr( $comment->comment_type ); ?>">
-			<div class="rthd-comment-content" data-content="<?php echo ( $display_private_comment_flag ) ? esc_attr( $comment->comment_content ) : ''; ?>">
-				<?php
-				if ( $display_private_comment_flag ) {
-					if ( isset( $comment->comment_content ) && $comment->comment_content != '' ) {
-						$comment->comment_content = rtbiz_hd_content_filter( $comment->comment_content );
-					}
-					?>
-					<p><?php echo $comment->comment_content; ?></p>
-				<?php } else { ?>
-					<p><?php _e( 'This followup has been marked private.', RTBIZ_HD_TEXT_DOMAIN ); ?></p>
-				<?php } ?>
-			</div>
-			<?php
-			if ( $display_private_comment_flag ) {
-				$comment_attechment = get_comment_meta( $comment->comment_ID, '_rtbiz_hd_attachment' );
-				$comment_attechment = array_unique( $comment_attechment );
-				if ( ! empty( $comment_attechment ) ) {
-					?>
-					<ul class="comment_attechment">
-						<?php foreach ( $comment_attechment as $a ) { ?>
-							<li>
-								<?php
-								$attachment = get_post( $a );
-								rtbiz_hd_get_attchment_link_with_fancybox( $attachment, $comment->comment_ID );
-								?>
-							</li>
-						<?php } ?>
-					</ul>
-					<?php
-				}
-			}
-			?>
+			<input id="followup-type" type="hidden" value="<?php echo esc_attr( $comment->comment_type ); ?>">
+			<input id="followup-senstive" type="hidden" value="<?php echo esc_attr( $sensitive ); ?>">
 
-
+			<div class="rthd-comment-content" data-content="<?php echo esc_attr( $comment->comment_content ); ?>"><?php
+				if ( isset( $comment->comment_content ) && $comment->comment_content != '' ) {
+					$comment->comment_content = rtbiz_hd_content_filter( $comment->comment_content );
+				}?>
+				<p><?php echo $comment->comment_content; ?></p>
+			</div><?php
+			$comment_attechment = get_comment_meta( $comment->comment_ID, '_rtbiz_hd_attachment' );
+			$comment_attechment = array_unique( $comment_attechment );
+			if ( ! empty( $comment_attechment ) ) {
+				?>
+				<ul class="comment_attechment">
+					<?php foreach ( $comment_attechment as $a ) { ?>
+						<li>
+							<?php
+							$attachment = get_post( $a );
+							rtbiz_hd_get_attchment_link_with_fancybox( $attachment, $comment->comment_ID );
+							?>
+						</li>
+					<?php } ?>
+				</ul> <?php
+			}?>
 		</div>
 	</li>
 	<?php
@@ -847,13 +821,10 @@ function rtbiz_hd_admin_notice_dependency_not_installed() {
 function rtbiz_hd_get_comment_type( $comment_type_value ) {
 	switch ( $comment_type_value ) {
 		case Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC:
-			return 'Default';
-			break;
-		case Rtbiz_HD_Import_Operation::$FOLLOWUP_SENSITIVE:
-			return 'Sensitive';
+			return 'Public Reply';
 			break;
 		case Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF:
-			return 'Only Staff';
+			return 'Staff Note';
 			break;
 		default:
 			return 'undefined';
@@ -1466,7 +1437,7 @@ function rtbiz_hd_get_default_email_template( $key = '', $all = false ) {
 	$redux['rthd_email_template_followup_add_private'] = '
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0;" />
 			<div style="color: #333333; line-height: 26px; font-size: 16px; ">
-				A private followup has been added by <strong>{followup_author}</strong>. Please go to ticket to view content.
+				A <strong>private</strong> {followup_type}followup has been added by <strong>{followup_author}</strong>. Please go to ticket to view content.
 			</div>
 			{ticket_link}
 		    <hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
@@ -1474,7 +1445,7 @@ function rtbiz_hd_get_default_email_template( $key = '', $all = false ) {
 	$redux['rthd_email_template_followup_deleted_private'] = '
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0;" />
 				<div style="color: #333333; line-height: 26px; font-size: 16px; ">
-					A private followup is deleted by <Strong>{followup_deleted_by}</Strong> {ticket_link}
+					A <strong>private</strong> {followup_type}followup is deleted by <Strong>{followup_deleted_by}</Strong> {ticket_link}
 				</div>
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
 
@@ -1491,7 +1462,7 @@ function rtbiz_hd_get_default_email_template( $key = '', $all = false ) {
 
 	$redux['rthd_email_template_followup_updated_private'] = '
 			<div style="color: #888888; font-size: 14px;">
-				A <strong>private</strong> followup has been edited by <strong>{followup_updated_by}</strong>.Please go to ticket to view content.{ticket_link}
+				A <strong>private</strong> {followup_type}followup has been edited by <strong>{followup_updated_by}</strong>.Please go to ticket to view content.{ticket_link}
 			</div>
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0;" />
 			<div style="font-size: 16px; line-height: 26px; color: #888888;">

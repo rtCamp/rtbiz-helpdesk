@@ -74,9 +74,6 @@ ul#chat-UI {
 	border-width: 8px;
 	margin-top: -8px;
 }
-.private-comment-item.rthd-self .avatar:after, .private-comment-item.rthd-other .avatar:after {
-	border-right-color: #FFC0CB;
-}
 
 .rthd-self .rthd-messages, .rthd-other .rthd-messages, .rt-hd-ticket-front-title{
 	-ms-word-break:break-all;
@@ -125,20 +122,11 @@ ul#chat-UI {
 	margin-right: 5px;
 }
 
-#private-comment{
-	display: inline-block;
-}
-
 .rthd-visibility-wrap {
 	margin-bottom: 16px;
-
 	label {
 		margin-right: 10px;
 	}
-}
-
-.rthd-keep-status-wrap {
-	margin-bottom: 16px;
 }
 
 .rthd-info-meta-created-by-li {
@@ -170,11 +158,6 @@ ul#chat-UI {
 	color: red;
 	float: right;
 	margin-left: 10px;
-}
-
-.private-comment-display{
-	/*color: red;*/
-	background: pink;
 }
 
 .followup-content {
@@ -345,7 +328,7 @@ ul#chat-UI {
     border-right-color: #bbb;
 }
 
-.rthd-discussion li.Sensitive{
+.rthd-discussion li.sensitive{
   .avatar:before {
     border-right-color: #C85D5D;
   }
@@ -366,7 +349,7 @@ ul#chat-UI {
 .load-more-ul li a:hover {
     background: #039;
 }
-.followup-information .private_comment_span{
+.followup-information .comment_type{
 	color: #C85D5D;
 }
 
@@ -430,7 +413,7 @@ ul#chat-UI {
 	box-shadow: 0 1px 1px rgba(0,0,0,0.04);
 }
 .edit-action-button {
-	float: right;
+	margin-top: 10px;
 }
 #clear-attachemntlist {
 	display: none;
@@ -645,11 +628,11 @@ h2.rthd-ticket-list-title{
     float: right;
 }
 
-.followup_staffonly{
-	background: beige;
+.rthd-self.staff_only .rthd-messages, .rthd-other.staff_only .rthd-messages {
+  background-color: beige;
 }
 
-.rthd-self .followup_staff_only_arrow:after, .rthd-other .followup_staff_only_arrow:after{
+.rthd-self.staff_only .avatar:after, .rthd-other.staff_only .avatar:after{
 	border-right-color: beige;
 }
 
@@ -661,10 +644,6 @@ img#hdspinner{
 	border-radius: 0;
 	box-shadow: none;
 	vertical-align: middle;
-}
-
-.rthd-attachment-box {
-	float: left;
 }
 
 .rthd-followup-action {
@@ -679,4 +658,43 @@ img#hdspinner{
 
 .rthd-comment-content ol, .rthd-comment-content ul{
 	margin: 0 0 1.6em 1.3333em;
+}
+
+.close-edit-followup{
+  float: left !important;
+}
+
+.followup-tabs{
+    text-decoration: none;
+    margin-bottom: 2px;
+    display: block;
+}
+
+.followup-tabs .tab{
+    display: inline-block;
+    margin-right: 10px;
+    padding: 5px;
+}
+
+.followup-tabs .tab.active {
+    font-weight: bold;
+    border-bottom: 3px solid #06C;
+}
+
+.rthd-followup-content-tolltip{
+    top: 0px;
+    position: relative;
+    float: right;
+    font-size: 11px;
+    padding-top: 5px;
+    color: gray;
+
+    &:hover {
+      .rthd-tip-bottom,
+      .rthd-tip-top,
+      .rthd-tip {
+        margin-right: 45px !important;
+        text-align: justify;
+      }
+    }
 }

@@ -555,7 +555,10 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 			if ( empty( $_POST['rthd_support_form_submit'] ) ) {
 				return false;
 			}
-			if ( empty( $_POST['post'] ) || empty( $_POST['post_description'] )|| empty( $_POST['post']['title'] ) || empty( $_POST['post']['email'][0] ) ) {
+			$_POST['post']['title'] = trim( $_POST['post']['title'] );
+			$_POST['post']['description'] = trim( $_POST['post']['description'] );
+
+			if ( empty( $_POST['post'] ) || empty( $_POST['post']['description'] )|| empty( $_POST['post']['title'] ) || empty( $_POST['post']['email'][0] ) ) {
 				echo '<div id="info" class="error rthd-notice">Please fill all the details.</div>';
 				return false;
 			}
@@ -578,7 +581,7 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 			$creator = $_POST['post']['email'][0];
 
 			$data = $_POST['post'];
-			$data['description'] = $_POST['post_description'];
+			//$data['description'] = $_POST['post_description'];
 
 			$allemails  = array();
 			foreach ( array_filter( $data['email'] ) as $email ) {

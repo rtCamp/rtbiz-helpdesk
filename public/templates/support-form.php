@@ -66,22 +66,9 @@
 	</div>
 
 	<div id="editor_container">
-		<!--		<textarea name="post[description]" placeholder="Description" rows="5" cols="20" required></textarea>-->
-		<?php
-		$editor_id = 'post_description';
-		$settings  = array(
-			'media_buttons' => false,
-			'editor_class'  => 'post_description',
-			'tinymce'       => array(
-				'height' => 150,
-			),
-		);
-		if ( empty( $_POST['post_description'] ) ) {
-			$_POST['post_description'] = '';
-		}
-		wp_editor( $_POST['post_description'], $editor_id, $settings );
-		?>
+		<textarea id="post_description" placeholder="Description" rows="5" cols="20" name="post[description]" class="post_description" required><?php echo isset( $_POST['post']['description'] ) ? $_POST['post']['description'] : ''; ?></textarea>
 	</div>
+	<p class="form-allowed-tags" id="form-allowed-tags">You may use these <abbr title="HyperText Markup Language">HTML</abbr> tags and attributes:  <code>&lt;a href="" title=""&gt; &lt;abbr title=""&gt; &lt;acronym title=""&gt; &lt;b&gt; &lt;blockquote cite=""&gt; &lt;cite&gt; &lt;code&gt; &lt;del datetime=""&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=""&gt; &lt;s&gt; &lt;strike&gt; &lt;strong&gt; </code></p>
 
 	<?php
 	//is ticket have adult content

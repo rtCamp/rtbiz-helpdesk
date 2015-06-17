@@ -26,11 +26,37 @@ jQuery( document ).ready(function () {
 			return '';
 		},
 		init: function () {
-			rthd_common.initAddNewFollowUp();
+            rthd_common.initAction();
+            rthd_common.initAddNewFollowUp();
 			rthd_common.initEditFollowUp();
 			rthd_common.initLoadAll();
 			rthd_common.initEditContent();
 		},
+        initAction : function () {
+            jQuery( document ).on('click', '#new-followup-form #followup-type-list li', function (e) {
+                jQuery('#followuptype').val( jQuery( this).data('ctype') );
+                jQuery( '#followup-type-list li.active').removeClass('active');
+                jQuery( this).addClass('active');
+
+                if ( 30 == jQuery( this).data('ctype') ){
+                    jQuery('#new-followup-form').find('#savefollwoup').text( "Add Staff Note" );
+                } else {
+                    jQuery('#new-followup-form').find('#savefollwoup').text( "Add Reply" );
+                }
+
+            });
+            jQuery( document ).on('click', '#dialog-form #followup-type-list li', function (e) {
+                jQuery('#dialog-form #followup-type').val( jQuery( this).data('ctype') );
+                jQuery( '#dialog-form #followup-type-list li.active').removeClass('active');
+                jQuery( this).addClass('active');
+
+                if ( 30 == jQuery( this).data('ctype') ){
+                    jQuery('#dialog-form').find('#savefollwoup').text( "Add Staff Note" );
+                } else {
+                    jQuery('#dialog-form').find('#savefollwoup').text( "Add Reply" );
+                }
+            });
+        },
 		initAddNewFollowUp: function () {
 
 			$ticket_unique_id = jQuery( '#ticket_unique_id' ).val();
@@ -130,43 +156,36 @@ jQuery( document ).ready(function () {
 					//jQuery(this).removeAttr('disabled');
 					return false;
 				}
-				if ( ! rthd_common.rthd_tinymce_get_content( 'followupcontent' )) {
-					alert( "Please input followup." );
-					jQuery( '#hdspinner' ).hide();
-					//jQuery(this).removeAttr('disabled');
-					return false;
-				}
+                var post_content = jQuery( '#followupcontent' )
+                if ( ! jQuery.trim( post_content.val() ) ) {
+                    post_content.css( 'border-color', 'red' );
+                    jQuery( '#hdspinner' ).hide();
+                    return false;
+                } else {
+                    post_content.css( 'border-color', '' );
+                }
 				return true;
 			}
 
 			// send followup ajax
 			function sendFollowup(force) {
 				jQuery( '#savefollwoup' ).attr( 'disabled', 'disabled' );
-				var followuptype = jQuery( "#followup-type" ).val();
-				var formData = new FormData();
-				var followup_type = jQuery( "input[name='private_comment']:checked" );
-				if (followup_type.length) {
+
+                var followup_type = jQuery( '#followuptype' );
+				if ( followup_type.length && followup_type.val() ) {
 					followup_type = followup_type.val();
 				} else {
-					//if ( jQuery( "input[name='private_comment']" ).is(':checked')){
-					//	followup_type = jQuery( "input[name='private_comment']" ).val();
-					//} else {
 						followup_type = 10;
-					//}
 				}
-				formData.append( "private_comment", followup_type );
+                var formData = new FormData();
+				formData.append( "private_comment", jQuery( '#new-followup-form').find( '#rthd_sensitive' ).is( ':checked' ) );
 				formData.append( "followup_ticket_unique_id", jQuery( '#ticket_unique_id' ).val() );
 				formData.append( "post_type", jQuery( '#followup_post_type' ).val() );
 				formData.append( "action", 'rtbiz_hd_add_new_followup_front' );
-				formData.append( "followuptype", jQuery( '#followuptype' ).val() );
-				formData.append( "follwoup-time", jQuery( '#follwoup-time' ).val() );
-				formData.append( "followup_content", rthd_common.rthd_tinymce_get_content( 'followupcontent' ) );
+				formData.append( "followuptype", followup_type );
+				formData.append( "follwoup-time", jQuery( '#new-followup-form #follwoup-time' ).val() );
+				formData.append( "followup_content", jQuery( '#followupcontent' ).val() );
 				formData.append( "followup_attachments", uploadedfiles );
-
-				//if ( force ){
-				//   formData.append('followup_duplicate_force', true);
-				//}
-
 				if (jQuery( '#rthd_keep_status' )) {
 					formData.append( "rthd_keep_status", jQuery( '#rthd_keep_status' ).is( ':checked' ) );
 				}
@@ -195,15 +214,9 @@ jQuery( document ).ready(function () {
 							jQuery( '.rt-hd-ticket-last-reply-value' ).html( data.last_reply );
 
 							// front end code end
-
-							rthd_common.rthd_tinymce_set_content( 'followupcontent', '' );
-
-							var comment_privacy = jQuery( "input[name='private_comment']" );
-							if (comment_privacy.is( ':radio' )) {
-								jQuery( '#followup_privacy_10' ).attr( 'checked','checked' );
-							} else {
-								comment_privacy.attr( 'checked',false );
-							}
+                            jQuery('#followupcontent').val('');
+                            jQuery('#followuptype').val('');
+                            jQuery( '#new-followup-form').find( '#rthd_sensitive' ).prop( "checked", false );
 
 							uploadedfiles = [];
 							if (data.ticket_status == 'answered') {
@@ -215,6 +228,9 @@ jQuery( document ).ready(function () {
 									jQuery( '#rthd_keep_status' ).prop( "checked", false );
 								}
 							}
+
+                            jQuery( '#new-followup-form #followup-type-list li').first().click();
+
 							jQuery( '#hdspinner' ).hide();
 						} else {
 							console.log( data.message );
@@ -226,7 +242,7 @@ jQuery( document ).ready(function () {
 			}
 		},
 		initEditFollowUp: function () {
-			var commentid;
+			var followup_id;
 			//ajax call to remove followup
 			jQuery( "#delfollowup" ).click(function () {
 				var r = confirm( "Are you sure you want to remove this Followup?" );
@@ -243,12 +259,12 @@ jQuery( document ).ready(function () {
 					dataType: 'json',
 					data: {
 						action: 'rtbiz_hd_delete_followup',
-						comment_id: commentid,
+						comment_id: followup_id,
 						post_id: postid
 					},
 					success: function (data) {
 						if (data.status) {
-							jQuery( "#comment-" + commentid ).fadeOut(500, function () {
+							jQuery( "#comment-" + followup_id ).fadeOut(500, function () {
 								jQuery( this ).remove();
 							});
 							jQuery( '.close-edit-followup' ).trigger( 'click' );
@@ -272,66 +288,73 @@ jQuery( document ).ready(function () {
 				e.preventDefault();
 				jQuery( '#dialog-form' ).slideToggle( 'slow' );
 				jQuery( '#new-followup-form' ).show();
-				jQuery( document ).scrollTop( ( jQuery( '#comment-' + commentid ).offset().top ) );
+				jQuery( document ).scrollTop( ( jQuery( '#comment-' + followup_id ).offset().top ) );
 			});
 
 			// show ui to edit or delete followup on click of edit link
 			jQuery( document ).on('click', '.editfollowuplink', function (e) {
 				e.preventDefault();
-				var select = jQuery( this ).parents();
-				rthd_common.rthd_tinymce_set_content( 'editedfollowupcontent', jQuery( this ).parents().siblings( '.rthd-comment-content' ).data( 'content' ) );
-				commentid = select.siblings( '#followup-id' ).val();
-				var that = select.siblings( '#is-private-comment' ).val();
-				var followup_type = jQuery( "input[name='edit_private'][value='" + that + "']" );
-				if (followup_type.length) {
-					followup_type.prop( 'checked', true );
-				} else {
-					followup_type.val( that );
-				}
+				var followup_information = jQuery( this ).parents().parents();
+                followup_id = followup_information.siblings( '#followup-id' ).val();
+                followup_content = followup_information.siblings( '.rthd-comment-content' ).data( 'content' );
+                followup_type = followup_information.siblings( '#followup-type' ).val();
+                followup_senstive = followup_information.siblings( '#followup-senstive' ).val();
+
+                jQuery('#dialog-form #editedfollowupcontent').val( followup_content );
+                jQuery('#dialog-form #followup-type').val( followup_type );
+
+                jQuery( '#dialog-form #followup-type-list li#tab-' + followup_type ).click();
+
+                if ( 1 == followup_senstive ){
+                    jQuery( '#dialog-form').find( '#rthd_sensitive' ).attr( 'checked', 'checked' );
+                } else {
+                    jQuery( '#dialog-form').find( '#rthd_sensitive' ).removeAttr('checked');
+                }
+
 				//jQuery('#edit-private' ).val(that);
 				jQuery( '#new-followup-form' ).hide();
 				if ( ! jQuery( '#dialog-form' ).is( ":visible" )) {
 					jQuery( '#dialog-form' ).slideToggle( 'slow' );
 				}
-				if (jQuery( '#edit-ticket-data' ).is( ":visible" )) {
-					jQuery( '#edit-ticket-data' ).slideToggle( 'slow' );
-				}
-				jQuery( document ).scrollTop( ( jQuery( '#dialog-form' ).offset().top ) - 50 );
+
+				jQuery( document ).scrollTop( jQuery( '#dialog-form' ).offset().top - 50 );
 
 			});
 
 			// edit followup ajax call
 			jQuery( "#editfollowup" ).click(function () {
 				var requestArray = {};
-				var content = rthd_common.rthd_tinymce_get_content( 'editedfollowupcontent' );
-				if ( ! content) {
-					alert( "Please enter comment" );
-					return false;
-				}
-				if (content.replace( /\s+/g, " " ) === jQuery( '#comment-' + commentid ).find( '.rthd-comment-content' ).data( 'content' )) {
+				var post_content = jQuery( '#dialog-form #editedfollowupcontent' );
+                if ( ! jQuery.trim( post_content.val() ) ) {
+                    post_content.css( 'border-color', 'red' );
+                    return false;
+                } else {
+                    post_content.css( 'border-color', '' );
+                }
+
+				if ( post_content.val() === jQuery( '#comment-' + followup_id ).find( '.rthd-comment-content' ).data( 'content' )) {
 					alert( 'You have not edited comment!' );
 					return false;
 				}
+
 				jQuery( '#edithdspinner' ).show();
 				jQuery( this ).attr( 'disabled', 'disabled' );
+
+                var followup_type = jQuery( '#dialog-form #followup-type' );
+                if ( followup_type.length && followup_type.val() ) {
+                    followup_type = followup_type.val();
+                } else {
+                    followup_type = 10;
+                }
 				requestArray.post_type = rtbiz_hd_post_type;
-				requestArray.comment_id = commentid;
+				requestArray.comment_id = followup_id;
 				requestArray.action = "rtbiz_hd_update_followup";
-				requestArray.followuptype = "comment";
 				requestArray.followup_ticket_unique_id = jQuery( '#ticket_unique_id' ).val();
-				//requestArray.followup_private='no';
 				requestArray.followup_post_id = jQuery( '#post-id' ).val();
-				var followup_type = jQuery( "input[name='edit_private']:checked" );
-				if (followup_type.length) {
-					followup_type = followup_type.val();
-				} else {
-					followup_type = jQuery( "input[name='edit_private']" ).val();
-				}
-				requestArray.followup_private = followup_type;
-				requestArray.followuptype = 'comment';
-				//requestArray.followup_post_id = jQuery( "#ticket_id" ).val();
-				//requestArray.follwoup_time = jQuery( "#follwoup_time" ).val();
-				requestArray.followup_content = content;
+				requestArray.private_comment = jQuery( '#dialog-form').find( '#rthd_sensitive' ).is( ':checked' );
+				requestArray.followuptype = followup_type;
+				requestArray.followup_content = post_content.val();
+
 				jQuery.ajax({
 					url: ajaxurl,
 					dataType: "json",
@@ -339,9 +362,9 @@ jQuery( document ).ready(function () {
 					data: requestArray,
 					success: function (data) {
 						if (data.status) {
-							jQuery( '#comment-' + commentid ).replaceWith( data.comment_content );
+							jQuery( '#comment-' + followup_id ).replaceWith( data.comment_content );
 							jQuery( '.close-edit-followup' ).trigger( 'click' );
-							jQuery( document ).scrollTop( ( jQuery( '#comment-' + commentid ).offset().top ) - 50 );
+							jQuery( document ).scrollTop( jQuery( '#comment-' + followup_id ).offset().top - 50 );
 						} else {
 							alert( data.message );
 						}
