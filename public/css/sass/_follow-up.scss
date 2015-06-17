@@ -174,7 +174,7 @@ ul#chat-UI {
 	display:none;
 }
 
-#editedfollowupcontent, #editedticketcontent{
+#editedfollowupcontent, #editedticketcontent, #followupcontent{
 	width:100%;
 }
 
@@ -672,7 +672,7 @@ img#hdspinner{
 
 .followup-tabs .tab{
     display: inline-block;
-    margin-right: 10px;
+    margin: 0px 10px 0px 0px;
     padding: 5px;
 }
 
