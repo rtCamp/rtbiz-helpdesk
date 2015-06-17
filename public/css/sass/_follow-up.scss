@@ -685,12 +685,16 @@ img#hdspinner{
     top: 0px;
     position: relative;
     float: right;
+    font-size: 11px;
+    padding-top: 5px;
+    color: gray;
 
     &:hover {
       .rthd-tip-bottom,
       .rthd-tip-top,
       .rthd-tip {
-        margin-left: 83px !important;
+        margin-right: 45px !important;
+        text-align: justify;
       }
     }
 }

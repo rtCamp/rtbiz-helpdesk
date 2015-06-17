@@ -34,10 +34,8 @@ $staffonly = current_user_can( $cap ); ?>
 	             placeholder="Add new followup" required></textarea>
 		<span class="rthd-tooltip rthd-followup-content-tolltip">
 			HTML support
-			<span class="rthd-tip"><?php
-				_e( 'You may use these <abbr title="HyperText Markup Language">HTML</abbr> tags and attributes: <code>&lt;a href="" title=""&gt; &lt;abbr
-			title=""&gt; &lt;acronym title=""&gt; &lt;b&gt; &lt;blockquote cite=""&gt; &lt;cite&gt; &lt;code&gt; &lt;del
-			datetime=""&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=""&gt; &lt;s&gt; &lt;strike&gt; &lt;strong&gt; </code>', RTBIZ_HD_TEXT_DOMAIN ); ?>
+			<span class="rthd-tip-bottom"><?php
+				_e( 'You may use these HTML tags - a, abbr, acronym, b, blockquote, cite, code, del, em, i, q, s, strike and strong', RTBIZ_HD_TEXT_DOMAIN ); ?>
 			</span>
 		</span>
 	</p>
