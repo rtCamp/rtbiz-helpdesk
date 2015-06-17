@@ -685,4 +685,12 @@ img#hdspinner{
     top: 0px;
     position: relative;
     float: right;
+
+    &:hover {
+      .rthd-tip-bottom,
+      .rthd-tip-top,
+      .rthd-tip {
+        margin-left: 83px !important;
+      }
+    }
 }
