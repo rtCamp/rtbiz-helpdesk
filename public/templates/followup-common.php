@@ -125,9 +125,19 @@ if ( ! empty( $post->post_content ) ) {
 
 	<?php } ?>
 
-	<p><textarea id="editedfollowupcontent" name="editedfollowupcontent" placeholder="edit followup" rows="5" cols="20" required></textarea></p>
+	<p>
+		<textarea id="editedfollowupcontent" name="editedfollowupcontent" placeholder="edit followup" rows="5" cols="20" required></textarea>
+		<span class="rthd-tooltip rthd-followup-content-tolltip">
+			<i class="dashicons dashicons-info rtmicon"></i>
+			<span class="rthd-tip"><?php
+				_e( 'You may use these <abbr title="HyperText Markup Language">HTML</abbr> tags and attributes: <code>&lt;a href="" title=""&gt; &lt;abbr
+			title=""&gt; &lt;acronym title=""&gt; &lt;b&gt; &lt;blockquote cite=""&gt; &lt;cite&gt; &lt;code&gt; &lt;del
+			datetime=""&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=""&gt; &lt;s&gt; &lt;strike&gt; &lt;strong&gt; </code>', RTBIZ_HD_TEXT_DOMAIN ); ?>
+			</span>
+		</span>
+	</p>
 
-	<p class="form-allowed-tags" id="form-allowed-tags">You may use these <abbr title="HyperText Markup Language">HTML</abbr> tags and attributes:  <code>&lt;a href="" title=""&gt; &lt;abbr title=""&gt; &lt;acronym title=""&gt; &lt;b&gt; &lt;blockquote cite=""&gt; &lt;cite&gt; &lt;code&gt; &lt;del datetime=""&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=""&gt; &lt;s&gt; &lt;strike&gt; &lt;strong&gt; </code></p>
+
 
 	<div id="edit-private-comment" class="rthd-edit-visibility-wrap">
 		<div class="rthd-edit-visibility-wrap">
