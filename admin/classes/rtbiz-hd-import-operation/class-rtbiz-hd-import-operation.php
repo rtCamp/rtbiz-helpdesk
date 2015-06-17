@@ -36,7 +36,6 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		 */
 		public static $FOLLOWUP_BOT = 5;
 		public static $FOLLOWUP_PUBLIC = 10;
-		public static $FOLLOWUP_SENSITIVE = 20;
 		public static $FOLLOWUP_STAFF = 30;
 
 		/**

@@ -821,10 +821,10 @@ function rtbiz_hd_admin_notice_dependency_not_installed() {
 function rtbiz_hd_get_comment_type( $comment_type_value ) {
 	switch ( $comment_type_value ) {
 		case Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC:
-			return 'Default';
+			return 'Public Reply';
 			break;
 		case Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF:
-			return 'Staff Only';
+			return 'Staff Note';
 			break;
 		default:
 			return 'undefined';

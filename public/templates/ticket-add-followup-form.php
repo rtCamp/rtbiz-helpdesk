@@ -6,7 +6,10 @@
  * Time: 9:47 PM
  */
 global $current_user;
-?>
+
+$cap       = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' );
+$staffonly = current_user_can( $cap ); ?>
+
 <div id="new-followup-form">
 	<input type="hidden" id='ticket_unique_id' name="followup_ticket_unique_id"
 	       value="<?php echo esc_attr( $ticket_unique_id ); ?>"/>
@@ -17,10 +20,14 @@ global $current_user;
 	<input id="post-id" type="hidden" value="<?php echo esc_attr( $post->ID ); ?>"/>
 	<input id="edit-comment-id" name="comment_id" type="hidden"/>
 
-	<ui id="followup-type-list" class="">
-		<li data-ctype="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC; ?>">Customer + Staff</li>
-		<li data-ctype="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF; ?>">Staff</li>
+	<?php if ( $staffonly ) { ?>
+
+	<ui id="followup-type-list" class="followup-tabs">
+		<li id="tab-<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC; ?>" class="tab active" data-ctype="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC; ?>"><?php _e('Public Reply', RTBIZ_HD_TEXT_DOMAIN) ?></li>
+		<li id="tab-<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF; ?>" class="tab" data-ctype="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF; ?>"><?php _e('Staff Note', RTBIZ_HD_TEXT_DOMAIN) ?></li>
 	</ui>
+
+	<?php } ?>
 
 	<p><textarea id="followupcontent" class="followupcontent" rows="5" cols="20" name="followupcontent"
 	             placeholder="Add new followup" required></textarea></p>
@@ -32,11 +39,8 @@ global $current_user;
 
 	<div id="rthd-followup-form" class="clearfix">
 		<div class="rthd-attachment-box">
-			<?php
-			$cap       = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' );
-			$staffonly = current_user_can( $cap ); ?>
+
 			<div class="rthd-visibility-wrap">
-				<label class="rthd-visibility"> <strong>Visibility </strong></label>
 				<div class="rthd-sensitive-wrap">
 					<label for="rthd_sensitive">
 						<input id="rthd_sensitive" type="checkbox" name="followup_sensitive"
@@ -69,9 +73,7 @@ global $current_user;
 			</div>
 		</div>
 		<div id="rthd-followup-action" class="rthd-followup-action">
-			<button class="add-savefollowup btn btn-primary button-primary button" id="savefollwoup" type="button">Add
-				followup
-			</button>
+			<button class="add-savefollowup btn btn-primary button-primary button" id="savefollwoup" type="button">Add Reply</button>
 			<img id='hdspinner' class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>">
 		</div>
 	</div>

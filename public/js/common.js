@@ -33,11 +33,28 @@ jQuery( document ).ready(function () {
 			rthd_common.initEditContent();
 		},
         initAction : function () {
-            jQuery( document ).on('click', '#followup-type-list li', function (e) {
+            jQuery( document ).on('click', '#new-followup-form #followup-type-list li', function (e) {
                 jQuery('#followuptype').val( jQuery( this).data('ctype') );
+                jQuery( '#followup-type-list li.active').removeClass('active');
+                jQuery( this).addClass('active');
+
+                if ( 30 == jQuery( this).data('ctype') ){
+                    jQuery('#new-followup-form').find('#savefollwoup').text( "Add Staff Note" );
+                } else {
+                    jQuery('#new-followup-form').find('#savefollwoup').text( "Add Reply" );
+                }
+
             });
             jQuery( document ).on('click', '#dialog-form #followup-type-list li', function (e) {
                 jQuery('#dialog-form #followup-type').val( jQuery( this).data('ctype') );
+                jQuery( '#dialog-form #followup-type-list li.active').removeClass('active');
+                jQuery( this).addClass('active');
+
+                if ( 30 == jQuery( this).data('ctype') ){
+                    jQuery('#dialog-form').find('#savefollwoup').text( "Add Staff Note" );
+                } else {
+                    jQuery('#dialog-form').find('#savefollwoup').text( "Add Reply" );
+                }
             });
         },
 		initAddNewFollowUp: function () {
@@ -211,6 +228,9 @@ jQuery( document ).ready(function () {
 									jQuery( '#rthd_keep_status' ).prop( "checked", false );
 								}
 							}
+
+                            jQuery( '#new-followup-form #followup-type-list li').first().click();
+
 							jQuery( '#hdspinner' ).hide();
 						} else {
 							console.log( data.message );
@@ -283,8 +303,7 @@ jQuery( document ).ready(function () {
                 jQuery('#dialog-form #editedfollowupcontent').val( followup_content );
                 jQuery('#dialog-form #followup-type').val( followup_type );
 
-                console.log( jQuery('#dialog-form #editedfollowupcontent').val() )
-                console.log( jQuery('#dialog-form #followup-type').val() )
+                jQuery( '#dialog-form #followup-type-list li#tab-' + followup_type ).click();
 
                 if ( 1 == followup_senstive ){
                     jQuery( '#dialog-form').find( '#rthd_sensitive' ).attr( 'checked', 'checked' );

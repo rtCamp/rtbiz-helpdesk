@@ -124,14 +124,10 @@ ul#chat-UI {
 
 .rthd-visibility-wrap {
 	margin-bottom: 16px;
-
+    float: left;
 	label {
 		margin-right: 10px;
 	}
-}
-
-.rthd-keep-status-wrap {
-	margin-bottom: 16px;
 }
 
 .rthd-info-meta-created-by-li {
@@ -418,7 +414,7 @@ ul#chat-UI {
 	box-shadow: 0 1px 1px rgba(0,0,0,0.04);
 }
 .edit-action-button {
-	float: right;
+	margin-top: 10px;
 }
 #clear-attachemntlist {
 	display: none;
@@ -651,12 +647,12 @@ img#hdspinner{
 	vertical-align: middle;
 }
 
-.rthd-attachment-box {
-	float: left;
-}
-
 .rthd-followup-action {
 	float: right;
+}
+
+#rthd-attachment-container{
+  text-align: right;
 }
 
 .rthd-visibility-wrap input[type="radio"]{
@@ -667,4 +663,25 @@ img#hdspinner{
 
 .rthd-comment-content ol, .rthd-comment-content ul{
 	margin: 0 0 1.6em 1.3333em;
+}
+
+.close-edit-followup{
+  float: left !important;
+}
+
+.followup-tabs{
+    text-decoration: none;
+    margin-bottom: 2px;
+    display: block;
+}
+
+.followup-tabs .tab{
+    display: inline-block;
+    margin-right: 10px;
+    padding: 5px;
+}
+
+.followup-tabs .tab.active {
+    font-weight: bold;
+    border-bottom: 3px solid #06C;
 }

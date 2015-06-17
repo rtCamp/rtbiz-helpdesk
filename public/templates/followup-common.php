@@ -15,9 +15,10 @@ $comments = get_comments( array(
 ) );
 
 $cap        = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' );
+$staffonly = current_user_can( $cap );
 $created_by = get_post_meta( $post->ID, '_rtbiz_hd_created_by', true );
 
-$user_edit_content = current_user_can( $cap ) || ( get_current_user_id() == $post->$created_by );
+$user_edit_content = $staffonly|| ( get_current_user_id() == $post->$created_by );
 
 
 if ( ! empty( $post->post_content ) ) {
@@ -38,7 +39,7 @@ if ( ! empty( $post->post_content ) ) {
 			<div class="rthd-messages ticketcontent">
 				<div class="followup-information">
 					<?php
-					if ( current_user_can( $cap ) ) {
+					if ( $staffonly ) {
 						$autherLink = '<a class="rthd-ticket-author-link" href="' . rtbiz_hd_biz_user_profile_link( $authoremail ) . '">' . $authorname . '</a>';
 					} else {
 						$autherLink = $authorname;
@@ -96,7 +97,7 @@ if ( ! empty( $post->post_content ) ) {
 
 	<?php
 	foreach ( $comments as $comment ) {
-		$user_edit           = current_user_can( $cap ) || ( get_current_user_id() == $comment->user_id );
+		$user_edit           = $staffonly || ( get_current_user_id() == $comment->user_id );
 		$comment_user        = get_user_by( 'id', $comment->user_id );
 		$comment_render_type = 'left';
 		if ( ! empty( $comment_user ) ) {
@@ -115,18 +116,21 @@ if ( ! empty( $post->post_content ) ) {
 	<input id="followup-totalcomment" type="hidden" value="<?php echo esc_attr( $totalComment ); ?>"/>
 	<input id="followup-type" type="hidden" name="followuptype" value=""/>
 
-	<ui id="followup-type-list" class="">
-		<li data-ctype="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC; ?>">Customer + Staff</li>
-		<li data-ctype="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF; ?>">Staff</li>
-	</ui>
+	<?php if ( $staffonly ) { ?>
+
+		<ui id="followup-type-list" class="followup-tabs">
+			<li id="tab-<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC; ?>" class="tab active" data-ctype="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC; ?>"><?php _e('Public Reply', RTBIZ_HD_TEXT_DOMAIN) ?></li>
+			<li id="tab-<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF; ?>" class="tab" data-ctype="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF; ?>"><?php _e('Staff Note', RTBIZ_HD_TEXT_DOMAIN) ?></li>
+		</ui>
+
+	<?php } ?>
 
 	<p><textarea id="editedfollowupcontent" name="editedfollowupcontent" placeholder="edit followup" rows="5" cols="20" required></textarea></p>
 
 	<p class="form-allowed-tags" id="form-allowed-tags">You may use these <abbr title="HyperText Markup Language">HTML</abbr> tags and attributes:  <code>&lt;a href="" title=""&gt; &lt;abbr title=""&gt; &lt;acronym title=""&gt; &lt;b&gt; &lt;blockquote cite=""&gt; &lt;cite&gt; &lt;code&gt; &lt;del datetime=""&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=""&gt; &lt;s&gt; &lt;strike&gt; &lt;strong&gt; </code></p>
 
-	<div id="edit-private-comment" class="rthd-visibility-wrap">
-		<div class="rthd-visibility-wrap">
-			<label class="rthd-visibility"> <strong>Visibility </strong></label>
+	<div id="edit-private-comment" class="rthd-edit-visibility-wrap">
+		<div class="rthd-edit-visibility-wrap">
 			<div class="rthd-sensitive-wrap">
 				<label for="rthd_sensitive">
 					<input id="rthd_sensitive" type="checkbox" name="followup_sensitive"
@@ -142,8 +146,8 @@ if ( ! empty( $post->post_content ) ) {
 		</div>
 		<img id='edithdspinner' class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>">
 	</div>
-	<button type="button" class="btn close-edit-followup">Close</button>
 	<div class="edit-action-button">
+		<button type="button" class="btn close-edit-followup">Close</button>
 		<button class="edit-followup btn red-color" id="delfollowup" type="button">Delete</button>
 		<button class="edit-followup btn btn-primary" id="editfollowup" type="button">Update</button>
 	</div>
