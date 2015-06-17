@@ -162,8 +162,8 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 		}
 
 		public function plugin_action_links( $links ) {
-			$links['get-started'] = '<a href="' . admin_url( 'admin.php?page=' . Rtbiz_Dashboard::$page_slug ) . '">' . __( 'Get Started', RTBIZ_HD_BASE_NAME ) . '</a>';
-			$links['settings'] = '<a href="' . admin_url( 'admin.php?page=' . Rtbiz_Dashboard::$page_slug ) . '">' . __( 'Settings', RTBIZ_HD_BASE_NAME ) . '</a>';
+			$links['get-started'] = '<a href="' . admin_url( 'admin.php?page=' . Rtbiz_HD_Dashboard::$page_slug ) . '">' . __( 'Get Started', RTBIZ_HD_BASE_NAME ) . '</a>';
+			$links['settings'] = '<a href="' . admin_url( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type .  '&page=' . Rtbiz_HD_Settings::$page_slug ) . '">' . __( 'Settings', RTBIZ_HD_BASE_NAME ) . '</a>';
 			return $links;
 		}
 
