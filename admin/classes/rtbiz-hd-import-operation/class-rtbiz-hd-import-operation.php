@@ -1219,7 +1219,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				add_comment_meta( $comment_id, '_rtbiz_hd_references', $references );
 			}
 
-			if ( $sensitive == true ){
+			if ( $sensitive ){
 				update_comment_meta( $comment_id, '_rtbiz_hd_sensitive', true );
 			}
 
@@ -1306,7 +1306,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			global $threadPostId;
 			if ( ! isset( $threadPostId ) ) {
 				global $rtbiz_hd_email_notification;
-				$rtbiz_hd_email_notification->notification_new_followup_added( get_comment( $comment_id ), $comment_type, $uploaded );
+				$rtbiz_hd_email_notification->notification_new_followup_added( get_comment( $comment_id ), $comment_type, $uploaded, $sensitive );
 			}
 
 			// fololowup crated by client then hook will called
@@ -1628,7 +1628,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			}
 
 			$comment_type                   = $_POST['followuptype'];
-			$sensitive                      = "true" === $_POST['private_comment'] ? true : false;
+			$sensitive                      = ( "true" === $_POST['private_comment'] ) ? true : false;
 			$comment_parent                 = 0;
 
 			if ( isset( $_REQUEST['follwoup-time'] ) && '' != $_REQUEST['follwoup-time'] ) {
@@ -1694,7 +1694,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 					) );
 
 					$returnArray['comment_id'] = $comment_ID;
-					$returnArray['private']       = $comment_type;
+					$returnArray['comment_type']       = $comment_type;
 					$comment_user  = get_user_by( 'id', $userid );
 					$comment_render_type = 'left';
 					$cap = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' );
@@ -1851,7 +1851,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				}
 			}
 
-			$rtbiz_hd_email_notification->notification_followup_updated( $comment, get_current_user_id(), $oldtype, $comment_type, $oldCommentBody, $commentdata['comment_content'] );
+			$rtbiz_hd_email_notification->notification_followup_updated( $comment, get_current_user_id(), $oldtype, $comment_type, $oldCommentBody, $commentdata['comment_content'], $sensitive );
 
 			$returnArray['status']        = true;
 			$returnArray['comment_type']       = $comment->comment_type;
@@ -1905,6 +1905,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			}
 			$comment          = get_comment( $_POST['comment_id'] );
 			$attachments_urls = get_comment_meta( $_POST['comment_id'], '_rtbiz_hd_attachment' );
+			$sensitive = get_comment_meta( $comment->comment_ID, '_rtbiz_hd_sensitive', true ) == 1 ? true : false;
 			$attachments = get_children( array( 'post_parent' => $comment->comment_post_ID, 'post_type' => 'attachment' ) );
 			if ( ! empty( $attachments ) && ! empty( $attachments_urls ) ) {
 				foreach ( $attachments as $att ) {
@@ -1914,7 +1915,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				}
 			}
 			$response['status'] = wp_delete_comment( $_POST['comment_id'], true );
-			$rtbiz_hd_email_notification->notification_followup_deleted( $comment, get_current_user_id() );
+			$rtbiz_hd_email_notification->notification_followup_deleted( $comment, get_current_user_id(), $sensitive );
 			echo json_encode( $response );
 			die( 0 );
 		}

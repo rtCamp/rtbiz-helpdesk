@@ -177,14 +177,15 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 
 		/**
 		 * @param $comment Object
-		 * @param $comment_privacy int/string
+		 * @param $comment_type int/string
 		 * @param $uploaded array
+		 * @param $sensitive bool
 		 */
-		public function notification_new_followup_added( $comment, $comment_privacy, $uploaded ) {
+		public function notification_new_followup_added( $comment, $comment_type, $uploaded, $sensitive = false ) {
 			$followup_creator = $ContactEmail = $groupEmail = $assigneEmail = $subscriberEmail = $bccemails = array();
 
 			$redux = rtbiz_hd_get_redux_settings();
-			if ( Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF != $comment_privacy ) {
+			if ( Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF != $comment_type ) {
 				$notificationFlagClient = ( isset( $redux['rthd_notification_acl_client_events'] ) && 1 == $redux['rthd_notification_acl_client_events']['new_followup_created_mail'] );
 				$notificationFlagAssignee = ( isset( $redux['rthd_notification_acl_assignee_events'] ) && 1 == $redux['rthd_notification_acl_assignee_events']['new_followup_created_mail'] );
 				$notificationFlagSubscriber = ( isset( $redux['rthd_notification_acl_staff_events'] ) && 1 == $redux['rthd_notification_acl_staff_events']['new_followup_created_mail'] );
@@ -224,38 +225,46 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 				$ContactEmail  = apply_filters( 'rtbiz_hd_filter_adult_emails', $ContactEmail, $comment->comment_post_ID );
 			}
 
-			if ( isset( $comment_privacy ) && ! empty( $comment_privacy ) && intval( $comment_privacy ) && $comment_privacy > Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC  ) {
-				if ( Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF == $comment_privacy ) {
-					$subject  = rtbiz_hd_create_new_ticket_title( 'rthd_new_followup_email_title_staff_note', $comment->comment_post_ID );
-					$body     = apply_filters( 'rthd_email_template_followup_add_staff_note', rtbiz_hd_get_email_template_body( 'rthd_email_template_followup_add_staff_note' ) );
-				} else {
-					// Filter for email when follow up is added as private
+			if ( isset( $comment_type ) && ! empty( $comment_type ) && intval( $comment_type ) ){
+				if ( $sensitive ) {
 					$subject  = rtbiz_hd_create_new_ticket_title( 'rthd_new_followup_email_title_private', $comment->comment_post_ID );
 					$body     = apply_filters( 'rthd_email_template_followup_add_private', rtbiz_hd_get_email_template_body( 'rthd_email_template_followup_add_private' ) );
+					if ( $comment_type == Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF ){
+						$body = rtbiz_hd_replace_placeholder( $body,'{followup_type}', strtolower( rtbiz_hd_get_comment_type( $comment_type ) ) . ' ' );
+					} else {
+						$body = rtbiz_hd_replace_placeholder( $body,'{followup_type}', '' );
+					}
 					$uploaded = array();
+				} else {
+					if ( $comment_type == Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF ) {
+						$subject  = rtbiz_hd_create_new_ticket_title( 'rthd_new_followup_email_title_staff_note', $comment->comment_post_ID );
+						$body     = apply_filters( 'rthd_email_template_followup_add_staff_note', rtbiz_hd_get_email_template_body( 'rthd_email_template_followup_add_staff_note' ) );
+					} else {
+						$subject = rtbiz_hd_create_new_ticket_title( 'rthd_new_followup_email_title', $comment->comment_post_ID );
+						$body = apply_filters( 'rthd_email_template_followup_add', rtbiz_hd_get_email_template_body( 'rthd_email_template_followup_add' ) );
+					}
 				}
-			} else {
-				$subject = rtbiz_hd_create_new_ticket_title( 'rthd_new_followup_email_title', $comment->comment_post_ID );
-				$body = apply_filters( 'rthd_email_template_followup_add', rtbiz_hd_get_email_template_body( 'rthd_email_template_followup_add' ) );
-			}
-			global $rtbiz_hd_module;
-			$labels = $rtbiz_hd_module->labels;
-			$title = $this->get_email_title( $comment->comment_post_ID, $labels['name'], $comment->comment_ID );
-			// replace followup_content placeholder with content
-			$body = rtbiz_hd_replace_placeholder( $body, '{followup_content}', rtbiz_hd_content_filter( $comment->comment_content ) );
 
-			// sending email to followup author [ To ]
-			$toBody = rtbiz_hd_replace_placeholder( $body,'{followup_author}', 'you' );
-			$from_email = get_comment_meta( $comment->comment_ID, '_rtbiz_hd_original_email', true );
-			// if followup is added via email do not send email as he will already have email content so we should not flood his email thread.
-			if ( empty( $from_email ) ) {
-				// follow up did not came from email send email
-				$this->insert_new_send_email( $subject, rtbiz_hd_get_general_body_template( $toBody, $title, true ), $followup_creator, array(), array(), $uploaded, $comment->comment_ID , 'comment' );
-			}
+				global $rtbiz_hd_module;
+				$labels = $rtbiz_hd_module->labels;
+				$title = $this->get_email_title( $comment->comment_post_ID, $labels['name'], $comment->comment_ID );
 
-			//sending email to ticket assignee [ To ] | staff [ BCC ] | contact [ BCC ] | globel list [ BCC ]
-			$toBody = rtbiz_hd_replace_placeholder( $body,'{followup_author}', $comment->comment_author );
-			$this->insert_new_send_email( $subject, rtbiz_hd_get_general_body_template( $toBody, $title, true ), $ContactEmail , array(), $bccemails, $uploaded, $comment->comment_ID , 'comment' );
+				// replace followup_content placeholder with content
+				$body = rtbiz_hd_replace_placeholder( $body, '{followup_content}', rtbiz_hd_content_filter( $comment->comment_content ) );
+
+				// sending email to followup author [ To ]
+				$toBody = rtbiz_hd_replace_placeholder( $body,'{followup_author}', 'you' );
+				$from_email = get_comment_meta( $comment->comment_ID, '_rtbiz_hd_original_email', true );
+				// if followup is added via email do not send email as he will already have email content so we should not flood his email thread.
+				if ( empty( $from_email ) ) {
+					// follow up did not came from email send email
+					$this->insert_new_send_email( $subject, rtbiz_hd_get_general_body_template( $toBody, $title, true ), $followup_creator, array(), array(), $uploaded, $comment->comment_ID , 'comment' );
+				}
+
+				//sending email to ticket assignee [ To ] | staff [ BCC ] | contact [ BCC ] | globel list [ BCC ]
+				$toBody = rtbiz_hd_replace_placeholder( $body,'{followup_author}', $comment->comment_author );
+				$this->insert_new_send_email( $subject, rtbiz_hd_get_general_body_template( $toBody, $title, true ), $ContactEmail , array(), $bccemails, $uploaded, $comment->comment_ID , 'comment' );
+			}
 		}
 
 
@@ -263,8 +272,9 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 		 * This will handle all notification for deleting followup
 		 * @param $comment Object that is being deleted
 		 * @param $user_id int user id who deleted comment
+		 * @param $sensitive bool
 		 */
-		public function notification_followup_deleted( $comment, $user_id ) {
+		public function notification_followup_deleted( $comment, $user_id, $sensitive = false ) {
 			$followup_deletor = $ContactEmail = $groupEmail = $assigneEmail = $subscriberEmail = $bccemails = array();
 
 			$user = get_user_by( 'id', $user_id );
@@ -297,18 +307,23 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 			$bccemails = $this->exclude_author( $bccemails, $comment->comment_author_email );
 			$bccemails = apply_filters( 'rtbiz_hd_filter_adult_emails', $bccemails , $comment->comment_post_ID );
 
-			if ( $notificationFlagClient ) {
+			if ( $notificationFlagClient && $comment->comment_type != Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF ) {
 				$ContactEmail  = $this->get_contacts( $comment->comment_post_ID );
 				$ContactEmail = $this->exclude_author( $ContactEmail, $comment->comment_author_email );
 				$ContactEmail = apply_filters( 'rtbiz_hd_filter_adult_emails', $ContactEmail , $comment->comment_post_ID );
 			}
 
-			if ( ! ( isset( $comment->comment_type ) && ! empty( $comment->comment_type ) && intval( $comment->comment_type ) && $comment->comment_type > Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC  ) ) {
-				$body = apply_filters( 'rthd_email_template_followup_deleted', rtbiz_hd_get_email_template_body( 'rthd_email_template_followup_deleted' ) );
-				$subject = rtbiz_hd_create_new_ticket_title( 'rthd_delete_followup_email_title', $comment->comment_post_ID );
-			} else {
+			if ( $sensitive ){
 				$body = apply_filters( 'rthd_email_template_followup_deleted_private', rtbiz_hd_get_email_template_body( 'rthd_email_template_followup_deleted_private' ) );
 				$subject = rtbiz_hd_create_new_ticket_title( 'rthd_delete_followup_email_title_private', $comment->comment_post_ID );
+				if ( $comment->comment_type == Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF ){
+					$body = rtbiz_hd_replace_placeholder( $body,'{followup_type}', strtolower( rtbiz_hd_get_comment_type( $comment->comment_type ) ) . ' ' );
+				} else {
+					$body = rtbiz_hd_replace_placeholder( $body,'{followup_type}', '' );
+				}
+			} else {
+				$body = apply_filters( 'rthd_email_template_followup_deleted', rtbiz_hd_get_email_template_body( 'rthd_email_template_followup_deleted' ) );
+				$subject = rtbiz_hd_create_new_ticket_title( 'rthd_delete_followup_email_title', $comment->comment_post_ID );
 			}
 			$body = rtbiz_hd_replace_placeholder( $body, '{followup_content}', rtbiz_hd_content_filter( $comment->comment_content ) );
 
@@ -330,12 +345,13 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 		/**
 		 * @param $comment object new comment object
 		 * @param $user_id int user who edited comment
-		 * @param $old_privacy int old privacy of followup
-		 * @param $new_privacy int new privacy of followup
+		 * @param $old_comment_type int old privacy of followup
+		 * @param $new_comment_type int new privacy of followup
 		 * @param $old_content string old string comment content
 		 * @param $new_content string new comment content
+		 * @param $sensitive bool
 		 */
-		public function notification_followup_updated( $comment, $user_id, $old_privacy, $new_privacy, $old_content, $new_content ) {
+		public function notification_followup_updated( $comment, $user_id, $old_comment_type, $new_comment_type, $old_content, $new_content, $sensitive = false  ) {
 			$followup_updater = $ContactEmail = $groupEmail = $assigneEmail = $subscriberEmail = $bccemails = array();
 
 			$user = get_user_by( 'id', $user_id );
@@ -345,12 +361,6 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 			$notificationFlagAssignee = ( isset( $redux['rthd_notification_acl_assignee_events'] ) && 1 == $redux['rthd_notification_acl_assignee_events']['new_followup_updated_mail'] );
 			$notificationFlagSsubscriber = ( isset( $redux['rthd_notification_acl_staff_events'] ) && 1 == $redux['rthd_notification_acl_staff_events']['new_followup_updated_mail'] );
 			$notificationFlagGroup = ( isset( $redux['rthd_notification_acl_group_events'] ) && 1 == $redux['rthd_notification_acl_group_events']['new_followup_updated_mail'] );
-
-			// find if followup was private before or right now it is private
-			$private_update = false;
-			if ( ( intval( $old_privacy ) && $old_privacy > Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC ) || ( intval( $new_privacy ) && $new_privacy > Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC ) ) {
-				$private_update = true;
-			}
 
 			$followup_updater[] = array( 'email' => $comment->comment_author_email, 'name' => $comment->comment_author );
 
@@ -374,28 +384,34 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 			$bccemails = $this->exclude_author( $bccemails, $comment->comment_author_email );
 			$bccemails = apply_filters( 'rtbiz_hd_filter_adult_emails', $bccemails , $comment->comment_post_ID );
 
-			if ( $notificationFlagClient && Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF != $new_privacy && Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF != $old_privacy ) {
+			if ( $notificationFlagClient && Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF != $new_comment_type ) {
 				$ContactEmail  = $this->get_contacts( $comment->comment_post_ID );
 				$ContactEmail = $this->exclude_author( $ContactEmail, $comment->comment_author_email );
 				$ContactEmail = apply_filters( 'rtbiz_hd_filter_adult_emails', $ContactEmail, $comment->comment_post_ID );
 			}
 
-			if ( $private_update ) {
+			if ( $sensitive ) {
 				$body = apply_filters( 'rthd_email_template_followup_updated_private', rtbiz_hd_get_email_template_body( 'rthd_email_template_followup_updated_private' ) );
 				$subject = rtbiz_hd_create_new_ticket_title( 'rthd_update_followup_email_title_private', $comment->comment_post_ID );
+				if ( $new_comment_type == Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF ){
+					$body = rtbiz_hd_replace_placeholder( $body,'{followup_type}', strtolower( rtbiz_hd_get_comment_type( $new_comment_type ) ) . ' ' );
+				} else {
+					$body = rtbiz_hd_replace_placeholder( $body,'{followup_type}', '' );
+				}
+
 			} else {
 				$body = apply_filters( 'rthd_email_template_followup_updated', rtbiz_hd_get_email_template_body( 'rthd_email_template_followup_updated' ) );
 				$subject = rtbiz_hd_create_new_ticket_title( 'rthd_update_followup_email_title', $comment->comment_post_ID );
 			}
-			$diff_visibility = rtbiz_hd_text_diff( rtbiz_hd_get_comment_type( $old_privacy ), rtbiz_hd_get_comment_type( $new_privacy ) );
+			$diff_visibility = rtbiz_hd_text_diff( rtbiz_hd_get_comment_type( $old_comment_type ), rtbiz_hd_get_comment_type( $new_comment_type ) );
 			$diff_followup_content = rtbiz_hd_text_diff( trim( html_entity_decode( strip_tags( $old_content ) ) ), trim( html_entity_decode( strip_tags( $new_content ) ) ) );
 
 			if ( $diff_visibility ) {
 				$body = rtbiz_hd_replace_placeholder( $body, '{visibility_diff}', $diff_visibility );
 			} else {
-				$body = rtbiz_hd_replace_placeholder( $body, '{visibility_diff}', rtbiz_hd_get_comment_type( $new_privacy ) );
+				$body = rtbiz_hd_replace_placeholder( $body, '{visibility_diff}', rtbiz_hd_get_comment_type( $new_comment_type ) );
 			}
-			if ( ! $private_update ) { // not private then add diff content if exists or add actual content if no diff
+			if ( ! $sensitive ) { // not private then add diff content if exists or add actual content if no diff
 				if ( $diff_followup_content ) {
 					$body = rtbiz_hd_replace_placeholder( $body, '{followup_diff}', $diff_followup_content );
 				} else {

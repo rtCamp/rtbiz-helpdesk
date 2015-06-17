@@ -823,11 +823,8 @@ function rtbiz_hd_get_comment_type( $comment_type_value ) {
 		case Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC:
 			return 'Default';
 			break;
-		case Rtbiz_HD_Import_Operation::$FOLLOWUP_SENSITIVE:
-			return 'Sensitive';
-			break;
 		case Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF:
-			return 'Only Staff';
+			return 'Staff Only';
 			break;
 		default:
 			return 'undefined';
@@ -1440,7 +1437,7 @@ function rtbiz_hd_get_default_email_template( $key = '', $all = false ) {
 	$redux['rthd_email_template_followup_add_private'] = '
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0;" />
 			<div style="color: #333333; line-height: 26px; font-size: 16px; ">
-				A private followup has been added by <strong>{followup_author}</strong>. Please go to ticket to view content.
+				A <strong>private</strong> {followup_type}followup has been added by <strong>{followup_author}</strong>. Please go to ticket to view content.
 			</div>
 			{ticket_link}
 		    <hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
@@ -1448,7 +1445,7 @@ function rtbiz_hd_get_default_email_template( $key = '', $all = false ) {
 	$redux['rthd_email_template_followup_deleted_private'] = '
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0;" />
 				<div style="color: #333333; line-height: 26px; font-size: 16px; ">
-					A private followup is deleted by <Strong>{followup_deleted_by}</Strong> {ticket_link}
+					A <strong>private</strong> {followup_type}followup is deleted by <Strong>{followup_deleted_by}</Strong> {ticket_link}
 				</div>
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
 
@@ -1465,7 +1462,7 @@ function rtbiz_hd_get_default_email_template( $key = '', $all = false ) {
 
 	$redux['rthd_email_template_followup_updated_private'] = '
 			<div style="color: #888888; font-size: 14px;">
-				A <strong>private</strong> followup has been edited by <strong>{followup_updated_by}</strong>.Please go to ticket to view content.{ticket_link}
+				A <strong>private</strong> {followup_type}followup has been edited by <strong>{followup_updated_by}</strong>.Please go to ticket to view content.{ticket_link}
 			</div>
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0;" />
 			<div style="font-size: 16px; line-height: 26px; color: #888888;">
