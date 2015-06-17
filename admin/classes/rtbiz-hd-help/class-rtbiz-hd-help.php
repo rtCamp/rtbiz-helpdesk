@@ -257,20 +257,18 @@ if ( ! class_exists( 'Rtbiz_Hd_Help' ) ) {
 				case 'ticket_list_overview':
 					?>
 					<p>
-						<?php echo esc_attr( __( 'This screen lists all the Helpdesk tickets on which the logged in user is a part of. The WordPress admin will see all tickets by default.  ' ) );?>
+						<?php echo esc_attr( __( 'This screen lists all the Helpdesk tickets which the logged in user is a part of. The WordPress admin will see all tickets by default.  ' ) );?>
 					</p>
 					<?php
 					break;
 				case 'ticket_list_screen_content':
 					?>
 					<ul>
-						<li><strong><?php _e( 'All, Unanswered, Answered, Solved - ' ); ?></strong><?php _e( 'Filters to see ticket sorted by status. All tickets are listed in latest first order.' ); ?></li>
+						<li><strong><?php _e( 'All, Unanswered, Answered, Archived - ' ); ?></strong><?php _e( 'Filters to see ticket sorted by status. All tickets are listed in latest first order.' ); ?></li>
 						<li><strong><?php _e( 'Filter by status, Filter by assignee, Filter by product - ' ); ?></strong><?php _e( 'Used to sort tickets.' ); ?></li>
-						<li><strong><?php _e( 'Assignee - ' ); ?></strong><?php _e( 'Staff member to whom ticket is assigned.' ); ?></li>
-						<li><strong><?php _e( 'Ticket Author - ' ); ?></strong><?php _e( 'Customer who has created the ticket.' ); ?></li>
+						<li><strong><?php _e( 'Customer - ' ); ?></strong><?php _e( 'Non-staff people on ticket who have been added by ticket author/customer.' ); ?></li>
+						<li><strong><?php _e( 'Staff - ' ); ?></strong><?php _e( 'staff people on ticket who have access to view ticket.' ); ?></li>
 						<li><strong><?php _e( 'Reply count  - ' ); ?></strong><?php _e( 'The number replies added on a ticket.' ); ?></li>
-						<li><strong><?php _e( 'Last Reply - ' ); ?></strong><?php _e( 'Customer/staff who has last replied to the ticket.' ); ?></li>
-						<li><strong><?php _e( 'Participants (Customer) - ' ); ?></strong><?php _e( 'Non-staff people on ticket who have been added by ticket author/customer.' ); ?></li>
 					</ul>
 					<?php
 					break;
