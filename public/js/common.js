@@ -41,8 +41,10 @@ jQuery( document ).ready(function () {
 
                 if ( 30 == jQuery( this).data('ctype') ){
                     jQuery('#new-followup-form').find('#savefollwoup').text( "Add Staff Note" );
+                    jQuery('#new-followup-form').find('#followupcontent').attr( 'placeholder', 'Add new staff note' );
                 } else {
                     jQuery('#new-followup-form').find('#savefollwoup').text( "Add Reply" );
+                    jQuery('#new-followup-form').find('#followupcontent').attr( 'placeholder', 'Add new reply' );
                 }
 
             });
@@ -53,8 +55,10 @@ jQuery( document ).ready(function () {
 
                 if ( 30 == jQuery( this).data('ctype') ){
                     jQuery('#dialog-form').find('#savefollwoup').text( "Add Staff Note" );
+                    jQuery('#dialog-form').find('#editedfollowupcontent').attr( 'placeholder', 'Add new staff note' );
                 } else {
                     jQuery('#dialog-form').find('#savefollwoup').text( "Add Reply" );
+                    jQuery('#dialog-form').find('#editedfollowupcontent').attr( 'placeholder', 'Add new reply' );
                 }
             });
         },

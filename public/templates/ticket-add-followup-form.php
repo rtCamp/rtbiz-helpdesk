@@ -31,7 +31,7 @@ $staffonly = current_user_can( $cap ); ?>
 
 	<p>
 		<textarea id="followupcontent" class="followupcontent" rows="5" cols="20" name="followupcontent"
-	             placeholder="Add new followup" required></textarea>
+	             placeholder="Add new reply" required></textarea>
 		<span class="rthd-tooltip rthd-followup-content-tolltip">
 			HTML support
 			<span class="rthd-tip-bottom"><?php
