@@ -394,14 +394,7 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 
 				wp_enqueue_script( RTBIZ_HD_TEXT_DOMAIN . 'admin-js', RTBIZ_HD_URL . 'admin/js/helpdesk-admin-min.js', array( 'jquery' ), RTBIZ_HD_VERSION, true );
 
-				$user_edit = false;
-				if ( current_user_can( 'edit_' . Rtbiz_HD_Module::$post_type ) ) {
-					$user_edit = true;
-				}
-
 				wp_localize_script( RTBIZ_HD_TEXT_DOMAIN . 'admin-js', 'rtbiz_hd_post_type', $rtbiz_hd_post_type );
-				wp_localize_script( RTBIZ_HD_TEXT_DOMAIN . 'admin-js', 'rtbiz_hd_user_edit', array( $user_edit ) );
-
 			} else {
 				wp_localize_script( RTBIZ_HD_TEXT_DOMAIN . 'admin-js', 'rtbiz_hd_user_edit', array( '' ) );
 			}
