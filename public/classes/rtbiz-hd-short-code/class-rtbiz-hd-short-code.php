@@ -295,7 +295,7 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 						$date = new DateTime( $ticket->post_modified );
 						?>
 						<tr class="<?php echo $highlight_class; ?>">
-							<td><a class="support" target="_blank"
+							<td><a class="support"
 							       href="<?php echo esc_url( ( rtbiz_hd_is_unique_hash_enabled() ) ? rtbiz_hd_get_unique_hash_url( $ticket->ID ) : get_post_permalink( $ticket->ID ) ); ?>"> #<?php echo esc_attr( $ticket->ID ) ?> </a></td>
 							<td><?php echo $ticket->post_title; ?></td>
 							<td> <?php echo esc_attr( human_time_diff( $date->format( 'U' ), current_time( 'timestamp' ) ) ) . esc_attr( __( ' ago' ) ) ?> </td>

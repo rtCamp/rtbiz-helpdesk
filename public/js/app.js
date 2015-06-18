@@ -338,6 +338,7 @@ jQuery( document ).ready(function ($) {
 			jQuery( '.rthd-add-people-box' ).hide();
 		} else {
 			jQuery( '.rthd-add-people-box' ).show();
+            jQuery( '#rthd-subscribe-email').focus();
 		}
 		e.preventDefault();
 		e.stopPropagation();
