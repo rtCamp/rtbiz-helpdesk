@@ -192,7 +192,7 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 				'supports'           => array( 'title', 'editor', 'comments', 'revisions' ),
 				'capability_type'    => self::$post_type,
 				'exclude_from_search'=> true,
-				//'map_meta_cap'    => true,
+				'map_meta_cap'    => true,
 			);
 
 			return register_post_type( self::$post_type, $args );

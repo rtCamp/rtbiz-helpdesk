@@ -57,7 +57,7 @@ if ( ! class_exists( 'Rtbiz_HD_Attributes' ) ) {
 				'assign_terms' => $editor_cap,
 			);
 			if ( rtbiz_hd_check_wizard_completed() ) {
-				$rtbiz_hd_rt_attributes->add_attributes_page( $this->attributes_page_slug, 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type, Rtbiz_HD_Module::$post_type, $admin_cap, $terms_caps, $render_type = true, $storage_type = true, $orderby = true );
+				$rtbiz_hd_rt_attributes->add_attributes_page( $this->attributes_page_slug, 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type, Rtbiz_HD_Module::$post_type, $admin_cap, $terms_caps, $render_type = false, $storage_type = false, $orderby = false );
 			}
 		}
 
