@@ -216,7 +216,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 
 			if ( empty( $customers_userid ) ) {
 				if ( ! class_exists( 'WooCommerce' ) && ! class_exists( 'Easy_Digital_Downloads' ) ) {
-					echo 'This reports will generated with EDD & WooCommerce plugin.';
+					echo 'This report will be generated with EDD or WooCommerce plugins.';
 				} else {
 					echo 'No customers found who have created any ticket.';
 				}
