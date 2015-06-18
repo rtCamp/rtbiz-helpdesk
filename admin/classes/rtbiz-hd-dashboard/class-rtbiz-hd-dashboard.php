@@ -234,8 +234,8 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 			}
 			$cols = array( __( 'Purchase', RTBIZ_HD_TEXT_DOMAIN ), __( 'Count', RTBIZ_HD_TEXT_DOMAIN ) );
 			$rows = array();
-			$rows[] = array( __( 'Customer who created Tickets' ), $custWithicket );
-			$rows[] = array( __( 'Customers have not created any Tickets' ), $totalcustomers - $custWithicket );
+			$rows[] = array( __( 'Customers who have created tickets' ), $custWithicket );
+			$rows[] = array( __( 'Customers who have not created tickets' ), $totalcustomers - $custWithicket );
 
 			$data_source = array();
 			$data_source['cols'] = $cols;
