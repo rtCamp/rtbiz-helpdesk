@@ -31,6 +31,7 @@ jQuery( document ).ready(function () {
 			rthd_common.initEditFollowUp();
 			rthd_common.initLoadAll();
 			rthd_common.initEditContent();
+			rthd_common.initParticipantRemove();
 		},
         initAction : function () {
             jQuery( document ).on('click', '#new-followup-form #followup-type-list li', function (e) {
@@ -479,7 +480,31 @@ jQuery( document ).ready(function () {
 					}
 				});
 			});
-		}
+		},
+        initParticipantRemove: function(){
+            jQuery( document ).on( "click", ".rthd-participant-remove", function() {
+                var requestArray = {};
+                //jQuery( '#rthd-subscribe-email-spinner' ).show();
+                var participant_div = jQuery( this);
+                requestArray.action = 'rtbiz_hd_remove_subscriber_email';
+                requestArray.email = participant_div.data('email');
+                requestArray.post_id = jQuery( '#post-id' ).val();
+                jQuery.ajax({
+                    url: ajaxurl,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: requestArray,
+                    success: function (data) {
+                        if (data.status) {
+                            participant_div.parent().remove();
+                        } else {
+                            alert( 'Error: participant not removed' )
+                        }
+                        //jQuery( '#rthd-subscribe-email-spinner' ).hide();
+                    }
+                });
+            });
+        }
 
 	};
 	rthd_common.init();

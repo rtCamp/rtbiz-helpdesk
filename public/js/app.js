@@ -146,30 +146,6 @@ jQuery( document ).ready(function ($) {
 		});
 	});
 
-    jQuery( document ).on( "click", ".rthd-participant-remove", function() {
-        var requestArray = {};
-        //jQuery( '#rthd-subscribe-email-spinner' ).show();
-        var participant_div = jQuery( this);
-        requestArray.action = 'rtbiz_hd_remove_subscriber_email';
-        requestArray.email = participant_div.data('email');
-        requestArray.post_id = jQuery( '#post-id' ).val();
-        jQuery.ajax({
-            url: ajaxurl,
-            type: 'POST',
-            dataType: 'json',
-            data: requestArray,
-            success: function (data) {
-                if (data.status) {
-                    participant_div.parent().remove();
-                } else {
-                    alert( 'Error: participant not removed' )
-                }
-                //jQuery( '#rthd-subscribe-email-spinner' ).hide();
-            }
-        });
-    });
-
-
 	var hashcheck = check_hash_call_hash();
 	if ( ! hashcheck && window.location.hash.length !== 0) {
 		hashflag = true;
