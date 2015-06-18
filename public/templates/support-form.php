@@ -78,7 +78,7 @@
 		<div>
 			<input type="checkbox" name="post[adult_ticket]" value="1"/>
 			<span class="description"><?php _e( 'Adult Content', RTBIZ_HD_TEXT_DOMAIN ); ?></span>
-			<span class="rthd-tooltip">
+			<span class="rthd-tooltip rthd-tooltip-adult-content">
 				<i class="dashicons dashicons-info rtmicon"></i>
 				<span class="rthd-tip">
 					<?php _e( 'My site has adult content', RTBIZ_HD_TEXT_DOMAIN ); ?>

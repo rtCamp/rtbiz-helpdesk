@@ -18,7 +18,7 @@
  * Description:       A WordPress based Helpdesk system with mail sync features, web based ticket UI and many custom settings. Easy to use for admin, staff and customers.
  * Version:           1.3.1
  * Author:            rtCamp
- * Author URI:        http://example.com/
+ * Author URI:        https://rtcamp.com/
  * License:           GPL-2.0+
  * License URI:       https://rtcamp.com/
  * Text Domain:       rtbiz-helpdesk
