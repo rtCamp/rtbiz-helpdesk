@@ -337,11 +337,6 @@ jQuery( document ).ready(function () {
                     post_content.css( 'border-color', '' );
                 }
 
-				if ( post_content.val() === jQuery( '#comment-' + followup_id ).find( '.rthd-comment-content' ).data( 'content' )) {
-					alert( 'You have not edited comment!' );
-					return false;
-				}
-
 				jQuery( '#edithdspinner' ).show();
 				jQuery( this ).attr( 'disabled', 'disabled' );
 
