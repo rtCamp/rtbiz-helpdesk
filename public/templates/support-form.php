@@ -74,39 +74,42 @@
 			</span>
 		</span>
 	</div>
+	<div id="rthd-followup-form" class="clearfix">
+	<div class="rthd-attachment-box">
+		<?php
+		//is ticket have adult content
 
-	<?php
-	//is ticket have adult content
-
-	if ( rtbiz_hd_get_redux_adult_filter() ) {
-		?>
-		<div>
-			<input type="checkbox" name="post[adult_ticket]" value="1"/>
-			<span class="description"><?php _e( 'Adult Content', RTBIZ_HD_TEXT_DOMAIN ); ?></span>
-			<span class="rthd-tooltip rthd-tooltip-adult-content">
-				<i class="dashicons dashicons-info rtmicon"></i>
-				<span class="rthd-tip">
-					<?php _e( 'My site has adult content', RTBIZ_HD_TEXT_DOMAIN ); ?>
+		if ( rtbiz_hd_get_redux_adult_filter() ) {
+			?>
+			<div>
+				<input type="checkbox" name="post[adult_ticket]" value="1"/>
+				<span class="description"><?php _e( 'Adult Content', RTBIZ_HD_TEXT_DOMAIN ); ?></span>
+				<span class="rthd-tooltip rthd-tooltip-adult-content">
+					<i class="dashicons dashicons-info rtmicon"></i>
+					<span class="rthd-tip">
+						<?php _e( 'My site has adult content', RTBIZ_HD_TEXT_DOMAIN ); ?>
+					</span>
 				</span>
-			</span>
-		</div>
-	<?php } ?>
-	<div>
-		<!--		--><?php //wp_nonce_field( 'rthd_support_add_nonce_for_security_thats_all', 'rthd_support_nonce' );       ?>
+			</div>
+		<?php } ?>
+		<div class="rthd-attachment">
+			<!--		--><?php //wp_nonce_field( 'rthd_support_add_nonce_for_security_thats_all', 'rthd_support_nonce' );       ?>
 
-		<!--		<input type="file" id="filesToUpload" name="attachment[]" multiple="multiple"/>-->
-		<div id="attachment-container">
-			<a href="javascript:;" class="rthd-attach-file" id="attachemntlist" value="Attach Files"><span
-					class="dashicons dashicons-upload" id="attachemntlist"></span><span>Attach Files</span>
-			</a>
+			<!--		<input type="file" id="filesToUpload" name="attachment[]" multiple="multiple"/>-->
+			<div id="attachment-container">
+				<a href="javascript:;" class="rthd-attach-file" id="attachemntlist" value="Attach Files"><span
+						class="dashicons dashicons-upload" id="attachemntlist"></span><span>Attach Files</span>
+				</a>
+			</div>
+			<div id="support-filelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
+			<input type="hidden" name="rthd_support_attach_ids" id="rthd_support_attach_ids">
 		</div>
-		<div id="support-filelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
-		<input type="hidden" name="rthd_support_attach_ids" id="rthd_support_attach_ids">
 	</div>
 
-	<div>
+	<div id="rthd-followup-action" class="rthd-followup-action">
 		<input type="hidden" name="rthd_support_form_submit" value="1"/>
 		<input class="btn btn-primary" id="submit-support-form" type="submit" value="Submit"/>
 	</div>
+		</div>
 
 </form>
