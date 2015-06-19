@@ -357,6 +357,9 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 				$edd_payments = get_posts( array(
 					                       'numberposts' => -1,
 					                       'post_type'   => 'edd_payment',
+					                       'meta_key'    => '_edd_payment_mode',
+					                       'meta_value'   => 'test',
+					                       'meta_compare' => '!=',
 					                       'order'       => 'ASC',
 					                       'post_status' => 'publish',
 				                       ) );
