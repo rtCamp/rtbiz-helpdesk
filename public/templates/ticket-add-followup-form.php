@@ -29,7 +29,7 @@ $staffonly = current_user_can( $cap ); ?>
 
 	<?php } ?>
 
-	<p>
+	<div>
 		<textarea id="followupcontent" class="followupcontent" rows="5" cols="20" name="followupcontent"
 	             placeholder="Add new reply" required></textarea>
 		<span class="rthd-tooltip rthd-followup-content-tolltip">
@@ -38,7 +38,7 @@ $staffonly = current_user_can( $cap ); ?>
 				_e( 'You may use these HTML tags - a, abbr, acronym, b, blockquote, cite, code, del, em, i, q, s, strike and strong', RTBIZ_HD_TEXT_DOMAIN ); ?>
 			</span>
 		</span>
-	</p>
+	</div>
 
 	<div id="rthd-followup-form" class="clearfix">
 		<div class="rthd-attachment-box">
@@ -67,9 +67,9 @@ $staffonly = current_user_can( $cap ); ?>
 			<div class="rthd-attachment">
 				<!--			<input id="attachemntlist" name="attachemntlist[]" type="file" multiple />-->
 				<div id="rthd-attachment-container">
-					<button class="btn button" id="attachemntlist" value="Attach Files"><span
+					<a href="javascript:;" class="rthd-attach-file" id="attachemntlist" value="Attach Files"><span
 							class="dashicons dashicons-upload" id="attachemntlist"></span><span>Attach Files</span>
-					</button>
+					</a>
 				</div>
 				<div id="followup-filelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
 				<!--	        <span class="followup-note"><b>Note:</b> Attachments will be uploaded when the form is submitted by clicking <i>Add Followup</i> button.</span>-->

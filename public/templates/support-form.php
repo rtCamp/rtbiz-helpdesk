@@ -96,7 +96,9 @@
 
 		<!--		<input type="file" id="filesToUpload" name="attachment[]" multiple="multiple"/>-->
 		<div id="attachment-container">
-			<input type="button" class="btn button" id="attachemntlist" value="Attach Files">
+			<a href="javascript:;" class="rthd-attach-file" id="attachemntlist" value="Attach Files"><span
+					class="dashicons dashicons-upload" id="attachemntlist"></span><span>Attach Files</span>
+			</a>
 		</div>
 		<div id="support-filelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
 		<input type="hidden" name="rthd_support_attach_ids" id="rthd_support_attach_ids">

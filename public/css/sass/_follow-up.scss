@@ -142,7 +142,7 @@ ul#chat-UI {
 }
 
 #rthd-followup-form {
-	margin-top: 16px;
+	margin-top: 30px;
 }
 
 #rthd-followup-form > div {
@@ -175,7 +175,8 @@ ul#chat-UI {
 }
 
 #editedfollowupcontent, #editedticketcontent, #followupcontent{
-	width:100%;
+	min-width:98%;
+	max-width:98%;
 }
 
 .red-color{
@@ -452,6 +453,12 @@ h2.rt-hd-ticket-front-title{
 
 #rthd-subscribe-email{
     word-break: initial;
+    width: 94%;
+    margin-bottom: 10px;
+}
+
+.rthd-subscribe-email-submit{
+    float: right;
 }
 
 .rthd-followup-file-uploaded{
@@ -650,6 +657,14 @@ img#hdspinner{
 	float: right;
 }
 
+.rthd-attachment-box{
+    display: inline-block;
+}
+
+.rthd-attach-file{
+    text-decoration: none;
+}
+
 .rthd-visibility-wrap input[type="radio"]{
 	display: inline-block;
 	min-height: inherit;
@@ -677,7 +692,6 @@ img#hdspinner{
 }
 
 .followup-tabs .tab.active {
-    font-weight: bold;
     border-bottom: 3px solid #06C;
 }
 
