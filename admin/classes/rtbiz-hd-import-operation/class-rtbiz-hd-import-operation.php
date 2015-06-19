@@ -1142,7 +1142,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			global $signature;
 			$this->add_contacts_to_post( $allemails, $comment_post_ID );
 			$comment_content_old = $comment_content;
-			$comment_content     = wp_kses_post( str_replace( $signature, '', $comment_content ) );
+			$comment_content     = wp_kses_post( stripslashes( str_replace( $signature, '', $comment_content ) ) );
 			$comment_author_ip = preg_replace( '/[^0-9a-fA-F:., ]/', '', $_SERVER['REMOTE_ADDR'] );
 			$comment_author_ip = empty( $comment_author_ip ) ? ' ' : $comment_author_ip;
 			$comment_agent = isset( $_SERVER['HTTP_USER_AGENT'] ) ? substr( $_SERVER['HTTP_USER_AGENT'], 0, 254 ) : '';
@@ -1792,7 +1792,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				die( 0 );
 			}
 			$oldCommentBody = $commentdata['comment_content'];
-			$commentdata['comment_content'] = wp_kses_post( $comment_content );
+			$commentdata['comment_content'] = wp_kses_post( stripslashes( $comment_content ) );
 
 			$oldDate                        = $commentdata['comment_date'];
 			$newDate                        = '';

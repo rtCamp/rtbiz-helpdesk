@@ -126,7 +126,7 @@ if ( ! empty( $post->post_content ) ) {
 	<?php } ?>
 
 	<p>
-		<textarea id="editedfollowupcontent" name="editedfollowupcontent" placeholder="edit followup" rows="5" cols="20" required></textarea>
+		<textarea id="editedfollowupcontent" name="editedfollowupcontent" placeholder="edit reply" rows="5" cols="20" required></textarea>
 		<span class="rthd-tooltip rthd-followup-content-tolltip">
 			HTML support
 			<span class="rthd-tip-bottom"><?php
@@ -161,4 +161,22 @@ if ( ! empty( $post->post_content ) ) {
 	</div>
 </div>
 <?php
+if ( $user_edit_content ) {
+	?>
+	<div id="edit-ticket-data" title="Edit Ticket" style="display: none;">
+		<p>
+			<textarea id="editedticketcontent" name="editedticketcontent" placeholder="edit ticket content" rows="5" cols="20" required></textarea>
+			<span class="rthd-tooltip rthd-followup-content-tolltip">
+				HTML support
+				<span class="rthd-tip-bottom"><?php
+					_e( 'You may use these HTML tags - a, abbr, acronym, b, blockquote, cite, code, del, em, i, q, s, strike and strong', RTBIZ_HD_TEXT_DOMAIN ); ?>
+				</span>
+			</span>
+		</p>
+		<button class="edit-ticket btn btn-primary" id="edit-ticket-content-click" type="button">Update</button>
+		<?php wp_nonce_field( 'rt_hd_ticket_edit', 'edit_ticket_nonce' ); ?>
+		<img id='ticket-edithdspinner' class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>">
+		<button class="btn close-edit-content">Close</button>
+	</div>
+<?php } ?>
 

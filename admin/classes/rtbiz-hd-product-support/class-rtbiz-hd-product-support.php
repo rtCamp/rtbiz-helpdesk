@@ -599,7 +599,7 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 			//Ticket created
 			$rtbiz_hd_tickets_id = $rtbiz_hd_import_operation->insert_new_ticket(
 				$data['title'],
-				stripslashes( $data['description'] ),
+				wp_kses_post( stripslashes( $data['description'] ) ),
 				'now',
 				$allemail,
 				$uploaded,

@@ -437,7 +437,7 @@ jQuery( document ).ready(function () {
 				}
 				jQuery( '#new-followup-form' ).hide();
 				jQuery( document ).scrollTop( ( jQuery( '#edit-ticket-data' ).offset().top ) - 50 );
-				rthd_common.rthd_tinymce_set_content( 'editedticketcontent', jQuery( this ).closest( '.ticketcontent' ).find( '.rthd-comment-content' ).data( 'content' ) );
+				jQuery( '#edit-ticket-data').find('#editedticketcontent').val( jQuery( this ).closest( '.ticketcontent' ).find( '.rthd-comment-content' ).data( 'content' ) );
 			});
 
 			// close tinyMCE editor and send user back to ticket content
@@ -455,9 +455,8 @@ jQuery( document ).ready(function () {
 				var requestArray = {};
 				requestArray.action = 'rtbiz_hd_add_new_ticket_ajax';
 				requestArray.post_id = jQuery( '#post-id' ).val();
-				var content = rthd_common.rthd_tinymce_get_content( 'editedticketcontent' );
-				requestArray.body = content;
-				requestArray.nonce = jQuery( '#edit_ticket_nonce' ).val();
+				requestArray.body = jQuery( '#edit-ticket-data').find('#editedticketcontent').val();
+				requestArray.nonce = jQuery( '#edit-ticket-data #edit_ticket_nonce' ).val();
 				jQuery( '#ticket-edithdspinner' ).show();
 				jQuery( this ).attr( 'disabled', 'disabled' );
 				jQuery.ajax({
@@ -469,18 +468,20 @@ jQuery( document ).ready(function () {
 						if (data.status) {
 							jQuery( '#ticket-edithdspinner' ).hide();
 							jQuery( "#edit-ticket-content-click" ).removeAttr( 'disabled' );
-							jQuery( '.edit-ticket-link' ).closest( '.ticketcontent' ).find( '.rthd-comment-content' ).html( rthd_common.rthd_tinymce_get_content( 'editedticketcontent' ) );
+							jQuery( '.edit-ticket-link' ).closest( '.ticketcontent' ).find( '.rthd-comment-content' ).html( jQuery( '#edit-ticket-data').find('#editedticketcontent').val() );
 							jQuery( '#edit-ticket-data' ).hide();
 							jQuery( '#new-followup-form' ).slideToggle( 'slow' );
-							jQuery( document ).scrollTop( ( jQuery( '.ticketcontent' ).offset().top ) - 50 );
+							jQuery( document ).scrollTop( jQuery( '.ticketcontent' ).offset().top - 50 );
 						} else {
 							console.log( data.msg );
+                            jQuery( '#new-followup-form' ).slideToggle( 'slow' );
 						}
 					},
 					error: function (xhr, textStatus, errorThrown) {
 						alert( "Error" );
 						jQuery( '#ticket-edithdspinner' ).hide();
 						jQuery( "#edit-ticket-content-click" ).removeAttr( 'disabled' );
+                        jQuery( '#new-followup-form' ).slideToggle( 'slow' );
 					}
 				});
 			});
