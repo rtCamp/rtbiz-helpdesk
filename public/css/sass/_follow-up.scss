@@ -175,8 +175,8 @@ ul#chat-UI {
 }
 
 #editedfollowupcontent, #editedticketcontent, #followupcontent{
-	min-width:98%;
-	max-width:98%;
+	width: 100%;
+    box-sizing: border-box;
 }
 
 .red-color{
@@ -453,7 +453,8 @@ h2.rt-hd-ticket-front-title{
 
 #rthd-subscribe-email{
     word-break: initial;
-    width: 94%;
+    width: 100%;
+    box-sizing: border-box;
     margin-bottom: 10px;
 }
 
@@ -689,6 +690,7 @@ img#hdspinner{
     display: inline-block;
     margin: 0px 10px 0px 0px;
     padding: 5px;
+    cursor: pointer;
 }
 
 .followup-tabs .tab.active {
