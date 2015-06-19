@@ -125,17 +125,15 @@ if ( ! empty( $post->post_content ) ) {
 
 	<?php } ?>
 
-	<p>
-		<textarea id="editedfollowupcontent" name="editedfollowupcontent" placeholder="edit reply" rows="5" cols="20" required></textarea>
+	<div>
+		<textarea id="editedfollowupcontent" name="editedfollowupcontent" placeholder="edit reply" rows="5" cols="20"></textarea>
 		<span class="rthd-tooltip rthd-followup-content-tolltip">
 			HTML support
 			<span class="rthd-tip-bottom"><?php
 				_e( 'You may use these HTML tags - a, abbr, acronym, b, blockquote, cite, code, del, em, i, q, s, strike and strong', RTBIZ_HD_TEXT_DOMAIN ); ?>
 			</span>
 		</span>
-	</p>
-
-
+	</div>
 
 	<div id="edit-private-comment" class="rthd-edit-visibility-wrap">
 		<div class="rthd-edit-visibility-wrap">
@@ -154,25 +152,25 @@ if ( ! empty( $post->post_content ) ) {
 		</div>
 		<img id='edithdspinner' class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>">
 	</div>
-	<div class="edit-action-button">
-		<button type="button" class="btn close-edit-followup">Close</button>
-		<button class="edit-followup btn red-color" id="delfollowup" type="button">Delete</button>
-		<button class="edit-followup btn btn-primary" id="editfollowup" type="button">Update</button>
+	<div class="edit-action-button clearfix">
+		<button type="button" class="btn button close-edit-followup">Close</button>
+		<button class="edit-followup button btn red-color button-" id="delfollowup" type="button">Delete</button>
+		<button class="edit-followup btn button btn-primary button-primary" id="editfollowup" type="button">Update</button>
 	</div>
 </div>
 <?php
 if ( $user_edit_content ) {
 	?>
 	<div id="edit-ticket-data" title="Edit Ticket" style="display: none;">
-		<p>
-			<textarea id="editedticketcontent" name="editedticketcontent" placeholder="edit ticket content" rows="5" cols="20" required></textarea>
+		<div>
+			<textarea id="editedticketcontent" name="editedticketcontent" placeholder="edit ticket content" rows="5" cols="20"></textarea>
 			<span class="rthd-tooltip rthd-followup-content-tolltip">
 				HTML support
 				<span class="rthd-tip-bottom"><?php
 					_e( 'You may use these HTML tags - a, abbr, acronym, b, blockquote, cite, code, del, em, i, q, s, strike and strong', RTBIZ_HD_TEXT_DOMAIN ); ?>
 				</span>
 			</span>
-		</p>
+		</div>
 		<button class="edit-ticket btn btn-primary" id="edit-ticket-content-click" type="button">Update</button>
 		<?php wp_nonce_field( 'rt_hd_ticket_edit', 'edit_ticket_nonce' ); ?>
 		<img id='ticket-edithdspinner' class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>">
