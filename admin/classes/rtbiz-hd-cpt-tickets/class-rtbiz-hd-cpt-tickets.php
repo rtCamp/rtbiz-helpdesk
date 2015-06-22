@@ -400,19 +400,27 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 		public function metabox_rearrenge() {
 			global $wp_meta_boxes;
 			$custom_order['submitdiv'] = $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['core']['submitdiv'];
+			unset( $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['core']['submitdiv'] );
+
 			$custom_order['rt-hd-ticket-data'] = $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default']['rt-hd-ticket-data'];
-			$custom_order['productdiv'] = $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['core']['productdiv'];
-//			$custom_order[ 'p2p-from-' . Rtbiz_HD_Module::$post_type . '_to_' . rtbiz_get_contact_post_type() ] = $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default'][ 'p2p-from-' . Rtbiz_HD_Module::$post_type . '_to_' . rtbiz_get_contact_post_type() ];
-			$custom_order['rt-hd-subscriiber'] = $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default']['rt-hd-subscriiber'];
-			$custom_order['rt-hd-ticket-order-history'] = $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default']['rt-hd-ticket-order-history'];
-//			$custom_order[ 'p2p-any-' . Rtbiz_HD_Module::$post_type . '_to_' . Rtbiz_HD_Module::$post_type ] = $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default'][ 'p2p-any-' . Rtbiz_HD_Module::$post_type . '_to_' . Rtbiz_HD_Module::$post_type ];
-			//$custom_order['rt-teamsdiv'] = $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['core']['rt-teamsdiv'];
-			$wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['core'] = $custom_order;
 			unset( $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default']['rt-hd-ticket-data'] );
-			unset( $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default'][ 'p2p-from-' . Rtbiz_HD_Module::$post_type . '_to_' . rtbiz_get_contact_post_type() ] );
+
+			$custom_order[ Rt_Products::$product_slug . 'div' ] = $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['core'][ Rt_Products::$product_slug . 'div' ];
+			unset( $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['core'][ Rt_Products::$product_slug . 'div' ] );
+
+			$custom_order['rt-hd-subscriiber'] = $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default']['rt-hd-subscriiber'];
+			unset( $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default']['rt-hd-subscriiber'] );
+
+			$custom_order['rt-hd-ticket-order-history'] = $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default']['rt-hd-ticket-order-history'];
+			unset( $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default']['rt-hd-ticket-order-history'] );
+
+			unset( $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default']['rt-hd-ticket-data'] );
 			unset( $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default']['rt-hd-subscriiber'] );
 			unset( $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default']['rt-hd-ticket-order-history'] );
-			unset( $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['default'][ 'p2p-any-' . Rtbiz_HD_Module::$post_type . '_to_' . Rtbiz_HD_Module::$post_type ] );
+			unset( $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['core'][ Rtbiz_Teams::$slug . 'div' ] );
+
+			$custom_order = array_merge( $custom_order, $wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['core'] );
+			$wp_meta_boxes[ Rtbiz_HD_Module::$post_type ]['side']['core'] = $custom_order;
 		}
 
 		/**
@@ -804,11 +812,11 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 				if ( ! empty( $products ) ) {
 					echo '<label class="screen-reader-text" for="rt_product">' . __( 'Filter by product' ) . '</label>';
 
-					echo '<select id="rt_product" class="postform" name="product">';
+					echo '<select id="' . Rt_Products::$product_slug . '" class="postform" name="' . Rt_Products::$product_slug . '">';
 					echo '<option value="0">Select Product</option>';
 
 					foreach ( $products as $product ) {
-						if ( isset( $_GET['product'] ) && $product->slug == $_GET['product'] ) {
+						if ( isset( $_GET[ Rt_Products::$product_slug ] ) && $product->slug == $_GET[ Rt_Products::$product_slug ] ) {
 							echo '<option value="' . $product->slug . '" selected="selected">' . $product->name . '</option>';
 						} else {
 							echo '<option value="' . $product->slug . '">' . $product->name . '</option>';

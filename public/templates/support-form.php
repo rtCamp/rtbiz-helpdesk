@@ -66,53 +66,50 @@
 	</div>
 
 	<div id="editor_container">
-		<!--		<textarea name="post[description]" placeholder="Description" rows="5" cols="20" required></textarea>-->
-		<?php
-		$editor_id = 'post_description';
-		$settings  = array(
-			'media_buttons' => false,
-			'editor_class'  => 'post_description',
-			'tinymce'       => array(
-				'height' => 150,
-			),
-		);
-		if ( empty( $_POST['post_description'] ) ) {
-			$_POST['post_description'] = '';
-		}
-		wp_editor( $_POST['post_description'], $editor_id, $settings );
-		?>
-	</div>
-
-	<?php
-	//is ticket have adult content
-
-	if ( rtbiz_hd_get_redux_adult_filter() ) {
-		?>
-		<div>
-			<input type="checkbox" name="post[adult_ticket]" value="1"/>
-			<span class="description"><?php _e( 'Adult Content', RTBIZ_HD_TEXT_DOMAIN ); ?></span>
-			<span class="rthd-tooltip">
-				<i class="dashicons dashicons-info rtmicon"></i>
-				<span class="rthd-tip">
-					<?php _e( 'My site has adult content', RTBIZ_HD_TEXT_DOMAIN ); ?>
-				</span>
+		<textarea id="post_description" placeholder="Description" rows="5" cols="20" name="post[description]" class="post_description" required><?php echo isset( $_POST['post']['description'] ) ? $_POST['post']['description'] : ''; ?></textarea>
+		<span class="rthd-tooltip rthd-followup-content-tolltip">
+			HTML support
+			<span class="rthd-tip-bottom"><?php
+				_e( 'You may use these HTML tags - a, abbr, acronym, b, blockquote, cite, code, del, em, i, q, s, strike and strong', RTBIZ_HD_TEXT_DOMAIN ); ?>
 			</span>
-		</div>
-	<?php } ?>
-	<div>
-		<!--		--><?php //wp_nonce_field( 'rthd_support_add_nonce_for_security_thats_all', 'rthd_support_nonce' );       ?>
+		</span>
+	</div>
+	<div id="rthd-followup-form" class="clearfix">
+	<div class="rthd-attachment-box">
+		<?php
+		//is ticket have adult content
 
-		<!--		<input type="file" id="filesToUpload" name="attachment[]" multiple="multiple"/>-->
-		<div id="attachment-container">
-			<input type="button" class="btn button" id="attachemntlist" value="Attach Files">
+		if ( rtbiz_hd_get_redux_adult_filter() ) {
+			?>
+			<div>
+				<input type="checkbox" name="post[adult_ticket]" value="1"/>
+				<span class="description"><?php _e( 'Adult Content', RTBIZ_HD_TEXT_DOMAIN ); ?></span>
+				<span class="rthd-tooltip rthd-tooltip-adult-content">
+					<i class="dashicons dashicons-info rtmicon"></i>
+					<span class="rthd-tip">
+						<?php _e( 'My site has adult content', RTBIZ_HD_TEXT_DOMAIN ); ?>
+					</span>
+				</span>
+			</div>
+		<?php } ?>
+		<div class="rthd-attachment">
+			<!--		--><?php //wp_nonce_field( 'rthd_support_add_nonce_for_security_thats_all', 'rthd_support_nonce' );       ?>
+
+			<!--		<input type="file" id="filesToUpload" name="attachment[]" multiple="multiple"/>-->
+			<div id="attachment-container">
+				<a href="javascript:;" class="rthd-attach-file" id="attachemntlist" value="Attach Files"><span
+						class="dashicons dashicons-upload" id="attachemntlist"></span><span>Attach Files</span>
+				</a>
+			</div>
+			<div id="support-filelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
+			<input type="hidden" name="rthd_support_attach_ids" id="rthd_support_attach_ids">
 		</div>
-		<div id="support-filelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
-		<input type="hidden" name="rthd_support_attach_ids" id="rthd_support_attach_ids">
 	</div>
 
-	<div>
+	<div id="rthd-followup-action" class="rthd-followup-action">
 		<input type="hidden" name="rthd_support_form_submit" value="1"/>
 		<input class="btn btn-primary" id="submit-support-form" type="submit" value="Submit"/>
 	</div>
+		</div>
 
 </form>

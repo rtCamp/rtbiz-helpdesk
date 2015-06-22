@@ -20,7 +20,7 @@ ul#chat-UI {
 	display: -webkit-flex;
 }
 
-.rthd-discussion > li:before {
+.rthd-discussion > li:not(.no-comments):before {
 	background: none repeat scroll 0 0 #eee;
 	content: " ";
 	height: 100%;
@@ -30,11 +30,11 @@ ul#chat-UI {
 	width: 2px;
 }
 
-#chat-UI.rthd-discussion > li:last-child:before {
+#chat-UI.rthd-discussion > li:not(.no-comments):last-child:before {
 	height: 45px;
 }
 
-#ticket-content-UI.rthd-discussion > li:before {
+#ticket-content-UI.rthd-discussion > li:not(.no-comments):before {
 	top: 30px;
 }
 
@@ -73,9 +73,6 @@ ul#chat-UI {
 	border-right-color: #eeeeee;
 	border-width: 8px;
 	margin-top: -8px;
-}
-.private-comment-item.rthd-self .avatar:after, .private-comment-item.rthd-other .avatar:after {
-	border-right-color: #FFC0CB;
 }
 
 .rthd-self .rthd-messages, .rthd-other .rthd-messages, .rt-hd-ticket-front-title{
@@ -125,20 +122,11 @@ ul#chat-UI {
 	margin-right: 5px;
 }
 
-#private-comment{
-	display: inline-block;
-}
-
 .rthd-visibility-wrap {
 	margin-bottom: 16px;
-
 	label {
 		margin-right: 10px;
 	}
-}
-
-.rthd-keep-status-wrap {
-	margin-bottom: 16px;
 }
 
 .rthd-info-meta-created-by-li {
@@ -154,7 +142,7 @@ ul#chat-UI {
 }
 
 #rthd-followup-form {
-	margin-top: 16px;
+	margin-top: 30px;
 }
 
 #rthd-followup-form > div {
@@ -172,11 +160,6 @@ ul#chat-UI {
 	margin-left: 10px;
 }
 
-.private-comment-display{
-	/*color: red;*/
-	background: pink;
-}
-
 .followup-content {
 	width:100%;
 	padding: 0;
@@ -191,8 +174,9 @@ ul#chat-UI {
 	display:none;
 }
 
-#editedfollowupcontent, #editedticketcontent{
-	width:100%;
+#editedfollowupcontent, #editedticketcontent, #followupcontent{
+	width: 100%;
+    box-sizing: border-box;
 }
 
 .red-color{
@@ -345,6 +329,16 @@ ul#chat-UI {
     border-right-color: #bbb;
 }
 
+.rthd-discussion li.sensitive{
+  .avatar:before {
+    border-right-color: #C85D5D;
+  }
+
+  .rthd-messages{
+    border: 1px solid #C85D5D;
+  }
+}
+
 #followup-load-more:hover {
     background: #039;
 }
@@ -356,7 +350,7 @@ ul#chat-UI {
 .load-more-ul li a:hover {
     background: #039;
 }
-.followup-information .private_comment_span{
+.followup-information .comment_type{
 	color: #C85D5D;
 }
 
@@ -420,7 +414,7 @@ ul#chat-UI {
 	box-shadow: 0 1px 1px rgba(0,0,0,0.04);
 }
 .edit-action-button {
-	float: right;
+	margin-top: 10px;
 }
 #clear-attachemntlist {
 	display: none;
@@ -433,9 +427,7 @@ ul#chat-UI {
 	right: 50px;
 	width: 50px;
 	height: 50px;
-	&:hover{
-		text-decoration: none;
-	}
+    text-decoration: none;
 }
 .rthd-followup-type-tolltip{
 	vertical-align: middle;
@@ -461,6 +453,13 @@ h2.rt-hd-ticket-front-title{
 
 #rthd-subscribe-email{
     word-break: initial;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+
+.rthd-subscribe-email-submit{
+    float: right;
 }
 
 .rthd-followup-file-uploaded{
@@ -491,6 +490,14 @@ h2.rt-hd-ticket-front-title{
 	margin-left: 5px;
 }
 
+.rthd-ticket-user-activity div.rthd-participant-container{
+  display: inline-block;
+  vertical-align: middle;
+  margin: 5px 15px 5px 0;
+  height: 48px;
+  width: 48px;
+}
+
 .rthd-ticket-user-activity a img, .rthd-ticket-user-activity-backend a img, .rthd-ticket-user-activity a input{
 	border-radius: 100%;
 	vertical-align: middle;
@@ -498,15 +505,11 @@ h2.rt-hd-ticket-front-title{
 
 .rthd-ticket-user-activity > a, .rthd-ticket-user-activity-backend > a{
 	display: inline-block;
-	padding-left: 8px;
 	text-decoration: none;
 }
 
 .rthd-ticket-user-activity-backend > a{
 	padding-bottom: 8px;
-}
-.rthd-ticket-user-activity > a {
-	margin: 5px 8px 5px 0;
 }
 
 .rthd-contact-avatar-no-reply-div a img,.rthd-subscriber-avatar-no-reply-div a img{
@@ -521,6 +524,25 @@ h2.rt-hd-ticket-front-title{
 	margin: 0;
 	padding: 0;
 }
+
+.rthd-ticket-user-activity div.rthd-participant-container .rthd-participant-remove{
+    width: 25px;
+    height: 25px;
+    text-align: center;
+    display: none;
+    position: relative;
+    top: -57px;
+    background-color: rgb(136, 136, 136);
+    border-radius: 25px;
+    font-size: 14px;
+    vertical-align: middle;
+    left: 33px;
+}
+
+.rthd-ticket-user-activity div.rthd-participant-container:hover .rthd-participant-remove{
+    display: inline-block;
+}
+
 
 .rt-hd-ticket-sub-row {
 	margin: 10px 0 15px;
@@ -614,11 +636,11 @@ h2.rthd-ticket-list-title{
     float: right;
 }
 
-.followup_staffonly{
-	background: beige;
+.rthd-self.staff_only .rthd-messages, .rthd-other.staff_only .rthd-messages {
+  background-color: beige;
 }
 
-.rthd-self .followup_staff_only_arrow:after, .rthd-other .followup_staff_only_arrow:after{
+.rthd-self.staff_only .avatar:after, .rthd-other.staff_only .avatar:after{
 	border-right-color: beige;
 }
 
@@ -632,12 +654,16 @@ img#hdspinner{
 	vertical-align: middle;
 }
 
-.rthd-attachment-box {
-	float: left;
-}
-
 .rthd-followup-action {
 	float: right;
+}
+
+.rthd-attachment-box{
+    display: inline-block;
+}
+
+.rthd-attach-file{
+    text-decoration: none;
 }
 
 .rthd-visibility-wrap input[type="radio"]{
@@ -648,4 +674,43 @@ img#hdspinner{
 
 .rthd-comment-content ol, .rthd-comment-content ul{
 	margin: 0 0 1.6em 1.3333em;
+}
+
+.close-edit-followup{
+  float: left !important;
+}
+
+.followup-tabs{
+    text-decoration: none;
+    margin-bottom: 0px;
+    display: block;
+}
+
+.followup-tabs .tab{
+    display: inline-block;
+    margin: 0px 10px 0px 0px;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.followup-tabs .tab.active {
+    border-bottom: 3px solid #06C;
+}
+
+.rthd-followup-content-tolltip{
+    top: 0px;
+    position: relative;
+    float: right;
+    font-size: 11px;
+    padding-top: 5px;
+    color: gray;
+
+    &:hover {
+      .rthd-tip-bottom,
+      .rthd-tip-top,
+      .rthd-tip {
+        margin-right: 45px !important;
+        text-align: justify;
+      }
+    }
 }

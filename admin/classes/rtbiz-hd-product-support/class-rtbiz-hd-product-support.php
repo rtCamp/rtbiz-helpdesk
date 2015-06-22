@@ -76,13 +76,17 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 
 			// Show ticket column in product and download post type
 			Rtbiz_HD::$loader->add_filter( 'edd_download_columns', $this, 'manage_woo_edd_post_columns' );
+			Rtbiz_HD::$loader->add_action( 'manage_download_posts_custom_column', $this, 'manage_woo_edd_post_columns_show', 10, 2 );
+
 			Rtbiz_HD::$loader->add_filter( 'manage_product_posts_columns', $this, 'manage_woo_edd_post_columns' );
-			Rtbiz_HD::$loader->add_action( 'manage_posts_custom_column', $this, 'manage_woo_edd_post_columns_show', 10, 2 );
+			Rtbiz_HD::$loader->add_action( 'manage_product_posts_custom_column', $this, 'manage_woo_edd_post_columns_show', 10, 2 );
 
 			// Show ticket in order of woo and edd
-			Rtbiz_HD::$loader->add_filter( 'manage_shop_order_posts_columns', $this, 'order_post_columns' );
+			Rtbiz_HD::$loader->add_filter( 'manage_shop_order_posts_columns', $this, 'order_post_columns', 20 );
+			Rtbiz_HD::$loader->add_action( 'manage_shop_order_posts_custom_column', $this, 'wc_order_post_columns_show', 20, 2 );
+
 			Rtbiz_HD::$loader->add_filter( 'edd_payments_table_columns', $this, 'order_post_columns' );
-			Rtbiz_HD::$loader->add_filter( 'edd_payments_table_column', $this, 'order_post_columns_show', 10, 3 );
+			Rtbiz_HD::$loader->add_filter( 'edd_payments_table_column', $this, 'edd_order_post_columns_show', 10, 3 );
 
 			// edd Customer column
 			Rtbiz_HD::$loader->add_filter( 'edd_report_customer_columns', $this, 'edd_customer_columns' );
@@ -108,7 +112,13 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 			return $columns;
 		}
 
-		function order_post_columns_show( $value, $payment, $column_name ) {
+		function wc_order_post_columns_show( $column_name, $payment ) {
+			if ( Rtbiz_HD_Module::$post_type.'_order' == $column_name ) {
+				echo $this->get_order_ticket_column_view( $payment );
+			}
+		}
+
+		function edd_order_post_columns_show( $value, $payment, $column_name ) {
 			if ( Rtbiz_HD_Module::$post_type.'_order' == $column_name ) {
 				$value = $this->get_order_ticket_column_view( $payment );
 			}
@@ -151,7 +161,7 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 					$tax = $wpdb->get_var( 'SELECT taxonomy_id FROM '.$wpdb->prefix.'taxonomymeta WHERE meta_key = "'.Rt_Products::$term_product_id_meta_key.'" AND meta_value ='.$post_id );
 					if ( ! empty( $tax ) ) {
 						$terms = get_term( $tax, Rt_Products::$product_slug );
-						if ( ! is_wp_error( $terms ) ) {
+						if ( ! is_wp_error( $terms ) && !empty( $terms ) ) {
 							$posts = new WP_Query( array(
 								                       'post_type'                      => Rtbiz_HD_Module::$post_type,
 								                       'post_status'                    => 'any',
@@ -347,6 +357,9 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 				$edd_payments = get_posts( array(
 					                       'numberposts' => -1,
 					                       'post_type'   => 'edd_payment',
+					                       'meta_key'    => '_edd_payment_mode',
+					                       'meta_value'   => 'test',
+					                       'meta_compare' => '!=',
 					                       'order'       => 'ASC',
 					                       'post_status' => 'publish',
 				                       ) );
@@ -545,7 +558,10 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 			if ( empty( $_POST['rthd_support_form_submit'] ) ) {
 				return false;
 			}
-			if ( empty( $_POST['post'] ) || empty( $_POST['post_description'] )|| empty( $_POST['post']['title'] ) || empty( $_POST['post']['email'][0] ) ) {
+			$_POST['post']['title'] = trim( $_POST['post']['title'] );
+			$_POST['post']['description'] = trim( $_POST['post']['description'] );
+
+			if ( empty( $_POST['post'] ) || empty( $_POST['post']['description'] )|| empty( $_POST['post']['title'] ) || empty( $_POST['post']['email'][0] ) ) {
 				echo '<div id="info" class="error rthd-notice">Please fill all the details.</div>';
 				return false;
 			}
@@ -568,7 +584,7 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 			$creator = $_POST['post']['email'][0];
 
 			$data = $_POST['post'];
-			$data['description'] = $_POST['post_description'];
+			//$data['description'] = $_POST['post_description'];
 
 			$allemails  = array();
 			foreach ( array_filter( $data['email'] ) as $email ) {
@@ -586,7 +602,7 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 			//Ticket created
 			$rtbiz_hd_tickets_id = $rtbiz_hd_import_operation->insert_new_ticket(
 				$data['title'],
-				stripslashes( $data['description'] ),
+				wp_kses_post( stripslashes( $data['description'] ) ),
 				'now',
 				$allemail,
 				$uploaded,
@@ -671,6 +687,12 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 			if ( isset( $data['product_id'] ) ) {
 				$term = get_term_by( 'id', $data['product_id'], Rt_Products::$product_slug );
 				if ( $term ) {
+					/* Product assignee | override defult assignee  */
+					$product_meta = Rt_Lib_Taxonomy_Metadata\get_term_meta( $data['product_id'], '_'.Rt_Products::$product_slug  . '_meta', true );
+					if ( ! empty( $product_meta ) && ! empty( $product_meta['default_assignee'] ) ){
+						wp_update_post( array( 'ID' => $rtbiz_hd_tickets_id, 'post_author' => $product_meta['default_assignee'] ) );
+					}
+					/* Product assignee | override defult assignee end */
 					wp_set_post_terms( $rtbiz_hd_tickets_id, array( $term->term_id ), Rt_Products::$product_slug );
 				}
 			}

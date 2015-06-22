@@ -121,8 +121,8 @@ jQuery( document ).ready(function ($) {
 						jQuery( '.rthd-participants' ).show();
 					}
 					if ( ! data.has_replied) {
-						var htmlappend = '<a title="' + data.display_name + '" class="rthd-last-reply-by" href="' + data.edit_link + '">' + data.avatar + ' </a>';
-						jQuery( '.rthd-ticket-created-by' ).after( htmlappend );
+						var htmlappend = '<div class="rthd-participant-container"><a title="' + data.display_name + '" class="rthd-last-reply-by" href="' + data.edit_link + '">' + data.avatar + ' </a><a href="javascript:;" class="rthd-participant-remove" data-email="' + email + '" data-post_id="' + jQuery( '#post-id' ).val() + '" >X</a></div>';
+						jQuery( '.rthd-ticket-created-by').parent().after( htmlappend );
 						//if (data.is_contact){
 						//	jQuery('.rthd-contact-avatar-no-reply-div' ).append( htmlappend );
 						//} else {
@@ -314,6 +314,7 @@ jQuery( document ).ready(function ($) {
 			jQuery( '.rthd-add-people-box' ).hide();
 		} else {
 			jQuery( '.rthd-add-people-box' ).show();
+            jQuery( '#rthd-subscribe-email').focus();
 		}
 		e.preventDefault();
 		e.stopPropagation();

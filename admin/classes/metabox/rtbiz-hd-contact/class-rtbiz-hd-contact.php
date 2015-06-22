@@ -30,6 +30,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contact ' ) ) {
 
 			global $rtbiz_hd_module;
 			$get_assigned_to = rtbiz_get_post_for_contact_connection( $post->ID, $post->post_type );
+			$cap             = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' );
 			if ( empty( $get_assigned_to ) ) {
 				$get_assigned_to = array();
 			}
@@ -37,17 +38,12 @@ if ( ! class_exists( 'Rtbiz_HD_Contact ' ) ) {
 			if ( ! empty( $get_assigned_to ) ) {
 				foreach ( $get_assigned_to as $contact ) {
 					$email = get_post_meta( $contact->ID, Rtbiz_Entity::$meta_key_prefix . Rtbiz_Contact::$primary_email_key, true );
-					$subContactHTML .= "<li id='subscribe-auth-" . $contact->ID . "' class='contact-list'>" .
-								get_avatar( $email, 24 ) .
-								"<br/><a target='_blank' class='subscribe-title heading' title='" . $contact->post_title . "' href='" . rtbiz_hd_biz_user_profile_link( $email ) . "'>" . $contact->post_title. '</a>' .
-								"<input type='hidden' name='contacts_to[]' value='" . $contact->ID . "' /></li>";
+					$subContactHTML .= '<div class="rthd-participant-container"><a title= "' . $contact->post_title . '" class="rthd-last-reply-by rthd-contact-avatar-no-reply"  href="' . ( current_user_can( $cap ) ? rtbiz_hd_biz_user_profile_link( $email ) : '#' ) . '">' . get_avatar( $email, '48' ) . ' </a><a href="javascript:;" class="rthd-participant-remove" data-email="' . $email . '" data-post_id="' . $post->ID . '" >X</a></div>';
 				}
 			} ?>
 
-			<div class="">
-			<ul id="divContactList" class="">
+			<div class="rthd-ticket-user-activity">
 				<?php echo balanceTags( $subContactHTML ); ?>
-			</ul>
 			</div><?php
 			do_action( 'rt_hd_after_ticket_information', $post );
 		}

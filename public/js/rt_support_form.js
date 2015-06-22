@@ -13,22 +13,6 @@ jQuery( document ).ready(function () {
 		jQuery( this ).parent().remove();
 	});
 
-	function rthd_tinymce_get_content_support(id) {
-		if (typeof tinymce != "undefined") {
-			var editor = tinymce.get( id );
-			if (editor && editor instanceof tinymce.Editor) {
-				return editor.getContent();
-			} else {
-				return jQuery( '#' + id ).val();
-			}
-		}
-		return '';
-	}
-
-	/**
-	 * Created by spock on 3/4/15.
-	 */
-
 	jQuery( document ).ready(function ($) {
 		var uploadedfiles = [];
 		//$accesscode = jQuery('#rthd_support_nonce' ).val();
@@ -69,20 +53,25 @@ jQuery( document ).ready(function () {
 							e.preventDefault();
 							jQuery( '#support-form-filelist' ).html( '' );
 							jQuery( '#rthd_support_attach_ids' ).val( uploadedfiles );
-							if ( ! rthd_tinymce_get_content_support( 'post_description' )) {
-								alert( 'Please enter Description' );
-								// need to find tinyMCE change event and add
-								// jQuery('#editor_container').after("<span class='error'>Please enter Discrpition</span>");
-							}
+                            var post_content = jQuery( '#post_description' );
+							if ( ! jQuery.trim( post_content.val() ) ) {
+                                post_content.css( 'border-color', 'red' );
+							} else {
+                                post_content.css( 'border-color', '' );
+                            }
 							var name = jQuery( '#title' );
-							var product = jQuery( 'select[name="post[product_id]"]' );
 							if ( ! name.val().length) {
 								name.css( 'border-color', 'red' );
-							}
+							} else {
+                                name.css( 'border-color', '' );
+                            }
+                            var product = jQuery( 'select[name="post[product_id]"]' );
 							if (product.length) {
 								if ( ! product.val().length) {
 									product.css( 'border-color', 'red' );
-								}
+								} else {
+                                    product.css( 'border-color', '' );
+                                }
 							}
 							if (jQuery( '.rthd_support_from' )[0].checkValidity()) {
 								uploader.start();

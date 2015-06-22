@@ -17,6 +17,8 @@ class Rtbiz_HD_Public {
 		global $wp_query, $post;
 
 		// include this css everywhere
+		wp_enqueue_style( 'dashicons' );
+
 		wp_enqueue_style( 'rthd-common-css', RTBIZ_HD_URL. 'public/css/rthd-common.css', array(), RTBIZ_HD_VERSION, 'all' );
 
 		// bail if not helpdesk
@@ -37,6 +39,8 @@ class Rtbiz_HD_Public {
 			return;
 		}
 
+		wp_enqueue_style( 'dashicons' );
+
 		wp_enqueue_script( 'rthd-app-js', RTBIZ_HD_URL . 'public/js/helpdesk-min.js', array( 'jquery' ), RTBIZ_HD_VERSION, true );
 
 		//fancybox
@@ -56,12 +60,9 @@ class Rtbiz_HD_Public {
 			return;
 		}
 
-		$user_edit = false;
-
 		if ( wp_script_is( 'rthd-app-js' ) ) {
 			wp_localize_script( 'rthd-app-js', 'ajaxurl', admin_url( 'admin-ajax.php' ) );
 			wp_localize_script( 'rthd-app-js', 'rtbiz_hd_post_type', get_post_type( $post->ID ) );
-			wp_localize_script( 'rthd-app-js', 'rtbiz_hd_user_edit', array( $user_edit ) );
 		}
 
 		return true;
