@@ -430,8 +430,8 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					array(
 						'id'       => 'rthd_enable_notification_acl',
 						'type'     => 'switch',
-						'title'    => __( 'Notification ACL' ),
-						'subtitle' => __( 'To enable/disable Notification ACL' ),
+						'title'    => __( 'Notification' ),
+						'subtitle' => __( 'To enable/disable Notification' ),
 						'default'  => true,
 						'on'       => __( 'Enable' ),
 						'off'      => __( 'Disable' ),
