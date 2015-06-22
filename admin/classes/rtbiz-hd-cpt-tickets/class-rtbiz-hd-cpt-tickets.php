@@ -382,7 +382,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 			global $post;
 			if ( ! empty( $post ) && 'auto-draft' != $post->post_status ) {
 				remove_post_type_support( Rtbiz_HD_Module::$post_type, 'editor' );
-				add_meta_box( 'rt-hd-ticket-follow-up', __( 'Follow Up', RTBIZ_HD_TEXT_DOMAIN ), 'Rtbiz_HD_Ticket_Comments::ui', Rtbiz_HD_Module::$post_type, 'normal', 'high' );
+				add_meta_box( 'rt-hd-ticket-follow-up', __( 'Reply', RTBIZ_HD_TEXT_DOMAIN ), 'Rtbiz_HD_Ticket_Comments::ui', Rtbiz_HD_Module::$post_type, 'normal', 'high' );
 			}
 
 			add_meta_box( 'rt-hd-ticket-data', __( 'Ticket Information', RTBIZ_HD_TEXT_DOMAIN ), 'Rtbiz_HD_Ticket_Info::ui', Rtbiz_HD_Module::$post_type, 'side', 'default' );
