@@ -266,7 +266,7 @@ $user_edit_content = current_user_can( $cap );
 										</select>
 										<img id="product-change-spinner" class="helpdeskspinner"
 										     src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
-									<?php } else { echo '<span class="rthd-front-product-value">' . $ticket_product[0]->name . '</span>'; } ?>
+									<?php } else { echo '<mark class="rthd-front-product-value">' . $ticket_product[0]->name . '</mark>'; } ?>
 								</div>
 							</div>
 						<?php
