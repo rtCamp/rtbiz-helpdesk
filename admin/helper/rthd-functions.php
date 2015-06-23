@@ -514,12 +514,20 @@ function rtbiz_hd_add_user_fav_ticket( $userid, $postid ) {
 }
 
 function rtbiz_hd_get_user_fav_ticket( $userid ) {
+	$fav_list = array();
 	$result = get_user_meta( $userid, '_rtbiz_hd_fav_tickets' );
 	if ( ! empty( $result ) ) {
-		$result = array_filter( $result );
-		$result = array_unique( $result );
+		foreach( $result as $postid ){
+			$post_status = get_post_status( $postid );
+			if ( ! in_array( $post_status, array( 'auto-draft', 'trash' ) ) ){
+				$fav_list[] = $postid;
+			}
+		}
+		$fav_list = array_filter( $fav_list );
+		$fav_list = array_unique( $fav_list );
 	}
-	return $result;
+
+	return $fav_list;
 }
 
 /**

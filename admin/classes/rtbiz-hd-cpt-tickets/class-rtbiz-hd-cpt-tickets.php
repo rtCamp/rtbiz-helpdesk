@@ -656,6 +656,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 		 * @param $post_id
 		 */
 		public function before_ticket_deleted( $post_id ) {
+			global $wpdb;
 
 			if ( get_post_type( $post_id ) == Rtbiz_HD_Module::$post_type ) {
 
@@ -668,6 +669,11 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 				$rtbiz_hd_ticket_history_model->delete( $ticket_history );
 
 				$ticketModel->delete_ticket( $ticket_index );
+
+				// remove ticket from favorites list
+				$sql = 'DELETE FROM ' . $wpdb->usermeta .  "  WHERE `meta_key` = '_rtbiz_hd_fav_tickets' and `meta_value` = " . $post_id;
+				$result = $wpdb->get_results( $sql );
+
 			}
 		}
 
