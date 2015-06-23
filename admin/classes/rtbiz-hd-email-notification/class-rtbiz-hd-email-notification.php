@@ -941,7 +941,10 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 		 * @return array
 		 */
 		public function get_contacts( $post_id ) {
-			$created_by = rtbiz_get_contact_for_wp_user( get_post_meta( $post_id, '_rtbiz_hd_created_by', true ) );
+			$wp_user_ticket_creator = get_post_meta( $post_id, '_rtbiz_hd_created_by', true );
+			if ( ! empty( $wp_user_ticket_creator ) && is_int( $wp_user_ticket_creator ) ) {
+				$created_by = rtbiz_get_contact_for_wp_user( $wp_user_ticket_creator );
+			}
 			$tocontact      = array();
 			if ( ! empty( $created_by[0] ) ) {
 				$email = get_post_meta( $created_by[0]->ID, Rtbiz_Entity::$meta_key_prefix.Rtbiz_Contact::$primary_email_key, true );

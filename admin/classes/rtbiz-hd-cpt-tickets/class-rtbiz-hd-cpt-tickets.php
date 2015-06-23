@@ -160,7 +160,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 					$created_by         = get_user_by( 'id', get_post_meta( $post->ID, '_rtbiz_hd_created_by', true ) );
 					$CCs                = $rtbiz_hd_email_notification->get_contacts( $post->ID );
 					$CCs                = wp_list_pluck( $CCs, 'email' );
-					if ( ! empty( $created_by ) ) {
+					if ( ! empty( $created_by ) && ! empty( $CCs ) ) {
 						$CCs = array_diff( $CCs, array( $created_by->user_email ) );
 					}
 					?>
