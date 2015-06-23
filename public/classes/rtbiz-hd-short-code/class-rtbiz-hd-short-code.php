@@ -35,6 +35,10 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 		 */
 		function support_form( $attr ) {
 
+			$arg_shortcode = shortcode_atts( array(
+				                                 'title' => 'yes',
+			                                 ), $attr );
+
 			global $rtbiz_hd_product_support;
 
 			ob_start();
@@ -117,6 +121,7 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 					rtbiz_hd_get_template( 'support-form.php', array(
 						'product_exists' => $product_exists,
 						'product_option' => $product_option,
+						'show_title' => $arg_shortcode['title'],
 					) );
 				}
 			} else {

@@ -1,4 +1,7 @@
+<?php if ( 'yes' == $show_title ) { ?>
 <div class="rthd-support-title"><?php _e( 'Get Support', RTBIZ_HD_TEXT_DOMAIN ); ?></div>
+<?php }
+?>
 <form method="post" class="pure-form rthd_support_from" enctype="multipart/form-data">
 
 	<?php if ( isset( $_REQUEST['order_id'] ) ) { ?>
