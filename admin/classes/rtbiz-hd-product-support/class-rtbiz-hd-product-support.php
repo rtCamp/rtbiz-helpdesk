@@ -670,7 +670,9 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 		 * @internal param int $rtbiz_hd_ticket_id
 		 */
 		function add_ticket_product_info( $rtbiz_hd_tickets_id ) {
-
+			if ( ! isset( $_POST['post'] ) ) {
+				return ;
+			}
 			$data = $_POST['post'];
 
 			// adult filter

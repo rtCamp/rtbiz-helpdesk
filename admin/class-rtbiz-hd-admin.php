@@ -60,13 +60,13 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 			$rtbiz_hd_setup_wizard = new Rtbiz_HD_Setup_Wizard();
 
 			//Setting
-			global $rtbiz_hd_settings, $rtbiz_hd_import_operation, $rtbiz_hd_product_support, $rtbiz_hd_short_code;
+			global $rtbiz_hd_settings, $rtbiz_hd_import_operation, $rtbiz_hd_product_support, $rtbiz_hd_short_code, $rtbiz_hd_gravity_form_importer, $rtbiz_hd_logs;
 
 			$rtbiz_hd_settings = new Rtbiz_HD_Settings();
 			$rtbiz_hd_import_operation = new Rtbiz_HD_Import_Operation();
 
-			//$rtbiz_hd_gravity_form_importer = new Rtbiz_HD_Gravity_Form_Importer();
-			//$rtbiz_hd_logs = new Rtbiz_HD_Logs();
+			$rtbiz_hd_gravity_form_importer = new Rtbiz_HD_Gravity_Form_Importer();
+			$rtbiz_hd_logs = new Rtbiz_HD_Logs();
 
 			$rtbiz_hd_product_support = new Rtbiz_HD_Product_Support();
 			$rtbiz_hd_short_code = new Rtbiz_HD_Short_Code();

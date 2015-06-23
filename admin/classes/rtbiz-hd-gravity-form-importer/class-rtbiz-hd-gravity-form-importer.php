@@ -38,9 +38,8 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 		 *  add hooks for importing Graviy form
 		 */
 		public function __construct() {
-
-			add_action( 'rtlib_importer_posttype', array( $this, 'add_hd_importer' ) );
-			add_action( 'rtlib_importer_fields', array( $this, 'init_importer' ) );
+			add_filter( 'rtlib_importer_posttype', array( $this, 'add_hd_importer' ) );
+			add_filter( 'rtlib_importer_fields', array( $this, 'init_importer' ) );
 			add_action( 'rtlib_add_mapping_field_ui', array( $this, 'add_hd_mapping_field_ui' ) );
 
 			add_action( 'rtlib_map_import_callback', array( $this, 'process_import' ), 1, 6 );
@@ -50,7 +49,7 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 
 		}
 
-		function  add_hd_importer( $post_type ) {
+		function add_hd_importer( $post_type ) {
 			$post_type[ Rtbiz_HD_Module::$post_type ] = array(
 				'module' => RTBIZ_HD_TEXT_DOMAIN,
 				'lable'  => 'Ticket',
@@ -67,8 +66,8 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 		function init_importer( $field_array ) {
 			global $rtbiz_hd_attributes_relationship_model;
 
-			//check current page is helpdesk setting page
-			if ( empty( $_REQUEST['rtbiz_hd_ticket'] ) || Rtbiz_HD_Module::$post_type !== $_REQUEST['rtbiz_hd_ticket'] || empty( $_REQUEST['page'] ) || Rtbiz_HD_Settings::$page_slug != $_REQUEST['page'] ) {
+			//check current page is helpdesk setting page or check map post_type is ticket
+			if ( ! isset( $_REQUEST['mapPostType'] ) ||  Rtbiz_HD_Module::$post_type != $_REQUEST['mapPostType'] ) {
 				return $field_array;
 			}
 
@@ -414,13 +413,13 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		function gravity_form_lead_meta( $gr_lead_id, $mappings ) {
-			global $rt_importer;
+			global $rtbiz_importer;
 			foreach ( $mappings as $mapping ) {
 				if ( $mapping->enable == 'yes' ) {
 					global $rtbiz_hd_module;
 					$labels       = $rtbiz_hd_module->labels;
 					$post_type    = Rtbiz_HD_Module::$post_type;
-					$hd_ticket_id = intval( $rt_importer->gform_get_meta( $gr_lead_id, 'helpdesk-' . $post_type . '-post-id' ) );
+					$hd_ticket_id = intval( $rtbiz_importer->gform_get_meta( $gr_lead_id, 'helpdesk-' . $post_type . '-post-id' ) );
 					if ( $hd_ticket_id ) {
 						echo 'Linked ' . esc_html( Rtbiz_HD_Module::$name ) . " Post : <a href='" . esc_url( get_edit_post_link( $hd_ticket_id ) ) . "' >" . esc_html( get_the_title( $hd_ticket_id ) ) . '</a><br/>';
 					}
@@ -442,7 +441,7 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 		 */
 		function process_import( $map_data, $form_id, $gravity_lead_id, $type, $forceImport = false, $autoDieFlag = true ) {
 			//** remove woocommerce hooks **//
-			global $rt_importer;
+			global $rtbiz_importer;
 
 			remove_action( 'create_term', 'woocommerce_create_term', 5, 3 );
 			remove_action( 'delete_term', 'woocommerce_delete_term', 5, 3 );
@@ -461,7 +460,7 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 				}
 				$response[0]['lead_id'] = $gravity_lead_id;
 				if ( ! $forceImport ) {
-					$alreadyImported = $rt_importer->gform_get_meta( $gravity_lead_id, 'import-to-helpdesk' );
+					$alreadyImported = $rtbiz_importer->gform_get_meta( $gravity_lead_id, 'import-to-helpdesk' );
 					if ( $alreadyImported ) {
 						if ( $autoDieFlag ) {
 							return true;
@@ -764,7 +763,7 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 		 */
 		function create_tickets_from_map_data( $map_data, $gravity_lead_id, $type ) {
 
-			global $rt_importer;
+			global $rtbiz_importer;
 
 			$contactemail = array();
 			$description  = '';
@@ -857,16 +856,17 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 			global $rtbiz_hd_import_operation;
 
 			$ticket_id           = $rtbiz_hd_import_operation->process_email_to_ticket( $title, $description, $fromemail, $creationdate, $allemail, array(), $description, false, $assignedto );
+			rtbiz_hd_update_assignee( $ticket_id, $assignedto );
 			$response            = array();
 			$response['lead_id'] = $gravity_lead_id;
 			if ( ! $ticket_id ) {
 				$response['status'] = false;
 			} else {
 				if ( 'gravity' === $type ) {
-					$rt_importer->gform_update_meta( $gravity_lead_id, 'import-to-helpdesk', 1 );
-					$rt_importer->gform_update_meta( $gravity_lead_id, 'helpdesk-' . $post_type . '-post-id', $ticket_id );
+					$rtbiz_importer->gform_update_meta( $gravity_lead_id, 'import-to-helpdesk', 1 );
+					$rtbiz_importer->gform_update_meta( $gravity_lead_id, 'helpdesk-' . $post_type . '-post-id', $ticket_id );
 					if ( isset( $transaction_id ) && $transaction_id > 0 ) {
-						$rt_importer->gform_update_meta( $gravity_lead_id, '_transaction_id', $transaction_id );
+						$rtbiz_importer->gform_update_meta( $gravity_lead_id, '_transaction_id', $transaction_id );
 					}
 				}
 				$response['status'] = true;

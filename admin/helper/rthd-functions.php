@@ -931,7 +931,9 @@ function rtbiz_hd_wp_new_user_notification( $user_id, $plaintext_pass = '' ) {
 	global $wpdb, $wp_hasher;
 
 	$user = get_userdata( $user_id );
-
+	if ( empty( $user_id ) ) {
+		return;
+	}
 	// The blogname option is escaped with esc_html on the way into the database in sanitize_option
 	// we want to reverse this for the plain text arena of emails.
 	$blogname = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
@@ -1853,4 +1855,19 @@ function rtbiz_hd_compare_wp_post( $objA, $objB ) {
 	} else {
 		return -1;
 	}
+}
+
+function rtbiz_hd_update_assignee( $postid, $post_author ) {
+	$user = get_userdata( $post_author );
+	if ( empty( $postid ) || empty( $post_author ) || ! $user ) {
+		return false;
+	}
+	$ticket = array(
+		'ID'          => $postid,
+		'post_author' => $post_author,
+	);
+	wp_update_post( $ticket );
+	global $rtbiz_hd_ticket_index_model;
+	$rtbiz_hd_ticket_index_model->update_ticket_assignee( $post_author, $postid );
+	return true;
 }
