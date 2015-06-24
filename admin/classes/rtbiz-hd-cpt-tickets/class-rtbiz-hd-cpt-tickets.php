@@ -190,7 +190,9 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 					$subscriber         = $rtbiz_hd_email_notification->get_subscriber( $post->ID );
 					$subscriber         = wp_list_pluck( $subscriber, 'email' );
 					$assigned_to        = get_user_by( 'id', $post->post_author );
-					$subscriber                = array_diff( $subscriber, array( $assigned_to->user_email ) );
+					if ( ! empty( $assigned_to ) ) {
+						$subscriber         = array_diff( $subscriber, array( $assigned_to->user_email ) );
+					}
 					?>
 					<div class="rthd-ticket-user-activity-backend">
 						<?php

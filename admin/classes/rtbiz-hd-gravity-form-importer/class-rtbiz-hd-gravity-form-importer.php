@@ -109,7 +109,7 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 					'type'         => 'date',
 				),
 				'assignedto'   => array(
-					'display_name'  => 'Assigne To',
+					'display_name'  => 'Assign To',
 					'slug'          => 'assignedto',
 					'required'      => false,
 					'multiple'      => false,
@@ -257,7 +257,9 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 					'type'         => 'any',
 				),
 			);
-			$field_array[ Rtbiz_HD_Module::$post_type ] = array_merge( $ticket_field, $temp_arr );
+			// Helpdesk do not support account for now
+//						$field_array[ Rtbiz_HD_Module::$post_type ] = array_merge( $ticket_field, $temp_arr );
+			$field_array[ Rtbiz_HD_Module::$post_type ] = $ticket_field;
 
 			return $field_array;
 		}
@@ -301,8 +303,9 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 					<?php
 					global $wpdb;
 					$results          = Rtbiz_HD_Utils::get_hd_rtcamp_user();
-					$meta_key_results = $wpdb->get_results( " select distinct meta_key from $wpdb->postmeta inner join $wpdb->posts on post_id=ID and post_type='" . $post_type . "' and  not meta_key like '\_%' order by meta_key" );
-
+					// Not all meta key is needed to map.
+					// $meta_key_results = $wpdb->get_results( " select distinct meta_key from $wpdb->postmeta inner join $wpdb->posts on post_id=ID and post_type='" . $post_type . "' and  not meta_key like '\_%' order by meta_key" );
+					$meta_key_results = $wpdb->get_results( "select distinct meta_key from $wpdb->postmeta inner join $wpdb->posts on post_id=ID and post_type='" . $post_type . "' and meta_key in('_rtbiz_hd_order_id', '_rtbiz_hd_order_link' ,'_rtbiz_hd_order_type' ,'_rtbiz_hd_ticket_adult_content') order by meta_key" );
 					$arr_assignedto = array();
 					if ( ! empty( $results ) ) {
 						// Name is your custom field key
@@ -321,6 +324,7 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 						_e( 'No authors found', RTBIZ_HD_TEXT_DOMAIN );
 					}
 					echo '<script> var arr_assignedto=' . json_encode( $arr_assignedto ) . '; </script>';
+					echo '<script> var arr_ticketmeta_key=' . json_encode( $meta_key_results ) .'; </script>';
 					?>
 				</td>
 				<td></td>
@@ -513,11 +517,11 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 									}
 								}
 								$tKey = $f_field['label'];
-								if ( isset( $this->ticket_field[ $key ]['type'] ) && 'type' === $this->ticket_field[ $key ]['type'] ) {
-									if ( isset( $meta['keyname'] ) && trim( $meta['keyname'] ) != '' ) {
-										$tKey = $meta['keyname'];
-									}
+								//if ( isset( $this->ticket_field[ $key ]['type'] ) && 'key' === $this->ticket_field[ $key ]['type'] ) {
+								if ( isset( $meta['keyname'] ) && trim( $meta['keyname'] ) != '' ) {
+									$tKey = $meta['keyname'];
 								}
+								//}
 								$meta = array( 'key' => ucfirst( $tKey ), 'value' => $tValue );
 							} else {
 								if ( isset( $this->ticket_field[ $key ]['type'] ) && 'defined' === $this->ticket_field[ $key ]['type'] ) {
