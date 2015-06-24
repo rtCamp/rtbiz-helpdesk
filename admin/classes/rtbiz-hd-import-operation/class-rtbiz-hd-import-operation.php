@@ -393,6 +393,9 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				                'ID'           => $_POST['post_id'],
 				                'post_content' => rtbiz_hd_content_filter( $_POST['body'] ),
 			                ) );
+
+			update_post_meta( $_POST['post_id'], '_rtbiz_hd_markdown_data', $_POST['body_markdown'] );
+
 			$body = 'Ticket content updated : '. rtbiz_hd_content_filter( $_POST['body'] );
 			global $rtbiz_hd_module, $rtbiz_hd_email_notification;
 			$labels = $rtbiz_hd_module->labels;
@@ -463,6 +466,11 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 
 			$userid = $rtbiz_hd_contacts->get_user_from_email( $senderEmail );
 
+			if ( is_array( $body ) ){
+				$markdown_body = $body['markdown'];
+				$body = $body['html'];
+			}
+
 			$postArray = array(
 				'post_author'   => $settings['rthd_default_user'],
 				'post_content'  => rtbiz_hd_content_filter( $body ),
@@ -508,6 +516,11 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			}
 
 			update_post_meta( $post_id, '_rtbiz_hd_email', $senderEmail );
+
+			//add markdown code
+			if ( isset( $markdown_body ) && ! empty( $markdown_body ) ){
+				update_post_meta( $post_id, '_rtbiz_hd_markdown_data', $markdown_body );
+			}
 
 			global $transaction_id;
 			if ( isset( $transaction_id ) && $transaction_id > 0 ) {
@@ -1141,6 +1154,13 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			$commentDateGmt = gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) ) );
 			global $signature;
 			$this->add_contacts_to_post( $allemails, $comment_post_ID );
+
+			// markdown data
+			if ( is_array( $comment_content ) ){
+				$markdown_content = $comment_content['markdown'];
+				$comment_content = $comment_content['html'];
+			}
+
 			$comment_content_old = $comment_content;
 			$comment_content     = wp_kses_post( stripslashes( str_replace( $signature, '', $comment_content ) ) );
 			$comment_author_ip = preg_replace( '/[^0-9a-fA-F:., ]/', '', $_SERVER['REMOTE_ADDR'] );
@@ -1219,6 +1239,11 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 
 			if ( $sensitive ){
 				update_comment_meta( $comment_id, '_rtbiz_hd_sensitive', true );
+			}
+
+			//add markdown code
+			if ( isset( $markdown_content ) && ! empty( $markdown_content ) ){
+				update_comment_meta( $comment_id, '_rtbiz_hd_markdown_data', $markdown_content );
 			}
 
 			$data  = array(
@@ -1614,7 +1639,8 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 
 			$rthd_ticket = $this->get_ticket_from_ticket_unique_id( $_POST['followup_ticket_unique_id'] );
 			$comment_post_ID = $rthd_ticket->ID;
-			$comment_content = rtbiz_hd_content_filter( $_POST['followup_content'] );
+			$comment_content['markdown'] = rtbiz_hd_content_filter_without_apautop( $_POST['followup_markdown'] );
+			$comment_content['html'] = rtbiz_hd_content_filter( $_POST['followup_content'] );
 
 			$user = wp_get_current_user();
 			$userid = $comment_author = $comment_author_email = '';
@@ -1819,6 +1845,10 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			} else {
 				delete_comment_meta( $commentdata['comment_ID'], '_rtbiz_hd_sensitive' );
 			}
+
+			//update markdown content
+			$markdown_content = isset( $_POST['followup_markdown'] ) && ! empty( $_POST['followup_markdown'] ) ? $_POST['followup_markdown'] : '';
+			update_comment_meta( $commentdata['comment_ID'], '_rtbiz_hd_markdown_data', $markdown_content );
 
 			$uploaded = array();
 			$attachment = array();

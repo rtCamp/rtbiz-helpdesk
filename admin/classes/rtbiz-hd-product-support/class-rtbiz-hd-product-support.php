@@ -599,10 +599,13 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 			$followup_attachment = explode( ',', $_POST['rthd_support_attach_ids'] );
 			$uploaded = array_filter( $followup_attachment );
 
+			$post_content['markdown'] = $data['description'];
+			$post_content['html'] = wp_kses_post( stripslashes( $data['description_html'] ) );
+
 			//Ticket created
 			$rtbiz_hd_tickets_id = $rtbiz_hd_import_operation->insert_new_ticket(
 				$data['title'],
-				wp_kses_post( stripslashes( $data['description'] ) ),
+				$post_content,
 				'now',
 				$allemail,
 				$uploaded,

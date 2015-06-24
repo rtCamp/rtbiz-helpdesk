@@ -142,7 +142,7 @@ ul#chat-UI {
 }
 
 #rthd-followup-form {
-	margin-top: 30px;
+	margin-top: 20px;
 }
 
 #rthd-followup-form > div {
@@ -176,6 +176,9 @@ ul#chat-UI {
 
 #editedfollowupcontent, #editedticketcontent, #followupcontent{
 	width: 100%;
+    max-width: 100%;
+    min-width: 100%;
+    min-height: 200px;
     box-sizing: border-box;
 }
 
@@ -683,7 +686,7 @@ img#hdspinner{
 .followup-tabs{
     text-decoration: none;
     margin-bottom: 0px;
-    display: block;
+    display: inline-block;
 }
 
 .followup-tabs .tab{
@@ -697,14 +700,27 @@ img#hdspinner{
     border-bottom: 3px solid #06C;
 }
 
+.rthd-followup-content-helpbar{
+    float: right;
+    font-size: 11px;
+    padding-top: 15px;
+    color: gray;
+}
+
+.rthd-followup-content-helpbar span.active{
+    font-weight: bold;
+}
+
+.markdown_preview_container{
+    border: 1px solid #ccc;
+    padding: 10px;
+    display: none;
+    min-height: 200px;
+}
+
 .rthd-followup-content-tolltip{
     top: 0px;
     position: relative;
-    float: right;
-    font-size: 11px;
-    padding-top: 5px;
-    color: gray;
-
     &:hover {
       .rthd-tip-bottom,
       .rthd-tip-top,

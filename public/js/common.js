@@ -189,7 +189,8 @@ jQuery( document ).ready(function () {
 				formData.append( "action", 'rtbiz_hd_add_new_followup_front' );
 				formData.append( "followuptype", followup_type );
 				formData.append( "follwoup-time", jQuery( '#new-followup-form #follwoup-time' ).val() );
-				formData.append( "followup_content", jQuery( '#followupcontent' ).val() );
+                formData.append( "followup_markdown", jQuery( '#followupcontent' ).val() );
+                formData.append( "followup_content", jQuery( '#followupcontent_html' ).html() );
 				formData.append( "followup_attachments", uploadedfiles );
 				if (jQuery( '#rthd_keep_status' )) {
 					formData.append( "rthd_keep_status", jQuery( '#rthd_keep_status' ).is( ':checked' ) );
@@ -242,6 +243,7 @@ jQuery( document ).ready(function () {
 							jQuery( '#hdspinner' ).hide();
 						}
 						jQuery( '#savefollwoup' ).removeAttr( 'disabled' );
+                        jQuery( '#followupcontent_html' ).html('');
 					}
 				});
 			}
@@ -278,6 +280,7 @@ jQuery( document ).ready(function () {
 						}
 						jQuery( '#edithdspinner' ).hide();
 						jQuery( "#delfollowup" ).removeAttr( 'disabled' );
+                        jQuery( '#dialog-form #editedfollowupcontent_html' ).html('');
 					},
 					error: function (xhr, textStatus, errorThrown) {
 						alert( "error while removing follow up." );
@@ -292,6 +295,7 @@ jQuery( document ).ready(function () {
 			jQuery( document ).on('click', '.close-edit-followup', function (e) {
 				e.preventDefault();
 				jQuery( '#dialog-form' ).slideToggle( 'slow' );
+                jQuery( '#dialog-form #editedfollowupcontent_html' ).html('');
 				jQuery( '#new-followup-form' ).show();
 				jQuery( document ).scrollTop( ( jQuery( '#comment-' + followup_id ).offset().top ) );
 			});
@@ -353,7 +357,8 @@ jQuery( document ).ready(function () {
 				requestArray.followup_post_id = jQuery( '#post-id' ).val();
 				requestArray.private_comment = jQuery( '#dialog-form').find( '#rthd_sensitive' ).is( ':checked' );
 				requestArray.followuptype = followup_type;
-				requestArray.followup_content = post_content.val();
+				requestArray.followup_markdown = post_content.val();
+				requestArray.followup_content = jQuery( '#dialog-form #editedfollowupcontent_html' ).html();
 
 				jQuery.ajax({
 					url: ajaxurl,
@@ -370,12 +375,13 @@ jQuery( document ).ready(function () {
 						}
 						jQuery( '#edithdspinner' ).hide();
 						jQuery( "#editfollowup" ).removeAttr( 'disabled' );
-
+                        jQuery( '#dialog-form #editedfollowupcontent_html' ).html('');
 					},
 					error: function (data) {
 						alert( "Sorry :( something went wrong!" );
 						jQuery( '#edithdspinner' ).hide();
 						jQuery( "#editfollowup" ).removeAttr( 'disabled' );
+                        jQuery( '#dialog-form #editedfollowupcontent_html' ).html('');
 					}
 				});
 			});
@@ -439,6 +445,7 @@ jQuery( document ).ready(function () {
 			jQuery( '.close-edit-content' ).click(function (e) {
 				e.preventDefault();
 				jQuery( '#edit-ticket-data' ).slideToggle( 'slow' );
+                jQuery( '#edit-ticket-data').find('#editedticketcontent_html').html('');
 				jQuery( '#new-followup-form' ).show();
 				jQuery( document ).scrollTop( ( jQuery( '.ticketcontent' ).offset().top ) - 50 );
 			});
@@ -450,7 +457,8 @@ jQuery( document ).ready(function () {
 				var requestArray = {};
 				requestArray.action = 'rtbiz_hd_add_new_ticket_ajax';
 				requestArray.post_id = jQuery( '#post-id' ).val();
-				requestArray.body = jQuery( '#edit-ticket-data').find('#editedticketcontent').val();
+                requestArray.body_markdown = jQuery( '#edit-ticket-data').find('#editedticketcontent').val();
+                requestArray.body = jQuery( '#edit-ticket-data').find('#editedticketcontent_html').html();
 				requestArray.nonce = jQuery( '#edit-ticket-data #edit_ticket_nonce' ).val();
 				jQuery( '#ticket-edithdspinner' ).show();
 				jQuery( this ).attr( 'disabled', 'disabled' );
@@ -463,12 +471,14 @@ jQuery( document ).ready(function () {
 						if (data.status) {
 							jQuery( '#ticket-edithdspinner' ).hide();
 							jQuery( "#edit-ticket-content-click" ).removeAttr( 'disabled' );
-							jQuery( '.edit-ticket-link' ).closest( '.ticketcontent' ).find( '.rthd-comment-content' ).html( jQuery( '#edit-ticket-data').find('#editedticketcontent').val() );
+							jQuery( '.edit-ticket-link' ).closest( '.ticketcontent' ).find( '.rthd-comment-content' ).html( jQuery( '#edit-ticket-data').find('#editedticketcontent_html').html() );
 							jQuery( '#edit-ticket-data' ).hide();
+                            jQuery( '#edit-ticket-data').find('#editedticketcontent_html').html();
 							jQuery( '#new-followup-form' ).slideToggle( 'slow' );
 							jQuery( document ).scrollTop( jQuery( '.ticketcontent' ).offset().top - 50 );
 						} else {
 							console.log( data.msg );
+                            jQuery( '#edit-ticket-data').find('#editedticketcontent_html').html();
                             jQuery( '#new-followup-form' ).slideToggle( 'slow' );
 						}
 					},
@@ -476,6 +486,7 @@ jQuery( document ).ready(function () {
 						alert( "Error" );
 						jQuery( '#ticket-edithdspinner' ).hide();
 						jQuery( "#edit-ticket-content-click" ).removeAttr( 'disabled' );
+                        jQuery( '#edit-ticket-data').find('#editedticketcontent_html').html();
                         jQuery( '#new-followup-form' ).slideToggle( 'slow' );
 					}
 				});

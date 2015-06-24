@@ -2,7 +2,7 @@
 <div class="rthd-support-title"><?php _e( 'Get Support', RTBIZ_HD_TEXT_DOMAIN ); ?></div>
 <?php }
 ?>
-<form method="post" class="pure-form rthd_support_from" enctype="multipart/form-data">
+<form method="post" id="rt-hd-support-page" class="pure-form rthd_support_from" enctype="multipart/form-data">
 
 	<?php if ( isset( $_REQUEST['order_id'] ) ) { ?>
 		<input type="hidden" name="post[order_id]" value="<?php echo $_REQUEST['order_id']; ?>">
@@ -68,14 +68,26 @@
 		</div>
 	</div>
 
+	<div class="clearfix">
+		<div class="rthd-followup-content-helpbar">
+				<span class="rthd-markdown-preview" data-parent="#rt-hd-support-page">
+					Preview |
+				</span>
+				<span class="rthd-tooltip rthd-followup-content-tolltip">
+					Markdown & HTML support
+					<span class="rthd-tip-bottom"><?php
+						_e( 'You may use Markdown syntax and these HTML tags - a, abbr, acronym, b, blockquote, cite, code, del, em, i, q, s, strike and strong', RTBIZ_HD_TEXT_DOMAIN ); ?>
+					</span>
+				</span>
+		</div>
+	</div>
+
 	<div id="editor_container">
-		<textarea id="post_description" placeholder="Description" rows="5" cols="20" name="post[description]" class="post_description" required><?php echo isset( $_POST['post']['description'] ) ? $_POST['post']['description'] : ''; ?></textarea>
-		<span class="rthd-tooltip rthd-followup-content-tolltip">
-			HTML support
-			<span class="rthd-tip-bottom"><?php
-				_e( 'You may use these HTML tags - a, abbr, acronym, b, blockquote, cite, code, del, em, i, q, s, strike and strong', RTBIZ_HD_TEXT_DOMAIN ); ?>
-			</span>
-		</span>
+		<div id="post_description_html" class="pane markdown_preview_container"><noscript><h2>You'll need to enable Javascript to use this tool.</h2></noscript></div>
+		<div class="rthd-followup-content-container">
+			<textarea id="post_description_html_text" placeholder="Description" name="post[description_html]" class="post_description"><?php echo isset( $_POST['post']['description_html'] ) ? $_POST['post']['description_html'] : ''; ?></textarea>
+			<textarea id="post_description" placeholder="Description" rows="5" cols="20" name="post[description]" class="post_description" required><?php echo isset( $_POST['post']['description'] ) ? $_POST['post']['description'] : ''; ?></textarea>
+		</div>
 	</div>
 	<div id="rthd-followup-form" class="clearfix">
 	<div class="rthd-attachment-box">

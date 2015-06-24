@@ -43,6 +43,12 @@ class Rtbiz_HD_Public {
 
 		wp_enqueue_script( 'rthd-app-js', RTBIZ_HD_URL . 'public/js/helpdesk-min.js', array( 'jquery' ), RTBIZ_HD_VERSION, true );
 
+//		wp_enqueue_script( 'rthd-markdown-js', RTBIZ_HD_URL . 'public/js/vendors/markdown/showdown.js', array( 'jquery' ), RTBIZ_HD_VERSION, true );
+//		wp_enqueue_script( 'rthd-markdown-ui-js', RTBIZ_HD_URL . 'public/js/vendors/markdown/showdown-gui.js', array( 'rthd-markdown-js' ), RTBIZ_HD_VERSION, true );
+//		wp_enqueue_script( 'rthd-markdown-table-js', RTBIZ_HD_URL . 'public/js/vendors/markdown/showdown-table.js', array( 'rthd-markdown-js' ), RTBIZ_HD_VERSION, true );
+//		wp_enqueue_script( 'rthd-markdown-github-js', RTBIZ_HD_URL . 'public/js/vendors/markdown/showdown-github.js', array( 'rthd-markdown-js' ), RTBIZ_HD_VERSION, true );
+//		wp_enqueue_script( 'rthd-markdown-prettify-js', RTBIZ_HD_URL . 'public/js/vendors/markdown/showdown-prettify.js', array( 'rthd-markdown-js' ), RTBIZ_HD_VERSION, true );
+
 		//fancybox
 		wp_enqueue_script( 'jquery-fancybox', RTBIZ_HD_URL . 'public/js/vendors/lightbox/jquery.fancybox.pack.js', array( 'jquery' ), RTBIZ_HD_VERSION, true );
 		$this->localize_scripts();

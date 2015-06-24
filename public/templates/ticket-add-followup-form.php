@@ -20,24 +20,35 @@ $staffonly = current_user_can( $cap ); ?>
 	<input id="post-id" type="hidden" value="<?php echo esc_attr( $post->ID ); ?>"/>
 	<input id="edit-comment-id" name="comment_id" type="hidden"/>
 
-	<?php if ( $staffonly ) { ?>
+	<div class="clearfix">
+		<?php if ( $staffonly ) { ?>
 
-	<ui id="followup-type-list" class="followup-tabs">
-		<li id="tab-<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC; ?>" class="tab active" data-ctype="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC; ?>"><?php _e('Public Reply', RTBIZ_HD_TEXT_DOMAIN) ?></li>
-		<li id="tab-<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF; ?>" class="tab" data-ctype="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF; ?>"><?php _e('Staff Note', RTBIZ_HD_TEXT_DOMAIN) ?></li>
-	</ui>
+		<ui id="followup-type-list" class="followup-tabs">
+			<li id="tab-<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC; ?>" class="tab active" data-ctype="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC; ?>"><?php _e('Public Reply', RTBIZ_HD_TEXT_DOMAIN) ?></li>
+			<li id="tab-<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF; ?>" class="tab" data-ctype="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF; ?>"><?php _e('Staff Note', RTBIZ_HD_TEXT_DOMAIN) ?></li>
+		</ui>
 
-	<?php } ?>
+		<?php } ?>
 
-	<div>
-		<textarea id="followupcontent" class="followupcontent" rows="5" cols="20" name="followupcontent"
-	             placeholder="Add new reply"></textarea>
-		<span class="rthd-tooltip rthd-followup-content-tolltip">
-			HTML support
-			<span class="rthd-tip-bottom"><?php
-				_e( 'You may use these HTML tags - a, abbr, acronym, b, blockquote, cite, code, del, em, i, q, s, strike and strong', RTBIZ_HD_TEXT_DOMAIN ); ?>
-			</span>
-		</span>
+		<div class="rthd-followup-content-helpbar">
+				<span class="rthd-markdown-preview" data-parent="#new-followup-form">
+					Preview |
+				</span>
+				<span class="rthd-tooltip rthd-followup-content-tolltip">
+					Markdown & HTML support
+					<span class="rthd-tip-bottom"><?php
+						_e( 'You may use Markdown syntax and these HTML tags - a, abbr, acronym, b, blockquote, cite, code, del, em, i, q, s, strike and strong', RTBIZ_HD_TEXT_DOMAIN ); ?>
+					</span>
+				</span>
+		</div>
+	</div>
+
+	<div id="followupcontent_markdown">
+		<div id="followupcontent_html" class="pane markdown_preview_container"><noscript><h2>You'll need to enable Javascript to use this tool.</h2></noscript></div>
+		<div class="rthd-followup-content-container">
+			<textarea id="followupcontent" class="followupcontent" rows="5" cols="20" name="followupcontent"
+		             placeholder="Add new reply"></textarea>
+		</div>
 	</div>
 
 	<div id="rthd-followup-form" class="clearfix">

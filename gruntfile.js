@@ -35,7 +35,12 @@ module.exports = function ( grunt ) {
 					'public/js/common.js',
 					'public/js/app.js',
 					'public/js/vendors/stickyfloat.js',
-				    'public/js/vendors/plupupload/plupload.full.min.js'
+				    'public/js/vendors/plupupload/plupload.full.min.js',
+				    'public/js/vendors/markdown/showdown.js',
+                    'public/js/showdown-gui.js',
+                    'public/js/vendors/markdown/showdown-table.js',
+                    'public/js/vendors/markdown/showdown-github.js',
+                    'public/js/vendors/markdown/showdown-prettify.js'
 				],
 				dest: 'public/js/helpdesk-min.js'
 			},
@@ -47,14 +52,24 @@ module.exports = function ( grunt ) {
 					'admin/js/setup-wizard.js',
 					'public/js/common.js',
 					'admin/js/admin.js',
-				    'admin/js/rthd_plugin_check.js'
+				    'admin/js/rthd_plugin_check.js',
+                    'public/js/vendors/markdown/showdown.js',
+                    'public/js/showdown-gui.js',
+                    'public/js/vendors/markdown/showdown-table.js',
+                    'public/js/vendors/markdown/showdown-github.js',
+                    'public/js/vendors/markdown/showdown-prettify.js'
 				],
 				dest: 'admin/js/helpdesk-admin-min.js'
 			},
 			support: {
 				src: [
 					'public/js/rt_support_form.js',
-					'public/js/vendors/plupupload/plupload.full.min.js'
+					'public/js/vendors/plupupload/plupload.full.min.js',
+                    'public/js/vendors/markdown/showdown.js',
+                    'public/js/showdown-gui.js',
+                    'public/js/vendors/markdown/showdown-table.js',
+                    'public/js/vendors/markdown/showdown-github.js',
+                    'public/js/vendors/markdown/showdown-prettify.js'
 				],
 				dest: 'public/js/helpdesk-support-min.js'
 			}

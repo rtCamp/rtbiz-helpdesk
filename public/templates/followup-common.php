@@ -64,8 +64,14 @@ if ( ! empty( $post->post_content ) ) {
 						<?php echo '<a class="followup-hash-url" id="ticket_description' . '" href="#ticket_description" >' . __( 'Created ' ) . esc_attr( human_time_diff( strtotime( $post->post_date ), current_time( 'timestamp' ) ) ) . ' ago</a>'; ?>
 					</time>
 				</div>
+				<?php
+				$markdown_content = get_post_meta( $post->ID, '_rtbiz_hd_markdown_data', true );
+				if ( !isset( $markdown_content ) || empty( $markdown_content ) ){
+					$markdown_content = $post->post_content;
+				}
+				?>
 				<div class="rthd-comment-content"
-				     data-content="<?php echo( isset( $post->ID ) ? esc_attr( $post->post_content ) : '' ); ?>">
+				     data-content="<?php echo( isset( $post->ID ) ? esc_attr( $markdown_content ) : '' ); ?>">
 					<?php
 					$content = rtbiz_hd_content_filter( isset( $post->ID ) ? $post->post_content : '' );
 					echo $content;
@@ -116,23 +122,34 @@ if ( ! empty( $post->post_content ) ) {
 	<input id="followup-totalcomment" type="hidden" value="<?php echo esc_attr( $totalComment ); ?>"/>
 	<input id="followup-type" type="hidden" name="followuptype" value=""/>
 
-	<?php if ( $staffonly ) { ?>
+	<div class="clearfix">
+		<?php if ( $staffonly ) { ?>
 
-		<ui id="followup-type-list" class="followup-tabs">
-			<li id="tab-<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC; ?>" class="tab active" data-ctype="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC; ?>"><?php _e('Public Reply', RTBIZ_HD_TEXT_DOMAIN) ?></li>
-			<li id="tab-<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF; ?>" class="tab" data-ctype="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF; ?>"><?php _e('Staff Note', RTBIZ_HD_TEXT_DOMAIN) ?></li>
-		</ui>
+			<ui id="followup-type-list" class="followup-tabs">
+				<li id="tab-<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC; ?>" class="tab active" data-ctype="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC; ?>"><?php _e('Public Reply', RTBIZ_HD_TEXT_DOMAIN) ?></li>
+				<li id="tab-<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF; ?>" class="tab" data-ctype="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF; ?>"><?php _e('Staff Note', RTBIZ_HD_TEXT_DOMAIN) ?></li>
+			</ui>
 
-	<?php } ?>
+		<?php } ?>
 
-	<div>
-		<textarea id="editedfollowupcontent" name="editedfollowupcontent" placeholder="edit reply" rows="5" cols="20"></textarea>
-		<span class="rthd-tooltip rthd-followup-content-tolltip">
-			HTML support
-			<span class="rthd-tip-bottom"><?php
-				_e( 'You may use these HTML tags - a, abbr, acronym, b, blockquote, cite, code, del, em, i, q, s, strike and strong', RTBIZ_HD_TEXT_DOMAIN ); ?>
-			</span>
-		</span>
+		<div class="rthd-followup-content-helpbar">
+				<span class="rthd-markdown-preview" data-parent="#dialog-form">
+					Preview |
+				</span>
+				<span class="rthd-tooltip rthd-followup-content-tolltip">
+					Markdown & HTML support
+					<span class="rthd-tip-bottom"><?php
+						_e( 'You may use Markdown syntax and these HTML tags - a, abbr, acronym, b, blockquote, cite, code, del, em, i, q, s, strike and strong', RTBIZ_HD_TEXT_DOMAIN ); ?>
+					</span>
+				</span>
+		</div>
+	</div>
+
+	<div id="editedfollowupcontent_markdown">
+		<div id="editedfollowupcontent_html" class="pane markdown_preview_container"><noscript><h2>You'll need to enable Javascript to use this tool.</h2></noscript></div>
+		<div class="rthd-followup-content-container">
+			<textarea id="editedfollowupcontent" name="editedfollowupcontent" placeholder="edit reply" rows="5" cols="20"></textarea>
+		</div>
 	</div>
 
 	<div id="edit-private-comment" class="rthd-edit-visibility-wrap">
@@ -162,14 +179,25 @@ if ( ! empty( $post->post_content ) ) {
 if ( $user_edit_content ) {
 	?>
 	<div id="edit-ticket-data" title="Edit Ticket" style="display: none;">
-		<div>
-			<textarea id="editedticketcontent" name="editedticketcontent" placeholder="edit ticket content" rows="5" cols="20"></textarea>
-			<span class="rthd-tooltip rthd-followup-content-tolltip">
-				HTML support
-				<span class="rthd-tip-bottom"><?php
-					_e( 'You may use these HTML tags - a, abbr, acronym, b, blockquote, cite, code, del, em, i, q, s, strike and strong', RTBIZ_HD_TEXT_DOMAIN ); ?>
-				</span>
-			</span>
+		<div class="clearfix">
+			<div class="rthd-followup-content-helpbar">
+					<span class="rthd-markdown-preview" data-parent="#edit-ticket-data">
+						Preview |
+					</span>
+					<span class="rthd-tooltip rthd-followup-content-tolltip">
+						Markdown & HTML support
+						<span class="rthd-tip-bottom"><?php
+		_e( 'You may use Markdown syntax and these HTML tags - a, abbr, acronym, b, blockquote, cite, code, del, em, i, q, s, strike and strong', RTBIZ_HD_TEXT_DOMAIN ); ?>
+						</span>
+					</span>
+			</div>
+		</div>
+
+		<div id="editedticketcontent_markdown">
+			<div v-html="input | marked" id="editedticketcontent_html" class="pane markdown_preview_container"><noscript><h2>You'll need to enable Javascript to use this tool.</h2></noscript></div>
+			<div class="rthd-followup-content-container">
+				<textarea v-model="input" debounce="300" id="editedticketcontent" name="editedticketcontent" placeholder="edit ticket content" rows="5" cols="20"></textarea>
+			</div>
 		</div>
 		<button class="edit-ticket btn btn-primary" id="edit-ticket-content-click" type="button">Update</button>
 		<?php wp_nonce_field( 'rt_hd_ticket_edit', 'edit_ticket_nonce' ); ?>

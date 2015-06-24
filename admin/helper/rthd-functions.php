@@ -703,7 +703,13 @@ function rtbiz_hd_render_comment( $comment, $user_edit, $type = 'right', $echo =
 			<input id="followup-type" type="hidden" value="<?php echo esc_attr( $comment->comment_type ); ?>">
 			<input id="followup-senstive" type="hidden" value="<?php echo esc_attr( $sensitive ); ?>">
 
-			<div class="rthd-comment-content" data-content="<?php echo esc_attr( $comment->comment_content ); ?>"><?php
+			<?php
+				$markdown_content = get_comment_meta( $comment->comment_ID, '_rtbiz_hd_markdown_data', true );
+				if ( !isset( $markdown_content ) || empty( $markdown_content ) ){
+					$markdown_content = $comment->comment_content;
+				}
+			?>
+			<div class="rthd-comment-content" data-content="<?php echo esc_attr( $markdown_content ); ?>"><?php
 				if ( isset( $comment->comment_content ) && $comment->comment_content != '' ) {
 					$comment->comment_content = rtbiz_hd_content_filter( $comment->comment_content );
 				}?>
@@ -753,6 +759,26 @@ function rtbiz_hd_content_filter( $content ) {
 
 	return balanceTags( wpautop( wp_kses_post( balanceTags( make_clickable( $content ), true ) ) ), true );
 }
+
+function rtbiz_hd_content_filter_without_apautop( $content ) {
+
+	$content = balanceTags( $content, true );
+
+	preg_match_all( '/<body\s[^>]*>(.*?)<\/body>/s', $content, $output_array );
+	if ( count( $output_array ) > 0 && ! empty( $output_array[1] ) ) {
+		$content = $output_array[1][0];
+	}
+
+	$offset = strpos( $content, ':: Reply Above This Line ::' );
+	$content = substr( $content, 0, ( false === $offset ) ? strlen( $content ) : $offset );
+
+	$content = balanceTags( $content, true );
+
+	$content = Rtbiz_HD_Utils::force_utf_8( $content );
+
+	return balanceTags( wp_kses_post( balanceTags( make_clickable( $content ), true ) ), true );
+}
+
 
 function rtbiz_hd_admin_notice_dependency_installed() {
 	$string = get_option( 'rtbiz_helpdesk_dependency_installed' );
