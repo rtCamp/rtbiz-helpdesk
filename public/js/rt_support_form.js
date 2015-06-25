@@ -105,7 +105,7 @@ jQuery( document ).ready(function () {
 						jQuery( '#rthd_support_attach_ids' ).val( uploadedfiles );
 
                         var post_content = jQuery( '#rt-hd-support-page #post_description' );
-                        var post_content_html = jQuery( '#rt-hd-support-page #post_description_html' );
+                        var post_content_html = jQuery( '<div/>', { html: converter.makeHtml( post_content.val() ) } );
                         if ( ! jQuery.trim( post_content.val() ) || ! jQuery.trim( post_content_html.text() ) ) {
                             post_content.css( 'border-color', 'red' );
                             return false;

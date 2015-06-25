@@ -1,5 +1,7 @@
 jQuery( document ).ready(function () {
 
+    var converter = new showdown.Converter({extensions: ['table', 'github', 'prettify']});
+
 	var rthd_common = {
 		rthd_tinymce_set_content: function (id, text) {
 			if (typeof tinymce != "undefined") {
@@ -162,7 +164,7 @@ jQuery( document ).ready(function () {
 					return false;
 				}
                 var post_content = jQuery( '#new-followup-form #followupcontent' );
-                var post_content_html = jQuery( '#new-followup-form #followupcontent_html' );
+                var post_content_html = jQuery( '<div/>', { html: converter.makeHtml( post_content.val() ) } );
                 if ( ! jQuery.trim( post_content.val() ) || ! jQuery.trim( post_content_html.text() ) ) {
                     post_content.css( 'border-color', 'red' );
                     jQuery( '#hdspinner' ).hide();
@@ -191,7 +193,7 @@ jQuery( document ).ready(function () {
 				formData.append( "followuptype", followup_type );
 				formData.append( "follwoup-time", jQuery( '#new-followup-form #follwoup-time' ).val() );
                 formData.append( "followup_markdown", jQuery( '#followupcontent' ).val() );
-                formData.append( "followup_content", jQuery( '#followupcontent_html' ).html() );
+                formData.append( "followup_content", converter.makeHtml( jQuery( '#followupcontent' ).val() ) );
 				formData.append( "followup_attachments", uploadedfiles );
 				if (jQuery( '#rthd_keep_status' )) {
 					formData.append( "rthd_keep_status", jQuery( '#rthd_keep_status' ).is( ':checked' ) );
@@ -345,7 +347,7 @@ jQuery( document ).ready(function () {
 			jQuery( "#editfollowup" ).click(function () {
 				var requestArray = {};
 				var post_content = jQuery( '#dialog-form #editedfollowupcontent' );
-				var post_content_html = jQuery( '#dialog-form #editedfollowupcontent_html' );
+                var post_content_html = jQuery( '<div/>', { html: converter.makeHtml( post_content.val() ) } );
                 if ( ! jQuery.trim( post_content.val() ) || ! jQuery.trim( post_content_html.text() ) ) {
                     post_content.css( 'border-color', 'red' );
                     return false;
@@ -476,7 +478,7 @@ jQuery( document ).ready(function () {
 				jQuery( '#edit-ticket-data' ).slideToggle( 'slow' );
 				jQuery( '#new-followup-form' ).hide();
                 var post_content = jQuery( '#edit-ticket-data').find('#editedticketcontent');
-                var post_content_html = jQuery( '#edit-ticket-data').find('#editedticketcontent_html');
+                var post_content_html = jQuery( '<div/>', { html: converter.makeHtml( post_content.val() ) } );
                 if ( ! jQuery.trim( post_content.val() ) || ! jQuery.trim( post_content_html.text() ) ) {
                     post_content.css( 'border-color', 'red' );
                     return false;
@@ -500,7 +502,7 @@ jQuery( document ).ready(function () {
 						if (data.status) {
 							jQuery( '#ticket-edithdspinner' ).hide();
 							jQuery( "#edit-ticket-content-click" ).removeAttr( 'disabled' );
-							jQuery( '.edit-ticket-link' ).closest( '.ticketcontent' ).find( '.rthd-comment-content' ).html( jQuery( '#edit-ticket-data').find('#editedticketcontent_html').html() );
+							jQuery( '.edit-ticket-link' ).closest( '.ticketcontent' ).find( '.rthd-comment-content' ).html( converter.makeHtml( post_content.val()) );
 							jQuery( '#edit-ticket-data' ).hide();
                             jQuery( '#edit-ticket-data').find('#editedticketcontent_html').html();
 							jQuery( '#new-followup-form' ).slideToggle( 'slow' );
