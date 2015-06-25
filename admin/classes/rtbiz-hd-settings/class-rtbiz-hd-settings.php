@@ -742,7 +742,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 				),
 			);
 
-			$this->sections[]   = array(
+/*			$this->sections[]   = array(
 				'title'       => __( 'Gravity Importer' ),
 				'icon'        => 'el-icon-list-alt',
 				'permissions' => $admin_cap,
@@ -789,7 +789,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 						'content' => $import_log_content,
 					),
 				),
-			);
+			);*/
 
 			$this->sections[] = array(
 				'icon'        => 'el-icon-key',
