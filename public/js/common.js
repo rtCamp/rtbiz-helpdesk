@@ -161,8 +161,9 @@ jQuery( document ).ready(function () {
 					//jQuery(this).removeAttr('disabled');
 					return false;
 				}
-                var post_content = jQuery( '#followupcontent' )
-                if ( ! jQuery.trim( post_content.val() ) ) {
+                var post_content = jQuery( '#new-followup-form #followupcontent' );
+                var post_content_html = jQuery( '#new-followup-form #followupcontent_html' );
+                if ( ! jQuery.trim( post_content.val() ) || ! jQuery.trim( post_content_html.text() ) ) {
                     post_content.css( 'border-color', 'red' );
                     jQuery( '#hdspinner' ).hide();
                     return false;
@@ -344,7 +345,8 @@ jQuery( document ).ready(function () {
 			jQuery( "#editfollowup" ).click(function () {
 				var requestArray = {};
 				var post_content = jQuery( '#dialog-form #editedfollowupcontent' );
-                if ( ! jQuery.trim( post_content.val() ) ) {
+				var post_content_html = jQuery( '#dialog-form #editedfollowupcontent_html' );
+                if ( ! jQuery.trim( post_content.val() ) || ! jQuery.trim( post_content_html.text() ) ) {
                     post_content.css( 'border-color', 'red' );
                     return false;
                 } else {
@@ -368,7 +370,7 @@ jQuery( document ).ready(function () {
 				requestArray.private_comment = jQuery( '#dialog-form').find( '#rthd_sensitive' ).is( ':checked' );
 				requestArray.followuptype = followup_type;
 				requestArray.followup_markdown = post_content.val();
-				requestArray.followup_content = jQuery( '#dialog-form #editedfollowupcontent_html' ).html();
+				requestArray.followup_content = post_content_html.html();
 
 				jQuery.ajax({
 					url: ajaxurl,
@@ -473,11 +475,19 @@ jQuery( document ).ready(function () {
 			jQuery( '#edit-ticket-content-click' ).click(function () {
 				jQuery( '#edit-ticket-data' ).slideToggle( 'slow' );
 				jQuery( '#new-followup-form' ).hide();
+                var post_content = jQuery( '#edit-ticket-data').find('#editedticketcontent');
+                var post_content_html = jQuery( '#edit-ticket-data').find('#editedticketcontent_html');
+                if ( ! jQuery.trim( post_content.val() ) || ! jQuery.trim( post_content_html.text() ) ) {
+                    post_content.css( 'border-color', 'red' );
+                    return false;
+                } else {
+                    post_content.css( 'border-color', '' );
+                }
 				var requestArray = {};
 				requestArray.action = 'rtbiz_hd_add_new_ticket_ajax';
 				requestArray.post_id = jQuery( '#post-id' ).val();
-                requestArray.body_markdown = jQuery( '#edit-ticket-data').find('#editedticketcontent').val();
-                requestArray.body = jQuery( '#edit-ticket-data').find('#editedticketcontent_html').html();
+                requestArray.body_markdown = post_content.val();
+                requestArray.body = post_content_html.html();
 				requestArray.nonce = jQuery( '#edit-ticket-data #edit_ticket_nonce' ).val();
 				jQuery( '#ticket-edithdspinner' ).show();
 				jQuery( this ).attr( 'disabled', 'disabled' );

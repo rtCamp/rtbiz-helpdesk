@@ -103,6 +103,15 @@ jQuery( document ).ready(function () {
 					UploadComplete: function () {
 						jQuery( '#support-form-filelist' ).html( '' );
 						jQuery( '#rthd_support_attach_ids' ).val( uploadedfiles );
+
+                        var post_content = jQuery( '#rt-hd-support-page #post_description' );
+                        var post_content_html = jQuery( '#rt-hd-support-page #post_description_html' );
+                        if ( ! jQuery.trim( post_content.val() ) || ! jQuery.trim( post_content_html.text() ) ) {
+                            post_content.css( 'border-color', 'red' );
+                            return false;
+                        }else{
+                            post_content.css( 'border-color', '' );
+                        }
 						jQuery( '.rthd_support_from' ).submit();
 					},
 
