@@ -722,7 +722,7 @@ img#hdspinner{
     min-height: 200px;
 }
 
-.markdown_preview_container ul{
+.markdown_preview_container ul, .markdown_preview_container ol,.markdown_preview_container dl{
   list-style-position: inside;
 }
 
