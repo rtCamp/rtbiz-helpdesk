@@ -174,7 +174,7 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 						}
 					}
 
-					if ( ! empty( $arg_shortcode['userid'] ) ){
+					if ( ! empty( $arg_shortcode['userid'] ) ) {
 						$is_staff = user_can( $arg_shortcode['userid'], $cap );
 					} else {
 						$is_staff = user_can( $current_user, $cap );
@@ -196,7 +196,7 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 							$fav = rtbiz_hd_get_tickets( 'favourite', $arg_shortcode['userid'] );
 							$tickets = rtbiz_hd_get_tickets( 'assignee', $arg_shortcode['userid'] );
 							$tickets = array_udiff( $tickets, $fav, 'rtbiz_hd_compare_wp_post' );
-							$tickets = $fav + $tickets ;
+							$tickets = array_merge( $fav, $tickets );
 						} else {
 							$tickets = rtbiz_hd_get_tickets( 'created_by', $arg_shortcode['userid'] );
 						}
