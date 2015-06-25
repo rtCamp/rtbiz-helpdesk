@@ -244,6 +244,10 @@ jQuery( document ).ready(function () {
 						}
 						jQuery( '#savefollwoup' ).removeAttr( 'disabled' );
                         jQuery( '#followupcontent_html' ).html('');
+                        if ( jQuery( '#new-followup-form' ).find('.markdown_preview_container').is(':visible') ) {
+                            console.log( 'hi' );
+                            jQuery( '#new-followup-form' ).find('.rthd-markdown-preview').click();
+                        }
 					}
 				});
 			}
@@ -281,6 +285,9 @@ jQuery( document ).ready(function () {
 						jQuery( '#edithdspinner' ).hide();
 						jQuery( "#delfollowup" ).removeAttr( 'disabled' );
                         jQuery( '#dialog-form #editedfollowupcontent_html' ).html('');
+                        if ( jQuery( '#dialog-form' ).find('.markdown_preview_container').is(':visible') ) {
+                            jQuery( '#dialog-form' ).find('.rthd-markdown-preview').click();
+                        }
 					},
 					error: function (xhr, textStatus, errorThrown) {
 						alert( "error while removing follow up." );
@@ -296,6 +303,9 @@ jQuery( document ).ready(function () {
 				e.preventDefault();
 				jQuery( '#dialog-form' ).slideToggle( 'slow' );
                 jQuery( '#dialog-form #editedfollowupcontent_html' ).html('');
+                if ( jQuery( '#dialog-form' ).find('.markdown_preview_container').is(':visible') ) {
+                    jQuery( '#dialog-form' ).find('.rthd-markdown-preview').click();
+                }
 				jQuery( '#new-followup-form' ).show();
 				jQuery( document ).scrollTop( ( jQuery( '#comment-' + followup_id ).offset().top ) );
 			});
@@ -376,12 +386,18 @@ jQuery( document ).ready(function () {
 						jQuery( '#edithdspinner' ).hide();
 						jQuery( "#editfollowup" ).removeAttr( 'disabled' );
                         jQuery( '#dialog-form #editedfollowupcontent_html' ).html('');
+                        if ( jQuery( '#dialog-form' ).find('.markdown_preview_container').is(':visible') ) {
+                            jQuery( '#dialog-form' ).find('.rthd-markdown-preview').click();
+                        }
 					},
 					error: function (data) {
 						alert( "Sorry :( something went wrong!" );
 						jQuery( '#edithdspinner' ).hide();
 						jQuery( "#editfollowup" ).removeAttr( 'disabled' );
                         jQuery( '#dialog-form #editedfollowupcontent_html' ).html('');
+                        if ( jQuery( '#dialog-form' ).find('.markdown_preview_container').is(':visible') ) {
+                            jQuery( '#dialog-form' ).find('.rthd-markdown-preview').click();
+                        }
 					}
 				});
 			});
@@ -446,6 +462,9 @@ jQuery( document ).ready(function () {
 				e.preventDefault();
 				jQuery( '#edit-ticket-data' ).slideToggle( 'slow' );
                 jQuery( '#edit-ticket-data').find('#editedticketcontent_html').html('');
+                if ( jQuery( '#edit-ticket-data' ).find('.markdown_preview_container').is(':visible') ) {
+                    jQuery( '#edit-ticket-data' ).find('.rthd-markdown-preview').click();
+                }
 				jQuery( '#new-followup-form' ).show();
 				jQuery( document ).scrollTop( ( jQuery( '.ticketcontent' ).offset().top ) - 50 );
 			});
