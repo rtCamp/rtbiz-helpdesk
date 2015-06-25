@@ -456,15 +456,18 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			$settings      = rtbiz_hd_get_redux_settings();
 
 			$new_all_emails = array();
+			$senderName = '';
 			// remove creator from all emails
 			foreach ( $allemail as $email ) {
 				if ( $senderEmail != $email['address'] ) {
 					$new_all_emails[] = $email;
+				} else {
+					$senderName = preg_replace( '/\s+/', ' ', $email['name'] );
 				}
 			}
 			$allemail = $new_all_emails;
 
-			$userid = $rtbiz_hd_contacts->get_user_from_email( $senderEmail );
+			$userid = $rtbiz_hd_contacts->get_user_from_email( $senderEmail, $senderName );
 
 			if ( is_array( $body ) ){
 				$markdown_body = $body['markdown'];
@@ -821,9 +824,9 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			if ( rtbiz_hd_check_email_blacklisted( $fromemail['address'] ) ) {
 				return false;
 			}
-			$emailsarrays = rtbiz_hd_filter_emails( $allemails );
-			$subscriber = $emailsarrays['subscriber'];
-			$allemail = $emailsarrays['allemail'];
+			$emails_array = rtbiz_hd_filter_emails( $allemails );
+			$subscriber = $emails_array['subscriber'];
+			$allemail = $emails_array['allemail'];
 
 			global $rtbiz_hd_contacts;
 
