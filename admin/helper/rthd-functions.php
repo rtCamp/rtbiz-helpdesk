@@ -1878,9 +1878,7 @@ function rtbiz_hd_get_user_id_from_order_id( $order_id ) {
 function rtbiz_hd_compare_wp_post( $objA, $objB ) {
 	if ( $objA->ID == $objB->ID ) {
 		return 0;
-	} else {
-		return -1;
-	}
+	} return ( $objA->ID > $objB->ID )?1:-1;
 }
 
 function rtbiz_hd_update_assignee( $postid, $post_author ) {
