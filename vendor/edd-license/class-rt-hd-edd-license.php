@@ -15,9 +15,10 @@ if ( ! class_exists( 'Rt_HD_Edd_License' ) ) {
 			}
 
 			add_action( 'admin_init', array( $this, 'edd_sl_sample_plugin_updater' ) );
+			add_action( 'admin_init', array( $this, 'edd_sample_save_activate_license' ) );
+			add_action( 'admin_init', array( $this, 'edd_sample_remove_deactivate_license' ) );
 			add_action( 'rthelpdesk_addon_license_details', array( $this, 'edd_sample_license_page' ), 10 );
-			add_action( 'admin_init', array( $this, 'edd_sample_activate_license' ) );
-			add_action( 'admin_init', array( $this, 'edd_sample_deactivate_license' ) );
+
 		}
 
 		function edd_sample_license_page() {
@@ -34,49 +35,55 @@ if ( ! class_exists( 'Rt_HD_Edd_License' ) ) {
 			?>
             <div class="rthd-addon-license">
                 <div class="row">
-                    <div class="columns large-12 rthd-addon-license-status"></strong>
-                        <span class="rthd-addon-license-status-label"> Helpdesk Status: </span>
-					    <span class="rthd-addon-license-status <?php echo $status_class ?>"><?php echo $status_value; ?></span>
-                    </div>
-                </div>
-                <div class="row">
                     <div class="columns large-12">
                         <table class="form-table">
                             <tbody>
                             <tr valign="top">
+	                            <th scope="row" valign="top">
+		                            <fieldset class="redux-field-container"><span class="rthd-addon-license-status-label"> Helpdesk Status: </span></fieldset>
+	                            </th>
+	                            <td>
+		                            <fieldset class="redux-field-container"><span class="rthd-addon-license-status <?php echo $status_class ?>"><?php echo $status_value; ?></span></fieldset>
+	                            </td>
+                            </tr>
+                            <tr valign="top" style="border-bottom: medium none;">
                                 <th scope="row" valign="top">
-                                    <?php _e( 'License Key', RTBIZ_HD_TEXT_DOMAIN ); ?>
+	                                <fieldset class="redux-field-container"><?php _e( 'License Key', RTBIZ_HD_TEXT_DOMAIN ); ?></fieldset>
                                 </th>
                                 <td>
-                                    <input id="rtbiz_hd_edd_license_key" name="rtbiz_hd_edd_license_key"
+	                                <fieldset class="redux-field-container"><input id="rtbiz_hd_edd_license_key" name="rtbiz_hd_edd_license_key"
                                            type="text"
-                                           class="regular-text" value="<?php esc_attr_e( $license ); ?>"/>
+                                           class="regular-text" value="<?php esc_attr_e( $license ); ?>"/></fieldset>
                                 </td>
                             </tr>
-                            <?php if ( false !== $license ) { ?>
-                                <tr valign="top">
-                                    <th scope="row" valign="top">
-                                        <?php _e( 'Activate / Deactivate License', RTBIZ_HD_TEXT_DOMAIN ); ?>
-                                    </th>
-                                    <td>
-                                        <?php if ( $status !== false && $status == 'valid' ) { ?>
-                                            <?php wp_nonce_field( 'edd_rthelpdesk_nonce', 'edd_rthelpdesk_nonce' ); ?>
-                                            <input type="submit" class="button-secondary"
-                                                   name="edd_rthelpdesk_license_deactivate"
-                                                   value="<?php _e( 'Deactivate License', RTBIZ_HD_TEXT_DOMAIN ); ?>"/>
-                                        <?php
-} else {
-	wp_nonce_field( 'edd_rthelpdesk_nonce', 'edd_rthelpdesk_nonce' ); ?>
-                                            <input type="submit" class="button-secondary"
-                                                   name="edd_rthelpdesk_license_activate"
-                                                   value="<?php _e( 'Activate License', RTBIZ_HD_TEXT_DOMAIN ); ?>"/>
-                                        <?php } ?>
-                                    </td>
-                                </tr>
-                            <?php } ?>
+                            <tr valign="top" >
+	                            <th scope="row" valign="top">
+		                            <fieldset><?php _e( '', RTBIZ_HD_TEXT_DOMAIN ); ?></fieldset>
+	                            </th>
+	                            <td><fieldset><?php
+		                            wp_nonce_field( 'edd_rthelpdesk_nonce', 'edd_rthelpdesk_nonce' );
+		                            if ( false !== $license && ! empty( $license ) ) {
+			                            if ( $status !== false && $status == 'valid' ) { ?>
+	                                        <input type="submit" class="button-secondary"
+	                                               name="edd_rthelpdesk_license_deactivate"
+	                                               value="<?php _e( 'Deactivate License', RTBIZ_HD_TEXT_DOMAIN ); ?>"/><?php
+										} else { ?>
+	                                        <input type="submit" class="button-secondary"
+	                                               name="edd_rthelpdesk_license_activate"
+	                                               value="<?php _e( 'Activate License', RTBIZ_HD_TEXT_DOMAIN ); ?>"/><?php
+			                            } ?>
+			                            <input type="submit" class="button-secondary"
+			                                   name="edd_rthelpdesk_remove_deactivate"
+			                                   value="<?php _e( 'Remove License', RTBIZ_HD_TEXT_DOMAIN ); ?>"/><?php
+		                            } else{ ?>
+			                            <input type="submit" class="button-secondary"
+			                                   name="edd_rthelpdesk_save_activate"
+			                                   value="<?php _e( 'Save & Activate License', RTBIZ_HD_TEXT_DOMAIN ); ?>"/><?php
+                                    } ?>
+	                            </fieldset></td>
+                            </tr>
                             </tbody>
                         </table>
-                        <?php submit_button( 'Save Key' ); ?>
                     </div>
                 </div>
             </div>
@@ -98,92 +105,113 @@ if ( ! class_exists( 'Rt_HD_Edd_License' ) ) {
 
 		}
 
-		function edd_sample_activate_license() {
-
-			if ( isset( $_POST['rtbiz_hd_edd_license_key'] ) ) {
-				update_option( 'rtbiz_hd_edd_license_key', $_POST['rtbiz_hd_edd_license_key'] );
+		function edd_sample_save_activate_license(){
+			if ( isset( $_POST['edd_rthelpdesk_save_activate'] ) ){
+				if ( isset( $_POST['rtbiz_hd_edd_license_key'] ) && ! empty( $_POST['rtbiz_hd_edd_license_key'] ) ) {
+					update_option( 'rtbiz_hd_edd_license_key', $_POST['rtbiz_hd_edd_license_key'] );
+					$this->edd_sample_activate_license();
+				}
 			}
 
 			// listen for our activate button to be clicked
 			if ( isset( $_POST['edd_rthelpdesk_license_activate'] ) ) {
+				$this->edd_sample_activate_license();
+			}
 
-				// run a quick security check
-				if ( ! check_admin_referer( 'edd_rthelpdesk_nonce', 'edd_rthelpdesk_nonce' ) ) {
-					return;
-				} // get out if we didn't click the Activate button
 
-				// retrieve the license from the database
-				$license = trim( get_option( 'rtbiz_hd_edd_license_key' ) );
+		}
 
-				// data to send in our API request
-				$api_params = array(
-					'edd_action' => 'activate_license',
-				'license' => $license,
-				'item_name' => urlencode( EDD_RT_HELPDESK_ITEM_NAME ), // the name of our product in EDD
-					'url' => home_url(),
-				);
+		function edd_sample_activate_license() {
 
-				// Call the custom API.
-				$response = wp_remote_get( esc_url_raw( add_query_arg( $api_params, EDD_RT_HELPDESK_STORE_URL ) ), array( 'timeout' => 15, 'sslverify' => false ) );
+			// run a quick security check
+			if ( ! check_admin_referer( 'edd_rthelpdesk_nonce', 'edd_rthelpdesk_nonce' ) ) {
+				return;
+			} // get out if we didn't click the Activate button
 
-				//		var_dump($response);
+			// retrieve the license from the database
+			$license = trim( get_option( 'rtbiz_hd_edd_license_key' ) );
 
-				// make sure the response came back okay
-				if ( is_wp_error( $response ) ) {
-					return false;
+			// data to send in our API request
+			$api_params = array(
+				'edd_action' => 'activate_license',
+			'license' => $license,
+			'item_name' => urlencode( EDD_RT_HELPDESK_ITEM_NAME ), // the name of our product in EDD
+				'url' => home_url(),
+			);
+
+			// Call the custom API.
+			$response = wp_remote_get( esc_url_raw( add_query_arg( $api_params, EDD_RT_HELPDESK_STORE_URL ) ), array( 'timeout' => 15, 'sslverify' => false ) );
+
+			//		var_dump($response);
+
+			// make sure the response came back okay
+			if ( is_wp_error( $response ) ) {
+				return false;
+			}
+
+			// decode the license data
+			$license_data = json_decode( wp_remote_retrieve_body( $response ) );
+
+			// $license_data->license will be either "valid" or "invalid"
+
+			update_option( 'rtbiz_hd_edd_license_status', $license_data->license );
+
+		}
+
+		function edd_sample_remove_deactivate_license(){
+			if ( isset( $_POST['edd_rthelpdesk_remove_deactivate'] ) ){
+				$status = get_option( 'rtbiz_hd_edd_license_status' );
+				if ( false !== $status && 'valid' == $status ){
+					$this->edd_sample_deactivate_license();
 				}
 
-				// decode the license data
-				$license_data = json_decode( wp_remote_retrieve_body( $response ) );
+				delete_option( 'rtbiz_hd_edd_license_key' );
+			}
 
-				// $license_data->license will be either "valid" or "invalid"
-
-				update_option( 'rtbiz_hd_edd_license_status', $license_data->license );
-
+			// listen for our deactivate button to be clicked
+			if ( isset( $_POST['edd_rthelpdesk_license_deactivate'] ) ) {
+				$this->edd_sample_deactivate_license();
 			}
 		}
 
 		function edd_sample_deactivate_license() {
 
-			// listen for our activate button to be clicked
-			if ( isset( $_POST['edd_rthelpdesk_license_deactivate'] ) ) {
+			// run a quick security check
+			if ( ! check_admin_referer( 'edd_rthelpdesk_nonce', 'edd_rthelpdesk_nonce' ) ) {
+				return;
+			} // get out if we didn't click the Activate button
 
-				// run a quick security check
-				if ( ! check_admin_referer( 'edd_rthelpdesk_nonce', 'edd_rthelpdesk_nonce' ) ) {
-					return;
-				} // get out if we didn't click the Activate button
+			// retrieve the license from the database
+			$license = trim( get_option( 'rtbiz_hd_edd_license_key' ) );
 
-				// retrieve the license from the database
-				$license = trim( get_option( 'rtbiz_hd_edd_license_key' ) );
+			// data to send in our API request
+			$api_params = array(
+				'edd_action' => 'deactivate_license',
+			'license' => $license,
+			'item_name' => urlencode( EDD_RT_HELPDESK_ITEM_NAME ), // the name of our product in EDD
+				'url' => home_url(),
+			);
 
-				// data to send in our API request
-				$api_params = array(
-					'edd_action' => 'deactivate_license',
-				'license' => $license,
-				'item_name' => urlencode( EDD_RT_HELPDESK_ITEM_NAME ), // the name of our product in EDD
-					'url' => home_url(),
-				);
+			// Call the custom API.
+			$response = wp_remote_get( esc_url_raw( add_query_arg( $api_params, EDD_RT_HELPDESK_STORE_URL ) ), array( 'timeout' => 15, 'sslverify' => false ) );
 
-				// Call the custom API.
-				$response = wp_remote_get( esc_url_raw( add_query_arg( $api_params, EDD_RT_HELPDESK_STORE_URL ) ), array( 'timeout' => 15, 'sslverify' => false ) );
+			//		var_dump($response);
 
-				//		var_dump($response);
-
-				// make sure the response came back okay
-				if ( is_wp_error( $response ) ) {
-					return false;
-				}
-
-				// decode the license data
-				$license_data = json_decode( wp_remote_retrieve_body( $response ) );
-
-				//		var_dump($license_data);
-
-				// $license_data->license will be either "deactivated" or "failed"
-				if ( $license_data->license == 'deactivated' ) {
-					delete_option( 'rtbiz_hd_edd_license_status' );
-				}
+			// make sure the response came back okay
+			if ( is_wp_error( $response ) ) {
+				return false;
 			}
+
+			// decode the license data
+			$license_data = json_decode( wp_remote_retrieve_body( $response ) );
+
+			//		var_dump($license_data);
+
+			// $license_data->license will be either "deactivated" or "failed"
+			if ( $license_data->license == 'deactivated' ) {
+				delete_option( 'rtbiz_hd_edd_license_status' );
+			}
+
 		}
 
 		function edd_sample_check_license() {
