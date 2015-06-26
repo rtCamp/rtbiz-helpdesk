@@ -21,7 +21,6 @@ $created_by = get_post_meta( $post->ID, '_rtbiz_hd_created_by', true );
 $user_edit_content = $staffonly|| ( get_current_user_id() == $post->$created_by );
 
 
-if ( ! empty( $post->post_content ) ) {
 
 	$created_by  = get_user_by( 'id', get_post_meta( $post->ID, '_rtbiz_hd_created_by', true ) );
 	$authorname  = 'Anonymous';
@@ -66,7 +65,7 @@ if ( ! empty( $post->post_content ) ) {
 				</div>
 				<?php
 				$markdown_content = get_post_meta( $post->ID, '_rtbiz_hd_markdown_data', true );
-				if ( !isset( $markdown_content ) || empty( $markdown_content ) ){
+				if ( ! isset( $markdown_content ) || empty( $markdown_content ) ) {
 					$markdown_content = $post->post_content;
 				}
 				?>
@@ -75,12 +74,14 @@ if ( ! empty( $post->post_content ) ) {
 					<?php
 					$content = rtbiz_hd_content_filter( isset( $post->ID ) ? $post->post_content : '' );
 					echo $content;
+					if ( empty( $post->post_content ) ) {
+						echo 'No content found.';
+					}
 					?>
 				</div>
 			</div>
 		</li>
 	</ul>
-<?php } ?>
 
 <?php if ( $Limit < $totalComment ) {
 	?>
