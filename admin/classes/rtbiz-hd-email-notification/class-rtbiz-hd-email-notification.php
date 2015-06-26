@@ -188,7 +188,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 			$followup_creator = $ContactEmail = $groupEmail = $assigneEmail = $subscriberEmail = $bccemails = array();
 
 			$redux = rtbiz_hd_get_redux_settings();
-			if ( ! empty( $redux[ 'rthd_enable_notification_acl' ] ) && 1 == $redux[ 'rthd_enable_notification_acl' ] ){
+			if ( empty( $redux[ 'rthd_enable_notification_acl' ] ) || 0 == $redux[ 'rthd_enable_notification_acl' ] ){
 				return false;
 			}
 
@@ -287,7 +287,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 			$user = get_user_by( 'id', $user_id );
 
 			$redux = rtbiz_hd_get_redux_settings();
-			if ( ! empty( $redux[ 'rthd_enable_notification_acl' ] ) && 1 == $redux[ 'rthd_enable_notification_acl' ] ){
+			if ( empty( $redux[ 'rthd_enable_notification_acl' ] ) || 0 == $redux[ 'rthd_enable_notification_acl' ] ){
 				return false;
 			}
 			$notificationFlagClient = ( isset( $redux['rthd_notification_acl_client_events'] ) && 1 == $redux['rthd_notification_acl_client_events']['new_followup_deleted_mail'] );
@@ -367,7 +367,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 			$user = get_user_by( 'id', $user_id );
 
 			$redux = rtbiz_hd_get_redux_settings();
-			if ( ! empty( $redux[ 'rthd_enable_notification_acl' ] ) && 1 == $redux[ 'rthd_enable_notification_acl' ] ){
+			if ( empty( $redux[ 'rthd_enable_notification_acl' ] ) || 0 == $redux[ 'rthd_enable_notification_acl' ] ){
 				return false;
 			}
 			$notificationFlagClient = ( isset( $redux['rthd_notification_acl_client_events'] ) && 1 == $redux['rthd_notification_acl_client_events']['new_followup_updated_mail'] );
@@ -499,7 +499,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 			$ticket_creator = $ContactEmail = $groupEmail = $assigneEmail = $subscriberEmail = array();
 
 			$redux = rtbiz_hd_get_redux_settings();
-			if ( ! empty( $redux[ 'rthd_enable_notification_acl' ] ) && 1 == $redux[ 'rthd_enable_notification_acl' ] ){
+			if ( empty( $redux[ 'rthd_enable_notification_acl' ] ) || 0 == $redux[ 'rthd_enable_notification_acl' ] ){
 				return false;
 			}
 			$notificationFlagClient = ( isset( $redux['rthd_notification_acl_client_events'] ) && 1 == $redux['rthd_notification_acl_client_events']['new_ticket_created_mail'] );
@@ -650,7 +650,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 			$bccemails = $groupEmail = $assigneEmail = $subscriberEmail = array();
 
 			$redux = rtbiz_hd_get_redux_settings();
-			if ( ! empty( $redux[ 'rthd_enable_notification_acl' ] ) && 1 == $redux[ 'rthd_enable_notification_acl' ] ){
+			if ( empty( $redux[ 'rthd_enable_notification_acl' ] ) || 0 == $redux[ 'rthd_enable_notification_acl' ] ){
 				return false;
 			}
 			$notificationFlagAssignee = ( isset( $redux['rthd_notification_acl_assignee_events'] ) && 1 == $redux['rthd_notification_acl_assignee_events']['new_subscriber_added_mail'] );
@@ -711,7 +711,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 			$bccemails = $groupEmail = $assigneEmail = $subscriberEmail = array();
 
 			$redux = rtbiz_hd_get_redux_settings();
-			if ( ! empty( $redux[ 'rthd_enable_notification_acl' ] ) && 1 == $redux[ 'rthd_enable_notification_acl' ] ){
+			if ( empty( $redux[ 'rthd_enable_notification_acl' ] ) || 0 == $redux[ 'rthd_enable_notification_acl' ] ){
 				return false;
 			}
 			$notificationFlagAssignee = ( isset( $redux['rthd_notification_acl_assignee_events'] ) && 1 == $redux['rthd_notification_acl_assignee_events']['subscriber_removed_mail'] );
@@ -771,7 +771,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 			$bccemails = $newassigneEmail = $oldassigneEmail = $groupEmail = $subscriberEmail = array();
 
 			$redux = rtbiz_hd_get_redux_settings();
-			if ( ! empty( $redux[ 'rthd_enable_notification_acl' ] ) && 1 == $redux[ 'rthd_enable_notification_acl' ] ){
+			if ( empty( $redux[ 'rthd_enable_notification_acl' ] ) || 0 == $redux[ 'rthd_enable_notification_acl' ] ){
 				return false;
 			}
 			$notificationFlagAssignee = ( isset( $redux['rthd_notification_acl_assignee_events'] ) && 1 == $redux['rthd_notification_acl_assignee_events']['ticket_reassigned_mail'] );
@@ -836,7 +836,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 			$ticket_updator = $ContactEmail = $groupEmail = $assigneEmail = $subscriberEmail = array();
 
 			$redux = rtbiz_hd_get_redux_settings();
-			if ( ! empty( $redux[ 'rthd_enable_notification_acl' ] ) && 1 == $redux[ 'rthd_enable_notification_acl' ] ){
+			if ( empty( $redux[ 'rthd_enable_notification_acl' ] ) || 0 == $redux[ 'rthd_enable_notification_acl' ] ){
 				return false;
 			}
 			$notificationFlagAssignee = ( isset( $redux['rthd_notification_acl_assignee_events'] ) && 1 == $redux['rthd_notification_acl_assignee_events']['ticket_reassigned_mail'] );
