@@ -513,6 +513,7 @@ h2.rt-hd-ticket-front-title{
 
 .rthd-ticket-user-activity-backend > a{
 	padding-bottom: 8px;
+    margin: 5px 5px 5px 0;
 }
 
 .rthd-contact-avatar-no-reply-div a img,.rthd-subscriber-avatar-no-reply-div a img{
@@ -722,7 +723,7 @@ img#hdspinner{
     min-height: 200px;
 }
 
-.markdown_preview_container ul{
+.markdown_preview_container ul, .markdown_preview_container ol,.markdown_preview_container dl{
   list-style-position: inside;
 }
 
