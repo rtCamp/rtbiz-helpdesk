@@ -1780,7 +1780,7 @@ function rtbiz_hd_ticket_import_logs() {
 
 function rtbiz_hd_mailbox_setup_view() {
 	global $rtbiz_mailBox;
-	$rtbiz_mailBox->render_mailbox_setting_page( rtbiz_sanitize_module_key( RTBIZ_HD_TEXT_DOMAIN ) );
+	$rtbiz_mailBox->render_mailbox_setting_page( rtbiz_sanitize_module_key( RTBIZ_HD_TEXT_DOMAIN ), add_query_arg( array( 'post_type' => Rtbiz_HD_Module::$post_type, 'page' => Rtbiz_HD_Settings::$page_slug ), admin_url( 'edit.php' ) ) );
 }
 
 function rtbiz_hd_gravity_importer_view() {
