@@ -120,14 +120,14 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 		public function get_custom_statuses() {
 			$this->statuses = array(
 				array(
-					'slug'        => 'hd-unanswered',
-					'name'        => __( 'Unanswered', RTBIZ_HD_TEXT_DOMAIN ),
-					'description' => __( 'Ticket is unanswered. It needs to be replied. The default state.', RTBIZ_HD_TEXT_DOMAIN ),
-				),
-				array(
 					'slug'        => 'hd-answered',
 					'name'        => __( 'Answered', RTBIZ_HD_TEXT_DOMAIN ),
 					'description' => __( 'Ticket is answered. Expecting further communication from client', RTBIZ_HD_TEXT_DOMAIN ),
+				),
+				array(
+					'slug'        => 'hd-unanswered',
+					'name'        => __( 'Unanswered', RTBIZ_HD_TEXT_DOMAIN ),
+					'description' => __( 'Ticket is unanswered. It needs to be replied. The default state.', RTBIZ_HD_TEXT_DOMAIN ),
 				),
 				array(
 					'slug'        => 'hd-archived',

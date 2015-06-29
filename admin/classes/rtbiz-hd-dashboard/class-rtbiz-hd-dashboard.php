@@ -521,7 +521,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 					'chart_type'  => 'table',
 					'data_source' => $data_source,
 					'dom_element' => 'rthd_hd_table_team_load',
-					'options'     => array( 'title' => __( 'Team Load', RTBIZ_HD_TEXT_DOMAIN ) ),
+					'options'     => array( 'title' => __( 'Team Load', RTBIZ_HD_TEXT_DOMAIN ) , 'sortColumn' => 1, 'sortAscending' => true ),
 				);
 			}
 			?>
