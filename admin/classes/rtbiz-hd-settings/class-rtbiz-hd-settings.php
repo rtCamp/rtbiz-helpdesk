@@ -741,22 +741,23 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					),
 				),
 			);
+			if ( is_plugin_active( 'gravityforms/gravityforms.php' ) ) {
 
-			$this->sections[]   = array(
-				'title'       => __( 'Gravity Importer' ),
-				'icon'        => 'el-icon-list-alt',
-				'permissions' => $admin_cap,
-				//'subsection'  => true,
-				'fields'      => array(
-					array(
-						'id'      => 'rthd_ticket_import_view',
-						'type'    => 'raw',
-						'content' => rtbiz_hd_gravity_importer_view(),
+				$this->sections[] = array(
+					'title'       => __( 'Gravity Importer' ),
+					'icon'        => 'el-icon-list-alt',
+					'permissions' => $admin_cap,
+					//'subsection'  => true,
+					'fields'      => array(
+						array(
+							'id'      => 'rthd_ticket_import_view',
+							'type'    => 'raw',
+							'content' => rtbiz_hd_gravity_importer_view(),
+						),
 					),
-				),
-			);
+				);
 
-			$this->sections[]   = array(
+				$this->sections[] = array(
 					'title'       => __( 'Importer Mapper' ),
 					'icon'        => 'el-icon-list-alt',
 					'permissions' => $admin_cap,
@@ -769,27 +770,28 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 						),
 					),
 				);
-			// Only initiates in case of settings page is getting displayed. Not otherwise
-			if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] == self::$page_slug ) {
-				ob_start();
-				rtbiz_hd_ticket_import_logs();
-				$import_log_content = ob_get_clean();
-			} else {
-				$import_log_content = '';
-			}
-			$this->sections[]   = array(
-				'title'       => __( 'Import Logs' ),
-				'icon'        => 'el-icon-list-alt',
-				'permissions' => $admin_cap,
-				'subsection'  => true,
-				'fields'      => array(
-					array(
-						'id'      => 'rtbiz_hd_ticket_import_logs',
-						'type'    => 'raw',
-						'content' => $import_log_content,
+				// Only initiates in case of settings page is getting displayed. Not otherwise
+				if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] == self::$page_slug ) {
+					ob_start();
+					rtbiz_hd_ticket_import_logs();
+					$import_log_content = ob_get_clean();
+				} else {
+					$import_log_content = '';
+				}
+				$this->sections[] = array(
+					'title'       => __( 'Import Logs' ),
+					'icon'        => 'el-icon-list-alt',
+					'permissions' => $admin_cap,
+					'subsection'  => true,
+					'fields'      => array(
+						array(
+							'id'      => 'rtbiz_hd_ticket_import_logs',
+							'type'    => 'raw',
+							'content' => $import_log_content,
+						),
 					),
-				),
-			);
+				);
+			}
 
 			$this->sections[] = array(
 				'icon'        => 'el-icon-key',
