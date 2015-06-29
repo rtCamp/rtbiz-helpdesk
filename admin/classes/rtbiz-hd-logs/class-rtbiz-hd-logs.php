@@ -35,6 +35,10 @@ if ( ! class_exists( 'Rtbiz_HD_Logs' ) ) {
 				return;
 			}
 
+			if ( ! class_exists( 'RGFormsModel' ) ) {
+				return;
+			}
+
 			global $wpdb;
 			$editor_cap = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' );
 			//			if( !current_user_can( $editor_cap ) ) {
