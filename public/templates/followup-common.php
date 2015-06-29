@@ -32,7 +32,7 @@ if ( ! empty( $post->post_content ) ) {
 	}
 	?>
 	<ul class="rthd-discussion" id="ticket-content-UI">
-		<li class="rthd-other <?php echo count( $comments ) > 0 ? '' : 'no-comments'; ?> ticketother">
+		<li class="rthd-other <?php echo count( $comments ) > 0 ? '' : 'rthd-no-comments'; ?> ticketother">
 			<div class="avatar">
 				<?php echo get_avatar( $authoremail, 48 ); ?>
 			</div>
