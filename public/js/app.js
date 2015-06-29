@@ -91,6 +91,11 @@ jQuery( document ).ready(function ($) {
 		return re.test( email );
 	}
 
+    jQuery('#frm-rthd-subscribe-email-submit').submit(function( e ){
+        jQuery( '.rthd-subscribe-email-submit' ).click();
+        e.preventDefault();
+    });
+
 	jQuery( '.rthd-subscribe-email-submit' ).click(function () {
 		jQuery( '.rthd-subscribe-validation' ).hide();
 		jQuery( '#rthd-subscribe-email-spinner' ).show();
