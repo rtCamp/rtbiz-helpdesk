@@ -376,6 +376,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 
 		public function ajax_add_new_ticket() {
 			$result = array();
+			$ticketModel = new Rtbiz_HD_Ticket_Model();
 
 			if ( ! isset( $_POST['nonce'] ) && ! wp_verify_nonce( $_POST['nonce'], 'rt_hd_ticket_edit' ) ) {
 				$result['status'] = false;
@@ -394,7 +395,17 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				                'post_content' => rtbiz_hd_content_filter( $_POST['body'] ),
 			                ) );
 
+			$dataArray = array(
+				'post_id' => $_POST['post_id'],
+				'post_content' => rtbiz_hd_content_filter( $_POST['body'] ),
+				'date_update'     => current_time( 'mysql' ),
+				'date_update_gmt' => gmdate( 'Y-m-d H:i:s' ),
+				'user_updated_by' => get_current_user_id(),
+			);
+			$ticketModel->add_ticket( $dataArray );
+
 			update_post_meta( $_POST['post_id'], '_rtbiz_hd_markdown_data', $_POST['body_markdown'] );
+			update_post_meta( $_POST['post_id'], '_rtbiz_hd_updated_by', get_current_user_id() );
 
 			$body = 'Ticket content updated : '. rtbiz_hd_content_filter( $_POST['body'] );
 			global $rtbiz_hd_module, $rtbiz_hd_email_notification;
@@ -1847,6 +1858,10 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				update_comment_meta( $commentdata['comment_ID'], '_rtbiz_hd_sensitive', true );
 			} else {
 				delete_comment_meta( $commentdata['comment_ID'], '_rtbiz_hd_sensitive' );
+			}
+
+			if ( $user_id ){
+				update_comment_meta( $commentdata['comment_ID'], '_rtbiz_hd_comment_update_by', $user_id );
 			}
 
 			//update markdown content

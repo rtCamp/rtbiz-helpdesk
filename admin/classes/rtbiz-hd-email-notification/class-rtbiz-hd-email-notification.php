@@ -362,7 +362,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 		 * @param $sensitive bool
 		 */
 		public function notification_followup_updated( $comment, $user_id, $old_comment_type, $new_comment_type, $old_content, $new_content, $sensitive = false  ) {
-			$followup_updater = $ContactEmail = $groupEmail = $assigneEmail = $subscriberEmail = $bccemails = array();
+			$followup_Author = $ContactEmail = $groupEmail = $assigneEmail = $subscriberEmail = $bccemails = array();
 
 			$user = get_user_by( 'id', $user_id );
 
@@ -375,7 +375,9 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 			$notificationFlagSsubscriber = ( isset( $redux['rthd_notification_acl_staff_events'] ) && 1 == $redux['rthd_notification_acl_staff_events']['new_followup_updated_mail'] );
 			$notificationFlagGroup = ( isset( $redux['rthd_notification_acl_group_events'] ) && 1 == $redux['rthd_notification_acl_group_events']['new_followup_updated_mail'] );
 
-			$followup_updater[] = array( 'email' => $comment->comment_author_email, 'name' => $comment->comment_author );
+			$followup_Author[] = array( 'email' => $comment->comment_author_email, 'name' => $comment->comment_author );
+
+			$followup_updater[] = array( 'email' => $user->user_email, 'name' => $user->display_name );
 
 			if ( $notificationFlagAssignee ) {
 				$assigneEmail[] = $this->get_assigne_email( $comment->comment_post_ID );
@@ -396,6 +398,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 
 			$bccemails = $this->exclude_author( $bccemails, $comment->comment_author_email );
 			$bccemails = apply_filters( 'rtbiz_hd_filter_adult_emails', $bccemails , $comment->comment_post_ID );
+			$bccemails = apply_filters( 'rtbiz_hd_filter_adult_emails', $bccemails , $user->user_email );
 
 			if ( $notificationFlagClient && Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF != $new_comment_type ) {
 				$ContactEmail  = $this->get_contacts( $comment->comment_post_ID );
@@ -437,14 +440,24 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 
 			// sending email to followup author [ To ]
 			if ( user_can( $user, rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' ) ) ) {
-				$bodyto = rtbiz_hd_replace_placeholder( $body,'{followup_updated_by}', 'you' );
-				$this->insert_new_send_email( $subject, rtbiz_hd_get_general_body_template( $bodyto, $title, true ), $followup_updater, array(), array(), array(), $comment->comment_ID, 'comment' );
+				if ( $user->user_email == $comment->comment_author_email ){
+					$bodyto = rtbiz_hd_replace_placeholder( $body,'{followup_updated_by}', 'you' );
+					$this->insert_new_send_email( $subject, rtbiz_hd_get_general_body_template( $bodyto, $title, true ), $followup_Author, array(), array(), array(), $comment->comment_ID, 'comment' );
+				}else{
+					$bodyto = rtbiz_hd_replace_placeholder( $body,'{followup_updated_by}', 'you' );
+					$this->insert_new_send_email( $subject, rtbiz_hd_get_general_body_template( $bodyto, $title, true ), $followup_updater, array(), array(), array(), $comment->comment_ID, 'comment' );
+
+					$bodyto = rtbiz_hd_replace_placeholder( $body,'{followup_updated_by}', $user->display_name );
+					$this->insert_new_send_email( $subject, rtbiz_hd_get_general_body_template( $bodyto, $title, true ), $followup_Author, array(), array(), array(), $comment->comment_ID, 'comment' );
+				}
+
 			}
 
 			//sending email to ticket assignee [ To ] | staff [ BCC ] | contact [ BCC ] | globel list [ BCC ]
-			$bodyto = rtbiz_hd_replace_placeholder( $body,'{followup_updated_by}', $user->display_name );
-			$this->insert_new_send_email( $subject, rtbiz_hd_get_general_body_template( $bodyto, $title,  true ), $ContactEmail, array(), $bccemails, array(), $comment->comment_ID , 'comment' );
-
+			if ( ! empty( $ContactEmail ) || ! empty( $bccemails ) ) {
+				$bodyto = rtbiz_hd_replace_placeholder( $body, '{followup_updated_by}', $user->display_name );
+				$this->insert_new_send_email( $subject, rtbiz_hd_get_general_body_template( $bodyto, $title, true ), $ContactEmail, array(), $bccemails, array(), $comment->comment_ID, 'comment' );
+			}
 		}
 
 		/**
