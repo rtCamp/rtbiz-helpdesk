@@ -286,12 +286,14 @@ $user_edit_content = current_user_can( $cap );
 											class="dashicons dashicons-plus-alt rthd-add-contact-icon"></span></a>
 
 									<div class="rthd-add-people-box">
-										<input type="email" placeholder="Enter email to add people"
-										       id="rthd-subscribe-email">
-										<button type="button" class='rthd-subscribe-email-submit button btn'>Add
-										</button>
-										<span style="display: none;" class="rthd-subscribe-validation"></span>
-										<img id="rthd-subscribe-email-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
+										<form id="frm-rthd-subscribe-email-submit">
+											<input type="email" placeholder="Enter email to add people"
+											       id="rthd-subscribe-email">
+											<button type="button" class='rthd-subscribe-email-submit button btn'>Add
+											</button>
+											<span style="display: none;" class="rthd-subscribe-validation"></span>
+											<img id="rthd-subscribe-email-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
+										</form>
 									</div>
 								</div>
 							</div>
