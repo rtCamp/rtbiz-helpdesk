@@ -20,7 +20,7 @@ ul#chat-UI {
 	display: -webkit-flex;
 }
 
-.rthd-discussion > li:not(.no-comments):before {
+.rthd-discussion > li:not(.rthd-no-comments):before {
 	background: none repeat scroll 0 0 #eee;
 	content: " ";
 	height: 100%;
@@ -30,11 +30,11 @@ ul#chat-UI {
 	width: 2px;
 }
 
-#chat-UI.rthd-discussion > li:not(.no-comments):last-child:before {
+#chat-UI.rthd-discussion > li:not(.rthd-no-comments):last-child:before {
 	height: 45px;
 }
 
-#ticket-content-UI.rthd-discussion > li:not(.no-comments):before {
+#ticket-content-UI.rthd-discussion > li:not(.rthd-no-comments):before {
 	top: 30px;
 }
 

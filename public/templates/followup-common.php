@@ -31,7 +31,7 @@ $user_edit_content = $staffonly|| ( get_current_user_id() == $post->$created_by 
 	}
 	?>
 	<ul class="rthd-discussion" id="ticket-content-UI">
-		<li class="rthd-other <?php echo count( $comments ) > 0 ? '' : 'no-comments'; ?> ticketother">
+		<li class="rthd-other <?php echo count( $comments ) > 0 ? '' : 'rthd-no-comments'; ?> ticketother">
 			<div class="avatar">
 				<?php echo get_avatar( $authoremail, 48 ); ?>
 			</div>
