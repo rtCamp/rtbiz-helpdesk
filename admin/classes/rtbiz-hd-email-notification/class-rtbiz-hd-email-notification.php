@@ -419,15 +419,18 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 				$body = apply_filters( 'rthd_email_template_followup_updated', rtbiz_hd_get_email_template_body( 'rthd_email_template_followup_updated' ) );
 				$subject = rtbiz_hd_create_new_ticket_title( 'rthd_update_followup_email_title', $comment->comment_post_ID );
 			}
+
 			$diff_visibility = rtbiz_hd_text_diff( rtbiz_hd_get_comment_type( $old_comment_type ), rtbiz_hd_get_comment_type( $new_comment_type ) );
 			$diff_followup_content = rtbiz_hd_text_diff( trim( html_entity_decode( strip_tags( $old_content ) ) ), trim( html_entity_decode( strip_tags( $new_content ) ) ) );
 
-			if ( $diff_visibility ) {
-				$body = rtbiz_hd_replace_placeholder( $body, '{visibility_diff}', $diff_visibility );
-			} else {
-				$body = rtbiz_hd_replace_placeholder( $body, '{visibility_diff}', rtbiz_hd_get_comment_type( $new_comment_type ) );
-			}
 			if ( ! $sensitive ) { // not private then add diff content if exists or add actual content if no diff
+
+				if ( $diff_visibility ) {
+					$body = rtbiz_hd_replace_placeholder( $body, '{visibility_diff}', $diff_visibility );
+				} else {
+					$body = rtbiz_hd_replace_placeholder( $body, '{visibility_diff}', rtbiz_hd_get_comment_type( $new_comment_type ) );
+				}
+
 				if ( $diff_followup_content ) {
 					$body = rtbiz_hd_replace_placeholder( $body, '{followup_diff}', $diff_followup_content );
 				} else {
