@@ -55,7 +55,7 @@ jQuery( document ).ready(function () {
                         e.preventDefault();
                         jQuery( '#support-form-filelist' ).html( '' );
                         jQuery( '#rthd_support_attach_ids' ).val( uploadedfiles );
-                        var post_content = jQuery( '#post_description' );
+                        var post_content = jQuery( '#post_description_body' );
                         if ( ! jQuery.trim( post_content.val() ) ) {
                             post_content.css( 'border-color', 'red' );
                         } else {
@@ -106,7 +106,7 @@ jQuery( document ).ready(function () {
                     jQuery( '#support-form-filelist' ).html( '' );
                     jQuery( '#rthd_support_attach_ids' ).val( uploadedfiles );
 
-                    var post_content = jQuery( '#rt-hd-support-page #post_description' );
+                    var post_content = jQuery( '#rt-hd-support-page #post_description_body' );
                     var post_content_html = jQuery( '<div/>', { html: converter.makeHtml( post_content.val() ) } );
                     if ( ! jQuery.trim( post_content.val() ) || ! jQuery.trim( post_content_html.text() ) ) {
                         post_content.css( 'border-color', 'red' );
