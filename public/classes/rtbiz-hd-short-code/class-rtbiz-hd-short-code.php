@@ -224,26 +224,47 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 			if ( ! empty( $arg_shortcode['userid'] ) ) {
 				if ( ! empty( $arg_shortcode['fav'] ) && ( true === $arg_shortcode['fav'] || 'true' == $arg_shortcode['fav'] ) ) {
 					$tickets = rtbiz_hd_get_tickets( 'favourite', $arg_shortcode['userid'], $top, $limit, false );
-					$count   = $tickets->found_posts;
-					$tickets = $tickets->posts;
+					if ( empty( $tickets ) ) {
+						$tickets = array();
+					} else {
+						$count   = $tickets->found_posts;
+						$tickets = $tickets->posts;
+					}
 				} elseif ( $is_staff ) {
+					// get fav tickets
 					$fav = rtbiz_hd_get_tickets( 'favourite', $arg_shortcode['userid'],0 ,0 ,true );
-					$fav = $fav->posts;
+					if ( empty( $fav ) )
+						$fav = array();
+					else
+						$fav = $fav->posts;
+
+					// get assigned tickets
 					$tickets = rtbiz_hd_get_tickets( 'assignee', $arg_shortcode['userid'],0 ,0 ,true );
-					$tickets = $tickets->posts;
+					if ( empty( $tickets ) )
+						$tickets = array();
+					else
+						$tickets = $tickets->posts;
 					$tickets = array_udiff( $tickets, $fav, 'rtbiz_hd_compare_wp_post' );
 					$tickets = array_merge( $fav, $tickets );
 					$count = count( $tickets );
 					$tickets = array_slice( $tickets, $top, $limit, true );
 				} else {
 					$tickets = rtbiz_hd_get_tickets( 'created_by', $arg_shortcode['userid'], $top, $limit, false );
-					$count   = $tickets->found_posts;
-					$tickets = $tickets->posts;
+					if ( empty( $tickets ) ) {
+						$tickets = array();
+					} else {
+						$count   = $tickets->found_posts;
+						$tickets = $tickets->posts;
+					}
 				}
 			} elseif ( ! empty( $arg_shortcode['orderid'] ) ) {
 				$tickets = rtbiz_hd_get_tickets( 'order', $arg_shortcode['orderid'], $top, $limit, false );
-				$count   = $tickets->found_posts;
-				$tickets = $tickets->posts;
+				if ( empty( $tickets ) ) {
+					$tickets = array();
+				} else {
+					$count   = $tickets->found_posts;
+					$tickets = $tickets->posts;
+				}
 				$oder_shortcode = true;
 			}
 
@@ -256,7 +277,7 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 			if ( $first ) {
 				?>
 				<div class="rthd-ticket-list-header"> <?php
-				if ( ! empty( $arg_shortcode['fav'] ) && ! empty( $tickets ) ) {
+				if ( ! empty( $arg_shortcode['fav'] ) ) {
 					if ( 'yes' === $arg_shortcode['title'] ) { ?>
 						<h2 class="rthd-ticket-list-title"><?php _e( 'Favourite Tickets', RTBIZ_HD_TEXT_DOMAIN );
 							echo ( empty( $tickets ) ) ? '' : ' <span class="rthd-count">(<span class="rthd-current-count">' . count( $tickets ) . '</span> of <span class="rthd-count-total">'. $count .'</span>)</span>'; ?></h2>
