@@ -1,0 +1,4 @@
+/*! 
+ * rtBiz Helpdesk JavaScript Library 
+ * @package rtBiz Helpdesk 
+ */jQuery(document).ready(function(a){var b=!1,c={init:function(){c.scroll()},scroll:function(){a(window).scroll(function(){a(window).scrollTop()==a(document).height()-a(window).height()&&c.load_more_helpdesk_ticket()})},load_more_helpdesk_ticket:function(){if(!b){var c={};c.offset=a(".rthd_ticket_short_code tr").length-1,c.offset>=a(".rthd-count-total").html()||(c.short_code_param=rthd_shortcode_params,c.action="rtbiz_hd_load_more_ticket_shortcode",b=!0,loader=a(".rthd-ticket-short-code-loader"),loader.css("display","block"),a.ajax({url:ajaxurl,type:"POST",dataType:"json",data:c,success:function(c){c.status?(a(".rthd_ticket_short_code").append(c.html),count=a(".rthd_ticket_short_code tr").length-1,a(".rthd-current-count").html(count)):console.log(c.msg),b=!1,loader.hide()}}))}}};c.init()});

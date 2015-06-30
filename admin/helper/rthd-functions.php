@@ -1225,7 +1225,7 @@ function rtbiz_hd_is_our_employee( $userid ) {
  *
  * @return bool
  */
-function rtbiz_hd_get_tickets( $key, $value ) {
+function rtbiz_hd_get_tickets( $key, $value, $offset = 0, $limit = 0, $nopaging = true ) {
 
 	$key_array = array( 'created_by', 'assignee', 'subscribe', 'order', 'favourite' );
 
@@ -1236,9 +1236,19 @@ function rtbiz_hd_get_tickets( $key, $value ) {
 	$args = array(
 		'post_type' => Rtbiz_HD_Module::$post_type,
 		'post_status' => 'any',
-		'nopaging' => true,
 		'orderby' => 'modified',
 	);
+
+	if ( $nopaging ) {
+		$args['nopaging'] = true;
+	} else {
+		if ( ! empty( $offset ) ) {
+			$args['offset'] = $offset;
+		}
+		if ( ! empty( $limit ) ) {
+			$args['posts_per_page'] = $limit;
+		}
+	}
 
 	if ( 'created_by' == $key ) {
 		$value = rtbiz_hd_convert_into_userid( $value );
@@ -1307,9 +1317,8 @@ function rtbiz_hd_get_tickets( $key, $value ) {
 			$args['post__in'] = $fav;
 		}
 	}
-	if ( ! empty( $args ) ) {
-		return get_posts( $args );
-	}
+	if ( ! empty( $args ) )
+		return new WP_Query( $args );
 	return false;
 }
 

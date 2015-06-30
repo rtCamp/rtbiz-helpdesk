@@ -370,6 +370,7 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 			} elseif ( isset( $_GET['post_type'] ) && ( 'post-new.php' == $pagenow || 'edit.php' == $pagenow ) ) {
 				$rtbiz_hd_post_type = $_GET['post_type'];
 			}
+			wp_enqueue_script( 'rthd-app-public-js', RTBIZ_HD_URL . 'public/js/helpdesk-shortcode-min.js', array( 'jquery' ), RTBIZ_HD_VERSION, true );
 
 			if ( ( in_array( $pagenow, array( 'edit.php', 'post.php', 'post-new.php' ) ) && Rtbiz_HD_Module::$post_type == $rtbiz_hd_post_type )
 			     || ( in_array( $pagenow, array( 'admin.php', ) ) && Rtbiz_HD_Setup_Wizard::$page_slug == $_REQUEST['page'] ) ) {

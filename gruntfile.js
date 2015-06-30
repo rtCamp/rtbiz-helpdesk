@@ -72,6 +72,12 @@ module.exports = function ( grunt ) {
                     'public/js/vendors/markdown/showdown-prettify.js'
 				],
 				dest: 'public/js/helpdesk-support-min.js'
+			},
+			shortcode: {
+				src: [
+					'public/js/helpdesk-shortcode.js'
+				],
+				dest: 'public/js/helpdesk-shortcode-min.js'
 			}
 		},
 		// Watch for hanges and trigger compass and uglify
@@ -81,7 +87,7 @@ module.exports = function ( grunt ) {
 				tasks: [ 'compass' ]
 			},
 			uglify: {
-				files: [ '<%= uglify.frontend.src %>', '<%= uglify.backend.src %>', '<%= uglify.support.src %>'  ],
+				files: [ '<%= uglify.frontend.src %>', '<%= uglify.backend.src %>', '<%= uglify.support.src %>','<%= uglify.shortcode.src %>'  ],
 				tasks: [ 'uglify' ]
 			}
 		}

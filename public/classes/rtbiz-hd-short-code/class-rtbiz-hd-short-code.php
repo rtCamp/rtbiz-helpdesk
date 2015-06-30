@@ -18,12 +18,33 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 	 */
 	class Rtbiz_HD_Short_Code {
 
+		var $LIMIT = 10;
+
 		/**
 		 * Constructor
 		 */
 		public function __construct() {
 			add_shortcode( 'rtbiz_hd_support_form', array( $this, 'support_form' ) );
 			add_shortcode( 'rtbiz_hd_tickets', array( $this, 'get_tickets' ) );
+			add_action( 'wp_ajax_rtbiz_hd_load_more_ticket_shortcode', array( $this, 'load_more_ticket_shortcode' ) );
+		}
+
+		function load_more_ticket_shortcode() {
+			$response = array( 'status' => false );
+			if ( ! isset( $_POST['short_code_param'] ) ||  empty( $_POST['short_code_param'] ) ) {
+				$response['msg'] = 'Shortcode param missing';
+				echo json_encode( $response );
+				die();
+			}
+			if ( ! isset( $_POST['offset'] ) ||  empty( $_POST['offset'] ) ) {
+				$response['msg'] = 'offset param missing';
+				echo json_encode( $response );
+				die();
+			}
+			$response['status'] = true;
+			$response['html'] = $this->ticket_shortcode_render_ui( $_POST['short_code_param'], $_POST['offset'], $this->LIMIT, false );
+			echo json_encode( $response );
+			die();
 		}
 
 		/**
@@ -143,7 +164,6 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 		 * @return string
 		 */
 		function get_tickets( $atts ) {
-			global $rtbiz_hd_module, $current_user, $redux_helpdesk_settings;
 
 			$arg_shortcode = shortcode_atts(
 				array(
@@ -155,173 +175,213 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 				'title' => 'yes',
 					), $atts );
 
-					$args = array(
-					'post_type' => Rtbiz_HD_Module::$post_type,
-					'post_status' => 'any',
-					'nopaging' => true,
-					);
-					$cap = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' );
+				$args = array(
+				'post_type' => Rtbiz_HD_Module::$post_type,
+				'post_status' => 'any',
+				'nopaging' => true,
+				);
+			?>
 
-					if ( ! empty( $arg_shortcode['email'] ) && empty( $arg_shortcode['userid'] ) ) {
-						if ( '{{logged_in_user}}' == $arg_shortcode['email'] ) {
-							$arg_shortcode['userid'] = $current_user;
-						} else {
-							$person = rtbiz_get_contact_by_email( $arg_shortcode['email'] );
-							$arg_shortcode['userid'] = rtbiz_get_wp_user_for_contact( $person->ID );
-						}
-						if ( is_object( $arg_shortcode['userid'] ) ) {
-							$arg_shortcode['userid'] = $arg_shortcode['userid']->ID;
-						}
-					}
+			<script>
+				var rthd_shortcode_params = <?php echo json_encode( $arg_shortcode ); ?>;
+			</script>
 
-					if ( ! empty( $arg_shortcode['userid'] ) ) {
-						$is_staff = user_can( $arg_shortcode['userid'], $cap );
-					} else {
-						$is_staff = user_can( $current_user, $cap );
-					}
+			<?php
+			return $this->ticket_shortcode_render_ui( $arg_shortcode, 0, $this->LIMIT, true );
+		}
 
-					// if user can not access Helpdesk don't show him fav tickets
-					if ( $arg_shortcode['fav'] ) {
-						if ( ! $is_staff ) {
-							return '';
-						}
-					}
+		function ticket_shortcode_render_ui( $arg_shortcode, $top, $limit, $first ) {
+			global $rtbiz_hd_module, $current_user, $redux_helpdesk_settings;
+			$cap = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' );
 
-					$tickets = array();
-					$oder_shortcode = false;
-					if ( ! empty( $arg_shortcode['userid'] ) ) {
-						if ( ! empty( $arg_shortcode['fav'] ) ) {
-							$tickets = rtbiz_hd_get_tickets( 'favourite', $arg_shortcode['userid'] );
-						} elseif ( $is_staff ) {
-							$fav = rtbiz_hd_get_tickets( 'favourite', $arg_shortcode['userid'] );
-							$tickets = rtbiz_hd_get_tickets( 'assignee', $arg_shortcode['userid'] );
-							$tickets = array_udiff( $tickets, $fav, 'rtbiz_hd_compare_wp_post' );
-							$tickets = array_merge( $fav, $tickets );
-						} else {
-							$tickets = rtbiz_hd_get_tickets( 'created_by', $arg_shortcode['userid'] );
-						}
-					} elseif ( ! empty( $arg_shortcode['orderid'] ) ) {
-						$tickets = rtbiz_hd_get_tickets( 'order', $arg_shortcode['orderid'] );
-						$oder_shortcode = true;
-					}
+			if ( ! empty( $arg_shortcode['email'] ) && empty( $arg_shortcode['userid'] ) ) {
+				if ( '{{logged_in_user}}' == $arg_shortcode['email'] ) {
+					$arg_shortcode['userid'] = $current_user;
+				} else {
+					$person = rtbiz_get_contact_by_email( $arg_shortcode['email'] );
+					$arg_shortcode['userid'] = rtbiz_get_wp_user_for_contact( $person->ID );
+				}
+				if ( is_object( $arg_shortcode['userid'] ) ) {
+					$arg_shortcode['userid'] = $arg_shortcode['userid']->ID;
+				}
+			}
 
-					if ( ! empty( $arg_shortcode['fav'] ) && empty( $tickets ) ) {
-						return '';
-					}
+			if ( ! empty( $arg_shortcode['userid'] ) ) {
+				$is_staff = user_can( $arg_shortcode['userid'], $cap );
+			} else {
+				$is_staff = user_can( $current_user, $cap );
+			}
+
+			// if user can not access Helpdesk don't show him fav tickets
+			if ( ! empty( $arg_shortcode['fav'] ) && ( true === $arg_shortcode['fav'] || 'true' == $arg_shortcode['fav'] ) ) {
+				if ( ! $is_staff ) {
+					return '';
+				}
+			}
+			$tickets = array();
+			$count = 0;
+			$oder_shortcode = false;
+			if ( ! empty( $arg_shortcode['userid'] ) ) {
+				if ( ! empty( $arg_shortcode['fav'] ) && ( true === $arg_shortcode['fav'] || 'true' == $arg_shortcode['fav'] ) ) {
+					$tickets = rtbiz_hd_get_tickets( 'favourite', $arg_shortcode['userid'], $top, $limit, false );
+					$count   = $tickets->found_posts;
+					$tickets = $tickets->posts;
+				} elseif ( $is_staff ) {
+					$fav = rtbiz_hd_get_tickets( 'favourite', $arg_shortcode['userid'],0 ,0 ,true );
+					$fav = $fav->posts;
+					$tickets = rtbiz_hd_get_tickets( 'assignee', $arg_shortcode['userid'],0 ,0 ,true );
+					$tickets = $tickets->posts;
+					$tickets = array_udiff( $tickets, $fav, 'rtbiz_hd_compare_wp_post' );
+					$tickets = array_merge( $fav, $tickets );
+					$count = count( $tickets );
+					$tickets = array_slice( $tickets, $top, $limit, true );
+				} else {
+					$tickets = rtbiz_hd_get_tickets( 'created_by', $arg_shortcode['userid'], $top, $limit, false );
+					$count   = $tickets->found_posts;
+					$tickets = $tickets->posts;
+				}
+			} elseif ( ! empty( $arg_shortcode['orderid'] ) ) {
+				$tickets = rtbiz_hd_get_tickets( 'order', $arg_shortcode['orderid'], $top, $limit, false );
+				$count   = $tickets->found_posts;
+				$tickets = $tickets->posts;
+				$oder_shortcode = true;
+			}
+
+			if ( ! empty( $arg_shortcode['fav'] ) && ( true === $arg_shortcode['fav'] || 'true' === $arg_shortcode['fav'] ) && empty( $tickets ) ) {
+				return '';
+			}
 			?>
 			<?php
 			ob_start();
-			?>
-			<div class="rthd-ticket-list-header"> <?php
-			if ( ! empty( $arg_shortcode['fav'] ) && ! empty( $tickets ) ) {
-				if ( 'yes' === $arg_shortcode['title'] ) { ?>
-					<h2 class="rthd-ticket-list-title"><?php echo __( 'Favourite Tickets', RTBIZ_HD_TEXT_DOMAIN ) . ' <span class="rthd-count">(' . count( $tickets ) . ')</span>'; ?></h2>
-				<?php
-				}
+			if ( $first ) {
+				?>
+				<div class="rthd-ticket-list-header"> <?php
+				if ( ! empty( $arg_shortcode['fav'] ) && ! empty( $tickets ) ) {
+					if ( 'yes' === $arg_shortcode['title'] ) { ?>
+						<h2 class="rthd-ticket-list-title"><?php _e( 'Favourite Tickets', RTBIZ_HD_TEXT_DOMAIN );
+							echo ( empty( $tickets ) ) ? '' : ' <span class="rthd-count">(<span class="rthd-current-count">' . count( $tickets ) . '</span> of <span class="rthd-count-total">'. $count .'</span>)</span>'; ?></h2>
+					<?php
+					}
 
-				if ( 'yes' == $arg_shortcode['show_support_form_link'] ) {
-					global $redux_helpdesk_settings;
-					if ( isset( $redux_helpdesk_settings['rthd_support_page'] ) && ! empty( $redux_helpdesk_settings['rthd_support_page'] ) ) {
-						$page = get_post( $redux_helpdesk_settings['rthd_support_page'] );
-						$link = get_permalink( $page->ID );
+					if ( 'yes' == $arg_shortcode['show_support_form_link'] ) {
+						global $redux_helpdesk_settings;
+						if ( isset( $redux_helpdesk_settings['rthd_support_page'] ) && ! empty( $redux_helpdesk_settings['rthd_support_page'] ) ) {
+							$page = get_post( $redux_helpdesk_settings['rthd_support_page'] );
+							$link = get_permalink( $page->ID );
+							?>
+							<a class="clearfix" href="<?php echo $link; ?>">
+								<button class=""><?php _e( 'Create New Ticket', RTBIZ_HD_TEXT_DOMAIN ) ?></button>
+							</a>
+						<?php
+						}
+					}
+				} else {
+					if ( 'yes' === $arg_shortcode['title'] ) { ?>
+						<h2 class="rthd-ticket-list-title"><?php _e( 'Tickets', RTBIZ_HD_TEXT_DOMAIN );
+						echo ( empty( $tickets ) ) ? '' : ' <span class="rthd-count">(<span class="rthd-current-count">' . count( $tickets ) . '</span> of <span class="rthd-count-total">'. $count .'</span>)</span>'; ?></h2><?php
+					}
+					if ( 'yes' == $arg_shortcode['show_support_form_link'] ) {
+						if ( isset( $redux_helpdesk_settings['rthd_support_page'] ) && ! empty( $redux_helpdesk_settings['rthd_support_page'] ) ) {
+							$page = get_post( $redux_helpdesk_settings['rthd_support_page'] );
+							$link = get_permalink( $page->ID );
+							if ( $oder_shortcode ) {
+								$link = add_query_arg( array( 'order_id' => $arg_shortcode['orderid'] ), $link );
+							} ?>
+							<a class="clearfix" href="<?php echo $link; ?>">
+								<button
+									class="button btn button-primary btn-primary"><?php _e( 'Create New Ticket', RTBIZ_HD_TEXT_DOMAIN ) ?></button>
+							</a>
+						<?php
+						}
+					}
+					if ( empty( $tickets ) && ! $is_staff ) {
+						echo '<p>' . __( 'You have not created any tickets yet. Create one now.', RTBIZ_HD_TEXT_DOMAIN ) . '</p>';
+					} else if ( empty( $tickets ) ) {
+						echo '<p>' . __( 'No tickets found', RTBIZ_HD_TEXT_DOMAIN ) . '</p>';
+					}
+				}
+				//			echo '<div class="rthd-ticket-list">';
+				//			printf( '<p>'._n( 'One Ticket Found', '%d Tickets Found', count( $tickets ), 'my-RT_BIZ_HD_TEXT_DOMAIN-domain' ). '</p>', count( $tickets ) );
+
+				echo '</div>';
+				if ( $is_staff && ! empty( $arg_shortcode['userid'] ) ) {
+					$fav_staff_tickets = rtbiz_hd_get_user_fav_ticket( $arg_shortcode['userid'] );
+					if ( ! empty( $fav ) ) {
 						?>
-						<a class="clearfix" href="<?php echo $link; ?>"><button class=""><?php _e( 'Create New Ticket', RTBIZ_HD_TEXT_DOMAIN ) ?></button></a>
+						<p> <?php _e( 'Your favourite tickets are highlighted below.' ); ?></p>
 					<?php
 					}
 				}
-			} else {
-				if ( 'yes' === $arg_shortcode['title'] ) { ?>
-					<h2 class="rthd-ticket-list-title"><?php _e( 'Tickets', RTBIZ_HD_TEXT_DOMAIN );
-						echo ( empty( $tickets ) ) ? '' : ' <span class="rthd-count">(' . count( $tickets ) . ')</span>'; ?></h2><?php
-				}
-				if ( 'yes' == $arg_shortcode['show_support_form_link'] ) {
-					if ( isset( $redux_helpdesk_settings['rthd_support_page'] ) && ! empty( $redux_helpdesk_settings['rthd_support_page'] ) ) {
-						$page = get_post( $redux_helpdesk_settings['rthd_support_page'] );
-						$link = get_permalink( $page->ID );
-						if ( $oder_shortcode ) {
-							$link = add_query_arg( array( 'order_id' => $arg_shortcode['orderid'] ), $link );
-						} ?>
-						<a class="clearfix" href="<?php echo $link; ?>"><button class="button btn button-primary btn-primary"><?php _e( 'Create New Ticket', RTBIZ_HD_TEXT_DOMAIN ) ?></button></a>
-					<?php
-					}
-				}
-				if ( empty( $tickets ) && ! $is_staff ) {
-					echo '<p>'.__( 'You have not created any tickets yet. Create one now.', RTBIZ_HD_TEXT_DOMAIN ).'</p>';
-				} else if ( empty( $tickets ) ) {
-					echo '<p>'.__( 'No tickets found', RTBIZ_HD_TEXT_DOMAIN ).'</p>';
-				}
-			}
-			//			echo '<div class="rthd-ticket-list">';
-			//			printf( '<p>'._n( 'One Ticket Found', '%d Tickets Found', count( $tickets ), 'my-RT_BIZ_HD_TEXT_DOMAIN-domain' ). '</p>', count( $tickets ) );
 
-			echo '</div>';
-			if ( $is_staff && ! empty( $arg_shortcode['userid'] ) ) {
-				$fav_staff_tickets = rtbiz_hd_get_user_fav_ticket( $arg_shortcode['userid'] );
-				if ( ! empty( $fav ) ) {
-					?>
-					<p> <?php _e( 'Your favourite tickets are highlighted below.' ); ?></p>
+				if ( is_admin() && ! empty( $tickets ) && $oder_shortcode ) { ?>
+					<p> <?php _e( 'Below are the all the tickets created by this customer. The tickets for this order are highlighted.', RTBIZ_HD_TEXT_DOMAIN ); ?></p>
 				<?php
 				}
-			}
-
-			if ( is_admin() && ! empty( $tickets ) && $oder_shortcode ) { ?>
-				<p> <?php _e( 'Below are the all the tickets created by this customer. The tickets for this order are highlighted.', RTBIZ_HD_TEXT_DOMAIN ); ?></p>
-			<?php
 			}
 			if ( ! empty( $tickets ) ) {
-				?>
-				<table class="wp-list-table striped widefat shop_table my_account_orders rthd_ticket_short_code">
-				<thead>
+				if ( $first ) {
+					?>
+					<table class="wp-list-table striped widefat shop_table my_account_orders rthd_ticket_short_code">
+					<thead>
 					<tr>
 						<th>Ticket ID</th>
 						<th>Title</th>
 						<th>Last Updated</th>
 						<th>Status</th>
-						<?php echo ( $is_staff )?'<th>Edit</th>':''; ?>
+						<?php echo ( $is_staff ) ? '<th>Edit</th>' : ''; ?>
 					</tr>
 					</thead>
-					<?php
-					foreach ( $tickets as $ticket ) {
-						$highlight_class = '';
-
-						if ( $is_staff && ! empty( $fav_staff_tickets ) ) {
-							if ( in_array( $ticket->ID, $fav_staff_tickets ) ) {
-								$highlight_class = 'rthd_highlight_row';
-							}
-						}
-						if ( $oder_shortcode && is_admin() ) {
-							$hd_order_by = get_post_meta( $ticket->ID, '_rtbiz_hd_order_id', true );
-							$order_by = $arg_shortcode['orderid'];
-
-							if ( $hd_order_by == $order_by ) {
-								$highlight_class = 'rthd_highlight_row';
-							}
-						}
-						$date = new DateTime( $ticket->post_modified );
-						?>
-						<tr class="<?php echo $highlight_class; ?>">
-							<td><a class="support"
-							       href="<?php echo esc_url( ( rtbiz_hd_is_unique_hash_enabled() ) ? rtbiz_hd_get_unique_hash_url( $ticket->ID ) : get_post_permalink( $ticket->ID ) ); ?>"> #<?php echo esc_attr( $ticket->ID ) ?> </a></td>
-							<td><?php echo $ticket->post_title; ?></td>
-							<td> <?php echo esc_attr( human_time_diff( $date->format( 'U' ), current_time( 'timestamp' ) ) ) . esc_attr( __( ' ago' ) ) ?> </td>
-							<td>
-								<?php
-								if ( ! empty( $ticket->post_status ) ) {
-									echo rtbiz_hd_status_markup( $ticket->post_status );
-								}
-								?>
-							</td>
-							<?php if ( current_user_can( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' ) ) || $ticket->post_author == $current_user->ID ) { ?>
-							<td>
-									<a class="support" target="_blank"
-									   href="<?php echo get_edit_post_link( $ticket->ID ); ?>"><span class="dashicons dashicons-edit"></span></a>
-							</td>
-							<?php } ?>
-						</tr>
-					<?php }
-				?>
-				</table>
 				<?php
+				}
+
+				foreach ( $tickets as $ticket ) {
+					$highlight_class = '';
+
+					if ( $is_staff && ! empty( $fav_staff_tickets ) ) {
+						if ( in_array( $ticket->ID, $fav_staff_tickets ) ) {
+							$highlight_class = 'rthd_highlight_row';
+						}
+					}
+					if ( $oder_shortcode && is_admin() ) {
+						$hd_order_by = get_post_meta( $ticket->ID, '_rtbiz_hd_order_id', true );
+						$order_by    = $arg_shortcode['orderid'];
+
+						if ( $hd_order_by == $order_by ) {
+							$highlight_class = 'rthd_highlight_row';
+						}
+					}
+					$date = new DateTime( $ticket->post_modified );
+					?>
+					<tr class="<?php echo $highlight_class; ?>">
+						<td><a class="support"
+						       href="<?php echo esc_url( ( rtbiz_hd_is_unique_hash_enabled() ) ? rtbiz_hd_get_unique_hash_url( $ticket->ID ) : get_post_permalink( $ticket->ID ) ); ?>">
+								#<?php echo esc_attr( $ticket->ID ) ?> </a></td>
+						<td><?php echo $ticket->post_title; ?></td>
+						<td> <?php echo esc_attr( human_time_diff( $date->format( 'U' ), current_time( 'timestamp' ) ) ) . esc_attr( __( ' ago' ) ) ?> </td>
+						<td>
+							<?php
+							if ( ! empty( $ticket->post_status ) ) {
+								echo rtbiz_hd_status_markup( $ticket->post_status );
+							}
+							?>
+						</td>
+						<?php if ( current_user_can( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' ) ) || $ticket->post_author == $current_user->ID ) { ?>
+							<td>
+								<a class="support" target="_blank"
+								   href="<?php echo get_edit_post_link( $ticket->ID ); ?>"><span
+										class="dashicons dashicons-edit"></span></a>
+							</td>
+						<?php } ?>
+					</tr>
+				<?php }
+				if ( $first ) {
+					?>
+				</table>
+				<img class="rthd-ticket-short-code-loader helpdeskspinner"
+								               src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
+				<?php
+
+				}
 			}
 			$html_content = ob_get_clean();
 			return $html_content;
