@@ -305,7 +305,12 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 					$results          = Rtbiz_HD_Utils::get_hd_rtcamp_user();
 					// Not all meta key is needed to map.
 					// $meta_key_results = $wpdb->get_results( " select distinct meta_key from $wpdb->postmeta inner join $wpdb->posts on post_id=ID and post_type='" . $post_type . "' and  not meta_key like '\_%' order by meta_key" );
-					$meta_key_results = $wpdb->get_results( "select distinct meta_key from $wpdb->postmeta inner join $wpdb->posts on post_id=ID and post_type='" . $post_type . "' and meta_key in('_rtbiz_hd_order_id', '_rtbiz_hd_order_link' ,'_rtbiz_hd_order_type' ,'_rtbiz_hd_ticket_adult_content') order by meta_key" );
+					$meta_keys = array( '_rtbiz_hd_order_id', '_rtbiz_hd_order_link' ,'_rtbiz_hd_order_type' ,'_rtbiz_hd_ticket_adult_content' );
+					$meta_key_results = array();
+					foreach ( $meta_keys as $key ) {
+						$meta_key_results[] = (object) array( 'meta_key' => $key );
+					}
+
 					$arr_assignedto = array();
 					if ( ! empty( $results ) ) {
 						// Name is your custom field key
