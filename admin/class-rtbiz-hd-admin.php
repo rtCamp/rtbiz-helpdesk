@@ -373,7 +373,7 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 			wp_enqueue_script( 'rthd-app-public-js', RTBIZ_HD_URL . 'public/js/helpdesk-shortcode-min.js', array( 'jquery' ), RTBIZ_HD_VERSION, true );
 
 			if ( ( in_array( $pagenow, array( 'edit.php', 'post.php', 'post-new.php' ) ) && Rtbiz_HD_Module::$post_type == $rtbiz_hd_post_type )
-			     || ( in_array( $pagenow, array( 'admin.php', ) ) && Rtbiz_HD_Setup_Wizard::$page_slug == $_REQUEST['page'] ) ) {
+			     || ( in_array( $pagenow, array( 'admin.php' ) ) && Rtbiz_HD_Setup_Wizard::$page_slug == $_REQUEST['page'] ) ) {
 
 				if ( isset( $post->post_type ) && $post->post_type == Rtbiz_HD_Module::$post_type ) {
 
@@ -391,7 +391,7 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 					'jquery-ui-position',
 				), '1.9.2' );
 
-				wp_enqueue_media();
+				//				wp_enqueue_media();
 
 				wp_enqueue_script( RTBIZ_HD_TEXT_DOMAIN . 'admin-js', RTBIZ_HD_URL . 'admin/js/helpdesk-admin-min.js', array( 'jquery' ), RTBIZ_HD_VERSION, true );
 
