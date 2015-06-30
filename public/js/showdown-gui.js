@@ -115,7 +115,7 @@ jQuery( document ).ready(function () {
             peviewPane.scrollTop = 0;
         },
         supportPage: function(){
-            var inputPane = jQuery( '#rt-hd-support-page').find('#post_description_body');
+            var inputPane = jQuery( '#rt-hd-support-page').find('#post_description');
             var peviewPane = jQuery( '#rt-hd-support-page').find( '#post_description_html' );
             var outputPane = jQuery( '#rt-hd-support-page').find( '#post_description_html_text' );
 
@@ -137,7 +137,7 @@ jQuery( document ).ready(function () {
 
             rthd_markdown.convertText( inputPane, peviewPane, outputPane );
 
-            inputPane.focus();
+            //inputPane.focus();
 
             //previewPane.scrollTop = 0;
             peviewPane.scrollTop = 0;

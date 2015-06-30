@@ -86,7 +86,7 @@
 		<div id="post_description_html" class="pane markdown_preview_container"><noscript><h2>You'll need to enable Javascript to use this tool.</h2></noscript></div>
 		<div class="rthd-followup-content-container">
 			<textarea id="post_description_html_text" placeholder="Description" name="post[description_html]" class="post_description"><?php echo isset( $_POST['post']['description_html'] ) ? $_POST['post']['description_html'] : ''; ?></textarea>
-			<textarea id="post_description_body" placeholder="Description" rows="5" cols="20" name="post[description]" class="post_description" required><?php echo isset( $_POST['post']['description'] ) ? $_POST['post']['description'] : ''; ?></textarea>
+			<textarea id="post_description" placeholder="Description" rows="5" cols="20" name="post[description]" class="post_description" required><?php echo isset( $_POST['post']['description'] ) ? $_POST['post']['description'] : ''; ?></textarea>
 		</div>
 	</div>
 	<div id="rthd-followup-form" class="clearfix">
