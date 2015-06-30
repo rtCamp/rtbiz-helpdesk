@@ -1500,10 +1500,6 @@ function rtbiz_hd_get_default_email_template( $key = '', $all = false ) {
 			<div style="color: #888888; font-size: 14px;">
 				A <strong>private</strong> {followup_type}followup has been edited by <strong>{followup_updated_by}</strong>.Please go to ticket to view content.{ticket_link}
 			</div>
-			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0;" />
-			<div style="font-size: 16px; line-height: 26px; color: #888888;">
-				Visibility: <div style="color: #333333; ">{visibility_diff}</div>
-			</div>
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
 
 	$redux['rthd_email_template_followup_updated'] = '
