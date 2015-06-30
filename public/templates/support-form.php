@@ -20,7 +20,7 @@
 	<?php if ( $product_exists ) { ?>
 		<div>
 			<select name="post[product_id]" required>
-				<option value="">Choose Product</option>
+				<option value=""><?php echo apply_filters( 'rtbiz_hd_support_from_product_title', 'Choose Product' ); ?></option>
 				<?php echo balanceTags( $product_option ); ?>
 			</select>
 		</div>
