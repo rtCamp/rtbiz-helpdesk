@@ -137,7 +137,7 @@ jQuery( document ).ready(function () {
 
             rthd_markdown.convertText( inputPane, peviewPane, outputPane );
 
-            inputPane.focus();
+            //inputPane.focus();
 
             //previewPane.scrollTop = 0;
             peviewPane.scrollTop = 0;
