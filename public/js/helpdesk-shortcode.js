@@ -10,12 +10,14 @@ jQuery( document ).ready(function ($) {
 			rthdShortcode.scroll();
 		},
 		scroll : function (){
-			$( window ).scroll( function () {
-				if ( $( window ).scrollTop() == $( document ).height() - $( window ).height() ) {
-					// run our call for pagination
-					rthdShortcode.load_more_helpdesk_ticket();
-				}
-			} );
+			if ( typeof rthd_shortcode_params !== 'undefined' ) {
+				$( window ).scroll( function () {
+					if ( $( window ).scrollTop() == $( document ).height() - $( window ).height() ) {
+						// run our call for pagination
+						rthdShortcode.load_more_helpdesk_ticket();
+					}
+				} );
+			}
 		},
 
 		load_more_helpdesk_ticket : function () {
