@@ -64,7 +64,8 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 
 		public function rthd_ticket_listing_metabox( $post ) {
 			//if ( ! empty( $_REQUEST['module'] ) && RTBIZ_HD_TEXT_DOMAIN == $_REQUEST['module'] ) {
-				$user = rtbiz_get_wp_user_for_contact( $post->ID );
+			$user = rtbiz_get_wp_user_for_contact( $post->ID );
+			var_dump( $user );
 				if ( empty($user[0]) ) {
 					return;
 				}
@@ -84,7 +85,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 				}
 				$_GET['fall_back'] = 'yes';
 				if ( isset( $_GET['contact_group'] ) && 'customer' == $_GET['contact_group'] && isset( $_REQUEST['tickets'] ) ) {
-					$sql = "SELECT DISTINCT p2p_from FROM $wpdb->postmeta, $wpdb->p2p WHERE `meta_key` = '_rtbiz_hd_created_by' and meta_value = p2p_to and p2p_type = '" . rtbiz_get_contact_post_type() . "_to_user'";
+					$sql = "SELECT DISTINCT p2p_from FROM $wpdb->post, $wpdb->postmeta, $wpdb->p2p WHERE post_id = id and post_status <> 'trash' and `meta_key` = '_rtbiz_hd_created_by' and meta_value = p2p_to and p2p_type = '" . rtbiz_get_contact_post_type() . "_to_user'";
 					$contacts_with_ticket = $wpdb->get_col( $sql );
 					if ( empty( $contacts_with_ticket ) ) {
 						$contacts_with_ticket = array( -1 );
