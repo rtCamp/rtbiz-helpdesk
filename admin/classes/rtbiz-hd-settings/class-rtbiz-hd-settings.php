@@ -418,7 +418,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 				'fields'      => array(
 					array(
 						'id'         => 'rthd_notification_emails',
-						'title'      => __( 'Notification Emails' ),
+						'title'      => __( 'Email Addresses' ),
 						'subtitle'   => __( 'Email addresses to be notified on events' ),
 						'desc'       => __( 'These email addresses will be notified of the events that occurs in HelpDesk Systems. This is a global list. All the subscribers also will be notified along with this list.' ),
 						'type'       => 'multi_text',
@@ -430,7 +430,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					array(
 						'id'       => 'rthd_enable_notification_acl',
 						'type'     => 'switch',
-						'title'    => __( 'Notification' ),
+						'title'    => __( 'Notification Events' ),
 						'subtitle' => __( 'To enable/disable Notification' ),
 						'default'  => true,
 						'on'       => __( 'Enable' ),
@@ -444,7 +444,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					),
 					array(
 						'id'      => 'rthd_notification_acl_client_events',
-						'title'   => __( 'Notification Event for Client [ Contact ] ' ),
+						'title'   => __( 'Notification Event for Customer ' ),
 						'type'    => 'checkbox',
 						'default' => array(
 							'new_ticket_created_mail'   => '1',
@@ -486,7 +486,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					),
 					array(
 						'id'      => 'rthd_notification_acl_staff_events',
-						'title'   => __( 'Notification Event for Staff [ Subscriber ]' ),
+						'title'   => __( 'Notification Event for Staff' ),
 						'type'    => 'checkbox',
 						'default' => array(
 							'new_ticket_created_mail'              => '1',
@@ -511,7 +511,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					),
 					array(
 						'id'      => 'rthd_notification_acl_group_events',
-						'title'   => __( 'Notification Event for Group [ Global ]' ),
+						'title'   => __( 'Notification Event for Group' ),
 						'type'    => 'checkbox',
 						'default' => array(
 							'new_ticket_created_mail'              => '1',
