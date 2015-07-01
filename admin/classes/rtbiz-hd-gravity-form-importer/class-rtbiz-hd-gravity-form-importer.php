@@ -773,6 +773,9 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 		function create_tickets_from_map_data( $map_data, $gravity_lead_id, $type ) {
 
 			global $rtbiz_importer;
+			if ( ! empty( $map_data['mapSource'] ) ) {
+				$gravity_from = GFFormsModel::get_form( $map_data['mapSource'] );
+			}
 
 			$contactemail = array();
 			$description  = '';
@@ -856,7 +859,11 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 				if ( 'csv' === $type ) {
 					$title = 'CSV Entry ' . $gravity_lead_id;
 				} else {
-					$title = 'Gravity Entry ' . $gravity_lead_id;
+					if ( isset( $gravity_from ) ){
+						$title = $gravity_from->title . ' - ' . $gravity_lead_id;
+					} else {
+						$title = 'Gravity Entry ' . $gravity_lead_id;
+					}
 				}
 			}
 
