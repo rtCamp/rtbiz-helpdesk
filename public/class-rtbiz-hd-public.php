@@ -35,6 +35,7 @@ class Rtbiz_HD_Public {
 		global $wp_query, $post;
 
 		wp_enqueue_script( 'rthd-app-public-js', RTBIZ_HD_URL . 'public/js/helpdesk-shortcode-min.js', array( 'jquery' ), RTBIZ_HD_VERSION, true );
+		wp_localize_script( 'rthd-app-js', 'ajaxurl', admin_url( 'admin-ajax.php' ) );
 
 		// bail if not helpdesk
 		if ( ! isset( $wp_query->query_vars['post_type'] ) || $wp_query->query_vars['post_type'] != Rtbiz_HD_Module::$post_type || empty( $post ) ) {
@@ -69,7 +70,6 @@ class Rtbiz_HD_Public {
 		}
 
 		if ( wp_script_is( 'rthd-app-js' ) ) {
-			wp_localize_script( 'rthd-app-js', 'ajaxurl', admin_url( 'admin-ajax.php' ) );
 			wp_localize_script( 'rthd-app-js', 'rtbiz_hd_post_type', get_post_type( $post->ID ) );
 		}
 
