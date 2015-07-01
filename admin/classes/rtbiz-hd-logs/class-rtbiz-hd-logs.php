@@ -27,7 +27,7 @@ if ( ! class_exists( 'Rtbiz_HD_Logs' ) ) {
 			if ( ! isset( $_REQUEST['generate_log'] ) ) {
 				?>
 				<p class="redux-container-multi_text rthd_log"><span
-						class="redux-multi-text-remove"><?php _e( 'Log generation is a heavy process. So please be patient.' ); ?></span>
+						class="redux-multi-text-remove" style="margin-left: 0;"><?php _e( 'Log generation is a heavy process. So please be patient.' ); ?></span>
 				</p>
 				<a class="button rthd-generate-log-button"
 				   href="<?php echo esc_url( add_query_arg( 'generate_log', 'yes' ) ); ?>"><?php _e( 'Generate Log' ); ?></a>

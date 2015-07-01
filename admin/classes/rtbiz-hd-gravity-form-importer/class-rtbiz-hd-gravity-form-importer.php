@@ -86,7 +86,7 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 					'multiple'     => false,
 					'type'         => 'any',
 				),
-				'ticketmeta'   => array(
+			/*	'ticketmeta'   => array(
 					'display_name' => 'Ticket Meta',
 					'slug'         => 'ticketmeta',
 					'required'     => false,
@@ -101,7 +101,7 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 					'multiple'     => false,
 					'type'         => 'date',
 				),
-			/*	'modifydate'   => array(
+				'modifydate'   => array(
 					'display_name' => 'Last Modified On',
 					'slug'         => 'modifydate',
 					'required'     => false,
@@ -172,7 +172,7 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 					'display_name' => 'Contact Email',
 					'slug'         => 'contactemail',
 					'required'     => true,
-					'multiple'     => true,
+					'multiple'     => false,
 					'type'         => 'email',
 				),
 		/*		'contactfirstname' => array(
