@@ -101,7 +101,7 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 					'multiple'     => false,
 					'type'         => 'date',
 				),
-				'modifydate'   => array(
+			/*	'modifydate'   => array(
 					'display_name' => 'Last Modified On',
 					'slug'         => 'modifydate',
 					'required'     => false,
@@ -123,7 +123,7 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 					'multiple'      => false,
 					'type'          => 'defined',
 					'definedsource' => 'arr_ticketstatus',
-				),
+				), */
 			);
 
 			$attributes = rtbiz_hd_get_attributes( Rtbiz_HD_Module::$post_type );
@@ -168,7 +168,14 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 					'multiple'     => false,
 					'type'         => 'text',
 				),
-				'contactfirstname' => array(
+				'contactemail'     => array(
+					'display_name' => 'Contact Email',
+					'slug'         => 'contactemail',
+					'required'     => true,
+					'multiple'     => true,
+					'type'         => 'email',
+				),
+		/*		'contactfirstname' => array(
 					'display_name' => 'Contact First Name',
 					'slug'         => 'contactfirstname',
 					'required'     => false,
@@ -196,13 +203,6 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 					'multiple'     => false,
 					'type'         => 'text',
 				),
-				'contactemail'     => array(
-					'display_name' => 'Contact Email',
-					'slug'         => 'contactemail',
-					'required'     => true,
-					'multiple'     => true,
-					'type'         => 'email',
-				),
 				'contactskypeid'   => array(
 					'display_name' => 'Contact Skype Id',
 					'slug'         => 'contactskypeid',
@@ -223,7 +223,7 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 					'required'     => false,
 					'multiple'     => true,
 					'type'         => 'any',
-				),
+				),*/
 			);
 			$ticket_field = array_merge( $ticket_field, $temp_arr );
 
