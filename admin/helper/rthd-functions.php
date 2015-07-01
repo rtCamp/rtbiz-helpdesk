@@ -670,7 +670,7 @@ function rtbiz_hd_render_comment( $comment, $user_edit, $type = 'right', $echo =
 			<?php echo get_avatar( $comment->comment_author_email, 48 ); ?>
 		</div>
 		<div class="rthd-messages">
-			<div class="followup-information"> <?php
+			<div class="followup-information clearfix"> <?php
 				if ( current_user_can( $cap ) ) {
 					$commentAuthorLink = '<a class="rthd-ticket-author-link" href="' . rtbiz_hd_biz_user_profile_link( $comment->comment_author_email ) . '">' . $comment->comment_author . '</a>';
 				} else {

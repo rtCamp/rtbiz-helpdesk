@@ -36,7 +36,7 @@ $user_edit_content = $staffonly|| ( get_current_user_id() == $post->$created_by 
 				<?php echo get_avatar( $authoremail, 48 ); ?>
 			</div>
 			<div class="rthd-messages ticketcontent">
-				<div class="followup-information">
+				<div class="followup-information clearfix">
 					<?php
 					if ( $staffonly ) {
 						$autherLink = '<a class="rthd-ticket-author-link" href="' . rtbiz_hd_biz_user_profile_link( $authoremail ) . '">' . $authorname . '</a>';
