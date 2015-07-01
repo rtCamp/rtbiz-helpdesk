@@ -37,7 +37,7 @@ if ( ! empty( $post->post_content ) ) {
 				<?php echo get_avatar( $authoremail, 48 ); ?>
 			</div>
 			<div class="rthd-messages ticketcontent">
-				<div class="followup-information">
+				<div class="followup-information clearfix">
 					<?php
 					if ( $staffonly ) {
 						$autherLink = '<a class="rthd-ticket-author-link" href="' . rtbiz_hd_biz_user_profile_link( $authoremail ) . '">' . $authorname . '</a>';
