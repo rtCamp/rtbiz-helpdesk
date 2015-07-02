@@ -102,7 +102,7 @@ if ( ! class_exists( 'Rtbiz_HD_Logs' ) ) {
 			$taxmeta   = $wpdb->prefix . 'taxonomymeta';
 			$post_type = Rtbiz_HD_Module::$post_type;
 
-			$sql = $wpdb->prepare( 'select gf2.meta_value as trans_id from ' . RGFormsModel::get_lead_meta_table_name() . ' as gf1, ' . RGFormsModel::get_lead_meta_table_name() . " as gf2 where gf1.meta_key LIKE 'helpdesk-" . $post_type . "-post-id' and gf2.meta_key LIKE '_transaction_id' and gf1.lead_id = gf2.lead_id group by convert( gf2.meta_value, UNSIGNED INTEGER) order by convert( gf2.meta_value, UNSIGNED INTEGER) desc limit %d, %d", $left, $size );
+			$sql = $wpdb->prepare( 'select gf2.meta_value as trans_id, gf1.lead_id as lead_id from ' . RGFormsModel::get_lead_meta_table_name() . ' as gf1, ' . RGFormsModel::get_lead_meta_table_name() . " as gf2 where gf1.meta_key LIKE 'helpdesk-" . $post_type . "-post-id' and gf2.meta_key LIKE '_transaction_id' and gf1.lead_id = gf2.lead_id group by convert( gf2.meta_value, UNSIGNED INTEGER) order by convert( gf2.meta_value, UNSIGNED INTEGER) desc limit %d, %d", $left, $size );
 			//$sql         = $wpdb->prepare( "select p.meta_value as trans_id from (select distinct meta_value from $wpdb->posts as p left join $wpdb->postmeta as m on p.ID = m.post_id where p.post_type=$post_type m.meta_key like '_transaction_id' order by convert(meta_value, UNSIGNED INTEGER) desc limit %d, %d) as p;", $left, $size );
 			$result = $wpdb->get_results( $sql );
 			?>
@@ -113,24 +113,24 @@ if ( ! class_exists( 'Rtbiz_HD_Logs' ) ) {
 					<th>
 						<?php _e( 'Transaction Id', RTBIZ_HD_TEXT_DOMAIN ); ?>
 					</th>
-					<!--					<th>-->
-					<!--						--><?php //_e( 'Title', RT_BIZ_HD_TEXT_DOMAIN ); ?>
-					<!--					</th>-->
-					<th>
-						<?php _e( 'First Date', RTBIZ_HD_TEXT_DOMAIN ); ?>
+										<th>
+											<?php _e( 'Form name', RTBIZ_HD_TEXT_DOMAIN ); ?>
+										</th>
+		<!--			<th>
+						<?php /*_e( 'First Date', RTBIZ_HD_TEXT_DOMAIN ); */?>
 					</th>
 					<th>
-						<?php _e( 'Last Date', RTBIZ_HD_TEXT_DOMAIN ); ?>
-					</th>
+						<?php /*_e( 'Last Date', RTBIZ_HD_TEXT_DOMAIN ); */?>
+					</th>-->
 					<th>
 						<?php _e( 'Post Count', RTBIZ_HD_TEXT_DOMAIN ); ?>
 					</th>
-					<th>
-						<?php _e( 'Taxonomy Count', RTBIZ_HD_TEXT_DOMAIN ); ?>
+				<!--	<th>
+						<?php /*_e( 'Taxonomy Count', RTBIZ_HD_TEXT_DOMAIN ); */?>
 					</th>
 					<th>
-						<?php _e( 'Transaction Start Time', RTBIZ_HD_TEXT_DOMAIN ); ?>
-					</th>
+						<?php /*_e( 'Transaction Start Time', RTBIZ_HD_TEXT_DOMAIN ); */?>
+					</th>-->
 					<!--<th>
 
 					</th>-->
@@ -144,40 +144,45 @@ if ( ! class_exists( 'Rtbiz_HD_Logs' ) ) {
 						<td>
 							<?php echo esc_attr( $rslt->trans_id ); ?>
 						</td>
-						<!--						<td>-->
-						<!--							--><?php
-						//								$title = $wpdb->get_var( "select a.post_title from $wpdb->posts a left join $wpdb->postmeta b on b.post_id=a.id where b.meta_value=$rslt->trans_id and b.post_id=$rslt->post_id limit 1" );
-						//								echo ( ! empty( $title ) ) ? $title : "-NA-";
-						//							?>
-						<!--						</td>-->
 						<td>
 							<?php
-							$first_date = $wpdb->get_var( "select a.post_date from $wpdb->posts a left join $wpdb->postmeta b on b.post_id=a.id where b.meta_value=$rslt->trans_id order by a.post_date asc limit 1" );
+							$form = RGFormsModel::get_form( RGFormsModel::get_lead( $rslt->lead_id )['form_id'] );
+							echo isset( $form->title ) && isset( $form->id )?'<a href="' . admin_url( 'admin.php?page=gf_edit_forms&id=' . $form->id ) .'">'.$form->title .'</a>': 'N/A' ;?>
+						</td>
+<!--												<td>-->
+<!--													--><?php
+//														$title = $wpdb->get_var( "select a.post_title from $wpdb->posts a left join $wpdb->postmeta b on b.post_id=a.id where b.meta_value=$rslt->trans_id and b.post_id=$rslt->post_id limit 1" );
+//														echo ( ! empty( $title ) ) ? $title : "-NA-";
+//													?>
+<!--												</td>-->
+					<!--	<td>
+							<?php
+/*							$first_date = $wpdb->get_var( "select a.post_date from $wpdb->posts a left join $wpdb->postmeta b on b.post_id=a.id where b.meta_value=$rslt->trans_id order by a.post_date asc limit 1" );
 							echo ( ! empty( $first_date ) ) ? $first_date : '-NA-';
-							?>
+							*/?>
 						</td>
 						<td>
 							<?php
-							$last_date = $wpdb->get_var( "select a.post_date from $wpdb->posts a left join $wpdb->postmeta b on b.post_id=a.id where b.meta_value=$rslt->trans_id order by a.post_date desc limit 1" );
+/*							$last_date = $wpdb->get_var( "select a.post_date from $wpdb->posts a left join $wpdb->postmeta b on b.post_id=a.id where b.meta_value=$rslt->trans_id order by a.post_date desc limit 1" );
 							echo ( ! empty( $last_date ) ) ? $last_date : '-NA-';
-							?>
-						</td>
+							*/?>
+						</td>-->
 						<td>
 							<?php
 							$post_count = $wpdb->get_var( "select count(*) as post_count from $wpdb->postmeta where meta_value like $rslt->trans_id" );
-							echo ( ! empty( $post_count ) ) ? $post_count : '-NA-';
+							echo ( ! empty( $post_count ) ) ? '<a target="_blank" href="'.admin_url( 'edit.php?post_type='.Rtbiz_HD_Module::$post_type.'&trans-id='.$rslt->trans_id ).'">'.$post_count.'</a>': '-NA-';
 							?>
 						</td>
-						<td>
-							<?php
-							$tax_count = $wpdb->get_var( "select count(*) as tax_count from $taxmeta where meta_value like $rslt->trans_id" );
-							echo ( ! empty( $tax_count ) ) ? $tax_count : '-NA-';
-							?>
-						</td>
-						<td>
-							<?php echo esc_attr( date( 'Y-m-d H:i:s', intval( $rslt->trans_id ) ) );
-							?>
-						</td>
+<!--						<td>-->
+<!--							--><?php
+//							$tax_count = $wpdb->get_var( "select count(*) as tax_count from $taxmeta where meta_value like $rslt->trans_id" );
+//							echo ( ! empty( $tax_count ) ) ? $tax_count : '-NA-';
+//							?>
+<!--						</td>-->
+						<!--<td>
+							<?php /*echo esc_attr( date( 'Y-m-d H:i:s', intval( $rslt->trans_id ) ) );
+							*/?>
+						</td>-->
 						<!--<td>
 							<a class="revertChanges"
 							   href="edit.php?post_type=rt_ticket&page=rthd-settings&transa_id=<?php /*echo esc_attr( $rslt->trans_id ); */ ?>"

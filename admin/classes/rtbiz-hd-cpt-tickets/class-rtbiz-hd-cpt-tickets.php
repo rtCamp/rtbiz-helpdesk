@@ -568,6 +568,15 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 					) );
 				}
 
+				if ( isset( $_GET['trans-id'] ) && intval( $_GET['trans-id'] ) ) {
+					$query->set( 'meta_query', array(
+						array(
+							'key' => '_rtbiz_hd_transaction_id',
+							'value' => $_GET['trans-id'],
+						),
+					) );
+				}
+
 				if ( isset( $_GET['order-id'] ) && intval( $_GET['order-id'] ) ) {
 					$query->set( 'meta_query', array(
 						array(
