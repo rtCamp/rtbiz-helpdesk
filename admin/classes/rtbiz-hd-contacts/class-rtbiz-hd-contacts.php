@@ -65,7 +65,6 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		public function rthd_ticket_listing_metabox( $post ) {
 			//if ( ! empty( $_REQUEST['module'] ) && RTBIZ_HD_TEXT_DOMAIN == $_REQUEST['module'] ) {
 			$user = rtbiz_get_wp_user_for_contact( $post->ID );
-			var_dump( $user );
 				if ( empty($user[0]) ) {
 					return;
 				}
