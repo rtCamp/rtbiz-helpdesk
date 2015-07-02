@@ -208,6 +208,12 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 			if ( ! empty( $_REQUEST['module'] ) && ! empty( $postid ) && get_post_type( $postid ) == rtbiz_get_contact_post_type() ) {
 				$url = esc_url( add_query_arg( 'module', $_REQUEST['module'], $url ) );
 			}
+
+			global $pagenow;
+			if ( 'users.php' == $pagenow && ! empty( $postid ) && get_post_type( $postid ) == rtbiz_get_contact_post_type() ) {
+				$url = esc_url( add_query_arg( 'module', RTBIZ_HD_TEXT_DOMAIN, $url ) );
+			}
+
 			return $url;
 		}
 
