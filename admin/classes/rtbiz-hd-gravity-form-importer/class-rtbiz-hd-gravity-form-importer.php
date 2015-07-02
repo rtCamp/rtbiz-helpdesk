@@ -782,6 +782,9 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 			$assignedto   = false;
 
 			extract( $map_data, EXTR_OVERWRITE );
+			if ( ! is_array( $contactemail ) && ! empty( $contactemail ) ) {
+				$contactemail = array( array( 'value' => $contactemail ) );
+			}
 
 			global $transaction_id;
 			if ( empty( $transaction_id ) ) {
