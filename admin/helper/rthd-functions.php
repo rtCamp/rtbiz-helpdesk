@@ -923,10 +923,10 @@ function rtbiz_hd_get_attachment_url_from_followups( $postid ) {
 	return $attach_cmt;
 }
 
-function rtbiz_hd_get_general_body_template( $body, $title, $replyflag = false ) {
+function rtbiz_hd_get_general_body_template( $body, $title, $post_id = '', $replyflag = false ) {
 	$mail_template = apply_filters( 'rthd_email_template', 'email-template.php' );
 	ob_start();
-	rtbiz_hd_get_template( $mail_template, array( 'body' => $body, 'title' => $title, 'replyflag' => $replyflag ) );
+	rtbiz_hd_get_template( $mail_template, array( 'body' => $body, 'title' => $title, 'post_id' => $post_id, 'replyflag' => $replyflag ) );
 	return ob_get_clean();
 }
 

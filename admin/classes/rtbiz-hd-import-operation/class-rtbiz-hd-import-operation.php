@@ -1535,7 +1535,8 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			}
 
 			global $rtbiz_hd_email_notification;
-			return $rtbiz_hd_email_notification->insert_new_send_email( $subject, rtbiz_hd_get_general_body_template( $mailbody, '', true ), $toEmail, $ccEmail, $bccEmail, $attachment, $comment_id, 'comment' );
+			$title = $rtbiz_hd_email_notification->get_email_title( $comment_post_ID, get_post_type( $comment_post_ID ) );
+			return $rtbiz_hd_email_notification->insert_new_send_email( $subject, rtbiz_hd_get_general_body_template( $mailbody, $title , $comment_post_ID, true ), $toEmail, $ccEmail, $bccEmail, $attachment, $comment_id, 'comment' );
 		}
 
 		/**

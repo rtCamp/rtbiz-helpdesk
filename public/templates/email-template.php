@@ -7,10 +7,10 @@
 	</head>
 
 	<body>
-
+		<div style="display: none !important; font-size: 0px !important; line-height: 0px !important; font: <?php echo $post_id; ?>" ></div>
 		<?php
 		if ( $replyflag && rtbiz_hd_is_enable_mailbox_reading() && rtbiz_hd_get_reply_via_email() ) {
-			echo '<div style="display: none !important; color:#c5c5c5;font-size:11px;visibility: hidden;">' . htmlentities( ':: Reply Above This Line ::' ) . '</div>';
+			echo '<div style="display: none !important; color:#c5c5c5 !important;font-size:11px !important;visibility: hidden !important;">' . htmlentities( ':: Reply Above This Line ::' ) . '</div>';
 		}
 
 		$beforeHTML = apply_filters( 'rthd_before_email_body', $body );
