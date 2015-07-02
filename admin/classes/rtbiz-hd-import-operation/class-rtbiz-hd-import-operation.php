@@ -923,7 +923,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				$title       = str_replace( 'Re:', '', $title );
 				$title       = str_replace( 're:', '', $title );
 				$title       = trim( $title );
-				$existPostId = $this->post_exists( $title ); //found title in post
+				$existPostId = $this->post_exists( $title, '', $fromemail['address'] ); //found title in post
 				if ( ! isset( $fromemail['name'] ) ) {
 					$fromemail['name'] = $fromemail['address'];
 				}
@@ -1095,13 +1095,13 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		public function post_exists( $title, $date = '' ) {
-			global $wpdb;
+		public function post_exists( $title, $date = '', $sender = '' ) {
+			global $wpdb, $rtbiz_hd_email_notification;
 			if ( trim( $title ) == '' ) {
 				return 0;
 			}
 			$post_title = stripslashes( sanitize_post_field( 'post_title', $title, 0, 'db' ) );
-			$post_date  = stripslashes( sanitize_post_field( 'post_date', $date, 0, 'db' ) );
+			//$post_date  = stripslashes( sanitize_post_field( 'post_date', $date, 0, 'db' ) );
 
 			$query = "SELECT ID FROM $wpdb->posts WHERE 1=1 and post_type IN ('" . Rtbiz_HD_Module::$post_type . "') ";
 			$args  = array();
@@ -1112,8 +1112,8 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				$d->setTimezone( $UTC );
 				$timeStamp = $d->getTimestamp();
 				$postDate  = gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) + ( get_option( 'gmt_offset' ) * 3600 ) ) );
-				//				$sql       = "select * from $wpdb->comments where  comment_post_id=%d  and comment_date between subtime(%s,'00:10:00') and addtime(%s,'00:10:00')";
-				//				$query .= " AND post_date between subtime(%s,'00:10:00') and addtime(%s,'00:10:00')";
+				//              $sql       = "select * from $wpdb->comments where  comment_post_id=%d  and comment_date between subtime(%s,'00:10:00') and addtime(%s,'00:10:00')";
+				//              $query .= " AND post_date between subtime(%s,'00:10:00') and addtime(%s,'00:10:00')";
 				$args[] = $postDate;
 				$args[] = $postDate;
 			}
@@ -1124,7 +1124,37 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			}
 
 			if ( ! empty( $args ) ) {
-				return $wpdb->get_var( $wpdb->prepare( $query, $args ) );
+				//return $wpdb->get_var( $wpdb->prepare( $query, $args ) );
+				$postids = $wpdb->get_col( $wpdb->prepare( $query, $args ) );
+				if ( ! empty( $postids ) ) {
+					if ( ! empty( $sender ) ) {
+						// get staff emails
+						$staff_emails = array();
+						$staffs = Rtbiz_HD_Utils::get_hd_rtcamp_user();
+						foreach ( $staffs as $staff ) {
+							$staff_emails[] = $staff->user_email;
+						}
+						if ( ! in_array( $sender, $staff_emails ) ){
+							foreach ( $postids as $post_id ){
+								// get ticket creator email for post
+								$ContactEmail  = $rtbiz_hd_email_notification->get_contacts( $post_id );
+								$ContactEmail  = wp_list_pluck( $ContactEmail, 'email' );
+
+								$user = get_post_meta( $post_id, '_rtbiz_hd_created_by', true );
+								$ticket_created_by = get_user_by( 'id', $user );
+								$ContactEmail[] = $ticket_created_by->user_email;
+								if ( in_array( $sender, $ContactEmail ) ){
+									return $post_id;
+									break;
+								}
+							}
+						} else {
+							return $postids[0];
+						}
+					} else {
+						return $postids[0];
+					}
+				}
 			}
 
 			return 0;
