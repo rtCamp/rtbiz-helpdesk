@@ -11,9 +11,10 @@ jQuery( document ).ready(function ($) {
 		},
 		scroll : function (){
 			if ( typeof rthd_shortcode_params !== 'undefined' ) {
-				$( window ).scroll( function () {
-					if ( $( window ).scrollTop() == $( document ).height() - $( window ).height() ) {
-						// run our call for pagination
+				jQuery( document ).scroll( function() {
+					var div_top = jQuery( '.rthd_ticket_short_code tr:last' ).offset().top;
+					if ( jQuery( window ).scrollTop() > div_top - 500 ) {
+						//jQuery( document ).unbind( 'scroll' );
 						rthdShortcode.load_more_helpdesk_ticket();
 					}
 				} );
