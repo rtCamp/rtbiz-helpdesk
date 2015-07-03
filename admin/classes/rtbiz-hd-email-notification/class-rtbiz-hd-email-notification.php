@@ -231,7 +231,6 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 				$ContactEmail = $this->exclude_author( $ContactEmail, $comment->comment_author_email );
 				$ContactEmail  = apply_filters( 'rtbiz_hd_filter_adult_emails', $ContactEmail, $comment->comment_post_ID );
 			}
-			var_dump( $ContactEmail );
 			if ( isset( $comment_type ) && ! empty( $comment_type ) && intval( $comment_type ) ){
 				if ( $sensitive ) {
 					$subject  = rtbiz_hd_create_new_ticket_title( 'rthd_new_followup_email_title_private', $comment->comment_post_ID );
