@@ -472,7 +472,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			foreach ( $allemail as $email ) {
 				if ( $senderEmail != $email['address'] ) {
 					$new_all_emails[] = $email;
-				} else {
+				} elseif ( ! empty( $email['name'] ) ) {
 					$senderName = preg_replace( '/\s+/', ' ', $email['name'] );
 				}
 			}
