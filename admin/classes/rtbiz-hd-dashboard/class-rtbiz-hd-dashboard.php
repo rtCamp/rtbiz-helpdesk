@@ -388,9 +388,12 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 				$post_statuses[ $status['slug'] ] = $status['name'];
 			}
 			$current_date = new DateTime();
-			$first_date = date( 'Y-m-d', strtotime( 'first day of this month', $current_date->format( 'U' ) ) );
-			$last_date = date( 'Y-m-d', strtotime( 'last day of this month', $current_date->format( 'U' ) ) );
+			$date_before_30days = new DateTime();
+			date_sub( $date_before_30days, date_interval_create_from_date_string( '30 days' ) );
+			date_add( $current_date, date_interval_create_from_date_string( '1 days' ) );
 
+			$last_date = date( 'Y-m-d', $current_date->format( 'U' ) );
+			$first_date = date( 'Y-m-d', $date_before_30days->format( 'U' ) );
 			$args = array(
 				'type' => 'post_status',
 				'update_time' => array( 'compare' => '>=', 'value' => array( $first_date ) ),
