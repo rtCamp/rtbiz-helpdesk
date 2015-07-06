@@ -612,18 +612,17 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 
 			$userid = email_exists( $email );
 			if ( ! $userid && ! is_wp_error( $userid ) ) {
-				if ( empty( $name ) ) {
-					$name = $email;
-				}
 				//add_filter( 'wpmu_welcome_user_notification', '__return_false' );
 				$random_password = wp_generate_password( $length = 12, $include_standard_special_chars = false );
 				$userid          = wp_create_user( $email, $random_password, $email );
 				rtbiz_hd_wp_new_user_notification( $userid, $random_password );
-				$contact         = rtbiz_get_contact_for_wp_user( $userid );
-				if ( ! empty( $contact[0] ) ) {
-					$contact[0]->post_title = $name;
-					wp_update_post( $contact[0] );
-				}
+			} else {
+				rtbiz_export_contact( $userid );
+			}
+			$contact = rtbiz_get_contact_for_wp_user( $userid );
+			if ( ! empty( $contact[0] ) && ! empty( $name ) && $contact[0]->post_title != $name ) {
+				$contact[0]->post_title = $name;
+				wp_update_post( $contact[0] );
 			}
 
 			return $userid;
