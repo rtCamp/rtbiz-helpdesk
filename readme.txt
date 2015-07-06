@@ -57,10 +57,12 @@ Please refer to the documentation.
 1. Dashboard
 
 == Changelog ==
+
 = 1.3.4 =
-* Gravity form importer added
-* Gravity form importer log added
+* Gravity form importer & logs added
+* Infinite scroll on ticket shortcode added
 * Airmail bug fix
+* Performance improvement
 
 = 1.3.3 =
 * Added markdown support for replies
