@@ -1611,7 +1611,7 @@ function rtbiz_hd_get_default_email_template( $key = '', $all = false ) {
 
 	$redux['rthd_email_template_ticket_updated'] = '
 			<div style="color: #888888; font-size: 14px;">
-				Ticket updated by <strong>{ticket_updated_by}</strong>.{ticket_link}
+				Ticket updated by <strong>{ticket_updated_by}</strong>. {ticket_link}
 			</div>
 			<div style="font-size: 16px; line-height: 26px; color:#333333; margin: 25px 0">
 				{ticket_difference}
