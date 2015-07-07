@@ -60,9 +60,18 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Operation' ) ) {
 		}
 
 		public function ticket_status_changed( $new_status, $old_status, $post ) {
-			global $rtbiz_hd_ticket_index_model;
+			global $rtbiz_hd_ticket_index_model, $rtbiz_hd_ticket_history_model;
 			if ( $post->post_type == Rtbiz_HD_Module::$post_type ) {
 				$rtbiz_hd_ticket_index_model->update_ticket_status( $new_status, $post->ID );
+				$rtbiz_hd_ticket_history_model->insert(
+					array(
+						'ticket_id'   => $post->ID,
+						'type'        => 'post_status',
+						'old_value'   => $old_status,
+						'new_value'   => $new_status,
+						'update_time' => current_time( 'mysql' ),
+						'updated_by'  => get_current_user_id(),
+					) );
 			}
 		}
 		/**
