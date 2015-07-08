@@ -1742,6 +1742,11 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			if ( isset( $_POST['rthd_keep_status'] ) && ! empty( $_POST['rthd_keep_status'] ) && 'true' == $_POST['rthd_keep_status'] ) {
 				$keep_status = true;
 			}
+
+			if ( 30 == $comment_type ){
+				$keep_status = true;
+			}
+
 			$uploaded = explode( ',', $_POST['followup_attachments'] );
 			//          $force_duplicate = false;
 			//          if ( ! empty( $_POST['followup_duplicate_force'] ) ) {

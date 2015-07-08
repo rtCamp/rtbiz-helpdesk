@@ -286,7 +286,7 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 				<p class="rthd-notice"><?php
 					_e( 'Connect the mailbox from which you would like to auto-create ticket from incoming e-mails.  Click on next if you want to do that later.', RTBIZ_HD_TEXT_DOMAIN ); ?>
 				</p><?php
-				rtbiz_hd_mailbox_setup_view(); ?>
+				rtbiz_hd_mailbox_setup_view( false ); ?>
 			</div>
 			<div class="rthd-mailbox-setup-process rthd-wizard-process" style="display: none;">
 				<span><?php _e( 'Loading outbound emails', RTBIZ_HD_TEXT_DOMAIN ) ?></span>
