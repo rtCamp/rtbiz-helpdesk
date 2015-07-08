@@ -49,8 +49,11 @@ mark.rthd-trash {
 }
 
 .rthd-error{
-	margin: 20px 0;
-	font-weight: bold;
+    margin-bottom: 20px;
+    padding: 10px;
+    color: #A94442;
+    background-color: #F2DEDE;
+    border-color: #EBCCD1;
 }
 
 .rthd_ticket_short_code tr.rthd_highlight_row{
