@@ -2,7 +2,7 @@
 /**
  * Don't load this file directly!
  */
-if ( ! defined( 'ABSPATH' ) ) {
+if ( !defined( 'ABSPATH' ) ) {
 	exit;
 }
 
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since rt-Helpdesk 0.1
  */
-if ( ! class_exists( 'Rtbiz_HD_Ticket_Info' ) ) {
+if ( !class_exists( 'Rtbiz_HD_Ticket_Info' ) ) {
 
 	class Rtbiz_HD_Ticket_Info {
 
@@ -29,7 +29,7 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Info' ) ) {
 		public static function ui( $post ) {
 
 			global $rtbiz_hd_module, $rtbiz_hd_attributes, $rtbiz_hd_cpt_tickets;
-			$labels    = $rtbiz_hd_module->labels;
+			$labels = $rtbiz_hd_module->labels;
 			$post_type = Rtbiz_HD_Module::$post_type;
 
 			$create = new DateTime( $post->post_date );
@@ -61,16 +61,17 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Info' ) ) {
 				</p>
 
 				<select name="post[post_author]"><?php
-				if ( ! empty( $rtcamp_users ) ) {
-					foreach ( $rtcamp_users as $author ) {
-						if ( $author->ID == $post_author ) {
-							$selected = ' selected';
-						} else {
-							$selected = ' ';
+					if ( !empty( $rtcamp_users ) ) {
+						foreach ( $rtcamp_users as $author ) {
+							if ( $author->ID == $post_author ) {
+								$selected = ' selected';
+							} else {
+								$selected = ' ';
+							}
+							echo '<option value="' . esc_attr( $author->ID ) . '"' . esc_attr( $selected ) . '>' . esc_attr( $author->display_name ) . '</option>';
 						}
-						echo '<option value="' . esc_attr( $author->ID ) . '"' . esc_attr( $selected ) . '>' . esc_attr( $author->display_name ) . '</option>';
 					}
-				} ?>
+					?>
 				</select>
 			</div>
 
@@ -94,18 +95,19 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Info' ) ) {
 				$custom_status_flag = true;
 				?>
 				<select id="rthd_post_status" class="right" name="post_status"><?php
-				foreach ( $post_status as $status ) {
-					if ( $status['slug'] == $pstatus ) {
-						$selected           = 'selected="selected"';
-						$custom_status_flag = false;
-					} else {
-						$selected = '';
+					foreach ( $post_status as $status ) {
+						if ( $status['slug'] == $pstatus ) {
+							$selected = 'selected="selected"';
+							$custom_status_flag = false;
+						} else {
+							$selected = '';
+						}
+						printf( '<option value="%s" %s >%s</option>', $status['slug'], $selected, $status['name'] );
 					}
-					printf( '<option value="%s" %s >%s</option>', $status['slug'], $selected, $status['name'] );
-				}
-				if ( $custom_status_flag && isset( $post->ID ) ) {
-					echo '<option selected="selected" value="' . esc_attr( $pstatus ) . '">' . esc_attr( $pstatus ) . '</option>';
-				} ?>
+					if ( $custom_status_flag && isset( $post->ID ) ) {
+						echo '<option selected="selected" value="' . esc_attr( $pstatus ) . '">' . esc_attr( $pstatus ) . '</option>';
+					}
+					?>
 				</select>
 			</div>
 
@@ -119,10 +121,10 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Info' ) ) {
 				<div id="selected_user">
 					<?php
 					$created_by = get_user_by( 'id', get_post_meta( $post->ID, '_rtbiz_hd_created_by', true ) );
-					if ( ! empty( $created_by ) ) {
+					if ( !empty( $created_by ) ) {
 						?>
 						<ul>
-								<li class="rthd-info-meta-created-by-li">
+							<li class="rthd-info-meta-created-by-li">
 								<p>
 									<?php
 									add_filter( 'get_avatar', array( $rtbiz_hd_cpt_tickets, 'add_gravatar_class' ) );
@@ -135,7 +137,7 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Info' ) ) {
 									<a class="rthd-info-meta-created-by heading" target="_blank"
 									   href="<?php echo rtbiz_hd_biz_user_profile_link( $created_by->user_email ); ?>"><?php echo $created_by->display_name; ?></a>
 									<input type="hidden" name="post[rthd_created_by]"
-									       value="<?php echo $created_by->ID; ?>"/>
+										   value="<?php echo $created_by->ID; ?>"/>
 								</p>
 							</li>
 
@@ -184,7 +186,7 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Info' ) ) {
 
 						});
 					</script>
-					-->
+				-->
 			</div>
 
 			<div class="row_group">
@@ -196,21 +198,21 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Info' ) ) {
 
 				<p>
 					<input class="moment-from-now" type="text" placeholder="Select Created On"
-					       value="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>"
-					       title="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>"
-					       readonly="readonly">
+						   value="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : ''  ); ?>"
+						   title="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : ''  ); ?>"
+						   readonly="readonly">
 					<input
 						name="post[post_date]" type="hidden"
-						value="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : '' ); ?>"/>
+						value="<?php echo esc_attr( ( isset( $createdate ) ) ? $createdate : ''  ); ?>"/>
 				</p>
 			</div>
 
 			<?php
 			// Last reply on Field
 			$comment = get_comments( array( 'post_id' => $post->ID, 'number' => 1 ) );
-			if ( ! empty( $comment[0] ) ) {
-				$comment    = $comment[0];
-				$modify     = new DateTime( $comment->comment_date );
+			if ( !empty( $comment[0] ) ) {
+				$comment = $comment[0];
+				$modify = new DateTime( $comment->comment_date );
 				$modifydate = $modify->format( 'M d, Y h:i A' );
 				?>
 				<div class="row_group">
@@ -220,16 +222,16 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Info' ) ) {
 						</span>
 					</p>
 					<input class="moment-from-now" type="text" placeholder="Last Reply On Date"
-					       value="<?php echo esc_attr( $modifydate ); ?>" title="<?php echo esc_attr( $modifydate ); ?>"
-					       readonly="readonly">
+						   value="<?php echo esc_attr( $modifydate ); ?>" title="<?php echo esc_attr( $modifydate ); ?>"
+						   readonly="readonly">
 				</div>
-			<?php
+				<?php
 			}
 
 			//adult content
 			if ( rtbiz_hd_get_redux_adult_filter() ) {
 				$text = '';
-				$val  = rtbiz_hd_get_adult_ticket_meta( $post->ID );
+				$val = rtbiz_hd_get_adult_ticket_meta( $post->ID );
 				if ( 'yes' == $val ) {
 					$text = 'checked="checked"';
 				}
@@ -237,27 +239,27 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Info' ) ) {
 				<div class="row_group">
 					<p>
 						<span class="prefix" title="<?php _e( 'Adult Content', RTBIZ_HD_TEXT_DOMAIN ); ?>">
-							<label><strong><?php _e( 'Adult Content', RTBIZ_HD_TEXT_DOMAIN ); ?></strong></label>
+							<label for="rthd_adult_content"><strong><?php _e( 'Adult Content', RTBIZ_HD_TEXT_DOMAIN ); ?></strong></label>
 						</span>
-						<input type="checkbox" name="post[adult_ticket]" <?php echo $text; ?> value="1" />
+						<input id="rthd_adult_content" type="checkbox" name="post[adult_ticket]" <?php echo $text; ?> value="1" />
 					</p>
 				</div>
 			<?php } ?>
 
 			<?php
 			$rthd_unique_id = get_post_meta( $post->ID, '_rtbiz_hd_unique_id', true );
-			if ( ! empty( $rthd_unique_id ) && rtbiz_hd_is_unique_hash_enabled() ) {
+			if ( !empty( $rthd_unique_id ) && rtbiz_hd_is_unique_hash_enabled() ) {
 				?>
 				<div class="row_group">
 					<span class="prefix"
-					      title="<?php _e( 'Public URL', RTBIZ_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Unique Hash URL', RTBIZ_HD_TEXT_DOMAIN ); ?></strong></label></span>
+						  title="<?php _e( 'Public URL', RTBIZ_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Unique Hash URL', RTBIZ_HD_TEXT_DOMAIN ); ?></strong></label></span>
 
 					<div class="rthd_attr_border">
 						<a class="rthd_public_link" target="_blank"
 						   href="<?php echo rtbiz_hd_is_unique_hash_enabled() ? rtbiz_hd_get_unique_hash_url( $post->ID ) : get_post_permalink( $post->ID ); ?>"><?php _e( 'Link' ); ?></a>
 					</div>
 				</div>
-			<?php
+				<?php
 			}
 
 			$meta_attributes = rtbiz_hd_get_attributes( $post_type, 'meta' );
@@ -280,17 +282,17 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Info' ) ) {
 
 			global $rtbiz_hd_tickets_operation;
 			if ( isset( $_REQUEST['rthd_check_matabox'] ) && 'true' == $_REQUEST['rthd_check_matabox'] ) {
-				$newTicket      = $_POST['post'];
+				$newTicket = $_POST['post'];
 				$datetimeformat = 'M d, Y h:i A';
 			} else {
-				$newTicket      = $_POST;
+				$newTicket = $_POST;
 				$datetimeformat = 'Y-m-d H:i:s';
 			}
-			$newTicket = (array) $newTicket;
+			$newTicket = ( array ) $newTicket;
 
 			//Adult Filter
 			if ( rtbiz_hd_get_redux_adult_filter() ) {
-				if ( ! empty( $newTicket['adult_ticket'] ) ) {
+				if ( !empty( $newTicket['adult_ticket'] ) ) {
 					rtbiz_hd_save_adult_ticket_meta( $post_id, 'yes' );
 				} else {
 					rtbiz_hd_save_adult_ticket_meta( $post_id, 'no' );
@@ -300,36 +302,36 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Info' ) ) {
 			$creationdate = $newTicket['post_date'];
 			if ( isset( $creationdate ) && '' != $creationdate ) {
 				try {
-					$dr                         = date_create_from_format( $datetimeformat, $creationdate );
-					$timeStamp                  = $dr->getTimestamp();
-					$newTicket['post_date']     = gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) ) );
+					$dr = date_create_from_format( $datetimeformat, $creationdate );
+					$timeStamp = $dr->getTimestamp();
+					$newTicket['post_date'] = gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) ) );
 					$newTicket['post_date_gmt'] = get_gmt_from_date( $dr->format( 'Y-m-d H:i:s' ) );
 				} catch ( Exception $e ) {
-					$newTicket['post_date']     = current_time( 'mysql' );
+					$newTicket['post_date'] = current_time( 'mysql' );
 					$newTicket['post_date_gmt'] = gmdate( 'Y-m-d H:i:s' );
 				}
 			} else {
-				$newTicket['post_date']     = current_time( 'mysql' );
+				$newTicket['post_date'] = current_time( 'mysql' );
 				$newTicket['post_date_gmt'] = gmdate( 'Y-m-d H:i:s' );
 			}
 
 			$postArray = array(
-				'ID'            => $post_id,
-				'post_author'   => $newTicket['post_author'],
-				'post_date'     => $newTicket['post_date'],
+				'ID' => $post_id,
+				'post_author' => $newTicket['post_author'],
+				'post_date' => $newTicket['post_date'],
 				'post_date_gmt' => $newTicket['post_date_gmt'],
-				'post_name'     => $post_id,
+				'post_name' => $post_id,
 			);
 
 			$dataArray = array(
-				'assignee'     => $postArray['post_author'],
+				'assignee' => $postArray['post_author'],
 				'post_content' => rtbiz_hd_content_filter( $post->post_content ),
-				'post_status'  => $post->post_status,
-				'post_title'   => $post->post_title,
+				'post_status' => $post->post_status,
+				'post_title' => $post->post_title,
 			);
 
 			$created_by = '';
-			if ( ! empty( $newTicket['rthd_created_by'] ) ) {
+			if ( !empty( $newTicket['rthd_created_by'] ) ) {
 				$created_by = $newTicket['rthd_created_by'];
 			}
 
@@ -340,16 +342,16 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Info' ) ) {
 		public static function custom_post_status_rendar() {
 			global $post, $pagenow, $rtbiz_hd_module;
 			$flag = false;
-			if ( isset( $post ) && ! empty( $post ) && $post->post_type === Rtbiz_HD_Module::$post_type ) {
+			if ( isset( $post ) && !empty( $post ) && $post->post_type === Rtbiz_HD_Module::$post_type ) {
 				if ( 'edit.php' == $pagenow || 'post-new.php' == $pagenow ) {
 					$flag = true;
 				}
 			}
-			if ( isset( $post ) && ! empty( $post ) && 'post.php' == $pagenow && get_post_type( $post->ID ) === Rtbiz_HD_Module::$post_type ) {
+			if ( isset( $post ) && !empty( $post ) && 'post.php' == $pagenow && get_post_type( $post->ID ) === Rtbiz_HD_Module::$post_type ) {
 				$flag = true;
 			}
 			if ( $flag ) {
-				$option      = '';
+				$option = '';
 				$post_status = $rtbiz_hd_module->get_custom_statuses();
 				foreach ( $post_status as $status ) {
 					if ( $post->post_status == $status['slug'] ) {
