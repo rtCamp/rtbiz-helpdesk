@@ -1482,9 +1482,8 @@ function rtbiz_hd_get_default_email_template( $key = '', $all = false ) {
 	$redux['rthd_email_template_followup_add_private'] = '
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0;" />
 			<div style="color: #333333; line-height: 26px; font-size: 16px; ">
-				A <strong>private</strong> {followup_type}followup has been added by <strong>{followup_author}</strong>. Please go to ticket to view content.
+				A <strong>private</strong> {followup_type}followup has been added by <strong>{followup_author}</strong>. {ticket_link}
 			</div>
-			{ticket_link}
 		    <hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
 
 	$redux['rthd_email_template_followup_deleted_private'] = '
@@ -1507,7 +1506,7 @@ function rtbiz_hd_get_default_email_template( $key = '', $all = false ) {
 
 	$redux['rthd_email_template_followup_updated_private'] = '
 			<div style="color: #888888; font-size: 14px;">
-				A <strong>private</strong> {followup_type}followup has been edited by <strong>{followup_updated_by}</strong>.Please go to ticket to view content.{ticket_link}
+				A <strong>private</strong> {followup_type}followup has been edited by <strong>{followup_updated_by}</strong>. {ticket_link}
 			</div>
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
 
