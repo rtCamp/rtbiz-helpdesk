@@ -147,7 +147,7 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 				}
 			} else {
 				?>
-				<div id="info" class="error rthd-notice">You're not logged in. Please <a href="<?php echo wp_login_url( get_permalink() ); ?>" title="Login">Login</a> first to create support ticket.
+				<div id="info" class="error rthd-notice">You're not logged in. Please <a href="<?php echo wp_login_url( get_permalink() ); ?>" title="login">login</a> first to create support ticket.
 				</div>
 				<?php
 			}

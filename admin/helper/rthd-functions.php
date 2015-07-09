@@ -540,8 +540,8 @@ function rtbiz_hd_get_user_fav_ticket( $userid ) {
 function rtbiz_hd_get_user_subscribe_ticket( $current_userid ) {
 	global $wpdb;
 	$lenght = strlen( (string) $current_userid );
-	$current_userid = '"' . $current_userid .'"';
-	$sql = $wpdb->prepare( "SELECT $wpdb->posts.ID FROM $wpdb->postmeta, $wpdb->posts where $wpdb->postmeta.post_id = $wpdb->posts.ID and $wpdb->postmeta.meta_key = '_rtbiz_hd_subscribe_to' and $wpdb->postmeta.meta_value like '%s' ", "%s:$lenght:$current_userid%" );
+	$current_userid_str = '"' . $current_userid .'"';
+	$sql = $wpdb->prepare( "SELECT $wpdb->posts.ID FROM $wpdb->postmeta, $wpdb->posts where $wpdb->postmeta.post_id = $wpdb->posts.ID and $wpdb->postmeta.meta_key = '_rtbiz_hd_subscribe_to' and ( $wpdb->postmeta.meta_value like '%s' or $wpdb->postmeta.meta_value like '%s' ) ", "%s:$lenght:$current_userid_str%", "%i:$current_userid%" );
 	return $wpdb->get_col( $sql );
 }
 
@@ -1482,9 +1482,8 @@ function rtbiz_hd_get_default_email_template( $key = '', $all = false ) {
 	$redux['rthd_email_template_followup_add_private'] = '
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0;" />
 			<div style="color: #333333; line-height: 26px; font-size: 16px; ">
-				A <strong>private</strong> {followup_type}followup has been added by <strong>{followup_author}</strong>. Please go to ticket to view content.
+				A <strong>private</strong> {followup_type}followup has been added by <strong>{followup_author}</strong>. {ticket_link}
 			</div>
-			{ticket_link}
 		    <hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
 
 	$redux['rthd_email_template_followup_deleted_private'] = '
@@ -1507,7 +1506,7 @@ function rtbiz_hd_get_default_email_template( $key = '', $all = false ) {
 
 	$redux['rthd_email_template_followup_updated_private'] = '
 			<div style="color: #888888; font-size: 14px;">
-				A <strong>private</strong> {followup_type}followup has been edited by <strong>{followup_updated_by}</strong>.Please go to ticket to view content.{ticket_link}
+				A <strong>private</strong> {followup_type}followup has been edited by <strong>{followup_updated_by}</strong>. {ticket_link}
 			</div>
 			<hr style="background-color: #eee; border: 0 none; height: 1px; margin-top: 25px" />';
 
@@ -1613,9 +1612,11 @@ function rtbiz_hd_get_default_email_template( $key = '', $all = false ) {
 			<div style="color: #888888; font-size: 14px;">
 				Ticket updated by <strong>{ticket_updated_by}</strong>. {ticket_link}
 			</div>
+			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0" />
 			<div style="font-size: 16px; line-height: 26px; color:#333333; margin: 25px 0">
 				{ticket_difference}
-			</div>';
+			</div>
+			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0" />';
 
 	if ( ! empty( $key ) && isset( $redux[ $key ] ) ) {
 		return $redux[ $key ];
