@@ -69,7 +69,7 @@ $staffonly = current_user_can( $cap );
 					<div class="rthd-keep-status-wrap">
 						<label for="rthd_keep_status">
 							<input id="rthd_keep_status" type="checkbox" name="rthd_keep_status"
-								   text="check keep status unanswered"/>&nbsp;
+								   text="check keep status unanswered"/>
 							<?php _e( 'Keep unanswered' ); ?></label></div>
 				<?php } ?>
 
