@@ -56,8 +56,8 @@ $staffonly = current_user_can( $cap );
 
 			<div class="rthd-visibility-wrap">
 				<div class="rthd-sensitive-wrap">
-					<label for="rthd_sensitive">
-						<input id="rthd_sensitive" type="checkbox" name="followup_sensitive"
+					<label for="rthd_sensitive_content">
+						<input id="rthd_sensitive_content" type="checkbox" name="followup_sensitive"
 							   value="true"/>&nbsp;<?php _e( 'Mark this as Sensitive' ); ?>
 						<span class="rthd-tooltip rthd-followup-type-tolltip">
 							<i class="dashicons dashicons-info rtmicon"></i>
