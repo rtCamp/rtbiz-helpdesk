@@ -107,9 +107,6 @@
 				</div>
 			<?php } ?>
 			<div class="rthd-attachment">
-				<!--		--><?php //wp_nonce_field( 'rthd_support_add_nonce_for_security_thats_all', 'rthd_support_nonce' );         ?>
-
-			<!--		<input type="file" id="filesToUpload" name="attachment[]" multiple="multiple"/>-->
 				<div id="attachment-container">
 					<a href="javascript:;" class="rthd-attach-file" id="attachemntlist" value="Attach Files"><span
 							class="dashicons dashicons-upload" id="attachemntlist"></span><span>Attach Files</span>
@@ -120,7 +117,7 @@
 			</div>
 		</div>
 
-		<div id="rthd-followup-action" class="rthd-followup-action">
+		<div class="rthd-followup-action">
 			<input type="hidden" name="rthd_support_form_submit" value="1"/>
 			<input class="btn btn-primary" id="submit-support-form" type="submit" value="Submit"/>
 		</div>

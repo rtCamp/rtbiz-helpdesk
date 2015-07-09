@@ -540,8 +540,8 @@ function rtbiz_hd_get_user_fav_ticket( $userid ) {
 function rtbiz_hd_get_user_subscribe_ticket( $current_userid ) {
 	global $wpdb;
 	$lenght = strlen( (string) $current_userid );
-	$current_userid = '"' . $current_userid .'"';
-	$sql = $wpdb->prepare( "SELECT $wpdb->posts.ID FROM $wpdb->postmeta, $wpdb->posts where $wpdb->postmeta.post_id = $wpdb->posts.ID and $wpdb->postmeta.meta_key = '_rtbiz_hd_subscribe_to' and $wpdb->postmeta.meta_value like '%s' ", "%s:$lenght:$current_userid%" );
+	$current_userid_str = '"' . $current_userid .'"';
+	$sql = $wpdb->prepare( "SELECT $wpdb->posts.ID FROM $wpdb->postmeta, $wpdb->posts where $wpdb->postmeta.post_id = $wpdb->posts.ID and $wpdb->postmeta.meta_key = '_rtbiz_hd_subscribe_to' and ( $wpdb->postmeta.meta_value like '%s' or $wpdb->postmeta.meta_value like '%s' ) ", "%s:$lenght:$current_userid_str%", "%i:$current_userid%" );
 	return $wpdb->get_col( $sql );
 }
 

@@ -603,10 +603,6 @@ h2.rt-hd-ticket-front-title{
 	}
 }
 
-#rthd-followup-action {
-	margin-top: 8px;
-}
-
 .rthd-front-icons a:hover,.rthd-collapse-click:hover{
 	text-decoration:none;
 }
@@ -660,12 +656,14 @@ img#hdspinner{
 }
 
 .rthd-followup-action {
+    margin-top: 8px;
 	float: right;
     display: inline-block;
 }
 
 .rthd-attachment-box{
     display: inline-block;
+    float: left;
 }
 
 .rthd-attach-file{
