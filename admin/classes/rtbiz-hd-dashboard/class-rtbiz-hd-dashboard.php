@@ -223,9 +223,17 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 				return;
 			}
 			$customers_userid = array_unique( $customers_userid );
-			$totalcustomers = count( $customers_userid );
+			// convert all user id to contact id for query post in ticket meta ticket created by
+			$contacts = array();
+			foreach ( $customers_userid as $cust_userid ) {
+				$contact_id = rtbiz_hd_get_contact_id_by_user_id( $cust_userid, true );
+				if ( ! empty( $cust_userid ) ) {
+					$contacts[] = $contact_id;
+				}
+			}
+			$totalcustomers = count( $contacts );
 
-			$customers_userid = implode( ',', $customers_userid );
+			$customers_userid = implode( ',', $contacts );
 			$query = $wpdb->prepare( "SELECT count( distinct( meta_value ) ) FROM $wpdb->posts INNER JOIN  $wpdb->postmeta ON post_id = ID  WHERE post_status <> 'trash' and post_type = %s and meta_key = '_rtbiz_hd_created_by' and meta_value in ( " . $customers_userid . ' )', Rtbiz_HD_Module::$post_type );
 			$customers_userid = $wpdb->get_col( $query );
 			$custWithicket = 0;
@@ -595,15 +603,19 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 			$query = '
 						SELECT
 							us.ID as contact_id,
-							us.display_name AS contact_name,
+							us.post_title AS contact_name,
 						    COUNT( ticket.ID ) AS contact_tickets
 						FROM
-							'.$wpdb->users.' as us
+							'.$wpdb->posts.' as us
 							JOIN
 							'.$table_name.' AS ticket
 							ON (us.ID = ticket.user_created_by)
 						WHERE
-							2=2
+								2=2
+							AND
+								us.post_type = "'.rtbiz_get_contact_post_type().'"
+							AND
+								us.post_status <> "trash"
 							GROUP BY us.ID
 						    ORDER BY contact_tickets
 						    DESC LIMIT 0 , 10';

@@ -707,13 +707,12 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		public function add_contacts_to_post( $allemail, $post_id, $create_wp_user = true ) {
 			/* @var $rtbiz_hd_contacts Rtbiz_HD_Contacts */
 			global $rtbiz_hd_contacts;
-			$ticket_creator = get_post_meta( $post_id, '_rtbiz_hd_created_by',true );
-			$ticket_creator = get_userdata( $ticket_creator );
+			$ticket_creator = rtbiz_hd_get_ticket_creator( $post_id );
 			$postterms = array();
 
 			foreach ( $allemail as $email ) {
 				// skip ticket creator getting added in contact list of ticket.
-				if ( $email['address'] == $ticket_creator->user_email ) {
+				if ( ! empty( $ticket_creator ) && $email['address'] == $ticket_creator->primary_email ) {
 					continue;
 				}
 				$contacts = rtbiz_get_contact_by_email( $email );
@@ -1139,10 +1138,8 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 								// get ticket creator email for post
 								$ContactEmail  = $rtbiz_hd_email_notification->get_contacts( $post_id );
 								$ContactEmail  = wp_list_pluck( $ContactEmail, 'email' );
-
-								$user = get_post_meta( $post_id, '_rtbiz_hd_created_by', true );
-								$ticket_created_by = get_user_by( 'id', $user );
-								$ContactEmail[] = $ticket_created_by->user_email;
+								$ticket_created_by  = rtbiz_hd_get_ticket_creator( $post_id );
+								$ContactEmail[] = $ticket_created_by->primary_email;
 								if ( in_array( $sender, $ContactEmail ) ){
 									return $post_id;
 									break;

@@ -94,11 +94,10 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Contacts_Blacklist' ) ) {
 			$reponse['status'] = false;
 			$ticket_data       = $_POST;
 			$contacts          = rtbiz_get_post_for_contact_connection( $ticket_data['post_id'], Rtbiz_HD_Module::$post_type );
-			$id  = get_post_meta( $_POST['post_id'], '_rtbiz_hd_created_by', true );
-			$created_by         = rtbiz_get_contact_for_wp_user( $id );
+			$created_by        = rtbiz_hd_get_ticket_creator( $_POST['post_id'] );
 
-			if ( ! empty( $created_by[0] ) ) {
-				$contacts[] = $created_by[0];
+			if ( ! empty( $created_by ) ) {
+				$contacts[] = $created_by;
 			}
 
 			ob_start();
@@ -145,8 +144,10 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Contacts_Blacklist' ) ) {
 			foreach ( $contacts as $contact ) {
 				$blacklistedEmail[] = get_post_meta( $contact->ID, Rtbiz_Entity::$meta_key_prefix . Rtbiz_Contact::$primary_email_key, true );
 			}
-			$created_by         = get_user_by( 'id', get_post_meta( $_POST['post_id'], '_rtbiz_hd_created_by', true ) );
-			$blacklistedEmail[] = $created_by->user_email;
+			$created_by         = rtbiz_hd_get_ticket_creator( $_POST['post_id'] );
+			if ( ! empty( $created_by ) ) {
+				$blacklistedEmail[] = $created_by->primary_email;
+			}
 			if ( ! empty( $blacklistedEmail ) ) {
 				$blacklistedEmail = array_merge( rtbiz_hd_get_blacklist_emails(), $blacklistedEmail );
 				$blacklistedEmail = implode( "\n", array_unique( $blacklistedEmail ) );

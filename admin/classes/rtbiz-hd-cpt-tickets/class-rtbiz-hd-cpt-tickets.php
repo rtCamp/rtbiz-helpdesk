@@ -157,28 +157,25 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 					$create             = new DateTime( $post->post_date );
 					$createdate         = $create->format( 'M d, Y h:i A' );
 					$create_by_time     = esc_attr( human_time_diff( strtotime( $createdate ), current_time( 'timestamp' ) ) ) . ' ago';
-					$created_by         = get_user_by( 'id', get_post_meta( $post->ID, '_rtbiz_hd_created_by', true ) );
-					$CCs                = $rtbiz_hd_email_notification->get_contacts( $post->ID );
-					$CCs                = wp_list_pluck( $CCs, 'email' );
-					if ( ! empty( $created_by ) && ! empty( $CCs ) ) {
-						$CCs = array_diff( $CCs, array( $created_by->user_email ) );
-					}
+					$created_by         = rtbiz_hd_get_ticket_creator( $post->ID );
+					$CCs = rtbiz_get_post_for_contact_connection( $post->ID , Rtbiz_HD_Module::$post_type, true );
+					//					$CCs                = $rtbiz_hd_email_notification->get_contacts( $post->ID );
+					//					$CCs                = wp_list_pluck( $CCs, 'email' );
+					//					if ( ! empty( $created_by ) && ! empty( $CCs ) ) {
+					//						$CCs = array_diff( $CCs, array( $created_by->user_email ) );
+					//					}
 					?>
 					<div class="rthd-ticket-user-activity-backend">
 						<?php
 						if ( ! empty( $created_by ) ) {
 							// Show ticket created by with large gravatar
-							echo ' <a class="rthd-ticket-created-by" title="Created by ' . $created_by->display_name . ' ' . $create_by_time . '" href="' .  admin_url( 'edit.php?post_type='.Rtbiz_HD_Module::$post_type.'&created_by='.$created_by->ID ) .'">' . get_avatar( $created_by->user_email, '30' ) . '</a>';
+							echo ' <a class="rthd-ticket-created-by" title="Created by ' . $created_by->post_title . ' ' . $create_by_time . '" href="' .  admin_url( 'edit.php?post_type='.Rtbiz_HD_Module::$post_type.'&created_by='.$created_by->ID ) .'">' . get_avatar( $created_by->primary_email, '30' ) . '</a>';
 						}
-						foreach ( $CCs as $email ) {
+						foreach ( $CCs as $contact ) {
 							// show other CCs' contact
-							$user         = get_user_by( 'email', $email );
-							$display_name = $email;
-							$url = '#';
-							if ( ! empty( $user ) ) {
-								$display_name = $user->display_name;
-								$url = admin_url( 'edit.php?post_type='.Rtbiz_HD_Module::$post_type.'&created_by='.$user->ID );
-							}
+							$email = rtbiz_get_entity_meta( $contact->ID, Rtbiz_Contact::$primary_email_key, true );
+							$display_name = $contact->post_title;
+							$url = admin_url( 'edit.php?post_type='.Rtbiz_HD_Module::$post_type.'&created_by='.$contact->ID );
 							echo '<a title= "' . $display_name . '" class="rthd-last-reply-by rthd-contact-avatar-no-reply"  href="' .$url . '">' . get_avatar( $email, '30' ) . ' </a>';
 						}
 						?>
@@ -323,20 +320,18 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 
 					$date = new DateTime( get_the_date( 'Y-m-d H:i:s' ) );
 					$datediff = human_time_diff( $date->format( 'U' ), current_time( 'timestamp' ) ) . __( ' ago' );
-
-					$user_id = get_post_meta( $post->ID, '_rtbiz_hd_created_by', true );
-					$user_info = get_userdata( $user_id );
+					$contact = rtbiz_hd_get_ticket_creator( $post->ID );
 					$url = esc_url(
 						add_query_arg(
 							array(
 								'post_type' => Rtbiz_HD_Module::$post_type,
-								'created_by' => $user_id,
+								'created_by' => $contact->ID,
 									), 'edit.php' ) );
 
 									$replyby = sprintf( __( '<span class="created-by tips" data-tip="%s">%s </span>', RTBIZ_HD_TEXT_DOMAIN ), get_the_date( 'd-m-Y H:i' ), $datediff );
-							if ( $user_info ) {
+							if ( ! empty( $contact ) ) {
 								add_filter( 'get_avatar', array( $this, 'add_gravatar_class' ) );
-								printf( "<div class='rthd-ticket-author'><a href='%s'>%s <span  class='rthd_td_show'>%s</span></a> <span class='rthd_td_show'>%s</span></div>", $url, get_avatar( $user_info->user_email, 25 ), $user_info->display_name, $replyby );
+								printf( "<div class='rthd-ticket-author'><a href='%s'>%s <span  class='rthd_td_show'>%s</span></a> <span class='rthd_td_show'>%s</span></div>", $url, get_avatar( $contact->primary_email, 25 ), $contact->post_title, $replyby );
 								remove_filter( 'get_avatar', array( $this, 'add_gravatar_class' ) );
 							}
 					break;

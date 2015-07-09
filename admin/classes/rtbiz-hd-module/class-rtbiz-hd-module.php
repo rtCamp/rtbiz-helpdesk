@@ -339,10 +339,9 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 				$result  = $wpdb->get_col( 'SELECT p2p_from FROM '.$wpdb->prefix."p2p WHERE p2p_type = '".rtbiz_get_contact_post_type()."_to_user' AND p2p_to in (SELECT DISTINCT(userid) FROM ".$rtbiz_acl_model->table_name." where module = '".RTBIZ_HD_TEXT_DOMAIN."' and permission != 0 )" );
 				$exclude = array_merge( $exclude, $result );
 				// Ticket Creator
-				$creator = get_post_meta( $post->ID, '_rtbiz_hd_created_by', true );
-				$contact = rtbiz_get_contact_for_wp_user( $creator );
+				$contact  = rtbiz_hd_get_ticket_creator( $post->ID );
 				if ( ! empty( $contact ) ) {
-					$exclude[] = $contact[0]->ID;
+					$exclude[] = $contact->ID;
 				}
 				// Exclude Admins
 				$admins = get_users(array(

@@ -522,15 +522,14 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 			$notificationFlagSsubscriber = ( isset( $redux['rthd_notification_acl_staff_events'] ) && 1 == $redux['rthd_notification_acl_staff_events']['new_ticket_created_mail'] );
 			$notificationFlagGroup = ( isset( $redux['rthd_notification_acl_group_events'] ) && 1 == $redux['rthd_notification_acl_group_events']['new_ticket_created_mail'] );
 
-			$user = get_post_meta( $post_id, '_rtbiz_hd_created_by', true );
-			$ticket_created_by = get_user_by( 'id', $user );
+			$ticket_created_by = rtbiz_hd_get_ticket_creator( $post_id );
 			$post = get_post( $post_id );
 			$assigne_user = get_user_by( 'id', $post->post_author );
 
-			$ticket_creator[] = array( 'email' => $ticket_created_by->user_email );
+			$ticket_creator[] = array( 'email' => $ticket_created_by->primary_email );
 
 			$assigneEmail[] = $this->get_assigne_email( $post_id );
-			$assigneEmail = $this->exclude_author( $assigneEmail, $ticket_created_by->user_email );
+			$assigneEmail = $this->exclude_author( $assigneEmail, $ticket_created_by->primary_email );
 			$assigneEmail = apply_filters( 'rtbiz_hd_filter_adult_emails', $assigneEmail, $post_id );
 
 			if ( $notificationFlagGroup && isset( $redux['rthd_notification_emails'] ) && is_array( $redux['rthd_notification_emails'] ) ) {
@@ -538,15 +537,15 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 					array_push( $groupEmail, array( 'email' => $email ) );
 				}
 			}
-			$groupEmail = $this->exclude_author( $groupEmail, $ticket_created_by->user_email );
+			$groupEmail = $this->exclude_author( $groupEmail, $ticket_created_by->primary_email );
 			$groupEmail = apply_filters( 'rtbiz_hd_filter_adult_emails', $groupEmail, $post_id );
 
 			$subscriberEmail = $this->get_subscriber( $post_id );
-			$subscriberEmail = $this->exclude_author( $subscriberEmail, $ticket_created_by->user_email );
+			$subscriberEmail = $this->exclude_author( $subscriberEmail, $ticket_created_by->primary_email );
 			$subscriberEmail = apply_filters( 'rtbiz_hd_filter_adult_emails', $subscriberEmail, $post_id );
 
 			$ContactEmail  = $this->get_contacts( $post_id );
-			$ContactEmail = $this->exclude_author( $ContactEmail, $ticket_created_by->user_email );
+			$ContactEmail = $this->exclude_author( $ContactEmail, $ticket_created_by->primary_email );
 			$ContactEmail = apply_filters( 'rtbiz_hd_filter_adult_emails', $ContactEmail, $post_id );
 
 			$produc_list = wp_get_object_terms( $post_id, Rt_Products::$product_slug );
@@ -575,7 +574,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 				$subject     = rtbiz_hd_create_new_ticket_title( 'rthd_new_ticket_email_title_contacts', $post_id );
 
 				$htmlbody = apply_filters( 'rthd_email_template_new_ticket_created_contacts', rtbiz_hd_get_email_template_body( 'rthd_email_template_new_ticket_created_contacts' ) );
-				$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_author}', $ticket_created_by->display_name );
+				$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_author}', $ticket_created_by->post_title );
 				if ( isset( $body ) && ! empty( $body ) ) {
 					$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_body}', '<div>' . rtbiz_hd_content_filter( $body ) . '</div>' );
 				} else {
@@ -590,7 +589,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 				$subject     = rtbiz_hd_create_new_ticket_title( 'rthd_new_ticket_email_title_group', $post_id );
 
 				$htmlbody = apply_filters( 'rthd_email_template_new_ticket_created_group_notification', rtbiz_hd_get_email_template_body( 'rthd_email_template_new_ticket_created_group_notification' ) );
-				$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_author}', $ticket_created_by->display_name );
+				$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_author}', $ticket_created_by->post_title );
 				$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_assignee}', $assigne_user->display_name );
 
 				// Add product info into mail body.
@@ -612,7 +611,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 			if ( ! empty( $assigneEmail ) && $notificationFlagAssignee ) {
 				$subject     = rtbiz_hd_create_new_ticket_title( 'rthd_new_ticket_email_title_assignee', $post_id );
 				$htmlbody = apply_filters( 'rthd_email_template_new_ticket_created_assignee', rtbiz_hd_get_email_template_body( 'rthd_email_template_new_ticket_created_assignee' ) );
-				$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_author}', $ticket_created_by->display_name );
+				$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_author}', $ticket_created_by->post_title );
 
 				// Add product info into mail body.
 				if ( ! empty( $arrProducts ) ) {
@@ -634,7 +633,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 				// A new support ticket is created by [CREATOR CONTACT NAME]. You have been subscribed to this ticket.
 				$subject     = rtbiz_hd_create_new_ticket_title( 'rthd_new_ticket_email_title_subscriber', $post_id );
 				$htmlbody = apply_filters( 'rthd_email_template_new_ticket_created_subscriber', rtbiz_hd_get_email_template_body( 'rthd_email_template_new_ticket_created_subscriber' ) );
-				$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_author}', $ticket_created_by->display_name );
+				$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_author}', $ticket_created_by->post_title );
 				$htmlbody = rtbiz_hd_replace_placeholder( $htmlbody,'{ticket_assignee}', $assigne_user->display_name );
 
 				// Add product info into mail body.
@@ -956,14 +955,10 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 		 * @return array
 		 */
 		public function get_contacts( $post_id ) {
-			$wp_user_ticket_creator = get_post_meta( $post_id, '_rtbiz_hd_created_by', true );
-			if ( ! empty( $wp_user_ticket_creator ) ) {
-				$created_by = rtbiz_get_contact_for_wp_user( $wp_user_ticket_creator );
-			}
 			$tocontact      = array();
-			if ( ! empty( $created_by[0] ) ) {
-				$email = get_post_meta( $created_by[0]->ID, Rtbiz_Entity::$meta_key_prefix.Rtbiz_Contact::$primary_email_key, true );
-				array_push( $tocontact, array( 'email' => $email ) );
+			$created_by = rtbiz_hd_get_ticket_creator( $post_id );
+			if ( ! empty( $created_by ) ) {
+				array_push( $tocontact, array( 'email' => $created_by->primary_email ) );
 			}
 			$contacts = rtbiz_get_post_for_contact_connection( $post_id, Rtbiz_HD_Module::$post_type, true );
 			foreach ( $contacts as $contact ) {

@@ -118,7 +118,7 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Info' ) ) {
 				<!--				<input type="text" name="created_by" class="user-autocomplete" placeholder="Search for User" />-->
 				<div id="selected_user">
 					<?php
-					$created_by = get_user_by( 'id', get_post_meta( $post->ID, '_rtbiz_hd_created_by', true ) );
+					$created_by = rtbiz_hd_get_ticket_creator( $post->ID );
 					if ( ! empty( $created_by ) ) {
 						?>
 						<ul>
@@ -127,13 +127,13 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Info' ) ) {
 									<?php
 									add_filter( 'get_avatar', array( $rtbiz_hd_cpt_tickets, 'add_gravatar_class' ) );
 
-									echo get_avatar( $created_by->user_email, 25 );
+									echo get_avatar( $created_by->primary_email, 25 );
 
 									remove_filter( 'get_avatar', array( $rtbiz_hd_cpt_tickets, 'add_gravatar_class' ) );
 									?>
 									<!--								<a href="#deleteContactUser" class="delete_row">×</a><br>-->
 									<a class="rthd-info-meta-created-by heading" target="_blank"
-									   href="<?php echo rtbiz_hd_biz_user_profile_link( $created_by->user_email ); ?>"><?php echo $created_by->display_name; ?></a>
+									   href="<?php echo rtbiz_hd_biz_user_profile_link( $created_by->primary_email ); ?>"><?php echo $created_by->post_title; ?></a>
 									<input type="hidden" name="post[rthd_created_by]"
 									       value="<?php echo $created_by->ID; ?>"/>
 								</p>

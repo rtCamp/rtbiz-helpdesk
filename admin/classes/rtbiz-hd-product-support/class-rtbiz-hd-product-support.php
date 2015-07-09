@@ -96,15 +96,20 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 		function edd_customer_ticket_column( $value, $item ) {
 			/* @var $customer EDD_Customer*/
 			$customer    = new EDD_Customer( $item );
+			$contact_id     = rtbiz_hd_get_contact_id_by_user_id( $customer->user_id, true );
+			if ( empty( $contact_id ) ) {
+				return '0';
+			}
+			// todo : in case of empty contact create contact and map it with wp_user do it now.
 			$posts = new WP_Query(array(
 				                      'post_type'      => Rtbiz_HD_Module::$post_type,
 				                      'post_status'    => 'any',
 				                      'nopaging'       => true,
 				                      'meta_key'       => '_rtbiz_hd_created_by',
-				                      'meta_value'     => $customer->user_id,
+				                      'meta_value'     => $contact_id,
 				                      'fields'         => 'ids',
 			                      ));
-			return '<a href="'.admin_url( 'edit.php?post_type='.Rtbiz_HD_Module::$post_type.'&created_by='.$customer->user_id ).'">'.$posts->found_posts.'</a>';
+			return '<a href="'.admin_url( 'edit.php?post_type='.Rtbiz_HD_Module::$post_type.'&created_by='.$contact_id ).'">'.$posts->found_posts.'</a>';
 		}
 
 		function edd_customer_columns( $columns ) {
@@ -385,7 +390,8 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 		 * @param $ticket_id
 		 */
 		function user_purchase_history( $ticket_id ) {
-			$created_by_id = get_post_meta( $ticket_id, '_rtbiz_hd_created_by', true );
+			$created_by_id = rtbiz_hd_get_ticket_creator( $ticket_id );
+			$created_by_id = rtbiz_hd_get_user_id_by_contact_id( $created_by_id );
 			if ( ! empty( $created_by_id ) ) {
 				$this->check_active_plugin();
 				$woo_payment = array();

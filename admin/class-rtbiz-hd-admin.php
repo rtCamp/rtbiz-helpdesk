@@ -36,7 +36,7 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 
 			global $rtbiz_hd_mail_acl_model, $rtbiz_hd_ticket_history_model, $rtbiz_hd_ticket_index_model,
 			       $rtbiz_hd_attributes, $rtbiz_hd_module, $rtbiz_hd_cpt_tickets, $rtbiz_hd_reports, $rtbiz_hd_dashboard,
-			       $rtbiz_hd_accounts, $rtbiz_hd_contacts, $rtbiz_hd_tickets_operation, $rtbiz_hd_email_notification, $rtbiz_hd_auto_response ;
+			       $rtbiz_hd_accounts, $rtbiz_hd_contacts, $rtbiz_hd_tickets_operation, $rtbiz_hd_email_notification, $rtbiz_hd_auto_response, $rtbiz_hd_migration ;
 
 			$rtbiz_hd_mail_acl_model = new Rtbiz_HD_Mail_ACL_Model();
 			$rtbiz_hd_ticket_history_model = new Rtbiz_HD_Ticket_History_Model();
@@ -76,6 +76,9 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 
 			// For ajax request register with WordPress
 			$rtbiz_hd_contact_blacklist = new Rtbiz_HD_Ticket_Contacts_Blacklist();
+
+			// migration class
+			$rtbiz_hd_migration = new Rtbiz_HD_Migration();
 
 		}
 

@@ -1252,12 +1252,19 @@ function rtbiz_hd_get_tickets( $key, $value, $offset = 0, $limit = 0, $nopaging 
 
 	if ( 'created_by' == $key ) {
 		$value = rtbiz_hd_convert_into_userid( $value );
-		$args['meta_query'] = array(
-			array(
-				'key' => '_rtbiz_hd_created_by',
-				'value' => $value,
-			),
-		);
+		$contact = rtbiz_get_contact_for_wp_user( $value );
+		$contact_id = 0;
+		if ( ! empty( $contact[0] ) ) {
+			$contact_id = $contact[0]->ID;
+		}
+		if ( ! empty( $contact_id ) ) {
+			$args['meta_query'] = array(
+				array(
+					'key'   => '_rtbiz_hd_created_by',
+					'value' => $contact_id,
+				),
+			);
+		}
 	} elseif ( 'assignee' == $key ) {
 		$value = rtbiz_hd_convert_into_userid( $value );
 		$args['author'] = $value;
@@ -1285,6 +1292,10 @@ function rtbiz_hd_get_tickets( $key, $value, $offset = 0, $limit = 0, $nopaging 
 			$value = $value->ID;
 		}
 		$user_id = rtbiz_hd_get_user_id_from_order_id( $value );
+		$contact_id = rtbiz_hd_get_contact_id_by_user_id( $user_id, true );
+		if ( empty( $contact_id ) ) {
+			return false;
+		}
 		if ( is_admin() ) {
 			$args['meta_query'] = array(
 				'relation' => 'OR',
@@ -1295,7 +1306,7 @@ function rtbiz_hd_get_tickets( $key, $value, $offset = 0, $limit = 0, $nopaging 
 				),
 				array(
 					'key' => '_rtbiz_hd_created_by',
-					'value' => $user_id,
+					'value' => $contact_id,
 					'compare' => '=',
 				),
 			);
@@ -1899,4 +1910,55 @@ function rtbiz_hd_update_assignee( $postid, $post_author ) {
 	global $rtbiz_hd_ticket_index_model;
 	$rtbiz_hd_ticket_index_model->update_ticket_assignee( $post_author, $postid );
 	return true;
+}
+
+
+/**
+ * @param $post_id
+ * get Contact post and primary email field.
+ *
+ * @return bool|mixed
+ */
+function rtbiz_hd_get_ticket_creator( $post_id ) {
+	$contact_id = get_post_meta( $post_id, '_rtbiz_hd_created_by', true );
+	if ( ! empty( $contact_id ) ) {
+		$contact = get_post( $contact_id );
+		if ( ! empty( $contact ) ) {
+			$contact->primary_email = rtbiz_get_entity_meta( $contact_id, Rtbiz_Contact::$primary_email_key, true );
+			return $contact;
+		}
+	}
+	return false;
+}
+
+/**
+ * @param      $contact_id
+ * @param bool $force
+ *
+ * @return bool
+ */
+function rtbiz_hd_get_user_id_by_contact_id( $contact_id ) {
+	if ( is_object( $contact_id ) ) {
+		$contact_id  = $contact_id->ID;
+	}
+	$users = rtbiz_get_wp_user_for_contact( $contact_id );
+	if ( ! empty( $users[0] ) ) {
+		return $users[0]->ID;
+	}
+	return false;
+}
+
+function rtbiz_hd_get_contact_id_by_user_id( $user_id, $force = false ) {
+	if ( is_object( $user_id ) ) {
+		$user_id = $user_id->ID;
+	}
+	$contacts = rtbiz_get_contact_for_wp_user( $user_id );
+	if ( ! empty( $contacts[0] ) ) {
+		return $contacts[0]->ID;
+	} else {
+		if ( $force ) {
+			return rtbiz_export_contact( $user_id );
+		}
+	}
+	return false;
 }

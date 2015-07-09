@@ -177,7 +177,7 @@ $user_edit_content = current_user_can( $cap );
 					}
 					// Participants
 					$create_by_time     = esc_attr( human_time_diff( strtotime( $createdate ), current_time( 'timestamp' ) ) ) . ' ago';
-					$created_by         = get_user_by( 'id', get_post_meta( $post->ID, '_rtbiz_hd_created_by', true ) );
+					$created_by         = rtbiz_hd_get_ticket_creator( $post->ID );
 
 					global $wpdb, $rtbiz_hd_email_notification;
 
@@ -185,7 +185,7 @@ $user_edit_content = current_user_can( $cap );
 					$emails = $wpdb->get_results( 'SELECT distinct(comment_author_email) from ' . $wpdb->comments . ' where comment_post_ID= ' . $post->ID . ' AND comment_type=' . Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC );
 					$emails = wp_list_pluck( $emails, 'comment_author_email' );
 
-					$emails = array_diff( $emails, array( $created_by->user_email ) );
+					$emails = array_diff( $emails, array( $created_by->primary_email ) );
 					// get last comment for getting date and time of last reply by
 					$comment = get_comments( array( 'post_id' => $post->ID, 'number' => 1 ) );
 
@@ -202,7 +202,7 @@ $user_edit_content = current_user_can( $cap );
 						$subscriber = array_diff( $subscriber, $emails );
 
 						// remove ticket creator from subscriber list if present ( in case of staff member created ticket )
-						$subscriber = array_diff( $subscriber, array( $created_by->user_email ) );
+						$subscriber = array_diff( $subscriber, array( $created_by->primary_email ) );
 					}
 
 					$other_contacts = wp_list_pluck( $other_contacts, 'email' );
@@ -211,7 +211,7 @@ $user_edit_content = current_user_can( $cap );
 					$other_contacts = array_diff( $other_contacts, $emails );
 
 					// remove user ticket creator
-					$other_contacts = array_diff( $other_contacts, array( $created_by->user_email ) );
+					$other_contacts = array_diff( $other_contacts, array( $created_by->primary_email ) );
 
 					if ( ! empty( $comment ) ) {
 						$comment = $comment[0];
@@ -300,7 +300,7 @@ $user_edit_content = current_user_can( $cap );
 
 							<?php
 							if ( ! empty( $created_by ) ) {
-								echo '<div class="rthd-participant-container"><a class="rthd-ticket-created-by" title="Created by ' . $created_by->display_name . ' ' . $create_by_time . '" href="' . ( current_user_can( $cap ) ? rtbiz_hd_biz_user_profile_link( $created_by->user_email ) : '#' ) . '">' . get_avatar( $created_by->user_email, '48' ) . '</a></div>';
+								echo '<div class="rthd-participant-container"><a class="rthd-ticket-created-by" title="Created by ' . $created_by->post_title . ' ' . $create_by_time . '" href="' . ( current_user_can( $cap ) ? get_edit_post_link( $created_by->ID ) : '#' ) . '">' . get_avatar( $created_by->primary_email, '48' ) . '</a></div>';
 							}
 							// contact group
 							foreach ( $other_contacts as $email ) {
@@ -340,7 +340,7 @@ $user_edit_content = current_user_can( $cap );
 							}
 
 							// Last reply author
-							if ( ! empty( $comment ) && $comment->comment_author_email != $created_by->user_email ) {
+							if ( ! empty( $comment ) && $comment->comment_author_email != $created_by->primary_email ) {
 								echo '<div class="rthd-participant-container"><a class="rthd-last-reply-by" title="last reply by ' . $comment->comment_author . ' ' . esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . ' ago " href="' . ( current_user_can( $cap ) ? rtbiz_hd_biz_user_profile_link( $comment->comment_author_email ) : '#' ) . '">' . get_avatar( $comment->comment_author_email, '48' ) . ' </a><a href="javascript:;" class="rthd-participant-remove" data-email="' . $comment->comment_author_email . '" data-post_id="' . $post->ID . '" >X</a><div>'
 								?>
 							<?php } ?>
@@ -426,19 +426,20 @@ $user_edit_content = current_user_can( $cap );
 					}
 				}
 
-				$created_by = get_user_by( 'id', get_post_meta( $post->ID, '_rtbiz_hd_created_by', true ) );
-				$otherposts = get_posts( array(
-					'post_type'    => Rtbiz_HD_Module::$post_type,
-					'post_status'  => 'any',
-					'post__not_in' => array( $post->ID ),
-					'meta_query'   => array(
-						array(
-							'key'   => '_rtbiz_hd_created_by',
-							'value' => $created_by->ID,
-						),
-					),
-				) );
-				if ( $otherposts ) {
+				if ( ! empty( $created_by ) ) {
+					$otherposts = get_posts( array(
+						                         'post_type'    => Rtbiz_HD_Module::$post_type,
+						                         'post_status'  => 'any',
+						                         'post__not_in' => array( $post->ID ),
+						                         'meta_query'   => array(
+							                         array(
+								                         'key'   => '_rtbiz_hd_created_by',
+								                         'value' => $created_by->ID,
+							                         ),
+						                         ),
+					                         ) );
+				}
+				if ( ! empty( $otherposts ) ) {
 					?>
 					<div class="rt-hd-sidebar-box">
 						<div class="rt-hd-ticket-info">

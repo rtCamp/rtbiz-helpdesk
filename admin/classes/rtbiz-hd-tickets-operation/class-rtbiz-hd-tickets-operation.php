@@ -106,11 +106,12 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Operation' ) ) {
 					if ( is_wp_error( $post_id ) ) {
 						return false;
 					}
-					update_post_meta( $post_id, '_rtbiz_hd_created_by', ( empty( $created_by ) ) ? get_current_user_id() : $created_by );
+					$current_user_contact = rtbiz_hd_get_contact_id_by_user_id( get_current_user_id(), true );
+					update_post_meta( $post_id, '_rtbiz_hd_created_by', ( empty( $created_by ) ) ? $current_user_contact  : $created_by );
 					$dataArray = array_merge( $dataArray, array(
 						'date_create'     => $postArray['post_date'],
 						'date_create_gmt' => $postArray['post_date_gmt'],
-						'user_created_by' => ( empty( $created_by ) ) ? get_current_user_id() : $created_by,
+						'user_created_by' => ( empty( $created_by ) ) ? $current_user_contact : $created_by,
 					) );
 				} else { //update post
 					// unhook this function so it doesn't loop infinitely
@@ -122,11 +123,12 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Operation' ) ) {
 					} else {
 						$created_by = get_post_meta( $post_id, '_rtbiz_hd_created_by', true );
 						if ( empty( $created_by ) ) {
-							update_post_meta( $post_id, '_rtbiz_hd_created_by', get_current_user_id() );
+							$contact_id = rtbiz_hd_get_contact_id_by_user_id( get_current_user_id(), true );
+							update_post_meta( $post_id, '_rtbiz_hd_created_by', $contact_id );
 							$dataArray = array_merge( $dataArray, array(
 								'date_create'     => current_time( 'mysql' ),
 								'date_create_gmt' => gmdate( 'Y-m-d H:i:s' ),
-								'user_created_by' => ( empty( $created_by ) ) ? get_current_user_id() : $created_by,
+								'user_created_by' => ( empty( $created_by ) ) ? $contact_id : $created_by,
 							) );
 						}
 					}

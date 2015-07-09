@@ -149,8 +149,8 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 					$subscriber     = get_post_meta( $post->ID, '_rtbiz_hd_subscribe_to', true );
 					$post_author_id = get_post_field( 'post_author', $post->ID );
 					$creator = get_post_meta( $post->ID, '_rtbiz_hd_created_by', true );
-
-					if ( ! in_array( $user->ID, $subscriber ) && ! in_array( $user->user_email, $subscriber ) && $user->ID != $post_author_id && $creator != $user->ID ) {
+					$contact_currrent_user_id = rtbiz_hd_get_contact_id_by_user_id( $user->ID, true );
+					if ( ! in_array( $user->ID, $subscriber ) && ! in_array( $user->user_email, $subscriber ) && $user->ID != $post_author_id && ! empty( $contact_currrent_user_id ) && $creator != $contact_currrent_user_id ) {
 						$redirect_url = ( ( is_ssl() ) ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 						$login_url    = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( $redirect_url ) );
 						$message      = sprintf( '%s ', __( 'You do not have sufficient permissions to access this ticket.' ) );
@@ -165,7 +165,8 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 					$other_contacts = $rtbiz_hd_email_notification->get_contacts( $post->ID );
 					$contact_ids    = wp_list_pluck( $contacts, 'ID' );
 					$contact_emails = wp_list_pluck( $other_contacts, 'email' );
-
+					$creator = get_post_meta( $post->ID, '_rtbiz_hd_created_by', true );
+					$contact_currrent_user_id = rtbiz_hd_get_contact_id_by_user_id( $user->ID, true );
 					$current_contact = '';
 					if ( ! empty( $user ) ) {
 						$current_contact = rtbiz_get_contact_for_wp_user( $user->ID );
@@ -173,8 +174,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 							$current_contact = $current_contact[0];
 						}
 					}
-					$creator = get_post_meta( $post->ID, '_rtbiz_hd_created_by', true );
-					if ( ( empty( $current_contact ) || ( ! in_array( $current_contact->ID, $contact_ids ) && ! in_array( $user->user_email, $contact_emails ) ) ) && $creator != $user->ID ) {
+					if ( ( empty( $current_contact ) || ( ! in_array( $current_contact->ID, $contact_ids ) && ! in_array( $user->user_email, $contact_emails ) ) ) && ! empty( $contact_currrent_user_id ) && $contact_currrent_user_id != $creator ) {
 						$redirect_url = ( ( is_ssl() ) ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 						$login_url    = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( $redirect_url ) );
 						$message      = sprintf( '%s ', __( 'You do not have sufficient permissions to access this ticket.' ) );

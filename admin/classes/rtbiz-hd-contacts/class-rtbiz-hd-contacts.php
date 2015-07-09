@@ -84,7 +84,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 				}
 				$_GET['fall_back'] = 'yes';
 				if ( isset( $_GET['contact_group'] ) && 'customer' == $_GET['contact_group'] && isset( $_REQUEST['tickets'] ) ) {
-					$sql = "SELECT DISTINCT p2p_from FROM $wpdb->posts, $wpdb->postmeta, $wpdb->p2p WHERE post_id = id and post_status <> 'trash' and `meta_key` = '_rtbiz_hd_created_by' and meta_value = p2p_to and p2p_type = '" . rtbiz_get_contact_post_type() . "_to_user'";
+					$sql = "SELECT DISTINCT meta_value FROM $wpdb->posts, $wpdb->postmeta WHERE post_id = id and post_status <> 'trash' and meta_key = '_rtbiz_hd_created_by'";
 					$contacts_with_ticket = $wpdb->get_col( $sql );
 					if ( empty( $contacts_with_ticket ) ) {
 						$contacts_with_ticket = array( -1 );
@@ -516,9 +516,9 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 
 			switch ( $column ) {
 				case Rtbiz_HD_Module::$post_type:
-					$userid = rtbiz_get_wp_user_for_contact( $post_id );
-					if ( ! empty( $userid[0] ) ) {
-						if ( ! empty( $_REQUEST['contact_group'] ) && 'staff' == $_REQUEST['contact_group'] ) {
+					if ( ! empty( $_REQUEST['contact_group'] ) && 'staff' == $_REQUEST['contact_group'] ) {
+						$userid = rtbiz_get_wp_user_for_contact( $post_id );
+						if ( ! empty( $userid[0] ) ) {
 							$args  = array(
 								'post_type'   => Rtbiz_HD_Module::$post_type,
 								'post_status' => 'any',
@@ -528,19 +528,19 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 							$link  = get_admin_url() . 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type . '&assigned=' . $userid[0]->ID;
 							echo '<a href="' . $link . '" target="_blank">' . $query->found_posts . '</a>';
 						} else {
-							$args  = array(
-								'post_type'   => Rtbiz_HD_Module::$post_type,
-								'post_status' => 'any',
-								'meta_key'    => '_rtbiz_hd_created_by',
-								'meta_value'  => $userid[0]->ID,
-							);
-							//$_REQUEST['tickets'] = null; // With/without pre post query override due to this argument. For preventing such condition argument set as null
-							$query = new WP_Query( $args );
-							$link  = get_admin_url() . 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type . '&created_by=' . $userid[0]->ID;
-							echo '<a href="' . $link . '" target="_blank">' . $query->found_posts . '</a>';
+							echo '0';
 						}
 					} else {
-						echo '0';
+						$args  = array(
+							'post_type'   => Rtbiz_HD_Module::$post_type,
+							'post_status' => 'any',
+							'meta_key'    => '_rtbiz_hd_created_by',
+							'meta_value'  => $post_id,
+						);
+						//$_REQUEST['tickets'] = null; // With/without pre post query override due to this argument. For preventing such condition argument set as null
+						$query = new WP_Query( $args );
+						$link  = get_admin_url() . 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type . '&created_by=' . $post_id;
+						echo '<a href="' . $link . '" target="_blank">' . $query->found_posts . '</a>';
 					}
 					break;
 				default:

@@ -16,19 +16,18 @@ $comments = get_comments( array(
 
 $cap        = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' );
 $staffonly = current_user_can( $cap );
-$created_by = get_post_meta( $post->ID, '_rtbiz_hd_created_by', true );
-
-$user_edit_content = $staffonly|| ( get_current_user_id() == $post->$created_by );
-
-
-
-	$created_by  = get_user_by( 'id', get_post_meta( $post->ID, '_rtbiz_hd_created_by', true ) );
-	$authorname  = 'Anonymous';
-	$authoremail = '';
-	if ( ! empty( $created_by ) ) {
-		$authorname  = $created_by->display_name;
-		$authoremail = $created_by->user_email;
-	}
+$created_by = rtbiz_hd_get_ticket_creator( $post->ID );
+$userid = rtbiz_get_wp_user_for_contact( $created_by->ID );
+if ( ! empty( $userid[0] ) ) {
+	$userid = $userid[0]->ID;
+}
+$user_edit_content = $staffonly || ( ! empty( $userid ) && get_current_user_id() == $userid );
+$authorname  = 'Anonymous';
+$authoremail = '';
+if ( ! empty( $created_by ) ) {
+	$authorname  = $created_by->post_title;
+	$authoremail = $created_by->primary_email;
+}
 	?>
 	<ul class="rthd-discussion" id="ticket-content-UI">
 		<li class="rthd-other <?php echo count( $comments ) > 0 ? '' : 'rthd-no-comments'; ?> ticketother">

@@ -63,7 +63,7 @@ class test_Rt_HD_Tickets_Operation extends RT_WP_TestCase {
 		$this->assertEquals( Rtbiz_HD_Module::$post_type, $post->post_type );
 		$this->assertEquals( $post_date_gmt, $post->post_date_gmt );
 
-		$this->assertEquals( get_current_user_id(), get_post_meta( $this->post_ID, '_rtbiz_hd_created_by', true ) );
+		$this->assertEquals( rtbiz_hd_get_contact_id_by_user_id( get_current_user_id(), true ), get_post_meta( $this->post_ID, '_rtbiz_hd_created_by', true ) );
 		$this->assertEquals( get_current_user_id(), get_post_meta( $this->post_ID, '_rtbiz_hd_updated_by', true ) );
 		$unique_id = get_post_meta( $this->post_ID, '_rtbiz_hd_unique_id', true );
 		$this->assertFalse( empty( $unique_id ) );
