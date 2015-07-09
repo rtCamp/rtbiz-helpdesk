@@ -1613,9 +1613,11 @@ function rtbiz_hd_get_default_email_template( $key = '', $all = false ) {
 			<div style="color: #888888; font-size: 14px;">
 				Ticket updated by <strong>{ticket_updated_by}</strong>. {ticket_link}
 			</div>
+			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0" />
 			<div style="font-size: 16px; line-height: 26px; color:#333333; margin: 25px 0">
 				{ticket_difference}
-			</div>';
+			</div>
+			<hr style="background-color: #eee; border: 0 none; height: 1px; margin: 25px 0" />';
 
 	if ( ! empty( $key ) && isset( $redux[ $key ] ) ) {
 		return $redux[ $key ];
