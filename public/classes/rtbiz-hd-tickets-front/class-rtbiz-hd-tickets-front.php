@@ -71,6 +71,9 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 			}
 			remove_action( 'wpseo_head', array( 'WPSEO_GooglePlus', 'get_instance' ), 35 );
 			remove_action( 'wpseo_head', array( 'WPSEO_Twitter', 'get_instance' ), 40 );
+			if ( function_exists( 'wpfbogp_build_head' ) ) {
+				remove_action( 'wp_head', 'wpfbogp_build_head', 50 );
+			}
 		}
 
 		function admin_bar_edit_menu( $wp_admin_bar ) {
