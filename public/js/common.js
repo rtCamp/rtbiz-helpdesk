@@ -186,7 +186,7 @@ jQuery( document ).ready(function () {
 						followup_type = 10;
 				}
                 var formData = new FormData();
-				formData.append( "private_comment", jQuery( '#new-followup-form').find( '#rthd_sensitive' ).is( ':checked' ) );
+				formData.append( "private_comment", jQuery( '#new-followup-form').find( '#rthd_sensitive_content' ).is( ':checked' ) );
 				formData.append( "followup_ticket_unique_id", jQuery( '#ticket_unique_id' ).val() );
 				formData.append( "post_type", jQuery( '#followup_post_type' ).val() );
 				formData.append( "action", 'rtbiz_hd_add_new_followup_front' );
@@ -225,7 +225,7 @@ jQuery( document ).ready(function () {
 							// front end code end
                             jQuery('#followupcontent').val('');
                             jQuery('#followuptype').val('');
-                            jQuery( '#new-followup-form').find( '#rthd_sensitive' ).prop( "checked", false );
+                            jQuery( '#new-followup-form').find( '#rthd_sensitive_content' ).prop( "checked", false );
 
 							uploadedfiles = [];
 							if (data.ticket_status == 'answered') {

@@ -1739,6 +1739,11 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			if ( isset( $_POST['rthd_keep_status'] ) && ! empty( $_POST['rthd_keep_status'] ) && 'true' == $_POST['rthd_keep_status'] ) {
 				$keep_status = true;
 			}
+
+			if ( 30 == $comment_type ){
+				$keep_status = true;
+			}
+
 			$uploaded = explode( ',', $_POST['followup_attachments'] );
 			//          $force_duplicate = false;
 			//          if ( ! empty( $_POST['followup_duplicate_force'] ) ) {
@@ -2146,7 +2151,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			$labels = $rtbiz_hd_module->labels;
 			rtbiz_hd_update_ticket_updated_by_user( $post_id, get_current_user_id() );
 			global $rtbiz_hd_email_notification;
-			$body = $labels['name'].' Status <strong>'.rtbiz_hd_status_markup( $old ).'</strong> changed to <strong>'.rtbiz_hd_status_markup( $post_status ).'</strong>';
+			$body = $labels['name'].' Status changed from <strong>'.rtbiz_hd_status_markup( $old ).'</strong> to <strong>'.rtbiz_hd_status_markup( $post_status ).'</strong>.';
 			$rtbiz_hd_email_notification->notification_ticket_updated( $post_id, $labels['name'], $body, array() );
 			echo json_encode( $response );
 			die();

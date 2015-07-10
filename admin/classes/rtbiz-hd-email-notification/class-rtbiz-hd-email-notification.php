@@ -53,7 +53,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 				$title = 'followup';
 			}
 			$url  = rtbiz_hd_is_unique_hash_enabled() ? rtbiz_hd_get_unique_hash_url( $post_id ) : get_post_permalink( $post_id );
-			return '<i style="color:#888888">To view '.$title.' online <a style="color: #3455ff; text-decoration: none;" href="'. $url . $followup_url . '">click here</a></i>';
+			return '<i style="color:#888888">To view '.$title.' online <a style="color: #3455ff; text-decoration: none;" href="'. $url . $followup_url . '">click here</a></i>.';
 		}
 
 		/**

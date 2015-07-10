@@ -124,7 +124,7 @@ ul#chat-UI {
 }
 
 .rthd-visibility-wrap {
-	margin-bottom: 16px;
+	margin-bottom: 14px;
 	label {
 		margin-right: 10px;
 	}
@@ -429,6 +429,9 @@ ul#chat-UI {
 	height: 50px;
     text-decoration: none;
 }
+a:hover.rthd-scroll-up{
+	text-decoration: none;
+}
 .rthd-followup-type-tolltip{
 	vertical-align: middle;
 }
@@ -656,12 +659,14 @@ img#hdspinner{
 }
 
 .rthd-followup-action {
+    margin-top: 6px;
 	float: right;
     display: inline-block;
 }
 
 .rthd-attachment-box{
     display: inline-block;
+    float: left;
 }
 
 .rthd-attach-file{
