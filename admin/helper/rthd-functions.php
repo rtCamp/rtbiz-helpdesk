@@ -1906,3 +1906,19 @@ function rtbiz_hd_update_assignee( $postid, $post_author ) {
 	$rtbiz_hd_ticket_index_model->update_ticket_assignee( $post_author, $postid );
 	return true;
 }
+
+/**
+* Function to get all the file extensions 
+* which supported by the wordpress
+*/
+function rtbiz_hd_get_supported_extensions() {
+	$mimes = get_allowed_mime_types();
+	foreach ( $mimes as $type => $mime ) {
+		$seprate_extensions = explode( '|', $type );
+		foreach ( $seprate_extensions as $seprate_extension ) {
+			$types[] = $seprate_extension;
+		}
+	}
+
+	return $types;
+}

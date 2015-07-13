@@ -166,13 +166,19 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				}
 				$attachment = $_FILES['file'];
 				$uploaded[] = Rtbiz_HD_Product_Support::insert_attachment( $attachment );
-				$attachments = $this->add_attachment_to_post( $uploaded, $comment_post_ID );
-				if ( ! empty( $attachments['ids'] ) ) {
-					$response['attach_ids'] = $attachments['ids'];
-				} else {
-					$response['attach_ids'] = array();
+				
+				$response['status'] = false;
+
+				if ( isset( $uploaded[0] ) && !empty( $uploaded[0] ) ) {
+					$attachments = $this->add_attachment_to_post( $uploaded, $comment_post_ID );
+					if ( !empty( $attachments['ids'] ) ) {
+						$response['attach_ids'] = $attachments['ids'];
+					} else {
+						$response['attach_ids'] = array();
+					}
+					$response['status'] = true;
 				}
-				$response['status'] = true;
+
 				echo json_encode( $response );
 				die();
 			}
