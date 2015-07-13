@@ -96,7 +96,7 @@ jQuery( document ).ready(function () {
                 },
 
                 Error: function (up, err) {
-					console.log( "\nError #" + err.code + ": " + err.message );
+                    jQuery( '#support-filelist' ).append('<div class="rthd-error">Selected file doesn\'t supported.</div>');
                     //document.getElementById( 'console' ).innerHTML += "\nError #" + err.code + ": " + err.message;
                 },
 

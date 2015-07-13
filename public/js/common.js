@@ -123,7 +123,7 @@ jQuery( document ).ready(function () {
 							document.getElementById( file.id ).getElementsByTagName( 'b' )[0].innerHTML = '<span>' + file.percent + "%</span>";
 						},
 						Error: function (up, err) {
-							console.log( "\nError #" + err.code + ": " + err.message );
+							jQuery( '#followup-filelist' ).append('<div class="rthd-error">Selected file doesn\'t supported.</div>');
 							//document.getElementById( 'console' ).innerHTML += "\nError #" + err.code + ": " + err.message;
 						},
 						UploadComplete: function () {
