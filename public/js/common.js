@@ -123,7 +123,8 @@ jQuery( document ).ready(function () {
 							document.getElementById( file.id ).getElementsByTagName( 'b' )[0].innerHTML = '<span>' + file.percent + "%</span>";
 						},
 						Error: function (up, err) {
-							document.getElementById( 'console' ).innerHTML += "\nError #" + err.code + ": " + err.message;
+							console.log( "\nError #" + err.code + ": " + err.message );
+							//document.getElementById( 'console' ).innerHTML += "\nError #" + err.code + ": " + err.message;
 						},
 						UploadComplete: function () {
 							document.getElementById( 'followup-filelist' ).innerHTML = '';
