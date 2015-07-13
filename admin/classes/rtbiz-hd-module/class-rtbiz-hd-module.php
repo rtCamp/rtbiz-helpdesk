@@ -183,7 +183,7 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 				'publicly_queryable' => true,
 				'has_archive'        => true,
 				'rewrite'            => array(
-					'slug'       => strtolower( $this->labels['all_items'] ),
+					'slug'       => strtolower( $this->labels['singular_name'] ),
 				    'with_front' => false,
 				),
 				'show_ui'            => true, // Show the UI in admin panel
