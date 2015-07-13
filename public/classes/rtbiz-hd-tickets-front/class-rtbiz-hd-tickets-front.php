@@ -44,6 +44,20 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 			add_filter( 'wpseo_title', array( $this, 'change_title' ), 9999, 1 );
 
 			add_action( 'rthd_ticket_front_page_after_header', array( $this, 'set_rthd_ticket_post_data' ) );
+
+			add_filter( 'page_template', array( $this, 'helpdesh_error_page_template' ) );
+		}
+
+		function helpdesh_error_page_template( $page_template ){
+			$slug = 'helpdesk-authentication-error';
+			if ( is_page( $slug ) ) {
+				$login_url    = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( esc_url( urldecode( $_REQUEST['redirect_url'] ) ) ) );
+				$message      = sprintf( '%s <a href="%s">%s</a> %s', __( 'You are not logged in. Please login' ), $login_url, __( 'here' ), __( 'to view this ticket.' ) );
+				global $rthd_messages;
+				$rthd_messages[] = array( 'type' => 'error rthd-error', 'message' => $message, 'displayed' => 'no' );
+				return rtbiz_hd_locate_template( 'ticket-error-page.php' );
+			}
+			return $page_template;
 		}
 
 		function show_original_email() {
@@ -136,13 +150,14 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 
 			if ( ! is_user_logged_in() ) {
 				$redirect_url = ( ( is_ssl() ) ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-				$login_url    = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( $redirect_url ) );
-				$message      = sprintf( '%s <a href="%s">%s</a> %s', __( 'You are not logged in. Please login' ), $login_url, __( 'here' ), __( 'to view this ticket.' ) );
-				global $rthd_messages;
-				$rthd_messages[] = array( 'type' => 'error rthd-error', 'message' => $message, 'displayed' => 'no' );
-				$rthd_front_page_title = __( 'Helpdesk' );
-
-				return rtbiz_hd_locate_template( 'ticket-error-page.php' );
+				$option = 'rtbiz_hd_helpdesk_authentication_error_page_id';
+				$option_value = get_option( $option );
+				if ( $option_value > 0 && get_post( $option_value ) ){
+					wp_redirect( add_query_arg( 'redirect_url', urlencode( $redirect_url ), get_page_link($option_value) ) );
+				} else {
+					wp_redirect( wp_login_url( $redirect_url ) );
+				}
+				die();
 			}
 
 			if ( ! empty( $post ) && isset( $wp_query->query[ Rtbiz_HD_Module::$post_type ] ) ) {

@@ -8,6 +8,7 @@ jQuery( document ).ready(function ($) {
 	var rthdShortcode = {
 		init: function () {
 			rthdShortcode.scroll();
+            rthdShortcode.initAddHdErrorPage();
 		},
 		scroll : function (){
 			if ( typeof rthd_shortcode_params !== 'undefined' ) {
@@ -49,7 +50,29 @@ jQuery( document ).ready(function ($) {
 						loader.hide();
 					}
 	        });
-	}
-};
+	    },
+        initAddHdErrorPage: function(){
+            jQuery( '#rthd-add-hd-error-page' ).on('click', function (e) {
+                var requestArray = {};
+                requestArray.action = 'rtbiz_add_hd_error_page';
+                jQuery.ajax({
+                    url: ajaxurl,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: requestArray,
+                    success: function (data) {
+                        if ( data.status ) {
+                            location.reload();
+                        }else{
+                            console.log( data.msg );
+                        }
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        console.log( data.msg );
+                    }
+                });
+            });
+        }
+    };
 	rthdShortcode.init();
 });

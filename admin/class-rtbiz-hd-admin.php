@@ -217,6 +217,65 @@ if ( !class_exists( 'Rtbiz_HD_Admin' ) ) {
 			return $modules;
 		}
 
+		function ajax_rtbiz_add_hd_error_page(){
+			$response = array();
+			$response['status'] = false;
+			$page_title = 'Helpdesk Authentication Error';
+			$page_content = '[Helpdesk Authentication Error]';
+			$slug = 'helpdesk-authentication-error';
+			$option = 'rtbiz_hd_helpdesk_authentication_error_page_id';
+			$option_value = get_option( $option );
+			if ( $option_value > 0 && get_post( $option_value ) ) {
+				$response['status'] = false;
+			} else {
+				global $wpdb;
+
+				$page_found = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM " . $wpdb->posts . " WHERE post_type='page' AND post_name = %s AND post_content NOT LIKE %s LIMIT 1;", $slug, "%{$page_content}%" ) );
+
+				if ( $page_found ) {
+					$post_name = wp_unique_post_slug( $slug, '', 'publish', 'page', '' );
+					$wpdb->update( $wpdb->posts, array( 'post_name' => $post_name, 'post_status' => 'draft' ), array( 'ID' => $page_found ) );
+				}
+
+				$page_found = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM " . $wpdb->posts . " WHERE post_type='page' AND post_name = %s AND post_content LIKE %s LIMIT 1;", $slug, "%{$page_content}%" ) );
+				if ( $page_found ) {
+					if ( ! $option_value ) {
+						update_option( $option, $page_found );
+					}
+					$response['status'] = true;
+				} else {
+					$page_data = array(
+						'post_status'       => 'publish',
+						'post_type'         => 'page',
+						'post_author'       => 1,
+						'post_name'         => $slug,
+						'post_title'        => $page_title,
+						'post_content'      => $page_content,
+						'comment_status'    => 'closed'
+					);
+					$page_id = wp_insert_post( $page_data );
+
+					if ( $option ) {
+						update_option( $option, $page_id );
+					}
+
+					$response['status'] = true;
+				}
+			}
+			echo json_encode( $response );
+			die();
+		}
+
+		function Add_error_page_notice(){
+			$option = get_option( 'rtbiz_hd_helpdesk_authentication_error_page_id' );
+			$page = get_post( $option );
+			if ( rtbiz_hd_check_wizard_completed() && ( $option <= 0  || ! $page ) ) {
+				$class   = "updated";
+				$message = "<p><b>Welcome to Helpdesk</b> - You're almost ready to use Helpdesk</p><p class='submit-action'><a id='rthd-add-hd-error-page' class='btn button-primary' href='javascript:;' title='Install Helpdesh Pages'>Install <b>Helpdesk Authentication Error</b> page.</a></p>";
+				echo "<div class=\"$class\"> <p>$message</p></div>";
+			}
+		}
+
 		/**
 		 * @param $term
 		 * @param $taxonomy
