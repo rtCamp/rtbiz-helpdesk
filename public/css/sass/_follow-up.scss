@@ -421,13 +421,14 @@ ul#chat-UI {
 	text-decoration: none;
 }
 .rthd-scroll-up {
-	z-index: 1;
+	z-index: 100;
 	position: fixed;
 	bottom: 100px;
 	right: 50px;
-	width: 50px;
-	height: 50px;
+	width: 34px;
+	height: 40px;
     text-decoration: none;
+    text-align: center;
 }
 .rthd-followup-type-tolltip{
 	vertical-align: middle;
@@ -435,11 +436,15 @@ ul#chat-UI {
 
 .rthd-scroll-up label{
 	display: block;
-	margin-left: 7px;
+    text-align: center;
+    width: 34px;
+    margin: 0px;
 }
 .rthd-scroll-up .dashicons{
 	font-weight: bold;
 	font-size: 2em;
+    width: 30px;
+    height: 20px;
 }
 
 h2.rt-hd-ticket-front-title{
