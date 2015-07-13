@@ -86,7 +86,7 @@ $staffonly = current_user_can( $cap );
 			</div>
 		</div>
 		<div id="rthd-followup-action" class="rthd-followup-action">
-			<button class="add-savefollowup btn btn-primary button-primary button" id="savefollwoup" type="button">Add Reply</button>
+			<button class="add-savefollowup btn btn-primary button-primary" id="savefollwoup" type="button">Add Reply</button>
 			<img id='hdspinner' class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>">
 		</div>
 	</div>

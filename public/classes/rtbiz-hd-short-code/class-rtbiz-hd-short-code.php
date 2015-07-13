@@ -315,7 +315,7 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 								?>
 								<a class="clearfix" href="<?php echo $link; ?>">
 									<button
-										class="button btn button-primary btn-primary"><?php _e( 'Create New Ticket', RTBIZ_HD_TEXT_DOMAIN ) ?></button>
+										class="btn button-primary btn-primary"><?php _e( 'Create New Ticket', RTBIZ_HD_TEXT_DOMAIN ) ?></button>
 								</a>
 								<?php
 							}
