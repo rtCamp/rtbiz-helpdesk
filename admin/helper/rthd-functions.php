@@ -757,7 +757,7 @@ function rtbiz_hd_content_filter( $content ) {
 
 	$content = Rtbiz_HD_Utils::force_utf_8( $content );
 
-	return balanceTags( wpautop( wp_kses_post( balanceTags( make_clickable( $content ), true ) ) ), true );
+	return balanceTags( wp_kses_post( balanceTags( make_clickable( $content ), true ) ), true );
 }
 
 function rtbiz_hd_content_filter_without_apautop( $content ) {
