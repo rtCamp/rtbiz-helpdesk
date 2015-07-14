@@ -1251,17 +1251,17 @@ function rtbiz_hd_get_tickets( $key, $value, $offset = 0, $limit = 0, $nopaging 
 	}
 
 	if ( 'created_by' == $key ) {
-		$value = rtbiz_hd_convert_into_userid( $value );
-		$contact = rtbiz_get_contact_for_wp_user( $value );
-		$contact_id = 0;
-		if ( ! empty( $contact[0] ) ) {
-			$contact_id = $contact[0]->ID;
-		}
-		if ( ! empty( $contact_id ) ) {
+//		$value = rtbiz_hd_convert_into_userid( $value );
+//		$contact = rtbiz_get_contact_for_wp_user( $value );
+//		$contact_id = 0;
+//		if ( ! empty( $contact[0] ) ) {
+//			$contact_id = $contact[0]->ID;
+//		}
+		if ( ! empty( $value ) ) {
 			$args['meta_query'] = array(
 				array(
 					'key'   => '_rtbiz_hd_created_by',
-					'value' => $contact_id,
+					'value' => $value,
 				),
 			);
 		}
@@ -1967,4 +1967,30 @@ function rtbiz_hd_get_contact_id_by_user_id( $user_id, $force = false ) {
 		}
 	}
 	return false;
+}
+
+function rtbiz_hd_get_email_only_support() {
+	$setting = rtbiz_hd_get_redux_settings();
+	if ( isset( $setting['rthd_email_support'] ) && isset( $setting['rthd_web_support'] ) ) {
+		if ( '1' == $setting['rthd_email_support'] && empty( $setting['rthd_web_support'] ) ) {
+			return true;
+		} else {
+			return false;
+		}
+	} else {
+		return true;
+	}
+}
+
+function rtbiz_hd_get_web_only_support() {
+	$setting = rtbiz_hd_get_redux_settings();
+	if ( isset( $setting['rthd_email_support'] ) && isset( $setting['rthd_web_support'] ) ) {
+		if ( empty( $setting['rthd_email_support'] ) && '1' == $setting['rthd_web_support'] ) {
+			return true;
+		} else {
+			return false;
+		}
+	} else {
+		return true;
+	}
 }

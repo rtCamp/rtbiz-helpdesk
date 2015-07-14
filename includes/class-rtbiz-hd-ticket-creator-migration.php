@@ -73,8 +73,22 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Creator_Migration' ) ) {
 
 			//*****************End Ticket Index table migration*****************
 
+
+			//*****************Start Follow up user migration*****************
+			$followup_authors = $wpdb->get_results( 'SELECT comment.user_id as user_id, comment.comment_ID as ID FROM '.$wpdb->comments.' as comment JOIN '.$wpdb->posts.' as posts ON (comment.comment_post_ID = posts.ID) WHERE posts.post_type="'.Rtbiz_HD_Module::$post_type.'"' ); // add existing followup creator to comment meta
+			$followup_authors = array_filter( $followup_authors );
+			foreach ( $followup_authors as $followup ) {
+				if ( ! empty($followup->ID ) && ! empty($followup->user_id ) ) {
+					$creator_contact_id = rtbiz_hd_get_contact_id_by_user_id( $followup->user_id, true );
+					if ( ! empty( $creator_contact_id ) ) {
+						update_comment_meta( $followup->ID, '_rtbiz_hd_followup_author',$creator_contact_id );
+					}
+				}
+			}
+			//*****************End Follow up user migration*****************
+
 			// script is been performed telling that to db so next time this will not run.
-			// also auto load will be off because we do not need to load this option on every page load.
+			// also auto load will be off because we do not need to load this option on every page load but only when version is changed.
 			add_option( 'rt_hd_ticket_creator_migration' ,'yes', false );
 		}
 

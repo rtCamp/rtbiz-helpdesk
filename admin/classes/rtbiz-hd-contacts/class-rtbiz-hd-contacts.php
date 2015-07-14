@@ -64,11 +64,11 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 
 		public function rthd_ticket_listing_metabox( $post ) {
 			//if ( ! empty( $_REQUEST['module'] ) && RTBIZ_HD_TEXT_DOMAIN == $_REQUEST['module'] ) {
-			$user = rtbiz_get_wp_user_for_contact( $post->ID );
-				if ( empty($user[0]) ) {
-					return;
-				}
-				echo balanceTags( do_shortcode( '[rtbiz_hd_tickets userid = ' . $user[0]->ID . " title='no' ]" ) );
+//			$user = rtbiz_get_wp_user_for_contact( $post->ID );
+//				if ( empty($user[0]) ) {
+//					return;
+//				}
+				echo balanceTags( do_shortcode( '[rtbiz_hd_tickets contactid = ' . $post->ID . " title='no' ]" ) );
 			//}
 		}
 
@@ -568,7 +568,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		 *
 		 * @return mixed|null|WP_Post
 		 */
-		public function insert_new_contact( $email, $title, $create_wp_user = true ) {
+		public function insert_new_contact( $email, $title, $create_wp_user = false ) {
 
 			global $transaction_id;
 			$contact = rtbiz_get_contact_by_email( $email );
@@ -611,18 +611,26 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		public function get_user_from_email( $email, $name = '' ) {
 
 			$userid = email_exists( $email );
-			if ( ! $userid && ! is_wp_error( $userid ) ) {
+//			if ( ! $userid && ! is_wp_error( $userid ) ) {
 				//add_filter( 'wpmu_welcome_user_notification', '__return_false' );
-				$random_password = wp_generate_password( $length = 12, $include_standard_special_chars = false );
-				$userid          = wp_create_user( $email, $random_password, $email );
-				rtbiz_hd_wp_new_user_notification( $userid, $random_password );
-			} else {
+//				$random_password = wp_generate_password( $length = 12, $include_standard_special_chars = false );
+//				$userid          = wp_create_user( $email, $random_password, $email );
+//				rtbiz_hd_wp_new_user_notification( $userid, $random_password );
+//			} else {
+//			}
+			if ( !is_wp_error( $userid ) && ! empty( $userid ) ){
 				rtbiz_export_contact( $userid );
 			}
-			$contact = rtbiz_get_contact_for_wp_user( $userid );
-			if ( ! empty( $contact[0] ) && ! empty( $name ) && $contact[0]->post_title != $name ) {
-				$contact[0]->post_title = $name;
-				wp_update_post( $contact[0] );
+			$contact = rtbiz_get_contact_by_email( $email );
+//			$contact = rtbiz_get_contact_for_wp_user( $userid );
+			if ( ! empty( $contact[0] ) ) {
+				$userid = $contact[0]->ID;
+				if ( ! empty( $name ) && $contact[0]->post_title != $name ) {
+					$contact[0]->post_title = $name;
+					wp_update_post( $contact[0] );
+				}
+			} else {
+				$userid = rtbiz_add_contact( ( ! empty( $name )? $name :$email ),'', $email );
 			}
 
 			return $userid;

@@ -40,6 +40,17 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 			Rtbiz_HD::$loader->add_action( 'redux/options/' . self::$hd_opt . '/saved', $this, 'on_redux_save', 10, 2 );
 			Rtbiz_HD::$loader->add_action( 'rt_mailbox_add_mailbox', $this, 'outbound_mail_setup_on_mailbox_add', 10, 2 );
 			Rtbiz_HD::$loader->add_action( 'rt_mailbox_remove_mailbox', $this, 'outbound_mail_setup_on_mailbox_remove', 10, 2 );
+			add_action( 'redux/construct', array( $this,'redux_disable_dev_mode_plugin'), 10, 1 );
+			add_action( 'admin_menu', array( $this,'remove_redux_menu' ), 12 );
+		}
+		function remove_redux_menu() {
+			remove_submenu_page( 'tools.php','redux-about' );
+		}
+		function redux_disable_dev_mode_plugin( $redux ) {
+			if ( $redux->args['opt_name'] != 'redux_demo' ) {
+				$redux->args['dev_mode'] = false;
+				$redux->args['forced_dev_mode_off'] = false;
+			}
 		}
 
 		function product_setting( $setting ) {
@@ -335,6 +346,31 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 				'callback' => 'rtbiz_hd_mailbox_setup_view',
 			) );
 
+			array_push( $email_fields, array(
+				'id'       => 'rthd_email_support',
+				'title'    => __( 'Email support' ),
+				'subtitle' => __( 'Email allows customer to create tickets and reply tickets from configured mailbox.' ),
+				'type'     => 'switch',
+				'default'  => false,
+				'on'       => __( 'Enable' ),
+				'off'      => __( 'Disable' ),
+			));
+			array_push( $email_fields, array(
+				'id'       => 'section-email-support-start',
+				'type'     => 'section',
+				'indent'   => true, // Indent all options below until the next 'section' option is set.
+				'required' => array( 'rthd_email_support', '=', 1 ),
+			));
+			/*array_push( $email_fields, array(
+				'id'       => 'rthd_email_only_support_user_not_allowed',
+				'title'    => __( 'Email only support User access' ),
+				'subtitle' => __( 'To allow user access to front end of ticket web' ),
+				'type'     => 'switch',
+				'default'  => false,
+				'on'       => __( 'Enable' ),
+				'off'      => __( 'Disable' ),
+				'required' => array( 'rthd_email_support', '=', 1 ),
+			) );*/
 			if ( ! empty( $system_emails ) ) {
 				array_push( $email_fields, array(
 					'id'       => 'rthd_enable_mailbox_reading',
@@ -344,6 +380,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					'default'  => true,
 					'on'       => __( 'Enable' ),
 					'off'      => __( 'Disable' ),
+					'required' => array( 'rthd_email_support', '=', 1 ),
 				) );
 
 				array_push( $email_fields, array(
@@ -356,7 +393,23 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					'off'      => __( 'Disable' ),
 					'required' => array( 'rthd_enable_mailbox_reading', '=', 1 ),
 				) );
+			}
 
+			array_push( $email_fields, array(
+				'id'     => 'section-email-support-end',
+				'type'   => 'section',
+				'indent' => false, // Indent all options below until the next 'section' option is set.
+			) );
+			array_push( $email_fields, array(
+				'id'       => 'rthd_web_support',
+				'title'    => __( 'Web support' ),
+				'subtitle' => __( 'Web will allow customer to create support ticket and tickets and reply tickets from front end.' ),
+				'type'     => 'switch',
+				'default'  => false,
+				'on'       => __( 'Enable' ),
+				'off'      => __( 'Disable' ),
+			));
+			if ( ! empty( $system_emails ) ) {
 				array_push( $email_fields, array(
 					'id'       => 'rthd_outgoing_email_mailbox',
 					'title'    => __( 'Outgoing Emails\' Mailbox' ),
@@ -864,6 +917,8 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 				'global_variable'    => '',
 				// Set a different name for your global variable other than the opt_name
 				'dev_mode'           => false,
+			    'forced_dev_mode_off' => false,
+			    'disable_tracking'  => false,
 				// Show the time the page took to load, etc
 				'customizer'         => false,
 				// Enable basic customizer support

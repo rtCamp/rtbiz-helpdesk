@@ -55,6 +55,7 @@ if ( ! class_exists( 'Rtbiz_HD_Auto_Response' ) ) {
 	            }
 
 				$userid = get_post_field( 'post_author', $comment_post_ID ); //post author
+				$contact_id = rtbiz_hd_get_contact_id_by_user_id( $userid, true );
 				$comment_author = 'Helpdesk Bot';
 				$comment_author_email = '';
 				$comment_content = rtbiz_hd_get_auto_response_message();
@@ -91,7 +92,7 @@ if ( ! class_exists( 'Rtbiz_HD_Auto_Response' ) ) {
 								$comment_content = str_replace( '{' . $key . '}', $value, $comment_content );
 							}
 
-							$rtbiz_hd_import_operation->insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, array(), array(), array(), '', '', '', array(), '', Rtbiz_HD_Import_Operation::$FOLLOWUP_BOT, 0, true );
+							$rtbiz_hd_import_operation->insert_post_comment( $comment_post_ID, $contact_id , $comment_content, $comment_author, $comment_author_email, $commenttime, array(), array(), array(), '', '', '', array(), '', Rtbiz_HD_Import_Operation::$FOLLOWUP_BOT, 0, true );
 
 						}
 					}
@@ -143,7 +144,7 @@ if ( ! class_exists( 'Rtbiz_HD_Auto_Response' ) ) {
 								$comment_content = str_replace( '{' . $key . '}', $value, $comment_content );
 							}
 
-							$rtbiz_hd_import_operation->insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, array(), array(), array(), '', '', '', array(), '', Rtbiz_HD_Import_Operation::$FOLLOWUP_BOT, 0, true );
+							$rtbiz_hd_import_operation->insert_post_comment( $comment_post_ID, $contact_id, $comment_content, $comment_author, $comment_author_email, $commenttime, array(), array(), array(), '', '', '', array(), '', Rtbiz_HD_Import_Operation::$FOLLOWUP_BOT, 0, true );
 						}
 					}
 				}

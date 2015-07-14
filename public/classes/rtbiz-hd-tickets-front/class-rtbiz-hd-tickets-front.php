@@ -130,11 +130,17 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 
 			// Restrict SEO META tags for Helpdesk Ticket Page.
 			$this->restrict_seo_on_helpdesk();
+			$author_access = current_user_can( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' ) );
+			$email_only_support = rtbiz_hd_get_email_only_support();
 
-			if ( ! is_user_logged_in() ) {
+			if ( ! is_user_logged_in() || ( $email_only_support && ! $author_access ) ) {
 				$redirect_url = ( ( is_ssl() ) ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 				$login_url    = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( $redirect_url ) );
-				$message      = sprintf( '%s <a href="%s">%s</a> %s', __( 'You are not logged in. Please login' ), $login_url, __( 'here' ), __( 'to view this ticket.' ) );
+				if ( $email_only_support ) {
+					$message      = sprintf( '%s', __( 'You can not access this page.' ) );
+				} else {
+					$message = sprintf( '%s <a href="%s">%s</a> %s', __( 'You are not logged in. Please login' ), $login_url, __( 'here' ), __( 'to view this ticket.' ) );
+				}
 				global $rthd_messages;
 				$rthd_messages[] = array( 'type' => 'error rthd-error', 'message' => $message, 'displayed' => 'no' );
 				$rthd_front_page_title = __( 'Helpdesk' );
@@ -145,7 +151,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 			if ( ! empty( $post ) && isset( $wp_query->query[ Rtbiz_HD_Module::$post_type ] ) ) {
 				global $rtbiz_hd_email_notification;
 				$user = wp_get_current_user();
-				if ( ! current_user_can( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' ) ) && current_user_can( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' ) ) ) {
+				if ( ! current_user_can( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' ) ) && $author_access ) {
 					$subscriber     = get_post_meta( $post->ID, '_rtbiz_hd_subscribe_to', true );
 					$post_author_id = get_post_field( 'post_author', $post->ID );
 					$creator = get_post_meta( $post->ID, '_rtbiz_hd_created_by', true );
@@ -160,7 +166,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 
 						return rtbiz_hd_locate_template( 'ticket-404-page.php' );
 					}
-				} else if ( ! current_user_can( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' ) ) ) {
+				} else if ( ! $author_access ) {
 					$contacts       = rtbiz_get_post_for_contact_connection( $post->ID, Rtbiz_HD_Module::$post_type );
 					$other_contacts = $rtbiz_hd_email_notification->get_contacts( $post->ID );
 					$contact_ids    = wp_list_pluck( $contacts, 'ID' );

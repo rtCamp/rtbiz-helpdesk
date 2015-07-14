@@ -68,10 +68,10 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 			wp_enqueue_script( 'rthd-support-form', RTBIZ_HD_URL . 'public/js/helpdesk-support-min.js', array( 'jquery' ), RTBIZ_HD_VERSION, true );
 			wp_localize_script( 'rthd-support-form', 'ajaxurl', admin_url( 'admin-ajax.php' ) );
 			$product_option = '';
-
-			if ( is_user_logged_in() ) {
+			$email_only_support = rtbiz_hd_get_email_only_support();
+			if ( is_user_logged_in() && ! $email_only_support ) {
 				$post_id = $rtbiz_hd_product_support->save_support_form();
-				if ( !empty( $post_id ) && is_int( $post_id ) ) {
+				if ( ! empty( $post_id ) && is_int( $post_id ) ) {
 					?>
 					<div id="info" class="success rthd-notice">Your support request has been submitted. We will get back to you for
 						your query soon.
@@ -126,9 +126,9 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 				foreach ( $terms as $tm ) {
 					$term_product_id = '';
 					// skip items if not from orders
-					if ( !empty( $product_ids ) ) {
+					if ( ! empty( $product_ids ) ) {
 						$term_product_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $tm->term_id, Rt_Products::$term_product_id_meta_key, true );
-						if ( !in_array( $term_product_id, $product_ids ) ) {
+						if ( ! in_array( $term_product_id, $product_ids ) ) {
 							continue;
 						}
 					}
@@ -146,10 +146,18 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 					) );
 				}
 			} else {
-				?>
-				<div id="info" class="error rthd-notice">You're not logged in. Please <a href="<?php echo wp_login_url( get_permalink() ); ?>" title="login">login</a> first to create support ticket.
-				</div>
-				<?php
+				if ( $email_only_support ) {
+					?>
+					<div id="info" class="error rthd-notice">We provide email only support.
+					</div>
+					<?php
+				} else {
+					?>
+					<div id="info" class="error rthd-notice">You're not logged in. Please <a
+							href="<?php echo wp_login_url( get_permalink() ); ?>" title="login">login</a> first to
+						create support ticket.
+					</div>				<?php
+				}
 			}
 			return apply_filters( 'rtbiz_hd_support_form_shorcode', ob_get_clean(), $attr );
 		}
@@ -166,8 +174,9 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 		function get_tickets( $atts ) {
 
 			$arg_shortcode = shortcode_atts(
-					array(
+				array(
 				'userid' => '',
+				'contactid' => '',
 				'email' => '',
 				'orderid' => '',
 				'show_support_form_link' => 'no',
@@ -180,6 +189,12 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 				'post_status' => 'any',
 				'nopaging' => true,
 			);
+			$author_access = current_user_can( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' ) );
+			$email_only_support = rtbiz_hd_get_email_only_support();
+			if ( $email_only_support && ! $author_access ) { ?>
+				<!--<div id="info" class="error rthd-notice"> You do not have access to this page! </div> --><?php
+				return;
+			}
 			?>
 
 			<script>
@@ -194,20 +209,28 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 			global $rtbiz_hd_module, $current_user, $redux_helpdesk_settings;
 			$cap = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' );
 
-			if ( !empty( $arg_shortcode['email'] ) && empty( $arg_shortcode['userid'] ) ) {
+			if ( ! empty( $arg_shortcode['email'] ) && empty( $arg_shortcode['userid'] ) ) {
 				if ( '{{logged_in_user}}' == $arg_shortcode['email'] ) {
 					$arg_shortcode['userid'] = $current_user;
 				} else {
 					$person = rtbiz_get_contact_by_email( $arg_shortcode['email'] );
-					$arg_shortcode['userid'] = rtbiz_get_wp_user_for_contact( $person->ID );
+					$arg_shortcode['userid'] = rtbiz_get_wp_user_for_contact( $person[0]->ID );
 				}
 				if ( is_object( $arg_shortcode['userid'] ) ) {
 					$arg_shortcode['userid'] = $arg_shortcode['userid']->ID;
 				}
 			}
 
-			if ( !empty( $arg_shortcode['userid'] ) ) {
+			if ( ! empty( $arg_shortcode['userid'] ) ) {
 				$is_staff = user_can( $arg_shortcode['userid'], $cap );
+			} else if ( ! empty( $arg_shortcode['contactid'] ) ) {
+				$user_id = rtbiz_hd_get_user_id_by_contact_id( $arg_shortcode['contactid'] );
+				if ( empty( $user_id ) ) {
+					$is_staff = false;
+				} else {
+					$is_staff = user_can( $user_id, $cap );
+					$arg_shortcode['userid'] = $user_id;
+				}
 			} else {
 				$is_staff = user_can( $current_user, $cap );
 			}
@@ -221,7 +244,7 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 			$tickets = array();
 			$count = 0;
 			$oder_shortcode = false;
-			if ( !empty( $arg_shortcode['userid'] ) ) {
+			if ( !empty( $arg_shortcode['userid'] ) || ! empty( $arg_shortcode['contactid'] ) ) {
 				if ( !empty( $arg_shortcode['fav'] ) && ( true === $arg_shortcode['fav'] || 'true' == $arg_shortcode['fav'] ) ) {
 					$tickets = rtbiz_hd_get_tickets( 'favourite', $arg_shortcode['userid'], $top, $limit, false );
 					if ( empty( $tickets ) ) {
@@ -249,7 +272,12 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 					$count = count( $tickets );
 					$tickets = array_slice( $tickets, $top, $limit, true );
 				} else {
-					$tickets = rtbiz_hd_get_tickets( 'created_by', $arg_shortcode['userid'], $top, $limit, false );
+					if ( ! empty( $arg_shortcode['contactid'] ) ) {
+						$tickets = rtbiz_hd_get_tickets( 'created_by', $arg_shortcode['contactid'], $top, $limit, false );
+					} else {
+						$contactid = rtbiz_hd_get_contact_id_by_user_id( $arg_shortcode['userid'] );
+						$tickets = rtbiz_hd_get_tickets( 'created_by', $contactid , $top, $limit, false );
+					}
 					if ( empty( $tickets ) ) {
 						$tickets = array();
 					} else {
@@ -414,6 +442,6 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 				return $html_content;
 			}
 
-		}
-
 	}
+
+}

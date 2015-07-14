@@ -238,14 +238,10 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 					$comment = get_comments( array( 'post_id' => $post->ID, 'number' => 1 ) );
 					if ( ! empty( $comment ) ) {
 						$comment = $comment[0];
-						//                      echo ''.esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) )) ." ago by ". $comment->comment_author ;
-						$user_info = get_user_by( 'id', $comment->user_id );
 						$lastreplyby = sprintf( '<span class="created-by tips" data-tip="%s">'.__( '%s', RTBIZ_HD_TEXT_DOMAIN ).'</span>', $comment->comment_date, human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) . __( ' ago' ) );
-						if ( $user_info ) {
-							add_filter( 'get_avatar', array( $this, 'add_gravatar_class' ) );
-							printf( "<div class='rthd-ticket-author'>%s <span class='rthd_td_show'>%s</span> <span class='rthd_td_show'>%s</span></div>", get_avatar( $user_info->user_email, 25 ), $user_info->display_name, $lastreplyby );
-							remove_filter( 'get_avatar', array( $this, 'add_gravatar_class' ) );
-						}
+						add_filter( 'get_avatar', array( $this, 'add_gravatar_class' ) );
+						printf( "<div class='rthd-ticket-author'>%s <span class='rthd_td_show'>%s</span> <span class='rthd_td_show'>%s</span></div>", get_avatar( $comment->comment_author_email, 25 ), $comment->comment_author, $lastreplyby );
+						remove_filter( 'get_avatar', array( $this, 'add_gravatar_class' ) );
 					} else {
 						echo '<div style="text-align: center;">' . __( 'No reply', RTBIZ_HD_TEXT_DOMAIN ) . '</div>';
 					}

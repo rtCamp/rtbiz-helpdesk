@@ -46,6 +46,9 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 		 * @return string Body Title
 		 */
 		public function get_email_title( $post_id, $posttype, $followupid = 0 ) {
+			if ( rtbiz_hd_get_email_only_support() ) {
+				return '';
+			}
 			$followup_url = '';
 			$title = 'ticket';
 			if ( ! empty( $followupid ) ) {

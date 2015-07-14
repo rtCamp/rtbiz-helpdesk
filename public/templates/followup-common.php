@@ -17,11 +17,8 @@ $comments = get_comments( array(
 $cap        = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' );
 $staffonly = current_user_can( $cap );
 $created_by = rtbiz_hd_get_ticket_creator( $post->ID );
-$userid = rtbiz_get_wp_user_for_contact( $created_by->ID );
-if ( ! empty( $userid[0] ) ) {
-	$userid = $userid[0]->ID;
-}
-$user_edit_content = $staffonly || ( ! empty( $userid ) && get_current_user_id() == $userid );
+$current_user_contact_id = rtbiz_hd_get_contact_id_by_user_id( get_current_user_id() );
+$user_edit_content = $staffonly || ( ! empty( $current_user_contact_id ) && $current_user_contact_id == $created_by );
 $authorname  = 'Anonymous';
 $authoremail = '';
 if ( ! empty( $created_by ) ) {
@@ -103,14 +100,15 @@ if ( ! empty( $created_by ) ) {
 
 	<?php
 	foreach ( $comments as $comment ) {
-		$user_edit           = $staffonly || ( get_current_user_id() == $comment->user_id );
-		$comment_user        = get_user_by( 'id', $comment->user_id );
+		$contact_id              = get_comment_meta( $comment->comment_ID, '_rtbiz_hd_followup_author', true );
+		$user_edit           = $staffonly || ( $current_user_contact_id == $contact_id );
+//		$comment_user        = get_user_by( 'id', $comment->user_id );
 		$comment_render_type = 'left';
-		if ( ! empty( $comment_user ) ) {
-			if ( $comment_user->has_cap( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' ) ) ) {
-				$comment_render_type = 'right';
-			}
-		}
+//		if ( ! empty( $comment_user ) ) {
+//			if ( $comment_user->has_cap( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' ) ) ) {
+//				$comment_render_type = 'right';
+//			}
+//		}
 		rtbiz_hd_render_comment( $comment, $user_edit, $comment_render_type );
 	}
 	?>
