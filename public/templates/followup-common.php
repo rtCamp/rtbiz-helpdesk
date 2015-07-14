@@ -116,7 +116,7 @@ $user_edit_content = $staffonly|| ( get_current_user_id() == $post->$created_by 
 	}
 	?>
 </ul>
-<div id="dialog-form" title="Edit Followup" style='display: none'>
+<div id="dialog-form" title="Edit Followup" class="rthd-dialog-form" style='display: none'>
 
 	<input id="followup-offset" type="hidden" value="<?php echo esc_attr( $offset ); ?>"/>
 	<input id="followup-limit" type="hidden" value="<?php echo esc_attr( $Limit ); ?>"/>
