@@ -239,8 +239,6 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 			}
 
 			if ( empty( $post ) || $wrong_unique_id ) {
-				$wp_query->is_404 = true;
-				$wp_query->set_404();
 				if ( isset( $wp_query->query[ Rtbiz_HD_Module::$post_type ] ) ) {
 					$message = sprintf( '%s ', __( "<div style='margin-left: 0;'>Sorry! Your requested ticket wasn't found.</div>" ) );
 					$rthd_front_page_title = __( 'Helpdesk - Ticket Not Found' );

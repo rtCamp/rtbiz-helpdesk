@@ -116,7 +116,7 @@ $user_edit_content = $staffonly|| ( get_current_user_id() == $post->$created_by 
 	}
 	?>
 </ul>
-<div id="dialog-form" title="Edit Followup" style='display: none'>
+<div id="dialog-form" title="Edit Followup" class="rthd-dialog-form" style='display: none'>
 
 	<input id="followup-offset" type="hidden" value="<?php echo esc_attr( $offset ); ?>"/>
 	<input id="followup-limit" type="hidden" value="<?php echo esc_attr( $Limit ); ?>"/>
@@ -171,9 +171,9 @@ $user_edit_content = $staffonly|| ( get_current_user_id() == $post->$created_by 
 		<img id='edithdspinner' class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>">
 	</div>
 	<div class="edit-action-button clearfix">
-		<button type="button" class="btn button close-edit-followup">Close</button>
-		<button class="edit-followup button btn red-color button-" id="delfollowup" type="button">Delete</button>
-		<button class="edit-followup btn button btn-primary button-primary" id="editfollowup" type="button">Update</button>
+		<button type="button" class="btn close-edit-followup">Close</button>
+		<button class="edit-followup btn red-color" id="delfollowup" type="button">Delete</button>
+		<button class="edit-followup btn btn-primary button-primary" id="editfollowup" type="button">Update</button>
 	</div>
 </div>
 <?php
