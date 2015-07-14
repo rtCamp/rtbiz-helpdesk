@@ -123,7 +123,18 @@ jQuery( document ).ready(function () {
 							document.getElementById( file.id ).getElementsByTagName( 'b' )[0].innerHTML = '<span>' + file.percent + "%</span>";
 						},
 						Error: function (up, err) {
-							jQuery( '#followup-filelist' ).append('<div class="rthd-error">Selected file doesn\'t supported.</div>');
+//							var file_name = err.file.name;
+//							var file_name_splits = file_name.split('.');
+//							var file_count = file_name_splits.length;
+							
+//							var error_message = file_name_splits[0] + ' file is without any extension.';
+							
+//							if (file_count > 1) {
+//								error_message = file_name_splits[0] + ' file is with ' + file_name_splits[file_name_splits.length-1] + ' extension is doen\'t supported.';
+//							}
+
+							var error_message = 'File type <span class="rtp_error_file_name"> "' + err.file.name + '" </span>  isn\'t supported.';
+							jQuery( '#followup-filelist' ).append('<div class="rthd-error">' + error_message + '</div>');
 							//document.getElementById( 'console' ).innerHTML += "\nError #" + err.code + ": " + err.message;
 						},
 						UploadComplete: function () {

@@ -96,7 +96,8 @@ jQuery( document ).ready(function () {
                 },
 
                 Error: function (up, err) {
-                    jQuery( '#support-filelist' ).append('<div class="rthd-error">Selected file doesn\'t supported.</div>');
+					var error_message = 'File type <span class="rtp_error_file_name"> "' + err.file.name + '" </span>  isn\'t supported.';
+					jQuery( '#support-filelist' ).append('<div class="rthd-error">' + error_message + '</div>');
                     //document.getElementById( 'console' ).innerHTML += "\nError #" + err.code + ": " + err.message;
                 },
 
