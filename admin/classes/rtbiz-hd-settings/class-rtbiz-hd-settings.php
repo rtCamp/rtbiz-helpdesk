@@ -240,7 +240,8 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 
 				$mailbox_options[ $email ] = $email;
 			}
-			$products_page_link = '<a href="' . admin_url( 'edit-tags.php?taxonomy=' . Rt_Products::$product_slug . '&post_type=' . Rtbiz_HD_Module::$post_type ) . '">products</a>';
+
+			$products_page_link = '<a href="' . admin_url( 'edit-tags.php?taxonomy=' . Rt_Products::$product_slug . '&post_type=' . Rtbiz_HD_Module::$post_type ) . '"> ' . __( 'products section.' ) . '</a>';
 			// ACTUAL DECLARATION OF SECTIONS
 			$general_fields = array(
 				array(
@@ -248,14 +249,14 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					'type'     => 'select',
 					'data'     => 'pages',
 					'title'    => __( 'Support Page' ),
-					'desc'     => __( 'Add <strong>[rtbiz_hd_support_form]</strong> shortcode to add support form to a page and select this page in the drop down. This page will then be used to handle new support requests from front-end.' ),
+					'desc' => __( 'Add <strong>[rtbiz_hd_support_form]</strong> shortcode to any page. Select that page in dropdown above. That page from now used to handle support requests from front-end.' ),
 					'subtitle' => __( 'Select Page for Product Support' ),
 				),
 				array(
 					'id'       => 'product_plugin',
 					'title'    => __( 'Connected Store' ),
 					'subtitle' => __( 'Select the plugin you want to connect Helpdesk with ' ),
-					'desc'     => __( 'All the existing and future products/products will be imported for the selected plugin. You can also create custom products from ' ) . $products_page_link . __( ' section.' ),
+					'desc' => __( 'All the existing and future products will be imported for the selected plugin. You can also create custom products from ' ) . $products_page_link,
 					'type'     => 'checkbox',
 					'options'  => array(
 						'woocommerce' => __( 'WooCommerce' ),
