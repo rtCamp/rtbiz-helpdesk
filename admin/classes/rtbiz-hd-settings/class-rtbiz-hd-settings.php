@@ -241,7 +241,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 				$mailbox_options[ $email ] = $email;
 			}
 
-			$products_page_link = '<a href="' . admin_url( 'edit-tags.php?taxonomy=' . Rt_Products::$product_slug . '&post_type=' . Rtbiz_HD_Module::$post_type ) . '"> ' . __( 'products section.' ) . '</a>';
+			$products_page_link = '<a href="' . admin_url( 'edit-tags.php?taxonomy=' . Rt_Products::$product_slug . '&post_type=' . Rtbiz_HD_Module::$post_type ) . '"> ' . __( 'Products Section.' ) . '</a>';
 			// ACTUAL DECLARATION OF SECTIONS
 			$general_fields = array(
 				array(
@@ -270,7 +270,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					'options'  => $users_options,
 					'default'  => $default_assignee,
 					'title'    => __( 'Default Assignee' ),
-					'desc'     => __( 'To select dedicated assignee for an product, visit the ' ) . $products_page_link . __( ' section.' ),
+					'desc'     => __( 'To select dedicated assignee for an product, visit the ' ) . $products_page_link,
 					'subtitle' => __( 'Select user for HelpDesk ticket Assignee' ),
 				),
 				array(
@@ -421,7 +421,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 						'id'         => 'rthd_notification_emails',
 						'title'      => __( 'Email Addresses' ),
 						'subtitle'   => __( 'Email addresses to be notified on events' ),
-						'desc'       => __( 'These email addresses will be notified of the events that occurs in HelpDesk Systems. This is a global list. All the subscribers also will be notified along with this list.' ),
+						'desc' => __( 'These email addresses will be notified of the events that occurs in HelpDesk Systems. This is a global list. All the subscribers will also notified along with this list.' ),
 						'type'       => 'multi_text',
 						'validate'   => 'email',
 						'multi'      => true,
