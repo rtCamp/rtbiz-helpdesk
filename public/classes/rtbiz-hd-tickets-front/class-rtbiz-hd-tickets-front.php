@@ -72,15 +72,19 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 		function show_original_email() {
 			global $post;
 
+			if ( empty( $_REQUEST['show_original'] ) || 'true' != $_REQUEST['show_original'] ){
+				return ;
+			}
+
 			$cap               = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' );
 			$user_edit_content = current_user_can( $cap );
 
-			if ( ! empty( $_REQUEST['show_original'] ) && 'true' === $_REQUEST['show_original'] && empty( $_REQUEST['comment-id'] ) && $user_edit_content ) {
+			if ( empty( $_REQUEST['comment-id'] ) && $user_edit_content ) {
 				$data = get_post_meta( $post->ID, '_rtbiz_hd_original_email_body', true );
 				echo '<div class="rt_original_email"><pre style="word-wrap: break-word;white-space: pre-wrap;">' . ( $data ) . '</pre></div>';
 				die( 0 );
 			}
-			if ( ! empty( $_REQUEST['show_original'] ) && 'true' === $_REQUEST['show_original'] && ! empty( $_REQUEST['comment-id'] ) && $user_edit_content ) {
+			if ( ! empty( $_REQUEST['comment-id'] ) && $user_edit_content ) {
 				$data = get_comment_meta( $_REQUEST['comment-id'], '_rtbiz_hd_original_email', true );
 				echo '<div class="rt_original_email"><pre style="word-wrap: break-word;white-space: pre-wrap;">' . ( $data ) . '</pre></div>';
 				die( 0 );
@@ -187,7 +191,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 
 						return rtbiz_hd_locate_template( 'ticket-404-page.php' );
 					}
-				} else if ( ! current_user_can( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' ) ) ) {
+				} else {
 					$contacts       = rtbiz_get_post_for_contact_connection( $post->ID, Rtbiz_HD_Module::$post_type );
 					$other_contacts = $rtbiz_hd_email_notification->get_contacts( $post->ID );
 					$contact_ids    = wp_list_pluck( $contacts, 'ID' );
