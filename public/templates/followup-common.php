@@ -66,7 +66,7 @@ if ( ! empty( $created_by ) ) {
 				}
 				?>
 				<div class="rthd-comment-content"
-				     data-content="<?php echo( isset( $post->ID ) ? esc_attr( $markdown_content ) : '' ); ?>">
+				     data-rthdcontent="<?php echo( isset( $post->ID ) ? esc_attr( $markdown_content ) : '' ); ?>">
 					<?php
 					$content = rtbiz_hd_content_filter( isset( $post->ID ) ? $post->post_content : '' );
 					echo $content;
@@ -107,7 +107,7 @@ if ( ! empty( $created_by ) ) {
 	}
 	?>
 </ul>
-<div id="dialog-form" title="Edit Followup" style='display: none'>
+<div id="dialog-form" title="Edit Followup" class="rthd-dialog-form" style='display: none'>
 
 	<input id="followup-offset" type="hidden" value="<?php echo esc_attr( $offset ); ?>"/>
 	<input id="followup-limit" type="hidden" value="<?php echo esc_attr( $Limit ); ?>"/>
@@ -125,7 +125,7 @@ if ( ! empty( $created_by ) ) {
 		<?php } ?>
 
 		<div class="rthd-followup-content-helpbar">
-				<span class="rthd-markdown-preview" data-parent="#dialog-form">
+				<span id="rthd-edit-followup-preview" class="rthd-markdown-preview">
 					Preview |
 				</span>
 				<span class="rthd-tooltip rthd-followup-content-tolltip">
@@ -162,9 +162,9 @@ if ( ! empty( $created_by ) ) {
 		<img id='edithdspinner' class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>">
 	</div>
 	<div class="edit-action-button clearfix">
-		<button type="button" class="btn button close-edit-followup">Close</button>
-		<button class="edit-followup button btn red-color button-" id="delfollowup" type="button">Delete</button>
-		<button class="edit-followup btn button btn-primary button-primary" id="editfollowup" type="button">Update</button>
+		<button type="button" class="btn close-edit-followup">Close</button>
+		<button class="edit-followup btn red-color" id="delfollowup" type="button">Delete</button>
+		<button class="edit-followup btn btn-primary button-primary" id="editfollowup" type="button">Update</button>
 	</div>
 </div>
 <?php
@@ -173,7 +173,7 @@ if ( $user_edit_content ) {
 	<div id="edit-ticket-data" title="Edit Ticket" style="display: none;">
 		<div class="clearfix">
 			<div class="rthd-followup-content-helpbar">
-					<span class="rthd-markdown-preview" data-parent="#edit-ticket-data">
+					<span id="rthd-edit-ticket-content-preview" class="rthd-markdown-preview">
 						Preview |
 					</span>
 					<span class="rthd-tooltip rthd-followup-content-tolltip">

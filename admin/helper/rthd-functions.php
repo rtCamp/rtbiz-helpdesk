@@ -725,7 +725,7 @@ function rtbiz_hd_render_comment( $comment, $user_edit, $type = 'right', $echo =
 					$markdown_content = $comment->comment_content;
 				}
 			?>
-			<div class="rthd-comment-content" data-content="<?php echo esc_attr( $markdown_content ); ?>"><?php
+			<div class="rthd-comment-content" data-rthdcontent="<?php echo esc_attr( $markdown_content ); ?>"><?php
 				if ( isset( $comment->comment_content ) && $comment->comment_content != '' ) {
 					$comment->comment_content = rtbiz_hd_content_filter( $comment->comment_content );
 				}?>
@@ -1932,6 +1932,22 @@ function rtbiz_hd_update_assignee( $postid, $post_author ) {
 	global $rtbiz_hd_ticket_index_model;
 	$rtbiz_hd_ticket_index_model->update_ticket_assignee( $post_author, $postid );
 	return true;
+}
+
+/**
+* Function to get all the file extensions 
+* which supported by the wordpress
+*/
+function rtbiz_hd_get_supported_extensions() {
+	$mimes = get_allowed_mime_types();
+	foreach ( $mimes as $type => $mime ) {
+		$seprate_extensions = explode( '|', $type );
+		foreach ( $seprate_extensions as $seprate_extension ) {
+			$types[] = $seprate_extension;
+		}
+	}
+
+	return $types;
 }
 
 

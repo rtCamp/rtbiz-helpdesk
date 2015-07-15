@@ -70,7 +70,7 @@
 
 	<div class="clearfix">
 		<div class="rthd-followup-content-helpbar">
-			<span class="rthd-markdown-preview" data-parent="#rt-hd-support-page">
+			<span id="rthd-ticket-create-preview" class="rthd-markdown-preview">
 				Preview |
 			</span>
 			<span class="rthd-tooltip rthd-followup-content-tolltip">

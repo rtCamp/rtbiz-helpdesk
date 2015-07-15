@@ -1,6 +1,6 @@
 jQuery( document ).ready(function () {
 
-    var converter = new showdown.Converter({extensions: ['table', 'github', 'prettify']});
+	var converter = new showdown.Converter({literalMidWordUnderscores: true, smoothLivePreview: true, ghCodeBlocks: true, simplifiedAutoLink: true, tables: true, extensions: ['table', 'github', 'prettify']});
 
 	var rthd_common = {
 		rthd_tinymce_set_content: function (id, text) {
@@ -87,13 +87,10 @@ jQuery( document ).ready(function () {
 					//resize : { width : 320, height : 240, quality : 90 },
 
 					filters: {
-						max_file_size: '10mb'
-
-						// Specify what files to browse for
-						//mime_types: [
-						//    {title : "Image files", extensions : "jpg,gif,png"},
-						//    {title : "Zip files", extensions : "zip"}
-						//]
+						max_file_size: '10mb',
+						mime_types: [
+						    {title : "Files", extensions : rtbiz_hd_supported_extensions}
+						]
 					},
 					flash_swf_url: 'Moxie.swf',
 					silverlight_xap_url: 'Moxie.xap',
@@ -126,7 +123,19 @@ jQuery( document ).ready(function () {
 							document.getElementById( file.id ).getElementsByTagName( 'b' )[0].innerHTML = '<span>' + file.percent + "%</span>";
 						},
 						Error: function (up, err) {
-							document.getElementById( 'console' ).innerHTML += "\nError #" + err.code + ": " + err.message;
+//							var file_name = err.file.name;
+//							var file_name_splits = file_name.split('.');
+//							var file_count = file_name_splits.length;
+							
+//							var error_message = file_name_splits[0] + ' file is without any extension.';
+							
+//							if (file_count > 1) {
+//								error_message = file_name_splits[0] + ' file is with ' + file_name_splits[file_name_splits.length-1] + ' extension is doen\'t supported.';
+//							}
+
+							var error_message = 'File type <span class="rtp_error_file_name"> "' + err.file.name + '" </span>  isn\'t supported.';
+							jQuery( '#followup-filelist' ).append('<div class="rthd-error">' + error_message + '</div>');
+							//document.getElementById( 'console' ).innerHTML += "\nError #" + err.code + ": " + err.message;
 						},
 						UploadComplete: function () {
 							document.getElementById( 'followup-filelist' ).innerHTML = '';
@@ -318,7 +327,7 @@ jQuery( document ).ready(function () {
 				e.preventDefault();
 				var followup_information = jQuery( this ).parents().parents();
                 followup_id = followup_information.siblings( '#followup-id' ).val();
-                followup_content = followup_information.siblings( '.rthd-comment-content' ).data( 'content' );
+                followup_content = followup_information.siblings( '.rthd-comment-content' ).data( 'rthdcontent' );
                 followup_type = followup_information.siblings( '#followup-type' ).val();
                 followup_senstive = followup_information.siblings( '#followup-senstive' ).val();
 
@@ -458,7 +467,7 @@ jQuery( document ).ready(function () {
 				}
 				jQuery( '#new-followup-form' ).hide();
 				jQuery( document ).scrollTop( ( jQuery( '#edit-ticket-data' ).offset().top ) - 50 );
-				jQuery( '#edit-ticket-data').find('#editedticketcontent').val( jQuery( this ).closest( '.ticketcontent' ).find( '.rthd-comment-content' ).data( 'content' ) );
+				jQuery( '#edit-ticket-data').find('#editedticketcontent').val( jQuery( this ).closest( '.ticketcontent' ).find( '.rthd-comment-content' ).data( 'rthdcontent' ) );
 			});
 
 			// close tinyMCE editor and send user back to ticket content
@@ -503,7 +512,7 @@ jQuery( document ).ready(function () {
 							jQuery( '#ticket-edithdspinner' ).hide();
 							jQuery( "#edit-ticket-content-click" ).removeAttr( 'disabled' );
 							jQuery( '.edit-ticket-link' ).closest( '.rthd-ticket-content' ).find( '.rthd-comment-content' ).html( converter.makeHtml( post_content.val()) );
-							jQuery( '.edit-ticket-link' ).closest( '.rthd-ticket-content' ).find( '.rthd-comment-content' ).data( 'content', post_content.val() );
+							jQuery( '.edit-ticket-link' ).closest( '.rthd-ticket-content' ).find( '.rthd-comment-content' ).data( 'rthdcontent', post_content.val() );
 							jQuery( '#edit-ticket-data' ).hide();
                             jQuery( '#edit-ticket-data').find('#editedticketcontent_html').html();
 							jQuery( '#new-followup-form' ).slideToggle( 'slow' );

@@ -92,7 +92,7 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 		 */
 		public function get_custom_labels() {
 			$this->labels = array(
-				'name'          => __( 'Ticket', RTBIZ_HD_TEXT_DOMAIN ),
+				'name'          => __( 'Tickets', RTBIZ_HD_TEXT_DOMAIN ),
 				'singular_name' => __( 'Ticket', RTBIZ_HD_TEXT_DOMAIN ),
 				'menu_name'     => 'Helpdesk',
 				'all_items'     => __( 'Tickets', RTBIZ_HD_TEXT_DOMAIN ),
@@ -183,7 +183,7 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 				'publicly_queryable' => true,
 				'has_archive'        => true,
 				'rewrite'            => array(
-					'slug'       => strtolower( $this->labels['name'] ),
+					'slug'       => strtolower( $this->labels['singular_name'] ),
 				    'with_front' => false,
 				),
 				'show_ui'            => true, // Show the UI in admin panel
