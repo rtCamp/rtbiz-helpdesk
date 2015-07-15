@@ -709,7 +709,7 @@ function rtbiz_hd_render_comment( $comment, $user_edit, $type = 'right', $echo =
 					$markdown_content = $comment->comment_content;
 				}
 			?>
-			<div class="rthd-comment-content" data-rthdcontent="<?php echo esc_attr( $markdown_content ); ?>"><?php
+			<div class="rthd-comment-content" data-rthdcontent="<?php echo rtbiz_hd_data_rthd_content( esc_attr( $markdown_content ) ); ?>"><?php
 				if ( isset( $comment->comment_content ) && $comment->comment_content != '' ) {
 					$comment->comment_content = rtbiz_hd_content_filter( $comment->comment_content );
 				}?>
@@ -1921,4 +1921,11 @@ function rtbiz_hd_get_supported_extensions() {
 	}
 
 	return $types;
+}
+
+function rtbiz_hd_data_rthd_content( $textarea ){
+	$lines = explode("\n", $textarea);
+	foreach( $lines as $line ){
+		echo $line;
+	}
 }
