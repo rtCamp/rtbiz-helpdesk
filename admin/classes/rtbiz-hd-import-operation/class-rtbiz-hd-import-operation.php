@@ -1773,15 +1773,9 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 
 					$returnArray['comment_id'] = $comment_ID;
 					$returnArray['comment_type']       = $comment_type;
-//					$comment_user  = get_user_by( 'id', $userid );
 					$current_user_contact_id = rtbiz_hd_get_contact_id_by_user_id( get_current_user_id() );
 					$comment_render_type = 'left';
 					$cap = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' );
-//					if ( ! empty( $comment_user ) ) {
-//						if ( $comment_user->has_cap( $cap ) ) {
-//							$comment_render_type = 'right';
-//						}
-//					}
 					$user_edit = current_user_can( $cap ) || ( $current_user_contact_id == $contact_id );
 					$comment = get_comment( $comment_ID );
 					$returnArray['comment_content'] = rtbiz_hd_render_comment( $comment, $user_edit, $comment_render_type, false );
@@ -2122,13 +2116,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			$current_user = wp_get_current_user();
 			$current_user_contact_id = rtbiz_hd_get_contact_id_by_user_id( $current_user );
 			foreach ( $comments as $comment ) {
-//				$comment_user  = get_user_by( 'id', $comment->user_id );
 				$comment_render_type = 'left';
-//				if ( ! empty( $comment_user ) ) {
-//					if ( $comment_user->has_cap( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' ) ) ) {
-//						$comment_render_type = 'right';
-//					}
-//				}
 				$contact_id              = get_comment_meta( $comment->comment_ID, '_rtbiz_hd_followup_author', true );
 				$user_edit = current_user_can( $cap ) || ( ! empty( $contact_id ) && $current_user_contact_id == $contact_id );
 				$commenthtml .= rtbiz_hd_render_comment( $comment, $user_edit, $comment_render_type, false );

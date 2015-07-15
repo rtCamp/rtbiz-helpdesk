@@ -102,13 +102,7 @@ if ( ! empty( $created_by ) ) {
 	foreach ( $comments as $comment ) {
 		$contact_id              = get_comment_meta( $comment->comment_ID, '_rtbiz_hd_followup_author', true );
 		$user_edit           = $staffonly || ( $current_user_contact_id == $contact_id );
-//		$comment_user        = get_user_by( 'id', $comment->user_id );
 		$comment_render_type = 'left';
-//		if ( ! empty( $comment_user ) ) {
-//			if ( $comment_user->has_cap( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' ) ) ) {
-//				$comment_render_type = 'right';
-//			}
-//		}
 		rtbiz_hd_render_comment( $comment, $user_edit, $comment_render_type );
 	}
 	?>

@@ -671,10 +671,26 @@ function rtbiz_hd_render_comment( $comment, $user_edit, $type = 'right', $echo =
 		</div>
 		<div class="rthd-messages">
 			<div class="followup-information clearfix"> <?php
-				if ( current_user_can( $cap ) ) {
-					$commentAuthorLink = '<a class="rthd-ticket-author-link" href="' . rtbiz_hd_biz_user_profile_link( $comment->comment_author_email ) . '">' . $comment->comment_author . '</a>';
+				$contact_id = get_comment_meta( $comment->comment_ID, '_rtbiz_hd_followup_author', true );
+				$authorName = '';
+				$authorProfileLink = '';
+				if ( ! empty( $contact_id ) ) {
+					$authorName = get_the_title( $contact_id );
+					$authorProfileLink = get_edit_post_link( $contact_id );
 				} else {
-					$commentAuthorLink = $comment->comment_author;
+					$contacts_by_email = rtbiz_get_contact_by_email( $comment->comment_author_email  );
+					if ( ! empty( $contacts_by_email ) ) {
+						$authorName = get_the_title( $contacts_by_email[0]->ID );
+						$authorProfileLink = get_edit_post_link( $contacts_by_email[0]->ID );
+					} else {
+						$authorName = $comment->comment_author;
+					}
+				}
+
+				if ( current_user_can( $cap ) ) {
+					$commentAuthorLink = '<a class="rthd-ticket-author-link" href="' . $authorProfileLink . '">' . $authorName. '</a>';
+				} else {
+					$commentAuthorLink = $authorName;
 				} ?>
 
 				<span
