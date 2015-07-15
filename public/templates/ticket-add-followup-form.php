@@ -32,7 +32,7 @@ $staffonly = current_user_can( $cap );
 		<?php } ?>
 
 		<div class="rthd-followup-content-helpbar">
-			<span class="rthd-markdown-preview" data-parent="#new-followup-form">
+			<span id="rthd-new-followup-preview" class="rthd-markdown-preview">
 				Preview |
 			</span>
 			<span class="rthd-tooltip rthd-followup-content-tolltip">
@@ -56,8 +56,8 @@ $staffonly = current_user_can( $cap );
 
 			<div class="rthd-visibility-wrap">
 				<div class="rthd-sensitive-wrap">
-					<label for="rthd_sensitive">
-						<input id="rthd_sensitive" type="checkbox" name="followup_sensitive"
+					<label for="rthd_sensitive_content">
+						<input id="rthd_sensitive_content" type="checkbox" name="followup_sensitive"
 							   value="true"/>&nbsp;<?php _e( 'Mark this as Sensitive' ); ?>
 						<span class="rthd-tooltip rthd-followup-type-tolltip">
 							<i class="dashicons dashicons-info rtmicon"></i>
@@ -69,7 +69,7 @@ $staffonly = current_user_can( $cap );
 					<div class="rthd-keep-status-wrap">
 						<label for="rthd_keep_status">
 							<input id="rthd_keep_status" type="checkbox" name="rthd_keep_status"
-								   text="check keep status unanswered"/>&nbsp;
+								   text="check keep status unanswered"/>
 							<?php _e( 'Keep unanswered' ); ?></label></div>
 				<?php } ?>
 

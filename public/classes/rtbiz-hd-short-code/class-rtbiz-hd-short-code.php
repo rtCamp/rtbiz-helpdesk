@@ -67,6 +67,8 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 			wp_enqueue_style( 'helpdesk-style', RTBIZ_HD_URL . 'public/css/rthd-main.css', false, RTBIZ_HD_VERSION, 'all' );
 			wp_enqueue_script( 'rthd-support-form', RTBIZ_HD_URL . 'public/js/helpdesk-support-min.js', array( 'jquery' ), RTBIZ_HD_VERSION, true );
 			wp_localize_script( 'rthd-support-form', 'ajaxurl', admin_url( 'admin-ajax.php' ) );
+			wp_localize_script( 'rthd-support-form', 'rtbiz_hd_supported_extensions', implode( ',', rtbiz_hd_get_supported_extensions() ) );
+
 			$product_option = '';
 
 			if ( is_user_logged_in() ) {
@@ -147,7 +149,7 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 				}
 			} else {
 				?>
-				<div id="info" class="error rthd-notice">You're not logged in. Please <a href="<?php echo wp_login_url( get_permalink() ); ?>" title="Login">Login</a> first to create support ticket.
+				<div id="info" class="error rthd-notice">You're not logged in. Please <a href="<?php echo wp_login_url( get_permalink() ); ?>" title="login">login</a> first to create support ticket.
 				</div>
 				<?php
 			}
@@ -280,9 +282,10 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 					if ( !empty( $arg_shortcode['fav'] ) ) {
 						if ( 'yes' === $arg_shortcode['title'] ) {
 							?>
-							<h2 class="rthd-ticket-list-title"><?php _e( 'Favourite Tickets', RTBIZ_HD_TEXT_DOMAIN );
-						echo ( empty( $tickets ) ) ? '' : ' <span class="rthd-count">(<span class="rthd-current-count">' . count( $tickets ) . '</span> of <span class="rthd-count-total">' . $count . '</span>)</span>';
-							?></h2>
+							<h2 class="rthd-ticket-list-title"><?php
+								_e( 'Favourite Tickets', RTBIZ_HD_TEXT_DOMAIN );
+								echo ( empty( $tickets ) ) ? '' : ' <span class="rthd-count">(<span class="rthd-current-count">' . count( $tickets ) . '</span> of <span class="rthd-count-total">' . $count . '</span>)</span>';
+								?></h2>
 							<?php
 						}
 
@@ -301,9 +304,10 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 					} else {
 						if ( 'yes' === $arg_shortcode['title'] ) {
 							?>
-							<h2 class="rthd-ticket-list-title"><?php _e( 'Tickets', RTBIZ_HD_TEXT_DOMAIN );
-						echo ( empty( $tickets ) ) ? '' : ' <span class="rthd-count">(<span class="rthd-current-count">' . count( $tickets ) . '</span> of <span class="rthd-count-total">' . $count . '</span>)</span>';
-							?></h2><?php
+							<h2 class="rthd-ticket-list-title"><?php
+								_e( 'Tickets', RTBIZ_HD_TEXT_DOMAIN );
+								echo ( empty( $tickets ) ) ? '' : ' <span class="rthd-count">(<span class="rthd-current-count">' . count( $tickets ) . '</span> of <span class="rthd-count-total">' . $count . '</span>)</span>';
+								?></h2><?php
 						}
 						if ( 'yes' == $arg_shortcode['show_support_form_link'] ) {
 							if ( isset( $redux_helpdesk_settings['rthd_support_page'] ) && !empty( $redux_helpdesk_settings['rthd_support_page'] ) ) {
@@ -342,12 +346,12 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 					if ( is_admin() && !empty( $tickets ) && $oder_shortcode ) {
 						?>
 						<p> <?php _e( 'Below are the all the tickets created by this customer. The tickets for this order are highlighted.', RTBIZ_HD_TEXT_DOMAIN ); ?></p>
-					<?php
+						<?php
+					}
 				}
-			}
-			if ( !empty( $tickets ) ) {
-				if ( $first ) {
-					?>
+				if ( !empty( $tickets ) ) {
+					if ( $first ) {
+						?>
 						<table class="wp-list-table striped widefat shop_table my_account_orders rthd_ticket_short_code">
 							<thead>
 								<tr>
@@ -355,7 +359,7 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 									<th>Title</th>
 									<th>Last Updated</th>
 									<th>Status</th>
-							<?php echo ( $is_staff ) ? '<th>Edit</th>' : ''; ?>
+									<?php echo ( $is_staff ) ? '<th>Edit</th>' : ''; ?>
 								</tr>
 							</thead>
 							<?php
@@ -386,11 +390,11 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 								<td><?php echo $ticket->post_title; ?></td>
 								<td> <?php echo esc_attr( human_time_diff( $date->format( 'U' ), current_time( 'timestamp' ) ) ) . esc_attr( __( ' ago' ) ) ?> </td>
 								<td>
-								<?php
-								if ( !empty( $ticket->post_status ) ) {
-									echo rtbiz_hd_status_markup( $ticket->post_status );
-								}
-								?>
+									<?php
+									if ( !empty( $ticket->post_status ) ) {
+										echo rtbiz_hd_status_markup( $ticket->post_status );
+									}
+									?>
 								</td>
 								<?php if ( current_user_can( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' ) ) || $ticket->post_author == $current_user->ID ) { ?>
 									<td>
@@ -398,12 +402,12 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 										   href="<?php echo get_edit_post_link( $ticket->ID ); ?>"><span
 												class="dashicons dashicons-edit"></span></a>
 									</td>
-					<?php } ?>
+								<?php } ?>
 							</tr>
-					<?php
-					}
-					if ( $first ) {
-						?>
+							<?php
+						}
+						if ( $first ) {
+							?>
 						</table>
 						<img class="rthd-ticket-short-code-loader helpdeskspinner"
 							 src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />

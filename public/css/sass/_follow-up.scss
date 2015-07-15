@@ -124,7 +124,7 @@ ul#chat-UI {
 }
 
 .rthd-visibility-wrap {
-	margin-bottom: 16px;
+	margin-bottom: 14px;
 	label {
 		margin-right: 10px;
 	}
@@ -430,6 +430,9 @@ ul#chat-UI {
     text-decoration: none;
     text-align: center;
 }
+a:hover.rthd-scroll-up{
+	text-decoration: none;
+}
 .rthd-followup-type-tolltip{
 	vertical-align: middle;
 }
@@ -608,10 +611,6 @@ h2.rt-hd-ticket-front-title{
 	}
 }
 
-#rthd-followup-action {
-	margin-top: 8px;
-}
-
 .rthd-front-icons a:hover,.rthd-collapse-click:hover{
 	text-decoration:none;
 }
@@ -665,12 +664,14 @@ img#hdspinner{
 }
 
 .rthd-followup-action {
+    margin-top: 6px;
 	float: right;
     display: inline-block;
 }
 
 .rthd-attachment-box{
     display: inline-block;
+    float: left;
 }
 
 .rthd-attach-file{
@@ -728,6 +729,7 @@ img#hdspinner{
     padding: 10px;
     display: none;
     min-height: 200px;
+ 	word-wrap: break-word;
 }
 
 .markdown_preview_container ul, .markdown_preview_container ol,.markdown_preview_container dl{

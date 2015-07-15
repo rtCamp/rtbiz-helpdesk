@@ -4,7 +4,7 @@
 
 jQuery( document ).ready(function () {
 
-    var converter = new showdown.Converter({extensions: ['table', 'github', 'prettify']});
+    var converter = new showdown.Converter({literalMidWordUnderscores: true, smoothLivePreview: true, ghCodeBlocks: true, simplifiedAutoLink: true, tables: true, extensions: ['table', 'github', 'prettify']});
 
 	jQuery( '.rt-hd-add-more-email' ).click(function (e) {
 		e.preventDefault();
@@ -33,13 +33,10 @@ jQuery( document ).ready(function () {
             //resize : { width : 320, height : 240, quality : 90 },
 
             filters: {
-                max_file_size: '10mb'
-
-                // Specify what files to browse for
-                //mime_types: [
-                //    {title : "Image files", extensions : "jpg,gif,png"},
-                //    {title : "Zip files", extensions : "zip"}
-                //]
+                max_file_size: '10mb',
+				mime_types: [
+					{title : "Files ", extensions : rtbiz_hd_supported_extensions}
+				]
             },
 
             flash_swf_url: 'Moxie.swf',
@@ -99,7 +96,9 @@ jQuery( document ).ready(function () {
                 },
 
                 Error: function (up, err) {
-                    document.getElementById( 'console' ).innerHTML += "\nError #" + err.code + ": " + err.message;
+					var error_message = 'File type <span class="rtp_error_file_name"> "' + err.file.name + '" </span>  isn\'t supported.';
+					jQuery( '#support-filelist' ).append('<div class="rthd-error">' + error_message + '</div>');
+                    //document.getElementById( 'console' ).innerHTML += "\nError #" + err.code + ": " + err.message;
                 },
 
                 UploadComplete: function () {
@@ -114,6 +113,21 @@ jQuery( document ).ready(function () {
                     }else{
                         post_content.css( 'border-color', '' );
                     }
+
+                    // Start convert markdown to html
+                    var inputPane = jQuery( '#rt-hd-support-page').find('#post_description_body');
+                    var peviewPane = jQuery( '#rt-hd-support-page').find( '#post_description_html' );
+                    var outputPane = jQuery( '#rt-hd-support-page').find( '#post_description_html_text' );
+
+                    var text = inputPane.val();
+                    text = converter.makeHtml(text);
+                    //previewPane.innerHTML = text;
+                    peviewPane.html( text );
+                    if ( outputPane ){
+                        outputPane.val( text );
+                    }
+                    // Start convert markdown to html
+
                     jQuery( '.rthd_support_from' ).submit();
                 },
 

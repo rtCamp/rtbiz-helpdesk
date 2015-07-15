@@ -70,7 +70,7 @@ $user_edit_content = $staffonly|| ( get_current_user_id() == $post->$created_by 
 				}
 				?>
 				<div class="rthd-comment-content"
-				     data-content="<?php echo( isset( $post->ID ) ? esc_attr( $markdown_content ) : '' ); ?>">
+				     data-rthdcontent="<?php echo( isset( $post->ID ) ? esc_attr( $markdown_content ) : '' ); ?>">
 					<?php
 					$content = rtbiz_hd_content_filter( isset( $post->ID ) ? $post->post_content : '' );
 					echo $content;
@@ -134,7 +134,7 @@ $user_edit_content = $staffonly|| ( get_current_user_id() == $post->$created_by 
 		<?php } ?>
 
 		<div class="rthd-followup-content-helpbar">
-				<span class="rthd-markdown-preview" data-parent="#dialog-form">
+				<span id="rthd-edit-followup-preview" class="rthd-markdown-preview">
 					Preview |
 				</span>
 				<span class="rthd-tooltip rthd-followup-content-tolltip">
@@ -182,7 +182,7 @@ if ( $user_edit_content ) {
 	<div id="edit-ticket-data" title="Edit Ticket" style="display: none;">
 		<div class="clearfix">
 			<div class="rthd-followup-content-helpbar">
-					<span class="rthd-markdown-preview" data-parent="#edit-ticket-data">
+					<span id="rthd-edit-ticket-content-preview" class="rthd-markdown-preview">
 						Preview |
 					</span>
 					<span class="rthd-tooltip rthd-followup-content-tolltip">

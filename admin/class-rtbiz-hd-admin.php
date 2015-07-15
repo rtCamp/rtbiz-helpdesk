@@ -9,7 +9,6 @@
  * @package    Plugin_Name
  * @subpackage Plugin_Name/admin
  */
-
 /**
  * The admin-specific functionality of the plugin.
  *
@@ -20,7 +19,8 @@
  * @subpackage Plugin_Name/admin
  * @author     Your Name <email@example.com>
  */
-if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
+if ( !class_exists( 'Rtbiz_HD_Admin' ) ) {
+
 	class Rtbiz_HD_Admin {
 
 		/**
@@ -28,15 +28,15 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 		 *
 		 * @since    1.0.0
 		 */
-		public function __construct( ) {
+		public function __construct() {
 
 		}
 
 		public function init_admin() {
 
 			global $rtbiz_hd_mail_acl_model, $rtbiz_hd_ticket_history_model, $rtbiz_hd_ticket_index_model,
-			       $rtbiz_hd_attributes, $rtbiz_hd_module, $rtbiz_hd_cpt_tickets, $rtbiz_hd_reports, $rtbiz_hd_dashboard,
-			       $rtbiz_hd_accounts, $rtbiz_hd_contacts, $rtbiz_hd_tickets_operation, $rtbiz_hd_email_notification, $rtbiz_hd_auto_response ;
+			$rtbiz_hd_attributes, $rtbiz_hd_module, $rtbiz_hd_cpt_tickets, $rtbiz_hd_reports, $rtbiz_hd_dashboard,
+			$rtbiz_hd_accounts, $rtbiz_hd_contacts, $rtbiz_hd_tickets_operation, $rtbiz_hd_email_notification, $rtbiz_hd_auto_response;
 
 			$rtbiz_hd_mail_acl_model = new Rtbiz_HD_Mail_ACL_Model();
 			$rtbiz_hd_ticket_history_model = new Rtbiz_HD_Ticket_History_Model();
@@ -76,7 +76,6 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 
 			// For ajax request register with WordPress
 			$rtbiz_hd_contact_blacklist = new Rtbiz_HD_Ticket_Contacts_Blacklist();
-
 		}
 
 		public function register_menu() {
@@ -101,25 +100,25 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 			//remove rtbiz menu
 			foreach ( $menu as $key => $menu_item ) {
 				if ( in_array( Rtbiz_Dashboard::$page_slug, $menu_item ) ) {
-					unset( $menu[ $key ] );
+					unset( $menu[$key] );
 				}
 			}
 
-			if ( isset( $submenu[ 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type ] ) && ! empty( $submenu[ 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type ] ) ) {
-				$module_menu = $submenu[ 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type ];
-				unset( $submenu[ 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type ] );
-				$submenu[ 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type ] = array();
+			if ( isset( $submenu['edit.php?post_type=' . Rtbiz_HD_Module::$post_type] ) && !empty( $submenu['edit.php?post_type=' . Rtbiz_HD_Module::$post_type] ) ) {
+				$module_menu = $submenu['edit.php?post_type=' . Rtbiz_HD_Module::$post_type];
+				unset( $submenu['edit.php?post_type=' . Rtbiz_HD_Module::$post_type] );
+				$submenu['edit.php?post_type=' . Rtbiz_HD_Module::$post_type] = array();
 				$new_index = 5;
 				$wizard_completed = rtbiz_hd_check_wizard_completed();
 				foreach ( $rtbizMenuOrder as $item ) {
-					if ( $wizard_completed || ( ! $wizard_completed && Rtbiz_HD_Setup_Wizard::$page_slug == $item ) ) {
+					if ( $wizard_completed || (!$wizard_completed && Rtbiz_HD_Setup_Wizard::$page_slug == $item ) ) {
 						foreach ( $module_menu as $p_key => $menu_item ) {
 							$out = array_filter( $menu_item, function ( $in ) {
 								return true !== $in;
 							} );
 							if ( in_array( $item, $out ) ) {
-								$submenu[ 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type ][ $new_index ] = $menu_item;
-								unset( $module_menu[ $p_key ] );
+								$submenu['edit.php?post_type=' . Rtbiz_HD_Module::$post_type][$new_index] = $menu_item;
+								unset( $module_menu[$p_key] );
 								$new_index += 5;
 								break;
 							}
@@ -127,11 +126,11 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 					}
 				}
 				foreach ( $module_menu as $p_key => $menu_item ) {
-					if ( $wizard_completed && ! in_array( esc_url( $menu_item[2] ), $rtbizMenuOrder ) ) {
-		                $submenu[ 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type ][ $new_index ] = $menu_item;
-		                unset( $module_menu[ $p_key ] );
-		                $new_index += 5;
-	                }
+					if ( $wizard_completed && !in_array( esc_url( $menu_item[2] ), $rtbizMenuOrder ) ) {
+						$submenu['edit.php?post_type=' . Rtbiz_HD_Module::$post_type][$new_index] = $menu_item;
+						unset( $module_menu[$p_key] );
+						$new_index += 5;
+					}
 				}
 			}
 
@@ -155,7 +154,7 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 				Rtbiz_HD_Setup_Wizard::$page_slug,
 			);
 
-			if ( ! empty( Rtbiz::$access_control_slug ) ) {
+			if ( !empty( Rtbiz::$access_control_slug ) ) {
 				$rtbizMenuOrder = Rtiz::$access_control_slug;
 			}
 			return $rtbizMenuOrder;
@@ -163,7 +162,7 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 
 		public function plugin_action_links( $links ) {
 			$links['get-started'] = '<a href="' . admin_url( 'admin.php?page=' . Rtbiz_HD_Dashboard::$page_slug ) . '">' . __( 'Get Started', RTBIZ_HD_BASE_NAME ) . '</a>';
-			$links['settings'] = '<a href="' . admin_url( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type .  '&page=' . Rtbiz_HD_Settings::$page_slug ) . '">' . __( 'Settings', RTBIZ_HD_BASE_NAME ) . '</a>';
+			$links['settings'] = '<a href="' . admin_url( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type . '&page=' . Rtbiz_HD_Settings::$page_slug ) . '">' . __( 'Settings', RTBIZ_HD_BASE_NAME ) . '</a>';
 			return $links;
 		}
 
@@ -183,7 +182,7 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 
 		public function rtbiz_hd_welcome() {
 			// fail if no activation redirect
-			if ( ! get_option( 'rtbiz_hd_activation_redirect', false ) ) {
+			if ( !get_option( 'rtbiz_hd_activation_redirect', false ) ) {
 				return;
 			}
 
@@ -193,9 +192,9 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 			}
 
 			if ( rtbiz_hd_check_wizard_completed() ) {
-				wp_safe_redirect( admin_url( 'edit.php?post_type='.Rtbiz_HD_Module::$post_type.'&page=' . Rtbiz_HD_Dashboard::$page_slug ) );
+				wp_safe_redirect( admin_url( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type . '&page=' . Rtbiz_HD_Dashboard::$page_slug ) );
 			} else {
-				wp_safe_redirect( admin_url( 'edit.php?post_type='.Rtbiz_HD_Module::$post_type.'&page=' . Rtbiz_HD_Setup_Wizard::$page_slug ) );
+				wp_safe_redirect( admin_url( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type . '&page=' . Rtbiz_HD_Setup_Wizard::$page_slug ) );
 			}
 			delete_option( 'rtbiz_hd_activation_redirect' );
 			exit;
@@ -205,17 +204,76 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 			global $rtbiz_contact, $rtbiz_company;
 			$menu_label = 'rtBiz';
 
-			$modules[ rtbiz_sanitize_module_key( RTBIZ_HD_TEXT_DOMAIN ) ] = array(
-				'label'               => __( 'Helpdesk', RTBIZ_HD_TEXT_DOMAIN ),
+			$modules[rtbiz_sanitize_module_key( RTBIZ_HD_TEXT_DOMAIN )] = array(
+				'label' => __( 'Helpdesk', RTBIZ_HD_TEXT_DOMAIN ),
 				'post_types' => array( Rtbiz_HD_Module::$post_type ),
 				'team_support' => array( Rtbiz_HD_Module::$post_type ),
 				'product_support' => array( Rtbiz_HD_Module::$post_type ),
 				'setting_option_name' => Rtbiz_HD_Settings::$hd_opt, // Use for setting page acl to add manage_options capability
-				'setting_page_url' => admin_url( 'edit.php?post_type='.Rtbiz_HD_Module::$post_type.'&page=rthd-settings' ), //
+				'setting_page_url' => admin_url( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type . '&page=rthd-settings' ), //
 				'email_template_support' => array( Rtbiz_HD_Module::$post_type ),
 			);
 
 			return $modules;
+		}
+
+		function ajax_rtbiz_add_hd_error_page(){
+			$response = array();
+			$response['status'] = false;
+			$page_title = 'Helpdesk Authentication Error';
+			$page_content = '[Helpdesk Authentication Error]';
+			$slug = 'helpdesk-authentication-error';
+			$option = 'rtbiz_hd_helpdesk_authentication_error_page_id';
+			$option_value = get_option( $option );
+			if ( $option_value > 0 && get_post( $option_value ) ) {
+				$response['status'] = false;
+			} else {
+				global $wpdb;
+
+				$page_found = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM " . $wpdb->posts . " WHERE post_type='page' AND post_name = %s AND post_content NOT LIKE %s LIMIT 1;", $slug, "%{$page_content}%" ) );
+
+				if ( $page_found ) {
+					$post_name = wp_unique_post_slug( $slug, '', 'publish', 'page', '' );
+					$wpdb->update( $wpdb->posts, array( 'post_name' => $post_name, 'post_status' => 'draft' ), array( 'ID' => $page_found ) );
+				}
+
+				$page_found = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM " . $wpdb->posts . " WHERE post_type='page' AND post_name = %s AND post_content LIKE %s LIMIT 1;", $slug, "%{$page_content}%" ) );
+				if ( $page_found ) {
+					if ( ! $option_value ) {
+						update_option( $option, $page_found );
+					}
+					$response['status'] = true;
+				} else {
+					$page_data = array(
+						'post_status'       => 'publish',
+						'post_type'         => 'page',
+						'post_author'       => 1,
+						'post_name'         => $slug,
+						'post_title'        => $page_title,
+						'post_content'      => $page_content,
+						'comment_status'    => 'closed'
+					);
+					$page_id = wp_insert_post( $page_data );
+
+					if ( $option ) {
+						update_option( $option, $page_id );
+					}
+
+					$response['status'] = true;
+				}
+			}
+			echo json_encode( $response );
+			die();
+		}
+
+		function Add_error_page_notice(){
+			$option = get_option( 'rtbiz_hd_helpdesk_authentication_error_page_id' );
+			$page = get_post( $option );
+			if ( rtbiz_hd_check_wizard_completed() && ( $option <= 0  || ! $page ) ) {
+				$class   = "updated";
+				$message = "<p><b>Welcome to Helpdesk</b> - You're almost ready to use Helpdesk</p><p class='submit-action'><a id='rthd-add-hd-error-page' class='btn button-primary' href='javascript:;' title='Install Helpdesh Pages'>Install <b>Helpdesk Authentication Error</b> page.</a></p>";
+				echo "<div class=\"$class\"> <p>$message</p></div>";
+			}
 		}
 
 		/**
@@ -253,7 +311,7 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 			if ( isset( $_REQUEST['post_type'] ) ) {
 				$postype = $_REQUEST['post_type'];
 			}
-			if ( empty( $postype ) && ! empty( $_REQUEST['post_id'] ) ) {
+			if ( empty( $postype ) && !empty( $_REQUEST['post_id'] ) ) {
 				$postype = get_post_type( $_REQUEST['post_id'] );
 			}
 			if ( Rtbiz_HD_Module::$post_type == $postype ) {
@@ -274,7 +332,7 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 			if ( isset( $_REQUEST['post_type'] ) ) {
 				$postype = $_REQUEST['post_type'];
 			}
-			if ( empty( $postype ) && ! empty( $_REQUEST['post_id'] ) ) {
+			if ( empty( $postype ) && !empty( $_REQUEST['post_id'] ) ) {
 				$postype = get_post_type( $_REQUEST['post_id'] );
 			}
 			if ( Rtbiz_HD_Module::$post_type == $postype ) {
@@ -295,7 +353,6 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 			$args['url'] = $args['baseurl'] . '/' . RTBIZ_HD_TEXT_DOMAIN . $args['subdir'];
 			return $args;
 		}
-
 
 		/**
 		 * Register the stylesheets for the admin area.
@@ -326,8 +383,7 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 			// include this css everywhere
 			wp_enqueue_style( RTBIZ_HD_TEXT_DOMAIN . 'common-css', RTBIZ_HD_URL . 'public/css/rthd-common.css', array(), RTBIZ_HD_VERSION, 'all' );
 
-			if ( ( in_array( $pagenow, array( 'edit.php', 'post.php', 'post-new.php' ) ) && Rtbiz_HD_Module::$post_type == $rtbiz_hd_post_type )
-			     || ( in_array( $pagenow, array( 'admin.php', ) ) && Rtbiz_HD_Setup_Wizard::$page_slug == $_REQUEST['page'] ) ) {
+			if ( ( in_array( $pagenow, array( 'edit.php', 'post.php', 'post-new.php' ) ) && Rtbiz_HD_Module::$post_type == $rtbiz_hd_post_type ) || ( in_array( $pagenow, array( 'admin.php', ) ) && Rtbiz_HD_Setup_Wizard::$page_slug == $_REQUEST['page'] ) ) {
 				wp_enqueue_style( RTBIZ_HD_TEXT_DOMAIN . 'admin-css', RTBIZ_HD_URL . 'admin/css/admin.css', array(), RTBIZ_HD_VERSION, 'all' );
 			}
 
@@ -337,11 +393,8 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 
 
 
-				//          wp_enqueue_style( 'rthd-common-css', RT_HD_URL . 'app/assets/css/rthd-common.css', array(), RT_HD_VERSION, 'all' );
+			//          wp_enqueue_style( 'rthd-common-css', RT_HD_URL . 'app/assets/css/rthd-common.css', array(), RT_HD_VERSION, 'all' );
 			//          wp_enqueue_style( 'rthd-admin-css', RT_HD_URL . 'app/assets/admin/css/admin.css', array(), RT_HD_VERSION );
-
-
-
 		}
 
 		/**
@@ -362,7 +415,6 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 			 * between the defined hooks and the functions defined in this
 			 * class.
 			 */
-
 			global $post, $pagenow, $rtbiz_hd_setup_wizard;
 			$rtbiz_hd_post_type = 'post';
 			if ( isset( $_GET['post'] ) ) {
@@ -372,30 +424,29 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 			}
 			wp_enqueue_script( 'rthd-app-public-js', RTBIZ_HD_URL . 'public/js/helpdesk-shortcode-min.js', array( 'jquery' ), RTBIZ_HD_VERSION, true );
 
-			if ( ( in_array( $pagenow, array( 'edit.php', 'post.php', 'post-new.php' ) ) && Rtbiz_HD_Module::$post_type == $rtbiz_hd_post_type )
-			     || ( in_array( $pagenow, array( 'admin.php' ) ) && Rtbiz_HD_Setup_Wizard::$page_slug == $_REQUEST['page'] ) ) {
+			if ( ( in_array( $pagenow, array( 'edit.php', 'post.php', 'post-new.php' ) ) && Rtbiz_HD_Module::$post_type == $rtbiz_hd_post_type ) || ( in_array( $pagenow, array( 'admin.php' ) ) && Rtbiz_HD_Setup_Wizard::$page_slug == $_REQUEST['page'] ) ) {
 
 				if ( isset( $post->post_type ) && $post->post_type == Rtbiz_HD_Module::$post_type ) {
 
 					wp_enqueue_script( 'jquery-ui-timepicker-addon', RTBIZ_HD_URL . 'admin/js/vendors/jquery-ui-timepicker-addon.js', array(
 						'jquery-ui-datepicker',
 						'jquery-ui-slider',
-					), RTBIZ_HD_VERSION, true );
+							), RTBIZ_HD_VERSION, true );
 
 					wp_enqueue_script( 'jquery-ui-datepicker' );
-
 				}
 
 				wp_enqueue_script( 'jquery-ui-autocomplete', '', array(
 					'jquery-ui-widget',
 					'jquery-ui-position',
-				), '1.9.2' );
+						), '1.9.2' );
 
 				//				wp_enqueue_media();
 
 				wp_enqueue_script( RTBIZ_HD_TEXT_DOMAIN . 'admin-js', RTBIZ_HD_URL . 'admin/js/helpdesk-admin-min.js', array( 'jquery' ), RTBIZ_HD_VERSION, true );
 
 				wp_localize_script( RTBIZ_HD_TEXT_DOMAIN . 'admin-js', 'rtbiz_hd_post_type', $rtbiz_hd_post_type );
+				wp_localize_script( RTBIZ_HD_TEXT_DOMAIN . 'admin-js', 'rtbiz_hd_supported_extensions', implode( ',', rtbiz_hd_get_supported_extensions() ) );
 			} else {
 				wp_localize_script( RTBIZ_HD_TEXT_DOMAIN . 'admin-js', 'rtbiz_hd_user_edit', array( '' ) );
 			}
@@ -407,12 +458,12 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 				wp_localize_script( RTBIZ_HD_TEXT_DOMAIN . '-menu-hack-js', 'rtbiz_hd_menu', Rtbiz_HD_Module::$post_type );
 
 				$query_arg = '';
-				if ( ! empty( $_GET['contact_group'] ) ) {
+				if ( !empty( $_GET['contact_group'] ) ) {
 					$query_arg = '&contact_group=' . $_GET['contact_group'] . '&module=' . RTBIZ_HD_TEXT_DOMAIN;
 				} else {
 					if ( isset( $_REQUEST['post'] ) ) {
 						$user = rtbiz_get_wp_user_for_contact( $_REQUEST['post'] );
-						if ( ! empty( $user[0] ) && in_array( 'administrator', $user[0]->roles ) ) {
+						if ( !empty( $user[0] ) && in_array( 'administrator', $user[0]->roles ) ) {
 							$query_arg = '&contact_group=staff';
 						} else {
 							$is_staff_member = get_post_meta( $_REQUEST['post'], 'rtbiz_is_staff_member', true );
@@ -436,8 +487,8 @@ if ( ! class_exists( 'Rtbiz_HD_Admin' ) ) {
 
 			wp_localize_script( RTBIZ_HD_TEXT_DOMAIN . 'admin-js', 'ajaxurl', admin_url( 'admin-ajax.php' ) );
 			wp_localize_script( RTBIZ_HD_TEXT_DOMAIN . 'admin-js', 'rtbiz_hd_dashboard_url', admin_url( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type . '&page=' . Rtbiz_HD_Dashboard::$page_slug . '&finish-wizard=yes' ) );
-
 		}
 
 	}
+
 }
