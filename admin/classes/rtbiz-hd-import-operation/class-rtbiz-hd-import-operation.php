@@ -1782,7 +1782,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 //							$comment_render_type = 'right';
 //						}
 //					}
-					$user_edit = current_user_can( $cap ) || ( $current_user_contact_id == $userid );
+					$user_edit = current_user_can( $cap ) || ( $current_user_contact_id == $contact_id );
 					$comment = get_comment( $comment_ID );
 					$returnArray['comment_content'] = rtbiz_hd_render_comment( $comment, $user_edit, $comment_render_type, false );
 					$returnArray['assign_value'] = get_post_field( 'post_author', $comment_post_ID, 'raw' );
