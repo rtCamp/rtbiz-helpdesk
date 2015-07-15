@@ -352,7 +352,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 				'title'    => __( 'Email support' ),
 				'subtitle' => __( 'Email allows customer to create tickets and reply tickets from configured mailbox.' ),
 				'type'     => 'switch',
-				'default'  => false,
+				'default'  => true,
 				'on'       => __( 'Enable' ),
 				'off'      => __( 'Disable' ),
 			));
@@ -406,7 +406,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 				'title'    => __( 'Web support' ),
 				'subtitle' => __( 'Web will allow customer to create support ticket and tickets and reply tickets from front end.' ),
 				'type'     => 'switch',
-				'default'  => false,
+				'default'  => true,
 				'on'       => __( 'Enable' ),
 				'off'      => __( 'Disable' ),
 			));
