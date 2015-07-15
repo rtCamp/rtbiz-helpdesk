@@ -823,8 +823,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		) {
 
 			// check mailbox reading enable or not
-			//todo: test this logic
-			if ( ! empty( $mailbox_email ) || ! rtbiz_hd_is_enable_mailbox_reading() || rtbiz_hd_get_web_only_support() ) {
+			if ( empty( $mailbox_email ) || ! rtbiz_hd_is_enable_mailbox_reading() || rtbiz_hd_get_web_only_support() ) {
 				return false;
 			}
 
