@@ -165,7 +165,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 				$redirect_url = ( ( is_ssl() ) ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 				$option = 'rtbiz_hd_helpdesk_authentication_error_page_id';
 				$option_value = get_option( $option );
-				if ( $option_value > 0 && get_post( $option_value ) && ! get_post_status( $option_value ) == 'publish' ){
+				if ( $option_value > 0 && get_post( $option_value ) && get_post_status( $option_value ) == 'publish' ){
 					wp_redirect( add_query_arg( 'redirect_url', urlencode( $redirect_url ), get_page_link($option_value) ) );
 				} else {
 					wp_redirect( wp_login_url( $redirect_url ) );
