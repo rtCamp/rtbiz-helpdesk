@@ -5,7 +5,7 @@ jQuery( document ).ready(function () {
 
     var rthd_markdown = {
         init: function () {
-            rthd_markdown.initPreviewLink();
+            //rthd_markdown.initPreviewLink();
             rthd_markdown.initGloble();
             rthd_markdown.addFollowup();
             rthd_markdown.editFollowup();
@@ -34,113 +34,97 @@ jQuery( document ).ready(function () {
             converter = new showdown.Converter({literalMidWordUnderscores: true, smoothLivePreview: true, ghCodeBlocks: true, simplifiedAutoLink: true, tables: true, extensions: ['table', 'github', 'prettify']});
         },
         addFollowup: function(){
-            var inputPane = jQuery("#followupcontent");
-            var peviewPane = jQuery("#followupcontent_html");
-            inputPane.keyup(function() {
-                rthd_markdown.onInput( inputPane, peviewPane )
-            });
+            jQuery('#rthd-new-followup-preview').click(function(e){
+                var parent_selector = '#new-followup-form';
+                if ( jQuery( parent_selector).find('.markdown_preview_container').is(':visible') ) {
+                    jQuery( parent_selector).find('.rthd-followup-content-container').show();
+                    jQuery( parent_selector).find('.markdown_preview_container').hide();
+                    jQuery(this).removeClass( 'active' );
+                }else{
+                    var inputPane = jQuery("#followupcontent");
+                    var peviewPane = jQuery("#followupcontent_html");
+                    rthd_markdown.onInput( inputPane, peviewPane );
 
-            var pollingFallback = window.setInterval(function(){
-                rthd_markdown.onInput( inputPane, peviewPane );
-            },1000);
+                    if ( ! jQuery( parent_selector).find('.markdown_preview_container').html() ){
+                        alert( 'Nothing to preview' );
+                        return;
+                    }
 
-
-            inputPane.bind("paste", function(e){
-                if (pollingFallback!=undefined) {
-                    window.clearInterval(pollingFallback);
-                    pollingFallback = undefined;
+                    jQuery( parent_selector).find('.rthd-followup-content-container').hide();
+                    jQuery( parent_selector).find('.markdown_preview_container').show();
+                    jQuery(this).addClass( 'active' );
                 }
-                rthd_markdown.onInput( inputPane, peviewPane );
-            } );
-
-            rthd_markdown.convertText( inputPane, peviewPane );
-
-            inputPane.focus();
-
-            //previewPane.scrollTop = 0;
-            peviewPane.scrollTop = 0;
+            });
         },
         editFollowup: function(){
-            var inputPane = jQuery( '#dialog-form').find( '#editedfollowupcontent' );
-            var peviewPane = jQuery( '#dialog-form').find( '#editedfollowupcontent_html' );
+            jQuery('#rthd-edit-followup-preview').click(function(e){
+                var parent_selector = '#dialog-form';
+                if ( jQuery( parent_selector).find('.markdown_preview_container').is(':visible') ) {
+                    jQuery( parent_selector).find('.rthd-followup-content-container').show();
+                    jQuery( parent_selector).find('.markdown_preview_container').hide();
+                    jQuery(this).removeClass( 'active' );
+                }else{
+                    var inputPane = jQuery( '#dialog-form').find( '#editedfollowupcontent' );
+                    var peviewPane = jQuery( '#dialog-form').find( '#editedfollowupcontent_html' );
+                    rthd_markdown.onInput( inputPane, peviewPane );
 
-            inputPane.on('keyup',function() {
-                rthd_markdown.onInput( inputPane, peviewPane )
-            });
+                    if ( ! jQuery( parent_selector).find('.markdown_preview_container').html() ){
+                        alert( 'Nothing to preview' );
+                        return;
+                    }
 
-            var pollingFallback = window.setInterval(function(){
-                rthd_markdown.onInput( inputPane, peviewPane );
-            },1000);
-
-            inputPane.on('paste', function(e){
-                if (pollingFallback!=undefined) {
-                    window.clearInterval(pollingFallback);
-                    pollingFallback = undefined;
+                    jQuery( parent_selector).find('.rthd-followup-content-container').hide();
+                    jQuery( parent_selector).find('.markdown_preview_container').show();
+                    jQuery(this).addClass( 'active' );
                 }
-                rthd_markdown.onInput( inputPane, peviewPane );
-            } );
-
-            rthd_markdown.convertText( inputPane, peviewPane );
-
-            inputPane.focus();
-
-            //previewPane.scrollTop = 0;
-            peviewPane.scrollTop = 0;
+            });
         },
         editTicketContnent: function(){
-            var inputPane = jQuery( '#edit-ticket-data').find('#editedticketcontent');
-            var peviewPane = jQuery( '#edit-ticket-data').find( '#editedticketcontent_html' );
+            jQuery('#rthd-edit-ticket-content-preview').click(function(e){
+                var parent_selector = '#edit-ticket-data';
+                if ( jQuery( parent_selector).find('.markdown_preview_container').is(':visible') ) {
+                    jQuery( parent_selector).find('.rthd-followup-content-container').show();
+                    jQuery( parent_selector).find('.markdown_preview_container').hide();
+                    jQuery(this).removeClass( 'active' );
+                }else{
+                    var inputPane = jQuery( '#edit-ticket-data').find('#editedticketcontent');
+                    var peviewPane = jQuery( '#edit-ticket-data').find( '#editedticketcontent_html' );
+                    rthd_markdown.onInput( inputPane, peviewPane );
 
-            inputPane.on('keyup',function() {
-                rthd_markdown.onInput( inputPane, peviewPane )
-            });
+                    if ( ! jQuery( parent_selector).find('.markdown_preview_container').html() ){
+                        alert( 'Nothing to preview' );
+                        return;
+                    }
 
-            var pollingFallback = window.setInterval(function(){
-                rthd_markdown.onInput( inputPane, peviewPane );
-            },1000);
-
-            inputPane.on('paste', function(e){
-                if (pollingFallback!=undefined) {
-                    window.clearInterval(pollingFallback);
-                    pollingFallback = undefined;
+                    jQuery( parent_selector).find('.rthd-followup-content-container').hide();
+                    jQuery( parent_selector).find('.markdown_preview_container').show();
+                    jQuery(this).addClass( 'active' );
                 }
-                rthd_markdown.onInput( inputPane, peviewPane );
-            } );
-
-            rthd_markdown.convertText( inputPane, peviewPane );
-
-            inputPane.focus();
-
-            //previewPane.scrollTop = 0;
-            peviewPane.scrollTop = 0;
+            });
         },
         supportPage: function(){
-            var inputPane = jQuery( '#rt-hd-support-page').find('#post_description_body');
-            var peviewPane = jQuery( '#rt-hd-support-page').find( '#post_description_html' );
-            var outputPane = jQuery( '#rt-hd-support-page').find( '#post_description_html_text' );
+            jQuery('#rthd-ticket-create-preview').click(function(e){
+                var parent_selector = '#rt-hd-support-page';
+                if ( jQuery( parent_selector).find('.markdown_preview_container').is(':visible') ) {
+                    jQuery( parent_selector).find('.rthd-followup-content-container').show();
+                    jQuery( parent_selector).find('.markdown_preview_container').hide();
+                    jQuery(this).removeClass( 'active' );
+                }else{
+                    var inputPane = jQuery( '#rt-hd-support-page').find('#post_description_body');
+                    var peviewPane = jQuery( '#rt-hd-support-page').find( '#post_description_html' );
+                    var outputPane = jQuery( '#rt-hd-support-page').find( '#post_description_html_text' );
+                    rthd_markdown.onInput( inputPane, peviewPane, outputPane );
 
-            inputPane.on('keyup',function() {
-                rthd_markdown.onInput( inputPane, peviewPane, outputPane )
-            });
+                    if ( ! jQuery( parent_selector).find('.markdown_preview_container').html() ){
+                        alert( 'Nothing to preview' );
+                        return;
+                    }
 
-            var pollingFallback = window.setInterval(function(){
-                rthd_markdown.onInput( inputPane, peviewPane, outputPane );
-            },1000);
-
-            inputPane.on('paste', function(e){
-                if (pollingFallback!=undefined) {
-                    window.clearInterval(pollingFallback);
-                    pollingFallback = undefined;
+                    jQuery( parent_selector).find('.rthd-followup-content-container').hide();
+                    jQuery( parent_selector).find('.markdown_preview_container').show();
+                    jQuery(this).addClass( 'active' );
                 }
-                rthd_markdown.onInput( inputPane, peviewPane, outputPane );
-            } );
-
-            rthd_markdown.convertText( inputPane, peviewPane, outputPane );
-
-            //inputPane.focus();
-
-            //previewPane.scrollTop = 0;
-            peviewPane.scrollTop = 0;
+            });
         },
         convertText: function( inputPane, peviewPane, outputPane ){
             // get input text

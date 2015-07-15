@@ -32,7 +32,7 @@ $staffonly = current_user_can( $cap );
 		<?php } ?>
 
 		<div class="rthd-followup-content-helpbar">
-			<span class="rthd-markdown-preview" data-parent="#new-followup-form">
+			<span id="rthd-new-followup-preview" class="rthd-markdown-preview">
 				Preview |
 			</span>
 			<span class="rthd-tooltip rthd-followup-content-tolltip">

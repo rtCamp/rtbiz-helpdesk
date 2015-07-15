@@ -327,7 +327,7 @@ jQuery( document ).ready(function () {
 				e.preventDefault();
 				var followup_information = jQuery( this ).parents().parents();
                 followup_id = followup_information.siblings( '#followup-id' ).val();
-                followup_content = followup_information.siblings( '.rthd-comment-content' ).data( 'content' );
+                followup_content = followup_information.siblings( '.rthd-comment-content' ).data( 'rthdcontent' );
                 followup_type = followup_information.siblings( '#followup-type' ).val();
                 followup_senstive = followup_information.siblings( '#followup-senstive' ).val();
 
@@ -467,7 +467,7 @@ jQuery( document ).ready(function () {
 				}
 				jQuery( '#new-followup-form' ).hide();
 				jQuery( document ).scrollTop( ( jQuery( '#edit-ticket-data' ).offset().top ) - 50 );
-				jQuery( '#edit-ticket-data').find('#editedticketcontent').val( jQuery( this ).closest( '.ticketcontent' ).find( '.rthd-comment-content' ).data( 'content' ) );
+				jQuery( '#edit-ticket-data').find('#editedticketcontent').val( jQuery( this ).closest( '.ticketcontent' ).find( '.rthd-comment-content' ).data( 'rthdcontent' ) );
 			});
 
 			// close tinyMCE editor and send user back to ticket content
@@ -512,7 +512,7 @@ jQuery( document ).ready(function () {
 							jQuery( '#ticket-edithdspinner' ).hide();
 							jQuery( "#edit-ticket-content-click" ).removeAttr( 'disabled' );
 							jQuery( '.edit-ticket-link' ).closest( '.rthd-ticket-content' ).find( '.rthd-comment-content' ).html( converter.makeHtml( post_content.val()) );
-							jQuery( '.edit-ticket-link' ).closest( '.rthd-ticket-content' ).find( '.rthd-comment-content' ).data( 'content', post_content.val() );
+							jQuery( '.edit-ticket-link' ).closest( '.rthd-ticket-content' ).find( '.rthd-comment-content' ).data( 'rthdcontent', post_content.val() );
 							jQuery( '#edit-ticket-data' ).hide();
                             jQuery( '#edit-ticket-data').find('#editedticketcontent_html').html();
 							jQuery( '#new-followup-form' ).slideToggle( 'slow' );

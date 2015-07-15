@@ -113,6 +113,21 @@ jQuery( document ).ready(function () {
                     }else{
                         post_content.css( 'border-color', '' );
                     }
+
+                    // Start convert markdown to html
+                    var inputPane = jQuery( '#rt-hd-support-page').find('#post_description_body');
+                    var peviewPane = jQuery( '#rt-hd-support-page').find( '#post_description_html' );
+                    var outputPane = jQuery( '#rt-hd-support-page').find( '#post_description_html_text' );
+
+                    var text = inputPane.val();
+                    text = converter.makeHtml(text);
+                    //previewPane.innerHTML = text;
+                    peviewPane.html( text );
+                    if ( outputPane ){
+                        outputPane.val( text );
+                    }
+                    // Start convert markdown to html
+
                     jQuery( '.rthd_support_from' ).submit();
                 },
 
