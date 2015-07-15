@@ -207,7 +207,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 
 						return rtbiz_hd_locate_template( 'ticket-404-page.php' );
 					}
-				} else if ( ! current_user_can( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' ) ) ) {
+				} else if ( ! $author_access ) {
 					$contacts       = rtbiz_get_post_for_contact_connection( $post->ID, Rtbiz_HD_Module::$post_type );
 					$other_contacts = $rtbiz_hd_email_notification->get_contacts( $post->ID );
 					$contact_ids    = wp_list_pluck( $contacts, 'ID' );
