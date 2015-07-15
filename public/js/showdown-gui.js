@@ -31,7 +31,7 @@ jQuery( document ).ready(function () {
             });
         },
         initGloble:function(){
-            converter = new showdown.Converter({extensions: ['table', 'github', 'prettify']});
+            converter = new showdown.Converter({literalMidWordUnderscores: true, smoothLivePreview: true, ghCodeBlocks: true, simplifiedAutoLink: true, tables: true, extensions: ['table', 'github', 'prettify']});
         },
         addFollowup: function(){
             var inputPane = jQuery("#followupcontent");
