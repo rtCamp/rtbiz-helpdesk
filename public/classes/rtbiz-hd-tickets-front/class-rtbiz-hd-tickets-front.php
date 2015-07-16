@@ -173,19 +173,47 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 				die();
 			}
 
-			if ( ! empty( $_REQUEST['rthd_unique_id'] ) && rtbiz_hd_is_unique_hash_enabled() ) {
+			if ( rtbiz_hd_is_unique_hash_enabled() && ! empty( $_REQUEST['rthd_unique_id'] ) ) {
 				$args = array(
 					'meta_key'    => '_rtbiz_hd_unique_id',
 					'meta_value'  => $_REQUEST['rthd_unique_id'],
 					'post_status' => 'any',
 					'post_type'   => Rtbiz_HD_Module::$post_type,
 				);
-				$post = get_posts( $args );
-				if ( ! empty( $post[0] ) ) {
-					$post = $post[0];
-					$wp_query->query[ Rtbiz_HD_Module::$post_type ]= $post->ID;
+
+				$ticketpost = get_posts( $args );
+				if ( ! empty( $ticketpost ) ) {
+					$ticket = $ticketpost[0];
+					global $rthd_front_page_title;
+					$labels                = $rtbiz_hd_module->labels;
+					$rthd_front_page_title = __( 'Helpdesk - Ticket #' . $ticket->ID );
+					$wp_query->query[ Rtbiz_HD_Module::$post_type ] =  $ticket->ID;
+					$post                  = $ticket;
+					setup_postdata( $post );
+				} else {
+					$wrong_unique_id = true;
 				}
+			} else if ( is_archive( 'ticket' ) ) {
+				$wrong_unique_id = true;
 			}
+
+			if ( empty( $post ) || $wrong_unique_id ) {
+				if ( isset( $wp_query->query[ Rtbiz_HD_Module::$post_type ] ) ) {
+					$message = sprintf( '%s ', __( "<div style='margin-left: 0;'>Sorry! Your requested ticket wasn't found.</div>" ) );
+					$rthd_front_page_title = __( 'Helpdesk - Ticket Not Found' );
+				} else {
+					$message = '';
+					$rthd_front_page_title = __( 'Helpdesk - Tickets' );
+				}
+				global $rthd_messages;
+				$rthd_messages[] = array( 'type' => 'error rthd-error', 'message' => $message, 'displayed' => 'no' );
+
+
+				return rtbiz_hd_locate_template( 'ticket-404-page.php' );
+
+				//return get_404_template();
+			}
+
 			if ( ! empty( $post ) && isset( $wp_query->query[ Rtbiz_HD_Module::$post_type ] ) ) {
 				global $rtbiz_hd_email_notification;
 				$user = wp_get_current_user();
@@ -231,50 +259,8 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 				}
 			}
 
-			if ( rtbiz_hd_is_unique_hash_enabled() && ! empty( $_REQUEST['rthd_unique_id'] ) ) {
-				$args = array(
-					'meta_key'    => '_rtbiz_hd_unique_id',
-					'meta_value'  => $_REQUEST['rthd_unique_id'],
-					'post_status' => 'any',
-					'post_type'   => Rtbiz_HD_Module::$post_type,
-				);
-
-				$ticketpost = get_posts( $args );
-				if ( ! empty( $ticketpost ) ) {
-					$ticket = $ticketpost[0];
-					global $rthd_front_page_title;
-					$labels                = $rtbiz_hd_module->labels;
-					$rthd_front_page_title = $ticket->post_title . ' | ' . get_bloginfo();
-					$rthd_front_page_title = __( 'Helpdesk - Ticket #' . $ticket->ID );
-					$post                  = $ticket;
-					setup_postdata( $post );
-				} else {
-					$wrong_unique_id = true;
-				}
-			} else if ( is_archive( 'ticket' ) ) {
-				$wrong_unique_id = true;
-			}
-
-			if ( empty( $post ) || $wrong_unique_id ) {
-				if ( isset( $wp_query->query[ Rtbiz_HD_Module::$post_type ] ) ) {
-					$message = sprintf( '%s ', __( "<div style='margin-left: 0;'>Sorry! Your requested ticket wasn't found.</div>" ) );
-					$rthd_front_page_title = __( 'Helpdesk - Ticket Not Found' );
-				} else {
-					$message = '';
-					$rthd_front_page_title = __( 'Helpdesk - Tickets' );
-				}
-				global $rthd_messages;
-				$rthd_messages[] = array( 'type' => 'error rthd-error', 'message' => $message, 'displayed' => 'no' );
-
-
-				return rtbiz_hd_locate_template( 'ticket-404-page.php' );
-
-				//return get_404_template();
-			}
-
 			$rtbiz_helpdesk_template = true;
 			$rthd_front_page_title = __( 'Helpdesk - Ticket #' . $post->ID );
-
 			return rtbiz_hd_locate_template( 'ticket-front-page.php' );
 		}
 
