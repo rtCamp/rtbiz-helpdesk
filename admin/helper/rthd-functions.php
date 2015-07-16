@@ -438,7 +438,7 @@ function rtbiz_hd_get_unique_hash_url( $ticket_id ) {
 	global $rtbiz_hd_module;
 	$labels = $rtbiz_hd_module->labels;
 	$rthd_unique_id = get_post_meta( $ticket_id, '_rtbiz_hd_unique_id', true );
-	return trailingslashit( site_url() ) . strtolower( $labels['name'] ) . '/?rthd_unique_id=' . $rthd_unique_id;
+	return trailingslashit( site_url() ) . strtolower( $labels['singular_name'] ) . '/?rthd_unique_id=' . $rthd_unique_id;
 }
 
 function rtbiz_hd_is_unique_hash_enabled() {
