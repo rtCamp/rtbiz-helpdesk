@@ -193,6 +193,13 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 		}
 
 		function ticket_shortcode_render_ui( $arg_shortcode, $top, $limit, $first ) {
+
+			if ( ! is_user_logged_in() ) { ?>
+				<div id="info" class="error rthd-notice">You're not logged in. Please <a href="<?php echo wp_login_url( get_permalink() ); ?>" title="login">login</a> first to view tickets.
+				</div><?php
+				return ;
+			}
+
 			global $rtbiz_hd_module, $current_user, $redux_helpdesk_settings;
 			$cap = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' );
 

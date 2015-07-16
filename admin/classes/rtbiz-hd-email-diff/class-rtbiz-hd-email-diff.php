@@ -31,6 +31,11 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Diff' ) ) {
 		 */
 		var $_trailing_context_lines = 2;
 
+
+		public function __construct( $params = array() ) {
+			parent::__construct( $params );
+		}
+
 		/**
 		 * Added Content format for Email Diff Content
 		 *
