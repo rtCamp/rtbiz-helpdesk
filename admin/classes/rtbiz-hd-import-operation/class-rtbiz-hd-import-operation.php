@@ -1229,7 +1229,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			$autoAssignEvent = ( isset( $redux['rthd_auto_assign_events'] ) ) ? $redux['rthd_auto_assign_events'] : '' ;
 			$isFirstStaffComment = false;
 			//check auto assign feature enable and followup created by staff
-			if ( $autoAssingeFlag && $rtbiz_hd_email_notification->is_internal_user( $comment_author_email ) ) {
+			if ( self::$FOLLOWUP_STAFF != $comment_type && $autoAssingeFlag && $rtbiz_hd_email_notification->is_internal_user( $comment_author_email ) ) {
 				if ( 'on_first_followup' == $autoAssignEvent ) {
 					$Comment = $this->get_first_staff_followup( $comment_post_ID );
 					$Comment = array_filter( $Comment );
@@ -1364,7 +1364,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			//check auto assign feature enable and followup created by staff
 			if ( $autoAssingeFlag && $rtbiz_hd_email_notification->is_internal_user( $comment_author_email ) ) {
 				//check on 'on_first_followup' selected and its first staff followup || select 'on_any_followup'
-				if ( ( 'on_first_followup' == $autoAssignEvent && $isFirstStaffComment ) || 'on_any_followup' == $autoAssignEvent ) {
+				if ( ( 'on_first_followup' == $autoAssignEvent && $isFirstStaffComment ) || ( self::$FOLLOWUP_STAFF != $comment_type && 'on_any_followup' == $autoAssignEvent ) ) {
 					wp_update_post( array( 'ID' => $comment_post_ID, 'post_author' => $userid ) );
 				}
 			}
@@ -1573,7 +1573,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			}
 
 			global $rtbiz_hd_email_notification;
-			$title = $rtbiz_hd_email_notification->get_email_title( $comment_post_ID, get_post_type( $comment_post_ID ) );
+			$title = $rtbiz_hd_email_notification->get_email_title( $comment_post_ID );
 			return $rtbiz_hd_email_notification->insert_new_send_email( $subject, rtbiz_hd_get_general_body_template( $mailbody, $title , $comment_post_ID, true ), $toEmail, $ccEmail, $bccEmail, $attachment, $comment_id, 'comment' );
 		}
 
@@ -1751,7 +1751,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				$keep_status = true;
 			}
 
-			if ( 30 == $comment_type ){
+			if ( self::$FOLLOWUP_STAFF == $comment_type ){
 				$keep_status = true;
 			}
 

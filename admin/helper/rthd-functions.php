@@ -438,7 +438,7 @@ function rtbiz_hd_get_unique_hash_url( $ticket_id ) {
 	global $rtbiz_hd_module;
 	$labels = $rtbiz_hd_module->labels;
 	$rthd_unique_id = get_post_meta( $ticket_id, '_rtbiz_hd_unique_id', true );
-	return trailingslashit( site_url() ) . strtolower( $labels['name'] ) . '/?rthd_unique_id=' . $rthd_unique_id;
+	return trailingslashit( site_url() ) . strtolower( $labels['singular_name'] ) . '/?rthd_unique_id=' . $rthd_unique_id;
 }
 
 function rtbiz_hd_is_unique_hash_enabled() {
@@ -725,7 +725,7 @@ function rtbiz_hd_render_comment( $comment, $user_edit, $type = 'right', $echo =
 					$markdown_content = $comment->comment_content;
 				}
 			?>
-			<div class="rthd-comment-content" data-rthdcontent="<?php echo esc_attr( $markdown_content ); ?>"><?php
+			<div class="rthd-comment-content" data-rthdcontent="<?php echo rtbiz_hd_data_rthd_content( esc_attr( $markdown_content ) ); ?>"><?php
 				if ( isset( $comment->comment_content ) && $comment->comment_content != '' ) {
 					$comment->comment_content = rtbiz_hd_content_filter( $comment->comment_content );
 				}?>
@@ -2024,5 +2024,12 @@ function rtbiz_hd_get_web_only_support() {
 		}
 	} else {
 		return true;
+	}
+}
+
+function rtbiz_hd_data_rthd_content( $textarea ){
+	$lines = explode("\n", $textarea);
+	foreach( $lines as $line ){
+		echo $line;
 	}
 }

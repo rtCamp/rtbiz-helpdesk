@@ -66,7 +66,7 @@ if ( ! empty( $created_by ) ) {
 				}
 				?>
 				<div class="rthd-comment-content"
-				     data-rthdcontent="<?php echo( isset( $post->ID ) ? esc_attr( $markdown_content ) : '' ); ?>">
+				     data-rthdcontent="<?php echo( isset( $post->ID ) ? rtbiz_hd_data_rthd_content( esc_attr( $markdown_content ) ) : '' ); ?>">
 					<?php
 					$content = rtbiz_hd_content_filter( isset( $post->ID ) ? $post->post_content : '' );
 					echo $content;
@@ -162,8 +162,8 @@ if ( ! empty( $created_by ) ) {
 		<img id='edithdspinner' class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>">
 	</div>
 	<div class="edit-action-button clearfix">
-		<button type="button" class="btn close-edit-followup">Close</button>
-		<button class="edit-followup btn red-color" id="delfollowup" type="button">Delete</button>
+		<button type="button" class="btn button-secondary close-edit-followup">Close</button>
+		<button class="edit-followup btn button-secondary red-color" id="delfollowup" type="button">Delete</button>
 		<button class="edit-followup btn btn-primary button-primary" id="editfollowup" type="button">Update</button>
 	</div>
 </div>
@@ -194,7 +194,7 @@ if ( $user_edit_content ) {
 		<button class="edit-ticket btn btn-primary" id="edit-ticket-content-click" type="button">Update</button>
 		<?php wp_nonce_field( 'rt_hd_ticket_edit', 'edit_ticket_nonce' ); ?>
 		<img id='ticket-edithdspinner' class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>">
-		<button class="btn close-edit-content">Close</button>
+		<button class="btn button-secondary  close-edit-content">Close</button>
 	</div>
 <?php } ?>
 

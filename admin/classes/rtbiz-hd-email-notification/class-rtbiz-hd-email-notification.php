@@ -45,7 +45,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 		 *
 		 * @return string Body Title
 		 */
-		public function get_email_title( $post_id, $posttype, $followupid = 0 ) {
+		public function get_email_title( $post_id, $followupid = 0 ) {
 			if ( rtbiz_hd_get_email_only_support() ) {
 				return '';
 			}
@@ -256,7 +256,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 
 				global $rtbiz_hd_module;
 				$labels = $rtbiz_hd_module->labels;
-				$title = $this->get_email_title( $comment->comment_post_ID, $labels['name'], $comment->comment_ID );
+				$title = $this->get_email_title( $comment->comment_post_ID, $comment->comment_ID );
 
 				// replace followup_content placeholder with content
 				$body = rtbiz_hd_replace_placeholder( $body, '{followup_content}', rtbiz_hd_content_filter( $comment->comment_content ) );
@@ -341,7 +341,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 
 			global $rtbiz_hd_module;
 			$labels = $rtbiz_hd_module->labels;
-			$title = $this->get_email_title( $comment->comment_post_ID, $labels['name'] );
+			$title = $this->get_email_title( $comment->comment_post_ID );
 
 			// sending email to followup author [ To ]
 			if ( user_can( $user, rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' ) ) ) {
@@ -441,7 +441,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 			}
 			global $rtbiz_hd_module;
 			$labels = $rtbiz_hd_module->labels;
-			$title = $this->get_email_title( $comment->comment_post_ID, $labels['name'], $comment->comment_ID );
+			$title = $this->get_email_title( $comment->comment_post_ID, $comment->comment_ID );
 
 			// sending email to followup author [ To ]
 			if ( user_can( $user, rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' ) ) ) {
@@ -555,7 +555,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 			$arrProducts = array_unique( wp_list_pluck( $produc_list, 'name' ) );
 			$arrProducts = implode( ', ', $arrProducts );
 
-			$title = $this->get_email_title( $post_id, $post_type );
+			$title = $this->get_email_title( $post_id );
 			$subject     = rtbiz_hd_create_new_ticket_title( 'rthd_new_ticket_email_title', $post_id );
 
 			// Ticket creator [ To ] Notification
@@ -696,7 +696,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 			}
 
 			// New subscriber added Notification to subscriber
-			$title = $this->get_email_title( $post_id, $post_type );
+			$title = $this->get_email_title( $post_id );
 			$subject     = rtbiz_hd_create_new_ticket_title( 'rthd_ticket_subscribe_email_title', $post_id );
 			//rthd_email_template_ticket_subscribed
 			$htmlbody_subscriber = apply_filters( 'rthd_email_template_ticket_subscribed', rtbiz_hd_get_email_template_body( 'rthd_email_template_ticket_subscribed' ) );
@@ -758,7 +758,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 			}
 
 			//subscriber removed Notification
-			$title = $this->get_email_title( $post_id, $post_type );
+			$title = $this->get_email_title( $post_id );
 			$subject     = rtbiz_hd_create_new_ticket_title( 'rthd_ticket_unsubscribe_email_title', $post_id );
 
 			$htmlbody = '';
@@ -817,7 +817,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 				$newassigneEmail[] = array( 'email' => $newUser->user_email );
 			}
 
-			$title = $this->get_email_title( $post_id, $post_type );
+			$title = $this->get_email_title( $post_id );
 
 			// old assignee [ To ] mail Notification
 			if ( ! empty( $oldassigneEmail ) && $notificationFlagAssignee ) {
@@ -885,7 +885,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 			$bccemails = apply_filters( 'rtbiz_hd_filter_adult_emails', $bccemails, $post_id );
 
 			$subject = rtbiz_hd_create_new_ticket_title( 'rthd_update_ticket_email_title', $post_id );
-			$title = $this->get_email_title( $post_id, $post_type );
+			$title = $this->get_email_title( $post_id );
 			$user = get_post_meta( $post_id, '_rtbiz_hd_updated_by', true );
 			$ticket_update_user = get_user_by( 'id', $user );
 			$htmlbody_ticket_update = apply_filters( 'rthd_email_template_ticket_updated', rtbiz_hd_get_email_template_body( 'rthd_email_template_ticket_updated' ) );

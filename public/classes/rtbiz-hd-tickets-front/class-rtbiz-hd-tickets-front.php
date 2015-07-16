@@ -167,7 +167,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 				$redirect_url = ( ( is_ssl() ) ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 				$option = 'rtbiz_hd_helpdesk_authentication_error_page_id';
 				$option_value = get_option( $option );
-				if ( $option_value > 0 && get_post( $option_value ) && ! get_post_status( $option_value ) == 'publish' ){
+				if ( $option_value > 0 && get_post( $option_value ) && get_post_status( $option_value ) == 'publish' ){
 					wp_redirect( add_query_arg( 'redirect_url', urlencode( $redirect_url ), get_page_link($option_value) ) );
 				} else {
 					wp_redirect( wp_login_url( $redirect_url ) );
@@ -187,6 +187,47 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 				$rthd_front_page_title = __( 'Helpdesk' );
 
 				return rtbiz_hd_locate_template( 'ticket-error-page.php' );
+			}
+
+			if ( rtbiz_hd_is_unique_hash_enabled() && ! empty( $_REQUEST['rthd_unique_id'] ) ) {
+				$args = array(
+					'meta_key'    => '_rtbiz_hd_unique_id',
+					'meta_value'  => $_REQUEST['rthd_unique_id'],
+					'post_status' => 'any',
+					'post_type'   => Rtbiz_HD_Module::$post_type,
+				);
+
+				$ticketpost = get_posts( $args );
+				if ( ! empty( $ticketpost ) ) {
+					$ticket = $ticketpost[0];
+					global $rthd_front_page_title;
+					$labels                = $rtbiz_hd_module->labels;
+					$rthd_front_page_title = __( 'Helpdesk - Ticket #' . $ticket->ID );
+					$wp_query->query[ Rtbiz_HD_Module::$post_type ] =  $ticket->ID;
+					$post                  = $ticket;
+					setup_postdata( $post );
+				} else {
+					$wrong_unique_id = true;
+				}
+			} else if ( is_archive( 'ticket' ) ) {
+				$wrong_unique_id = true;
+			}
+
+			if ( empty( $post ) || $wrong_unique_id ) {
+				if ( isset( $wp_query->query[ Rtbiz_HD_Module::$post_type ] ) ) {
+					$message = sprintf( '%s ', __( "<div style='margin-left: 0;'>Sorry! Your requested ticket wasn't found.</div>" ) );
+					$rthd_front_page_title = __( 'Helpdesk - Ticket Not Found' );
+				} else {
+					$message = '';
+					$rthd_front_page_title = __( 'Helpdesk - Tickets' );
+				}
+				global $rthd_messages;
+				$rthd_messages[] = array( 'type' => 'error rthd-error', 'message' => $message, 'displayed' => 'no' );
+
+
+				return rtbiz_hd_locate_template( 'ticket-404-page.php' );
+
+				//return get_404_template();
 			}
 
 			if ( ! empty( $post ) && isset( $wp_query->query[ Rtbiz_HD_Module::$post_type ] ) ) {
@@ -234,50 +275,8 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 				}
 			}
 
-			if ( rtbiz_hd_is_unique_hash_enabled() && ! empty( $_REQUEST['rthd_unique_id'] ) ) {
-				$args = array(
-					'meta_key'    => '_rtbiz_hd_unique_id',
-					'meta_value'  => $_REQUEST['rthd_unique_id'],
-					'post_status' => 'any',
-					'post_type'   => Rtbiz_HD_Module::$post_type,
-				);
-
-				$ticketpost = get_posts( $args );
-				if ( ! empty( $ticketpost ) ) {
-					$ticket = $ticketpost[0];
-					global $rthd_front_page_title;
-					$labels                = $rtbiz_hd_module->labels;
-					$rthd_front_page_title = $ticket->post_title . ' | ' . get_bloginfo();
-					$rthd_front_page_title = __( 'Helpdesk - Ticket #' . $ticket->ID );
-					$post                  = $ticket;
-					setup_postdata( $post );
-				} else {
-					$wrong_unique_id = true;
-				}
-			} else if ( is_archive( 'ticket' ) ) {
-				$wrong_unique_id = true;
-			}
-
-			if ( empty( $post ) || $wrong_unique_id ) {
-				if ( isset( $wp_query->query[ Rtbiz_HD_Module::$post_type ] ) ) {
-					$message = sprintf( '%s ', __( "<div style='margin-left: 0;'>Sorry! Your requested ticket wasn't found.</div>" ) );
-					$rthd_front_page_title = __( 'Helpdesk - Ticket Not Found' );
-				} else {
-					$message = '';
-					$rthd_front_page_title = __( 'Helpdesk - Tickets' );
-				}
-				global $rthd_messages;
-				$rthd_messages[] = array( 'type' => 'error rthd-error', 'message' => $message, 'displayed' => 'no' );
-
-
-				return rtbiz_hd_locate_template( 'ticket-404-page.php' );
-
-				//return get_404_template();
-			}
-
 			$rtbiz_helpdesk_template = true;
 			$rthd_front_page_title = __( 'Helpdesk - Ticket #' . $post->ID );
-
 			return rtbiz_hd_locate_template( 'ticket-front-page.php' );
 		}
 

@@ -14,7 +14,7 @@ global $rthd_messages;
 
 ?>
 	<div id="primary" class="content-area">
-		<main id="main" class="site-main" role="main">
+		<main id="main" role="main">
 
 			<section class="error-404 not-found entry-content">
 				<div class="page-content">
