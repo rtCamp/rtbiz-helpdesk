@@ -173,6 +173,19 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 				die();
 			}
 
+			if ( ! empty( $_REQUEST['rthd_unique_id'] ) && rtbiz_hd_is_unique_hash_enabled() ) {
+				$args = array(
+					'meta_key'    => '_rtbiz_hd_unique_id',
+					'meta_value'  => $_REQUEST['rthd_unique_id'],
+					'post_status' => 'any',
+					'post_type'   => Rtbiz_HD_Module::$post_type,
+				);
+				$post = get_posts( $args );
+				if ( ! empty( $post[0] ) ) {
+					$post = $post[0];
+					$wp_query->query[ Rtbiz_HD_Module::$post_type ]= $post->ID;
+				}
+			}
 			if ( ! empty( $post ) && isset( $wp_query->query[ Rtbiz_HD_Module::$post_type ] ) ) {
 				global $rtbiz_hd_email_notification;
 				$user = wp_get_current_user();
