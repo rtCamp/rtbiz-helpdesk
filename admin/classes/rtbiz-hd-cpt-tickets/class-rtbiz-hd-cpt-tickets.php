@@ -613,7 +613,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 					$query->set( 'post__in', $fav_ticket );
 				}
 
-				if ( isset( $_GET['subscribe'] ) ) {
+				if ( isset( $_GET['subscribed'] ) ) {
 					global $wpdb;
 					//subscribe ticket
 					$contacts = rtbiz_hd_get_user_subscribe_ticket( get_current_user_id() );
