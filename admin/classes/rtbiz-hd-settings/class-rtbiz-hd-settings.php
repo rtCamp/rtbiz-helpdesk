@@ -270,7 +270,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					'options'  => $users_options,
 					'default'  => $default_assignee,
 					'title'    => __( 'Default Assignee' ),
-					'desc'     => __( 'To select dedicated assignee for an product, visit the ' ) . $products_page_link,
+					'desc'     => __( 'To select dedicated assignee for a product, visit the ' ) . $products_page_link,
 					'subtitle' => __( 'Select user for HelpDesk ticket Assignee' ),
 				),
 				array(
@@ -566,7 +566,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 						'type'         => 'textarea',
 						'title'        => __( 'Email Signature' ),
 						'subtitle'     => __( 'Add here Email Signature' ),
-						'desc'         => esc_attr( 'You can add email signature here that will be send with every email send with the Helpdesk plugin.' ), // Allowed tags are <a> <br> <em> <strong>.
+						'desc' => esc_attr( 'You can add email signature here that will be send with every email send by Helpdesk plugin.' ), // Allowed tags are <a> <br> <em> <strong>.
 						//'validate'     => 'html_custom',
 						'default'      => esc_attr( ' -- Sent via rtBiz Helpdesk Plugin' ),
 						/*'allowed_html' => array(
