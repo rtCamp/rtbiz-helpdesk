@@ -291,7 +291,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 			$post_type = Rtbiz_HD_Module::$post_type;
 			$total = 0;
 			if ( empty( $terms ) ) {
-				printf( 'No products [ product / downloads ] found. <a target="_blank" href="%s" >Add new product</a>', admin_url( 'edit-tags.php?taxonomy=' . Rt_Products::$product_slug . '&post_type=' . Rtbiz_HD_Module::$post_type ) );
+				printf( 'No tickets found for available [ products / downloads ]. <a href="%s" >Add new product</a>', admin_url( 'edit-tags.php?taxonomy=' . Rt_Products::$product_slug . '&post_type=' . Rtbiz_HD_Module::$post_type ) );
 				return;
 			}
 			if ( ! $terms instanceof WP_Error ) {
