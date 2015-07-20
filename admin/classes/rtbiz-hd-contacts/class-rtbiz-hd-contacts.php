@@ -29,7 +29,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 
 			Rtbiz_HD::$loader->add_action( 'bulk_edit_custom_box', $this, 'contact_quick_action', 10, 2 );
 			Rtbiz_HD::$loader->add_action( 'quick_edit_custom_box', $this, 'contact_quick_action', 10, 2 );
-			Rtbiz_HD::$loader->add_action( 'save_post', $this, 'save_helpdesk_role', 10, 2 );
+			Rtbiz_HD::$loader->add_action( 'save_post', $this, 'save_helpdesk_role', 20, 2 );
 
 			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_search_contact', $this, 'ajax_contact_autocomplete' );
 			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_get_term_meta', $this, 'ajax_get_taxonomy_meta' );

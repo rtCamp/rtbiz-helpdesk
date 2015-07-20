@@ -875,7 +875,7 @@ function rtbiz_hd_edit_comment_type( $Comment_ID, $value ) {
 function rtbiz_hd_status_markup( $pstatus ) {
 	global $rtbiz_hd_module;
 	$post_statuses = $rtbiz_hd_module->get_custom_statuses();
-	$key = array_search( $pstatus, array_column( $post_statuses, 'slug' ) );
+	$key = array_search( $pstatus, wp_list_pluck( $post_statuses, 'slug' ) );
 	if ( false !== $key ) {
 		$pstatus = ucfirst( $post_statuses[ $key ]['name'] );
 		$tstatus = $post_statuses[ $key ]['slug'];
