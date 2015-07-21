@@ -983,7 +983,10 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 		public function get_assigne_email( $post_id ) {
 			$post_author_id = get_post_field( 'post_author', $post_id );
 			$userSub     = get_user_by( 'id', intval( $post_author_id ) );
-			return  array( 'email' => $userSub->user_email );
+			if ( $userSub ){
+				return  array( 'email' => $userSub->user_email );
+			}
+			return array();
 		}
 
 	}
