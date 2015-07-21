@@ -166,7 +166,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				}
 				$attachment = $_FILES['file'];
 				$uploaded[] = Rtbiz_HD_Product_Support::insert_attachment( $attachment );
-				
+
 				$response['status'] = false;
 
 				if ( isset( $uploaded[0] ) && !empty( $uploaded[0] ) ) {
@@ -1690,7 +1690,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 
 			$rthd_ticket = $this->get_ticket_from_ticket_unique_id( $_POST['followup_ticket_unique_id'] );
 			$comment_post_ID = $rthd_ticket->ID;
-			$comment_content['markdown'] = rtbiz_hd_content_filter_without_apautop( $_POST['followup_markdown'] );
+			$comment_content['markdown'] = $_POST['followup_markdown'];
 			$comment_content['html'] = rtbiz_hd_content_filter( $_POST['followup_content'] );
 
 			$user = wp_get_current_user();
