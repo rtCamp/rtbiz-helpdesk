@@ -40,7 +40,7 @@
 		echo ( ( ! empty( $signature ) ) ? '<div style="color:#c5c5c5; font-size: 14px;">' . wpautop( $signature ) . '</div>' : '' ) . '<br/>'
 		?>
 
-		<div style="display: none !important; font-size: 0px !important; line-height: 0px !important; font: <?php echo time(); ?>" ></div>
+		<div style="display: none !important; font-size: 0px !important; line-height: 0px !important; font: <?php echo time();?>; color:white;" ><?php echo time(); ?></div>
 	</body>
 
 </html>
