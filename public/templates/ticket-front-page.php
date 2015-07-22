@@ -335,7 +335,7 @@ $user_edit_content = current_user_can( $cap );
 									if ( ! empty( $user ) ) {
 										$display_name = $user->display_name;
 									}
-									echo '<div class="rthd-participant-container"> <a title= "' . $display_name . '" class="rthd-last-reply-by"  href="' . ( current_user_can( $cap ) ? rtbiz_hd_biz_user_profile_link( $email ) : '#' ) . '">' . get_avatar( $email, '48' ) . ' </a><a href="javascript:;" class="rthd-participant-remove" data-email="' . $email . '" data-post_id="' . $post->ID . '" >X</a></div>';
+									echo '<div class="rthd-participant-container"> <a title= "' . $display_name . '" class="rthd-last-reply-by"  href="' . ( current_user_can( $cap ) ? rtbiz_hd_biz_user_profile_link( $email ) : '#' ) . '">' . get_avatar( $email, '48' ) . ' </a></div>';
 								}
 							}
 
