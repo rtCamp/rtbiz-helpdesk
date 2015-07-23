@@ -511,8 +511,8 @@ jQuery( document ).ready(function () {
 						if (data.status) {
 							jQuery( '#ticket-edithdspinner' ).hide();
 							jQuery( "#edit-ticket-content-click" ).removeAttr( 'disabled' );
-							jQuery( '.edit-ticket-link' ).closest( '.rthd-ticket-content' ).find( '.rthd-comment-content' ).html( converter.makeHtml( post_content.val()) );
-							jQuery( '.edit-ticket-link' ).closest( '.rthd-ticket-content' ).find( '.rthd-comment-content' ).data( 'rthdcontent', post_content.val() );
+							jQuery( '.edit-ticket-link' ).closest( '.rthd-ticket-content' ).find( '.rthd-ticket-content' ).html( converter.makeHtml( post_content.val()) );
+							jQuery( '.edit-ticket-link' ).closest( '.rthd-ticket-content' ).find( '.rthd-ticket-content' ).data( 'rthdcontent', post_content.val() );
 							jQuery( '#edit-ticket-data' ).hide();
                             jQuery( '#edit-ticket-data').find('#editedticketcontent_html').html();
 							jQuery( '#new-followup-form' ).slideToggle( 'slow' );
