@@ -37,19 +37,21 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 		 * @since 0.1
 		 */
 		function __construct() {
-			// filter for add new action link on My Account page
-			Rtbiz_HD::$loader->add_filter( 'woocommerce_my_account_my_orders_actions', $this, 'wocommerce_actions_link', 10, 2 );
-			Rtbiz_HD::$loader->add_action( 'edd_download_history_header_end', $this, 'edd_action_link_header' );
-			Rtbiz_HD::$loader->add_action( 'edd_purchase_history_header_after', $this, 'edd_action_link_header' );
-
-			Rtbiz_HD::$loader->add_action( 'edd_download_history_row_end', $this, 'edd_support_link', 10, 2 );
-			Rtbiz_HD::$loader->add_action( 'edd_purchase_history_row_end', $this, 'edd_support_link', 10, 2 );
 
 			// Add product information in ticket meta.
 			Rtbiz_HD::$loader->add_action( 'rtbiz_hd_add_ticket_product_info', $this, 'add_ticket_product_info' );
 
 			// my account and download history ticket list view
-			Rtbiz_HD::$loader->add_action( 'woocommerce_after_my_account', $this, 'woo_my_tickets_my_account' );
+			$email_only_support = rtbiz_hd_get_email_only_support();
+			if ( ! $email_only_support ) {
+				// filter for add new action link on My Account page
+				Rtbiz_HD::$loader->add_filter( 'woocommerce_my_account_my_orders_actions', $this, 'wocommerce_actions_link', 10, 2 );
+				Rtbiz_HD::$loader->add_action( 'edd_download_history_header_end', $this, 'edd_action_link_header' );
+				Rtbiz_HD::$loader->add_action( 'edd_purchase_history_header_after', $this, 'edd_action_link_header' );
+				Rtbiz_HD::$loader->add_action( 'woocommerce_after_my_account', $this, 'woo_my_tickets_my_account' );
+				Rtbiz_HD::$loader->add_action( 'edd_download_history_row_end', $this, 'edd_support_link', 10, 2 );
+				Rtbiz_HD::$loader->add_action( 'edd_purchase_history_row_end', $this, 'edd_support_link', 10, 2 );
+			}
 			//			Rtbiz_HD::$loader->add_action( 'edd_after_download_history', $this, 'woo_my_tickets_my_account' );
 
 			// Metaboxes for Orders
