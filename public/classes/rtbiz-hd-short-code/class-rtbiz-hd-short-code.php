@@ -70,8 +70,9 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 			wp_localize_script( 'rthd-support-form', 'rtbiz_hd_supported_extensions', implode( ',', rtbiz_hd_get_supported_extensions() ) );
 
 			$product_option = '';
+			$author_access = current_user_can( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' ) );
 			$email_only_support = rtbiz_hd_get_email_only_support();
-			if ( is_user_logged_in() && ! $email_only_support ) {
+			if ( is_user_logged_in() && ( ! $email_only_support || $author_access ) ) {
 				$post_id = $rtbiz_hd_product_support->save_support_form();
 				if ( ! empty( $post_id ) && is_int( $post_id ) ) {
 					?>
