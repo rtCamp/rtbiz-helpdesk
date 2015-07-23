@@ -350,7 +350,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 			array_push( $email_fields, array(
 				'id'       => 'rthd_email_support',
 				'title'    => __( 'Email support' ),
-				'subtitle' => __( 'Email allows customer to create tickets and reply tickets from configured mailbox.' ),
+				'subtitle' => __( 'Allows customer to create tickets and reply tickets from configured mailbox.' ),
 				'type'     => 'switch',
 				'default'  => true,
 				'on'       => __( 'Enable' ),
@@ -404,7 +404,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 			array_push( $email_fields, array(
 				'id'       => 'rthd_web_support',
 				'title'    => __( 'Web support' ),
-				'subtitle' => __( 'Web will allow customer to create support ticket and tickets and reply tickets from front end.' ),
+				'subtitle' => __( 'Allows customer to create support ticket and tickets and reply tickets from front end.' ),
 				'type'     => 'switch',
 				'default'  => true,
 				'on'       => __( 'Enable' ),
