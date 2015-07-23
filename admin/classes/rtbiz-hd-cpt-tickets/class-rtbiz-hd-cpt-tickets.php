@@ -467,7 +467,6 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 			}
 
 			do_action( 'rt_hd_process_' . $post->post_type . '_meta', $post_id, $post );
-			;
 			if ( 'trash' == $post->post_status ) {
 
 				$url = esc_url_raw( add_query_arg( array( 'post_type' => Rtbiz_HD_Module::$post_type ), admin_url( 'edit.php' ) ) );
@@ -604,7 +603,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 					$query->set( 'post__in', $fav_ticket );
 				}
 
-				if ( isset( $_GET['subscribe'] ) ) {
+				if ( isset( $_GET['subscribed'] ) ) {
 					global $wpdb;
 					//subscribe ticket
 					$contacts = rtbiz_hd_get_user_subscribe_ticket( get_current_user_id() );
@@ -749,7 +748,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 				} else {
 					$class = '';
 				}
-				$temp_view['subscribe_ticket'] = "<a href='edit.php?post_type=" . Rtbiz_HD_Module::$post_type . "&subscribed=true' $class>" . sprintf( _nx( 'Subscribed <span class="count">(%s)</span>', 'Subscribed <span class="count">(%s)</span>', count( $fav_ticket ), RTBIZ_HD_TEXT_DOMAIN ), number_format_i18n( count( $contacts ) ) ) . '</a>';
+				$temp_view['subscribe_ticket'] = "<a href='edit.php?post_type=" . Rtbiz_HD_Module::$post_type . "&subscribed=true' $class>" . sprintf( _nx( 'Subscribed <span class="count">(%s)</span>', 'Subscribed <span class="count">(%s)</span>', count( $contacts ), RTBIZ_HD_TEXT_DOMAIN ), number_format_i18n( count( $contacts ) ) ) . '</a>';
 			}
 
 			//remove count for editor

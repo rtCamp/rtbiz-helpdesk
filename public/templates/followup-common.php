@@ -66,7 +66,7 @@ if ( ! empty( $created_by ) ) {
 				}
 				?>
 				<div class="rthd-comment-content"
-				     data-rthdcontent="<?php echo( isset( $post->ID ) ? rtbiz_hd_data_rthd_content( esc_attr( $markdown_content ) ) : '' ); ?>">
+				     data-rthdcontent="<?php echo( isset( $post->ID ) ? esc_attr( $markdown_content ) : '' ); ?>">
 					<?php
 					$content = rtbiz_hd_content_filter( isset( $post->ID ) ? $post->post_content : '' );
 					echo $content;

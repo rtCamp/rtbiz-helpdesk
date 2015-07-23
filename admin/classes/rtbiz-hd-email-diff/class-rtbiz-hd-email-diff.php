@@ -46,7 +46,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Diff' ) ) {
 		 * @return string
 		 */
 		function addedLine( $line ) {
-			return "<td style='padding: .5em;border: 0;width:25px;'>+</td><td style='padding: .5em;border: 0;background-color: #dfd;'>{$line}</td>";
+			return "<td style='padding: .5em;border: 0;background-color: #dfd;'><span style='padding: .5em;border: 0;width:25px;'>+</span>{$line}</td>";
 		}
 
 		/**
@@ -59,7 +59,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Diff' ) ) {
 		 * @return string
 		 */
 		function deletedLine( $line ) {
-			return "<td style='padding: .5em;border: 0;width:25px;' >-</td><td style='padding: .5em;border: 0;background-color: #fdd;' >{$line}</td>";
+			return "<td style='padding: .5em;border: 0;background-color: #fdd;' ><span style='padding: .5em;border: 0;width:25px;'>-</span>{$line}</td>";
 		}
 
 		/**
@@ -72,7 +72,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Diff' ) ) {
 		 * @return string
 		 */
 		function contextLine( $line ) {
-			return "<td style='padding: .5em;border: 0;' > </td><td style='padding: .5em;border: 0;'>{$line}</td>";
+			return "<td style='padding: .5em;border: 0;'><span style='padding: .5em;border: 0;width:25px;'></span>{$line}</td>";
 		}
 	}
 }

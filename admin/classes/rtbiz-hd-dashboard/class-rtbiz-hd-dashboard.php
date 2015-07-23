@@ -299,7 +299,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 			$post_type = Rtbiz_HD_Module::$post_type;
 			$total = 0;
 			if ( empty( $terms ) ) {
-				printf( 'No products [ product / downloads ] found. <a target="_blank" href="%s" >Add new product</a>', admin_url( 'edit-tags.php?taxonomy=' . Rt_Products::$product_slug . '&post_type=' . Rtbiz_HD_Module::$post_type ) );
+				printf( 'No tickets found for available [ products / downloads ]. <a href="%s" >Add new product</a>', admin_url( 'edit-tags.php?taxonomy=' . Rt_Products::$product_slug . '&post_type=' . Rtbiz_HD_Module::$post_type ) );
 				return;
 			}
 			if ( ! $terms instanceof WP_Error ) {
@@ -791,7 +791,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 								<div id="rthd-support-page">
 									<?php if ( isset( $settings['rthd_support_page'] ) && ! empty( $settings['rthd_support_page'] ) && get_post( $settings['rthd_support_page'] ) ) : ?>
 										<li>
-											<a id="rthd-view-support-page" class="welcome-icon welcome-view-site" target="_blank" href="<?php echo get_page_link( $settings['rthd_support_page'] ); ?>"><?php _e( 'Add Support Ticket' ); ?></a>
+											<a id="rthd-view-support-page" class="welcome-icon welcome-view-site" href="<?php echo get_page_link( $settings['rthd_support_page'] ); ?>"><?php _e( 'Add Support Ticket' ); ?></a>
 										</li>
 									<?php else : ?>
 										<li>
@@ -809,7 +809,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 					<div class="welcome-panel-column welcome-panel-last">
 						<h4><?php _e( 'More Actions' ); ?></h4>
 						<ul>
-							<li><?php printf( '<a href="%s" target="_blank" class="welcome-icon welcome-learn-more">' . __( 'Learn more about getting started' ) . '</a>', 'http://docs.rtcamp.com/rtbiz/' ); ?></li>
+							<li><?php printf( '<a href="%s" class="welcome-icon welcome-learn-more">' . __( 'Learn more about getting started' ) . '</a>', 'http://docs.rtcamp.com/rtbiz/' ); ?></li>
 							<?php if ( current_user_can( $editor_cap ) ) { ?>
 								<li><?php printf( '<a href="%s" class="welcome-icon welcome-universal-access-alt">' . __( 'Add new Team' ) . '</a>', admin_url( 'edit-tags.php?taxonomy=' . Rtbiz_Teams::$slug . '&post_type=' . Rtbiz_HD_Module::$post_type ) ); ?></li>
 							<?php } ?>

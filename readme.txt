@@ -6,7 +6,7 @@ Donate Link:       https://rtcamp.com/donate/
 Tags:              helpdesk, support, products, tickets, followups, customers, e-commerce
 Requires at least: 4.1
 Tested up to:      4.2.2
-Stable tag:        1.3.6.2
+Stable tag:        1.4
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,6 +57,14 @@ Please refer to the documentation.
 1. Dashboard
 
 == Changelog ==
+= 1.3.7 =
+* Added support to prevent unsupported file extension
+* Add additional privacy support
+* Updated markdown js plugin
+* CSS changes
+* Fixed Hash url issue
+* Fix scroll up hover underline issue
+* Fix ticket status issue with php version
 
 = 1.3.6.2 =
 * Ticket slug fixed

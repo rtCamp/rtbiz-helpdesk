@@ -725,7 +725,7 @@ function rtbiz_hd_render_comment( $comment, $user_edit, $type = 'right', $echo =
 					$markdown_content = $comment->comment_content;
 				}
 			?>
-			<div class="rthd-comment-content" data-rthdcontent="<?php echo rtbiz_hd_data_rthd_content( esc_attr( $markdown_content ) ); ?>"><?php
+			<div class="rthd-comment-content" data-rthdcontent="<?php echo esc_attr( $markdown_content ); ?>"><?php
 				if ( isset( $comment->comment_content ) && $comment->comment_content != '' ) {
 					$comment->comment_content = rtbiz_hd_content_filter( $comment->comment_content );
 				}?>
@@ -891,7 +891,7 @@ function rtbiz_hd_edit_comment_type( $Comment_ID, $value ) {
 function rtbiz_hd_status_markup( $pstatus ) {
 	global $rtbiz_hd_module;
 	$post_statuses = $rtbiz_hd_module->get_custom_statuses();
-	$key = array_search( $pstatus, array_column( $post_statuses, 'slug' ) );
+	$key = array_search( $pstatus, wp_list_pluck( $post_statuses, 'slug' ) );
 	if ( false !== $key ) {
 		$pstatus = ucfirst( $post_statuses[ $key ]['name'] );
 		$tstatus = $post_statuses[ $key ]['slug'];
@@ -1935,7 +1935,7 @@ function rtbiz_hd_update_assignee( $postid, $post_author ) {
 }
 
 /**
-* Function to get all the file extensions 
+* Function to get all the file extensions
 * which supported by the wordpress
 */
 function rtbiz_hd_get_supported_extensions() {
@@ -2024,12 +2024,5 @@ function rtbiz_hd_get_web_only_support() {
 		}
 	} else {
 		return true;
-	}
-}
-
-function rtbiz_hd_data_rthd_content( $textarea ){
-	$lines = explode("\n", $textarea);
-	foreach( $lines as $line ){
-		echo $line;
 	}
 }
