@@ -126,9 +126,9 @@ jQuery( document ).ready(function () {
 //							var file_name = err.file.name;
 //							var file_name_splits = file_name.split('.');
 //							var file_count = file_name_splits.length;
-							
+
 //							var error_message = file_name_splits[0] + ' file is without any extension.';
-							
+
 //							if (file_count > 1) {
 //								error_message = file_name_splits[0] + ' file is with ' + file_name_splits[file_name_splits.length-1] + ' extension is doen\'t supported.';
 //							}
@@ -467,7 +467,7 @@ jQuery( document ).ready(function () {
 				}
 				jQuery( '#new-followup-form' ).hide();
 				jQuery( document ).scrollTop( ( jQuery( '#edit-ticket-data' ).offset().top ) - 50 );
-				jQuery( '#edit-ticket-data').find('#editedticketcontent').val( jQuery( this ).closest( '.ticketcontent' ).find( '.rthd-comment-content' ).data( 'rthdcontent' ) );
+				jQuery( '#edit-ticket-data').find('#editedticketcontent').val( jQuery( this ).closest( '.ticketcontent' ).find( '.rthd-ticket-content' ).data( 'rthdcontent' ) );
 			});
 
 			// close tinyMCE editor and send user back to ticket content
