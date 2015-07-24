@@ -712,23 +712,25 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 
 			$temp_view = array();
 			$editor_cap = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' );
+			$is_editor = current_user_can( $editor_cap );
 			$current_user_id = get_current_user_id();
-
-			$count_user_tickets = new WP_Query(
-				array(
+			$query  = array(
 				'posts_per_page' => -1,
 				'post_type' => Rtbiz_HD_Module::$post_type,
 				'post_status' => 'any',
 				'author' => $current_user_id,
 				'fields' => 'ids',
-				)
 			);
 
-			//For Author WordPress provide mine link to view display current user post so added My ticket link only for admin/editor
-			if ( current_user_can( $editor_cap ) ) {
+			$count_user_tickets = new WP_Query(
+				$query
+			);
+			$current_all = true;
 
+			//For Author WordPress provide mine link to view display current user post so added My ticket link only for admin/editor
+			if ( $is_editor ) {
 				if ( isset( $_GET['author'] ) && ( $_GET['author'] == $current_user_id ) ) {
-					$class = ' class="current"'; } else { 					$class = ''; }
+					$class = ' class="current"'; $current_all = false;} else { 					$class = ''; }
 				$temp_view['mine'] = "<a href='edit.php?post_type=" . Rtbiz_HD_Module::$post_type . "&author=$current_user_id' $class>" . sprintf( _nx( 'Mine <span class="count">(%s)</span>', 'Mine <span class="count">(%s)</span>', $count_user_tickets->found_posts, RTBIZ_HD_TEXT_DOMAIN ), number_format_i18n( $count_user_tickets->post_count ) ) . '</a>';
 			} else {
 				unset( $views['all'] );
@@ -737,7 +739,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 			$fav_ticket = rtbiz_hd_get_user_fav_ticket( $current_user_id );
 			if ( ! empty( $fav_ticket ) ) {
 				if ( isset( $_GET['favorite'] ) ) {
-					$class = ' class="current"'; } else { 					$class = ''; }
+					$class = ' class="current"'; $current_all = false; } else { 					$class = ''; }
 				$temp_view['favorite_ticket'] = "<a href='edit.php?post_type=" . Rtbiz_HD_Module::$post_type . "&favorite=true' $class>" . sprintf( _nx( 'Favorite <span class="count">(%s)</span>', 'Favorites <span class="count">(%s)</span>', count( $fav_ticket ), RTBIZ_HD_TEXT_DOMAIN ), number_format_i18n( count( $fav_ticket ) ) ) . '</a>';
 			}
 
@@ -745,6 +747,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 			if ( ! empty( $contacts ) ) {
 				if ( isset( $_GET['subscribed'] ) ) {
 					$class = ' class="current"';
+					$current_all = false;
 				} else {
 					$class = '';
 				}
@@ -752,7 +755,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 			}
 
 			//remove count for editor
-			if ( ! current_user_can( $editor_cap ) ) {
+			if ( ! $is_editor  ) {
 				foreach ( $views as $key => $view ) {
 					$views[ $key ] = preg_replace( '#<span class=["\']count["\']>(.*?)</span>#', '', $view );
 				}
@@ -762,6 +765,27 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 				$trash = $views['trash'];
 				unset( $views['trash'] );
 				$views['trash'] = $trash;
+			}
+
+			if ( rtbiz_hd_get_redux_adult_filter() && rtbiz_hd_get_user_adult_preference( $current_user_id ) == 'yes' && $is_editor ) {
+				$all_query = array(
+					'posts_per_page' => -1,
+					'post_type'      => Rtbiz_HD_Module::$post_type,
+					'post_status'    => 'any',
+					'fields '        => 'ids',
+					'meta_query'     => array(
+						array(
+							'key'    => '_rtbiz_hd_ticket_adult_content',
+							'value'  => 'no',
+						),
+					),
+				);
+				$class = '';
+				if ( $current_all ) {
+					$class = ' class="current"';
+				}
+				$adult_count_user_all_tickets = new WP_Query( $all_query );
+				$views['all'] = "<a " . $class. " href='edit.php?post_type=" . Rtbiz_HD_Module::$post_type . "'> All <span class='count'>(" .$adult_count_user_all_tickets->found_posts . ")</span></a>";
 			}
 
 			return $views;
