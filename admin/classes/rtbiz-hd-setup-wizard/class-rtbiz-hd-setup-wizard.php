@@ -484,7 +484,10 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 				if ( ! empty( $_POST['email'] ) && is_email( $_POST['email'] ) ) {
 					// create wordpress user and get it's id for creating rt contact user
 					global $rtbiz_hd_contacts;
-					$_POST['ID'] = $rtbiz_hd_contacts->get_user_from_email( $_POST['email'] );
+					$contact = $rtbiz_hd_contacts->insert_new_contact( $_POST['email'],$_POST['email'], true );
+					if ( ! empty($contact->ID ) ) {
+						$_POST[ 'ID' ] = rtbiz_hd_get_user_id_by_contact_id( $contact->ID );
+					}
 				}
 				if ( ! empty( $_POST['ID'] ) ) {
 					// Create dept if not exist in wp-option, if exist assign new user to that taxonomy and add entry for author access to that user

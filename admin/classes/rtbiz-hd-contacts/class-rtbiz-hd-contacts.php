@@ -63,13 +63,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		}
 
 		public function rthd_ticket_listing_metabox( $post ) {
-			//if ( ! empty( $_REQUEST['module'] ) && RTBIZ_HD_TEXT_DOMAIN == $_REQUEST['module'] ) {
-//			$user = rtbiz_get_wp_user_for_contact( $post->ID );
-//				if ( empty($user[0]) ) {
-//					return;
-//				}
 				echo balanceTags( do_shortcode( '[rtbiz_hd_tickets contactid = ' . $post->ID . " title='no' ]" ) );
-			//}
 		}
 
 		/**
@@ -78,8 +72,8 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		 */
 		public function contact_posts_filter( $query ) {
 			global $wpdb, $rtbiz_acl_model;
-			if ( isset( $_GET['post_type'] ) && rtbiz_get_contact_post_type() == $_GET['post_type'] && rtbiz_get_contact_post_type() == $query->get( 'post_type'    )  ) {
-				if ( ! empty( $_GET['fall_back'] ) ){
+			if ( isset( $_GET['post_type'] ) && rtbiz_get_contact_post_type() == $_GET['post_type'] && rtbiz_get_contact_post_type() == $query->get( 'post_type' )  ) {
+				if ( ! empty( $_GET['fall_back'] ) ) {
 					return ;
 				}
 				$_GET['fall_back'] = 'yes';
@@ -581,9 +575,15 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 				if ( ! $create_wp_user ) {
 					return $contact;
 				}
-				$userid     = $this->get_user_from_email( $email );
-
+				$userid     = get_user_by( 'email', $email );
+				if ( empty( $userid ) ) {
+					$random_password = wp_generate_password( $length = 12, $include_standard_special_chars = false );
+					$userid          = wp_create_user( $email, $random_password, $email );
+				}
 				if ( ! empty( $userid ) ) {
+					if ( is_object( $userid ) ) {
+						$userid = $userid->ID;
+					}
 					rtbiz_add_entity_meta( $contact->ID, $this->user_id, $userid );
 				}
 
