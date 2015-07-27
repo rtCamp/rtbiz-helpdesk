@@ -1794,6 +1794,85 @@ function rtbiz_hd_mailbox_setup_view( $isredirect = true ) {
 
 }
 
+
+function rtbiz_hd_mailbox_assignee_ui( $email_data, $module = NULL ) {
+	
+	if ( $module == RTBIZ_HD_TEXT_DOMAIN ) {
+		// get product list
+		$rtbiz_hd_products = array();
+		global $rtbiz_products;
+		if ( isset( $rtbiz_products ) ) {
+			add_filter( 'get_terms', array( $rtbiz_products, 'product_filter' ), 10, 3 );
+			$rtbiz_hd_products = get_terms( Rt_Products::$product_slug, array( 'hide_empty' => 0 ) );
+			remove_filter( 'get_terms', array( $rtbiz_products, 'product_filter' ), 10, 3 );
+		}
+		
+		$product_list = '';
+		if ( isset ( $rtbiz_hd_products ) && ! empty ( $rtbiz_hd_products ) ) {
+			$product_list .= '<div class="rtmailbox-row rthd-mailbox-assign"><label> ' . __( 'Select Product', RTBIZ_HD_TEXT_DOMAIN ) . '</label>';
+			$product_list .= '<div class="mailbox-folder-list">';
+			$product_list .= '<select name="rtmailbox[product]" class="redux-select-item" tabindex="-1" title="">';
+			$product_list .= '<option value="">Select Product</option>';
+			foreach ( $rtbiz_hd_products as $rtbiz_hd_product ) {
+				$product_selected = '';
+				if ( $email_data['product'] == $rtbiz_hd_product->term_id ) { 
+					$product_selected = ' selected="selected" '; 
+				}
+				$product_list .= '<option value="' . $rtbiz_hd_product->term_id . '"' . $product_selected . '>' . $rtbiz_hd_product->name . '</option>';
+			}
+			$product_list .= '</select>';
+			$product_list .= '</div>';
+			$product_list .= '</div>';
+		}
+		echo $product_list;
+		
+		$users = Rtbiz_HD_Utils::get_hd_rtcamp_user();
+		$users_options = '';
+
+		if ( isset ( $users ) && ! empty ( $users ) ) {
+			$users_options .= '<div class="rtmailbox-row rthd-mailbox-assign"><label> ' . __( 'Select Employee', RTBIZ_HD_TEXT_DOMAIN ) . '</label>';
+			$users_options .= '<div class="mailbox-folder-list">';
+			$users_options .= '<select name="rtmailbox[employee]" class="redux-select-item" tabindex="-1" title="">';
+			$users_options .= '<option value="">Select Assignee</option>';
+			foreach ( $users as $user ) {
+				$user_selected = '';
+				if ( $email_data['employee'] == $user->ID ) { 
+					$user_selected = ' selected="selected" '; 
+				}
+				$users_options .= '<option value="' . $user->ID . '"' . $user_selected . '>' . $user->display_name . '</option>';
+			}
+			$users_options .= '</select>';
+			$users_options .= '</div>';
+			$users_options .= '</div>';
+		}
+		echo $users_options;
+	}
+}
+add_action( 'rt_mailbox_assignee_ui', 'rtbiz_hd_mailbox_assignee_ui', 10, 2 );
+
+
+
+
+/**
+ * Filter to replace the [caption] shortcode text with HTML5 compliant code
+ *
+ * @return text HTML content describing embedded figure
+ **/
+function rtbiz_hd_mailbox_assignee_save( $obj_data, $email_data ) {
+	if ( $obj_data['module'] == RTBIZ_HD_TEXT_DOMAIN ) {
+		if ( isset( $obj_data['product'] ) && ! empty ( $obj_data['product'] ) ) {
+			$email_data['product'] = $obj_data['product'];
+		}
+		if ( isset( $obj_data['employee'] ) && ! empty ( $obj_data['employee'] ) ) {
+			$email_data['employee'] = $obj_data['employee'];
+		}
+	}
+	return $email_data;
+}
+add_filter( 'rt_mailbox_assignee_save', 'rtbiz_hd_mailbox_assignee_save', 10, 2 );
+
+
+
 function rtbiz_hd_gravity_importer_view() {
 	$module_key = rtbiz_sanitize_module_key( RTBIZ_HD_TEXT_DOMAIN );
 	return rtbiz_gravity_importer_view( $module_key );

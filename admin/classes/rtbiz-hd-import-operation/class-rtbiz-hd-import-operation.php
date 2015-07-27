@@ -462,7 +462,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		public function insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $senderEmail, $messageid = '', $inreplyto = '', $references = '', $subscriber = array(), $originalBody = '' ) {
+		public function insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $senderEmail, $messageid = '', $inreplyto = '', $references = '', $subscriber = array(), $originalBody = '', $mailbox_email_address = NULL ) {
 			global $rtbiz_hd_module, $rtbiz_hd_tickets_operation, $rtbiz_hd_ticket_history_model, $rtbiz_hd_contacts;
 			$d             = new DateTime( $mailtime );
 			$timeStamp     = $d->getTimestamp();
@@ -555,12 +555,15 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			if ( '' != $references ) {
 				update_post_meta( $post_id, '_rtbiz_hd_references', $references );
 			}
+			if ( '' != $mailbox_email_address ) {
+				update_post_meta( $post_id, '_rtbiz_hd_ticket_with_mailbox', $mailbox_email_address );
+			}
 
 			// Call action to add product info into ticket meta data.
 			do_action( 'rtbiz_hd_add_ticket_product_info', $post_id );
+			
 			// Call action to change default assignee accoding to products
-
-			do_action( 'rt_hd_before_send_notification', $post_id, get_post( $post_id ) );
+			do_action( 'rtbiz_hd_before_send_notification', $post_id, get_post( $post_id ) );
 
 			//send Notification
 			global $bulkimport, $gravity_auto_import, $rtbiz_hd_email_notification, $helpdesk_import_ticket_id;
@@ -830,13 +833,17 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 
 			//Exclude mailbox email form all emails
 			$contactEmail = array();
+			$mailbox_email_address = NULL;
 			if ( ! empty( $allemails ) && is_array( $allemails ) ) {
 				foreach ( $allemails as $email ) {
 					if ( ! rtmb_get_module_mailbox_email( $email['address'], RTBIZ_HD_TEXT_DOMAIN ) ) { //check mail is exist in mailbox or not
 						$contactEmail[] = $email;
+					} else {
+						$mailbox_email_address = $email['address'];
 					}
 				}
 			}
+			
 			$allemails = $contactEmail;
 			if ( rtbiz_hd_check_email_blacklisted( $fromemail['address'] ) ) {
 				return false;
@@ -852,7 +859,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			}
 			//always true in mail cron  is use for importer
 			if ( ! $check_duplicate ) {
-				$success_flag = $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], '', '', '', $subscriber );
+				$success_flag = $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], '', '', '', $subscriber, '', $mailbox_email_address );
 
 				error_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
 
@@ -895,7 +902,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			} else {
 				$postid = $threadPostId;
 			}
-			error_log( 'POST ID : '. var_export( $postid, true ) . "\r\n" );
+
 			$dndEmails = array();
 
 			if ( $postid && get_post( $postid ) != null ) { // if post id found from title or mail meta & mail is Re: or Fwd:
@@ -951,7 +958,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 					}
 					return $success_flag;
 				} else {
-					$success_flag = $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], $messageid, $inreplyto, $references, $subscriber, $originalBody );
+					$success_flag = $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], $messageid, $inreplyto, $references, $subscriber, $originalBody, $mailbox_email_address );
 					error_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
 
 					if ( ! $success_flag ) {
@@ -966,7 +973,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				//if given post title exits then it will be add as comment other wise as post
 				error_log( 'Post Exists : '. var_export( $existPostId, true ) . "\r\n" );
 				if ( ! $existPostId ) {
-					$success_flag = $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], $messageid, $inreplyto, $references, $subscriber, $originalBody );
+					$success_flag = $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], $messageid, $inreplyto, $references, $subscriber, $originalBody, $mailbox_email_address );
 					error_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
 
 					if ( ! $success_flag ) {
