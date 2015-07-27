@@ -229,7 +229,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 						$user_contact_info = rtbiz_get_contact_by_email( $_POST['email'] );
 						$user_contact_info = $user_contact_info[0];
 						if ( ! p2p_connection_exists( Rtbiz_HD_Module::$post_type . '_to_' . rtbiz_get_contact_post_type(), array( 'from' => $_POST['post_id'], 'to' => $user_contact_info->ID ) ) ) {
-							rtbiz_connect_post_to_contact( Rtbiz_HD_Module::$post_type, $_POST['post_id'], $user_contact_info );
+							rtbiz_connect_post_to_contact( Rtbiz_HD_Module::$post_type, $_POST['post_id'], $user_contact_info->ID );
 							$response['status'] = true;
 							$response['is_contact'] = true;
 						} else {
@@ -239,13 +239,22 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 					}
 				} else { // create user and then add to p2p
 					$create_wp_user = false;
-					//					$setting = rtbiz_hd_get_redux_settings();
-					//					if ( 1 == $setting['rthd_enable_auto_wp_user_create'] ) {
-					//						$create_wp_user = true;
-					//					}
-					$this->add_contacts_to_post( array( array( 'address' => $_POST['email'] ) ), $_POST['post_id'], $create_wp_user );
-					$response['status'] = true;
-					$response['is_contact'] = true;
+					$user_contact_info = rtbiz_get_contact_by_email( $_POST['email'] );
+					$user_contact_info = $user_contact_info[0];
+					if ( $user_contact_info && ! empty( $user_contact_info->ID ) ){
+						if ( ! p2p_connection_exists( Rtbiz_HD_Module::$post_type . '_to_' . rtbiz_get_contact_post_type(), array( 'from' => $_POST['post_id'], 'to' => $user_contact_info->ID ) ) ) {
+							rtbiz_connect_post_to_contact( Rtbiz_HD_Module::$post_type, $_POST['post_id'], $user_contact_info->ID );
+							$response['status'] = true;
+							$response['is_contact'] = true;
+						} else {
+							$response['status'] = false;
+							$response['msg'] = 'Already subscribed.';
+						}
+					} else {
+						$this->add_contacts_to_post( array( array( 'address' => $_POST['email'] ) ), $_POST['post_id'], $create_wp_user );
+						$response['status'] = true;
+						$response['is_contact'] = true;
+					}
 				}
 			} else {
 				$response['msg'] = 'Something went wrong.';
