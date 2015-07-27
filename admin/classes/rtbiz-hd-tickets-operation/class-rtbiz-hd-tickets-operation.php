@@ -63,7 +63,9 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Operation' ) ) {
 					if ( empty ( $default_assignee ) ) {
 						$default_assignee = $mailbox_data['employee'];
 					}
-				} else {
+				}
+
+				if ( empty ( $default_assignee ) ) {
 					$default_assignee = $settings['rthd_default_user'];
 				}
 				if ( $post->post_author != $default_assignee ) {

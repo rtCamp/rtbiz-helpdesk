@@ -1812,11 +1812,13 @@ function rtbiz_hd_mailbox_assignee_ui( $email_data, $module = NULL ) {
 			$product_list .= '<div class="rtmailbox-row rthd-mailbox-assign"><label> ' . __( 'Select Product', RTBIZ_HD_TEXT_DOMAIN ) . '</label>';
 			$product_list .= '<div class="mailbox-folder-list">';
 			$product_list .= '<select name="rtmailbox[product]" class="redux-select-item" tabindex="-1" title="">';
-			$product_list .= '<option value="">Select Product</option>';
+			$product_list .= '<option value="0">Select Product</option>';
 			foreach ( $rtbiz_hd_products as $rtbiz_hd_product ) {
 				$product_selected = '';
-				if ( $email_data['product'] == $rtbiz_hd_product->term_id ) { 
-					$product_selected = ' selected="selected" '; 
+				if ( isset ( $email_data['product'] ) && ! empty ( $email_data['product'] ) ) {
+					if ( $email_data['product'] == $rtbiz_hd_product->term_id ) { 
+						$product_selected = ' selected="selected" '; 
+					}
 				}
 				$product_list .= '<option value="' . $rtbiz_hd_product->term_id . '"' . $product_selected . '>' . $rtbiz_hd_product->name . '</option>';
 			}
@@ -1833,11 +1835,13 @@ function rtbiz_hd_mailbox_assignee_ui( $email_data, $module = NULL ) {
 			$users_options .= '<div class="rtmailbox-row rthd-mailbox-assign"><label> ' . __( 'Select Employee', RTBIZ_HD_TEXT_DOMAIN ) . '</label>';
 			$users_options .= '<div class="mailbox-folder-list">';
 			$users_options .= '<select name="rtmailbox[employee]" class="redux-select-item" tabindex="-1" title="">';
-			$users_options .= '<option value="">Select Assignee</option>';
+			$users_options .= '<option value="0">Select Assignee</option>';
 			foreach ( $users as $user ) {
 				$user_selected = '';
-				if ( $email_data['employee'] == $user->ID ) { 
-					$user_selected = ' selected="selected" '; 
+				if ( isset ( $email_data['employee'] ) && ! empty ( $email_data['employee'] ) ) {
+					if ( $email_data['employee'] == $user->ID ) { 
+						$user_selected = ' selected="selected" ';
+					}
 				}
 				$users_options .= '<option value="' . $user->ID . '"' . $user_selected . '>' . $user->display_name . '</option>';
 			}
@@ -1858,12 +1862,12 @@ add_action( 'rt_mailbox_assignee_ui', 'rtbiz_hd_mailbox_assignee_ui', 10, 2 );
  *
  * @return text HTML content describing embedded figure
  **/
-function rtbiz_hd_mailbox_assignee_save( $obj_data, $email_data ) {
+function rtbiz_hd_mailbox_assignee_save( $email_data, $obj_data ) {
 	if ( $obj_data['module'] == RTBIZ_HD_TEXT_DOMAIN ) {
-		if ( isset( $obj_data['product'] ) && ! empty ( $obj_data['product'] ) ) {
+		if ( isset ( $obj_data['product'] ) ) {
 			$email_data['product'] = $obj_data['product'];
 		}
-		if ( isset( $obj_data['employee'] ) && ! empty ( $obj_data['employee'] ) ) {
+		if ( isset ( $obj_data['employee'] ) ) {
 			$email_data['employee'] = $obj_data['employee'];
 		}
 	}
