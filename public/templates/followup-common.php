@@ -18,7 +18,7 @@ $cap        = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' );
 $staffonly = current_user_can( $cap );
 $created_by = rtbiz_hd_get_ticket_creator( $post->ID );
 $current_user_contact_id = rtbiz_hd_get_contact_id_by_user_id( get_current_user_id() );
-$user_edit_content = $staffonly || ( ! empty( $current_user_contact_id ) && $current_user_contact_id == $created_by );
+$user_edit_content = $staffonly || ( ! empty( $current_user_contact_id ) && $current_user_contact_id == $created_by->ID );
 $authorname  = 'Anonymous';
 $authoremail = '';
 if ( ! empty( $created_by ) ) {
