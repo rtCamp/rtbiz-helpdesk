@@ -47,20 +47,22 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Operation' ) ) {
 				$settings = rtbiz_hd_get_redux_settings();
 				if ( ! empty( $terms ) && count( $terms ) == 1 ) {
 					$default_assignee = rtbiz_hd_get_product_meta( 'default_assignee', $terms[0]->term_id );
-					if ( empty( $default_assignee ) ) {
-						$default_assignee = $settings['rthd_default_user'];
-					}
-				} else if ( isset ( $mailbox_email ) ) {
+//					if ( empty( $default_assignee ) ) {
+//						$default_assignee = $settings['rthd_default_user'];
+//					}
+				}
+				if ( isset ( $mailbox_email ) ) {
 					$mailbox_data = rtmb_get_module_mailbox_email( $mailbox_email, RTBIZ_HD_TEXT_DOMAIN );
-
 					$mailbox_data = maybe_unserialize( $mailbox_data->email_data );
+
+					if ( empty( $terms ) && count( $terms ) < 1 ) {
+						wp_set_post_terms( $postid, $mailbox_data['product'], Rt_Products::$product_slug );
+						$default_assignee = rtbiz_hd_get_product_meta( 'default_assignee', $mailbox_data['product'] );
+					}
+
 					if ( empty ( $default_assignee ) ) {
 						$default_assignee = $mailbox_data['employee'];
 					}
-					if ( empty ( $terms ) ) {
-						wp_set_post_terms( $postid, $mailbox_data['product'], Rt_Products::$product_slug );
-					}
-
 				} else {
 					$default_assignee = $settings['rthd_default_user'];
 				}
