@@ -146,7 +146,13 @@ if ( ! empty( $created_by ) ) {
 
 	<div id="edit-private-comment" class="rthd-edit-visibility-wrap">
 		<div class="rthd-edit-visibility-wrap">
-			<div class="rthd-sensitive-wrap">
+			<?php
+			$rthd_sensitive_style = '';
+			if ( rtbiz_hd_get_email_only_support()) {
+				$rthd_sensitive_style = 'style="display:none;"';
+			 }
+			?>
+			<div class="rthd-sensitive-wrap" <?php echo $rthd_sensitive_style; ?> >
 				<label for="rthd_sensitive">
 					<input id="rthd_sensitive" type="checkbox" name="followup_sensitive"
 					       value="true"/>&nbsp;<?php _e( 'Mark this as Sensitive' ); ?>

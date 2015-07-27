@@ -55,7 +55,13 @@ $staffonly = current_user_can( $cap );
 		<div class="rthd-attachment-box">
 
 			<div class="rthd-visibility-wrap">
-				<div class="rthd-sensitive-wrap">
+				<?php
+				$rthd_sensitive_style = '';
+				if ( rtbiz_hd_get_email_only_support()) {
+					$rthd_sensitive_style = 'style="display:none;"';
+				}
+				?>
+				<div class="rthd-sensitive-wrap" <?php echo $rthd_sensitive_style; ?> >
 					<label for="rthd_sensitive_content">
 						<input id="rthd_sensitive_content" type="checkbox" name="followup_sensitive"
 							   value="true"/>&nbsp;<?php _e( 'Mark this as Sensitive' ); ?>
