@@ -346,33 +346,33 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 				'subtitle' => __( 'Helpdesk Configured Mailbox(s)' ),
 				'callback' => 'rtbiz_hd_mailbox_setup_view',
 			) );
-
-			array_push( $email_fields, array(
-				'id'       => 'rthd_email_support',
-				'title'    => __( 'Email support' ),
-				'subtitle' => __( 'Allows customer to create tickets and reply tickets from configured mailbox.' ),
-				'type'     => 'switch',
-				'default'  => true,
-				'on'       => __( 'Enable' ),
-				'off'      => __( 'Disable' ),
-			));
-			array_push( $email_fields, array(
-				'id'       => 'section-email-support-start',
-				'type'     => 'section',
-				'indent'   => true, // Indent all options below until the next 'section' option is set.
-				'required' => array( 'rthd_email_support', '=', 1 ),
-			));
-			/*array_push( $email_fields, array(
-				'id'       => 'rthd_email_only_support_user_not_allowed',
-				'title'    => __( 'Email only support User access' ),
-				'subtitle' => __( 'To allow user access to front end of ticket web' ),
-				'type'     => 'switch',
-				'default'  => false,
-				'on'       => __( 'Enable' ),
-				'off'      => __( 'Disable' ),
-				'required' => array( 'rthd_email_support', '=', 1 ),
-			) );*/
 			if ( ! empty( $system_emails ) ) {
+
+				array_push( $email_fields, array(
+					'id'       => 'rthd_email_support',
+					'title'    => __( 'Email support' ),
+					'subtitle' => __( 'Allows customer to create tickets and reply tickets from configured mailbox.' ),
+					'type'     => 'switch',
+					'default'  => true,
+					'on'       => __( 'Enable' ),
+					'off'      => __( 'Disable' ),
+				));
+				array_push( $email_fields, array(
+					'id'       => 'section-email-support-start',
+					'type'     => 'section',
+					'indent'   => true, // Indent all options below until the next 'section' option is set.
+					'required' => array( 'rthd_email_support', '=', 1 ),
+				));
+				/*array_push( $email_fields, array(
+					'id'       => 'rthd_email_only_support_user_not_allowed',
+					'title'    => __( 'Email only support User access' ),
+					'subtitle' => __( 'To allow user access to front end of ticket web' ),
+					'type'     => 'switch',
+					'default'  => false,
+					'on'       => __( 'Enable' ),
+					'off'      => __( 'Disable' ),
+					'required' => array( 'rthd_email_support', '=', 1 ),
+				) );*/
 				array_push( $email_fields, array(
 					'id'       => 'rthd_enable_mailbox_reading',
 					'type'     => 'switch',
@@ -404,7 +404,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 			array_push( $email_fields, array(
 				'id'       => 'rthd_web_support',
 				'title'    => __( 'Web support' ),
-				'subtitle' => __( 'Allows customer to create support ticket and tickets and reply tickets from front end.' ),
+				'subtitle' => __( 'Allows customer to create support tickets and reply tickets from front end.' ),
 				'type'     => 'switch',
 				'default'  => true,
 				'on'       => __( 'Enable' ),
