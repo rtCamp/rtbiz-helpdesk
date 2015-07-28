@@ -372,8 +372,12 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 			}
 			?>
 			<div id="rthd_hd_pie_tickets_by_status"></div>
-				<?php if ( empty( $results ) ) {
-					printf( 'No tickets found. <a target="_blank" href="%s" >Add new ticket</a>', get_page_link( $settings['rthd_support_page'] ) ); }
+			<?php if ( empty( $results ) ) {
+				printf( 'No tickets found.' );
+				if ( ! empty( $settings['rthd_support_page'] ) ){
+					printf( '<a target="_blank" href="%s" >Add new ticket</a>', get_page_link( $settings['rthd_support_page'] ) );
+				}
+			}
 		}
 
 		/**
