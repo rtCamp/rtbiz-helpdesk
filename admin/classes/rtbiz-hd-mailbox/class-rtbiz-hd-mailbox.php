@@ -24,15 +24,15 @@ if ( ! class_exists( 'Rtbiz_HD_Mailbox' ) ) {
 		 */
 		public function __construct() {
 			
-			Rtbiz_HD::$loader->add_action( 'rt_mailbox_assignee_ui', $this, 'rtbiz_hd_mailbox_assignee_ui', 10, 2 );
-			Rtbiz_HD::$loader->add_filter( 'rt_mailbox_assignee_save', $this, 'rtbiz_hd_mailbox_assignee_save', 10, 2 );
+			Rtbiz_HD::$loader->add_action( 'rt_mailbox_assignee_ui', $this, 'mailbox_assignee_ui', 10, 2 );
+			Rtbiz_HD::$loader->add_filter( 'rt_mailbox_assignee_save', $this, 'mailbox_assignee_save', 10, 2 );
 
 			Rtbiz_HD::$loader->add_action( 'delete_term', $this, 'delete_mailbox_product', 10, 3 );
 			Rtbiz_HD::$loader->add_action( 'delete_user', $this, 'delete_mailbox_employee', 10, 1 );
 		}
 
 		
-		public function rtbiz_hd_mailbox_assignee_ui( $email_data, $module = NULL ) {
+		public function mailbox_assignee_ui( $email_data, $module = NULL ) {
 	
 			if ( $module == RTBIZ_HD_TEXT_DOMAIN ) {
 				// get product list
@@ -96,7 +96,7 @@ if ( ! class_exists( 'Rtbiz_HD_Mailbox' ) ) {
 		 *
 		 * @return text HTML content describing embedded figure
 		 **/
-		public function rtbiz_hd_mailbox_assignee_save( $email_data, $obj_data ) {
+		public function mailbox_assignee_save( $email_data, $obj_data ) {
 			if ( $obj_data['module'] == RTBIZ_HD_TEXT_DOMAIN ) {
 				if ( isset ( $obj_data['product'] ) ) {
 					$email_data['product'] = $obj_data['product'];
