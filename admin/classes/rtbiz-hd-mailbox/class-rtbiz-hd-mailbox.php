@@ -139,7 +139,7 @@ if ( ! class_exists( 'Rtbiz_HD_Mailbox' ) ) {
 		 * @param type $taxonomy
 		 */
 		public function delete_mailbox_product( $term_id, $tt_id, $taxonomy ) {
-			$this->remove_data_from_mailbox_account( 'product', $term_id );
+			$this->delete_data_from_mailbox_account( 'product', $term_id );
 		}
 
 		/**
@@ -148,7 +148,7 @@ if ( ! class_exists( 'Rtbiz_HD_Mailbox' ) ) {
 		 * @param type $user_id
 		 */
 		public function delete_mailbox_employee( $user_id ) {
-			$this->remove_data_from_mailbox_account( 'staff', $user_id );
+			$this->delete_data_from_mailbox_account( 'staff', $user_id );
 		}
 		
 	}
