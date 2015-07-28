@@ -53,21 +53,24 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Operation' ) ) {
 				}
 				if ( isset ( $mailbox_email ) ) {
 					$mailbox_data = rtmb_get_module_mailbox_email( $mailbox_email, RTBIZ_HD_TEXT_DOMAIN );
-					$mailbox_data = maybe_unserialize( $mailbox_data->email_data );
+					if ( ! empty ( $mailbox_data ) ) {
+						$mailbox_data = maybe_unserialize( $mailbox_data->email_data );
 
-					if ( empty( $terms ) && count( $terms ) < 1 ) {
-						wp_set_post_terms( $postid, $mailbox_data['product'], Rt_Products::$product_slug );
-						$default_assignee = rtbiz_hd_get_product_meta( 'default_assignee', $mailbox_data['product'] );
-					}
+						if ( empty( $terms ) && count( $terms ) < 1 && ! empty ( $mailbox_data['product'] ) ) {
+							wp_set_post_terms( $postid, $mailbox_data['product'], Rt_Products::$product_slug );
+							$default_assignee = rtbiz_hd_get_product_meta( 'default_assignee', $mailbox_data['product'] );
+						}
 
-					if ( empty ( $default_assignee ) ) {
-						$default_assignee = $mailbox_data['employee'];
+						if ( empty ( $default_assignee ) && ! empty ( $mailbox_data['employee'] ) ) {
+							$default_assignee = $mailbox_data['employee'];
+						}
 					}
 				}
 
 				if ( empty ( $default_assignee ) ) {
 					$default_assignee = $settings['rthd_default_user'];
 				}
+
 				if ( $post->post_author != $default_assignee ) {
 					global $rtbiz_hd_cpt_tickets;
 					remove_action( 'save_post', array( $rtbiz_hd_cpt_tickets, 'save_meta_boxes' ), 1, 2 );

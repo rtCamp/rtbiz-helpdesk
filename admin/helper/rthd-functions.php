@@ -2005,3 +2005,30 @@ function rtbiz_hd_get_supported_extensions() {
 
 	return $types;
 }
+
+
+function remove_data_from_mailbox_account( $mailbox_data_key, $mailbox_data_value ) {
+	$emails = rtmb_get_module_mailbox_emails( RTBIZ_HD_TEXT_DOMAIN );
+	foreach ( $emails as $email ) {
+		$mailbox_data = rtmb_get_module_mailbox_email( $email, RTBIZ_HD_TEXT_DOMAIN );
+		if ( ! empty ( $mailbox_data ) ) {
+			$mailbox_data = maybe_unserialize( $mailbox_data->email_data );
+			if ( ! empty ( $mailbox_data[ $mailbox_data_key ] ) ) {
+				if ( $mailbox_data[ $mailbox_data_key ] == $mailbox_data_value ) {
+					$mailbox_data[ $mailbox_data_key ] = 0;
+				}
+				rtmb_set_module_mailbox_data( $email, $mailbox_data );
+			}
+		}
+	}
+}
+
+function remove_mailbox_product_relation( $term_id, $tt_id, $taxonomy ){
+	remove_data_from_mailbox_account( 'product', $term_id );
+}
+add_action( 'delete_term', 'remove_mailbox_product_relation', 10, 3 );
+
+function remove_mailbox_employee( $user_id ) {
+	remove_data_from_mailbox_account( 'employee', $user_id );
+}
+add_action( 'delete_user', 'remove_mailbox_employee', 10, 1 );
