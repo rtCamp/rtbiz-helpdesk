@@ -61,8 +61,8 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Operation' ) ) {
 							$default_assignee = rtbiz_hd_get_product_meta( 'default_assignee', $mailbox_data['product'] );
 						}
 
-						if ( empty ( $default_assignee ) && ! empty ( $mailbox_data['employee'] ) ) {
-							$default_assignee = $mailbox_data['employee'];
+						if ( empty ( $default_assignee ) && ! empty ( $mailbox_data['staff'] ) ) {
+							$default_assignee = $mailbox_data['staff'];
 						}
 					}
 				}

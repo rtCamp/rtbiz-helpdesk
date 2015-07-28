@@ -100,7 +100,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 					rtbiz_hd_delete_user_fav_ticket( get_current_user_id(), $_POST['post_id'] );
 					$label = 'Favorite this ticket';
 				} else {
-					rtbiz_hd_add_user_fav_ticket( get_current_user_id(),$_POST['post_id'] );
+					rtbiz_hd_add_user_fav_ticket( get_current_user_id(), $_POST['post_id'] );
 					$label = 'Remove this ticket from favorites';
 				}
 				$status = true;
@@ -462,7 +462,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		public function insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $senderEmail, $messageid = '', $inreplyto = '', $references = '', $subscriber = array(), $originalBody = '', $mailbox_email_address = NULL ) {
+		public function insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $senderEmail, $messageid = '', $inreplyto = '', $references = '', $subscriber = array(), $originalBody = '', $mailbox_email_address = '' ) {
 			global $rtbiz_hd_module, $rtbiz_hd_tickets_operation, $rtbiz_hd_ticket_history_model, $rtbiz_hd_contacts;
 			$d             = new DateTime( $mailtime );
 			$timeStamp     = $d->getTimestamp();
@@ -833,7 +833,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 
 			//Exclude mailbox email form all emails
 			$contactEmail = array();
-			$mailbox_email_address = NULL;
+			$mailbox_email_address = '';
 			if ( ! empty( $allemails ) && is_array( $allemails ) ) {
 				foreach ( $allemails as $email ) {
 					if ( ! rtmb_get_module_mailbox_email( $email['address'], RTBIZ_HD_TEXT_DOMAIN ) ) { //check mail is exist in mailbox or not
