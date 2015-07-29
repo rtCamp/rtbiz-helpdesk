@@ -297,7 +297,7 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 		public function set_role_ui() {
 			?>
 			<div class="rthd-setup-wizard-controls rthd-ACL-change rthd-setup-wizard-row">
-				<h3 class="rthd-setup-wizard-title"><?php _e( 'Congrats !!!', RTBIZ_HD_TEXT_DOMAIN ); ?></h3>
+				<h3 class="rthd-setup-wizard-title"><?php _e( 'Congratulations!', RTBIZ_HD_TEXT_DOMAIN ); ?></h3>
 				<p>Your Helpdesk is ready. Click on finish to get started.</p>
 			</div>
 		<?php
