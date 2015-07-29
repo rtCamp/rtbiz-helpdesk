@@ -557,11 +557,15 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 				$rtbiz_acl_model->remove_acl( array( 'module' => RTBIZ_TEXT_DOMAIN, 'userid' => $_POST['userid'] ) );
 				$arrReturn['status'] = true;
 				$contact = rtbiz_get_contact_for_wp_user( $_POST['userid'] );
+				
+				rtbiz_remove_contact_to_user( $contact[0]->p2p_from, $contact[0]->p2p_to );
+				wp_delete_post( $contact[0]->p2p_from );
+
 				//              $support_team = get_option( 'rtbiz_hd_default_support_team' );
 				//              if ( ! empty( $support_team ) && ! empty( $contact[0] ) ){
 				//                  wp_remove_object_terms($contact[0]->ID,array($support_team),Rtbiz_Teams::$slug );
 				//              }
-				if ( ! empty( $contact[0] ) && empty( $team_term_id ) ) {
+				if ( ! empty( $contact[0] ) ) {
 					$user_permissions = get_post_meta( $contact[0]->ID, 'rtbiz_profile_permissions', true );
 					if ( ! empty( $user_permissions[ RTBIZ_HD_TEXT_DOMAIN ] ) ) {
 						$user_permissions[ RTBIZ_HD_TEXT_DOMAIN ] = 0;
