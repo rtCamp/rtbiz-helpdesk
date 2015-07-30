@@ -16,6 +16,7 @@ jQuery( document ).ready(function ($) {
 			rthdSetup.acl_save();
 			rthdSetup.on_connected_store_change();
 			rthdSetup.hide_notice();
+			rthdSetup.delete_product();
 		},
 
 		bind_enter_event: function (textbox, button) {
@@ -115,9 +116,33 @@ jQuery( document ).ready(function ($) {
 					},
 					success: function (data) {
 						if (data.status) {
-							jQuery( 'ol.rthd-setup-wizard-new-product' ).append( '<li> ' + new_term + ' </li>' );
+							jQuery( 'table.rthd-setup-wizard-new-product' ).append( '<tr id="li-' + data.term_id + '"><td>' + new_term + '</td><td><a href="" class="rthd-delete-product" id="' + data.term_id + '"><span class="dashicons dashicons-dismiss"></span></a></td></tr>' );
 							jQuery( '#rthd-setup-store-new-team' ).val( '' );
 						}
+					}
+				});
+			});
+		},
+		delete_product: function() {
+			jQuery( document ).on('click', '.rthd-delete-product', function (e) {
+				e.preventDefault();
+				var term_id = jQuery( this ).attr( 'id' );
+
+				jQuery.ajax({
+					url: ajaxurl,
+					dataType: 'json',
+					type: 'post',
+					data: {
+						action: 'rtbiz_hd_delete_product',
+						term_id: term_id
+					},
+					success: function (data) {
+						if (data.status) {
+							jQuery( '#li-' + term_id ).remove();
+						}
+					},
+					error: function (xhr, textStatus, errorThrown) {
+//						jQuery( '#contacts-blacklist-container' ).html( "Some error with ajax request!!" ).show();
 					}
 				});
 			});

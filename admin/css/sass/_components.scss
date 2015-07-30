@@ -162,6 +162,7 @@
 	.rthd-setup-wizard-row label {
 		float: none;
 		width: auto;
+	  	margin-right: 10px;
 	}
 }
 
@@ -200,6 +201,16 @@
 	vertical-align: top;
 	margin-top: -5px;
 	display: inline-block;
+}
+
+.rthd-setup-wizard-new-product {
+	border: none;
+	margin: 25px 0;
+}
+
+.rthd-delete-product {
+	text-decoration: none;
+	margin-left: 15px;
 }
 
 a#rthd-new-support-page{

@@ -98,6 +98,7 @@ jQuery( document ).ready(function ($) {
 
 	jQuery( '.rthd-subscribe-email-submit' ).click(function () {
 		jQuery( '.rthd-subscribe-validation' ).hide();
+		jQuery( '.rthd-subscribe-validation' ).text( '' );
 		jQuery( '#rthd-subscribe-email-spinner' ).show();
 		var email = jQuery( '#rthd-subscribe-email' ).val();
 		if ( ! validateEmail( email )) {
@@ -119,7 +120,7 @@ jQuery( document ).ready(function ($) {
 				if (data.status) {
 					jQuery( '.rthd-subscribe-validation' ).show();
 					jQuery( '.rthd-subscribe-validation' ).text( 'Added Successfully' );
-					jQuery( '.rthd-subscribe-validation' ).hide( 5000 );
+					//jQuery( '.rthd-subscribe-validation' ).hide( 5000 );
 					jQuery( '#rthd-subscribe-email' ).val( '' );
 					//show participants lable
 					if ( ! jQuery( '.rthd-participants' ).is( ":visible" )) {
@@ -128,12 +129,6 @@ jQuery( document ).ready(function ($) {
 					if ( ! data.has_replied) {
 						var htmlappend = '<div class="rthd-participant-container"><a title="' + data.display_name + '" class="rthd-last-reply-by" href="' + data.edit_link + '">' + data.avatar + ' </a><a href="javascript:;" class="rthd-participant-remove" data-email="' + email + '" data-post_id="' + jQuery( '#post-id' ).val() + '" >X</a></div>';
 						jQuery( '.rthd-ticket-created-by').parent().after( htmlappend );
-						//if (data.is_contact){
-						//	jQuery('.rthd-contact-avatar-no-reply-div' ).append( htmlappend );
-						//} else {
-						//jQuery('.rthd-subscriber-avatar-no-reply-div' ).append( htmlappend );
-						//jQuery('.rthd-ticket-created-by' ).after( htmlappend );
-						//}
 					}
 					// hide box when person is added
 					jQuery( '.rthd-add-people-box' ).hide();
@@ -144,7 +139,7 @@ jQuery( document ).ready(function ($) {
 					} else {
 						jQuery( '.rthd-subscribe-validation' ).html( 'Something went wrong' );
 					}
-					jQuery( '.rthd-subscribe-validation' ).hide( 5000 );
+					//jQuery( '.rthd-subscribe-validation' ).hide( 10000 );
 				}
 				jQuery( '#rthd-subscribe-email-spinner' ).hide();
 			}

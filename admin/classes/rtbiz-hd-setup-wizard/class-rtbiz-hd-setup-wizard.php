@@ -31,6 +31,7 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 
 			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_product_sync', $this, 'ajax_product_sync' );
 			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_add_new_product', $this, 'ajax_add_new_product' );
+			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_delete_product', $this, 'ajax_delete_product' );
 
 			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_search_non_hd_user_by_name', $this, 'ajax_get_user_from_name' );
 			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_hd_create_contact_with_hd_access', $this, 'ajax_creater_rtbiz_and_give_access_helpdesk' );
@@ -166,9 +167,9 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 					<input type="text" id="rthd-setup-store-new-team" />
 					<input type="button" id="rthd-setup-store-new-team-submit" value="Add" />
 				</div>
-				<ol class="rthd-setup-wizard-new-product">
+				<table class="rthd-setup-wizard-new-product">
 
-				</ol>
+				</table>
 			</div>
 			<div class="rthd-store-process rthd-wizard-process" style="display: none; float: left;">
 				<span><?php _e( 'Connecting store and importing existing products', RTBIZ_HD_TEXT_DOMAIN ) ?></span>
@@ -297,7 +298,7 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 		public function set_role_ui() {
 			?>
 			<div class="rthd-setup-wizard-controls rthd-ACL-change rthd-setup-wizard-row">
-				<h3 class="rthd-setup-wizard-title"><?php _e( 'Congrats !!!', RTBIZ_HD_TEXT_DOMAIN ); ?></h3>
+				<h3 class="rthd-setup-wizard-title"><?php _e( 'Congratulations!', RTBIZ_HD_TEXT_DOMAIN ); ?></h3>
 				<p>Your Helpdesk is ready. Click on finish to get started.</p>
 			</div>
 		<?php
@@ -334,8 +335,9 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 			$arrReturn = array( 'status' => false );
 			if ( ! empty( $_POST['product'] ) ) {
 				$term = wp_insert_term( $_POST['product'], Rt_Products::$product_slug );
+
 				if ( ! $term instanceof WP_Error && ! empty( $term ) ) {
-					$arrReturn = array( 'status' => true );
+					$arrReturn = array( 'status' => true, 'term_id' => $term['term_id'] );
 				}
 			}
 			header( 'Content-Type: application/json' );
@@ -343,6 +345,19 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 			die( 0 );
 		}
 
+		public function ajax_delete_product() {
+			$arrReturn = array( 'status' => false );
+			if ( ! empty( $_POST['term_id'] ) ) {
+				$term = wp_delete_term( $_POST['term_id'], Rt_Products::$product_slug );
+
+				if ( $term ) {
+					$arrReturn = array( 'status' => true );
+				}
+			}
+			header( 'Content-Type: application/json' );
+			echo json_encode( $arrReturn );
+			die( 0 );
+		}
 
 		/**
 		 * Search all wp user who don't have helpdesk access
@@ -557,11 +572,15 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 				$rtbiz_acl_model->remove_acl( array( 'module' => RTBIZ_TEXT_DOMAIN, 'userid' => $_POST['userid'] ) );
 				$arrReturn['status'] = true;
 				$contact = rtbiz_get_contact_for_wp_user( $_POST['userid'] );
+				
+				rtbiz_remove_contact_to_user( $contact[0]->p2p_from, $contact[0]->p2p_to );
+				wp_delete_post( $contact[0]->p2p_from );
+
 				//              $support_team = get_option( 'rtbiz_hd_default_support_team' );
 				//              if ( ! empty( $support_team ) && ! empty( $contact[0] ) ){
 				//                  wp_remove_object_terms($contact[0]->ID,array($support_team),Rtbiz_Teams::$slug );
 				//              }
-				if ( ! empty( $contact[0] ) && empty( $team_term_id ) ) {
+				if ( ! empty( $contact[0] ) ) {
 					$user_permissions = get_post_meta( $contact[0]->ID, 'rtbiz_profile_permissions', true );
 					if ( ! empty( $user_permissions[ RTBIZ_HD_TEXT_DOMAIN ] ) ) {
 						$user_permissions[ RTBIZ_HD_TEXT_DOMAIN ] = 0;
