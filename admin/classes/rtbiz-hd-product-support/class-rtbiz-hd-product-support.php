@@ -701,10 +701,10 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 				$term = get_term_by( 'id', $data['product_id'], Rt_Products::$product_slug );
 				if ( $term ) {
 					/* Product assignee | override defult assignee  */
-					$product_meta = Rt_Lib_Taxonomy_Metadata\get_term_meta( $data['product_id'], '_'.Rt_Products::$product_slug  . '_meta', true );
-					if ( ! empty( $product_meta ) && ! empty( $product_meta['default_assignee'] ) ){
-						wp_update_post( array( 'ID' => $rtbiz_hd_tickets_id, 'post_author' => $product_meta['default_assignee'] ) );
-					}
+//					$product_meta = Rt_Lib_Taxonomy_Metadata\get_term_meta( $data['product_id'], '_'.Rt_Products::$product_slug  . '_meta', true );
+//					if ( ! empty( $product_meta ) && ! empty( $product_meta['default_assignee'] ) ){
+//						wp_update_post( array( 'ID' => $rtbiz_hd_tickets_id, 'post_author' => $product_meta['default_assignee'] ) );
+//					}
 					/* Product assignee | override defult assignee end */
 					wp_set_post_terms( $rtbiz_hd_tickets_id, array( $term->term_id ), Rt_Products::$product_slug );
 				}

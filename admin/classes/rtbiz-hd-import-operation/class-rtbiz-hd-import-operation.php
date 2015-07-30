@@ -100,7 +100,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 					rtbiz_hd_delete_user_fav_ticket( get_current_user_id(), $_POST['post_id'] );
 					$label = 'Favorite this ticket';
 				} else {
-					rtbiz_hd_add_user_fav_ticket( get_current_user_id(),$_POST['post_id'] );
+					rtbiz_hd_add_user_fav_ticket( get_current_user_id(), $_POST['post_id'] );
 					$label = 'Remove this ticket from favorites';
 				}
 				$status = true;
@@ -229,7 +229,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 						$user_contact_info = rtbiz_get_contact_by_email( $_POST['email'] );
 						$user_contact_info = $user_contact_info[0];
 						if ( ! p2p_connection_exists( Rtbiz_HD_Module::$post_type . '_to_' . rtbiz_get_contact_post_type(), array( 'from' => $_POST['post_id'], 'to' => $user_contact_info->ID ) ) ) {
-							rtbiz_connect_post_to_contact( Rtbiz_HD_Module::$post_type, $_POST['post_id'], $user_contact_info );
+							rtbiz_connect_post_to_contact( Rtbiz_HD_Module::$post_type, $_POST['post_id'], $user_contact_info->ID );
 							$response['status'] = true;
 							$response['is_contact'] = true;
 						} else {
@@ -239,13 +239,22 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 					}
 				} else { // create user and then add to p2p
 					$create_wp_user = false;
-					//					$setting = rtbiz_hd_get_redux_settings();
-					//					if ( 1 == $setting['rthd_enable_auto_wp_user_create'] ) {
-					//						$create_wp_user = true;
-					//					}
-					$this->add_contacts_to_post( array( array( 'address' => $_POST['email'] ) ), $_POST['post_id'], $create_wp_user );
-					$response['status'] = true;
-					$response['is_contact'] = true;
+					$user_contact_info = rtbiz_get_contact_by_email( $_POST['email'] );
+					$user_contact_info = $user_contact_info[0];
+					if ( $user_contact_info && ! empty( $user_contact_info->ID ) ){
+						if ( ! p2p_connection_exists( Rtbiz_HD_Module::$post_type . '_to_' . rtbiz_get_contact_post_type(), array( 'from' => $_POST['post_id'], 'to' => $user_contact_info->ID ) ) ) {
+							rtbiz_connect_post_to_contact( Rtbiz_HD_Module::$post_type, $_POST['post_id'], $user_contact_info->ID );
+							$response['status'] = true;
+							$response['is_contact'] = true;
+						} else {
+							$response['status'] = false;
+							$response['msg'] = 'Already subscribed.';
+						}
+					} else {
+						$this->add_contacts_to_post( array( array( 'address' => $_POST['email'] ) ), $_POST['post_id'], $create_wp_user );
+						$response['status'] = true;
+						$response['is_contact'] = true;
+					}
 				}
 			} else {
 				$response['msg'] = 'Something went wrong.';
@@ -462,7 +471,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
-		public function insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $senderEmail, $messageid = '', $inreplyto = '', $references = '', $subscriber = array(), $originalBody = '' ) {
+		public function insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $senderEmail, $messageid = '', $inreplyto = '', $references = '', $subscriber = array(), $originalBody = '', $mailbox_email_address = '' ) {
 			global $rtbiz_hd_module, $rtbiz_hd_tickets_operation, $rtbiz_hd_ticket_history_model, $rtbiz_hd_contacts;
 			$d             = new DateTime( $mailtime );
 			$timeStamp     = $d->getTimestamp();
@@ -555,12 +564,15 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			if ( '' != $references ) {
 				update_post_meta( $post_id, '_rtbiz_hd_references', $references );
 			}
+			if ( '' != $mailbox_email_address ) {
+				update_post_meta( $post_id, '_rtbiz_hd_ticket_with_mailbox', $mailbox_email_address );
+			}
 
 			// Call action to add product info into ticket meta data.
 			do_action( 'rtbiz_hd_add_ticket_product_info', $post_id );
+			
 			// Call action to change default assignee accoding to products
-
-			do_action( 'rt_hd_before_send_notification', $post_id, get_post( $post_id ) );
+			do_action( 'rtbiz_hd_before_send_notification', $post_id, get_post( $post_id ) );
 
 			//send Notification
 			global $bulkimport, $gravity_auto_import, $rtbiz_hd_email_notification, $helpdesk_import_ticket_id;
@@ -829,13 +841,17 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 
 			//Exclude mailbox email form all emails
 			$contactEmail = array();
+			$mailbox_email_address = '';
 			if ( ! empty( $allemails ) && is_array( $allemails ) ) {
 				foreach ( $allemails as $email ) {
 					if ( ! rtmb_get_module_mailbox_email( $email['address'], RTBIZ_HD_TEXT_DOMAIN ) ) { //check mail is exist in mailbox or not
 						$contactEmail[] = $email;
+					} else {
+						$mailbox_email_address = $email['address'];
 					}
 				}
 			}
+			
 			$allemails = $contactEmail;
 			if ( rtbiz_hd_check_email_blacklisted( $fromemail['address'] ) ) {
 				return false;
@@ -853,7 +869,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			}
 			//always true in mail cron  is use for importer
 			if ( ! $check_duplicate ) {
-				$success_flag = $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], '', '', '', $subscriber );
+				$success_flag = $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], '', '', '', $subscriber, '', $mailbox_email_address );
 
 				error_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
 
@@ -896,7 +912,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			} else {
 				$postid = $threadPostId;
 			}
-			error_log( 'POST ID : '. var_export( $postid, true ) . "\r\n" );
+
 			$dndEmails = array();
 
 			if ( $postid && get_post( $postid ) != null ) { // if post id found from title or mail meta & mail is Re: or Fwd:
@@ -953,7 +969,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 					}
 					return $success_flag;
 				} else {
-					$success_flag = $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], $messageid, $inreplyto, $references, $subscriber, $originalBody );
+					$success_flag = $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], $messageid, $inreplyto, $references, $subscriber, $originalBody, $mailbox_email_address );
 					error_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
 
 					if ( ! $success_flag ) {
@@ -968,7 +984,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				//if given post title exits then it will be add as comment other wise as post
 				error_log( 'Post Exists : '. var_export( $existPostId, true ) . "\r\n" );
 				if ( ! $existPostId ) {
-					$success_flag = $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], $messageid, $inreplyto, $references, $subscriber, $originalBody );
+					$success_flag = $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], $messageid, $inreplyto, $references, $subscriber, $originalBody, $mailbox_email_address );
 					error_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
 
 					if ( ! $success_flag ) {

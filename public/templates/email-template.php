@@ -7,7 +7,7 @@
 	</head>
 
 	<body>
-		<div style="display: none !important; font-size: 0px !important; line-height: 0px !important; font: <?php echo $post_id; ?>" ></div>
+		<div style="display: none !important; font-size: 0px !important; line-height: 0px !important; font: <?php echo $post_id; ?>; color:white;" >Ref: <?php echo $post_id; ?></div>
 		<?php
 		// todo : check this logic
 		if ( $replyflag && rtbiz_hd_is_enable_mailbox_reading() && rtbiz_hd_get_reply_via_email() && ! rtbiz_hd_get_web_only_support() ) {
@@ -41,7 +41,7 @@
 		echo ( ( ! empty( $signature ) ) ? '<div style="color:#c5c5c5; font-size: 14px;">' . wpautop( $signature ) . '</div>' : '' ) . '<br/>'
 		?>
 
-		<div style="display: none !important; font-size: 0px !important; line-height: 0px !important; font: <?php echo time();?>; color:white;" ><?php echo time(); ?></div>
+		<div style="display: none !important; font-size: 0px !important; line-height: 0px !important; font: <?php echo time();?>; color:white;" >Tick: <?php echo time(); ?></div>
 	</body>
 
 </html>

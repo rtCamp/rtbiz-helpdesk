@@ -13,10 +13,12 @@ jQuery( document ).ready(function ($) {
 		scroll : function (){
 			if ( typeof rthd_shortcode_params !== 'undefined' ) {
 				jQuery( document ).scroll( function() {
-					var div_top = jQuery( '.rthd_ticket_short_code tr:last' ).offset().top;
-					if ( jQuery( window ).scrollTop() > div_top - 500 ) {
-						//jQuery( document ).unbind( 'scroll' );
-						rthdShortcode.load_more_helpdesk_ticket();
+					if ( jQuery('.rthd_ticket_short_code tr:last').length > 0 ) {
+						var div_top = jQuery('.rthd_ticket_short_code tr:last').offset().top;
+						if (jQuery(window).scrollTop() > div_top - 500) {
+							//jQuery( document ).unbind( 'scroll' );
+							rthdShortcode.load_more_helpdesk_ticket();
+						}
 					}
 				} );
 			}
