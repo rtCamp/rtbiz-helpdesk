@@ -309,6 +309,7 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 							}
 						}
 					} else {
+						
 						if ( 'yes' === $arg_shortcode['title'] ) {
 							?>
 							<h2 class="rthd-ticket-list-title"><?php
@@ -416,6 +417,7 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 						if ( $first ) {
 							?>
 						</table>
+						<input type="hidden" class="rt-hd-total-ticket-count" value="<?php echo $count;?>" />
 						<img class="rthd-ticket-short-code-loader helpdeskspinner"
 							 src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 						<?php

@@ -68,7 +68,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 				if ( empty($user[0]) ) {
 					return;
 				}
-				echo balanceTags( do_shortcode( '[rtbiz_hd_tickets userid = ' . $user[0]->ID . " title='yes' ]" ) );
+				echo balanceTags( do_shortcode( '[rtbiz_hd_tickets userid = ' . $user[0]->ID . " title='no' ]" ) );
 			//}
 		}
 
