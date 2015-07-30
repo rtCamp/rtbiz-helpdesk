@@ -53,9 +53,6 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Operation' ) ) {
 					$settings = rtbiz_hd_get_redux_settings();
 					if ( ! empty( $terms ) && count( $terms ) == 1 ) {
 						$default_assignee = rtbiz_hd_get_product_meta( 'default_assignee', $terms[0]->term_id );
-	//					if ( empty( $default_assignee ) ) {
-	//						$default_assignee = $settings['rthd_default_user'];
-	//					}
 					}
 				}
 				if ( isset ( $mailbox_email ) ) {
@@ -69,7 +66,9 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Operation' ) ) {
 						}
 
 						if ( empty ( $default_assignee ) && ! empty ( $mailbox_data['staff'] ) ) {
-							$default_assignee = $mailbox_data['staff'];
+							if ( get_user_by( 'id', $mailbox_data['staff'] ) ) {
+								$default_assignee = $mailbox_data['staff'];
+							}
 						}
 					}
 				}
