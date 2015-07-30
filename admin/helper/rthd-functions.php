@@ -1829,7 +1829,7 @@ function rtbiz_hd_admin_sidebar() {
 			<div class="inside">
 				<div class="rthd-social-share" id="social">
 					<p><a href="<?php echo 'http://twitter.com/home/?status=' . $message; ?>" class="button twitter" target= "_blank" title="<?php _e( 'Post to Twitter Now', RTBIZ_HD_TEXT_DOMAIN ) ?>"><?php _e( 'Post to Twitter', RTBIZ_HD_TEXT_DOMAIN ) ?><span class="dashicons dashicons-twitter"></span></a></p>
-					<p><a href="<?php echo esc_url( 'https://www.facebook.com/sharer/sharer.php?u=http://rtcamp.com/helpdesk/' ); ?>" class="button facebook" target="_blank" title="<?php  _e( 'Share on Facebook Now', RTBIZ_HD_TEXT_DOMAIN ) ?>"><?php  _e( 'Share on Facebook', RTBIZ_HD_TEXT_DOMAIN ) ?><span class="dashicons dashicons-facebook"></span></a></p>
+					<p><a href="<?php echo esc_url( 'https://www.facebook.com/sharer/sharer.php?u=https://rtcamp.com/rtbiz/helpdesk/' ); ?>" class="button facebook" target="_blank" title="<?php  _e( 'Share on Facebook Now', RTBIZ_HD_TEXT_DOMAIN ) ?>"><?php  _e( 'Share on Facebook', RTBIZ_HD_TEXT_DOMAIN ) ?><span class="dashicons dashicons-facebook"></span></a></p>
 					<p><a href="<?php echo esc_url( 'https://wordpress.org/support/view/plugin-reviews/rtbiz?rate=5#postform' ); ?>" class="button wordpress" target= "_blank" title="<?php _e( 'Rate rtBiz on Wordpress.org', RTBIZ_HD_TEXT_DOMAIN ) ?>"><?php _e( 'Rate on Wordpress.org', RTBIZ_HD_TEXT_DOMAIN ) ?><span class="dashicons dashicons-wordpress"></span></a></p>
 					<p><a href="<?php echo sprintf( '%s', 'https://rtcamp.com/feed/' ) ?>"  class="button rss" target="_blank" title="<?php _e( 'Subscribe to our Feeds', RTBIZ_HD_TEXT_DOMAIN )  ?>"><?php _e( 'Subscribe to our Feeds', RTBIZ_HD_TEXT_DOMAIN ) ?><span class="dashicons dashicons-rss"></span></a></p>
 				</div>
