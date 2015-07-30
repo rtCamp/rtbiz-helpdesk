@@ -521,9 +521,9 @@ jQuery( document ).ready(function ($) {
 				success: function (data) {
 					if (data.status) {
 						jQuery( '.rthd-assignee-process' ).show();
-						skip_step = true;
-						jQuery( '.wizard' ).steps( 'next' );
 					}
+					skip_step = true;
+					jQuery( '.wizard' ).steps( 'next' );
 				}
 			});
 		},
