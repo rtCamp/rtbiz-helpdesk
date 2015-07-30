@@ -572,7 +572,7 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 				$rtbiz_acl_model->remove_acl( array( 'module' => RTBIZ_TEXT_DOMAIN, 'userid' => $_POST['userid'] ) );
 				$arrReturn['status'] = true;
 				$contact = rtbiz_get_contact_for_wp_user( $_POST['userid'] );
-				
+
 				rtbiz_remove_contact_to_user( $contact[0]->p2p_from, $contact[0]->p2p_to );
 				wp_delete_post( $contact[0]->p2p_from );
 
@@ -621,13 +621,9 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 								<li>
 									<label for="rthd_product<?php echo $tm->term_id ?>"> <?php echo $tm->name ?></label>
 									<select class="rthd-setup-assignee" data="<?php echo $tm->term_id ?>"  id="rthd_product<?php echo $tm->term_id ?>"><?php
+									echo '<option value="" > -- select an assignee -- </option>';
 									foreach ( $users as $user ) {
-										if ( $user->ID == $current ) {
-											$selected = 'selected';
-										} else {
-											$selected = '';
-										}
-										echo '<option value="' . $user->ID . '" ' . $selected . '>' . $user->display_name . '</option>';
+										echo '<option value="' . $user->ID . '" >' . $user->display_name . '</option>';
 									} ?>
 									</select>
 								</li><?php
@@ -638,11 +634,6 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 					<div class="rthd-setup-wizard-row">
 						<label class="rthd-product-default-assignee" for="rthd_product-default"> <strong><?php _e( 'Default Assignee', RTBIZ_HD_TEXT_DOMAIN ); ?> </strong></label>
 						<select id="rthd_product-default"><?php
-						if ( empty( $current ) ) {
-							echo '<option disabled selected> -- select an assignee -- </option>';
-						} else {
-							echo '<option > -- select an assignee -- </option>';
-						}
 						foreach ( $users as $user ) {
 							if ( $user->ID == $current ) {
 								$selected = 'selected';
