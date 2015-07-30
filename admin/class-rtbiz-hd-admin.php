@@ -36,7 +36,7 @@ if ( !class_exists( 'Rtbiz_HD_Admin' ) ) {
 
 			global $rtbiz_hd_mail_acl_model, $rtbiz_hd_ticket_history_model, $rtbiz_hd_ticket_index_model,
 			$rtbiz_hd_attributes, $rtbiz_hd_module, $rtbiz_hd_cpt_tickets, $rtbiz_hd_reports, $rtbiz_hd_dashboard,
-			$rtbiz_hd_accounts, $rtbiz_hd_contacts, $rtbiz_hd_tickets_operation, $rtbiz_hd_email_notification, $rtbiz_hd_auto_response;
+			$rtbiz_hd_accounts, $rtbiz_hd_contacts, $rtbiz_hd_tickets_operation, $rtbiz_hd_email_notification, $rtbiz_hd_auto_response, $rtbiz_hd_mailbox;
 
 			$rtbiz_hd_mail_acl_model = new Rtbiz_HD_Mail_ACL_Model();
 			$rtbiz_hd_ticket_history_model = new Rtbiz_HD_Ticket_History_Model();
@@ -55,6 +55,8 @@ if ( !class_exists( 'Rtbiz_HD_Admin' ) ) {
 			$rtbiz_hd_tickets_operation = new Rtbiz_HD_Tickets_Operation();
 			$rtbiz_hd_email_notification = new Rtbiz_HD_Email_Notification();
 			$rtbiz_hd_auto_response = new Rtbiz_HD_Auto_Response();
+			$rtbiz_hd_mailbox = new Rtbiz_HD_Mailbox();
+
 
 			global $rtbiz_hd_setup_wizard;
 			$rtbiz_hd_setup_wizard = new Rtbiz_HD_Setup_Wizard();
