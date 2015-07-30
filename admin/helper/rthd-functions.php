@@ -1794,6 +1794,7 @@ function rtbiz_hd_mailbox_setup_view( $isredirect = true ) {
 
 }
 
+
 function rtbiz_hd_gravity_importer_view() {
 	$module_key = rtbiz_sanitize_module_key( RTBIZ_HD_TEXT_DOMAIN );
 	return rtbiz_gravity_importer_view( $module_key );
