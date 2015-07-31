@@ -429,32 +429,30 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 				}
 			}
 
-			if ( ! isset( $_REQUEST['rtbiz_is_staff_member'] ) ) {
-				if ( ! empty ( $contactIds ) ) {
-					foreach ( $contactIds as $contactId ) {
-						$user = rtbiz_get_wp_user_for_contact( $contactId );
-						$str_count = strlen( $user[0]->data->ID );
-						$old_meta = 'a:1:{s:16:"default_assignee";s:' . $str_count . ':"' . $user[0]->data->ID . '";}';
-						$new_meta = 'a:1:{s:16:"default_assignee";i:0;}';
+			if ( ! isset( $_REQUEST['rtbiz_is_staff_member'] ) && ! empty ( $contactIds ) ) {
+				foreach ( $contactIds as $contactId ) {
+					$user = rtbiz_get_wp_user_for_contact( $contactId );
+					$str_count = strlen( $user[0]->data->ID );
+					$old_meta = 'a:1:{s:16:"default_assignee";s:' . $str_count . ':"' . $user[0]->data->ID . '";}';
+					$new_meta = 'a:1:{s:16:"default_assignee";i:0;}';
 
-						global $wpdb;
-						$taxonomymeta = $wpdb->prefix . 'taxonomymeta';
+					global $wpdb;
+					$taxonomymeta = $wpdb->prefix . 'taxonomymeta';
 
-						$wpdb->update(
-							$taxonomymeta,
-							array(
-								'meta_value' => $new_meta,
-							),
-							array( 'meta_value' => $old_meta ),
-							array(
-								'%s',
-							),
-							array( '%s' )
-						);
+					$wpdb->update(
+						$taxonomymeta,
+						array(
+							'meta_value' => $new_meta,
+						),
+						array( 'meta_value' => $old_meta ),
+						array(
+							'%s',
+						),
+						array( '%s' )
+					);
 
-						wp_delete_object_term_relationships( $contactId, Rtbiz_Teams::$slug );
-						wp_delete_object_term_relationships( $contactId, Rt_Products::$product_slug );
-					}
+					wp_delete_object_term_relationships( $contactId, Rtbiz_Teams::$slug );
+					wp_delete_object_term_relationships( $contactId, Rt_Products::$product_slug );
 				}
 			}
 
