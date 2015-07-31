@@ -159,9 +159,22 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		 * @param $location
 		 */
 		public function redirect_post_location_filter( $location ) {
+
 			if ( ! empty( $_POST['post_type'] ) && rtbiz_get_contact_post_type() == $_POST['post_type']
 			     &&  strpos( $_POST['_wp_http_referer'], 'module=' . RTBIZ_HD_TEXT_DOMAIN ) !== false ) {
 				$location = add_query_arg( 'module', RTBIZ_HD_TEXT_DOMAIN, $location );
+
+				$staff_member = 'customer';
+				if ( ! empty( get_post_meta( $_POST['post_ID'], 'rtbiz_is_staff_member', true ) ) ) {
+					$staff_member = 'staff';
+				}
+
+				$user = rtbiz_get_wp_user_for_contact( $_POST['post_ID'] );
+				if ( isset( $user[0]->roles ) && in_array( 'administrator', $user[0]->roles ) ) {
+					$staff_member = 'staff';
+				}
+
+				$location = add_query_arg( 'contact_group', $staff_member, $location );
 			}
 			return $location;
 		}
