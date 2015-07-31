@@ -344,12 +344,16 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 			if ( isset( $post->post_type ) && $post->post_type != rtbiz_get_contact_post_type() ) {
 				return $post_id;
 			}
-			
+
 			$contactIds = array();
 			if ( isset( $_REQUEST['post_ID'] ) ) {
 				$contactIds = array( $_REQUEST['post_ID'] );
 			} else {
 				$contactIds = $_REQUEST['post'];
+			}
+
+			if ( empty( $_REQUEST['rtbiz_is_staff_member'] ) ){
+				$_REQUEST['rtbiz_is_staff_member'] = '';
 			}
 
 			if ( isset( $_REQUEST['rtbiz_action'] ) && 'rtbiz_helpdesk_role_updated' == $_REQUEST['rtbiz_action'] ) {
@@ -364,7 +368,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 					if ( in_array( 'administrator', $user->roles ) ) {
 						continue;
 					}
-					if ( 'yes' == $_REQUEST['rtbiz_is_staff_member'] ) {
+					if ( ! empty( $_REQUEST['rtbiz_is_staff_member']  )  &&  'yes' == $_REQUEST['rtbiz_is_staff_member'] ) {
 						foreach ( $profile_permissions as $module_Key => $module_permission ) {
 							switch ( $module_permission ) {
 								case 0:
@@ -416,13 +420,13 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 				}
 				foreach ( $contactIds as $contactId ) {
 					$user_permissions = get_post_meta( $contactId, 'rtbiz_profile_permissions', true );
-					$user_permissions[ RTBIZ_TEXT_DOMAIN ] = $profile_permissions[ RTBIZ_TEXT_DOMAIN ];
-					$user_permissions[ RTBIZ_HD_TEXT_DOMAIN ]  = $profile_permissions[ RTBIZ_HD_TEXT_DOMAIN ];
+					$user_permissions[ RTBIZ_TEXT_DOMAIN ] = empty( $profile_permissions[ RTBIZ_TEXT_DOMAIN ] ) ? 0 : $profile_permissions[ RTBIZ_TEXT_DOMAIN ] ;
+					$user_permissions[ RTBIZ_HD_TEXT_DOMAIN ]  = empty( $profile_permissions[ RTBIZ_HD_TEXT_DOMAIN ] ) ? 0 : $profile_permissions[ RTBIZ_HD_TEXT_DOMAIN ] ;
 					update_post_meta( $contactId, 'rtbiz_profile_permissions', $user_permissions );
 					update_post_meta( $contactId, 'rtbiz_is_staff_member', $_REQUEST['rtbiz_is_staff_member'] );
 				}
 			}
-			
+
 			if ( ! isset( $_REQUEST['rtbiz_is_staff_member'] ) ) {
 
 				foreach ( $contactIds as $contactId ) {
@@ -434,16 +438,16 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 					global $wpdb;
 					$taxonomymeta = $wpdb->prefix . 'taxonomymeta';
 
-					$wpdb->update( 
-						$taxonomymeta, 
-						array( 
+					$wpdb->update(
+						$taxonomymeta,
+						array(
 							'meta_value' => $new_meta,
-						), 
-						array( 'meta_value' => $old_meta ), 
-						array( 
+						),
+						array( 'meta_value' => $old_meta ),
+						array(
 							'%s',
-						), 
-						array( '%s' ) 
+						),
+						array( '%s' )
 					);
 
 					wp_delete_object_term_relationships( $contactId, Rtbiz_Teams::$slug );
