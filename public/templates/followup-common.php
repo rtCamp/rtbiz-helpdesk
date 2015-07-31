@@ -69,7 +69,7 @@ $user_edit_content = $staffonly|| ( get_current_user_id() == $post->$created_by 
 					$markdown_content = $post->post_content;
 				}
 				?>
-				<div class="rthd-comment-content"
+				<div class="rthd-ticket-content"
 				     data-rthdcontent="<?php echo( isset( $post->ID ) ? esc_attr( $markdown_content ) : '' ); ?>">
 					<?php
 					$content = rtbiz_hd_content_filter( isset( $post->ID ) ? $post->post_content : '' );
