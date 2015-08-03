@@ -235,9 +235,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 			$system_emails = rtmb_get_module_mailbox_emails( RTBIZ_HD_TEXT_DOMAIN );
 
 			$mailbox_options = array();
-			$mailbox_options[] = '---- select email ----';
 			foreach ( $system_emails as $email ) {
-
 				$mailbox_options[ $email ] = $email;
 			}
 
@@ -365,6 +363,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					'desc'     => sprintf( '%s.', __( 'Choose any one email from the configured mailboxes.' ) ),
 					'type'     => 'select',
 					'options'  => $mailbox_options,
+					'default'  => ! empty( $mailbox_options ) ? $mailbox_options[0] : '',
 				) );
 
 				if ( count( $mailbox_options ) >= 2 ) {
