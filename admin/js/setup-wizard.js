@@ -215,6 +215,10 @@ jQuery( document ).ready(function ($) {
 						success: function (data) {
 							if (data.status) {
 								jQuery( that ).parent().parent().remove();
+								
+								// Decrease import users count by 1
+								imported_users -= 1;
+								jQuery( '#rthd-all-import-message' ).html( imported_users + ' Users Added' );
 							}
 						}
 					});
