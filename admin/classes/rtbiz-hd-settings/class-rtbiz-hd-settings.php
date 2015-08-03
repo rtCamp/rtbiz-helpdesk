@@ -367,6 +367,17 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					'options'  => $mailbox_options,
 				) );
 
+				array_push( $email_fields, array(
+					'id'       => 'rthd_outgoing_via_same_email',
+					'type'     => 'switch',
+					'title'    => __( 'Outgoing Emails\' FROM Same mailbox' ),
+					'subtitle' => __( 'To enable/disable Outgoing Emails\' FROM Same mailbox' ),
+					'default'  => true,
+					'on'       => __( 'Enable' ),
+					'off'      => __( 'Disable' ),
+					'required' => array( 'rthd_enable_mailbox_reading', '=', 1 ),
+				) );
+
 			} else {
 
 				array_push( $email_fields, array(
@@ -570,7 +581,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 						//'validate'     => 'html_custom',
 						'default'      => esc_attr( ' -- Sent via rtBiz Helpdesk Plugin' ),
 						/*'allowed_html' => array(
-							'a'      => array( 
+							'a'      => array(
 								'href'  => array(),
 								'title' => array(),
 							),
