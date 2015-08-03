@@ -351,7 +351,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 			} else if ( isset( $_REQUEST['post'] ) ) {
 				$contactIds = $_REQUEST['post'];
 			}
-			
+
 			global $rtbiz_acl_model;
 
 			$profile_permissions = array();
@@ -370,7 +370,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 					if ( in_array( 'administrator', $user->roles ) ) {
 						continue;
 					}
-					
+
 					if ( empty ( $profile_permissions ) ) {
 						// rtbiz has same acl as helpdesk
 						$_REQUEST['rtbiz_profile_permissions'][ RTBIZ_TEXT_DOMAIN ] = $_REQUEST['rtbiz_profile_permissions'][ RTBIZ_HD_TEXT_DOMAIN ];
@@ -435,14 +435,14 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 
 			if ( empty ( $_REQUEST['rtbiz_is_staff_member'] ) && ! empty ( $contactIds ) ) {
 				foreach ( $contactIds as $contactId ) {
-					
+
 					$user = rtbiz_get_wp_user_for_contact( $contactId );
 
 					$where = array(
 						'userid' => $user[0]->data->ID,
 					);
 					$rtbiz_acl_model->remove_acl( $where );
-					
+
 					$str_count = strlen( $user[0]->data->ID );
 					$old_meta = 'a:1:{s:16:"default_assignee";s:' . $str_count . ':"' . $user[0]->data->ID . '";}';
 					$new_meta = 'a:1:{s:16:"default_assignee";i:0;}';
