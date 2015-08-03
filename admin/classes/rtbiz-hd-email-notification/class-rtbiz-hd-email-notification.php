@@ -90,10 +90,28 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 			if ( $this->is_array_empty( $toemail ) && $this->is_array_empty( $ccemail ) && $this->is_array_empty( $bccemail ) ) {  // check if all emails are empty do not send email
 				return false;
 			}
+
+			$fromemail = $settings['rthd_outgoing_email_mailbox'];
+
+			if( ! empty( $settings['rthd_outgoing_via_same_email'] ) && 1 == $settings['rthd_outgoing_via_same_email'] ) {
+
+				$post_id = $refrence_id;
+				if ( 'comment' == $refrence_type ) {
+					$post_id = get_comment( $refrence_id )->comment_post_ID;
+				}
+
+				$mailbox_email = get_post_meta( $post_id, '_rtbiz_hd_ticket_with_mailbox', true );
+				if ( ! empty ( $mailbox_email ) ) {
+					$fromemail = $mailbox_email;
+				}
+			}
+
+			$fromemail = empty( $settings['rthd_outgoing_email_mailbox'] ) ? get_option( 'admin_email' ) : $fromemail;
+
 			$args = array(
 				'user_id'       => $user_id,
 				'fromname'      => $settings['rthd_outgoing_email_from_name'],
-				'fromemail'     => empty( $settings['rthd_outgoing_email_mailbox'] ) ? get_option( 'admin_email' ) : $settings['rthd_outgoing_email_mailbox'],
+				'fromemail'     => $fromemail,
 				'toemail'       => serialize( $toemail ),
 				'ccemail'       => serialize( $ccemail ),
 				'bccemail'      => serialize( $bccemail ),
@@ -211,11 +229,6 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 
 			$followup_creator[] = array( 'email' => $comment->comment_author_email, 'name' => $comment->comment_author );
 
-			if ( $notificationFlagAssignee ) {
-				$assigneEmail[] = $this->get_assigne_email( $comment->comment_post_ID );
-				$bccemails = array_merge( $bccemails, $assigneEmail );
-			}
-
 			if ( $notificationFlagGroup && isset( $redux['rthd_notification_emails'] ) && is_array( $redux['rthd_notification_emails'] ) ) {
 				foreach ( $redux['rthd_notification_emails'] as $email ) {
 					array_push( $groupEmail, array( 'email' => $email ) );
@@ -231,12 +244,17 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 			$bccemails = $this->exclude_author( $bccemails, $comment->comment_author_email );
 			$bccemails  = apply_filters( 'rtbiz_hd_filter_adult_emails', $bccemails, $comment->comment_post_ID );
 
+			if ( $notificationFlagAssignee ) {
+				$assigneEmail[] = $this->get_assigne_email( $comment->comment_post_ID );
+				$bccemails = array_merge( $bccemails, $assigneEmail );
+			}
+
 			if ( $notificationFlagClient ) {
 				$ContactEmail  = $this->get_contacts( $comment->comment_post_ID );
 				$ContactEmail = $this->exclude_author( $ContactEmail, $comment->comment_author_email );
 				$ContactEmail  = apply_filters( 'rtbiz_hd_filter_adult_emails', $ContactEmail, $comment->comment_post_ID );
 			}
-			if ( isset( $comment_type ) && ! empty( $comment_type ) && intval( $comment_type ) ){
+			if ( isset( $comment_type ) && ! empty( $comment_type ) && is_numeric( $comment_type ) ){
 				if ( $sensitive ) {
 					$subject  = rtbiz_hd_create_new_ticket_title( 'rthd_new_followup_email_title_private', $comment->comment_post_ID );
 					$body     = apply_filters( 'rthd_email_template_followup_add_private', rtbiz_hd_get_email_template_body( 'rthd_email_template_followup_add_private' ) );
@@ -945,7 +963,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 			$oldSubscriberArr = get_post_meta( $post_id, '_rtbiz_hd_subscribe_to', true );
 			if ( $oldSubscriberArr && is_array( $oldSubscriberArr ) && ! empty( $oldSubscriberArr ) ) {
 				foreach ( $oldSubscriberArr as $emailsubscriber ) {
-					$userSub = get_user_by( 'id', intval( $emailsubscriber ) );
+					$userSub = get_user_by( 'id', is_numeric( $emailsubscriber ) );
 					if ( ! empty( $userSub ) ) {
 						$bccemails[]  = array( 'email' => $userSub->user_email );
 					}
