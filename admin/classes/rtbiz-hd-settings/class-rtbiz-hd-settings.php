@@ -363,6 +363,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					'desc'     => sprintf( '%s.', __( 'Choose any one email from the configured mailboxes.' ) ),
 					'type'     => 'select',
 					'options'  => $mailbox_options,
+					'default'  => ! empty( $mailbox_options ) && isset( $mailbox_options[0] ) ? $mailbox_options[0] : '',
 				) );
 
 				if ( count( $mailbox_options ) >= 2 ) {
