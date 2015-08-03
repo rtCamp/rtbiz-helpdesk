@@ -77,6 +77,11 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 			$user_id = get_current_user_id();
 			global $rt_outbound_model;
 
+			if ( empty( $refrence_id ) ){
+				// if refrence id [ post or comment id ] not found
+				return false;
+			}
+
 			$settings = rtbiz_hd_get_redux_settings();
 			$attachments = wp_list_pluck( $attachement, 'file' );
 			$toemail = $this->filter_user_notification_preference( $toemail );
