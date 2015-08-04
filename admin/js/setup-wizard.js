@@ -205,26 +205,29 @@ jQuery( document ).ready(function ($) {
 
 				jQuery( document ).on("click", "a[href=#removeUser]", function (e) {
 					e.preventDefault();
-					that = this;
-					var requestArray = {};
-					requestArray.action = 'rtbiz_hd_remove_user';
-					requestArray.userid = jQuery( this ).next( '.rthd-import-selected-users' ).val();
-					jQuery( this ).next( '.rthd-import-selected-users' ).val('');
-					jQuery.ajax({
-						url: ajaxurl,
-						dataType: "json",
-						type: 'post',
-						data: requestArray,
-						success: function (data) {
-							if (data.status) {
-								jQuery( that ).parent().parent().remove();
-								
-								// Decrease import users count by 1
-								imported_users -= 1;
-								jQuery( '#rthd-all-import-message' ).html( imported_users + ' Users Added' );
+					if ( jQuery( this ).attr("disabled") != "disabled" ) {
+						jQuery( this ).attr("disabled","disabled");
+						that = this;
+						var requestArray = {};
+						requestArray.action = 'rtbiz_hd_remove_user';
+						requestArray.userid = jQuery( this ).next( '.rthd-import-selected-users' ).val();
+						jQuery.ajax({
+							url: ajaxurl,
+							dataType: "json",
+							type: 'post',
+							data: requestArray,
+							success: function (data) {
+								if (data.status) {
+									jQuery( that ).parent().parent().remove();
+									// Decrease import users count by 1
+									imported_users -= 1;
+									jQuery( '#rthd-all-import-message' ).html( imported_users + ' Users Added' );
+								} else {
+									jQuery( this ).removeAttr("disabled");
+								}
 							}
-						}
-					});
+						});
+					}
 				});
 			}
 
