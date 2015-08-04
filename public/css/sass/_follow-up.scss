@@ -245,11 +245,11 @@ ul#chat-UI {
 .load-more-ul li a.load-more-block {
 	.dashicons{
 	  line-height: 42px;
+	  color: #FFF;
 	}
     border-radius: 50%;
     text-align: center;
     z-index: 1;
-  	top: 3px;
 	margin: 0;
 }
 
@@ -314,7 +314,7 @@ ul#chat-UI {
 }
 
 .ticketother .avatar:before {
-    border-right-color: #bbb;
+    border-right-color: #eee;
 }
 
 a.load-more-block{
@@ -339,9 +339,6 @@ a.load-more-block{
     border-right-color: #0066cc;
 }
 
-.load-more-ul li a:hover {
-    background: #fafafa;
-}
 .followup-information .comment_type{
 	color: #C85D5D;
 }
