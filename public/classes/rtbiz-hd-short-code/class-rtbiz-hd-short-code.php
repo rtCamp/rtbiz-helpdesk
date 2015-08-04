@@ -276,7 +276,7 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 				}
 				$oder_shortcode = true;
 			}
-
+			
 			if ( !empty( $arg_shortcode['fav'] ) && ( true === $arg_shortcode['fav'] || 'true' === $arg_shortcode['fav'] ) && empty( $tickets ) ) {
 				return '';
 			}
@@ -414,7 +414,8 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 									<td>
 										<?php 
 											$user_id = get_post_meta( $ticket->ID, '_rtbiz_hd_created_by', true );
-											echo '<a class="rthd-ticket-created-by" href="' .  admin_url( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type . '&created_by=' . $user_id ) . '">' . get_avatar( $user_id, '30' ) . '</a>';
+											$user = get_user_by( 'id', $user_id );
+											echo '<a class="rthd-ticket-created-by" href="' .  admin_url( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type . '&created_by=' . $user_id ) . '" title="' . $user->data->display_name . '">' . get_avatar( $user_id, '30' ) . '</a>';
 										?>
 									</td>
 									<td>

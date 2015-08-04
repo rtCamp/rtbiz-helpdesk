@@ -209,6 +209,7 @@ jQuery( document ).ready(function ($) {
 					var requestArray = {};
 					requestArray.action = 'rtbiz_hd_remove_user';
 					requestArray.userid = jQuery( this ).next( '.rthd-import-selected-users' ).val();
+					jQuery( this ).next( '.rthd-import-selected-users' ).val('');
 					jQuery.ajax({
 						url: ajaxurl,
 						dataType: "json",
