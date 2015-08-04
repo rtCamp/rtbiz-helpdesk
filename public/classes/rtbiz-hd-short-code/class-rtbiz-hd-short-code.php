@@ -220,6 +220,10 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 			} else {
 				$is_staff = user_can( $current_user, $cap );
 			}
+			
+//			echo 'is_Staff : <pre>';
+//			print_r( current_user_can( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' ) ) || $ticket->post_author == $current_user->ID );
+//			echo '</pre>';die;
 
 			// if user can not access Helpdesk don't show him fav tickets
 			if ( !empty( $arg_shortcode['fav'] ) && ( true === $arg_shortcode['fav'] || 'true' == $arg_shortcode['fav'] ) ) {
@@ -369,8 +373,12 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 									<th>Title</th>
 									<th>Last Updated</th>
 									<th>Status</th>
-									<?php echo ( $is_staff ) ? '<th>Created by</th>' : ''; ?>
-									<?php echo ( $is_staff ) ? '<th>Edit</th>' : ''; ?>
+									<?php
+									if ( $is_staff || current_user_can( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' ) ) ) {
+										echo '<th>Created by</th>';
+										echo '<th>Edit</th>';
+									}
+									?>
 								</tr>
 							</thead>
 							<?php
@@ -408,7 +416,7 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 									}
 									?>
 								</td>
-								<?php if ( current_user_can( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' ) ) || $ticket->post_author == $current_user->ID ) { ?>
+								<?php if ( $is_staff || current_user_can( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' ) ) ) { //|| $ticket->post_author == $current_user->ID ?>
 									<td>
 										<?php 
 											$user_id = get_post_meta( $ticket->ID, '_rtbiz_hd_created_by', true );
