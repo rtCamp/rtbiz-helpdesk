@@ -345,25 +345,39 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 				return $post_id;
 			}
 
-			if ( isset( $_REQUEST['rtbiz_action'] ) && 'rtbiz_helpdesk_role_updated' == $_REQUEST['rtbiz_action'] ) {
-				global $rtbiz_acl_model;
+			$contactIds = array();
+			if ( isset( $_REQUEST['post_ID'] ) ) {
+				$contactIds = array( $_REQUEST['post_ID'] );
+			} else if ( isset( $_REQUEST['post'] ) ) {
+				$contactIds = $_REQUEST['post'];
+			}
 
+			global $rtbiz_acl_model;
+
+			$profile_permissions = array();
+			if ( ! isset ( $_REQUEST['rtbiz_is_staff_member'] ) || empty ( $_REQUEST['rtbiz_is_staff_member'] ) ) {
+				$_REQUEST['rtbiz_is_staff_member'] = '';
+			} else {
 				// rtbiz has same acl as helpdesk
 				$_REQUEST['rtbiz_profile_permissions'][ RTBIZ_TEXT_DOMAIN ] = $_REQUEST['rtbiz_profile_permissions'][ RTBIZ_HD_TEXT_DOMAIN ];
-				$profile_permissions                                          = $_REQUEST['rtbiz_profile_permissions'];
+				$profile_permissions = $_REQUEST['rtbiz_profile_permissions'];
+			}
 
-				$contactIds = array();
-				if ( isset( $_REQUEST['post_ID'] ) ) {
-					$contactIds = array( $_REQUEST['post_ID'] );
-				} else {
-					$contactIds = $_REQUEST['post'];
-				}
+			if ( isset( $_REQUEST['rtbiz_action'] ) && 'rtbiz_helpdesk_role_updated' == $_REQUEST['rtbiz_action'] ) {
+
 				$users = rtbiz_get_wp_user_for_contact( $contactIds );
 				foreach ( $users as $user ) {
 					if ( in_array( 'administrator', $user->roles ) ) {
 						continue;
 					}
-					if ( 'yes' == $_REQUEST['rtbiz_is_staff_member'] ) {
+
+					if ( empty ( $profile_permissions ) ) {
+						// rtbiz has same acl as helpdesk
+						$_REQUEST['rtbiz_profile_permissions'][ RTBIZ_TEXT_DOMAIN ] = $_REQUEST['rtbiz_profile_permissions'][ RTBIZ_HD_TEXT_DOMAIN ];
+						$profile_permissions = $_REQUEST['rtbiz_profile_permissions'];
+					}
+
+					if ( ! empty( $_REQUEST['rtbiz_is_staff_member']  )  &&  'yes' == $_REQUEST['rtbiz_is_staff_member'] ) {
 						foreach ( $profile_permissions as $module_Key => $module_permission ) {
 							switch ( $module_permission ) {
 								case 0:
@@ -405,20 +419,51 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 									break;
 							}
 						}
-					} else {
-						$where = array(
-							'userid' => $user->ID,
-						);
-						$rtbiz_acl_model->remove_acl( $where );
-						$profile_permissions = array();
 					}
 				}
+			}
+
+			if ( ! empty ( $contactIds ) ) {
 				foreach ( $contactIds as $contactId ) {
-					$user_permissions                       = get_post_meta( $contactId, 'rtbiz_profile_permissions', true );
-					$user_permissions[ RTBIZ_TEXT_DOMAIN ] = $profile_permissions[ RTBIZ_TEXT_DOMAIN ];
-					$user_permissions[ RTBIZ_HD_TEXT_DOMAIN ]  = $profile_permissions[ RTBIZ_HD_TEXT_DOMAIN ];
+					$user_permissions = get_post_meta( $contactId, 'rtbiz_profile_permissions', true );
+					$user_permissions[ RTBIZ_TEXT_DOMAIN ] = empty( $profile_permissions[ RTBIZ_TEXT_DOMAIN ] ) ? 0 : $profile_permissions[ RTBIZ_TEXT_DOMAIN ] ;
+					$user_permissions[ RTBIZ_HD_TEXT_DOMAIN ]  = empty( $profile_permissions[ RTBIZ_HD_TEXT_DOMAIN ] ) ? 0 : $profile_permissions[ RTBIZ_HD_TEXT_DOMAIN ] ;
 					update_post_meta( $contactId, 'rtbiz_profile_permissions', $user_permissions );
 					update_post_meta( $contactId, 'rtbiz_is_staff_member', $_REQUEST['rtbiz_is_staff_member'] );
+				}
+			}
+
+			if ( empty ( $_REQUEST['rtbiz_is_staff_member'] ) && ! empty ( $contactIds ) ) {
+				foreach ( $contactIds as $contactId ) {
+
+					$user = rtbiz_get_wp_user_for_contact( $contactId );
+
+					$where = array(
+						'userid' => $user[0]->data->ID,
+					);
+					$rtbiz_acl_model->remove_acl( $where );
+
+					$str_count = strlen( $user[0]->data->ID );
+					$old_meta = 'a:1:{s:16:"default_assignee";s:' . $str_count . ':"' . $user[0]->data->ID . '";}';
+					$new_meta = 'a:1:{s:16:"default_assignee";i:0;}';
+
+					global $wpdb;
+					$taxonomymeta = $wpdb->prefix . 'taxonomymeta';
+
+					$wpdb->update(
+						$taxonomymeta,
+						array(
+							'meta_value' => $new_meta,
+						),
+						array( 'meta_value' => $old_meta ),
+						array(
+							'%s',
+						),
+						array( '%s' )
+					);
+
+					wp_delete_object_term_relationships( $contactId, Rtbiz_Teams::$slug );
+					wp_delete_object_term_relationships( $contactId, Rt_Products::$product_slug );
 				}
 			}
 		}
