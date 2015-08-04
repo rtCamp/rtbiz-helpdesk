@@ -285,7 +285,7 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 			ob_start();
 			if ( $first ) {
 				?>
-				<div class="rthd-ticket-list-header"> <?php
+				<div class="rthd-ticket-list-header clearfix"> <?php
 					if ( !empty( $arg_shortcode['fav'] ) ) {
 						if ( 'yes' === $arg_shortcode['title'] ) {
 							?>
@@ -308,8 +308,9 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 								<?php
 							}
 						}
+						echo '</div>';
 					} else {
-						
+
 						if ( 'yes' === $arg_shortcode['title'] ) {
 							?>
 							<h2 class="rthd-ticket-list-title"><?php
@@ -325,13 +326,14 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 									$link = add_query_arg( array( 'order_id' => $arg_shortcode['orderid'] ), $link );
 								}
 								?>
-								<a class="clearfix" href="<?php echo $link; ?>">
+								<a class="" href="<?php echo $link; ?>">
 									<button
 										class="btn button-primary btn-primary"><?php _e( 'Create New Ticket', RTBIZ_HD_TEXT_DOMAIN ) ?></button>
 								</a>
 								<?php
 							}
 						}
+						echo '</div>';
 						if ( empty( $tickets ) && !$is_staff ) {
 							echo '<p>' . __( 'You have not created any tickets yet. Create one now.', RTBIZ_HD_TEXT_DOMAIN ) . '</p>';
 						} else if ( empty( $tickets ) ) {
@@ -341,7 +343,7 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 					//			echo '<div class="rthd-ticket-list">';
 					//			printf( '<p>'._n( 'One Ticket Found', '%d Tickets Found', count( $tickets ), 'my-RT_BIZ_HD_TEXT_DOMAIN-domain' ). '</p>', count( $tickets ) );
 
-					echo '</div>';
+
 					if ( $is_staff && !empty( $arg_shortcode['userid'] ) ) {
 						$fav_staff_tickets = rtbiz_hd_get_user_fav_ticket( $arg_shortcode['userid'] );
 						if ( !empty( $fav ) ) {
