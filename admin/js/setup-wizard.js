@@ -118,6 +118,8 @@ jQuery( document ).ready(function ($) {
 						if (data.status) {
 							jQuery( 'table.rthd-setup-wizard-new-product' ).append( '<tr id="li-' + data.term_id + '"><td>' + new_term + '</td><td><a href="" class="rthd-delete-product" id="' + data.term_id + '"><span class="dashicons dashicons-dismiss"></span></a></td></tr>' );
 							jQuery( '#rthd-setup-store-new-team' ).val( '' );
+						} else if ( data.product_exists ) {
+							alert(data.product_exists);
 						}
 					}
 				});

@@ -339,6 +339,10 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 				if ( ! $term instanceof WP_Error && ! empty( $term ) ) {
 					$arrReturn = array( 'status' => true, 'term_id' => $term['term_id'] );
 				}
+				if ( ! empty ( $term->errors['term_exists'] ) ) {
+					$arrReturn = array( 'status' => false, 'product_exists' => 'This product already exists in system.' );
+				}
+
 			}
 			header( 'Content-Type: application/json' );
 			echo json_encode( $arrReturn );
