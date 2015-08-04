@@ -220,10 +220,6 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 			} else {
 				$is_staff = user_can( $current_user, $cap );
 			}
-			
-//			echo 'is_Staff : <pre>';
-//			print_r( current_user_can( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' ) ) || $ticket->post_author == $current_user->ID );
-//			echo '</pre>';die;
 
 			// if user can not access Helpdesk don't show him fav tickets
 			if ( !empty( $arg_shortcode['fav'] ) && ( true === $arg_shortcode['fav'] || 'true' == $arg_shortcode['fav'] ) ) {
