@@ -317,6 +317,10 @@ ul#chat-UI {
     border-right-color: #bbb;
 }
 
+a.load-more-block{
+  background: #0066cc;
+}
+
 .rthd-discussion li.sensitive{
   .avatar:before {
     border-right-color: #C85D5D;
@@ -328,11 +332,11 @@ ul#chat-UI {
 }
 
 #followup-load-more:hover {
-    background: #039;
+  border: 1px solid #0066cc;
 }
 
 #followup-load-more:hover:after {
-    border-right-color: #039;
+    border-right-color: #0066cc;
 }
 
 .load-more-ul li a:hover {
