@@ -369,6 +369,7 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 									<th>Title</th>
 									<th>Last Updated</th>
 									<th>Status</th>
+									<?php echo ( $is_staff ) ? '<th>Created by</th>' : ''; ?>
 									<?php echo ( $is_staff ) ? '<th>Edit</th>' : ''; ?>
 								</tr>
 							</thead>
@@ -376,6 +377,7 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 						}
 
 						foreach ( $tickets as $ticket ) {
+
 							$highlight_class = '';
 
 							if ( $is_staff && !empty( $fav_staff_tickets ) ) {
@@ -398,7 +400,7 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 									   href="<?php echo esc_url( ( rtbiz_hd_is_unique_hash_enabled() ) ? rtbiz_hd_get_unique_hash_url( $ticket->ID ) : get_post_permalink( $ticket->ID )  ); ?>">
 										#<?php echo esc_attr( $ticket->ID ) ?> </a></td>
 								<td><?php echo $ticket->post_title; ?></td>
-								<td> <?php echo esc_attr( human_time_diff( $date->format( 'U' ), current_time( 'timestamp' ) ) ) . esc_attr( __( ' ago' ) ) ?> </td>
+								<td><?php echo esc_attr( human_time_diff( $date->format( 'U' ), current_time( 'timestamp' ) ) ) . esc_attr( __( ' ago' ) ) ?> </td>
 								<td>
 									<?php
 									if ( !empty( $ticket->post_status ) ) {
@@ -407,6 +409,12 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 									?>
 								</td>
 								<?php if ( current_user_can( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' ) ) || $ticket->post_author == $current_user->ID ) { ?>
+									<td>
+										<?php 
+											$user_id = get_post_meta( $ticket->ID, '_rtbiz_hd_created_by', true );
+											echo '<a class="rthd-ticket-created-by" href="' .  admin_url( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type . '&created_by=' . $user_id ) . '">' . get_avatar( $user_id, '30' ) . '</a>';
+										?>
+									</td>
 									<td>
 										<a class="support" target="_blank"
 										   href="<?php echo get_edit_post_link( $ticket->ID ); ?>"><span
