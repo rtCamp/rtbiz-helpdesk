@@ -236,7 +236,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 
 			$mailbox_options = array();
 			foreach ( $system_emails as $email ) {
-				$mailbox_options[] = $email;
+				$mailbox_options[ $email ] = $email;
 			}
 
 			$products_page_link = '<a href="' . admin_url( 'edit-tags.php?taxonomy=' . Rt_Products::$product_slug . '&post_type=' . Rtbiz_HD_Module::$post_type ) . '"> ' . __( 'Products Section.' ) . '</a>';
@@ -363,7 +363,6 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					'desc'     => sprintf( '%s.', __( 'Choose any one email from the configured mailboxes.' ) ),
 					'type'     => 'select',
 					'options'  => $mailbox_options,
-					'default'  => ! empty( $mailbox_options ) ? $mailbox_options[0] : '',
 				) );
 
 				if ( count( $mailbox_options ) >= 2 ) {
