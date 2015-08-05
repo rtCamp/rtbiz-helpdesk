@@ -53,7 +53,7 @@ ul#chat-UI {
 }
 
 .rthd-self .avatar:after, .rthd-other .avatar:after, .rthd-self .avatar:before, .rthd-other .avatar:before {
-	left: 94%;
+	left: 38px;
 	top: 22px;
 	border: solid transparent;
 	content: " ";
@@ -67,7 +67,7 @@ ul#chat-UI {
 	border-color: rgba(250, 250, 250, 0);
 	border-width: 9px;
 	margin-top: -9px;
-	border-right-color: #ededed;
+	border-right-color: #fafafa;
 }
 
 .ticket-post-content .avatar:after {
@@ -76,12 +76,12 @@ ul#chat-UI {
 
 
 .ticket-post-content .avatar:before {
-  border-right-color: #eee;
+  border-right-color: #ededed;
 }
 
 .rthd-self .avatar:before, .rthd-other .avatar:before {
 	border-color: rgba(238, 238, 238, 0);
-	border-right-color: #fafafa;
+	border-right-color: #ededed;
 	border-width: 8px;
 	margin-top: -8px;
 }
@@ -101,7 +101,7 @@ ul#chat-UI {
 .rthd-messages {
 	border: solid 1px #eee;
 	background: #fafafa;
-	padding: 20px;
+	padding: 15px;
 	border-radius: 2px;
 	width: 100%;
 
@@ -245,11 +245,11 @@ ul#chat-UI {
 .load-more-ul li a.load-more-block {
 	.dashicons{
 	  line-height: 42px;
+	  color: #FFF;
 	}
     border-radius: 50%;
     text-align: center;
     z-index: 1;
-  	top: 3px;
 	margin: 0;
 }
 
@@ -300,7 +300,6 @@ ul#chat-UI {
     left: 10px;
     padding: 10px 20px;
 	margin-right: 20px;
-  	background: #fafafa;
   	border: 1px solid #ededed;
 }
 
@@ -309,12 +308,16 @@ ul#chat-UI {
 }
 
 .ticketcontent{
-    border: 1px solid #BBB;
+    border: 1px solid #ededed;
   	background: #eee;
 }
 
 .ticketother .avatar:before {
-    border-right-color: #bbb;
+    border-right-color: #eee;
+}
+
+a.load-more-block{
+  background: #0066cc;
 }
 
 .rthd-discussion li.sensitive{
@@ -328,16 +331,13 @@ ul#chat-UI {
 }
 
 #followup-load-more:hover {
-    background: #039;
+  border: 1px solid #0066cc;
 }
 
 #followup-load-more:hover:after {
-    border-right-color: #039;
+    border-right-color: #0066cc;
 }
 
-.load-more-ul li a:hover {
-    background: #fafafa;
-}
 .followup-information .comment_type{
 	color: #C85D5D;
 }
