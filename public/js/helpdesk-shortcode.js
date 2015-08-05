@@ -30,7 +30,7 @@ jQuery( document ).ready(function ($) {
 			}
 			var requestArray = {};
 			requestArray.offset = $( '.rthd_ticket_short_code tr' ).length - 1;
-			if ( requestArray.offset >= $( '.rthd-count-total' ).html() ) {
+			if ( requestArray.offset >= $( '.rt-hd-total-ticket-count' ).val() ) {
 				return;
 			}
 			requestArray.short_code_param = rthd_shortcode_params;

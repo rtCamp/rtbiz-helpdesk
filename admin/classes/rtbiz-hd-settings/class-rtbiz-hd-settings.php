@@ -246,9 +246,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 			$system_emails = rtmb_get_module_mailbox_emails( RTBIZ_HD_TEXT_DOMAIN );
 
 			$mailbox_options = array();
-			$mailbox_options[] = '---- select email ----';
 			foreach ( $system_emails as $email ) {
-
 				$mailbox_options[ $email ] = $email;
 			}
 
@@ -419,6 +417,19 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					'type'     => 'select',
 					'options'  => $mailbox_options,
 				) );
+
+				if ( count( $mailbox_options ) >= 2 ) {
+					array_push( $email_fields, array(
+						'id'       => 'rthd_outgoing_via_same_email',
+						'type'     => 'switch',
+						'title'    => __( 'Outgoing Emails\' FROM Same mailbox' ),
+						'subtitle' => __( 'To enable/disable Outgoing Emails\' FROM Same mailbox' ),
+						'default'  => true,
+						'on'       => __( 'Enable' ),
+						'off'      => __( 'Disable' ),
+						'required' => array( 'rthd_enable_mailbox_reading', '=', 1 ),
+					) );
+				}
 
 			} else {
 
@@ -623,7 +634,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 						//'validate'     => 'html_custom',
 						'default'      => esc_attr( ' -- Sent via rtBiz Helpdesk Plugin' ),
 						/*'allowed_html' => array(
-							'a'      => array( 
+							'a'      => array(
 								'href'  => array(),
 								'title' => array(),
 							),

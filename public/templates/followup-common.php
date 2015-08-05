@@ -27,7 +27,7 @@ if ( ! empty( $created_by ) ) {
 }
 	?>
 	<ul class="rthd-discussion" id="ticket-content-UI">
-		<li class="rthd-other <?php echo count( $comments ) > 0 ? '' : 'rthd-no-comments'; ?> ticketother">
+		<li class="rthd-other <?php echo count( $comments ) > 0 ? '' : 'rthd-no-comments'; ?> ticketother ticket-post-content">
 			<div class="avatar">
 				<?php echo get_avatar( $authoremail, 48 ); ?>
 			</div>
@@ -65,7 +65,7 @@ if ( ! empty( $created_by ) ) {
 					$markdown_content = $post->post_content;
 				}
 				?>
-				<div class="rthd-comment-content"
+				<div class="rthd-ticket-content"
 				     data-rthdcontent="<?php echo( isset( $post->ID ) ? esc_attr( $markdown_content ) : '' ); ?>">
 					<?php
 					$content = rtbiz_hd_content_filter( isset( $post->ID ) ? $post->post_content : '' );
@@ -84,10 +84,11 @@ if ( ! empty( $created_by ) ) {
 	<ul class="rthd-discussion load-more-ul" id="load-more-UI">
 		<li>
 			<a class="load-more-block" href="#">
-				<span class="load-more-circle" id="followup-load-more-count"><?php echo $offset ?></span>
-				<span class="load-more-count">more</span>
+<!--				<span class="load-more-circle" id="followup-load-more-count">--><?php //echo $offset ?><!--</span>-->
+<!--				<span class="load-more-count">more</span>-->
+				<span class="dashicons dashicons-arrow-down-alt2"></span>
 			</a>
-			<a href="#" class="load-more" id="followup-load-more"> Load more</a>
+			<a href="#" class="load-more" id="followup-load-more"> <?php echo $offset; ?> Older followup</a>
 		</li>
 		<li class="load-more-spinner-li">
 			<div class="rthdcenter"><img id="load-more-hdspinner" class="helpdeskspinner"

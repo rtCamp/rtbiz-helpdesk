@@ -289,7 +289,7 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 		 * @param string $group
 		 */
 		function product_add_custom_field( $tag, $group = '' ) {
-			$users         = Rtbiz_HD_Utils::get_hd_rtcamp_user();
+			$users = Rtbiz_HD_Utils::get_hd_rtcamp_user();
 			if ( $this->is_edit_products( 'edit' ) ) {
 				?>
 				<h3><?php _e( 'Helpdesk Settings', RTBIZ_HD_TEXT_DOMAIN ); ?></h3>

@@ -305,7 +305,7 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 				}
 				$oder_shortcode = true;
 			}
-
+			
 			if ( !empty( $arg_shortcode['fav'] ) && ( true === $arg_shortcode['fav'] || 'true' === $arg_shortcode['fav'] ) && empty( $tickets ) ) {
 				return '';
 			}
@@ -314,7 +314,7 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 			ob_start();
 			if ( $first ) {
 				?>
-				<div class="rthd-ticket-list-header"> <?php
+				<div class="rthd-ticket-list-header clearfix"> <?php
 					if ( !empty( $arg_shortcode['fav'] ) ) {
 						if ( 'yes' === $arg_shortcode['title'] ) {
 							?>
@@ -337,7 +337,9 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 								<?php
 							}
 						}
+						echo '</div>';
 					} else {
+
 						if ( 'yes' === $arg_shortcode['title'] ) {
 							?>
 							<h2 class="rthd-ticket-list-title"><?php
@@ -353,13 +355,14 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 									$link = add_query_arg( array( 'order_id' => $arg_shortcode['orderid'] ), $link );
 								}
 								?>
-								<a class="clearfix" href="<?php echo $link; ?>">
+								<a class="" href="<?php echo $link; ?>">
 									<button
 										class="btn button-primary btn-primary"><?php _e( 'Create New Ticket', RTBIZ_HD_TEXT_DOMAIN ) ?></button>
 								</a>
 								<?php
 							}
 						}
+						echo '</div>';
 						if ( empty( $tickets ) && !$is_staff ) {
 							echo '<p>' . __( 'You have not created any tickets yet. Create one now.', RTBIZ_HD_TEXT_DOMAIN ) . '</p>';
 						} else if ( empty( $tickets ) ) {
@@ -369,7 +372,7 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 					//			echo '<div class="rthd-ticket-list">';
 					//			printf( '<p>'._n( 'One Ticket Found', '%d Tickets Found', count( $tickets ), 'my-RT_BIZ_HD_TEXT_DOMAIN-domain' ). '</p>', count( $tickets ) );
 
-					echo '</div>';
+
 					if ( $is_staff && !empty( $arg_shortcode['userid'] ) ) {
 						$fav_staff_tickets = rtbiz_hd_get_user_fav_ticket( $arg_shortcode['userid'] );
 						if ( !empty( $fav ) ) {
@@ -395,13 +398,19 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 									<th>Title</th>
 									<th>Last Updated</th>
 									<th>Status</th>
-									<?php echo ( $is_staff ) ? '<th>Edit</th>' : ''; ?>
+									<?php
+									if ( $is_staff || current_user_can( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' ) ) ) {
+										echo '<th>Created by</th>';
+										echo '<th>Edit</th>';
+									}
+									?>
 								</tr>
 							</thead>
 							<?php
 						}
 
 						foreach ( $tickets as $ticket ) {
+
 							$highlight_class = '';
 
 							if ( $is_staff && !empty( $fav_staff_tickets ) ) {
@@ -424,7 +433,7 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 									   href="<?php echo esc_url( ( rtbiz_hd_is_unique_hash_enabled() ) ? rtbiz_hd_get_unique_hash_url( $ticket->ID ) : get_post_permalink( $ticket->ID )  ); ?>">
 										#<?php echo esc_attr( $ticket->ID ) ?> </a></td>
 								<td><?php echo $ticket->post_title; ?></td>
-								<td> <?php echo esc_attr( human_time_diff( $date->format( 'U' ), current_time( 'timestamp' ) ) ) . esc_attr( __( ' ago' ) ) ?> </td>
+								<td><?php echo esc_attr( human_time_diff( $date->format( 'U' ), current_time( 'timestamp' ) ) ) . esc_attr( __( ' ago' ) ) ?> </td>
 								<td>
 									<?php
 									if ( !empty( $ticket->post_status ) ) {
@@ -432,7 +441,14 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 									}
 									?>
 								</td>
-								<?php if ( current_user_can( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' ) ) || $ticket->post_author == $current_user->ID ) { ?>
+								<?php if ( $is_staff || current_user_can( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' ) ) ) { //|| $ticket->post_author == $current_user->ID ?>
+									<td>
+										<?php 
+											$user_id = get_post_meta( $ticket->ID, '_rtbiz_hd_created_by', true );
+											$user = get_user_by( 'id', $user_id );
+											echo '<a class="rthd-ticket-created-by" href="' .  admin_url( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type . '&created_by=' . $user_id ) . '" title="' . $user->data->display_name . '">' . get_avatar( $user_id, '30' ) . '</a>';
+										?>
+									</td>
 									<td>
 										<a class="support" target="_blank"
 										   href="<?php echo get_edit_post_link( $ticket->ID ); ?>"><span
@@ -445,6 +461,7 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 						if ( $first ) {
 							?>
 						</table>
+						<input type="hidden" class="rt-hd-total-ticket-count" value="<?php echo $count;?>" />
 						<img class="rthd-ticket-short-code-loader helpdeskspinner"
 							 src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 						<?php

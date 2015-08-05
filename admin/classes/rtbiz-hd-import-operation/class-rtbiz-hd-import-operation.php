@@ -570,7 +570,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 
 			// Call action to add product info into ticket meta data.
 			do_action( 'rtbiz_hd_add_ticket_product_info', $post_id );
-			
+
 			// Call action to change default assignee accoding to products
 			do_action( 'rtbiz_hd_before_send_notification', $post_id, get_post( $post_id ) );
 
@@ -851,7 +851,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 					}
 				}
 			}
-			
+
 			$allemails = $contactEmail;
 			if ( rtbiz_hd_check_email_blacklisted( $fromemail['address'] ) ) {
 				return false;
