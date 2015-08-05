@@ -437,11 +437,11 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 				foreach ( $contactIds as $contactId ) {
 
 					$user = rtbiz_get_wp_user_for_contact( $contactId );
-					if ( 'administrator' != $user[0]->roles[0] ) {
-						wp_delete_object_term_relationships( $contactId, Rtbiz_Teams::$slug );
-						wp_delete_object_term_relationships( $contactId, Rt_Products::$product_slug );
+					if ( ! empty ( $user ) ) {
+						if ( 'administrator' != $user[0]->roles[0] ) {
+							wp_delete_object_term_relationships( $contactId, Rtbiz_Teams::$slug );
+							wp_delete_object_term_relationships( $contactId, Rt_Products::$product_slug );
 
-						if ( ! empty ( $user ) ) {
 							$where = array(
 								'userid' => $user[0]->data->ID,
 							);
