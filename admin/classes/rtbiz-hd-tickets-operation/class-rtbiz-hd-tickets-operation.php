@@ -43,11 +43,11 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Operation' ) ) {
 			//  ( product selecting form backend  ) || product selected form support form
 			if ( ( isset( $_POST['tax_input'] ) && isset( $_POST['tax_input'][ Rt_Products::$product_slug ] ) && ! empty( $_POST['tax_input'][ Rt_Products::$product_slug ][0] ) ) || isset( $_POST['post']['product_id'] ) || isset( $_POST['post']['post_author'] ) || isset ( $mailbox_email ) ) {
 				$default_assignee = null;
-				
+
 				if ( ! empty ( $_POST['post']['post_author'] ) ) {
 					$default_assignee = $_POST['post']['post_author'];
 				}
-				
+
 				if ( empty ( $default_assignee ) ) {
 					$terms = wp_get_post_terms( $postid, Rt_Products::$product_slug );
 					$settings = rtbiz_hd_get_redux_settings();
@@ -184,7 +184,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Operation' ) ) {
 					$d             = new DateTime( $postArray['post_date'] );
 					$timeStamp     = $d->getTimestamp();
 					$post_date_gmt = gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) ) );
-					$unique_id     = md5( 'rthd_' . $post_type . '_' . $post_date_gmt );
+					$unique_id     = md5( 'rthd_' . $post_type . '_' . $post_date_gmt . '_' . $post_id );
 					update_post_meta( $post_id, '_rtbiz_hd_unique_id', $unique_id );
 				}
 
