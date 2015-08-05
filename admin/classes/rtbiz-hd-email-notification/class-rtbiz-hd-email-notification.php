@@ -229,6 +229,11 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 
 			$followup_creator[] = array( 'email' => $comment->comment_author_email, 'name' => $comment->comment_author );
 
+			if ( $notificationFlagAssignee ) {
+				$assigneEmail[] = $this->get_assigne_email( $comment->comment_post_ID );
+				$bccemails = array_merge( $bccemails, $assigneEmail );
+			}
+
 			if ( $notificationFlagGroup && isset( $redux['rthd_notification_emails'] ) && is_array( $redux['rthd_notification_emails'] ) ) {
 				foreach ( $redux['rthd_notification_emails'] as $email ) {
 					array_push( $groupEmail, array( 'email' => $email ) );
@@ -243,11 +248,6 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 
 			$bccemails = $this->exclude_author( $bccemails, $comment->comment_author_email );
 			$bccemails  = apply_filters( 'rtbiz_hd_filter_adult_emails', $bccemails, $comment->comment_post_ID );
-
-			if ( $notificationFlagAssignee ) {
-				$assigneEmail[] = $this->get_assigne_email( $comment->comment_post_ID );
-				$bccemails = array_merge( $bccemails, $assigneEmail );
-			}
 
 			if ( $notificationFlagClient ) {
 				$ContactEmail  = $this->get_contacts( $comment->comment_post_ID );
