@@ -52,6 +52,8 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 
 			Rtbiz_HD::$loader->add_filter( 'views_edit-' . rtbiz_get_contact_post_type(), $this, 'display_custom_views' );
 			Rtbiz_HD::$loader->add_action( 'pre_get_posts', $this, 'contact_posts_filter' );
+			
+			Rtbiz_HD::$loader->add_filter( 'rtbiz_current_module_name', $this, 'change_module_name_in_link', 10, 1 );
 
 		}
 
@@ -437,33 +439,36 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 				foreach ( $contactIds as $contactId ) {
 
 					$user = rtbiz_get_wp_user_for_contact( $contactId );
+					if ( ! empty ( $user ) ) {
+						if ( 'administrator' != $user[0]->roles[0] ) {
+							wp_delete_object_term_relationships( $contactId, Rtbiz_Teams::$slug );
+							wp_delete_object_term_relationships( $contactId, Rt_Products::$product_slug );
 
-					$where = array(
-						'userid' => $user[0]->data->ID,
-					);
-					$rtbiz_acl_model->remove_acl( $where );
+							$where = array(
+								'userid' => $user[0]->data->ID,
+							);
+							$rtbiz_acl_model->remove_acl( $where );
 
-					$str_count = strlen( $user[0]->data->ID );
-					$old_meta = 'a:1:{s:16:"default_assignee";s:' . $str_count . ':"' . $user[0]->data->ID . '";}';
-					$new_meta = 'a:1:{s:16:"default_assignee";i:0;}';
+							$str_count = strlen( $user[0]->data->ID );
+							$old_meta = 'a:1:{s:16:"default_assignee";s:' . $str_count . ':"' . $user[0]->data->ID . '";}';
+							$new_meta = 'a:1:{s:16:"default_assignee";i:0;}';
 
-					global $wpdb;
-					$taxonomymeta = $wpdb->prefix . 'taxonomymeta';
+							global $wpdb;
+							$taxonomymeta = $wpdb->prefix . 'taxonomymeta';
 
-					$wpdb->update(
-						$taxonomymeta,
-						array(
-							'meta_value' => $new_meta,
-						),
-						array( 'meta_value' => $old_meta ),
-						array(
-							'%s',
-						),
-						array( '%s' )
-					);
-
-					wp_delete_object_term_relationships( $contactId, Rtbiz_Teams::$slug );
-					wp_delete_object_term_relationships( $contactId, Rt_Products::$product_slug );
+							$wpdb->update(
+								$taxonomymeta,
+								array(
+									'meta_value' => $new_meta,
+								),
+								array( 'meta_value' => $old_meta ),
+								array(
+									'%s',
+								),
+								array( '%s' )
+							);
+						}
+					}
 				}
 			}
 		}
@@ -930,6 +935,12 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 			}
 			echo json_encode( $returnArray );
 			die( 0 );
+		}
+		
+		
+		function change_module_name_in_link( $module ) {
+			$module = '&module=' . RTBIZ_HD_TEXT_DOMAIN;
+			return $module;
 		}
 	}
 }
