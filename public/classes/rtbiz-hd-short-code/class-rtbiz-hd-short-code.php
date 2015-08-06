@@ -444,9 +444,10 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 								<?php if ( $is_staff || current_user_can( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' ) ) ) { //|| $ticket->post_author == $current_user->ID ?>
 									<td>
 										<?php 
-											$user_id = get_post_meta( $ticket->ID, '_rtbiz_hd_created_by', true );
-											$user = get_user_by( 'id', $user_id );
-											echo '<a class="rthd-ticket-created-by" href="' .  admin_url( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type . '&created_by=' . $user_id ) . '" title="' . $user->data->display_name . '">' . get_avatar( $user_id, '30' ) . '</a>';
+											$ticket_creator = rtbiz_hd_get_ticket_creator( $ticket->ID );
+											if ( ! empty ( $ticket_creator ) ) {
+												echo '<a class="rthd-ticket-created-by" href="' .  admin_url( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type . '&created_by=' . $ticket_creator->ID ) . '" title="' . $ticket_creator->post_title . '">' . get_avatar( $ticket_creator->primary_email, '30' ) . '</a>';
+											}
 										?>
 									</td>
 									<td>
