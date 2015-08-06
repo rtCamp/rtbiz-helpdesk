@@ -52,6 +52,8 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 
 			Rtbiz_HD::$loader->add_filter( 'views_edit-' . rtbiz_get_contact_post_type(), $this, 'display_custom_views' );
 			Rtbiz_HD::$loader->add_action( 'pre_get_posts', $this, 'contact_posts_filter' );
+			
+			Rtbiz_HD::$loader->add_filter( 'rtbiz_current_module_name', $this, 'change_module_name_in_link', 10, 1 );
 
 		}
 
@@ -933,6 +935,14 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 			}
 			echo json_encode( $returnArray );
 			die( 0 );
+		}
+		
+		
+		function change_module_name_in_link( $module ) {
+			if ( RTBIZ_HD_TEXT_DOMAIN != $module) {
+				$module = RTBIZ_HD_TEXT_DOMAIN;
+			}
+			return $module;
 		}
 	}
 }
