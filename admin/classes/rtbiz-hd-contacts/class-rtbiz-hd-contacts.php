@@ -939,9 +939,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		
 		
 		function change_module_name_in_link( $module ) {
-			if ( RTBIZ_HD_TEXT_DOMAIN != $module) {
-				$module = RTBIZ_HD_TEXT_DOMAIN;
-			}
+			$module = '&module=' . RTBIZ_HD_TEXT_DOMAIN;
 			return $module;
 		}
 	}
