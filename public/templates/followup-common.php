@@ -92,7 +92,7 @@ $user_edit_content = $staffonly|| ( get_current_user_id() == $post->$created_by 
 <!--				<span class="load-more-count">more</span>-->
 				<span class="dashicons dashicons-arrow-down-alt2"></span>
 			</a>
-			<a href="#" class="load-more" id="followup-load-more"> <?php sprintf( _n( '%s Older reply', '%s Older replies', $offset, RTBIZ_HD_TEXT_DOMAIN ), $offset ) ?></a>
+			<a href="#" class="load-more" id="followup-load-more"> <?php echo sprintf( _n( '%s Older reply', '%s Older replies', $offset, RTBIZ_HD_TEXT_DOMAIN ), $offset ) ?></a>
 		</li>
 		<li class="load-more-spinner-li">
 			<div class="rthdcenter"><img id="load-more-hdspinner" class="helpdeskspinner"
