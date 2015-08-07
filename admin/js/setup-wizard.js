@@ -220,8 +220,8 @@ jQuery( document ).ready(function ($) {
 								if (data.status) {
 									jQuery( that ).parent().parent().remove();
 									// Decrease import users count by 1
-									imported_users -= 1;
-									jQuery( '#rthd-all-import-message' ).html( imported_users + ' Users Added' );
+//									imported_users -= 1;
+//									jQuery( '#rthd-all-import-message' ).html( imported_users + ' Users Added' );
 								} else {
 									jQuery( this ).removeAttr("disabled");
 								}
@@ -355,7 +355,7 @@ jQuery( document ).ready(function ($) {
 					if (data.status) {
 						var remain = jQuery( '#rthd-setup-import-all-count' ).val();
 						remain = parseInt( remain ) - parseInt( data.imported_count );
-						imported_users += parseInt( data.imported_count );
+						imported_users = parseInt( data.imported_count );
 						var progressbar = jQuery( '#rthd-setup-import-users-progress' ).val();
 						progressbar = parseInt( progressbar ) + parseInt( data.imported_count );
 						jQuery( '#rthd-setup-import-users-progress' ).val( progressbar );
