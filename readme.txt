@@ -6,7 +6,7 @@ Donate Link:       https://rtcamp.com/donate/
 Tags:              helpdesk, support, products, tickets, followups, customers, e-commerce
 Requires at least: 4.1
 Tested up to:      4.2.2
-Stable tag:        1.3.7
+Stable tag:        1.4
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,6 +57,17 @@ Please refer to the documentation.
 1. Dashboard
 
 == Changelog ==
+
+= 1.4 =
+* Added support to select assignee for every mailbox
+* Added support to select product for every mailbox
+* Option added to use same address for outgoing emails as its incoming mails'
+* Added Customer/created by parameter in ticket short-code
+* Updated logic for removing participants from tickets
+* Improved setup wizard
+* Improved ticket frontend UI
+* Performance improvements
+
 = 1.3.7 =
 * Added support to prevent unsupported file extension
 * Add additional privacy support
