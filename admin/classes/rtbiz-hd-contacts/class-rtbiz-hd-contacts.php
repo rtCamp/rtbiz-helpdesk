@@ -417,7 +417,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 				}
 			}
 
-			if ( ! empty ( $contactIds ) ) {
+			if ( isset ( $contactIds ) && ! empty ( $contactIds ) ) {
 				foreach ( $contactIds as $contactId ) {
 					$user_permissions = get_post_meta( $contactId, 'rtbiz_profile_permissions', true );
 					$user_permissions[ RTBIZ_TEXT_DOMAIN ] = empty( $profile_permissions[ RTBIZ_TEXT_DOMAIN ] ) ? 0 : $profile_permissions[ RTBIZ_TEXT_DOMAIN ] ;
@@ -427,7 +427,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 				}
 			}
 
-			if ( empty ( $_REQUEST['rtbiz_is_staff_member'] ) && ! empty ( $contactIds ) ) {
+			if ( empty ( $_REQUEST['rtbiz_is_staff_member'] ) && isset ( $contactIds ) && ! empty ( $contactIds ) ) {
 				foreach ( $contactIds as $contactId ) {
 
 					$user = rtbiz_get_wp_user_for_contact( $contactId );

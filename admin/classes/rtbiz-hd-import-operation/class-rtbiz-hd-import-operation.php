@@ -485,10 +485,14 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			$senderName = '';
 			// remove creator from all emails
 			foreach ( $allemail as $email ) {
+				if ( ! empty( $email['name'] ) ) {
+                    $email['name'] = preg_replace( '/\s+/', ' ', $email['name'] );
+					$email['name'] = preg_replace( '/\"/', '', $email['name'] );
+                }
 				if ( $senderEmail != $email['address'] ) {
 					$new_all_emails[] = $email;
 				} elseif ( ! empty( $email['name'] ) ) {
-					$senderName = preg_replace( '/\s+/', ' ', $email['name'] );
+					$senderName = $email['name'];
 				}
 			}
 			$allemail = $new_all_emails;
