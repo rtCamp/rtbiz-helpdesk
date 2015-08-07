@@ -723,7 +723,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 						'id'           => 'rthd_auto_response_message',
 						'type'         => 'textarea',
 						'title'        => __( 'Auto response message' ),
-						'desc'         => esc_attr( 'You can add email message here that will be send into followup when your team are offline, ' ) . 'Use <b>{NextStartingHour}</b> to get next working hours like <b>`Today after 10 pm` or `Monday after 9 AM`</b>', //Allowed tags are <a> <br> <em> <strong>.
+						'desc'         => esc_attr( 'Add message here and that will be send in followup when your team is offline, ' ) . 'Use <b>{NextStartingHour}</b> to get next working hours like <b>`Today after 10 pm` or `Monday after 9 AM`</b>', //Allowed tags are <a> <br> <em> <strong>.
 						//'validate'     => 'html_custom',
 						'default'      => esc_attr( 'We have received your support request. Our support team is currently offline. We will get back at the soonest.' ),
 						'required'     => array( 'rthd_enable_auto_response', '=', 1 ),
