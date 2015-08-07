@@ -268,8 +268,10 @@ if ( !class_exists( 'Rtbiz_HD_Admin' ) ) {
 			die();
 		}
 
-		function Add_error_page_notice(){
-			if ( current_user_can('administrator') ) {
+		function add_error_page_notice() {
+			$admin_cap = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'admin' );
+			$is_admin = current_user_can( $admin_cap );
+			if ( current_user_can( 'publish_pages' ) && $is_admin ) {
 				$option = get_option( 'rtbiz_hd_helpdesk_authentication_error_page_id' );
 				$page = get_post( $option );
 				if ( rtbiz_hd_check_wizard_completed() && ( $option <= 0  || ! $page ) ) {

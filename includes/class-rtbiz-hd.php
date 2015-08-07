@@ -157,7 +157,7 @@ if ( ! class_exists( 'Rtbiz_HD' ) ) {
 			self::$loader->add_filter( 'rtbiz_modules', $rtbiz_hd_admin, 'module_register' );
 
 			Rtbiz_HD::$loader->add_action( 'wp_ajax_rtbiz_add_hd_error_page', $rtbiz_hd_admin, 'ajax_rtbiz_add_hd_error_page' );
-			Rtbiz_HD::$loader->add_action( 'admin_notices', $rtbiz_hd_admin, 'Add_error_page_notice' );
+			Rtbiz_HD::$loader->add_action( 'admin_notices', $rtbiz_hd_admin, 'add_error_page_notice' );
 
 			self::$loader->add_filter( 'pre_insert_term', $rtbiz_hd_admin, 'remove_wocommerce_actions', 10, 2 );
 
