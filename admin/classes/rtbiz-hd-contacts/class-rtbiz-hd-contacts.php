@@ -52,7 +52,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 
 			Rtbiz_HD::$loader->add_filter( 'views_edit-' . rtbiz_get_contact_post_type(), $this, 'display_custom_views' );
 			Rtbiz_HD::$loader->add_action( 'pre_get_posts', $this, 'contact_posts_filter' );
-			
+
 			Rtbiz_HD::$loader->add_filter( 'rtbiz_current_module_name', $this, 'change_module_name_in_link', 10, 1 );
 
 		}
@@ -159,6 +159,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		/**
 		 * add query parameter after post update redirection url
 		 * @param $location
+		 * @return string
 		 */
 		public function redirect_post_location_filter( $location ) {
 
@@ -167,7 +168,8 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 				$location = add_query_arg( 'module', RTBIZ_HD_TEXT_DOMAIN, $location );
 
 				$staff_member = 'customer';
-				if ( ! empty( get_post_meta( $_POST['post_ID'], 'rtbiz_is_staff_member', true ) ) ) {
+				$is_staff = get_post_meta( $_POST['post_ID'], 'rtbiz_is_staff_member', true );
+				if ( ! empty( $is_staff ) ) {
 					$staff_member = 'staff';
 				}
 
@@ -936,8 +938,8 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 			echo json_encode( $returnArray );
 			die( 0 );
 		}
-		
-		
+
+
 		function change_module_name_in_link( $module ) {
 			$module = '&module=' . RTBIZ_HD_TEXT_DOMAIN;
 			return $module;
