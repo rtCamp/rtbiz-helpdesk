@@ -57,6 +57,21 @@ Please refer to the documentation.
 1. Dashboard
 
 == Changelog ==
+
+
+= 1.4.0.1 =
+* Hox fix php version error
+
+= 1.4 =
+* Added support to select assignee for every mailbox
+* Added support to select product for every mailbox
+* Option added to use same address for outgoing emails as its incoming mails'
+* Added Customer/created by parameter in ticket short-code
+* Updated logic for removing participants from tickets
+* Improved setup wizard
+* Improved ticket frontend UI
+* Performance improvements
+
 = 1.3.7 =
 * Added support to prevent unsupported file extension
 * Add additional privacy support

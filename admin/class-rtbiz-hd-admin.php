@@ -272,13 +272,17 @@ if ( !class_exists( 'Rtbiz_HD_Admin' ) ) {
 			die();
 		}
 
-		function Add_error_page_notice(){
-			$option = get_option( 'rtbiz_hd_helpdesk_authentication_error_page_id' );
-			$page = get_post( $option );
-			if ( rtbiz_hd_check_wizard_completed() && ( $option <= 0  || ! $page ) ) {
-				$class   = "updated";
-				$message = "<p><b>Welcome to Helpdesk</b> - You're almost ready to use Helpdesk</p><p class='submit-action'><a id='rthd-add-hd-error-page' class='btn button-primary' href='javascript:;' title='Install Helpdesh Pages'>Install <b>Helpdesk Authentication Error</b> page.</a></p>";
-				echo "<div class=\"$class\"> <p>$message</p></div>";
+		function add_error_page_notice() {
+			$admin_cap = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'admin' );
+			$is_admin = current_user_can( $admin_cap );
+			if ( current_user_can( 'publish_pages' ) && $is_admin ) {
+				$option = get_option( 'rtbiz_hd_helpdesk_authentication_error_page_id' );
+				$page = get_post( $option );
+				if ( rtbiz_hd_check_wizard_completed() && ( $option <= 0  || ! $page ) ) {
+					$class   = "updated";
+					$message = "<p><b>Welcome to Helpdesk</b> - You're almost ready to use Helpdesk</p><p class='submit-action'><a id='rthd-add-hd-error-page' class='btn button-primary' href='javascript:;' title='Install Helpdesh Pages'>Install <b>Helpdesk Authentication Error</b> page.</a></p>";
+					echo "<div class=\"$class\"> <p>$message</p></div>";
+				}
 			}
 		}
 

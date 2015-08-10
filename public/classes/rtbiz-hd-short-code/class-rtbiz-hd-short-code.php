@@ -305,7 +305,7 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 				}
 				$oder_shortcode = true;
 			}
-			
+
 			if ( !empty( $arg_shortcode['fav'] ) && ( true === $arg_shortcode['fav'] || 'true' === $arg_shortcode['fav'] ) && empty( $tickets ) ) {
 				return '';
 			}
@@ -443,7 +443,7 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 								</td>
 								<?php if ( $is_staff || current_user_can( rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' ) ) ) { //|| $ticket->post_author == $current_user->ID ?>
 									<td>
-										<?php 
+										<?php
 											$ticket_creator = rtbiz_hd_get_ticket_creator( $ticket->ID );
 											if ( ! empty ( $ticket_creator ) ) {
 												echo '<a class="rthd-ticket-created-by" href="' .  admin_url( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type . '&created_by=' . $ticket_creator->ID ) . '" title="' . $ticket_creator->post_title . '">' . get_avatar( $ticket_creator->primary_email, '30' ) . '</a>';
