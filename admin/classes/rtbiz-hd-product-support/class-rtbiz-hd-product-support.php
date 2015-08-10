@@ -355,41 +355,13 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 				// get payment and user ids with SQL query
 				$query = $wpdb->prepare('SELECT PM.meta_value FROM '.$wpdb->posts.' P JOIN '.$wpdb->postmeta.' PM ON (P.id = PM.post_id) WHERE PM.meta_key=%s AND P.post_type=%s AND P.post_status=%s','_customer_user','shop_order','wc-completed');
 				$woo_payment  = $wpdb->get_col( $query );
-/*				$woo_payment = get_posts( array(
-					                       'numberposts' => -1,
-					                       'post_type'   => 'shop_order',
-					                       'meta_key'    => '_billing_email',
-					                       'order'       => 'ASC',
-					                       'post_status' => 'wc-completed',
-				                       ) );*/
 			}
 			if ( $this->iseddActive ) {
 				$query = $wpdb->prepare('SELECT PM.meta_value FROM '.$wpdb->posts.' P JOIN '.$wpdb->postmeta.' PM ON (P.id = PM.post_id) WHERE PM.meta_key=%s AND P.post_type=%s AND P.post_status=%s','_edd_payment_user_id','edd_payment','publish');
 				$edd_payments  = $wpdb->get_col( $query );
-				/*$edd_payments = get_posts( array(
-					                       'numberposts' => -1,
-					                       'post_type'   => 'edd_payment',
-					                       'meta_key'    => '_edd_payment_mode',
-					                       'meta_value'   => 'test',
-					                       'meta_compare' => '!=',
-					                       'order'       => 'ASC',
-					                       'post_status' => 'publish',
-				                       ) );*/
 			}
 			$payments = array_merge( $woo_payment, $edd_payments );
 			$payments = array_filter( $payments );
-			/*$ids = array();
-
-			if ( ! empty( $payments ) ) {
-				foreach ( $payments as $payment ) {
-				    if ( $payment->post_type == 'shop_order' ) {
-					    $ids[] = get_post_meta( $payment->ID, '_customer_user', true );
-				    }
-					else if ( $payment->post_type == 'edd_payment' ) {
-						$ids[] = get_post_meta( $payment->ID, '_edd_payment_user_id', true );
-					}
-				}
-			}*/
 			return $payments;
 		}
 
