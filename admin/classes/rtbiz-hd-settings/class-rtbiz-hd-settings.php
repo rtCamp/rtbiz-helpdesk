@@ -358,7 +358,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 
 				array_push( $email_fields, array(
 					'id'       => 'rthd_outgoing_email_mailbox',
-					'title'    => __( 'Outgoing Emails\' Mailbox' ),
+					'title'    => __( 'Outgoing Emails Mailbox' ),
 					'subtitle' => __( 'Mailbox to be used to send outgoing emails/notifications.' ),
 					'desc'     => sprintf( '%s.', __( 'Choose any one email from the configured mailboxes.' ) ),
 					'type'     => 'select',
@@ -369,8 +369,8 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					array_push( $email_fields, array(
 						'id'       => 'rthd_outgoing_via_same_email',
 						'type'     => 'switch',
-						'title'    => __( 'Outgoing Emails\' FROM Same mailbox' ),
-						'subtitle' => __( 'To enable/disable Outgoing Emails\' FROM Same mailbox' ),
+						'title'    => __( 'Outgoing Emails From Same Mailbox' ),
+						'subtitle' => __( 'To enable/disable outgoing emails from same mailbox' ),
 						'default'  => true,
 						'on'       => __( 'Enable' ),
 						'off'      => __( 'Disable' ),
@@ -382,9 +382,10 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 
 				array_push( $email_fields, array(
 					'id'       => 'rthd_outgoing_email_mailbox',
-					'title'    => __( 'Outgoing Emails\' FROM Address' ),
+					'title'    => __( 'Outgoing Emails \'From\' Address' ),
 					'subtitle' => __( 'Outgoing System Email used for all Helpdesk Communication' ),
-					'desc'     => sprintf( '%s <a href="%s">%s</a>. %s.', __( 'WordPress by default send email using (mostly postfix) FROM/TO value set to Admin Email taken from' ), admin_url( 'options-general.php' ), __( 'here' ), __( 'System Email Address to be used for outbound emails. This Address will be used as FROM: name < email address > for all outgoing emails' ) ),
+//					'desc'     => sprintf( '%s <a href="%s">%s</a>. %s.', __( 'WordPress by default sends email using (mostly postfix) FROM/TO value set to Admin Email taken from' ), admin_url( 'options-general.php' ), __( 'here' ), __( 'System Email Address to be used for outbound emails. This Address will be used as FROM: name < email address > for all outgoing emails' ) ),
+					'desc'     => sprintf( '%s <a href="%s">%s</a>. %s.', __( 'This Address will be used as FROM: name < email address > for all outgoing emails' ) ),
 					'type'     => 'text',
 					'default'  => get_option( 'admin_email' ),
 					'validate' => 'email',
@@ -394,7 +395,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 
 			array_push( $email_fields, array(
 				'id'       => 'rthd_outgoing_email_from_name',
-				'title'    => __( 'Outgoing Emails\' FROM Name' ),
+				'title'    => __( 'Outgoing emails \'From\' name' ),
 				'subtitle' => __( 'Outgoing System Name used for all Helpdesk Communication' ),
 				'desc'     => sprintf( '%s.', __( 'System Name to be used for outbound emails. This Name will be used as FROM: name < email address > for all outgoing emails' ) ),
 				'type'     => 'text',
@@ -723,7 +724,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 						'id'           => 'rthd_auto_response_message',
 						'type'         => 'textarea',
 						'title'        => __( 'Auto response message' ),
-						'desc'         => esc_attr( 'Add a message here that will be sent to the customer when your team is offline, ' ) . 'Use <b>{NextStartingHour}</b> to get next working hours like <b>`Today after 10 pm` or `Monday after 9 AM`</b>', //Allowed tags are <a> <br> <em> <strong>.
+						'desc'         => esc_attr( 'Add a message here that will be sent to the customer when your team is offline. ' ) . 'Use <b>{NextStartingHour}</b> to get next working hours like <b>`Today after 10 pm` or `Monday after 9 AM`</b>', //Allowed tags are <a> <br> <em> <strong>.
 						//'validate'     => 'html_custom',
 						'default'      => esc_attr( 'We have received your support request. Our support team is currently offline. We will get back at the soonest.' ),
 						'required'     => array( 'rthd_enable_auto_response', '=', 1 ),
