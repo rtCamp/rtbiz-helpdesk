@@ -216,9 +216,19 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		 * @param $postid
 		 */
 		public function edit_contact_link( $url, $postid ) {
-			if ( ! empty( $_REQUEST['module'] ) && ! empty( $postid ) && get_post_type( $postid ) == rtbiz_get_contact_post_type() ) {
-				$url = esc_url( add_query_arg( 'module', $_REQUEST['module'], $url ) );
+			if ( get_post_type( $postid ) == rtbiz_get_contact_post_type() ) {
+				$parameters = array();
+				if ( ! empty( $_REQUEST['module'] ) ) {
+					$parameters = array ( 'module' => $_REQUEST['module'] );
+				}
+				if ( ! empty( $_REQUEST['contact_group'] ) ) {
+					$parameters = array_merge( $parameters, array ( 'contact_group' => $_REQUEST['contact_group'] ) );
+				}
+				$url = esc_url( add_query_arg( $parameters, $url ) );
 			}
+//			if ( ! empty( $_REQUEST['module'] ) && ! empty( $postid ) && get_post_type( $postid ) == rtbiz_get_contact_post_type() ) {
+//				$url = esc_url( add_query_arg( 'module', $_REQUEST['module'], $url ) );
+//			}
 
 			global $pagenow;
 			if ( 'users.php' == $pagenow && ! empty( $postid ) && get_post_type( $postid ) == rtbiz_get_contact_post_type() ) {
