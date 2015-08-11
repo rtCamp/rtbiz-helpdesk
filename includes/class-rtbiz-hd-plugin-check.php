@@ -98,7 +98,7 @@ if ( ! class_exists( 'Rtbiz_HD_Plugin_Check' ) ) {
 			?>
 			<div class="error rtbiz-php-older-version">
 				<p>
-					You are running an older php version. Please upgrade to php <strong>5.3 or above</strong> to run rtBiz-Helpdesk plugin.
+					You are running an older PHP version. Please upgrade to PHP <strong>5.3 or above</strong> to run rtBiz-Helpdesk plugin.
 				</p>
 			</div> <?php
 		}
