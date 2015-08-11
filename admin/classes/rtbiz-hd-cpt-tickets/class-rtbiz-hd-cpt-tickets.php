@@ -28,6 +28,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 
 			// CPT List View
 			Rtbiz_HD::$loader->add_filter( 'manage_edit-' . Rtbiz_HD_Module::$post_type . '_columns', $this, 'edit_custom_columns', 20 );
+			Rtbiz_HD::$loader->add_filter( 'manage_'. Rtbiz_HD_Module::$post_type .'_posts_columns', $this, 'add_custom_columns', 10 );
 			Rtbiz_HD::$loader->add_action( 'manage_' . Rtbiz_HD_Module::$post_type . '_posts_custom_column', $this, 'manage_custom_columns', 2 );
 			Rtbiz_HD::$loader->add_filter( 'manage_edit-' . Rtbiz_HD_Module::$post_type . '_sortable_columns', $this, 'sortable_column' );
 
@@ -60,7 +61,30 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 			Rtbiz_HD::$loader->add_action( 'restrict_manage_posts', $this, 'display_custom_filters' );
 
 			Rtbiz_HD::$loader->add_action( 'edit_form_top', $this, 'append_ticket_id_to_title' );
+			Rtbiz_HD::$loader->add_filter( 'list_table_primary_column', $this,'ticket_primary_column', 10, 2 );
+		}
 
+		/**
+		 * Add ticket title as primary column
+		 * @param $column
+		 * @param $screen
+		 * @return string
+         */
+		function ticket_primary_column( $column, $screen ){
+			if ( $screen === 'edit-ticket' ) {
+				$column = 'rthd_ticket_title';
+			}
+			return $column;
+		}
+
+		/**
+		 * Add title on early hook so that we can add it as primary column
+		 * @param $cols
+		 * @return mixed
+         */
+		public function add_custom_columns( $cols ){
+			$cols['rthd_ticket_title'] = __( 'Ticket', RTBIZ_HD_TEXT_DOMAIN );
+			return $cols;
 		}
 
 		/**
@@ -77,7 +101,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 
 			unset( $cols['cb'] );
 			unset( $cols['title'] );
-			unset( $cols['comments'] );
+//			unset( $cols['comments'] );
 			unset( $cols['date'] );
 			unset( $cols[ 'p2p-from-'.Rtbiz_HD_Module::$post_type.'_to_'.rtbiz_get_contact_post_type() ] );
 			$columns['cb'] = '<input type="checkbox" />';
@@ -88,7 +112,8 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 			//			$columns['rthd_ticket_assignee'] = __( 'Assignee', RT_BIZ_HD_TEXT_DOMAIN );
 			//			$columns['rthd_ticket_created_by'] = __( 'Ticket Author', RT_BIZ_HD_TEXT_DOMAIN );
 			//			$columns['rthd_ticket_last_reply_by'] = __( 'Last Reply By', RT_BIZ_HD_TEXT_DOMAIN );
-			$columns['rthd_ticket_followup'] = __( 'Reply Count', RTBIZ_HD_TEXT_DOMAIN );
+			$columns['comments'] = $cols['comments'];
+
 			//            $columns['rthd_ticket_updated_by']     = __( 'Updated By', RT_BIZ_HD_TEXT_DOMAIN );
 			$columns = array_merge( $columns, $cols );
 			//			$columns[ 'p2p-from-'.Rt_HD_Module::$post_type.'_to_'.rtbiz_get_contact_post_type() ] = __( 'Participants (Customers)', RT_BIZ_HD_TEXT_DOMAIN );
@@ -109,7 +134,6 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 			$columns['rthd_ticket_title'] = 'ticket';
 			$columns['rthd_ticket_created_by'] = 'created_by';
 			$columns['rthd_ticket_updated_by'] = 'updated_by';
-			$columns['rthd_ticket_followup'] = 'comments';
 			return $columns;
 		}
 
@@ -229,10 +253,11 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 					}
 					break;
 
-				case 'rthd_ticket_followup' :
-					$comment = get_comments( array( 'post_id' => $post->ID, 'number' => 1 ) );
-					echo '<span class="post-com-count-wrapper"><a class="post-com-count" style="cursor: default;"><span class="comment-count">' . ( $post->comment_count) . '</span></a></span>';
-					break;
+//				case 'rthd_ticket_followup' :
+					//$comment = get_comments( array( 'post_id' => $post->ID, 'number' => 1 ) );
+//					echo '<span class="post-com-count-wrapper"><a class="post-com-count" style="cursor: default;"><span class="comment-count">' . ( $post->comment_count) . '</span></a></span>';
+//					$this->column_comments( $post );
+//					break;
 
 				case 'rthd_ticket_last_reply_by' :
 					$comment = get_comments( array( 'post_id' => $post->ID, 'number' => 1 ) );
@@ -258,58 +283,60 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 					} else {
 						printf( __( '%s  %s', RTBIZ_HD_TEXT_DOMAIN ), '<strong>' . esc_attr( _x( '#', 'hash before order number', RTBIZ_HD_TEXT_DOMAIN ) . esc_attr( $post->ID ) ) . '</strong>', $post->post_title );
 					}
+					global $wp_version;
+					if ( version_compare( $wp_version, '4.3', '<' ) ) {
+						//						$user_id = $post->post_author;
+						//						$user_info = get_userdata($user_id);
 
-					$user_id = $post->post_author;
-					$user_info = get_userdata( $user_id );
+						/*$query_var = array(
+							'post_type' => Rtbiz_HD_Module::$post_type,
+							'assigned' => $user_id,
+						);
 
-					$query_var = array(
-						'post_type' => Rtbiz_HD_Module::$post_type,
-						'assigned' => $user_id,
-					);
+						if (get_current_user_id() == $user_id) {
+							$query_var['post_status'] = 'assigned';
+						}*/
 
-					if ( get_current_user_id() == $user_id ) {
-						$query_var['post_status'] = 'assigned';
-					}
+						//						$url = esc_url(add_query_arg($query_var, 'edit.php'));
 
-					$url = esc_url( add_query_arg( $query_var, 'edit.php' ) );
+						//                  if ( $user_info ) {
+						//                      printf( " Assigned to <a href='%s'>%s</a>", $url, $user_info->display_name );
+						//                  }
 
-					//                  if ( $user_info ) {
-					//                      printf( " Assigned to <a href='%s'>%s</a>", $url, $user_info->display_name );
-					//                  }
-
-					$actions = array();
-					if ( $can_edit_post && 'trash' != $post->post_status ) {
-						$actions['edit'] = '<a href="' . get_edit_post_link( $post->ID, true ) . '" title="' . esc_attr( __( 'Edit this item' ) ) . '">' . __( 'Edit' ) . '</a>';
-						$actions['inline hide-if-no-js'] = '<a href="#" class="editinline" title="' . esc_attr( __( 'Edit this item inline' ) ) . '">' . __( 'Quick&nbsp;Edit' ) . '</a>';
-					}
-
-					if ( current_user_can( 'delete_post', $post->ID ) ) {
-						if ( 'trash' == $post->post_status ) {
-							$actions['untrash'] = "<a title='" . esc_attr( __( 'Restore this item from the Trash' ) ) . "' href='" . wp_nonce_url( admin_url( sprintf( $post_type_object->_edit_link . '&amp;action=untrash', $post->ID ) ), 'untrash-post_' . $post->ID ) . "'>" . __( 'Restore' ) . '</a>';
-						} else {
-							$actions['trash'] = "<a class='submitdelete' title='" . esc_attr( __( 'Move this item to the Trash' ) ) . "' href='" . get_delete_post_link( $post->ID ) . "'>" . __( 'Trash' ) . '</a>';
+						$actions = array();
+						if ($can_edit_post && 'trash' != $post->post_status) {
+							$actions['edit'] = '<a href="' . get_edit_post_link($post->ID, true) . '" title="' . esc_attr(__('Edit this item')) . '">' . __('Edit') . '</a>';
+							$actions['inline hide-if-no-js'] = '<a href="#" class="editinline" title="' . esc_attr(__('Edit this item inline')) . '">' . __('Quick&nbsp;Edit') . '</a>';
 						}
-						if ( 'trash' == $post->post_status ) {
-							$actions['delete'] = "<a class='submitdelete' title='" . esc_attr( __( 'Delete this item permanently' ) ) . "' href='" . get_delete_post_link( $post->ID, '', true ) . "'>" . __( 'Delete Permanently' ) . '</a>';
-						}
-					}
-					if ( $post_type_object->public ) {
-						if ( in_array( $post->post_status, array( 'pending', 'draft', 'future' ) ) ) {
-							if ( $can_edit_post ) {
-								$preview_link = set_url_scheme( get_permalink( $post->ID ) );
-								/** This filter is documented in wp-admin/includes/meta-boxes.php */
-								$preview_link = apply_filters( 'preview_post_link', esc_url( add_query_arg( 'preview', 'true', $preview_link ) ), $post );
-								$actions['view'] = '<a href="' . esc_url( $preview_link ) . '" title="' . esc_attr( sprintf( __( 'Preview &#8220;%s&#8221;' ), $post->post_title ) ) . '" rel="permalink">' . __( 'Preview' ) . '</a>';
+
+						if (current_user_can('delete_post', $post->ID)) {
+							if ('trash' == $post->post_status) {
+								$actions['untrash'] = "<a title='" . esc_attr(__('Restore this item from the Trash')) . "' href='" . wp_nonce_url(admin_url(sprintf($post_type_object->_edit_link . '&amp;action=untrash', $post->ID)), 'untrash-post_' . $post->ID) . "'>" . __('Restore') . '</a>';
+							} else {
+								$actions['trash'] = "<a class='submitdelete' title='" . esc_attr(__('Move this item to the Trash')) . "' href='" . get_delete_post_link($post->ID) . "'>" . __('Trash') . '</a>';
 							}
-						} elseif ( 'trash' != $post->post_status ) {
-							$actions['view'] = '<a href="' . get_permalink( $post->ID ) . '" title="' . esc_attr( sprintf( __( 'View &#8220;%s&#8221;' ), $post->post_title ) ) . '" rel="permalink">' . __( 'View' ) . '</a>';
+							if ('trash' == $post->post_status) {
+								$actions['delete'] = "<a class='submitdelete' title='" . esc_attr(__('Delete this item permanently')) . "' href='" . get_delete_post_link($post->ID, '', true) . "'>" . __('Delete Permanently') . '</a>';
+							}
 						}
+						if ($post_type_object->public) {
+							if (in_array($post->post_status, array('pending', 'draft', 'future'))) {
+								if ($can_edit_post) {
+									$preview_link = set_url_scheme(get_permalink($post->ID));
+									/** This filter is documented in wp-admin/includes/meta-boxes.php */
+									$preview_link = apply_filters('preview_post_link', esc_url(add_query_arg('preview', 'true', $preview_link)), $post);
+									$actions['view'] = '<a href="' . esc_url($preview_link) . '" title="' . esc_attr(sprintf(__('Preview &#8220;%s&#8221;'), $post->post_title)) . '" rel="permalink">' . __('Preview') . '</a>';
+								}
+							} elseif ('trash' != $post->post_status) {
+								$actions['view'] = '<a href="' . get_permalink($post->ID) . '" title="' . esc_attr(sprintf(__('View &#8220;%s&#8221;'), $post->post_title)) . '" rel="permalink">' . __('View') . '</a>';
+							}
+						} elseif ('trash' != $post->post_status) {
+							$actions['view'] = '<a href="' . get_permalink($post->ID) . '" title="' . esc_attr(sprintf(__('View &#8220;%s&#8221;'), $post->post_title)) . '" rel="permalink">' . __('View') . '</a>';
+						}
+						echo $this->row_actions($actions);
+
+						get_inline_data($post);
 					}
-
-					echo $this->row_actions( $actions );
-
-					get_inline_data( $post );
-
 					break;
 
 				case 'rthd_ticket_created_by':

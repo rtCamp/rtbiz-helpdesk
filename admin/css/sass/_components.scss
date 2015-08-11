@@ -17,8 +17,20 @@
 	visibility: visible;
 }
 
-.column-rthd_ticket_title{
-	width: 25%;
+.fixed .column-rthd_ticket_last_reply_by, .fixed .column-rthd_ticket_status, .fixed .column-rthd_ticket_customers, .fixed .column-rthd_ticket_staff, .fixed .column-rthd_ticket_followup, .fixed .column-taxonomy-rt-product, .fixed .column-taxonomy-rt-team{
+  width: 10%;
+}
+
+@media screen and (max-width: 782px){
+  .fixed .column-rthd_ticket_last_reply_by, .fixed .column-rthd_ticket_status, .fixed .column-rthd_ticket_customers, .fixed .column-rthd_ticket_staff, .fixed .column-rthd_ticket_followup, .fixed .column-taxonomy-rt-product, .fixed .column-taxonomy-rt-team{
+	display:none;
+  }
+}
+
+@media screen and (max-width: 900px){
+  .rthd-status{
+	min-width: 0;
+  }
 }
 
 .column-rthd_ticket_status{
@@ -238,13 +250,6 @@ a#rthd-new-support-page{
 	border-radius: 100%;
 }
 
-.rthd_ticket_followup {
-	text-align: center;
-
-	.post-com-count {
-		display: inline-block;
-	}
-}
 
 .rthd_ticket_assignee {
 	text-align: center;
