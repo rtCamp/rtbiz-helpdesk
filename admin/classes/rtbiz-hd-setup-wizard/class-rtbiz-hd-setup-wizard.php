@@ -699,11 +699,11 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 					<input type="hidden" id="rthd_outound_sub-action" name="rthd_outound_sub-action" value="rtbiz_hd_save_outound_setup">
 					<?php wp_nonce_field( 'rtbiz_hd_save_outound_setup' ); ?>
 					<div class="rthd-setup-wizard-row">
-						<label for="rthd_outgoing_email_from_name"> <?php _e( 'Outgoing Emails\' FROM Name' ); ?></label>
+						<label for="rthd_outgoing_email_from_name"> <?php _e( 'Outgoing Emails \'From\' Name' ); ?></label>
 						<input type="text" id="rthd_outgoing_email_from_name" name="rthd_outgoing_email_from_name" value="<?php echo get_bloginfo(); ?>" />
 					</div>
 					<div class="rthd-setup-wizard-row">
-						<label for="rthd_outgoing_email_mailbox"> <?php _e( 'Outgoing Emails\' Mailbox' ); ?></label>
+						<label for="rthd_outgoing_email_mailbox"> <?php _e( 'Outgoing Emails Mailbox' ); ?></label>
 						<select id="rthd_outgoing_email_mailbox" name="rthd_outgoing_email_mailbox">
 							<?php foreach ( $system_emails as $email ) { ?>
 								<option value="<?php echo $email; ?>"><?php echo $email; ?></option>
