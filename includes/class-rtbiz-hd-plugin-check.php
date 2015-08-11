@@ -26,11 +26,20 @@ if ( ! class_exists( 'Rtbiz_HD_Plugin_Check' ) ) {
 			$this->plugins_dependency = $plugins_dependency;
 		}
 
+		public function _deactivate_self(){
+			deactivate_plugins( RTBIZ_HD_BASE_NAME );
+		}
+
 		public function rtbiz_hd_check_plugin_dependency() {
 
 			$flag = true;
-
-			if ( ! class_exists( 'Rtbiz' ) || ! did_action( 'rtbiz_init' ) ) {
+			if ( ! $this->_rtbiz_hd_php_version_check() ) {
+				// PHP dependency not found fall back team!
+				add_action( 'admin_init', array( $this, '_deactivate_self' ) );
+//				deactivate_plugins( RTBIZ_HD_BASE_NAME );
+				return false;
+			}
+			if ( ! class_exists( 'Rtbiz' ) && ! did_action( 'rtbiz_init' ) ) {
 				$flag = false;
 			}
 
@@ -77,6 +86,35 @@ if ( ! class_exists( 'Rtbiz_HD_Plugin_Check' ) ) {
 			} else {
 				wp_safe_redirect( admin_url( 'edit.php?post_type=ticket&page=rtbiz-hd-setup-wizard' ) );
 			}
+		}
+
+		/**
+		 * Show admin notice if running older version of php
+         */
+		function _rtbiz_hd_running_older_php_version(){
+			global $rtbiz_hd_version_not_compatible;
+			$rtbiz_hd_version_not_compatible = true;
+			$php_version = phpversion();
+			?>
+			<div class="error rtbiz-php-older-version">
+				<p>
+					You are running php version <strong><?php echo $php_version; ?></strong>. rtBiz-Helpdesk supports php <strong>5.3 and above</strong> version, Please upgrade php version to run this plugin.
+				</p>
+			</div> <?php
+		}
+
+		/**
+		 * Check if running older version of php and if so show admin notice.
+		 * @return bool
+         */
+		function _rtbiz_hd_php_version_check(){
+			$php_version = phpversion();
+			if ( version_compare( $php_version ,'5.3', '<' ) ) {
+				// running older version do not load our plugins.
+				add_action( 'admin_notices',array( $this, '_rtbiz_hd_running_older_php_version' ) );
+				return false;
+			}
+			return true;
 		}
 
 		function rtbiz_hd_check_wizard_completed() {
