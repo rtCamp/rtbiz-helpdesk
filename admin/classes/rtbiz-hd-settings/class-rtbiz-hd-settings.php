@@ -395,7 +395,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 
 			array_push( $email_fields, array(
 				'id'       => 'rthd_outgoing_email_from_name',
-				'title'    => __( 'Outgoing emails \'From\' name' ),
+				'title'    => __( 'Outgoing Emails \'From\' Name' ),
 				'subtitle' => __( 'Outgoing System Name used for all Helpdesk Communication' ),
 				'desc'     => sprintf( '%s.', __( 'System Name to be used for outbound emails. This Name will be used as FROM: name < email address > for all outgoing emails' ) ),
 				'type'     => 'text',
