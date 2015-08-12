@@ -439,7 +439,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					'title'    => __( 'Outgoing Emails \'From\' Address' ),
 					'subtitle' => __( 'Outgoing System Email used for all Helpdesk Communication' ),
 //					'desc'     => sprintf( '%s <a href="%s">%s</a>. %s.', __( 'WordPress by default sends email using (mostly postfix) FROM/TO value set to Admin Email taken from' ), admin_url( 'options-general.php' ), __( 'here' ), __( 'System Email Address to be used for outbound emails. This Address will be used as FROM: name < email address > for all outgoing emails' ) ),
-					'desc'     => sprintf( '%s <a href="%s">%s</a>. %s.', __( 'This Address will be used as FROM: name < email address > for all outgoing emails' ) ),
+					'desc'     => sprintf( '%s.', __( 'This Address will be used as FROM: name < email address > for all outgoing emails' ) ),
 					'type'     => 'text',
 					'default'  => $domain_name,
 					'validate' => 'email',
