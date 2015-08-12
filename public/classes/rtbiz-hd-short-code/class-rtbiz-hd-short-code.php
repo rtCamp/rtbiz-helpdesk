@@ -282,10 +282,14 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 			}
 			?>
 			<?php
+			$show_title = ('yes' === $arg_shortcode['title']);
 			ob_start();
 			if ( $first ) {
-				?>
-				<div class="rthd-ticket-list-header clearfix"> <?php
+			$header_class  = 'clearfix ';
+				if ( $show_title  ){
+					$header_class .= 'rthd-ticket-list-header';
+				}
+				echo '<div class="'.$header_class.'">';
 					if ( !empty( $arg_shortcode['fav'] ) ) {
 						if ( 'yes' === $arg_shortcode['title'] ) {
 							?>
