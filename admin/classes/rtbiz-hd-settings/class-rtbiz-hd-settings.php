@@ -379,7 +379,8 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 				}
 
 			} else {
-
+				$domain_name = preg_replace( '/^www\./', '', $_SERVER['SERVER_NAME'] );
+				$domain_name = 'noreply@'.$domain_name;
 				array_push( $email_fields, array(
 					'id'       => 'rthd_outgoing_email_mailbox',
 					'title'    => __( 'Outgoing Emails \'From\' Address' ),
@@ -387,7 +388,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 //					'desc'     => sprintf( '%s <a href="%s">%s</a>. %s.', __( 'WordPress by default sends email using (mostly postfix) FROM/TO value set to Admin Email taken from' ), admin_url( 'options-general.php' ), __( 'here' ), __( 'System Email Address to be used for outbound emails. This Address will be used as FROM: name < email address > for all outgoing emails' ) ),
 					'desc'     => sprintf( '%s <a href="%s">%s</a>. %s.', __( 'This Address will be used as FROM: name < email address > for all outgoing emails' ) ),
 					'type'     => 'text',
-					'default'  => get_option( 'admin_email' ),
+					'default'  => $domain_name,
 					'validate' => 'email',
 				) );
 
