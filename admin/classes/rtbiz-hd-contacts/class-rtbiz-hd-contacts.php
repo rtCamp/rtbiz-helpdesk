@@ -216,12 +216,13 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		 * @param $postid
 		 */
 		public function edit_contact_link( $url, $postid ) {
-			if ( get_post_type( $postid ) == rtbiz_get_contact_post_type() ) {
+			if ( ( ! empty( $_REQUEST['module'] ) || !empty($_REQUEST['contact_group'] ) ) && ! empty( $postid ) && get_post_type( $postid ) == rtbiz_get_contact_post_type() ) {
+
 				$parameters = array();
 				if ( ! empty( $_REQUEST['module'] ) ) {
 					$parameters = array ( 'module' => $_REQUEST['module'] );
 				}
-				if ( ! empty( $_REQUEST['contact_group'] ) ) {
+				if ( isset( $_REQUEST['contact_group'] ) ) {
 					$parameters = array_merge( $parameters, array ( 'contact_group' => $_REQUEST['contact_group'] ) );
 				}
 				$url = esc_url( add_query_arg( $parameters, $url ) );
