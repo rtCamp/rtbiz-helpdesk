@@ -27,7 +27,8 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Creator_Migration' ) ) {
 			    || ( defined( 'RTBIZ_HD_VERSION' ) && version_compare( RTBIZ_HD_VERSION ,'1.3.6', '<' ) ) ) {
 				return;
 			}
-			if ( empty( get_option( 'rt_hd_ticket_creator_migration' ) ) ) {
+			$op = get_option( 'rt_hd_ticket_creator_migration' );
+			if ( empty( $op ) ) {
 				$this->ticket_creator_migration();
 			}
 
@@ -50,6 +51,8 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Creator_Migration' ) ) {
 						$wpdb->update( $wpdb->postmeta, array( 'meta_value' => $creator_contact_id ), array( 'meta_key'   => '_rtbiz_hd_created_by',
 						                                                                                     'meta_value' => $creator,
 						), array( '%d' ), array( '%s', '%d' ) );
+					} else {
+						error_log('[Meta migration] Ticket creator user id :'.$creator. " Not found");
 					}
 				}
 			}
@@ -67,6 +70,8 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Creator_Migration' ) ) {
 					if ( ! empty( $creator_contact_id ) ) {
 						// perform update on unique result
 						$wpdb->update( $table_name, array( 'user_created_by' => $creator_contact_id ), array( 'user_created_by' => $creator ), array( '%d' ), array( '%d' ) );
+					} else {
+						error_log("[$table_name migration] Ticket creator user id :".$creator. " Not found");
 					}
 				}
 			}
@@ -82,6 +87,8 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Creator_Migration' ) ) {
 					$creator_contact_id = rtbiz_hd_get_contact_id_by_user_id( $followup->user_id, true );
 					if ( ! empty( $creator_contact_id ) ) {
 						update_comment_meta( $followup->ID, '_rtbiz_hd_followup_author',$creator_contact_id );
+					} else {
+						error_log("[comment meta migration] Ticket creator user id :".$followup->user_id. " Not found");
 					}
 				}
 			}
