@@ -1190,7 +1190,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		 * Add comment to post
 		 *
 		 * @param            $comment_post_ID
-		 * @param            $userid
+		 * @param            $contact_id
 		 * @param            $comment_content
 		 * @param            $comment_author
 		 * @param            $comment_author_email
@@ -1212,7 +1212,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		 * @return bool
 		 * @since rt-Helpdesk 0.1
 		 */
-		public function insert_post_comment( $comment_post_ID, $userid, $comment_content, $comment_author, $comment_author_email, $commenttime, $uploaded, $allemails = array(), $dndEmails, $messageid = '', $inreplyto = '', $references = '', $subscriber = array(), $originalBody = '', $comment_type = '10', $comment_parent = 0, $keep_status = false, $force_skip_duplicate_check = true, $sensitive = false ) {
+		public function insert_post_comment( $comment_post_ID, $contact_id, $comment_content, $comment_author, $comment_author_email, $commenttime, $uploaded, $allemails = array(), $dndEmails, $messageid = '', $inreplyto = '', $references = '', $subscriber = array(), $originalBody = '', $comment_type = '10', $comment_parent = 0, $keep_status = false, $force_skip_duplicate_check = true, $sensitive = false ) {
 
 			$post_type       = get_post_type( $comment_post_ID );
 			$ticketModel     = new Rtbiz_HD_Ticket_Model();
@@ -1258,7 +1258,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 					}
 				}
 			}
-
+			$user_id = rtbiz_hd_get_user_id_by_contact_id( $contact_id );
 			$data                = array(
 				'comment_post_ID'      => $comment_post_ID,
 				'comment_author'       => is_object( $user ) ? $user->display_name : $comment_author,
@@ -1267,7 +1267,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				'comment_content'      => $comment_content,
 				'comment_type'         => $comment_type,
 				'comment_parent'       => $comment_parent,
-				'user_id'              => $userid,
+				'user_id'              => empty( $user_id ) ? 0 : $user_id,
 				'comment_author_IP'    => $comment_author_ip,
 				'comment_agent'        => $comment_agent,
 				'comment_date'         => $commentDate,
@@ -1294,7 +1294,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			}
 
 			$comment_id = wp_insert_comment( $data );
-			update_comment_meta( $comment_id, '_rtbiz_hd_followup_author', $userid );
+			update_comment_meta( $comment_id, '_rtbiz_hd_followup_author', $contact_id );
 
 			if ( '' != $originalBody ) {
 				add_comment_meta( $comment_id, '_rtbiz_hd_original_email', $originalBody );
@@ -1321,7 +1321,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			$data  = array(
 				'date_update'     => current_time( 'mysql' ),
 				'date_update_gmt' => gmdate( 'Y-m-d H:i:s' ),
-				'user_updated_by' => $userid,
+				'user_updated_by' => empty( $user_id )? 0 : $user_id,
 				'last_comment_id' => $comment_id,
 			);
 			$where = array(
@@ -1385,7 +1385,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			if ( $autoAssingeFlag && $rtbiz_hd_email_notification->is_internal_user( $comment_author_email ) ) {
 				//check on 'on_first_followup' selected and its first staff followup || select 'on_any_followup'
 				if ( ( 'on_first_followup' == $autoAssignEvent && $isFirstStaffComment ) || ( self::$FOLLOWUP_STAFF != $comment_type && 'on_any_followup' == $autoAssignEvent ) ) {
-					wp_update_post( array( 'ID' => $comment_post_ID, 'post_author' => $userid ) );
+					wp_update_post( array( 'ID' => $comment_post_ID, 'post_author' => $user_id ) );
 				}
 			}
 			/* end assignee toogle code */
@@ -1804,6 +1804,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 					$user_edit = current_user_can( $cap ) || ( $current_user_contact_id == $contact_id );
 					$comment = get_comment( $comment_ID );
 					$returnArray['comment_content'] = rtbiz_hd_render_comment( $comment, $user_edit, $comment_render_type, false );
+				    // do some logic
 					$returnArray['assign_value'] = get_post_field( 'post_author', $comment_post_ID, 'raw' );
 					if ( current_user_can( $cap ) ) {
 						$commentlink = '<a href="'.rtbiz_hd_biz_user_profile_link( $comment->comment_author_email ).'" >'.$comment->comment_author.'</a>';
