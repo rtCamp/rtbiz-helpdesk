@@ -140,7 +140,28 @@ function run_rtbiz_hd() {
 
 	global $rtbiz_hd;
 
-	$rtbiz_hd = new Rtbiz_HD();
-
+	if ( _rtbiz_hd_php_version_check() ) {
+		$rtbiz_hd = new Rtbiz_HD();
+	}
 }
 add_action( 'rtbiz_init', 'run_rtbiz_hd', 1 );
+
+function _rtbiz_hd_php_version_check(){
+	$php_version = phpversion();
+	if ( version_compare( $php_version ,'5.3', '<' ) ) {
+		add_action( 'admin_notices','_rtbiz_hd_running_older_php_version' );
+		add_action( 'admin_init', '_rtbiz_hd_deactive_self' );
+		return false;
+	}
+	return true;
+}
+
+function _rtbiz_hd_running_older_php_version(){ ?>
+	<div class="error rtbiz-hd-php-older-version">
+		<p><?php _e( 'You are running an older PHP version. Please upgrade to PHP <strong>5.3 or above</strong> to run rtBiz Helpdesk plugin.', RTBIZ_HD_TEXT_DOMAIN ) ?></p>
+	</div> <?php
+}
+
+function _rtbiz_hd_deactive_self(){
+	deactivate_plugins( plugin_basename( __FILE__ ) );
+}
