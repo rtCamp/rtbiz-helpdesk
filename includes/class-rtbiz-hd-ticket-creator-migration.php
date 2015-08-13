@@ -126,7 +126,6 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Creator_Migration' ) ) {
 					INSERT INTO
 						{$wpdb->commentmeta}
 							(comment_id,meta_key,meta_value)
-						values (
 									SELECT
 										cmt.comment_post_ID, %s, p2p.p2p_from
 											FROM
@@ -141,7 +140,7 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Creator_Migration' ) ) {
 													AND
 														posts.post_type = %s
 													)
-								)",
+								",
 				'_rtbiz_hd_followup_author',
 				'contact_to_user',
 				'ticket'
