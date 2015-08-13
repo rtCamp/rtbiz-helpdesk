@@ -47,6 +47,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 
 			Rtbiz_HD::$loader->add_action( 'rtbiz_entity_meta_boxes', $this, 'contact_custom_metabox' );
 			Rtbiz_HD::$loader->add_filter( 'get_edit_post_link', $this, 'edit_contact_link', 10, 2 );
+			Rtbiz_HD::$loader->add_filter( 'get_delete_post_link', $this, 'edit_contact_link', 10, 2 );
 			Rtbiz_HD::$loader->add_action( 'add_meta_boxes_'. rtbiz_get_contact_post_type(), $this, 'metabox_rearrange', 20 );
 			Rtbiz_HD::$loader->add_filter( 'redirect_post_location', $this, 'redirect_post_location_filter', 99 );
 
@@ -217,7 +218,6 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		 */
 		public function edit_contact_link( $url, $postid ) {
 			if ( ( ! empty( $_REQUEST['module'] ) || !empty($_REQUEST['contact_group'] ) ) && ! empty( $postid ) && get_post_type( $postid ) == rtbiz_get_contact_post_type() ) {
-
 				$parameters = array();
 				if ( ! empty( $_REQUEST['module'] ) ) {
 					$parameters = array ( 'module' => $_REQUEST['module'] );
