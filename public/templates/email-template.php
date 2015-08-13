@@ -13,7 +13,7 @@
 		if ( $replyflag && rtbiz_hd_is_enable_mailbox_reading() && rtbiz_hd_get_reply_via_email() && ! rtbiz_hd_get_web_only_support() ) {
 			echo '<div style="display: none !important; color:#c5c5c5 !important;font-size:11px !important;visibility: hidden !important;">' . htmlentities( '::Reply Above This Line::' ) . '</div>';
 		} else {
-			echo '<div style="color:#c5c5c5 !important;font-size:12px !important; padding-bottom: 10px; !important;">' . htmlentities( '-- Do not reply to this email --' ) . '</div>';
+			echo '<div style="color:#c5c5c5 !important;font-size:12px !important; padding-bottom: 10px !important;">' . htmlentities( '-- Do not reply to this email --' ) . '</div>';
 		}
 
 		$beforeHTML = apply_filters( 'rthd_before_email_body', $body );
