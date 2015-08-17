@@ -560,13 +560,16 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				update_post_meta( $post_id, '_rtbiz_hd_transaction_id', $transaction_id );
 			}
 			if ( '' != $messageid ) {
-				update_post_meta( $post_id, '_rtbiz_hd_messageid', $messageid );
+				update_post_meta( $post_id, '_rtlib_messageid', $messageid );
 			}
 			if ( '' != $inreplyto ) {
-				update_post_meta( $post_id, '_rtbiz_hd_inreplyto', $inreplyto );
+				update_post_meta( $post_id, '_rtlib_inreplyto', $inreplyto );
+			}
+			if ( function_exists('rtmb_add_message_id_in_ref_id') ) {
+				$references = rtmb_add_message_id_in_ref_id( $messageid, $references, $post_id );
 			}
 			if ( '' != $references ) {
-				update_post_meta( $post_id, '_rtbiz_hd_references', $references );
+				update_post_meta( $post_id, '_rtlib_references', $references );
 			}
 			if ( '' != $mailbox_email_address ) {
 				update_post_meta( $post_id, '_rtbiz_hd_ticket_with_mailbox', $mailbox_email_address );
@@ -1038,13 +1041,11 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			$sql2       = "select comment_id as id, 'comment' as type from {$wpdb->commentmeta} where ";
 			$operatorOr = '';
 			if ( '' != $inreplyto ) {
-				$sql1 .= " ({$wpdb->postmeta}.meta_key in('_rtbiz_hd_messageid','_rtbiz_hd_references','_rtbiz_hd_inreplyto') and {$wpdb->postmeta}.meta_value like '%{$inreplyto}%' ) ";
-				$sql2 .= " ({$wpdb->commentmeta}.meta_key in('_rtbiz_hd_messageid','_rtbiz_hd_references','_rtbiz_hd_inreplyto') and {$wpdb->commentmeta}.meta_value like '%{$inreplyto}%' ) ";
-				$operatorOr = ' or ';
+				$sql1 .= " ({$wpdb->postmeta}.meta_key in('_rtlib_messageid','_rtlib_references','_rtlib_inreplyto') and {$wpdb->postmeta}.meta_value like '%{$inreplyto}%' ) ";
+				$sql2 .= " ({$wpdb->commentmeta}.meta_key in('_rtlib_messageid','_rtlib_references','_rtlib_inreplyto') and {$wpdb->commentmeta}.meta_value like '%{$inreplyto}%' ) ";
 			}
 
 			$sql = $sql1 . ' union ' . $sql2;
-			// echo '\r\n' . $sql . '\r\n';
 			$result = $wpdb->get_results( $sql );
 			if ( ! empty( $result ) ) {
 				$row = $result[0];
@@ -1052,7 +1053,6 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 					return $row->id;
 				} else {
 					$comment = get_comment( $row->id );
-
 					return $comment->comment_post_ID;
 				}
 			} else {
@@ -1281,13 +1281,13 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				$checkDupli = $this->check_duplicate_comment( $comment_post_ID, $commentDate, $comment_content, $comment_content_old );
 				if ( false !== $checkDupli ) {
 					if ( '' != $messageid ) {
-						add_comment_meta( $checkDupli, '_rtbiz_hd_messageid', $messageid );
+						add_comment_meta( $checkDupli, '_rtlib_messageid', $messageid );
 					}
 					if ( '' != $inreplyto ) {
-						add_comment_meta( $checkDupli, '_rtbiz_hd_inreplyto', $inreplyto );
+						add_comment_meta( $checkDupli, '_rtlib_inreplyto', $inreplyto );
 					}
 					if ( '' != $references ) {
-						add_comment_meta( $checkDupli, '_rtbiz_hd_references', $references );
+						add_comment_meta( $checkDupli, '_rtlib_references', $references );
 					}
 					return false;
 				}
@@ -1300,13 +1300,16 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				add_comment_meta( $comment_id, '_rtbiz_hd_original_email', $originalBody );
 			}
 			if ( '' != $messageid ) {
-				add_comment_meta( $comment_id, '_rtbiz_hd_messageid', $messageid );
+				add_comment_meta( $comment_id, '_rtlib_messageid', $messageid );
 			}
 			if ( '' != $inreplyto ) {
-				add_comment_meta( $comment_id, '_rtbiz_hd_inreplyto', $inreplyto );
+				add_comment_meta( $comment_id, '_rtlib_inreplyto', $inreplyto );
+			}
+			if ( function_exists( 'rtmb_add_message_id_in_ref_id' ) ) {
+				$references = rtmb_add_message_id_in_ref_id( $messageid, $references, $comment_post_ID );
 			}
 			if ( '' != $references ) {
-				add_comment_meta( $comment_id, '_rtbiz_hd_references', $references );
+				add_comment_meta( $comment_id, '_rtlib_references', $references );
 			}
 
 			if ( $sensitive ){
@@ -1483,11 +1486,11 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				return false;
 			}
 
-			$sql    = $wpdb->prepare( "select meta_value from $wpdb->commentmeta where $wpdb->commentmeta.meta_key = '_rtbiz_hd_messageid' and $wpdb->commentmeta.meta_value = %s", $messageid );
+			$sql    = $wpdb->prepare( "select meta_value from $wpdb->commentmeta where $wpdb->commentmeta.meta_key = '_rtlib_messageid' and $wpdb->commentmeta.meta_value = %s", $messageid );
 			$result = $wpdb->get_results( $sql );
 			if ( empty( $result ) ) {
 
-				$sql    = $wpdb->prepare( "select meta_value from $wpdb->postmeta where $wpdb->postmeta.meta_key = '_rtbiz_hd_messageid' and $wpdb->postmeta.meta_value = %s", $messageid );
+				$sql    = $wpdb->prepare( "select meta_value from $wpdb->postmeta where $wpdb->postmeta.meta_key = '_rtlib_messageid' and $wpdb->postmeta.meta_value = %s", $messageid );
 				$result = $wpdb->get_results( $sql );
 
 				return ! empty( $result );

@@ -113,6 +113,34 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Creator_Migration' ) ) {
 			error_log("Migration comment meta add finish");
 			//*****************End Follow up user migration*****************
 
+			//*****************Start Email ids migration*****************
+			$emails_header_ids = array(
+				'_rtbiz_hd_messageid'	=> '_rtlib_messageid',
+				'_rtbiz_hd_references'	=> '_rtlib_references',
+				'_rtbiz_hd_inreplyto'	=> '_rtlib_inreplyto',
+			);
+			error_log("Migration Email message-id start");
+			foreach ( $emails_header_ids as $key => $val ) {
+				$meta_update_q = $wpdb->prepare('
+						UPDATE '.$wpdb->postmeta.'
+							SET meta_key = %s
+							WHERE meta_key = $s
+				', $val, $key);
+				$wpdb->query($meta_update_q);
+
+				$c_meta_update_q = $wpdb->prepare('
+						UPDATE '.$wpdb->commentmeta.'
+							SET meta_key = %s
+							WHERE meta_key = $s
+				', $val, $key);
+				$wpdb->query($c_meta_update_q);
+			}
+
+
+			$wpdb->query( $q3 );
+			error_log("Migration Email message-id finish");
+			//*****************End Email ids migration*****************
+
 			// script is been performed telling that to db so next time this will not run.
 			// also auto load will be off because we do not need to load this option on every page load but only when version is changed.
 			add_option( 'rt_hd_ticket_creator_migration' ,'yes', false );

@@ -215,6 +215,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		 * add module query argument
 		 * @param $url
 		 * @param $postid
+		 * @return string
 		 */
 		public function edit_contact_link( $url, $postid ) {
 			if ( ( ! empty( $_REQUEST['module'] ) || !empty($_REQUEST['contact_group'] ) ) && ! empty( $postid ) && get_post_type( $postid ) == rtbiz_get_contact_post_type() ) {
