@@ -124,14 +124,14 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Creator_Migration' ) ) {
 				$meta_update_q = $wpdb->prepare('
 						UPDATE '.$wpdb->postmeta.'
 							SET meta_key = %s
-							WHERE meta_key = $s
+							WHERE meta_key = %s
 				', $val, $key);
 				$wpdb->query($meta_update_q);
 
 				$c_meta_update_q = $wpdb->prepare('
 						UPDATE '.$wpdb->commentmeta.'
 							SET meta_key = %s
-							WHERE meta_key = $s
+							WHERE meta_key = %s
 				', $val, $key);
 				$wpdb->query($c_meta_update_q);
 			}
