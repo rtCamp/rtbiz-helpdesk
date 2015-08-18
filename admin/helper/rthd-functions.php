@@ -2007,12 +2007,9 @@ function rtbiz_hd_get_email_only_support() {
 	if ( isset( $setting['rthd_email_support'] ) && isset( $setting['rthd_web_support'] ) ) {
 		if ( '1' == $setting['rthd_email_support'] && empty( $setting['rthd_web_support'] ) ) {
 			return true;
-		} else {
-			return false;
 		}
-	} else {
-		return true;
 	}
+	return false;
 }
 
 function rtbiz_hd_get_web_only_support() {
