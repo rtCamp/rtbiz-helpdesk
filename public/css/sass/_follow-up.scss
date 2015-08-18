@@ -31,10 +31,7 @@ ul#chat-UI {
 }
 .edit-followup-warning{
   float: right;
-  line-height: 47px;
-	.rthd-tooltip{
-		vertical-align: middle;
-	}
+  padding-right: 5px;
 }
 
 #chat-UI.rthd-discussion > li:not(.rthd-no-comments):last-child:before {
