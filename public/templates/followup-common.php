@@ -176,7 +176,7 @@ if ( ! empty( $created_by ) ) {
 		<div class="edit-followup-warning">
 				<span class="rthd-tooltip">
 					<i class="dashicons dashicons-info rtmicon"></i>
-					<span class="rthd-tip">Edits will not send new email, If changes are major please add new followup.</span>
+					<span class="rthd-tip">Reply edit will not send any email notification.</span>
 				</span>
 		</div>
 		<?php } ?>
