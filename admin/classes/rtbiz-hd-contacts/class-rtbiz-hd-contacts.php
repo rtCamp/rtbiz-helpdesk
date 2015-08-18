@@ -360,7 +360,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 			$contactIds = array();
 			if ( isset( $_REQUEST['post_ID'] ) ) {
 				$contactIds = array( $_REQUEST['post_ID'] );
-			} else {
+			} if ( isset( $_REQUEST['post'] ) ) {
 				$contactIds = $_REQUEST['post'];
 			}
 
@@ -424,7 +424,13 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 							}
 						}
 					} else {
-
+						foreach ( $profile_permissions as $module_Key => $module_permission ) {
+							$where = array(
+								'userid' => $user->ID,
+								'module' => $module_Key,
+							);
+							$rtbiz_acl_model->remove_acl( $where );
+						}
 					}
 				}
 				if ( isset( $contactIds ) && ! empty( $contactIds ) ) {
