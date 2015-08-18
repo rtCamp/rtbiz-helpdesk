@@ -109,7 +109,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 				}
 			}
 
-			$fromemail = empty( $settings['rthd_outgoing_email_mailbox'] ) ? get_option( 'admin_email' ) : $fromemail;
+			$fromemail = empty( $settings['rthd_outgoing_email_mailbox'] ) ? 'noreply@'. preg_replace( '/^www\./', '', $_SERVER['SERVER_NAME'] ): $fromemail;
 
 			$args = array(
 				'user_id'       => $user_id,
