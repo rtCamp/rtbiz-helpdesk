@@ -108,7 +108,7 @@ if ( ! empty( $created_by ) ) {
 	}
 	?>
 </ul>
-<div id="dialog-form" title="Edit Followup" class="rthd-dialog-form" style='display: none'>
+<div id="dialog-form" title="" class="rthd-dialog-form" style='display: none'>
 
 	<input id="followup-offset" type="hidden" value="<?php echo esc_attr( $offset ); ?>"/>
 	<input id="followup-limit" type="hidden" value="<?php echo esc_attr( $Limit ); ?>"/>
@@ -172,6 +172,14 @@ if ( ! empty( $created_by ) ) {
 		<button type="button" class="btn button-secondary close-edit-followup">Close</button>
 		<button class="edit-followup btn button-secondary red-color" id="delfollowup" type="button">Delete</button>
 		<button class="edit-followup btn btn-primary button-primary" id="editfollowup" type="button">Update</button>
+		<?php if ( ! rtbiz_hd_get_email_only_support() ) { ?>
+		<div class="edit-followup-warning">
+				<span class="rthd-tooltip">
+					<i class="dashicons dashicons-info rtmicon"></i>
+					<span class="rthd-tip">Edits will not send new email, If changes are major please add new followup.</span>
+				</span>
+		</div>
+		<?php } ?>
 	</div>
 </div>
 <?php

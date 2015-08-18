@@ -29,6 +29,13 @@ ul#chat-UI {
 	top: 0;
 	width: 2px;
 }
+.edit-followup-warning{
+  float: right;
+  line-height: 47px;
+	.rthd-tooltip{
+		vertical-align: middle;
+	}
+}
 
 #chat-UI.rthd-discussion > li:not(.rthd-no-comments):last-child:before {
 	height: 45px;
