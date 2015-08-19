@@ -258,7 +258,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					'type'     => 'select',
 					'data'     => 'pages',
 					'title'    => __( 'Support Page' ),
-					'desc' => __( 'Add <strong>[rtbiz_hd_support_form]</strong> shortcode to any page. Select that page in dropdown above. That page from now used to handle support requests from front-end.' ),
+					'desc' => __( 'Add <strong>[rtbiz_hd_support_form]</strong> shortcode to any page. Select that page in dropdown above. That page from now used to handle support requests from web interface.' ),
 					'subtitle' => __( 'Select Page for Product Support' ),
 				),
 				array(
@@ -287,7 +287,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					'type'     => 'switch',
 					'title'    => __( 'Unique Hash URLs for Tickets' ),
 					'subtitle' => __( 'Please flush the permalinks after enabling this option.' ),
-					'desc'     => __( 'If enabled, this will generate a unique Hash URL for all the tickets through which tickets can be accessed in the front end. This unique URLs will be sent in all emails of Helpdesk. Tickets can be accessed from the default WordPress permalinks as well.' ),
+					'desc'     => __( 'If enabled, this will generate a unique Hash URL for all the tickets through which tickets can be accessed in the web interface. This unique URLs will be sent in all emails of Helpdesk. Tickets can be accessed from the default WordPress permalinks as well.' ),
 					'default'  => false,
 					'on'       => __( 'Enable' ),
 					'off'      => __( 'Disable' ),
@@ -364,7 +364,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 				/*array_push( $email_fields, array(
 					'id'       => 'rthd_email_only_support_user_not_allowed',
 					'title'    => __( 'Email only support User access' ),
-					'subtitle' => __( 'To allow user access to front end of ticket web' ),
+					'subtitle' => __( 'To allow user access to web interface of ticket web' ),
 					'type'     => 'switch',
 					'default'  => false,
 					'on'       => __( 'Enable' ),
@@ -402,7 +402,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 			array_push( $email_fields, array(
 				'id'       => 'rthd_web_support',
 				'title'    => __( 'Web support' ),
-				'subtitle' => __( 'Allows customer to create support tickets and reply tickets from front end.' ),
+				'subtitle' => __( 'Allows customer to create support tickets and reply tickets from web interface.' ),
 				'type'     => 'switch',
 				'default'  => true,
 				'on'       => __( 'Enable' ),
