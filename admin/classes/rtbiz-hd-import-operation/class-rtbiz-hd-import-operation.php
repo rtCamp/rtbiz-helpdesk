@@ -1214,6 +1214,9 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		 */
 		public function insert_post_comment( $comment_post_ID, $contact_id, $comment_content, $comment_author, $comment_author_email, $commenttime, $uploaded, $allemails = array(), $dndEmails, $messageid = '', $inreplyto = '', $references = '', $subscriber = array(), $originalBody = '', $comment_type = '10', $comment_parent = 0, $keep_status = false, $force_skip_duplicate_check = true, $sensitive = false ) {
 
+			if ( ! rtbiz_hd_can_user_access( $contact_id,$comment_post_ID ) ) {
+				return false;
+			}
 			$post_type       = get_post_type( $comment_post_ID );
 			$ticketModel     = new Rtbiz_HD_Ticket_Model();
 			$d               = new DateTime( $commenttime );
