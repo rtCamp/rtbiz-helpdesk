@@ -207,13 +207,10 @@ if ( !class_exists( 'Rtbiz_HD_Admin' ) ) {
 		}
 
 		public function module_register( $modules ) {
-			global $rtbiz_contact, $rtbiz_company;
-			$menu_label = 'rtBiz';
-
-			$modules[rtbiz_sanitize_module_key( RTBIZ_HD_TEXT_DOMAIN )] = array(
+			$modules[ rtbiz_sanitize_module_key( RTBIZ_HD_TEXT_DOMAIN ) ] = array(
 				'label' => __( 'Helpdesk', RTBIZ_HD_TEXT_DOMAIN ),
 				'post_types' => array( Rtbiz_HD_Module::$post_type ),
-				'team_support' => array( Rtbiz_HD_Module::$post_type ),
+				'team_support' => '',
 				'product_support' => array( Rtbiz_HD_Module::$post_type ),
 				'setting_option_name' => Rtbiz_HD_Settings::$hd_opt, // Use for setting page acl to add manage_options capability
 				'setting_page_url' => admin_url( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type . '&page=rthd-settings' ), //
