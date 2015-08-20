@@ -101,7 +101,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 
 			unset( $cols['cb'] );
 			unset( $cols['title'] );
-//			unset( $cols['comments'] );
+			unset( $cols['comments'] );
 			unset( $cols['date'] );
 			unset( $cols[ 'p2p-from-'.Rtbiz_HD_Module::$post_type.'_to_'.rtbiz_get_contact_post_type() ] );
 			$columns['cb'] = '<input type="checkbox" />';
@@ -112,7 +112,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 			//			$columns['rthd_ticket_assignee'] = __( 'Assignee', RT_BIZ_HD_TEXT_DOMAIN );
 			//			$columns['rthd_ticket_created_by'] = __( 'Ticket Author', RT_BIZ_HD_TEXT_DOMAIN );
 			//			$columns['rthd_ticket_last_reply_by'] = __( 'Last Reply By', RT_BIZ_HD_TEXT_DOMAIN );
-			$columns['comments'] = $cols['comments'];
+			$columns['rthd_ticket_followup'] = '<span><span class="vers comment-grey-bubble" title="Reply count"><span class="screen-reader-text">Reply count</span></span></span>';
 
 			//            $columns['rthd_ticket_updated_by']     = __( 'Updated By', RT_BIZ_HD_TEXT_DOMAIN );
 			$columns = array_merge( $columns, $cols );
@@ -253,12 +253,9 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 					}
 					break;
 
-//				case 'rthd_ticket_followup' :
-					//$comment = get_comments( array( 'post_id' => $post->ID, 'number' => 1 ) );
-//					echo '<span class="post-com-count-wrapper"><a class="post-com-count" style="cursor: default;"><span class="comment-count">' . ( $post->comment_count) . '</span></a></span>';
-//					$this->column_comments( $post );
-//					break;
-
+				case 'rthd_ticket_followup' :
+					echo '<span class="post-com-count-wrapper"><a class="post-com-count" style="cursor: default;"><span class="comment-count">' . ( $post->comment_count ) . '</span></a></span>';
+					break;
 				case 'rthd_ticket_last_reply_by' :
 					$comment = get_comments( array( 'post_id' => $post->ID, 'number' => 1 ) );
 					if ( ! empty( $comment ) ) {
