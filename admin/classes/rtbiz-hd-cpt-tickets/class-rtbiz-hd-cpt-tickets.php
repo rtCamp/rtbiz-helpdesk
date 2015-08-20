@@ -134,6 +134,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 			$columns['rthd_ticket_title'] = 'ticket';
 			$columns['rthd_ticket_created_by'] = 'created_by';
 			$columns['rthd_ticket_updated_by'] = 'updated_by';
+			$columns['rthd_ticket_followup'] = 'comment_count';
 			return $columns;
 		}
 
