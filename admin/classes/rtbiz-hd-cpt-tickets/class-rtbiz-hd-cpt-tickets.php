@@ -283,59 +283,42 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 					} else {
 						printf( __( '%s  %s', RTBIZ_HD_TEXT_DOMAIN ), '<strong>' . esc_attr( _x( '#', 'hash before order number', RTBIZ_HD_TEXT_DOMAIN ) . esc_attr( $post->ID ) ) . '</strong>', $post->post_title );
 					}
+
+					get_inline_data( $post );
+
 					global $wp_version;
 					if ( version_compare( $wp_version, '4.3', '<' ) ) {
-						//						$user_id = $post->post_author;
-						//						$user_info = get_userdata($user_id);
-
-						/*$query_var = array(
-							'post_type' => Rtbiz_HD_Module::$post_type,
-							'assigned' => $user_id,
-						);
-
-						if (get_current_user_id() == $user_id) {
-							$query_var['post_status'] = 'assigned';
-						}*/
-
-						//						$url = esc_url(add_query_arg($query_var, 'edit.php'));
-
-						//                  if ( $user_info ) {
-						//                      printf( " Assigned to <a href='%s'>%s</a>", $url, $user_info->display_name );
-						//                  }
-
 						$actions = array();
-						if ($can_edit_post && 'trash' != $post->post_status) {
-							$actions['edit'] = '<a href="' . get_edit_post_link($post->ID, true) . '" title="' . esc_attr(__('Edit this item')) . '">' . __('Edit') . '</a>';
-							$actions['inline hide-if-no-js'] = '<a href="#" class="editinline" title="' . esc_attr(__('Edit this item inline')) . '">' . __('Quick&nbsp;Edit') . '</a>';
+						if ( $can_edit_post && 'trash' != $post->post_status ) {
+							$actions['edit']                 = '<a href="' . get_edit_post_link( $post->ID, true ) . '" title="' . esc_attr( __( 'Edit this item' ) ) . '">' . __( 'Edit' ) . '</a>';
+							$actions['inline hide-if-no-js'] = '<a href="#" class="editinline" title="' . esc_attr( __( 'Edit this item inline' ) ) . '">' . __( 'Quick&nbsp;Edit' ) . '</a>';
 						}
 
-						if (current_user_can('delete_post', $post->ID)) {
-							if ('trash' == $post->post_status) {
-								$actions['untrash'] = "<a title='" . esc_attr(__('Restore this item from the Trash')) . "' href='" . wp_nonce_url(admin_url(sprintf($post_type_object->_edit_link . '&amp;action=untrash', $post->ID)), 'untrash-post_' . $post->ID) . "'>" . __('Restore') . '</a>';
+						if ( current_user_can( 'delete_post', $post->ID ) ) {
+							if ( 'trash' == $post->post_status ) {
+								$actions['untrash'] = "<a title='" . esc_attr( __( 'Restore this item from the Trash' ) ) . "' href='" . wp_nonce_url( admin_url( sprintf( $post_type_object->_edit_link . '&amp;action=untrash', $post->ID ) ), 'untrash-post_' . $post->ID ) . "'>" . __( 'Restore' ) . '</a>';
 							} else {
-								$actions['trash'] = "<a class='submitdelete' title='" . esc_attr(__('Move this item to the Trash')) . "' href='" . get_delete_post_link($post->ID) . "'>" . __('Trash') . '</a>';
+								$actions['trash'] = "<a class='submitdelete' title='" . esc_attr( __( 'Move this item to the Trash' ) ) . "' href='" . get_delete_post_link( $post->ID ) . "'>" . __( 'Trash' ) . '</a>';
 							}
-							if ('trash' == $post->post_status) {
-								$actions['delete'] = "<a class='submitdelete' title='" . esc_attr(__('Delete this item permanently')) . "' href='" . get_delete_post_link($post->ID, '', true) . "'>" . __('Delete Permanently') . '</a>';
+							if ( 'trash' == $post->post_status ) {
+								$actions['delete'] = "<a class='submitdelete' title='" . esc_attr( __( 'Delete this item permanently' ) ) . "' href='" . get_delete_post_link( $post->ID, '', true ) . "'>" . __( 'Delete Permanently' ) . '</a>';
 							}
 						}
-						if ($post_type_object->public) {
-							if (in_array($post->post_status, array('pending', 'draft', 'future'))) {
-								if ($can_edit_post) {
-									$preview_link = set_url_scheme(get_permalink($post->ID));
+						if ( $post_type_object->public ) {
+							if ( in_array( $post->post_status, array( 'pending', 'draft', 'future' ) ) ) {
+								if ( $can_edit_post ) {
+									$preview_link = set_url_scheme( get_permalink( $post->ID ) );
 									/** This filter is documented in wp-admin/includes/meta-boxes.php */
-									$preview_link = apply_filters('preview_post_link', esc_url(add_query_arg('preview', 'true', $preview_link)), $post);
-									$actions['view'] = '<a href="' . esc_url($preview_link) . '" title="' . esc_attr(sprintf(__('Preview &#8220;%s&#8221;'), $post->post_title)) . '" rel="permalink">' . __('Preview') . '</a>';
+									$preview_link    = apply_filters( 'preview_post_link', esc_url( add_query_arg( 'preview', 'true', $preview_link ) ), $post );
+									$actions['view'] = '<a href="' . esc_url( $preview_link ) . '" title="' . esc_attr( sprintf( __( 'Preview &#8220;%s&#8221;' ), $post->post_title ) ) . '" rel="permalink">' . __( 'Preview' ) . '</a>';
 								}
-							} elseif ('trash' != $post->post_status) {
-								$actions['view'] = '<a href="' . get_permalink($post->ID) . '" title="' . esc_attr(sprintf(__('View &#8220;%s&#8221;'), $post->post_title)) . '" rel="permalink">' . __('View') . '</a>';
+							} elseif ( 'trash' != $post->post_status ) {
+								$actions['view'] = '<a href="' . get_permalink( $post->ID ) . '" title="' . esc_attr( sprintf( __( 'View &#8220;%s&#8221;' ), $post->post_title ) ) . '" rel="permalink">' . __( 'View' ) . '</a>';
 							}
-						} elseif ('trash' != $post->post_status) {
-							$actions['view'] = '<a href="' . get_permalink($post->ID) . '" title="' . esc_attr(sprintf(__('View &#8220;%s&#8221;'), $post->post_title)) . '" rel="permalink">' . __('View') . '</a>';
+						} elseif ( 'trash' != $post->post_status ) {
+							$actions['view'] = '<a href="' . get_permalink( $post->ID ) . '" title="' . esc_attr( sprintf( __( 'View &#8220;%s&#8221;' ), $post->post_title ) ) . '" rel="permalink">' . __( 'View' ) . '</a>';
 						}
-						echo $this->row_actions($actions);
-
-						get_inline_data($post);
+						echo $this->row_actions( $actions );
 					}
 					break;
 
