@@ -965,9 +965,11 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 			$oldSubscriberArr = get_post_meta( $post_id, '_rtbiz_hd_subscribe_to', true );
 			if ( $oldSubscriberArr && is_array( $oldSubscriberArr ) && ! empty( $oldSubscriberArr ) ) {
 				foreach ( $oldSubscriberArr as $emailsubscriber ) {
-					$userSub = get_user_by( 'id', is_numeric( $emailsubscriber ) );
-					if ( ! empty( $userSub ) ) {
-						$bccemails[]  = array( 'email' => $userSub->user_email );
+					if ( is_numeric( $emailsubscriber ) ) {
+						$userSub = get_user_by( 'id', $emailsubscriber );
+						if ( ! empty( $userSub ) ) {
+							$bccemails[]  = array( 'email' => $userSub->user_email );
+						}
 					}
 				}
 			}
