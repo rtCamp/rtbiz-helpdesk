@@ -2024,3 +2024,58 @@ function rtbiz_hd_get_web_only_support() {
 		return true;
 	}
 }
+
+function rtbiz_hd_can_user_access( $contact_id, $post_id ){
+	if ( Rtbiz_HD_Module::$post_type != get_post_type( $post_id ) ) {
+		return false;
+	}
+	$creator = rtbiz_hd_get_ticket_creator( $post_id );
+	// check user is ticket creator
+	if ( $contact_id == $creator->ID ){
+		return true;
+	}
+	// check user is staff
+	$user_id = rtbiz_hd_get_user_id_by_contact_id( $contact_id );
+	$user_email = rtbiz_get_entity_meta( $contact_id, Rtbiz_Contact::$primary_email_key, true );
+	$post = get_post( $post_id );
+
+	if ( ! empty( $user_id ) ){
+		$user = get_userdata( $user_id );
+		$cap               = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' );
+		$author_cap               = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' );
+		$user_can_edit_content = user_can( $user_id, $cap );
+		if ( $user_can_edit_content ){
+			return true;
+		}
+		$user_is_author = user_can( $user_id, $author_cap );
+		if ( $user_is_author ) {
+			if ( $user_id == $post->post_author ){
+				return true;
+			}
+			$subscriber     = get_post_meta( $post_id, '_rtbiz_hd_subscribe_to', true );
+			if ( ! empty( $subscriber ) ) {
+				if ( in_array( $user_id, $subscriber ) ||  in_array( $user->user_email, $subscriber ) ){
+					return true;
+				}
+			}
+		}
+	}
+	// check user is contact
+	global $rtbiz_hd_email_notification;
+	$contacts       = rtbiz_get_post_for_contact_connection( $post->ID, Rtbiz_HD_Module::$post_type );
+	$other_contacts = $rtbiz_hd_email_notification->get_contacts( $post->ID );
+	$contact_ids    = wp_list_pluck( $contacts, 'ID' );
+	$contact_emails = wp_list_pluck( $other_contacts, 'email' );
+	if ( ( ! empty( $contact_ids ) &&  in_array( $contact_id, $contact_ids ) ) || ( ! empty( $contact_emails ) && in_array( $user_email, $contact_emails ) ) ){
+		return true;
+	}
+
+	// check notification emails
+	$redux = rtbiz_hd_get_redux_settings();
+	if ( ! empty( $redux['rthd_notification_emails'] ) ){
+		if ( ! empty( $redux['rthd_notification_emails'] ) && in_array( $user_email, $redux['rthd_notification_emails'] ) ){
+			return true;
+		}
+	}
+	return false;
+}

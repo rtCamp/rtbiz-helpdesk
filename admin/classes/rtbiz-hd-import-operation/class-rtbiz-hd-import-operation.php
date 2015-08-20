@@ -240,8 +240,8 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				} else { // create user and then add to p2p
 					$create_wp_user = false;
 					$user_contact_info = rtbiz_get_contact_by_email( $_POST['email'] );
-					$user_contact_info = $user_contact_info[0];
-					if ( $user_contact_info && ! empty( $user_contact_info->ID ) ){
+					if ( ! empty( $user_contact_info[0]->ID ) ){
+						$user_contact_info = $user_contact_info[0];
 						if ( ! p2p_connection_exists( Rtbiz_HD_Module::$post_type . '_to_' . rtbiz_get_contact_post_type(), array( 'from' => $_POST['post_id'], 'to' => $user_contact_info->ID ) ) ) {
 							rtbiz_connect_post_to_contact( Rtbiz_HD_Module::$post_type, $_POST['post_id'], $user_contact_info->ID );
 							$response['status'] = true;
@@ -1214,6 +1214,9 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		 */
 		public function insert_post_comment( $comment_post_ID, $contact_id, $comment_content, $comment_author, $comment_author_email, $commenttime, $uploaded, $allemails = array(), $dndEmails, $messageid = '', $inreplyto = '', $references = '', $subscriber = array(), $originalBody = '', $comment_type = '10', $comment_parent = 0, $keep_status = false, $force_skip_duplicate_check = true, $sensitive = false ) {
 
+			if ( ! rtbiz_hd_can_user_access( $contact_id,$comment_post_ID ) ) {
+				return false;
+			}
 			$post_type       = get_post_type( $comment_post_ID );
 			$ticketModel     = new Rtbiz_HD_Ticket_Model();
 			$d               = new DateTime( $commenttime );
