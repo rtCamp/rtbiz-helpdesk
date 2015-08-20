@@ -255,7 +255,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 					break;
 
 				case 'rthd_ticket_followup' :
-					echo '<span class="post-com-count-wrapper"><a class="post-com-count" style="cursor: default;"><span class="comment-count">' . ( $post->comment_count ) . '</span></a></span>';
+					echo '<div class="column-comments"><div class="post-com-count-wrapper"><a href="javascript:;" class="post-com-count post-com-count-approved"><span class="comment-count-approved" aria-hidden="true">' . ( $post->comment_count ) . '</span><span class="screen-reader-text">' . ( $post->comment_count ) . ' comments</span></a></div></div>';
 					break;
 				case 'rthd_ticket_last_reply_by' :
 					$comment = get_comments( array( 'post_id' => $post->ID, 'number' => 1 ) );
