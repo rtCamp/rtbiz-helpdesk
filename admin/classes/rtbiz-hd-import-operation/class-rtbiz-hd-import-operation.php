@@ -1381,6 +1381,13 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 							$subscribe_to[] = $sub_userid->ID;
 						}
 					}
+					// in email we are given userid of subscriber
+					if ( (string)(int)$sub == $sub ){
+						$sub_user = get_userdata( $sub );
+						if ( ! empty( $sub_user ) ) {
+							$subscribe_to[] = $sub;
+						}
+					}
 				}
 				$subscribe_to = array_unique( $subscribe_to );
 			}
