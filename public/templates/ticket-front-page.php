@@ -341,7 +341,7 @@ $user_edit_content = current_user_can( $cap );
 
 							// Last reply author
 							if ( ! empty( $comment ) && $comment->comment_author_email != $created_by->primary_email ) {
-								echo '<div class="rthd-participant-container"><a class="rthd-last-reply-by" title="last reply by ' . $comment->comment_author . ' ' . esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . ' ago " href="' . ( current_user_can( $cap ) ? rtbiz_hd_biz_user_profile_link( $comment->comment_author_email ) : '#' ) . '">' . get_avatar( $comment->comment_author_email, '48' ) . ' </a><a href="javascript:;" class="rthd-participant-remove" data-email="' . $comment->comment_author_email . '" data-post_id="' . $post->ID . '" >X</a><div>'
+								echo '<div class="rthd-participant-container"><a class="rthd-last-reply-by" title="last reply by ' . $comment->comment_author . ' ' . esc_attr( human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) ) . ' ago " href="' . ( current_user_can( $cap ) ? rtbiz_hd_biz_user_profile_link( $comment->comment_author_email ) : '#' ) . '">' . get_avatar( $comment->comment_author_email, '48' ) . ' </a><div>'
 								?>
 							<?php } ?>
 						</div>
