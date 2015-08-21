@@ -40,7 +40,8 @@ module.exports = function ( grunt ) {
                     'public/js/showdown-gui.js',
                     'public/js/vendors/markdown/showdown-table.js',
                     'public/js/vendors/markdown/showdown-github.js',
-                    'public/js/vendors/markdown/showdown-prettify.js'
+                    'public/js/vendors/markdown/showdown-prettify.js',
+					'public/js/zen-form.js'
 				],
 				dest: 'public/js/helpdesk-min.js'
 			},
@@ -57,7 +58,8 @@ module.exports = function ( grunt ) {
                     'public/js/showdown-gui.js',
                     'public/js/vendors/markdown/showdown-table.js',
                     'public/js/vendors/markdown/showdown-github.js',
-                    'public/js/vendors/markdown/showdown-prettify.js'
+                    'public/js/vendors/markdown/showdown-prettify.js',
+					'public/js/zen-form.js'
 				],
 				dest: 'admin/js/helpdesk-admin-min.js'
 			},

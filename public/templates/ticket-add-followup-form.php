@@ -46,8 +46,9 @@ $staffonly = current_user_can( $cap );
 	<div id="followupcontent_markdown">
 		<div id="followupcontent_html" class="pane markdown_preview_container"><noscript><h2>You'll need to enable Javascript to use this tool.</h2></noscript></div>
 		<div class="rthd-followup-content-container">
-			<textarea id="followupcontent" class="followupcontent" rows="5" cols="20" name="followupcontent"
-					  placeholder="Add new reply"></textarea>
+			<a href="#" class="go-zen--textarea"><i class="s s--zen">Edit in Zen Mode</i></a>
+			<textarea id="followupcontent" class="followupcontent zen-mode--textarea" name="followupcontent"
+					  placeholder="Add new reply" data-label="Add new followup here..."></textarea>
 		</div>
 	</div>
 
