@@ -7,7 +7,7 @@
 **Tags:** [helpdesk](https://wordpress.org/plugins/tags/helpdesk), [support](https://wordpress.org/plugins/tags/support), [products](https://wordpress.org/plugins/tags/products), [tickets](https://wordpress.org/plugins/tags/tickets), [followups](https://wordpress.org/plugins/tags/followups), [customers](https://wordpress.org/plugins/tags/customers), [e-commerce](https://wordpress.org/plugins/tags/e-commerce)  
 **Requires at least:** 4.1  
 **Tested up to:** 4.2.2  
-**Stable tag:** 1.4.0.1  
+**Stable tag:** 1.5  
 **License:** [GPLv2 or later](http://www.gnu.org/licenses/gpl-2.0.html)  
 **Author URI:** https://rtcamp.com  
 **Plugin URI:** https://rtcamp.com/rtbiz-helpdesk  
@@ -29,6 +29,16 @@ Please refer to the documentation.
 
 
 ## Changelog ##
+
+### 1.5 ###
+* Email only support added
+* Better thread in emails
+* Ticket backend list table improvement
+* Added security while adding followup via email
+* Added staff created ticket in ticket shortcode
+* Php version check added
+* Performance improvement
+* Bug fixes
 
 ### 1.4.0.1 ###
 * Hox fix php version error

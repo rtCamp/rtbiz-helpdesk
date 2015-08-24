@@ -58,6 +58,15 @@ Please refer to the documentation.
 
 == Changelog ==
 
+= 1.5 =
+* Email only support added
+* Better thread in emails
+* Ticket backend list table improvement
+* Added security while adding followup via email
+* Added staff created ticket in ticket shortcode
+* Php version check added
+* Performance improvement
+* Bug fixes
 
 = 1.4.0.1 =
 * Hox fix php version error
