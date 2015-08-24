@@ -15,7 +15,7 @@ jQuery( document ).ready(function ($) {
 
 	jQuery( ".fancybox" ).fancybox({
 		afterLoad: function () {
-			this.title = '<a class="rtbiz_hd_quick_download" download="' + jQuery( this.element ).data( "downloadlink" ) + '" href="' + jQuery( this.element ).data( "downloadlink" ) + '">Download</a> ' + this.title;
+			this.title = '<a class="rtbiz_hd_quick_download" target="_blank" download="' + jQuery( this.element ).data( "downloadlink" ) + '" href="' + jQuery( this.element ).data( "downloadlink" ) + '">Download</a> ' + this.title;
 		},
 		iframe: {
 			preload: false
