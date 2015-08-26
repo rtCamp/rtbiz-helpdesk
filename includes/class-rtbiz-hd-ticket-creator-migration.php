@@ -24,7 +24,7 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Creator_Migration' ) ) {
 		public function init() {
 			// bail if older helpdesk
 			if ( ! defined( 'RTBIZ_HD_VERSION' )
-			    || ( defined( 'RTBIZ_HD_VERSION' ) && version_compare( RTBIZ_HD_VERSION ,'1.3.6', '<' ) ) ) {
+			    || ( defined( 'RTBIZ_HD_VERSION' ) && version_compare( RTBIZ_HD_VERSION ,'1.5', '<' ) ) ) {
 				return;
 			}
 			$op = get_option( 'rt_hd_ticket_creator_migration' );

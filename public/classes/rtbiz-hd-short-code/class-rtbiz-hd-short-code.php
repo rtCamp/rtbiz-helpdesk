@@ -271,6 +271,16 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 					else
 						$fav = $fav->posts;
 
+					// get created by
+					$contactid = rtbiz_hd_get_contact_id_by_user_id($arg_shortcode['userid'], true);
+					$creator_tickets= rtbiz_hd_get_tickets('created_by', $contactid, 0, 0, true);
+					if (empty($creator_tickets))
+						$creator_tickets = array();
+					else {
+						$creator_tickets = $creator_tickets->posts;
+					}
+					$fav = array_merge($fav,$creator_tickets);
+
 					// get assigned tickets
 					$tickets = rtbiz_hd_get_tickets( 'assignee', $arg_shortcode['userid'], 0, 0, true );
 					if ( empty( $tickets ) )
