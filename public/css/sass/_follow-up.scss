@@ -2,7 +2,7 @@ ul#chat-UI {
 	margin-bottom: 30px;
 }
 
-.rthd-ticket-content .rthd-discussion.rthd-discussion {
+.rthd-ticket-wrapper .rthd-discussion.rthd-discussion {
 	list-style: none;
 	margin: 0;
 	padding: 0;
@@ -205,7 +205,7 @@ ul#chat-UI {
 	margin-right: 5px;
 }
 
-.rthd-ticket-content {
+.rthd-ticket-wrapper {
 	font-size: 14px;
 	float: left;
 	width: 72%;

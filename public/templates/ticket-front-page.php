@@ -41,7 +41,7 @@ $user_edit_content = current_user_can( $cap );
 
 		<div class="clearfix entry-content">
 
-			<div id="rthd-ticket" class="rthd-ticket-content">
+			<div id="rthd-ticket" class="rthd-ticket-wrapper">
 				<?php if ( isset( $post->ID ) ) { ?>
 					<div id="followup_wrapper">
 						<div id="commentlist">
