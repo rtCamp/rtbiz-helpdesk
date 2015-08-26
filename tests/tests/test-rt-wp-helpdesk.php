@@ -19,7 +19,7 @@ class test_RT_WP_Help_desk extends RT_WP_TestCase {
 	 */
 	function setUp() {
 		parent::setUp();
-		$this->rtwpHelpDesk = new Rt_Biz_Helpdesk();
+		$this->rtwpHelpDesk = new Rtbiz_HD_Admin();
 		$this->rtdbupdate   = new RT_DB_Update( false, realpath( dirname( __FILE__ ) . '/../../admin/schema/' ) );
 		$this->rtdbupdate->do_upgrade();
 	}

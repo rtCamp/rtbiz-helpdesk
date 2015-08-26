@@ -37,7 +37,7 @@ class test_Rt_HD_Module extends RT_WP_TestCase {
 	 * Test Class variable
 	 */
 	function  test_class_local_variable() {
-		$this->assertEquals( 'rtbiz_hd_ticket', Rtbiz_HD_Module::$post_type );
+		$this->assertEquals( 'ticket', Rtbiz_HD_Module::$post_type );
 		$this->assertEquals( 'Helpdesk', Rtbiz_HD_Module::$name);
 	}
 

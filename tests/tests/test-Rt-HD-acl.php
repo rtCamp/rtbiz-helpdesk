@@ -16,16 +16,14 @@ class test_Rt_HD_ACL extends RT_WP_TestCase {
 	 */
 	function setUp() {
 		parent::setUp();
-		$this->rthdAcl = new Rtbiz_HD_ACL();
+		$this->rthdAcl = new Rtbiz_HD_Admin();
 	}
 
 	/**
 	 * Test register_rt_hd_module
 	 */
 	function  test_register_rt_hd_module() {
-		$tmp = $this->rthdAcl->register_rt_hd_module( array() );
-		$settings               = rtbiz_hd_get_redux_settings();
-
+		$tmp = $this->rthdAcl->module_register( array() );
 		$this->assertEquals(
 			array(
 				'label'      => 'Helpdesk',

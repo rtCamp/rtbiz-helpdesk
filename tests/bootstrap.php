@@ -1,14 +1,6 @@
 <?php
 
 // Activates this plugin in WordPress so it can be tested.
-$GLOBALS['wp_tests_options'] = array(
-	'active_plugins' => array(
-		'posts-to-posts/posts-to-posts.php',
-		'rtbiz/index.php',
-		'rtbiz-helpdesk/rtbiz-helpdesk.php'
-	),
-);
-
 $_tests_dir = getenv( 'WP_TESTS_DIR' );
 if ( ! $_tests_dir ) {
 	$_tests_dir = '/tmp/wordpress-tests-lib';
@@ -23,9 +15,8 @@ function _manually_load_plugin() {
 	define( 'AUTH_KEY', '1234567890' );
 	define( 'SECURE_AUTH_KEY', '1234567890' );
 
-	require_once dirname( __FILE__ ) . '/../../posts-to-posts/posts-to-posts.php';
 
-	require_once dirname( __FILE__ ) . '/../../rtbiz/index.php';
+	require_once dirname( __FILE__ ) . '/../../rtbiz/rtbiz.php';
 	require_once dirname( __FILE__ ) . '/../rtbiz-helpdesk.php';
 }
 
