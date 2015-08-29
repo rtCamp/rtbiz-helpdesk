@@ -232,7 +232,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 				}
 			}
 			$totalcustomers = count( $contacts );
-
+			$contacts = array_filter( $contacts );
 			$customers_userid = implode( ',', $contacts );
 			$query = $wpdb->prepare( "SELECT count( distinct( meta_value ) ) FROM $wpdb->posts INNER JOIN  $wpdb->postmeta ON post_id = ID  WHERE post_status <> 'trash' and post_type = %s and meta_key = '_rtbiz_hd_created_by' and meta_value in ( " . $customers_userid . ' )', Rtbiz_HD_Module::$post_type );
 			$customers_userid = $wpdb->get_col( $query );
