@@ -878,7 +878,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			if ( ! $check_duplicate ) {
 				$success_flag = $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], '', '', '', $subscriber, '', $mailbox_email_address );
 
-				error_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
+				rtbiz_hd_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
 
 				if ( ! $success_flag ) {
 					foreach ( $uploaded as $u ) {
@@ -907,12 +907,12 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 
 				$postid = $this->get_post_id_from_subject( $title );
 
-				error_log( "POST ID FOUND FROM MAIL SUBJECT\n\r" );
+				rtbiz_hd_log( "POST ID FOUND FROM MAIL SUBJECT\n\r" );
 
 				if ( ! $postid ) {
 					//get postID from inreply to and refrence meta
 					$postid = $this->get_post_id_from_mail_meta( $inreplyto, $references );
-					error_log( "POST ID FOUND FROM MAIL META\n\r" );
+					rtbiz_hd_log( "POST ID FOUND FROM MAIL META\n\r" );
 				}
 
 				//if we got post id from subject
@@ -924,7 +924,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 
 			if ( $postid && get_post( $postid ) != null ) { // if post id found from title or mail meta & mail is Re: or Fwd:
 				if ( ! rtbiz_hd_get_reply_via_email() ) {
-					error_log( 'Mail Parse Status : ' . var_export( false, true ) . " Reply via email | false \n\r" );
+					rtbiz_hd_log( 'Mail Parse Status : ' . var_export( false, true ) . " Reply via email | false \n\r" );
 					return false;
 				}
 
@@ -934,7 +934,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 
 				$success_flag = $this->insert_post_comment( $postid, $userid, $body, $fromemail['name'], $fromemail['address'], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $subscriber, $originalBody );
 
-				error_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
+				rtbiz_hd_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
 
 				if ( ! $success_flag ) {
 					foreach ( $uploaded as $u ) {
@@ -949,7 +949,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			//if subject is re to post title
 
 			if ( $replyFlag ) { // if post id not found from title or mail meta & mail is Re: or Fwd:
-				error_log( "MAIL IS A REPLY / FORWARD OF PREVIOUS TICKET\n\r" );
+				rtbiz_hd_log( "MAIL IS A REPLY / FORWARD OF PREVIOUS TICKET\n\r" );
 				$title       = str_replace( 'Re:', '', $title );
 				$title       = str_replace( 're:', '', $title );
 				$title       = trim( $title );
@@ -960,12 +960,12 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				//if given post title exits then it will be add as comment other wise as post
 				if ( $existPostId ) {
 					if ( ! rtbiz_hd_get_reply_via_email() ) {
-						error_log( 'Mail Parse Status : ' . var_export( false, true ) . " Reply via email | false \n\r" );
+						rtbiz_hd_log( 'Mail Parse Status : ' . var_export( false, true ) . " Reply via email | false \n\r" );
 						return false;
 					}
 
 					$success_flag = $this->insert_post_comment( $existPostId, $userid, $body, $fromemail['name'], $fromemail['address'], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $subscriber, $originalBody );
-					error_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
+					rtbiz_hd_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
 
 					if ( ! $success_flag ) {
 						foreach ( $uploaded as $u ) {
@@ -977,7 +977,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 					return $success_flag;
 				} else {
 					$success_flag = $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], $messageid, $inreplyto, $references, $subscriber, $originalBody, $mailbox_email_address );
-					error_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
+					rtbiz_hd_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
 
 					if ( ! $success_flag ) {
 						foreach ( $uploaded as $u ) {
@@ -989,10 +989,10 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			} else { // if post id not found from title or mail meta & mail is not Re: or Fwd:
 				$existPostId = $this->post_exists( $title, $mailtime );
 				//if given post title exits then it will be add as comment other wise as post
-				error_log( 'Post Exists : '. var_export( $existPostId, true ) . "\r\n" );
+				rtbiz_hd_log( 'Post Exists : '. var_export( $existPostId, true ) . "\r\n" );
 				if ( ! $existPostId ) {
 					$success_flag = $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], $messageid, $inreplyto, $references, $subscriber, $originalBody, $mailbox_email_address );
-					error_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
+					rtbiz_hd_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
 
 					if ( ! $success_flag ) {
 						foreach ( $uploaded as $u ) {
@@ -1002,11 +1002,11 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 					return $success_flag;
 				} else {
 					if ( ! rtbiz_hd_get_reply_via_email() ) {
-						error_log( 'Mail Parse Status : ' . var_export( false, true ) . " Reply via email | false \n\r" );
+						rtbiz_hd_log( 'Mail Parse Status : ' . var_export( false, true ) . " Reply via email | false \n\r" );
 						return false;
 					}
 					$success_flag = $this->insert_post_comment( $existPostId, $userid, $body, $fromemail['name'], $fromemail['address'], $mailtime, $uploaded, $allemail, $dndEmails, $messageid, $inreplyto, $references, $subscriber, $originalBody );
-					error_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
+					rtbiz_hd_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
 
 					if ( ! $success_flag ) {
 						foreach ( $uploaded as $u ) {

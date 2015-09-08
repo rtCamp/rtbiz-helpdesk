@@ -2079,3 +2079,13 @@ function rtbiz_hd_can_user_access( $contact_id, $post_id ){
 	}
 	return false;
 }
+
+if ( ! function_exists( 'rtbiz_hd_log' ) ) {
+	function rtbiz_hd_log( $msg ) {
+		if ( function_exists( 'rt_log' ) ) {
+			rt_log($msg);
+		} else if( defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ){
+			error_log($msg);
+		}
+	}
+}
