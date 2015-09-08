@@ -5,8 +5,8 @@ Contributors:      rtcamp, rahul286, desaiuditd, dipesh.kakadiya, utkarshpatel, 
 Donate Link:       https://rtcamp.com/donate/
 Tags:              helpdesk, support, products, tickets, followups, customers, e-commerce
 Requires at least: 4.1
-Tested up to:      4.2.2
-Stable tag:        1.5
+Tested up to:      4.3
+Stable tag:        1.5.1
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,6 +57,9 @@ Please refer to the documentation.
 1. Dashboard
 
 == Changelog ==
+
+= 1.5.1 =
+* error_log now only logs on wp_debug_log true
 
 = 1.5 =
 * Email only support added
