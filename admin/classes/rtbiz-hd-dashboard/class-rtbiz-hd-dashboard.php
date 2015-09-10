@@ -409,7 +409,6 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 			$args = array(
 				'type' => 'post_status',
 				'update_time' => array( 'compare' => '>=', 'value' => array( $first_date ) ),
-				'update_time' => array( 'compare' => '<=', 'value' => array( $last_date ) ),
 			);
 			$history = $rtbiz_hd_ticket_history_model->get( $args, false, false, 'update_time asc' );
 
