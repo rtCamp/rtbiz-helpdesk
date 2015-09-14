@@ -772,7 +772,7 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 		 */
 		function create_tickets_from_map_data( $map_data, $gravity_lead_id, $type ) {
 
-			global $rtbiz_importer;
+			global $rtbiz_importer,$rtbiz_hd_ticket_index_model;
 			if ( ! empty( $map_data['mapSource'] ) ) {
 				$gravity_from = GFFormsModel::get_form( $map_data['mapSource'] );
 			}
@@ -792,7 +792,6 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 			}
 
 			$post_type   = Rtbiz_HD_Module::$post_type;
-			$ticketModel = new Rtbiz_HD_Ticket_Model();
 			if ( isset( $creationdate ) ) {
 				$creationdate = trim( $creationdate );
 
@@ -918,7 +917,7 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 								'date_update_gmt' => $modify_date_gmt,
 								'user_updated_by' => get_current_user_id(),
 							);
-							$ticketModel->update_ticket( $data, $where );
+							$rtbiz_hd_ticket_index_model->update_ticket( $data, $where );
 						} else {
 							try {
 								$dt              = new DateTime( $modifydate );
@@ -939,7 +938,7 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 									'date_update_gmt' => $modify_date_gmt,
 									'user_updated_by' => get_current_user_id(),
 								);
-								$ticketModel->update_ticket( $data, $where );
+								$rtbiz_hd_ticket_index_model->update_ticket( $data, $where );
 
 							} catch ( Exception $e ) {
 								$modifydate = 'now';
@@ -965,7 +964,7 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 								'date_update_gmt' => $modify_date_gmt,
 								'user_updated_by' => get_current_user_id(),
 							);
-							$ticketModel->update_ticket( $data, $where );
+							$rtbiz_hd_ticket_index_model->update_ticket( $data, $where );
 
 						} catch ( Exception $e ) {
 							$modifydate = 'now';
@@ -987,7 +986,7 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 						'date_update_gmt' => gmdate( 'Y-m-d H:i:s' ),
 						'user_updated_by' => get_current_user_id(),
 					);
-					$ticketModel->update_ticket( $data, $where );
+					$rtbiz_hd_ticket_index_model->update_ticket( $data, $where );
 
 					// System Notification -- Meta Attribute updated
 				}
@@ -1035,7 +1034,7 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 											'date_update_gmt' => gmdate( 'Y-m-d H:i:s' ),
 											'user_updated_by' => get_current_user_id(),
 										);
-										$ticketModel->update_ticket( $data, $where );
+										$rtbiz_hd_ticket_index_model->update_ticket( $data, $where );
 
 										// System Notification -- Tax Attribute updated
 									}
@@ -1081,7 +1080,7 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 											'date_update_gmt' => gmdate( 'Y-m-d H:i:s' ),
 											'user_updated_by' => get_current_user_id(),
 										);
-										$ticketModel->update_ticket( $data, $where );
+										$rtbiz_hd_ticket_index_model->update_ticket( $data, $where );
 
 										// System Notification -- Tax Attribute updated
 									}
@@ -1107,7 +1106,7 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 											'date_update_gmt' => gmdate( 'Y-m-d H:i:s' ),
 											'user_updated_by' => get_current_user_id(),
 										);
-										$ticketModel->update_ticket( $data, $where );
+										$rtbiz_hd_ticket_index_model->update_ticket( $data, $where );
 
 										// System Notification -- Meta Attribute updated
 									}
@@ -1145,7 +1144,7 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 											'date_update_gmt' => gmdate( 'Y-m-d H:i:s' ),
 											'user_updated_by' => get_current_user_id(),
 										);
-										$ticketModel->update_ticket( $data, $where );
+										$rtbiz_hd_ticket_index_model->update_ticket( $data, $where );
 
 										// System Notification -- Meta Attribute updated
 
@@ -1227,7 +1226,7 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 							'date_update_gmt' => gmdate( 'Y-m-d H:i:s' ),
 							'user_updated_by' => get_current_user_id(),
 						);
-						$ticketModel->update_ticket( $data, $where );
+						$rtbiz_hd_ticket_index_model->update_ticket( $data, $where );
 
 						//	System Notification -- Accounts Updated
 					}

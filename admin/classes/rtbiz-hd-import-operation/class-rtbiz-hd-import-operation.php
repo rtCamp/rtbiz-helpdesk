@@ -391,7 +391,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 
 		public function ajax_add_new_ticket() {
 			$result = array();
-			$ticketModel = new Rtbiz_HD_Ticket_Model();
+			global $rtbiz_hd_ticket_index_model;
 
 			if ( ! isset( $_POST['nonce'] ) && ! wp_verify_nonce( $_POST['nonce'], 'rt_hd_ticket_edit' ) ) {
 				$result['status'] = false;
@@ -417,7 +417,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				'date_update_gmt' => gmdate( 'Y-m-d H:i:s' ),
 				'user_updated_by' => get_current_user_id(),
 			);
-			$ticketModel->add_ticket( $dataArray );
+			$rtbiz_hd_ticket_index_model->add_ticket( $dataArray );
 
 			update_post_meta( $_POST['post_id'], '_rtbiz_hd_markdown_data', $_POST['body_markdown'] );
 			update_post_meta( $_POST['post_id'], '_rtbiz_hd_updated_by', get_current_user_id() );
@@ -731,7 +731,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 		 */
 		public function add_contacts_to_post( $allemail, $post_id, $create_wp_user = false ) {
 			/* @var $rtbiz_hd_contacts Rtbiz_HD_Contacts */
-			global $rtbiz_hd_contacts;
+			global $rtbiz_hd_contacts,$rtbiz_hd_ticket_index_model;
 			$ticket_creator = rtbiz_hd_get_ticket_creator( $post_id );
 			$postterms = array();
 
@@ -757,7 +757,6 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 					rtbiz_connect_post_to_contact( $post_type, $post_id, $term );
 				}
 				// Update Index
-				$ticketModel = new Rtbiz_HD_Ticket_Model();
 				$where       = array( 'post_id' => $post_id );
 				$attr_name   = rtbiz_get_contact_post_type();
 				$data        = array(
@@ -766,7 +765,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 					'date_update_gmt' => gmdate( 'Y-m-d H:i:s' ),
 					'user_updated_by' => get_current_user_id(),
 				);
-				$ticketModel->update_ticket( $data, $where );
+				$rtbiz_hd_ticket_index_model->update_ticket( $data, $where );
 				// System Notification -- Contact added
 			}
 		}
@@ -1217,8 +1216,8 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			if ( ! rtbiz_hd_can_user_access( $contact_id,$comment_post_ID ) ) {
 				return false;
 			}
+			global $rtbiz_hd_ticket_index_model;
 			$post_type       = get_post_type( $comment_post_ID );
-			$ticketModel     = new Rtbiz_HD_Ticket_Model();
 			$d               = new DateTime( $commenttime );
 			$UTC             = new DateTimeZone( 'UTC' );
 			$d->setTimezone( $UTC );
@@ -1333,7 +1332,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			$where = array(
 				'post_id' => $comment_post_ID,
 			);
-			$ticketModel->update_ticket( $data, $where );
+			$rtbiz_hd_ticket_index_model->update_ticket( $data, $where );
 			/* System Notification -- Followup Added to the ticket */
 
 			/* Toggle Ticket Status */
