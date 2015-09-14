@@ -124,8 +124,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Operation' ) ) {
 			}
 
 			if ( isset( $postArray ) && ! empty( $postArray ) && isset( $dataArray ) && ! empty( $dataArray ) ) {
-
-				$ticketModel = new Rtbiz_HD_Ticket_Model();
+				global $rtbiz_hd_ticket_index_model;
 
 				if ( empty( $post_id ) ) { // new post
 					$post_id = wp_insert_post( $postArray );
@@ -190,12 +189,12 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Operation' ) ) {
 					update_post_meta( $post_id, '_rtbiz_hd_unique_id', $unique_id );
 				}
 
-				if ( $ticketModel->is_exist( $post_id ) ) {
+				if ( $rtbiz_hd_ticket_index_model->is_exist( $post_id ) ) {
 					$where = array( 'post_id' => $post_id );
-					$ticketModel->update_ticket( $dataArray, $where );
+					$rtbiz_hd_ticket_index_model->update_ticket( $dataArray, $where );
 				} else {
 					$data = array_merge( $dataArray, array( 'post_id' => $post_id ) );
-					$ticketModel->add_ticket( $data );
+					$rtbiz_hd_ticket_index_model->add_ticket( $data );
 				}
 
 				//TODO : History table update
@@ -219,10 +218,9 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Operation' ) ) {
 		 */
 		public function ticket_attribute_update( $newTicket, $post_type, $post_id, $attribute_store_as = 'taxonomy' ) {
 
-			global $rtbiz_hd_attributes;
+			global $rtbiz_hd_attributes, $rtbiz_hd_ticket_index_model;
 			if ( isset( $newTicket ) && ! empty( $newTicket ) && isset( $post_id ) && ! empty( $post_id ) ) {
 				$dataArray       = array();
-				$ticketModel     = new Rtbiz_HD_Ticket_Model();
 				$meta_attributes = rtbiz_hd_get_attributes( $post_type, $attribute_store_as );
 				foreach ( $meta_attributes as $attr ) {
 					$attr_diff = $rtbiz_hd_attributes->attribute_diff( $attr, $post_id, $newTicket );
@@ -251,7 +249,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Operation' ) ) {
 						'user_updated_by' => get_current_user_id(),
 					) );
 					$where     = array( 'post_id' => $post_id );
-					$ticketModel->update_ticket( $dataArray, $where );
+					$rtbiz_hd_ticket_index_model->update_ticket( $dataArray, $where );
 
 					return true;
 				}
