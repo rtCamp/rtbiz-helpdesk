@@ -371,7 +371,7 @@ a.load-more-block{
 
 .rt-hd-related-ticket ul li, .rt-hd-ticket-history ul li{
 	padding: 5px;
-	margin: 5px 0px;
+	margin: 5px 0;
 }
 
 .rt-hd-related-ticket ul li mark, .rt-hd-ticket-history ul li mark{
@@ -433,7 +433,7 @@ a:hover.rthd-scroll-up{
 	display: block;
     text-align: center;
     width: 34px;
-    margin: 0px;
+    margin: 0;
 }
 .rthd-scroll-up .dashicons{
 	font-weight: bold;
@@ -678,6 +678,12 @@ img#hdspinner{
 .rthd-comment-content ol, .rthd-comment-content ul{
 	margin: 0 0 1.6em 1.3333em;
 }
+.rthd-comment-content{
+  img{
+	height: auto !important;
+	width: auto !important;
+  }
+}
 
 .close-edit-followup{
   float: left !important;
@@ -685,13 +691,13 @@ img#hdspinner{
 
 .followup-tabs{
     text-decoration: none;
-    margin-bottom: 0px;
+    margin-bottom: 0;
     display: inline-block;
 }
 
 .followup-tabs .tab{
     display: inline-block;
-    margin: 0px 10px 0px 0px;
+    margin: 0 10px 0 0;
     padding: 5px;
     cursor: pointer;
 }
@@ -728,7 +734,7 @@ img#hdspinner{
 }
 
 .rthd-followup-content-tolltip{
-    top: 0px;
+    top: 0;
     position: relative;
     &:hover {
       .rthd-tip-bottom,
