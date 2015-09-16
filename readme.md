@@ -7,7 +7,7 @@
 **Tags:** [helpdesk](https://wordpress.org/plugins/tags/helpdesk), [support](https://wordpress.org/plugins/tags/support), [products](https://wordpress.org/plugins/tags/products), [tickets](https://wordpress.org/plugins/tags/tickets), [followups](https://wordpress.org/plugins/tags/followups), [customers](https://wordpress.org/plugins/tags/customers), [e-commerce](https://wordpress.org/plugins/tags/e-commerce)  
 **Requires at least:** 4.1  
 **Tested up to:** 4.3  
-**Stable tag:** 1.5.1  
+**Stable tag:** 1.5.2  
 **License:** [GPLv2 or later](http://www.gnu.org/licenses/gpl-2.0.html)  
 **Author URI:** https://rtcamp.com  
 **Plugin URI:** https://rtcamp.com/rtbiz-helpdesk  
@@ -29,6 +29,9 @@ Please refer to the documentation.
 
 
 ## Changelog ##
+
+### 1.5.2 ###
+* Php version error fix
 
 ### 1.5.1 ###
 * error_log now only logs on wp_debug_log true
