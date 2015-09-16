@@ -92,9 +92,10 @@ if ( ! class_exists( 'Rtbiz_HD' ) ) {
 			 */
 			include_once RTBIZ_HD_PATH . 'admin/helper/rthd-functions.php';
 			include_once RTBIZ_HD_PATH . 'vendor/forceutf8/src/ForceUTF8/Encoding.php';
-			include_once RTBIZ_HD_PATH . 'vendor/excel_reader2.php';
-			include_once RTBIZ_HD_PATH . 'vendor/parsecsv.lib.php';
-			include_once RTBIZ_HD_PATH . 'vendor/simplexlsx.php';
+			// this dependency
+			//			include_once RTBIZ_HD_PATH . 'vendor/excel_reader2.php';
+			//			include_once RTBIZ_HD_PATH . 'vendor/parsecsv.lib.php';
+			//			include_once RTBIZ_HD_PATH . 'vendor/simplexlsx.php';
 
 			new RT_WP_Autoload( RTBIZ_HD_PATH . 'lib/rtformhelpers/' );
 			new RT_WP_Autoload( RTBIZ_HD_PATH . 'includes/' );
