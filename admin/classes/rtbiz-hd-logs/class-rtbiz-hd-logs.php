@@ -146,7 +146,8 @@ if ( ! class_exists( 'Rtbiz_HD_Logs' ) ) {
 						</td>
 						<td>
 							<?php
-							$form = RGFormsModel::get_form( RGFormsModel::get_lead( $rslt->lead_id )['form_id'] );
+							$lead = RGFormsModel::get_lead( $rslt->lead_id );
+							$form = RGFormsModel::get_form( $lead['form_id'] );
 							echo isset( $form->title ) && isset( $form->id )?'<a href="' . admin_url( 'admin.php?page=gf_edit_forms&id=' . $form->id ) .'">'.$form->title .'</a>': 'N/A' ;?>
 						</td>
 <!--												<td>-->
