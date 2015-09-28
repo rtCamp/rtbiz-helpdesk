@@ -59,7 +59,13 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Model' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		function add_ticket( $data ) {
+			$this->reset_cache();
 			return parent::insert( $data );
+		}
+		function reset_cache(){
+			wp_cache_delete( 'hd_team_load', 'hd_dashboard' );
+			wp_cache_delete( 'hd_top_client', 'hd_dashboard' );
+			wp_cache_delete( 'hd_ticket_by_status', 'hd_dashboard' );
 		}
 
 		/**
@@ -73,6 +79,7 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Model' ) ) {
 		 * @since rt-Helpdesk 0.1
 		 */
 		function update_ticket( $data, $where ) {
+			$this->reset_cache();
 			return parent::update( $data, $where );
 		}
 

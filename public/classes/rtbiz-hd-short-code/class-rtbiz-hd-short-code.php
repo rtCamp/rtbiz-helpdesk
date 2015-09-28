@@ -155,6 +155,7 @@ if ( !class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 					</div>
 					<?php
 				} else {
+					// todo: add filter to this login
 					?>
 					<div id="info" class="error rthd-notice">You're not logged in. Please <a
 							href="<?php echo wp_login_url( get_permalink() ); ?>" title="login">login</a> first to

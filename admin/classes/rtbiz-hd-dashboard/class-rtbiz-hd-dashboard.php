@@ -344,43 +344,52 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 		 * @since 0.1
 		 */
 		public function tickets_by_status() {
-			global $rtbiz_hd_module, $wpdb;
+
+			$data_source = wp_cache_get( 'hd_ticket_by_status', 'hd_dashboard' );
+			error_log( (false !== $data_source) . " hd_ticket_by_status From cache? ");
+
 			$settings = rtbiz_hd_get_redux_settings();
-			$table_name = rtbiz_hd_get_ticket_table_name();
-			$post_statuses = array();
-			foreach ( $rtbiz_hd_module->statuses as $status ) {
-				$post_statuses[ $status['slug'] ] = $status['name'];
-			}
-
-			$query = "SELECT post_status, COUNT(id) AS rthd_count FROM {$table_name} WHERE 1=1 GROUP BY post_status";
-			$results = $wpdb->get_results( $query );
-			if ( ! empty( $results ) ) {
-				$data_source = array();
-				$cols        = array( __( 'Ticket Status', RTBIZ_HD_TEXT_DOMAIN ), __( 'Count', RTBIZ_HD_TEXT_DOMAIN ) );
-				$rows        = array();
-				foreach ( $results as $item ) {
-					$post_status = ( isset( $post_statuses[ $item->post_status ] ) ) ? $post_statuses[ $item->post_status ] : '';
-					if ( ! empty( $post_status ) ) {
-						$rows[] = array(
-							$post_status,
-							( ! empty( $item->rthd_count ) ) ? floatval( $item->rthd_count ) : 0,
-						);
-					}
+			if ( false === $data_source ) {
+				global $rtbiz_hd_module, $wpdb;
+				$table_name = rtbiz_hd_get_ticket_table_name();
+				$post_statuses = array();
+				foreach ($rtbiz_hd_module->statuses as $status) {
+					$post_statuses[$status['slug']] = $status['name'];
 				}
-				$data_source['cols'] = $cols;
-				$data_source['rows'] = $rows;
 
+				$query = "SELECT post_status, COUNT(id) AS rthd_count FROM {$table_name} WHERE 1=1 GROUP BY post_status";
+				$results = $wpdb->get_results($query);
+				$data_source = array();
+				if ( ! empty( $results ) ) {
+					$cols = array(__('Ticket Status', RTBIZ_HD_TEXT_DOMAIN), __('Count', RTBIZ_HD_TEXT_DOMAIN));
+					$rows = array();
+					foreach ($results as $item) {
+						$post_status = (isset($post_statuses[$item->post_status])) ? $post_statuses[$item->post_status] : '';
+						if (!empty($post_status)) {
+							$rows[] = array(
+								$post_status,
+								(!empty($item->rthd_count)) ? floatval($item->rthd_count) : 0,
+							);
+						}
+					}
+					$data_source['cols'] = $cols;
+					$data_source['rows'] = $rows;
+				}
+				wp_cache_set('hd_ticket_by_status', $data_source, 'hd_dashboard', DAY_IN_SECONDS );
+			}
+			if ( ! empty( $data_source ) ) {
 				$this->charts[] = array(
-					'id'          => 1,
-					'chart_type'  => 'pie',
+					'id' => 1,
+					'chart_type' => 'pie',
 					'data_source' => $data_source,
 					'dom_element' => 'rthd_hd_pie_tickets_by_status',
-					'options'     => array( 'title' => __( 'Status wise Tickets', RTBIZ_HD_TEXT_DOMAIN ) ),
+					'options' => array('title' => __('Status wise Tickets', RTBIZ_HD_TEXT_DOMAIN)),
 				);
 			}
+
 			?>
 			<div id="rthd_hd_pie_tickets_by_status"></div>
-			<?php if ( empty( $results ) ) {
+			<?php if ( empty( $data_source ) ) {
 				printf( 'No tickets found.' );
 				if ( ! empty( $settings['rthd_support_page'] ) ){
 					printf( '<a target="_blank" href="%s" >Add new ticket</a>', get_page_link( $settings['rthd_support_page'] ) );
@@ -474,62 +483,67 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 		 * @since 0.1
 		 */
 		public function team_load() {
-			global $rtbiz_hd_module, $wpdb;
-			$table_name = rtbiz_hd_get_ticket_table_name();
-			$post_statuses = array();
-			foreach ( $rtbiz_hd_module->statuses as $status ) {
-				$post_statuses[ $status['slug'] ] = $status['name'];
-			}
-
-			$query = "SELECT assignee, post_status, COUNT(ID) AS rthd_ticket_count FROM {$table_name} WHERE 1=1 GROUP BY assignee, post_status";
-			$results = $wpdb->get_results( $query );
-			if ( ! empty( $results ) ) {
-				$table_matrix = array();
-				foreach ( $results as $item ) {
-					if ( isset( $table_matrix[ $item->assignee ] ) ) {
-						if ( isset( $post_statuses[ $item->post_status ] ) ) {
-							$table_matrix[ $item->assignee ][ $item->post_status ] = $item->rthd_ticket_count;
-						}
-					} else {
-						foreach ( $post_statuses as $key => $status ) {
-							$table_matrix[ $item->assignee ][ $key ] = 0;
-						}
-						if ( isset( $post_statuses[ $item->post_status ] ) ) {
-							$table_matrix[ $item->assignee ][ $item->post_status ] = $item->rthd_ticket_count;
-						}
-					}
+			$data_source = wp_cache_get( 'hd_team_load', 'hd_dashboard' );
+			error_log( (false !== $data_source) . " hd_team_load From cache? ");
+			if ( false === $data_source ) {
+				global $rtbiz_hd_module, $wpdb;
+				$table_name = rtbiz_hd_get_ticket_table_name();
+				$post_statuses = array();
+				foreach ($rtbiz_hd_module->statuses as $status) {
+					$post_statuses[$status['slug']] = $status['name'];
 				}
 
+				$query = "SELECT assignee, post_status, COUNT(ID) AS rthd_ticket_count FROM {$table_name} WHERE 1=1 GROUP BY assignee, post_status";
+				$results = $wpdb->get_results($query);
 				$data_source = array();
-				$cols[]      = array( 'type' => 'string', 'label' => __( 'Users', RTBIZ_HD_TEXT_DOMAIN ) );
-				foreach ( $post_statuses as $status ) {
-					$cols[] = array( 'type' => 'number', 'label' => $status );
+				if ( ! empty( $results ) ) {
+					$table_matrix = array();
+					foreach ($results as $item) {
+						if (isset($table_matrix[$item->assignee])) {
+							if (isset($post_statuses[$item->post_status])) {
+								$table_matrix[$item->assignee][$item->post_status] = $item->rthd_ticket_count;
+							}
+						} else {
+							foreach ($post_statuses as $key => $status) {
+								$table_matrix[$item->assignee][$key] = 0;
+							}
+							if (isset($post_statuses[$item->post_status])) {
+								$table_matrix[$item->assignee][$item->post_status] = $item->rthd_ticket_count;
+							}
+						}
+					}
+
+					$cols[] = array('type' => 'string', 'label' => __('Users', RTBIZ_HD_TEXT_DOMAIN));
+					foreach ($post_statuses as $status) {
+						$cols[] = array('type' => 'number', 'label' => $status);
+					}
+
+					$rows = array();
+					foreach ($table_matrix as $user => $item) {
+
+						$temp = array();
+						foreach ($item as $status => $count) {
+							$temp[] = intval($count);
+						}
+						$user = get_user_by('id', $user);
+						if (empty($user)) {
+							continue;
+						}
+						$url = esc_url(add_query_arg(array(
+							'post_type' => Rtbiz_HD_Module::$post_type,
+							'assigned' => $user->ID,
+						), admin_url('edit.php')));
+						if (!empty($user)) {
+							array_unshift($temp, '<a href="' . $url . '">' . $user->display_name . '</a>');
+							$rows[] = $temp;
+						}
+					}
+					$data_source['cols'] = $cols;
+					$data_source['rows'] = $rows;
 				}
-
-				$rows = array();
-				foreach ( $table_matrix as $user => $item ) {
-
-					$temp = array();
-					foreach ( $item as $status => $count ) {
-						$temp[] = intval( $count );
-					}
-					$user = get_user_by( 'id', $user );
-					if ( empty( $user ) ) {
-						continue;
-					}
-					$url  = esc_url( add_query_arg( array(
-						                                'post_type' => Rtbiz_HD_Module::$post_type,
-						                                'assigned'  => $user->ID,
-					                                ), admin_url( 'edit.php' ) ) );
-					if ( ! empty( $user ) ) {
-						array_unshift( $temp, '<a href="' . $url . '">' . $user->display_name . '</a>' );
-						$rows[] = $temp;
-					}
-				}
-
-				$data_source['cols'] = $cols;
-				$data_source['rows'] = $rows;
-
+				wp_cache_set('hd_team_load', $data_source, 'hd_dashboard', DAY_IN_SECONDS );
+			}
+			if ( ! empty( $data_source ) ) {
 				$this->charts[] = array(
 					'id'          => 2,
 					'chart_type'  => 'table',
@@ -537,11 +551,10 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 					'dom_element' => 'rthd_hd_table_team_load',
 					'options'     => array( 'title' => __( 'Team Load', RTBIZ_HD_TEXT_DOMAIN ) , 'sortColumn' => 1, 'sortAscending' => true ),
 				);
-			}
-			?>
-			<div id="rthd_hd_table_team_load"></div>
-			<?php if ( empty( $results ) ) {
-				_e( 'No staff / ticket found.' ); }
+				?>
+				<div id="rthd_hd_table_team_load"></div> <?php
+			} else
+				_e( 'No staff / ticket found.' );
 		}
 
 		/**
@@ -597,68 +610,72 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 		 * @since 0.1
 		 */
 		public function top_clients() {
-			global $wpdb;
-			$table_name = rtbiz_hd_get_ticket_table_name();
-			$contact = rtbiz_get_contact_post_type();
-			$account = rtbiz_get_company_post_type();
 
-			//$query = 'SELECT contact.ID AS contact_id, contact.post_title AS contact_name ' . ( ( isset( $wpdb->p2p ) ) ? ', COUNT( ticket.ID ) AS contact_tickets ' : ' ' ) . "FROM {$wpdb->posts} AS contact " . ( ( isset( $wpdb->p2p ) ) ? "JOIN {$wpdb->p2p} AS p2p_lc ON contact.ID = p2p_lc.p2p_to " : ' ' ) . ( ( isset( $wpdb->p2p ) ) ? "JOIN {$table_name} AS ticket ON ticket.post_id = p2p_lc.p2p_from " : ' ' ) . ( ( isset( $wpdb->p2p ) ) ? "LEFT JOIN {$wpdb->p2p} AS p2p_ac ON contact.ID = p2p_ac.p2p_to AND p2p_ac.p2p_type = '{$account}_to_{$contact}'  " : ' ' ) . 'WHERE 2=2 ' . ( ( isset( $wpdb->p2p ) ) ? "AND p2p_lc.p2p_type = '" . Rtbiz_HD_Module::$post_type . "_to_{$contact}' " : ' ' ) . "AND contact.post_type = '{$contact}' " . ( ( isset( $wpdb->p2p ) ) ? 'AND p2p_ac.p2p_type IS NULL ' : ' ' ) . 'GROUP BY contact.ID ' . ( ( isset( $wpdb->p2p ) ) ? 'ORDER BY contact_tickets DESC ' : ' ' ) . 'LIMIT 0 , 10';
-			$query = '
-						SELECT
+			$data_source = wp_cache_get( 'hd_top_client', 'hd_dashboard' );
+			error_log( (false !== $data_source) . " hd_top_client From cache? ");
+			if ( false === $data_source ) {
+				global $wpdb;
+				$table_name = rtbiz_hd_get_ticket_table_name();
+				$contact = rtbiz_get_contact_post_type();
+				$query = ' SELECT
 							us.ID as contact_id,
 							us.post_title AS contact_name,
 						    COUNT( ticket.ID ) AS contact_tickets
 						FROM
-							'.$wpdb->posts.' as us
+							' . $wpdb->posts . ' as us
 							JOIN
-							'.$table_name.' AS ticket
+							' . $table_name . ' AS ticket
 							ON (us.ID = ticket.user_created_by)
 						WHERE
 								2=2
 							AND
-								us.post_type = "'.rtbiz_get_contact_post_type().'"
+								us.post_type = "' . $contact . '"
 							AND
 								us.post_status <> "trash"
 							GROUP BY us.ID
 						    ORDER BY contact_tickets
 						    DESC LIMIT 0 , 10';
-			$results = $wpdb->get_results( $query );
-			if ( ! empty( $results ) ) {
+				$results = $wpdb->get_results($query);
 				$data_source = array();
-				$cols = array(
-					array( 'type' => 'string', 'label' => __( 'Contact Name', RTBIZ_HD_TEXT_DOMAIN ) ),
-					array( 'type' => 'number', 'label' => __( 'Number of Tickets', RTBIZ_HD_TEXT_DOMAIN ) ),
-				);
-
-				$rows = array();
-				foreach ( $results as $item ) {
-					$url = esc_url( add_query_arg( array(
-						                               'post_type'  => Rtbiz_HD_Module::$post_type,
-						                               'contact_id' => $item->contact_id,
-					                               ), admin_url( 'edit.php' ) ) );
-					$rows[] = array(
-						'<a href="' . $url . '">' . $item->contact_name . '</a>',
-						intval( $item->contact_tickets ),
+				if ( ! empty( $results ) ) {
+					$cols = array(
+						array('type' => 'string', 'label' => __('Contact Name', RTBIZ_HD_TEXT_DOMAIN)),
+						array('type' => 'number', 'label' => __('Number of Tickets', RTBIZ_HD_TEXT_DOMAIN)),
 					);
+
+					$rows = array();
+					foreach ($results as $item) {
+						$url = esc_url(add_query_arg(array(
+							'post_type' => Rtbiz_HD_Module::$post_type,
+							'contact_id' => $item->contact_id,
+						), admin_url('edit.php')));
+						$rows[] = array(
+							'<a href="' . $url . '">' . $item->contact_name . '</a>',
+							intval($item->contact_tickets),
+						);
+					}
+
+					$data_source['cols'] = $cols;
+					$data_source['rows'] = $rows;
 				}
-
-				$data_source['cols'] = $cols;
-				$data_source['rows'] = $rows;
-
+				wp_cache_set('hd_top_client', $data_source, 'hd_dashboard', DAY_IN_SECONDS );
+			}
+			if ( ! empty( $data_source ) ) {
 				$this->charts[] = array(
 					'id' => 4,
 					'chart_type' => 'table',
 					'data_source' => $data_source,
 					'dom_element' => 'rthd_hd_table_top_clients',
-					'options' => array( 'title' => __( 'Top Clients', RTBIZ_HD_TEXT_DOMAIN ) ),
+					'options' => array('title' => __('Top Clients', RTBIZ_HD_TEXT_DOMAIN)),
 				);
 			}
-			?>
-			<div id="rthd_hd_table_top_clients">
-				<?php if ( empty( $results ) ) {
-					_e( 'No customer found' ); } ?>
-			</div>
-			<?php
+				?>
+				<div id="rthd_hd_table_top_clients">
+					<?php if ( empty( $data_source ) ) {
+						_e('No customer found');
+					} ?>
+				</div>
+				<?php
 		}
 
 		/**
