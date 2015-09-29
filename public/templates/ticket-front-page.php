@@ -65,49 +65,50 @@ $user_edit_content = current_user_can( $cap );
 						</h3>
 
 						<?php if ( current_user_can( $cap ) ) { ?>
-						<div class="rthd-front-icons clearfix">
-							<a id='ticket-information-edit-ticket-link'
-							   href="<?php echo get_edit_post_link( $post->ID ) ?>"
-							   title="<?php _e( 'Edit ' . esc_attr( ucfirst( $labels['name'] ) ) ); ?>"> <span
-									class="dashicons dashicons-edit"></span></a>
-							<?php
-							// Watch/Unwatch ticket feature.
-							$watch_unwatch_label = $watch_unwatch_value = '';
-							if ( rtbiz_hd_is_ticket_subscriber( $post->ID ) ) {
-								$watch_unwatch_label = 'Unsubscribe notifications from this ticket';
-								$watch_unwatch_value = 'unwatch';
-							} else {
-								$watch_unwatch_label = 'Subscribe for notifications from this ticket';
-								$watch_unwatch_value = 'watch';
-							}
-
-							if ( ! empty( $watch_unwatch_label ) ) {
-							?>
-							<a id="rthd-ticket-watch-unwatch" href="#" data-value="<?php echo $watch_unwatch_value; ?>"
-							   title="<?php _e( $watch_unwatch_label ) ?>">
+							<div class="rthd-front-icons clearfix">
+								<a id='ticket-information-edit-ticket-link'
+								   href="<?php echo get_edit_post_link( $post->ID ) ?>"
+								   title="<?php _e( 'Edit ' . esc_attr( ucfirst( $labels['name'] ) ) ); ?>"> <span
+										class="dashicons dashicons-edit"></span></a>
 								<?php
-								if ( 'watch' == $watch_unwatch_value ) {
-									echo '<span class="dashicons dashicons-email-alt rthd-gray"></span>';
+								// Watch/Unwatch ticket feature.
+								$watch_unwatch_label = $watch_unwatch_value = '';
+								if ( rtbiz_hd_is_ticket_subscriber( $post->ID ) ) {
+									$watch_unwatch_label = 'Unsubscribe notifications from this ticket';
+									$watch_unwatch_value = 'unwatch';
 								} else {
-									echo '<span class="dashicons dashicons-email"></span>';
+									$watch_unwatch_label = 'Subscribe for notifications from this ticket';
+									$watch_unwatch_value = 'watch';
 								}
+
+								if ( ! empty( $watch_unwatch_label ) ) {
 								?>
-								<?php }
-								$isfav = in_array( $post->ID, rtbiz_hd_get_user_fav_ticket( get_current_user_id() ) );
-								?>
-								<a id="ticket-add-fav" href="#"
-								   title="<?php ( $isfav ) ? _e( 'Remove this ticket from favorites', RTBIZ_HD_TEXT_DOMAIN ) : _e( 'Favorite this ticket', RTBIZ_HD_TEXT_DOMAIN ) ?>"><?php
-									if ( $isfav ) {
-										echo '<span class="dashicons dashicons-heart"></span>';
+								<a id="rthd-ticket-watch-unwatch" href="#"
+								   data-value="<?php echo $watch_unwatch_value; ?>"
+								   title="<?php _e( $watch_unwatch_label ) ?>">
+									<?php
+									if ( 'watch' == $watch_unwatch_value ) {
+										echo '<span class="dashicons dashicons-email-alt rthd-gray"></span>';
 									} else {
-										echo '<span class="dashicons dashicons-heart rthd-gray"></span>';
+										echo '<span class="dashicons dashicons-email"></span>';
 									}
 									?>
-								</a>
-								<?php wp_nonce_field( 'heythisisrthd_ticket_fav_' . $post->ID, 'rtbiz_hd_fav_tickets_nonce' ); ?>
+									<?php }
+									$isfav = in_array( $post->ID, rtbiz_hd_get_user_fav_ticket( get_current_user_id() ) );
+									?>
+									<a id="ticket-add-fav" href="#"
+									   title="<?php ( $isfav ) ? _e( 'Remove this ticket from favorites', RTBIZ_HD_TEXT_DOMAIN ) : _e( 'Favorite this ticket', RTBIZ_HD_TEXT_DOMAIN ) ?>"><?php
+										if ( $isfav ) {
+											echo '<span class="dashicons dashicons-heart"></span>';
+										} else {
+											echo '<span class="dashicons dashicons-heart rthd-gray"></span>';
+										}
+										?>
+									</a>
+									<?php wp_nonce_field( 'heythisisrthd_ticket_fav_' . $post->ID, 'rtbiz_hd_fav_tickets_nonce' ); ?>
 
-						</div>
-					<?php } ?>
+							</div>
+						<?php } ?>
 					</div>
 
 					<div class="rt-hd-ticket-sub-row">
@@ -147,15 +148,23 @@ $user_edit_content = current_user_can( $cap );
 								<select id="rthd-assignee-list" class="rthd-ticket-dropdown" name="rt-hd-assignee">
 									<?php
 									if ( ! empty( $rtcamp_users ) ) {
+										$assignee_options  = '';
+										$is_found_assignee = false;
 										foreach ( $rtcamp_users as $author ) {
 											if ( $author->ID == $post->post_author ) {
-												$selected      = ' selected="selected"';
-												$assignee_info = $author;
+												$selected          = ' selected="selected"';
+												$assignee_info     = $author;
+												$is_found_assignee = true;
 											} else {
 												$selected = ' ';
 											}
-											echo '<option value="' . esc_attr( $author->ID ) . '"' . esc_attr( $selected ) . '>' . esc_attr( $author->display_name ) . '</option>';
+											$assignee_options .= '<option value="' . esc_attr( $author->ID ) . '"' . esc_attr( $selected ) . '>' . esc_attr( $author->display_name ) . '</option>';
 										}
+										if ( ! $is_found_assignee ) {
+											$assignee_options = '<option selected="selected">--Select Assignee--</option>' . $assignee_options;
+											// todo: assignee is not found or he don't have helpdesk access anymore should assignee to default assignee in such case ?
+										}
+										echo $assignee_options;
 									}
 									?>
 								</select>
@@ -173,11 +182,11 @@ $user_edit_content = current_user_can( $cap );
 								     src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
 							</div>
 						</div>
-					<?php
+						<?php
 					}
 					// Participants
-					$create_by_time     = esc_attr( human_time_diff( strtotime( $createdate ), current_time( 'timestamp' ) ) ) . ' ago';
-					$created_by         = rtbiz_hd_get_ticket_creator( $post->ID );
+					$create_by_time = esc_attr( human_time_diff( strtotime( $createdate ), current_time( 'timestamp' ) ) ) . ' ago';
+					$created_by     = rtbiz_hd_get_ticket_creator( $post->ID );
 
 					global $wpdb, $rtbiz_hd_email_notification;
 
@@ -266,10 +275,12 @@ $user_edit_content = current_user_can( $cap );
 										</select>
 										<img id="product-change-spinner" class="helpdeskspinner"
 										     src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
-									<?php } else { echo '<mark class="rthd-front-product-value">' . $ticket_product[0]->name . '</mark>'; } ?>
+									<?php } else {
+										echo '<mark class="rthd-front-product-value">' . $ticket_product[0]->name . '</mark>';
+									} ?>
 								</div>
 							</div>
-						<?php
+							<?php
 						}
 					}
 					?>
@@ -292,7 +303,8 @@ $user_edit_content = current_user_can( $cap );
 											<button type="button" class='rthd-subscribe-email-submit button btn'>Add
 											</button>
 											<span style="display: none;" class="rthd-subscribe-validation"></span>
-											<img id="rthd-subscribe-email-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
+											<img id="rthd-subscribe-email-spinner" class="helpdeskspinner"
+											     src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
 										</form>
 									</div>
 								</div>
@@ -379,7 +391,7 @@ $user_edit_content = current_user_can( $cap );
 								<input type="hidden" name="attachment[]"
 								       value="<?php echo esc_attr( $attachment->ID ); ?>"/>
 							</li>
-						<?php
+							<?php
 						}
 						if ( ! $attachFlag ) {
 							echo '</ul> </div> </div>';
@@ -416,7 +428,7 @@ $user_edit_content = current_user_can( $cap );
 											</ul>
 										</div>
 									</div>
-								<?php
+									<?php
 								}
 							}
 						}
@@ -428,16 +440,16 @@ $user_edit_content = current_user_can( $cap );
 
 				if ( ! empty( $created_by ) ) {
 					$otherposts = get_posts( array(
-						                         'post_type'    => Rtbiz_HD_Module::$post_type,
-						                         'post_status'  => 'any',
-						                         'post__not_in' => array( $post->ID ),
-						                         'meta_query'   => array(
-							                         array(
-								                         'key'   => '_rtbiz_hd_created_by',
-								                         'value' => $created_by->ID,
-							                         ),
-						                         ),
-					                         ) );
+						'post_type'    => Rtbiz_HD_Module::$post_type,
+						'post_status'  => 'any',
+						'post__not_in' => array( $post->ID ),
+						'meta_query'   => array(
+							array(
+								'key'   => '_rtbiz_hd_created_by',
+								'value' => $created_by->ID,
+							),
+						),
+					) );
 				}
 				if ( ! empty( $otherposts ) ) {
 					?>
@@ -454,7 +466,7 @@ $user_edit_content = current_user_can( $cap );
 							<ul>
 								<?php foreach ( $otherposts as $p ) { ?>
 									<li>
-										<a href="<?php echo get_post_permalink( $p->ID ); ?>"><?php echo '[#' . $p->ID . '] ' . balanceTags( $p->post_title );  ?>  </a><?php echo rtbiz_hd_status_markup( $p->post_status ); ?>
+										<a href="<?php echo get_post_permalink( $p->ID ); ?>"><?php echo '[#' . $p->ID . '] ' . balanceTags( $p->post_title ); ?>  </a><?php echo rtbiz_hd_status_markup( $p->post_status ); ?>
 									</li>
 								<?php } ?>
 							</ul>
