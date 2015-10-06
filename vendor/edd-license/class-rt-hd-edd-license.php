@@ -27,10 +27,10 @@ if ( ! class_exists( 'Rt_HD_Edd_License' ) ) {
 
 			if ( false !== $status && 'valid' == $status ) {
 				$status_class = 'rthd-addon-status-activated';
-				$status_value = __( 'Activated', 'rtmedia' );
+				$status_value = __( 'Activated', RTBIZ_TEXT_DOMAIN  );
 			} else {
 				$status_class = 'rthd-addon-status-deactivated';
-				$status_value = __( 'Deactivated', 'rtmedia' );
+				$status_value = __( 'Deactivated', RTBIZ_TEXT_DOMAIN );
 			}
 			?>
             <div class="rthd-addon-license">

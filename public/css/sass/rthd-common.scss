@@ -82,3 +82,27 @@ a.rthd-ticket-created-by img {
 .widefat .column-ticket_order{
   width: 9%;
 }
+
+.rtbiz-hd-support-container {
+  min-height: 300px;
+}
+
+.rtbiz-hd-support-form .rtbiz-hd-form-filed {
+  clear: both;
+  margin: 15px 0;
+}
+.rtbiz-hd-support-form label {
+  float: left;
+  width: 15%;
+}
+.rtbiz-hd-support-form textarea {
+  height: 80px;
+}
+
+.rtbiz-hd-form-filed.clearfix input[type="text"], .rtbiz-hd-form-filed.clearfix textarea {
+  width: 35%;
+}
+
+.rtbiz-hd-form-filed.rtbiz-hd-button-wrapper{
+  margin-left: 15%;
+}

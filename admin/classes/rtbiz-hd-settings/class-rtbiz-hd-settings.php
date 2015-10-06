@@ -874,6 +874,47 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					),
 				),
 			);
+			$status = get_option( 'rtbiz_hd_edd_license_status' );
+			$status = 'valid';
+			$support = new Rtbiz_HD_Support();
+
+			if ( 'valid' == $status ) {
+				if ( isset($_POST['rtmedia-submit-request'])){
+					$support->submit_request();
+					$this->sections[] = array(
+						'icon'        => 'el-wrench',
+						'title'       => __( 'Premium Support' ),
+						'permissions' => $admin_cap,
+						'full_width' => true,
+						'fields'      => array(
+							array(
+								'id'       => 'rt_hd_support',
+								'type'     => 'callback',
+								'title'    => __( 'Premium Support' ),
+								'callback' => array( 'Rtbiz_HD_Support', 'support_sent' ),
+							),
+						),
+					);
+				}  else {
+					$this->sections[] = array(
+						'icon'        => 'el-wrench',
+						'title'       => __( 'Premium Support' ),
+						'permissions' => $admin_cap,
+						'full_width' => true,
+						'fields'      => array(
+							array(
+								'full_width' => true,
+								'id'       => 'rt_hd_support',
+								'type'     => 'callback',
+								'title'    => __( 'Premium Support' ),
+								'callback' => array( $support, 'call_get_form' ),
+							),
+						),
+					);
+				}
+			}
+
+
 
 			$this->sections[] = array(
 				'title'       => __( 'Miscellaneous' ),
