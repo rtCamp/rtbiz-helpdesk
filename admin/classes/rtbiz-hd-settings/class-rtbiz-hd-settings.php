@@ -40,9 +40,19 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 			Rtbiz_HD::$loader->add_action( 'redux/options/' . self::$hd_opt . '/saved', $this, 'on_redux_save', 10, 2 );
 			Rtbiz_HD::$loader->add_action( 'rt_mailbox_add_mailbox', $this, 'outbound_mail_setup_on_mailbox_add', 10, 2 );
 			Rtbiz_HD::$loader->add_action( 'rt_mailbox_remove_mailbox', $this, 'outbound_mail_setup_on_mailbox_remove', 10, 2 );
+			Rtbiz_HD::$loader->add_filter( 'rt_lib_import_page', $this, 'rt_lib_setting_page' );
 			add_action( 'redux/construct', array( $this,'redux_disable_dev_mode_plugin'), 10, 1 );
 			add_action( 'admin_menu', array( $this,'remove_redux_menu' ), 12 );
+			$this->gf_active = is_plugin_active( 'gravityforms/gravityforms.php' );
 		}
+
+		public function rt_lib_setting_page( $pages ) {
+			if ( $this->gf_active ) {
+				$pages[]= self::$page_slug;
+			}
+			return $pages;
+		}
+
 		function remove_redux_menu() {
 			remove_submenu_page( 'tools.php','redux-about' );
 		}
@@ -808,7 +818,8 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					),
 				),
 			);
-			if ( is_plugin_active( 'gravityforms/gravityforms.php' ) ) {
+//			if ( is_plugin_active( 'gravityforms/gravityforms.php' ) ) {
+			if ( $this->gf_active ) {
 
 				$this->sections[] = array(
 					'title'       => __( 'Gravity Importer' ),

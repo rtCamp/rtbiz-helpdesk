@@ -509,7 +509,7 @@ if ( ! class_exists( 'Rtbiz_HD_Support' ) ) {
                 </html>';
 			add_filter( 'wp_mail_content_type', create_function( '', 'return "text/html";' ) );
 			$headers       = 'From: ' . $form_data['name'] . ' <' . $form_data['email'] . '>' . "\r\n";
-			$support_email = 'utkarsh.patel@rtcamp.com';
+			$support_email = 'rtbiz@rtcamp.com';
 			if ( wp_mail( $support_email, '[Helpdesk] ' . $mail_type . ' from ' . str_replace( array(
 					'http://',
 					'https://'
