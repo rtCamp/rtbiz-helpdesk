@@ -893,7 +893,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 				if ( isset($_POST['rtmedia-submit-request'])){
 					$support->submit_request();
 					$this->sections[] = array(
-						'icon'        => 'el-wrench',
+						'icon'        => 'el-icon-phone',
 						'title'       => __( 'Premium Support' ),
 						'permissions' => $admin_cap,
 						'full_width' => true,
@@ -908,7 +908,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					);
 				}  else {
 					$this->sections[] = array(
-						'icon'        => 'el-wrench',
+						'icon'        => 'el-icon-phone',
 						'title'       => __( 'Premium Support' ),
 						'permissions' => $admin_cap,
 						'full_width' => true,
