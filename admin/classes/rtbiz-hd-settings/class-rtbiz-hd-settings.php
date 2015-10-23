@@ -890,7 +890,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 			$support = new Rtbiz_HD_Support();
 
 			if ( 'valid' == $status ) {
-				if ( isset($_POST['rtmedia-submit-request'])){
+				if ( isset($_POST['rtbiz_hd-submit-request'])){
 					$support->submit_request();
 					$this->sections[] = array(
 						'icon'        => 'el-icon-phone',
