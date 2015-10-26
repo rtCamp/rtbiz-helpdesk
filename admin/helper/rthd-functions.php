@@ -675,6 +675,7 @@ function rtbiz_hd_render_comment( $comment, $user_edit, $type = 'right', $echo =
 	}
 
 	$side_class = ( 'right' == $type ) ? 'rthd-self' : ( ( 'left' == $type ) ? 'rthd-other' : '' );
+	$comment_type_class = apply_filters( 'rthd_followup_class', $comment_type_class,  $comment->comment_ID );
 	?>
 	<li class="<?php echo $side_class . ' editable  ' . $comment_type_class; ?> <?php echo $sensitive ? 'sensitive' : ''; ?>"
 	    id="comment-<?php echo esc_attr( $comment->comment_ID ); ?>">
