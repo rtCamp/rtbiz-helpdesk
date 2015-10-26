@@ -861,7 +861,7 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 				if ( 'csv' === $type ) {
 					$title = 'CSV Entry ' . $gravity_lead_id;
 				} else {
-					if ( isset( $gravity_from ) ){
+					if ( isset( $gravity_from ) ) {
 						$title = $gravity_from->title . ' - ' . $gravity_lead_id;
 					} else {
 						$title = 'Gravity Entry ' . $gravity_lead_id;
@@ -873,7 +873,7 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 			$title = trim( $title );
 			global $rtbiz_hd_import_operation;
 
-			$ticket_id           = $rtbiz_hd_import_operation->process_email_to_ticket( $title, $description, $fromemail, $creationdate, $allemail, array(), $description, false, $assignedto );
+			$ticket_id           = $rtbiz_hd_import_operation->process_email_to_ticket( $title, $description, $fromemail, $creationdate, $allemail, array(), $description, false, $assignedto, 'rthd_gf_import' );
 			rtbiz_hd_update_assignee( $ticket_id, $assignedto );
 			$response            = array();
 			$response['lead_id'] = $gravity_lead_id;

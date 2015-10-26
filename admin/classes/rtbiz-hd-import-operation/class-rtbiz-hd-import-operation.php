@@ -842,7 +842,11 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 
 			// check mailbox reading enable or not
 			if ( empty( $mailbox_email ) || ! rtbiz_hd_is_enable_mailbox_reading() || rtbiz_hd_get_web_only_support() ) {
-				return false;
+				if ( 'rthd_gf_import' !== $messageid ){
+					return false;
+				} else {
+					$messageid = '';
+				}
 			}
 
 			//Exclude mailbox email form all emails
