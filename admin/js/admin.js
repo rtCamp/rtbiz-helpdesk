@@ -268,7 +268,7 @@ jQuery( document ).ready(function () {
 
 				jQuery.ajaxPrefilter(function (options, originalOptions, jqXHR) {
 					var action = JSON.stringify( options.data );
-					if (action.indexOf( 'action=redux_helpdesk_settings_ajax_save&' ) !== -1) {
+					if ( action && action.indexOf( 'action=redux_helpdesk_settings_ajax_save&' ) !== -1) {
 						var flag = true, i, tr_parent;
 						if (jQuery( '#rthd_enable_auto_response' ).val() === 0) {
 							return true;
