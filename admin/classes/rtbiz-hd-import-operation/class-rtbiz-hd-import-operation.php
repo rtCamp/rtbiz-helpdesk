@@ -851,13 +851,10 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 
 			//Exclude mailbox email form all emails
 			$contactEmail = array();
-			$mailbox_email_address = '';
 			if ( ! empty( $allemails ) && is_array( $allemails ) ) {
 				foreach ( $allemails as $email ) {
 					if ( ! rtmb_get_module_mailbox_email( $email['address'], RTBIZ_HD_TEXT_DOMAIN ) ) { //check mail is exist in mailbox or not
 						$contactEmail[] = $email;
-					} else {
-						$mailbox_email_address = $email['address'];
 					}
 				}
 			}
@@ -879,7 +876,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			}
 			//always true in mail cron  is use for importer
 			if ( ! $check_duplicate ) {
-				$success_flag = $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], '', '', '', $subscriber, '', $mailbox_email_address );
+				$success_flag = $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], '', '', '', $subscriber, '', $mailbox_email );
 
 				rtbiz_hd_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
 
@@ -979,7 +976,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 					}
 					return $success_flag;
 				} else {
-					$success_flag = $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], $messageid, $inreplyto, $references, $subscriber, $originalBody, $mailbox_email_address );
+					$success_flag = $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], $messageid, $inreplyto, $references, $subscriber, $originalBody, $mailbox_email );
 					rtbiz_hd_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
 
 					if ( ! $success_flag ) {
@@ -994,7 +991,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				//if given post title exits then it will be add as comment other wise as post
 				rtbiz_hd_log( 'Post Exists : '. var_export( $existPostId, true ) . "\r\n" );
 				if ( ! $existPostId ) {
-					$success_flag = $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], $messageid, $inreplyto, $references, $subscriber, $originalBody, $mailbox_email_address );
+					$success_flag = $this->insert_new_ticket( $title, $body, $mailtime, $allemail, $uploaded, $fromemail['address'], $messageid, $inreplyto, $references, $subscriber, $originalBody, $mailbox_email );
 					rtbiz_hd_log( 'Mail Parse Status : ' . var_export( $success_flag, true ) . "\n\r" );
 
 					if ( ! $success_flag ) {

@@ -16,14 +16,14 @@ if ( ! class_exists( 'Rtbiz_HD_Mailbox' ) ) {
 	 * @author udit
 	 */
 	class Rtbiz_HD_Mailbox {
-		
+
 		/**
 		 * set hooks
 		 *
 		 * @since rt-Helpdesk 0.1
 		 */
 		public function __construct() {
-			
+
 			Rtbiz_HD::$loader->add_action( 'rt_mailbox_assignee_ui', $this, 'mailbox_assignee_ui', 10, 2 );
 			Rtbiz_HD::$loader->add_filter( 'rt_mailbox_assignee_save', $this, 'mailbox_assignee_save', 10, 2 );
 
@@ -31,9 +31,9 @@ if ( ! class_exists( 'Rtbiz_HD_Mailbox' ) ) {
 			Rtbiz_HD::$loader->add_action( 'delete_user', $this, 'delete_mailbox_employee', 10, 1 );
 		}
 
-		
+
 		public function mailbox_assignee_ui( $email_data, $module = NULL ) {
-	
+
 			if ( $module == RTBIZ_HD_TEXT_DOMAIN ) {
 				// get product list
 				$rtbiz_hd_products = array();
@@ -53,8 +53,8 @@ if ( ! class_exists( 'Rtbiz_HD_Mailbox' ) ) {
 					foreach ( $rtbiz_hd_products as $rtbiz_hd_product ) {
 						$product_selected = '';
 						if ( isset ( $email_data['product'] ) && ! empty ( $email_data['product'] ) ) {
-							if ( $email_data['product'] == $rtbiz_hd_product->term_id ) { 
-								$product_selected = ' selected="selected" '; 
+							if ( $email_data['product'] == $rtbiz_hd_product->term_id ) {
+								$product_selected = ' selected="selected" ';
 							}
 						}
 						$product_list .= '<option value="' . $rtbiz_hd_product->term_id . '"' . $product_selected . '>' . $rtbiz_hd_product->name . '</option>';
@@ -76,7 +76,7 @@ if ( ! class_exists( 'Rtbiz_HD_Mailbox' ) ) {
 					foreach ( $users as $user ) {
 						$user_selected = '';
 						if ( isset ( $email_data['staff'] ) && ! empty ( $email_data['staff'] ) ) {
-							if ( $email_data['staff'] == $user->ID ) { 
+							if ( $email_data['staff'] == $user->ID ) {
 								$user_selected = ' selected="selected" ';
 							}
 						}
@@ -89,7 +89,7 @@ if ( ! class_exists( 'Rtbiz_HD_Mailbox' ) ) {
 				echo $users_options;
 			}
 		}
-		
+
 
 		/**
 		 * Filter to replace the [caption] shortcode text with HTML5 compliant code
@@ -110,7 +110,7 @@ if ( ! class_exists( 'Rtbiz_HD_Mailbox' ) ) {
 
 		/**
 		 * Remove product/staff from the mailbox account data
-		 * 
+		 *
 		 * @param type $email_data_key
 		 * @param type $email_data_value
 		 */
@@ -125,7 +125,7 @@ if ( ! class_exists( 'Rtbiz_HD_Mailbox' ) ) {
 						if ( $mailbox_data[ $email_data_key ] == $email_data_value ) {
 							$mailbox_data[ $email_data_key ] = 0;
 						}
-						rtmb_set_module_mailbox_data( $email, $mailbox_data, RTBIZ_HD_TEXT_DOMAIN );
+							rtmb_set_module_mailbox_data( RTBIZ_HD_TEXT_DOMAIN, $email, $mailbox_data );
 					}
 				}
 			}
@@ -133,7 +133,7 @@ if ( ! class_exists( 'Rtbiz_HD_Mailbox' ) ) {
 
 		/**
 		 * Remove product from mailbox data which product going to deleted
-		 * 
+		 *
 		 * @param type $term_id
 		 * @param type $tt_id
 		 * @param type $taxonomy
@@ -144,13 +144,13 @@ if ( ! class_exists( 'Rtbiz_HD_Mailbox' ) ) {
 
 		/**
 		 * Remove staff from mailbox data which staff going to delete
-		 * 
+		 *
 		 * @param type $user_id
 		 */
 		public function delete_mailbox_employee( $user_id ) {
 			$this->delete_data_from_mailbox_account( 'staff', $user_id );
 		}
-		
+
 	}
-	
+
 }
