@@ -162,15 +162,15 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 					</div>
 					<?php
 				} else {
+					$login_url    = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( get_permalink() ), get_permalink() );
 					?>
 					<div id="info" class="error rthd-notice">You're not logged in. Please <a
-							href="<?php echo esc_url( apply_filters( 'rtbiz_hd_login_url', wp_login_url( get_permalink() ) ) ); ?>" title="login">login</a> first to
+							href="<?php echo esc_url( $login_url ); ?>" title="login">login</a> first to
 						create support ticket.
 					</div>                <?php
 				}
 			}
-
-			return apply_filters( 'rtbiz_hd_support_form_shorcode', ob_get_clean(), $attr );
+			return apply_filters( 'rtbiz_hd_support_form_shortcode', ob_get_clean(), $attr );
 		}
 
 		/**
@@ -218,8 +218,9 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 
 		function ticket_shortcode_render_ui( $arg_shortcode, $top, $limit, $first ) {
 
-			if ( ! is_user_logged_in() ) { ?>
-				<div id="info" class="error rthd-notice">You're not logged in. Please <a href="<?php echo apply_filters( 'rtbiz_hd_login_url', wp_login_url( get_permalink() ) ); ?>" title="login">login</a> first to view tickets.
+			if ( ! is_user_logged_in() ) {
+				$login_url    = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( get_permalink() ), get_permalink() );?>
+				<div id="info" class="error rthd-notice">You're not logged in. Please <a href="<?php echo esc_url( $login_url ); ?>" title="login">login</a> first to view tickets.
 				</div><?php
 				return;
 			}
