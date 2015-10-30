@@ -52,7 +52,7 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 			$this->get_custom_labels();
 			$this->get_custom_statuses();
 			Rtbiz_HD::$loader->add_action( 'init', $this, 'init_hd' );
-			add_action( 'rt_db_update_finished' , array( $this, 'db_ticket_table_update' ) );
+			Rtbiz_HD::$loader->add_action( 'rt_db_update_finished', $this, 'db_ticket_table_update' );
 
 			Rtbiz_HD::$loader->add_action( 'rt_attributes_relations_added', $this, 'create_database_table' );
 			Rtbiz_HD::$loader->add_action( 'rt_attributes_relations_updated', $this, 'create_database_table' );
