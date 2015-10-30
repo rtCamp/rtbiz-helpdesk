@@ -15,7 +15,7 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Creator_Migration' ) ) {
 		 * construct
 		 */
 		public function __construct() {
-			add_action( 'rt_db_update_finished' , array( $this, 'init' ) );
+			Rtbiz_HD::$loader->add_action( 'rt_db_update_finished', $this, 'init', 20 );
 		}
 
 		/*
