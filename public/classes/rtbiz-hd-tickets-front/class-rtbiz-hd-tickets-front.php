@@ -55,8 +55,9 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 					if ( ! isset( $_REQUEST['redirect_url'] ) ){
 						$_REQUEST['redirect_url'] = '';
 					}
-					$login_url    = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( esc_url( urldecode( $_REQUEST['redirect_url'] ) ) ) );
-					$message      = sprintf( '%s <a href="%s">%s</a> %s', __( 'You are not logged in. Please login' ), $login_url, __( 'here' ), __( 'to view this ticket.' ) );
+					$redirect_url = esc_url( urldecode( $_REQUEST['redirect_url'] ) );
+					$login_url    = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( $redirect_url ), $redirect_url );
+					$message      = sprintf( '%s <a href="%s">%s</a> %s', __( 'You are not logged in. Please login' ), esc_url( $login_url ), __( 'here' ), __( 'to view this ticket.' ) );
 					global $rthd_messages;
 					$rthd_messages[] = array( 'type' => 'error rthd-error', 'message' => $message, 'displayed' => 'no' );
 					return rtbiz_hd_locate_template( 'ticket-error-page.php' );
@@ -170,17 +171,19 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 				if ( $option_value > 0 && get_post( $option_value ) && get_post_status( $option_value ) == 'publish' ){
 					wp_redirect( add_query_arg( 'redirect_url', urlencode( $redirect_url ), get_page_link($option_value) ) );
 				} else {
-					wp_redirect( wp_login_url( $redirect_url ) );
+					$login_url = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( $redirect_url ), $redirect_url );
+					$login_url = esc_url( $login_url );
+					wp_redirect( $login_url );
 				}
 				die();
 			}
 			else if ( $email_only_support && ! $author_access ) {
 				$redirect_url = ( ( is_ssl() ) ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-				$login_url    = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( $redirect_url ) );
+				$login_url    = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( $redirect_url ), $redirect_url );
 				if ( $email_only_support ) {
 					$message      = sprintf( '%s', __( 'You can not access this page.' ) );
 				} else {
-					$message = sprintf( '%s <a href="%s">%s</a> %s', __( 'You are not logged in. Please login' ), $login_url, __( 'here' ), __( 'to view this ticket.' ) );
+					$message = sprintf( '%s <a href="%s">%s</a> %s', __( 'You are not logged in. Please login' ), esc_url( $login_url ), __( 'here' ), __( 'to view this ticket.' ) );
 				}
 				global $rthd_messages;
 				$rthd_messages[] = array( 'type' => 'error rthd-error', 'message' => $message, 'displayed' => 'no' );
@@ -240,7 +243,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 					$contact_currrent_user_id = rtbiz_hd_get_contact_id_by_user_id( $user->ID, true );
 					if ( ! in_array( $user->ID, $subscriber ) && ! in_array( $user->user_email, $subscriber ) && $user->ID != $post_author_id && ! empty( $contact_currrent_user_id ) && $creator != $contact_currrent_user_id ) {
 						$redirect_url = ( ( is_ssl() ) ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-						$login_url    = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( $redirect_url ) );
+						$login_url    = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( $redirect_url ), $redirect_url );
 						$message      = sprintf( '%s ', __( 'You do not have sufficient permissions to access this ticket.' ) );
 						global $rthd_messages;
 						$rthd_messages[] = array( 'type' => 'error rthd-error', 'message' => $message, 'displayed' => 'no' );
@@ -264,7 +267,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 					}
 					if ( ( empty( $current_contact ) || ( ! in_array( $current_contact->ID, $contact_ids ) && ! in_array( $user->user_email, $contact_emails ) ) ) && ! empty( $contact_currrent_user_id ) && $contact_currrent_user_id != $creator ) {
 						$redirect_url = ( ( is_ssl() ) ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-						$login_url    = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( $redirect_url ) );
+						$login_url    = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( $redirect_url ), $redirect_url );
 						$message      = sprintf( '%s ', __( 'You do not have sufficient permissions to access this ticket.' ) );
 						global $rthd_messages;
 						$rthd_messages[] = array( 'type' => 'error rthd-error', 'message' => $message, 'displayed' => 'no' );
