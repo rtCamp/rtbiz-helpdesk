@@ -886,7 +886,6 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 				),
 			);
 			$status = get_option( 'rtbiz_hd_edd_license_status' );
-			$status = 'valid';
 			$support = new Rtbiz_HD_Support();
 
 			if ( 'valid' == $status ) {

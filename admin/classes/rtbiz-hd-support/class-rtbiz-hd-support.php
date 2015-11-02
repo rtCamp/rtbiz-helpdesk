@@ -331,7 +331,6 @@ if ( ! class_exists( 'Rtbiz_HD_Support' ) ) {
 			}
 
 			$status = get_option( 'rtbiz_hd_edd_license_status' );
-			$status = true;
 			if ( 'premium_support' == $form ) {
 				if ( false === $status && 'valid' != $status ) {
 					$content = '<h3>' . $meta_title . '</h3>';
@@ -509,7 +508,7 @@ if ( ! class_exists( 'Rtbiz_HD_Support' ) ) {
                 </html>';
 			add_filter( 'wp_mail_content_type', create_function( '', 'return "text/html";' ) );
 			$headers       = 'From: ' . $form_data['name'] . ' <' . $form_data['email'] . '>' . "\r\n";
-			$support_email = 'rtbiz@rtcamp.com';
+			$support_email = 'support@rtcamp.com';
 			if ( wp_mail( $support_email, '[Helpdesk] ' . $mail_type . ' from ' . str_replace( array(
 					'http://',
 					'https://'
