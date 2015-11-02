@@ -31,7 +31,7 @@ Please refer to the documentation.
 ## Changelog ##
 
 ### 1.6 ###
-* Send support request for this plugin
+* Request support for rtbiz-helpdesk from developers
 * Support form short code param added which allows non logged in user to create ticket
 * Object cache added for dashboard
 * Filters added
