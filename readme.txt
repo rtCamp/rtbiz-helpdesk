@@ -5,8 +5,8 @@ Contributors:      rtcamp, rahul286, desaiuditd, dipesh.kakadiya, utkarshpatel, 
 Donate Link:       https://rtcamp.com/donate/
 Tags:              helpdesk, support, products, tickets, followups, customers, e-commerce
 Requires at least: 4.1
-Tested up to:      4.3
-Stable tag:        1.5.2
+Tested up to:      4.4
+Stable tag:        1.6
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,6 +57,13 @@ Please refer to the documentation.
 1. Dashboard
 
 == Changelog ==
+
+= 1.6 =
+* Send support request for this plugin
+* Support form short code param added which allows non logged in user to create ticket
+* Object cache added for dashboard
+* Filters added
+* Gravity form mapper issue fix
 
 = 1.5.2 =
 * Php version error fix
