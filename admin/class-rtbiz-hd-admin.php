@@ -82,6 +82,20 @@ if ( !class_exists( 'Rtbiz_HD_Admin' ) ) {
 			// migration class
 			$rtbiz_hd_migration = new Rtbiz_HD_Migration();
 
+			add_action( 'rtbiz_get_settings_pages_'.Rtbiz_HD_Module::$post_type, array( $this, 'setting_tabs' ) );
+
+		}
+
+		public function setting_tabs( $tabs ) {
+			$tabs[] = include( RTBIZ_HD_PATH. 'admin/classes/settings/tabs/class-rtbiz-hd-settings-general.php' );
+			$tabs[] = include( RTBIZ_HD_PATH. 'admin/classes/settings/tabs/class-rtbiz-hd-settings-team-setup.php' );
+			$tabs[] = include( RTBIZ_HD_PATH. 'admin/classes/settings/tabs/class-rtbiz-hd-settings-mail-setup.php' );
+			$tabs[] = include( RTBIZ_HD_PATH. 'admin/classes/settings/tabs/class-rtbiz-hd-settings-email-notification.php' );
+			$tabs[] = include( RTBIZ_HD_PATH. 'admin/classes/settings/tabs/class-rtbiz-hd-advance-settings.php' );
+			if (is_plugin_active( 'gravityforms/gravityforms.php' )){
+				$tabs[] = include( RTBIZ_HD_PATH. 'admin/classes/settings/tabs/class-rtbiz-hd-settings-importer.php' );
+			}
+			$tabs[] = include( RTBIZ_HD_PATH. 'admin/classes/settings/tabs/class-rtbiz-hd-settings-licence.php' );
 		}
 
 		public function register_menu() {
@@ -89,6 +103,7 @@ if ( !class_exists( 'Rtbiz_HD_Admin' ) ) {
 				add_submenu_page( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type, __( 'Customers' ), __( 'Customers' ), rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' ), esc_url( 'edit.php?post_type=' . rtbiz_get_contact_post_type() . '&contact_group=customer&module=' . RTBIZ_HD_TEXT_DOMAIN ) );
 				add_submenu_page( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type, __( 'Staff' ), __( 'Staff' ), rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' ), esc_url( 'edit.php?post_type=' . rtbiz_get_contact_post_type() . '&contact_group=staff&module=' . RTBIZ_HD_TEXT_DOMAIN ) );
 				add_submenu_page( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type, __( '---Teams' ), __( '---Teams' ), rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' ), esc_url( 'edit-tags.php?taxonomy=' . Rtbiz_Teams::$slug . '&post_type=' . Rtbiz_HD_Module::$post_type ) );
+				add_submenu_page( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type, __( 'Helpdesk Settings' ), __( 'Settings' ), 'manage_options', 'rtbiz-ticket-settings', array( $this, 'settings_page') );
 			} else {
 				global $rtbiz_hd_setup_wizard;
 				add_submenu_page( 'edit.php?post_type=' . esc_html( Rtbiz_HD_Module::$post_type ), __( 'Setup Wizard', RTBIZ_HD_TEXT_DOMAIN ), __( 'Setup Wizard', RTBIZ_HD_TEXT_DOMAIN ), rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'admin' ), Rtbiz_HD_Setup_Wizard::$page_slug, array(
@@ -96,6 +111,10 @@ if ( !class_exists( 'Rtbiz_HD_Admin' ) ) {
 					'setup_wizard_ui',
 				) );
 			}
+		}
+
+		public function settings_page() {
+			rtBiz_Admin_Settings::output( Rtbiz_HD_Module::$post_type );
 		}
 
 		public function custom_pages_order( $menu_order ) {
