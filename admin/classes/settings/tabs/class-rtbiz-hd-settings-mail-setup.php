@@ -59,7 +59,7 @@ if ( ! class_exists( 'rtBiz_HD_Settings_Mail_Setup ' ) ) :
 					array(
 						'title'    => __( 'Email support', RTBIZ_HD_TEXT_DOMAIN ),
 						'desc'     => __( 'Allows customer to create tickets and reply tickets from configured mailbox.', RTBIZ_HD_TEXT_DOMAIN ),
-						'id'       => 'rthd_email_support',
+						'id'       => 'rthd_settings_email_support',
 						'default'  => 'on',
 						'type'     => 'radio',
 						'options'  => array(
@@ -71,7 +71,7 @@ if ( ! class_exists( 'rtBiz_HD_Settings_Mail_Setup ' ) ) :
 					array(
 						'title'    => __( 'Mailbox Reading', RTBIZ_HD_TEXT_DOMAIN ),
 						'desc'     => __( 'To enable/disable Mailbox Reading', RTBIZ_HD_TEXT_DOMAIN ),
-						'id'       => 'rthd_enable_mailbox_reading',
+						'id'       => 'rthd_settings_enable_mailbox_reading',
 						'default'  => 'on',
 						'type'     => 'radio',
 						'options'  => array(
@@ -81,7 +81,7 @@ if ( ! class_exists( 'rtBiz_HD_Settings_Mail_Setup ' ) ) :
 						'autoload' => true
 					),
 					array(
-						'id'       => 'rthd_reply_via_email',
+						'id'       => 'rthd_settings_reply_via_email',
 						'type'     => 'radio',
 						'title'    => __( 'Reply Via Email', RTBIZ_HD_TEXT_DOMAIN ),
 						'desc'     => __( 'To enable/disable Reply Via Email', RTBIZ_HD_TEXT_DOMAIN ),
@@ -95,7 +95,7 @@ if ( ! class_exists( 'rtBiz_HD_Settings_Mail_Setup ' ) ) :
 			}
 			array_push( $settings,
 				array(
-					'id'       => 'rthd_web_support',
+					'id'       => 'rthd_settings_web_support',
 					'type'     => 'radio',
 					'title'    => __( 'Web support', RTBIZ_HD_TEXT_DOMAIN ),
 					'desc'     => __( 'Allows customer to create support tickets and reply tickets from web interface.', RTBIZ_HD_TEXT_DOMAIN ),
@@ -110,7 +110,7 @@ if ( ! class_exists( 'rtBiz_HD_Settings_Mail_Setup ' ) ) :
 				array_push( $settings,
 					array(
 						'title'    => __( 'Outgoing Emails Mailbox', RTBIZ_HD_TEXT_DOMAIN ),
-						'id'       => 'rthd_outgoing_email_mailbox',
+						'id'       => 'rthd_settings_outgoing_email_mailbox',
 						'desc_tip' => sprintf( '%s.', __( 'Choose any one email from the configured mailboxes.', RTBIZ_HD_TEXT_DOMAIN ) ),
 						'desc'     => __( 'Mailbox to be used to send outgoing emails/notifications.', RTBIZ_HD_TEXT_DOMAIN ),
 						'type'     => 'select',
@@ -120,7 +120,7 @@ if ( ! class_exists( 'rtBiz_HD_Settings_Mail_Setup ' ) ) :
 
 					array_push( $email_fields, array(
 						array(
-							'id'       => 'rthd_outgoing_via_same_email',
+							'id'       => 'rthd_settings_outgoing_via_same_email',
 							'type'     => 'radio',
 							'title'    => __( 'Outgoing Emails From Same Mailbox', RTBIZ_HD_TEXT_DOMAIN ),
 							'desc'     => __( 'To enable/disable outgoing emails from same mailbox', RTBIZ_HD_TEXT_DOMAIN ),
@@ -139,7 +139,7 @@ if ( ! class_exists( 'rtBiz_HD_Settings_Mail_Setup ' ) ) :
 						'title'    => __( 'Outgoing Emails \'From\' Address', RTBIZ_HD_TEXT_DOMAIN ),
 						'desc'     => 'Outgoing System Email used for all Helpdesk Communication',
 						'desc_tip' => sprintf( '%s.', __( 'This Address will be used as FROM: name < email address > for all outgoing emails', RTBIZ_HD_TEXT_DOMAIN ) ),
-						'id'       => 'rthd_outgoing_email_mailbox',
+						'id'       => 'rthd_settings_outgoing_email_mailbox',
 						'default'  => $domain_name,
 						'type'     => 'email',
 						'css'      => 'width:400px;',
@@ -151,7 +151,7 @@ if ( ! class_exists( 'rtBiz_HD_Settings_Mail_Setup ' ) ) :
 					'title'    => __( 'Outgoing Emails \'From\' Name', RTBIZ_HD_TEXT_DOMAIN ),
 					'desc'     => 'Outgoing System Name used for all Helpdesk Communication',
 					'desc_tip' => sprintf( '%s.', __( 'System Name to be used for outbound emails. This Name will be used as FROM: name < email address > for all outgoing emails', RTBIZ_HD_TEXT_DOMAIN ) ),
-					'id'       => 'rthd_outgoing_email_from_name',
+					'id'       => 'rthd_settings_outgoing_email_from_name',
 					'default'  => get_bloginfo(),
 					'type'     => 'text',
 					'css'      => 'width:400px;',
@@ -159,7 +159,7 @@ if ( ! class_exists( 'rtBiz_HD_Settings_Mail_Setup ' ) ) :
 				),
 
 				array(
-					'id'       => 'rthd_blacklist_emails_textarea',
+					'id'       => 'rthd_settings_blacklist_emails_textarea',
 					'title'    => __( 'Blacklist Emails', RTBIZ_HD_TEXT_DOMAIN ),
 					'desc'     => __( 'Email addresses to be blacklisted for creating tickets / follow-ups.', RTBIZ_HD_TEXT_DOMAIN ),
 					'desc_tip' => __( 'All mails coming from these addresses will be blocked by Helpdesk. It also accept arguments like *@example.com, @example.*, Keep each email in new line without comma(,).', RTBIZ_HD_TEXT_DOMAIN ),

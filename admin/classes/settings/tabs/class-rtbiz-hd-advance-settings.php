@@ -44,7 +44,7 @@ if ( ! class_exists( 'rtBiz_HD_Advance_Settings ' ) ) :
 				array(
 					'title'    => __( 'Auto Assign Tickets', RTBIZ_HD_TEXT_DOMAIN ),
 					'desc'     => __( 'To auto assign a ticket to staff on reply', RTBIZ_HD_TEXT_DOMAIN ),
-					'id'       => 'rthd_enable_ticket_unique_hash',
+					'id'       => 'rthd_settings_enable_auto_assign',
 					'default'  => 'off',
 					'type'     => 'radio',
 					'options'  => array(
@@ -55,7 +55,7 @@ if ( ! class_exists( 'rtBiz_HD_Advance_Settings ' ) ) :
 				),
 				array(
 					'title'    => __( 'Event For Auto assign', RTBIZ_HD_TEXT_DOMAIN ),
-					'id'       => 'rthd_auto_assign_events',
+					'id'       => 'rthd_settings_auto_assign_events',
 					'default'  => 'on_first_followup',
 					'type'     => 'radio',
 					'options'  => array(
@@ -68,7 +68,7 @@ if ( ! class_exists( 'rtBiz_HD_Advance_Settings ' ) ) :
 				array(
 					'title'    => __( 'Auto Response', RTBIZ_HD_TEXT_DOMAIN ),
 					'desc'     => __( 'To enable/disable auto response feature', RTBIZ_HD_TEXT_DOMAIN ),
-					'id'       => 'rthd_enable_auto_response',
+					'id'       => 'rthd_settings_enable_auto_response',
 					'default'  => 'off',
 					'type'     => 'radio',
 					'options'  => array(
@@ -80,7 +80,7 @@ if ( ! class_exists( 'rtBiz_HD_Advance_Settings ' ) ) :
 				array(
 					'title'    => __( 'Select working shift', RTBIZ_HD_TEXT_DOMAIN ),
 					'desc'     => __( 'Day shift / Day-Night Shift', RTBIZ_HD_TEXT_DOMAIN ),
-					'id'       => 'rthd_enable_auto_response_mode',
+					'id'       => 'rthd_settings_enable_auto_response_mode',
 					'default'  => 'off',
 					'type'     => 'radio',
 					'options'  => array(
@@ -106,7 +106,7 @@ if ( ! class_exists( 'rtBiz_HD_Advance_Settings ' ) ) :
 
 				array(
 					'title'    => __( 'Auto-respond on weekends only.', RTBIZ_HD_TEXT_DOMAIN ),
-					'id'       => 'rthd_autoresponse_weekend',
+					'id'       => 'rthd_settings_autoresponse_weekend',
 					'default'  => 'off',
 					'type'     => 'radio',
 					'options'  => array(
@@ -119,7 +119,7 @@ if ( ! class_exists( 'rtBiz_HD_Advance_Settings ' ) ) :
 				array(
 					'title'    => __( 'Auto response message', RTBIZ_HD_TEXT_DOMAIN ),
 					'desc'     => esc_attr( 'Add a message here that will be sent to the customer when your team is offline. ' ) . 'Use <b>{NextStartingHour}</b> to get next working hours like <b>`Today after 10 pm` or `Monday after 9 AM`</b>',
-					'id'       => 'rthd_auto_response_message',
+					'id'       => 'rthd_settings_auto_response_message',
 					'default'      => esc_attr( 'We have received your support request. Our support team is currently offline. We will get back at the soonest.' ),
 					'type'     => 'textarea',
 					'css'     => 'width:400px; height: 65px;',
@@ -130,7 +130,7 @@ if ( ! class_exists( 'rtBiz_HD_Advance_Settings ' ) ) :
 				array(
 					'title'    => __( 'Adult Content Filter', RTBIZ_HD_TEXT_DOMAIN ),
 					'desc'     => __( 'For customer, a form feature to mark adult content will be enabled. For staff, profile level setting to filter the adult content will be enabled.', RTBIZ_HD_TEXT_DOMAIN ),
-					'id'       => 'rthd_enable_ticket_adult_content',
+					'id'       => 'rthd_settings_enable_ticket_adult_content',
 					'default'  => 'off',
 					'type'     => 'radio',
 					'options'  => array(

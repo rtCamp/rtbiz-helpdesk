@@ -89,7 +89,7 @@ if ( ! class_exists( 'rtBiz_HD_Settings_General ' ) ) :
 				),
 				array(
 					'title'    => __( 'Support Page', RTBIZ_HD_TEXT_DOMAIN ),
-					'id'       => 'rthd_support_page',
+					'id'       => 'rthd_settings_support_page',
 					'desc_tip' => __( 'Select Page for Product Support', RTBIZ_HD_TEXT_DOMAIN ),
 					'desc'     => __( 'Add <strong>[rtbiz_hd_support_form]</strong> shortcode to any page. Select that page in dropdown above. That page from now used to handle support requests from web interface.' ),
 					'type'     => 'select',
@@ -115,7 +115,7 @@ if ( ! class_exists( 'rtBiz_HD_Settings_General ' ) ) :
 				),
 				array(
 					'title'    => __( 'Default Assignee', RTBIZ_HD_TEXT_DOMAIN ),
-					'id'       => 'rthd_default_user',
+					'id'       => 'rthd_settings_default_user',
 					'desc_tip' => __( 'Select user for HelpDesk ticket Assignee', RTBIZ_HD_TEXT_DOMAIN ),
 					'desc'     => __( 'To select dedicated assignee for a product, visit the ' ) . $products_page_link,
 					'type'     => 'select',
@@ -126,7 +126,7 @@ if ( ! class_exists( 'rtBiz_HD_Settings_General ' ) ) :
 					'title'    => __( 'Unique Hash URLs for Tickets', RTBIZ_HD_TEXT_DOMAIN ),
 					'desc'     => __( 'If enabled, this will generate a unique Hash URL for all the tickets through which tickets can be accessed in the web interface. This unique URLs will be sent in all emails of Helpdesk. Tickets can be accessed from the default WordPress permalinks as well.', RTBIZ_HD_TEXT_DOMAIN ),
 					'desc_tip' => __( 'Please flush the permalinks after enabling this option.', RTBIZ_HD_TEXT_DOMAIN ),
-					'id'       => 'rthd_enable_ticket_unique_hash',
+					'id'       => 'rthd_settings_enable_ticket_unique_hash',
 					'default'  => 'off',
 					'type'     => 'radio',
 					'options'  => array(

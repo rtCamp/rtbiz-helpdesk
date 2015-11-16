@@ -99,6 +99,7 @@ if ( ! class_exists( 'Rtbiz_HD' ) ) {
 
 			new RT_WP_Autoload( RTBIZ_HD_PATH . 'lib/rtformhelpers/' );
 			new RT_WP_Autoload( RTBIZ_HD_PATH . 'includes/' );
+			new RT_WP_Autoload( RTBIZ_HD_PATH . 'migration/' );
 			new RT_WP_Autoload( RTBIZ_HD_PATH . 'admin/' );
 			new RT_WP_Autoload( RTBIZ_HD_PATH . 'admin/classes' );
 			new RT_WP_Autoload( RTBIZ_HD_PATH . 'admin/classes/models/' );

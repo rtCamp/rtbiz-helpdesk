@@ -22,6 +22,7 @@ if ( ! class_exists( 'Rtbiz_HD_Migration' ) ) {
 		 */
 		public function __construct() {
 			new Rtbiz_HD_Ticket_Creator_Migration();
+			new rtBiz_HD_Settings_Migration();
 		}
 	}
 }

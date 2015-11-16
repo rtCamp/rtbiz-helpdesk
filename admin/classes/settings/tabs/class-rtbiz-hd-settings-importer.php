@@ -111,9 +111,9 @@ if ( ! class_exists( 'rtBiz_HD_Settings_Importer ' ) ) :
 		 */
 		public function get_sections() {
 			$sections = array(
-				''                => __( 'Gravity Importer', 'woocommerce' ),
-				'importer_mapper' => __( 'Importer Mapper', 'woocommerce' ),
-				'importer_log'    => __( 'Importer Log', 'woocommerce' )
+				''                => __( 'Gravity Importer', RTBIZ_TEXT_DOMAIN ),
+				'importer_mapper' => __( 'Importer Mapper', RTBIZ_TEXT_DOMAIN ),
+				'importer_log'    => __( 'Importer Log', RTBIZ_TEXT_DOMAIN )
 			);
 
 			return apply_filters( 'rtbiz_get_sections_' . $this->id, $sections );
