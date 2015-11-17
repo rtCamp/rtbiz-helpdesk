@@ -22,6 +22,33 @@ if ( ! class_exists( 'rtBiz_HD_Advance_Settings ' ) ) :
 			add_action( 'rtbiz_settings_save_' . $this->id, array( $this, 'save' ) );
 			add_action( 'rtbiz_admin_field_rthd_auto_response_dayshift_time' , 'rtbiz_hd_auto_response_dayshift_view' );
 			add_action( 'rtbiz_admin_field_rthd_auto_response_nightshift_time' , 'rtbiz_hd_auto_response_daynightshift_view' );
+			add_action( 'rtbiz_update_option_values', array( $this, 'auto_response_setting_save' ) );
+		}
+
+		public function auto_response_setting_save( $option ){
+			if ( ! empty( $option['rthd_settings_enable_auto_response'] ) && 'on' == $option['rthd_settings_enable_auto_response'] ) {
+				$default = array( 0 => -1, 1 => -1, 2 => -1, 3 => -1, 4 => -1, 5 => -1, 6 => -1 );
+				if ( ! empty( $option['rthd_settings_enable_auto_response_mode'] ) && 'on' == $option['rthd_settings_enable_auto_response_mode'] ) {
+					update_option( 'rthd_settings_dayshift_time_start', ! empty( $_POST['rthd_settings_dayshift_time_start'] ) ? $_POST['rthd_settings_dayshift_time_start'] : $default );
+					update_option( 'rthd_settings_dayshift_time_end', ! empty( $_POST['rthd_settings_dayshift_time_end'] ) ? $_POST['rthd_settings_dayshift_time_end'] : $default );
+
+					update_option( 'rthd_settings_daynight_am_time_start', $default );
+					update_option( 'rthd_settings_daynight_am_time_end', ! $default );
+					update_option( 'rthd_settings_daynight_pm_time_start', $default );
+					update_option( 'rthd_settings_daynight_pm_time_end', ! $default );
+				}
+
+				if ( ! empty( $option['rthd_settings_enable_auto_response_mode'] ) && 'off' == $option['rthd_settings_enable_auto_response_mode'] ) {
+					update_option( 'rthd_settings_daynight_am_time_start', ! empty( $_POST['rthd_settings_daynight_am_time_start'] ) ? $_POST['rthd_settings_daynight_am_time_start'] : $default );
+					update_option( 'rthd_settings_daynight_am_time_end', ! empty( $_POST['rthd_settings_daynight_am_time_end'] ) ? $_POST['rthd_settings_daynight_am_time_end'] : $default );
+					update_option( 'rthd_settings_daynight_pm_time_start', ! empty( $_POST['rthd_settings_daynight_pm_time_start'] ) ? $_POST['rthd_settings_daynight_pm_time_start'] : $default );
+					update_option( 'rthd_settings_daynight_pm_time_end', ! empty( $_POST['rthd_settings_daynight_pm_time_end'] ) ? $_POST['rthd_settings_daynight_pm_time_end'] : $default );
+
+					update_option( 'rthd_settings_dayshift_time_start', $default );
+					update_option( 'rthd_settings_dayshift_time_end', ! $default );
+
+				}
+			}
 		}
 
 
