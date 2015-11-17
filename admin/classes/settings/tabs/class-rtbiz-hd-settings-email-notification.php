@@ -65,7 +65,7 @@ class rtBiz_HD_Settings_Email_Notification extends rtBiz_Settings_Page{
 			array(
 				'title'         => __( 'Notification Event for Customer', RTBIZ_HD_TEXT_DOMAIN),
 				'desc'          => __( 'When a customer creates a ticket via the web form or email', RTBIZ_HD_TEXT_DOMAIN ),
-				'id'            => 'rthd_settings_notification_acl_client_events_new_ticket_created_mail',
+				'id'            => 'rthd_settings_client_new_ticket_created_mail',
 				'default'       => 'yes',
 				'type'          => 'checkbox',
 				'checkboxgroup' => 'start',
@@ -74,7 +74,7 @@ class rtBiz_HD_Settings_Email_Notification extends rtBiz_Settings_Page{
 
 			array(
 				'desc'          => __( 'When a new follow-up is added to a ticket', RTBIZ_HD_TEXT_DOMAIN ),
-				'id'            => 'rthd_settings_notification_acl_client_events_new_followup_created_mail',
+				'id'            => 'rthd_settings_client_new_followup_created_mail',
 				'default'       => 'yes',
 				'type'          => 'checkbox',
 				'checkboxgroup' => '',
@@ -82,7 +82,7 @@ class rtBiz_HD_Settings_Email_Notification extends rtBiz_Settings_Page{
 			),
 			array(
 				'desc'          => __( 'When any follow-up is edited by staff', RTBIZ_HD_TEXT_DOMAIN ),
-				'id'            => 'rthd_settings_notification_acl_client_events_new_followup_updated_mail',
+				'id'            => 'rthd_settings_client_new_followup_updated_mail',
 				'default'       => 'no',
 				'type'          => 'checkbox',
 				'checkboxgroup' => '',
@@ -91,7 +91,7 @@ class rtBiz_HD_Settings_Email_Notification extends rtBiz_Settings_Page{
 
 			array(
 				'desc'          => __( 'When any follow-up is edited by staff', RTBIZ_HD_TEXT_DOMAIN ),
-				'id'            => 'rthd_settings_notification_acl_client_events_new_followup_deleted_mail',
+				'id'            => 'rthd_settings_client_new_followup_deleted_mail',
 				'default'       => 'no',
 				'type'          => 'checkbox',
 				'checkboxgroup' => 'end',
@@ -105,7 +105,7 @@ class rtBiz_HD_Settings_Email_Notification extends rtBiz_Settings_Page{
 			array(
 				'title'         => __( 'Notification Event for Assignee', RTBIZ_HD_TEXT_DOMAIN),
 				'desc'          => __( 'When a customer creates a ticket via the web form or email', RTBIZ_HD_TEXT_DOMAIN ),
-				'id'            => 'rthd_settings_notification_acl_assignee_events_new_ticket_created_mail',
+				'id'            => 'rthd_settings_assignee_new_ticket_created_mail',
 				'default'       => 'yes',
 				'type'          => 'checkbox',
 				'checkboxgroup' => 'start',
@@ -114,7 +114,7 @@ class rtBiz_HD_Settings_Email_Notification extends rtBiz_Settings_Page{
 
 			array(
 				'desc'          => __( 'When a new follow-up is added to a ticket', RTBIZ_HD_TEXT_DOMAIN ),
-				'id'            => 'rthd_settings_notification_acl_assignee_events_new_followup_created_mail',
+				'id'            => 'rthd_settings_assignee_new_followup_created_mail',
 				'default'       => 'yes',
 				'type'          => 'checkbox',
 				'checkboxgroup' => '',
@@ -122,7 +122,7 @@ class rtBiz_HD_Settings_Email_Notification extends rtBiz_Settings_Page{
 			),
 			array(
 				'desc'          => __( 'When a follow-up is edited by staff/customer', RTBIZ_HD_TEXT_DOMAIN ),
-				'id'            => 'rthd_settings_notification_acl_assignee_events_new_followup_updated_mail',
+				'id'            => 'rthd_settings_assignee_new_followup_updated_mail',
 				'default'       => 'yes',
 				'type'          => 'checkbox',
 				'checkboxgroup' => '',
@@ -131,7 +131,7 @@ class rtBiz_HD_Settings_Email_Notification extends rtBiz_Settings_Page{
 
 			array(
 				'desc'          => __( 'When a follow-up is deleted by staff/customer', RTBIZ_HD_TEXT_DOMAIN ),
-				'id'            => 'rthd_settings_notification_acl_assignee_events_new_followup_deleted_mail',
+				'id'            => 'rthd_settings_assignee_new_followup_deleted_mail',
 				'default'       => 'yes',
 				'type'          => 'checkbox',
 				'checkboxgroup' => '',
@@ -140,7 +140,7 @@ class rtBiz_HD_Settings_Email_Notification extends rtBiz_Settings_Page{
 
 			array(
 				'desc'          => __( 'When a ticket is reassigned', RTBIZ_HD_TEXT_DOMAIN ),
-				'id'            => 'rthd_settings_notification_acl_assignee_events_ticket_reassigned_mail',
+				'id'            => 'rthd_settings_assignee_ticket_reassigned_mail',
 				'default'       => 'yes',
 				'type'          => 'checkbox',
 				'checkboxgroup' => '',
@@ -149,7 +149,7 @@ class rtBiz_HD_Settings_Email_Notification extends rtBiz_Settings_Page{
 
 			array(
 				'desc'          => __( 'When a staff-only follow-up is added/edited on a ticket', RTBIZ_HD_TEXT_DOMAIN ),
-				'id'            => 'rthd_settings_notification_acl_assignee_events_new_staff_only_followup_created_mail',
+				'id'            => 'rthd_settings_assignee_new_staff_only_followup_created_mail',
 				'default'       => 'yes',
 				'type'          => 'checkbox',
 				'checkboxgroup' => '',
@@ -158,7 +158,7 @@ class rtBiz_HD_Settings_Email_Notification extends rtBiz_Settings_Page{
 
 			array(
 				'desc'          => __( 'When any status or metadata changed for a ticket', RTBIZ_HD_TEXT_DOMAIN ),
-				'id'            => 'rthd_settings_notification_acl_assignee_events_ticket_updated_mail',
+				'id'            => 'rthd_settings_assignee_ticket_updated_mail',
 				'default'       => 'yes',
 				'type'          => 'checkbox',
 				'checkboxgroup' => '',
@@ -167,7 +167,7 @@ class rtBiz_HD_Settings_Email_Notification extends rtBiz_Settings_Page{
 
 			array(
 				'desc'          => __( 'When a staff member subscribes to a ticket', RTBIZ_HD_TEXT_DOMAIN ),
-				'id'            => 'rthd_settings_notification_acl_assignee_events_new_subscriber_added_mail',
+				'id'            => 'rthd_settings_assignee_new_subscriber_added_mail',
 				'default'       => 'no',
 				'type'          => 'checkbox',
 				'checkboxgroup' => '',
@@ -176,7 +176,7 @@ class rtBiz_HD_Settings_Email_Notification extends rtBiz_Settings_Page{
 
 			array(
 				'desc'          => __( 'When a subscriber is removed from a ticket', RTBIZ_HD_TEXT_DOMAIN ),
-				'id'            => 'rthd_settings_notification_acl_assignee_events_subscriber_removed_mail',
+				'id'            => 'rthd_settings_assignee_subscriber_removed_mail',
 				'default'       => 'no',
 				'type'          => 'checkbox',
 				'checkboxgroup' => 'end',
@@ -190,7 +190,7 @@ class rtBiz_HD_Settings_Email_Notification extends rtBiz_Settings_Page{
 			array(
 				'title'         => __( 'Notification Event for Staff', RTBIZ_HD_TEXT_DOMAIN),
 				'desc'          => __( 'When a customer creates a ticket via the web form or email', RTBIZ_HD_TEXT_DOMAIN ),
-				'id'            => 'rthd_settings_notification_acl_staff_events_new_ticket_created_mail',
+				'id'            => 'rthd_settings_staff_new_ticket_created_mail',
 				'default'       => 'yes',
 				'type'          => 'checkbox',
 				'checkboxgroup' => 'start',
@@ -199,7 +199,7 @@ class rtBiz_HD_Settings_Email_Notification extends rtBiz_Settings_Page{
 
 			array(
 				'desc'          => __( 'When a new follow-up is added to a ticket', RTBIZ_HD_TEXT_DOMAIN ),
-				'id'            => 'rthd_settings_notification_acl_staff_events_new_followup_created_mail',
+				'id'            => 'rthd_settings_staff_new_followup_created_mail',
 				'default'       => 'yes',
 				'type'          => 'checkbox',
 				'checkboxgroup' => '',
@@ -207,7 +207,7 @@ class rtBiz_HD_Settings_Email_Notification extends rtBiz_Settings_Page{
 			),
 			array(
 				'desc'          => __( 'When a follow-up is edited by staff/customer', RTBIZ_HD_TEXT_DOMAIN ),
-				'id'            => 'rthd_settings_notification_acl_staff_events_new_followup_updated_mail',
+				'id'            => 'rthd_settings_staff_new_followup_updated_mail',
 				'default'       => 'yes',
 				'type'          => 'checkbox',
 				'checkboxgroup' => '',
@@ -216,7 +216,7 @@ class rtBiz_HD_Settings_Email_Notification extends rtBiz_Settings_Page{
 
 			array(
 				'desc'          => __( 'When a follow-up is deleted by staff/customer', RTBIZ_HD_TEXT_DOMAIN ),
-				'id'            => 'rthd_settings_notification_acl_staff_events_new_followup_deleted_mail',
+				'id'            => 'rthd_settings_staff_new_followup_deleted_mail',
 				'default'       => 'yes',
 				'type'          => 'checkbox',
 				'checkboxgroup' => '',
@@ -225,7 +225,7 @@ class rtBiz_HD_Settings_Email_Notification extends rtBiz_Settings_Page{
 
 			array(
 				'desc'          => __( 'When a ticket is reassigned', RTBIZ_HD_TEXT_DOMAIN ),
-				'id'            => 'rthd_settings_notification_acl_staff_events_ticket_reassigned_mail',
+				'id'            => 'rthd_settings_staff_ticket_reassigned_mail',
 				'default'       => 'yes',
 				'type'          => 'checkbox',
 				'checkboxgroup' => '',
@@ -234,7 +234,7 @@ class rtBiz_HD_Settings_Email_Notification extends rtBiz_Settings_Page{
 
 			array(
 				'desc'          => __( 'When a staff-only follow-up is added/edited on a ticket', RTBIZ_HD_TEXT_DOMAIN ),
-				'id'            => 'rthd_settings_notification_acl_staff_events_new_staff_only_followup_created_mail',
+				'id'            => 'rthd_settings_staff_new_staff_only_followup_created_mail',
 				'default'       => 'yes',
 				'type'          => 'checkbox',
 				'checkboxgroup' => '',
@@ -243,7 +243,7 @@ class rtBiz_HD_Settings_Email_Notification extends rtBiz_Settings_Page{
 
 			array(
 				'desc'          => __( 'When any status or metadata changed for a ticket', RTBIZ_HD_TEXT_DOMAIN ),
-				'id'            => 'rthd_settings_notification_acl_staff_events_ticket_updated_mail',
+				'id'            => 'rthd_settings_staff_ticket_updated_mail',
 				'default'       => 'yes',
 				'type'          => 'checkbox',
 				'checkboxgroup' => '',
@@ -252,7 +252,7 @@ class rtBiz_HD_Settings_Email_Notification extends rtBiz_Settings_Page{
 
 			array(
 				'desc'          => __( 'When a staff member subscribes to a ticket', RTBIZ_HD_TEXT_DOMAIN ),
-				'id'            => 'rthd_settings_notification_acl_staff_events_new_subscriber_added_mail',
+				'id'            => 'rthd_settings_staff_new_subscriber_added_mail',
 				'default'       => 'no',
 				'type'          => 'checkbox',
 				'checkboxgroup' => '',
@@ -261,7 +261,7 @@ class rtBiz_HD_Settings_Email_Notification extends rtBiz_Settings_Page{
 
 			array(
 				'desc'          => __( 'When a subscriber is removed from a ticket', RTBIZ_HD_TEXT_DOMAIN ),
-				'id'            => 'rthd_settings_notification_acl_staff_events_subscriber_removed_mail',
+				'id'            => 'rthd_settings_staff_subscriber_removed_mail',
 				'default'       => 'no',
 				'type'          => 'checkbox',
 				'checkboxgroup' => 'end',
@@ -274,7 +274,7 @@ class rtBiz_HD_Settings_Email_Notification extends rtBiz_Settings_Page{
 			array(
 				'title'         => __( 'Notification Event for group', RTBIZ_HD_TEXT_DOMAIN),
 				'desc'          => __( 'When a customer creates a ticket via the web form or email', RTBIZ_HD_TEXT_DOMAIN ),
-				'id'            => 'rthd_settings_notification_acl_group_events_new_ticket_created_mail',
+				'id'            => 'rthd_settings_group_new_ticket_created_mail',
 				'default'       => 'yes',
 				'type'          => 'checkbox',
 				'checkboxgroup' => 'start',
@@ -283,7 +283,7 @@ class rtBiz_HD_Settings_Email_Notification extends rtBiz_Settings_Page{
 
 			array(
 				'desc'          => __( 'When a new follow-up is added to a ticket', RTBIZ_HD_TEXT_DOMAIN ),
-				'id'            => 'rthd_settings_notification_acl_group_events_new_followup_created_mail',
+				'id'            => 'rthd_settings_group_new_followup_created_mail',
 				'default'       => 'yes',
 				'type'          => 'checkbox',
 				'checkboxgroup' => '',
@@ -291,7 +291,7 @@ class rtBiz_HD_Settings_Email_Notification extends rtBiz_Settings_Page{
 			),
 			array(
 				'desc'          => __( 'When a follow-up is edited by staff/customer', RTBIZ_HD_TEXT_DOMAIN ),
-				'id'            => 'rthd_settings_notification_acl_group_events_new_followup_updated_mail',
+				'id'            => 'rthd_settings_group_new_followup_updated_mail',
 				'default'       => 'yes',
 				'type'          => 'checkbox',
 				'checkboxgroup' => '',
@@ -300,7 +300,7 @@ class rtBiz_HD_Settings_Email_Notification extends rtBiz_Settings_Page{
 
 			array(
 				'desc'          => __( 'When a follow-up is deleted by staff/customer', RTBIZ_HD_TEXT_DOMAIN ),
-				'id'            => 'rthd_settings_notification_acl_group_events_new_followup_deleted_mail',
+				'id'            => 'rthd_settings_group_new_followup_deleted_mail',
 				'default'       => 'yes',
 				'type'          => 'checkbox',
 				'checkboxgroup' => '',
@@ -309,7 +309,7 @@ class rtBiz_HD_Settings_Email_Notification extends rtBiz_Settings_Page{
 
 			array(
 				'desc'          => __( 'When a ticket is reassigned', RTBIZ_HD_TEXT_DOMAIN ),
-				'id'            => 'rthd_settings_notification_acl_group_events_ticket_reassigned_mail',
+				'id'            => 'rthd_settings_group_ticket_reassigned_mail',
 				'default'       => 'yes',
 				'type'          => 'checkbox',
 				'checkboxgroup' => '',
@@ -318,7 +318,7 @@ class rtBiz_HD_Settings_Email_Notification extends rtBiz_Settings_Page{
 
 			array(
 				'desc'          => __( 'When a staff-only follow-up is added/edited on a ticket', RTBIZ_HD_TEXT_DOMAIN ),
-				'id'            => 'rthd_settings_notification_acl_group_events_new_staff_only_followup_created_mail',
+				'id'            => 'rthd_settings_group_new_staff_only_followup_created_mail',
 				'default'       => 'yes',
 				'type'          => 'checkbox',
 				'checkboxgroup' => '',
@@ -327,7 +327,7 @@ class rtBiz_HD_Settings_Email_Notification extends rtBiz_Settings_Page{
 
 			array(
 				'desc'          => __( 'When any status or metadata changed for a ticket', RTBIZ_HD_TEXT_DOMAIN ),
-				'id'            => 'rthd_settings_notification_acl_group_events_ticket_updated_mail',
+				'id'            => 'rthd_settings_group_ticket_updated_mail',
 				'default'       => 'yes',
 				'type'          => 'checkbox',
 				'checkboxgroup' => '',
@@ -336,7 +336,7 @@ class rtBiz_HD_Settings_Email_Notification extends rtBiz_Settings_Page{
 
 			array(
 				'desc'          => __( 'When a staff member subscribes to a ticket', RTBIZ_HD_TEXT_DOMAIN ),
-				'id'            => 'rthd_settings_notification_acl_group_events_new_subscriber_added_mail',
+				'id'            => 'rthd_settings_group_new_subscriber_added_mail',
 				'default'       => 'no',
 				'type'          => 'checkbox',
 				'checkboxgroup' => '',
@@ -345,7 +345,7 @@ class rtBiz_HD_Settings_Email_Notification extends rtBiz_Settings_Page{
 
 			array(
 				'desc'          => __( 'When a subscriber is removed from a ticket', RTBIZ_HD_TEXT_DOMAIN ),
-				'id'            => 'rthd_settings_notification_acl_group_events_subscriber_removed_mail',
+				'id'            => 'rthd_settings_group_subscriber_removed_mail',
 				'default'       => 'no',
 				'type'          => 'checkbox',
 				'checkboxgroup' => 'end',

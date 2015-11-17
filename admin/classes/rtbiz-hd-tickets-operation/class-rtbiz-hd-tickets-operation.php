@@ -50,22 +50,21 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Operation' ) ) {
 
 				if ( empty ( $default_assignee ) ) {
 					$terms = wp_get_post_terms( $postid, Rt_Products::$product_slug );
-					$settings = rtbiz_hd_get_redux_settings();
 					if ( ! empty( $terms ) && count( $terms ) == 1 ) {
 						$default_assignee = rtbiz_hd_get_product_meta( 'default_assignee', $terms[0]->term_id );
 					}
 				}
-				if ( isset ( $mailbox_email ) ) {
+				if ( isset( $mailbox_email ) ) {
 					$mailbox_data = rtmb_get_module_mailbox_email( $mailbox_email, RTBIZ_HD_TEXT_DOMAIN );
-					if ( ! empty ( $mailbox_data ) ) {
+					if ( ! empty( $mailbox_data ) ) {
 						$mailbox_data = maybe_unserialize( $mailbox_data->email_data );
 
-						if ( empty( $terms ) && count( $terms ) < 1 && ! empty ( $mailbox_data['product'] ) ) {
+						if ( empty( $terms ) && count( $terms ) < 1 && ! empty( $mailbox_data['product'] ) ) {
 							wp_set_post_terms( $postid, $mailbox_data['product'], Rt_Products::$product_slug );
 							$default_assignee = rtbiz_hd_get_product_meta( 'default_assignee', $mailbox_data['product'] );
 						}
 
-						if ( empty ( $default_assignee ) && ! empty ( $mailbox_data['staff'] ) ) {
+						if ( empty( $default_assignee ) && ! empty( $mailbox_data['staff'] ) ) {
 							if ( get_user_by( 'id', $mailbox_data['staff'] ) ) {
 								$default_assignee = $mailbox_data['staff'];
 							}
@@ -73,8 +72,8 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Operation' ) ) {
 					}
 				}
 
-				if ( empty ( $default_assignee ) ) {
-					$default_assignee = $settings['rthd_default_user'];
+				if ( empty( $default_assignee ) ) {
+					$default_assignee = rtbiz_hd_default_assignee();
 				}
 
 				if ( $post->post_author != $default_assignee ) {

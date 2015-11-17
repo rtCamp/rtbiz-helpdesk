@@ -64,7 +64,7 @@ if ( !class_exists( 'Rtbiz_HD_Admin' ) ) {
 			//Setting
 			global $rtbiz_hd_settings, $rtbiz_hd_import_operation, $rtbiz_hd_product_support, $rtbiz_hd_short_code, $rtbiz_hd_gravity_form_importer, $rtbiz_hd_logs;
 
-			$rtbiz_hd_settings = new Rtbiz_HD_Settings();
+			//$rtbiz_hd_settings = new Rtbiz_HD_Settings();
 			$rtbiz_hd_import_operation = new Rtbiz_HD_Import_Operation();
 
 			$rtbiz_hd_gravity_form_importer = new Rtbiz_HD_Gravity_Form_Importer();

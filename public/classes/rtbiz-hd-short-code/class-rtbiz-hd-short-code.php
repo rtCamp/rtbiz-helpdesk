@@ -225,7 +225,7 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 				return;
 			}
 
-			global $rtbiz_hd_module, $current_user, $redux_helpdesk_settings;
+			global $rtbiz_hd_module, $current_user;
 			$cap = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' );
 
 			if ( ! empty( $arg_shortcode['email'] ) && empty( $arg_shortcode['userid'] ) ) {
@@ -351,9 +351,9 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 					}
 
 					if ( 'yes' == $arg_shortcode['show_support_form_link'] ) {
-						global $redux_helpdesk_settings;
-						if ( isset( $redux_helpdesk_settings['rthd_support_page'] ) && ! empty( $redux_helpdesk_settings['rthd_support_page'] ) ) {
-							$page = get_post( $redux_helpdesk_settings['rthd_support_page'] );
+						$support_page = rtbiz_hd_get_settings( 'rthd_settings_support_page' );
+						if ( isset( $support_page ) && ! empty( $support_page ) ) {
+							$page = get_post( $support_page );
 							$link = get_permalink( $page->ID );
 							?>
 							<a class="clearfix" href="<?php echo $link; ?>">
@@ -373,8 +373,9 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 						?></h2><?php
 					}
 					if ( 'yes' == $arg_shortcode['show_support_form_link'] ) {
-						if ( isset( $redux_helpdesk_settings['rthd_support_page'] ) && ! empty( $redux_helpdesk_settings['rthd_support_page'] ) ) {
-							$page = get_post( $redux_helpdesk_settings['rthd_support_page'] );
+						$support_page = rtbiz_hd_get_settings( 'rthd_settings_support_page' );
+						if ( isset( $support_page ) && ! empty( $support_page ) ) {
+							$page = get_post( $support_page );
 							$link = get_permalink( $page->ID );
 							if ( $oder_shortcode ) {
 								$link = add_query_arg( array( 'order_id' => $arg_shortcode['orderid'] ), $link );

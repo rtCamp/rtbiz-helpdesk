@@ -459,8 +459,8 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 		 * add support link
 		 */
 		function edd_action_link_header() {
-			global $redux_helpdesk_settings;
-			if ( isset( $redux_helpdesk_settings['rthd_support_page'] ) && ! empty( $redux_helpdesk_settings['rthd_support_page'] ) ) {
+			$support_page = rtbiz_hd_get_settings( 'rthd_settings_support_page' );
+			if ( isset( $support_page ) && ! empty( $support_page ) ) {
 				?>
 				<th class="edd_rt_hd_support"><?php _e( 'Support', 'edd' ); ?></th>
 			<?php
@@ -474,9 +474,9 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 			if ( is_array( $download_id ) ) {
 				$download_id = $download_id['downloads'][0]['id'];
 			}
-			global $redux_helpdesk_settings;
-			if ( isset( $redux_helpdesk_settings['rthd_support_page'] ) && ! empty( $redux_helpdesk_settings['rthd_support_page'] ) ) {
-				$page = get_post( $redux_helpdesk_settings['rthd_support_page'] );
+			$support_page = rtbiz_hd_get_settings( 'rthd_settings_support_page' );
+			if ( isset( $support_page ) && ! empty( $support_page ) ) {
+				$page = get_post( $support_page );
 				$link = get_permalink( $page->ID );
 				$link = add_query_arg( array( 'product_id' => $download_id, 'order_id' => $payment_id, 'order_type' => 'edd' ), $link );
 				?>
@@ -492,17 +492,15 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 		 *
 		 * @since 0.1
 		 *
-		 * @global type $redux_helpdesk_settings
-		 *
 		 * @param type  $actions
 		 * @param type  $order
 		 *
 		 * @return type
 		 */
 		function wocommerce_actions_link( $actions, $order ) {
-			global $redux_helpdesk_settings;
-			if ( isset( $redux_helpdesk_settings['rthd_support_page'] ) && ! empty( $redux_helpdesk_settings['rthd_support_page'] ) ) {
-				$page                 = get_post( $redux_helpdesk_settings['rthd_support_page'] );
+			$support_page = rtbiz_hd_get_settings( 'rthd_settings_support_page' );
+			if ( isset( $support_page ) && ! empty( $support_page ) ) {
+				$page                 = get_post( $support_page );
 				$link                 = get_permalink( $page->ID );
 				$link = add_query_arg( array( 'order_id' => $order->id, 'order_type' => 'woocommerce' ), $link );
 				$actions['support'] = array(

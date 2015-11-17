@@ -151,7 +151,7 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Contacts_Blacklist' ) ) {
 			if ( ! empty( $blacklistedEmail ) ) {
 				$blacklistedEmail = array_merge( rtbiz_hd_get_blacklist_emails(), $blacklistedEmail );
 				$blacklistedEmail = implode( "\n", array_unique( $blacklistedEmail ) );
-				rtbiz_hd_set_redux_settings( 'rthd_blacklist_emails_textarea', $blacklistedEmail );
+				rtbiz_hd_set_settings( 'rthd_settings_blacklist_emails_textarea', $blacklistedEmail );
 				update_post_meta( $_POST['post_id'], '_rtbiz_hd_is_blocklised', 'true' );
 				ob_start();
 				?>
@@ -193,7 +193,7 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Contacts_Blacklist' ) ) {
 			$arrContactsEmail = array_unique( $arrContactsEmail );
 			$arrContactsEmail = implode( "\n", $arrContactsEmail );
 
-			rtbiz_hd_set_redux_settings( 'rthd_blacklist_emails_textarea', $arrContactsEmail );
+			rtbiz_hd_set_settings( 'rthd_settings_blacklist_emails_textarea', $arrContactsEmail );
 			update_post_meta( $_POST['post_id'], '_rtbiz_hd_is_blocklised', 'false' );
 			ob_start();
 			?>

@@ -34,7 +34,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 			// hook priority 25 because rtBiz email model is on after_theme 20 and we can not get 'rt_get_all_system_emails' before that because of acl needs p2p
 			Rtbiz_HD::$loader->add_action( 'p2p_init', $this, 'init_settings', 30 );
 
-			Rtbiz_HD::$loader->add_filter( 'rtbiz_product_setting', $this, 'product_setting' );
+			//Rtbiz_HD::$loader->add_filter( 'rtbiz_product_setting', $this, 'product_setting' );
 
 			//after redux setting saved
 			Rtbiz_HD::$loader->add_action( 'redux/options/' . self::$hd_opt . '/saved', $this, 'on_redux_save', 10, 2 );
@@ -64,14 +64,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 		}
 
 		function product_setting( $setting ) {
-			$redux = rtbiz_hd_get_redux_settings();
-			if ( ! empty( $redux['product_plugin'] ) ) {
-				if ( empty( $redux['product_plugin'] ) ) {
-					$redux['product_plugin'] = array();
-				}
-				$setting = $redux['product_plugin'];
-			}
-
+			$setting = rtbiz_hd_get_settings( 'rtbiz_product_plugin', array() );
 			return $setting;
 		}
 
@@ -133,10 +126,10 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 		public  function outbound_mail_setup_on_mailbox_remove( $email, $module ) {
 			if ( RTBIZ_HD_TEXT_DOMAIN == $module ){
 				$system_emails = rtmb_get_module_mailbox_emails( RTBIZ_HD_TEXT_DOMAIN );
-				$settings = rtbiz_hd_get_redux_settings();
+				$outgoing_email = rtbiz_hd_get_outgoing_email();
 				if ( count( $system_emails ) <= 0 ){
 					rtbiz_hd_set_redux_settings( 'rthd_outgoing_email_mailbox', get_option( 'admin_email' ) );
-				}else if ( empty( $settings['rthd_outgoing_email_mailbox'] ) || $email ==  $settings['rthd_outgoing_email_mailbox'] ){
+				}else if ( empty( $outgoing_email ) || $email ==  $outgoing_email ){
 					rtbiz_hd_set_redux_settings( 'rthd_outgoing_email_mailbox', $system_emails[0] );
 				}
 			}

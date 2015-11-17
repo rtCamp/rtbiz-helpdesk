@@ -479,7 +479,6 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			$post_date_gmt = gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) ) );
 			$post_type     = Rtbiz_HD_Module::$post_type;
 			$labels        = $rtbiz_hd_module->labels;
-			$settings      = rtbiz_hd_get_redux_settings();
 
 			$new_all_emails = array();
 			$senderName = '';
@@ -505,7 +504,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 			}
 
 			$postArray = array(
-				'post_author'   => $settings['rthd_default_user'],
+				'post_author'   => rtbiz_hd_default_assignee(),
 				'post_content'  => rtbiz_hd_content_filter( $body ),
 				'post_date'     => $post_date,
 				'post_status'   => 'publish',
@@ -1247,9 +1246,9 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 
 			/* auto assign flag set */
 			global $rtbiz_hd_email_notification;
-			$redux = rtbiz_hd_get_redux_settings();
-			$autoAssingeFlag = ( isset( $redux['rthd_enable_auto_assign'] ) && 1 == $redux['rthd_enable_auto_assign'] ) ;
-			$autoAssignEvent = ( isset( $redux['rthd_auto_assign_events'] ) ) ? $redux['rthd_auto_assign_events'] : '' ;
+			$autoAssingeFlag = rtbiz_hd_enable_auto_assign() ;
+			$auto_assign_events = rtbiz_hd_get_settings( 'rthd_settings_auto_assign_events' );
+			$autoAssignEvent = ( isset( $auto_assign_events ) ) ? $auto_assign_events : '' ;
 			$isFirstStaffComment = false;
 			//check auto assign feature enable and followup created by staff
 			if ( self::$FOLLOWUP_STAFF != $comment_type && $autoAssingeFlag && $rtbiz_hd_email_notification->is_internal_user( $comment_author_email ) ) {
@@ -2118,12 +2117,14 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 
 			return $rows_affected;
 		}
+
+		//todo: setting not found
 		public function check_setting_for_new_followup_email() {
-			$redux = rtbiz_hd_get_redux_settings();
-			if ( isset( $redux['rthd_notification_events']['new_comment_added'] ) && 1 != $redux['rthd_notification_events']['new_comment_added'] ) {
-				return false;
-			}
-			return true;
+			//$redux = rtbiz_hd_get_redux_settings();
+			//if ( isset( $redux['rthd_notification_events']['new_comment_added'] ) && 1 != $redux['rthd_notification_events']['new_comment_added'] ) {
+			return false;
+			//}
+			//return true;
 		}
 
 		public function ajax_load_more_followup() {

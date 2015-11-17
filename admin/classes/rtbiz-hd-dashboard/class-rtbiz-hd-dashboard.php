@@ -346,36 +346,35 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 		public function tickets_by_status() {
 
 			$data_source = wp_cache_get( 'hd_ticket_by_status', 'hd_dashboard' );
-			error_log( (false !== $data_source) . " hd_ticket_by_status From cache? ");
+			error_log( ( false !== $data_source ) . ' hd_ticket_by_status From cache? ' );
 
-			$settings = rtbiz_hd_get_redux_settings();
 			if ( false === $data_source ) {
 				global $rtbiz_hd_module, $wpdb;
 				$table_name = rtbiz_hd_get_ticket_table_name();
 				$post_statuses = array();
-				foreach ($rtbiz_hd_module->statuses as $status) {
-					$post_statuses[$status['slug']] = $status['name'];
+				foreach ( $rtbiz_hd_module->statuses as $status ) {
+					$post_statuses[ $status['slug'] ] = $status['name'];
 				}
 
 				$query = "SELECT post_status, COUNT(id) AS rthd_count FROM {$table_name} WHERE 1=1 GROUP BY post_status";
-				$results = $wpdb->get_results($query);
+				$results = $wpdb->get_results( $query );
 				$data_source = array();
 				if ( ! empty( $results ) ) {
 					$cols = array(__('Ticket Status', RTBIZ_HD_TEXT_DOMAIN), __('Count', RTBIZ_HD_TEXT_DOMAIN));
 					$rows = array();
-					foreach ($results as $item) {
-						$post_status = (isset($post_statuses[$item->post_status])) ? $post_statuses[$item->post_status] : '';
-						if (!empty($post_status)) {
+					foreach ( $results as $item ) {
+						$post_status = ( isset( $post_statuses[ $item->post_status ] ) ) ? $post_statuses[ $item->post_status ] : '';
+						if ( ! empty( $post_status ) ) {
 							$rows[] = array(
 								$post_status,
-								(!empty($item->rthd_count)) ? floatval($item->rthd_count) : 0,
+								( ! empty( $item->rthd_count ) ) ? floatval( $item->rthd_count ) : 0,
 							);
 						}
 					}
 					$data_source['cols'] = $cols;
 					$data_source['rows'] = $rows;
 				}
-				wp_cache_set('hd_ticket_by_status', $data_source, 'hd_dashboard', DAY_IN_SECONDS );
+				wp_cache_set( 'hd_ticket_by_status', $data_source, 'hd_dashboard', DAY_IN_SECONDS );
 			}
 			if ( ! empty( $data_source ) ) {
 				$this->charts[] = array(
@@ -388,11 +387,12 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 			}
 
 			?>
-			<div id="rthd_hd_pie_tickets_by_status"></div>
-			<?php if ( empty( $data_source ) ) {
+			<div id="rthd_hd_pie_tickets_by_status"></div> <?php
+			if ( empty( $data_source ) ) {
 				printf( 'No tickets found.' );
-				if ( ! empty( $settings['rthd_support_page'] ) ){
-					printf( '<a target="_blank" href="%s" >Add new ticket</a>', get_page_link( $settings['rthd_support_page'] ) );
+				$support_page = rtbiz_hd_get_settings( 'rthd_settings_support_page' );
+				if ( ! empty( $support_page ) ) {
+					printf( '<a target="_blank" href="%s" >Add new ticket</a>', get_page_link( $support_page ) );
 				}
 			}
 		}
@@ -788,7 +788,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 		public function welcome_panel() {
 			global $rtbiz_hd_attributes;
 
-			$settings = rtbiz_hd_get_redux_settings();
+			$support_page = rtbiz_hd_get_settings( 'rthd_settings_support_page' );
 			$welcome_label = 'Helpdesk';
 
 			$admin_cap = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'admin' );
@@ -809,9 +809,9 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 						<ul>
 							<?php if ( current_user_can( $editor_cap ) ) { ?>
 								<div id="rthd-support-page">
-									<?php if ( isset( $settings['rthd_support_page'] ) && ! empty( $settings['rthd_support_page'] ) && get_post( $settings['rthd_support_page'] ) ) : ?>
+									<?php if ( isset( $support_page ) && ! empty( $support_page ) && get_post( $support_page ) ) : ?>
 										<li>
-											<a id="rthd-view-support-page" class="welcome-icon welcome-view-site" href="<?php echo get_page_link( $settings['rthd_support_page'] ); ?>"><?php _e( 'Add Support Ticket' ); ?></a>
+											<a id="rthd-view-support-page" class="welcome-icon welcome-view-site" href="<?php echo get_page_link( $support_page ); ?>"><?php _e( 'Add Support Ticket' ); ?></a>
 										</li>
 									<?php else : ?>
 										<li>
@@ -944,7 +944,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 			}
 			if ( ! empty( $support_page_id ) && ! $support_page_id instanceof WP_Error ) {
 				/* Set support page option. */
-				rtbiz_hd_set_redux_settings( 'rthd_support_page', $support_page_id );
+				rtbiz_hd_set_settings( 'rthd_settings_support_page', $support_page_id );
 				$response['status'] = true;
 				$response['html'] = '<li><a id="rthd-view-support-page" class="welcome-icon welcome-view-site" target="_blank" href="' . get_page_link( $support_page_id ) . '">' . __( 'View Support Page' ) . '</a></li>';
 			}

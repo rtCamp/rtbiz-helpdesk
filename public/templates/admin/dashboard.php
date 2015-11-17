@@ -6,7 +6,6 @@
  */
 global $rtbiz_hd_dashboard;
 $author_cap = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' );
-$settings = rtbiz_hd_get_redux_settings();
 $welcome_label = 'Helpdesk';
 ?>
 <div class="wrap">

@@ -320,8 +320,7 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 				}
 			}
 			$product = array_merge( $defaultproduct, $product );
-			rtbiz_hd_set_redux_setting( 'product_plugin', $product );
-			rtbiz_set_redux_setting( 'product_plugin', $product );
+			rtbiz_hd_set_settings( 'rtbiz_product_plugin', $product );
 			global $rtbiz_products;
 			$product = array_keys( $product );
 			$rtbiz_products->bulk_insert_products( $product );
@@ -676,7 +675,7 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 			}
 			//default_assignee
 			if ( ! empty( $_POST['default_assignee'] ) && is_numeric( $_POST['default_assignee'] ) ) {
-				rtbiz_hd_set_redux_settings( 'rthd_default_user', $_POST['default_assignee'] );
+				rtbiz_hd_set_settings( 'rthd_settings_default_user', $_POST['default_assignee'] );
 				$arrReturn['status'] = true;
 			}
 
@@ -699,12 +698,12 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 					<input type="hidden" id="rthd_outound_sub-action" name="rthd_outound_sub-action" value="rtbiz_hd_save_outound_setup">
 					<?php wp_nonce_field( 'rtbiz_hd_save_outound_setup' ); ?>
 					<div class="rthd-setup-wizard-row">
-						<label for="rthd_outgoing_email_from_name"> <?php _e( 'Outgoing Emails \'From\' Name' ); ?></label>
-						<input type="text" id="rthd_outgoing_email_from_name" name="rthd_outgoing_email_from_name" value="<?php echo get_bloginfo(); ?>" />
+						<label for="rthd_settings_outgoing_email_from_name"> <?php _e( 'Outgoing Emails \'From\' Name' ); ?></label>
+						<input type="text" id="rthd_settings_outgoing_email_from_name" name="rthd_settings_outgoing_email_from_name" value="<?php echo get_bloginfo(); ?>" />
 					</div>
 					<div class="rthd-setup-wizard-row">
-						<label for="rthd_outgoing_email_mailbox"> <?php _e( 'Outgoing Emails Mailbox' ); ?></label>
-						<select id="rthd_outgoing_email_mailbox" name="rthd_outgoing_email_mailbox">
+						<label for="rthd_settings_outgoing_email_mailbox"> <?php _e( 'Outgoing Emails Mailbox' ); ?></label>
+						<select id="rthd_settings_outgoing_email_mailbox" name="rthd_settings_outgoing_email_mailbox">
 							<?php foreach ( $system_emails as $email ) { ?>
 								<option value="<?php echo $email; ?>"><?php echo $email; ?></option>
 							<?php } ?>
@@ -739,18 +738,18 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 				die();
 			}
 
-			if ( empty( $obj_data['rthd_outgoing_email_from_name'] ) || empty( $obj_data['rthd_outgoing_email_mailbox'] ) ) {
+			if ( empty( $obj_data['rthd_settings_outgoing_email_from_name'] ) || empty( $obj_data['rthd_settings_outgoing_email_mailbox'] ) ) {
 				$result['error'] = 'Error: Required mailbox field missing';
 				echo json_encode( $result );
 				die();
 			}
 
-			if ( ! empty( $obj_data['rthd_outgoing_email_from_name'] ) ) {
-				rtbiz_hd_set_redux_settings( 'rthd_outgoing_email_from_name', $obj_data['rthd_outgoing_email_from_name'] );
+			if ( ! empty( $obj_data['rthd_settings_outgoing_email_from_name'] ) ) {
+				rtbiz_hd_set_settings( 'rthd_settings_outgoing_email_from_name', $obj_data['rthd_settings_outgoing_email_from_name'] );
 			}
 
-			if ( ! empty( $obj_data['rthd_outgoing_email_mailbox'] ) ) {
-				rtbiz_hd_set_redux_settings( 'rthd_outgoing_email_mailbox', $obj_data['rthd_outgoing_email_mailbox'] );
+			if ( ! empty( $obj_data['rthd_settings_outgoing_email_mailbox'] ) ) {
+				rtbiz_hd_set_settings( 'rthd_settings_outgoing_email_mailbox', $obj_data['rthd_settings_outgoing_email_mailbox'] );
 			}
 			$result['status'] = true;
 			echo json_encode( $result );

@@ -443,27 +443,64 @@ function rtbiz_hd_get_unique_hash_url( $ticket_id ) {
 }
 
 function rtbiz_hd_is_unique_hash_enabled() {
-	$settings = rtbiz_hd_get_redux_settings();
-	if ( ! empty( $settings['rthd_enable_ticket_unique_hash'] ) ) {
+	$enable_ticket_unique_hash = rtbiz_hd_get_settings( 'rthd_settings_enable_ticket_unique_hash' );
+	if ( ! empty( $enable_ticket_unique_hash ) && 'on' == $enable_ticket_unique_hash ) {
 		return true;
 	}
-
 	return false;
 }
 
 // Setting ApI
-function rtbiz_hd_get_redux_settings() {
-	if ( ! isset( $GLOBALS['redux_helpdesk_settings'] ) ) {
-		$GLOBALS['redux_helpdesk_settings'] = get_option( 'redux_helpdesk_settings', array() );
-	}
-
-	return $GLOBALS['redux_helpdesk_settings'];
+function rtbiz_hd_get_settings( $option, $default = false ) {
+	return get_option( $option, $default );
 }
 
-function rtbiz_hd_my_mail_from( $email ) {
-	$settings = rtbiz_hd_get_redux_settings();
+function rtbiz_hd_default_assignee(){
+	$default_user      = rtbiz_hd_get_settings( 'rthd_settings_default_user' );
+	if ( empty( $default_user ) ) {
+		$default_user = 0;
+	}
+	return $default_user;
+}
 
-	return $settings['rthd_outgoing_email_from_address'];
+function rtbiz_hd_get_outgoing_email(){
+	$outgoing_email = rtbiz_hd_get_settings( 'rthd_settings_outgoing_email_mailbox' );
+	return $outgoing_email;
+}
+
+function rtbiz_hd_enable_auto_assign() {
+	$enable_auto_assign = rtbiz_hd_get_settings( 'rthd_settings_enable_auto_assign' );
+	if ( ! empty( $enable_auto_assign ) && 'on' == $enable_auto_assign ) {
+		return true;
+	}
+	return false;
+}
+
+
+function rtbiz_hd_enable_notification_acl() {
+	$enable_notification_acl = rtbiz_hd_get_settings( 'rthd_settings_enable_notification_acl' );
+	if ( ! empty( $enable_notification_acl ) && 'on' == $enable_notification_acl ) {
+		return true;
+	}
+	return false;
+}
+
+function rtbiz_hd_enable_notification_event( $key ) {
+	$enable_notification = rtbiz_hd_get_settings( $key );
+	if ( ! empty( $enable_notification ) && 'yes' == $enable_notification ) {
+		return true;
+	}
+	return false;
+}
+
+function rtbiz_hd_get_notification_emails(){
+	$notification_emails = rtbiz_hd_get_settings( 'rthd_settings_notification_emails', '' );
+	if ( ! empty( $notification_emails ) ) {
+		$notification_emails = explode( ',', $notification_emails );
+	} else {
+		$notification_emails = array();
+	}
+	return $notification_emails;
 }
 
 // user notification preference
@@ -487,11 +524,10 @@ function rtbiz_hd_get_user_notification_preference( $user_id, $email = '' ) {
 
 //adult filter redux setting
 function rtbiz_hd_get_redux_adult_filter() {
-	$settings = rtbiz_hd_get_redux_settings();
-	if ( ! empty( $settings['rthd_enable_ticket_adult_content'] ) ) {
+	$enable_ticket_adult = rtbiz_hd_get_settings( 'rthd_settings_enable_ticket_adult_content' );
+	if ( ! empty( $enable_ticket_adult ) && 'on' == $enable_ticket_adult ) {
 		return true;
 	}
-
 	return false;
 }
 
@@ -576,9 +612,10 @@ function rtbiz_hd_create_new_ticket_title( $key, $post_id ) {
 }
 
 function rtbiz_hd_get_email_signature_settings() {
-	$redux = rtbiz_hd_get_redux_settings();
-	if ( isset( $redux['rthd_enable_signature'] ) && 1 == $redux['rthd_enable_signature'] && isset( $redux['rthd_email_signature'] ) ) {
-		return wp_kses( $redux['rthd_email_signature'], array(
+	$enable_signature = rtbiz_hd_get_settings( 'rthd_settings_enable_signature' );
+	$email_signature = rtbiz_hd_get_settings( 'rthd_settings_email_signature' );
+	if ( ! empty( $enable_signature ) && 'on' == $enable_signature && ! empty( $email_signature ) ) {
+		return wp_kses( $email_signature, array(
 			'a'      => array(
 				'href'   => array(),
 				'title'  => array(),
@@ -594,9 +631,10 @@ function rtbiz_hd_get_email_signature_settings() {
 }
 
 function rtbiz_hd_get_auto_response_message() {
-	$redux = rtbiz_hd_get_redux_settings();
-	if ( isset( $redux['rthd_enable_auto_response'] ) && 1 == $redux['rthd_enable_auto_response'] && isset( $redux['rthd_auto_response_message'] ) ) {
-		return wp_kses( $redux['rthd_auto_response_message'], array(
+	$enable_auto_response = rtbiz_hd_get_settings( 'rthd_settings_enable_auto_response' );
+	$auto_response_message = rtbiz_hd_get_settings( 'rthd_settings_auto_response_message' );
+	if ( ! empty( $enable_auto_response ) && 'on' == $enable_auto_response && ! empty( $auto_response_message ) ) {
+		return wp_kses( $auto_response_message, array(
 			'a'      => array(
 				'href'   => array(),
 				'title'  => array(),
@@ -612,7 +650,6 @@ function rtbiz_hd_get_auto_response_message() {
 }
 
 function rtbiz_hd_generate_email_title( $post_id, $title ) {
-	$redux = rtbiz_hd_get_redux_settings();
 	$title = str_replace( '{module_name}', Rtbiz_HD_Module::$name, $title );
 	$title = str_replace( '{ticket_id}', $post_id, $title );
 	$title = str_replace( '{ticket_title}', html_entity_decode( get_the_title( $post_id ), ENT_COMPAT, 'UTF-8' ), $title );
@@ -1013,7 +1050,6 @@ function rtbiz_hd_wp_new_user_notification( $user_id, $plaintext_pass = '' ) {
 		return;
 	}
 
-	$settings     = rtbiz_hd_get_redux_settings();
 	$module_label = 'Helpdesk';
 
 	// Generate something random for a password reset key.
@@ -1042,10 +1078,10 @@ function rtbiz_hd_wp_new_user_notification( $user_id, $plaintext_pass = '' ) {
 }
 
 function rtbiz_hd_get_blacklist_emails() {
-	$redux     = rtbiz_hd_get_redux_settings();
+	$blacklist_emails = rtbiz_hd_get_settings( 'rthd_settings_blacklist_emails_textarea' );
 	$blacklist = array();
-	if ( isset( $redux['rthd_blacklist_emails_textarea'] ) && ! empty( $redux['rthd_blacklist_emails_textarea'] ) ) {
-		$blacklist = explode( "\n", $redux['rthd_blacklist_emails_textarea'] );
+	if ( isset( $blacklist_emails ) && ! empty( $blacklist_emails ) ) {
+		$blacklist = explode( "\n", $blacklist_emails );
 	}
 
 	return array_filter( $blacklist );
@@ -1061,6 +1097,10 @@ function rtbiz_hd_get_blacklist_emails() {
 function rtbiz_hd_set_redux_settings( $option_name, $option_value ) {
 	global $rtbiz_hd_settings;
 	$rtbiz_hd_settings->ReduxFramework->set( $option_name, $option_value );
+}
+
+function rtbiz_hd_set_settings( $option_name, $option_value ) {
+	update_option( $option_name, $option_value );
 }
 
 /**
@@ -1192,8 +1232,8 @@ function rtbiz_hd_check_email_blacklisted( $testemail ) {
  * @return bool
  */
 function rtbiz_hd_is_enable_mailbox_reading() {
-	$redux = rtbiz_hd_get_redux_settings();
-	$flag  = ( isset( $redux['rthd_enable_mailbox_reading'] ) && 1 == $redux['rthd_enable_mailbox_reading'] );
+	$enable_mailbox_reading = rtbiz_hd_get_settings( 'rthd_settings_enable_mailbox_reading' );
+	$flag  = ( isset( $enable_mailbox_reading ) && 'on' == $enable_mailbox_reading );
 
 	return $flag;
 }
@@ -1249,9 +1289,9 @@ function rtbiz_hd_update_product_meta( $key, $value, $term_id ) {
  * @return bool
  */
 function rtbiz_hd_get_reply_via_email() {
-	$redux = rtbiz_hd_get_redux_settings();
+	$reply_via_email = rtbiz_hd_get_settings( 'rthd_settings_reply_via_email' );
 
-	return ( isset( $redux['rthd_reply_via_email'] ) && 1 == $redux['rthd_reply_via_email'] );
+	return ( ! empty( $reply_via_email ) && 'on' == $reply_via_email );
 }
 
 /**
@@ -1844,16 +1884,6 @@ function rtbiz_hd_set_redux_setting( $key, $val ) {
 	$GLOBALS[ Rtbiz_HD_Settings::$hd_opt ] = get_option( Rtbiz_HD_Settings::$hd_opt, array() );
 }
 
-function rtbiz_hd_get_redux_post_settings( $post ) {
-	// NOTE : Make modifications for what value to return.
-	if ( ! isset( $GLOBALS['redux_helpdesk_settings'] ) ) {
-		$GLOBALS['redux_helpdesk_settings'] = get_option( 'redux_helpdesk_settings', array() );
-	}
-	$data = wp_parse_args( get_post_meta( $post->ID, 'redux_helpdesk_settings', true ), $GLOBALS['redux_helpdesk_settings'] );
-
-	return $GLOBALS['redux_helpdesk_settings'];
-}
-
 function rtbiz_hd_ticket_import_logs() {
 	global $rtbiz_hd_logs;
 	$rtbiz_hd_logs->ui();
@@ -2090,27 +2120,24 @@ function rtbiz_hd_get_contact_id_by_user_id( $user_id, $force = false ) {
 }
 
 function rtbiz_hd_get_email_only_support() {
-	$setting = rtbiz_hd_get_redux_settings();
-	if ( isset( $setting['rthd_email_support'] ) && isset( $setting['rthd_web_support'] ) ) {
-		if ( '1' == $setting['rthd_email_support'] && empty( $setting['rthd_web_support'] ) ) {
-			return true;
-		}
+	$email_support = rtbiz_hd_get_settings( 'rthd_settings_email_support' );
+	$web_support = rtbiz_hd_get_settings( 'rthd_settings_web_support' );
+
+	if ( ! empty( $email_support ) && ! empty( $web_support ) && 'on' == $email_support && 'off' == $web_support ){
+		return true;
 	}
 
 	return false;
 }
 
 function rtbiz_hd_get_web_only_support() {
-	$setting = rtbiz_hd_get_redux_settings();
-	if ( isset( $setting['rthd_email_support'] ) && isset( $setting['rthd_web_support'] ) ) {
-		if ( empty( $setting['rthd_email_support'] ) && '1' == $setting['rthd_web_support'] ) {
-			return true;
-		} else {
-			return false;
-		}
-	} else {
+	$email_support = rtbiz_hd_get_settings( 'rthd_settings_email_support' );
+	$web_support = rtbiz_hd_get_settings( 'rthd_settings_web_support' );
+
+	if ( ! empty( $email_support ) && ! empty( $web_support ) && 'off' == $email_support && 'on' == $web_support ) {
 		return true;
 	}
+	return false;
 }
 
 function rtbiz_hd_can_user_access( $contact_id, $post_id ) {
@@ -2159,11 +2186,9 @@ function rtbiz_hd_can_user_access( $contact_id, $post_id ) {
 	}
 
 	// check notification emails
-	$redux = rtbiz_hd_get_redux_settings();
-	if ( ! empty( $redux['rthd_notification_emails'] ) ) {
-		if ( ! empty( $redux['rthd_notification_emails'] ) && in_array( $user_email, $redux['rthd_notification_emails'] ) ) {
+	$notification_emails = rtbiz_hd_get_notification_emails();
+	if ( ! empty( $notification_emails ) && in_array( $user_email, $notification_emails ) ) {
 			return true;
-		}
 	}
 
 	return false;

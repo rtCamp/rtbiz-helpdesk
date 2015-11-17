@@ -281,7 +281,6 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		 * @param $userid
 		 */
 		public function before_delete_staff( $contactid, $userid, $permission ) {
-			$settings = rtbiz_hd_get_redux_settings();
 			$args     = array(
 				'numberposts' => - 1,
 				'post_type'   => Rtbiz_HD_Module::$post_type,
@@ -293,7 +292,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 				foreach ( $tickets as $ticket ) {
 					$data = array(
 						'ID'          => $ticket->ID,
-						'post_author' => $settings['rthd_default_user'],
+						'post_author' => rtbiz_hd_default_assignee(),
 					);
 					// Update the post into the database
 					wp_update_post( $data );
