@@ -452,13 +452,10 @@ if ( ! class_exists( 'Rtbiz_HD_Support' ) ) {
                                         <td>Email</td><td>' . strip_tags( $form_data['email'] ) . '</td>
                                     </tr>
                                     <tr>
-                                        <td>Website</td><td>' . strip_tags( $form_data['website'] ) . '</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Subject</td><td>' . strip_tags( $form_data['subject'] ) . '</td>
-                                    </tr>
-                                    <tr>
                                         <td>Details</td><td>' . strip_tags( $form_data['details'] ) . '</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Website</td><td>' . strip_tags( $form_data['website'] ) . '</td>
                                     </tr>
                                     <tr>
                                         <td>Request ID</td><td>' . strip_tags( $form_data['request_id'] ) . '</td>
@@ -509,10 +506,7 @@ if ( ! class_exists( 'Rtbiz_HD_Support' ) ) {
 			add_filter( 'wp_mail_content_type', create_function( '', 'return "text/html";' ) );
 			$headers       = 'From: ' . $form_data['name'] . ' <' . $form_data['email'] . '>' . "\r\n";
 			$support_email = 'support@rtcamp.com';
-			if ( wp_mail( $support_email, '[Helpdesk] ' . $mail_type . ' from ' . str_replace( array(
-					'http://',
-					'https://'
-				), '', $form_data['website'] ), stripslashes( $message ), $headers ) ) {
+			if ( wp_mail( $support_email, stripslashes( $form_data['subject'] ), stripslashes( $message ), $headers ) ) {
 
 //				echo '<div class="rtbiz_hd-success" style="margin:10px 0;">';
 //				if ( 'new_feature' == $form_data['request_type'] ) {
