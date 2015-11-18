@@ -96,6 +96,10 @@ if ( !class_exists( 'Rtbiz_HD_Admin' ) ) {
 				$tabs[] = include( RTBIZ_HD_PATH. 'admin/classes/settings/tabs/class-rtbiz-hd-settings-importer.php' );
 			}
 			$tabs[] = include( RTBIZ_HD_PATH. 'admin/classes/settings/tabs/class-rtbiz-hd-settings-licence.php' );
+			$status = get_option( 'rtbiz_hd_edd_license_status' );
+			if ( 'valid' == $status )
+				$tabs[] = include( RTBIZ_HD_PATH. 'admin/classes/settings/tabs/class-rtbiz-hd-settings-support.php' );
+
 		}
 
 		public function register_menu() {

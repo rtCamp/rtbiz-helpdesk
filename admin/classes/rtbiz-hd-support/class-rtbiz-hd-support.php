@@ -153,13 +153,10 @@ if ( ! class_exists( 'Rtbiz_HD_Support' ) ) {
 		 *
 		 * @access public
 		 *
-		 * @param string $page
-		 *
-		 * @internal param $void
-		 *
+		 * param $void
 		 */
 		public function call_get_form() {
-			if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] == Rtbiz_HD_Settings::$page_slug ) {
+			if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] == 'rtbiz-ticket-settings' ) {
 				//echo "<h2 class='nav-tab-wrapper'>".$this->rtbiz_hd_support_sub_tabs()."</h2>";
 					echo "<div id='rtbiz_hd_service_contact_container' class='rtbiz-hd-support-container'><form name='rtbiz_hd_service_contact_detail' method='post'>";
 					$this->get_form( 'premium_support' );
