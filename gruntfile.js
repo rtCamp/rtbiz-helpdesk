@@ -52,6 +52,7 @@ module.exports = function ( grunt ) {
 					'admin/js/setup-wizard.js',
 					'public/js/common.js',
 					'admin/js/admin.js',
+					'admin/js/setting.js',
 				    'admin/js/rthd_plugin_check.js',
                     'public/js/vendors/markdown/showdown.js',
                     'public/js/showdown-gui.js',
