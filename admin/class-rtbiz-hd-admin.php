@@ -302,13 +302,14 @@ if ( !class_exists( 'Rtbiz_HD_Admin' ) ) {
 		}
 
 		public function module_register( $modules ) {
+			$tab = ! empty( $_REQUEST['tab'] ) ? $_REQUEST['tab'] : 'rtbiz_ticket_general';
 			$modules[ rtbiz_sanitize_module_key( RTBIZ_HD_TEXT_DOMAIN ) ] = array(
 				'label' => __( 'Helpdesk', RTBIZ_HD_TEXT_DOMAIN ),
 				'post_types' => array( Rtbiz_HD_Module::$post_type ),
 				'team_support' => '',
 				'product_support' => array( Rtbiz_HD_Module::$post_type ),
 				'setting_option_name' => Rtbiz_HD_Settings::$hd_opt, // Use for setting page acl to add manage_options capability
-				'setting_page_url' => admin_url( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type . '&page=rtbiz-ticket-settings' ), //
+				'setting_page_url' => admin_url( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type . '&page=rtbiz-ticket-settings&tab=' . $tab ), //
 				'email_template_support' => array( Rtbiz_HD_Module::$post_type ),
 			);
 
