@@ -97,7 +97,7 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 			$fromemail = empty( $fromemail ) ? 'noreply@'. preg_replace( '/^www\./', '', $_SERVER['SERVER_NAME'] ): $fromemail;
 			$fromname = rtbiz_hd_get_settings( 'rthd_settings_outgoing_email_from_name' );
 
-			$outgoing_via_same_email = rtbiz_hd_get_settings( 'rthd_settings_settings_outgoing_via_same_email' );
+			$outgoing_via_same_email = rtbiz_hd_get_settings( 'rthd_settings_outgoing_via_same_email' );
 			if ( ! empty( $outgoing_via_same_email ) && 'on' == $outgoing_via_same_email ) {
 
 				$post_id = $refrence_id;

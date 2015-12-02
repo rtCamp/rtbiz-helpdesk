@@ -23,7 +23,7 @@ jQuery( document ).ready(function () {
 				jQuery("input[name='rthd_settings_email_support']").parents("tr:first").show();
 
 				//if Email support enable display mailbox reading & replay via email
-				rthdSettings.toggleEmailSupport( jQuery("input[name='rthd_settings_email_support']").val() );
+				rthdSettings.toggleEmailSupport( jQuery("input[name='rthd_settings_email_support']:checked").val() );
 				jQuery("input[name='rthd_settings_email_support']").change(function( ){
 					rthdSettings.toggleEmailSupport( jQuery( this ).val() );
 				});
@@ -60,13 +60,13 @@ jQuery( document ).ready(function () {
 		},
 		initNotificationsetup: function(){
 			//if Notification acl enable display Notification event
-			rthdSettings.toggleNotificationAcl( jQuery("input[name='rthd_settings_enable_notification_acl']").val() );
+			rthdSettings.toggleNotificationAcl( jQuery("input[name='rthd_settings_enable_notification_acl']:checked").val() );
 			jQuery("input[name='rthd_settings_enable_notification_acl']").change(function( ){
 				rthdSettings.toggleNotificationAcl( jQuery( this ).val() );
 			});
 
 			//if Email Signature enable display Email Signature
-			rthdSettings.toggleEmailSignature( jQuery("input[name='rthd_settings_enable_signature']").val() );
+			rthdSettings.toggleEmailSignature( jQuery("input[name='rthd_settings_enable_signature']:checked").val() );
 			jQuery("input[name='rthd_settings_enable_signature']").change(function( ){
 				rthdSettings.toggleEmailSignature( jQuery( this ).val() );
 			});
@@ -94,7 +94,7 @@ jQuery( document ).ready(function () {
 				jQuery("textarea#rthd_settings_auto_response_message").parents("tr:first").show();
 
 				//auto response mode setting
-				rthdSettings.toggleAutoresponseMode( jQuery("input[name='rthd_settings_enable_auto_response_mode']").val() );
+				rthdSettings.toggleAutoresponseMode( jQuery("input[name='rthd_settings_enable_auto_response_mode']:checked").val() );
 				jQuery("input[name='rthd_settings_enable_auto_response_mode']").change(function( ){
 					rthdSettings.toggleAutoresponseMode( jQuery( this ).val() );
 				});
@@ -108,13 +108,13 @@ jQuery( document ).ready(function () {
 		},
 		initAdvanceSetting: function(){
 			//if Auto Assign enable display Auto Assign event
-			rthdSettings.toggleAutoassign( jQuery("input[name='rthd_settings_enable_auto_assign']").val() );
+			rthdSettings.toggleAutoassign( jQuery("input[name='rthd_settings_enable_auto_assign']:checked").val() );
 			jQuery("input[name='rthd_settings_enable_auto_assign']").change(function( ){
 				rthdSettings.toggleAutoassign( jQuery( this ).val() );
 			});
 
 			//if Auto response enable display Auto response setting
-			rthdSettings.toggleAutoresponse( jQuery("input[name='rthd_settings_enable_auto_response']").val() );
+			rthdSettings.toggleAutoresponse( jQuery("input[name='rthd_settings_enable_auto_response']:checked").val() );
 			jQuery("input[name='rthd_settings_enable_auto_response']").change(function( ){
 				rthdSettings.toggleAutoresponse( jQuery( this ).val() );
 			});

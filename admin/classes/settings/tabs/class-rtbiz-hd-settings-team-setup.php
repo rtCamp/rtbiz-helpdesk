@@ -23,8 +23,7 @@ if ( ! class_exists( 'rtBiz_HD_Settings_Team_Setup ' ) ) :
 		}
 
 		public function display() {
-			global $rtbiz_hd_setup_wizard;
-			$rtbiz_hd_setup_wizard->setup_team( false );
+			echo rtbiz_hd_get_setup_team_ui();
 		}
 
 		/**

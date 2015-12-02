@@ -155,6 +155,7 @@ if ( ! class_exists( 'Rtbiz_HD' ) ) {
 			}
 
 			self::$loader->add_action( 'admin_init', $rtbiz_hd_admin, 'database_update' );
+			self::$loader->add_action( 'admin_init', $rtbiz_hd_admin, 'default_setting' );
 			self::$loader->add_action( 'admin_init', $rtbiz_hd_admin, 'rtbiz_hd_welcome' );
 			self::$loader->add_filter( 'rtbiz_modules', $rtbiz_hd_admin, 'module_register' );
 

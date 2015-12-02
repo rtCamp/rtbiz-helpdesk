@@ -52,7 +52,7 @@ if ( ! class_exists( 'rtBiz_HD_Settings_Migration' ) ) :
 					update_option( 'rthd_settings_web_support', ! empty( $redux['rthd_web_support'] ) ? 'on' : 'off' );
 					update_option( 'rthd_settings_outgoing_email_mailbox', ! empty( $redux['rthd_outgoing_email_mailbox'] ) ? $redux['rthd_outgoing_email_mailbox'] : '' );
 					update_option( 'rthd_settings_outgoing_email_from_name', ! empty( $redux['rthd_outgoing_email_from_name'] ) ? $redux['rthd_outgoing_email_from_name'] : '' );
-					update_option( 'rthd_settings_settings_outgoing_via_same_email', ! empty( $redux['rthd_outgoing_via_same_email'] ) ? 'on' : 'off' );
+					update_option( 'rthd_settings_outgoing_via_same_email', ! empty( $redux['rthd_outgoing_via_same_email'] ) ? 'on' : 'off' );
 					update_option( 'rthd_settings_blacklist_emails_textarea', ! empty( $redux['rthd_blacklist_emails_textarea'] ) ? $redux['rthd_blacklist_emails_textarea'] : '' );
 
 

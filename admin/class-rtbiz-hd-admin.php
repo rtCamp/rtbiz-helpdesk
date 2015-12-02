@@ -209,6 +209,78 @@ if ( !class_exists( 'Rtbiz_HD_Admin' ) ) {
 			$updateDB->do_upgrade();
 		}
 
+		public function default_setting(){
+			$option = get_option( 'rtbiz_hd_save_default_setting' );
+			if ( empty( $option ) || 'true' == $option ) {
+
+				$admins = get_users( array( 'role' => 'administrator' ) );
+				if ( ! empty( $admins ) ) {
+					$default_assignee = $admins[0];
+					$default_assignee = strval( $default_assignee->ID );
+				} else {
+					$default_assignee = get_current_user_id();
+				}
+				update_option( 'rthd_settings_default_user', $default_assignee );
+				update_option( 'rthd_settings_enable_ticket_unique_hash', 'off' );
+
+
+				update_option( 'rthd_settings_email_support', 'on' );
+				update_option( 'rthd_settings_enable_mailbox_reading', 'on' );
+				update_option( 'rthd_settings_reply_via_email', 'on' );
+				update_option( 'rthd_settings_web_support', 'on' );
+				update_option( 'rthd_settings_outgoing_via_same_email', 'on' );
+
+				$domain_name = preg_replace( '/^www\./', '', $_SERVER['SERVER_NAME'] );
+				$domain_name = 'noreply@'.$domain_name;
+				update_option( 'rthd_settings_outgoing_email_mailbox', $domain_name );
+				update_option( 'rthd_settings_outgoing_email_from_name', get_bloginfo() );
+
+				update_option( 'rthd_settings_enable_notification_acl', 'on' );
+
+				update_option( 'rthd_settings_client_new_ticket_created_mail', 'yes' );
+				update_option( 'rthd_settings_client_new_followup_created_mail', 'yes' );
+
+				update_option( 'rthd_settings_assignee_new_ticket_created_mail', 'yes' );
+				update_option( 'rthd_settings_assignee_new_followup_created_mail', 'yes' );
+				update_option( 'rthd_settings_assignee_new_followup_updated_mail', 'yes' );
+				update_option( 'rthd_settings_assignee_new_followup_deleted_mail', 'yes' );
+				update_option( 'rthd_settings_assignee_ticket_reassigned_mail', 'yes' );
+				update_option( 'rthd_settings_assignee_new_staff_only_followup_created_mail', 'yes' );
+				update_option( 'rthd_settings_assignee_ticket_updated_mail', 'yes' );
+
+				update_option( 'rthd_settings_staff_new_ticket_created_mail', 'yes' );
+				update_option( 'rthd_settings_staff_new_followup_created_mail', 'yes' );
+				update_option( 'rthd_settings_staff_new_followup_updated_mail', 'yes' );
+				update_option( 'rthd_settings_staff_new_followup_deleted_mail', 'yes' );
+				update_option( 'rthd_settings_staff_ticket_reassigned_mail', 'yes' );
+				update_option( 'rthd_settings_staff_new_staff_only_followup_created_mail', 'yes' );
+				update_option( 'rthd_settings_staff_ticket_updated_mail', 'yes' );
+
+				update_option( 'rthd_settings_group_new_ticket_created_mail', 'yes' );
+				update_option( 'rthd_settings_group_new_followup_created_mail', 'yes' );
+				update_option( 'rthd_settings_group_new_followup_updated_mail', 'yes' );
+				update_option( 'rthd_settings_group_new_followup_deleted_mail', 'yes' );
+				update_option( 'rthd_settings_group_ticket_reassigned_mail', 'yes' );
+				update_option( 'rthd_settings_group_new_staff_only_followup_created_mail', 'yes' );
+				update_option( 'rthd_settings_group_ticket_updated_mail', 'yes' );
+
+				update_option( 'rthd_settings_enable_signature', 'on' );
+				update_option( 'rthd_settings_email_signature', ' -- Sent via rtBiz Helpdesk Plugin' );
+
+				update_option( 'rthd_settings_enable_auto_assign', 'off' );
+				update_option( 'rthd_settings_auto_assign_events', 'on_first_followup' );
+
+				update_option( 'rthd_settings_enable_auto_response', 'off' );
+				update_option( 'rthd_settings_enable_auto_response_mode', 'on' );
+				update_option( 'rthd_settings_autoresponse_weekend', 'off' );
+				update_option( 'rthd_settings_auto_response_message', esc_attr( 'We have received your support request. Our support team is currently offline. We will get back at the soonest.' ) );
+				update_option( 'rthd_settings_enable_ticket_adult_content', 'off' );
+
+				update_option( 'rtbiz_hd_save_default_setting', 'false' );
+
+			}
+		}
+
 		public function rtbiz_hd_welcome() {
 			// fail if no activation redirect
 			if ( !get_option( 'rtbiz_hd_activation_redirect', false ) ) {
