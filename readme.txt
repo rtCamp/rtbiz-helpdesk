@@ -1,12 +1,12 @@
 === rtBiz Helpdesk ===
-Author URI:        https://rtcamp.com
-Plugin URI:        https://rtcamp.com/rtbiz-helpdesk
+Author URI:        https://rtbiz.io
+Plugin URI:        https://rtbiz.io/products/helpdesk/
 Contributors:      rtcamp, rahul286, desaiuditd, dipesh.kakadiya, utkarshpatel, sagarjadhav
-Donate Link:       https://rtcamp.com/donate/
+Donate Link:       https://rtbiz.io/donate/
 Tags:              helpdesk, support, products, tickets, followups, customers, e-commerce
 Requires at least: 4.1
 Tested up to:      4.4
-Stable tag:        1.6
+Stable tag:        1.6.1
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,12 +37,12 @@ Same [GPL] (http://www.gnu.org/licenses/gpl-2.0.txt) that WordPress uses!
 
 Great! There are several ways you can get involved to help make rtBiz Helpdesk better:
 
-1. **Report Bugs:** If you find a bug, error or other problem, please report it! You can do this by [creating a new support ticket](https://rtcamp.com/premium-support) on rtCamp's Helpdesk. See! We use the very same plugin for our own helpdesk.
-2. **Suggest New Features:** Have an awesome idea? Please share it! Simply [create a new idea](https://rtcamp.com/products/rtbiz-helpdesk) in the idea tracker to express your thoughts on why the feature should be included and get a discussion going around your idea.
+1. **Report Bugs:** If you find a bug, error or other problem, please report it! You can do this by [creating a new support ticket](https://rtbiz.io/premium-support) on rtCamp's Helpdesk. See! We use the very same plugin for our own helpdesk.
+2. **Suggest New Features:** Have an awesome idea? Please share it! Simply [create a new idea](https://rtbiz.io/products/rtbiz-helpdesk) in the idea tracker to express your thoughts on why the feature should be included and get a discussion going around your idea.
 
 == Installation ==
 
-* You can download the plugin from [My Account](https://rtcamp.com/my-account/) section on our store. Unzip it and upload it to the plugins folder of your WordPress installation (`wp-content/plugins/` directory of your WordPress installation).
+* You can download the plugin from [My Account](https://rtbiz.io/my-account/) section on our store. Unzip it and upload it to the plugins folder of your WordPress installation (`wp-content/plugins/` directory of your WordPress installation).
 * Activate it through the 'Plugins' section.
 * rtBiz Helpdesk is dependent on [rtBiz](https://wordpress.org/plugins/rtbiz/) plugin. So once you activate rtBiz Helpdesk, it will ask you to install & activate rtBiz plugin.
 
@@ -57,6 +57,9 @@ Please refer to the documentation.
 1. Dashboard
 
 == Changelog ==
+
+= 1.6.1 =
+* Updated links for license checker
 
 = 1.6 =
 * Request support for rtbiz-helpdesk from developers

@@ -7,15 +7,15 @@
 **Tags:** [helpdesk](https://wordpress.org/plugins/tags/helpdesk), [support](https://wordpress.org/plugins/tags/support), [products](https://wordpress.org/plugins/tags/products), [tickets](https://wordpress.org/plugins/tags/tickets), [followups](https://wordpress.org/plugins/tags/followups), [customers](https://wordpress.org/plugins/tags/customers), [e-commerce](https://wordpress.org/plugins/tags/e-commerce)  
 **Requires at least:** 4.1  
 **Tested up to:** 4.4  
-**Stable tag:** 1.6  
+**Stable tag:** 1.6.1  
 **License:** [GPLv2 or later](http://www.gnu.org/licenses/gpl-2.0.html)  
-**Author URI:** https://rtcamp.com  
-**Plugin URI:** https://rtcamp.com/rtbiz-helpdesk  
-**Donate Link:** https://rtcamp.com/donate/  
+**Author URI:** https://rtbiz.io  
+**Plugin URI:** https://rtbiz.io/products/helpdesk/  
+**Donate Link:** https://rtbiz.io/donate/  
 
 ## Installation ##
 
-* You can download the plugin from [My Account](https://rtcamp.com/my-account/) section on our store. Unzip it and upload it to the plugins folder of your WordPress installation (`wp-content/plugins/` directory of your WordPress installation).
+* You can download the plugin from [My Account](https://rtbiz.io/my-account/) section on our store. Unzip it and upload it to the plugins folder of your WordPress installation (`wp-content/plugins/` directory of your WordPress installation).
 * Activate it through the 'Plugins' section.
 * rtBiz Helpdesk is dependent on [rtBiz](https://wordpress.org/plugins/rtbiz/) plugin. So once you activate rtBiz Helpdesk, it will ask you to install & activate rtBiz plugin.
 
@@ -29,6 +29,9 @@ Please refer to the documentation.
 
 
 ## Changelog ##
+
+### 1.6.1 ###
+* Updated links for license checker
 
 ### 1.6 ###
 * Request support for rtbiz-helpdesk from developers

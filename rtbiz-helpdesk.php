@@ -8,19 +8,19 @@
  * registers the activation and deactivation functions, and defines a function
  * that starts the plugin.
  *
- * @link              https://rtcamp.com/
+ * @link              https://rtbiz.com/
  * @since             1.2.6
  * @package           rtbiz-helpdesk
  *
  * @wordpress-plugin
  * Plugin Name:       rtBiz Helpdesk
- * Plugin URI:        https://rtcamp.com/rtbiz/helpdesk/
+ * Plugin URI:        https://rtbiz.io/rtbiz/helpdesk/
  * Description:       A WordPress based Helpdesk system with mail sync features, web based ticket UI and many custom settings. Easy to use for admin, staff and customers.
- * Version:           1.6
+ * Version:           1.6.1
  * Author:            rtCamp
- * Author URI:        https://rtcamp.com/
+ * Author URI:        https://rtbiz.io/
  * License:           GPL-2.0+
- * License URI:       https://rtcamp.com/
+ * License URI:       https://rtbiz.io/
  * Text Domain:       rtbiz-helpdesk
  * Domain Path:       /languages
  */
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! defined( 'RTBIZ_HD_VERSION' ) ) {
-	define( 'RTBIZ_HD_VERSION', '1.6' );
+	define( 'RTBIZ_HD_VERSION', '1.6.1' );
 }
 
 if ( ! defined( 'RTBIZ_HD_TEXT_DOMAIN' ) ) {
@@ -60,7 +60,12 @@ if ( ! defined( 'RTBIZ_HD_PATH_TEMPLATES' ) ) {
 
 if ( ! defined( 'EDD_RT_HELPDESK_STORE_URL' ) ) {
 
-	define( 'EDD_RT_HELPDESK_STORE_URL', 'https://rtcamp.com/' );
+	define( 'EDD_RT_HELPDESK_STORE_URL', 'https://rtbiz.io/' );
+}
+
+if ( ! defined( 'RT_HELPDESK_SUPPORT_EMAIL' ) ) {
+
+	define( 'RT_HELPDESK_SUPPORT_EMAIL', 'support@rtbiz.io' );
 }
 
 if ( ! defined( 'EDD_RT_HELPDESK_ITEM_NAME' ) ) {

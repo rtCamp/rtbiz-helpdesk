@@ -306,7 +306,7 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 					if ( ! empty( $arg_shortcode['contactid'] ) ) {
 						$tickets = rtbiz_hd_get_tickets( 'created_by', $arg_shortcode['contactid'], $top, $limit, false );
 					} else {
-						$contactid = rtbiz_hd_get_contact_id_by_user_id( $arg_shortcode['userid'] );
+						$contactid = rtbiz_hd_get_contact_id_by_user_id( $arg_shortcode['userid'], true );
 						$tickets   = rtbiz_hd_get_tickets( 'created_by', $contactid, $top, $limit, false );
 					}
 					if ( empty( $tickets ) ) {
