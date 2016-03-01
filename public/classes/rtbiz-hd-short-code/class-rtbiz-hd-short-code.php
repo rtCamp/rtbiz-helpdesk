@@ -164,10 +164,13 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 				} else {
 					$login_url    = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( get_permalink() ), get_permalink() );
 					?>
-					<div id="info" class="error rthd-notice">You're not logged in. Please <a
-							href="<?php echo esc_url( $login_url ); ?>" title="login">login</a> first to
-						create support ticket.
-					</div>                <?php
+					<div id="info" class="error rthd-notice">
+                    <?php
+                        $message = __( "You're not logged in. Please ", 'rtbiz-helpdesk' ) . ' <a href="' . esc_url( $login_url ) . '" title="' . __( 'login', 'rtbiz-helpdesk' ) . '">' . __( 'login', 'rtbiz-helpdesk' ) . '</a>' . __( ' first to create support ticket.', 'rtbiz-helpdesk' );                        
+                        echo apply_filters( 'rthd_login_to_create_support_message_filter', $message );
+                    ?>
+					</div>       
+                <?php
 				}
 			}
 			return apply_filters( 'rtbiz_hd_support_form_shortcode', ob_get_clean(), $attr );
