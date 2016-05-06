@@ -2197,3 +2197,18 @@ if ( ! function_exists( 'rtbiz_hd_get_site_option' ) ) {
 		return $return_val;
 	}
 }
+
+/**
+ * To allow/disallow fancybox for attachments in ticket
+ * 
+ * @since   1.6.2
+ * 
+ * @return  boolean
+ */
+function is_rtbiz_hd_allow_fancybox_for_attachments() {
+    
+    $rthd_fancybox = apply_filters( 'rtbiz_hd_allow_fancybox_for_attachments', true );
+    
+    return $rthd_fancybox;
+    
+}

@@ -179,7 +179,7 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Info' ) ) {
 									return $( '<li></li>' ).data( 'ui-autocomplete-item', item ).append( '<a>' + item.imghtml + '&nbsp;' + item.label + '</a>' ).appendTo( ul );
 								};
 
-								$( document ).on( "click", "a[href=#deleteContactUser]", function() {
+								$( document ).on( "click", "a[href='#deleteContactUser']", function() {
 									$( this ).parent().remove();
 								} );
 							}

@@ -203,7 +203,7 @@ jQuery( document ).ready(function ($) {
 					return $( '<li></li>' ).data( 'ui-autocomplete-item', item ).append( '<a>' + item.imghtml + '&nbsp;' + item.label + '</a>' ).appendTo( ul );
 				};
 
-				jQuery( document ).on("click", "a[href=#removeUser]", function (e) {
+				jQuery( document ).on("click", "a[href='#removeUser']", function (e) {
 					e.preventDefault();
 					if ( jQuery( this ).attr("disabled") != "disabled" ) {
 						jQuery( this ).attr("disabled","disabled");
