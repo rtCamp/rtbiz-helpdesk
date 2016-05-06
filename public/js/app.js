@@ -13,7 +13,7 @@
 var file_frame_ticket;
 jQuery( document ).ready(function ($) {
 
-    if ( rtbiz_fancybox_allow == 'true' ) {
+    if ( 'true' == rtbiz_fancybox_allow ) {
         jQuery( ".fancybox" ).fancybox({
             afterLoad: function () {
                 this.title = '<a class="rtbiz_hd_quick_download" target="_blank" download="' + jQuery( this.element ).data( "downloadlink" ) + '" href="' + jQuery( this.element ).data( "downloadlink" ) + '">Download</a> ' + this.title;
