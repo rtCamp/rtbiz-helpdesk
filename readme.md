@@ -6,8 +6,8 @@
 **Contributors:** [rtcamp](https://profiles.wordpress.org/rtcamp), [rahul286](https://profiles.wordpress.org/rahul286), [desaiuditd](https://profiles.wordpress.org/desaiuditd), [dipesh.kakadiya](https://profiles.wordpress.org/dipesh.kakadiya), [utkarshpatel](https://profiles.wordpress.org/utkarshpatel), [sagarjadhav](https://profiles.wordpress.org/sagarjadhav)  
 **Tags:** [helpdesk](https://wordpress.org/plugins/tags/helpdesk), [support](https://wordpress.org/plugins/tags/support), [products](https://wordpress.org/plugins/tags/products), [tickets](https://wordpress.org/plugins/tags/tickets), [followups](https://wordpress.org/plugins/tags/followups), [customers](https://wordpress.org/plugins/tags/customers), [e-commerce](https://wordpress.org/plugins/tags/e-commerce)  
 **Requires at least:** 4.1  
-**Tested up to:** 4.4  
-**Stable tag:** 1.6.1  
+**Tested up to:** 4.5.1  
+**Stable tag:** 1.6.2  
 **License:** [GPLv2 or later](http://www.gnu.org/licenses/gpl-2.0.html)  
 **Author URI:** https://rtbiz.io  
 **Plugin URI:** https://rtbiz.io/products/helpdesk/  
@@ -29,6 +29,10 @@ Please refer to the documentation.
 
 
 ## Changelog ##
+
+### 1.6.2 ###
+* Fixed JS issue with WordPress 4.5+
+* Added filter for allow/disallow fancybox for attachments
 
 ### 1.6.1 ###
 * Updated links for license checker
