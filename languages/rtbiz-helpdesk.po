@@ -1,0 +1,2035 @@
+# Copyright (C) 2016 rtCamp
+# This file is distributed under the GPL-2.0+.
+msgid ""
+msgstr ""
+"Project-Id-Version: rtBiz Helpdesk 1.6.2\n"
+"Report-Msgid-Bugs-To: http://community.rtcamp.com/\n"
+"POT-Creation-Date: 2016-07-07 06:01:04+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2016-MO-DA HO:MI+ZONE\n"
+"Last-Translator: rtBiz <rtbiz@rtbiz.io>\n"
+"Language-Team: rtBiz <rtbiz@rtbiz.io>\n"
+"X-Generator: grunt-wp-i18n 0.5.4\n"
+"X-Poedit-KeywordsList: "
+"__;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;_nx_noop:1,2,3c;esc_"
+"attr__;esc_html__;esc_attr_e;esc_html_e;esc_attr_x:1,2c;esc_html_x:1,2c;\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-Country: United States\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-Bookmarks: \n"
+"X-Textdomain-Support: yes\n"
+
+#: admin/class-rtbiz-hd-admin.php:89
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:110
+msgid "Customers"
+msgstr ""
+
+#: admin/class-rtbiz-hd-admin.php:90
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:111
+msgid "Staff"
+msgstr ""
+
+#: admin/class-rtbiz-hd-admin.php:91
+msgid "---Teams"
+msgstr ""
+
+#: admin/class-rtbiz-hd-admin.php:94
+msgid "Setup Wizard"
+msgstr ""
+
+#: admin/class-rtbiz-hd-admin.php:170
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:803
+msgid "Get Started"
+msgstr ""
+
+#: admin/class-rtbiz-hd-admin.php:171
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:963
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:971
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:972
+msgid "Settings"
+msgstr ""
+
+#: admin/class-rtbiz-hd-admin.php:177
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:149
+msgid "Documentation"
+msgstr ""
+
+#: admin/class-rtbiz-hd-admin.php:179
+#: admin/classes/rtbiz-hd-product-support/class-rtbiz-hd-product-support.php:465
+#: admin/classes/rtbiz-hd-support/class-rtbiz-hd-support.php:48
+#: admin/classes/rtbiz-hd-support/class-rtbiz-hd-support.php:49
+msgid "Support"
+msgstr ""
+
+#: admin/class-rtbiz-hd-admin.php:211
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:97
+#: public/classes/rtbiz-hd-tickets-front/class-rtbiz-hd-tickets-front.php:190
+msgid "Helpdesk"
+msgstr ""
+
+#: admin/classes/metabox/rtbiz-hd-attachment/class-rtbiz-hd-attachment.php:47
+#: admin/classes/metabox/rtbiz-hd-external-link/class-rtbiz-hd-external-link.php:53
+msgid "Add"
+msgstr ""
+
+#: admin/classes/metabox/rtbiz-hd-ticket-contacts-blacklist/class-rtbiz-hd-ticket-contacts-blacklist.php:74
+#: admin/classes/metabox/rtbiz-hd-ticket-contacts-blacklist/class-rtbiz-hd-ticket-contacts-blacklist.php:161
+msgid "Remove"
+msgstr ""
+
+#: admin/classes/metabox/rtbiz-hd-ticket-contacts-blacklist/class-rtbiz-hd-ticket-contacts-blacklist.php:76
+#: admin/classes/metabox/rtbiz-hd-ticket-contacts-blacklist/class-rtbiz-hd-ticket-contacts-blacklist.php:203
+msgid "Blacklist"
+msgstr ""
+
+#: admin/classes/metabox/rtbiz-hd-ticket-contacts-blacklist/class-rtbiz-hd-ticket-contacts-blacklist.php:82
+msgid "Note : Add ticket contacts as blacklist."
+msgstr ""
+
+#: admin/classes/metabox/rtbiz-hd-ticket-contacts-blacklist/class-rtbiz-hd-ticket-contacts-blacklist.php:119
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:783
+msgid "Yes"
+msgstr ""
+
+#: admin/classes/metabox/rtbiz-hd-ticket-contacts-blacklist/class-rtbiz-hd-ticket-contacts-blacklist.php:122
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:784
+msgid "No"
+msgstr ""
+
+#: admin/classes/metabox/rtbiz-hd-ticket-info/class-rtbiz-hd-ticket-info.php:58
+#: admin/classes/metabox/rtbiz-hd-ticket-info/class-rtbiz-hd-ticket-info.php:59
+#: public/templates/ticket-front-page.php:146
+msgid "Assignee"
+msgstr ""
+
+#: admin/classes/metabox/rtbiz-hd-ticket-info/class-rtbiz-hd-ticket-info.php:80
+#: admin/classes/metabox/rtbiz-hd-ticket-info/class-rtbiz-hd-ticket-info.php:81
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:109
+msgid "Status"
+msgstr ""
+
+#: admin/classes/metabox/rtbiz-hd-ticket-info/class-rtbiz-hd-ticket-info.php:116
+#: admin/classes/metabox/rtbiz-hd-ticket-info/class-rtbiz-hd-ticket-info.php:117
+msgid "Created By"
+msgstr ""
+
+#: admin/classes/metabox/rtbiz-hd-ticket-info/class-rtbiz-hd-ticket-info.php:194
+#: admin/classes/metabox/rtbiz-hd-ticket-info/class-rtbiz-hd-ticket-info.php:195
+msgid "Created On"
+msgstr ""
+
+#: admin/classes/metabox/rtbiz-hd-ticket-info/class-rtbiz-hd-ticket-info.php:220
+#: admin/classes/metabox/rtbiz-hd-ticket-info/class-rtbiz-hd-ticket-info.php:221
+msgid "Last Reply On"
+msgstr ""
+
+#: admin/classes/metabox/rtbiz-hd-ticket-info/class-rtbiz-hd-ticket-info.php:241
+#: admin/classes/metabox/rtbiz-hd-ticket-info/class-rtbiz-hd-ticket-info.php:242
+#: public/templates/support-form.php:100
+msgid "Adult Content"
+msgstr ""
+
+#: admin/classes/metabox/rtbiz-hd-ticket-info/class-rtbiz-hd-ticket-info.php:255
+msgid "Public URL"
+msgstr ""
+
+#: admin/classes/metabox/rtbiz-hd-ticket-info/class-rtbiz-hd-ticket-info.php:255
+msgid "Unique Hash URL"
+msgstr ""
+
+#: admin/classes/metabox/rtbiz-hd-ticket-info/class-rtbiz-hd-ticket-info.php:259
+msgid "Link"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-contacts/class-rtbiz-hd-contacts.php:62
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:699
+#: admin/classes/rtbiz-hd-module/class-rtbiz-hd-module.php:96
+#: admin/classes/rtbiz-hd-module/class-rtbiz-hd-module.php:99
+#: admin/classes/rtbiz-hd-product-support/class-rtbiz-hd-product-support.php:118
+#: admin/classes/rtbiz-hd-product-support/class-rtbiz-hd-product-support.php:154
+#: admin/classes/rtbiz-hd-product-support/class-rtbiz-hd-product-support.php:198
+#: public/classes/rtbiz-hd-short-code/class-rtbiz-hd-short-code.php:371
+msgid "Tickets"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-contacts/class-rtbiz-hd-contacts.php:131
+#: admin/classes/rtbiz-hd-contacts/class-rtbiz-hd-contacts.php:140
+msgid "All"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-contacts/class-rtbiz-hd-contacts.php:133
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:247
+msgid "Admin"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-contacts/class-rtbiz-hd-contacts.php:135
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:255
+msgid "Editor"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-contacts/class-rtbiz-hd-contacts.php:137
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:263
+msgid "Author"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-contacts/class-rtbiz-hd-contacts.php:143
+msgid "With Tickets"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-contacts/class-rtbiz-hd-contacts.php:146
+msgid "Without Tickets"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-contacts/class-rtbiz-hd-contacts.php:322
+msgid "Staff Member "
+msgstr ""
+
+#: admin/classes/rtbiz-hd-contacts/class-rtbiz-hd-contacts.php:500
+msgid "Don't show Adult content"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-contacts/class-rtbiz-hd-contacts.php:501
+msgid "Helpdesk Content Preference"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-contacts/class-rtbiz-hd-contacts.php:510
+msgid "Turn Off Event Notification"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-contacts/class-rtbiz-hd-contacts.php:511
+msgid "Helpdesk Notification Preference"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-contacts/class-rtbiz-hd-contacts.php:565
+msgid "Role"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:86
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:108
+#: admin/classes/rtbiz-hd-module/class-rtbiz-hd-module.php:97
+msgid "Ticket"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:253
+msgid "No assignee"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:264
+msgid "%s"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:264
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:326
+#: public/classes/rtbiz-hd-short-code/class-rtbiz-hd-short-code.php:461
+msgid " ago"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:269
+msgid "No reply"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:280
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:282
+msgid "%s  %s"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:291
+msgid "Edit this item"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:291
+msgid "Edit"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:292
+msgid "Edit this item inline"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:292
+msgid "Quick&nbsp;Edit"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:297
+msgid "Restore this item from the Trash"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:297
+msgid "Restore"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:299
+msgid "Move this item to the Trash"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:299
+msgid "Trash"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:302
+msgid "Delete this item permanently"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:302
+msgid "Delete Permanently"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:311
+msgid "Preview &#8220;%s&#8221;"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:311
+msgid "Preview"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:314
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:317
+msgid "View &#8220;%s&#8221;"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:314
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:317
+msgid "View"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:335
+msgid "<span class=\"created-by tips\" data-tip=\"%s\">%s </span>"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:386
+msgid "Reply"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:389
+msgid "Ticket Information"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:390
+msgid "Participants (Staff)"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:391
+msgid "Participants (Customer)"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:392
+#: admin/classes/rtbiz-hd-product-support/class-rtbiz-hd-product-support.php:403
+msgid "Purchase History"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:393
+msgid "Blacklist Contacts"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:394
+#: public/templates/ticket-front-page.php:369
+msgid "Attachments"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:810
+msgid "Filter by status"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:827
+msgid "Filter by assignee"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:851
+msgid "Filter by product"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:78
+msgid "Dashboard"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:168
+msgid "Tickets by Status"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:173
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:447
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:471
+msgid "Daily Tickets"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:178
+msgid "Work Load"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:188
+msgid "Top Customers"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:193
+msgid "Tickets by Products"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:198
+msgid "Ticket Conversion from Sales"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:206
+msgid "Wise Tickets"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:243
+msgid "Purchase"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:243
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:297
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:364
+msgid "Count"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:245
+msgid "Customers who have created tickets"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:246
+msgid "Customers who have not created tickets"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:297
+msgid "Products"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:322
+msgid "Uncategorized"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:364
+msgid "Ticket Status"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:386
+msgid "Status wise Tickets"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:516
+msgid "Users"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:552
+msgid "Team Load"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:557
+msgid "No staff / ticket found."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:576
+msgid "Account Name"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:577
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:643
+msgid "Number of Tickets"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:600
+msgid "Top Accounts"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:642
+msgid "Contact Name"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:669
+msgid "Top Clients"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:675
+msgid "No customer found"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:725
+msgid "Others"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:799
+msgid "We&#8217;ve assembled some links to get you started:"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:804
+#: admin/classes/rtbiz-hd-product-support/class-rtbiz-hd-product-support.php:295
+msgid "Helpdesk Settings"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:808
+msgid "Next Steps"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:814
+msgid "Add Support Ticket"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:818
+msgid "Setup Support Page"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:824
+msgid "Setup Attributes"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:830
+msgid "More Actions"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:832
+msgid "Learn more about getting started"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:834
+msgid "Add new Team"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:910
+msgid "Welcome"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-dashboard/class-rtbiz-hd-dashboard.php:949
+msgid "View Support Page"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-gravity-form-importer/class-rtbiz-hd-gravity-form-importer.php:329
+msgid "No authors found"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:37
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:57
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:69
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:83
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:90
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:102
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:111
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:125
+msgid "Overview"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:43
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:49
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:63
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:75
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:96
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:118
+msgid "Screen Content"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:149
+msgid "For More Information : "
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:149
+msgid "Support Forum"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:220
+msgid "Screen to add a new ticket. Only staff can create ticket from this screen. "
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:228
+msgid "Title - "
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:228
+msgid "Ticket title"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:229
+msgid "Ticket Information - "
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:229
+msgid ""
+"Has information about ticket creations date, customer who created ticket, "
+"ticket assignee and status."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:230
+msgid "Products - "
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:230
+msgid "The product/product for which customer has created a ticket"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:231
+msgid "Team - "
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:231
+msgid ""
+" Staff members can update the relevant user departments the ticket belongs "
+"to."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:232
+msgid "Participant (Customers) - "
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:232
+msgid "Non-staff people on ticket who have been added by ticket author/customer"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:233
+msgid "Participant (Staff) - "
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:233
+msgid "Staff people (other than assignee) on ticket."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:234
+msgid "Related Tickets - "
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:234
+msgid "Option for staff to connect two tickets "
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:235
+msgid "Teams - "
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:235
+msgid "Team that is handling a ticket"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:236
+msgid "Blacklist Contacts - "
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:236
+msgid ""
+"To blacklist contacts from which spam tickets are being created. A "
+"blacklisted contact can't create tickets and can't add replies to a ticket."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:242
+msgid ""
+"There are a few sections where you can save essential information about an "
+"company : "
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:244
+msgid "There is a textbox for the title of a company."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:245
+msgid ""
+"You can also put any description/comments related to the company in to the "
+"rich text editor provided."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:247
+msgid ""
+"There might be other extra attributes metaboxes depending upon how you add "
+"an attribute from the attributes page"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:248
+#: public/classes/rtbiz-hd-tickets-front/class-rtbiz-hd-tickets-front.php:60
+#: public/classes/rtbiz-hd-tickets-front/class-rtbiz-hd-tickets-front.php:186
+msgid "here"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:251
+msgid "You will see a \"Connected X\" metaboxes in the side column."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:252
+msgid "You can select any entity from the metabox to connect it to the company."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:260
+msgid ""
+"This screen lists all the Helpdesk tickets on which the logged in user is a "
+"part of. The WordPress admin will see all tickets by default.  "
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:267
+msgid "All, Unanswered, Answered, Solved - "
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:267
+msgid ""
+"Filters to see ticket sorted by status. All tickets are listed in latest "
+"first order."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:268
+msgid "Filter by status, Filter by assignee, Filter by product - "
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:268
+msgid "Used to sort tickets."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:269
+msgid "Customers - "
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:269
+msgid "Non-staff people on ticket who have been added by ticket author/customer."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:270
+msgid "Staff - "
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:270
+msgid "staff people on ticket who have access to view ticket."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:271
+msgid "Reply count  - "
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:271
+msgid "The number of replies added on a ticket."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:278
+msgid "Welcome to your %s Dashboard!"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:279
+msgid ""
+"You can get help for any screen by clicking the Help tab in the upper "
+"corner."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:286
+msgid ""
+"This screen will give you the generic overview of the Tickets, states "
+"within the system."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:287
+msgid ""
+"It will show the various chart distribution based on the attributes "
+"assigned to the contacts & their terms."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:295
+msgid "This screen consists of all the %s settings."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:296
+msgid ""
+"The settings are divided into different tabs depending upon their "
+"functionality."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:297
+msgid "You can configure & update them according to your choice from here."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:298
+msgid ""
+"There's also a buttom named \"Reset to Default\" which will put all "
+"settings to its default values."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:305
+msgid ""
+"This screen is useful when you have to introduce departments within your "
+"company."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:306
+msgid ""
+"You can create, edit, delete departments & perfom other CRUD operations "
+"from here."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:307
+msgid ""
+"These departments can be later assigned to contacts to further categorize "
+"them."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:308
+msgid ""
+"They will also be useful in defining Access Control for the system & its "
+"other modules."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:315
+msgid "Using the left column form, you can create new departments."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:316
+msgid "You can assign an group email address to the department as well, if in use."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:317
+msgid ""
+"You can also assign a color code to the department. It will help you "
+"identify the department or the user from which department he is just by the "
+"color."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:318
+msgid ""
+"On the right column, there will be existing departments listed along with "
+"basic information related to the department."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:319
+msgid "You can edit an individual department on the Edit Department Screen."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-help/class-rtbiz-hd-help.php:326
+msgid "This screen will let you add attribute."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-logs/class-rtbiz-hd-logs.php:30
+msgid "Log generation is a heavy process. So please be patient."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-logs/class-rtbiz-hd-logs.php:33
+msgid "Generate Log"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-logs/class-rtbiz-hd-logs.php:114
+msgid "Transaction Id"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-logs/class-rtbiz-hd-logs.php:117
+msgid "Form name"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-logs/class-rtbiz-hd-logs.php:126
+msgid "Post Count"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-mailbox/class-rtbiz-hd-mailbox.php:49
+msgid "Select Product"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-mailbox/class-rtbiz-hd-mailbox.php:72
+msgid "Select Assignee"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-module/class-rtbiz-hd-module.php:100
+#: admin/classes/rtbiz-hd-module/class-rtbiz-hd-module.php:101
+#: admin/classes/rtbiz-hd-module/class-rtbiz-hd-module.php:102
+msgid "Add New Ticket"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-module/class-rtbiz-hd-module.php:103
+msgid "Edit Ticket"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-module/class-rtbiz-hd-module.php:104
+msgid "View Ticket"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-module/class-rtbiz-hd-module.php:105
+msgid "Search Tickets"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-module/class-rtbiz-hd-module.php:106
+msgid "Parent Tickets"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-module/class-rtbiz-hd-module.php:107
+msgid "No Tickets found"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-module/class-rtbiz-hd-module.php:108
+msgid "No Tickets found in Trash"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-module/class-rtbiz-hd-module.php:125
+msgid "Answered"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-module/class-rtbiz-hd-module.php:126
+msgid "Ticket is answered. Expecting further communication from client"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-module/class-rtbiz-hd-module.php:130
+msgid "Unanswered"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-module/class-rtbiz-hd-module.php:131
+msgid "Ticket is unanswered. It needs to be replied. The default state."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-module/class-rtbiz-hd-module.php:135
+msgid "Archived"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-module/class-rtbiz-hd-module.php:136
+msgid "Ticket is archived. Client can re-open if they wish to."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-module/class-rtbiz-hd-module.php:292
+#: admin/classes/rtbiz-hd-module/class-rtbiz-hd-module.php:295
+msgid "Ticket updated."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-module/class-rtbiz-hd-module.php:293
+msgid "Custom field updated."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-module/class-rtbiz-hd-module.php:294
+msgid "Custom field deleted."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-module/class-rtbiz-hd-module.php:297
+#. translators: %s: date and time of the revision
+msgid "Ticket restored to revision from %s"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-module/class-rtbiz-hd-module.php:298
+msgid "Ticket published."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-module/class-rtbiz-hd-module.php:299
+msgid "Ticket saved."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-module/class-rtbiz-hd-module.php:300
+msgid "Ticket submitted."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-module/class-rtbiz-hd-module.php:301
+msgid "Ticket draft updated."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-module/class-rtbiz-hd-module.php:315
+msgid "%s ticket updated."
+msgid_plural "%s tickets updated."
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/classes/rtbiz-hd-module/class-rtbiz-hd-module.php:316
+msgid "%s ticket not updated, somebody is editing it."
+msgid_plural "%s tickets not updated, somebody is editing them."
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/classes/rtbiz-hd-module/class-rtbiz-hd-module.php:317
+msgid "%s ticket permanently deleted."
+msgid_plural "%s tickets permanently deleted."
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/classes/rtbiz-hd-module/class-rtbiz-hd-module.php:318
+msgid "%s ticket moved to the Trash."
+msgid_plural "%s tickets moved to the Trash."
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/classes/rtbiz-hd-module/class-rtbiz-hd-module.php:319
+msgid "%s ticket restored from the Trash."
+msgid_plural "%s tickets restored from the Trash."
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/classes/rtbiz-hd-product-support/class-rtbiz-hd-product-support.php:225
+msgid "Helpdesk default assignee"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-product-support/class-rtbiz-hd-product-support.php:301
+#: admin/classes/rtbiz-hd-product-support/class-rtbiz-hd-product-support.php:331
+msgid "Helpdesk Default Assignee"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-product-support/class-rtbiz-hd-product-support.php:322
+#: admin/classes/rtbiz-hd-product-support/class-rtbiz-hd-product-support.php:341
+msgid "All new support request for this product will be assigned to selected user."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-product-support/class-rtbiz-hd-product-support.php:416
+msgid "Order #%d"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-product-support/class-rtbiz-hd-product-support.php:429
+#: admin/classes/rtbiz-hd-product-support/class-rtbiz-hd-product-support.php:448
+msgid "Support History"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-product-support/class-rtbiz-hd-product-support.php:484
+#: admin/classes/rtbiz-hd-product-support/class-rtbiz-hd-product-support.php:510
+msgid "Create Ticket"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:192
+msgid "Section via hook"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:193
+msgid ""
+"<p class=\"description\">This is a section created by adding a filter to "
+"the sections array. Can be used by child themes to add/remove sections from "
+"the options.</p>"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:263
+msgid "Products Section."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:270
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:105
+msgid "Support Page"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:271
+msgid ""
+"Add <strong>[rtbiz_hd_support_form]</strong> shortcode to any page. Select "
+"that page in dropdown above. That page from now used to handle support "
+"requests from web interface."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:272
+msgid "Select Page for Product Support"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:276
+msgid "Connected Store"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:277
+msgid "Select the plugin you want to connect Helpdesk with "
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:278
+msgid ""
+"All the existing and future products will be imported for the selected "
+"plugin. You can also create custom products from "
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:281
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:154
+msgid "WooCommerce"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:282
+msgid "Easy Digital Download"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:291
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:642
+msgid "Default Assignee"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:292
+msgid "To select dedicated assignee for a product, visit the "
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:293
+msgid "Select user for HelpDesk ticket Assignee"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:298
+msgid "Unique Hash URLs for Tickets"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:299
+msgid "Please flush the permalinks after enabling this option."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:300
+msgid ""
+"If enabled, this will generate a unique Hash URL for all the tickets "
+"through which tickets can be accessed in the web interface. This unique "
+"URLs will be sent in all emails of Helpdesk. Tickets can be accessed from "
+"the default WordPress permalinks as well."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:302
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:365
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:390
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:401
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:418
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:438
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:513
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:631
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:686
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:716
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:816
+msgid "Enable"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:303
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:366
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:391
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:402
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:419
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:439
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:514
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:632
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:687
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:717
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:817
+msgid "Disable"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:309
+msgid "General"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:317
+msgid "Note"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:337
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:188
+msgid "Setup Your Team"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:354
+msgid "Helpdesk Configured Mailbox(s)"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:361
+msgid "Email support"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:362
+msgid "Allows customer to create tickets and reply tickets from configured mailbox."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:387
+msgid "Mailbox Reading"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:388
+msgid "To enable/disable Mailbox Reading"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:398
+msgid "Reply Via Email"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:399
+msgid "To enable/disable Reply Via Email"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:414
+msgid "Web support"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:415
+msgid ""
+"Allows customer to create support tickets and reply tickets from web "
+"interface."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:424
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:706
+msgid "Outgoing Emails Mailbox"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:425
+msgid "Mailbox to be used to send outgoing emails/notifications."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:426
+msgid "Choose any one email from the configured mailboxes."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:435
+msgid "Outgoing Emails From Same Mailbox"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:436
+msgid "To enable/disable outgoing emails from same mailbox"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:449
+msgid "Outgoing Emails 'From' Address"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:450
+msgid "Outgoing System Email used for all Helpdesk Communication"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:452
+msgid ""
+"This Address will be used as FROM: name < email address > for all outgoing "
+"emails"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:462
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:702
+msgid "Outgoing Emails 'From' Name"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:463
+msgid "Outgoing System Name used for all Helpdesk Communication"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:464
+msgid ""
+"System Name to be used for outbound emails. This Name will be used as FROM: "
+"name < email address > for all outgoing emails"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:472
+msgid "Blacklist Emails"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:473
+msgid "Email addresses to be blacklisted from creating tickets / follow-ups."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:474
+msgid ""
+"All mails coming from these addresses will be blocked by Helpdesk. It also "
+"accept arguments like *@example.com, @example.*, Keep each email in new "
+"line without comma(,)."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:483
+msgid "Mail Setup"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:493
+msgid "Notification Emails "
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:498
+msgid "Email Addresses"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:499
+msgid "Email addresses to be notified on events"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:500
+msgid ""
+"These email addresses will be notified of the events that occurs in "
+"HelpDesk Systems. This is a global list. All the subscribers will also "
+"notified along with this list."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:510
+msgid "Notification Events"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:511
+msgid "To enable/disable Notification"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:524
+msgid "Notification Event for Customer "
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:531
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:553
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:578
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:603
+msgid "When a customer creates a ticket via the web form or email"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:532
+msgid "When a new follow-up is added to a ticket"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:533
+msgid "When any follow-up is edited by staff"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:534
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:556
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:581
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:606
+msgid "When a follow-up is deleted by staff/customer"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:541
+msgid "Notification Event for Assignee"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:554
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:579
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:604
+msgid "When a New follow-up is added to a ticket"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:555
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:580
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:605
+msgid "When a follow-up is edited by staff/customer"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:557
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:582
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:607
+msgid "When a ticket is reassigned"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:558
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:583
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:608
+msgid "When a staff-only follow-up is added/edited on a ticket"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:559
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:584
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:609
+msgid "When any status or metadata changed for a ticket"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:560
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:585
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:610
+msgid "When a staff member subscribes to a ticket"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:561
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:586
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:611
+msgid "When a subscriber is removed from a ticket"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:566
+msgid "Notification Event for Staff"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:591
+msgid "Notification Event for Group"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:622
+msgid "Customize Notification Emails "
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:628
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:643
+msgid "Email Signature"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:629
+msgid "To enable/disable signature for all email send via rtCamp Helpdesk."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:644
+msgid "Add here Email Signature"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:668
+msgid "Advanced Settings"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:683
+msgid "Auto Assign Tickets"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:684
+msgid "To auto assign a ticket to staff on reply"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:697
+msgid "Event For Auto assign"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:701
+msgid "When first follow-up is added to a ticket by any staff member."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:702
+msgid "When any follow-up is added to a ticket by any staff member."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:713
+msgid "Auto Response"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:714
+msgid "To enable/disable auto response feature"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:728
+msgid "Select working shift"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:729
+msgid "Day shift / Day-Night Shift"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:731
+msgid "Day Shift"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:732
+msgid "Day-Night Shift"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:746
+msgid "Configure working time for dayshift"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:747
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:769
+msgid "Add hours of operation"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:768
+msgid "Configure working time for nightshift"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:781
+msgid "Auto-respond on weekends only."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:790
+msgid "Auto response message"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:813
+msgid "Adult Content Filter"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:814
+msgid ""
+"For customer, a form feature to mark adult content will be enabled. For "
+"staff, profile level setting to filter the adult content will be enabled."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:825
+msgid "Gravity Importer"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:839
+msgid "Importer Mapper"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:860
+msgid "Import Logs"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:876
+msgid "License"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:882
+msgid "Plugin Activation"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:883
+msgid "Enter License Key and Activate plugin"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:896
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:903
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:911
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:919
+#: admin/classes/rtbiz-hd-support/class-rtbiz-hd-support.php:129
+msgid "Premium Support"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:930
+msgid "Miscellaneous"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:931
+msgid "Import / Export Settings"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:932
+msgid "Import and Export your settings from file, text or URL."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-settings/class-rtbiz-hd-settings.php:939
+msgid "Import Export"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:67
+msgid "rtBiz Helpdesk Setup"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:71
+msgid "Please follow given steps to configure your Helpdesk."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:106
+msgid "Create a support page where your customers can submit tickets."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:108
+msgid "Select Support Page "
+msgstr ""
+
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:110
+msgid "- Create New Page -"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:111
+msgid "-- Select Page --"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:120
+msgid "Create New Page"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:125
+msgid "Setting up support page"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:135
+msgid "Connect Your Store"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:149
+msgid ""
+"Looks like none of the following plugins are installed right now. Anyways "
+"you can select the plugin you wish to install in future. Helpdesk will "
+"automatically sync products when that happens."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:158
+msgid "Easy Digital Downloads"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:163
+msgid "Custom"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:166
+msgid "Add New Product"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:175
+msgid "Connecting store and importing existing products"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:191
+msgid "There are 3 ways you can add users to this helpdesk."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:193
+msgid " If you forget somebody now, you can add them later."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:195
+msgid " You (admin) are already added to the helpdesk."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:200
+msgid "1. Search and add users"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:213
+msgid "2. Add all users from domain"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:216
+msgid "%s user"
+msgid_plural "%s users"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:229
+msgid "3. Add all WordPress"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:229
+msgid "(%s) user"
+msgid_plural "(%s) users"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:251
+msgid "Can manage all tickets and Helpdesk settings."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:259
+msgid "Can manage all the tickets. No access to settings. "
+msgstr ""
+
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:267
+msgid "Can manage only the tickets assigned to them. No access to settings."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:286
+msgid "Incoming MailBox Setup"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:288
+msgid ""
+"Connect the mailbox from which you would like to auto-create ticket from "
+"incoming e-mails.  Click on next if you want to do that later."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:293
+msgid "Loading outbound emails"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:301
+msgid "Congratulations!"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:622
+msgid "Select Ticket Assignee"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:624
+msgid "Select an assignee for the products we synced in previous setup."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:696
+msgid "Outgoing Mail Setup "
+msgstr ""
+
+#: admin/classes/rtbiz-hd-setup-wizard/class-rtbiz-hd-setup-wizard.php:766
+msgid "Set Roles"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-support/class-rtbiz-hd-support.php:55
+#: admin/classes/rtbiz-hd-support/class-rtbiz-hd-support.php:56
+#: admin/classes/rtbiz-hd-support/class-rtbiz-hd-support.php:285
+#: admin/classes/rtbiz-hd-support/class-rtbiz-hd-support.php:498
+msgid "Debug Info"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-support/class-rtbiz-hd-support.php:69
+msgid "Thank you for posting your support request."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-support/class-rtbiz-hd-support.php:70
+msgid "We will get back to you shortly."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-support/class-rtbiz-hd-support.php:122
+msgid "Service"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-support/class-rtbiz-hd-support.php:135
+msgid "Bug Report"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-support/class-rtbiz-hd-support.php:141
+msgid "New Feature"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-support/class-rtbiz-hd-support.php:143
+msgid "Submit"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-support/class-rtbiz-hd-support.php:189
+msgid "by"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-support/class-rtbiz-hd-support.php:189
+msgid "version"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-support/class-rtbiz-hd-support.php:323
+msgid "Submit a Bug Report"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-support/class-rtbiz-hd-support.php:326
+msgid "Submit a New Feature Request"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-support/class-rtbiz-hd-support.php:329
+msgid "Submit Support Request"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-support/class-rtbiz-hd-support.php:337
+msgid ""
+"If you have any suggestions, enhancements or bug reports, you can open a "
+"new issue on <a target=\"_blank\" "
+"href=\"https://github.com/rtCamp/rtbiz/issues/new\">GitHub</a>."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-support/class-rtbiz-hd-support.php:346
+msgid "Name"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-support/class-rtbiz-hd-support.php:351
+msgid "Use actual user name which used during purchased."
+msgstr ""
+
+#: admin/classes/rtbiz-hd-support/class-rtbiz-hd-support.php:358
+msgid "Email"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-support/class-rtbiz-hd-support.php:363
+msgid "Use email id which used during purchased"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-support/class-rtbiz-hd-support.php:370
+msgid "Website"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-support/class-rtbiz-hd-support.php:378
+msgid "Subject"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-support/class-rtbiz-hd-support.php:386
+msgid "Details"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-support/class-rtbiz-hd-support.php:431
+msgid "rtMedia Premium Support Request from"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-support/class-rtbiz-hd-support.php:434
+msgid "rtMedia New Feature Request from"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-support/class-rtbiz-hd-support.php:437
+msgid "rtMedia Bug Report from"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-support/class-rtbiz-hd-support.php:440
+msgid "rtMedia Contact from"
+msgstr ""
+
+#: admin/helper/rthd-functions.php:851 admin/helper/rthd-functions.php:873
+msgid "rtBiz Helpdesk:"
+msgstr ""
+
+#: admin/helper/rthd-functions.php:851 admin/helper/rthd-functions.php:873
+msgid "Click"
+msgstr ""
+
+#: admin/helper/rthd-functions.php:1003
+msgid "New user registration on your site %s:"
+msgstr ""
+
+#: admin/helper/rthd-functions.php:1004
+msgid "Username: %s"
+msgstr ""
+
+#: admin/helper/rthd-functions.php:1005
+msgid "E-mail: %s"
+msgstr ""
+
+#: admin/helper/rthd-functions.php:1008
+msgid "[%s] New User Registration"
+msgstr ""
+
+#: admin/helper/rthd-functions.php:1031
+msgid "Howdy,"
+msgstr ""
+
+#: admin/helper/rthd-functions.php:1032
+msgid "A new account on %s has been created for you."
+msgstr ""
+
+#: admin/helper/rthd-functions.php:1033
+msgid "Your username is: %s"
+msgstr ""
+
+#: admin/helper/rthd-functions.php:1035
+msgid "Thanks."
+msgstr ""
+
+#: admin/helper/rthd-functions.php:1035
+msgid "Admin."
+msgstr ""
+
+#: admin/helper/rthd-functions.php:1038
+msgid "Your New %s Account"
+msgstr ""
+
+#: admin/helper/rthd-functions.php:1903
+msgid "I use @rtbizwp on %s"
+msgstr ""
+
+#: admin/helper/rthd-functions.php:1913
+msgid "Post to Twitter Now"
+msgstr ""
+
+#: admin/helper/rthd-functions.php:1913
+msgid "Post to Twitter"
+msgstr ""
+
+#: admin/helper/rthd-functions.php:1919
+msgid "Share on Facebook Now"
+msgstr ""
+
+#: admin/helper/rthd-functions.php:1919
+msgid "Share on Facebook"
+msgstr ""
+
+#: admin/helper/rthd-functions.php:1925
+msgid "Rate rtBiz on Wordpress.org"
+msgstr ""
+
+#: admin/helper/rthd-functions.php:1925
+msgid "Rate on Wordpress.org"
+msgstr ""
+
+#: admin/helper/rthd-functions.php:1930
+msgid "Subscribe to our Feeds"
+msgstr ""
+
+#: admin/helper/rthd-functions.php:1954
+msgid "Subscribe"
+msgstr ""
+
+#: includes/class-rtbiz-hd-plugin-check.php:138
+#: includes/class-rtbiz-hd-plugin-check.php:171
+msgid "ERROR: No slug was passed to the AJAX callback."
+msgstr ""
+
+#: includes/class-rtbiz-hd-plugin-check.php:143
+msgid "ERROR: You lack permissions to install and/or activate plugins."
+msgstr ""
+
+#: includes/class-rtbiz-hd-plugin-check.php:177
+msgid "ERROR: You lack permissions to activate plugins."
+msgstr ""
+
+#: includes/class-rtbiz-hd-plugin-check.php:206
+#: includes/class-rtbiz-hd-plugin-check.php:254
+msgid "ERROR: Failed to activate plugin: %s"
+msgstr ""
+
+#: includes/class-rtbiz-hd-plugin-check.php:222
+msgid "ERROR: Error fetching plugin information: %s"
+msgstr ""
+
+#: includes/class-rtbiz-hd-plugin-check.php:243
+msgid "Please ensure the file system is writable"
+msgstr ""
+
+#: includes/class-rtbiz-hd-plugin-check.php:249
+msgid "ERROR: Failed to install plugin: %s"
+msgstr ""
+
+#: public/classes/rtbiz-hd-short-code/class-rtbiz-hd-short-code.php:347
+msgid "Favourite Tickets"
+msgstr ""
+
+#: public/classes/rtbiz-hd-short-code/class-rtbiz-hd-short-code.php:360
+#: public/classes/rtbiz-hd-short-code/class-rtbiz-hd-short-code.php:385
+msgid "Create New Ticket"
+msgstr ""
+
+#: public/classes/rtbiz-hd-short-code/class-rtbiz-hd-short-code.php:392
+msgid "You have not created any tickets yet. Create one now."
+msgstr ""
+
+#: public/classes/rtbiz-hd-short-code/class-rtbiz-hd-short-code.php:394
+msgid "No tickets found"
+msgstr ""
+
+#: public/classes/rtbiz-hd-short-code/class-rtbiz-hd-short-code.php:405
+msgid "Your favourite tickets are highlighted below."
+msgstr ""
+
+#: public/classes/rtbiz-hd-short-code/class-rtbiz-hd-short-code.php:412
+msgid ""
+"Below are the all the tickets created by this customer. The tickets for "
+"this order are highlighted."
+msgstr ""
+
+#: public/classes/rtbiz-hd-tickets-front/class-rtbiz-hd-tickets-front.php:60
+#: public/classes/rtbiz-hd-tickets-front/class-rtbiz-hd-tickets-front.php:186
+msgid "You are not logged in. Please login"
+msgstr ""
+
+#: public/classes/rtbiz-hd-tickets-front/class-rtbiz-hd-tickets-front.php:60
+#: public/classes/rtbiz-hd-tickets-front/class-rtbiz-hd-tickets-front.php:186
+msgid "to view this ticket."
+msgstr ""
+
+#: public/classes/rtbiz-hd-tickets-front/class-rtbiz-hd-tickets-front.php:184
+msgid "You can not access this page."
+msgstr ""
+
+#: public/classes/rtbiz-hd-tickets-front/class-rtbiz-hd-tickets-front.php:221
+msgid ""
+"<div style='margin-left: 0;'>Sorry! Your requested ticket wasn't "
+"found.</div>"
+msgstr ""
+
+#: public/classes/rtbiz-hd-tickets-front/class-rtbiz-hd-tickets-front.php:222
+msgid "Helpdesk - Ticket Not Found"
+msgstr ""
+
+#: public/classes/rtbiz-hd-tickets-front/class-rtbiz-hd-tickets-front.php:225
+msgid "Helpdesk - Tickets"
+msgstr ""
+
+#: public/classes/rtbiz-hd-tickets-front/class-rtbiz-hd-tickets-front.php:247
+#: public/classes/rtbiz-hd-tickets-front/class-rtbiz-hd-tickets-front.php:271
+msgid "You do not have sufficient permissions to access this ticket."
+msgstr ""
+
+#: public/templates/admin/dashboard.php:16
+msgid "%s Dashboard"
+msgstr ""
+
+#: public/templates/admin/dashboard.php:32
+msgid "Dismiss"
+msgstr ""
+
+#: public/templates/followup-common.php:59
+msgid "Created "
+msgstr ""
+
+#: public/templates/followup-common.php:91
+msgid "%s Older reply"
+msgid_plural "%s Older replies"
+msgstr[0] ""
+msgstr[1] ""
+
+#: public/templates/followup-common.php:122
+#: public/templates/ticket-add-followup-form.php:28
+msgid "Public Reply"
+msgstr ""
+
+#: public/templates/followup-common.php:123
+#: public/templates/ticket-add-followup-form.php:29
+msgid "Staff Note"
+msgstr ""
+
+#: public/templates/followup-common.php:135
+#: public/templates/followup-common.php:197
+#: public/templates/support-form.php:78
+#: public/templates/ticket-add-followup-form.php:40
+msgid ""
+"You may use Markdown syntax and these HTML tags - a, abbr, acronym, b, "
+"blockquote, cite, code, del, em, i, q, s, strike and strong"
+msgstr ""
+
+#: public/templates/followup-common.php:159
+#: public/templates/ticket-add-followup-form.php:67
+msgid "Mark this as Sensitive"
+msgstr ""
+
+#: public/templates/followup-common.php:163
+#: public/templates/ticket-add-followup-form.php:70
+msgid ""
+"Email notification will not show content of this followup. Recommended, if "
+"you are sharing password or other sensitive information."
+msgstr ""
+
+#: public/templates/support-form.php:2
+msgid "Get Support"
+msgstr ""
+
+#: public/templates/support-form.php:104
+msgid "My site has adult content"
+msgstr ""
+
+#: public/templates/ticket-add-followup-form.php:79
+msgid "Keep unanswered"
+msgstr ""
+
+#: public/templates/ticket-front-page.php:100
+msgid "Remove this ticket from favorites"
+msgstr ""
+
+#: public/templates/ticket-front-page.php:100
+msgid "Favorite this ticket"
+msgstr ""
+
+#: public/templates/ticket-front-page.php:180
+msgid "Assign me"
+msgstr ""
+
+#: public/templates/ticket-front-page.php:257
+msgid "Product"
+msgstr ""
+
+#: public/templates/ticket-front-page.php:458
+msgid "Ticket History"
+msgstr ""
+
+#: rtbiz-helpdesk.php:117
+msgid "rtBiz"
+msgstr ""
+
+#: rtbiz-helpdesk.php:118
+msgid "WordPress for Business."
+msgstr ""
+
+#: rtbiz-helpdesk.php:166
+msgid ""
+"You are running an older PHP version. Please upgrade to PHP <strong>5.3 or "
+"above</strong> to run rtBiz Helpdesk plugin."
+msgstr ""
+
+#: vendor/edd-license/class-rt-hd-edd-license.php:30
+msgid "Activated"
+msgstr ""
+
+#: vendor/edd-license/class-rt-hd-edd-license.php:33
+msgid "Deactivated"
+msgstr ""
+
+#: vendor/edd-license/class-rt-hd-edd-license.php:51
+msgid "License Key"
+msgstr ""
+
+#: vendor/edd-license/class-rt-hd-edd-license.php:69
+msgid "Deactivate License"
+msgstr ""
+
+#: vendor/edd-license/class-rt-hd-edd-license.php:73
+msgid "Activate License"
+msgstr ""
+
+#: vendor/edd-license/class-rt-hd-edd-license.php:77
+msgid "Remove License"
+msgstr ""
+
+#: vendor/edd-license/class-rt-hd-edd-license.php:81
+msgid "Save & Activate License"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "rtBiz Helpdesk"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "https://rtbiz.io/helpdesk/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"A WordPress based Helpdesk system with mail sync features, web based ticket "
+"UI and many custom settings. Easy to use for admin, staff and customers."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "rtCamp"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "https://rtbiz.io/"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:280
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:282
+msgctxt "hash before order number"
+msgid "#"
+msgstr ""
+
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:741
+msgctxt "rtbiz-helpdesk"
+msgid "Mine <span class=\"count\">(%s)</span>"
+msgid_plural "Mine <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:750
+msgctxt "rtbiz-helpdesk"
+msgid "Favorite <span class=\"count\">(%s)</span>"
+msgid_plural "Favorites <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: admin/classes/rtbiz-hd-cpt-tickets/class-rtbiz-hd-cpt-tickets.php:761
+msgctxt "rtbiz-helpdesk"
+msgid "Subscribed <span class=\"count\">(%s)</span>"
+msgid_plural "Subscribed <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""

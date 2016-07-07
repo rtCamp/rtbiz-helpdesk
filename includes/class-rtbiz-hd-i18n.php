@@ -49,7 +49,7 @@ if ( ! class_exists( 'Rtbiz_HD_i18n' ) ) {
 
 			// Traditional WordPress plugin locale filter
 			$locale = apply_filters( 'plugin_locale', get_locale(), RTBIZ_HD_TEXT_DOMAIN );
-			$mofile = sprintf( '%1$s-%2$s.mo', RTBIZ_HD_TEXT_DOMAIN, $locale );
+			$mofile = sprintf( '%1$s-%2$s.mo', 'rtbiz-helpdesk', $locale );
 
 			// Setup paths to current locale file
 			$mofile_local  = $lang_dir . $mofile;

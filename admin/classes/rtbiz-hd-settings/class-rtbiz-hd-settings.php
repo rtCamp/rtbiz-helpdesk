@@ -189,8 +189,8 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 		function dynamic_section( $sections ) {
 			//$sections = array();
 			$sections[] = array(
-				'title'  => __( 'Section via hook', 'redux-framework-demo' ),
-				'desc'   => __( '<p class="description">This is a section created by adding a filter to the sections array. Can be used by child themes to add/remove sections from the options.</p>', 'redux-framework-demo' ),
+				'title'  => __( 'Section via hook', 'rtbiz-helpdesk' ),
+				'desc'   => __( '<p class="description">This is a section created by adding a filter to the sections array. Can be used by child themes to add/remove sections from the options.</p>', 'rtbiz-helpdesk' ),
 				'icon'   => 'el-icon-paper-clip',
 				// Leave this as a blank section, no options just some intro text set above.
 				'fields' => array(),
@@ -260,26 +260,26 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 				$mailbox_options[ $email ] = $email;
 			}
 
-			$products_page_link = '<a href="' . admin_url( 'edit-tags.php?taxonomy=' . Rt_Products::$product_slug . '&post_type=' . Rtbiz_HD_Module::$post_type ) . '"> ' . __( 'Products Section.' ) . '</a>';
+			$products_page_link = '<a href="' . admin_url( 'edit-tags.php?taxonomy=' . Rt_Products::$product_slug . '&post_type=' . Rtbiz_HD_Module::$post_type ) . '"> ' . __( 'Products Section.', 'rtbiz-helpdesk' ) . '</a>';
 			// ACTUAL DECLARATION OF SECTIONS
 			$general_fields = array(
 				array(
 					'id'       => 'rthd_support_page',
 					'type'     => 'select',
 					'data'     => 'pages',
-					'title'    => __( 'Support Page' ),
-					'desc' => __( 'Add <strong>[rtbiz_hd_support_form]</strong> shortcode to any page. Select that page in dropdown above. That page from now used to handle support requests from web interface.' ),
-					'subtitle' => __( 'Select Page for Product Support' ),
+					'title'    => __( 'Support Page', 'rtbiz-helpdesk' ),
+					'desc' => __( 'Add <strong>[rtbiz_hd_support_form]</strong> shortcode to any page. Select that page in dropdown above. That page from now used to handle support requests from web interface.', 'rtbiz-helpdesk' ),
+					'subtitle' => __( 'Select Page for Product Support', 'rtbiz-helpdesk' ),
 				),
 				array(
 					'id'       => 'product_plugin',
-					'title'    => __( 'Connected Store' ),
-					'subtitle' => __( 'Select the plugin you want to connect Helpdesk with ' ),
-					'desc' => __( 'All the existing and future products will be imported for the selected plugin. You can also create custom products from ' ) . $products_page_link,
+					'title'    => __( 'Connected Store', 'rtbiz-helpdesk' ),
+					'subtitle' => __( 'Select the plugin you want to connect Helpdesk with ', 'rtbiz-helpdesk' ),
+					'desc' => __( 'All the existing and future products will be imported for the selected plugin. You can also create custom products from ', 'rtbiz-helpdesk' ) . $products_page_link,
 					'type'     => 'checkbox',
 					'options'  => array(
-						'woocommerce' => __( 'WooCommerce' ),
-						'edd'         => __( 'Easy Digital Download' ),
+						'woocommerce' => __( 'WooCommerce', 'rtbiz-helpdesk' ),
+						'edd'         => __( 'Easy Digital Download', 'rtbiz-helpdesk' ),
 					),
 					'default'  => '',
 				),
@@ -288,25 +288,25 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					'type'     => 'select',
 					'options'  => $users_options,
 					'default'  => $default_assignee,
-					'title'    => __( 'Default Assignee' ),
-					'desc'     => __( 'To select dedicated assignee for a product, visit the ' ) . $products_page_link,
-					'subtitle' => __( 'Select user for HelpDesk ticket Assignee' ),
+					'title'    => __( 'Default Assignee', 'rtbiz-helpdesk' ),
+					'desc'     => __( 'To select dedicated assignee for a product, visit the ', 'rtbiz-helpdesk' ) . $products_page_link,
+					'subtitle' => __( 'Select user for HelpDesk ticket Assignee', 'rtbiz-helpdesk' ),
 				),
 				array(
 					'id'       => 'rthd_enable_ticket_unique_hash',
 					'type'     => 'switch',
-					'title'    => __( 'Unique Hash URLs for Tickets' ),
-					'subtitle' => __( 'Please flush the permalinks after enabling this option.' ),
-					'desc'     => __( 'If enabled, this will generate a unique Hash URL for all the tickets through which tickets can be accessed in the web interface. This unique URLs will be sent in all emails of Helpdesk. Tickets can be accessed from the default WordPress permalinks as well.' ),
+					'title'    => __( 'Unique Hash URLs for Tickets', 'rtbiz-helpdesk' ),
+					'subtitle' => __( 'Please flush the permalinks after enabling this option.', 'rtbiz-helpdesk' ),
+					'desc'     => __( 'If enabled, this will generate a unique Hash URL for all the tickets through which tickets can be accessed in the web interface. This unique URLs will be sent in all emails of Helpdesk. Tickets can be accessed from the default WordPress permalinks as well.', 'rtbiz-helpdesk' ),
 					'default'  => false,
-					'on'       => __( 'Enable' ),
-					'off'      => __( 'Disable' ),
+					'on'       => __( 'Enable', 'rtbiz-helpdesk' ),
+					'off'      => __( 'Disable', 'rtbiz-helpdesk' ),
 				),
 			);
 
 			$this->sections[] = array(
 				'icon'        => 'el-icon-cogs',
-				'title'       => __( 'General' ),
+				'title'       => __( 'General', 'rtbiz-helpdesk' ),
 				'permissions' => $admin_cap,
 				'fields'      => $general_fields,
 			);
@@ -314,7 +314,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 			if ( ! current_user_can( $admin_cap ) ) {
 				$this->sections[] = array(
 					'icon'        => 'el-icon-cogs',
-					'title'       => __( 'Note' ),
+					'title'       => __( 'Note', 'rtbiz-helpdesk' ),
 					'permissions' => $editor_cap,
 					'fields'      => array(
 						array(
@@ -334,7 +334,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 
 			$this->sections[] = array(
 				'icon'        => 'el-icon-group',
-				'title'       => __( 'Setup Your Team' ),
+				'title'       => __( 'Setup Your Team', 'rtbiz-helpdesk' ),
 				'permissions' => $admin_cap,
 				'fields'      => array(
 					array(
@@ -351,19 +351,19 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 				'id'       => 'rthd_Mailboxes_setup',
 				'type'     => 'callback',
 				'title'    => 'Mailboxes Setup',
-				'subtitle' => __( 'Helpdesk Configured Mailbox(s)' ),
+				'subtitle' => __( 'Helpdesk Configured Mailbox(s)', 'rtbiz-helpdesk' ),
 				'callback' => 'rtbiz_hd_mailbox_setup_view',
 			) );
 			if ( ! empty( $system_emails ) ) {
 
 				array_push( $email_fields, array(
 					'id'       => 'rthd_email_support',
-					'title'    => __( 'Email support' ),
-					'subtitle' => __( 'Allows customer to create tickets and reply tickets from configured mailbox.' ),
+					'title'    => __( 'Email support', 'rtbiz-helpdesk' ),
+					'subtitle' => __( 'Allows customer to create tickets and reply tickets from configured mailbox.', 'rtbiz-helpdesk' ),
 					'type'     => 'switch',
 					'default'  => true,
-					'on'       => __( 'Enable' ),
-					'off'      => __( 'Disable' ),
+					'on'       => __( 'Enable', 'rtbiz-helpdesk' ),
+					'off'      => __( 'Disable', 'rtbiz-helpdesk' ),
 				));
 				array_push( $email_fields, array(
 					'id'       => 'section-email-support-start',
@@ -384,22 +384,22 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 				array_push( $email_fields, array(
 					'id'       => 'rthd_enable_mailbox_reading',
 					'type'     => 'switch',
-					'title'    => __( 'Mailbox Reading' ),
-					'subtitle' => __( 'To enable/disable Mailbox Reading' ),
+					'title'    => __( 'Mailbox Reading', 'rtbiz-helpdesk' ),
+					'subtitle' => __( 'To enable/disable Mailbox Reading', 'rtbiz-helpdesk' ),
 					'default'  => true,
-					'on'       => __( 'Enable' ),
-					'off'      => __( 'Disable' ),
+					'on'       => __( 'Enable', 'rtbiz-helpdesk' ),
+					'off'      => __( 'Disable', 'rtbiz-helpdesk' ),
 					'required' => array( 'rthd_email_support', '=', 1 ),
 				) );
 
 				array_push( $email_fields, array(
 					'id'       => 'rthd_reply_via_email',
 					'type'     => 'switch',
-					'title'    => __( 'Reply Via Email' ),
-					'subtitle' => __( 'To enable/disable Reply Via Email' ),
+					'title'    => __( 'Reply Via Email', 'rtbiz-helpdesk' ),
+					'subtitle' => __( 'To enable/disable Reply Via Email', 'rtbiz-helpdesk' ),
 					'default'  => true,
-					'on'       => __( 'Enable' ),
-					'off'      => __( 'Disable' ),
+					'on'       => __( 'Enable', 'rtbiz-helpdesk' ),
+					'off'      => __( 'Disable', 'rtbiz-helpdesk' ),
 					'required' => array( 'rthd_enable_mailbox_reading', '=', 1 ),
 				) );
 			}
@@ -411,19 +411,19 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 			) );
 			array_push( $email_fields, array(
 				'id'       => 'rthd_web_support',
-				'title'    => __( 'Web support' ),
-				'subtitle' => __( 'Allows customer to create support tickets and reply tickets from web interface.' ),
+				'title'    => __( 'Web support', 'rtbiz-helpdesk' ),
+				'subtitle' => __( 'Allows customer to create support tickets and reply tickets from web interface.', 'rtbiz-helpdesk' ),
 				'type'     => 'switch',
 				'default'  => true,
-				'on'       => __( 'Enable' ),
-				'off'      => __( 'Disable' ),
+				'on'       => __( 'Enable', 'rtbiz-helpdesk' ),
+				'off'      => __( 'Disable', 'rtbiz-helpdesk' ),
 			));
 			if ( ! empty( $system_emails ) ) {
 				array_push( $email_fields, array(
 					'id'       => 'rthd_outgoing_email_mailbox',
-					'title'    => __( 'Outgoing Emails Mailbox' ),
-					'subtitle' => __( 'Mailbox to be used to send outgoing emails/notifications.' ),
-					'desc'     => sprintf( '%s.', __( 'Choose any one email from the configured mailboxes.' ) ),
+					'title'    => __( 'Outgoing Emails Mailbox', 'rtbiz-helpdesk' ),
+					'subtitle' => __( 'Mailbox to be used to send outgoing emails/notifications.', 'rtbiz-helpdesk' ),
+					'desc'     => sprintf( '%s.', __( 'Choose any one email from the configured mailboxes.', 'rtbiz-helpdesk' ) ),
 					'type'     => 'select',
 					'options'  => $mailbox_options,
 				) );
@@ -432,11 +432,11 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					array_push( $email_fields, array(
 						'id'       => 'rthd_outgoing_via_same_email',
 						'type'     => 'switch',
-						'title'    => __( 'Outgoing Emails From Same Mailbox' ),
-						'subtitle' => __( 'To enable/disable outgoing emails from same mailbox' ),
+						'title'    => __( 'Outgoing Emails From Same Mailbox', 'rtbiz-helpdesk' ),
+						'subtitle' => __( 'To enable/disable outgoing emails from same mailbox', 'rtbiz-helpdesk' ),
 						'default'  => true,
-						'on'       => __( 'Enable' ),
-						'off'      => __( 'Disable' ),
+						'on'       => __( 'Enable', 'rtbiz-helpdesk' ),
+						'off'      => __( 'Disable', 'rtbiz-helpdesk' ),
 						'required' => array( 'rthd_enable_mailbox_reading', '=', 1 ),
 					) );
 				}
@@ -446,10 +446,10 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 				$domain_name = 'noreply@'.$domain_name;
 				array_push( $email_fields, array(
 					'id'       => 'rthd_outgoing_email_mailbox',
-					'title'    => __( 'Outgoing Emails \'From\' Address' ),
-					'subtitle' => __( 'Outgoing System Email used for all Helpdesk Communication' ),
+					'title'    => __( 'Outgoing Emails \'From\' Address', 'rtbiz-helpdesk' ),
+					'subtitle' => __( 'Outgoing System Email used for all Helpdesk Communication', 'rtbiz-helpdesk' ),
 //					'desc'     => sprintf( '%s <a href="%s">%s</a>. %s.', __( 'WordPress by default sends email using (mostly postfix) FROM/TO value set to Admin Email taken from' ), admin_url( 'options-general.php' ), __( 'here' ), __( 'System Email Address to be used for outbound emails. This Address will be used as FROM: name < email address > for all outgoing emails' ) ),
-					'desc'     => sprintf( '%s.', __( 'This Address will be used as FROM: name < email address > for all outgoing emails' ) ),
+					'desc'     => sprintf( '%s.', __( 'This Address will be used as FROM: name < email address > for all outgoing emails', 'rtbiz-helpdesk' ) ),
 					'type'     => 'text',
 					'default'  => $domain_name,
 					'validate' => 'email',
@@ -459,9 +459,9 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 
 			array_push( $email_fields, array(
 				'id'       => 'rthd_outgoing_email_from_name',
-				'title'    => __( 'Outgoing Emails \'From\' Name' ),
-				'subtitle' => __( 'Outgoing System Name used for all Helpdesk Communication' ),
-				'desc'     => sprintf( '%s.', __( 'System Name to be used for outbound emails. This Name will be used as FROM: name < email address > for all outgoing emails' ) ),
+				'title'    => __( 'Outgoing Emails \'From\' Name', 'rtbiz-helpdesk' ),
+				'subtitle' => __( 'Outgoing System Name used for all Helpdesk Communication', 'rtbiz-helpdesk' ),
+				'desc'     => sprintf( '%s.', __( 'System Name to be used for outbound emails. This Name will be used as FROM: name < email address > for all outgoing emails', 'rtbiz-helpdesk' ) ),
 				'type'     => 'text',
 				'default'  => get_bloginfo(),
 			) );
@@ -469,9 +469,9 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 			array_push( $email_fields,
 				array(
 					'id'         => 'rthd_blacklist_emails_textarea',
-					'title'      => __( 'Blacklist Emails' ),
-					'subtitle'   => __( 'Email addresses to be blacklisted from creating tickets / follow-ups.' ),
-					'desc'       => __( 'All mails coming from these addresses will be blocked by Helpdesk. It also accept arguments like *@example.com, @example.*, Keep each email in new line without comma(,).' ),
+					'title'      => __( 'Blacklist Emails', 'rtbiz-helpdesk' ),
+					'subtitle'   => __( 'Email addresses to be blacklisted from creating tickets / follow-ups.', 'rtbiz-helpdesk' ),
+					'desc'       => __( 'All mails coming from these addresses will be blocked by Helpdesk. It also accept arguments like *@example.com, @example.*, Keep each email in new line without comma(,).', 'rtbiz-helpdesk' ),
 					'type'       => 'textarea',
 					'multi'      => true,
 					'show_empty' => false,
@@ -480,7 +480,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 
 			$this->sections[] = array(
 				'icon'        => 'el-icon-envelope',
-				'title'       => __( 'Mail Setup' ),
+				'title'       => __( 'Mail Setup', 'rtbiz-helpdesk' ),
 				'permissions' => $admin_cap,
 				'fields'      => $email_fields,
 			);
@@ -490,14 +490,14 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 			}*/
 			$this->sections[] = array(
 				'icon'        => 'el-icon-edit',
-				'title'       => __( 'Notification Emails ' ),
+				'title'       => __( 'Notification Emails ', 'rtbiz-helpdesk' ),
 				'permissions' => $admin_cap,
 				'fields'      => array(
 					array(
 						'id'         => 'rthd_notification_emails',
-						'title'      => __( 'Email Addresses' ),
-						'subtitle'   => __( 'Email addresses to be notified on events' ),
-						'desc' => __( 'These email addresses will be notified of the events that occurs in HelpDesk Systems. This is a global list. All the subscribers will also notified along with this list.' ),
+						'title'      => __( 'Email Addresses', 'rtbiz-helpdesk' ),
+						'subtitle'   => __( 'Email addresses to be notified on events', 'rtbiz-helpdesk' ),
+						'desc' => __( 'These email addresses will be notified of the events that occurs in HelpDesk Systems. This is a global list. All the subscribers will also notified along with this list.', 'rtbiz-helpdesk' ),
 						'type'       => 'multi_text',
 						'validate'   => 'email',
 						'multi'      => true,
@@ -507,11 +507,11 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					array(
 						'id'       => 'rthd_enable_notification_acl',
 						'type'     => 'switch',
-						'title'    => __( 'Notification Events' ),
-						'subtitle' => __( 'To enable/disable Notification' ),
+						'title'    => __( 'Notification Events', 'rtbiz-helpdesk' ),
+						'subtitle' => __( 'To enable/disable Notification', 'rtbiz-helpdesk' ),
 						'default'  => true,
-						'on'       => __( 'Enable' ),
-						'off'      => __( 'Disable' ),
+						'on'       => __( 'Enable', 'rtbiz-helpdesk' ),
+						'off'      => __( 'Disable', 'rtbiz-helpdesk' ),
 					),
 					array(
 						'id'       => 'section-notification_acl-start',
@@ -521,24 +521,24 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					),
 					array(
 						'id'      => 'rthd_notification_acl_client_events',
-						'title'   => __( 'Notification Event for Customer ' ),
+						'title'   => __( 'Notification Event for Customer ', 'rtbiz-helpdesk' ),
 						'type'    => 'checkbox',
 						'default' => array(
 							'new_ticket_created_mail'   => '1',
 							'new_followup_created_mail' => '1',
 						),
 						'options' => array(
-							'new_ticket_created_mail'   => __( 'When a customer creates a ticket via the web form or email' ),
-							'new_followup_created_mail' => __( 'When a new follow-up is added to a ticket' ),
-							'new_followup_updated_mail' => __( 'When any follow-up is edited by staff' ),
-							'new_followup_deleted_mail' => __( 'When a follow-up is deleted by staff/customer' ),
+							'new_ticket_created_mail'   => __( 'When a customer creates a ticket via the web form or email', 'rtbiz-helpdesk' ),
+							'new_followup_created_mail' => __( 'When a new follow-up is added to a ticket', 'rtbiz-helpdesk' ),
+							'new_followup_updated_mail' => __( 'When any follow-up is edited by staff', 'rtbiz-helpdesk' ),
+							'new_followup_deleted_mail' => __( 'When a follow-up is deleted by staff/customer', 'rtbiz-helpdesk' ),
 							//'new_customer_accoutn_created_mail'	=> __( 'When a customer creates a ticket for the first time and an account is created automatically for them' ),
 							//'ticket_solved_mail'	=> __( 'When a ticket status is changed to solved' ),
 						),
 					),
 					array(
 						'id'      => 'rthd_notification_acl_assignee_events',
-						'title'   => __( 'Notification Event for Assignee' ),
+						'title'   => __( 'Notification Event for Assignee', 'rtbiz-helpdesk' ),
 						'type'    => 'checkbox',
 						'default' => array(
 							'new_ticket_created_mail'              => '1',
@@ -550,20 +550,20 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 							'ticket_updated_mail'                  => '1',
 						),
 						'options' => array(
-							'new_ticket_created_mail'              => __( 'When a customer creates a ticket via the web form or email' ),
-							'new_followup_created_mail'            => __( 'When a New follow-up is added to a ticket' ),
-							'new_followup_updated_mail'            => __( 'When a follow-up is edited by staff/customer' ),
-							'new_followup_deleted_mail'            => __( 'When a follow-up is deleted by staff/customer' ),
-							'ticket_reassigned_mail'               => __( 'When a ticket is reassigned' ),
-							'new_staff_only_followup_created_mail' => __( 'When a staff-only follow-up is added/edited on a ticket' ),
-							'ticket_updated_mail'                  => __( 'When any status or metadata changed for a ticket' ),
-							'new_subscriber_added_mail'            => __( 'When a staff member subscribes to a ticket' ),
-							'subscriber_removed_mail'              => __( 'When a subscriber is removed from a ticket' ),
+							'new_ticket_created_mail'              => __( 'When a customer creates a ticket via the web form or email', 'rtbiz-helpdesk' ),
+							'new_followup_created_mail'            => __( 'When a New follow-up is added to a ticket', 'rtbiz-helpdesk' ),
+							'new_followup_updated_mail'            => __( 'When a follow-up is edited by staff/customer', 'rtbiz-helpdesk' ),
+							'new_followup_deleted_mail'            => __( 'When a follow-up is deleted by staff/customer', 'rtbiz-helpdesk' ),
+							'ticket_reassigned_mail'               => __( 'When a ticket is reassigned', 'rtbiz-helpdesk' ),
+							'new_staff_only_followup_created_mail' => __( 'When a staff-only follow-up is added/edited on a ticket', 'rtbiz-helpdesk' ),
+							'ticket_updated_mail'                  => __( 'When any status or metadata changed for a ticket', 'rtbiz-helpdesk' ),
+							'new_subscriber_added_mail'            => __( 'When a staff member subscribes to a ticket', 'rtbiz-helpdesk' ),
+							'subscriber_removed_mail'              => __( 'When a subscriber is removed from a ticket', 'rtbiz-helpdesk' ),
 						),
 					),
 					array(
 						'id'      => 'rthd_notification_acl_staff_events',
-						'title'   => __( 'Notification Event for Staff' ),
+						'title'   => __( 'Notification Event for Staff', 'rtbiz-helpdesk' ),
 						'type'    => 'checkbox',
 						'default' => array(
 							'new_ticket_created_mail'              => '1',
@@ -575,20 +575,20 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 							'ticket_updated_mail'                  => '1',
 						),
 						'options' => array(
-							'new_ticket_created_mail'              => __( 'When a customer creates a ticket via the web form or email' ),
-							'new_followup_created_mail'            => __( 'When a New follow-up is added to a ticket' ),
-							'new_followup_updated_mail'            => __( 'When a follow-up is edited by staff/customer' ),
-							'new_followup_deleted_mail'            => __( 'When a follow-up is deleted by staff/customer' ),
-							'ticket_reassigned_mail'               => __( 'When a ticket is reassigned' ),
-							'new_staff_only_followup_created_mail' => __( 'When a staff-only follow-up is added/edited on a ticket' ),
-							'ticket_updated_mail'                  => __( 'When any status or metadata changed for a ticket' ),
-							'new_subscriber_added_mail'            => __( 'When a staff member subscribes to a ticket' ),
-							'subscriber_removed_mail'              => __( 'When a subscriber is removed from a ticket' ),
+							'new_ticket_created_mail'              => __( 'When a customer creates a ticket via the web form or email', 'rtbiz-helpdesk' ),
+							'new_followup_created_mail'            => __( 'When a New follow-up is added to a ticket', 'rtbiz-helpdesk' ),
+							'new_followup_updated_mail'            => __( 'When a follow-up is edited by staff/customer', 'rtbiz-helpdesk' ),
+							'new_followup_deleted_mail'            => __( 'When a follow-up is deleted by staff/customer', 'rtbiz-helpdesk' ),
+							'ticket_reassigned_mail'               => __( 'When a ticket is reassigned', 'rtbiz-helpdesk' ),
+							'new_staff_only_followup_created_mail' => __( 'When a staff-only follow-up is added/edited on a ticket', 'rtbiz-helpdesk' ),
+							'ticket_updated_mail'                  => __( 'When any status or metadata changed for a ticket', 'rtbiz-helpdesk' ),
+							'new_subscriber_added_mail'            => __( 'When a staff member subscribes to a ticket', 'rtbiz-helpdesk' ),
+							'subscriber_removed_mail'              => __( 'When a subscriber is removed from a ticket', 'rtbiz-helpdesk' ),
 						),
 					),
 					array(
 						'id'      => 'rthd_notification_acl_group_events',
-						'title'   => __( 'Notification Event for Group' ),
+						'title'   => __( 'Notification Event for Group', 'rtbiz-helpdesk' ),
 						'type'    => 'checkbox',
 						'default' => array(
 							'new_ticket_created_mail'              => '1',
@@ -600,15 +600,15 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 							'ticket_updated_mail'                  => '1',
 						),
 						'options' => array(
-							'new_ticket_created_mail'              => __( 'When a customer creates a ticket via the web form or email' ),
-							'new_followup_created_mail'            => __( 'When a New follow-up is added to a ticket' ),
-							'new_followup_updated_mail'            => __( 'When a follow-up is edited by staff/customer' ),
-							'new_followup_deleted_mail'            => __( 'When a follow-up is deleted by staff/customer' ),
-							'ticket_reassigned_mail'               => __( 'When a ticket is reassigned' ),
-							'new_staff_only_followup_created_mail' => __( 'When a staff-only follow-up is added/edited on a ticket' ),
-							'ticket_updated_mail'                  => __( 'When any status or metadata changed for a ticket' ),
-							'new_subscriber_added_mail'            => __( 'When a staff member subscribes to a ticket' ),
-							'subscriber_removed_mail'              => __( 'When a subscriber is removed from a ticket' ),
+							'new_ticket_created_mail'              => __( 'When a customer creates a ticket via the web form or email', 'rtbiz-helpdesk' ),
+							'new_followup_created_mail'            => __( 'When a New follow-up is added to a ticket', 'rtbiz-helpdesk' ),
+							'new_followup_updated_mail'            => __( 'When a follow-up is edited by staff/customer', 'rtbiz-helpdesk' ),
+							'new_followup_deleted_mail'            => __( 'When a follow-up is deleted by staff/customer', 'rtbiz-helpdesk' ),
+							'ticket_reassigned_mail'               => __( 'When a ticket is reassigned', 'rtbiz-helpdesk' ),
+							'new_staff_only_followup_created_mail' => __( 'When a staff-only follow-up is added/edited on a ticket', 'rtbiz-helpdesk' ),
+							'ticket_updated_mail'                  => __( 'When any status or metadata changed for a ticket', 'rtbiz-helpdesk' ),
+							'new_subscriber_added_mail'            => __( 'When a staff member subscribes to a ticket', 'rtbiz-helpdesk' ),
+							'subscriber_removed_mail'              => __( 'When a subscriber is removed from a ticket', 'rtbiz-helpdesk' ),
 						),
 					),
 					array(
@@ -619,17 +619,17 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					array(
 						'id'     => 'section-notification_email-customize-start',
 						'type'   => 'section',
-						'title'  => __( 'Customize Notification Emails ' ),
+						'title'  => __( 'Customize Notification Emails ', 'rtbiz-helpdesk' ),
 						'indent' => true, // Indent all options below until the next 'section' option is set.
 					),
 					array(
 						'id'       => 'rthd_enable_signature',
 						'type'     => 'switch',
-						'title'    => __( 'Email Signature' ),
-						'subtitle' => __( 'To enable/disable signature for all email send via rtCamp Helpdesk.' ),
+						'title'    => __( 'Email Signature', 'rtbiz-helpdesk' ),
+						'subtitle' => __( 'To enable/disable signature for all email send via rtCamp Helpdesk.', 'rtbiz-helpdesk' ),
 						'default'  => true,
-						'on'       => __( 'Enable' ),
-						'off'      => __( 'Disable' ),
+						'on'       => __( 'Enable', 'rtbiz-helpdesk' ),
+						'off'      => __( 'Disable', 'rtbiz-helpdesk' ),
 					),
 					array(
 						'id'       => 'section-email-signature',
@@ -640,9 +640,9 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					array(
 						'id'           => 'rthd_email_signature',
 						'type'         => 'textarea',
-						'title'        => __( 'Email Signature' ),
-						'subtitle'     => __( 'Add here Email Signature' ),
-						'desc' => esc_attr( 'You can add email signature here that will be sent with every email send by Helpdesk plugin.' ), // Allowed tags are <a> <br> <em> <strong>.
+						'title'        => __( 'Email Signature', 'rtbiz-helpdesk' ),
+						'subtitle'     => __( 'Add here Email Signature', 'rtbiz-helpdesk' ),
+						'desc' => esc_attr( 'You can add email signature here that will be sent with every email send by Helpdesk plugin.', 'rtbiz-helpdesk' ), // Allowed tags are <a> <br> <em> <strong>.
 						//'validate'     => 'html_custom',
 						'default'      => esc_attr( ' -- Sent via rtBiz Helpdesk Plugin' ),
 						/*'allowed_html' => array(
@@ -665,7 +665,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 
 			$this->sections[] = array(
 				'icon'        => 'el-icon-magic',
-				'title'       => __( 'Advanced Settings' ),
+				'title'       => __( 'Advanced Settings', 'rtbiz-helpdesk' ),
 				'permissions' => $admin_cap,
 				'fields'      => array(
 					/*					array(
@@ -680,11 +680,11 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					array(
 						'id'       => 'rthd_enable_auto_assign',
 						'type'     => 'switch',
-						'title'    => __( 'Auto Assign Tickets' ),
-						'subtitle' => __( 'To auto assign a ticket to staff on reply' ),
+						'title'    => __( 'Auto Assign Tickets', 'rtbiz-helpdesk' ),
+						'subtitle' => __( 'To auto assign a ticket to staff on reply', 'rtbiz-helpdesk' ),
 						'default'  => false,
-						'on'       => __( 'Enable' ),
-						'off'      => __( 'Disable' ),
+						'on'       => __( 'Enable', 'rtbiz-helpdesk' ),
+						'off'      => __( 'Disable', 'rtbiz-helpdesk' ),
 					),
 					array(
 						'id'       => 'section-auto-assign-start',
@@ -694,12 +694,12 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					),
 					array(
 						'id'      => 'rthd_auto_assign_events',
-						'title'   => __( 'Event For Auto assign' ),
+						'title'   => __( 'Event For Auto assign', 'rtbiz-helpdesk' ),
 						'default' => 'on_first_followup',
 						'type'    => 'radio',
 						'options' => array(
-							'on_first_followup' => __( 'When first follow-up is added to a ticket by any staff member.' ),
-							'on_any_followup'   => __( 'When any follow-up is added to a ticket by any staff member.' ),
+							'on_first_followup' => __( 'When first follow-up is added to a ticket by any staff member.', 'rtbiz-helpdesk' ),
+							'on_any_followup'   => __( 'When any follow-up is added to a ticket by any staff member.', 'rtbiz-helpdesk' ),
 						),
 					),
 					array(
@@ -710,11 +710,11 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					array(
 						'id'       => 'rthd_enable_auto_response',
 						'type'     => 'switch',
-						'title'    => __( 'Auto Response' ),
-						'subtitle' => __( 'To enable/disable auto response feature' ),
+						'title'    => __( 'Auto Response', 'rtbiz-helpdesk' ),
+						'subtitle' => __( 'To enable/disable auto response feature', 'rtbiz-helpdesk' ),
 						'default'  => false,
-						'on'       => __( 'Enable' ),
-						'off'      => __( 'Disable' ),
+						'on'       => __( 'Enable', 'rtbiz-helpdesk' ),
+						'off'      => __( 'Disable', 'rtbiz-helpdesk' ),
 					),
 					array(
 						'id'       => 'section-auto-response-start',
@@ -725,11 +725,11 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					array(
 						'id'       => 'rthd_enable_auto_response_mode',
 						'type'     => 'switch',
-						'title'    => __( 'Select working shift' ),
-						'subtitle' => __( 'Day shift / Day-Night Shift' ),
+						'title'    => __( 'Select working shift', 'rtbiz-helpdesk' ),
+						'subtitle' => __( 'Day shift / Day-Night Shift', 'rtbiz-helpdesk' ),
 						'default'  => true,
-						'on'       => __( 'Day Shift' ),
-						'off'      => __( 'Day-Night Shift' ),
+						'on'       => __( 'Day Shift', 'rtbiz-helpdesk' ),
+						'off'      => __( 'Day-Night Shift', 'rtbiz-helpdesk' ),
 					),
 					array(
 						'id'       => 'section-auto-response-dayshift-start',
@@ -743,8 +743,8 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					array(
 						'id'       => 'rthd_auto_response_dayshift_time',
 						'type'     => 'callback',
-						'title'    => __( 'Configure working time for dayshift' ),
-						'subtitle' => __( 'Add hours of operation' ),
+						'title'    => __( 'Configure working time for dayshift', 'rtbiz-helpdesk' ),
+						'subtitle' => __( 'Add hours of operation', 'rtbiz-helpdesk' ),
 						'desc'     => '',
 						'callback' => 'rtbiz_hd_auto_response_dayshift_view',
 					),
@@ -765,8 +765,8 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					array(
 						'id'       => 'rthd_auto_response_nightshift_time',
 						'type'     => 'callback',
-						'title'    => __( 'Configure working time for nightshift' ),
-						'subtitle' => __( 'Add hours of operation' ),
+						'title'    => __( 'Configure working time for nightshift', 'rtbiz-helpdesk' ),
+						'subtitle' => __( 'Add hours of operation', 'rtbiz-helpdesk' ),
 						'desc'     => '',
 						'callback' => 'rtbiz_hd_auto_response_daynightshift_view',
 					),
@@ -778,16 +778,16 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					array(
 						'id'       => 'rthd_autoresponse_weekend',
 						'type'     => 'switch',
-						'title'    => __( 'Auto-respond on weekends only.' ),
+						'title'    => __( 'Auto-respond on weekends only.', 'rtbiz-helpdesk' ),
 						'default'  => false,
-						'on'       => __( 'Yes' ),
-						'off'      => __( 'No' ),
+						'on'       => __( 'Yes', 'rtbiz-helpdesk' ),
+						'off'      => __( 'No', 'rtbiz-helpdesk' ),
 						'required' => array( 'rthd_enable_auto_response', '=', 1 ),
 					),
 					array(
 						'id'           => 'rthd_auto_response_message',
 						'type'         => 'textarea',
-						'title'        => __( 'Auto response message' ),
+						'title'        => __( 'Auto response message', 'rtbiz-helpdesk' ),
 						'desc'         => esc_attr( 'Add a message here that will be sent to the customer when your team is offline. ' ) . 'Use <b>{NextStartingHour}</b> to get next working hours like <b>`Today after 10 pm` or `Monday after 9 AM`</b>', //Allowed tags are <a> <br> <em> <strong>.
 						//'validate'     => 'html_custom',
 						'default'      => esc_attr( 'We have received your support request. Our support team is currently offline. We will get back at the soonest.' ),
@@ -810,11 +810,11 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					array(
 						'id'      => 'rthd_enable_ticket_adult_content',
 						'type'    => 'switch',
-						'title'   => __( 'Adult Content Filter' ),
-						'desc'    => __( 'For customer, a form feature to mark adult content will be enabled. For staff, profile level setting to filter the adult content will be enabled.' ),
+						'title'   => __( 'Adult Content Filter', 'rtbiz-helpdesk' ),
+						'desc'    => __( 'For customer, a form feature to mark adult content will be enabled. For staff, profile level setting to filter the adult content will be enabled.', 'rtbiz-helpdesk' ),
 						'default' => false,
-						'on'      => __( 'Enable' ),
-						'off'     => __( 'Disable' ),
+						'on'      => __( 'Enable', 'rtbiz-helpdesk' ),
+						'off'     => __( 'Disable', 'rtbiz-helpdesk' ),
 					),
 				),
 			);
@@ -822,7 +822,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 			if ( $this->gf_active ) {
 
 				$this->sections[] = array(
-					'title'       => __( 'Gravity Importer' ),
+					'title'       => __( 'Gravity Importer', 'rtbiz-helpdesk' ),
 					'icon'        => 'el-icon-list-alt',
 					'permissions' => $admin_cap,
 					//'subsection'  => true,
@@ -836,7 +836,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 				);
 
 				$this->sections[] = array(
-					'title'       => __( 'Importer Mapper' ),
+					'title'       => __( 'Importer Mapper', 'rtbiz-helpdesk' ),
 					'icon'        => 'el-icon-list-alt',
 					'permissions' => $admin_cap,
 					'subsection'  => true,
@@ -857,7 +857,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					$import_log_content = '';
 				}
 				$this->sections[] = array(
-					'title'       => __( 'Import Logs' ),
+					'title'       => __( 'Import Logs', 'rtbiz-helpdesk' ),
 					'icon'        => 'el-icon-list-alt',
 					'permissions' => $admin_cap,
 					'subsection'  => true,
@@ -873,14 +873,14 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 
 			$this->sections[] = array(
 				'icon'        => 'el-icon-key',
-				'title'       => __( 'License' ),
+				'title'       => __( 'License', 'rtbiz-helpdesk' ),
 				'permissions' => $admin_cap,
 				'fields'      => array(
 					array(
 						'id'       => 'rt_hd_activiation',
 						'type'     => 'callback',
-						'title'    => __( 'Plugin Activation' ),
-						'subtitle' => __( 'Enter License Key and Activate plugin' ),
+						'title'    => __( 'Plugin Activation', 'rtbiz-helpdesk' ),
+						'subtitle' => __( 'Enter License Key and Activate plugin', 'rtbiz-helpdesk' ),
 						'callback' => 'rtbiz_hd_activation_view',
 					),
 				),
@@ -893,14 +893,14 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 					$support->submit_request();
 					$this->sections[] = array(
 						'icon'        => 'el-icon-phone',
-						'title'       => __( 'Premium Support' ),
+						'title'       => __( 'Premium Support', 'rtbiz-helpdesk' ),
 						'permissions' => $admin_cap,
 						'full_width' => true,
 						'fields'      => array(
 							array(
 								'id'       => 'rt_hd_support',
 								'type'     => 'callback',
-								'title'    => __( 'Premium Support' ),
+								'title'    => __( 'Premium Support', 'rtbiz-helpdesk' ),
 								'callback' => array( 'Rtbiz_HD_Support', 'support_sent' ),
 							),
 						),
@@ -908,7 +908,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 				}  else {
 					$this->sections[] = array(
 						'icon'        => 'el-icon-phone',
-						'title'       => __( 'Premium Support' ),
+						'title'       => __( 'Premium Support', 'rtbiz-helpdesk' ),
 						'permissions' => $admin_cap,
 						'full_width' => true,
 						'fields'      => array(
@@ -916,7 +916,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 								'full_width' => true,
 								'id'       => 'rt_hd_support',
 								'type'     => 'callback',
-								'title'    => __( 'Premium Support' ),
+								'title'    => __( 'Premium Support', 'rtbiz-helpdesk' ),
 								'callback' => array( $support, 'call_get_form' ),
 							),
 						),
@@ -927,16 +927,16 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 
 
 			$this->sections[] = array(
-				'title'       => __( 'Miscellaneous' ),
-				'heading'     => __( 'Import / Export Settings' ),
-				'desc'        => __( 'Import and Export your settings from file, text or URL.' ),
+				'title'       => __( 'Miscellaneous', 'rtbiz-helpdesk' ),
+				'heading'     => __( 'Import / Export Settings', 'rtbiz-helpdesk' ),
+				'desc'        => __( 'Import and Export your settings from file, text or URL.', 'rtbiz-helpdesk' ),
 				'icon'        => 'el-icon-refresh',
 				'permissions' => $admin_cap,
 				'fields'      => array(
 					array(
 						'id'         => 'rthd_settings_import_export',
 						'type'       => 'import_export',
-						'title'      => __( 'Import Export' ),
+						'title'      => __( 'Import Export', 'rtbiz-helpdesk' ),
 						'subtitle'   => 'Save and restore your options',
 						'full_width' => false,
 					),
@@ -960,7 +960,7 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 				// TYPICAL -> Change these values as you need/desire
 				'opt_name'           => self::$hd_opt,
 				// This is where your data is stored in the database and also becomes your global variable name.
-				'display_name'       => __( 'Settings' ),
+				'display_name'       => __( 'Settings', 'rtbiz-helpdesk' ),
 				// Name that appears at the top of your panel
 				'display_version'    => RTBIZ_HD_VERSION,
 				// Version that appears at the top of your panel
@@ -968,8 +968,8 @@ if ( ! class_exists( 'Rtbiz_HD_Settings' ) ) {
 				//Specify if the admin menu should appear or not. Options: menu or submenu (Under appearance only)
 				'allow_sub_menu'     => false,
 				// Show the sections below the admin menu item or not
-				'menu_title'         => __( 'Settings' ),
-				'page_title'         => __( 'Settings' ),
+				'menu_title'         => __( 'Settings', 'rtbiz-helpdesk' ),
+				'page_title'         => __( 'Settings', 'rtbiz-helpdesk' ),
 				// You will need to generate a Google API key to use this feature.
 				// Please visit: https://developers.google.com/fonts/docs/developer_api#Auth
 				'google_api_key'     => '',

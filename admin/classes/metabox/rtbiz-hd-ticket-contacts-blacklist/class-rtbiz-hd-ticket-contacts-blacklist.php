@@ -71,15 +71,15 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Contacts_Blacklist' ) ) {
 					   id="rthd_ticket_contacts_blacklist">
 						<?php
 						if ( 'remove_blacklisted' == $blocklist_action ) {
-							_e( 'Remove', RTBIZ_HD_TEXT_DOMAIN );
+							_e( 'Remove', 'rtbiz-helpdesk' );
 						} else {
-							_e( 'Blacklist', RTBIZ_HD_TEXT_DOMAIN );
+							_e( 'Blacklist', 'rtbiz-helpdesk' );
 						}
 						?>
 					</a>
 				</p>
 			</div>
-			<p class="description"><?php _e( 'Note : Add ticket contacts as blacklist.', RTBIZ_HD_TEXT_DOMAIN ); ?></p>
+			<p class="description"><?php _e( 'Note : Add ticket contacts as blacklist.', 'rtbiz-helpdesk' ); ?></p>
 		<?php
 		}
 
@@ -116,10 +116,10 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Contacts_Blacklist' ) ) {
 				<p>
 					<a href="#" data-action="blacklisted_contact" data-postid="<?php echo $ticket_data['post_id']; ?>"
 					   class="button"
-					   id="rthd_ticket_contacts_blacklist_yes"><?php _e( 'Yes', RTBIZ_HD_TEXT_DOMAIN ); ?></a>
+					   id="rthd_ticket_contacts_blacklist_yes"><?php _e( 'Yes', 'rtbiz-helpdesk' ); ?></a>
 					<a href="#" data-action="blacklisted_contact_no"
 					   data-postid="<?php echo $ticket_data['post_id']; ?>" class="button"
-					   id="rthd_ticket_contacts_blacklist_no"><?php _e( 'No', RTBIZ_HD_TEXT_DOMAIN ); ?></a>
+					   id="rthd_ticket_contacts_blacklist_no"><?php _e( 'No', 'rtbiz-helpdesk' ); ?></a>
 				</p>
 			</div>
 
@@ -158,7 +158,7 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Contacts_Blacklist' ) ) {
 				<p>
 					<a href="#" data-action="remove_blacklisted" data-postid="<?php echo $_POST['post_id']; ?>"
 					   class="button" id="rthd_ticket_contacts_blacklist">
-						<?php _e( 'Remove', RTBIZ_HD_TEXT_DOMAIN ); ?>
+						<?php _e( 'Remove', 'rtbiz-helpdesk' ); ?>
 					</a>
 				</p>
 
@@ -200,7 +200,7 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Contacts_Blacklist' ) ) {
 			<p>
 				<a href="#" data-action="blacklisted_confirmation" data-postid="<?php echo $_POST['post_id']; ?>"
 				   class="button" id="rthd_ticket_contacts_blacklist">
-					<?php _e( 'Blacklist', RTBIZ_HD_TEXT_DOMAIN ); ?>
+					<?php _e( 'Blacklist', 'rtbiz-helpdesk' ); ?>
 				</a>
 			</p>
 			<?php

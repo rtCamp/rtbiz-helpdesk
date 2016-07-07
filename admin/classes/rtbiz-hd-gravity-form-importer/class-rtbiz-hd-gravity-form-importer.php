@@ -326,7 +326,7 @@ if ( ! class_exists( 'Rtbiz_HD_Gravity_Form_Importer' ) ) {
 
 						echo '</select>';
 					} else {
-						_e( 'No authors found', RTBIZ_HD_TEXT_DOMAIN );
+						_e( 'No authors found', 'rtbiz-helpdesk' );
 					}
 					echo '<script> var arr_assignedto=' . json_encode( $arr_assignedto ) . '; </script>';
 					echo '<script> var arr_ticketmeta_key=' . json_encode( $meta_key_results ) .'; </script>';

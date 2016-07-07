@@ -80,6 +80,59 @@ module.exports = function ( grunt ) {
 				dest: 'public/js/helpdesk-shortcode-min.js'
 			}
 		},
+		checktextdomain: {
+			options: {
+				text_domain: 'rtbiz-helpdesk', //Specify allowed domain(s)
+				keywords: [ //List keyword specifications
+					'__:1,2d',
+					'_e:1,2d',
+					'_x:1,2c,3d',
+					'esc_html__:1,2d',
+					'esc_html_e:1,2d',
+					'esc_html_x:1,2c,3d',
+					'esc_attr__:1,2d',
+					'esc_attr_e:1,2d',
+					'esc_attr_x:1,2c,3d',
+					'_ex:1,2c,3d',
+					'_n:1,2,4d',
+					'_nx:1,2,4c,5d',
+					'_n_noop:1,2,3d',
+					'_nx_noop:1,2,3c,4d'
+				]
+			},
+			target: {
+				files: [ {
+					src: [
+							'*.php',
+							'**/*.php',
+							'!node_modules/**',
+							'!tests/**'
+						], //all php
+					expand: true
+				} ]
+			}
+		},
+		makepot: {
+			target: {
+				options: {
+					cwd: '.', // Directory of files to internationalize.
+					domainPath: 'languages/', // Where to save the POT file.
+					exclude: [ 'node_modules/*', 'tests' ], // List of files or directories to ignore.
+					mainFile: 'rtbiz-helpdesk.php', // Main project file.
+					potFilename: 'rtbiz-helpdesk.po', // Name of the POT file.
+					potHeaders: { // Headers to add to the generated POT file.
+						poedit: true, // Includes common Poedit headers.
+						'Last-Translator': 'rtBiz <rtbiz@rtbiz.io>',
+						'Language-Team': 'rtBiz <rtbiz@rtbiz.io>',
+						'report-msgid-bugs-to': 'http://community.rtcamp.com/',
+						'x-poedit-keywordslist': true // Include a list of all possible gettext functions.
+					},
+					type: 'wp-plugin', // Type of project (wp-plugin or wp-theme).
+					updateTimestamp: true // Whether the POT-Creation-Date should be updated without other changes.
+				}
+			}
+		},
+
 		// Watch for hanges and trigger compass and uglify
 		// Ref. https://npmjs.org/package/grunt-contrib-watch
 		watch: {
@@ -94,5 +147,5 @@ module.exports = function ( grunt ) {
 	} );
 
 	// Register Task
-	grunt.registerTask( 'default', [ 'watch' ] );
+	grunt.registerTask( 'default', [ 'checktextdomain', 'makepot', 'watch' ] );
 };

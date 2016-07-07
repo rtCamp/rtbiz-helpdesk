@@ -61,14 +61,14 @@ $user_edit_content = current_user_can( $cap );
 			<div id="rthd-sidebar" class="rthd_sticky_div rthd-sidebar">
 				<div class="rt-hd-sidebar-box">
 					<div class="rt-hd-ticket-info">
-						<h3 class="rt-hd-ticket-info-header"><?php _e( esc_attr( ucfirst( $labels['name'] ) ) . ' Information' ); ?>
+						<h3 class="rt-hd-ticket-info-header"><?php _e( esc_attr( ucfirst( $labels['name'] ) ) . ' Information', 'rtbiz-helpdesk' ); ?>
 						</h3>
 
 						<?php if ( current_user_can( $cap ) ) { ?>
 							<div class="rthd-front-icons clearfix">
 								<a id='ticket-information-edit-ticket-link'
 								   href="<?php echo get_edit_post_link( $post->ID ) ?>"
-								   title="<?php _e( 'Edit ' . esc_attr( ucfirst( $labels['name'] ) ) ); ?>"> <span
+								   title="<?php _e( 'Edit ' . esc_attr( ucfirst( $labels['name'] ) ), 'rtbiz-helpdesk' ); ?>"> <span
 										class="dashicons dashicons-edit"></span></a>
 								<?php
 								// Watch/Unwatch ticket feature.
@@ -85,7 +85,7 @@ $user_edit_content = current_user_can( $cap );
 								?>
 								<a id="rthd-ticket-watch-unwatch" href="#"
 								   data-value="<?php echo $watch_unwatch_value; ?>"
-								   title="<?php _e( $watch_unwatch_label ) ?>">
+								   title="<?php _e( $watch_unwatch_label, 'rtbiz-helpdesk' ) ?>">
 									<?php
 									if ( 'watch' == $watch_unwatch_value ) {
 										echo '<span class="dashicons dashicons-email-alt rthd-gray"></span>';
@@ -97,7 +97,7 @@ $user_edit_content = current_user_can( $cap );
 									$isfav = in_array( $post->ID, rtbiz_hd_get_user_fav_ticket( get_current_user_id() ) );
 									?>
 									<a id="ticket-add-fav" href="#"
-									   title="<?php ( $isfav ) ? _e( 'Remove this ticket from favorites', RTBIZ_HD_TEXT_DOMAIN ) : _e( 'Favorite this ticket', RTBIZ_HD_TEXT_DOMAIN ) ?>"><?php
+									   title="<?php ( $isfav ) ? _e( 'Remove this ticket from favorites', 'rtbiz-helpdesk' ) : _e( 'Favorite this ticket', 'rtbiz-helpdesk' ) ?>"><?php
 										if ( $isfav ) {
 											echo '<span class="dashicons dashicons-heart"></span>';
 										} else {
@@ -143,7 +143,7 @@ $user_edit_content = current_user_can( $cap );
 						<div class="rt-hd-ticket-sub-row">
 							<div class="rthd-ticket-sidebar-sub-result clearfix">
 								<label for="rthd-assignee-list">
-									<?php _e( 'Assignee', RTBIZ_HD_TEXT_DOMAIN ); ?>
+									<?php _e( 'Assignee', 'rtbiz-helpdesk' ); ?>
 								</label>
 								<select id="rthd-assignee-list" class="rthd-ticket-dropdown" name="rt-hd-assignee">
 									<?php
@@ -177,7 +177,7 @@ $user_edit_content = current_user_can( $cap );
 								<input type="hidden" class="rthd-current-user-id"
 								       value="<?php echo get_current_user_id(); ?>"/>
 								<a style="<?php echo $assign_tome_style; ?>" href="#"
-								   class="rt-hd-assign-me"><?php _e( 'Assign me', RTBIZ_HD_TEXT_DOMAIN ); ?></a>
+								   class="rt-hd-assign-me"><?php _e( 'Assign me', 'rtbiz-helpdesk' ); ?></a>
 								<img id="assignee-change-spinner" class="helpdeskspinner"
 								     src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
 							</div>
@@ -254,7 +254,7 @@ $user_edit_content = current_user_can( $cap );
 							<div class="rt-hd-ticket-sub-row">
 								<div class="rthd-ticket-sidebar-sub-result clearfix">
 									<label for="rthd-product-list">
-										<?php _e( 'Product' ); ?>
+										<?php _e( 'Product', 'rtbiz-helpdesk' ); ?>
 									</label>
 									<?php if ( current_user_can( $cap ) ) { ?>
 										<select id="rthd-product-list" class="rthd-ticket-dropdown"
@@ -366,7 +366,7 @@ $user_edit_content = current_user_can( $cap );
 					if ( ! empty( $attachments ) ) {
 						$attach_cmt = rtbiz_hd_get_attachment_url_from_followups( $post->ID );
 						$attachFlag = true;
-						$tmphtml    = '<div class="rt-hd-sidebar-box"><div class="rt-hd-ticket-info"><h3 class="rt-hd-ticket-info-header">' . __( 'Attachments' ) . '</h3> <div class="rthd-collapse-icon"><a class="rthd-collapse-click" href="#"><span class="dashicons dashicons-arrow-up-alt2"></span></a></div><div class="rthd-clearfix"></div></div><div class="rt-hd-ticket-sub-row"><ul id="attachment-files">';
+						$tmphtml    = '<div class="rt-hd-sidebar-box"><div class="rt-hd-ticket-info"><h3 class="rt-hd-ticket-info-header">' . __( 'Attachments', 'rtbiz-helpdesk' ) . '</h3> <div class="rthd-collapse-icon"><a class="rthd-collapse-click" href="#"><span class="dashicons dashicons-arrow-up-alt2"></span></a></div><div class="rthd-clearfix"></div></div><div class="rt-hd-ticket-sub-row"><ul id="attachment-files">';
 						?>
 						<?php
 						foreach ( $attachments as $attachment ) {
@@ -455,7 +455,7 @@ $user_edit_content = current_user_can( $cap );
 					?>
 					<div class="rt-hd-sidebar-box">
 						<div class="rt-hd-ticket-info">
-							<h3 class="rt-hd-ticket-info-header"><?php echo __( 'Ticket History' ); ?></h3>
+							<h3 class="rt-hd-ticket-info-header"><?php echo __( 'Ticket History', 'rtbiz-helpdesk' ); ?></h3>
 
 							<div class="rthd-collapse-icon"><a class='rthd-collapse-click' href="#"><span
 										class="dashicons dashicons-arrow-up-alt2"></span></a></div>

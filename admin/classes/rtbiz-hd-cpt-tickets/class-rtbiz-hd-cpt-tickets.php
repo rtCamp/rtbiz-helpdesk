@@ -83,7 +83,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 		 * @return mixed
          */
 		public function add_custom_columns( $cols ){
-			$cols['rthd_ticket_title'] = __( 'Ticket', RTBIZ_HD_TEXT_DOMAIN );
+			$cols['rthd_ticket_title'] = __( 'Ticket', 'rtbiz-helpdesk' );
 			return $cols;
 		}
 
@@ -105,10 +105,10 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 			unset( $cols['date'] );
 			unset( $cols[ 'p2p-from-'.Rtbiz_HD_Module::$post_type.'_to_'.rtbiz_get_contact_post_type() ] );
 			$columns['cb'] = '<input type="checkbox" />';
-			$columns['rthd_ticket_title'] = __( 'Ticket', RTBIZ_HD_TEXT_DOMAIN );
-			$columns['rthd_ticket_status'] = '<span class="status_head tips" data-tip="' . esc_attr__( 'Status', RTBIZ_HD_TEXT_DOMAIN ) . '">' . esc_attr__( 'Status', RTBIZ_HD_TEXT_DOMAIN ) . '</span>';
-			$columns['rthd_ticket_customers'] = __( 'Customers', RTBIZ_HD_TEXT_DOMAIN );
-			$columns['rthd_ticket_staff'] = __( 'Staff', RTBIZ_HD_TEXT_DOMAIN );
+			$columns['rthd_ticket_title'] = __( 'Ticket', 'rtbiz-helpdesk' );
+			$columns['rthd_ticket_status'] = '<span class="status_head tips" data-tip="' . esc_attr__( 'Status', 'rtbiz-helpdesk' ) . '">' . esc_attr__( 'Status', 'rtbiz-helpdesk' ) . '</span>';
+			$columns['rthd_ticket_customers'] = __( 'Customers', 'rtbiz-helpdesk' );
+			$columns['rthd_ticket_staff'] = __( 'Staff', 'rtbiz-helpdesk' );
 			//			$columns['rthd_ticket_assignee'] = __( 'Assignee', RT_BIZ_HD_TEXT_DOMAIN );
 			//			$columns['rthd_ticket_created_by'] = __( 'Ticket Author', RT_BIZ_HD_TEXT_DOMAIN );
 			//			$columns['rthd_ticket_last_reply_by'] = __( 'Last Reply By', RT_BIZ_HD_TEXT_DOMAIN );
@@ -250,7 +250,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 						printf( " <a href='%s'>%s <span  class='rthd_td_show'>%s</span> ", $url, get_avatar( $user_info->user_email, 25 ), $user_info->display_name );
 						remove_filter( 'get_avatar', array( $this, 'add_gravatar_class' ) );
 					} else {
-						echo '<div>' . __( 'No assignee', RTBIZ_HD_TEXT_DOMAIN ) . '</div>';
+						echo '<div>' . __( 'No assignee', 'rtbiz-helpdesk' ) . '</div>';
 					}
 					break;
 
@@ -261,12 +261,12 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 					$comment = get_comments( array( 'post_id' => $post->ID, 'number' => 1 ) );
 					if ( ! empty( $comment ) ) {
 						$comment = $comment[0];
-						$lastreplyby = sprintf( '<span class="created-by tips" data-tip="%s">'.__( '%s', RTBIZ_HD_TEXT_DOMAIN ).'</span>', $comment->comment_date, human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) . __( ' ago' ) );
+						$lastreplyby = sprintf( '<span class="created-by tips" data-tip="%s">'.__( '%s', 'rtbiz-helpdesk' ).'</span>', $comment->comment_date, human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) . __( ' ago', 'rtbiz-helpdesk' ) );
 						add_filter( 'get_avatar', array( $this, 'add_gravatar_class' ) );
 						printf( "<div class='rthd-ticket-author'>%s <span class='rthd_td_show'>%s</span> <span class='rthd_td_show'>%s</span></div>", get_avatar( $comment->comment_author_email, 25 ), $comment->comment_author, $lastreplyby );
 						remove_filter( 'get_avatar', array( $this, 'add_gravatar_class' ) );
 					} else {
-						echo '<div style="text-align: center;">' . __( 'No reply', RTBIZ_HD_TEXT_DOMAIN ) . '</div>';
+						echo '<div style="text-align: center;">' . __( 'No reply', 'rtbiz-helpdesk' ) . '</div>';
 					}
 					break;
 
@@ -277,9 +277,9 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 				case 'rthd_ticket_title' :
 
 					if ( $can_edit_post && $post->post_status != 'trash' ) {
-						printf( __( '%s  %s', RTBIZ_HD_TEXT_DOMAIN ), '<a href="' . esc_url( get_edit_post_link( $post->ID ) ) . '"><strong>' . esc_attr( _x( '#', 'hash before order number', RTBIZ_HD_TEXT_DOMAIN ) . esc_attr( $post->ID ) ) . '</strong></a>', $post->post_title );
+						printf( __( '%s  %s', 'rtbiz-helpdesk' ), '<a href="' . esc_url( get_edit_post_link( $post->ID ) ) . '"><strong>' . esc_attr( _x( '#', 'hash before order number', 'rtbiz-helpdesk' ) . esc_attr( $post->ID ) ) . '</strong></a>', $post->post_title );
 					} else {
-						printf( __( '%s  %s', RTBIZ_HD_TEXT_DOMAIN ), '<strong>' . esc_attr( _x( '#', 'hash before order number', RTBIZ_HD_TEXT_DOMAIN ) . esc_attr( $post->ID ) ) . '</strong>', $post->post_title );
+						printf( __( '%s  %s', 'rtbiz-helpdesk' ), '<strong>' . esc_attr( _x( '#', 'hash before order number', 'rtbiz-helpdesk' ) . esc_attr( $post->ID ) ) . '</strong>', $post->post_title );
 					}
 
 					get_inline_data( $post );
@@ -288,18 +288,18 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 					if ( version_compare( $wp_version, '4.3', '<' ) ) {
 						$actions = array();
 						if ( $can_edit_post && 'trash' != $post->post_status ) {
-							$actions['edit']                 = '<a href="' . get_edit_post_link( $post->ID, true ) . '" title="' . esc_attr( __( 'Edit this item' ) ) . '">' . __( 'Edit' ) . '</a>';
-							$actions['inline hide-if-no-js'] = '<a href="#" class="editinline" title="' . esc_attr( __( 'Edit this item inline' ) ) . '">' . __( 'Quick&nbsp;Edit' ) . '</a>';
+							$actions['edit']                 = '<a href="' . get_edit_post_link( $post->ID, true ) . '" title="' . esc_attr( __( 'Edit this item', 'rtbiz-helpdesk' ) ) . '">' . __( 'Edit', 'rtbiz-helpdesk' ) . '</a>';
+							$actions['inline hide-if-no-js'] = '<a href="#" class="editinline" title="' . esc_attr( __( 'Edit this item inline', 'rtbiz-helpdesk' ) ) . '">' . __( 'Quick&nbsp;Edit', 'rtbiz-helpdesk' ) . '</a>';
 						}
 
 						if ( current_user_can( 'delete_post', $post->ID ) ) {
 							if ( 'trash' == $post->post_status ) {
-								$actions['untrash'] = "<a title='" . esc_attr( __( 'Restore this item from the Trash' ) ) . "' href='" . wp_nonce_url( admin_url( sprintf( $post_type_object->_edit_link . '&amp;action=untrash', $post->ID ) ), 'untrash-post_' . $post->ID ) . "'>" . __( 'Restore' ) . '</a>';
+								$actions['untrash'] = "<a title='" . esc_attr( __( 'Restore this item from the Trash', 'rtbiz-helpdesk' ) ) . "' href='" . wp_nonce_url( admin_url( sprintf( $post_type_object->_edit_link . '&amp;action=untrash', $post->ID ) ), 'untrash-post_' . $post->ID ) . "'>" . __( 'Restore', 'rtbiz-helpdesk' ) . '</a>';
 							} else {
-								$actions['trash'] = "<a class='submitdelete' title='" . esc_attr( __( 'Move this item to the Trash' ) ) . "' href='" . get_delete_post_link( $post->ID ) . "'>" . __( 'Trash' ) . '</a>';
+								$actions['trash'] = "<a class='submitdelete' title='" . esc_attr( __( 'Move this item to the Trash', 'rtbiz-helpdesk' ) ) . "' href='" . get_delete_post_link( $post->ID ) . "'>" . __( 'Trash', 'rtbiz-helpdesk' ) . '</a>';
 							}
 							if ( 'trash' == $post->post_status ) {
-								$actions['delete'] = "<a class='submitdelete' title='" . esc_attr( __( 'Delete this item permanently' ) ) . "' href='" . get_delete_post_link( $post->ID, '', true ) . "'>" . __( 'Delete Permanently' ) . '</a>';
+								$actions['delete'] = "<a class='submitdelete' title='" . esc_attr( __( 'Delete this item permanently', 'rtbiz-helpdesk' ) ) . "' href='" . get_delete_post_link( $post->ID, '', true ) . "'>" . __( 'Delete Permanently', 'rtbiz-helpdesk' ) . '</a>';
 							}
 						}
 						if ( $post_type_object->public ) {
@@ -308,13 +308,13 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 									$preview_link = set_url_scheme( get_permalink( $post->ID ) );
 									/** This filter is documented in wp-admin/includes/meta-boxes.php */
 									$preview_link    = apply_filters( 'preview_post_link', esc_url( add_query_arg( 'preview', 'true', $preview_link ) ), $post );
-									$actions['view'] = '<a href="' . esc_url( $preview_link ) . '" title="' . esc_attr( sprintf( __( 'Preview &#8220;%s&#8221;' ), $post->post_title ) ) . '" rel="permalink">' . __( 'Preview' ) . '</a>';
+									$actions['view'] = '<a href="' . esc_url( $preview_link ) . '" title="' . esc_attr( sprintf( __( 'Preview &#8220;%s&#8221;', 'rtbiz-helpdesk' ), $post->post_title ) ) . '" rel="permalink">' . __( 'Preview', 'rtbiz-helpdesk' ) . '</a>';
 								}
 							} elseif ( 'trash' != $post->post_status ) {
-								$actions['view'] = '<a href="' . get_permalink( $post->ID ) . '" title="' . esc_attr( sprintf( __( 'View &#8220;%s&#8221;' ), $post->post_title ) ) . '" rel="permalink">' . __( 'View' ) . '</a>';
+								$actions['view'] = '<a href="' . get_permalink( $post->ID ) . '" title="' . esc_attr( sprintf( __( 'View &#8220;%s&#8221;', 'rtbiz-helpdesk' ), $post->post_title ) ) . '" rel="permalink">' . __( 'View', 'rtbiz-helpdesk' ) . '</a>';
 							}
 						} elseif ( 'trash' != $post->post_status ) {
-							$actions['view'] = '<a href="' . get_permalink( $post->ID ) . '" title="' . esc_attr( sprintf( __( 'View &#8220;%s&#8221;' ), $post->post_title ) ) . '" rel="permalink">' . __( 'View' ) . '</a>';
+							$actions['view'] = '<a href="' . get_permalink( $post->ID ) . '" title="' . esc_attr( sprintf( __( 'View &#8220;%s&#8221;', 'rtbiz-helpdesk' ), $post->post_title ) ) . '" rel="permalink">' . __( 'View', 'rtbiz-helpdesk' ) . '</a>';
 						}
 						echo $this->row_actions( $actions );
 					}
@@ -323,7 +323,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 				case 'rthd_ticket_created_by':
 
 					$date = new DateTime( get_the_date( 'Y-m-d H:i:s' ) );
-					$datediff = human_time_diff( $date->format( 'U' ), current_time( 'timestamp' ) ) . __( ' ago' );
+					$datediff = human_time_diff( $date->format( 'U' ), current_time( 'timestamp' ) ) . __( ' ago', 'rtbiz-helpdesk' );
 					$contact = rtbiz_hd_get_ticket_creator( $post->ID );
 					$url = esc_url(
 						add_query_arg(
@@ -332,7 +332,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 								'created_by' => $contact->ID,
 									), 'edit.php' ) );
 
-									$replyby = sprintf( __( '<span class="created-by tips" data-tip="%s">%s </span>', RTBIZ_HD_TEXT_DOMAIN ), get_the_date( 'd-m-Y H:i' ), $datediff );
+									$replyby = sprintf( __( '<span class="created-by tips" data-tip="%s">%s </span>', 'rtbiz-helpdesk' ), get_the_date( 'd-m-Y H:i' ), $datediff );
 							if ( ! empty( $contact ) ) {
 								add_filter( 'get_avatar', array( $this, 'add_gravatar_class' ) );
 								printf( "<div class='rthd-ticket-author'><a href='%s'>%s <span  class='rthd_td_show'>%s</span></a> <span class='rthd_td_show'>%s</span></div>", $url, get_avatar( $contact->primary_email, 25 ), $contact->post_title, $replyby );
@@ -383,15 +383,15 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 			global $post;
 			if ( ! empty( $post ) && 'auto-draft' != $post->post_status ) {
 				remove_post_type_support( Rtbiz_HD_Module::$post_type, 'editor' );
-				add_meta_box( 'rt-hd-ticket-follow-up', __( 'Reply', RTBIZ_HD_TEXT_DOMAIN ), 'Rtbiz_HD_Ticket_Comments::ui', Rtbiz_HD_Module::$post_type, 'normal', 'high' );
+				add_meta_box( 'rt-hd-ticket-follow-up', __( 'Reply', 'rtbiz-helpdesk' ), 'Rtbiz_HD_Ticket_Comments::ui', Rtbiz_HD_Module::$post_type, 'normal', 'high' );
 			}
 
-			add_meta_box( 'rt-hd-ticket-data', __( 'Ticket Information', RTBIZ_HD_TEXT_DOMAIN ), 'Rtbiz_HD_Ticket_Info::ui', Rtbiz_HD_Module::$post_type, 'side', 'default' );
-			add_meta_box( 'rt-hd-subscriiber', __( 'Participants (Staff)', RTBIZ_HD_TEXT_DOMAIN ), 'Rtbiz_HD_Subscribers::ui', Rtbiz_HD_Module::$post_type, 'side', 'default' );
-			add_meta_box( 'rt-hd-contact', __( 'Participants (Customer)', RTBIZ_HD_TEXT_DOMAIN ), 'Rtbiz_HD_Contact::ui', Rtbiz_HD_Module::$post_type, 'side', 'default' );
-			add_meta_box( 'rt-hd-ticket-order-history', __( 'Purchase History', RTBIZ_HD_TEXT_DOMAIN ), array( $this, 'order_history' ), Rtbiz_HD_Module::$post_type, 'side', 'default' );
-			add_meta_box( 'rt-hd-ticket-contacts-blacklist', __( 'Blacklist Contacts', RTBIZ_HD_TEXT_DOMAIN ), 'Rtbiz_HD_Ticket_Contacts_Blacklist::ui', Rtbiz_HD_Module::$post_type, 'side', 'low' );
-			add_meta_box( 'rt-hd-attachment', __( 'Attachments', RTBIZ_HD_TEXT_DOMAIN ), 'Rtbiz_HD_Attachment::ui', Rtbiz_HD_Module::$post_type, 'side', 'low' );
+			add_meta_box( 'rt-hd-ticket-data', __( 'Ticket Information', 'rtbiz-helpdesk' ), 'Rtbiz_HD_Ticket_Info::ui', Rtbiz_HD_Module::$post_type, 'side', 'default' );
+			add_meta_box( 'rt-hd-subscriiber', __( 'Participants (Staff)', 'rtbiz-helpdesk' ), 'Rtbiz_HD_Subscribers::ui', Rtbiz_HD_Module::$post_type, 'side', 'default' );
+			add_meta_box( 'rt-hd-contact', __( 'Participants (Customer)', 'rtbiz-helpdesk' ), 'Rtbiz_HD_Contact::ui', Rtbiz_HD_Module::$post_type, 'side', 'default' );
+			add_meta_box( 'rt-hd-ticket-order-history', __( 'Purchase History', 'rtbiz-helpdesk' ), array( $this, 'order_history' ), Rtbiz_HD_Module::$post_type, 'side', 'default' );
+			add_meta_box( 'rt-hd-ticket-contacts-blacklist', __( 'Blacklist Contacts', 'rtbiz-helpdesk' ), 'Rtbiz_HD_Ticket_Contacts_Blacklist::ui', Rtbiz_HD_Module::$post_type, 'side', 'low' );
+			add_meta_box( 'rt-hd-attachment', __( 'Attachments', 'rtbiz-helpdesk' ), 'Rtbiz_HD_Attachment::ui', Rtbiz_HD_Module::$post_type, 'side', 'low' );
 			//          add_meta_box( 'rt-hd-external-link', __( 'Reference Links', RT_BIZ_HD_TEXT_DOMAIN ), 'Rtbiz_HD_External_Link::ui', Rt_HD_Module::$post_type, 'side', 'default' );
 		}
 
@@ -738,7 +738,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 			if ( $is_editor ) {
 				if ( isset( $_GET['author'] ) && ( $_GET['author'] == $current_user_id ) ) {
 					$class = ' class="current"'; $current_all = false;} else { 					$class = ''; }
-				$temp_view['mine'] = "<a href='edit.php?post_type=" . Rtbiz_HD_Module::$post_type . "&author=$current_user_id' $class>" . sprintf( _nx( 'Mine <span class="count">(%s)</span>', 'Mine <span class="count">(%s)</span>', $count_user_tickets->found_posts, RTBIZ_HD_TEXT_DOMAIN ), number_format_i18n( $count_user_tickets->post_count ) ) . '</a>';
+				$temp_view['mine'] = "<a href='edit.php?post_type=" . Rtbiz_HD_Module::$post_type . "&author=$current_user_id' $class>" . sprintf( _nx( 'Mine <span class="count">(%s)</span>', 'Mine <span class="count">(%s)</span>', $count_user_tickets->found_posts, 'rtbiz-helpdesk', 'rtbiz-helpdesk' ), number_format_i18n( $count_user_tickets->post_count ) ) . '</a>';
 			} else {
 				unset( $views['all'] );
 			}
@@ -747,7 +747,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 			if ( ! empty( $fav_ticket ) ) {
 				if ( isset( $_GET['favorite'] ) ) {
 					$class = ' class="current"'; $current_all = false; } else { 					$class = ''; }
-				$temp_view['favorite_ticket'] = "<a href='edit.php?post_type=" . Rtbiz_HD_Module::$post_type . "&favorite=true' $class>" . sprintf( _nx( 'Favorite <span class="count">(%s)</span>', 'Favorites <span class="count">(%s)</span>', count( $fav_ticket ), RTBIZ_HD_TEXT_DOMAIN ), number_format_i18n( count( $fav_ticket ) ) ) . '</a>';
+				$temp_view['favorite_ticket'] = "<a href='edit.php?post_type=" . Rtbiz_HD_Module::$post_type . "&favorite=true' $class>" . sprintf( _nx( 'Favorite <span class="count">(%s)</span>', 'Favorites <span class="count">(%s)</span>', count( $fav_ticket ), 'rtbiz-helpdesk', 'rtbiz-helpdesk' ), number_format_i18n( count( $fav_ticket ) ) ) . '</a>';
 			}
 
 			$contacts = rtbiz_hd_get_user_subscribe_ticket( get_current_user_id() );
@@ -758,7 +758,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 				} else {
 					$class = '';
 				}
-				$temp_view['subscribe_ticket'] = "<a href='edit.php?post_type=" . Rtbiz_HD_Module::$post_type . "&subscribed=true' $class>" . sprintf( _nx( 'Subscribed <span class="count">(%s)</span>', 'Subscribed <span class="count">(%s)</span>', count( $contacts ), RTBIZ_HD_TEXT_DOMAIN ), number_format_i18n( count( $contacts ) ) ) . '</a>';
+				$temp_view['subscribe_ticket'] = "<a href='edit.php?post_type=" . Rtbiz_HD_Module::$post_type . "&subscribed=true' $class>" . sprintf( _nx( 'Subscribed <span class="count">(%s)</span>', 'Subscribed <span class="count">(%s)</span>', count( $contacts ), 'rtbiz-helpdesk','rtbiz-helpdesk' ), number_format_i18n( count( $contacts ) ) ) . '</a>';
 			}
 
 			//remove count for editor
@@ -807,7 +807,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 			if ( Rtbiz_HD_Module::$post_type == $typenow ) {
 
 				// Filter by status
-				echo '<label class="screen-reader-text" for="ticket_status">' . __( 'Filter by status' ) . '</label>';
+				echo '<label class="screen-reader-text" for="ticket_status">' . __( 'Filter by status','rtbiz-helpdesk' ) . '</label>';
 
 				$statuses = $rtbiz_hd_module->get_custom_statuses();
 
@@ -824,7 +824,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 				echo '</select>';
 
 				// Filter by assignee
-				echo '<label class="screen-reader-text" for="ticket_assigned">' . __( 'Filter by assignee' ) . '</label>';
+				echo '<label class="screen-reader-text" for="ticket_assigned">' . __( 'Filter by assignee', 'rtbiz-helpdesk' ) . '</label>';
 
 				$ticket_authors = Rtbiz_HD_Utils::get_hd_rtcamp_user();
 
@@ -848,7 +848,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 				}
 
 				if ( ! empty( $products ) ) {
-					echo '<label class="screen-reader-text" for="rt_product">' . __( 'Filter by product' ) . '</label>';
+					echo '<label class="screen-reader-text" for="rt_product">' . __( 'Filter by product', 'rtbiz-helpdesk' ) . '</label>';
 
 					echo '<select id="' . Rt_Products::$product_slug . '" class="postform" name="' . Rt_Products::$product_slug . '">';
 					echo '<option value="0">Select Product</option>';
@@ -869,7 +869,7 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 						$attr_tax = $rtbiz_hd_rt_attributes->get_taxonomy_name( $attr->attribute_name );
 						$attr_terms = get_terms( $attr_tax, array( 'hide_empty' => false ) );
 						if ( ! empty( $attr_terms ) ) {
-							echo '<label class="screen-reader-text" for="' . $attr_tax . '">' . __( 'Filter by '.$attr->attribute_label ) . '</label>';
+							echo '<label class="screen-reader-text" for="' . $attr_tax . '">' . __( 'Filter by '.$attr->attribute_label, 'rtbiz-helpdesk' ) . '</label>';
 
 							echo '<select id="' . $attr->attribute_name . '" class="postform" name="' . $attr_tax . '">';
 							echo '<option value="0">Select ' . $attr->attribute_label . '</option>';

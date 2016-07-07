@@ -114,8 +114,8 @@ global $rtbiz_hd_plugin_check;
 $plugins_dependency = array(
 	'rtbiz' => array(
 		'project_type' => 'all',
-		'name'         => esc_html__( 'rtBiz', RTBIZ_HD_TEXT_DOMAIN ),
-		'desc' => esc_html__( 'WordPress for Business.', RTBIZ_HD_TEXT_DOMAIN ),
+		'name'         => esc_html__( 'rtBiz', 'rtbiz-helpdesk' ),
+		'desc' => esc_html__( 'WordPress for Business.', 'rtbiz-helpdesk' ),
 		'active' => class_exists( 'Rt_Biz' ),
 		'filename' => 'rtbiz.php',
 	),
@@ -163,7 +163,7 @@ function _rtbiz_hd_php_version_check(){
 
 function _rtbiz_hd_running_older_php_version(){ ?>
 	<div class="error rtbiz-hd-php-older-version">
-		<p><?php _e( 'You are running an older PHP version. Please upgrade to PHP <strong>5.3 or above</strong> to run rtBiz Helpdesk plugin.', RTBIZ_HD_TEXT_DOMAIN ) ?></p>
+		<p><?php _e( 'You are running an older PHP version. Please upgrade to PHP <strong>5.3 or above</strong> to run rtBiz Helpdesk plugin.', 'rtbiz-helpdesk' ) ?></p>
 	</div> <?php
 }
 

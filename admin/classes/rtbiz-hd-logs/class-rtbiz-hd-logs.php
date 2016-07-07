@@ -27,10 +27,10 @@ if ( ! class_exists( 'Rtbiz_HD_Logs' ) ) {
 			if ( ! isset( $_REQUEST['generate_log'] ) ) {
 				?>
 				<p class="redux-container-multi_text rthd_log"><span
-						class="redux-multi-text-remove" style="margin-left: 0;"><?php _e( 'Log generation is a heavy process. So please be patient.' ); ?></span>
+						class="redux-multi-text-remove" style="margin-left: 0;"><?php _e( 'Log generation is a heavy process. So please be patient.','rtbiz-helpdesk' ); ?></span>
 				</p>
 				<a class="button rthd-generate-log-button"
-				   href="<?php echo esc_url( add_query_arg( 'generate_log', 'yes' ) ); ?>"><?php _e( 'Generate Log' ); ?></a>
+				   href="<?php echo esc_url( add_query_arg( 'generate_log', 'yes' ) ); ?>"><?php _e( 'Generate Log','rtbiz-helpdesk' ); ?></a>
 				<?php
 				return;
 			}
@@ -111,10 +111,10 @@ if ( ! class_exists( 'Rtbiz_HD_Logs' ) ) {
 				<thead>
 				<tr>
 					<th>
-						<?php _e( 'Transaction Id', RTBIZ_HD_TEXT_DOMAIN ); ?>
+						<?php _e( 'Transaction Id', 'rtbiz-helpdesk' ); ?>
 					</th>
 										<th>
-											<?php _e( 'Form name', RTBIZ_HD_TEXT_DOMAIN ); ?>
+											<?php _e( 'Form name', 'rtbiz-helpdesk' ); ?>
 										</th>
 		<!--			<th>
 						<?php /*_e( 'First Date', RTBIZ_HD_TEXT_DOMAIN ); */?>
@@ -123,7 +123,7 @@ if ( ! class_exists( 'Rtbiz_HD_Logs' ) ) {
 						<?php /*_e( 'Last Date', RTBIZ_HD_TEXT_DOMAIN ); */?>
 					</th>-->
 					<th>
-						<?php _e( 'Post Count', RTBIZ_HD_TEXT_DOMAIN ); ?>
+						<?php _e( 'Post Count', 'rtbiz-helpdesk' ); ?>
 					</th>
 				<!--	<th>
 						<?php /*_e( 'Taxonomy Count', RTBIZ_HD_TEXT_DOMAIN ); */?>

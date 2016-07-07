@@ -56,7 +56,7 @@ if ( ! empty( $created_by ) ) {
 									original email</a> |
 							<?php } ?>
 						<?php } ?>
-						<?php echo '<a class="followup-hash-url" id="ticket_description' . '" href="#ticket_description" >' . __( 'Created ' ) . esc_attr( human_time_diff( strtotime( $post->post_date ), current_time( 'timestamp' ) ) ) . ' ago</a>'; ?>
+						<?php echo '<a class="followup-hash-url" id="ticket_description' . '" href="#ticket_description" >' . __( 'Created ', 'rtbiz-helpdesk' ) . esc_attr( human_time_diff( strtotime( $post->post_date ), current_time( 'timestamp' ) ) ) . ' ago</a>'; ?>
 					</time>
 				</div>
 				<?php
@@ -88,7 +88,7 @@ if ( ! empty( $created_by ) ) {
 <!--				<span class="load-more-count">more</span>-->
 				<span class="dashicons dashicons-arrow-down-alt2"></span>
 			</a>
-			<a href="#" class="load-more" id="followup-load-more"> <?php echo sprintf( _n( '%s Older reply', '%s Older replies', $offset, RTBIZ_HD_TEXT_DOMAIN ), $offset ); ?></a>
+			<a href="#" class="load-more" id="followup-load-more"> <?php echo sprintf( _n( '%s Older reply', '%s Older replies', $offset, 'rtbiz-helpdesk' ), $offset ); ?></a>
 		</li>
 		<li class="load-more-spinner-li">
 			<div class="rthdcenter"><img id="load-more-hdspinner" class="helpdeskspinner"
@@ -119,8 +119,8 @@ if ( ! empty( $created_by ) ) {
 		<?php if ( $staffonly ) { ?>
 
 			<ui id="followup-type-list" class="followup-tabs">
-				<li id="tab-<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC; ?>" class="tab active" data-ctype="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC; ?>"><?php _e('Public Reply', RTBIZ_HD_TEXT_DOMAIN) ?></li>
-				<li id="tab-<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF; ?>" class="tab" data-ctype="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF; ?>"><?php _e('Staff Note', RTBIZ_HD_TEXT_DOMAIN) ?></li>
+				<li id="tab-<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC; ?>" class="tab active" data-ctype="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC; ?>"><?php _e('Public Reply', 'rtbiz-helpdesk') ?></li>
+				<li id="tab-<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF; ?>" class="tab" data-ctype="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF; ?>"><?php _e('Staff Note', 'rtbiz-helpdesk') ?></li>
 			</ui>
 
 		<?php } ?>
@@ -132,7 +132,7 @@ if ( ! empty( $created_by ) ) {
 				<span class="rthd-tooltip rthd-followup-content-tolltip">
 					Markdown & HTML support
 					<span class="rthd-tip-bottom"><?php
-						_e( 'You may use Markdown syntax and these HTML tags - a, abbr, acronym, b, blockquote, cite, code, del, em, i, q, s, strike and strong', RTBIZ_HD_TEXT_DOMAIN ); ?>
+						_e( 'You may use Markdown syntax and these HTML tags - a, abbr, acronym, b, blockquote, cite, code, del, em, i, q, s, strike and strong', 'rtbiz-helpdesk' ); ?>
 					</span>
 				</span>
 		</div>
@@ -156,11 +156,11 @@ if ( ! empty( $created_by ) ) {
 			<div class="rthd-sensitive-wrap" <?php echo $rthd_sensitive_style; ?> >
 				<label for="rthd_sensitive">
 					<input id="rthd_sensitive" type="checkbox" name="followup_sensitive"
-					       value="true"/>&nbsp;<?php _e( 'Mark this as Sensitive' ); ?>
+					       value="true"/>&nbsp;<?php _e( 'Mark this as Sensitive', 'rtbiz-helpdesk' ); ?>
 					<span class="rthd-tooltip rthd-followup-type-tolltip">
 							<i class="dashicons dashicons-info rtmicon"></i>
 							<span class="rthd-tip"><?php
-								_e( 'Email notification will not show content of this followup. Recommended, if you are sharing password or other sensitive information.', RTBIZ_HD_TEXT_DOMAIN ); ?>
+								_e( 'Email notification will not show content of this followup. Recommended, if you are sharing password or other sensitive information.', 'rtbiz-helpdesk' ); ?>
 							</span>
 						</span>
 				</label>
@@ -194,7 +194,7 @@ if ( $user_edit_content ) {
 					<span class="rthd-tooltip rthd-followup-content-tolltip">
 						Markdown & HTML support
 						<span class="rthd-tip-bottom"><?php
-		_e( 'You may use Markdown syntax and these HTML tags - a, abbr, acronym, b, blockquote, cite, code, del, em, i, q, s, strike and strong', RTBIZ_HD_TEXT_DOMAIN ); ?>
+		_e( 'You may use Markdown syntax and these HTML tags - a, abbr, acronym, b, blockquote, cite, code, del, em, i, q, s, strike and strong', 'rtbiz-helpdesk' ); ?>
 						</span>
 					</span>
 			</div>
@@ -212,4 +212,3 @@ if ( $user_edit_content ) {
 		<button class="btn button-secondary  close-edit-content">Close</button>
 	</div>
 <?php } ?>
-

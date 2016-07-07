@@ -59,7 +59,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 		}
 
 		public function contact_custom_metabox( ) {
-			add_meta_box( 'rthd-ticket-listing', __( 'Tickets' ), array(
+			add_meta_box( 'rthd-ticket-listing', __( 'Tickets', 'rtbiz-helpdesk' ), array(
 				$this,
 				'rthd_ticket_listing_metabox',
 			), rtbiz_get_contact_post_type(), 'normal', 'default' );
@@ -128,22 +128,22 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 			if ( ! empty( $_REQUEST['module'] ) && RTBIZ_HD_TEXT_DOMAIN == $_REQUEST['module'] && isset( $_REQUEST['contact_group'] ) ) {
 				if ( 'staff' == $_REQUEST['contact_group'] ) {
 					if ( ! isset( $_GET['role'] ) ) { $class = ' class="current"'; } else { $class = ''; }
-					$temp_view['All'] = "<a href='edit.php?post_type=" . rtbiz_get_contact_post_type() . '&contact_group=staff&module=' . RTBIZ_HD_TEXT_DOMAIN . "' $class>" . __( 'All' ) . '</a>';
+					$temp_view['All'] = "<a href='edit.php?post_type=" . rtbiz_get_contact_post_type() . '&contact_group=staff&module=' . RTBIZ_HD_TEXT_DOMAIN . "' $class>" . __( 'All', 'rtbiz-helpdesk' ) . '</a>';
 					if ( isset( $_GET['role'] ) && 'admin' == $_GET['role'] ) { $class = ' class="current"'; } else { $class = ''; }
-					$temp_view['Admin'] = "<a href='edit.php?post_type=" . rtbiz_get_contact_post_type() . '&contact_group=staff&module=' . RTBIZ_HD_TEXT_DOMAIN . "&role=admin' $class>" . __( 'Admin' ) . '</a>';
+					$temp_view['Admin'] = "<a href='edit.php?post_type=" . rtbiz_get_contact_post_type() . '&contact_group=staff&module=' . RTBIZ_HD_TEXT_DOMAIN . "&role=admin' $class>" . __( 'Admin', 'rtbiz-helpdesk' ) . '</a>';
 					if ( isset( $_GET['role'] ) && 'editor' == $_GET['role'] ) { $class = ' class="current"'; } else { $class = ''; }
-					$temp_view['Editor'] = "<a href='edit.php?post_type=" . rtbiz_get_contact_post_type() . '&contact_group=staff&module=' . RTBIZ_HD_TEXT_DOMAIN . "&role=editor' $class>" . __( 'Editor' ) . '</a>';
+					$temp_view['Editor'] = "<a href='edit.php?post_type=" . rtbiz_get_contact_post_type() . '&contact_group=staff&module=' . RTBIZ_HD_TEXT_DOMAIN . "&role=editor' $class>" . __( 'Editor', 'rtbiz-helpdesk' ) . '</a>';
 					if ( isset( $_GET['role'] ) && 'author' == $_GET['role'] ) { $class = ' class="current"'; } else { $class = ''; }
-					$temp_view['Author'] = "<a href='edit.php?post_type=" . rtbiz_get_contact_post_type() . '&contact_group=staff&module=' . RTBIZ_HD_TEXT_DOMAIN . "&role=author' $class>" . __( 'Author' ) . '</a>';
+					$temp_view['Author'] = "<a href='edit.php?post_type=" . rtbiz_get_contact_post_type() . '&contact_group=staff&module=' . RTBIZ_HD_TEXT_DOMAIN . "&role=author' $class>" . __( 'Author', 'rtbiz-helpdesk' ) . '</a>';
 				} elseif ( 'customer' == $_REQUEST['contact_group'] ) {
 					if ( ! isset( $_GET['tickets'] ) ) { $class = ' class="current"'; } else { $class = ''; }
-					$temp_view['All'] = "<a href='edit.php?post_type=" . rtbiz_get_contact_post_type() . '&contact_group=customer&module=' . RTBIZ_HD_TEXT_DOMAIN . "' $class>" . __( 'All' ) . '</a>';
+					$temp_view['All'] = "<a href='edit.php?post_type=" . rtbiz_get_contact_post_type() . '&contact_group=customer&module=' . RTBIZ_HD_TEXT_DOMAIN . "' $class>" . __( 'All', 'rtbiz-helpdesk' ) . '</a>';
 					//$temp_view['All'] = "<a href='edit.php?post_type=" . rtbiz_get_contact_post_type() . "&contact_group=customer&module=" . RT_BIZ_HD_TEXT_DOMAIN . "&tickets=all' $class>" . sprintf( _nx( 'All <span class="count">(%s)</span>', 'All <span class="count">(%s)</span>', 0, RT_BIZ_HD_TEXT_DOMAIN ), number_format_i18n( 0 ) ) . '</a>';
 					if ( isset( $_GET['tickets'] ) && 'yes' == $_GET['tickets'] ) { $class = ' class="current"'; } else { $class = ''; }
-					$temp_view['With_Ticket'] = "<a href='edit.php?post_type=" . rtbiz_get_contact_post_type() . '&contact_group=customer&module=' . RTBIZ_HD_TEXT_DOMAIN . "&tickets=yes' $class>" . __( 'With Tickets' ) . '</a>';
+					$temp_view['With_Ticket'] = "<a href='edit.php?post_type=" . rtbiz_get_contact_post_type() . '&contact_group=customer&module=' . RTBIZ_HD_TEXT_DOMAIN . "&tickets=yes' $class>" . __( 'With Tickets', 'rtbiz-helpdesk' ) . '</a>';
 					//$temp_view['With_Ticket'] = "<a href='edit.php?post_type=" . rtbiz_get_contact_post_type() . "&contact_group=customer&module=" . RT_BIZ_HD_TEXT_DOMAIN . "&tickets=yes' $class>" . sprintf( _nx( 'With Tickets <span class="count">(%s)</span>', 'With Tickets <span class="count">(%s)</span>', 0, RT_BIZ_HD_TEXT_DOMAIN ), number_format_i18n( 0 ) ) . '</a>';
 					if ( isset( $_GET['tickets'] ) && 'no' == $_GET['tickets'] ) { $class = ' class="current"'; } else { $class = ''; }
-					$temp_view['Without_Ticket'] = "<a href='edit.php?post_type=" . rtbiz_get_contact_post_type() . '&contact_group=customer&module=' . RTBIZ_HD_TEXT_DOMAIN . "&tickets=no' $class>" . __( 'Without Tickets' ) . '</a>';
+					$temp_view['Without_Ticket'] = "<a href='edit.php?post_type=" . rtbiz_get_contact_post_type() . '&contact_group=customer&module=' . RTBIZ_HD_TEXT_DOMAIN . "&tickets=no' $class>" . __( 'Without Tickets', 'rtbiz-helpdesk' ) . '</a>';
 					//$temp_view['Without_Ticket'] = "<a href='edit.php?post_type=" . rtbiz_get_contact_post_type() . "&contact_group=customer&module=" . RT_BIZ_HD_TEXT_DOMAIN . "&tickets=no' $class>" . sprintf( _nx( 'Without Tickets <span class="count">(%s)</span>', 'Without Tickets <span class="count">(%s)</span>', 0, RT_BIZ_HD_TEXT_DOMAIN ), number_format_i18n( 0 ) ) . '</a>';
 				}
 				$views = $temp_view;
@@ -256,18 +256,18 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 
 			if ( ! empty( $label ) ) {
 				$labels = array(
-					'name'               => __( $labelp ),
-					'singular_name'      => __( $label ),
-					'menu_name'          => __( $labelp ),
-					'all_items'          => __( 'All ' . $labelp ),
-					'add_new'            => __( 'New ' . $label ),
-					'add_new_item'       => __( 'Add ' . $label ),
-					'edit_item'          => __( 'Edit ' . $label ),
-					'new_item'           => __( 'New ' . $label ),
-					'view_item'          => __( 'View ' . $label ),
-					'search_items'       => __( 'Search ' . $label ),
-					'not_found'          => __( 'No ' . $label . ' found' ),
-					'not_found_in_trash' => __( 'No ' . $label . ' found in Trash' ),
+					'name'               => __( $labelp, 'rtbiz-helpdesk' ),
+					'singular_name'      => __( $label, 'rtbiz-helpdesk' ),
+					'menu_name'          => __( $labelp, 'rtbiz-helpdesk' ),
+					'all_items'          => __( 'All ' . $labelp, 'rtbiz-helpdesk' ),
+					'add_new'            => __( 'New ' . $label, 'rtbiz-helpdesk' ),
+					'add_new_item'       => __( 'Add ' . $label, 'rtbiz-helpdesk' ),
+					'edit_item'          => __( 'Edit ' . $label, 'rtbiz-helpdesk' ),
+					'new_item'           => __( 'New ' . $label, 'rtbiz-helpdesk' ),
+					'view_item'          => __( 'View ' . $label, 'rtbiz-helpdesk' ),
+					'search_items'       => __( 'Search ' . $label, 'rtbiz-helpdesk' ),
+					'not_found'          => __( 'No ' . $label . ' found', 'rtbiz-helpdesk' ),
+					'not_found_in_trash' => __( 'No ' . $label . ' found in Trash', 'rtbiz-helpdesk' ),
 				);
 			}
 
@@ -319,7 +319,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 					<?php $selected = ( isset( $_REQUEST['contact_group'] ) && 'staff' == $_REQUEST['contact_group'] ) ? 'Checked="Checked"' : ''; ?>
 					<label><input type="checkbox" id="rtbiz_is_staff_member" <?php echo $selected; ?>
 					              name="rtbiz_is_staff_member" value="yes"><span
-							class="checkbox-title"><?php _e( 'Staff Member ', RTBIZ_HD_TEXT_DOMAIN ) ?></span></label>
+							class="checkbox-title"><?php _e( 'Staff Member ', 'rtbiz-helpdesk' ) ?></span></label>
 				</div>
 				<div id="rtbiz-permission-container" class="inline-edit-col <?php if ( ! $selected ) {
 					echo 'rtbiz-hide'; } ?> ">
@@ -497,8 +497,8 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 			if ( rtbiz_hd_get_redux_adult_filter() ) {
 				$fields[] = array(
 					'key'      => 'rthd_contact_adult_filter',
-					'text'     => __( 'Don\'t show Adult content' ),
-					'label'    => __( 'Helpdesk Content Preference' ),
+					'text'     => __( 'Don\'t show Adult content', 'rtbiz-helpdesk' ),
+					'label'    => __( 'Helpdesk Content Preference', 'rtbiz-helpdesk' ),
 					'type'     => 'checkbox',
 					'name'     => 'contact_meta[rthd_contact_adult_filter]',
 					'id'       => 'rthd_contact_adult_filter',
@@ -507,8 +507,8 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 			};
 			$fields[] = array(
 				'key'      => 'rthd_receive_notification',
-				'text'     => __( 'Turn Off Event Notification' ),
-				'label'    => __( 'Helpdesk Notification Preference' ),
+				'text'     => __( 'Turn Off Event Notification', 'rtbiz-helpdesk' ),
+				'label'    => __( 'Helpdesk Notification Preference', 'rtbiz-helpdesk' ),
 				'type'     => 'checkbox',
 				'name'     => 'contact_meta[rthd_receive_notification]',
 				'id'       => 'rthd_receive_notification',
@@ -562,7 +562,7 @@ if ( ! class_exists( 'Rtbiz_HD_Contacts' ) ) {
 			}
 
 			$columns[ Rtbiz_HD_Module::$post_type ] = $rtbiz_hd_module->labels['all_items'];
-			$columns[ 'rtbiz_hd_ticket' ] = __( 'Role', RTBIZ_HD_TEXT_DOMAIN );
+			$columns[ 'rtbiz_hd_ticket' ] = __( 'Role', 'rtbiz-helpdesk' );
 
 			return $columns;
 		}
