@@ -44,7 +44,7 @@ if ( ! class_exists( 'Rtbiz_HD_i18n' ) ) {
 		public function load_plugin_textdomain() {
 
 			// Set filter for plugin's languages directory
-			$lang_dir = dirname( plugin_basename( RTBIZ_HD_PATH ) ) . 'languages/';
+			$lang_dir = basename( RTBIZ_HD_PATH ) . '/languages/';
 			$lang_dir = apply_filters( 'rtbiz_languages_directory', $lang_dir );
 
 			// Traditional WordPress plugin locale filter
