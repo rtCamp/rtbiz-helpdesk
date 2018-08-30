@@ -906,8 +906,9 @@ function rtbiz_hd_status_markup( $pstatus ) {
 	if ( false !== $key ) {
 		$pstatus = ucfirst( $post_statuses[ $key ]['name'] );
 		$tstatus = $post_statuses[ $key ]['slug'];
+		$bgcolor = $post_statuses[ $key ]['color'];
 
-		return '<mark class="rt' . $tstatus . ' rthd-status tips" data-tip="' . $pstatus . '">' . $pstatus . '</mark>';
+		return '<mark class="rt' . esc_attr( $tstatus ) . ' rthd-status tips" data-tip="' . esc_attr( $pstatus ) . '" style="background-color: ' . esc_attr( $bgcolor ) . '; border-color: ' . esc_attr( $bgcolor ) . '">' . esc_html( $pstatus ) . '</mark>';
 	}
 
 	return '';

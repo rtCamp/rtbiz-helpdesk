@@ -26,7 +26,47 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Operation' ) ) {
 		public function __construct() {
 			Rtbiz_HD::$loader->add_action( 'transition_post_status', $this, 'ticket_status_changed', 10, 3 );
 			Rtbiz_HD::$loader->add_action( 'rtbiz_hd_before_send_notification', $this, 'before_send_notification' );
+
+			// Send mail on ticket status change.
+			Rtbiz_HD::$loader->add_action( 'rthd_ticket_status_changed', $this, 'send_mail_status_change', 10, 3 );
 			Rtbiz_HD::$loader->add_action( 'rt_hd_process_' . Rtbiz_HD_Module::$post_type . '_meta', $this, 'before_send_notification', 20 );
+		}
+
+
+		/**
+		 * Hooked to `rthd_ticket_status_changed` action in `ticket_status_changed` function.
+		 *
+		 * @param string $old_status Old status.
+		 * @param string $new_status New Status.
+		 * @param object $post       Post object.
+		 *
+		 * @return bool
+		 */
+		public function send_mail_status_change( $old_status, $new_status, $post ) {
+			if ( empty( $post->post_author ) ) {
+				return false;
+			}
+
+			$term = get_term_by( 'slug', $post->post_status, 'rtbiz_helpdesk_post_status' );
+			if ( empty( $term ) ) {
+				return false;
+			}
+
+			$term_meta = get_term_meta( $term->term_id, 'rtbiz_hd_post_status_data', true );
+			if ( empty( $term_meta['email_template'] ) ) {
+				return false;
+			}
+
+			$user = get_userdata( $post->post_author );
+			if ( empty( $user ) ) {
+				return false;
+			}
+
+			$sent = wp_mail( 'siddharthantikekar@gmail.com', 'Ticket status changed', $term_meta['email_template'] );
+			if ( ! $sent ) {
+				error_log( 'Unable to send mail' );
+			}
+			return $sent;
 		}
 
 		/**
@@ -87,6 +127,17 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Operation' ) ) {
 		}
 
 		public function ticket_status_changed( $new_status, $old_status, $post ) {
+			if ( $new_status !== $old_status ) {
+				/**
+				 * Call this action when ticket status gets changed.
+				 *
+				 * @param string $old_status Old status.
+				 * @param string $new_status New status.
+				 * @param object $post		 Post object.
+				 */
+				do_action( 'rthd_ticket_status_changed', $old_status, $new_status, $post );
+			}
+
 			global $rtbiz_hd_ticket_index_model, $rtbiz_hd_ticket_history_model;
 			if ( $post->post_type == Rtbiz_HD_Module::$post_type ) {
 				$rtbiz_hd_ticket_index_model->update_ticket_status( $new_status, $post->ID );

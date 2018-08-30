@@ -50,7 +50,6 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 		 */
 		public function __construct() {
 			$this->get_custom_labels();
-			$this->get_custom_statuses();
 			Rtbiz_HD::$loader->add_action( 'init', $this, 'init_hd' );
 			Rtbiz_HD::$loader->add_action( 'rt_db_update_finished', $this, 'db_ticket_table_update' );
 
@@ -79,10 +78,71 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 
 			Rtbiz_HD::$loader->add_action( 'wp_before_admin_bar_render', $this, 'ticket_chnage_action_publish_update', 11 );
 
+			// Add custom fields on rtbiz_helpdesk_post_status taxonomy.
+			Rtbiz_HD::$loader->add_action( 'rtbiz_helpdesk_post_status_edit_form_fields', $this, 'add_custom_field_on_post_status' );
+
+			// Save custom fields of rtbiz_helpdesk_post_status taxonomy.
+			Rtbiz_HD::$loader->add_action( 'edited_rtbiz_helpdesk_post_status', $this, 'save_custom_field_post_status' );
+
 			if ( rtbiz_hd_get_redux_adult_filter() && isset( $_GET['post_type'] ) && $_GET['post_type'] == self::$post_type ) {
 				Rtbiz_HD::$loader->add_action( 'parse_query', $this, 'adult_post_filter' );
 			}
 		}
+
+
+		/**
+		 * Save custom field values in term_meta.
+		 *
+		 * @param int $term_id Current term id.
+		 */
+		public function save_custom_field_post_status( $term_id ) {
+			$email_template = wp_kses_post( filter_input( INPUT_POST, 'email_template' ) );
+			$color          = sanitize_hex_color( filter_input( INPUT_POST, 'post_status_color', FILTER_SANITIZE_STRING ) );
+			$data           = array();
+			if ( ! empty( $email_template ) ) {
+				$data['email_template'] = $email_template;
+			}
+			if ( ! empty( $color ) ) {
+				$data['color'] = $color;
+			}
+
+			if ( empty( $data ) ) {
+				delete_term_meta( $term_id, 'rtbiz_hd_post_status_data' );
+			} else {
+				update_term_meta( $term_id, 'rtbiz_hd_post_status_data', $data );
+			}
+		}
+
+
+		/**
+		 * Add custom fields on rtbiz_helpdesk_post_status taxonomy.
+		 *
+		 * @param object $term Term object.
+		 */
+		public function add_custom_field_on_post_status( $term ) {
+			$data = get_term_meta( $term->term_id, 'rtbiz_hd_post_status_data', true );
+			?>
+			<tr class="form-field">
+				<th scope="row" valign="top">
+					<label for="email_template"><?php esc_html_e('Email Template'); ?></label>
+				</th>
+				<td>
+					<textarea name="email_template" id="email_template" rows="5" cols="50" class="large-text"><?php echo ( ! empty( $data['email_template'] ) ) ? wp_kses_post( $data['email_template'] ) : ''; ?></textarea>
+					<p class="description"><?php esc_html_e('Email template associated with this post status. Mail will not get send if empty.'); ?></p>
+				</td>
+			</tr>
+			<tr class="form-field">
+				<th scope="row" valign="top">
+					<label for="post_status_color"><?php esc_html_e('Post Status Color'); ?></label>
+				</th>
+				<td>
+					<input type="color" name="post_status_color" id="post_status_color" value="<?php echo ( ! empty( $data['color'] ) ) ? esc_html( $data['color'] ) : ''; ?>">
+					<p class="description"><?php esc_html_e('Background-color for post status.'); ?></p>
+				</td>
+			</tr>
+			<?php
+		}
+
 
 		/**
 		 * get rtbiz-HelpDesk CPT [ Ticket ] labels
@@ -112,6 +172,42 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 
 
 		/**
+		 * Register rtbiz_helpdesk_post_status taxonomy.
+		 */
+		public function register_custom_status_taxonomy() {
+			register_taxonomy(
+				'rtbiz_helpdesk_post_status',
+				self::$post_type,
+				array(
+					'labels'            => array(
+						'name'                       => __( 'Post Status', 'rtbiz-helpdesk' ),
+						'singular_name'              => __( 'Post Status', 'rtbiz-helpdesk' ),
+						'all_items'                  => __( 'All Post Status', 'rtbiz-helpdesk' ),
+						'edit_item'                  => __( 'Edit Post Status', 'rtbiz-helpdesk' ),
+						'view_item'                  => __( 'View Post Status', 'rtbiz-helpdesk' ),
+						'update_item'                => __( 'Update Post Status', 'rtbiz-helpdesk' ),
+						'add_new_item'               => __( 'Add New Post Status', 'rtbiz-helpdesk' ),
+						'new_item_name'              => __( 'New Post Status Name', 'rtbiz-helpdesk' ),
+						'search_items'               => __( 'Search Post Status', 'rtbiz-helpdesk' ),
+						'separate_items_with_commas' => __( 'Separate Post Status with commas', 'rtbiz-helpdesk' ),
+						'choose_from_most_used'      => __( 'Choose from the most used Post Status', 'rtbiz-helpdesk' ),
+						'not_found'                  => __( 'No Post Status found', 'rtbiz-helpdesk' ),
+						'back_to_items'              => __( 'Back to Post Status', 'rtbiz-helpdesk' ),
+					),
+					'public'             => false,
+					'show_ui'            => true,
+					'show_in_quick_edit' => false,
+					'meta_box_cb'        => false,
+					'show_in_menu'       => true,
+					'show_in_rest'       => false,
+					'show_in_nav_menus'  => false,
+				)
+			);
+			register_taxonomy_for_object_type( 'rtbiz_helpdesk_post_status', self::$post_type );
+		}
+
+
+		/**
 		 * get rtbiz-HelpDesk CPT [ Ticket ] statuses
 		 *
 		 * @since 0.1
@@ -119,23 +215,37 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 		 * @return array
 		 */
 		public function get_custom_statuses() {
-			$this->statuses = array(
+			if ( empty( $this->statuses ) ) {
+				$this->statuses = $this->set_custom_statuses();
+			}
+
+			return $this->statuses;
+		}
+
+		/**
+		 * Set statuses to $this->statuses.
+		 *
+		 * @return array
+		 */
+		public function set_custom_statuses() {
+			$statuses = get_terms(
 				array(
-					'slug'        => 'hd-answered',
-					'name'        => __( 'Answered', 'rtbiz-helpdesk' ),
-					'description' => __( 'Ticket is answered. Expecting further communication from client', 'rtbiz-helpdesk' ),
-				),
-				array(
-					'slug'        => 'hd-unanswered',
-					'name'        => __( 'Unanswered', 'rtbiz-helpdesk' ),
-					'description' => __( 'Ticket is unanswered. It needs to be replied. The default state.', 'rtbiz-helpdesk' ),
-				),
-				array(
-					'slug'        => 'hd-archived',
-					'name'        => __( 'Archived', 'rtbiz-helpdesk' ),
-					'description' => __( 'Ticket is archived. Client can re-open if they wish to.', 'rtbiz-helpdesk' ),
-				),
+					'taxonomy'   => 'rtbiz_helpdesk_post_status',
+					'hide_empty' => false,
+				)
 			);
+
+			$this->statuses = array();
+			foreach ( $statuses as $status ) {
+				$data = get_term_meta( $status->term_id, 'rtbiz_hd_post_status_data', true );
+
+				$this->statuses[] = array(
+					'slug'        => $status->slug,
+					'name'        => $status->name,
+					'description' => $status->description,
+					'color'       => ( ! empty( $data['color'] ) ) ? $data['color'] : '#000000',
+				);
+			}
 
 			return $this->statuses;
 		}
@@ -148,6 +258,8 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 		public function init_hd() {
 			$menu_position = 32;
 			$this->register_custom_post( $menu_position );
+			$this->register_custom_status_taxonomy();
+			$this->statuses = $this->get_custom_statuses();
 
 			foreach ( $this->statuses as $status ) {
 				$this->register_custom_statuses( $status );
