@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: sid177
- * Date: 30/8/18
- * Time: 3:25 PM
- */
-
 if ( ! class_exists( 'Rtbiz_HD_Slack_Integration' ) ) {
 
 	/**
