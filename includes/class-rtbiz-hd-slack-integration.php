@@ -16,6 +16,8 @@ if ( ! class_exists( 'Rtbiz_HD_Slack_Integration' ) ) {
 	 */
 	class Rtbiz_HD_Slack_Integration {
 
+		private $slack_name = '';
+
 		/**
 		 * Rtbiz_HD_Slack_Integration constructor.
 		 */
@@ -23,9 +25,133 @@ if ( ! class_exists( 'Rtbiz_HD_Slack_Integration' ) ) {
 			add_action( 'admin_notices', array( $this, 'check_slack_integration_plugin' ) );
 			add_action( 'wp_insert_comment', array( $this, 'handle_ticket_followup' ) );
 			add_action( 'wp_insert_post', array( $this, 'handle_support_page_new_ticket' ), 10, 3 );
+			add_action( 'show_user_profile', array( $this, 'show_slack_channel_field' ) );
+			add_action( 'edit_user_profile', array( $this, 'show_slack_channel_field' ) );
 
+			add_filter( 'rtbiz_contact_meta_fields', array( $this, 'show_slack_channel_field' ) );
 			add_filter( 'wp_insert_post_data', array( $this, 'handle_post_data_update' ), 10, 2 );
 			add_filter( 'slack_get_events', array( $this, 'slack_get_events' ) );
+
+			add_action( 'rt_hd_si_new_support_page_ticket', array( $this, 'schedule_cron_for_new_ticket' ) );
+			add_action( 'rt_hd_si_new_staff_note', array( $this, 'unschedule_cron_on_new_followup' ), 10, 2 );
+			add_action( 'rt_hd_si_new_public_note', array( $this, 'unschedule_cron_on_new_followup' ), 10, 2 );
+			add_action( 'init', array( $this, 'register_schedule_action_callback' ) );
+		}
+
+
+		/**
+		 * Add reminder slack ID field on contact edit page.
+		 *
+		 * @param array $meta_fields Meta field configuration array.
+		 *
+		 * @return array
+		 */
+		public function show_slack_channel_field( $meta_fields ) {
+			$meta_fields[] = array(
+				'key'             => 'reminder_slack_id',
+				'text'            => __( 'Reminder slack ID' ),
+				'label'           => __( 'Reminder slack ID' ),
+				'is_multiple'     => false,
+				'type'            => 'text',
+				'name'            => 'contact_meta[reminder_slack_id]',
+				'description'     => __( 'Current active slack ID for reminders' ),
+				'hide_for_client' => true,
+				'category'        => 'Contact',
+			);
+
+			return $meta_fields;
+		}
+
+		/**
+		 * Register action callbacks for cron scheduled events.
+		 */
+		public function register_schedule_action_callback() {
+			$new_posts = get_option( 'rt_hd_si_new_tickets' );
+			if ( empty( $new_posts ) ) {
+				return;
+			}
+
+			foreach ( $new_posts as $post ) {
+				add_action( 'rt_hd_si_new_ticket_cron_' . $post, array( $this, 'handle_schedule_event' ) );
+			}
+		}
+
+		/**
+		 * Handle scheduled event for post.
+		 *
+		 * @param int $post_id Post ID for which event is being handled.
+		 */
+		public function handle_schedule_event( $post_id ) {
+			$post    = get_post( $post_id );
+			$contact = rtbiz_get_contact_for_wp_user( $post->post_author );
+			if ( empty( $contact ) ) {
+				return;
+			}
+			if ( is_array( $contact ) ) {
+				$contact = $contact[0];
+			}
+
+			$slack_id = Rtbiz_Entity::get_meta( $contact->ID, 'reminder_slack_id', true );
+			if ( empty( $slack_id ) ) {
+				return;
+			}
+
+			$this->slack_name = $slack_id;
+
+			add_filter( 'slack_channel_name', array( $this, 'change_slack_channel_name' ) );
+			do_action( 'rt_hd_si_reminder_for_new_ticket', $post );
+			remove_filter( 'slack_channel_name', array( $this, 'change_slack_channel_name' ) );
+		}
+
+		/**
+		 * Return changed slack name.
+		 *
+		 * @return string
+		 */
+		public function change_slack_channel_name() {
+			return $this->slack_name;
+		}
+
+		/**
+		 * Unschedule event if staff note or public note is added.
+		 *
+		 * @param object $comment Comment object.
+		 * @param object $post    Post object.
+		 */
+		public function unschedule_cron_on_new_followup( $comment, $post ) {
+			$time = wp_next_scheduled( 'rt_hd_si_new_ticket_cron_' . $post->ID, array( 'post_id' => $post->ID ) );
+			if ( $time ) {
+				wp_unschedule_event( $time, 'rt_hd_si_new_ticket_cron_' . $post->ID, array( 'post_id' => $post->ID ) );
+			}
+
+			$new_posts = get_option( 'rt_hd_si_new_tickets' );
+			if ( ! empty( $new_posts[$post->ID] ) ) {
+				unset( $new_posts[$post->ID] );
+				if ( empty( $new_posts ) ) {
+					delete_option( 'rt_hd_si_new_tickets' );
+				} else {
+					update_option( 'rt_hd_si_new_tickets', $new_posts );
+				}
+			}
+		}
+
+
+		/**
+		 * Schedule cron event for new ticket created.
+		 *
+		 * @param object $post Post object.
+		 */
+		public function schedule_cron_for_new_ticket( $post ) {
+			if ( ! wp_next_scheduled( 'rt_hd_si_new_ticket_cron_' . $post->ID, array( 'post_id' => $post->ID ) ) ) {
+				wp_schedule_event( strtotime( '+2 day', time() ), 'daily', 'rt_hd_si_new_ticket_cron_' . $post->ID, array( 'post_id' => $post->ID ) );
+			}
+
+			$new_posts = get_option( 'rt_hd_si_new_tickets' );
+			if ( empty( $new_posts ) ) {
+				$new_posts = array();
+			}
+			$new_posts[$post->ID] = $post->ID;
+			update_option( 'rt_hd_si_new_tickets', $new_posts );
 		}
 
 		/**
@@ -123,6 +249,33 @@ if ( ! class_exists( 'Rtbiz_HD_Slack_Integration' ) ) {
 						if ( ! empty( $user ) ) {
 							$message .= sprintf( ' by %s', $user->data->display_name );
 						}
+					}
+
+					return apply_filters( 'rt_hd_si_new_support_page_ticket_slack_message', $message );
+				},
+			);
+
+		}
+
+		/**
+		 * Return event parameters of new ticket creation.
+		 *
+		 * @return array
+		 */
+		public function rthd_new_ticket_assignee_reminder() {
+
+			return array(
+				'action'      => 'rt_hd_si_reminder_for_new_ticket',
+				'description' => esc_html__( 'After 2+ days of no reply on new ticket', 'rtbiz-helpdesk' ),
+				'default'     => false,
+				'message'     => function ( $post ) {
+					$date = new DateTime( $post->post_date );
+					$diff = $date->diff( new DateTime() );
+
+					$message = sprintf( 'Reminder for <%s|%s>.', get_post_permalink( $post->ID ), $post->post_title );
+
+					if ( $diff->d >= 2 ) {
+						$message .= sprintf( ' It\'s been %d days since no Staff Note / Public Note.', $diff->d );
 					}
 
 					return apply_filters( 'rt_hd_si_new_support_page_ticket_slack_message', $message );
@@ -260,11 +413,12 @@ if ( ! class_exists( 'Rtbiz_HD_Slack_Integration' ) ) {
 		 * @return array
 		 */
 		public function slack_get_events( $events ) {
-			$events['rthd_ticket_status_changed'] = $this->rthd_ticket_status_changed();
-			$events['rthd_new_ticket']            = $this->rthd_new_ticket();
-			$events['rthd_new_staff_note']        = $this->rthd_new_staff_note();
-			$events['rthd_new_public_note']       = $this->rthd_new_public_note();
-			$events['rthd_ticket_author_change']  = $this->rthd_ticket_author_change();
+			$events['rthd_ticket_status_changed']        = $this->rthd_ticket_status_changed();
+			$events['rthd_new_ticket']                   = $this->rthd_new_ticket();
+			$events['rthd_new_staff_note']               = $this->rthd_new_staff_note();
+			$events['rthd_new_public_note']              = $this->rthd_new_public_note();
+			$events['rthd_ticket_author_change']         = $this->rthd_ticket_author_change();
+			$events['rthd_new_ticket_assignee_reminder'] = $this->rthd_new_ticket_assignee_reminder();
 
 			return $events;
 		}
