@@ -231,10 +231,14 @@ if ( ! class_exists( 'Rtbiz_HD_Slack_Integration' ) ) {
 
 					$message = sprintf( 'New ticket: <%s|%s>', get_post_type_archive_link( $post->post_type ) . '/' . $post->ID, $post->post_title );
 
-					if ( ! empty( $post->post_author ) ) {
-						$user = get_userdata( $post->post_author );
-						if ( ! empty( $user ) ) {
-							$message .= sprintf( ' by %s', $user->data->display_name );
+					$author = get_post_meta( $post->ID, '_rtbiz_hd_created_by', true );
+					if ( ! empty( $author ) ) {
+						$author = rtbiz_hd_get_user_id_by_contact_id( $author );
+						if ( ! empty( $author ) ) {
+							$author = get_userdata( $author );
+							if ( ! empty( $author ) ) {
+								$message .= sprintf( ' by %s', $author->data->display_name );
+							}
 						}
 					}
 
@@ -299,7 +303,14 @@ if ( ! class_exists( 'Rtbiz_HD_Slack_Integration' ) ) {
 						$current_user = get_userdata( get_current_user_id() )->data->display_name;
 					}
 
-					$message = sprintf( 'Ticket <%s|%s> assignee changed from *%s* to *%s* by *%s*', get_post_type_archive_link( $post->post_type ) . '/' . $post->ID, $post->post_title, $old_author->data->display_name, $new_author->data->display_name, $current_user );
+					$message = sprintf(
+						'Ticket <%s|%s> assignee changed from *%s* to *%s* by *%s*',
+						get_post_type_archive_link( $post->post_type ) . '/' . $post->ID,
+						$post->post_title,
+						$old_author->data->display_name,
+						$new_author->data->display_name,
+						$current_user
+					);
 
 					return apply_filters( 'rt_hd_si_ticket_author_change_slack_message', $message );
 				},
