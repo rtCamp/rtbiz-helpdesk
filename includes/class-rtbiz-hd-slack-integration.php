@@ -153,7 +153,7 @@ if ( ! class_exists( 'Rtbiz_HD_Slack_Integration' ) ) {
 			}
 
 			if ( ! wp_next_scheduled( 'rt_hd_si_new_ticket_cron_' . $post->ID, array( 'post_id' => $post->ID ) ) ) {
-				wp_schedule_event( strtotime( '+15 seconds', time() ), 'daily', 'rt_hd_si_new_ticket_cron_' . $post->ID, array( 'post_id' => $post->ID ) );
+				wp_schedule_event( strtotime( '+2 days', time() ), 'daily', 'rt_hd_si_new_ticket_cron_' . $post->ID, array( 'post_id' => $post->ID ) );
 			}
 
 			$new_posts = get_option( 'rt_hd_si_new_tickets' );
