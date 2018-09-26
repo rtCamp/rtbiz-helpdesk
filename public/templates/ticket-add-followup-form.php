@@ -9,6 +9,12 @@ global $current_user;
 
 $cap = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' );
 $staffonly = current_user_can( $cap );
+
+$user             = rtbiz_get_contact_for_wp_user( get_current_user_id() );
+$ticket_signature = false;
+if ( ! empty( $user[0] ) ) {
+	$ticket_signature = Rtbiz_Entity::get_meta( $user[0]->ID, 'rthd_ticket_signature', true );
+}
 ?>
 
 <div id="new-followup-form">
@@ -47,7 +53,7 @@ $staffonly = current_user_can( $cap );
 		<div id="followupcontent_html" class="pane markdown_preview_container"><noscript><h2>You'll need to enable Javascript to use this tool.</h2></noscript></div>
 		<div class="rthd-followup-content-container">
 			<textarea id="followupcontent" class="followupcontent" rows="5" cols="20" name="followupcontent"
-					  placeholder="Add new reply"></textarea>
+					  placeholder="Add new reply"><?php if ( ! empty( $ticket_signature ) ) { echo esc_html( trim( $ticket_signature ) ); } ?></textarea>
 		</div>
 	</div>
 

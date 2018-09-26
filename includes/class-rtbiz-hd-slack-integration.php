@@ -17,7 +17,7 @@ if ( ! class_exists( 'Rtbiz_HD_Slack_Integration' ) ) {
 		function __construct() {
 			add_action( 'admin_notices', array( $this, 'check_slack_integration_plugin' ) );
 
-			add_filter( 'rtbiz_contact_meta_fields', array( $this, 'show_slack_channel_field' ) );
+			add_filter( 'rtbiz_contact_meta_fields', array( $this, 'rtbiz_contact_meta_fields_callback' ) );
 			add_filter( 'slack_get_events', array( $this, 'slack_get_events' ) );
 
 			add_action( 'rt_hd_after_new_support_ticket_saved', array( $this, 'schedule_cron_for_new_ticket' ) );
@@ -34,7 +34,7 @@ if ( ! class_exists( 'Rtbiz_HD_Slack_Integration' ) ) {
 		 *
 		 * @return array
 		 */
-		public function show_slack_channel_field( $meta_fields ) {
+		public function rtbiz_contact_meta_fields_callback( $meta_fields ) {
 			$meta_fields[] = array(
 				'key'             => 'reminder_slack_id',
 				'text'            => __( 'Reminder slack ID' ),
@@ -43,6 +43,18 @@ if ( ! class_exists( 'Rtbiz_HD_Slack_Integration' ) ) {
 				'type'            => 'text',
 				'name'            => 'contact_meta[reminder_slack_id]',
 				'description'     => __( 'Current active slack ID for reminders' ),
+				'hide_for_client' => true,
+				'category'        => 'Contact',
+			);
+
+			$meta_fields[] = array(
+				'key'             => 'rthd_ticket_signature',
+				'text'            => __( 'Ticket signature' ),
+				'label'           => __( 'Ticket signature' ),
+				'is_multiple'     => false,
+				'type'            => 'textarea',
+				'name'            => 'contact_meta[rthd_ticket_signature]',
+				'description'     => __( 'Ticket signature for contact.' ),
 				'hide_for_client' => true,
 				'category'        => 'Contact',
 			);
