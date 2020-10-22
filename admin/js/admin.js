@@ -216,7 +216,7 @@ jQuery( document ).ready(function () {
 						return jQuery( "<li></li>" ).data( "ui-autocomplete-item", item ).append( "<a class='ac-subscribe-selected'>" + item.imghtml + "&nbsp;" + item.label + "</a>" ).appendTo( ul );
 					};
 
-					jQuery( document ).on('click', "a[href=#removeSubscriber]", function (e) {
+					jQuery( document ).on('click', "a[href='#removeSubscriber']", function (e) {
 						e.preventDefault();
 						jQuery( this ).parent().remove();
 					});

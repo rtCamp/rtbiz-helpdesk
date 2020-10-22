@@ -45,15 +45,15 @@ if ( ! class_exists( 'Rtbiz_HD_Support' ) ) {
 		public function get_support_content() {
 			$tabs   = array();
 			$tabs[] = array(
-				'title'    => __( 'Support', RTBIZ_HD_TEXT_DOMAIN ),
-				'name'     => __( 'Support', RTBIZ_HD_TEXT_DOMAIN ),
+				'title'    => __( 'Support', 'rtbiz-helpdesk' ),
+				'name'     => __( 'Support', 'rtbiz-helpdesk' ),
 				'href'     => '#support',
 				'icon'     => 'dashicons-businessman',
 				'callback' => array( $this, 'call_get_form' ),
 			);
 			$tabs[] = array(
-				'title'    => __( 'Debug Info', RTBIZ_HD_TEXT_DOMAIN ),
-				'name'     => __( 'Debug Info', RTBIZ_HD_TEXT_DOMAIN ),
+				'title'    => __( 'Debug Info', 'rtbiz-helpdesk' ),
+				'name'     => __( 'Debug Info', 'rtbiz-helpdesk' ),
 				'href'     => '#debug',
 				'icon'     => 'dashicons-admin-tools',
 				'callback' => array( $this, 'debug_info_html' ),
@@ -66,8 +66,8 @@ if ( ! class_exists( 'Rtbiz_HD_Support' ) ) {
 		}
 
 		public static function support_sent(){
-			echo '<p>' . __( 'Thank you for posting your support request.', RTBIZ_HD_TEXT_DOMAIN ) . '</p>';
-			echo '<p>' . __( 'We will get back to you shortly.', RTBIZ_HD_TEXT_DOMAIN ) . '</p>';
+			echo '<p>' . __( 'Thank you for posting your support request.', 'rtbiz-helpdesk' ) . '</p>';
+			echo '<p>' . __( 'We will get back to you shortly.', 'rtbiz-helpdesk' ) . '</p>';
 		}
 
 		/**
@@ -119,28 +119,28 @@ if ( ! class_exists( 'Rtbiz_HD_Support' ) ) {
 				<form name="rtbiz_hd_service_select_form" method="post">
 					<p>
 						<label
-						       for="select_support"><?php _e( 'Service', RTBIZ_HD_TEXT_DOMAIN ); ?>:</label>
+						       for="select_support"><?php _e( 'Service', 'rtbiz-helpdesk' ); ?>:</label>
 						<select name="rtbiz_hd_service_select">
 							<option
 								value="premium_support" <?php
 							if ( 'premium_support' == $_POST['form'] ) {
 								echo 'selected';
 							}
-							?>><?php _e( 'Premium Support', RTBIZ_HD_TEXT_DOMAIN ); ?></option>
+							?>><?php _e( 'Premium Support', 'rtbiz-helpdesk' ); ?></option>
 							<option
 								value="bug_report" <?php
 							if ( 'bug_report' == $_POST['form'] ) {
 								echo 'selected';
 							}
-							?>><?php _e( 'Bug Report', RTBIZ_HD_TEXT_DOMAIN ); ?></option>
+							?>><?php _e( 'Bug Report', 'rtbiz-helpdesk' ); ?></option>
 							<option
 								value="new_feature" <?php
 							if ( 'new_feature' == $_POST['form'] ) {
 								echo 'selected';
 							}
-							?>><?php _e( 'New Feature', RTBIZ_HD_TEXT_DOMAIN ); ?></option>
+							?>><?php _e( 'New Feature', 'rtbiz-helpdesk' ); ?></option>
 						</select>
-						<input name="support_submit" value="<?php esc_attr_e( 'Submit', RTBIZ_HD_TEXT_DOMAIN ); ?>"
+						<input name="support_submit" value="<?php esc_attr_e( 'Submit', 'rtbiz-helpdesk' ); ?>"
 						       type="submit" class="button"/>
 					</p>
 				</form>
@@ -186,7 +186,7 @@ if ( ! class_exists( 'Rtbiz_HD_Support' ) ) {
 				$plugin_data    = @get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin );
 				$version_string = '';
 				if ( ! empty( $plugin_data['Name'] ) ) {
-					$rtbiz_hd_plugins[] = $plugin_data['Name'] . ' ' . __( 'by', RTBIZ_HD_TEXT_DOMAIN ) . ' ' . $plugin_data['Author'] . ' ' . __( 'version', RTBIZ_HD_TEXT_DOMAIN ) . ' ' . $plugin_data['Version'] . $version_string;
+					$rtbiz_hd_plugins[] = $plugin_data['Name'] . ' ' . __( 'by', 'rtbiz-helpdesk' ) . ' ' . $plugin_data['Author'] . ' ' . __( 'version', 'rtbiz-helpdesk' ) . ' ' . $plugin_data['Version'] . $version_string;
 				}
 			}
 			if ( 0 == sizeof( $rtbiz_hd_plugins ) ) {
@@ -282,7 +282,7 @@ if ( ! class_exists( 'Rtbiz_HD_Support' ) ) {
 			$this->debug_info();
 			?>
 			<div id="debug-info" class="rtbiz-hd-option-wrapper">
-			<h3 class="rtbiz-hd-option-title"><?php _e( 'Debug Info', RTBIZ_HD_TEXT_DOMAIN ); ?></h3>
+			<h3 class="rtbiz-hd-option-title"><?php _e( 'Debug Info', 'rtbiz-helpdesk' ); ?></h3>
 			<table class="form-table rtbiz-hd-debug-info">
 				<tbody>
 				<?php
@@ -320,13 +320,13 @@ if ( ! class_exists( 'Rtbiz_HD_Support' ) ) {
 			}
 			switch ( $form ) {
 				case 'bug_report':
-					$meta_title = __( 'Submit a Bug Report', RTBIZ_HD_TEXT_DOMAIN );
+					$meta_title = __( 'Submit a Bug Report', 'rtbiz-helpdesk' );
 					break;
 				case 'new_feature':
-					$meta_title = __( 'Submit a New Feature Request', RTBIZ_HD_TEXT_DOMAIN );
+					$meta_title = __( 'Submit a New Feature Request', 'rtbiz-helpdesk' );
 					break;
 				case 'premium_support':
-					$meta_title = __( 'Submit Support Request', RTBIZ_HD_TEXT_DOMAIN );
+					$meta_title = __( 'Submit Support Request', 'rtbiz-helpdesk' );
 					break;
 			}
 
@@ -334,7 +334,7 @@ if ( ! class_exists( 'Rtbiz_HD_Support' ) ) {
 			if ( 'premium_support' == $form ) {
 				if ( false === $status && 'valid' != $status ) {
 					$content = '<h3>' . $meta_title . '</h3>';
-					$content .= '<p>' . __( 'If you have any suggestions, enhancements or bug reports, you can open a new issue on <a target="_blank" href="https://github.com/rtCamp/rtbiz/issues/new">GitHub</a>.', RTBIZ_HD_TEXT_DOMAIN ) . '</p>';
+					$content .= '<p>' . __( 'If you have any suggestions, enhancements or bug reports, you can open a new issue on <a target="_blank" href="https://github.com/rtCamp/rtbiz/issues/new">GitHub</a>.', 'rtbiz-helpdesk' ) . '</p>';
 
 					echo $content;
 				} else { ?>
@@ -343,31 +343,31 @@ if ( ! class_exists( 'Rtbiz_HD_Support' ) ) {
 
 						<div class="rtbiz-hd-form-filed clearfix">
 							<label
-							       for="name"><?php _e( 'Name', RTBIZ_HD_TEXT_DOMAIN ); ?></label>
+							       for="name"><?php _e( 'Name', 'rtbiz-helpdesk' ); ?></label>
 							<input id="name" type="text" name="name" value="" required/>
 							<span class="rthd-tooltip">
 								<i class="dashicons dashicons-info rtmicon"></i>
 								<span class="rthd-tip">
-									<?php _e( 'Use actual user name which used during purchased.', RTBIZ_HD_TEXT_DOMAIN ); ?>
+									<?php _e( 'Use actual user name which used during purchased.', 'rtbiz-helpdesk' ); ?>
 								</span>
 							</span>
 						</div>
 
 						<div class="rtbiz-hd-form-filed clearfix">
 							<label
-							       for="email"><?php _e( 'Email', RTBIZ_HD_TEXT_DOMAIN ); ?></label>
+							       for="email"><?php _e( 'Email', 'rtbiz-helpdesk' ); ?></label>
 							<input id="email" type="text" name="email" value="" required/>
 							<span class="rthd-tooltip">
 								<i class="dashicons dashicons-info rtmicon"></i>
 								<span class="rthd-tip">
-									<?php _e( 'Use email id which used during purchased', RTBIZ_HD_TEXT_DOMAIN ); ?>
+									<?php _e( 'Use email id which used during purchased', 'rtbiz-helpdesk' ); ?>
 								</span>
 							</span>
 						</div>
 
 						<div class="rtbiz-hd-form-filed clearfix">
 							<label
-							       for="website"><?php _e( 'Website', RTBIZ_HD_TEXT_DOMAIN ); ?></label>
+							       for="website"><?php _e( 'Website', 'rtbiz-helpdesk' ); ?></label>
 							<input id="website" type="text" name="website"
 							       value="<?php echo ( isset( $_REQUEST['website'] ) ) ? esc_attr( stripslashes( trim( $_REQUEST['website'] ) ) ) : get_bloginfo( 'url' ); ?>"
 							       required/>
@@ -375,7 +375,7 @@ if ( ! class_exists( 'Rtbiz_HD_Support' ) ) {
 
 						<div class="rtbiz-hd-form-filed clearfix">
 							<label
-							       for="subject"><?php _e( 'Subject', RTBIZ_HD_TEXT_DOMAIN ); ?></label>
+							       for="subject"><?php _e( 'Subject', 'rtbiz-helpdesk' ); ?></label>
 							<input id="subject" type="text" name="subject"
 							       value="<?php echo ( isset( $_REQUEST['subject'] ) ) ? esc_attr( stripslashes( trim( $_REQUEST['subject'] ) ) ) : ''; ?>"
 							       required/>
@@ -383,7 +383,7 @@ if ( ! class_exists( 'Rtbiz_HD_Support' ) ) {
 
 						<div class="rtbiz-hd-form-filed clearfix">
 							<label
-							       for="details"><?php _e( 'Details', RTBIZ_HD_TEXT_DOMAIN ); ?></label>
+							       for="details"><?php _e( 'Details', 'rtbiz-helpdesk' ); ?></label>
 							<textarea id="details" name="details"
 							          required><?php echo ( isset( $_REQUEST['details'] ) ) ? esc_textarea( stripslashes( trim( $_REQUEST['details'] ) ) ) : ''; ?></textarea>
 
@@ -428,16 +428,16 @@ if ( ! class_exists( 'Rtbiz_HD_Support' ) ) {
 			}
 			if ( 'premium_support' == $form_data['request_type'] ) {
 				$mail_type = 'Premium Support';
-				$title     = __( 'rtMedia Premium Support Request from', RTBIZ_HD_TEXT_DOMAIN );
+				$title     = __( 'rtMedia Premium Support Request from', 'rtbiz-helpdesk' );
 			} elseif ( 'new_feature' == $form_data['request_type'] ) {
 				$mail_type = 'New Feature Request';
-				$title     = __( 'rtMedia New Feature Request from', RTBIZ_HD_TEXT_DOMAIN );
+				$title     = __( 'rtMedia New Feature Request from', 'rtbiz-helpdesk' );
 			} elseif ( 'bug_report' == $form_data['request_type'] ) {
 				$mail_type = 'Bug Report';
-				$title     = __( 'rtMedia Bug Report from', RTBIZ_HD_TEXT_DOMAIN );
+				$title     = __( 'rtMedia Bug Report from', 'rtbiz-helpdesk' );
 			} else {
 				$mail_type = 'Bug Report';
-				$title     = __( 'rtMedia Contact from', RTBIZ_HD_TEXT_DOMAIN );
+				$title     = __( 'rtMedia Contact from', 'rtbiz-helpdesk' );
 			}
 			$message = '<html>
                             <head>
@@ -492,7 +492,7 @@ if ( ! class_exists( 'Rtbiz_HD_Support' ) ) {
 			}
 			$message .= '</table>';
 			if ( $this->debug_info ) {
-				$message .= '<h3>' . __( 'Debug Info', RTBIZ_HD_TEXT_DOMAIN ) . '</h3>';
+				$message .= '<h3>' . __( 'Debug Info', 'rtbiz-helpdesk' ) . '</h3>';
 				$message .= '<table>';
 				foreach ( $this->debug_info as $configuration => $value ) {
 					$message .= '<tr>

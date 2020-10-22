@@ -44,7 +44,7 @@ if ( ! class_exists( 'Rtbiz_HD_Attachment' ) ) {
 			?>
 
 			<div id="attachment-container" class="row_group">
-				<p><a href="#" class="button" id="add_ticket_attachment"><?php _e( 'Add', RTBIZ_HD_TEXT_DOMAIN ); ?></a></p>
+				<p><a href="#" class="button" id="add_ticket_attachment"><?php _e( 'Add', 'rtbiz-helpdesk' ); ?></a></p>
 				<ul id="divAttachmentList" class="scroll-height">
 					<?php
 					foreach ( $attachments as $attachment ) {

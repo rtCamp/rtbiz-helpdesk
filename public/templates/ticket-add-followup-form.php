@@ -25,8 +25,8 @@ $staffonly = current_user_can( $cap );
 		<?php if ( $staffonly ) { ?>
 
 			<ui id="followup-type-list" class="followup-tabs">
-				<li id="tab-<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC; ?>" class="tab active" data-ctype="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC; ?>"><?php _e( 'Public Reply', RTBIZ_HD_TEXT_DOMAIN ) ?></li>
-				<li id="tab-<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF; ?>" class="tab" data-ctype="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF; ?>"><?php _e( 'Staff Note', RTBIZ_HD_TEXT_DOMAIN ) ?></li>
+				<li id="tab-<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC; ?>" class="tab active" data-ctype="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_PUBLIC; ?>"><?php _e( 'Public Reply', 'rtbiz-helpdesk' ) ?></li>
+				<li id="tab-<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF; ?>" class="tab" data-ctype="<?php echo Rtbiz_HD_Import_Operation::$FOLLOWUP_STAFF; ?>"><?php _e( 'Staff Note', 'rtbiz-helpdesk' ) ?></li>
 			</ui>
 
 		<?php } ?>
@@ -37,7 +37,7 @@ $staffonly = current_user_can( $cap );
 			</span>
 			<span class="rthd-tooltip rthd-followup-content-tolltip">
 				Markdown & HTML support
-				<span class="rthd-tip-bottom"><?php _e( 'You may use Markdown syntax and these HTML tags - a, abbr, acronym, b, blockquote, cite, code, del, em, i, q, s, strike and strong', RTBIZ_HD_TEXT_DOMAIN ); ?>
+				<span class="rthd-tip-bottom"><?php _e( 'You may use Markdown syntax and these HTML tags - a, abbr, acronym, b, blockquote, cite, code, del, em, i, q, s, strike and strong', 'rtbiz-helpdesk' ); ?>
 				</span>
 			</span>
 		</div>
@@ -64,10 +64,10 @@ $staffonly = current_user_can( $cap );
 				<div class="rthd-sensitive-wrap" <?php echo $rthd_sensitive_style; ?> >
 					<label for="rthd_sensitive_content">
 						<input id="rthd_sensitive_content" type="checkbox" name="followup_sensitive"
-							   value="true"/>&nbsp;<?php _e( 'Mark this as Sensitive' ); ?>
+							   value="true"/>&nbsp;<?php _e( 'Mark this as Sensitive', 'rtbiz-helpdesk' ); ?>
 						<span class="rthd-tooltip rthd-followup-type-tolltip">
 							<i class="dashicons dashicons-info rtmicon"></i>
-							<span class="rthd-tip"><?php _e( 'Email notification will not show content of this followup. Recommended, if you are sharing password or other sensitive information.', RTBIZ_HD_TEXT_DOMAIN ); ?>
+							<span class="rthd-tip"><?php _e( 'Email notification will not show content of this followup. Recommended, if you are sharing password or other sensitive information.', 'rtbiz-helpdesk' ); ?>
 							</span>
 						</span>
 					</label></div>
@@ -76,7 +76,7 @@ $staffonly = current_user_can( $cap );
 						<label for="rthd_keep_status">
 							<input id="rthd_keep_status" type="checkbox" name="rthd_keep_status"
 								   text="check keep status unanswered"/>
-							<?php _e( 'Keep unanswered' ); ?></label></div>
+							<?php _e( 'Keep unanswered', 'rtbiz-helpdesk' ); ?></label></div>
 				<?php } ?>
 
 			</div>

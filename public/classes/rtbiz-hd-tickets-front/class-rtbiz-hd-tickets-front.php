@@ -57,7 +57,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 					}
 					$redirect_url = esc_url( urldecode( $_REQUEST['redirect_url'] ) );
 					$login_url    = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( $redirect_url ), $redirect_url );
-					$message      = sprintf( '%s <a href="%s">%s</a> %s', __( 'You are not logged in. Please login' ), esc_url( $login_url ), __( 'here' ), __( 'to view this ticket.' ) );
+					$message      = sprintf( '%s <a href="%s">%s</a> %s', __( 'You are not logged in. Please login', 'rtbiz-helpdesk' ), esc_url( $login_url ), __( 'here', 'rtbiz-helpdesk' ), __( 'to view this ticket.', 'rtbiz-helpdesk' ) );
 					global $rthd_messages;
 					$rthd_messages[] = array( 'type' => 'error rthd-error', 'message' => $message, 'displayed' => 'no' );
 					return rtbiz_hd_locate_template( 'ticket-error-page.php' );
@@ -181,13 +181,13 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 				$redirect_url = ( ( is_ssl() ) ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 				$login_url    = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( $redirect_url ), $redirect_url );
 				if ( $email_only_support ) {
-					$message      = sprintf( '%s', __( 'You can not access this page.' ) );
+					$message      = sprintf( '%s', __( 'You can not access this page.', 'rtbiz-helpdesk' ) );
 				} else {
-					$message = sprintf( '%s <a href="%s">%s</a> %s', __( 'You are not logged in. Please login' ), esc_url( $login_url ), __( 'here' ), __( 'to view this ticket.' ) );
+					$message = sprintf( '%s <a href="%s">%s</a> %s', __( 'You are not logged in. Please login', 'rtbiz-helpdesk' ), esc_url( $login_url ), __( 'here', 'rtbiz-helpdesk' ), __( 'to view this ticket.', 'rtbiz-helpdesk' ) );
 				}
 				global $rthd_messages;
 				$rthd_messages[] = array( 'type' => 'error rthd-error', 'message' => $message, 'displayed' => 'no' );
-				$rthd_front_page_title = __( 'Helpdesk' );
+				$rthd_front_page_title = __( 'Helpdesk', 'rtbiz-helpdesk' );
 
 				return rtbiz_hd_locate_template( 'ticket-error-page.php' );
 			}
@@ -205,7 +205,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 					$ticket = $ticketpost[0];
 					global $rthd_front_page_title;
 					$labels                = $rtbiz_hd_module->labels;
-					$rthd_front_page_title = __( 'Helpdesk - Ticket #' . $ticket->ID );
+					$rthd_front_page_title = __( 'Helpdesk - Ticket #' . $ticket->ID, 'rtbiz-helpdesk' );
 					$wp_query->query[ Rtbiz_HD_Module::$post_type ] =  $ticket->ID;
 					$post                  = $ticket;
 					setup_postdata( $post );
@@ -218,11 +218,11 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 
 			if ( empty( $post ) || $wrong_unique_id ) {
 				if ( isset( $wp_query->query[ Rtbiz_HD_Module::$post_type ] ) ) {
-					$message = sprintf( '%s ', __( "<div style='margin-left: 0;'>Sorry! Your requested ticket wasn't found.</div>" ) );
-					$rthd_front_page_title = __( 'Helpdesk - Ticket Not Found' );
+					$message = sprintf( '%s ', __( "<div style='margin-left: 0;'>Sorry! Your requested ticket wasn't found.</div>", 'rtbiz-helpdesk' ) );
+					$rthd_front_page_title = __( 'Helpdesk - Ticket Not Found', 'rtbiz-helpdesk' );
 				} else {
 					$message = '';
-					$rthd_front_page_title = __( 'Helpdesk - Tickets' );
+					$rthd_front_page_title = __( 'Helpdesk - Tickets', 'rtbiz-helpdesk' );
 				}
 				global $rthd_messages;
 				$rthd_messages[] = array( 'type' => 'error rthd-error', 'message' => $message, 'displayed' => 'no' );
@@ -244,10 +244,10 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 					if ( ! in_array( $user->ID, $subscriber ) && ! in_array( $user->user_email, $subscriber ) && $user->ID != $post_author_id && ! empty( $contact_currrent_user_id ) && $creator != $contact_currrent_user_id ) {
 						$redirect_url = ( ( is_ssl() ) ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 						$login_url    = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( $redirect_url ), $redirect_url );
-						$message      = sprintf( '%s ', __( 'You do not have sufficient permissions to access this ticket.' ) );
+						$message      = sprintf( '%s ', __( 'You do not have sufficient permissions to access this ticket.', 'rtbiz-helpdesk' ) );
 						global $rthd_messages;
 						$rthd_messages[] = array( 'type' => 'error rthd-error', 'message' => $message, 'displayed' => 'no' );
-						$rthd_front_page_title = __( 'Helpdesk - Ticket #' . $post->ID );
+						$rthd_front_page_title = __( 'Helpdesk - Ticket #' . $post->ID, 'rtbiz-helpdesk' );
 
 						return rtbiz_hd_locate_template( 'ticket-404-page.php' );
 					}
@@ -268,10 +268,10 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 					if ( ( empty( $current_contact ) || ( ! in_array( $current_contact->ID, $contact_ids ) && ! in_array( $user->user_email, $contact_emails ) ) ) && ! empty( $contact_currrent_user_id ) && $contact_currrent_user_id != $creator ) {
 						$redirect_url = ( ( is_ssl() ) ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 						$login_url    = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( $redirect_url ), $redirect_url );
-						$message      = sprintf( '%s ', __( 'You do not have sufficient permissions to access this ticket.' ) );
+						$message      = sprintf( '%s ', __( 'You do not have sufficient permissions to access this ticket.', 'rtbiz-helpdesk' ) );
 						global $rthd_messages;
 						$rthd_messages[] = array( 'type' => 'error rthd-error', 'message' => $message, 'displayed' => 'no' );
-						$rthd_front_page_title = __( 'Helpdesk - Ticket #' . $post->ID );
+						$rthd_front_page_title = __( 'Helpdesk - Ticket #' . $post->ID, 'rtbiz-helpdesk' );
 
 						return rtbiz_hd_locate_template( 'ticket-404-page.php' );
 					}
@@ -279,7 +279,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 			}
 
 			$rtbiz_helpdesk_template = true;
-			$rthd_front_page_title = __( 'Helpdesk - Ticket #' . $post->ID );
+			$rthd_front_page_title = __( 'Helpdesk - Ticket #' . $post->ID, 'rtbiz-helpdesk' );
 			return rtbiz_hd_locate_template( 'ticket-front-page.php' );
 		}
 

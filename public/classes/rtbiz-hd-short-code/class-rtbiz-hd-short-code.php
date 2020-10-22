@@ -306,7 +306,7 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 					if ( ! empty( $arg_shortcode['contactid'] ) ) {
 						$tickets = rtbiz_hd_get_tickets( 'created_by', $arg_shortcode['contactid'], $top, $limit, false );
 					} else {
-						$contactid = rtbiz_hd_get_contact_id_by_user_id( $arg_shortcode['userid'] );
+						$contactid = rtbiz_hd_get_contact_id_by_user_id( $arg_shortcode['userid'], true );
 						$tickets   = rtbiz_hd_get_tickets( 'created_by', $contactid, $top, $limit, false );
 					}
 					if ( empty( $tickets ) ) {
@@ -344,7 +344,7 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 					if ( 'yes' === $arg_shortcode['title'] ) {
 						?>
 						<h2 class="rthd-ticket-list-title"><?php
-							_e( 'Favourite Tickets', RTBIZ_HD_TEXT_DOMAIN );
+							_e( 'Favourite Tickets', 'rtbiz-helpdesk' );
 							echo ( empty( $tickets ) ) ? '' : ' <span class="rthd-count">(<span class="rthd-current-count">' . count( $tickets ) . '</span> of <span class="rthd-count-total">' . $count . '</span>)</span>';
 							?></h2>
 						<?php
@@ -357,7 +357,7 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 							$link = get_permalink( $page->ID );
 							?>
 							<a class="clearfix" href="<?php echo $link; ?>">
-								<button class=""><?php _e( 'Create New Ticket', RTBIZ_HD_TEXT_DOMAIN ) ?></button>
+								<button class=""><?php _e( 'Create New Ticket', 'rtbiz-helpdesk' ) ?></button>
 							</a>
 							<?php
 						}
@@ -368,7 +368,7 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 					if ( 'yes' === $arg_shortcode['title'] ) {
 						?>
 						<h2 class="rthd-ticket-list-title"><?php
-						_e( 'Tickets', RTBIZ_HD_TEXT_DOMAIN );
+						_e( 'Tickets', 'rtbiz-helpdesk' );
 						echo ( empty( $tickets ) ) ? '' : ' <span class="rthd-count">(<span class="rthd-current-count">' . count( $tickets ) . '</span> of <span class="rthd-count-total">' . $count . '</span>)</span>';
 						?></h2><?php
 					}
@@ -382,16 +382,16 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 							?>
 							<a class="" href="<?php echo $link; ?>">
 								<button
-									class="btn button-primary btn-primary"><?php _e( 'Create New Ticket', RTBIZ_HD_TEXT_DOMAIN ) ?></button>
+									class="btn button-primary btn-primary"><?php _e( 'Create New Ticket', 'rtbiz-helpdesk' ) ?></button>
 							</a>
 							<?php
 						}
 					}
 					echo '</div>';
 					if ( empty( $tickets ) && ! $is_staff ) {
-						echo '<p>' . __( 'You have not created any tickets yet. Create one now.', RTBIZ_HD_TEXT_DOMAIN ) . '</p>';
+						echo '<p>' . __( 'You have not created any tickets yet. Create one now.', 'rtbiz-helpdesk' ) . '</p>';
 					} else if ( empty( $tickets ) ) {
-						echo '<p>' . __( 'No tickets found', RTBIZ_HD_TEXT_DOMAIN ) . '</p>';
+						echo '<p>' . __( 'No tickets found', 'rtbiz-helpdesk' ) . '</p>';
 					}
 				}
 				//			echo '<div class="rthd-ticket-list">';
@@ -402,14 +402,14 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 					$fav_staff_tickets = rtbiz_hd_get_user_fav_ticket( $arg_shortcode['userid'] );
 					if ( ! empty( $fav ) ) {
 						?>
-						<p> <?php _e( 'Your favourite tickets are highlighted below.' ); ?></p>
+						<p> <?php _e( 'Your favourite tickets are highlighted below.', 'rtbiz-helpdesk' ); ?></p>
 						<?php
 					}
 				}
 
 				if ( is_admin() && ! empty( $tickets ) && $oder_shortcode ) {
 					?>
-					<p> <?php _e( 'Below are the all the tickets created by this customer. The tickets for this order are highlighted.', RTBIZ_HD_TEXT_DOMAIN ); ?></p>
+					<p> <?php _e( 'Below are the all the tickets created by this customer. The tickets for this order are highlighted.', 'rtbiz-helpdesk' ); ?></p>
 					<?php
 				}
 			}
@@ -458,7 +458,7 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 						       href="<?php echo esc_url( ( rtbiz_hd_is_unique_hash_enabled() ) ? rtbiz_hd_get_unique_hash_url( $ticket->ID ) : get_post_permalink( $ticket->ID ) ); ?>">
 								#<?php echo esc_attr( $ticket->ID ) ?> </a></td>
 						<td><?php echo $ticket->post_title; ?></td>
-						<td><?php echo esc_attr( human_time_diff( $date->format( 'U' ), current_time( 'timestamp' ) ) ) . esc_attr( __( ' ago' ) ) ?> </td>
+						<td><?php echo esc_attr( human_time_diff( $date->format( 'U' ), current_time( 'timestamp' ) ) ) . esc_attr( __( ' ago','rtbiz-helpdesk' ) ) ?> </td>
 						<td>
 							<?php
 							if ( ! empty( $ticket->post_status ) ) {

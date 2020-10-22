@@ -8,19 +8,19 @@
  * registers the activation and deactivation functions, and defines a function
  * that starts the plugin.
  *
- * @link              https://rtcamp.com/
+ * @link              https://rtbiz.io/
  * @since             1.2.6
  * @package           rtbiz-helpdesk
  *
  * @wordpress-plugin
  * Plugin Name:       rtBiz Helpdesk
- * Plugin URI:        https://rtcamp.com/rtbiz/helpdesk/
+ * Plugin URI:        https://rtbiz.io/helpdesk/
  * Description:       A WordPress based Helpdesk system with mail sync features, web based ticket UI and many custom settings. Easy to use for admin, staff and customers.
- * Version:           1.6
+ * Version:           1.6.3
  * Author:            rtCamp
- * Author URI:        https://rtcamp.com/
+ * Author URI:        https://rtbiz.io/
  * License:           GPL-2.0+
- * License URI:       https://rtcamp.com/
+ * License URI:       https://rtbiz.io/
  * Text Domain:       rtbiz-helpdesk
  * Domain Path:       /languages
  */
@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! defined( 'RTBIZ_HD_VERSION' ) ) {
-	define( 'RTBIZ_HD_VERSION', '1.6' );
+	define( 'RTBIZ_HD_VERSION', '1.6.3' );
 }
 
 if ( ! defined( 'RTBIZ_HD_TEXT_DOMAIN' ) ) {
@@ -60,7 +60,12 @@ if ( ! defined( 'RTBIZ_HD_PATH_TEMPLATES' ) ) {
 
 if ( ! defined( 'EDD_RT_HELPDESK_STORE_URL' ) ) {
 
-	define( 'EDD_RT_HELPDESK_STORE_URL', 'https://rtcamp.com/' );
+	define( 'EDD_RT_HELPDESK_STORE_URL', 'https://rtbiz.io/' );
+}
+
+if ( ! defined( 'RT_HELPDESK_SUPPORT_EMAIL' ) ) {
+
+	define( 'RT_HELPDESK_SUPPORT_EMAIL', 'support@rtbiz.io' );
 }
 
 if ( ! defined( 'EDD_RT_HELPDESK_ITEM_NAME' ) ) {
@@ -109,8 +114,8 @@ global $rtbiz_hd_plugin_check;
 $plugins_dependency = array(
 	'rtbiz' => array(
 		'project_type' => 'all',
-		'name'         => esc_html__( 'rtBiz', RTBIZ_HD_TEXT_DOMAIN ),
-		'desc' => esc_html__( 'WordPress for Business.', RTBIZ_HD_TEXT_DOMAIN ),
+		'name'         => esc_html__( 'rtBiz', 'rtbiz-helpdesk' ),
+		'desc' => esc_html__( 'WordPress for Business.', 'rtbiz-helpdesk' ),
 		'active' => class_exists( 'Rt_Biz' ),
 		'filename' => 'rtbiz.php',
 	),
@@ -158,7 +163,7 @@ function _rtbiz_hd_php_version_check(){
 
 function _rtbiz_hd_running_older_php_version(){ ?>
 	<div class="error rtbiz-hd-php-older-version">
-		<p><?php _e( 'You are running an older PHP version. Please upgrade to PHP <strong>5.3 or above</strong> to run rtBiz Helpdesk plugin.', RTBIZ_HD_TEXT_DOMAIN ) ?></p>
+		<p><?php _e( 'You are running an older PHP version. Please upgrade to PHP <strong>5.3 or above</strong> to run rtBiz Helpdesk plugin.', 'rtbiz-helpdesk' ) ?></p>
 	</div> <?php
 }
 

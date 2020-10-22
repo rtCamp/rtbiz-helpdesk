@@ -46,7 +46,7 @@ if ( ! class_exists( 'Rtbiz_HD_Mailbox' ) ) {
 
 				$product_list = '';
 				if ( isset ( $rtbiz_hd_products ) && ! empty ( $rtbiz_hd_products ) ) {
-					$product_list .= '<div class="rtmailbox-row rthd-mailbox-assign"><label> ' . __( 'Select Product', RTBIZ_HD_TEXT_DOMAIN ) . '</label>';
+					$product_list .= '<div class="rtmailbox-row rthd-mailbox-assign"><label> ' . __( 'Select Product', 'rtbiz-helpdesk' ) . '</label>';
 					$product_list .= '<div class="mailbox-folder-list">';
 					$product_list .= '<select name="rtmailbox[product]" class="redux-select-item" tabindex="-1" title="">';
 					$product_list .= '<option value="0">Select Product</option>';
@@ -69,7 +69,7 @@ if ( ! class_exists( 'Rtbiz_HD_Mailbox' ) ) {
 				$users_options = '';
 
 				if ( isset ( $users ) && ! empty ( $users ) ) {
-					$users_options .= '<div class="rtmailbox-row rthd-mailbox-assign"><label> ' . __( 'Select Assignee', RTBIZ_HD_TEXT_DOMAIN ) . '</label>';
+					$users_options .= '<div class="rtmailbox-row rthd-mailbox-assign"><label> ' . __( 'Select Assignee', 'rtbiz-helpdesk' ) . '</label>';
 					$users_options .= '<div class="mailbox-folder-list">';
 					$users_options .= '<select name="rtmailbox[staff]" class="redux-select-item" tabindex="-1" title="">';
 					$users_options .= '<option value="0">Select Assignee</option>';

@@ -93,19 +93,19 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 		 */
 		public function get_custom_labels() {
 			$this->labels = array(
-				'name'          => __( 'Tickets', RTBIZ_HD_TEXT_DOMAIN ),
-				'singular_name' => __( 'Ticket', RTBIZ_HD_TEXT_DOMAIN ),
+				'name'          => __( 'Tickets', 'rtbiz-helpdesk' ),
+				'singular_name' => __( 'Ticket', 'rtbiz-helpdesk' ),
 				'menu_name'     => 'Helpdesk',
-				'all_items'     => __( 'Tickets', RTBIZ_HD_TEXT_DOMAIN ),
-				'add_new'       => __( 'Add New Ticket', RTBIZ_HD_TEXT_DOMAIN ),
-				'add_new_item'  => __( 'Add New Ticket', RTBIZ_HD_TEXT_DOMAIN ),
-				'new_item'      => __( 'Add New Ticket', RTBIZ_HD_TEXT_DOMAIN ),
-				'edit_item'     => __( 'Edit Ticket', RTBIZ_HD_TEXT_DOMAIN ),
-				'view_item'     => __( 'View Ticket', RTBIZ_HD_TEXT_DOMAIN ),
-				'search_items'  => __( 'Search Tickets', RTBIZ_HD_TEXT_DOMAIN ),
-				'parent_item_colon'  => __( 'Parent Tickets', RTBIZ_HD_TEXT_DOMAIN ),
-				'not_found'  => __( 'No Tickets found', RTBIZ_HD_TEXT_DOMAIN ),
-				'not_found_in_trash'  => __( 'No Tickets found in Trash', RTBIZ_HD_TEXT_DOMAIN ),
+				'all_items'     => __( 'Tickets', 'rtbiz-helpdesk' ),
+				'add_new'       => __( 'Add New Ticket', 'rtbiz-helpdesk' ),
+				'add_new_item'  => __( 'Add New Ticket', 'rtbiz-helpdesk' ),
+				'new_item'      => __( 'Add New Ticket', 'rtbiz-helpdesk' ),
+				'edit_item'     => __( 'Edit Ticket', 'rtbiz-helpdesk' ),
+				'view_item'     => __( 'View Ticket', 'rtbiz-helpdesk' ),
+				'search_items'  => __( 'Search Tickets', 'rtbiz-helpdesk' ),
+				'parent_item_colon'  => __( 'Parent Tickets', 'rtbiz-helpdesk' ),
+				'not_found'  => __( 'No Tickets found', 'rtbiz-helpdesk' ),
+				'not_found_in_trash'  => __( 'No Tickets found in Trash', 'rtbiz-helpdesk' ),
 			);
 			return $this->labels;
 		}
@@ -122,18 +122,18 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 			$this->statuses = array(
 				array(
 					'slug'        => 'hd-answered',
-					'name'        => __( 'Answered', RTBIZ_HD_TEXT_DOMAIN ),
-					'description' => __( 'Ticket is answered. Expecting further communication from client', RTBIZ_HD_TEXT_DOMAIN ),
+					'name'        => __( 'Answered', 'rtbiz-helpdesk' ),
+					'description' => __( 'Ticket is answered. Expecting further communication from client', 'rtbiz-helpdesk' ),
 				),
 				array(
 					'slug'        => 'hd-unanswered',
-					'name'        => __( 'Unanswered', RTBIZ_HD_TEXT_DOMAIN ),
-					'description' => __( 'Ticket is unanswered. It needs to be replied. The default state.', RTBIZ_HD_TEXT_DOMAIN ),
+					'name'        => __( 'Unanswered', 'rtbiz-helpdesk' ),
+					'description' => __( 'Ticket is unanswered. It needs to be replied. The default state.', 'rtbiz-helpdesk' ),
 				),
 				array(
 					'slug'        => 'hd-archived',
-					'name'        => __( 'Archived', RTBIZ_HD_TEXT_DOMAIN ),
-					'description' => __( 'Ticket is archived. Client can re-open if they wish to.', RTBIZ_HD_TEXT_DOMAIN ),
+					'name'        => __( 'Archived', 'rtbiz-helpdesk' ),
+					'description' => __( 'Ticket is archived. Client can re-open if they wish to.', 'rtbiz-helpdesk' ),
 				),
 			);
 
@@ -214,7 +214,7 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 				'label'       => $status['name'],
 				'public'      => true,
 				'exclude_from_search' => false,
-				'label_count' => _n_noop( "{$status['name']} <span class='count'>(%s)</span>", "{$status['name']} <span class='count'>(%s)</span>" ),
+				'label_count' => _n_noop( "{$status['name']} <span class='count'>(%s)</span>", "{$status['name']} <span class='count'>(%s)</span>", 'rtbiz-helpdesk' ),
 			) );
 
 		}
@@ -289,16 +289,16 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 		public function ticket_updated_messages( $messages ) {
 			$messages[ self::$post_type ] = array(
 				0  => '', // Unused. Messages start at index 1.
-				1  => __( 'Ticket updated.', RTBIZ_HD_TEXT_DOMAIN ),
-				2  => __( 'Custom field updated.', RTBIZ_HD_TEXT_DOMAIN ),
-				3  => __( 'Custom field deleted.', RTBIZ_HD_TEXT_DOMAIN ),
-				4  => __( 'Ticket updated.', RTBIZ_HD_TEXT_DOMAIN ),
+				1  => __( 'Ticket updated.', 'rtbiz-helpdesk' ),
+				2  => __( 'Custom field updated.', 'rtbiz-helpdesk' ),
+				3  => __( 'Custom field deleted.', 'rtbiz-helpdesk' ),
+				4  => __( 'Ticket updated.', 'rtbiz-helpdesk' ),
 				/* translators: %s: date and time of the revision */
-				5  => isset( $_GET['revision'] ) ? sprintf( __( 'Ticket restored to revision from %s', RTBIZ_HD_TEXT_DOMAIN ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
-				6  => __( 'Ticket published.', RTBIZ_HD_TEXT_DOMAIN ),
-				7  => __( 'Ticket saved.', RTBIZ_HD_TEXT_DOMAIN ),
-				8  => __( 'Ticket submitted.', RTBIZ_HD_TEXT_DOMAIN ),
-				10 => __( 'Ticket draft updated.', RTBIZ_HD_TEXT_DOMAIN ),
+				5  => isset( $_GET['revision'] ) ? sprintf( __( 'Ticket restored to revision from %s', 'rtbiz-helpdesk' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
+				6  => __( 'Ticket published.', 'rtbiz-helpdesk' ),
+				7  => __( 'Ticket saved.', 'rtbiz-helpdesk' ),
+				8  => __( 'Ticket submitted.', 'rtbiz-helpdesk' ),
+				10 => __( 'Ticket draft updated.', 'rtbiz-helpdesk' ),
 			);
 			return $messages;
 		}
@@ -312,11 +312,11 @@ if ( ! class_exists( 'Rtbiz_HD_Module' ) ) {
 		 */
 		public function bulk_ticket_update_messages( $bulk_messages, $bulk_counts ) {
 			$bulk_messages[ self::$post_type ] = array(
-				'updated'   => _n( '%s ticket updated.', '%s tickets updated.', $bulk_counts['updated'] ),
-				'locked'    => _n( '%s ticket not updated, somebody is editing it.', '%s tickets not updated, somebody is editing them.', $bulk_counts['locked'] ),
-				'deleted'   => _n( '%s ticket permanently deleted.', '%s tickets permanently deleted.', $bulk_counts['deleted'] ),
-				'trashed'   => _n( '%s ticket moved to the Trash.', '%s tickets moved to the Trash.', $bulk_counts['trashed'] ),
-				'untrashed' => _n( '%s ticket restored from the Trash.', '%s tickets restored from the Trash.', $bulk_counts['untrashed'] ),
+				'updated'   => _n( '%s ticket updated.', '%s tickets updated.', $bulk_counts['updated'], 'rtbiz-helpdesk'  ),
+				'locked'    => _n( '%s ticket not updated, somebody is editing it.', '%s tickets not updated, somebody is editing them.', $bulk_counts['locked'], 'rtbiz-helpdesk' ),
+				'deleted'   => _n( '%s ticket permanently deleted.', '%s tickets permanently deleted.', $bulk_counts['deleted'], 'rtbiz-helpdesk' ),
+				'trashed'   => _n( '%s ticket moved to the Trash.', '%s tickets moved to the Trash.', $bulk_counts['trashed'], 'rtbiz-helpdesk' ),
+				'untrashed' => _n( '%s ticket restored from the Trash.', '%s tickets restored from the Trash.', $bulk_counts['untrashed'], 'rtbiz-helpdesk' ),
 			);
 			return $bulk_messages;
 		}

@@ -115,7 +115,7 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 		}
 
 		function edd_customer_columns( $columns ) {
-			$columns[ Rtbiz_HD_Module::$post_type ] = __( 'Tickets', RTBIZ_HD_TEXT_DOMAIN );
+			$columns[ Rtbiz_HD_Module::$post_type ] = __( 'Tickets', 'rtbiz-helpdesk' );
 			return $columns;
 		}
 
@@ -151,7 +151,7 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 		 * @return mixed
 		 */
 		function order_post_columns( $existing_columns ) {
-			$existing_columns[ Rtbiz_HD_Module::$post_type.'_order' ] = __( 'Tickets', RTBIZ_HD_TEXT_DOMAIN );
+			$existing_columns[ Rtbiz_HD_Module::$post_type.'_order' ] = __( 'Tickets', 'rtbiz-helpdesk' );
 			return $existing_columns;
 		}
 
@@ -195,7 +195,7 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 		 * @return mixed
 		 */
 		function manage_woo_edd_post_columns( $columns ) {
-			$columns[ Rtbiz_HD_Module::$post_type.'_product' ] = __( 'Tickets', RTBIZ_HD_TEXT_DOMAIN );
+			$columns[ Rtbiz_HD_Module::$post_type.'_product' ] = __( 'Tickets', 'rtbiz-helpdesk' );
 			return $columns;
 		}
 
@@ -222,7 +222,7 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 		 * @return mixed
 		 */
 		function manage_product_column_header( $columns ) {
-			$columns['default_assignee']         = __( 'Helpdesk default assignee', RTBIZ_HD_TEXT_DOMAIN );
+			$columns['default_assignee']         = __( 'Helpdesk default assignee', 'rtbiz-helpdesk' );
 			return $columns;
 		}
 
@@ -292,13 +292,13 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 			$users = Rtbiz_HD_Utils::get_hd_rtcamp_user();
 			if ( $this->is_edit_products( 'edit' ) ) {
 				?>
-				<h3><?php _e( 'Helpdesk Settings', RTBIZ_HD_TEXT_DOMAIN ); ?></h3>
+				<h3><?php _e( 'Helpdesk Settings', 'rtbiz-helpdesk' ); ?></h3>
 
 				<table class="form-table">
 					<tbody>
 					<tr class="form-field">
 						<th scope="row" valign="top"><label
-								for="<?php echo esc_attr( Rt_Products::$product_slug ); ?>[default_assignee]"><?php _e( 'Helpdesk Default Assignee', RTBIZ_HD_TEXT_DOMAIN ); ?></label></th>
+								for="<?php echo esc_attr( Rt_Products::$product_slug ); ?>[default_assignee]"><?php _e( 'Helpdesk Default Assignee', 'rtbiz-helpdesk' ); ?></label></th>
 						<td>
 							<select name="<?php echo esc_attr( Rt_Products::$product_slug ); ?>[default_assignee]" id="<?php echo esc_attr( Rt_Products::$product_slug ); ?>[default_assignee]" >
 								<?php
@@ -319,7 +319,7 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 								?>
 							</select>
 
-							<p class="description"><?php _e( 'All new support request for this product will be assigned to selected user.', RTBIZ_HD_TEXT_DOMAIN ); ?></p>
+							<p class="description"><?php _e( 'All new support request for this product will be assigned to selected user.', 'rtbiz-helpdesk' ); ?></p>
 						</td>
 					</tr>
 					</tbody>
@@ -328,7 +328,7 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 
 				<div class="form-field">
 					<p>
-						<label for="<?php echo esc_attr( Rt_Products::$product_slug ); ?>[default_assignee]"><?php _e( 'Helpdesk Default Assignee', RTBIZ_HD_TEXT_DOMAIN ); ?></label>
+						<label for="<?php echo esc_attr( Rt_Products::$product_slug ); ?>[default_assignee]"><?php _e( 'Helpdesk Default Assignee', 'rtbiz-helpdesk' ); ?></label>
 						<select name="<?php echo esc_attr( Rt_Products::$product_slug ); ?>[default_assignee]" id="<?php echo esc_attr( Rt_Products::$product_slug ); ?>[default_assignee]" >
 							<option disabled selected > -- select an assignee -- </option>
 							<?php
@@ -338,7 +338,7 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 							?>
 						</select>
 					</p>
-					<p class="description"><?php _e( 'All new support request for this product will be assigned to selected user.', RTBIZ_HD_TEXT_DOMAIN ); ?></p>
+					<p class="description"><?php _e( 'All new support request for this product will be assigned to selected user.', 'rtbiz-helpdesk' ); ?></p>
 				</div>
 			<?php }
 		}
@@ -400,7 +400,7 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 				if ( ! empty( $payments ) ) {
 					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_box_wrapper_start','<div class="rt-hd-sidebar-box">' );
 					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_header_wrapper_start','<div class="rt-hd-ticket-info">' );
-					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_heading', '<h3 class="rt-hd-ticket-info-header">' . __( 'Purchase History' ) . '</h3><div class="rthd-collapse-icon"><a class="rthd-collapse-click" href="#"><span class="dashicons dashicons-arrow-up-alt2"></span></a></div><div class="rthd-clearfix"></div>' );
+					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_heading', '<h3 class="rt-hd-ticket-info-header">' . __( 'Purchase History', 'rtbiz-helpdesk' ) . '</h3><div class="rthd-collapse-icon"><a class="rthd-collapse-click" href="#"><span class="dashicons dashicons-arrow-up-alt2"></span></a></div><div class="rthd-clearfix"></div>' );
 					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_header_wrapper_end', '</div>' );
 					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_wrapper_start', '<div class="rt-hd-ticket-sub-row">' );
 					echo '<ul>';
@@ -413,7 +413,7 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 							$status = wc_get_order_status_name( $payment->post_status );
 							$link = get_edit_post_link( $payment->ID );
 						}
-						echo '<li><a href="' . $link . '">' . sprintf( __( 'Order #%d', RTBIZ_HD_TEXT_DOMAIN ), $payment->ID ) . '</a> <div class="rthd_order_status">'. $status .'</div></li>';
+						echo '<li><a href="' . $link . '">' . sprintf( __( 'Order #%d', 'rtbiz-helpdesk' ), $payment->ID ) . '</a> <div class="rthd_order_status">'. $status .'</div></li>';
 					}
 					echo '</ul>';
 					echo apply_filters( 'rtbiz_hd_ticket_purchase_history_wrapper_end', '</div>' );
@@ -426,7 +426,7 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 		 * Display ticket history on order page
 		 */
 		function order_support_history( $post ) {
-			add_meta_box( 'rtbiz-helpdesk-support-info', __( 'Support History' ), array( $this, 'support_info' ), 'shop_order', 'normal' );
+			add_meta_box( 'rtbiz-helpdesk-support-info', __( 'Support History', 'rtbiz-helpdesk' ), array( $this, 'support_info' ), 'shop_order', 'normal' );
 			add_action( 'edd_view_order_details_main_after', array( $this, 'edd_support_info' ), 700 );
 		}
 
@@ -445,7 +445,7 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 			<div class="postbox-container">
 				<div id="normal-sortables" class="meta-box-sortables ui-sortable">
 					<div class="postbox">
-						<h3 class="hndle"><?php _e( 'Support History' ); ?></h3>
+						<h3 class="hndle"><?php _e( 'Support History', 'rtbiz-helpdesk' ); ?></h3>
 						<div class="inside">
 							<?php $this->support_info( get_post( $order_id ) ); ?>
 						</div>
@@ -462,7 +462,7 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 			global $redux_helpdesk_settings;
 			if ( isset( $redux_helpdesk_settings['rthd_support_page'] ) && ! empty( $redux_helpdesk_settings['rthd_support_page'] ) ) {
 				?>
-				<th class="edd_rt_hd_support"><?php _e( 'Support', 'edd' ); ?></th>
+				<th class="edd_rt_hd_support"><?php _e( 'Support', 'rtbiz-helpdesk' ); ?></th>
 			<?php
 			}
 		}
@@ -481,7 +481,7 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 				$link = add_query_arg( array( 'product_id' => $download_id, 'order_id' => $payment_id, 'order_type' => 'edd' ), $link );
 				?>
 				<td class="edd_rt_hd_support"><a
-						href="<?php echo $link; ?>"><?php _e( 'Create Ticket', RTBIZ_HD_TEXT_DOMAIN ) ?></a>
+						href="<?php echo $link; ?>"><?php _e( 'Create Ticket', 'rtbiz-helpdesk' ) ?></a>
 				</td>
 			<?php
 			}
@@ -507,7 +507,7 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 				$link = add_query_arg( array( 'order_id' => $order->id, 'order_type' => 'woocommerce' ), $link );
 				$actions['support'] = array(
 					'url'  => $link,
-					'name' => __( 'Create Ticket', RTBIZ_HD_TEXT_DOMAIN ),
+					'name' => __( 'Create Ticket', 'rtbiz-helpdesk' ),
 				);
 			}
 			return $actions;

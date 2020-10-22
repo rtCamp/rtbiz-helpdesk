@@ -13,7 +13,7 @@ $welcome_label = 'Helpdesk';
 
 	<?php screen_icon(); ?>
 
-	<h2><?php printf( __( '%s Dashboard' ), $welcome_label ); ?></h2>
+	<h2><?php printf( __( '%s Dashboard', 'rtbiz-helpdesk' ), $welcome_label ); ?></h2>
 
 	<?php
 	if ( current_user_can( $author_cap ) ) {
@@ -29,7 +29,7 @@ $welcome_label = 'Helpdesk';
 
 		<div id="welcome-panel" class="<?php echo esc_attr( $classes ); ?>">
 			<?php wp_nonce_field( 'rthd-welcome-panel-nonce', 'rthdwelcomepanelnonce', false ); ?>
-			<a class="welcome-panel-close" href="<?php echo esc_url( admin_url( 'admin.php?page=rthd-' . esc_html( Rtbiz_HD_Module::$post_type ) . '-dashboard&rthdwelcome=0' ) ); ?>"><?php _e( 'Dismiss' ); ?></a>
+			<a class="welcome-panel-close" href="<?php echo esc_url( admin_url( 'admin.php?page=rthd-' . esc_html( Rtbiz_HD_Module::$post_type ) . '-dashboard&rthdwelcome=0' ) ); ?>"><?php _e( 'Dismiss', 'rtbiz-helpdesk' ); ?></a>
 			<?php
 			/**
 			 * Add content to the welcome panel on the admin dashboard.

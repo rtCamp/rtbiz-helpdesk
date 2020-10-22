@@ -44,12 +44,12 @@ if ( ! class_exists( 'Rtbiz_HD_i18n' ) ) {
 		public function load_plugin_textdomain() {
 
 			// Set filter for plugin's languages directory
-			$lang_dir = dirname( plugin_basename( RTBIZ_HD_PATH ) ) . 'languages/';
+			$lang_dir = basename( RTBIZ_HD_PATH ) . '/languages/';
 			$lang_dir = apply_filters( 'rtbiz_languages_directory', $lang_dir );
 
 			// Traditional WordPress plugin locale filter
 			$locale = apply_filters( 'plugin_locale', get_locale(), RTBIZ_HD_TEXT_DOMAIN );
-			$mofile = sprintf( '%1$s-%2$s.mo', RTBIZ_HD_TEXT_DOMAIN, $locale );
+			$mofile = sprintf( '%1$s-%2$s.mo', 'rtbiz-helpdesk', $locale );
 
 			// Setup paths to current locale file
 			$mofile_local  = $lang_dir . $mofile;

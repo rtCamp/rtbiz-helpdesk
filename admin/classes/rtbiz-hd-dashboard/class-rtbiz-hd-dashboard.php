@@ -75,7 +75,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 
 				$author_cap = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'author' );
 
-				$this->screen_id = add_submenu_page( 'edit.php?post_type=' . esc_html( Rtbiz_HD_Module::$post_type ), __( 'Dashboard', RTBIZ_HD_TEXT_DOMAIN ), __( 'Dashboard', RTBIZ_HD_TEXT_DOMAIN ), $author_cap, self::$page_slug, array(
+				$this->screen_id = add_submenu_page( 'edit.php?post_type=' . esc_html( Rtbiz_HD_Module::$post_type ), __( 'Dashboard', 'rtbiz-helpdesk' ), __( 'Dashboard', 'rtbiz-helpdesk' ), $author_cap, self::$page_slug, array(
 					$this,
 					'dashboard_ui',
 				) );
@@ -94,7 +94,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 
 
 		public function add_helpdesk_link() {
-			?><a id="rtbiz-customize-helpdesk" class="button button-primary button-hero" href="<?php echo admin_url( 'admin.php?page=rthd-' . Rtbiz_HD_Module::$post_type . '-dashboard' ); ?>"><?php _e( 'Helpdesk' ); ?></a><?php
+			?><a id="rtbiz-customize-helpdesk" class="button button-primary button-hero" href="<?php echo admin_url( 'admin.php?page=rthd-' . Rtbiz_HD_Module::$post_type . '-dashboard' ); ?>"><?php _e( 'Helpdesk', 'rtbiz-helpdesk' ); ?></a><?php
 		}
 
 		/**
@@ -165,17 +165,17 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 			global $rtbiz_hd_dashboard, $rtbiz_hd_attributes_model, $rtbiz_hd_attributes_relationship_model;
 
 			/* Pie Chart - Progress Indicator (Post status based) */
-			add_meta_box( 'rthd-tickets-by-status', __( 'Tickets by Status', RTBIZ_HD_TEXT_DOMAIN ), array(
+			add_meta_box( 'rthd-tickets-by-status', __( 'Tickets by Status', 'rtbiz-helpdesk' ), array(
 				$this,
 				'tickets_by_status',
 					), $rtbiz_hd_dashboard->screen_id, 'column1' );
 			/* Line Chart for Answered::Archived */
-			add_meta_box( 'rthd-daily-tickets', __( 'Daily Tickets', RTBIZ_HD_TEXT_DOMAIN ), array(
+			add_meta_box( 'rthd-daily-tickets', __( 'Daily Tickets', 'rtbiz-helpdesk' ), array(
 				$this,
 				'daily_tickets',
 					), $rtbiz_hd_dashboard->screen_id, 'column2' );
 			/* Load by Team (Matrix/Table) */
-			add_meta_box( 'rthd-team-load', __( 'Work Load', RTBIZ_HD_TEXT_DOMAIN ), array(
+			add_meta_box( 'rthd-team-load', __( 'Work Load', 'rtbiz-helpdesk' ), array(
 				$this,
 				'team_load',
 					), $rtbiz_hd_dashboard->screen_id, 'column1' );
@@ -185,17 +185,17 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 			  'top_accounts',
 			  ), $rtbiz_hd_dashboard->screen_id, 'column4' ); */
 			/* Top Clients */
-			add_meta_box( 'rthd-top-clients', __( 'Top Customers', RTBIZ_HD_TEXT_DOMAIN ), array(
+			add_meta_box( 'rthd-top-clients', __( 'Top Customers', 'rtbiz-helpdesk' ), array(
 				$this,
 				'top_clients',
 					), $rtbiz_hd_dashboard->screen_id, 'column2' );
 
-			add_meta_box( 'rthd-tickets-by-product', __( 'Tickets by Products', RTBIZ_HD_TEXT_DOMAIN ), array(
+			add_meta_box( 'rthd-tickets-by-product', __( 'Tickets by Products', 'rtbiz-helpdesk' ), array(
 				$this,
 				'tickets_by_products',
 					), $rtbiz_hd_dashboard->screen_id, 'column1' );
 
-			add_meta_box( 'rthd-customer-by-product-tickets', __( 'Ticket Conversion from Sales', RTBIZ_HD_TEXT_DOMAIN ), array(
+			add_meta_box( 'rthd-customer-by-product-tickets', __( 'Ticket Conversion from Sales', 'rtbiz-helpdesk' ), array(
 				$this,
 				'tickets_by_product_purchase',
 					), $rtbiz_hd_dashboard->screen_id, 'column2' );
@@ -203,7 +203,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 			foreach ( $relations as $r ) {
 				$attr = $rtbiz_hd_attributes_model->get_attribute( $r->attr_id );
 				if ( 'taxonomy' == $attr->attribute_store_as ) {
-					add_meta_box( 'rthd-tickets-by-' . $attr->attribute_name, $attr->attribute_label . ' ' . __( 'Wise Tickets', RTBIZ_HD_TEXT_DOMAIN ), array( $this, 'dashboard_attributes_widget_content' ), $rtbiz_hd_dashboard->screen_id, 'column1', 'default', array( 'attribute_id' => $attr->id ) );
+					add_meta_box( 'rthd-tickets-by-' . $attr->attribute_name, $attr->attribute_label . ' ' . __( 'Wise Tickets', 'rtbiz-helpdesk' ), array( $this, 'dashboard_attributes_widget_content' ), $rtbiz_hd_dashboard->screen_id, 'column1', 'default', array( 'attribute_id' => $attr->id ) );
 				}
 			}
 		}
@@ -240,10 +240,10 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 			if ( ! empty( $customers_userid ) ) {
 				$custWithicket = (int) $customers_userid[0];
 			}
-			$cols = array( __( 'Purchase', RTBIZ_HD_TEXT_DOMAIN ), __( 'Count', RTBIZ_HD_TEXT_DOMAIN ) );
+			$cols = array( __( 'Purchase', 'rtbiz-helpdesk' ), __( 'Count', 'rtbiz-helpdesk' ) );
 			$rows = array();
-			$rows[] = array( __( 'Customers who have created tickets' ), $custWithicket );
-			$rows[] = array( __( 'Customers who have not created tickets' ), $totalcustomers - $custWithicket );
+			$rows[] = array( __( 'Customers who have created tickets', 'rtbiz-helpdesk' ), $custWithicket );
+			$rows[] = array( __( 'Customers who have not created tickets', 'rtbiz-helpdesk' ), $totalcustomers - $custWithicket );
 
 			$data_source = array();
 			$data_source['cols'] = $cols;
@@ -294,7 +294,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 			$taxonomy = Rt_Products::$product_slug;
 			$terms = get_terms( $taxonomy );
 			$data_source = array();
-			$cols = array( __( 'Products', RTBIZ_HD_TEXT_DOMAIN ), __( 'Count', RTBIZ_HD_TEXT_DOMAIN ) );
+			$cols = array( __( 'Products', 'rtbiz-helpdesk' ), __( 'Count', 'rtbiz-helpdesk' ) );
 			$rows = array();
 			$post_type = Rtbiz_HD_Module::$post_type;
 			$total = 0;
@@ -319,7 +319,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 				}
 			}
 
-			$rows[] = array( __( 'Uncategorized' ), $this->get_post_count_excluding_tax( $taxonomy, $post_type ) );
+			$rows[] = array( __( 'Uncategorized', 'rtbiz-helpdesk' ), $this->get_post_count_excluding_tax( $taxonomy, $post_type ) );
 
 			$data_source['cols'] = $cols;
 			$data_source['rows'] = $rows;
@@ -360,7 +360,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 				$results = $wpdb->get_results($query);
 				$data_source = array();
 				if ( ! empty( $results ) ) {
-					$cols = array(__('Ticket Status', RTBIZ_HD_TEXT_DOMAIN), __('Count', RTBIZ_HD_TEXT_DOMAIN));
+					$cols = array(__('Ticket Status', 'rtbiz-helpdesk'), __('Count', 'rtbiz-helpdesk'));
 					$rows = array();
 					foreach ($results as $item) {
 						$post_status = (isset($post_statuses[$item->post_status])) ? $post_statuses[$item->post_status] : '';
@@ -382,7 +382,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 					'chart_type' => 'pie',
 					'data_source' => $data_source,
 					'dom_element' => 'rthd_hd_pie_tickets_by_status',
-					'options' => array('title' => __('Status wise Tickets', RTBIZ_HD_TEXT_DOMAIN)),
+					'options' => array('title' => __('Status wise Tickets', 'rtbiz-helpdesk')),
 				);
 			}
 
@@ -443,7 +443,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 			} while ( $current_date < $last_date );
 
 			$data_source = array();
-			$cols[0] = __( 'Daily Tickets', RTBIZ_HD_TEXT_DOMAIN );
+			$cols[0] = __( 'Daily Tickets', 'rtbiz-helpdesk' );
 			foreach ( $post_statuses as $status ) {
 				$cols[] = $status;
 			}
@@ -467,7 +467,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 				'data_source' => $data_source,
 				'dom_element' => 'rthd_hd_line_daily_tickets',
 				'options' => array(
-					'title' => __( 'Daily Tickets', RTBIZ_HD_TEXT_DOMAIN ),
+					'title' => __( 'Daily Tickets', 'rtbiz-helpdesk' ),
 					'vAxis' => json_encode( array( 'viewWindow' => array( 'min' => 0 ) ) ),
 				),
 			);
@@ -511,7 +511,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 						}
 					}
 
-					$cols[] = array('type' => 'string', 'label' => __('Users', RTBIZ_HD_TEXT_DOMAIN));
+					$cols[] = array('type' => 'string', 'label' => __('Users', 'rtbiz-helpdesk'));
 					foreach ($post_statuses as $status) {
 						$cols[] = array('type' => 'number', 'label' => $status);
 					}
@@ -547,12 +547,12 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 					'chart_type'  => 'table',
 					'data_source' => $data_source,
 					'dom_element' => 'rthd_hd_table_team_load',
-					'options'     => array( 'title' => __( 'Team Load', RTBIZ_HD_TEXT_DOMAIN ) , 'sortColumn' => 1, 'sortAscending' => true ),
+					'options'     => array( 'title' => __( 'Team Load', 'rtbiz-helpdesk' ) , 'sortColumn' => 1, 'sortAscending' => true ),
 				);
 				?>
 				<div id="rthd_hd_table_team_load"></div> <?php
 			} else
-				_e( 'No staff / ticket found.' );
+				_e( 'No staff / ticket found.', 'rtbiz-helpdesk' );
 		}
 
 		/**
@@ -571,8 +571,8 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 
 			$data_source = array();
 			$cols = array(
-				array( 'type' => 'string', 'label' => __( 'Account Name', RTBIZ_HD_TEXT_DOMAIN ) ),
-				array( 'type' => 'number', 'label' => __( 'Number of Tickets', RTBIZ_HD_TEXT_DOMAIN ) ),
+				array( 'type' => 'string', 'label' => __( 'Account Name', 'rtbiz-helpdesk' ) ),
+				array( 'type' => 'number', 'label' => __( 'Number of Tickets', 'rtbiz-helpdesk' ) ),
 			);
 
 			$rows = array();
@@ -595,7 +595,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 				'chart_type' => 'table',
 				'data_source' => $data_source,
 				'dom_element' => 'rthd_hd_table_top_accounts',
-				'options' => array( 'title' => __( 'Top Accounts', RTBIZ_HD_TEXT_DOMAIN ) ),
+				'options' => array( 'title' => __( 'Top Accounts', 'rtbiz-helpdesk' ) ),
 			);
 			?>
 			<div id="rthd_hd_table_top_accounts"></div>
@@ -636,8 +636,8 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 				$data_source = array();
 				if ( ! empty( $results ) ) {
 					$cols = array(
-						array('type' => 'string', 'label' => __('Contact Name', RTBIZ_HD_TEXT_DOMAIN)),
-						array('type' => 'number', 'label' => __('Number of Tickets', RTBIZ_HD_TEXT_DOMAIN)),
+						array('type' => 'string', 'label' => __('Contact Name', 'rtbiz-helpdesk')),
+						array('type' => 'number', 'label' => __('Number of Tickets', 'rtbiz-helpdesk')),
 					);
 
 					$rows = array();
@@ -663,13 +663,13 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 					'chart_type' => 'table',
 					'data_source' => $data_source,
 					'dom_element' => 'rthd_hd_table_top_clients',
-					'options' => array('title' => __('Top Clients', RTBIZ_HD_TEXT_DOMAIN)),
+					'options' => array('title' => __('Top Clients', 'rtbiz-helpdesk')),
 				);
 			}
 				?>
 				<div id="rthd_hd_table_top_clients">
 					<?php if ( empty( $data_source ) ) {
-						_e('No customer found');
+						_e('No customer found', 'rtbiz-helpdesk');
 					} ?>
 				</div>
 				<?php
@@ -693,7 +693,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 			$terms = get_terms( $taxonomy );
 
 			$data_source = array();
-			$cols = array( $attr->attribute_label, __( 'Tickets', RTBIZ_HD_TEXT_DOMAIN ) );
+			$cols = array( $attr->attribute_label, __( 'Tickets', 'rtbiz-helpdesk' ) );
 			$rows = array();
 			$total = 0;
 
@@ -719,7 +719,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 				                       'fields'        => 'ids',
 			                       ) );
 
-			$rows[] = array( __( 'Others', RTBIZ_HD_TEXT_DOMAIN ), $posts->found_posts - $total );
+			$rows[] = array( __( 'Others', 'rtbiz-helpdesk' ), $posts->found_posts - $total );
 
 			$data_source['cols'] = $cols;
 			$data_source['rows'] = $rows;
@@ -792,43 +792,43 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 			$editor_cap = rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' );
 			?>
 			<div class="welcome-panel-content">
-				<h3><?php _e( 'Welcome to ' . $welcome_label ); ?></h3>
-				<p class="about-description"><?php _e( 'We&#8217;ve assembled some links to get you started:' ); ?></p>
+				<h3><?php _e( 'Welcome to ' . $welcome_label, 'rtbiz-helpdesk' ); ?></h3>
+				<p class="about-description"><?php _e( 'We&#8217;ve assembled some links to get you started:', 'rtbiz-helpdesk' ); ?></p>
 				<div class="welcome-panel-column-container">
 					<div class="welcome-panel-column">
 						<?php if ( current_user_can( $admin_cap ) ) : ?>
-							<h4><?php _e( 'Get Started' ); ?></h4>
-							<a id="rt-hd-customize-biz" class="button button-primary button-hero" href="<?php echo admin_url( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type . '&page=' . Rtbiz_HD_Settings::$page_slug ); ?>"><?php _e( 'Helpdesk Settings' ); ?></a>
+							<h4><?php _e( 'Get Started', 'rtbiz-helpdesk' ); ?></h4>
+							<a id="rt-hd-customize-biz" class="button button-primary button-hero" href="<?php echo admin_url( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type . '&page=' . Rtbiz_HD_Settings::$page_slug ); ?>"><?php _e( 'Helpdesk Settings', 'rtbiz-helpdesk' ); ?></a>
 						<?php endif; ?>
 					</div>
 					<div class="welcome-panel-column">
-						<h4><?php _e( 'Next Steps' ); ?></h4>
+						<h4><?php _e( 'Next Steps', 'rtbiz-helpdesk' ); ?></h4>
 						<ul>
 							<?php if ( current_user_can( $editor_cap ) ) { ?>
 								<div id="rthd-support-page">
 									<?php if ( isset( $settings['rthd_support_page'] ) && ! empty( $settings['rthd_support_page'] ) && get_post( $settings['rthd_support_page'] ) ) : ?>
 										<li>
-											<a id="rthd-view-support-page" class="welcome-icon welcome-view-site" href="<?php echo get_page_link( $settings['rthd_support_page'] ); ?>"><?php _e( 'Add Support Ticket' ); ?></a>
+											<a id="rthd-view-support-page" class="welcome-icon welcome-view-site" href="<?php echo get_page_link( $settings['rthd_support_page'] ); ?>"><?php _e( 'Add Support Ticket', 'rtbiz-helpdesk' ); ?></a>
 										</li>
 									<?php else : ?>
 										<li>
-											<a id="rthd-new-support-page" class="rthd-new-support-page welcome-icon welcome-add-page" href="javascript:;"><?php _e( 'Setup Support Page' ); ?></a>
+											<a id="rthd-new-support-page" class="rthd-new-support-page welcome-icon welcome-add-page" href="javascript:;"><?php _e( 'Setup Support Page', 'rtbiz-helpdesk' ); ?></a>
 											<img id="rthd-support-spinner" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 										</li>
 									<?php endif; ?>
 								</div>
 								<!--<li><?php /* printf( '<a id="rtiz-add-ticket" href="%s" class="welcome-icon welcome-admin-users">' . __( 'Add new Ticket' ) . '</a>', admin_url( 'post-new.php?post_type=' . Rt_HD_Module::$post_type ) ); */ ?></li>-->
-								<li><?php printf( '<a href="%s" class="welcome-icon welcome-networking">' . __( 'Setup Attributes' ) . '</a>', admin_url( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type . '&page=' . $rtbiz_hd_attributes->attributes_page_slug ) ); ?></li>
+								<li><?php printf( '<a href="%s" class="welcome-icon welcome-networking">' . __( 'Setup Attributes', 'rtbiz-helpdesk' ) . '</a>', admin_url( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type . '&page=' . $rtbiz_hd_attributes->attributes_page_slug ) ); ?></li>
 							<?php } ?>
 						</ul>
 					</div>
 
 					<div class="welcome-panel-column welcome-panel-last">
-						<h4><?php _e( 'More Actions' ); ?></h4>
+						<h4><?php _e( 'More Actions', 'rtbiz-helpdesk' ); ?></h4>
 						<ul>
-							<li><?php printf( '<a href="%s" class="welcome-icon welcome-learn-more">' . __( 'Learn more about getting started' ) . '</a>', 'http://docs.rtcamp.com/rtbiz/' ); ?></li>
+							<li><?php printf( '<a href="%s" class="welcome-icon welcome-learn-more">' . __( 'Learn more about getting started', 'rtbiz-helpdesk' ) . '</a>', 'http://docs.rtcamp.com/rtbiz/' ); ?></li>
 							<?php if ( current_user_can( $editor_cap ) ) { ?>
-								<li><?php printf( '<a href="%s" class="welcome-icon welcome-universal-access-alt">' . __( 'Add new Team' ) . '</a>', admin_url( 'edit-tags.php?taxonomy=' . Rtbiz_Teams::$slug . '&post_type=' . Rtbiz_HD_Module::$post_type ) ); ?></li>
+								<li><?php printf( '<a href="%s" class="welcome-icon welcome-universal-access-alt">' . __( 'Add new Team', 'rtbiz-helpdesk' ) . '</a>', admin_url( 'edit-tags.php?taxonomy=' . Rtbiz_Teams::$slug . '&post_type=' . Rtbiz_HD_Module::$post_type ) ); ?></li>
 							<?php } ?>
 						</ul>
 					</div>
@@ -904,7 +904,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 						} );
 					} );
 
-					$( '#screen-options-wrap #adv-settings .metabox-prefs' ).append( "<label for='rthd_welcome_panel-hide'><input type='checkbox' id='rthd_welcome_panel-hide' value='welcome-panel' <?php echo checked( (bool) $welcome_checked, true, false ); ?> /><?php _e( 'Welcome', RTBIZ_HD_TEXT_DOMAIN ); ?></label>" );
+					$( '#screen-options-wrap #adv-settings .metabox-prefs' ).append( "<label for='rthd_welcome_panel-hide'><input type='checkbox' id='rthd_welcome_panel-hide' value='welcome-panel' <?php echo checked( (bool) $welcome_checked, true, false ); ?> /><?php _e( 'Welcome', 'rtbiz-helpdesk' ); ?></label>" );
 				} );
 			</script>
 			<?php
@@ -943,7 +943,7 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 				/* Set support page option. */
 				rtbiz_hd_set_redux_settings( 'rthd_support_page', $support_page_id );
 				$response['status'] = true;
-				$response['html'] = '<li><a id="rthd-view-support-page" class="welcome-icon welcome-view-site" target="_blank" href="' . get_page_link( $support_page_id ) . '">' . __( 'View Support Page' ) . '</a></li>';
+				$response['html'] = '<li><a id="rthd-view-support-page" class="welcome-icon welcome-view-site" target="_blank" href="' . get_page_link( $support_page_id ) . '">' . __( 'View Support Page', 'rtbiz-helpdesk' ) . '</a></li>';
 			}
 			echo json_encode( $response );
 			die();

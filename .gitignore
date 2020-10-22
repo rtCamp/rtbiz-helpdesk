@@ -9,3 +9,5 @@ _book
 node_modules
 npm-debug.log
 /nbproject/private/
+nbproject
+

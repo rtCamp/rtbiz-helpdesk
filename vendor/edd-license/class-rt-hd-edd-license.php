@@ -27,10 +27,10 @@ if ( ! class_exists( 'Rt_HD_Edd_License' ) ) {
 
 			if ( false !== $status && 'valid' == $status ) {
 				$status_class = 'rthd-addon-status-activated';
-				$status_value = __( 'Activated', RTBIZ_TEXT_DOMAIN  );
+				$status_value = __( 'Activated', 'rtbiz-helpdesk'  );
 			} else {
 				$status_class = 'rthd-addon-status-deactivated';
-				$status_value = __( 'Deactivated', RTBIZ_TEXT_DOMAIN );
+				$status_value = __( 'Deactivated', 'rtbiz-helpdesk' );
 			}
 			?>
             <div class="rthd-addon-license">
@@ -48,17 +48,17 @@ if ( ! class_exists( 'Rt_HD_Edd_License' ) ) {
                             </tr>
                             <tr valign="top" style="border-bottom: medium none;">
                                 <th scope="row" valign="top">
-	                                <fieldset class="redux-field-container"><?php _e( 'License Key', RTBIZ_HD_TEXT_DOMAIN ); ?></fieldset>
+	                                <fieldset class="redux-field-container"><?php _e( 'License Key', 'rtbiz-helpdesk' ); ?></fieldset>
                                 </th>
                                 <td>
 	                                <fieldset class="redux-field-container"><input id="rtbiz_hd_edd_license_key" name="rtbiz_hd_edd_license_key"
                                            type="text"
-                                           class="regular-text" value="<?php esc_attr_e( $license ); ?>"/></fieldset>
+                                           class="regular-text" value="<?php esc_attr_e( $license, 'rtbiz-helpdesk' ); ?>"/></fieldset>
                                 </td>
                             </tr>
                             <tr valign="top" >
 	                            <th scope="row" valign="top">
-		                            <fieldset><?php _e( '', RTBIZ_HD_TEXT_DOMAIN ); ?></fieldset>
+		                            <fieldset><?php _e( '', 'rtbiz-helpdesk' ); ?></fieldset>
 	                            </th>
 	                            <td><fieldset><?php
 		                            wp_nonce_field( 'edd_rthelpdesk_nonce', 'edd_rthelpdesk_nonce' );
@@ -66,19 +66,19 @@ if ( ! class_exists( 'Rt_HD_Edd_License' ) ) {
 			                            if ( $status !== false && $status == 'valid' ) { ?>
 	                                        <input type="submit" class="button-secondary"
 	                                               name="edd_rthelpdesk_license_deactivate"
-	                                               value="<?php _e( 'Deactivate License', RTBIZ_HD_TEXT_DOMAIN ); ?>"/><?php
+	                                               value="<?php _e( 'Deactivate License', 'rtbiz-helpdesk' ); ?>"/><?php
 										} else { ?>
 	                                        <input type="submit" class="button-secondary"
 	                                               name="edd_rthelpdesk_license_activate"
-	                                               value="<?php _e( 'Activate License', RTBIZ_HD_TEXT_DOMAIN ); ?>"/><?php
+	                                               value="<?php _e( 'Activate License', 'rtbiz-helpdesk' ); ?>"/><?php
 			                            } ?>
 			                            <input type="submit" class="button-secondary"
 			                                   name="edd_rthelpdesk_remove_deactivate"
-			                                   value="<?php _e( 'Remove License', RTBIZ_HD_TEXT_DOMAIN ); ?>"/><?php
+			                                   value="<?php _e( 'Remove License', 'rtbiz-helpdesk' ); ?>"/><?php
 		                            } else{ ?>
 			                            <input type="submit" class="button-secondary"
 			                                   name="edd_rthelpdesk_save_activate"
-			                                   value="<?php _e( 'Save & Activate License', RTBIZ_HD_TEXT_DOMAIN ); ?>"/><?php
+			                                   value="<?php _e( 'Save & Activate License', 'rtbiz-helpdesk' ); ?>"/><?php
                                     } ?>
 	                            </fieldset></td>
                             </tr>

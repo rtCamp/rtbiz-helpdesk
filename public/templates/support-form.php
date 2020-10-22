@@ -1,5 +1,5 @@
 <?php if ( 'yes' == $show_title ) { ?>
-	<div class="rthd-support-title"><?php _e( 'Get Support', RTBIZ_HD_TEXT_DOMAIN ); ?></div>
+	<div class="rthd-support-title"><?php _e( 'Get Support', 'rtbiz-helpdesk' ); ?></div>
 <?php }
 ?>
 <form method="post" id="rt-hd-support-page" class="pure-form rthd_support_from" enctype="multipart/form-data">
@@ -75,7 +75,7 @@
 			</span>
 			<span class="rthd-tooltip rthd-followup-content-tolltip">
 				Markdown & HTML support
-				<span class="rthd-tip-bottom"><?php _e( 'You may use Markdown syntax and these HTML tags - a, abbr, acronym, b, blockquote, cite, code, del, em, i, q, s, strike and strong', RTBIZ_HD_TEXT_DOMAIN ); ?>
+				<span class="rthd-tip-bottom"><?php _e( 'You may use Markdown syntax and these HTML tags - a, abbr, acronym, b, blockquote, cite, code, del, em, i, q, s, strike and strong', 'rtbiz-helpdesk' ); ?>
 				</span>
 			</span>
 		</div>
@@ -97,11 +97,11 @@
 				?>
 				<div>
 					<input id="rthd_adult_content" type="checkbox" name="post[adult_ticket]" value="1"/>
-					<label for="rthd_adult_content" class="description"><?php _e( 'Adult Content', RTBIZ_HD_TEXT_DOMAIN ); ?></label>
+					<label for="rthd_adult_content" class="description"><?php _e( 'Adult Content', 'rtbiz-helpdesk' ); ?></label>
 					<span class="rthd-tooltip rthd-tooltip-adult-content">
 						<i class="dashicons dashicons-info rtmicon"></i>
 						<span class="rthd-tip">
-							<?php _e( 'My site has adult content', RTBIZ_HD_TEXT_DOMAIN ); ?>
+							<?php _e( 'My site has adult content', 'rtbiz-helpdesk' ); ?>
 						</span>
 					</span>
 				</div>

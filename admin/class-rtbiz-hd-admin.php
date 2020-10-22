@@ -86,12 +86,12 @@ if ( !class_exists( 'Rtbiz_HD_Admin' ) ) {
 
 		public function register_menu() {
 			if ( rtbiz_hd_check_wizard_completed() ) {
-				add_submenu_page( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type, __( 'Customers' ), __( 'Customers' ), rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' ), esc_url( 'edit.php?post_type=' . rtbiz_get_contact_post_type() . '&contact_group=customer&module=' . RTBIZ_HD_TEXT_DOMAIN ) );
-				add_submenu_page( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type, __( 'Staff' ), __( 'Staff' ), rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' ), esc_url( 'edit.php?post_type=' . rtbiz_get_contact_post_type() . '&contact_group=staff&module=' . RTBIZ_HD_TEXT_DOMAIN ) );
-				add_submenu_page( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type, __( '---Teams' ), __( '---Teams' ), rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' ), esc_url( 'edit-tags.php?taxonomy=' . Rtbiz_Teams::$slug . '&post_type=' . Rtbiz_HD_Module::$post_type ) );
+				add_submenu_page( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type, __( 'Customers', 'rtbiz-helpdesk' ), __( 'Customers', 'rtbiz-helpdesk' ), rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' ), esc_url( 'edit.php?post_type=' . rtbiz_get_contact_post_type() . '&contact_group=customer&module=' . RTBIZ_HD_TEXT_DOMAIN ) );
+				add_submenu_page( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type, __( 'Staff', 'rtbiz-helpdesk' ), __( 'Staff', 'rtbiz-helpdesk' ), rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' ), esc_url( 'edit.php?post_type=' . rtbiz_get_contact_post_type() . '&contact_group=staff&module=' . RTBIZ_HD_TEXT_DOMAIN ) );
+				add_submenu_page( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type, __( '---Teams', 'rtbiz-helpdesk' ), __( '---Teams', 'rtbiz-helpdesk' ), rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'editor' ), esc_url( 'edit-tags.php?taxonomy=' . Rtbiz_Teams::$slug . '&post_type=' . Rtbiz_HD_Module::$post_type ) );
 			} else {
 				global $rtbiz_hd_setup_wizard;
-				add_submenu_page( 'edit.php?post_type=' . esc_html( Rtbiz_HD_Module::$post_type ), __( 'Setup Wizard', RTBIZ_HD_TEXT_DOMAIN ), __( 'Setup Wizard', RTBIZ_HD_TEXT_DOMAIN ), rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'admin' ), Rtbiz_HD_Setup_Wizard::$page_slug, array(
+				add_submenu_page( 'edit.php?post_type=' . esc_html( Rtbiz_HD_Module::$post_type ), __( 'Setup Wizard', 'rtbiz-helpdesk' ), __( 'Setup Wizard', 'rtbiz-helpdesk' ), rtbiz_get_access_role_cap( RTBIZ_HD_TEXT_DOMAIN, 'admin' ), Rtbiz_HD_Setup_Wizard::$page_slug, array(
 					$rtbiz_hd_setup_wizard,
 					'setup_wizard_ui',
 				) );
@@ -167,16 +167,16 @@ if ( !class_exists( 'Rtbiz_HD_Admin' ) ) {
 		}
 
 		public function plugin_action_links( $links ) {
-			$links['get-started'] = '<a href="' . admin_url( 'admin.php?page=' . Rtbiz_HD_Dashboard::$page_slug ) . '">' . __( 'Get Started', RTBIZ_HD_BASE_NAME ) . '</a>';
-			$links['settings'] = '<a href="' . admin_url( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type . '&page=' . Rtbiz_HD_Settings::$page_slug ) . '">' . __( 'Settings', RTBIZ_HD_BASE_NAME ) . '</a>';
+			$links['get-started'] = '<a href="' . admin_url( 'admin.php?page=' . Rtbiz_HD_Dashboard::$page_slug ) . '">' . __( 'Get Started', 'rtbiz-helpdesk' ) . '</a>';
+			$links['settings'] = '<a href="' . admin_url( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type . '&page=' . Rtbiz_HD_Settings::$page_slug ) . '">' . __( 'Settings', 'rtbiz-helpdesk' ) . '</a>';
 			return $links;
 		}
 
 		public function plugin_row_meta( $plugin_meta, $plugin_file, $plugin_data, $status ) {
 			if ( RTBIZ_HD_BASE_NAME == $plugin_file ) {
-				$plugin_meta[] = '<a href="' . 'http://docs.rtcamp.com/rtbiz/' . '">' . __( 'Documentation', RTBIZ_HD_TEXT_DOMAIN ) . '</a>';
+				$plugin_meta[] = '<a href="' . 'http://docs.rtcamp.com/rtbiz/' . '">' . __( 'Documentation', 'rtbiz-helpdesk' ) . '</a>';
 				//$plugin_meta[] = '<a href="' . 'https://rtcamp.com/rtbiz/faq' . '">' . __( 'FAQ', RTBIZ_TEXT_DOMAIN ) . '</a>';
-				$plugin_meta[] = '<a href="' . 'https://rtcamp.com/premium-support/' . '">' . __( 'Support', RTBIZ_HD_BASE_NAME ) . '</a>';
+				$plugin_meta[] = '<a href="' . 'https://rtcamp.com/premium-support/' . '">' . __( 'Support', 'rtbiz-helpdesk' ) . '</a>';
 			}
 			return $plugin_meta;
 		}
@@ -208,7 +208,7 @@ if ( !class_exists( 'Rtbiz_HD_Admin' ) ) {
 
 		public function module_register( $modules ) {
 			$modules[ rtbiz_sanitize_module_key( RTBIZ_HD_TEXT_DOMAIN ) ] = array(
-				'label' => __( 'Helpdesk', RTBIZ_HD_TEXT_DOMAIN ),
+				'label' => __( 'Helpdesk', 'rtbiz-helpdesk' ),
 				'post_types' => array( Rtbiz_HD_Module::$post_type ),
 				'team_support' => '',
 				'product_support' => array( Rtbiz_HD_Module::$post_type ),

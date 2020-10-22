@@ -64,11 +64,11 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 		 */
 		public function setup_wizard_ui( $post_type ) { ?>
 			<div class="wrap">
-				<h2><?php _e( 'rtBiz Helpdesk Setup', RTBIZ_HD_TEXT_DOMAIN ); ?></h2>
+				<h2><?php _e( 'rtBiz Helpdesk Setup', 'rtbiz-helpdesk' ); ?></h2>
 				<hr>
 				<div class="rthd-row-container">
 					<div class="rthd-content-section">
-						<h3 class="rthd-option-title"><?php _e( 'Please follow given steps to configure your Helpdesk.', RTBIZ_HD_TEXT_DOMAIN ); ?></h3> <?php
+						<h3 class="rthd-option-title"><?php _e( 'Please follow given steps to configure your Helpdesk.', 'rtbiz-helpdesk' ); ?></h3> <?php
 						$wizard = array(
 							'Support Page' => array( $this, 'support_page_ui' ),
 							'Connect Store' => array( $this, 'connect_store_ui' ),
@@ -89,7 +89,7 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 			if ( ! empty( $wizard ) ) { ?>
 				<div id="wizard"><?php
 				foreach ( $wizard as $key => $val ) { ?>
-						<h3><?php _e( $key ); ?></h3>
+						<h3><?php _e( $key, 'rtbiz-helpdesk' ); ?></h3>
 						<fieldset> <?php call_user_func( $val ); ?></fieldset> <?php
 				} ?>
 				</div> <?php
@@ -102,13 +102,13 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 		public function support_page_ui() {
 			$pages = get_pages(); ?>
 			<div class="rthd-setup-wizard-controls">
-				<h3 class="rthd-setup-wizard-title"><?php _e( 'Support Page', RTBIZ_HD_TEXT_DOMAIN ); ?></h3>
-				<p class="rthd-notice"><?php _e( 'Create a support page where your customers can submit tickets.', RTBIZ_HD_TEXT_DOMAIN ); ?></p>
+				<h3 class="rthd-setup-wizard-title"><?php _e( 'Support Page', 'rtbiz-helpdesk' ); ?></h3>
+				<p class="rthd-notice"><?php _e( 'Create a support page where your customers can submit tickets.', 'rtbiz-helpdesk' ); ?></p>
 				<div class="rthd-setup-wizard-row">
-					<label for="rthd-setup-wizard-support-page"><?php _e( 'Select Support Page ', RTBIZ_HD_TEXT_DOMAIN ); ?></label>
+					<label for="rthd-setup-wizard-support-page"><?php _e( 'Select Support Page ', 'rtbiz-helpdesk' ); ?></label>
 					<select id="rthd-setup-wizard-support-page">
-						<option value="-1"><?php _e( '- Create New Page -', RTBIZ_HD_TEXT_DOMAIN ); ?></option>
-						<option value="0" selected><?php _e( '-- Select Page --', RTBIZ_HD_TEXT_DOMAIN ); ?></option> <?php
+						<option value="-1"><?php _e( '- Create New Page -', 'rtbiz-helpdesk' ); ?></option>
+						<option value="0" selected><?php _e( '-- Select Page --', 'rtbiz-helpdesk' ); ?></option> <?php
 						if ( ! empty( $pages ) ) {
 							foreach ( $pages as $page ) {
 								echo '<option value="' . $page->ID . '">' . $page->post_title . '</option>';
@@ -117,12 +117,12 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 					</select>
 				</div>
 				<div class="rthd-setup-wizard-row rthd-setup-wizard-support-page-new-div" style="display: none;">
-					<label for="rthd-setup-wizard-support-page-new"><?php _e( 'Create New Page', RTBIZ_HD_TEXT_DOMAIN ); ?></label>
+					<label for="rthd-setup-wizard-support-page-new"><?php _e( 'Create New Page', 'rtbiz-helpdesk' ); ?></label>
 					<input type="text" id="rthd-setup-wizard-support-page-new" name="rthd-setup-wizard-support-page-new-value" />
 				</div>
 			</div>
 			<div class="rthd-support-process rthd-wizard-process" style="display: none;">
-				<span><?php _e( 'Setting up support page', RTBIZ_HD_TEXT_DOMAIN ) ?></span>
+				<span><?php _e( 'Setting up support page', 'rtbiz-helpdesk' ) ?></span>
 				<img class="" alt="load" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 			</div> <?php
 		}
@@ -132,7 +132,7 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 		 */
 		public function connect_store_ui() { ?>
 			<div class="rthd-setup-wizard-controls rthd-setup-store-controls">
-				<h3 class="rthd-setup-wizard-title"><?php _e( 'Connect Your Store', RTBIZ_HD_TEXT_DOMAIN ); ?></h3>
+				<h3 class="rthd-setup-wizard-title"><?php _e( 'Connect Your Store', 'rtbiz-helpdesk' ); ?></h3>
 				<p class="rthd-notice"><?php
 				$eddactive = is_plugin_active( 'easy-digital-downloads/easy-digital-downloads.php' );
 				$wooactive = is_plugin_active( 'woocommerce/woocommerce.php' );
@@ -144,26 +144,26 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 					} else {
 						$active_plugins = 'EDD plugin';
 					}
-					_e( 'Looks like you have ' . $active_plugins . ' Active. Helpdesk has selected it for you, You can uncheck that if you want to.', RTBIZ_HD_TEXT_DOMAIN );
+					_e( 'Looks like you have ' . $active_plugins . ' Active. Helpdesk has selected it for you, You can uncheck that if you want to.', 'rtbiz-helpdesk' );
 				} else {
-					_e( 'Looks like none of the following plugins are installed right now. Anyways you can select the plugin you wish to install in future. Helpdesk will automatically sync products when that happens.', RTBIZ_HD_TEXT_DOMAIN );
+					_e( 'Looks like none of the following plugins are installed right now. Anyways you can select the plugin you wish to install in future. Helpdesk will automatically sync products when that happens.', 'rtbiz-helpdesk' );
 				} ?>
 				</p>
 				<div class="rthd-setup-wizard-row">
 					<input id="rthd-wizard-store-wc" class="" type="checkbox" name="rthd-wizard-store" value="woocommerce" <?php echo $wooactive ? 'checked' : ''; ?> >
-					<label for="rthd-wizard-store-wc"><?php _e( 'WooCommerce', RTBIZ_HD_TEXT_DOMAIN ) ?></label>
+					<label for="rthd-wizard-store-wc"><?php _e( 'WooCommerce', 'rtbiz-helpdesk' ) ?></label>
 				</div>
 				<div class="rthd-setup-wizard-row">
 					<input id="rthd-wizard-store-edd" type="checkbox" name="rthd-wizard-store" value="edd" <?php echo $eddactive ? 'checked' : ''; ?> >
-					<label for="rthd-wizard-store-edd"><?php _e( 'Easy Digital Downloads', RTBIZ_HD_TEXT_DOMAIN ) ?></label>
+					<label for="rthd-wizard-store-edd"><?php _e( 'Easy Digital Downloads', 'rtbiz-helpdesk' ) ?></label>
 				</div>
 
 				<div class="rthd-setup-wizard-row">
 					<input id="rthd-wizard-store-custom" type="checkbox" name="rthd-wizard-store" value="custom" >
-					<label for="rthd-wizard-store-custom"><?php _e( 'Custom', RTBIZ_HD_TEXT_DOMAIN ) ?></label>
+					<label for="rthd-wizard-store-custom"><?php _e( 'Custom', 'rtbiz-helpdesk' ) ?></label>
 				</div>
 				<div class="rthd-setup-wizard-row rthd-wizard-store-custom-div" style="display:none;">
-					<label for="rthd-setup-store-new-team"><?php _e( 'Add New Product', RTBIZ_HD_TEXT_DOMAIN ); ?></label>
+					<label for="rthd-setup-store-new-team"><?php _e( 'Add New Product', 'rtbiz-helpdesk' ); ?></label>
 					<input type="text" id="rthd-setup-store-new-team" />
 					<input type="button" id="rthd-setup-store-new-team-submit" value="Add" />
 				</div>
@@ -172,7 +172,7 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 				</table>
 			</div>
 			<div class="rthd-store-process rthd-wizard-process" style="display: none; float: left;">
-				<span><?php _e( 'Connecting store and importing existing products', RTBIZ_HD_TEXT_DOMAIN ) ?></span>
+				<span><?php _e( 'Connecting store and importing existing products', 'rtbiz-helpdesk' ) ?></span>
 				<img class="" alt="load"  src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 			</div> <?php
 		}
@@ -185,19 +185,19 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 			<div>
 				<div class="rthd-setup-wizard-controls rthd-setup-team-wizard-controls"><?php
 				if ( $isheader ) { ?>
-						<h3 class="rthd-setup-wizard-title"><?php _e( 'Setup Your Team', RTBIZ_HD_TEXT_DOMAIN ) ?></h3> <?php
+						<h3 class="rthd-setup-wizard-title"><?php _e( 'Setup Your Team', 'rtbiz-helpdesk' ) ?></h3> <?php
 				} ?>
 					<p class="rthd-notice"><?php
-					_e( 'There are 3 ways you can add users to this helpdesk.', RTBIZ_HD_TEXT_DOMAIN );
+					_e( 'There are 3 ways you can add users to this helpdesk.', 'rtbiz-helpdesk' );
 					if ( self::$page_slug == $_REQUEST['page'] ) {
-						_e( ' If you forget somebody now, you can add them later.' );
+						_e( ' If you forget somebody now, you can add them later.', 'rtbiz-helpdesk' );
 					}
-					_e( ' You (admin) are already added to the helpdesk.', RTBIZ_HD_TEXT_DOMAIN ) ?>
+					_e( ' You (admin) are already added to the helpdesk.', 'rtbiz-helpdesk' ) ?>
 					</p>
 					<div class="rthd-setup-team-settings">
 						<div class="rthd_wizard_container rthd-setup-wizard-row">
 							<div class="rthd-setup-value-container">
-								<label for="rthd-user-autocomplete"><?php _e( '1. Search and add users', RTBIZ_HD_TEXT_DOMAIN ) ?></label>
+								<label for="rthd-user-autocomplete"><?php _e( '1. Search and add users', 'rtbiz-helpdesk' ) ?></label>
 								<input id="rthd-user-autocomplete" type="text" placeholder="Search by name or email" class="rthd-user-autocomplete rthd-setup-wizard-text " />
 								<img id="rthd-autocomplete-page-spinner" alt="load" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 								<br/>
@@ -210,10 +210,10 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 						<div class="rthd_wizard_container rthd-setup-wizard-row"> <?php
 							$domain_name = preg_replace( '/^www\./', '', $_SERVER['SERVER_NAME'] );
 							$count_domain_users = rtbiz_hd_search_non_helpdesk_users( $domain_name, true, true ); ?>
-							<label for="rthd-add-user-domain"><?php _e( '2. Add all users from domain', RTBIZ_HD_TEXT_DOMAIN ) ?></label>
+							<label for="rthd-add-user-domain"><?php _e( '2. Add all users from domain', 'rtbiz-helpdesk' ) ?></label>
 							<input id="rthd-add-user-domain" class="rthd-setup-wizard-text" type="text" value="<?php echo $domain_name; ?>" placeholder="gmail.com" />
 							<div class="rthd-domain-action">
-								<span id='rthd-domain-import-message' style=""> Found <?php echo sprintf( _n( '%s user', '%s users', $count_domain_users, RTBIZ_HD_TEXT_DOMAIN ), $count_domain_users ); ?></span>
+								<span id='rthd-domain-import-message' style=""> Found <?php echo sprintf( _n( '%s user', '%s users', $count_domain_users, 'rtbiz-helpdesk' ), $count_domain_users ); ?></span>
 								<input id="rthd-import-domain-users" class="button" type="button" value="Add Users" />
 								<img id="rthd-domain-import-spinner" alt="load" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" /><?php
 								wp_nonce_field( get_current_user_id() . 'import-user-domain', 'import_domain' ); ?>
@@ -226,7 +226,7 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 								$helpdesk_users = rtbiz_hd_get_helpdesk_user_ids();
 								$count = count_users();
 								$remain_wp_users = $count['total_users'] - count( $helpdesk_users ); ?>
-								<label><?php _e( '3. Add all WordPress', RTBIZ_HD_TEXT_DOMAIN ) ?><?php echo sprintf( _n( '(%s) user', '(%s) users', $remain_wp_users, RTBIZ_HD_TEXT_DOMAIN ), $remain_wp_users ); ?></label>
+								<label><?php _e( '3. Add all WordPress', 'rtbiz-helpdesk' ) ?><?php echo sprintf( _n( '(%s) user', '(%s) users', $remain_wp_users, 'rtbiz-helpdesk' ), $remain_wp_users ); ?></label>
 								<input id="rthd-add-all-users" class="button" type="button" value="Add Users" />
 								<img id="rthd-import-all-spinner" alt="load" class="helpdeskspinner" src="<?php echo admin_url() . 'images/spinner.gif'; ?>" />
 								<?php wp_nonce_field( get_current_user_id() . 'import-all-users', 'import_all_users' ); ?>
@@ -244,27 +244,27 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 						<table class="rthd-setup-ul-text-decoration rthd-setup-list-users">
 							<tr>
 								<th>User</th>
-								<th><span><?php _e( 'Admin', RTBIZ_HD_TEXT_DOMAIN ); ?></span>
+								<th><span><?php _e( 'Admin', 'rtbiz-helpdesk' ); ?></span>
 									<span class="rthd-tooltip">
 										<i class="dashicons dashicons-info rtmicon"></i>
 										<span class="rthd-tip-bottom">
-											<?php _e( 'Can manage all tickets and Helpdesk settings.', RTBIZ_HD_TEXT_DOMAIN ); ?>
+											<?php _e( 'Can manage all tickets and Helpdesk settings.', 'rtbiz-helpdesk' ); ?>
 										</span>
 									</span>
 								</th>
-								<th><span><?php _e( 'Editor', RTBIZ_HD_TEXT_DOMAIN ); ?></span>
+								<th><span><?php _e( 'Editor', 'rtbiz-helpdesk' ); ?></span>
 									<span class="rthd-tooltip">
 										<i class="dashicons dashicons-info rtmicon"></i>
 										<span class="rthd-tip-bottom">
-											<?php _e( 'Can manage all the tickets. No access to settings. ', RTBIZ_HD_TEXT_DOMAIN ); ?>
+											<?php _e( 'Can manage all the tickets. No access to settings. ', 'rtbiz-helpdesk' ); ?>
 										</span>
 									</span>
 								</th>
-								<th class="rthd-author-row"><span><?php _e( 'Author', RTBIZ_HD_TEXT_DOMAIN ); ?></span>
+								<th class="rthd-author-row"><span><?php _e( 'Author', 'rtbiz-helpdesk' ); ?></span>
 									<span class="rthd-tooltip">
 										<i class="dashicons dashicons-info rtmicon"></i>
 										<span class="rthd-tip-bottom">
-											<?php _e( 'Can manage only the tickets assigned to them. No access to settings.', RTBIZ_HD_TEXT_DOMAIN ); ?>
+											<?php _e( 'Can manage only the tickets assigned to them. No access to settings.', 'rtbiz-helpdesk' ); ?>
 										</span>
 									</span>
 								</th>
@@ -283,14 +283,14 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 
 		public function mail_box_ui() { ?>
 			<div class="rthd-setup-wizard-controls">
-				<h3 class="rthd-setup-wizard-title"><?php _e( 'Incoming MailBox Setup', RTBIZ_HD_TEXT_DOMAIN ); ?></h3>
+				<h3 class="rthd-setup-wizard-title"><?php _e( 'Incoming MailBox Setup', 'rtbiz-helpdesk' ); ?></h3>
 				<p class="rthd-notice"><?php
-					_e( 'Connect the mailbox from which you would like to auto-create ticket from incoming e-mails.  Click on next if you want to do that later.', RTBIZ_HD_TEXT_DOMAIN ); ?>
+					_e( 'Connect the mailbox from which you would like to auto-create ticket from incoming e-mails.  Click on next if you want to do that later.', 'rtbiz-helpdesk' ); ?>
 				</p><?php
 				rtbiz_hd_mailbox_setup_view( false ); ?>
 			</div>
 			<div class="rthd-mailbox-setup-process rthd-wizard-process" style="display: none;">
-				<span><?php _e( 'Loading outbound emails', RTBIZ_HD_TEXT_DOMAIN ) ?></span>
+				<span><?php _e( 'Loading outbound emails', 'rtbiz-helpdesk' ) ?></span>
 				<img class="" alt="load" src="<?php echo admin_url() . 'images/spinner.gif'; ?>"/>
 			</div> <?php
 		}
@@ -298,7 +298,7 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 		public function set_role_ui() {
 			?>
 			<div class="rthd-setup-wizard-controls rthd-ACL-change rthd-setup-wizard-row">
-				<h3 class="rthd-setup-wizard-title"><?php _e( 'Congratulations!', RTBIZ_HD_TEXT_DOMAIN ); ?></h3>
+				<h3 class="rthd-setup-wizard-title"><?php _e( 'Congratulations!', 'rtbiz-helpdesk' ); ?></h3>
 				<p>Your Helpdesk is ready. Click on finish to get started.</p>
 			</div>
 		<?php
@@ -619,9 +619,9 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 			}
 			$users = Rtbiz_HD_Utils::get_hd_rtcamp_user(); ?>
 			<div class="rthd-setup-wizard-controls">
-				<h3 class="rthd-setup-wizard-title"><?php _e( 'Select Ticket Assignee', RTBIZ_HD_TEXT_DOMAIN ); ?></h3><?php
+				<h3 class="rthd-setup-wizard-title"><?php _e( 'Select Ticket Assignee', 'rtbiz-helpdesk' ); ?></h3><?php
 				if ( ! empty( $terms ) ) { ?>
-					<p class="rthd-notice"> <?php _e( 'Select an assignee for the products we synced in previous setup.', RTBIZ_HD_TEXT_DOMAIN ); ?> </p>
+					<p class="rthd-notice"> <?php _e( 'Select an assignee for the products we synced in previous setup.', 'rtbiz-helpdesk' ); ?> </p>
 					<div class="rthd-setup-wizard-row">
 						<ul><?php
 						foreach ( $terms as $tm ) { ?>
@@ -639,7 +639,7 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 					</div><?php
 				} else { ?>
 					<div class="rthd-setup-wizard-row">
-						<label class="rthd-product-default-assignee" for="rthd_product-default"> <strong><?php _e( 'Default Assignee', RTBIZ_HD_TEXT_DOMAIN ); ?> </strong></label>
+						<label class="rthd-product-default-assignee" for="rthd_product-default"> <strong><?php _e( 'Default Assignee', 'rtbiz-helpdesk' ); ?> </strong></label>
 						<select id="rthd_product-default"><?php
 						foreach ( $users as $user ) {
 							if ( $user->ID == $current ) {
@@ -693,17 +693,17 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 			ob_start();
 			?>
 			<div class="rthd-setup-wizard-controls">
-				<h3 class="rthd-setup-wizard-title"><?php _e( 'Outgoing Mail Setup ', RTBIZ_HD_TEXT_DOMAIN ); ?></h3>
+				<h3 class="rthd-setup-wizard-title"><?php _e( 'Outgoing Mail Setup ', 'rtbiz-helpdesk' ); ?></h3>
 				<p class="rthd-notice">Configure settings for the mailbox from where you will like to send Helpdesk e-mails to customers and staff.</p>
 				<div id="rthd_outgoing_mailbox_setup_container">
 					<input type="hidden" id="rthd_outound_sub-action" name="rthd_outound_sub-action" value="rtbiz_hd_save_outound_setup">
 					<?php wp_nonce_field( 'rtbiz_hd_save_outound_setup' ); ?>
 					<div class="rthd-setup-wizard-row">
-						<label for="rthd_outgoing_email_from_name"> <?php _e( 'Outgoing Emails \'From\' Name' ); ?></label>
+						<label for="rthd_outgoing_email_from_name"> <?php _e( 'Outgoing Emails \'From\' Name', 'rtbiz-helpdesk' ); ?></label>
 						<input type="text" id="rthd_outgoing_email_from_name" name="rthd_outgoing_email_from_name" value="<?php echo get_bloginfo(); ?>" />
 					</div>
 					<div class="rthd-setup-wizard-row">
-						<label for="rthd_outgoing_email_mailbox"> <?php _e( 'Outgoing Emails Mailbox' ); ?></label>
+						<label for="rthd_outgoing_email_mailbox"> <?php _e( 'Outgoing Emails Mailbox', 'rtbiz-helpdesk' ); ?></label>
 						<select id="rthd_outgoing_email_mailbox" name="rthd_outgoing_email_mailbox">
 							<?php foreach ( $system_emails as $email ) { ?>
 								<option value="<?php echo $email; ?>"><?php echo $email; ?></option>
@@ -763,7 +763,7 @@ if ( ! class_exists( 'Rtbiz_HD_Setup_Wizard' ) ) {
 			ob_start();
 			if ( ! empty( $result ) ) {
 				?>
-				<h3 class="rthd-setup-wizard-title"><?php _e( 'Set Roles', RTBIZ_HD_TEXT_DOMAIN ); ?></h3>
+				<h3 class="rthd-setup-wizard-title"><?php _e( 'Set Roles', 'rtbiz-helpdesk' ); ?></h3>
 
 				<table class="shop_table my_account_orders">
 					<tr>

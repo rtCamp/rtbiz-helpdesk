@@ -848,8 +848,8 @@ function rtbiz_hd_admin_notice_dependency_not_installed() {
 		<div class="error rthd-plugin-not-installed-error">
 			<?php $nonce = wp_create_nonce( 'rthd_install_plugin_rtbiz' ); ?>
 
-			<p><b><?php _e( 'rtBiz Helpdesk:' ) ?></b> <?php _e( 'Click' ) ?> <a href="#"
-			                                                                     onclick="install_rthd_plugin( '<?php echo $msg ?>', 'rthd_install_plugin', '<?php echo $nonce ?>' )">here</a> <?php _e( 'to install ' . $msg . '.', RTBIZ_HD_TEXT_DOMAIN ) ?>
+			<p><b><?php _e( 'rtBiz Helpdesk:', 'rtbiz-helpdesk' ) ?></b> <?php _e( 'Click', 'rtbiz-helpdesk' ) ?> <a href="#"
+			                                                                     onclick="install_rthd_plugin( '<?php echo $msg ?>', 'rthd_install_plugin', '<?php echo $nonce ?>' )">here</a> <?php _e( 'to install ' . $msg . '.', 'rtbiz-helpdesk' ) ?>
 			</p>
 		</div>
 		<?php
@@ -870,8 +870,8 @@ function rtbiz_hd_admin_notice_dependency_not_installed() {
 		$nonce = wp_create_nonce( 'rthd_activate_plugin_' . $path );
 		?>
 		<div class="error rthd-plugin-not-active-error">
-			<p><b><?php _e( 'rtBiz Helpdesk:' ) ?></b> <?php _e( 'Click' ) ?> <a href="#"
-			                                                                     onclick="activate_rthd_plugin( '<?php echo $msg ?>', 'rthd_activate_plugin', '<?php echo $nonce; ?>' )">here</a> <?php _e( 'to activate ' . $msg . '.', RTBIZ_HD_TEXT_DOMAIN ) ?>
+			<p><b><?php _e( 'rtBiz Helpdesk:', 'rtbiz-helpdesk' ) ?></b> <?php _e( 'Click', 'rtbiz-helpdesk' ) ?> <a href="#"
+			                                                                     onclick="activate_rthd_plugin( '<?php echo $msg ?>', 'rthd_activate_plugin', '<?php echo $nonce; ?>' )">here</a> <?php _e( 'to activate ' . $msg . '.', 'rtbiz-helpdesk' ) ?>
 			</p>
 		</div>
 		<?php
@@ -1000,12 +1000,12 @@ function rtbiz_hd_wp_new_user_notification( $user_id, $plaintext_pass = '' ) {
 	// we want to reverse this for the plain text arena of emails.
 	$blogname = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
 
-	$message = sprintf( __( 'New user registration on your site %s:' ), $blogname ) . "\r\n\r\n";
-	$message .= sprintf( __( 'Username: %s' ), $user->user_login ) . "\r\n\r\n";
-	$message .= sprintf( __( 'E-mail: %s' ), $user->user_email ) . "\r\n";
+	$message = sprintf( __( 'New user registration on your site %s:', 'rtbiz-helpdesk' ), $blogname ) . "\r\n\r\n";
+	$message .= sprintf( __( 'Username: %s', 'rtbiz-helpdesk' ), $user->user_login ) . "\r\n\r\n";
+	$message .= sprintf( __( 'E-mail: %s', 'rtbiz-helpdesk' ), $user->user_email ) . "\r\n";
 
 	try {
-		wp_mail( get_option( 'admin_email' ), sprintf( __( '[%s] New User Registration' ), $blogname ), $message );
+		wp_mail( get_option( 'admin_email' ), sprintf( __( '[%s] New User Registration', 'rtbiz-helpdesk' ), $blogname ), $message );
 	} catch ( Exception $e ) {
 	}
 
@@ -1028,14 +1028,14 @@ function rtbiz_hd_wp_new_user_notification( $user_id, $plaintext_pass = '' ) {
 
 	$reset_pass_link = network_site_url( "wp-login.php?action=rp&key=$key&login=" . rawurlencode( $user->user_login ), 'login' );
 
-	$message = __( 'Howdy,' ) . "\r\n\r\n";
-	$message .= sprintf( __( 'A new account on %s has been created for you.' ), $module_label ) . "\r\n\r\n";
-	$message .= sprintf( __( 'Your username is: %s' ), $user->user_login ) . "\r\n";
-	$message .= sprintf( __( 'Please visit following link to activate the account.' . "\r\n" . '%s' ), $reset_pass_link ) . "\r\n\r\n";
-	$message .= __( 'Thanks.' ) . "\r\n" . __( 'Admin.' );
+	$message = __( 'Howdy,','rtbiz-helpdesk' ) . "\r\n\r\n";
+	$message .= sprintf( __( 'A new account on %s has been created for you.', 'rtbiz-helpdesk' ), $module_label ) . "\r\n\r\n";
+	$message .= sprintf( __( 'Your username is: %s', 'rtbiz-helpdesk' ), $user->user_login ) . "\r\n";
+	$message .= sprintf( __( 'Please visit following link to activate the account.' . "\r\n" . '%s', 'rtbiz-helpdesk' ), $reset_pass_link ) . "\r\n\r\n";
+	$message .= __( 'Thanks.', 'rtbiz-helpdesk' ) . "\r\n" . __( 'Admin.', 'rtbiz-helpdesk' );
 
 	try {
-		wp_mail( $user->user_email, sprintf( __( 'Your New %s Account' ), $module_label ), $message );
+		wp_mail( $user->user_email, sprintf( __( 'Your New %s Account', 'rtbiz-helpdesk' ), $module_label ), $message );
 	} catch ( Exception $e ) {
 	}
 
@@ -1900,7 +1900,7 @@ function rtbiz_hd_no_access_redux() {
 function rtbiz_hd_admin_sidebar() {
 	do_action( 'rthd_before_default_admin_widgets' );
 	$current_user = wp_get_current_user();
-	$message      = sprintf( __( 'I use @rtbizwp on %s', RTBIZ_HD_TEXT_DOMAIN ), home_url() ); ?>
+	$message      = sprintf( __( 'I use @rtbizwp on %s', 'rtbiz-helpdesk' ), home_url() ); ?>
 
 	<div class="metabox-holder bp-media-metabox-holder rthd-sidebar">
 		<div id="spread-the-word" class="postbox">
@@ -1910,24 +1910,24 @@ function rtbiz_hd_admin_sidebar() {
 				<div class="rthd-social-share" id="social">
 					<p><a href="<?php echo 'http://twitter.com/home/?status=' . $message; ?>" class="button twitter"
 					      target="_blank"
-					      title="<?php _e( 'Post to Twitter Now', RTBIZ_HD_TEXT_DOMAIN ) ?>"><?php _e( 'Post to Twitter', RTBIZ_HD_TEXT_DOMAIN ) ?>
+					      title="<?php _e( 'Post to Twitter Now', 'rtbiz-helpdesk' ) ?>"><?php _e( 'Post to Twitter', 'rtbiz-helpdesk' ) ?>
 							<span class="dashicons dashicons-twitter"></span></a></p>
 
 					<p>
 						<a href="<?php echo esc_url( 'https://www.facebook.com/sharer/sharer.php?u=https://rtcamp.com/rtbiz/helpdesk/' ); ?>"
 						   class="button facebook" target="_blank"
-						   title="<?php _e( 'Share on Facebook Now', RTBIZ_HD_TEXT_DOMAIN ) ?>"><?php _e( 'Share on Facebook', RTBIZ_HD_TEXT_DOMAIN ) ?>
+						   title="<?php _e( 'Share on Facebook Now', 'rtbiz-helpdesk' ) ?>"><?php _e( 'Share on Facebook', 'rtbiz-helpdesk' ) ?>
 							<span class="dashicons dashicons-facebook"></span></a></p>
 
 					<p>
 						<a href="<?php echo esc_url( 'https://wordpress.org/support/view/plugin-reviews/rtbiz?rate=5#postform' ); ?>"
 						   class="button wordpress" target="_blank"
-						   title="<?php _e( 'Rate rtBiz on Wordpress.org', RTBIZ_HD_TEXT_DOMAIN ) ?>"><?php _e( 'Rate on Wordpress.org', RTBIZ_HD_TEXT_DOMAIN ) ?>
+						   title="<?php _e( 'Rate rtBiz on Wordpress.org', 'rtbiz-helpdesk' ) ?>"><?php _e( 'Rate on Wordpress.org', 'rtbiz-helpdesk' ) ?>
 							<span class="dashicons dashicons-wordpress"></span></a></p>
 
 					<p><a href="<?php echo sprintf( '%s', 'https://rtcamp.com/feed/' ) ?>" class="button rss"
 					      target="_blank"
-					      title="<?php _e( 'Subscribe to our Feeds', RTBIZ_HD_TEXT_DOMAIN ) ?>"><?php _e( 'Subscribe to our Feeds', RTBIZ_HD_TEXT_DOMAIN ) ?>
+					      title="<?php _e( 'Subscribe to our Feeds', 'rtbiz-helpdesk' ) ?>"><?php _e( 'Subscribe to our Feeds', 'rtbiz-helpdesk' ) ?>
 							<span class="dashicons dashicons-rss"></span></a></p>
 				</div>
 			</div>
@@ -1951,7 +1951,7 @@ function rtbiz_hd_admin_sidebar() {
 							<div class="response" id="mce-error-response" style="display:none"></div>
 							<div class="response" id="mce-success-response" style="display:none"></div>
 						</div>
-						<input type="submit" value="<?php _e( 'Subscribe', RTBIZ_HD_TEXT_DOMAIN ) ?>" name="subscribe"
+						<input type="submit" value="<?php _e( 'Subscribe', 'rtbiz-helpdesk' ) ?>" name="subscribe"
 						       id="mc-embedded-subscribe" class="button">
 					</div>
 				</form>
@@ -2196,4 +2196,19 @@ if ( ! function_exists( 'rtbiz_hd_get_site_option' ) ) {
 
 		return $return_val;
 	}
+}
+
+/**
+ * To allow/disallow fancybox for attachments in ticket
+ *
+ * @since   1.6.2
+ *
+ * @return  boolean
+ */
+function is_rtbiz_hd_allow_fancybox_for_attachments() {
+
+    $rthd_fancybox = apply_filters( 'rtbiz_hd_allow_fancybox_for_attachments', true );
+
+    return $rthd_fancybox;
+
 }

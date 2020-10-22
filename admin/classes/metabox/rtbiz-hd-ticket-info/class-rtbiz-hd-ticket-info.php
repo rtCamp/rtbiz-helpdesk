@@ -55,8 +55,8 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Info' ) ) {
 			<input type="hidden" name="rthd_check_matabox" value="true">
 			<div class="row_group">
 				<p>
-					<span class="prefix" title="<?php _e( 'Assignee', RTBIZ_HD_TEXT_DOMAIN ); ?>"><label
-							for="post[post_author]"><strong><?php _e( 'Assignee' ); ?></strong></label>
+					<span class="prefix" title="<?php _e( 'Assignee', 'rtbiz-helpdesk' ); ?>"><label
+							for="post[post_author]"><strong><?php _e( 'Assignee', 'rtbiz-helpdesk' ); ?></strong></label>
 					</span>
 				</p>
 
@@ -77,8 +77,8 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Info' ) ) {
 
 			<div class="row_group">
 				<p>
-					<span class="prefix" title="<?php _e( 'Status' ); ?>">
-						<label><strong><?php _e( 'Status', RTBIZ_HD_TEXT_DOMAIN ); ?></strong></label>
+					<span class="prefix" title="<?php _e( 'Status', 'rtbiz-helpdesk' ); ?>">
+						<label><strong><?php _e( 'Status', 'rtbiz-helpdesk' ); ?></strong></label>
 					</span>
 				</p>
 				<?php
@@ -113,8 +113,8 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Info' ) ) {
 
 			<div class="row_group">
 				<p>
-					<span class="prefix" title="<?php _e( 'Created By', RTBIZ_HD_TEXT_DOMAIN ); ?>">
-						<label><strong><?php _e( 'Created By', RTBIZ_HD_TEXT_DOMAIN ); ?></strong></label>
+					<span class="prefix" title="<?php _e( 'Created By', 'rtbiz-helpdesk' ); ?>">
+						<label><strong><?php _e( 'Created By', 'rtbiz-helpdesk' ); ?></strong></label>
 					</span>
 				</p>
 				<!--				<input type="text" name="created_by" class="user-autocomplete" placeholder="Search for User" />-->
@@ -179,7 +179,7 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Info' ) ) {
 									return $( '<li></li>' ).data( 'ui-autocomplete-item', item ).append( '<a>' + item.imghtml + '&nbsp;' + item.label + '</a>' ).appendTo( ul );
 								};
 
-								$( document ).on( "click", "a[href=#deleteContactUser]", function() {
+								$( document ).on( "click", "a[href='#deleteContactUser']", function() {
 									$( this ).parent().remove();
 								} );
 							}
@@ -191,8 +191,8 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Info' ) ) {
 
 			<div class="row_group">
 				<p>
-					<span class="prefix" title="<?php _e( 'Created On', RTBIZ_HD_TEXT_DOMAIN ); ?>">
-						<label><strong><?php _e( 'Created On', RTBIZ_HD_TEXT_DOMAIN ); ?></strong></label>
+					<span class="prefix" title="<?php _e( 'Created On', 'rtbiz-helpdesk' ); ?>">
+						<label><strong><?php _e( 'Created On', 'rtbiz-helpdesk' ); ?></strong></label>
 					</span>
 				</p>
 
@@ -217,8 +217,8 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Info' ) ) {
 				?>
 				<div class="row_group">
 					<p>
-						<span class="prefix" title="<?php _e( 'Last Reply On', RTBIZ_HD_TEXT_DOMAIN ); ?>">
-							<label><strong><?php _e( 'Last Reply On', RTBIZ_HD_TEXT_DOMAIN ); ?></strong></label>
+						<span class="prefix" title="<?php _e( 'Last Reply On', 'rtbiz-helpdesk' ); ?>">
+							<label><strong><?php _e( 'Last Reply On', 'rtbiz-helpdesk' ); ?></strong></label>
 						</span>
 					</p>
 					<input class="moment-from-now" type="text" placeholder="Last Reply On Date"
@@ -238,8 +238,8 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Info' ) ) {
 				?>
 				<div class="row_group">
 					<p>
-						<span class="prefix" title="<?php _e( 'Adult Content', RTBIZ_HD_TEXT_DOMAIN ); ?>">
-							<label for="rthd_adult_content"><strong><?php _e( 'Adult Content', RTBIZ_HD_TEXT_DOMAIN ); ?></strong></label>
+						<span class="prefix" title="<?php _e( 'Adult Content', 'rtbiz-helpdesk' ); ?>">
+							<label for="rthd_adult_content"><strong><?php _e( 'Adult Content', 'rtbiz-helpdesk' ); ?></strong></label>
 						</span>
 						<input id="rthd_adult_content" type="checkbox" name="post[adult_ticket]" <?php echo $text; ?> value="1" />
 					</p>
@@ -252,11 +252,11 @@ if ( ! class_exists( 'Rtbiz_HD_Ticket_Info' ) ) {
 				?>
 				<div class="row_group">
 					<span class="prefix"
-						  title="<?php _e( 'Public URL', RTBIZ_HD_TEXT_DOMAIN ); ?>"><label><strong><?php _e( 'Unique Hash URL', RTBIZ_HD_TEXT_DOMAIN ); ?></strong></label></span>
+						  title="<?php _e( 'Public URL', 'rtbiz-helpdesk' ); ?>"><label><strong><?php _e( 'Unique Hash URL', 'rtbiz-helpdesk' ); ?></strong></label></span>
 
 					<div class="rthd_attr_border">
 						<a class="rthd_public_link" target="_blank"
-						   href="<?php echo rtbiz_hd_is_unique_hash_enabled() ? rtbiz_hd_get_unique_hash_url( $post->ID ) : get_post_permalink( $post->ID ); ?>"><?php _e( 'Link' ); ?></a>
+						   href="<?php echo rtbiz_hd_is_unique_hash_enabled() ? rtbiz_hd_get_unique_hash_url( $post->ID ) : get_post_permalink( $post->ID ); ?>"><?php _e( 'Link', 'rtbiz-helpdesk' ); ?></a>
 					</div>
 				</div>
 				<?php
