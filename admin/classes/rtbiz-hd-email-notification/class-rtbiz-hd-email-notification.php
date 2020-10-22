@@ -250,7 +250,10 @@ if ( ! class_exists( 'Rtbiz_HD_Email_Notification' ) ) {
 			}
 
 			$bccemails = $this->exclude_author( $bccemails, $comment->comment_author_email );
-			$bccemails  = apply_filters( 'rtbiz_hd_filter_adult_emails', $bccemails, $comment->comment_post_ID );
+
+			// Get unique emails.
+			$bccemails = array_map( 'unserialize', array_unique( array_map( 'serialize', $bccemails ) ) );
+			$bccemails = apply_filters( 'rtbiz_hd_filter_adult_emails', $bccemails, $comment->comment_post_ID );
 
 			if ( $notificationFlagClient ) {
 				$ContactEmail  = $this->get_contacts( $comment->comment_post_ID );
