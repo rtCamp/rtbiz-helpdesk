@@ -210,14 +210,14 @@ if ( ! class_exists( 'Rtbiz_HD_Support' ) ) {
 			$result = array();
 			if ( $files ) {
 				foreach ( $files as $key => $value ) {
-					if ( ! in_array( $value, array( '.', '..' ) ) ) {
+					if ( ! in_array( $value, array( '.', '..' ), true ) ) {
 						if ( is_dir( $template_path . DIRECTORY_SEPARATOR . $value ) ) {
 							$sub_files = $this->scan_template_files( $template_path . DIRECTORY_SEPARATOR . $value );
 							foreach ( $sub_files as $sub_file ) {
-								$result[] = str_replace( ABSPATH . 'wp-content/', '', rtbiz_hd_locate_template( substr( $sub_file, 0, ( sizeof( $sub_file ) - 5 ) ) ) );
+								$result[] = str_replace( ABSPATH . 'wp-content/', '', rtbiz_hd_locate_template( substr( $sub_file, 0, ( strlen( $sub_file ) - 4 ) ) ) );
 							}
 						} else {
-							if ( 'main.php' != $value ) {
+							if ( 'main.php' !== $value ) {
 								$result[] = $value;
 							}
 						}
@@ -388,8 +388,7 @@ if ( ! class_exists( 'Rtbiz_HD_Support' ) ) {
 							          required><?php echo ( isset( $_REQUEST['details'] ) ) ? esc_textarea( stripslashes( trim( $_REQUEST['details'] ) ) ) : ''; ?></textarea>
 
 							<input type="hidden" name="request_type" value="<?php echo $form; ?>"/>
-							<input type="hidden" name="request_id"
-							       value="<?php echo wp_create_nonce( date( 'YmdHis' ) ); ?>"/>
+							<input type="hidden" name="request_id" value="<?php echo wp_create_nonce( date( 'YmdHis' ) ); ?>"/>
 							<input type="hidden" name="server_address" value="<?php echo $_SERVER['SERVER_ADDR']; ?>"/>
 							<input type="hidden" name="ip_address" value="<?php echo $_SERVER['REMOTE_ADDR']; ?>"/>
 							<input type="hidden" name="server_type" value="<?php echo $_SERVER['SERVER_SOFTWARE']; ?>"/>
@@ -399,7 +398,6 @@ if ( ! class_exists( 'Rtbiz_HD_Support' ) ) {
 
 					<div class="rtbiz-hd-form-filed rtbiz-hd-button-wrapper clearfix">
 						<?php submit_button( 'Submit', 'primary', 'rtbiz_hd-submit-request', false ); ?>
-						<?php // submit_button( 'Cancel', 'secondary', 'cancel-request', false ); ?>
 					</div>
 
 					<?php
@@ -418,21 +416,21 @@ if ( ! class_exists( 'Rtbiz_HD_Support' ) ) {
 		 */
 		public function submit_request() {
 			$this->debug_info();
-			//$form_data = wp_parse_args( $_POST['form_data'] );
 			$form_data = $_POST;
+
 			foreach ( $form_data as $key => $formdata ) {
 				if ( '' == $formdata && 'phone' != $key ) {
 					echo 'false';
 					die();
 				}
 			}
-			if ( 'premium_support' == $form_data['request_type'] ) {
+			if ( 'premium_support' === $form_data['request_type'] ) {
 				$mail_type = 'Premium Support';
 				$title     = __( 'rtMedia Premium Support Request from', 'rtbiz-helpdesk' );
-			} elseif ( 'new_feature' == $form_data['request_type'] ) {
+			} elseif ( 'new_feature' === $form_data['request_type'] ) {
 				$mail_type = 'New Feature Request';
 				$title     = __( 'rtMedia New Feature Request from', 'rtbiz-helpdesk' );
-			} elseif ( 'bug_report' == $form_data['request_type'] ) {
+			} elseif ( 'bug_report' === $form_data['request_type'] ) {
 				$mail_type = 'Bug Report';
 				$title     = __( 'rtMedia Bug Report from', 'rtbiz-helpdesk' );
 			} else {
@@ -452,13 +450,10 @@ if ( ! class_exists( 'Rtbiz_HD_Support' ) ) {
                                         <td>Email</td><td>' . strip_tags( $form_data['email'] ) . '</td>
                                     </tr>
                                     <tr>
-                                        <td>Website</td><td>' . strip_tags( $form_data['website'] ) . '</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Subject</td><td>' . strip_tags( $form_data['subject'] ) . '</td>
-                                    </tr>
-                                    <tr>
                                         <td>Details</td><td>' . strip_tags( $form_data['details'] ) . '</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Website</td><td>' . strip_tags( $form_data['website'] ) . '</td>
                                     </tr>
                                     <tr>
                                         <td>Request ID</td><td>' . strip_tags( $form_data['request_id'] ) . '</td>
@@ -506,29 +501,15 @@ if ( ! class_exists( 'Rtbiz_HD_Support' ) ) {
 			}
 			$message .= '</body>
                 </html>';
-			add_filter( 'wp_mail_content_type', create_function( '', 'return "text/html";' ) );
+			add_filter(
+				'wp_mail_content_type',
+				function() {
+					return 'text/html';
+				}
+			);
 			$headers       = 'From: ' . $form_data['name'] . ' <' . $form_data['email'] . '>' . "\r\n";
-			if ( wp_mail( RT_HELPDESK_SUPPORT_EMAIL, '[Helpdesk] ' . $mail_type . ' from ' . str_replace( array(
-					'http://',
-					'https://'
-				), '', $form_data['website'] ), stripslashes( $message ), $headers ) ) {
-
-//				echo '<div class="rtbiz_hd-success" style="margin:10px 0;">';
-//				if ( 'new_feature' == $form_data['request_type'] ) {
-//					echo '<p>' . __( 'Thank you for your Feedback/Suggestion.', RTBIZ_HD_TEXT_DOMAIN ) . '</p>';
-//				} else {
-//					echo '<p>' . __( 'Thank you for posting your support request.', RTBIZ_HD_TEXT_DOMAIN ) . '</p>';
-//					echo '<p>' . __( 'We will get back to you shortly.', RTBIZ_HD_TEXT_DOMAIN ) . '</p>';
-//				}
-//				echo '</div>';
-//			} else {
-//				echo '<div class="rtbiz_hd-error">';
-//				echo '<p>' . __( 'Your server failed to send an email.', RTBIZ_HD_TEXT_DOMAIN ) . '</p>';
-//				echo '<p>' . __( 'Kindly contact your server support to fix this.', RTBIZ_HD_TEXT_DOMAIN ) . '</p>';
-//				echo '<p>' . sprintf( __( 'You can alternatively create a support request <a href="%s">here</a>', RTBIZ_HD_TEXT_DOMAIN ), 'https://rtcamp.com/premium-support/' ) . '</p>';
-//				echo '</div>';
-			}
-//			die();
+			$support_email = 'support@rtcamp.com';
+			wp_mail( $support_email, stripslashes( $form_data['subject'] ), stripslashes( $message ), $headers );
 		}
 
 	}

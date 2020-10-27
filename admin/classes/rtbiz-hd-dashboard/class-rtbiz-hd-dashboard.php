@@ -346,7 +346,6 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 		public function tickets_by_status() {
 
 			$data_source = wp_cache_get( 'hd_ticket_by_status', 'hd_dashboard' );
-			//error_log( (false !== $data_source) . " hd_ticket_by_status From cache? ");
 
 			$settings = rtbiz_hd_get_redux_settings();
 			if ( false === $data_source ) {
@@ -484,7 +483,6 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 		 */
 		public function team_load() {
 			$data_source = wp_cache_get( 'hd_team_load', 'hd_dashboard' );
-			//error_log( (false !== $data_source) . " hd_team_load From cache? ");
 			if ( false === $data_source ) {
 				global $rtbiz_hd_module, $wpdb;
 				$table_name = rtbiz_hd_get_ticket_table_name();
@@ -612,7 +610,6 @@ if ( ! class_exists( 'Rtbiz_HD_Dashboard' ) ) {
 		public function top_clients() {
 
 			$data_source = wp_cache_get( 'hd_top_client', 'hd_dashboard' );
-			//error_log( (false !== $data_source) . " hd_top_client From cache? ");
 			if ( false === $data_source ) {
 				global $wpdb;
 				$table_name = rtbiz_hd_get_ticket_table_name();
