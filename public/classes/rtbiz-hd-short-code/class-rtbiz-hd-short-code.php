@@ -146,7 +146,7 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 					$product_exists = true;
 				}
 
-				if ( $wrong_user_flag ) {
+				if ( false === $wrong_user_flag ) {
 					echo '<span> You have not placed this order, Please login from account that placed this order. </span>';
 				} else {
 					rtbiz_hd_get_template( 'support-form.php', array(
