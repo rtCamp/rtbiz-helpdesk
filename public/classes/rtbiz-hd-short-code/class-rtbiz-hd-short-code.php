@@ -119,9 +119,9 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 						}
 						// check in edd orders
 						if ( $rtbiz_hd_product_support->iseddActive && empty( $order ) ) {
-							$payment = get_post( $_REQUEST['order_id'] );
-							if ( ! empty( $payment ) && $loggedin_id == $payment->post_author ) {
-								if ( 'edd_payment' == $payment->post_type ) {
+							$payment = new EDD_Payment( $_REQUEST['order_id'] );
+							if ( ! empty( $payment ) && $loggedin_id == $payment->user_id ) {
+								if ( 'complete' == $payment->status ) {
 									$items           = edd_get_payment_meta_downloads( $payment->ID );
 									$product_ids     = wp_list_pluck( $items, 'id' );
 									$wrong_user_flag = false;
@@ -146,7 +146,7 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 					$product_exists = true;
 				}
 
-				if ( false === $wrong_user_flag ) {
+				if ( $wrong_user_flag ) {
 					echo '<span> You have not placed this order, Please login from account that placed this order. </span>';
 				} else {
 					rtbiz_hd_get_template( 'support-form.php', array(
