@@ -136,9 +136,9 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 				foreach ( $terms as $tm ) {
 					$term_product_id = '';
 					// skip items if not from orders
-					if ( ! empty( $product_ids ) ) {
+					if ( ! empty( $_REQUEST['product_id'] ) ) {
 						$term_product_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $tm->term_id, Rt_Products::$term_product_id_meta_key, true );
-						if ( ! in_array( $term_product_id, $product_ids ) ) {
+						if ( $term_product_id !== $_REQUEST['product_id'] ) {
 							continue;
 						}
 					}
