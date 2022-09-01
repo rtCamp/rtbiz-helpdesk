@@ -6,7 +6,7 @@ Donate Link:       https://rtbiz.io/donate/
 Tags:              helpdesk, support, products, tickets, followups, customers, e-commerce
 Requires at least: 4.1
 Tested up to:      4.5.1
-Stable tag:        1.6.4
+Stable tag:        1.6.5
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,6 +57,11 @@ Please refer to the documentation.
 1. Dashboard
 
 == Changelog ==
+
+= 1.6.5 =
+* Fixed Product name not getting pre-selected while creating a ticket.
+* Fixed login issue while creating a ticket.
+
 
 = 1.6.4 =
 * Resolve Multiple Emails issue
