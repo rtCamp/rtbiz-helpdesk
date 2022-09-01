@@ -6,7 +6,7 @@
 **Contributors:** [rtcamp](https://profiles.wordpress.org/rtcamp), [rahul286](https://profiles.wordpress.org/rahul286), [desaiuditd](https://profiles.wordpress.org/desaiuditd), [dipesh.kakadiya](https://profiles.wordpress.org/dipesh.kakadiya), [utkarshpatel](https://profiles.wordpress.org/utkarshpatel), [sagarjadhav](https://profiles.wordpress.org/sagarjadhav), [pradeep1308](https://profiles.wordpress.org/pradeep1308/), [pooja1210](https://profiles.wordpress.org/pooja1210),[pavanpatil1](https://profiles.wordpress.org/pavanpatil1/)
 **Tags:** [helpdesk](https://wordpress.org/plugins/tags/helpdesk), [support](https://wordpress.org/plugins/tags/support), [products](https://wordpress.org/plugins/tags/products), [tickets](https://wordpress.org/plugins/tags/tickets), [followups](https://wordpress.org/plugins/tags/followups), [customers](https://wordpress.org/plugins/tags/customers), [e-commerce](https://wordpress.org/plugins/tags/e-commerce)
 **Requires at least:** 4.1
-**Tested up to:** 4.5.1
+**Tested up to:** 6.0.2
 **Stable tag:** 1.6.5
 **License:** [GPLv2 or later](http://www.gnu.org/licenses/gpl-2.0.html)
 **Author URI:** https://rtbiz.io
