@@ -119,9 +119,9 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 						}
 						// check in edd orders
 						if ( $rtbiz_hd_product_support->iseddActive && empty( $order ) ) {
-							$payment = get_post( $_REQUEST['order_id'] );
-							if ( ! empty( $payment ) && $loggedin_id == $payment->post_author ) {
-								if ( 'edd_payment' == $payment->post_type ) {
+							$payment = new EDD_Payment( $_REQUEST['order_id'] );
+							if ( ! empty( $payment ) && $loggedin_id == $payment->user_id ) {
+								if ( 'complete' == $payment->status ) {
 									$items           = edd_get_payment_meta_downloads( $payment->ID );
 									$product_ids     = wp_list_pluck( $items, 'id' );
 									$wrong_user_flag = false;
@@ -136,9 +136,9 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 				foreach ( $terms as $tm ) {
 					$term_product_id = '';
 					// skip items if not from orders
-					if ( ! empty( $product_ids ) ) {
+					if ( ! empty( $_REQUEST['product_id'] ) ) {
 						$term_product_id = Rt_Lib_Taxonomy_Metadata\get_term_meta( $tm->term_id, Rt_Products::$term_product_id_meta_key, true );
-						if ( ! in_array( $term_product_id, $product_ids ) ) {
+						if ( $term_product_id !== $_REQUEST['product_id'] ) {
 							continue;
 						}
 					}
