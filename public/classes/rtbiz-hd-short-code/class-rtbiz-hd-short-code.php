@@ -164,7 +164,7 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 				} else {
 					$login_url    = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( get_permalink() ), get_permalink() );
 					?>
-					<div id="info" class="error rthd-notice rthd-login-error">You're not logged in. Please <a
+					<div id="info" class="error rthd-notice">You're not logged in. Please <a
 							href="<?php echo esc_url( $login_url ); ?>" title="login">login</a> first to
 						create support ticket.
 					</div>                <?php
@@ -220,7 +220,7 @@ if ( ! class_exists( 'Rtbiz_HD_Short_Code' ) ) {
 
 			if ( ! is_user_logged_in() ) {
 				$login_url    = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( get_permalink() ), get_permalink() );?>
-				<div id="info" class="error rthd-notice rthd-login-error">You're not logged in. Please <a href="<?php echo esc_url( $login_url ); ?>" title="login">login</a> first to view tickets.
+				<div id="info" class="error rthd-notice">You're not logged in. Please <a href="<?php echo esc_url( $login_url ); ?>" title="login">login</a> first to view tickets.
 				</div><?php
 				return;
 			}
