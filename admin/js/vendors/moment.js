@@ -134,7 +134,7 @@
 			case"s":
 				return c;
 			default:
-				return new RegExp( e.replace( "\\", "" ) )
+				return new RegExp( e.replace(/\\/g, "" ) )
 		}
 	}
 
