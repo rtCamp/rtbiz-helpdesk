@@ -151,6 +151,11 @@ if ( ! class_exists( 'Rtbiz_HD' ) ) {
 
 				self::$loader->add_filter( 'plugin_action_links_' . RTBIZ_HD_BASE_NAME, $rtbiz_hd_admin, 'plugin_action_links' );
 				self::$loader->add_filter( 'plugin_row_meta', $rtbiz_hd_admin, 'plugin_row_meta', 10, 4 );
+				self::$loader->add_action( 'admin_head', $rtbiz_hd_admin, 'hide_add_staff_button' );
+				self::$loader->add_filter( 'parse_query', $rtbiz_hd_admin, 'retain_contact_group_in_parse_query' );
+				self::$loader->add_filter( 'request', $rtbiz_hd_admin,'retain_contact_group_in_request' );
+				self::$loader->add_filter( 'admin_url', $rtbiz_hd_admin, 'append_contact_group_to_admin_url', 10, 3 );
+				self::$loader->add_action( 'restrict_manage_posts',$rtbiz_hd_admin, 'add_contact_group_to_search_form' );
 			}
 
 			self::$loader->add_action( 'admin_init', $rtbiz_hd_admin, 'database_update' );
