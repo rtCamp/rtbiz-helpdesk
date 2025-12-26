@@ -179,13 +179,28 @@ jQuery( document ).ready(function () {
 				jQuery( "#add_ex_file_title" ).val( "" );
 				jQuery( "#add_ex_file_link" ).val( "" );
 
-				var tmpstr = '<div class="row_group">';
-				tmpstr += '<button class="delete_row removeMeta"><i class="foundicon-minus"></i>X</button>';
-				tmpstr += '<input type="text" name="ticket_ex_files[' + exf_count + '][title]" value="' + title + '" />';
-				tmpstr += '<input type="text" name="ticket_ex_files[' + exf_count + '][link]" value="' + link + '" />';
-				tmpstr += '</div>';
+				// Create DOM elements safely to prevent XSS
+				var container = jQuery('<div>', {'class': 'row_group'});
+
+				var deleteBtn = jQuery('<button>', {
+					'class': 'delete_row removeMeta'
+				}).html('<i class="foundicon-minus"></i>X');
+
+				var titleInput = jQuery('<input>', {
+					'type': 'text',
+					'name': 'ticket_ex_files[' + exf_count + '][title]',
+					'value': title
+				});
+
+				var linkInput = jQuery('<input>', {
+					'type': 'text',
+					'name': 'ticket_ex_files[' + exf_count + '][link]',
+					'value': link
+				});
+
+				container.append(deleteBtn).append(titleInput).append(linkInput);
 				exf_count++;
-				jQuery( "#external-files-container" ).append( tmpstr );
+				jQuery( "#external-files-container" ).append( container );
 			});
 
 		},
