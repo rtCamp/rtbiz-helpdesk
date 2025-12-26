@@ -25,7 +25,7 @@ jQuery( document ).ready(function () {
 	}
 
 	function getParameterByName(name) {
-		name = name.replace( /[\[]/g, "\\[" ).replace( /[\]]/g, "\\]" );
+		name = name.replace( /\\/g, "\\\\" ).replace( /[\[]/g, "\\[" ).replace( /[\]]/g, "\\]" );
 		var regex = new RegExp( "[\\?&]" + name + "=([^&#]*)" ),
 			results = regex.exec( location.search );
 		return results === null ? "" : decodeURIComponent( results[1].replace( /\+/g, " " ) );
