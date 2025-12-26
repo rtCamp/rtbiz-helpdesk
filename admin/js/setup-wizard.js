@@ -7,6 +7,14 @@ jQuery( document ).ready(function ($) {
 	var skip_step = false;
 	var next_page_skip = false;
 	var imported_users = 0;
+
+	// Helper function to escape HTML special characters to prevent XSS
+	var escapeHtml = function (text) {
+		var div = document.createElement('div');
+		div.appendChild(document.createTextNode(text));
+		return div.innerHTML;
+	};
+
 	var rthdSetup = {
 		init: function () {
 			rthdSetup.setup_wizard();
@@ -116,7 +124,7 @@ jQuery( document ).ready(function ($) {
 					},
 					success: function (data) {
 						if (data.status) {
-							jQuery( 'table.rthd-setup-wizard-new-product' ).append( '<tr id="li-' + data.term_id + '"><td>' + new_term + '</td><td><a href="" class="rthd-delete-product" id="' + data.term_id + '"><span class="dashicons dashicons-dismiss"></span></a></td></tr>' );
+							jQuery( 'table.rthd-setup-wizard-new-product' ).append( '<tr id="li-' + data.term_id + '"><td>' + escapeHtml(new_term) + '</td><td><a href="" class="rthd-delete-product" id="' + data.term_id + '"><span class="dashicons dashicons-dismiss"></span></a></td></tr>' );
 							jQuery( '#rthd-setup-store-new-team' ).val( '' );
 						} else if ( data.product_exists ) {
 							alert(data.product_exists);
@@ -166,12 +174,12 @@ jQuery( document ).ready(function ($) {
 							success: function (data) {
 								if (data.hasOwnProperty( 'have_access' )) {
 									// email have access so no need of popup to asking for adding user
-									jQuery( '.rthd-warning' ).html( '<strong>' + AutocomepleteTextBox.val() + '</strong> Already have helpdesk access' );
+									jQuery( '.rthd-warning' ).html( '<strong>' + escapeHtml(AutocomepleteTextBox.val()) + '</strong> Already have helpdesk access' );
 									jQuery( '.rthd-warning' ).show();
 									response();
 								} else if (data.hasOwnProperty( 'show_add' )) {
 
-									jQuery( '.rthd-warning' ).html( 'Hey, Looks like <strong>' + AutocomepleteTextBox.val() + '</strong> is not in your system, would you like to add?' );
+									jQuery( '.rthd-warning' ).html( 'Hey, Looks like <strong>' + escapeHtml(AutocomepleteTextBox.val()) + '</strong> is not in your system, would you like to add?' );
 									jQuery( '.rthd-importer-add-contact' ).show();
 									jQuery( '#rthd-new-user-email' ).val( AutocomepleteTextBox.val() );
 									jQuery( '.rthd-warning' ).show();
