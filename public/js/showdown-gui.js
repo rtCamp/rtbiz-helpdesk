@@ -132,8 +132,13 @@ jQuery( document ).ready(function () {
 
             text = converter.makeHtml(text);
 
-            //previewPane.innerHTML = text;
-            peviewPane.html( text );
+            // Create a temporary element to sanitize the HTML
+            var tempDiv = document.createElement('div');
+            tempDiv.textContent = text;
+            var sanitizedText = tempDiv.innerHTML;
+
+            // Set the sanitized HTML
+            peviewPane.html( sanitizedText );
 
             if ( outputPane ){
                 outputPane.val( text );
