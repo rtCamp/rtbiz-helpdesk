@@ -162,9 +162,15 @@ if ( ! class_exists( 'EDD_SL_Plugin_Updater' ) ){
 				return;
 			}
 
-			$api_params = array(
-				'edd_action' => 'get_version', 'license' => $data[ 'license' ], 'name' => $data[ 'item_name' ], 'slug' => $this->slug, 'author' => $data[ 'author' ], 'url' => home_url()
-			);
+			$api_params = [
+				'edd_action' => 'get_version',
+				'license'    => $data['license'],
+				'slug'       => $this->slug,
+				'author'     => $data['author'],
+				'url'        => home_url(),
+				'name'       => isset($data['item_name']) ? $data['item_name'] : 'EDD SL Plugin',
+			];
+
 			$request    = wp_remote_post( $this->api_url, array( 'timeout' => 15, 'sslverify' => false, 'body' => $api_params ) );
 
 			if ( ! is_wp_error( $request ) ):

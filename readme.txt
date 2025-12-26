@@ -58,6 +58,11 @@ Please refer to the documentation.
 
 == Changelog ==
 
+= 1.6.6 =
+* Updated array access syntax from curly braces to square brackets to comply with PHP 8.0 deprecation of curly brace array access syntax.
+* Replaced utf8_decode with mb_convert_encoding for improved compatibility.
+* Added support for providing a default name for `item_name` if it is not present in the data array.
+
 = 1.6.5 =
 * Fixed Product name not getting pre-selected while creating a ticket.
 * Fixed login issue while creating a ticket.

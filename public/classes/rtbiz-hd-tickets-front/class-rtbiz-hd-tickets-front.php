@@ -59,7 +59,7 @@ if ( ! class_exists( 'Rtbiz_HD_Tickets_Front' ) ) {
 					$login_url    = apply_filters( 'rthd_ticket_front_page_login_url', wp_login_url( $redirect_url ), $redirect_url );
 					$message      = sprintf( '%s <a href="%s">%s</a> %s', __( 'You are not logged in. Please login', 'rtbiz-helpdesk' ), esc_url( $login_url ), __( 'here', 'rtbiz-helpdesk' ), __( 'to view this ticket.', 'rtbiz-helpdesk' ) );
 					global $rthd_messages;
-					$rthd_messages[] = array( 'type' => 'error rthd-error', 'message' => $message, 'displayed' => 'no' );
+					$rthd_messages[] = array( 'type' => 'error rthd-error rthd-login-error', 'message' => $message, 'displayed' => 'no' );
 					return rtbiz_hd_locate_template( 'ticket-error-page.php' );
 				}else{
 					wp_redirect( get_post_type_archive_link( Rtbiz_HD_Module::$post_type ) );

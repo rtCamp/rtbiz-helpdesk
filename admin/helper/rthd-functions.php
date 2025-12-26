@@ -1991,7 +1991,17 @@ function rtbiz_hd_get_user_id_from_order_id( $order_id ) {
 	} else if ( 'shop_order' == $post_type ) {
 		// find in woo
 		return get_post_meta( $order_id, '_customer_user', true );
-	}
+	} else if('edd_license_log') {
+		if ( ! empty( $order_id ) && is_numeric( $order_id ) ) {
+			$rtbiz_edd_order = edd_get_order( $order_id );
+
+			if ( $rtbiz_edd_order && isset( $rtbiz_edd_order->user_id ) ) {
+				return $rtbiz_edd_order->user_id;
+			}
+		}
+
+		return false;
+    }
 }
 
 function rtbiz_hd_compare_wp_post( $objA, $objB ) {

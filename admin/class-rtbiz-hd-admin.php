@@ -496,6 +496,97 @@ if ( !class_exists( 'Rtbiz_HD_Admin' ) ) {
 			wp_localize_script( RTBIZ_HD_TEXT_DOMAIN . 'admin-js', 'rtbiz_hd_dashboard_url', admin_url( 'edit.php?post_type=' . Rtbiz_HD_Module::$post_type . '&page=' . Rtbiz_HD_Dashboard::$page_slug . '&finish-wizard=yes' ) );
 		}
 
-	}
+		/**
+		 * Ensure 'contact_group' is retained in the query_vars during parsing.
+		 *
+		 * This function checks if the current post type is 'contact' and retains the
+		 * 'contact_group' query parameter during the query parsing phase.
+		 *
+		 * @param WP_Query $query The current query object.
+		 */
+		public function retain_contact_group_in_parse_query( $query ) {
+			if ( is_admin() && isset( $_GET['post_type'] ) && $_GET['post_type'] === 'contact' ) {
+				if ( isset( $_GET['contact_group'] ) && ! empty( $_GET['contact_group'] ) ) {
+					$query->query_vars['contact_group'] = sanitize_text_field( $_GET['contact_group'] );
+				}
+			}
+		}
 
+		/**
+		 * Ensure 'contact_group' is retained in the request vars.
+		 *
+		 * This function checks if the current post type is 'contact' and ensures
+		 * that the 'contact_group' parameter is included in the request variables
+		 * for later use in WordPress admin.
+		 *
+		 * @param array $request The current request variables.
+		 * @return array Modified request variables with the 'contact_group' parameter.
+		 */
+		public function retain_contact_group_in_request( $request ) {
+			if ( is_admin() && isset( $_GET['post_type'] ) && $_GET['post_type'] === 'contact' ) {
+				if ( isset( $_GET['contact_group'] ) && ! empty( $_GET['contact_group'] ) ) {
+					$request['contact_group'] = sanitize_text_field( $_GET['contact_group'] );
+				}
+			}
+			return $request;
+		}
+
+		/**
+		 * Append the contact_group parameter to admin URLs, except specific paths.
+		 *
+		 * This function ensures that the 'contact_group' query parameter is appended
+		 * to admin URLs when necessary, except when the URL is for creating a new post.
+		 *
+		 * @param string $url The current URL to modify.
+		 * @param string $path The path portion of the URL.
+		 * @param int $blog_id The ID of the current blog.
+		 * @return string Modified URL with 'contact_group' appended if applicable.
+		 */
+		public function append_contact_group_to_admin_url( $url, $path, $blog_id ) {
+			if ( strpos( $url, 'post_type=contact' ) !== false
+				&& strpos( $url, 'post-new.php' ) === false
+				&& isset( $_GET['contact_group'] ) ) {
+				$contact_group = sanitize_text_field( $_GET['contact_group'] );
+				$url = add_query_arg( 'contact_group', $contact_group, $url );
+			}
+			return $url;
+		}
+
+		/**
+		 * Add contact_group to the search form in the admin interface.
+		 *
+		 * This function adds a hidden input field for the 'contact_group' parameter
+		 * to the search form in the admin interface when the post type is 'contact'
+		 * and the 'contact_group' parameter is set.
+		 */
+		public function add_contact_group_to_search_form() {
+			if ( isset( $_GET['post_type'] ) && $_GET['post_type'] === 'contact' && isset( $_GET['contact_group'] ) ) {
+				echo '<input type="hidden" name="contact_group" value="' . esc_attr( sanitize_text_field( $_GET['contact_group'] ) ) . '">';
+			}
+		}
+
+		/**
+		 * Hide the "Add Staff" button for the 'staff' contact group.
+		 *
+		 * This function hides the "Add Staff" button in the admin interface when the
+		 * current post type is 'contact' and the 'contact_group' parameter is set to 'staff'.
+		 *
+		 * We are hiding the "Add Staff" button because when a new User with role Admin/Author/Editor is added then they will be automatically added to the Staff.
+		 */
+		public function hide_add_staff_button() {
+			global $post_type;
+
+			// Check if the current post type is 'contact' and the contact_group is 'staff'
+			if ( 'contact' === $post_type && isset( $_GET['contact_group'] ) && 'staff' === $_GET['contact_group'] ) {
+				// Remove the "Add New" button by unsetting it from the admin toolbar
+				?>
+				<style>
+					.page-title-action {
+						display: none !important;
+					}
+				</style>
+				<?php
+			}
+		}
+	}
 }
