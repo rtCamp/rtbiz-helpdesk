@@ -46,7 +46,8 @@ class Rtbiz_HD_Public {
 
 		wp_enqueue_style( 'dashicons' );
 
-		wp_enqueue_script( 'rthd-app-js', RTBIZ_HD_URL . 'public/js/helpdesk-min.js', array( 'jquery' ), RTBIZ_HD_VERSION, true );
+		wp_enqueue_script( 'dompurify', RTBIZ_HD_URL . 'public/js/vendors/purify.min.js', array(), RTBIZ_HD_VERSION, true );
+		wp_enqueue_script( 'rthd-app-js', RTBIZ_HD_URL . 'public/js/helpdesk-min.js', array( 'jquery', 'dompurify' ), RTBIZ_HD_VERSION, true );
 
 		wp_localize_script( 'rthd-app-js', 'rtbiz_hd_supported_extensions', implode( ',', rtbiz_hd_get_supported_extensions() ) );
 
