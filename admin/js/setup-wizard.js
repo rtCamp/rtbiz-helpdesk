@@ -8,13 +8,6 @@ jQuery( document ).ready(function ($) {
 	var next_page_skip = false;
 	var imported_users = 0;
 
-	// Helper function to escape HTML special characters to prevent XSS
-	var escapeHtml = function (text) {
-		var div = document.createElement('div');
-		div.appendChild(document.createTextNode(text));
-		return div.innerHTML;
-	};
-
 	var rthdSetup = {
 		init: function () {
 			rthdSetup.setup_wizard();
