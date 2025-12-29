@@ -179,7 +179,7 @@ jQuery( document ).ready(function ($) {
 									response();
 								} else if (data.hasOwnProperty( 'show_add' )) {
 
-									jQuery( '.rthd-warning' ).html( 'Hey, Looks like <strong>' + escapeHtml(AutocomepleteTextBox.val()) + '</strong> is not in your system, would you like to add?' );
+									jQuery( '.rthd-warning' ).html( 'Hey, Looks like <strong>' + AutocomepleteTextBox.val() + '</strong> is not in your system, would you like to add?' );
 									jQuery( '.rthd-importer-add-contact' ).show();
 									jQuery( '#rthd-new-user-email' ).val( AutocomepleteTextBox.val() );
 									jQuery( '.rthd-warning' ).show();
