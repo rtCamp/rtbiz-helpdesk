@@ -124,7 +124,7 @@ jQuery( document ).ready(function ($) {
 					},
 					success: function (data) {
 						if (data.status) {
-							jQuery( 'table.rthd-setup-wizard-new-product' ).append( '<tr id="li-' + data.term_id + '"><td>' + escapeHtml(new_term) + '</td><td><a href="" class="rthd-delete-product" id="' + data.term_id + '"><span class="dashicons dashicons-dismiss"></span></a></td></tr>' );
+							jQuery( 'table.rthd-setup-wizard-new-product' ).append( '<tr id="li-' + data.term_id + '"><td>' + new_term + '</td><td><a href="" class="rthd-delete-product" id="' + data.term_id + '"><span class="dashicons dashicons-dismiss"></span></a></td></tr>' );
 							jQuery( '#rthd-setup-store-new-team' ).val( '' );
 						} else if ( data.product_exists ) {
 							alert(data.product_exists);
@@ -174,7 +174,7 @@ jQuery( document ).ready(function ($) {
 							success: function (data) {
 								if (data.hasOwnProperty( 'have_access' )) {
 									// email have access so no need of popup to asking for adding user
-									jQuery( '.rthd-warning' ).html( '<strong>' + escapeHtml(AutocomepleteTextBox.val()) + '</strong> Already have helpdesk access' );
+									jQuery( '.rthd-warning' ).html( '<strong>' + AutocomepleteTextBox.val() + '</strong> Already have helpdesk access' );
 									jQuery( '.rthd-warning' ).show();
 									response();
 								} else if (data.hasOwnProperty( 'show_add' )) {
