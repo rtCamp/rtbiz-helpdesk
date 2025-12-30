@@ -14,17 +14,19 @@ var file_frame_ticket;
 jQuery( document ).ready(function ($) {
 
     if ( 'true' == rtbiz_fancybox_allow ) {
-        jQuery( ".fancybox" ).fancybox({
-            afterLoad: function () {
-                this.title = '<a class="rtbiz_hd_quick_download" target="_blank" download="' + jQuery( this.element ).data( "downloadlink" ) + '" href="' + jQuery( this.element ).data( "downloadlink" ) + '">Download</a> ' + this.title;
+        jQuery( "[data-fancybox]" ).fancybox({
+            afterLoad: function (instance, current) {
+                // Add download link to caption
+                var downloadLink = current.opts.$orig.data( "downloadlink" );
+                var originalCaption = current.opts.$orig.data( "caption" ) || current.opts.$orig.attr( "title" ) || '';
+                if ( downloadLink ) {
+                    current.opts.caption = '<a class="rtbiz_hd_quick_download" target="_blank" download="' + downloadLink + '" href="' + downloadLink + '">Download</a> ' + originalCaption;
+                } else {
+                    current.opts.caption = originalCaption;
+                }
             },
             iframe: {
                 preload: false
-            },
-            helpers: {
-                title: {
-                    type: 'inside'
-                }
             }
         });
     }
