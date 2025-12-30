@@ -129,8 +129,27 @@ jQuery( document ).ready(function ($) {
 						jQuery( '.rthd-participants' ).show();
 					}
 					if ( ! data.has_replied) {
-						var htmlappend = '<div class="rthd-participant-container"><a title="' + data.display_name + '" class="rthd-last-reply-by" href="' + data.edit_link + '">' + data.avatar + ' </a><a href="javascript:;" class="rthd-participant-remove" data-email="' + email + '" data-post_id="' + jQuery( '#post-id' ).val() + '" >X</a></div>';
-						jQuery( '.rthd-ticket-created-by').parent().after( htmlappend );
+						// Create DOM elements safely to prevent XSS
+						var container = jQuery('<div>', {
+							'class': 'rthd-participant-container'
+						});
+
+						var avatarLink = jQuery('<a>', {
+							'class': 'rthd-last-reply-by',
+							'title': data.display_name,
+							'href': data.edit_link
+						}).html(data.avatar);
+
+						var removeLink = jQuery('<a>', {
+							'class': 'rthd-participant-remove',
+							'href': 'javascript:;',
+							'data-email': email,
+							'data-post_id': jQuery( '#post-id' ).val(),
+							'text': 'X'
+						});
+
+						container.append(avatarLink).append(' ').append(removeLink);
+						jQuery( '.rthd-ticket-created-by').parent().after( container );
 					}
 					// hide box when person is added
 					jQuery( '.rthd-add-people-box' ).hide();
