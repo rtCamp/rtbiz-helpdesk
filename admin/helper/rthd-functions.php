@@ -1435,18 +1435,21 @@ function rtbiz_hd_get_attchment_link_with_fancybox( $attachment, $post_id = '', 
 	$attachment_url = wp_get_attachment_url( $attachment->ID );
 	$original_url   = $attachment_url;
 	$extn           = rtbiz_get_attchment_extension( $attachment_url );
-	$class          = 'rthd_attachment fancybox';
+	$class          = 'rthd_attachment';
+	$data_fancybox  = 'rthd_attachment_' . ( ! empty( $post_id ) ? $post_id : $attachment->post_parent );
+	$data_type      = '';
 	if ( rtbiz_is_google_doc_supported_type( $attachment->post_mime_type, $extn ) ) {
 		$attachment_url = rtbiz_google_doc_viewer_url( $attachment_url );
-		$class .= ' fancybox.iframe';
+		$data_type = 'iframe';
 	} elseif ( rtbiz_hd_is_fancybox_supported_type( $extn ) ) {
-		$class .= ' fancybox.iframe';
+		$data_type = 'iframe';
 	}
 	?>
 	<a class="<?php echo $class; ?>"
-	   rel="rthd_attachment_<?php echo ! empty( $post_id ) ? $post_id : $attachment->post_parent; ?>"
+	   data-fancybox="<?php echo $data_fancybox; ?>"
+	   <?php echo $data_type ? 'data-type="' . $data_type . '"' : ''; ?>
 	   data-downloadlink="<?php echo esc_url( $original_url ); ?>"
-	   title="<?php echo balanceTags( $attachment->post_title ); ?>"
+	   data-caption="<?php echo esc_attr( balanceTags( $attachment->post_title ) ); ?>"
 	   href="<?php echo esc_url( $attachment_url ); ?>"> <img
 			height="20px" width="20px"
 			src="<?php echo esc_url( RTBIZ_HD_URL . 'public/file-type/' . $extn . '.png' ); ?>"/>
