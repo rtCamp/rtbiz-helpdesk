@@ -173,7 +173,9 @@ jQuery( document ).ready(function () {
 					return false;
 				}
                 var post_content = jQuery( '#new-followup-form #followupcontent' );
-                var post_content_html = jQuery( '<div/>', { html: converter.makeHtml( post_content.val() ) } );
+                var raw_html = converter.makeHtml( post_content.val() );
+                var safe_html = (typeof DOMPurify !== 'undefined') ? DOMPurify.sanitize( raw_html ) : raw_html;
+                var post_content_html = jQuery( '<div/>', { html: safe_html } );
                 if ( ! jQuery.trim( post_content.val() ) || ! jQuery.trim( post_content_html.text() ) ) {
                     post_content.css( 'border-color', 'red' );
                     jQuery( '#hdspinner' ).hide();
@@ -202,7 +204,9 @@ jQuery( document ).ready(function () {
 				formData.append( "followuptype", followup_type );
 				formData.append( "follwoup-time", jQuery( '#new-followup-form #follwoup-time' ).val() );
                 formData.append( "followup_markdown", jQuery( '#followupcontent' ).val() );
-                formData.append( "followup_content", converter.makeHtml( jQuery( '#followupcontent' ).val() ) );
+                var raw_html = converter.makeHtml( jQuery( '#followupcontent' ).val() );
+                var safe_html = (typeof DOMPurify !== 'undefined') ? DOMPurify.sanitize( raw_html ) : raw_html;
+                formData.append( "followup_content", safe_html );
 				formData.append( "followup_attachments", uploadedfiles );
 				if (jQuery( '#rthd_keep_status' )) {
 					formData.append( "rthd_keep_status", jQuery( '#rthd_keep_status' ).is( ':checked' ) );
@@ -356,7 +360,9 @@ jQuery( document ).ready(function () {
 			jQuery( "#editfollowup" ).click(function () {
 				var requestArray = {};
 				var post_content = jQuery( '#dialog-form #editedfollowupcontent' );
-                var post_content_html = jQuery( '<div/>', { html: converter.makeHtml( post_content.val() ) } );
+                var raw_html = converter.makeHtml( post_content.val() );
+                var safe_html = (typeof DOMPurify !== 'undefined') ? DOMPurify.sanitize( raw_html ) : raw_html;
+                var post_content_html = jQuery( '<div/>', { html: safe_html } );
                 if ( ! jQuery.trim( post_content.val() ) || ! jQuery.trim( post_content_html.text() ) ) {
                     post_content.css( 'border-color', 'red' );
                     return false;
@@ -487,7 +493,9 @@ jQuery( document ).ready(function () {
 				jQuery( '#edit-ticket-data' ).slideToggle( 'slow' );
 				jQuery( '#new-followup-form' ).hide();
                 var post_content = jQuery( '#edit-ticket-data').find('#editedticketcontent');
-                var post_content_html = jQuery( '<div/>', { html: converter.makeHtml( post_content.val() ) } );
+                var raw_html = converter.makeHtml( post_content.val() );
+                var safe_html = (typeof DOMPurify !== 'undefined') ? DOMPurify.sanitize( raw_html ) : raw_html;
+                var post_content_html = jQuery( '<div/>', { html: safe_html } );
                 if ( ! jQuery.trim( post_content.val() ) || ! jQuery.trim( post_content_html.text() ) ) {
                     post_content.css( 'border-color', 'red' );
                     return false;
@@ -511,7 +519,9 @@ jQuery( document ).ready(function () {
 						if (data.status) {
 							jQuery( '#ticket-edithdspinner' ).hide();
 							jQuery( "#edit-ticket-content-click" ).removeAttr( 'disabled' );
-							jQuery( '.edit-ticket-link' ).closest( '.rthd-ticket-content' ).find( '.rthd-ticket-content' ).html( converter.makeHtml( post_content.val()) );
+							var raw_html = converter.makeHtml( post_content.val() );
+							var safe_html = (typeof DOMPurify !== 'undefined') ? DOMPurify.sanitize( raw_html ) : raw_html;
+							jQuery( '.edit-ticket-link' ).closest( '.rthd-ticket-content' ).find( '.rthd-ticket-content' ).html( safe_html );
 							jQuery( '.edit-ticket-link' ).closest( '.rthd-ticket-content' ).find( '.rthd-ticket-content' ).data( 'rthdcontent', post_content.val() );
 							jQuery( '#edit-ticket-data' ).hide();
                             jQuery( '#edit-ticket-data').find('#editedticketcontent_html').html();
