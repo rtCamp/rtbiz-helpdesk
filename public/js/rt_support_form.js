@@ -106,7 +106,9 @@ jQuery( document ).ready(function () {
                     jQuery( '#rthd_support_attach_ids' ).val( uploadedfiles );
 
                     var post_content = jQuery( '#rt-hd-support-page #post_description_body' );
-                    var post_content_html = jQuery( '<div/>', { html: converter.makeHtml( post_content.val() ) } );
+                    var raw_html = converter.makeHtml( post_content.val() );
+                    var safe_html = (typeof DOMPurify !== 'undefined') ? DOMPurify.sanitize( raw_html ) : raw_html;
+                    var post_content_html = jQuery( '<div/>', { html: safe_html } );
                     if ( ! jQuery.trim( post_content.val() ) || ! jQuery.trim( post_content_html.text() ) ) {
                         post_content.css( 'border-color', 'red' );
                         return false;
@@ -120,11 +122,12 @@ jQuery( document ).ready(function () {
                     var outputPane = jQuery( '#rt-hd-support-page').find( '#post_description_html_text' );
 
                     var text = inputPane.val();
-                    text = converter.makeHtml(text);
+                    var raw_html_preview = converter.makeHtml(text);
+                    var safe_html_preview = (typeof DOMPurify !== 'undefined') ? DOMPurify.sanitize( raw_html_preview ) : raw_html_preview;
                     //previewPane.innerHTML = text;
-                    peviewPane.html( text );
+                    peviewPane.html( safe_html_preview );
                     if ( outputPane ){
-                        outputPane.val( text );
+                        outputPane.val( safe_html_preview );
                     }
                     // Start convert markdown to html
 

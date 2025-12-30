@@ -130,13 +130,14 @@ jQuery( document ).ready(function () {
             // get input text
             var text = inputPane.val();
 
-            text = converter.makeHtml(text);
+            var raw_html = converter.makeHtml(text);
+            var safe_html = (typeof DOMPurify !== 'undefined') ? DOMPurify.sanitize( raw_html ) : raw_html;
 
             //previewPane.innerHTML = text;
-            peviewPane.html( text );
+            peviewPane.html( safe_html );
 
             if ( outputPane ){
-                outputPane.val( text );
+                outputPane.val( safe_html );
             }
         },
         onInput: function( inputPane, peviewPane, outputPane ){

@@ -14,17 +14,19 @@ var file_frame_ticket;
 jQuery( document ).ready(function ($) {
 
     if ( 'true' == rtbiz_fancybox_allow ) {
-        jQuery( ".fancybox" ).fancybox({
-            afterLoad: function () {
-                this.title = '<a class="rtbiz_hd_quick_download" target="_blank" download="' + jQuery( this.element ).data( "downloadlink" ) + '" href="' + jQuery( this.element ).data( "downloadlink" ) + '">Download</a> ' + this.title;
+        jQuery( "[data-fancybox]" ).fancybox({
+            afterLoad: function (instance, current) {
+                // Add download link to caption
+                var downloadLink = current.opts.$orig.data( "downloadlink" );
+                var originalCaption = current.opts.$orig.data( "caption" ) || current.opts.$orig.attr( "title" ) || '';
+                if ( downloadLink ) {
+                    current.opts.caption = '<a class="rtbiz_hd_quick_download" target="_blank" download="' + downloadLink + '" href="' + downloadLink + '">Download</a> ' + originalCaption;
+                } else {
+                    current.opts.caption = originalCaption;
+                }
             },
             iframe: {
                 preload: false
-            },
-            helpers: {
-                title: {
-                    type: 'inside'
-                }
             }
         });
     }
@@ -129,8 +131,27 @@ jQuery( document ).ready(function ($) {
 						jQuery( '.rthd-participants' ).show();
 					}
 					if ( ! data.has_replied) {
-						var htmlappend = '<div class="rthd-participant-container"><a title="' + data.display_name + '" class="rthd-last-reply-by" href="' + data.edit_link + '">' + data.avatar + ' </a><a href="javascript:;" class="rthd-participant-remove" data-email="' + email + '" data-post_id="' + jQuery( '#post-id' ).val() + '" >X</a></div>';
-						jQuery( '.rthd-ticket-created-by').parent().after( htmlappend );
+						// Create DOM elements safely to prevent XSS
+						var container = jQuery('<div>', {
+							'class': 'rthd-participant-container'
+						});
+
+						var avatarLink = jQuery('<a>', {
+							'class': 'rthd-last-reply-by',
+							'title': data.display_name,
+							'href': data.edit_link
+						}).html(data.avatar);
+
+						var removeLink = jQuery('<a>', {
+							'class': 'rthd-participant-remove',
+							'href': 'javascript:;',
+							'data-email': email,
+							'data-post_id': jQuery( '#post-id' ).val(),
+							'text': 'X'
+						});
+
+						container.append(avatarLink).append(' ').append(removeLink);
+						jQuery( '.rthd-ticket-created-by').parent().after( container );
 					}
 					// hide box when person is added
 					jQuery( '.rthd-add-people-box' ).hide();

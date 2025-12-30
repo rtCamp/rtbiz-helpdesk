@@ -449,6 +449,7 @@ $user_edit_content = current_user_can( $cap );
 								'value' => $created_by->ID,
 							),
 						),
+						'posts_per_page'   => -1,
 					) );
 				}
 				if ( ! empty( $otherposts ) ) {

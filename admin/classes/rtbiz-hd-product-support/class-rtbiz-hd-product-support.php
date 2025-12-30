@@ -92,7 +92,7 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 
 			// edd Customer column
 			Rtbiz_HD::$loader->add_filter( 'edd_report_customer_columns', $this, 'edd_customer_columns' );
-			Rtbiz_HD::$loader->add_filter( 'edd_report_column_'. Rtbiz_HD_Module::$post_type , $this, 'edd_customer_ticket_column', 10, 2 );
+			Rtbiz_HD::$loader->add_filter( 'edd_customers_column_'. Rtbiz_HD_Module::$post_type , $this, 'edd_customer_ticket_column', 10, 2 );
 		}
 
 		function edd_customer_ticket_column( $value, $item ) {
@@ -141,7 +141,7 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 				                       'meta_value'     => $payment,
 				                       'fields'         => 'ids',
 			                       ) );
-			return '<a target="_blank" href="'.admin_url( 'edit.php?post_type='.Rtbiz_HD_Module::$post_type.'&order-id='.$payment ).'">'.$posts->found_posts.'</a>';
+			return '<a target="_blank" href="'.admin_url( 'edit.php?post_type='.Rtbiz_HD_Module::$post_type.'&order_id='.$payment ).'">'.$posts->found_posts.'</a>';
 		}
 
 		/**
@@ -357,7 +357,7 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 				$woo_payment  = $wpdb->get_col( $query );
 			}
 			if ( $this->iseddActive ) {
-				$query = $wpdb->prepare('SELECT PM.meta_value FROM '.$wpdb->posts.' P JOIN '.$wpdb->postmeta.' PM ON (P.id = PM.post_id) WHERE PM.meta_key=%s AND P.post_type=%s AND P.post_status=%s','_edd_payment_user_id','edd_payment','publish');
+				$query = $wpdb->prepare('SELECT user_id FROM '.$wpdb->edd_orders.' WHERE type=%s AND status<>%s','sale','trash');
 				$edd_payments  = $wpdb->get_col( $query );
 			}
 			$payments = array_merge( $woo_payment, $edd_payments );
@@ -386,14 +386,15 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 						'post_status' => 'any', // wc-completed is for completed orders
 					) );
 				} if ( $this->iseddActive ) {
-					$edd_payments = get_posts( array(
-						'numberposts' => -1,
-						'meta_key'    => '_edd_payment_user_id',
-						'meta_value'  => $created_by_id,
-						'post_type'   => 'edd_payment',
-						'order'       => 'ASC',
-						'post_status' => 'any', // publish is for completed orders
-					) );
+					$edd_payments = edd_get_payments(
+						array(
+							'numberposts' => -1,
+							'meta_key'    => '_edd_payment_user_id',
+							'meta_value'  => $created_by_id,
+							'order'       => 'ASC',
+							'status'      => 'any',
+						)
+					);
 					$order_post_status = edd_get_payment_statuses();
 				}
 				$payments = array_merge( $woo_payment, $edd_payments );
@@ -688,18 +689,18 @@ if ( ! class_exists( 'Rtbiz_HD_Product_Support' ) ) {
 				}
 			}
 
-			if ( isset( $data['order_id'] ) ) {
-				update_post_meta( $rtbiz_hd_tickets_id, '_rtbiz_hd_order_id', esc_attr( $data['order_id'] ) );
+			if ( isset( $_GET['order_id'] ) ) {
+				update_post_meta( $rtbiz_hd_tickets_id, '_rtbiz_hd_order_id', esc_attr( $_GET['order_id'] ) );
 			}
 
-			if ( isset( $data['order_id'] ) && isset( $data['order_type'] ) ) {
+			if ( isset( $_GET['order_id'] ) && isset( $_GET['order_type'] ) ) {
 				//Store Order ID
-				update_post_meta( $rtbiz_hd_tickets_id, '_rtbiz_hd_order_type', esc_attr( $data['order_type'] ) );
+				update_post_meta( $rtbiz_hd_tickets_id, '_rtbiz_hd_order_type', esc_attr( $_GET['order_type'] ) );
 
 				$link = '';
-				if ( 'woocommerce' === $data['order_type'] ) {
+				if ( 'woocommerce' === $_GET['order_type'] ) {
 					$link = add_query_arg( 'post', $_REQUEST['order_id'], admin_url( 'post.php?action=edit' ) );
-				} else if ( 'edd' === $data['order_type'] ) {
+				} else if ( 'edd' === $_GET['order_type'] ) {
 					$link = add_query_arg( 'id', $_REQUEST['order_id'], admin_url( 'edit.php?post_type=download&page=edd-payment-history&view=view-order-details' ) );
 				}
 				update_post_meta( $rtbiz_hd_tickets_id, '_rtbiz_hd_order_link', esc_url( $link ) );

@@ -1435,18 +1435,21 @@ function rtbiz_hd_get_attchment_link_with_fancybox( $attachment, $post_id = '', 
 	$attachment_url = wp_get_attachment_url( $attachment->ID );
 	$original_url   = $attachment_url;
 	$extn           = rtbiz_get_attchment_extension( $attachment_url );
-	$class          = 'rthd_attachment fancybox';
+	$class          = 'rthd_attachment';
+	$data_fancybox  = 'rthd_attachment_' . ( ! empty( $post_id ) ? $post_id : $attachment->post_parent );
+	$data_type      = '';
 	if ( rtbiz_is_google_doc_supported_type( $attachment->post_mime_type, $extn ) ) {
 		$attachment_url = rtbiz_google_doc_viewer_url( $attachment_url );
-		$class .= ' fancybox.iframe';
+		$data_type = 'iframe';
 	} elseif ( rtbiz_hd_is_fancybox_supported_type( $extn ) ) {
-		$class .= ' fancybox.iframe';
+		$data_type = 'iframe';
 	}
 	?>
 	<a class="<?php echo $class; ?>"
-	   rel="rthd_attachment_<?php echo ! empty( $post_id ) ? $post_id : $attachment->post_parent; ?>"
+	   data-fancybox="<?php echo $data_fancybox; ?>"
+	   <?php echo $data_type ? 'data-type="' . $data_type . '"' : ''; ?>
 	   data-downloadlink="<?php echo esc_url( $original_url ); ?>"
-	   title="<?php echo balanceTags( $attachment->post_title ); ?>"
+	   data-caption="<?php echo esc_attr( balanceTags( $attachment->post_title ) ); ?>"
 	   href="<?php echo esc_url( $attachment_url ); ?>"> <img
 			height="20px" width="20px"
 			src="<?php echo esc_url( RTBIZ_HD_URL . 'public/file-type/' . $extn . '.png' ); ?>"/>
@@ -1991,7 +1994,17 @@ function rtbiz_hd_get_user_id_from_order_id( $order_id ) {
 	} else if ( 'shop_order' == $post_type ) {
 		// find in woo
 		return get_post_meta( $order_id, '_customer_user', true );
-	}
+	} else if('edd_license_log') {
+		if ( ! empty( $order_id ) && is_numeric( $order_id ) ) {
+			$rtbiz_edd_order = edd_get_order( $order_id );
+
+			if ( $rtbiz_edd_order && isset( $rtbiz_edd_order->user_id ) ) {
+				return $rtbiz_edd_order->user_id;
+			}
+		}
+
+		return false;
+    }
 }
 
 function rtbiz_hd_compare_wp_post( $objA, $objB ) {

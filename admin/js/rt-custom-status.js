@@ -25,10 +25,8 @@ jQuery( document ).ready(function () {
 	}
 
 	function getParameterByName(name) {
-		name = name.replace( /[\[]/, "\\[" ).replace( /[\]]/, "\\]" );
-		var regex = new RegExp( "[\\?&]" + name + "=([^&#]*)" ),
-			results = regex.exec( location.search );
-		return results === null ? "" : decodeURIComponent( results[1].replace( /\+/g, " " ) );
+		var urlParams = new URLSearchParams( window.location.search );
+		return urlParams.get( name ) || "";
 	}
 
 	jQuery( '#rtbiz_is_staff_member' ).click( function( e ){

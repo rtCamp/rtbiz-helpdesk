@@ -575,11 +575,11 @@ if ( ! class_exists( 'Rtbiz_HD_CPT_Tickets' ) ) {
 					) );
 				}
 
-				if ( isset( $_GET['order-id'] ) && intval( $_GET['order-id'] ) ) {
+				if ( isset( $_GET['order_id'] ) && intval( $_GET['order_id'] ) ) {
 					$query->set( 'meta_query', array(
 						array(
 							'key' => '_rtbiz_hd_order_id',
-							'value' => $_GET['order-id'],
+							'value' => $_GET['order_id'],
 						),
 					) );
 				}

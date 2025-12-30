@@ -504,8 +504,10 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				$body = $body['html'];
 			}
 
+			$post_author = ( ! empty( $settings['rthd_default_user'] ) ) ? $settings['rthd_default_user'] : 0;
+
 			$postArray = array(
-				'post_author'   => $settings['rthd_default_user'],
+				'post_author'   => $post_author,
 				'post_content'  => rtbiz_hd_content_filter( $body ),
 				'post_date'     => $post_date,
 				'post_status'   => 'publish',
@@ -987,7 +989,7 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 					return $success_flag;
 				}
 			} else { // if post id not found from title or mail meta & mail is not Re: or Fwd:
-				$existPostId = $this->post_exists( $title, $mailtime );
+				$existPostId = $this->post_exists( $title, $mailtime, $fromemail['address'] );
 				//if given post title exits then it will be add as comment other wise as post
 				rtbiz_hd_log( 'Post Exists : '. var_export( $existPostId, true ) . "\r\n" );
 				if ( ! $existPostId ) {
@@ -1142,15 +1144,14 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 				$postDate  = gmdate( 'Y-m-d H:i:s', ( intval( $timeStamp ) + ( get_option( 'gmt_offset' ) * 3600 ) ) );
 				//              $sql       = "select * from $wpdb->comments where  comment_post_id=%d  and comment_date between subtime(%s,'00:10:00') and addtime(%s,'00:10:00')";
 				//              $query .= " AND post_date between subtime(%s,'00:10:00') and addtime(%s,'00:10:00')";
-				$args[] = $postDate;
-				$args[] = $postDate;
+				// $args[] = $postDate;
+				// $args[] = $postDate;
 			}
 
 			if ( ! empty( $title ) && trim( $title ) != '' ) {
 				$query .= ' AND post_title = %s';
 				$args[] = $post_title;
 			}
-
 			if ( ! empty( $args ) ) {
 				//return $wpdb->get_var( $wpdb->prepare( $query, $args ) );
 				$postids = $wpdb->get_col( $wpdb->prepare( $query, $args ) );
@@ -1168,7 +1169,9 @@ if ( ! class_exists( 'Rtbiz_HD_Import_Operation' ) ) {
 								$ContactEmail  = $rtbiz_hd_email_notification->get_contacts( $post_id );
 								$ContactEmail  = wp_list_pluck( $ContactEmail, 'email' );
 								$ticket_created_by  = rtbiz_hd_get_ticket_creator( $post_id );
-								$ContactEmail[] = $ticket_created_by->primary_email;
+								if ( ! empty( $ticket_created_by ) ) {
+									$ContactEmail[] = $ticket_created_by->primary_email;
+								}
 								if ( in_array( $sender, $ContactEmail ) ){
 									return $post_id;
 									break;
