@@ -1,6 +1,6 @@
 jQuery( document ).ready(function () {
 
-	var converter = new showdown.Converter({literalMidWordUnderscores: true, smoothLivePreview: true, ghCodeBlocks: true, simplifiedAutoLink: true, tables: true, extensions: ['table', 'github', 'prettify']});
+	var converter = new showdown.Converter({literalMidWordUnderscores: true, smoothLivePreview: true, ghCodeBlocks: true, simplifiedAutoLink: true, tables: true, sanitize: true, extensions: ['table', 'github', 'prettify']});
 
 	var rthd_common = {
 		rthd_tinymce_set_content: function (id, text) {
